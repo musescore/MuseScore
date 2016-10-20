@@ -105,7 +105,7 @@ void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
       clef->setMag(staff->mag());
       clef->setSmall(isSmall);
       Measure* m = staff->score()->tick2measure(tick);
-      Segment* seg = m->getSegment(clef, tick);
+      Segment* seg = m->getSegment(Segment::Type::Clef, tick);
       seg->add(clef);
       staff->setClef(clef);
       }

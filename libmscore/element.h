@@ -109,6 +109,7 @@ class Symbol;
 class FSymbol;
 class Fingering;
 class NoteHead;
+class FiguredBass;
 
 enum class SymId;
 
@@ -129,13 +130,34 @@ enum class Grip : signed char {
 //   ElementFlag
 //---------------------------------------------------------
 
-enum class ElementFlag : char {
-      DROP_TARGET  = 0x2,
-      SELECTABLE   = 0x4,
-      MOVABLE      = 0x8,
-      SEGMENT      = 0x10,
-      HAS_TAG      = 0x20,
-      ON_STAFF     = 0x40   // parent is Segment() type
+enum class ElementFlag {
+      DROP_TARGET     = 0x00000001,
+      SELECTABLE      = 0x00000002,
+      MOVABLE         = 0x00000004,
+      SEGMENT         = 0x00000008,
+      HAS_TAG         = 0x00000010,
+      ON_STAFF        = 0x00000020,   // parent is Segment() type
+      SELECTED        = 0x00000040,
+      GENERATED       = 0x00000080,
+      VISIBLE         = 0x00000100,
+      AUTOPLACE       = 0x00000200,
+
+      // measure flags
+      REPEAT_END      = 0x00000400,
+      REPEAT_START    = 0x00000800,
+      REPEAT_JUMP     = 0x00001000,
+      IRREGULAR       = 0x00002000,
+      LINE_BREAK      = 0x00004000,
+      PAGE_BREAK      = 0x00008000,
+      SECTION_BREAK   = 0x00010000,
+      NO_BREAK        = 0x00020000,
+      HEADER          = 0x00040000,
+      TRAILER         = 0x00080000,    // also used in segment
+      KEYSIG          = 0x00100000,
+      // segment flags
+      ENABLED         = 0x00200000,    // used for segments
+      EMPTY           = 0x00400000,
+      WRITTEN         = 0x00800000,
       };
 
 typedef QFlags<ElementFlag> ElementFlags;
@@ -224,13 +246,12 @@ class Element : public QObject, public ScoreElement {
       Q_PROPERTY(bool                     visible     READ visible      WRITE undoSetVisible)
 
       Element* _parent { 0 };
-
-      bool _generated;            ///< automatically generated Element
-      bool _autoplace;
+      mutable ElementFlags _flags  {
+            ElementFlag::ENABLED | ElementFlag::EMPTY | ElementFlag::AUTOPLACE | ElementFlag::SELECTABLE
+            | ElementFlag::VISIBLE
+            };    // used for segments
 
   protected:
-      bool _selected;             ///< set if element is selected
-      bool _visible;              ///< visibility attribute
       mutable int _z;
       QColor _color;              ///< element color attribute
 
@@ -348,17 +369,11 @@ class Element : public QObject, public ScoreElement {
 
   private:
       Placement _placement;
-
-      mutable ElementFlags _flags;
-
       int _track;                 ///< staffIdx * VOICES + voice
       qreal _mag;                 ///< standard magnification (derived value)
-
       QPointF _pos;               ///< Reference position, relative to _parent.
       QPointF _userOff;           ///< offset from normal layout position:
-                                  ///< user dragged object this amount.
       QPointF _readPos;
-
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
@@ -382,11 +397,18 @@ class Element : public QObject, public ScoreElement {
 
       qreal spatium() const;
 
-      bool selected() const                   { return _selected;   }
-      virtual void setSelected(bool f)        { _selected = f;      }
+      inline void setFlag(ElementFlag f, bool v)       { if (v) _flags |= f; else _flags &= ~ElementFlags(f); }
+      inline void setFlag(ElementFlag f, bool v) const { if (v) _flags |= f; else _flags &= ~ElementFlags(f); }
+      inline bool flag(ElementFlag f) const            { return _flags & f; }
+      inline void setFlags(ElementFlags f)             { _flags |= f;       }
+      inline void clearFlags(ElementFlags f)           { _flags &= ~f;      }
+      inline ElementFlags flags() const                { return _flags;     }
 
-      bool visible() const                    { return _visible;    }
-      virtual void setVisible(bool f)         { _visible = f;       }
+      bool selected() const                   { return flag(ElementFlag::SELECTED); }
+      virtual void setSelected(bool f)        { setFlag(ElementFlag::SELECTED, f);  }
+
+      bool visible() const                    { return flag(ElementFlag::VISIBLE);  }
+      virtual void setVisible(bool f)         { setFlag(ElementFlag::VISIBLE, f);   }
 
       Placement placement() const             { return _placement;  }
       void setPlacement(Placement val)        { _placement = val;   }
@@ -394,8 +416,8 @@ class Element : public QObject, public ScoreElement {
       bool placeBelow() const                 { return _placement == Placement::BELOW; }
       bool placeAbove() const                 { return _placement == Placement::ABOVE; }
 
-      bool generated() const                  { return _generated;  }
-      void setGenerated(bool val)             { _generated = val;   }
+      bool generated() const                  { return flag(ElementFlag::GENERATED);  }
+      void setGenerated(bool val)             { setFlag(ElementFlag::GENERATED, val);   }
 
       const QPointF& ipos() const             { return _pos;                    }
       virtual const QPointF pos() const       { return _pos + _userOff;         }
@@ -429,17 +451,17 @@ class Element : public QObject, public ScoreElement {
       QPointF scriptUserOff() const;
       void scriptSetUserOff(const QPointF& o);
 
-      bool isNudged() const                   { return !(_readPos.isNull() && _userOff.isNull()); }
-      const QPointF& readPos() const          { return _readPos;   }
-      void setReadPos(const QPointF& p)       { _readPos = p;      }
+      bool isNudged() const                       { return !(_readPos.isNull() && _userOff.isNull()); }
+      const QPointF& readPos() const              { return _readPos;   }
+      void setReadPos(const QPointF& p)           { _readPos = p;      }
       virtual void adjustReadPos();
 
-      virtual const QRectF& bbox() const      { return _bbox;              }
-      virtual QRectF& bbox()                  { return _bbox;              }
-      virtual qreal height() const            { return bbox().height();    }
-      virtual void setHeight(qreal v)         { _bbox.setHeight(v);        }
-      virtual qreal width() const             { return bbox().width();     }
-      virtual void setWidth(qreal v)          { _bbox.setWidth(v);         }
+      virtual const QRectF& bbox() const          { return _bbox;              }
+      virtual QRectF& bbox()                      { return _bbox;              }
+      virtual qreal height() const                { return bbox().height();    }
+      virtual void setHeight(qreal v)             { _bbox.setHeight(v);        }
+      virtual qreal width() const                 { return bbox().width();     }
+      virtual void setWidth(qreal v)              { _bbox.setWidth(v);         }
       QRectF abbox() const                        { return bbox().translated(pagePos());   }
       QRectF pageBoundingRect() const             { return bbox().translated(pagePos());   }
       QRectF canvasBoundingRect() const           { return bbox().translated(canvasPos()); }
@@ -467,7 +489,7 @@ class Element : public QObject, public ScoreElement {
       virtual void endDrag()                  {}
       virtual QLineF dragAnchor() const       { return QLineF(); }
 
-      virtual bool isEditable() const         { return !_generated; }
+      virtual bool isEditable() const         { return !flag(ElementFlag::GENERATED); }
       virtual void startEdit(MuseScoreView*, const QPointF&);
       virtual bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString& s);
       virtual void editDrag(const EditData&);
@@ -582,31 +604,25 @@ class Element : public QObject, public ScoreElement {
       static Element::Type name2type(const QStringRef&);
       static Element* name2Element(const QStringRef&, Score*);
 
-      void setFlag(ElementFlag f, bool v)  {
-            if (v)
-                  _flags |= f;
-            else
-                  _flags &= ~ElementFlags(f);
-            }
-      bool flag(ElementFlag f) const   { return _flags & f; }
-      void setFlags(ElementFlags f)    { _flags = f;    }
-      ElementFlags flags() const       { return _flags; }
       virtual bool systemFlag() const  { return false;  }
+
       bool selectable() const          { return flag(ElementFlag::SELECTABLE);  }
       void setSelectable(bool val)     { setFlag(ElementFlag::SELECTABLE, val); }
+
       bool dropTarget() const          { return flag(ElementFlag::DROP_TARGET); }
-      void setDropTarget(bool v) const {
-            if (v)
-                  _flags |= ElementFlag::DROP_TARGET;
-            else
-                  _flags &= ~ElementFlags(ElementFlag::DROP_TARGET);
-            }
+      void setDropTarget(bool v) const { setFlag(ElementFlag::DROP_TARGET, v);  }
+
       virtual bool isMovable() const   { return flag(ElementFlag::MOVABLE);     }
-      bool isSegmentFlag() const           { return flag(ElementFlag::SEGMENT);     }
+      bool isSegmentFlag() const       { return flag(ElementFlag::SEGMENT);     }
+
+      bool enabled() const             { return flag(ElementFlag::ENABLED); }
+      void setEnabled(bool val)        { setFlag(ElementFlag::ENABLED, val); }
+
       uint tag() const                 { return _tag;                      }
       void setTag(uint val)            { _tag = val;                       }
-      bool autoplace() const           { return _autoplace; }
-      void setAutoplace(bool v)        { _autoplace = v; }
+
+      bool autoplace() const           { return flag(ElementFlag::AUTOPLACE); }
+      void setAutoplace(bool v)        { setFlag(ElementFlag::AUTOPLACE, v); }
 
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
@@ -744,6 +760,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Fingering,     FINGERING)
       CONVERT(NoteHead,      NOTEHEAD)
       CONVERT(LyricsLineSegment, LYRICSLINE_SEGMENT)
+      CONVERT(FiguredBass,   FIGURED_BASS)
 #undef CONVERT
       };
 
@@ -844,6 +861,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Fingering,     FINGERING)
       CONVERT(NoteHead,      NOTEHEAD)
       CONVERT(LyricsLineSegment, LYRICSLINE_SEGMENT)
+      CONVERT(FiguredBass,   FIGURED_BASS)
 #undef CONVERT
 
 //---------------------------------------------------------

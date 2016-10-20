@@ -1077,6 +1077,29 @@ Note* Score::addMidiPitch(int pitch, bool addFlag)
       }
 
 //---------------------------------------------------------
+//   searchNote
+//    search for note or rest before or at tick position tick
+//    in staff
+//---------------------------------------------------------
+
+ChordRest* Score::searchNote(int tick, int track) const
+      {
+      ChordRest* ipe = 0;
+      Segment::Type st = Segment::Type::ChordRest;
+      for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
+            ChordRest* cr = segment->cr(track);
+            if (!cr)
+                  continue;
+            if (cr->tick() == tick)
+                  return cr;
+            if (cr->tick() >  tick)
+                  return ipe ? ipe : cr;
+            ipe = cr;
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   addPitch
 //---------------------------------------------------------
 
@@ -3637,7 +3660,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link
                   rest->setDurationType(TDuration::DurationType::V_MEASURE);
                   rest->setTrack(dtrack);
                   if (link) {
-                        Segment* segment = dm->getSegment(rest, dm->tick());
+                        Segment* segment = dm->getSegment(Segment::Type::ChordRest, dm->tick());
                         segment->add(rest);
                         }
                   else

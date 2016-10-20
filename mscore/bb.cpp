@@ -429,7 +429,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
                   Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
                   rest->setDuration(measure->len());
                   rest->setTrack(0);
-                  Segment* s = measure->getSegment(rest, measure->tick());
+                  Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
                   s->add(rest);
                   }
             }
@@ -448,7 +448,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
                   Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
                   rest->setDuration(measure->len());
                   rest->setTrack(0);
-                  Segment* s = measure->getSegment(rest, measure->tick());
+                  Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
                   s->add(rest);
                   }
             }
@@ -539,7 +539,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
             keysig->setTrack((score->staffIdx(staff->part()) + staff->rstaff()) * VOICES);
             keysig->setKey(Key(bb.key()));
             Measure* mks = score->tick2measure(tick);
-            Segment* sks = mks->getSegment(keysig, tick);
+            Segment* sks = mks->getSegment(Segment::Type::KeySig, tick);
             sks->add(keysig);
             }
       score->fixTicks();
@@ -584,7 +584,7 @@ int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int
       d.setVal(len);
       chord->setDurationType(d);
       chord->setDuration(d.fraction());
-      Segment* s = measure->getSegment(chord, tick);
+      Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
       s->add(chord);
 
       foreach (MNote* n, *notes) {
@@ -718,7 +718,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
                               Rest* rest = new Rest(score, d);
                               rest->setDuration(d.fraction());
                               rest->setTrack(staffIdx * VOICES);
-                              Segment* s = measure->getSegment(rest, ctick);
+                              Segment* s = measure->getSegment(Segment::Type::ChordRest, ctick);
                               s->add(rest);
 // qDebug("   add rest %d", len);
 

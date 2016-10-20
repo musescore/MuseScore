@@ -850,7 +850,7 @@ qreal StaffType::physStringToYOffset(int strg) const
 TabDurationSymbol::TabDurationSymbol(Score* s)
    : Element(s)
       {
-      setFlags(flags() & ~(ElementFlag::MOVABLE | ElementFlag::SELECTABLE) );
+      clearFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       setGenerated(true);
       _beamGrid   = TabBeamGrid::NONE;
       _beamLength = 0.0;
@@ -861,7 +861,7 @@ TabDurationSymbol::TabDurationSymbol(Score* s)
 TabDurationSymbol::TabDurationSymbol(Score* s, StaffType* tab, TDuration::DurationType type, int dots)
    : Element(s)
       {
-      setFlags(flags() & ~(ElementFlag::MOVABLE | ElementFlag::SELECTABLE) );
+      clearFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       setGenerated(true);
       _beamGrid   = TabBeamGrid::NONE;
       _beamLength = 0.0;
@@ -892,7 +892,7 @@ void TabDurationSymbol::layout()
       _beamGrid = TabBeamGrid::NONE;
       Chord* chord = static_cast<Chord*>(parent());
       // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
-      if (!chord || chord->type() != Element::Type::CHORD ||
+      if (!chord || !chord->isChord() ||
             (chord->beamMode() != Beam::Mode::BEGIN && chord->beamMode() != Beam::Mode::MID &&
                   chord->beamMode() != Beam::Mode::END) ) {
             QFontMetricsF fm(_tab->durationFont(), MScore::paintDevice());
@@ -903,7 +903,7 @@ void TabDurationSymbol::layout()
             ypos  = _tab->durationFontYOffset();
             ybb   = _tab->durationBoxY() - ypos;
             // with rests, move symbol down by half its displacement from staff
-            if(parent() && parent()->type() == Element::Type::REST) {
+            if (parent() && parent()->isRest()) {
                   ybb  += TAB_RESTSYMBDISPL * _spatium;
                   ypos += TAB_RESTSYMBDISPL * _spatium;
                   }

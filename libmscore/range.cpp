@@ -336,14 +336,11 @@ bool TrackList::write(Measure* measure) const
 
                   bool firstpart = true;
                   while (duration.numerator() > 0) {
-                        if ((e->type() == Element::Type::REST || e->type() == Element::Type::REPEAT_MEASURE)
-                           && (duration >= rest || e == back())
-                           && (rest == m->len()))
-                              {
+                        if ((e->isRest() || e->isRepeatMeasure()) && (duration >= rest || e == back()) && (rest == m->len())) {
                               //
                               // handle full measure rest
                               //
-                              segment = m->getSegment(e, m->tick() + pos.ticks());
+                              segment = m->getSegment(Segment::Type::ChordRest, m->tick() + pos.ticks());
                               if ((_track % VOICES) == 0) {
                                     // write only for voice 1
                                     Rest* r = new Rest(score, TDuration::DurationType::V_MEASURE);
@@ -374,9 +371,9 @@ bool TrackList::write(Measure* measure) const
                                           pos      += dd;
                                           }
                                     }
-                              else if (e->type() == Element::Type::CHORD) {
-                                    segment = m->getSegment(e, m->tick() + pos.ticks());
-                                    Chord* c = static_cast<Chord*>(e)->clone();
+                              else if (e->isChord()) {
+                                    segment = m->getSegment(Segment::Type::ChordRest, m->tick() + pos.ticks());
+                                    Chord* c = toChord(e)->clone();
                                     if (!firstpart)
                                           c->removeMarkings(true);
                                     c->setScore(score);
@@ -435,7 +432,7 @@ bool TrackList::write(Measure* measure) const
                         firstpart = false;
                         }
                   }
-            else if (e->type() == Element::Type::BAR_LINE) {
+            else if (e->isBarLine()) {
                   if (pos.numerator() == 0 && m) {
 //                        BarLineType t = static_cast<BarLine*>(e)->barLineType();
 //                        Measure* pm = m->prevMeasure();
@@ -444,11 +441,11 @@ bool TrackList::write(Measure* measure) const
                         }
                   }
             else {
-                  if (m == nullptr)
+                  if (!m)
                         break;
                   // add the element in its own segment;
                   // but KeySig has to be at start of (current) measure
-                  segment = m->getSegment(e, m->tick() + ((e->type() == Element::Type::KEYSIG) ? 0 : pos.ticks()));
+                  segment = m->getSegment(Segment::segmentType(e->type()), m->tick() + ((e->isKeySig()) ? 0 : pos.ticks()));
                   Element* ne = e->clone();
                   ne->setScore(score);
                   ne->setTrack(_track);

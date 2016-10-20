@@ -2179,7 +2179,7 @@ void Chord::layoutTablature()
                   LedgerLine* ldgLin = new LedgerLine(score());
                   ldgLin->setParent(this);
                   ldgLin->setTrack(track());
-                  ldgLin->setVisible(_visible);
+                  ldgLin->setVisible(visible());
                   ldgLin->setLen(headWidth + extraLen);
                   ldgLin->setPos(llX, llY);
                   ldgLin->setNext(_ledgerLines);

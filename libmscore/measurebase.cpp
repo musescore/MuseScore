@@ -32,23 +32,17 @@ namespace Ms {
 MeasureBase::MeasureBase(Score* score)
    : Element(score)
       {
+      setIrregular(true);
       }
 
 MeasureBase::MeasureBase(const MeasureBase& m)
    : Element(m)
       {
-      _next          = m._next;
-      _prev          = m._prev;
-      _tick          = m._tick;
-      _lineBreak     = m._lineBreak;
-      _pageBreak     = m._pageBreak;
-      _sectionBreak  = m._sectionBreak;
-      _no            = m._no;
-      _noOffset      = m._noOffset;
-      _irregular     = m._irregular;
-      _repeatEnd     = m._repeatEnd;
-      _repeatStart   = m._repeatStart;
-      _repeatJump    = m._repeatJump;
+      _next     = m._next;
+      _prev     = m._prev;
+      _tick     = m._tick;
+      _no       = m._no;
+      _noOffset = m._noOffset;
 
       for (Element* e : m._el)
             add(e->clone());
@@ -132,28 +126,28 @@ void MeasureBase::add(Element* e)
             LayoutBreak* b = toLayoutBreak(e);
             switch (b->layoutBreakType()) {
                   case LayoutBreak::PAGE:
-                        _pageBreak    = true;
-                        _lineBreak    = false;
-                        _noBreak      = false;
+                        setPageBreak(true);
+                        setLineBreak(false);
+                        setNoBreak(false);
                         break;
                   case LayoutBreak::LINE:
-                        _pageBreak    = false;
-                        _lineBreak    = true;
-                        _sectionBreak = false;
-                        _noBreak      = false;
+                        setPageBreak(false);
+                        setLineBreak(true);
+                        setSectionBreak(false);
+                        setNoBreak(false);
                         break;
                   case LayoutBreak::SECTION:
-                        _lineBreak    = false;
-                        _sectionBreak = true;
-                        _noBreak      = false;
+                        setLineBreak(false);
+                        setSectionBreak(true);
+                        setNoBreak(false);
       //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
                         score()->setLayoutAll();
                         break;
                   case LayoutBreak::NOBREAK:
-                        _pageBreak    = false;
-                        _lineBreak    = false;
-                        _sectionBreak = false;
-                        _noBreak      = true;
+                        setPageBreak(false);
+                        setLineBreak(false);
+                        setSectionBreak(false);
+                        setNoBreak(true);
                         break;
                   }
             }
@@ -172,18 +166,18 @@ void MeasureBase::remove(Element* el)
             LayoutBreak* lb = toLayoutBreak(el);
             switch (lb->layoutBreakType()) {
                   case LayoutBreak::PAGE:
-                        _pageBreak = false;
+                        setPageBreak(false);
                         break;
                   case LayoutBreak::LINE:
-                        _lineBreak = false;
+                        setLineBreak(false);
                         break;
                   case LayoutBreak::SECTION:
-                        _sectionBreak = false;
+                        setSectionBreak(false);
                         score()->setPause(endTick(), 0);
                         score()->setLayoutAll();
                         break;
                   case LayoutBreak::NOBREAK:
-                        _noBreak = false;
+                        setNoBreak(false);
                         break;
                   }
             }
@@ -265,7 +259,7 @@ Measure* MeasureBase::prevMeasureMM() const
 
 qreal MeasureBase::pause() const
       {
-      return _sectionBreak ? sectionBreakElement()->pause() : 0.0;
+      return sectionBreak() ? sectionBreakElement()->pause() : 0.0;
       }
 
 //---------------------------------------------------------
@@ -552,7 +546,7 @@ int MeasureBase::index() const
 
 LayoutBreak* MeasureBase::sectionBreakElement() const
       {
-      if (_sectionBreak) {
+      if (sectionBreak()) {
             for (Element* e : el()) {
                   if (e->isLayoutBreak() && toLayoutBreak(e)->isSectionBreak())
                         return toLayoutBreak(e);

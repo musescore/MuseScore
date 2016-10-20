@@ -321,7 +321,7 @@ static void fillGap(Measure* measure, int track, int tstart, int tend)
             rest->setDuration(Fraction::fromTicks(len));
             rest->setTrack(track);
             rest->setVisible(false);
-            Segment* s = measure->getSegment(rest, tstart);
+            Segment* s = measure->getSegment(Segment::Type::ChordRest, tstart);
             s->add(rest);
             len = rest->globalDuration().ticks();
             // qDebug(" %d", len);
@@ -3365,7 +3365,7 @@ static void addKey(const KeySigEvent key, const bool printObj, Score* score, Mea
             keysig->setTrack((staffIdx) * VOICES);
             keysig->setKeySigEvent(key);
             keysig->setVisible(printObj);
-            Segment* s = measure->getSegment(keysig, tick);
+            Segment* s = measure->getSegment(Segment::Type::KeySig, tick);
             s->add(keysig);
             //currKeySig->setKeySigEvent(key);
             }
@@ -3602,7 +3602,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       clefs->setClefType(clef);
       int track = _pass1.trackForPart(partId) + clefno * VOICES;
       clefs->setTrack(track);
-      Segment* s = measure->getSegment(clefs, tick);
+      Segment* s = measure->getSegment(Segment::Type::Clef, tick);
       s->add(clefs);
 
       // set the correct staff type
@@ -3721,7 +3721,7 @@ void MusicXMLParserPass2::time(const QString& partId, Measure* measure, const in
                               timesig->setNumeratorString(beats);
                               timesig->setDenominatorString(beatType);
                               }
-                        Segment* s = measure->getSegment(timesig, tick);
+                        Segment* s = measure->getSegment(Segment::Type::TimeSig, tick);
                         s->add(timesig);
                         }
                   }
@@ -3924,7 +3924,7 @@ static Chord* findOrCreateChord(Score* score, Measure* m,
             c->setTrack(track);
 
             setChordRestDuration(c, duration, dura);
-            Segment* s = m->getSegment(c, tick);
+            Segment* s = m->getSegment(Segment::Type::ChordRest, tick);
             s->add(c);
             }
       c->setStaffMove(move);

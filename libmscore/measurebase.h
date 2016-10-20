@@ -79,20 +79,6 @@ class MeasureBase : public Element {
       int _no                { 0 };       ///< Measure number, counting from zero
       int _noOffset          { 0 };       ///< Offset to measure number
 
-      bool _repeatEnd        { false };
-      bool _repeatStart      { false };
-      bool _repeatJump       { false };
-      bool _irregular        { true  };        ///< Irregular measure, do not count
-
-      bool _lineBreak        { false };        ///< Forced line break
-      bool _pageBreak        { false };        ///< Forced page break
-      bool _sectionBreak     { false };
-      bool _noBreak          { false };
-
-      bool _hasSystemHeader  { false };
-      bool _hasSystemTrailer { false };
-      bool _hasCourtesyKeySig { false };
-
    protected:
       void cleanupLayoutBreaks(bool undo);
 
@@ -128,15 +114,6 @@ class MeasureBase : public Element {
       System* system() const                 { return (System*)parent(); }
       void setSystem(System* s)              { setParent((Element*)s);   }
 
-      bool lineBreak() const                 { return _lineBreak; }
-      bool pageBreak() const                 { return _pageBreak; }
-      bool noBreak() const                   { return _noBreak;   }
-      bool sectionBreak() const              { return _sectionBreak; }
-      void setLineBreak(bool v)              { _lineBreak = v;    }
-      void setPageBreak(bool v)              { _pageBreak = v;    }
-      void setSectionBreak(bool v)           { _sectionBreak = v; }
-      void setNoBreak(bool v)                { _noBreak = v;      }
-
       LayoutBreak* sectionBreakElement() const;
 
       void undoSetBreak(bool v, LayoutBreak::Type type);
@@ -166,29 +143,44 @@ class MeasureBase : public Element {
       void clearElements();
       ElementList takeElements();
 
-      int no() const                     { return _no;          }
-      void setNo(int n)                  { _no = n;             }
-      bool irregular() const             { return _irregular;   }
-      void setIrregular(bool val)        { _irregular = val;    }
-      int noOffset() const               { return _noOffset;    }
-      void setNoOffset(int n)            { _noOffset = n;       }
+      int no() const                   { return _no;                     }
+      void setNo(int n)                { _no = n;                        }
+      int noOffset() const             { return _noOffset;               }
+      void setNoOffset(int n)          { _noOffset = n;                  }
 
-      bool repeatEnd() const             { return _repeatEnd;     }
-      bool repeatStart() const           { return _repeatStart;   }
-      bool repeatJump() const            { return _repeatJump;    }
+      bool repeatEnd() const           { return flag(ElementFlag::REPEAT_END);    }
+      void setRepeatEnd(bool v)        { setFlag(ElementFlag::REPEAT_END, v);     }
 
-      void setRepeatEnd(bool v)          { _repeatEnd = v;     }
-      void setRepeatStart(bool v)        { _repeatStart = v;   }
-      void setRepeatJump(bool v)         { _repeatJump = v;    }
+      bool repeatStart() const         { return flag(ElementFlag::REPEAT_START);  }
+      void setRepeatStart(bool v)      { setFlag(ElementFlag::REPEAT_START, v);   }
 
+      bool repeatJump() const          { return flag(ElementFlag::REPEAT_JUMP);   }
+      void setRepeatJump(bool v)       { setFlag(ElementFlag::REPEAT_JUMP, v);    }
 
-      bool hasSystemHeader() const       { return _hasSystemHeader;    }
-      bool hasSystemTrailer() const      { return _hasSystemTrailer;   }
-      void setHasSystemHeader(bool val)  { _hasSystemHeader = val;     }
-      void setHasSystemTrailer(bool val) { _hasSystemTrailer = val;    }
+      bool irregular() const           { return flag(ElementFlag::IRREGULAR);     }
+      void setIrregular(bool v)        { setFlag(ElementFlag::IRREGULAR, v);      }
 
-      bool hasCourtesyKeySig() const     { return _hasCourtesyKeySig; }
-      void setHasCourtesyKeySig(int val) { _hasCourtesyKeySig = val; }
+      bool lineBreak() const           { return flag(ElementFlag::LINE_BREAK);    }
+      void setLineBreak(bool v)        { setFlag(ElementFlag::LINE_BREAK, v);     }
+
+      bool pageBreak() const           { return flag(ElementFlag::PAGE_BREAK);    }
+      void setPageBreak(bool v)        { setFlag(ElementFlag::PAGE_BREAK, v);     }
+
+      bool sectionBreak() const        { return flag(ElementFlag::SECTION_BREAK); }
+      void setSectionBreak(bool v)     { setFlag(ElementFlag::SECTION_BREAK, v);  }
+
+      bool noBreak() const             { return flag(ElementFlag::NO_BREAK);      }
+      void setNoBreak(bool v)          { setFlag(ElementFlag::NO_BREAK, v);       }
+
+      bool hasSystemHeader() const     { return flag(ElementFlag::HEADER);        }
+      void setHasSystemHeader(bool v)  { setFlag(ElementFlag::HEADER, v);         }
+
+      bool hasSystemTrailer() const    { return flag(ElementFlag::TRAILER);       }
+      void setHasSystemTrailer(bool v) { setFlag(ElementFlag::TRAILER, v);        }
+
+      bool hasCourtesyKeySig() const   { return flag(ElementFlag::KEYSIG);        }
+      void setHasCourtesyKeySig(int v) { setFlag(ElementFlag::KEYSIG, v);         }
+
       virtual qreal computeMinWidth(bool /*isFirstMeasureInSystem*/) { return 0.0; };
 
       int index() const;

@@ -596,7 +596,7 @@ void MuseScore::newFile()
                               ts->setTrack(staffIdx * VOICES);
                               ts->setSig(timesig, timesigType);
                               Measure* m = _score->firstMeasure();
-                              Segment* s = m->getSegment(ts, 0);
+                              Segment* s = m->getSegment(Segment::Type::TimeSig, 0);
                               s->add(ts);
                               Part* part = staff->part();
                               if (!part->instrument()->useDrumset()) {
@@ -614,7 +614,7 @@ void MuseScore::newFile()
                                           KeySig* keysig = new KeySig(score);
                                           keysig->setTrack(staffIdx * VOICES);
                                           keysig->setKeySigEvent(nKey);
-                                          Segment* s = measure->getSegment(keysig, 0);
+                                          Segment* s = measure->getSegment(Segment::Type::KeySig, 0);
                                           s->add(keysig);
                                           }
                                     }
@@ -639,7 +639,7 @@ void MuseScore::newFile()
                                           rest->setScore(_score);
                                           rest->setDuration(d.fraction());
                                           rest->setTrack(staffIdx * VOICES);
-                                          Segment* seg = measure->getSegment(rest, ltick);
+                                          Segment* seg = measure->getSegment(Segment::Type::ChordRest, ltick);
                                           seg->add(rest);
                                           ltick += rest->actualTicks();
                                           k++;
@@ -654,7 +654,7 @@ void MuseScore::newFile()
                               rest->setScore(_score);
                               rest->setDuration(measure->len());
                               rest->setTrack(staffIdx * VOICES);
-                              Segment* seg = measure->getSegment(rest, tick);
+                              Segment* seg = measure->getSegment(Segment::Type::ChordRest, tick);
                               seg->add(rest);
                               }
                         }

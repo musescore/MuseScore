@@ -675,7 +675,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   rest->setDuration(m->timesig()/timeStretch);
                   rest->setTrack(e.track());
                   readRest(rest, e);
-                  segment = m->getSegment(rest, e.tick());
+                  segment = m->getSegment(Segment::Type::ChordRest, e.tick());
                   segment->add(rest);
 
                   if (!rest->duration().isValid())     // hack
@@ -815,7 +815,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                                           }
                                     }
                               if (!segment) {
-                                    segment = new Segment(m, Segment::Type::Clef, e.tick());
+                                    segment = new Segment(m, Segment::Type::Clef, e.tick() - m->tick());
                                     m->segments().insert(segment, ns);
                                     }
                               }

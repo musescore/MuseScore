@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>677</width>
-    <height>311</height>
+    <height>329</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -441,6 +441,13 @@
          <widget class="QCheckBox" name="autoplace">
           <property name="text">
            <string>autoplace</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="enabled">
+          <property name="text">
+           <string>enabled</string>
           </property>
          </widget>
         </item>

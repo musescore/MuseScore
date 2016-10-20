@@ -509,12 +509,12 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
       bool firstSeg = seg->measure()->first() == seg;
 
       Clef* gclef = 0;
-      foreach (Staff* staff, ostaff->staffList()) {
+      for (Staff* staff : ostaff->staffList()) {
             if (staff->staffType()->group() != ClefInfo::staffGroup(st))
                   continue;
 
-            Score* score = staff->score();
-            int tick     = seg->tick();
+            Score* score     = staff->score();
+            int tick         = seg->tick();
             Measure* measure = score->tick2measure(tick);
             if (!measure) {
                   qWarning("measure for tick %d not found!", tick);
@@ -529,16 +529,16 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                && measure->prevMeasure()        // and there is a previous measure
                ) {
                   measure = measure->prevMeasure();
-                  destSeg = measure->findSegment(Segment::Type::Clef, tick);
+                  destSeg = measure->findSegmentR(Segment::Type::Clef, measure->ticks());
                   }
 
             if (!destSeg) {
-                  destSeg = new Segment(measure, Segment::Type::Clef, seg->tick());
+                  destSeg = new Segment(measure, Segment::Type::Clef, measure->ticks());
                   score->undoAddElement(destSeg);
                   }
             int staffIdx = staff->idx();
             int track    = staffIdx * VOICES;
-            Clef* clef   = static_cast<Clef*>(destSeg->element(track));
+            Clef* clef   = toClef(destSeg->element(track));
 
             if (clef) {
                   //
@@ -569,7 +569,7 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                         Measure* mmMeasure = measure->mmRest();
                         Segment* mmDestSeg = mmMeasure->findSegment(Segment::Type::Clef, tick);
                         if (mmDestSeg) {
-                              Clef* mmClef = static_cast<Clef*>(mmDestSeg->element(clef->track()));
+                              Clef* mmClef = toClef(mmDestSeg->element(clef->track()));
                               if (mmClef)
                                     score->undo(new ChangeClefType(mmClef, cp, tp));
                               }
@@ -577,7 +577,7 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   }
             else {
                   if (gclef) {
-                        clef = static_cast<Clef*>(gclef->linkedClone());
+                        clef = toClef(gclef->linkedClone());
                         clef->setScore(score);
                         }
                   else {
@@ -3707,9 +3707,8 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType, bool beginB
                               if (segment) {
                                     for (Element* e : segment->elist()) {
                                           if (e) {
-                                                BarLine* bl = toBarLine(e);
-                                                bl->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(barType));
-                                                bl->undoChangeProperty(P_ID::GENERATED, false);
+                                                e->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(barType));
+                                                e->undoChangeProperty(P_ID::GENERATED, false);
                                                 }
                                           }
                                     }
@@ -3718,9 +3717,8 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType, bool beginB
                               segment = m->undoGetSegment(Segment::Type::BeginBarLine, tick);
                               for (Element* e : segment->elist()) {
                                     if (e) {
-                                          BarLine* bl = toBarLine(e);
-                                          bl->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(barType));
-                                          bl->undoChangeProperty(P_ID::GENERATED, false);
+                                          e->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(barType));
+                                          e->undoChangeProperty(P_ID::GENERATED, false);
                                           }
                                     else {
                                           BarLine* bl = new BarLine(s);
@@ -3739,8 +3737,6 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType, bool beginB
                         break;
                   case BarLineType::END_REPEAT:
                         s->undoChangeProperty(m, P_ID::REPEAT_END, true);
-                        if (nm)
-                              s->undoChangeProperty(nm, P_ID::REPEAT_START, false);
                         break;
                   case BarLineType::END_START_REPEAT:
                         s->undoChangeProperty(m, P_ID::REPEAT_END, true);
