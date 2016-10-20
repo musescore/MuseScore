@@ -77,6 +77,7 @@ class Part : public QObject, public ScoreElement {
       virtual const char* name() const override { return "Part"; }
 
       void read(XmlReader&);
+      virtual bool readProperties(XmlReader&);
       void write(Xml& xml) const;
 
       int nstaves() const                       { return _staves.size(); }

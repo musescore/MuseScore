@@ -58,6 +58,7 @@ void TestCompat206::compat_data()
       QTest::newRow("articulations") <<  "articulations";
       QTest::newRow("breath")        <<  "breath";
       QTest::newRow("clefs")         <<  "clefs";
+      QTest::newRow("drumset")       <<  "drumset";
       QTest::newRow("markers")       <<  "markers";
       QTest::newRow("noteheads")     <<  "noteheads";
       QTest::newRow("textstyles")    <<  "textstyles";

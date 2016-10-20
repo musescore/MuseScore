@@ -57,7 +57,7 @@
         <instrumentId>drum.snare-drum</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="37">
-          <head>1</head>
+          <head>cross</head>
           <line>0</line>
           <voice>0</voice>
           <name>Side Stick</name>
@@ -65,7 +65,7 @@
           <shortcut>A</shortcut>
           </Drum>
         <Drum pitch="38">
-          <head>0</head>
+          <head>normal</head>
           <line>0</line>
           <voice>0</voice>
           <name>Acoustic Snare</name>

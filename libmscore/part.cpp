@@ -57,6 +57,39 @@ Staff* Part::staff(int idx) const
       return _staves[idx];
       }
 
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Part::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "Staff") {
+            Staff* staff = new Staff(score());
+            staff->setPart(this);
+            score()->staves().push_back(staff);
+            _staves.push_back(staff);
+            staff->read(e);
+            }
+      else if (tag == "Instrument") {
+            Instrument* instr = new Instrument;
+            instr->read(e, this);
+            setInstrument(instr, -1);
+            }
+      else if (tag == "name")
+            instrument()->setLongName(e.readElementText());
+      else if (tag == "shortName")
+            instrument()->setShortName(e.readElementText());
+      else if (tag == "trackName")
+            _partName = e.readElementText();
+      else if (tag == "show")
+            _show = e.readInt();
+      else
+            return false;
+      return true;
+      }
+
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
@@ -64,35 +97,8 @@ Staff* Part::staff(int idx) const
 void Part::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "Staff") {
-                  Staff* staff = new Staff(score());
-                  staff->setPart(this);
-                  score()->staves().push_back(staff);
-                  _staves.push_back(staff);
-                  staff->read(e);
-                  }
-            else if (tag == "Instrument") {
-                  Instrument* instr = new Instrument;
-                  instr->read(e, this);
-                  setInstrument(instr, -1);
-                  Staff* s = staff(0);
-                  // adjust drumset line numbers for pre-2.1 scores
-                  Drumset* ds = instr->drumset();
-                  int lld = s ? qRound(s->logicalLineDistance()) : 1;
-                  if (score()->mscVersion() < 207 && ds && lld > 1) {
-                        for (int i = 0; i < DRUM_INSTRUMENTS; ++i)
-                              ds->drum(i).line /= lld;
-                        }
-                  }
-            else if (tag == "name")
-                  instrument()->setLongName(e.readElementText());
-            else if (tag == "shortName")
-                  instrument()->setShortName(e.readElementText());
-            else if (tag == "trackName")
-                  _partName = e.readElementText();
-            else if (tag == "show")
-                  _show = e.readInt();
+            if (readProperties(e))
+                 ;
             else
                   e.unknown();
             }
