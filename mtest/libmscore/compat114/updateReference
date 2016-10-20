@@ -24,3 +24,4 @@ cp $S/textstyles-test.mscx               textstyles-ref.mscx
 cp $S/title-test.mscx                    title-ref.mscx
 cp $S/tremolo2notes-test.mscx            tremolo2notes-ref.mscx
 cp $S/markers-test.mscx                  markers-ref.mscx
+cp $S/drumset-test.mscx                  drumset-ref.mscx

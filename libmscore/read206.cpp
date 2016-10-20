@@ -29,6 +29,7 @@
 #include "keysig.h"
 #include "stafftext.h"
 #include "dynamic.h"
+#include "drumset.h"
 #include "timesig.h"
 #include "slur.h"
 #include "chord.h"
@@ -360,6 +361,101 @@ static NoteHead::Type convertHeadType(int i)
                   val = NoteHead::Type::HEAD_AUTO;;
             }
       return val;
+      }
+
+//---------------------------------------------------------
+//   readDrumset
+//---------------------------------------------------------
+
+static void readDrumset(Drumset* ds, XmlReader& e)
+      {
+      int pitch = e.intAttribute("pitch", -1);
+      if (pitch < 0 || pitch > 127) {
+            qDebug("load drumset: invalid pitch %d", pitch);
+            return;
+            }
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "head")
+                  ds->drum(pitch).notehead = convertHeadGroup(e.readInt());
+            else if (ds->readProperties(e, pitch))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   readInstrument
+//---------------------------------------------------------
+
+static void readInstrument(Instrument *i, Part* p, XmlReader& e)
+      {
+      int program = -1;
+      int bank    = 0;
+      int chorus  = 30;
+      int reverb  = 30;
+      int volume  = 100;
+      int pan     = 60;
+      bool customDrumset = false;
+      i->clearChannels();       // remove default channel
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Drum") {
+                  // if we see one of this tags, a custom drumset will
+                  // be created
+                  if (!i->drumset())
+                        i->setDrumset(new Drumset(*smDrumset));
+                  if (!customDrumset) {
+                        i->drumset()->clear();
+                        customDrumset = true;
+                        }
+                  readDrumset(i->drumset(), e);
+                  }
+
+            else if (i->readProperties(e, p, &customDrumset))
+                  ;
+            else
+                 e.unknown();
+            }
+      if (i->channel().empty()) {      // for backward compatibility
+            Channel* a = new Channel;
+            a->chorus  = chorus;
+            a->reverb  = reverb;
+            a->name    = "normal";
+            a->program = program;
+            a->bank    = bank;
+            a->volume  = volume;
+            a->pan     = pan;
+            i->appendChannel(a);
+            }
+      if (i->useDrumset()) {
+            if (i->channel()[0]->bank == 0)
+                  i->channel()[0]->bank = 128;
+            i->channel()[0]->updateInitList();
+            }
+      }
+
+static void readPart(Part* part, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Instrument") {
+                  Instrument* i = part->instrument();
+                  readInstrument(i, part, e);
+                  Drumset* ds = i->drumset();
+                  Staff*   s = part->staff(0);
+                  int lld = s ? qRound(s->logicalLineDistance()) : 1;
+                  if (ds && s && lld > 1) {
+                        for (int i = 0; i < DRUM_INSTRUMENTS; ++i)
+                              ds->drum(i).line /= lld;
+                        }
+                  }
+            else if (part->readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
       }
 
 //---------------------------------------------------------
@@ -1404,7 +1500,7 @@ static bool readScore(Score* score, XmlReader& e)
                   }
             else if (tag == "Part") {
                   Part* part = new Part(score);
-                  part->read(e);
+                  readPart(part, e);
                   score->parts().push_back(part);
                   }
             else if ((tag == "HairPin")
