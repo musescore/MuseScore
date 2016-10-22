@@ -2600,22 +2600,32 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
                   noteheadTagname += " filled=\"no\"";
             if (note->headGroup() == NoteHead::Group::HEAD_SLASH)
                   xml.tag(noteheadTagname, "slash");
-            else if (note->headGroup() == NoteHead::Group::HEAD_TRIANGLE)
+            else if (note->headGroup() == NoteHead::Group::HEAD_TRIANGLE_UP)
                   xml.tag(noteheadTagname, "triangle");
             else if (note->headGroup() == NoteHead::Group::HEAD_DIAMOND)
                   xml.tag(noteheadTagname, "diamond");
+            else if (note->headGroup() == NoteHead::Group::HEAD_PLUS)
+                  xml.tag(noteheadTagname, "cross");
             else if (note->headGroup() == NoteHead::Group::HEAD_CROSS)
                   xml.tag(noteheadTagname, "x");
             else if (note->headGroup() == NoteHead::Group::HEAD_XCIRCLE)
                   xml.tag(noteheadTagname, "circle-x");
+            else if (note->headGroup() == NoteHead::Group::HEAD_TRIANGLE_DOWN)
+                  xml.tag(noteheadTagname, "inverted triangle");
+            else if (note->headGroup() == NoteHead::Group::HEAD_SLASHED1)
+                  xml.tag(noteheadTagname, "slashed");
+            else if (note->headGroup() == NoteHead::Group::HEAD_SLASHED2)
+                  xml.tag(noteheadTagname, "back slashed");
             else if (note->headGroup() == NoteHead::Group::HEAD_DO)
                   xml.tag(noteheadTagname, "do");
             else if (note->headGroup() == NoteHead::Group::HEAD_RE)
                   xml.tag(noteheadTagname, "re");
             else if (note->headGroup() == NoteHead::Group::HEAD_MI)
                   xml.tag(noteheadTagname, "mi");
-            else if (note->headGroup() == NoteHead::Group::HEAD_FA)
+            else if (note->headGroup() == NoteHead::Group::HEAD_FA && !note->chord()->up())
                   xml.tag(noteheadTagname, "fa");
+            else if (note->headGroup() == NoteHead::Group::HEAD_FA && note->chord()->up())
+                  xml.tag(noteheadTagname, "fa up");
             else if (note->headGroup() == NoteHead::Group::HEAD_LA)
                   xml.tag(noteheadTagname, "la");
             else if (note->headGroup() == NoteHead::Group::HEAD_TI)

@@ -23,6 +23,8 @@
 #include "libmscore/tremolo.h"
 #include "libmscore/articulation.h"
 #include "libmscore/sym.h"
+#include "libmscore/key.h"
+#include "libmscore/pitchspelling.h"
 #include "mtest/testutils.h"
 
 #define DIR QString("libmscore/note/")
@@ -45,6 +47,7 @@ class TestNote : public QObject, public MTest
       void tpcTranspose();
       void tpcTranspose2();
       void noteLimits();
+      void tpcDegrees();
       };
 
 //---------------------------------------------------------
@@ -481,6 +484,17 @@ void TestNote::noteLimits()
             score->cmdAddInterval(8, nl);
             }
       QVERIFY(saveCompareScore(score, "notelimits-test.mscx", DIR + "notelimits-ref.mscx"));
+      }
+
+void TestNote::tpcDegrees()
+      {
+      QCOMPARE(tpc2degree(Tpc::TPC_C,   Key::C),   0);
+      //QCOMPARE(tpc2degree(Tpc::TPC_E_S, Key::C),   3);
+      QCOMPARE(tpc2degree(Tpc::TPC_B,   Key::C),   6);
+      QCOMPARE(tpc2degree(Tpc::TPC_F_S, Key::C_S), 3);
+      QCOMPARE(tpc2degree(Tpc::TPC_B,   Key::C_S), 6);
+      QCOMPARE(tpc2degree(Tpc::TPC_B_B, Key::C_S), 6);
+      //QCOMPARE(tpc2degree(Tpc::TPC_B_S, Key::C_S), 7);
       }
 
 QTEST_MAIN(TestNote)

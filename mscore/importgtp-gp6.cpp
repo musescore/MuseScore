@@ -646,7 +646,7 @@ void GuitarPro6::readDrumNote(Note* note, int element, int variation)
       else if (element == 2 && variation == 0) {
             octaveInt = 6;
             toneInt = 4;
-            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE);
+            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE_DOWN);
       }
       else if (element == 15 && variation == 0) {
             octaveInt = 6;
@@ -666,7 +666,7 @@ void GuitarPro6::readDrumNote(Note* note, int element, int variation)
       else if (element == 3 && variation == 0) {
             octaveInt = 6;
             toneInt = 5;
-            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE);
+            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE_DOWN);
       }
       else if (element == 10 && variation == 0) {
             octaveInt = 6;
@@ -691,7 +691,7 @@ void GuitarPro6::readDrumNote(Note* note, int element, int variation)
       else if (element == 4 && variation == 0) {
             octaveInt = 6;
             toneInt = 7;
-            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE);
+            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE_DOWN);
       }
       else if (element == 14 && variation == 0) {
             octaveInt = 6;

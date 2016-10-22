@@ -385,7 +385,7 @@ static NoteHead::Group convertHeadGroup(int i)
                   val = NoteHead::Group::HEAD_DIAMOND;
                   break;
             case 3:
-                  val = NoteHead::Group::HEAD_TRIANGLE;
+                  val = NoteHead::Group::HEAD_TRIANGLE_DOWN;
                   break;
             case 4:
                   val = NoteHead::Group::HEAD_MI;

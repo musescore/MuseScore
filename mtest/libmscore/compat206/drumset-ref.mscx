@@ -242,7 +242,7 @@
           <stem>1</stem>
           </Drum>
         <Drum pitch="56">
-          <head>triangle</head>
+          <head>triangle-down</head>
           <line>1</line>
           <voice>0</voice>
           <name>Cowbell</name>
@@ -378,7 +378,7 @@
           <stem>1</stem>
           </Drum>
         <Drum pitch="60">
-          <head>triangle</head>
+          <head>triangle-down</head>
           <line>0</line>
           <voice>0</voice>
           <name>Visual (BS,X-Over,Etc)</name>
@@ -996,7 +996,7 @@
           <Note>
             <pitch>56</pitch>
             <tpc>22</tpc>
-            <head>triangle</head>
+            <head>triangle-down</head>
             </Note>
           </Chord>
         <Chord>
@@ -1128,7 +1128,7 @@
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>
-            <head>triangle</head>
+            <head>triangle-down</head>
             </Note>
           </Chord>
         <Rest>
