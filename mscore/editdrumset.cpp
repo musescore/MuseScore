@@ -41,7 +41,7 @@ NoteHead::Group noteHeadNames[] = {
       NoteHead::Group::HEAD_NORMAL,
       NoteHead::Group::HEAD_CROSS,
       NoteHead::Group::HEAD_DIAMOND,
-      NoteHead::Group::HEAD_TRIANGLE,
+      NoteHead::Group::HEAD_TRIANGLE_DOWN,
       NoteHead::Group::HEAD_MI,
       NoteHead::Group::HEAD_SLASH,
       NoteHead::Group::HEAD_XCIRCLE,

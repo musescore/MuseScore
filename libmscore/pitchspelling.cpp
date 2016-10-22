@@ -902,5 +902,19 @@ int absStep2pitchByKey(int step, Key key)
       return octave * PITCH_DELTA_OCTAVE + deltaPitch;
       }
 
+//---------------------------------------------------------
+//   tpc2degree
+//    the scale degree of a TPC for a given Key
+//---------------------------------------------------------
+
+int tpc2degree(int tpc, Key key)
+      {
+      const QString names("CDEFGAB");
+      const QString scales("CGDAEBFCGDAEBFC");
+      QString scale = scales[int(key)+7];
+      QString stepName = tpc2stepName(tpc);
+      return (names.indexOf(stepName) - names.indexOf(scale) +28) % 7;
+      }
+
 }
 

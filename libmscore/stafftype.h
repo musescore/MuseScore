@@ -186,6 +186,9 @@ class StaffType {
       bool _genKeysig       = true;       // create key signature at beginning of system
       bool _showLedgerLines = true;
 
+      // Standard: configurable properties
+      NoteHeadScheme _noteHeadScheme = NoteHeadScheme::HEAD_NORMAL;
+
       // TAB: configurable properties
       qreal _durationFontSize = 15.0;     // the size (in points) for the duration symbol font
       qreal _durationFontUserY = 0.0;     // the vertical offset (spatium units) for the duration symb. font
@@ -297,6 +300,8 @@ class StaffType {
       bool genKeysig() const                   { return _genKeysig;         }
       void setShowLedgerLines(bool val)        { _showLedgerLines = val;    }
       bool showLedgerLines() const             { return _showLedgerLines;   }
+      void setNoteHeadScheme(NoteHeadScheme s) { _noteHeadScheme = s;       }
+      NoteHeadScheme noteHeadScheme()          { return _noteHeadScheme;    }
 
       QString fretString(int fret, int string, bool ghost) const;   // returns a string with the text for fret
       QString durationString(TDuration::DurationType type, int dots) const;
@@ -375,6 +380,9 @@ class StaffType {
 
       static void initStaffTypes();
       static const std::vector<StaffType>& presets() { return _presets; }
+      static QString scheme2userName(NoteHeadScheme ns);
+      static QString scheme2name(NoteHeadScheme ns);
+      static NoteHeadScheme name2scheme(QString name);
       };
 
 //---------------------------------------------------------
