@@ -71,6 +71,60 @@ static Acc accList[] = {
       Acc(AccidentalVal::NATURAL, 0,    SymId::accidentalKucukMucennebSharp), // SHARP_SLASH3
       Acc(AccidentalVal::NATURAL, 0,    SymId::accidentalBuyukMucennebSharp), // SHARP_SLASH2
 
+      // Extended Helmholtz-Ellis accidentals (just intonation)
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalDoubleFlatOneArrowDown),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalFlatOneArrowDown),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalNaturalOneArrowDown),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalSharpOneArrowDown),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalDoubleSharpOneArrowDown),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalDoubleFlatOneArrowUp),
+
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalFlatOneArrowUp),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalNaturalOneArrowUp),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalSharpOneArrowUp),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalDoubleSharpOneArrowUp),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalDoubleFlatTwoArrowsDown),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalFlatTwoArrowsDown),
+
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalNaturalTwoArrowsDown),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalSharpTwoArrowsDown),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalDoubleSharpTwoArrowsDown),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalDoubleFlatTwoArrowsUp),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalFlatTwoArrowsUp),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalNaturalTwoArrowsUp),
+
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalSharpTwoArrowsUp),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalDoubleSharpTwoArrowsUp),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalDoubleFlatThreeArrowsDown),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalFlatThreeArrowsDown),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalNaturalThreeArrowsDown),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalSharpThreeArrowsDown),
+
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalDoubleSharpThreeArrowsDown),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalDoubleFlatThreeArrowsUp),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalFlatThreeArrowsUp),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalNaturalThreeArrowsUp),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalSharpThreeArrowsUp),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalDoubleSharpThreeArrowsUp),
+
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalLowerOneSeptimalComma),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalRaiseOneSeptimalComma),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalLowerTwoSeptimalCommas),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalRaiseTwoSeptimalCommas),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalLowerOneUndecimalQuartertone),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalRaiseOneUndecimalQuartertone),
+
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalLowerOneTridecimalQuartertone),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalRaiseOneTridecimalQuartertone),
+
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalDoubleFlatEqualTempered),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalFlatEqualTempered),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalNaturalEqualTempered),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalSharpEqualTempered),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalDoubleSharpEqualTempered),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalQuarterFlatEqualTempered),
+      Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalQuarterSharpEqualTempered),
+
       // Persian
       Acc(AccidentalVal::NATURAL, 50,   SymId::accidentalSori),                          // SORI
       Acc(AccidentalVal::NATURAL, -50,  SymId::accidentalKoron),                         // KORON
