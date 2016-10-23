@@ -203,6 +203,8 @@ void Beam::removeChordRest(ChordRest* a)
 
 void Beam::draw(QPainter* painter) const
       {
+      if (beamSegments.size() <= 0)
+            return;
       painter->setBrush(QBrush(curColor()));
       painter->setPen(Qt::NoPen);
       qreal lw2 = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
