@@ -201,6 +201,60 @@ class Accidental : public Element {
             FLAT_SLASH,
             SHARP_SLASH3,
             SHARP_SLASH2,
+            
+            // Extended Helmholtz-Ellis accidentals (just intonation)
+            DOUBLE_FLAT_ONE_ARROW_DOWN,
+            FLAT_ONE_ARROW_DOWN,
+            NATURAL_ONE_ARROW_DOWN,
+            SHARP_ONE_ARROW_DOWN,
+            DOUBLE_SHARP_ONE_ARROW_DOWN,
+            DOUBLE_FLAT_ONE_ARROW_UP,
+
+            FLAT_ONE_ARROW_UP,
+            NATURAL_ONE_ARROW_UP,
+            SHARP_ONE_ARROW_UP,
+            DOUBLE_SHARP_ONE_ARROW_UP,
+            DOUBLE_FLAT_TWO_ARROWS_DOWN,
+            FLAT_TWO_ARROWS_DOWN,
+
+            NATURAL_TWO_ARROWS_DOWN,
+            SHARP_TWO_ARROWS_DOWN,
+            DOUBLE_SHARP_TWO_ARROWS_DOWN,
+            DOUBLE_FLAT_TWO_ARROWS_UP,
+            FLAT_TWO_ARROWS_UP,
+            NATURAL_TWO_ARROWS_UP,
+
+            SHARP_TWO_ARROWS_UP,
+            DOUBLE_SHARP_TWO_ARROWS_UP,
+            DOUBLE_FLAT_THREE_ARROWS_DOWN,
+            FLAT_THREE_ARROWS_DOWN,
+            NATURAL_THREE_ARROWS_DOWN,
+            SHARP_THREE_ARROWS_DOWN,
+
+            DOUBLE_SHARP_THREE_ARROWS_DOWN,
+            DOUBLE_FLAT_THREE_ARROWS_UP,
+            FLAT_THREE_ARROWS_UP,
+            NATURAL_THREE_ARROWS_UP,
+            SHARP_THREE_ARROWS_UP,
+            DOUBLE_SHARP_THREE_ARROWS_UP,
+
+            LOWER_ONE_SEPTIMAL_COMMA,
+            RAISE_ONE_SEPTIMAL_COMMA,
+            LOWER_TWO_SEPTIMAL_COMMAS,
+            RAISE_TWO_SEPTIMAL_COMMAS,
+            LOWER_ONE_UNDECIMAL_QUARTERTONE,
+            RAISE_ONE_UNDECIMAL_QUARTERTONE,
+
+            LOWER_ONE_TRIDECIMAL_QUARTERTONE,
+            RAISE_ONE_TRIDECIMAL_QUARTERTONE,
+
+            DOUBLE_FLAT_EQUAL_TEMPERED,
+            FLAT_EQUAL_TEMPERED,
+            NATURAL_EQUAL_TEMPERED,
+            SHARP_EQUAL_TEMPERED,
+            DOUBLE_SHARP_EQUAL_TEMPERED,
+            QUARTER_FLAT_EQUAL_TEMPERED,
+            QUARTER_SHARP_EQUAL_TEMPERED,
 
             // Persian
             SORI,
