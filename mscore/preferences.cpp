@@ -319,7 +319,7 @@ void Preferences::write()
       if (globalStyle == MuseScoreStyleType::DARK_OXYGEN)
             styleName = "dark";
       else if (globalStyle == MuseScoreStyleType::LIGHT_OXYGEN)
-            styleName = "light_oxygen";
+            styleName = "light";
       else if (globalStyle == MuseScoreStyleType::DARK_FUSION)
             styleName = "dark_fusion";
       s.setValue("style", styleName);
