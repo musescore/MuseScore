@@ -26,10 +26,13 @@ enum class SymId;
 //---------------------------------------------------------
 //   @@ Symbol
 ///    Symbol constructed from builtin symbol.
+//
+//   @P symbol       string       the SMuFL name of the symbol
 //---------------------------------------------------------
 
 class Symbol : public BSymbol {
       Q_OBJECT
+      Q_PROPERTY(QString symbol        READ symName)
 
    protected:
       SymId _sym;
@@ -46,6 +49,7 @@ class Symbol : public BSymbol {
 
       void setSym(SymId s, const ScoreFont* sf = nullptr) { _sym  = s; _scoreFont = sf;    }
       SymId sym() const                  { return _sym;  }
+      QString symName() const;
 
       virtual void draw(QPainter*) const override;
       virtual void write(Xml& xml) const override;
