@@ -4664,11 +4664,11 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "masterpalette")
             showMasterPalette();
       else if (cmd == "key-signatures")
-            showMasterPalette(tr("Key Signatures"));
+            showMasterPalette(qApp->translate("Palette", "Key Signatures"));
       else if (cmd == "time-signatures")
-            showMasterPalette(tr("Time Signatures"));
+            showMasterPalette(qApp->translate("Palette", "Time Signatures"));
       else if (cmd == "symbols")
-            showMasterPalette(tr("Symbols"));
+            showMasterPalette(qApp->translate("MasterPalette", "Symbols"));
       else if (cmd == "toggle-statusbar") {
             preferences.showStatusBar = a->isChecked();
             _statusBar->setVisible(preferences.showStatusBar);
