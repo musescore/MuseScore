@@ -2,7 +2,7 @@ test script p1
      Direction.AUTO: 0
      Direction.UP:   1
      Direction.DOWN: 2
-filter:256
+filter:512
 filter:-1
 Clef
 type is:15

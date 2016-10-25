@@ -805,7 +805,11 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         clef->setClefType(nclef);
                         clef->setTrack(staffIdx * VOICES);
                         Measure* m = score->getCreateMeasure(tick);
-                        Segment* s = m->getSegment(Segment::Type::Clef, tick);
+                        Segment* s;
+                        if (tick == m->tick())
+                              s = m->getSegment(Segment::Type::HeaderClef, tick);
+                        else
+                              s = m->getSegment(Segment::Type::Clef, tick);
                         s->add(clef);
                         }
                         break;

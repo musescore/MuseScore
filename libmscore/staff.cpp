@@ -249,6 +249,22 @@ ClefType Staff::clef(int tick) const
       return score()->styleB(StyleIdx::concertPitch) ? c._concertClef : c._transposingClef;
       }
 
+//---------------------------------------------------------
+//   Staff::nextClefTick
+//
+//    return the tick of next clef after tick
+//    return last tick of score if not found
+//---------------------------------------------------------
+
+int Staff::nextClefTick(int tick) const
+      {
+      int t = clefs.nextClefTick(tick);
+      if (t == -1)
+            return score()->lastMeasure()->last()->tick();
+      return t;
+      }
+
+
 #ifndef NDEBUG
 //---------------------------------------------------------
 //   dumpClef

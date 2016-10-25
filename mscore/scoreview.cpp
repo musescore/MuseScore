@@ -1981,7 +1981,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                               double _spatium = score()->spatium();
                               QPen pen;
                               pen.setColor(Qt::red);
-                              pen.setWidthF(1);
+                              pen.setWidthF(4);
                               pen.setStyle(Qt::SolidLine);
                               p.setPen(pen);
                               p.setBrush(Qt::NoBrush);

@@ -109,6 +109,7 @@
       <Staff id="2">
         <StaffType group="pitched">
           </StaffType>
+        <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
@@ -532,10 +533,6 @@
       </Staff>
     <Staff id="2">
       <Measure number="1">
-        <Clef>
-          <concertClefType>F</concertClefType>
-          <transposingClefType>F</transposingClefType>
-          </Clef>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>

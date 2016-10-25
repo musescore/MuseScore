@@ -451,6 +451,32 @@
           </property>
          </widget>
         </item>
+        <item row="2" column="4">
+         <widget class="QCheckBox" name="header">
+          <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string notr="true">header</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="5">
+         <widget class="QCheckBox" name="trailer">
+          <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string notr="true">trailer</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>

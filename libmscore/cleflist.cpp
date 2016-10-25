@@ -62,5 +62,21 @@ void ClefList::setClef(int tick, ClefTypeList ctl)
             i->second = ctl;
       }
 
+//---------------------------------------------------------
+//   nextClefTick
+//
+//    return the tick at which the clef after tick is located
+//    return -1, if no such clef
+//---------------------------------------------------------
+
+int ClefList::nextClefTick(int tick) const
+      {
+      if (empty())
+            return -1;
+      auto i = upper_bound(tick+1);
+      if (i == end())
+            return -1;
+      return i->first;
+      }
 }
 

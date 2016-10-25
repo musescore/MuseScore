@@ -187,10 +187,26 @@ void CapExplicitBarline::readCapx(XmlReader& e)
 void CapClef::readCapx(XmlReader& e)
       {
       QString clef = e.attribute("clef");
-      if (clef == "G2-") { form = Form::G; line = ClefLine::L2; oct = Oct::OCT_BASSA; }
-      else if (clef == "treble") { form = Form::G; line = ClefLine::L2; oct = Oct::OCT_NULL; }
-      else if (clef == "bass") { form = Form::F; line = ClefLine::L4; oct = Oct::OCT_NULL; }
-      else { /* default */ form = Form::G; line = ClefLine::L2; oct = Oct::OCT_NULL; }
+      if (clef == "G2-") {
+            form = Form::G;
+            line = ClefLine::L2;
+            oct = Oct::OCT_BASSA;
+            }
+      else if (clef == "treble") {
+            form = Form::G;
+            line = ClefLine::L2;
+            oct = Oct::OCT_NULL;
+            }
+      else if (clef == "bass") {
+            form = Form::F;
+            line = ClefLine::L4;
+            oct = Oct::OCT_NULL;
+            }
+      else {
+            /* default */ form = Form::G;
+            line = ClefLine::L2;
+            oct = Oct::OCT_NULL;
+            }
       qDebug("Clef::read '%s' -> form %d line %d oct %d", qPrintable(clef), int(form), int(line), int(oct));
       e.readNext();
       }

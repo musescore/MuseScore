@@ -139,7 +139,6 @@ class BarLine : public Element {
       virtual int subtype() const override         { return int(_barLineType); }
       virtual QString subtypeName() const override { return qApp->translate("barline", barLineTypeName().toUtf8()); }
 
-
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID propertyId) const override;

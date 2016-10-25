@@ -3602,7 +3602,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       clefs->setClefType(clef);
       int track = _pass1.trackForPart(partId) + clefno * VOICES;
       clefs->setTrack(track);
-      Segment* s = measure->getSegment(Segment::Type::Clef, tick);
+      Segment* s = measure->getSegment(tick ? Segment::Type::Clef : Segment::Type::HeaderClef, tick);
       s->add(clefs);
 
       // set the correct staff type

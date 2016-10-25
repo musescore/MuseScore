@@ -171,6 +171,7 @@ class Staff : public QObject, public ScoreElement {
       ClefTypeList defaultClefType() const           { return _defaultClefType; }
       void setDefaultClefType(const ClefTypeList& l) { _defaultClefType = l; }
       ClefType clef(int tick) const;
+      int nextClefTick(int tick) const;
 
       void setClef(Clef*);
       void removeClef(Clef*);

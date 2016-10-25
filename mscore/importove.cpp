@@ -851,7 +851,7 @@ void OveToMScore::convertSignatures(){
                         clef->setClefType(clefType);
                         clef->setTrack((staffCount+j)*VOICES);
 
-                        Segment* s = measure->getSegment(Segment::Type::Clef, 0);
+                        Segment* s = measure->getSegment(Segment::Type::HeaderClef, 0);
                         s->add(clef);
                         }
 

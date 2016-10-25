@@ -435,7 +435,11 @@ void TestNote::tpcTranspose2()
       int octave = 5 * 7;
       score->cmdAddPitch(octave + 3, false, false);
 
+      score->startCmd();
       score->cmdConcertPitchChanged(true, true);
+      score->endCmd();
+
+      printf("================\n");
 
       QVERIFY(saveCompareScore(score, "tpc-transpose2-test.mscx", DIR + "tpc-transpose2-ref.mscx"));
       }

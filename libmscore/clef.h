@@ -136,9 +136,6 @@ class Clef : public Element {
 
       SymId symId;
       bool _showCourtesy;
-      bool _showPreviousClef;       // show clef type at position tick-1
-                                    // used for first clef on staff immediatly followed
-                                    // by a different clef at same tick position
       bool _small;
 
       ClefTypeList _clefTypes;

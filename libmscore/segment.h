@@ -67,21 +67,26 @@ class Segment : public Element {
       Q_ENUMS(Type)
 
    public:
-      // Type need to be in the order in which they appear in a measure
+      //
+      // Type values determine the order of segments for a given tick
+      //
       enum class Type {
             Invalid            = 0x0,
             BeginBarLine       = 0x1,
-            Clef               = 0x2,
+            HeaderClef         = 0x2,
             KeySig             = 0x4,
             Ambitus            = 0x8,
             TimeSig            = 0x10,
-            StartRepeatBarLine = 0x20,
-            BarLine            = 0x40,
-            Breath             = 0x80,
-            ChordRest          = 0x100,
-            EndBarLine         = 0x200,
-            KeySigAnnounce     = 0x400,
-            TimeSigAnnounce    = 0x800,
+            Clef               = 0x20,
+            StartRepeatBarLine = 0x40,
+            BarLine            = 0x80,
+            Breath             = 0x100,
+            //--
+            ChordRest          = 0x200,
+            //--
+            EndBarLine         = 0x400,
+            KeySigAnnounce     = 0x800,
+            TimeSigAnnounce    = 0x1000,
             All                = -1
             };
 
@@ -115,25 +120,30 @@ class Segment : public Element {
       Segment(const Segment&);
       ~Segment();
 
-      virtual Segment* clone() const     { return new Segment(*this); }
-      virtual Element::Type type() const { return Element::Type::SEGMENT; }
+      virtual Segment* clone() const      { return new Segment(*this); }
+      virtual Element::Type type() const  { return Element::Type::SEGMENT; }
 
       virtual void setScore(Score*);
 
-      Ms::Segment* next() const          { return _next;   }
+      Segment* next() const               { return _next;   }
       Segment* next(Type) const;
+      Segment* nextEnabled() const;
+      void setNext(Segment* e)            { _next = e;      }
 
-      void setNext(Segment* e)           { _next = e;      }
-      Ms::Segment* prev() const          { return _prev;   }
+      Segment* prev() const               { return _prev;   }
       Segment* prev(Type) const;
-      void setPrev(Segment* e)           { _prev = e;      }
+      Segment* prevEnabled() const;
+      void setPrev(Segment* e)            { _prev = e;      }
 
-      Ms::Segment* next1() const;
-      Ms::Segment* next1MM() const;
+      // dont stop at measure boundary:
+      Segment* next1() const;
+      Segment* next1enabled() const;
+      Segment* next1MM() const;
       Segment* next1(Type) const;
       Segment* next1MM(Type) const;
-      Ms::Segment* prev1() const;
-      Ms::Segment* prev1MM() const;
+
+      Segment* prev1() const;
+      Segment* prev1MM() const;
       Segment* prev1(Type) const;
       Segment* prev1MM(Type) const;
 
@@ -141,7 +151,7 @@ class Segment : public Element {
 
       ChordRest* nextChordRest(int track, bool backwards = false) const;
 
-      Ms::Element* element(int track) const { return _elist[track];  }
+      Element* element(int track) const { return _elist[track];  }
 
       // a variant of the above function, specifically designed to be called from QML
       //@ returns the element at track 'track' (null if none)
@@ -176,8 +186,6 @@ class Segment : public Element {
       bool empty() const                         { return flag(ElementFlag::EMPTY); }
       bool written() const                       { return flag(ElementFlag::WRITTEN); }
       void setWritten(bool val) const            { setFlag(ElementFlag::WRITTEN, val); }
-      bool trailer() const                       { return flag(ElementFlag::TRAILER); }
-      void setTrailer(bool val)                  { setFlag(ElementFlag::TRAILER, val); }
 
       void fixStaffIdx();
 
@@ -240,6 +248,7 @@ class Segment : public Element {
       bool isType(const Segment::Type t) const { return static_cast<int>(_segmentType) & static_cast<int>(t); }
       bool isBeginBarLineType() const       { return _segmentType == Type::BeginBarLine; }
       bool isClefType() const               { return _segmentType == Type::Clef; }
+      bool isHeaderClefType() const         { return _segmentType == Type::HeaderClef; }
       bool isKeySigType() const             { return _segmentType == Type::KeySig; }
       bool isAmbitusType() const            { return _segmentType == Type::Ambitus; }
       bool isTimeSigType() const            { return _segmentType == Type::TimeSig; }
@@ -257,6 +266,30 @@ constexpr Segment::Type operator| (const Segment::Type t1, const Segment::Type t
       }
 constexpr bool operator& (const Segment::Type t1, const Segment::Type t2) {
       return static_cast<int>(t1) & static_cast<int>(t2);
+      }
+
+//---------------------------------------------------------
+//   nextEnabled
+//---------------------------------------------------------
+
+inline Segment* Segment::nextEnabled() const
+      {
+      Segment* ps = next();
+      while (ps && !ps->enabled())
+            ps = ps->next();
+      return ps;
+      }
+
+//---------------------------------------------------------
+//   prevEnabled
+//---------------------------------------------------------
+
+inline Segment* Segment::prevEnabled() const
+      {
+      Segment* ps = prev();
+      while (ps && !ps->enabled())
+            ps = ps->prev();
+      return ps;
       }
 
 }     // namespace Ms

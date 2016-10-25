@@ -172,16 +172,10 @@ class MeasureBase : public Element {
       bool noBreak() const             { return flag(ElementFlag::NO_BREAK);      }
       void setNoBreak(bool v)          { setFlag(ElementFlag::NO_BREAK, v);       }
 
-      bool hasSystemHeader() const     { return flag(ElementFlag::HEADER);        }
-      void setHasSystemHeader(bool v)  { setFlag(ElementFlag::HEADER, v);         }
-
-      bool hasSystemTrailer() const    { return flag(ElementFlag::TRAILER);       }
-      void setHasSystemTrailer(bool v) { setFlag(ElementFlag::TRAILER, v);        }
-
       bool hasCourtesyKeySig() const   { return flag(ElementFlag::KEYSIG);        }
       void setHasCourtesyKeySig(int v) { setFlag(ElementFlag::KEYSIG, v);         }
 
-      virtual qreal computeMinWidth(bool /*isFirstMeasureInSystem*/) { return 0.0; };
+      virtual void computeMinWidth() { };
 
       int index() const;
       };

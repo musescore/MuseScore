@@ -203,7 +203,7 @@ void Beam::removeChordRest(ChordRest* a)
 
 void Beam::draw(QPainter* painter) const
       {
-      if (beamSegments.size() <= 0)
+      if (beamSegments.empty())
             return;
       painter->setBrush(QBrush(curColor()));
       painter->setPen(Qt::NoPen);
@@ -226,7 +226,7 @@ void Beam::draw(QPainter* painter) const
                   QPointF(bs->x2(), bs->y2() + ww),
                   QPointF(bs->x1(), bs->y1() + ww),
                   }),
-               Qt::OddEvenFill);
+            Qt::OddEvenFill);
             }
       }
 

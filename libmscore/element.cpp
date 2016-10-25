@@ -361,7 +361,7 @@ Staff* Element::staff() const
       if (_track == -1 || score()->staves().empty())
             return 0;
 
-      return score()->staff(staffIdx());
+      return score()->staff(_track >> 2);
       }
 
 //---------------------------------------------------------
