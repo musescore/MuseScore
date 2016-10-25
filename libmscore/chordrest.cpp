@@ -759,7 +759,7 @@ Element* ChordRest::drop(const DropData& data)
 
             case Element::Type::BAR_LINE:
                   if (data.control())
-                        score()->splitMeasure(this);
+                        score()->splitMeasure(segment());
                   else {
                         BarLine* bl = toBarLine(e);
                         bl->setPos(QPointF());

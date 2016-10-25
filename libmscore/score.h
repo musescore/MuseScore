@@ -491,7 +491,6 @@ class Score : public QObject, public ScoreElement {
       void addAudioTrack();
       QList<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
       void pasteChordRest(ChordRest* cr, int tick, const Interval&);
-      qreal cautionaryWidth(Measure* m, bool* hasCourtesy);
 
       void selectSingle(Element* e, int staffIdx);
       void selectAdd(Element* e);
@@ -971,7 +970,7 @@ class Score : public QObject, public ScoreElement {
 
       void layoutFingering(Fingering*);
       void cmdSplitMeasure(ChordRest*);
-      void splitMeasure(ChordRest*);
+      void splitMeasure(Segment*);
       void cmdJoinMeasure(Measure*, Measure*);
       int pageNumberOffset() const          { return _pageNumberOffset; }
       void setPageNumberOffset(int v)       { _pageNumberOffset = v; }

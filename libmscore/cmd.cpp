@@ -2360,6 +2360,7 @@ void Score::cmd(const QAction* a)
       else if (cmd == "add-8vb")
             cmdAddOttava(Ottava::Type::OTTAVA_8VB);
       else if (cmd == "time-delete") {
+            printf("time delete\n");
             Element* e = selection().element();
             if (e && e->isBarLine() && toBarLine(e)->segment()->isEndBarLineType()) {
                   Measure* m = toBarLine(e)->segment()->measure();
@@ -2634,49 +2635,42 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
       {
       Clef* gclef = 0;
       for (ScoreElement* e : cr->linkList()) {
-            ChordRest* cr = static_cast<ChordRest*>(e);
+            ChordRest* cr = static_cast<ChordRest*>(e);  // toChordRest() does not work as e is ScoreElement
             Score* score  = cr->score();
 
             //
             // create a clef segment before cr if needed
             //
             Segment* s  = cr->segment();
-            Segment* cs = s->prev();
-            int tick    = s->tick();
-            bool createSegment = true;
-#if 1
-            // re-use a preceding clef segment containing no clef or a non-generated one,
-            // but still allow addition of a "mid-measure" change even at the start of a measure/system
-            // this is useful for cues, for example
-            if (cs && cs->segmentType() == Segment::Type::Clef) {
-                  Element* e = cs->element(cr->staffIdx() * VOICES);
-                  if (!e || !e->generated())
-                        createSegment = false;
+            int rtick   = s->rtick();
+            Measure* m  = s->measure();
+
+            Segment* cs;
+            if (rtick == 0) {
+                  cs = m->findFirst(Segment::Type::HeaderClef, 0);
+                  if (!cs)
+                        cs = m->undoGetSegmentR(Segment::Type::HeaderClef, 0);
+                  else {
+                        if (cs->next() == s)
+                              ;
+                        else {
+                              for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                                    Element* e = cs->element(staffIdx * VOICES);
+                                    if (e)
+                                          e->setGenerated(false);
+                                    }
+                              cs = m->undoGetSegmentR(Segment::Type::Clef, 0);
+                              }
+                        }
                   }
-#else
-            // automatically convert a clef added on first chordrest of measure
-            // into a "regular" clef change at end of previous bar
-            // this defeats the ability to have a "mid-measure" clef change at the start of a bar for cues
-            Measure* m = s->measure();
-            if (s == m->first(Segment::Type::ChordRest)) {
-                  if (m->prevMeasure())
-                        m = m->prevMeasure();
-                  cs = m->undoGetSegment(Segment::Type::Clef, tick);
-                  createSegment = false;
-                  }
-#endif
-            if (createSegment) {
-                  cs = new Segment(cr->measure(), Segment::Type::Clef, tick - cr->measure()->tick());
-                  cs->setNext(s);
-                  score->undo(new AddElement(cs));
-                  }
+            else
+                  cs = m->undoGetSegmentR(Segment::Type::Clef, 0);
+
             Clef* c = toClef(gclef ? gclef->linkedClone() : clef->clone());
-            gclef = c;
-            c->setParent(cs);
+            gclef   = c;
             c->setScore(score);
             c->setTrack(cr->staffIdx() * VOICES);
-            if (cs->element(c->track()))
-                  score->undo(new RemoveElement(cs->element(c->track())));
+            c->setParent(cs);
             score->undo(new AddElement(c));
             }
       delete clef;

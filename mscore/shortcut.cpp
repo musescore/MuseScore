@@ -1122,8 +1122,8 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Timewise delete"),
          QT_TRANSLATE_NOOP("action","Delete element and duration"),
          Icons::Invalid_ICON,
-         Qt::WindowShortcut,
-         ShortcutFlags::A_CMD
+         Qt::WindowShortcut
+//         ShortcutFlags::A_CMD
          },
       {
          MsWidget::SCORE_TAB,

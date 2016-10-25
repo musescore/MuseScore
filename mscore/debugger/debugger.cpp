@@ -782,8 +782,8 @@ void MeasureView::setElement(Element* e)
       mb.tick->setValue(m->tick());
       mb.startRepeat->setChecked(m->repeatStart());
       mb.endRepeat->setChecked(m->repeatEnd());
-      mb.hasSystemHeader->setChecked(m->hasSystemHeader());
-      mb.hasSystemTrailer->setChecked(m->hasSystemTrailer());
+      mb.hasSystemHeader->setChecked(m->header());
+      mb.hasSystemTrailer->setChecked(m->trailer());
       mb.hasCourtesyKeySig->setChecked(m->hasCourtesyKeySig());
       mb.hasVoices->setChecked(m->hasVoices(0));
       mb.sel->clear();
@@ -845,6 +845,7 @@ void SegmentView::setElement(Element* e)
       sb.ticks->setValue(ticks);
       sb.tick->setValue(s->tick());
       sb.rtick->setValue(s->rtick());
+      sb.ticks2->setValue(s->ticks());
       sb.segmentType->setText(s->subTypeName());
       sb.lyrics->clear();
 
@@ -1772,6 +1773,8 @@ void ShowElementBase::setElement(Element* e)
       eb.generated->setChecked(e->generated());
       eb.visible->setChecked(e->visible());
       eb.enabled->setChecked(e->enabled());
+      eb.header->setChecked(e->header());
+      eb.trailer->setChecked(e->trailer());
       eb.track->setValue(e->track());
       eb.z->setValue(e->z());
       eb.posx->setValue(e->ipos().x());

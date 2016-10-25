@@ -98,10 +98,6 @@
       </Part>
     <Staff id="1">
       <Measure number="1">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -369,10 +365,6 @@
       </Staff>
     <Staff id="2">
       <Measure number="1">
-        <Clef>
-          <concertClefType>F</concertClefType>
-          <transposingClefType>F</transposingClefType>
-          </Clef>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>

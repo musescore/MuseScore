@@ -131,8 +131,7 @@ void System::removeStaff(int idx)
 //---------------------------------------------------------
 //   layout
 ///   Layout the System
-//    If first MeasureBase is a HBOX, then xo1 is the
-//    width of this box.
+//    xo1 is the indent of this system
 //---------------------------------------------------------
 
 void System::layoutSystem(qreal xo1)

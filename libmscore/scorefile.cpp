@@ -1072,7 +1072,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                   //               - part (excerpt) staff starts after
                   //                 barline element
                   bool needTick = (needFirstTick && segment == fs) || (segment->tick() != xml.curTick);
-                  if ((segment->isEndBarLineType()) && (e == 0) && writeSystemElements && ((track % VOICES) == 0)) {
+                  if ((segment->isEndBarLineType()) && !e && writeSystemElements && ((track % VOICES) == 0)) {
                         // search barline:
                         for (int idx = track - VOICES; idx >= 0; idx -= VOICES) {
                               if (segment->element(idx)) {

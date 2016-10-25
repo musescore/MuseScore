@@ -95,19 +95,27 @@ ClefType clefTypeFromAveragePitch(int averagePitch)
       return averagePitch < clefMidPitch() ? ClefType::F : ClefType::G;
       }
 
+//---------------------------------------------------------
+//   createClef
+//---------------------------------------------------------
+
 void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
       {
-      Clef* clef = new Clef(staff->score());
-      clef->setClefType(clefType);
-      const int track = staff->idx() * VOICES;
-      clef->setTrack(track);
-      clef->setGenerated(false);
-      clef->setMag(staff->mag());
-      clef->setSmall(isSmall);
-      Measure* m = staff->score()->tick2measure(tick);
-      Segment* seg = m->getSegment(Segment::Type::Clef, tick);
-      seg->add(clef);
-      staff->setClef(clef);
+      if (tick == 0) {
+            staff->setDefaultClefType(ClefTypeList(clefType, clefType));
+            }
+      else {
+            Clef* clef = new Clef(staff->score());
+            clef->setClefType(clefType);
+            const int track = staff->idx() * VOICES;
+            clef->setTrack(track);
+            clef->setGenerated(false);
+            clef->setMag(staff->mag());
+            clef->setSmall(isSmall);
+            Measure* m = staff->score()->tick2measure(tick);
+            Segment* seg = m->getSegment(Segment::Type::Clef, tick);
+            seg->add(clef);
+            }
       }
 
 AveragePitch findAverageSegPitch(const Segment *seg, int strack)

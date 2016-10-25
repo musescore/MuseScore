@@ -212,11 +212,13 @@ class Measure : public MeasureBase {
 
       Segment* undoGetSegment(Segment::Type st, int tick);  // deprecated
       Segment* getSegment(Segment::Type st, int tick);      // deprecated
-      Segment* findSegment(Segment::Type st, int tick);     // deprecated
+      Segment* findSegment(Segment::Type st, int tick) const;     // deprecated
 
       Segment* undoGetSegmentR(Segment::Type st, int rtick);
       Segment* getSegmentR(Segment::Type st, int rtick);
-      Segment* findSegmentR(Segment::Type st, int rtick);
+      Segment* findSegmentR(Segment::Type st, int rtick) const;
+
+      Segment* findFirst(Segment::Type st, int rtick) const;
 
       qreal createEndBarLines(bool);
       void barLinesSetSpan(Segment*);
@@ -272,8 +274,8 @@ class Measure : public MeasureBase {
 
       void addSystemHeader(bool firstSystem);
       void addSystemTrailer(Measure* nm);
-      bool removeSystemHeader();
-      bool removeSystemTrailer();
+      void removeSystemHeader();
+      void removeSystemTrailer();
 
       const BarLine* endBarLine() const;
       BarLineType endBarLineType() const;
@@ -282,7 +284,9 @@ class Measure : public MeasureBase {
       virtual void triggerLayout() const override;
       qreal basicStretch() const;
       qreal basicWidth() const;
-      virtual qreal computeMinWidth(bool isFirstMeasureInSystem);
+      virtual void computeMinWidth();
+      void checkHeader();
+      void checkTrailer();
       };
 
 }     // namespace Ms

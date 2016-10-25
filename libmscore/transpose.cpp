@@ -492,6 +492,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
 
 void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval& interval, bool useInstrument, bool flip)
       {
+printf("transpose keys\n");
       Interval firstInterval = interval;
       Interval segmentInterval = interval;
       for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
@@ -540,8 +541,9 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   ke.setKey(nKey);
                   KeySig* ks = new KeySig(this);
                   ks->setTrack(staffIdx * VOICES);
-                  ks->setKey(nKey);
-                  Segment* seg = firstMeasure()->undoGetSegment(Segment::Type::KeySig, 0);
+                  ks->setKeySigEvent(ke);
+                  Segment* seg = firstMeasure()->undoGetSegmentR(Segment::Type::KeySig, 0);
+                  seg->setHeader(true);
                   ks->setParent(seg);
                   undoAddElement(ks);
                   }

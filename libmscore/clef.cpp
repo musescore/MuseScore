@@ -100,10 +100,9 @@ Clef::Clef(Score* s)
 Clef::Clef(const Clef& c)
    : Element(c)
       {
-      _showCourtesy     = c._showCourtesy;
-      _showPreviousClef = c._showPreviousClef;
-      _small            = c._small;
-      _clefTypes        = c._clefTypes;
+      _showCourtesy = c._showCourtesy;
+      _small        = c._small;
+      _clefTypes    = c._clefTypes;
       }
 
 //---------------------------------------------------------
@@ -166,7 +165,7 @@ void Clef::layout()
             symId = ClefInfo::symId(clefType());
             yoff = lineDist * (lines - ClefInfo::line(clefType()));
             }
-      
+
       switch (clefType()) {
             case ClefType::C_19C:                            // 19th C clef is like a G clef
                   yoff = lineDist * 1.5;

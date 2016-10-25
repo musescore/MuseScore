@@ -139,15 +139,15 @@
           </Text>
         </VBox>
       <Measure number="1">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
         <TimeSig>
           <sigN>2</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
         <Rest>
           <lid>179</lid>
           <durationType>measure</durationType>
@@ -228,15 +228,15 @@
       </Staff>
     <Staff id="2">
       <Measure number="1">
-        <Clef>
-          <concertClefType>F</concertClefType>
-          <transposingClefType>F</transposingClefType>
-          </Clef>
         <TimeSig>
           <sigN>2</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Clef>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
+          </Clef>
         <Rest>
           <lid>180</lid>
           <durationType>measure</durationType>
@@ -274,15 +274,15 @@
       </Staff>
     <Staff id="3">
       <Measure number="1">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
         <TimeSig>
           <sigN>2</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
         <Rest>
           <lid>181</lid>
           <durationType>measure</durationType>
@@ -423,15 +423,15 @@
             </Text>
           </VBox>
         <Measure number="1">
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <TimeSig>
             <sigN>2</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
           <Rest>
             <lid>179</lid>
             <durationType>measure</durationType>
@@ -513,15 +513,15 @@
         </Staff>
       <Staff id="2">
         <Measure number="1">
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <TimeSig>
             <sigN>2</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
           <Rest>
             <lid>180</lid>
             <durationType>measure</durationType>
@@ -655,15 +655,15 @@
             </Text>
           </VBox>
         <Measure number="1">
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <TimeSig>
             <sigN>2</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
           <Rest>
             <lid>181</lid>
             <durationType>measure</durationType>

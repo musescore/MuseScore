@@ -212,6 +212,10 @@
           </BarLine>
         </Measure>
       <Measure number="1">
+        <Clef>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
+          </Clef>
         <KeySig>
           <accidental>-2</accidental>
           </KeySig>

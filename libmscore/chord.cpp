@@ -422,11 +422,13 @@ void Chord::add(Element* e)
       switch(e->type()) {
             case Element::Type::NOTE:
                   {
-                  Note* note = static_cast<Note*>(e);
+                  Note* note = toNote(e);
                   bool found = false;
+
                   // _notes should be sorted by line position,
                   // but it's often not yet possible since line is unknown
                   // use pitch instead, and line as a second sort critera.
+
                   for (unsigned idx = 0; idx < _notes.size(); ++idx) {
                         if (note->pitch() <= _notes[idx]->pitch()) {
                               if (note->pitch() == _notes[idx]->pitch() && note->line() > _notes[idx]->line())
@@ -448,7 +450,7 @@ void Chord::add(Element* e)
                   }
                   break;
             case Element::Type::ARPEGGIO:
-                  _arpeggio = static_cast<Arpeggio*>(e);
+                  _arpeggio = toArpeggio(e);
                   break;
             case Element::Type::TREMOLO:
                   {

@@ -110,6 +110,8 @@ class FSymbol;
 class Fingering;
 class NoteHead;
 class FiguredBass;
+class StaffState;
+class Arpeggio;
 
 enum class SymId;
 
@@ -606,6 +608,12 @@ class Element : public QObject, public ScoreElement {
 
       virtual bool systemFlag() const  { return false;  }
 
+      bool header() const              { return flag(ElementFlag::HEADER);        }
+      void setHeader(bool v)           { setFlag(ElementFlag::HEADER, v);         }
+
+      bool trailer() const             { return flag(ElementFlag::TRAILER); }
+      void setTrailer(bool val)        { setFlag(ElementFlag::TRAILER, val); }
+
       bool selectable() const          { return flag(ElementFlag::SELECTABLE);  }
       void setSelectable(bool val)     { setFlag(ElementFlag::SELECTABLE, val); }
 
@@ -761,6 +769,8 @@ class Element : public QObject, public ScoreElement {
       CONVERT(NoteHead,      NOTEHEAD)
       CONVERT(LyricsLineSegment, LYRICSLINE_SEGMENT)
       CONVERT(FiguredBass,   FIGURED_BASS)
+      CONVERT(StaffState,    STAFF_STATE)
+      CONVERT(Arpeggio,      ARPEGGIO)
 #undef CONVERT
       };
 
@@ -862,6 +872,8 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(NoteHead,      NOTEHEAD)
       CONVERT(LyricsLineSegment, LYRICSLINE_SEGMENT)
       CONVERT(FiguredBass,   FIGURED_BASS)
+      CONVERT(StaffState,    STAFF_STATE)
+      CONVERT(Arpeggio,      ARPEGGIO)
 #undef CONVERT
 
 //---------------------------------------------------------

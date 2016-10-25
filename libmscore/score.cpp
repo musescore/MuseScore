@@ -1886,20 +1886,21 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
             score->cmdConcertPitchChanged(styleB(StyleIdx::concertPitch), true);
 
       // convert any "generated" initial clefs into real "non-generated" clefs if clef type changes
-      if (score->firstMeasure()) {
-            Segment* initialClefSegment = score->firstMeasure()->findSegment(Segment::Type::Clef, 0);      // find clefs at first tick of first measure
-            if (initialClefSegment) {
+      Measure* fm = score->firstMeasure();
+      if (fm) {
+            Segment* seg = fm->findSegmentR(Segment::Type::HeaderClef, 0);
+            if (seg) {
                   for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                         int track    = staffIdx * VOICES;
                         Staff* staff = score->staff(staffIdx);
-                        Clef* initialClef  = toClef(initialClefSegment->element(track));
+                        Clef* clef   = toClef(seg->element(track));
 
                         // if the first clef of score to append is generated and
                         // if the first clef of score to append is of different type than clef at final tick of first score
-                        if (initialClef && initialClef->generated() && initialClef->clefType() != this->staff(staffIdx)->clef(tickOfAppend)) {
-
-                              // then convert that generated clef into a real non-generated clef so that its different type will be copied to joined score
-                              score->undoChangeClef(staff, initialClefSegment, initialClef->clefType());
+                        if (clef && clef->generated() && clef->clefType() != this->staff(staffIdx)->clef(tickOfAppend)) {
+                              // then convert that generated clef into a real non-generated clef
+                              // so that its different type will be copied to joined score
+                              score->undoChangeClef(staff, seg, clef->clefType());
                               }
                         }
                   }
@@ -2018,7 +2019,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       Clef* clef = new Clef(this);
       clef->setClefType(ClefType::F);
       clef->setTrack((staffIdx+1) * VOICES);
-      Segment* seg = firstMeasure()->getSegment(Segment::Type::Clef, 0);
+      Segment* seg = firstMeasure()->getSegment(Segment::Type::HeaderClef, 0);
       clef->setParent(seg);
       undoAddElement(clef);
       clef->layout();
@@ -2047,7 +2048,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         if (note->pitch() >= splitPoint)
                               continue;
                         Chord* chord = toChord(s->element(dtrack + voice));
-                        Q_ASSERT(!chord || (chord->type() == Element::Type::CHORD));
+                        Q_ASSERT(!chord || (chord->isChord()));
                         if (chord == 0) {
                               chord = new Chord(*c);
                               qDeleteAll(chord->notes());
@@ -2446,7 +2447,7 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                         for (ScoreElement* e : h->linkList()) {
                               // don't transpose all links
                               // just ones resulting from mmrests
-                              Harmony* he = static_cast<Harmony*>(e);
+                              Harmony* he = static_cast<Harmony*>(e);    // toHarmony() does not work as e is an ScoreElement
                               if (he->staff() == h->staff())
                                     undoTransposeHarmony(he, rootTpc, baseTpc);
                               }

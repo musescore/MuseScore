@@ -1474,7 +1474,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                                     delete newClef;
                               }
                         else  {
-                              Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
+                              Segment* segment = measure->getSegment(Segment::Type::HeaderClef, 0);
                               segment->add(newClef);
                               oldClefId[staffIdx] = clefId;
                               }

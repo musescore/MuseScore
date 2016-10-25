@@ -24,8 +24,9 @@ namespace Ms {
 
 void Score::cmdSplitMeasure(ChordRest* cr)
       {
+      printf("splitMeasure\n");
       startCmd();
-      splitMeasure(cr);
+      splitMeasure(cr->segment());
       endCmd();
       }
 
@@ -33,16 +34,15 @@ void Score::cmdSplitMeasure(ChordRest* cr)
 //   splitMeasure
 //---------------------------------------------------------
 
-void Score::splitMeasure(ChordRest* cr)
+void Score::splitMeasure(Segment* segment)
       {
-      Segment* segment = cr->segment();
       Measure* measure = segment->measure();
 
       ScoreRange range;
       range.read(measure->first(), measure->last());
 
       undoRemoveMeasures(measure, measure);
-      undoInsertTime(measure->tick(), -(measure->endTick() - measure->tick()));
+      undoInsertTime(measure->tick(), -measure->ticks());
 
       // create empty measures:
       Measure* m2 = toMeasure(insertMeasure(Element::Type::MEASURE, measure->next(), true));

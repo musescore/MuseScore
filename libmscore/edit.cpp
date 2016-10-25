@@ -3337,6 +3337,7 @@ static constexpr Segment::Type CR_TYPE = Segment::Type::ChordRest;
 
 void Score::cmdTimeDelete()
       {
+      startCmd();
       Segment* startSegment;
       Segment* endSegment;
 
@@ -3400,6 +3401,7 @@ void Score::cmdTimeDelete()
             };
 
       deselectAll();
+      endCmd();
       }
 
 //---------------------------------------------------------

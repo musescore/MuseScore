@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>347</height>
+    <height>350</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -111,7 +111,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="9">
+        <item row="2" column="11">
          <widget class="QSpinBox" name="ticks">
           <property name="readOnly">
            <bool>true</bool>
@@ -127,7 +127,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="7">
+        <item row="2" column="9">
          <widget class="QSpinBox" name="beat">
           <property name="readOnly">
            <bool>true</bool>
@@ -140,7 +140,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="8">
+        <item row="2" column="10">
          <widget class="QLabel" name="label_9">
           <property name="toolTip">
            <string notr="true"/>
@@ -166,7 +166,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="5">
+        <item row="2" column="7">
          <widget class="QSpinBox" name="bar">
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
@@ -176,7 +176,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="4">
+        <item row="2" column="6">
          <widget class="QLabel" name="label_7">
           <property name="toolTip">
            <string notr="true"/>
@@ -192,7 +192,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="6">
+        <item row="2" column="8">
          <widget class="QLabel" name="label_8">
           <property name="toolTip">
            <string notr="true"/>
@@ -244,7 +244,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="3" colspan="2">
+        <item row="0" column="3" colspan="4">
          <widget class="QLabel" name="segmentType">
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
@@ -257,6 +257,29 @@
           </property>
           <property name="text">
            <string notr="true">TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="5">
+         <widget class="QSpinBox" name="ticks2">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="maximum">
+           <number>16000000</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="4">
+         <widget class="QLabel" name="label_11">
+          <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string notr="true">ticks:</string>
           </property>
          </widget>
         </item>
