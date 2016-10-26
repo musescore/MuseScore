@@ -63,7 +63,6 @@ MasterScore* TestInstrumentChange::test_pre(const char* p)
       {
       QString p1 = DIR + p + ".mscx";
       MasterScore* score = readScore(p1);
-      score->doLayout();
       return score;
       }
 
@@ -95,7 +94,7 @@ void TestInstrumentChange::testDelete()
       MasterScore* score = test_pre("delete");
       Measure* m = score->firstMeasure()->nextMeasure();
       Segment* s = m->first(Segment::Type::ChordRest);
-      InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
+      InstrumentChange* ic = toInstrumentChange(s->annotations()[0]);
       score->deleteItem(ic);
       score->doLayout();
       test_post(score, "delete");
@@ -103,12 +102,12 @@ void TestInstrumentChange::testDelete()
 
 void TestInstrumentChange::testChange()
       {
-      MasterScore* score = test_pre("change");
-      Measure* m = score->firstMeasure()->nextMeasure();
-      Segment* s = m->first(Segment::Type::ChordRest);
-      InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
-      Instrument* ni = score->staff(1)->part()->instrument();
-      ic->setInstrument(*ni);
+      MasterScore* score   = test_pre("change");
+      Measure* m           = score->firstMeasure()->nextMeasure();
+      Segment* s           = m->first(Segment::Type::ChordRest);
+      InstrumentChange* ic = toInstrumentChange(s->annotations()[0]);
+      Instrument* ni       = score->staff(1)->part()->instrument();
+      ic->setInstrument(new Instrument(*ni));
       score->startCmd();
       ic->setXmlText("Instrument Oboe");
       score->undo(new ChangeInstrument(ic, ic->instrument()));
