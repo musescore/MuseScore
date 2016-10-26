@@ -1707,7 +1707,6 @@ void Measure::computeMinWidth()
             qreal w;
 
             if (ns) {
-//printf("  min <%s>(%d) <%s>(%d)\n", s->subTypeName(), s->enabled(), ns->subTypeName(), ns->enabled());
                   if (isSystemHeader && !ns->header()) {        // this is the system header gap
                         w = s->minHorizontalDistance(ns, true);
                         isSystemHeader = false;
@@ -1715,7 +1714,8 @@ void Measure::computeMinWidth()
                   else {
                         w = s->minHorizontalDistance(ns, false);
                         }
-#if 0
+// printf("  min %f <%s>(%d) <%s>(%d)\n", s->x(), s->subTypeName(), s->enabled(), ns->subTypeName(), ns->enabled());
+#if 1
                   // look back for collisions with previous segments
                   // this is time consuming (ca. +5%) and probably requires more optimization
 
