@@ -2086,7 +2086,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   if (!m)
                         continue;
                   Segment::Type st = Segment::Type::Clef;
-                  if ((tick == m->tick())) {
+                  if (tick == m->tick()) {
                        if (m->prevMeasure())
                               m = m->prevMeasure();
                         else
