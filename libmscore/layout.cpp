@@ -2894,6 +2894,25 @@ static void applyLyricsMin(Measure* m, int staffIdx, qreal yMin)
       }
 
 //---------------------------------------------------------
+//   restoreBeams
+//---------------------------------------------------------
+
+static void restoreBeams(Measure* m)
+      {
+      for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
+            for (Element* e : s->elist()) {
+                  if (e && e->isChordRest()) {
+                        ChordRest* cr = toChordRest(e);
+                        if (isTopBeam(cr)) {
+                              cr->beam()->layout();
+                              s->staffShape(cr->staffIdx()).add(cr->beam()->shape().translated(-(cr->segment()->pos()+m->pos())));
+                              }
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   collectSystem
 //---------------------------------------------------------
 
@@ -3036,6 +3055,8 @@ System* Score::collectSystem(LayoutContext& lc)
                   // TODO: we may check if another measure fits in this system
                   if (lc.prevMeasure == lc.systemOldMeasure) {
                         lc.rangeDone = true;
+                        if (lc.curMeasure && lc.curMeasure->isMeasure())
+                              restoreBeams(toMeasure(lc.curMeasure));
                         break;
                         }
                   }
