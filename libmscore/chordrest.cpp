@@ -219,7 +219,7 @@ void ChordRest::writeProperties(Xml& xml) const
             }
       for (auto i : score()->spanner()) {     // TODO: dont search whole list
             Spanner* s = i.second;
-            if (s->generated() || s->type() != Element::Type::SLUR || !xml.canWrite(s))
+            if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !xml.canWrite(s))
                   continue;
 
             if (s->startElement() == this) {

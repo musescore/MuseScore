@@ -492,9 +492,7 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
             Measure* m2 = endCR()->segment()->measure();
             qDebug("zero slur at tick %d(%d) track %d in measure %d-%d  tick %d ticks %d",
                m1->tick(), tick(), track(), m1->no(), m2->no(), tick(), ticks());
-#ifndef NDEBUG
-            broken = true;
-#endif
+            setBroken(true);
             return;
             }
 
@@ -1347,12 +1345,10 @@ Slur::~Slur()
 
 void Slur::write(Xml& xml) const
       {
-#ifndef NDEBUG
-      if (broken) {
+      if (broken()) {
             qDebug("broken slur not written");
             return;
             }
-#endif
       if (!xml.canWrite(this))
             return;
       xml.stag(QString("Slur id=\"%1\"").arg(xml.spannerId(this)));
