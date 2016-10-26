@@ -1769,7 +1769,11 @@ void Measure::computeMinWidth()
             x += w;
             s = s->next();
             }
-      setWidth(x * basicStretch());
+      x *= basicStretch();
+      qreal minWidth = score()->styleP(StyleIdx::minMeasureWidth);
+      if (x < minWidth)
+            x = minWidth;
+      setWidth(x);
       }
 
 //---------------------------------------------------------

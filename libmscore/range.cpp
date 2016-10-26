@@ -133,7 +133,6 @@ void TrackList::appendGap(const Fraction& d)
 
 void TrackList::read(const Segment* fs, const Segment* es)
       {
-      printf("read %s %d %s %d\n", fs->subTypeName(), fs->tick(), es->subTypeName(), es->tick());
       int tick = fs->tick();
       int gap  = 0;
 
@@ -323,10 +322,8 @@ bool TrackList::write(Measure* measure) const
       int n            = size();
       for (int i = 0; i < n; ++i) {
             Element* e = at(i);
-printf("%4d %04d write %s track %d\n", m->tick(), pos.ticks(), e->name(), e->track());
             if (e->isDurationElement()) {
                   Fraction duration = static_cast<DurationElement*>(e)->duration();
-                  printf("   %d ticks\n", duration.ticks());
 
                   if (duration > rest && e->isTuplet()) {
                         // cannot split tuplet
