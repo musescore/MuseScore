@@ -5259,9 +5259,8 @@ QMenu* MuseScore::createPopupMenu()
       QMenu* m = QMainWindow::createPopupMenu();
       QList<QAction*> al = m->actions();
       for (QAction* a : al) {
+            // textTool visibility is handled differentlyr
             if (_textTools && a->text() == _textTools->windowTitle())
-                  m->removeAction(a);
-            else if (entryTools && a->text() == entryTools->windowTitle())
                   m->removeAction(a);
             }
       return m;
