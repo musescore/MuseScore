@@ -3439,7 +3439,11 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                   }
             s = s->next();
             }
-      setWidth(x * basicStretch());
+      x *= basicStretch();
+      qreal minWidth = score()->styleP(StyleIdx::minMeasureWidth);
+      if (x < minWidth)
+            x = minWidth;
+      setWidth(x);
 
 #ifndef NDEBUG
       qreal w = width();
