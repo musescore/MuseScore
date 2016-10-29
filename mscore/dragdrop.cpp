@@ -32,18 +32,6 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   moveElement
-//---------------------------------------------------------
-
-static void moveElement(void* data, Element* e)
-      {
-      QPointF* pos = (QPointF*)data;
-      e->score()->addRefresh(e->canvasBoundingRect());
-      e->setPos(*pos);
-      e->score()->addRefresh(e->canvasBoundingRect());
-      }
-
-//---------------------------------------------------------
 //   setDropTarget
 //---------------------------------------------------------
 
@@ -113,12 +101,6 @@ void ScoreView::setDropAnchor(const QLineF& l)
             r.adjust(-w, -w, 2*w, 2*w);
             _score->addRefresh(r);
             }
-/*      if (dropTarget) {
-            dropTarget->setDropTarget(false);
-            _score->addRefresh(dropTarget->canvasBoundingRect());
-            dropTarget = 0;
-            }
-      */
       if (dropRectangle.isValid()) {
             _score->addRefresh(dropRectangle);
             dropRectangle = QRectF();
@@ -158,16 +140,18 @@ void ScoreView::setViewRect(const QRectF& r)
 //---------------------------------------------------------
 //   dragTimeAnchorElement
 //    pos is in canvas coordinates
+//    return true if there is a valid target
 //---------------------------------------------------------
 
-void ScoreView::dragTimeAnchorElement(const QPointF& pos)
+bool ScoreView::dragTimeAnchorElement(const QPointF& pos)
       {
       int staffIdx;
       Segment* seg;
       MeasureBase* mb = _score->pos2measure(pos, &staffIdx, 0, &seg, 0);
       int track  = staffIdx * VOICES;
-      if (mb && mb->type() == Element::Type::MEASURE && seg->element(track)) {
-            Measure* m = static_cast<Measure*>(mb);
+
+      if (mb && mb->isMeasure() && seg->element(track)) {
+            Measure* m = toMeasure(mb);
             System* s  = m->system();
             qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
             QPointF anchor(seg->canvasBoundingRect().x(), y);
@@ -175,10 +159,11 @@ void ScoreView::dragTimeAnchorElement(const QPointF& pos)
             dragElement->score()->addRefresh(dragElement->canvasBoundingRect());
             dragElement->setTrack(track);
             dragElement->score()->addRefresh(dragElement->canvasBoundingRect());
-            return;
+            return true;
             }
       dragElement->score()->addRefresh(dragElement->canvasBoundingRect());
       setDropTarget(0);
+      return false;
       }
 
 //---------------------------------------------------------
@@ -210,20 +195,18 @@ bool ScoreView::dragMeasureAnchorElement(const QPointF& pos)
 
 void ScoreView::dragEnterEvent(QDragEnterEvent* event)
       {
-      if (MScore::debugMode)
-            qDebug("dragEnterEvent");
       double _spatium = score()->spatium();
       dragElement = 0;
 
       const QMimeData* data = event->mimeData();
 
       if (data->hasFormat(mimeSymbolListFormat) || data->hasFormat(mimeStaffListFormat)) {
-            event->acceptProposedAction();
+            event->accept();
             return;
             }
 
       if (data->hasFormat(mimeSymbolFormat)) {
-            event->acceptProposedAction();
+            event->accept();
 
             QByteArray a = data->data(mimeSymbolFormat);
 
@@ -260,46 +243,17 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
                            || suffix == "jpeg"
                            || suffix == "png"
                            ) {
-                              event->acceptProposedAction();
+                              event->accept();
                               break;
                               }
                         }
                   }
             return;
             }
-      QStringList formats = data->formats();
       qDebug("unknown drop format: formats:");
-      foreach(const QString& s, formats)
+      for (const QString& s : data->formats())
             qDebug("  <%s>", qPrintable(s));
-      }
-
-//---------------------------------------------------------
-//   dragSymbol
-//    drag SYMBOL and IMAGE elements
-//---------------------------------------------------------
-
-void ScoreView::dragSymbol(const QPointF& pos)
-      {
-      const QList<Element*> el = elementsAt(pos);
-      const Element* e = el.isEmpty() ? 0 : el[0];
-      if (e && (e->type() == Element::Type::NOTE || e->type() == Element::Type::SYMBOL
-         || e->type() == Element::Type::IMAGE || e->type() == Element::Type::TEXT)) {
-            DropData dropData;
-            dropData.view       = this;
-            dropData.pos        = pos;
-            dropData.element    = dragElement;
-            dropData.modifiers  = 0;
-
-            if (e->acceptDrop(dropData)) {
-                  setDropTarget(e);
-                  return;
-                  }
-            else {
-                  setDropTarget(0);
-                  return;
-                  }
-            }
-      dragTimeAnchorElement(pos);
+      event->ignore();
       }
 
 //---------------------------------------------------------
@@ -311,9 +265,10 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
       // we always accept the drop action
       // to get a "drop" Event:
 
-      event->acceptProposedAction();
-      if (mscore->state() == STATE_PLAY)  // no editing during play
+      if (mscore->state() == STATE_PLAY) {  // no editing during play
+            event->ignore();
             return;
+            }
 
       // convert window to canvas position
       QPointF pos(imatrix.map(QPointF(event->pos())));
@@ -327,9 +282,34 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 
       if (dragElement) {
             switch(dragElement->type()) {
+                  case Element::Type::IMAGE:
+                  case Element::Type::SYMBOL:
+                        {
+                        // dragSymbol(pos);
+                        const QList<Element*> el = elementsAt(pos);
+                        const Element* e = el.isEmpty() ? 0 : el[0];
+                        if (e && (e->isNote() || e->isSymbol() || e->isImage() || e->isText())) {
+                              DropData dropData;
+                              dropData.view       = this;
+                              dropData.pos        = pos;
+                              dropData.element    = dragElement;
+                              dropData.modifiers  = 0;
+
+                              if (e->acceptDrop(dropData)) {
+                                    setDropTarget(e);
+                                    event->accept();
+                                    return;
+                                    }
+                              else {
+                                    setDropTarget(0);
+                                    event->ignore();
+                                    return;
+                                    }
+                              }
+                        }
+                        // fall through
+
                   case Element::Type::VOLTA:
-                        // dragMeasureAnchorElement(pos);
-                        // break;
                   case Element::Type::PEDAL:
                   case Element::Type::DYNAMIC:
                   case Element::Type::OTTAVA:
@@ -337,11 +317,10 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case Element::Type::HAIRPIN:
                   case Element::Type::TEXTLINE:
                   case Element::Type::FRET_DIAGRAM:
-                        dragTimeAnchorElement(pos);
-                        break;
-                  case Element::Type::IMAGE:
-                  case Element::Type::SYMBOL:
-                        dragSymbol(pos);
+                        if (dragTimeAnchorElement(pos))
+                              event->accept();
+                        else
+                              event->ignore();
                         break;
                   case Element::Type::KEYSIG:
                   case Element::Type::CLEF:
@@ -381,23 +360,26 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                         {
                         QList<Element*> el = elementsAt(pos);
                         bool found = false;
-                        foreach(const Element* e, el) {
+                        setDropTarget(0);
+                        for (const Element* e : el) {
                               if (e->acceptDrop(dropData)) {
-                                    if (e->type() != Element::Type::MEASURE)
-                                          setDropTarget(const_cast<Element*>(e));
+                                    if (!e->isMeasure())
+                                          setDropTarget(e);
                                     found = true;
                                     break;
                                     }
                               }
-                        if (!found)
-                              setDropTarget(0);
+                        if (found)
+                              event->accept();
+                        else
+                              event->ignore();
                         }
                         break;
                   default:
+                        event->ignore();
                         break;
                   }
 
-            dragElement->scanElements(&pos, moveElement, false);
             _score->update();
             return;
             }
@@ -420,10 +402,13 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   // special drop target Note
                   //
                   Element* el = elementAt(pos);
-                  if (el && (el->type() == Element::Type::NOTE || el->type() == Element::Type::REST))
+                  if (el && (el->isNote() || el->isRest())) {
                         setDropTarget(el);
-                  else
+                        }
+                  else {
                         setDropTarget(0);
+                        }
+                  event->accept();
                   }
             _score->update();
             return;
