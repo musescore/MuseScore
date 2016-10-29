@@ -223,8 +223,7 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void setShadowNote(const QPointF&);
       void drawElements(QPainter& p,const QList<Element*>& el);
-      void dragTimeAnchorElement(const QPointF& pos);
-      void dragSymbol(const QPointF& pos);
+      bool dragTimeAnchorElement(const QPointF& pos);
       bool dragMeasureAnchorElement(const QPointF& pos);
       void updateGrips();
       virtual void lyricsTab(bool back, bool end, bool moveOnly) override;
@@ -415,7 +414,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void selectMeasure(int m);
       void postCmd(const char* cmd)   { sm->postEvent(new CommandEvent(cmd)); }
       void setFocusRect();
-      Element* getDragElement() const { return dragElement; }
       void changeVoice(int voice);
       virtual void drawBackground(QPainter* p, const QRectF& r) const;
       bool fotoScoreViewDragTest(QMouseEvent*);

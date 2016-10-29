@@ -913,6 +913,7 @@ void SLine::layout()
             // tick and tick2 has no meaning so no layout is
             // possible and needed
             //
+            setLen(gscore->spatium() * 7);
             if (!spannerSegments().empty()) {
                   LineSegment* lineSegm = frontSegment();
                   lineSegm->layout();

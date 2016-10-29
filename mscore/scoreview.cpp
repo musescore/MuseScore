@@ -1729,8 +1729,6 @@ void ScoreView::paintEvent(QPaintEvent* ev)
             _foto->draw(&vp);
       shadowNote->draw(&vp);
 
-      if (dragElement && dragElement->type() != Element::Type::MEASURE)
-            dragElement->scanElements(&vp, paintElement, false);
       if (!dropAnchor.isNull()) {
             QPen pen(QBrush(QColor(80, 0, 0)), 2.0 / vp.worldTransform().m11(), Qt::DotLine);
             vp.setPen(pen);

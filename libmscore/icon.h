@@ -28,20 +28,24 @@ class Icon : public Element {
       IconType _iconType { IconType::NONE };
       QByteArray _action;
       QIcon _icon;
+      int _extent { 40 };
 
    public:
       Icon(Score* s) : Element(s) { }
       virtual ~Icon() {}
 
-      virtual Icon* clone() const override        { return new Icon(*this);    }
-      virtual Element::Type type() const override { return Element::Type::ICON;  }
-      IconType iconType() const          { return _iconType;          }
-      void setIconType(IconType val)     { _iconType = val;           }
+      virtual Icon* clone() const override                { return new Icon(*this);    }
+      virtual Element::Type type() const override         { return Element::Type::ICON;  }
+      IconType iconType() const                           { return _iconType;          }
+      void setIconType(IconType val)                      { _iconType = val;           }
       void setAction(const QByteArray& a, const QIcon& i) { _action = a; _icon = i; }
-      const QByteArray& action() const   { return _action; }
-      QIcon icon() const                 { return _icon;   }
+      const QByteArray& action() const                    { return _action; }
+      QIcon icon() const                                  { return _icon;   }
+      void setExtent(int v)                               { _extent = v; }
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
+      virtual void draw(QPainter*) const override;
+      virtual void layout() override;
       };
 
 

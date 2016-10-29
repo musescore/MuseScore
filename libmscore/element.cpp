@@ -408,7 +408,7 @@ QColor Element::curColor(const Element* proxy) const
       if (flag(ElementFlag::DROP_TARGET))
             return MScore::dropColor;
       bool marked = false;
-      if (type() == Element::Type::NOTE) {
+      if (isNote()) {
             const Note* note = static_cast<const Note*>(this);
             marked = note->mark();
             }

@@ -89,6 +89,12 @@ Timewise insert/delete notes/rests
             - delete measure timewise: replaced by Ctrl+Del of selection ranges
 
 
+Palette handling
+-------------------------------
+      - shift+drag allows to move a palette element in the palette
+      - ctrl+drag is drag operation with special semantic
+
+
 ====================================================================
       Programming Style Changes in MuseScore 3
 ====================================================================

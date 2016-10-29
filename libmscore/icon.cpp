@@ -45,5 +45,24 @@ void Icon::read(XmlReader& e)
             }
       }
 
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Icon::layout()
+      {
+      setbbox(QRectF(0, 0, _extent, _extent));
+      }
+
+//---------------------------------------------------------
+//   draw
+//---------------------------------------------------------
+
+void Icon::draw(QPainter* p) const
+      {
+      QPixmap pm(_icon.pixmap(_extent, QIcon::Normal, QIcon::On));
+      p->drawPixmap(0, 0, pm);
+      }
+
 }
 
