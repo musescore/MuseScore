@@ -313,15 +313,6 @@ void Palette::mousePressEvent(QMouseEvent* ev)
       }
 
 //---------------------------------------------------------
-//   mouseReleaseEvent
-//---------------------------------------------------------
-
-void Palette::mouseReleaseEvent(QMouseEvent*)
-      {
-      printf("mouse release\n");
-      }
-
-//---------------------------------------------------------
 //   mouseMoveEvent
 //---------------------------------------------------------
 
@@ -992,7 +983,7 @@ QPixmap Palette::pixmap(int paletteIdx) const
       int w    = r.width()  * cellMag;
       int h    = r.height() * cellMag;
 
-      printf("h %f * %f = %d, %f\n", r.height(), cellMag, h, r.y());
+//      printf("h %f * %f = %d, %f\n", r.height(), cellMag, h, r.y());
 
       QPixmap pm(w, h);
       pm.fill(Qt::transparent);
