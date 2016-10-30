@@ -93,9 +93,9 @@ void updateNoteLines(Segment* segment, int track)
       if (staff->isDrumStaff() || staff->isTabStaff())
             return;
       for (Segment* s = segment->next1(); s; s = s->next1()) {
-            if (s->segmentType() == Segment::Type::Clef && s->element(track) && !s->element(track)->generated())
+            if ((s->segmentType() & (Segment::Type::Clef | Segment::Type::HeaderClef)) && s->element(track) && !s->element(track)->generated())
                   break;
-            if (s->segmentType() != Segment::Type::ChordRest)
+            if (!s->isChordRestType())
                   continue;
             for (int t = track; t < track + VOICES; ++t) {
                   Element* e = s->element(t);
@@ -505,18 +505,29 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
 //    create a clef before segment seg
 //---------------------------------------------------------
 
-void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
+void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType ct)
       {
-//      bool firstSeg = seg->measure()->first() == seg;
-      bool firstSeg = seg->isHeaderClefType();
+      Segment::Type st;
+      if (seg->isHeaderClefType())
+            st = Segment::Type::HeaderClef;
+      else if (seg->isClefType())
+            st = Segment::Type::Clef;
+      else if (seg->rtick() == 0)
+            st = Segment::Type::HeaderClef;
+      else
+            st = Segment::Type::Clef;
+
+      bool moveClef = (st == Segment::Type::HeaderClef) && seg->measure()->prevMeasure();
+// printf("change clef seg %s rtick %d move %d\n", seg->subTypeName(), seg->rtick(), moveClef);
 
       Clef* gclef = 0;
+      int tick = seg->tick();
+      int rtick = seg->rtick();
       for (Staff* staff : ostaff->staffList()) {
-            if (staff->staffType()->group() != ClefInfo::staffGroup(st))
+            if (staff->staffType()->group() != ClefInfo::staffGroup(ct))
                   continue;
 
             Score* score     = staff->score();
-            int tick         = seg->tick();
             Measure* measure = score->tick2measure(tick);
 
             if (!measure) {
@@ -524,19 +535,16 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   continue;
                   }
 
-            Segment* destSeg = measure->findSegment(seg->segmentType(), tick);
-
-            // move measure-initial clef to last segment of prev measure
-
-            if (firstSeg && measure->prevMeasure() ) {            // if at start of measure and there is a previous measure
+            Segment* destSeg;
+            int rt;
+            if (moveClef) {            // if at start of measure and there is a previous measure
                   measure = measure->prevMeasure();
-                  destSeg = measure->findSegmentR(Segment::Type::Clef, measure->ticks());
+                  rt      = measure->ticks();
                   }
+            else
+                  rt = rtick;
+            destSeg = measure->undoGetSegmentR(st, rt);
 
-            if (!destSeg) {
-                  destSeg = new Segment(measure, Segment::Type::HeaderClef, measure->ticks());
-                  score->undoAddElement(destSeg);
-                  }
             int staffIdx = staff->idx();
             int track    = staffIdx * VOICES;
             Clef* clef   = toClef(destSeg->element(track));
@@ -549,18 +557,18 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   Instrument* i = staff->part()->instrument(tick);
                   ClefType cp, tp;
                   if (i->transpose().isZero()) {
-                        cp = st;
-                        tp = st;
+                        cp = ct;
+                        tp = ct;
                         }
                   else {
                         bool concertPitch = clef->concertPitch();
                         if (concertPitch) {
-                              cp = st;
+                              cp = ct;
                               tp = clef->transposingClef();
                               }
                         else {
                               cp = clef->concertClef();
-                              tp = st;
+                              tp = ct;
                               }
                         }
                   clef->setGenerated(false);
@@ -586,11 +594,12 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                         gclef = clef;
                         }
                   clef->setTrack(track);
-                  clef->setClefType(st);
+                  clef->setClefType(ct);
                   clef->setParent(destSeg);
                   score->undo(new AddElement(clef));
                   clef->layout();
                   }
+            clef->setSmall(true);
             }
       }
 

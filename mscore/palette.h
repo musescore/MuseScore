@@ -129,7 +129,6 @@ class Palette : public QWidget {
 
       virtual void paintEvent(QPaintEvent*) override;
       virtual void mousePressEvent(QMouseEvent*) override;
-      virtual void mouseReleaseEvent(QMouseEvent*) override;
       virtual void mouseDoubleClickEvent(QMouseEvent*) override;
       virtual void mouseMoveEvent(QMouseEvent*) override;
       virtual void leaveEvent(QEvent*) override;

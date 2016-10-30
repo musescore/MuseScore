@@ -2633,46 +2633,7 @@ void Score::cmdInsertClef(ClefType type)
 
 void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
       {
-      Clef* gclef = 0;
-      for (ScoreElement* e : cr->linkList()) {
-            ChordRest* cr = static_cast<ChordRest*>(e);  // toChordRest() does not work as e is ScoreElement
-            Score* score  = cr->score();
-
-            //
-            // create a clef segment before cr if needed
-            //
-            Segment* s  = cr->segment();
-            int rtick   = s->rtick();
-            Measure* m  = s->measure();
-
-            Segment* cs;
-            if (rtick == 0) {
-                  cs = m->findFirst(Segment::Type::HeaderClef, 0);
-                  if (!cs)
-                        cs = m->undoGetSegmentR(Segment::Type::HeaderClef, 0);
-                  else {
-                        if (cs->next() == s)
-                              ;
-                        else {
-                              for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
-                                    Element* e = cs->element(staffIdx * VOICES);
-                                    if (e)
-                                          e->setGenerated(false);
-                                    }
-                              cs = m->undoGetSegmentR(Segment::Type::Clef, 0);
-                              }
-                        }
-                  }
-            else
-                  cs = m->undoGetSegmentR(Segment::Type::Clef, 0);
-
-            Clef* c = toClef(gclef ? gclef->linkedClone() : clef->clone());
-            gclef   = c;
-            c->setScore(score);
-            c->setTrack(cr->staffIdx() * VOICES);
-            c->setParent(cs);
-            score->undo(new AddElement(c));
-            }
+      undoChangeClef(cr->staff(), cr->segment(), clef->clefType());
       delete clef;
       }
 
