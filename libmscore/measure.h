@@ -287,6 +287,7 @@ class Measure : public MeasureBase {
       virtual void computeMinWidth();
       void checkHeader();
       void checkTrailer();
+      void setStretchedWidth(qreal);
       };
 
 }     // namespace Ms

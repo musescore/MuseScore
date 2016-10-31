@@ -1297,6 +1297,8 @@ qreal Segment::minRight() const
       qreal distance = 0.0;
       for (const Shape& sh : shapes())
             distance = qMax(distance, sh.right());
+      if (isClefType())
+            distance += score()->styleP(StyleIdx::clefBarlineDistance);
       return distance;
       }
 

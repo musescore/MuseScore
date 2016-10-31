@@ -1760,20 +1760,13 @@ void Measure::computeMinWidth()
                         }
 #endif
                   }
-            else {
+            else
                   w = s->minRight();
-                  if (s->isClefType())
-                        w += score()->styleP(StyleIdx::clefBarlineDistance);
-                  }
             s->setWidth(w);
             x += w;
-            s = s->next();
+            s = ns; // s->next();
             }
-      x *= basicStretch();
-      qreal minWidth = score()->styleP(StyleIdx::minMeasureWidth);
-      if (x < minWidth)
-            x = minWidth;
-      setWidth(x);
+      setStretchedWidth(x);
       }
 
 //---------------------------------------------------------
