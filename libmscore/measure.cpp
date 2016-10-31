@@ -2944,9 +2944,7 @@ void Measure::stretchMeasure(qreal targetWidth)
             ns = ns->next();
       while (ns) {
             Segment* s = ns;
-            ns         = s->next();
-            while (ns && !ns->enabled())
-                  ns = ns->next();
+            ns         = s->nextEnabled();
             int nticks = (ns ? ns->rtick() : ticks()) - s->rtick();
             if (nticks) {
                   if (nticks < minTick)
@@ -2961,7 +2959,10 @@ void Measure::stretchMeasure(qreal targetWidth)
 
       std::multimap<qreal, Segment*> springs;
 
-      qreal minimumWidth = first()->pos().x();
+      Segment* s = first();
+      while (s && !s->enabled())
+            s = s->next();
+      qreal minimumWidth = s ? s->x() : 0.0;
       for (Segment& s : _segments) {
             if (!s.enabled())
                   continue;
@@ -3014,9 +3015,7 @@ void Measure::stretchMeasure(qreal targetWidth)
             while (s) {
                   s->rxpos() = x;
                   x += s->width();
-                  s = s->next();
-                  while (s && !s->enabled())
-                        s = s->next();
+                  s = s->nextEnabled();
                   }
             }
 
@@ -3038,10 +3037,12 @@ void Measure::stretchMeasure(qreal targetWidth)
                         //    x1 - left measure position of free space
                         //    x2 - right measure position of free space
 
-                        Segment* s1 = s.prev() ? s.prev() : 0;
+                        Segment* s1;
+                        for (s1 = s.prev(); s1 && !s1->enabled(); s1 = s1->prev())
+                              ;
                         Segment* s2;
                         for (s2 = s.next(); s2; s2 = s2->next()) {
-                              if (!s2->isChordRestType())
+                              if (s2->enabled() && !s2->isChordRestType() && s2->element(staffIdx * VOICES))
                                     break;
                               }
                         qreal x1 = s1 ? s1->x() + s1->minRight() : 0;
@@ -3426,11 +3427,8 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                   qreal w;
                   if (ns)
                         w = s->minHorizontalDistance(ns, false);
-                  else {
+                  else
                         w = s->minRight();
-                        if (s->isClefType())
-                              w += score()->styleP(StyleIdx::clefBarlineDistance);
-                        }
                   s->setWidth(w);
                   x += w;
                   }
@@ -3439,11 +3437,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                   }
             s = s->next();
             }
-      x *= basicStretch();
-      qreal minWidth = score()->styleP(StyleIdx::minMeasureWidth);
-      if (x < minWidth)
-            x = minWidth;
-      setWidth(x);
+      setStretchedWidth(x);
 
 #ifndef NDEBUG
       qreal w = width();
@@ -3765,9 +3759,8 @@ void Measure::removeSystemTrailer()
             changed = true;
             }
       setTrailer(false);
-      if (changed) {
+      if (changed)
             computeMinWidth();
-            }
       }
 
 //---------------------------------------------------------
@@ -3798,6 +3791,18 @@ void Measure::checkTrailer()
             }
       }
 
+//---------------------------------------------------------
+//   setStretchedWidth
+//---------------------------------------------------------
+
+void Measure::setStretchedWidth(qreal w)
+      {
+      qreal minWidth = score()->styleP(StyleIdx::minMeasureWidth);
+      if (w < minWidth)
+            w = minWidth;
+      w *= basicStretch();
+      setWidth(w);
+      }
 
 }
 
