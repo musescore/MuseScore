@@ -2515,9 +2515,7 @@ void Score::cmdDeleteSelection()
       else {
             // deleteItem modifies selection().elements() list,
             // so we need a local copy:
-            QList<Element*> el(selection().elements());
-            if (el.empty())
-                  qDebug("...nothing selected");
+            QList<Element*> el = selection().elements();
 
             // keep track of linked elements that are deleted implicitly
             // so we don't try to delete them twice if they are also in selection
@@ -2530,7 +2528,7 @@ void Score::cmdDeleteSelection()
                         links = *e->links();
 
                   // find location of element to select after deleting notes
-                  int tick = -1;
+                  int tick  = -1;
                   int track = -1;
                   if (!cr) {
                         if (e->isNote())

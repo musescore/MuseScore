@@ -763,6 +763,7 @@ LyricsLineSegment::LyricsLineSegment(Score* s)
       : LineSegment(s)
       {
       setFlags(ElementFlag::SEGMENT | ElementFlag::ON_STAFF);
+      clearFlags(ElementFlag::SELECTABLE | ElementFlag::MOVABLE);
       setGenerated(true);
       }
 
