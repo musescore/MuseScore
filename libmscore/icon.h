@@ -42,6 +42,7 @@ class Icon : public Element {
       const QByteArray& action() const                    { return _action; }
       QIcon icon() const                                  { return _icon;   }
       void setExtent(int v)                               { _extent = v; }
+      int extent() const                                  { return _extent; }
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
       virtual void draw(QPainter*) const override;
