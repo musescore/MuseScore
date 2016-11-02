@@ -22,7 +22,7 @@
         <string/>
        </property>
        <property name="placeholderText">
-        <string>Search...</string>
+        <string>Search</string>
        </property>
       </widget>
      </item>
