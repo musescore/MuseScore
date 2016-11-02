@@ -24,7 +24,6 @@ namespace Ms {
 
 void Score::cmdSplitMeasure(ChordRest* cr)
       {
-      printf("splitMeasure\n");
       startCmd();
       splitMeasure(cr->segment());
       endCmd();

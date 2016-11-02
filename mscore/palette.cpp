@@ -911,8 +911,10 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
             int column = idx % columns();
 
             qreal cellMag = cc->mag * mag;
-            if (el->isIcon())
-                  toIcon(el)->setExtent(((hhgrid < vgrid ? hhgrid : vgrid) - 4) / cellMag);
+            if (el->isIcon()) {
+                  toIcon(el)->setExtent((hhgrid < vgrid ? hhgrid : vgrid) - 4);
+                  cellMag = 1.0;
+                  }
             el->layout();
 
             if (drawStaff) {
