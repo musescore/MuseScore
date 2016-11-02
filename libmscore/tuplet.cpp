@@ -694,8 +694,9 @@ void Tuplet::read(XmlReader& e)
             else if (!DurationElement::readProperties(e))
                   e.unknown();
             }
-      Fraction f(_ratio.reduced().denominator(), _baseLen.fraction().denominator());
-      setDuration(f);
+//      Fraction f(_ratio.reduced().denominator(), _baseLen.fraction().denominator());
+      Fraction f(_ratio.denominator(), _baseLen.fraction().denominator());
+      setDuration(f.reduced());
       if (bl != -1) {         // obsolete
             TDuration d;
             d.setVal(bl);
