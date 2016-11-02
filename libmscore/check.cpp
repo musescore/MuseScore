@@ -20,6 +20,7 @@
 #include "staff.h"
 #include "keysig.h"
 #include "clef.h"
+#include "utils.h"
 
 namespace Ms {
 
@@ -284,27 +285,106 @@ bool Score::checkKeys()
 bool Score::checkClefs()
       {
       bool rc = true;
-      for (int i = 0; i < nstaves(); ++i) {
-            ClefType clef = staff(i)->clef(0);
-            Measure* cm = nullptr;
+//TODO:ws   what about clefs not at measure start?
+
+#if 0
+      int track = 0;
+      for (Staff* staff : _staves) {
+            ClefType clefType = staff->clef(0);
+            Measure* prevMeasure  = 0;
+
             for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-                  if (cm) {
-                        Segment* s = cm->findSegment(Segment::Type::Clef, m->tick());
-                        if (s) {
-                              Element* element = s->element(i * VOICES);
-                              if (element)
-                                    clef = static_cast<Clef*>(element)->clefType();
+                  if (prevMeasure) {
+                        Segment* segment = prevMeasure->findSegmentR(Segment::Type::Clef | Segment::Type::HeaderClef, 0);
+                        if (segment) {
+                              Element* e = segment->element(track);
+                              if (e)
+                                    clefType = toClef(e)->clefType();
                               }
                         }
-                  if (staff(i)->clef(m->tick()) != clef) {
-                        qDebug("measure %d (tick %d) : clef %d, map %d", m->no(), m->tick(), int(clef),
-                           int(staff(i)->clef(m->tick())));
+                  ClefType mapClefType = staff->clef(m->tick());
+                  if (mapClefType != clefType) {
+                        qDebug("measure %d (tick %d) : clef %d, map %d", m->no(), m->tick(), int(clefType), int(mapClefType));
                         rc = false;
                         }
-                  cm = m;
+                  prevMeasure = m;
                   }
+            track += VOICES;
             }
+#endif
       return rc;
+      }
+
+//---------------------------------------------------------
+//   fillGap
+//---------------------------------------------------------
+
+void Measure::fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch)
+      {
+//      qDebug("measure %6d pos %d, len %d, track %d", tick(), pos.ticks(), len.ticks(), track);
+      TDuration d;
+      d.setVal(len.ticks());
+      if (d.isValid()) {
+            Rest* rest = new Rest(score());
+            rest->setDuration(len);
+            rest->setDurationType(d);
+            rest->setTrack(track);
+            rest->setGap(true);
+            score()->undoAddCR(rest, this, (pos / stretch).ticks() + tick());
+            }
+      }
+
+//---------------------------------------------------------
+//   checkMeasure
+//    after opening / paste and every read operation
+//    this method checks for gaps and fills them
+//    with invisible rests
+//---------------------------------------------------------
+
+void Measure::checkMeasure(int staffIdx)
+      {
+      if (isMMRest())
+            return;
+
+      int strack = staffIdx * VOICES;
+      int dtrack = strack + (hasVoices(staffIdx) ? VOICES : 1);
+
+      Fraction stretch = score()->staff(staffIdx)->timeStretch(tick());
+      Fraction f       = len() * stretch;
+
+      for (int track = strack; track < dtrack; track++) {
+            Fraction expectedPos = 0;
+            Fraction currentPos  = 0;
+
+            for (Segment* seg = first(Segment::Type::ChordRest); seg; seg = seg->next(Segment::Type::ChordRest)) {
+                  Element* e = seg->element(track);
+                  if (!e)
+                        continue;
+
+                  ChordRest* cr = toChordRest(e);
+                  currentPos    = seg->fpos() * stretch;
+
+                  if (currentPos < expectedPos)
+                        qDebug("overlap measure %6d at %d-%d track %d", tick(), (currentPos/stretch).ticks(), (expectedPos/stretch).ticks(), track);
+                  else if (currentPos > expectedPos)
+                        fillGap(expectedPos, currentPos - expectedPos, track, stretch);
+
+                  DurationElement* de = cr;
+                  if (cr->tuplet()) {
+                        Tuplet* tuplet = cr->tuplet();
+                        seg            = skipTuplet(tuplet);
+                        de             = tuplet;
+                        }
+                  expectedPos = currentPos + de->duration();
+                  }
+            if (f > expectedPos) {
+                  // don't fill empty voices
+                  if (expectedPos != 0)
+                        fillGap(expectedPos, len() - expectedPos, track, stretch);
+                  }
+            else if (f < expectedPos)
+                  qDebug("overfilled measure %6d, %d > %d, track %d", tick(), expectedPos.ticks(), f.ticks(), track);
+            }
       }
 
 }

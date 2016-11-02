@@ -237,15 +237,15 @@ Element* Clef::drop(const DropData& data)
       {
       Element* e = data.element;
       Clef* c = 0;
-      if (e->type() == Element::Type::CLEF) {
-            Clef* clef = static_cast<Clef*>(e);
+      if (e->isClef()) {
+            Clef* clef = toClef(e);
             ClefType stype  = clef->clefType();
             if (clefType() != stype) {
                   score()->undoChangeClef(staff(), segment(), stype);
                   c = this;
                   }
             }
-      else if (e->type() == Element::Type::AMBITUS) {
+      else if (e->isAmbitus()) {
             /*if (!generated())*/ {
                   Measure*    meas  = measure();
                   Segment*    segm  = meas->getSegment(Segment::Type::Ambitus, meas->tick());

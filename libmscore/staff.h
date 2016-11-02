@@ -101,7 +101,7 @@ class Staff : public QObject, public ScoreElement {
 
    private:
       Part* _part       { 0 };
-      Excerpt* _excerpt { 0 };
+//      Excerpt* _excerpt { 0 };
 
       ClefList clefs;
       ClefTypeList _defaultClefType;
@@ -154,8 +154,8 @@ class Staff : public QObject, public ScoreElement {
       Part* part() const             { return _part;        }
       void setPart(Part* p)          { _part = p;           }
 
-      Excerpt* excerpt() const       { return _excerpt;     }
-      void setExcerpt(Excerpt* e)    { _excerpt = e;        }
+      Excerpt* excerpt() const;     //       { return score()->excerpt();     }
+//      void setExcerpt(Excerpt* e)    { _excerpt = e;        }
 
       BracketType bracket(int idx) const;
       int bracketSpan(int idx) const;

@@ -26,6 +26,7 @@
 #include "chord.h"
 #include "key.h"
 #include "sig.h"
+#include "tuplet.h"
 
 namespace Ms {
 
@@ -962,5 +963,20 @@ int step2pitch(int step)
       return tab[step % 7];
       }
 
+//---------------------------------------------------------
+//   skipTuplet
+//    return segment of rightmost chord/rest in a
+//    (possible nested) tuplet
+//---------------------------------------------------------
+
+Segment* skipTuplet(Tuplet* tuplet)
+      {
+      DurationElement* nde = tuplet->elements().back();
+      while (nde->isTuplet()) {
+            tuplet = toTuplet(nde);
+            nde = tuplet->elements().back();
+            }
+      return toChordRest(nde)->segment();
+      }
 }
 

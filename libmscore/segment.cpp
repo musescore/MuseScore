@@ -749,6 +749,16 @@ void Segment::checkEmpty() const
       }
 
 //---------------------------------------------------------
+//   fpos
+//    return relative position of segment in measure
+//---------------------------------------------------------
+
+Fraction Segment::fpos() const
+      {
+      return Fraction::fromTicks(_tick);
+      }
+
+//---------------------------------------------------------
 //   swapElements
 //---------------------------------------------------------
 

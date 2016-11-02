@@ -359,7 +359,7 @@ void Staff::removeClef(Clef* clef)
 Fraction Staff::timeStretch(int tick) const
       {
       TimeSig* timesig = timeSig(tick);
-      return timesig == 0 ? Fraction(1,1) : timesig->stretch();
+      return timesig ? timesig->stretch() : Fraction(1,1);
       }
 
 //---------------------------------------------------------
@@ -1367,5 +1367,16 @@ void Staff::scaleChanged(double oldVal, double newVal)
                   }
             }
       }
+
+//---------------------------------------------------------
+//   excerpt
+//    TODO:ws remove
+//---------------------------------------------------------
+
+Excerpt* Staff::excerpt() const
+      {
+      return score()->excerpt();
+      }
+
 }
 

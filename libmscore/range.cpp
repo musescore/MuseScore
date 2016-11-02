@@ -157,15 +157,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
                               qFatal("TrackList::read: cannot start in middle of tuplet");
                               }
                         de = tuplet;
-
-                        // find last chord/rest in (possibly nested) tuplet:
-                        DurationElement* nde = tuplet;
-                        while (nde) {
-                              nde = tuplet->elements().back();
-                              if (!nde->isTuplet())
-                                    break;
-                              }
-                        s = toChordRest(nde)->segment();
+                        s = skipTuplet(tuplet);
                         // continue with first chord/rest after tuplet
                         }
                   if (gap) {

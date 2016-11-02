@@ -126,6 +126,8 @@ class Measure : public MeasureBase {
       void push_back(Segment* e);
       void push_front(Segment* e);
 
+      void fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch);
+
    public:
       Measure(Score* = 0);
       Measure(const Measure&);

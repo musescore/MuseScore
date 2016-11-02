@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2016 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -2115,97 +2115,6 @@ void Measure::read(XmlReader& e, int staffIdx)
       }
 
 //---------------------------------------------------------
-//   checkMeasure
-//    after opening / paste and every read operation
-//    this method checks for gaps and fills them
-//    with invisible rests
-//---------------------------------------------------------
-
-void Measure::checkMeasure(int staffIdx)
-      {
-      // ws:
-      // this is _very_ slow on big files
-      // most time is consumed in nextCR()
-
-      score()->staff(staffIdx)->setExcerpt(score()->excerpt());
-      int n = VOICES;
-      if (score()->staff(staffIdx)->excerpt())
-            n = 1;
-
-      if (isMMRest())
-            return;
-
-      for (int track = staffIdx * VOICES; (n || track % n) && hasVoice(track); track++) {
-            Segment* seg = first();
-            if (!seg->element(track))
-                  seg = seg->nextCR(track, false);
-            if (!seg->element(track))
-                  continue;
-
-            Segment* pseg = 0;
-            int stick = tick();
-            int ticks = seg->tick() - stick;
-
-            while (seg) {
-                  // !HACK, it was > 1, but for some tuplets it can happen to have 1 tick difference...
-                  // 4 is a 512th...
-                  if (ticks > 3) {
-                        TDuration d;
-                        d.setVal(ticks);
-                        if (d.isValid()) {
-                              Fraction f = Fraction::fromTicks(ticks);
-                              Rest* rest = new Rest(score());
-                              rest->setDuration(f);
-                              rest->setDurationType(d);
-                              rest->setTrack(track);
-                              rest->setGap(true);
-                              score()->undoAddCR(rest, this, stick);
-                              }
-                        }
-
-                  pseg = seg;
-                  if (!seg->element(track)->isChordRest())
-                        break;
-                  stick = seg->tick() + toChordRest(seg->element(track))->actualTicks();
-
-                  // ws: nextCR() is very inefficient as it may scan the whole score
-                  for (Segment* s = seg->nextCR(track, true); s; s = s->nextCR(track, true)) {
-                        if (!s->element(track))
-                              continue;
-                        if (s->parent() != this) {
-                              stick = -1;
-                              break;
-                              }
-
-                        seg = s;
-                        if (seg->tick() == stick) {
-                              pseg = seg;
-                              stick = seg->tick() + toChordRest(seg->element(track))->actualTicks();
-                              continue;
-                              }
-                        else {
-                              ticks = seg->tick() - stick;
-                              break;
-                              }
-                        }
-
-                  if (stick == -1) {
-                        break;
-                        }
-                  //reached last segment in measure
-                  if (pseg == seg || stick == tick() + _len.ticks()) {
-                        if (stick + ticks < tick() + _len.ticks()) {
-                              ticks = tick() + _len.ticks() - stick;
-                              if (ticks > 0)
-                                    continue;
-                              }
-                        break;
-                        }
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   visible
 //---------------------------------------------------------
 
@@ -3584,6 +3493,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         }
                   if (clef->generated())
                         clef->setClefType(cl);
+                  clef->setSmall(false);
                   clef->layout();
                   cSegment->createShape(staffIdx);
                   cSegment->setEnabled(true);
@@ -3721,8 +3631,11 @@ void Measure::addSystemTrailer(Measure* nm)
                   }
             if (clefSegment) {
                   Clef* clef = toClef(clefSegment->element(track));
-                  if (clef && (!score()->genCourtesyClef() || repeatEnd() || isFinalMeasure || !clef->showCourtesy()))
-                        clef->clear();          // make invisible
+                  if (clef) {
+                        clef->setSmall(true);
+                        if (!score()->genCourtesyClef() || repeatEnd() || isFinalMeasure || !clef->showCourtesy())
+                              clef->clear();          // make invisible
+                        }
                   }
             }
       checkTrailer();
@@ -3803,6 +3716,118 @@ void Measure::setStretchedWidth(qreal w)
       w *= basicStretch();
       setWidth(w);
       }
+
+//---------------------------------------------------------
+//   computeMinWidth
+//    sets the minimum stretched width of segment list s
+//    set the width and x position for all segments
+//---------------------------------------------------------
+
+void Measure::computeMinWidth()
+      {
+      Segment* s;
+
+      //
+      // skip disabled segment or system header segments if not the first measure in a system
+      //
+      for (s = first(); s && !s->enabled(); s = s->next()) {
+            s->rxpos() = 0;
+            s->setWidth(0);
+            }
+      if (!s) {
+            setWidth(0.0);
+            return;
+            }
+      qreal x;
+      bool first = system()->firstMeasure() == this;
+      Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
+
+      x = s->minLeft(ls);
+      if (s->isChordRestType())
+            x += score()->styleP(StyleIdx::barNoteDistance);
+      else if (s->isClefType())
+            x += score()->styleP(StyleIdx::clefLeftMargin);
+      else if (s->isKeySigType())
+            x = qMax(x, score()->styleP(StyleIdx::keysigLeftMargin));
+      else if (s->isTimeSigType())
+            x = qMax(x, score()->styleP(StyleIdx::timesigLeftMargin));
+
+      x += s->extraLeadingSpace().val() * spatium();
+      bool isSystemHeader = s->header();
+
+      while (s) {
+            s->rxpos() = x;
+            if (!s->enabled()) {
+                  s->setWidth(0);
+                  s = s->next();
+                  continue;
+                  }
+            Segment* ns = s->nextEnabled();
+            qreal w;
+
+            if (ns) {
+                  if (isSystemHeader && !ns->header()) {        // this is the system header gap
+                        w = s->minHorizontalDistance(ns, true);
+                        isSystemHeader = false;
+                        }
+                  else {
+                        w = s->minHorizontalDistance(ns, false);
+                        }
+// printf("  min %f <%s>(%d) <%s>(%d)\n", s->x(), s->subTypeName(), s->enabled(), ns->subTypeName(), ns->enabled());
+#if 1
+                  // look back for collisions with previous segments
+                  // this is time consuming (ca. +5%) and probably requires more optimization
+
+                  int n = 1;
+                  for (Segment* ps = s; ps != s;) {
+                        qreal ww;
+                        ps = ps->prev();
+                        while (ps && !ps->enabled())
+                              ps = ps->prev();
+                        if (ps == s)
+                              ww = ns->minLeft(ls) - s->x();
+                        else {
+                              if (ps->isChordRestType())
+                                    ++n;
+                              ww = ps->minHorizontalDistance(ns, false) - (s->x() - ps->x());
+                              }
+                        if (ww > w) {
+                              // overlap !
+                              // distribute extra space between segments ps - ss;
+                              // only ChordRest segments get more space
+                              // TODO: is there a special case n == 0 ?
+
+                              qreal d = (ww - w) / n;
+                              qreal xx = ps->x();
+                              for (Segment* ss = ps; ss != s;) {
+                                    Segment* ns = ss->next();
+                                    while (ns && !ns->enabled())
+                                          ns = ns->next();
+                                    qreal ww    = ss->width();
+                                    if (ss->isChordRestType()) {
+                                          ww += d;
+                                          ss->setWidth(ww);
+                                          }
+                                    xx += ww;
+                                    ns->rxpos() = xx;
+                                    ss = ns;
+                                    }
+                              w += d;
+                              x = xx;
+                              break;
+                              }
+                        }
+#endif
+                  }
+            else
+                  w = s->minRight();
+            s->setWidth(w);
+            x += w;
+            s = ns; // s->next();
+            }
+      setStretchedWidth(x);
+      }
+
 
 }
 
