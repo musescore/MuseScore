@@ -336,29 +336,24 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
                   QPoint o(dragStartPosition - r.topLeft());
                   drag->setHotSpot(o);
 
-                  Qt::DropActions da = Qt::CopyAction;
+                  Qt::DropActions da;
                   if (!(_readOnly || filterActive) && (ev->modifiers() & Qt::ShiftModifier)) {
                         dragCells = cells;      // backup
                         da = Qt::MoveAction;
                         }
+                  else
+                        da = Qt::CopyAction;
                   Qt::DropAction a = drag->exec(da);
                   if (da == Qt::MoveAction && a != da)
-                        cells = dragCells;      // restore
+                        cells = dragCells;      // restore on a failed move action
                   update();
                   }
             }
       else {
-            QRect r;
-            if (currentIdx != -1)
-                  r = idxRect(currentIdx);
             currentIdx = idx(ev->pos());
-            if (currentIdx != -1) {
-                  if (cellAt(currentIdx) == 0)
-                        currentIdx = -1;
-                  else
-                        r |= idxRect(currentIdx);
-                  }
-            update(r);
+            if (currentIdx != -1 && cellAt(currentIdx) == 0)
+                  currentIdx = -1;
+            update();
             }
       }
 
@@ -985,8 +980,6 @@ QPixmap Palette::pixmap(int paletteIdx) const
       int w    = r.width()  * cellMag;
       int h    = r.height() * cellMag;
 
-//      printf("h %f * %f = %d, %f\n", r.height(), cellMag, h, r.y());
-
       QPixmap pm(w, h);
       pm.fill(Qt::transparent);
       QPainter p(&pm);
@@ -995,6 +988,8 @@ QPixmap Palette::pixmap(int paletteIdx) const
       if (e->isIcon())
             toIcon(e)->setExtent(w < h ? w : h);
       p.scale(cellMag, cellMag);
+
+      QPointF pos = e->ipos();
       e->setPos(-r.topLeft());
 
       QColor color;
@@ -1011,6 +1006,7 @@ QPixmap Palette::pixmap(int paletteIdx) const
       p.setPen(QPen(color));
       e->scanElements(&p, paintPaletteElement);
 
+      e->setPos(pos);
       return pm;
       }
 
