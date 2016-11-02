@@ -2190,7 +2190,6 @@ void Score::deleteItem(Element* el)
             case Element::Type::VOLTA_SEGMENT:
             case Element::Type::SLUR_SEGMENT:
             case Element::Type::PEDAL_SEGMENT:
-//            case Element::Type::LYRICSLINE_SEGMENT:
             case Element::Type::GLISSANDO_SEGMENT:
                   {
                   el = static_cast<SpannerSegment*>(el)->spanner();

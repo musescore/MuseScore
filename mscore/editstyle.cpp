@@ -697,24 +697,6 @@ void EditStyle::setValues()
       radioFBModern->setChecked(lstyle.value(StyleIdx::figuredBassStyle).toInt() == 0);
       radioFBHistoric->setChecked(lstyle.value(StyleIdx::figuredBassStyle).toInt() == 1);
 
-#if 0 // TODO-ws
-      for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
-            QComboBox* cb = static_cast<QComboBox*>(articulationTable->cellWidget(i, 1));
-            if (cb == 0)
-                  continue;
-            ArticulationAnchor st  = lstyle.articulationAnchor(i);
-            int idx = 0;
-            switch (st) {
-                  case ArticulationAnchor::TOP_STAFF:       idx = 0;    break;
-                  case ArticulationAnchor::BOTTOM_STAFF:    idx = 1;    break;
-                  case ArticulationAnchor::CHORD:           idx = 2;    break;
-                  case ArticulationAnchor::TOP_CHORD:       idx = 3;    break;
-                  case ArticulationAnchor::BOTTOM_CHORD:    idx = 4;    break;
-                  }
-            cb->setCurrentIndex(idx);
-            }
-#endif
-
       QString mfont(lstyle.value(StyleIdx::MusicalSymbolFont).toString());
       int idx = 0;
       for (const auto& i : ScoreFont::scoreFonts()) {

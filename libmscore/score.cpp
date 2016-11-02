@@ -1487,6 +1487,7 @@ void Score::removeElement(Element* element)
             default:
                   break;
             }
+      setLayout(element->tick());
       }
 
 //---------------------------------------------------------
