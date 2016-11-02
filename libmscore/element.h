@@ -71,6 +71,7 @@ class LayoutBreak;
 class Tremolo;
 class System;
 class Lyrics;
+class LyricsLine;
 class LyricsLineSegment;
 class Stem;
 class SlurSegment;
@@ -768,6 +769,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(FSymbol,       FSYMBOL)
       CONVERT(Fingering,     FINGERING)
       CONVERT(NoteHead,      NOTEHEAD)
+      CONVERT(LyricsLine,    LYRICSLINE)
       CONVERT(LyricsLineSegment, LYRICSLINE_SEGMENT)
       CONVERT(FiguredBass,   FIGURED_BASS)
       CONVERT(StaffState,    STAFF_STATE)
@@ -872,6 +874,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(FSymbol,       FSYMBOL)
       CONVERT(Fingering,     FINGERING)
       CONVERT(NoteHead,      NOTEHEAD)
+      CONVERT(LyricsLine,    LYRICSLINE)
       CONVERT(LyricsLineSegment, LYRICSLINE_SEGMENT)
       CONVERT(FiguredBass,   FIGURED_BASS)
       CONVERT(StaffState,    STAFF_STATE)
