@@ -518,7 +518,9 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType ct)
             st = Segment::Type::Clef;
 
       bool moveClef = (st == Segment::Type::HeaderClef) && seg->measure()->prevMeasure();
-// printf("change clef seg %s rtick %d move %d\n", seg->subTypeName(), seg->rtick(), moveClef);
+      bool small = !seg->header() || moveClef;
+
+printf("change clef seg %s rtick %d move %d small %d\n", seg->subTypeName(), seg->rtick(), moveClef, small);
 
       Clef* gclef = 0;
       int tick = seg->tick();
@@ -599,7 +601,7 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType ct)
                   score->undo(new AddElement(clef));
                   clef->layout();
                   }
-            clef->setSmall(true);
+            clef->setSmall(small);
             }
       }
 

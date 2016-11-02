@@ -37,6 +37,8 @@ class Segment;
 class System;
 class Element;
 class Note;
+class Tuplet;
+
 enum class ClefType : signed char;
 
 extern QRectF handleRect(const QPointF& pos);
@@ -83,6 +85,7 @@ extern int relStep(int pitch, int tpc, ClefType clef);
 extern int pitch2step(int pitch);
 extern int step2pitch(int step);
 
+extern Segment* skipTuplet(Tuplet* tuplet);
 
 
 }     // namespace Ms

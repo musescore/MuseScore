@@ -1659,117 +1659,6 @@ void Score::respace(std::vector<ChordRest*>* elements)
       }
 
 //---------------------------------------------------------
-//   computeMinWidth
-//    sets the minimum stretched width of segment list s
-//    set the width and x position for all segments
-//---------------------------------------------------------
-
-void Measure::computeMinWidth()
-      {
-      Segment* s;
-
-      //
-      // skip disabled segment or system header segments if not the first measure in a system
-      //
-      for (s = first(); s && !s->enabled(); s = s->next()) {
-            s->rxpos() = 0;
-            s->setWidth(0);
-            }
-      if (!s) {
-            setWidth(0.0);
-            return;
-            }
-      qreal x;
-      bool first = system()->firstMeasure() == this;
-      Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
-
-      x = s->minLeft(ls);
-      if (s->isChordRestType())
-            x += score()->styleP(StyleIdx::barNoteDistance);
-      else if (s->isClefType())
-            x += score()->styleP(StyleIdx::clefLeftMargin);
-      else if (s->isKeySigType())
-            x = qMax(x, score()->styleP(StyleIdx::keysigLeftMargin));
-      else if (s->isTimeSigType())
-            x = qMax(x, score()->styleP(StyleIdx::timesigLeftMargin));
-
-      x += s->extraLeadingSpace().val() * spatium();
-      bool isSystemHeader = s->header();
-
-      while (s) {
-            s->rxpos() = x;
-            if (!s->enabled()) {
-                  s->setWidth(0);
-                  s = s->next();
-                  continue;
-                  }
-            Segment* ns = s->nextEnabled();
-            qreal w;
-
-            if (ns) {
-                  if (isSystemHeader && !ns->header()) {        // this is the system header gap
-                        w = s->minHorizontalDistance(ns, true);
-                        isSystemHeader = false;
-                        }
-                  else {
-                        w = s->minHorizontalDistance(ns, false);
-                        }
-// printf("  min %f <%s>(%d) <%s>(%d)\n", s->x(), s->subTypeName(), s->enabled(), ns->subTypeName(), ns->enabled());
-#if 1
-                  // look back for collisions with previous segments
-                  // this is time consuming (ca. +5%) and probably requires more optimization
-
-                  int n = 1;
-                  for (Segment* ps = s; ps != s;) {
-                        qreal ww;
-                        ps = ps->prev();
-                        while (ps && !ps->enabled())
-                              ps = ps->prev();
-                        if (ps == s)
-                              ww = ns->minLeft(ls) - s->x();
-                        else {
-                              if (ps->isChordRestType())
-                                    ++n;
-                              ww = ps->minHorizontalDistance(ns, false) - (s->x() - ps->x());
-                              }
-                        if (ww > w) {
-                              // overlap !
-                              // distribute extra space between segments ps - ss;
-                              // only ChordRest segments get more space
-                              // TODO: is there a special case n == 0 ?
-
-                              qreal d = (ww - w) / n;
-                              qreal xx = ps->x();
-                              for (Segment* ss = ps; ss != s;) {
-                                    Segment* ns = ss->next();
-                                    while (ns && !ns->enabled())
-                                          ns = ns->next();
-                                    qreal ww    = ss->width();
-                                    if (ss->isChordRestType()) {
-                                          ww += d;
-                                          ss->setWidth(ww);
-                                          }
-                                    xx += ww;
-                                    ns->rxpos() = xx;
-                                    ss = ns;
-                                    }
-                              w += d;
-                              x = xx;
-                              break;
-                              }
-                        }
-#endif
-                  }
-            else
-                  w = s->minRight();
-            s->setWidth(w);
-            x += w;
-            s = ns; // s->next();
-            }
-      setStretchedWidth(x);
-      }
-
-//---------------------------------------------------------
 //   updateBarLineSpans
 ///   updates bar line span(s) when the number of lines of a staff changes
 //---------------------------------------------------------
@@ -2584,7 +2473,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                               e->layout();
                               }
                         }
-                  else if (segment.isType(Segment::Type::Clef | Segment::Type::TimeSig | Segment::Type::Ambitus)) {
+                  else if (segment.isType(Segment::Type::TimeSig | Segment::Type::Ambitus)) {
                         Element* e = segment.element(staffIdx * VOICES);
                         if (e)
                               e->layout();

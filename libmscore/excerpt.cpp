@@ -146,7 +146,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             foreach (Staff* staff, *part->staves()) {
                   Staff* s = new Staff(score);
                   s->setPart(p);
-                  s->setExcerpt(excerpt);
+//ws:???                  s->setExcerpt(excerpt);
                   s->setStaffType(staff->staffType());
                   s->setDefaultClefType(staff->defaultClefType());
                   score->undo(new LinkStaff(s, staff));

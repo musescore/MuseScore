@@ -1608,6 +1608,7 @@ TupletView::TupletView()
       tb.direction->addItem("Up",   1);
       tb.direction->addItem("Down", 2);
 
+
       connect(tb.number, SIGNAL(clicked()), SLOT(numberClicked()));
       connect(tb.tuplet, SIGNAL(clicked()), SLOT(tupletClicked()));
       connect(tb.elements, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(elementClicked(QTreeWidgetItem*)));
@@ -1654,8 +1655,10 @@ void TupletView::setElement(Element* e)
       tb.ratioN->setValue(tuplet->ratio().denominator());
       tb.number->setEnabled(tuplet->number());
       tb.tuplet->setEnabled(tuplet->tuplet());
+      tb.duration->setText(tuplet->duration().print());
+
       tb.elements->clear();
-      foreach(DurationElement* e, tuplet->elements()) {
+      for (DurationElement* e : tuplet->elements()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
             item->setText(0, e->name());
             item->setText(1, QString("%1").arg(e->tick()));
