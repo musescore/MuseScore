@@ -1279,14 +1279,12 @@ void Segment::createShape(int staffIdx)
             }
 #endif
       for (Element* e : _elist) {
-//            if (e && e->vStaffIdx() == staffIdx && e->visible())
             if (e && e->vStaffIdx() == staffIdx)
                   s.add(e->shape());
             }
       for (Element* e : _annotations) {
             // probably only allow for lyrics and chordnames
             if (e->staffIdx() == staffIdx
-//               && e->visible()
                && !e->isRehearsalMark()
                && !e->isTempoText()
                && !e->isDynamic()

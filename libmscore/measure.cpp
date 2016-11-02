@@ -3738,6 +3738,7 @@ void Measure::computeMinWidth()
             setWidth(0.0);
             return;
             }
+      Segment* fs = s;
       qreal x;
       bool first = system()->firstMeasure() == this;
       Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
@@ -3779,12 +3780,10 @@ void Measure::computeMinWidth()
                   // this is time consuming (ca. +5%) and probably requires more optimization
 
                   int n = 1;
-                  for (Segment* ps = s; ps != s;) {
+                  for (Segment* ps = s; ps != fs;) {
                         qreal ww;
-                        ps = ps->prev();
-                        while (ps && !ps->enabled())
-                              ps = ps->prev();
-                        if (ps == s)
+                        ps = ps->prevEnabled();
+                        if (ps == fs)
                               ww = ns->minLeft(ls) - s->x();
                         else {
                               if (ps->isChordRestType())
@@ -3800,9 +3799,7 @@ void Measure::computeMinWidth()
                               qreal d = (ww - w) / n;
                               qreal xx = ps->x();
                               for (Segment* ss = ps; ss != s;) {
-                                    Segment* ns = ss->next();
-                                    while (ns && !ns->enabled())
-                                          ns = ns->next();
+                                    Segment* ns = ss->nextEnabled();
                                     qreal ww    = ss->width();
                                     if (ss->isChordRestType()) {
                                           ww += d;

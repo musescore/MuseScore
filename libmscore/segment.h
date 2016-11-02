@@ -27,7 +27,6 @@ namespace Ms {
 class Measure;
 class Segment;
 class ChordRest;
-class Lyrics;
 class Spanner;
 class System;
 
