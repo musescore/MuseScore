@@ -127,7 +127,7 @@ void Box::editDrag(const EditData& ed)
                   }
             bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
             system()->setHeight(height());
-//TODO-ws            score()->doLayoutPages();
+            score()->setLayout(tick());
             }
       else {
             _boxWidth += Spatium(ed.delta.x() / spatium());
@@ -136,7 +136,7 @@ void Box::editDrag(const EditData& ed)
                   int n = lrint(_boxWidth.val() / hRaster);
                   _boxWidth = Spatium(hRaster * n);
                   }
-            score()->setLayoutAll();
+            score()->setLayout(tick());
             }
       layout();
       }
@@ -403,7 +403,7 @@ bool Box::setProperty(P_ID propertyId, const QVariant& v)
             default:
                   return MeasureBase::setProperty(propertyId, v);
             }
-      score()->setLayoutAll();
+      score()->setLayout(tick());
       return true;
       }
 
@@ -467,7 +467,7 @@ void Box::resetProperty(P_ID id)
             default:
                   return MeasureBase::resetProperty(id);
             }
-      score()->setLayoutAll();
+      score()->setLayout(tick());
       }
 
 //---------------------------------------------------------
@@ -481,7 +481,7 @@ void Box::styleChanged()
             setTopGap(isHBox() ? 0.0 : score()->styleP(StyleIdx::systemFrameDistance));
       if (bottomGapStyle == PropertyStyle::STYLED)
             setBottomGap(isHBox() ? 0.0 : score()->styleP(StyleIdx::frameSystemDistance));
-      score()->setLayoutAll();
+      score()->setLayout(tick());
       }
 
 //---------------------------------------------------------
@@ -673,7 +673,6 @@ Element* Box::drop(const DropData& data)
                   return e;
 
             case Type::BAR_LINE: {
-printf("drop barline\n");
                   MeasureBase* mb = next();
                   if (!mb || !mb->isMeasure()) {
                         delete e;
@@ -717,7 +716,7 @@ QRectF HBox::drag(EditData* data)
 
 void HBox::endEditDrag()
       {
-      score()->setLayoutAll();
+      score()->setLayout(tick());
       score()->update();
       }
 

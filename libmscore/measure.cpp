@@ -2675,7 +2675,7 @@ QVariant Measure::getProperty(P_ID propertyId) const
 
 bool Measure::setProperty(P_ID propertyId, const QVariant& value)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::TIMESIG_NOMINAL:
                   _timesig = value.value<Fraction>();
                   break;
@@ -2703,7 +2703,7 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
             default:
                   return MeasureBase::setProperty(propertyId, value);
             }
-      score()->setLayoutAll();
+      score()->setLayout(tick());
       return true;
       }
 

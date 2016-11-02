@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2013 Werner Schweer
+//  Copyright (C) 2002-2016 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -519,8 +519,6 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType ct)
 
       bool moveClef = (st == Segment::Type::HeaderClef) && seg->measure()->prevMeasure();
       bool small = !seg->header() || moveClef;
-
-printf("change clef seg %s rtick %d move %d small %d\n", seg->subTypeName(), seg->rtick(), moveClef, small);
 
       Clef* gclef = 0;
       int tick = seg->tick();
@@ -1861,7 +1859,7 @@ void RemoveElement::cleanup(bool undo)
 
 void RemoveElement::undo()
       {
-      if (element->type() != Element::Type::TUPLET)
+      if (!element->isTuplet())
             element->score()->addElement(element);
       if (element->isChordRest1()) {
             if (element->isChord()) {
@@ -1887,7 +1885,7 @@ void RemoveElement::undo()
 
 void RemoveElement::redo()
       {
-      if (element->type() != Element::Type::TUPLET)
+      if (!element->isTuplet())
             element->score()->removeElement(element);
       if (element->isChordRest1()) {
             undoRemoveTuplet(toChordRest(element));

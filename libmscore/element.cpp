@@ -2044,6 +2044,8 @@ int Element::tick() const
       while (e) {
             if (e->isSegment())
                   return toSegment(e)->tick();
+            else if (e->isMeasure())
+                  return toMeasure(e)->tick();
             e = e->parent();
             }
       return -1;
