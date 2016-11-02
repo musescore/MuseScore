@@ -66,10 +66,10 @@ qreal Shape::minHorizontalDistance(const Shape& a) const
             for (const QRectF& r1 : *this) {
                   qreal ay1 = r1.top();
                   qreal ay2 = r1.bottom();
+//                  if (intersects(ay1, ay2, by1, by2))
                   if (intersects(ay1, ay2, by1, by2)
                      || ((r1.height() == 0.0) && (r2.height() == 0.0) && (ay1 == by1))
                      || ((r1.width() == 0.0) || (r2.width() == 0.0)))
-//                  if (intersects(ay1, ay2, by1, by2))
                         dist = qMax(dist, r1.right() - r2.left());
                   }
             }
