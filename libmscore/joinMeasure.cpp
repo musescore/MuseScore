@@ -24,6 +24,8 @@ namespace Ms {
 
 void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
       {
+      if (!m2)
+            return;
       startCmd();
 
       deselectAll();
