@@ -3460,7 +3460,7 @@
             <string/>
            </property>
            <property name="placeholderText">
-            <string>Filter</string>
+            <string>Search</string>
            </property>
           </widget>
          </item>
