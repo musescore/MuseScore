@@ -188,132 +188,132 @@
              <widget class="QComboBox" name="intervalList">
               <item>
                <property name="text">
-                <string>Perfect Unison</string>
+                <string>Perfect Unison - 0</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Augmented Unison</string>
+                <string>Augmented Unison - 1</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Diminished Second</string>
+                <string>Diminished Second - 0</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Minor Second</string>
+                <string>Minor Second - 1</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Major Second</string>
+                <string>Major Second - 2</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Augmented Second</string>
+                <string>Augmented Second - 3</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Diminished Third</string>
+                <string>Diminished Third - 2</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Minor Third</string>
+                <string>Minor Third - 3</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Major Third</string>
+                <string>Major Third - 4</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Augmented Third</string>
+                <string>Augmented Third - 5</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Diminished Fourth</string>
+                <string>Diminished Fourth - 4</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Perfect Fourth</string>
+                <string>Perfect Fourth - 5</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Augmented Fourth</string>
+                <string>Augmented Fourth - 6</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Diminished Fifth</string>
+                <string>Diminished Fifth - 6</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Perfect Fifth</string>
+                <string>Perfect Fifth - 7</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Augmented Fifth</string>
+                <string>Augmented Fifth - 8</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Diminished Sixth</string>
+                <string>Diminished Sixth - 7</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Minor Sixth</string>
+                <string>Minor Sixth - 8</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Major Sixth</string>
+                <string>Major Sixth - 9</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Augmented Sixth</string>
+                <string>Augmented Sixth - 10</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Diminished Seventh</string>
+                <string>Diminished Seventh - 9</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Minor Seventh</string>
+                <string>Minor Seventh - 10</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Major Seventh</string>
+                <string>Major Seventh - 11</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Augmented Seventh</string>
+                <string>Augmented Seventh - 12</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Diminished Octave</string>
+                <string>Diminished Octave - 11</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Perfect Octave</string>
+                <string>Perfect Octave - 12</string>
                </property>
               </item>
              </widget>

@@ -49,6 +49,22 @@ TransposeDialog::TransposeDialog(QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       connect(transposeByKey, SIGNAL(clicked(bool)), SLOT(transposeByKeyToggled(bool)));
       connect(transposeByInterval, SIGNAL(clicked(bool)), SLOT(transposeByIntervalToggled(bool)));
+      QFont f(intervalList->font());
+      f.setItalic(true);
+      intervalList->setItemData(0, f, Qt::FontRole);
+      intervalList->setItemData(3, f, Qt::FontRole);
+      intervalList->setItemData(4, f, Qt::FontRole);
+      intervalList->setItemData(7, f, Qt::FontRole);
+      intervalList->setItemData(8, f, Qt::FontRole);
+      intervalList->setItemData(11, f, Qt::FontRole);
+      intervalList->setItemData(12, f, Qt::FontRole);
+      intervalList->setItemData(13, f, Qt::FontRole);
+      intervalList->setItemData(14, f, Qt::FontRole);
+      intervalList->setItemData(17, f, Qt::FontRole);
+      intervalList->setItemData(18, f, Qt::FontRole);
+      intervalList->setItemData(21, f, Qt::FontRole);
+      intervalList->setItemData(22, f, Qt::FontRole);
+      intervalList->setItemData(25, f, Qt::FontRole);
       }
 
 //---------------------------------------------------------
