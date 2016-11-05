@@ -592,6 +592,21 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       if (ss->system() && ss->track() >= 0)
             staffOffset = QPointF(0.0, -ss->system()->staff(ss->staffIdx())->y());
 
+      QPainterPath p;
+      p.moveTo(QPointF());
+      p.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
+      ss->_shape.clear();
+      QPointF start;
+      start = t.map(start);
+      int nbShapes = 10;
+      for (int i = 1; i <= nbShapes; i++) {
+            QPointF point = t.map(p.pointAtPercent(i/float(nbShapes)));
+            QRectF re(start, point);
+            re.translate(staffOffset);
+            ss->_shape.add(re);
+            start = point;
+            }
+
       ss->path.translate(staffOffset);
       ss->shapePath.translate(staffOffset);
       }
