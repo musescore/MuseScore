@@ -127,6 +127,7 @@ class Measure : public MeasureBase {
       void push_front(Segment* e);
 
       void fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch);
+      void computeMinWidth(Segment* s, qreal x, bool isSystemHeader);
 
    public:
       Measure(Score* = 0);

@@ -1352,9 +1352,9 @@ Element* Note::drop(const DropData& data)
                                           e->undoChangeProperty(P_ID::GHOST, true);
                                     }
                               }
-                        else
+                        else {
                               undoChangeProperty(P_ID::HEAD_GROUP, int(group));
-                        score()->select(this);
+                              }
                         }
                   }
                   break;
