@@ -110,7 +110,7 @@ void MeasureProperties::setMeasure(Measure* _m)
       {
       m = _m;
       setWindowTitle(tr("MuseScore: Measure Properties for Measure %1").arg(m->no()+1));
-      m->score()->select(0, SelectType::SINGLE, 0);
+      m->score()->deselectAll();
       m->score()->select(m, SelectType::ADD, 0);
 
       actualZ->setValue(m->len().numerator());
@@ -263,6 +263,7 @@ void MeasureProperties::apply()
                      );
                   }
             }
+      score->select(m, SelectType::SINGLE, 0);
       score->update();
       }
 }
