@@ -27,7 +27,6 @@
 #include "ui_insertmeasuresdialog.h"
 #include "ui_aboutbox.h"
 #include "ui_aboutmusicxmlbox.h"
-#include "ui_startdialog.h"
 #include "singleapp/src/QtSingleApplication"
 #include "updatechecker.h"
 #include "loginmanager.h"
@@ -186,21 +185,6 @@ class MeasuresDialog : public QDialog, public Ui::MeasuresDialogBase {
       MeasuresDialog(QWidget* parent = 0);
       };
 
-
-//---------------------------------------------------------
-//   StartDialog
-//---------------------------------------------------------
-
-class StartDialog : public QDialog, public Ui::StartDialog {
-      Q_OBJECT
-
-   private slots:
-      void createScoreClicked();
-      void loadScoreClicked();
-
-   public:
-      StartDialog(QWidget* parent = 0);
-      };
 
 //---------------------------------------------------------
 //   MuseScoreApplication (mac only)

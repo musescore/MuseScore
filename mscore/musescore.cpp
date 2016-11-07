@@ -2377,38 +2377,6 @@ static bool processNonGui(const QStringList& argv)
       }
 
 //---------------------------------------------------------
-//   StartDialog
-//---------------------------------------------------------
-
-StartDialog::StartDialog(QWidget* parent)
-  : QDialog(parent)
-      {
-      setupUi(this);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      setWindowTitle(tr("MuseScore Startup Dialog"));
-      connect(createScore, SIGNAL(clicked()), SLOT(createScoreClicked()));
-      connect(loadScore, SIGNAL(clicked()), SLOT(loadScoreClicked()));
-      }
-
-//---------------------------------------------------------
-//   createScoreClicked
-//---------------------------------------------------------
-
-void StartDialog::createScoreClicked()
-      {
-      done(1);
-      }
-
-//---------------------------------------------------------
-//   loadScoreClicked
-//---------------------------------------------------------
-
-void StartDialog::loadScoreClicked()
-      {
-      done(2);
-      }
-
-//---------------------------------------------------------
 //   Message handler
 //---------------------------------------------------------
 
