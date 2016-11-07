@@ -37,7 +37,6 @@
 #include "musescore.h"
 #include "seq.h"
 #include "selinstrument.h"
-#include "texteditor.h"
 
 namespace Ms {
 

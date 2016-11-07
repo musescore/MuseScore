@@ -19,7 +19,6 @@
 #include "icons.h"
 #include "musescore.h"
 #include "libmscore/undo.h"
-#include "texteditor.h"
 #include "icons.h"
 #include "libmscore/harmony.h"
 #include "libmscore/chordlist.h"
