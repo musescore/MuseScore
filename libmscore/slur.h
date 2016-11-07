@@ -70,6 +70,7 @@ class SlurSegment : public SpannerSegment {
 
       QPainterPath path;
       QPainterPath shapePath;
+      Shape _shape;
       QPointF autoAdjustOffset;
 
       void computeBezier();
@@ -116,6 +117,7 @@ class SlurSegment : public SpannerSegment {
       void setSlurOffset(Grip i, const QPointF& val) { _ups[int(i)].off = val;  }
       const struct UP& ups(Grip i) const             { return _ups[int(i)]; }
       struct UP& ups(Grip i)                         { return _ups[int(i)]; }
+      virtual Shape shape() const override           { return _shape; }
 
       friend class Tie;
       friend class Slur;
