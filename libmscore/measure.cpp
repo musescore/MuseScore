@@ -3263,7 +3263,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             //  create the courtesy key sig.
             //
 
-            bool show     = score()->styleB(StyleIdx::genCourtesyKeysig) && !sectionBreak() && nm;
+            bool show = score()->styleB(StyleIdx::genCourtesyKeysig) && !sectionBreak() && nm;
 
             setHasCourtesyKeySig(false);
 
@@ -3326,27 +3326,9 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             }
 
       // fix segment layout
-      Segment* ps = seg->prevEnabled();
-      qreal x     = ps->rxpos();
-
-      for (Segment* s = ps; s;) {
-            s->rxpos() = x;
-            if (s->enabled()) {
-                  Segment* ns = s->nextEnabled();
-                  qreal w;
-                  if (ns)
-                        w = s->minHorizontalDistance(ns, false);
-                  else
-                        w = s->minRight();
-                  s->setWidth(w);
-                  x += w;
-                  }
-            else {
-                  s->setWidth(0);
-                  }
-            s = s->next();
-            }
-      setStretchedWidth(x);
+      Segment* s = seg->prevEnabled();
+      qreal x    = s->rxpos();
+      computeMinWidth(s, x, false);
 
 #ifndef NDEBUG
       qreal w = width();
@@ -3419,7 +3401,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                                     needKeysig = false;
 //                                    if (keysig) {
 //                                          ksAnnounce->setGenerated(false);
-//TODO                                          keysig->setGenerated(true);
+//TODO                                      keysig->setGenerated(true);
 //                                          }
                                     }
                               }
@@ -3723,39 +3705,11 @@ void Measure::setStretchedWidth(qreal w)
 //    set the width and x position for all segments
 //---------------------------------------------------------
 
-void Measure::computeMinWidth()
+void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
       {
-      Segment* s;
-
-      //
-      // skip disabled segment or system header segments if not the first measure in a system
-      //
-      for (s = first(); s && !s->enabled(); s = s->next()) {
-            s->rxpos() = 0;
-            s->setWidth(0);
-            }
-      if (!s) {
-            setWidth(0.0);
-            return;
-            }
       Segment* fs = s;
-      qreal x;
       bool first = system()->firstMeasure() == this;
-      Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
-
-      x = s->minLeft(ls);
-      if (s->isChordRestType())
-            x += score()->styleP(StyleIdx::barNoteDistance);
-      else if (s->isClefType())
-            x += score()->styleP(StyleIdx::clefLeftMargin);
-      else if (s->isKeySigType())
-            x = qMax(x, score()->styleP(StyleIdx::keysigLeftMargin));
-      else if (s->isTimeSigType())
-            x = qMax(x, score()->styleP(StyleIdx::timesigLeftMargin));
-
-      x += s->extraLeadingSpace().val() * spatium();
-      bool isSystemHeader = s->header();
-
+      const Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
       while (s) {
             s->rxpos() = x;
             if (!s->enabled()) {
@@ -3820,11 +3774,48 @@ void Measure::computeMinWidth()
                   w = s->minRight();
             s->setWidth(w);
             x += w;
-            s = ns; // s->next();
+            s = s->next();
             }
       setStretchedWidth(x);
       }
 
+void Measure::computeMinWidth()
+      {
+      Segment* s;
+
+      //
+      // skip disabled segment
+      //
+      for (s = first(); s && !s->enabled(); s = s->next()) {
+            s->rxpos() = 0;
+            s->setWidth(0);
+            }
+      if (!s) {
+            setWidth(0.0);
+            return;
+            }
+      qreal x;
+      bool first = system()->firstMeasure() == this;
+
+      // left barriere:
+      //    Make sure no elements crosses the left boarder if first measure in a system.
+      //
+      Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
+
+      x = s->minLeft(ls);
+      if (s->isChordRestType())
+            x += score()->styleP(StyleIdx::barNoteDistance);
+      else if (s->isClefType())
+            x += score()->styleP(StyleIdx::clefLeftMargin);
+      else if (s->isKeySigType())
+            x = qMax(x, score()->styleP(StyleIdx::keysigLeftMargin));
+      else if (s->isTimeSigType())
+            x = qMax(x, score()->styleP(StyleIdx::timesigLeftMargin));
+      x += s->extraLeadingSpace().val() * spatium();
+      bool isSystemHeader = s->header();
+
+      computeMinWidth(s, x, isSystemHeader);
+      }
 
 }
 
