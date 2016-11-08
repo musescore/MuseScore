@@ -502,9 +502,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                               break;
                         }
                   }
-            else if (element->type() == Element::Type::CLEF
-                     || element->type() == Element::Type::KEYSIG
-                     || element->type() == Element::Type::TIMESIG) {
+            else if (element->isClef() || element->isKeySig() || element->isTimeSig()) {
                   Measure* m1 = sel.startSegment()->measure();
                   Measure* m2 = sel.endSegment() ? sel.endSegment()->measure() : nullptr;
                   if (m2 == m1 && sel.startSegment()->rtick() == 0)
@@ -645,6 +643,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             if (viewer->mscoreState() == STATE_NOTE_ENTRY_STAFF_DRUM)
                   viewer->moveCursor();
             }
+      viewer->setDropTarget(0);
       mscore->endCmd();
       }
 
