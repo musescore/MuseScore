@@ -2142,13 +2142,13 @@ void Beam::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       ChordRest* c2 = nullptr;
       int n = _elements.size();
       for (int i = 0; i < n; ++i) {
-            if (_elements[i]->isChordRest1()) {
+            if (_elements[i]->isChordRest()) {
                   c1 = static_cast<ChordRest*>(_elements[i]);
                   break;
                   }
             }
       for (int i = n-1; i >= 0; --i) {
-            if (_elements[i]->isChordRest1()) {
+            if (_elements[i]->isChordRest()) {
                   c2 = static_cast<ChordRest*>(_elements[i]);
                   break;
                   }
