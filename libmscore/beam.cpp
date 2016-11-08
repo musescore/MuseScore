@@ -2138,24 +2138,25 @@ void Beam::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       BeamFragment* f = fragments[editFragment];
 
-      Chord* c1 = nullptr;
-      Chord* c2 = nullptr;
+      ChordRest* c1 = nullptr;
+      ChordRest* c2 = nullptr;
       int n = _elements.size();
       for (int i = 0; i < n; ++i) {
-            if (_elements[i]->type() == Element::Type::CHORD) {
-                  c1 = static_cast<Chord*>(_elements[i]);
+            if (_elements[i]->isChordRest1()) {
+                  c1 = static_cast<ChordRest*>(_elements[i]);
                   break;
                   }
             }
       for (int i = n-1; i >= 0; --i) {
-            if (_elements[i]->type() == Element::Type::CHORD) {
-                  c2 = static_cast<Chord*>(_elements[i]);
+            if (_elements[i]->isChordRest1()) {
+                  c2 = static_cast<ChordRest*>(_elements[i]);
                   break;
                   }
             }
+
       int y = pagePos().y();
-      grip[0].translate(QPointF(c1->stemPosX()+c1->pageX(), f->py1[idx] + y));
-      grip[1].translate(QPointF(c2->stemPosX()+c2->pageX(), f->py2[idx] + y));
+      grip[0].translate(QPointF(c1->stemPosX() + c1->pageX(), f->py1[idx] + y));
+      grip[1].translate(QPointF(c2->stemPosX() + c2->pageX(), f->py2[idx] + y));
       }
 
 //---------------------------------------------------------
