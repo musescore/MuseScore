@@ -745,10 +745,6 @@ void Tuplet::add(Element* e)
                   if (!found)
                         _elements.push_back(de);
                   de->setTuplet(this);
-
-                  // the tick position of a tuplet is the tick position of its
-                  // first element:
-                  setTick(_elements.front()->tick());
                   }
                   break;
 
