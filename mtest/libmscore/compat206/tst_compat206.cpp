@@ -62,6 +62,7 @@ void TestCompat206::compat_data()
       QTest::newRow("markers")       <<  "markers";
       QTest::newRow("noteheads")     <<  "noteheads";
       QTest::newRow("textstyles")    <<  "textstyles";
+      QTest::newRow("tuplets")       <<  "tuplets";
       }
 
 //---------------------------------------------------------

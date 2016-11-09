@@ -15,3 +15,4 @@ cp $S/drumset-test.mscx         drumset-ref.mscx
 cp $S/markers-test.mscx         markers-ref.mscx
 cp $S/noteheads-test.mscx       noteheads-ref.mscx
 cp $S/textstyles-test.mscx      textstyles-ref.mscx
+cp $S/tuplets-test.mscx         tuplets-ref.mscx

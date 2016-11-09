@@ -699,6 +699,42 @@ static void readClef(Clef* clef, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   readTuplet
+//---------------------------------------------------------
+
+static void readTuplet(Tuplet* tuplet, XmlReader& e)
+      {
+      int bl = -1;
+      tuplet->setId(e.intAttribute("id", 0));
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "subtype")    // obsolete
+                  e.skipCurrentElement();
+            else if (tag == "hasNumber")  // obsolete even in 1.3
+                  tuplet->setNumberType(e.readInt() ? Tuplet::NumberType::SHOW_NUMBER : Tuplet::NumberType::NO_TEXT);
+            else if (tag == "hasLine") {  // obsolete even in 1.3
+                  tuplet->setHasBracket(e.readInt());
+                  tuplet->setBracketType(Tuplet::BracketType::AUTO_BRACKET);
+                  }
+            else if (tag == "baseLen")    // obsolete even in 1.3
+                  bl = e.readInt();
+            else if (!tuplet->readProperties(e))
+                  e.unknown();
+            }
+      Fraction r = (tuplet->ratio() == 1) ? tuplet->ratio() : tuplet->ratio().reduced();
+      Fraction f(r.denominator(), tuplet->baseLen().fraction().denominator());
+      tuplet->setDuration(f.reduced());
+      if (bl != -1) {         // obsolete, even in 1.3
+            TDuration d;
+            d.setVal(bl);
+            tuplet->setBaseLen(d);
+            d.setVal(bl * tuplet->ratio().denominator());
+            tuplet->setDuration(d.fraction());
+            }
+      }
+
+//---------------------------------------------------------
 //   readChord
 //---------------------------------------------------------
 
@@ -1254,7 +1290,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   tuplet->setTrack(e.track());
                   tuplet->setTick(e.tick());
                   tuplet->setParent(m);
-                  tuplet->read(e);
+                  readTuplet(tuplet, e);
                   e.addTuplet(tuplet);
                   }
             else if (tag == "startRepeat") {
