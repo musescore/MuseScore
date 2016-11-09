@@ -566,6 +566,22 @@ static void readNote(Note* note, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   readTuplet
+//---------------------------------------------------------
+
+static void readTuplet(Tuplet* tuplet, XmlReader& e)
+      {
+      tuplet->setId(e.intAttribute("id", 0));
+      while (e.readNextStartElement()) {
+            if (!tuplet->readProperties(e))
+                  e.unknown();
+            }
+      Fraction r = (tuplet->ratio() == 1) ? tuplet->ratio() : tuplet->ratio().reduced();
+      Fraction f(r.denominator(), tuplet->baseLen().fraction().denominator());
+      tuplet->setDuration(f.reduced());
+      }
+
+//---------------------------------------------------------
 //   readChord
 //---------------------------------------------------------
 
@@ -1166,7 +1182,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   tuplet->setTrack(e.track());
                   tuplet->setTick(e.tick());
                   tuplet->setParent(m);
-                  tuplet->read(e);
+                  readTuplet(tuplet, e);
                   e.addTuplet(tuplet);
                   }
             else if (tag == "startRepeat") {

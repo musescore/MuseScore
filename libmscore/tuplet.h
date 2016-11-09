@@ -92,6 +92,7 @@ class Tuplet : public DurationElement {
       void setNumberType(NumberType val)   { _numberType = val;        }
       void setBracketType(BracketType val) { _bracketType = val;       }
       bool hasBracket() const              { return _hasBracket;       }
+      void setHasBracket(bool b)           { _hasBracket = b;          }
 
       Fraction ratio() const               { return _ratio;         }
       void setRatio(const Fraction& r)     { _ratio = r;            }
@@ -105,6 +106,7 @@ class Tuplet : public DurationElement {
 
       virtual void read(XmlReader&) override;
       virtual void write(Xml&) const override;
+      virtual bool readProperties(XmlReader&) override;
 
       virtual void reset() override;
 
