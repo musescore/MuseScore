@@ -33,19 +33,43 @@
     },
 
     "glyphsWithAlternates": {
+        "4stringTabClef": {
+            "alternates": [
+                {
+                    "codepoint": "U+F40D", 
+                    "name": "4stringTabClefSerif"
+                }
+            ]
+        },
         "6stringTabClef": {
             "alternates": [
                 {
-                    "codepoint": "U+E1A2",
+                    "codepoint": "U+F40B",
                     "name": "6stringTabClefSerif"
                 }
             ]
         },
-        "noteheadDoubleWhole": {
+        "cClef": {
             "alternates": [
                 {
-                    "codepoint": "U+E1BA",
-                    "name": "noteheadDoubleWholeAlt"
+                    "codepoint": "U+F473", 
+                    "name": "cClefSmall"
+                }
+            ]
+        },
+        "fClef": {
+            "alternates": [
+                {
+                    "codepoint": "U+F474", 
+                    "name": "fClefSmall"
+                }
+            ]
+        },
+        "gClef": {
+            "alternates": [
+                {
+                    "codepoint": "U+F472", 
+                    "name": "gClefSmall"
                 }
             ]
         }
