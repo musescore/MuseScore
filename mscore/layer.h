@@ -36,6 +36,8 @@ class LayerManager : public QDialog, public Ui::LayerManager {
 
       Score* score;
 
+      virtual void hideEvent(QHideEvent*);
+
    private slots:
       void createClicked();
       void deleteClicked();

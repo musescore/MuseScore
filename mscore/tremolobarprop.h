@@ -39,6 +39,7 @@ class TremoloBarProperties : public QDialog, public Ui::TremoloBarDialog {
       TremoloBar* bend;
       QButtonGroup* bendTypes;
 
+      virtual void hideEvent(QHideEvent*);
    private slots:
       void bendTypeChanged(int);
 

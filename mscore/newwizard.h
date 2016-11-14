@@ -24,6 +24,8 @@
 #include "ui_timesigwizard.h"
 #include "ui_newwizard.h"
 
+#include <QWizard>
+
 #include "libmscore/timesig.h"
 #include "libmscore/key.h"
 #include "libmscore/fraction.h"
@@ -177,6 +179,8 @@ class NewWizard : public QWizard {
       NewWizardPage3* p3;
       NewWizardPage4* p4;
       NewWizardPage5* p5;
+
+      virtual void hideEvent(QHideEvent*);
 
    private slots:
       void idChanged(int);

@@ -46,6 +46,7 @@ class ShortcutCaptureDialog : public QDialog, public Ui::ShortcutCaptureDialogBa
       QKeySequence key;
       QMap<QString, Shortcut*> localShortcuts;
 
+      virtual void hideEvent(QHideEvent*);
     private slots:
       void clearClicked();
       void addClicked();

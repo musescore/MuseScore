@@ -35,7 +35,7 @@ class TimeSigProperties : public QDialog, public Ui::TimeSigProperties {
       Q_OBJECT
 
       TimeSig* timesig;
-
+      virtual void hideEvent(QHideEvent*);
    public slots:
       virtual void accept();
 

@@ -36,6 +36,7 @@ namespace Ms {
 MediaDialog::MediaDialog(QWidget* /*parent*/)
    : QDialog()
       {
+      setObjectName("MediaDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setWindowTitle(tr("MuseScore: Additional Media"));
@@ -46,6 +47,8 @@ MediaDialog::MediaDialog(QWidget* /*parent*/)
       connect(removeAudio,     SIGNAL(clicked()), SLOT(removeAudioPressed()));
       connect(scanFileButton,  SIGNAL(clicked()), SLOT(scanFileButtonPressed()));
       connect(audioFileButton, SIGNAL(clicked()), SLOT(audioFileButtonPressed()));
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -233,5 +236,16 @@ void MediaDialog::audioFileButtonPressed()
       if (!s.isNull())
             audioFile->setText(s);
       }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void MediaDialog::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
+
 }
 

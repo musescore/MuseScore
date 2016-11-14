@@ -20,6 +20,7 @@
 
 #include "selinstrument.h"
 #include "instrdialog.h"
+#include "musescore.h"
 
 #include "libmscore/instrument.h"
 #include "libmscore/instrtemplate.h"
@@ -35,12 +36,14 @@ extern void filterInstruments(QTreeWidget *instrumentList, const QString &search
 SelectInstrument::SelectInstrument(const Instrument* instrument, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("SelectInstrument");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       currentInstrument->setText(instrument->trackName());
       buildTemplateList();
       buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
       connect(instrumentList, SIGNAL(clicked(const QModelIndex &)), SLOT(expandOrCollapse(const QModelIndex &)));
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -166,5 +169,16 @@ void SelectInstrument::filterInstrumentsByGenre(QTreeWidget *instrumentList, QSt
             ++iList;
             }
       }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void SelectInstrument::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
+
 }
 

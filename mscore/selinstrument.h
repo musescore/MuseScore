@@ -35,6 +35,7 @@ class InstrumentTemplate;
 class SelectInstrument : public QDialog, private Ui::SelectInstrument {
       Q_OBJECT
 
+      virtual void hideEvent(QHideEvent*);
    private slots:
       void buildTemplateList();
       void expandOrCollapse(const QModelIndex &);

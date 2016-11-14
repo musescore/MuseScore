@@ -32,6 +32,7 @@ namespace Ms {
 ShortcutCaptureDialog::ShortcutCaptureDialog(Shortcut* _s, QMap<QString, Shortcut*> ls, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("ShortcutCaptureDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       localShortcuts = ls;
@@ -48,6 +49,7 @@ ShortcutCaptureDialog::ShortcutCaptureDialog(Shortcut* _s, QMap<QString, Shortcu
       clearClicked();
 
       nshrtLabel->installEventFilter(this);
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -205,5 +207,16 @@ void ShortcutCaptureDialog::clearClicked()
       nshrtLabel->setText("");
       key = 0;
       }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void ShortcutCaptureDialog::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
+
 }
 

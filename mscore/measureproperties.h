@@ -44,6 +44,8 @@ class MeasureProperties : public QDialog, private Ui::MeasurePropertiesBase {
       bool slashStyle(int staffIdx);
       void setMeasure(Measure* _m);
 
+      virtual void hideEvent(QHideEvent*);
+
    private slots:
       void bboxClicked(QAbstractButton* button);
       void gotoNextMeasure();
