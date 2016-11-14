@@ -75,6 +75,7 @@ class TDuration {
       void setDots(int v);
       Fraction fraction() const;
       QString durationTypeUserName() const;
+      static bool isValid(Fraction f);
       };
 
 std::vector<TDuration> toDurationList(Fraction l, bool useDots, int maxDots = 4, bool printRestRemains = true);
