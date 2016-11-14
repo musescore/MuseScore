@@ -49,6 +49,7 @@ namespace Ms {
 TextProperties::TextProperties(Text* t, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("TextProperties");
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setWindowTitle(tr("MuseScore: Text Properties"));
       QGridLayout* layout = new QGridLayout;
@@ -71,6 +72,8 @@ TextProperties::TextProperties(Text* t, QWidget* parent)
       connect(bb, SIGNAL(accepted()), SLOT(accept()));
       connect(bb, SIGNAL(rejected()), SLOT(reject()));
       connect(tp, SIGNAL(resetToStyleClicked()), SLOT(resetToStyle()));
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -91,6 +94,16 @@ void TextProperties::accept()
       text->setTextStyleType(tp->textStyleType());
       text->setTextStyle(tp->textStyle());
       QDialog::accept();
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void TextProperties::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
       }
 }
 

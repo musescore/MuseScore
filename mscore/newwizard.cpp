@@ -415,6 +415,7 @@ KeySigEvent NewWizardPage5::keysig() const
 NewWizard::NewWizard(QWidget* parent)
    : QWizard(parent)
       {
+      setObjectName("NewWizard");
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setWizardStyle(QWizard::ClassicStyle);
       setPixmap(QWizard::LogoPixmap, QPixmap(":/data/mscore.png"));
@@ -440,7 +441,8 @@ NewWizard::NewWizard(QWidget* parent)
       setPage(Page::Keysig,      p5);
       setPage(Page::Timesig,     p3);
 
-      resize(840, 560);
+
+      MuseScore::restoreGeometry(this);
       connect(this, SIGNAL(currentIdChanged(int)), SLOT(idChanged(int)));
       }
 
@@ -492,5 +494,16 @@ bool NewWizard::emptyScore() const
       bool val = fi.completeBaseName() == "00-Blank";
       return val;
       }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void NewWizard::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
+
 }
 

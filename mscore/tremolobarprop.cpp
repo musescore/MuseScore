@@ -26,6 +26,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
+#include "musescore.h"
 
 namespace Ms {
 
@@ -38,8 +39,10 @@ enum class TremoloBarType { DIP, DIVE, RELEASE_UP, INVERTED_DIP, RETURN, RELEASE
 TremoloBarProperties::TremoloBarProperties(TremoloBar* b, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("TremoloBarProperties");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
       bend = b;
       bendCanvas->setPoints(bend->points());
       bendTypes = new QButtonGroup(this);
@@ -50,7 +53,9 @@ TremoloBarProperties::TremoloBarProperties(TremoloBar* b, QWidget* parent)
       bendTypes->addButton(bend5, int(TremoloBarType::RETURN));
       bendTypes->addButton(bend6, int(TremoloBarType::RELEASE_DOWN));
       bendTypes->setExclusive(true);
+
       connect(bendTypes, SIGNAL(buttonClicked(int)), SLOT(bendTypeChanged(int)));
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -246,5 +251,14 @@ void TremoloBarCanvas::mousePressEvent(QMouseEvent* ev)
       update();
       }
 
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void TremoloBarProperties::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
 }
 

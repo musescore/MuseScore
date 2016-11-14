@@ -40,6 +40,7 @@ void MuseScore::showToolbarEditor()
 ToolbarEditor::ToolbarEditor(QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("ToolbarEditor");
       setupUi(this);
 
       for (auto i : toolbars)
@@ -52,6 +53,8 @@ ToolbarEditor::ToolbarEditor(QWidget* parent)
       connect(up, SIGNAL(clicked()), SLOT(upAction()));
       connect(down, SIGNAL(clicked()), SLOT(downAction()));
       connect(buttonBox, SIGNAL(accepted()), SLOT(accepted()));
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -222,6 +225,15 @@ void ToolbarEditor::toolbarChanged(int tb)
             }
       }
 
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void ToolbarEditor::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
 
 } // namespace Ms
 

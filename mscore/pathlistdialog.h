@@ -31,6 +31,8 @@ namespace Ms {
 class PathListDialog : public QDialog, public Ui::PathListDialog {
       Q_OBJECT
 
+      virtual void hideEvent(QHideEvent*);
+
    private slots:
       void addClicked();
       void removeClicked();

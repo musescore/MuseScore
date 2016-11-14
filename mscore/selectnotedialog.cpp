@@ -30,6 +30,7 @@
 #include "libmscore/score.h"
 #include "libmscore/chord.h"
 #include "libmscore/sym.h"
+#include "musescore.h"
 
 namespace Ms {
 
@@ -40,6 +41,7 @@ namespace Ms {
 SelectNoteDialog::SelectNoteDialog(const Note* _n, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("SelectNoteDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       n = _n;
@@ -49,6 +51,7 @@ SelectNoteDialog::SelectNoteDialog(const Note* _n, QWidget* parent)
       duration->setText(n->chord()->durationUserName());
       name->setText(tpc2name(n->tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false));
       inSelection->setEnabled(n->score()->selection().isRange());
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -86,5 +89,16 @@ void SelectNoteDialog::setPattern(NotePattern* p)
       if (sameSystem->isChecked())
             p->system = n->chord()->segment()->system();
       }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void SelectNoteDialog::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
+
 }
 

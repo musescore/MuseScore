@@ -31,9 +31,11 @@ namespace Ms {
 LayerManager::LayerManager(Score* s, QWidget* parent)
    : QDialog(parent)
       {
-      score = s;
+      setObjectName("LayerManager");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+      score = s;
 
       for (int i = 0; i < 31; ++i) {
             QTableWidgetItem* item = new QTableWidgetItem(score->layerTags()[i+1]);
@@ -61,10 +63,13 @@ LayerManager::LayerManager(Score* s, QWidget* parent)
             ++row;
             }
       layers->setCurrentCell(score->currentLayer(), 0);
+
       connect(createButton, SIGNAL(clicked()), SLOT(createClicked()));
       connect(deleteButton, SIGNAL(clicked()), SLOT(deleteClicked()));
       connect(addTagButton, SIGNAL(clicked()), SLOT(addTagClicked()));
       connect(deleteTagButton, SIGNAL(clicked()), SLOT(deleteTagClicked()));
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -169,7 +174,7 @@ void LayerManager::deleteTagClicked()
       }
 
 //---------------------------------------------------------
-//   closeEvent
+//   accept
 //---------------------------------------------------------
 
 void LayerManager:: accept()
@@ -212,6 +217,16 @@ void LayerManager:: accept()
       if (enableExperimental)
       	mscore->updateLayer();
       QDialog::accept();
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void LayerManager::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
       }
 
 }

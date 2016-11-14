@@ -44,8 +44,10 @@ namespace Ms {
 TupletDialog::TupletDialog(QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("TupletDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -127,5 +129,14 @@ Tuplet* MuseScore::tupletDialog()
       return tuplet;
       }
 
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void TupletDialog::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
+      }
 }
 

@@ -35,6 +35,7 @@ namespace Ms {
 class SplitStaff : public QDialog, private Ui::SplitStaff {
       Q_OBJECT
 
+      virtual void hideEvent(QHideEvent*);
    private slots:
 
    public:

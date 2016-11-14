@@ -51,8 +51,10 @@ void MuseScore::showUploadScoreDialog()
 UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
  : QDialog(0)
       {
+      setObjectName("UploadScoreDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
       license->addItem(tr("All Rights reserved"), "all-rights-reserved");
       license->addItem(tr("Creative Commons Attribution"), "cc-by");
       license->addItem(tr("Creative Commons Attribution Share Alike"), "cc-by-sa");
@@ -84,6 +86,8 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
       connect(_loginManager, SIGNAL(getScoreError(QString)), this, SLOT(onGetScoreError(QString)));
       connect(_loginManager, SIGNAL(tryLoginSuccess()), this, SLOT(display()));
       connect(btnSignout, SIGNAL(pressed()), this, SLOT(logout()));
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -233,6 +237,16 @@ void UploadScoreDialog::logout()
       {
       _loginManager->logout();
       setVisible(false);
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void UploadScoreDialog::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(event);
       }
 }
 

@@ -37,7 +37,7 @@ class AlbumManager : public AbstractDialog, public Ui::AlbumManager {
 
       void setAlbum(Album*);
       virtual void closeEvent(QCloseEvent*);
-
+      virtual void hideEvent(QHideEvent*);
    private slots:
       void addClicked();
       void loadClicked();
