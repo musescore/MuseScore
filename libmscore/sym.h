@@ -2641,7 +2641,9 @@ enum class SymId {
       cClefFrench20C,
       fClefFrench,
       fClef19thCentury,
-      
+      braceSmall,
+      braceLarge,
+      braceLarger,
 
 //    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
 

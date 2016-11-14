@@ -35,7 +35,31 @@ Bracket::Bracket(Score* s)
       _span        = 0;
       _firstStaff  = 0;
       _lastStaff   = 0;
+      _braceSymbol = SymId::brace;
       setGenerated(true);     // brackets are not saved
+      }
+
+//---------------------------------------------------------
+//   setSpan
+//---------------------------------------------------------
+
+void Bracket::setSpan(int v)
+      {
+      _span = v;
+      if (bracketType() == BracketType::BRACE) {
+            // total default height of a system of n staves / height of a 5 line staff
+            _magx = v + ((v - 1) * score()->styleS(StyleIdx::akkoladeDistance).val() / 4.0);
+            if (v == 1)
+                  _braceSymbol = SymId::braceSmall;
+            else if (v <= 2)
+                  _braceSymbol = SymId::brace;
+            else if (v <= 3)
+                  _braceSymbol = SymId::braceLarge;
+            else
+                  _braceSymbol = SymId::braceLarger;
+            if (!symIsValid(_braceSymbol))
+                  _braceSymbol = SymId::brace;
+            }
       }
 
 //---------------------------------------------------------
@@ -56,7 +80,10 @@ qreal Bracket::width() const
       qreal w;
       switch (bracketType()) {
             case BracketType::BRACE:
-                  w = score()->styleP(StyleIdx::akkoladeWidth) + score()->styleP(StyleIdx::akkoladeBarDistance);
+                  if (score()->styleSt(StyleIdx::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(StyleIdx::MusicalSymbolFont) == "Gonville")
+                        w = score()->styleP(StyleIdx::akkoladeWidth) + score()->styleP(StyleIdx::akkoladeBarDistance);
+                  else
+                        w = (symWidth(_braceSymbol) * _magx) + score()->styleP(StyleIdx::akkoladeBarDistance);
                   break;
             case BracketType::NORMAL:
                   w = score()->styleP(StyleIdx::bracketWidth) + score()->styleP(StyleIdx::bracketDistance);
@@ -86,34 +113,41 @@ void Bracket::layout()
             return;
 
       switch (bracketType()) {
-           case BracketType::BRACE: {
-                  qreal w = score()->styleP(StyleIdx::akkoladeWidth);
+            case BracketType::BRACE: {
+                  if (score()->styleSt(StyleIdx::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(StyleIdx::MusicalSymbolFont) == "Gonville") {
+                        qreal w = score()->styleP(StyleIdx::akkoladeWidth);
 
 #define XM(a) (a+700)*w/700
 #define YM(a) (a+7100)*h2/7100
 
-                  path.moveTo( XM(   -8), YM(-2048));
-                  path.cubicTo(XM(   -8), YM(-3192), XM(-360), YM(-4304), XM( -360), YM(-5400)); // c 0
-                  path.cubicTo(XM( -360), YM(-5952), XM(-264), YM(-6488), XM(   32), YM(-6968)); // c 1
-                  path.cubicTo(XM(   36), YM(-6974), XM(  38), YM(-6984), XM(   38), YM(-6990)); // c 0
-                  path.cubicTo(XM(   38), YM(-7008), XM(  16), YM(-7024), XM(    0), YM(-7024)); // c 0
-                  path.cubicTo(XM(   -8), YM(-7024), XM( -22), YM(-7022), XM(  -32), YM(-7008)); // c 1
-                  path.cubicTo(XM( -416), YM(-6392), XM(-544), YM(-5680), XM( -544), YM(-4960)); // c 0
-                  path.cubicTo(XM( -544), YM(-3800), XM(-168), YM(-2680), XM( -168), YM(-1568)); // c 0
-                  path.cubicTo(XM( -168), YM(-1016), XM(-264), YM( -496), XM( -560), YM(  -16)); // c 1
-                  path.lineTo( XM( -560), YM(    0));  //  l 1
-                  path.lineTo( XM( -560), YM(   16));  //  l 1
-                  path.cubicTo(XM( -264), YM(  496), XM(-168), YM( 1016), XM( -168), YM( 1568)); // c 0
-                  path.cubicTo(XM( -168), YM( 2680), XM(-544), YM( 3800), XM( -544), YM( 4960)); // c 0
-                  path.cubicTo(XM( -544), YM( 5680), XM(-416), YM( 6392), XM(  -32), YM( 7008)); // c 1
-                  path.cubicTo(XM(  -22), YM( 7022), XM(  -8), YM( 7024), XM(    0), YM( 7024)); // c 0
-                  path.cubicTo(XM(   16), YM( 7024), XM(  38), YM( 7008), XM(   38), YM( 6990)); // c 0
-                  path.cubicTo(XM(   38), YM( 6984), XM(  36), YM( 6974), XM(   32), YM( 6968)); // c 1
-                  path.cubicTo(XM( -264), YM( 6488), XM(-360), YM( 5952), XM( -360), YM( 5400)); // c 0
-                  path.cubicTo(XM( -360), YM( 4304), XM(  -8), YM( 3192), XM(   -8), YM( 2048)); // c 0
-                  path.cubicTo(XM( -  8), YM( 1320), XM(-136), YM(  624), XM( -512), YM(    0)); // c 1
-                  path.cubicTo(XM( -136), YM( -624), XM(  -8), YM(-1320), XM(   -8), YM(-2048)); // c 0
-                  setbbox(path.boundingRect());
+                        path.moveTo( XM(   -8), YM(-2048));
+                        path.cubicTo(XM(   -8), YM(-3192), XM(-360), YM(-4304), XM( -360), YM(-5400)); // c 0
+                        path.cubicTo(XM( -360), YM(-5952), XM(-264), YM(-6488), XM(   32), YM(-6968)); // c 1
+                        path.cubicTo(XM(   36), YM(-6974), XM(  38), YM(-6984), XM(   38), YM(-6990)); // c 0
+                        path.cubicTo(XM(   38), YM(-7008), XM(  16), YM(-7024), XM(    0), YM(-7024)); // c 0
+                        path.cubicTo(XM(   -8), YM(-7024), XM( -22), YM(-7022), XM(  -32), YM(-7008)); // c 1
+                        path.cubicTo(XM( -416), YM(-6392), XM(-544), YM(-5680), XM( -544), YM(-4960)); // c 0
+                        path.cubicTo(XM( -544), YM(-3800), XM(-168), YM(-2680), XM( -168), YM(-1568)); // c 0
+                        path.cubicTo(XM( -168), YM(-1016), XM(-264), YM( -496), XM( -560), YM(  -16)); // c 1
+                        path.lineTo( XM( -560), YM(    0));  //  l 1
+                        path.lineTo( XM( -560), YM(   16));  //  l 1
+                        path.cubicTo(XM( -264), YM(  496), XM(-168), YM( 1016), XM( -168), YM( 1568)); // c 0
+                        path.cubicTo(XM( -168), YM( 2680), XM(-544), YM( 3800), XM( -544), YM( 4960)); // c 0
+                        path.cubicTo(XM( -544), YM( 5680), XM(-416), YM( 6392), XM(  -32), YM( 7008)); // c 1
+                        path.cubicTo(XM(  -22), YM( 7022), XM(  -8), YM( 7024), XM(    0), YM( 7024)); // c 0
+                        path.cubicTo(XM(   16), YM( 7024), XM(  38), YM( 7008), XM(   38), YM( 6990)); // c 0
+                        path.cubicTo(XM(   38), YM( 6984), XM(  36), YM( 6974), XM(   32), YM( 6968)); // c 1
+                        path.cubicTo(XM( -264), YM( 6488), XM(-360), YM( 5952), XM( -360), YM( 5400)); // c 0
+                        path.cubicTo(XM( -360), YM( 4304), XM(  -8), YM( 3192), XM(   -8), YM( 2048)); // c 0
+                        path.cubicTo(XM( -  8), YM( 1320), XM(-136), YM(  624), XM( -512), YM(    0)); // c 1
+                        path.cubicTo(XM( -136), YM( -624), XM(  -8), YM(-1320), XM(   -8), YM(-2048)); // c 0*/
+                        setbbox(path.boundingRect());
+                        }
+                  else {
+                        qreal h = h2 * 2;
+                        qreal w = symWidth(_braceSymbol) * _magx;
+                        bbox().setRect(0, 0, w, h);
+                        }
                   }
                   break;
             case BracketType::NORMAL: {
@@ -160,10 +194,21 @@ void Bracket::draw(QPainter* painter) const
       if (h2 == 0.0)
             return;
       switch (bracketType()) {
-            case BracketType::BRACE:
+            case BracketType::BRACE: {
                   painter->setPen(Qt::NoPen);
                   painter->setBrush(QBrush(curColor()));
-                  painter->drawPath(path);
+                  if (score()->styleSt(StyleIdx::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(StyleIdx::MusicalSymbolFont) == "Gonville")
+                      painter->drawPath(path);
+                  else {
+                        qreal h = 2 * h2;
+                        qreal _spatium = spatium();
+                        qreal mag = h / (4 *_spatium);
+                        painter->save();
+                        painter->scale(_magx, mag);
+                        drawSymbol(_braceSymbol, painter, QPointF(0, h/mag));
+                        painter->restore();
+                        }
+                  }
                   break;
             case BracketType::NORMAL: {
                   qreal h = 2 * h2;
