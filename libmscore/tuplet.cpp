@@ -651,61 +651,51 @@ void Tuplet::write(Xml& xml) const
 
 void Tuplet::read(XmlReader& e)
       {
-      int bl = -1;
       _id    = e.intAttribute("id", 0);
-
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-
-            if (tag == "direction")
-                  readProperty(e, P_ID::DIRECTION);
-            else if (tag == "numberType")
-                  _numberType = NumberType(e.readInt());
-            else if (tag == "bracketType")
-                  _bracketType = BracketType(e.readInt());
-            else if (tag == "normalNotes")
-                  _ratio.setDenominator(e.readInt());
-            else if (tag == "actualNotes")
-                  _ratio.setNumerator(e.readInt());
-            else if (tag == "p1")
-                  _p1 = e.readPoint();
-            else if (tag == "p2")
-                  _p2 = e.readPoint();
-            else if (tag == "baseNote")
-                  _baseLen = TDuration(e.readElementText());
-            else if (tag == "Number") {
-                  _number = new Text(score());
-                  _number->setParent(this);
-                  _number->read(e);
-                  _number->setTextStyleType(TextStyleType::TUPLET);
-                  _number->setVisible(visible());     //?? override saved property
-                  _number->setTrack(track());
-                  }
-            else if (tag == "subtype")    // obsolete
-                  e.skipCurrentElement();
-            else if (tag == "hasNumber")             // obsolete
-                  _numberType = e.readInt() ? NumberType::SHOW_NUMBER : NumberType::NO_TEXT;
-            else if (tag == "hasLine") {          // obsolete
-                  _hasBracket = e.readInt();
-                  _bracketType = BracketType::AUTO_BRACKET;
-                  }
-            else if (tag == "baseLen")            // obsolete
-                  bl = e.readInt();
-            else if (!DurationElement::readProperties(e))
+            if (readProperties(e))
+                  ;
+            else
                   e.unknown();
             }
-//      Fraction f(_ratio.reduced().denominator(), _baseLen.fraction().denominator());
       Fraction f(_ratio.denominator(), _baseLen.fraction().denominator());
       setDuration(f.reduced());
-      if (bl != -1) {         // obsolete
-            TDuration d;
-            d.setVal(bl);
-            _baseLen = d;
-// qDebug("Tuplet base len %d/%d", d.fraction().numerator(), d.fraction().denominator());
-// qDebug("   %s  dots %d, %d/%d", qPrintable(d.name()), d.dots(), _ratio.numerator(), _ratio.denominator());
-            d.setVal(bl * _ratio.denominator());
-            setDuration(d.fraction());
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Tuplet::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "direction")
+            readProperty(e, P_ID::DIRECTION);
+      else if (tag == "numberType")
+            _numberType = NumberType(e.readInt());
+      else if (tag == "bracketType")
+            _bracketType = BracketType(e.readInt());
+      else if (tag == "normalNotes")
+            _ratio.setDenominator(e.readInt());
+      else if (tag == "actualNotes")
+            _ratio.setNumerator(e.readInt());
+      else if (tag == "p1")
+            _p1 = e.readPoint();
+      else if (tag == "p2")
+            _p2 = e.readPoint();
+      else if (tag == "baseNote")
+            _baseLen = TDuration(e.readElementText());
+      else if (tag == "Number") {
+            _number = new Text(score());
+            _number->setParent(this);
+            _number->read(e);
+            _number->setTextStyleType(TextStyleType::TUPLET);
+            _number->setVisible(visible());     //?? override saved property
+            _number->setTrack(track());
             }
+      else if (!DurationElement::readProperties(e))
+            return false;
+      return true;
       }
 
 //---------------------------------------------------------
@@ -745,10 +735,6 @@ void Tuplet::add(Element* e)
                   if (!found)
                         _elements.push_back(de);
                   de->setTuplet(this);
-
-                  // the tick position of a tuplet is the tick position of its
-                  // first element:
-                  setTick(_elements.front()->tick());
                   }
                   break;
 

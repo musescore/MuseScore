@@ -102,10 +102,9 @@ Tuplet* MuseScore::tupletDialog()
       tuplet->setTrack(cr->track());
       tuplet->setTick(cr->tick());
       td.setupTuplet(tuplet);
-      //      tuplet->setRatio(tuplet->ratio().reduced());
       Fraction f1(cr->duration());
       tuplet->setDuration(f1);
-      Fraction f = f1 * tuplet->ratio();
+      Fraction f = f1 * Fraction(1, tuplet->ratio().denominator());
       f.reduce();
 
       qDebug("len %s  ratio %s  base %s",
@@ -113,7 +112,11 @@ Tuplet* MuseScore::tupletDialog()
          qPrintable(tuplet->ratio().print()),
          qPrintable(f.print()));
 
-      tuplet->setBaseLen(Fraction(1, f.denominator()));
+      Fraction fbl(1, f.denominator());
+      if (TDuration::isValid(fbl))
+            tuplet->setBaseLen(fbl);
+      else
+            tuplet->setBaseLen(TDuration::DurationType::V_INVALID);
 
       if (tuplet->baseLen() == TDuration::DurationType::V_INVALID) {
             QMessageBox::warning(0,

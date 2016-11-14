@@ -788,5 +788,18 @@ void TDuration::setType(DurationType t)
       if (_val == DurationType::V_MEASURE)
             _dots = 0;
       }
+
+//---------------------------------------------------------
+//   isValid
+//---------------------------------------------------------
+
+bool TDuration::isValid(Fraction f)
+     {
+     TDuration t;
+     t.setType(DurationType::V_LONG);
+     t.setDots(4);
+     t.truncateToFraction(f, 4);
+     return ((t.fraction() - f).numerator() == 0);
+     }
 }
 

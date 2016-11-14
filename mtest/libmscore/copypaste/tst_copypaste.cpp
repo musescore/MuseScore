@@ -62,6 +62,8 @@ class TestCopyPaste : public QObject, public MTest
       void copypaste19() { copypaste("19"); }       // chord symbols
       void copyPasteShortTremolo() { copypastevoice("21", 1); } // remove tremolo on shorten note #30411
       void copypaste22() { copypaste("22"); }       // cross-staff slur
+      void copypaste23() { copypaste("23"); }       // full measure tuplet 10/8
+      void copypaste24() { copypaste("24"); }       // more complex non reduced tuplet
 
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 
@@ -69,7 +71,6 @@ class TestCopyPaste : public QObject, public MTest
 
       void copyPasteTuplet01() { copypastetuplet("01"); }
       void copyPasteTuplet02() { copypastetuplet("02"); }
-
       };
 
 //---------------------------------------------------------

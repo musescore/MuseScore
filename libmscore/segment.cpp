@@ -512,6 +512,7 @@ void Segment::add(Element* el)
             case Element::Type::CHORD:
             case Element::Type::REST:
                   Q_ASSERT(_segmentType == Type::ChordRest);
+                  {
                   if (track % VOICES) {
                         bool v;
                         if (el->isChord()) {
@@ -531,7 +532,12 @@ void Segment::add(Element* el)
                         if (v && int(measure()->mstaves().size() * VOICES) > track)
                               measure()->mstaff(track / VOICES)->hasVoices = true;
                         }
-
+                  // the tick position of a tuplet is the tick position of its
+                  // first element:
+                  ChordRest* cr = toChordRest(el);
+                  if (cr->tuplet() && !cr->tuplet()->elements().empty() && cr->tuplet()->elements().front() == cr)
+                        cr->tuplet()->setTick(cr->tick());
+                  }
                   // fall through
 
             case Element::Type::BAR_LINE:
