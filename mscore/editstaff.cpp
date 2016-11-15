@@ -48,11 +48,45 @@ EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
    : QDialog(parent)
       {
       setObjectName("EditStaff");
-      orgStaff = s;
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
 
+      staff = nullptr;
+      setStaff(s);
+
+      MuseScore::restoreGeometry(this);
+
+      connect(buttonBox,            SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
+      connect(changeInstrument,     SIGNAL(clicked()),            SLOT(showInstrumentDialog()));
+      connect(changeStaffType,      SIGNAL(clicked()),            SLOT(showStaffTypeDialog()));
+      connect(minPitchASelect,      SIGNAL(clicked()),            SLOT(minPitchAClicked()));
+      connect(maxPitchASelect,      SIGNAL(clicked()),            SLOT(maxPitchAClicked()));
+      connect(minPitchPSelect,      SIGNAL(clicked()),            SLOT(minPitchPClicked()));
+      connect(maxPitchPSelect,      SIGNAL(clicked()),            SLOT(maxPitchPClicked()));
+      connect(editStringData,       SIGNAL(clicked()),            SLOT(editStringDataClicked()));
+      connect(lines,                SIGNAL(valueChanged(int)),    SLOT(numOfLinesChanged()));
+      connect(lineDistance,         SIGNAL(valueChanged(double)), SLOT(lineDistanceChanged()));
+      connect(showClef,             SIGNAL(clicked()),            SLOT(showClefChanged()));
+      connect(showTimesig,          SIGNAL(clicked()),            SLOT(showTimeSigChanged()));
+      connect(showBarlines,         SIGNAL(clicked()),            SLOT(showBarlinesChanged()));
+
+      connect(nextButton,           SIGNAL(clicked()),            SLOT(gotoNextStaff()));
+      connect(previousButton,       SIGNAL(clicked()),            SLOT(gotoPreviousStaff()));
+
+      addAction(getAction("help"));  // why is this needed?
+      }
+
+//---------------------------------------------------------
+//   setStaff
+//---------------------------------------------------------
+
+void EditStaff::setStaff(Staff* s)
+      {
+      if (staff != nullptr)
+            delete staff;
+
+      orgStaff = s;
       Part* part        = orgStaff->part();
       instrument        = *part->instrument(/*tick*/);
       Score* score      = part->score();
@@ -98,23 +132,7 @@ EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
       mag->setValue(staff->userMag() * 100.0);
       updateStaffType();
       updateInstrument();
-
-      MuseScore::restoreGeometry(this);
-
-      connect(buttonBox,            SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
-      connect(changeInstrument,     SIGNAL(clicked()),            SLOT(showInstrumentDialog()));
-      connect(changeStaffType,      SIGNAL(clicked()),            SLOT(showStaffTypeDialog()));
-      connect(minPitchASelect,      SIGNAL(clicked()),            SLOT(minPitchAClicked()));
-      connect(maxPitchASelect,      SIGNAL(clicked()),            SLOT(maxPitchAClicked()));
-      connect(minPitchPSelect,      SIGNAL(clicked()),            SLOT(minPitchPClicked()));
-      connect(maxPitchPSelect,      SIGNAL(clicked()),            SLOT(maxPitchPClicked()));
-      connect(editStringData,       SIGNAL(clicked()),            SLOT(editStringDataClicked()));
-      connect(lines,                SIGNAL(valueChanged(int)),    SLOT(numOfLinesChanged()));
-      connect(lineDistance,         SIGNAL(valueChanged(double)), SLOT(lineDistanceChanged()));
-      connect(showClef,             SIGNAL(clicked()),            SLOT(showClefChanged()));
-      connect(showTimesig,          SIGNAL(clicked()),            SLOT(showTimeSigChanged()));
-      connect(showBarlines,         SIGNAL(clicked()),            SLOT(showBarlinesChanged()));
-      addAction(getAction("help"));  // why is this needed?
+      updateNextPreviousButtons();
       }
 
 //---------------------------------------------------------
@@ -210,6 +228,44 @@ void EditStaff::updateInterval(const Interval& iv)
       up->setChecked(upFlag);
       down->setChecked(!upFlag);
       octave->setValue(oct);
+      }
+
+//---------------------------------------------------------
+//   updateNextPreviousButtons
+//---------------------------------------------------------
+
+void EditStaff::updateNextPreviousButtons()
+      {
+      int staffIdx = orgStaff->idx();
+
+      nextButton->setEnabled(staffIdx < (orgStaff->score()->nstaves() - 1));
+      previousButton->setEnabled(staffIdx != 0);
+      }
+
+//---------------------------------------------------------
+//   gotoNextStaff
+//---------------------------------------------------------
+
+void EditStaff::gotoNextStaff()
+      {
+      Staff* nextStaff = orgStaff->score()->staff(orgStaff->idx() + 1);
+      if (nextStaff)
+            {
+            setStaff(nextStaff);
+            }
+      }
+
+//---------------------------------------------------------
+//   gotoPreviousStaff
+//---------------------------------------------------------
+
+void EditStaff::gotoPreviousStaff()
+      {
+      Staff* prevStaff = orgStaff->score()->staff(orgStaff->idx() - 1);
+      if (prevStaff)
+            {
+            setStaff(prevStaff);
+            }
       }
 
 //---------------------------------------------------------
