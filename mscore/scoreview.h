@@ -54,7 +54,7 @@ class FretDiagram;
 class Bend;
 class TremoloBar;
 
-enum class Grip : signed char;
+enum class Grip : int;
 enum class POS : char;
 enum class MagIdx : char;
 

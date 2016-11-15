@@ -19,7 +19,7 @@ class Element;
 class Score;
 class Note;
 class Page;
-enum class Grip : signed char;
+enum class Grip : int;
 enum class HairpinType : char;
 
 //---------------------------------------------------------

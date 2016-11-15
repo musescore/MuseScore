@@ -13,7 +13,6 @@
 #ifndef __TEXTLINEBASE_H__
 #define __TEXTLINEBASE_H__
 
-#include "mscore.h"
 #include "line.h"
 #include "style.h"
 

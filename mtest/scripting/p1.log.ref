@@ -5,13 +5,13 @@ test script p1
 filter:512
 filter:-1
 Clef
-type is:15
-KeySig
 type is:16
+KeySig
+type is:17
 TimeSig
-type is:18
+type is:19
 Chord
-type is:78
+type is:79
   durationType:480
   beamMode:0
   small:false
@@ -21,7 +21,7 @@ type is:78
     denominator:4
     ticks:480
 Rest
-type is:19
+type is:20
   duration:
     numerator:1
     denominator:4
@@ -29,7 +29,7 @@ type is:19
   beamMode:4
   small:false
 Chord
-type is:78
+type is:79
   durationType:960
   beamMode:0
   small:false
@@ -39,4 +39,4 @@ type is:78
     denominator:2
     ticks:960
 BarLine
-type is:6
+type is:7

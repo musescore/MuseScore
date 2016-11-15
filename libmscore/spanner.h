@@ -17,12 +17,7 @@
 
 namespace Ms {
 
-class Segment;
 class Spanner;
-class System;
-class Chord;
-class ChordRest;
-class Note;
 
 //---------------------------------------------------------
 //   SpannerSegmentType

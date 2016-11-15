@@ -31,6 +31,7 @@
 #include "repeat.h"
 #include "chord.h"
 #include "tremolo.h"
+#include "slur.h"
 
 namespace Ms {
 
