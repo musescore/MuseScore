@@ -129,6 +129,7 @@ void MasterPalette::addPalette(Palette* sp)
       psa->setRestrictHeight(false);
       QTreeWidgetItem* item = new QTreeWidgetItem(QStringList(sp->name()));
       item->setData(0, Qt::UserRole, stack->count());
+      item->setText(0, qApp->translate("Palette", sp->name().toUtf8().data()).replace("&&","&"));
       stack->addWidget(psa);
       treeWidget->addTopLevelItem(item);
       }
@@ -184,6 +185,7 @@ MasterPalette::MasterPalette(QWidget* parent)
 
       symbolItem = new QTreeWidgetItem();
       symbolItem->setData(0, Qt::UserRole, -1);
+      symbolItem->setText(0, QT_TRANSLATE_NOOP("MasterPalette", "Symbols"));
       treeWidget->addTopLevelItem(symbolItem);
 
       for (const QString& s : smuflRanges()->keys()) {
@@ -206,9 +208,9 @@ MasterPalette::MasterPalette(QWidget* parent)
 
 void MasterPalette::retranslate(bool firstTime)
       {
-      keyItem->setText(0, tr("Key Signatures"));
-      timeItem->setText(0, tr("Time Signatures"));
-      symbolItem->setText(0, tr("Symbols"));
+      keyItem->setText(0, qApp->translate("Palette", "Key Signatures"));
+      timeItem->setText(0, qApp->translate("Palette", "Time Signatures"));
+      symbolItem->setText(0, qApp->translate("MasterPalette", "Symbols"));
       if (!firstTime)
             retranslateUi(this);
       }
