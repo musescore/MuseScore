@@ -1055,9 +1055,10 @@ void SLine::writeProperties(Xml& xml) const
             xml.tag("diagonal", _diagonal);
       if (propertyStyle(P_ID::LINE_WIDTH) != PropertyStyle::STYLED)
             xml.tag("lineWidth", lineWidth().val());
-      if (propertyStyle(P_ID::LINE_STYLE) == PropertyStyle::UNSTYLED || (lineStyle() != Qt::SolidLine))
+      if (propertyStyle(P_ID::LINE_STYLE) == PropertyStyle::UNSTYLED || (lineStyle() != Qt::SolidLine)) {
             if (propertyStyle(P_ID::LINE_STYLE) != PropertyStyle::STYLED)
                   xml.tag("lineStyle", int(lineStyle()));
+            }
       if (propertyStyle(P_ID::LINE_COLOR) == PropertyStyle::UNSTYLED || (lineColor() != MScore::defaultColor))
             xml.tag("lineColor", lineColor());
 

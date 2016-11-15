@@ -98,6 +98,7 @@ static const ElementName elementNames[] = {
       ElementName("Text",                 QT_TRANSLATE_NOOP("elementName", "Text")),
       ElementName("InstrumentName",       QT_TRANSLATE_NOOP("elementName", "Instrument Name")),
       ElementName("SlurSegment",          QT_TRANSLATE_NOOP("elementName", "Slur Segment")),
+      ElementName("TieSegment",           QT_TRANSLATE_NOOP("elementName", "Tie Segment")),
       ElementName("StaffLines",           QT_TRANSLATE_NOOP("elementName", "Staff Lines")),
       ElementName("BarLine",              QT_TRANSLATE_NOOP("elementName", "Barline")),
       ElementName("SystemDivider",        QT_TRANSLATE_NOOP("elementName", "System Divider")),
@@ -1309,6 +1310,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::TEXTLINE_SEGMENT:
             case Element::Type::GLISSANDO_SEGMENT:
             case Element::Type::SLUR_SEGMENT:
+            case Element::Type::TIE_SEGMENT:
             case Element::Type::STEM_SLASH:
             case Element::Type::LINE:
             case Element::Type::TIE:

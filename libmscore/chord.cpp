@@ -51,6 +51,7 @@
 #include "sym.h"
 #include "stringdata.h"
 #include "beam.h"
+#include "slur.h"
 
 namespace Ms {
 

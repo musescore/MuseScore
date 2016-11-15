@@ -16,7 +16,7 @@
 namespace Ms {
 
 #ifndef NDEBUG
-//#define DEBUG_SHAPES    // enable shape debugging
+#define DEBUG_SHAPES    // enable shape debugging
 #endif
 
 class Segment;
@@ -39,6 +39,8 @@ class Shape : std::vector<QRectF> {
       Shape translated(const QPointF&) const;
       qreal minHorizontalDistance(const Shape&) const;
       qreal minVerticalDistance(const Shape&) const;
+      qreal topDistance(const QPointF&) const;
+      qreal bottomDistance(const QPointF&) const;
       qreal left() const;
       qreal right() const;
       qreal top() const;

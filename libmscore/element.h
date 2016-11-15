@@ -75,6 +75,7 @@ class LyricsLine;
 class LyricsLineSegment;
 class Stem;
 class SlurSegment;
+class TieSegment;
 class OttavaSegment;
 class Beam;
 class Hook;
@@ -121,7 +122,7 @@ enum class SymId;
 //   Grip
 //---------------------------------------------------------
 
-enum class Grip : signed char {
+enum class Grip : int {
       NO_GRIP = -1,
       START = 0, END = 1,                         // arpeggio etc.
           MIDDLE = 2, APERTURE = 3,               // Line
@@ -271,6 +272,7 @@ class Element : public QObject, public ScoreElement {
             TEXT,
             INSTRUMENT_NAME,
             SLUR_SEGMENT,
+            TIE_SEGMENT,
             STAFF_LINES,
             BAR_LINE,
             SYSTEM_DIVIDER,
@@ -739,6 +741,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Hook,          HOOK)
       CONVERT(StemSlash,     STEM_SLASH)
       CONVERT(SlurSegment,   SLUR_SEGMENT)
+      CONVERT(TieSegment,    TIE_SEGMENT)
       CONVERT(Spacer,        SPACER)
       CONVERT(StaffLines,    STAFF_LINES)
       CONVERT(Ambitus,       AMBITUS)
@@ -843,6 +846,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Hook,          HOOK)
       CONVERT(StemSlash,     STEM_SLASH)
       CONVERT(SlurSegment,   SLUR_SEGMENT)
+      CONVERT(TieSegment,    TIE_SEGMENT)
       CONVERT(Spacer,        SPACER)
       CONVERT(StaffLines,    STAFF_LINES)
       CONVERT(Ambitus,       AMBITUS)

@@ -158,6 +158,38 @@ qreal Shape::bottom() const
       }
 
 //---------------------------------------------------------
+//   topDistance
+//    p is on top of shape
+//    returns negative values if there is an overlap
+//---------------------------------------------------------
+
+qreal Shape::topDistance(const QPointF& p) const
+      {
+      qreal dist = 1000000.0;
+      for (const QRectF& r : *this) {
+            if (p.x() >= r.left() && p.x() < r.right())
+                  dist = qMin(dist, r.top() - p.y());
+            }
+      return dist;
+      }
+
+//---------------------------------------------------------
+//   bottomDistance
+//    p is below the shape
+//    returns negative values if there is an overlap
+//---------------------------------------------------------
+
+qreal Shape::bottomDistance(const QPointF& p) const
+      {
+      qreal dist = 1000000.0;
+      for (const QRectF& r : *this) {
+            if (p.x() >= r.left() && p.x() < r.right())
+                  dist = qMin(dist, p.y() - r.bottom());
+            }
+      return dist;
+      }
+
+//---------------------------------------------------------
 //   remove
 //---------------------------------------------------------
 
