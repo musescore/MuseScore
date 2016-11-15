@@ -2655,6 +2655,9 @@ QVector<const char*> Sym::symNames = {
       "cClefFrench20C",
       "fClefFrench",
       "fClef19thCentury",
+      "braceSmall",
+      "braceLarge",
+      "braceLarger",
 
 //    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
 
@@ -5289,6 +5292,9 @@ QVector<QString> Sym::symUserNames = {
       "C clef (French, 20th century)",
       "F clef (French, 18th century)",
       "F clef (19th century)",
+      "Small brace",
+      "Large brace",
+      "Larger brace",
 
 //    MuseScore local symbols, precomposed symbols to mimic some Emmentaler glyphs
 
@@ -6067,6 +6073,18 @@ void ScoreFont::load()
                   {     QString("noteheadDoubleWhole"),
                         QString("noteheadDoubleWholeAlt"),
                         SymId::noteheadDoubleWholeAlt
+                  },
+                  {     QString("brace"),
+                        QString("braceSmall"),
+                        SymId::braceSmall
+                  },
+                  {     QString("brace"),
+                        QString("braceLarge"),
+                        SymId::braceLarge
+                  },
+                  {     QString("brace"),
+                        QString("braceLarger"),
+                        SymId::braceLarger
                   }
             };
 
