@@ -167,7 +167,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, Grip curGrip, Element* ele
                   case Spanner::Anchor::NOTE: {
                         Tie* tie = toTie(spanner());
                         Note* note = toNote(element);
-                        if (note->chord()->tick() <= tie->endNote()->chord()->tick()) {
+                        if (note->chord()->tick() <= tie->endNote()->tick()) {
                               tie->startNote()->setTieFor(0);
                               tie->setStartNote(note);
                               note->setTieFor(tie);
@@ -175,7 +175,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, Grip curGrip, Element* ele
                         break;
                         }
                   case Spanner::Anchor::CHORD:
-                        spanner()->setTick(toChord(element)->tick());
+                        spanner()->setTick(element->tick());
                         spanner()->setTick2(spanner()->endElement()->tick());
                         spanner()->setTrack(element->track());
                         if (score()->spannerMap().removeSpanner(spanner()))
@@ -194,7 +194,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, Grip curGrip, Element* ele
                         Tie* tie = toTie(spanner());
                         Note* note = toNote(element);
                         // do not allow backward ties
-                        if (note->chord()->tick() >= tie->startNote()->chord()->tick()) {
+                        if (note->chord()->tick() >= tie->startNote()->tick()) {
                               tie->endNote()->setTieBack(0);
                               tie->setEndNote(note);
                               note->setTieBack(tie);
@@ -202,7 +202,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, Grip curGrip, Element* ele
                         break;
                         }
                   case Spanner::Anchor::CHORD:
-                        spanner()->setTick2(toChord(element)->tick());
+                        spanner()->setTick2(element->tick());
                         spanner()->setTrack2(element->track());
                         break;
 
@@ -539,7 +539,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       ups(Grip::END).p   = p2;
       computeBezier();
 
-      if (autoplace()) {
+      if (autoplace() && system()) {
             bool up = slur()->up();
             //
             // lookup segments for collision detection
@@ -567,13 +567,13 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                   if (pp2.x() >= x1 && pp2.x() < x2)
                         break;
                   if (up) {
-                        QPointF pt = QPoint(s->x(), s->staffShape(staffIdx()).top() + s->pos().y());
+                        QPointF pt = QPoint(s->x() + s->parent()->x(), s->staffShape(staffIdx()).top() + s->pos().y());
                         qreal dist = _shape.bottomDistance(pt) - sdist;
                         if (dist < 0.0)
                               pl.append(Collision(-dist, pt));
                         }
                   else {
-                        QPointF pt = QPoint(s->x(), s->staffShape(staffIdx()).bottom() + s->pos().y());
+                        QPointF pt = QPoint(s->x() + s->parent()->x(), s->staffShape(staffIdx()).bottom() + s->pos().y());
                         qreal dist = _shape.topDistance(pt) - sdist;
                         if (dist < 0.0)
                               pl.append(Collision(dist, pt));
@@ -589,8 +589,8 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                   Collision& c2 = pl[i+1];
                   if (qAbs(c1.p.y() - c2.p.y()) < 0.1) {
                         // combine the collisions
-                        pl.erase(pl.begin() + i + 1);
                         c1.p.rx() += (c2.p.x() - c1.p.x()) / 2.0;
+                        pl.erase(pl.begin() + i + 1);
                         }
                   }
             qSort(pl.begin(), pl.end(), [](const Collision& a, const Collision& b) { return a.dist < b.dist; });
@@ -636,6 +636,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
 #endif
             }
       else {
+            printf("manual layout=== slur\n");
             if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
                   QPointF staffOffset;
                   if (system() && track() >= 0)
