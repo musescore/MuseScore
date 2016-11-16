@@ -195,14 +195,16 @@ void Bracket::draw(QPainter* painter) const
             return;
       switch (bracketType()) {
             case BracketType::BRACE: {
-                  painter->setPen(Qt::NoPen);
-                  painter->setBrush(QBrush(curColor()));
-                  if (score()->styleSt(StyleIdx::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(StyleIdx::MusicalSymbolFont) == "Gonville")
+                  if (score()->styleSt(StyleIdx::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(StyleIdx::MusicalSymbolFont) == "Gonville") {
+                      painter->setPen(Qt::NoPen);
+                      painter->setBrush(QBrush(curColor()));
                       painter->drawPath(path);
+                      }
                   else {
                         qreal h = 2 * h2;
                         qreal _spatium = spatium();
                         qreal mag = h / (4 *_spatium);
+                        painter->setPen(curColor());
                         painter->save();
                         painter->scale(_magx, mag);
                         drawSymbol(_braceSymbol, painter, QPointF(0, h/mag));
