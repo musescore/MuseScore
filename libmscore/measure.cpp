@@ -3518,7 +3518,6 @@ void Measure::addSystemHeader(bool isFirstSystem)
 
 //---------------------------------------------------------
 //   addSystemTrailer
-//    return the width change
 //---------------------------------------------------------
 
 void Measure::addSystemTrailer(Measure* nm)
@@ -3529,45 +3528,44 @@ void Measure::addSystemTrailer(Measure* nm)
       // locate a time sig. in the next measure and, if found,
       // check if it has court. sig. turned off
       TimeSig* ts;
-      Segment* tss         = nm->findSegmentR(Segment::Type::TimeSig, _rtick);
-      bool showCourtesySig = tss && score()->genCourtesyTimesig() && !(isFinalMeasure && !score()->floatMode());
-
-      if (showCourtesySig) {
-            ts = toTimeSig(tss->element(0));
-            if (ts && !ts->showCourtesySig())
-                  showCourtesySig = false;     // this key change has court. sig turned off
-            }
+      bool showCourtesySig = false;
       Segment* s = findSegmentR(Segment::Type::TimeSigAnnounce, _rtick);
-      if (showCourtesySig) {
-            // if due, create a new courtesy time signature for each staff
-            if (!s) {
-                  s  = new Segment(this, Segment::Type::TimeSigAnnounce, _rtick);
-                  s->setTrailer(true);
-                  add(s);
-                  }
-            s->setEnabled(true);
-            int nstaves = score()->nstaves();
-            for (int track = 0; track < nstaves * VOICES; track += VOICES) {
-                  TimeSig* nts = toTimeSig(tss->element(track));
-                  if (!nts)
-                        continue;
-                  ts = toTimeSig(s->element(track));
-                  if (!ts) {
-                        ts = new TimeSig(score());
-                        ts->setTrack(track);
-                        ts->setGenerated(true);
-                        ts->setParent(s);
-                        score()->undoAddElement(ts);
+      if (score()->genCourtesyTimesig() && !isFinalMeasure && !score()->floatMode()) {
+            Segment* tss = nm->findSegmentR(Segment::Type::TimeSig, 0);
+            if (tss) {
+                  ts = toTimeSig(tss->element(0));
+                  if (ts && ts->showCourtesySig()) {
+                        showCourtesySig = true;
+                        // if due, create a new courtesy time signature for each staff
+                        if (!s) {
+                              s  = new Segment(this, Segment::Type::TimeSigAnnounce, _rtick);
+                              s->setTrailer(true);
+                              add(s);
+                              }
+                        s->setEnabled(true);
+                        int nstaves = score()->nstaves();
+                        for (int track = 0; track < nstaves * VOICES; track += VOICES) {
+                              TimeSig* nts = toTimeSig(tss->element(track));
+                              if (!nts)
+                                    continue;
+                              ts = toTimeSig(s->element(track));
+                              if (!ts) {
+                                    ts = new TimeSig(score());
+                                    ts->setTrack(track);
+                                    ts->setGenerated(true);
+                                    ts->setParent(s);
+                                    score()->undoAddElement(ts);
+                                    }
+                              ts->setFrom(nts);
+                              ts->layout();
+                              s->createShape(track / VOICES);
+                              }
                         }
-                  ts->setFrom(nts);
-                  ts->layout();
-                  s->createShape(track / VOICES);
                   }
             }
-      else {
+      if (!showCourtesySig && s) {
             // remove any existing time signatures
-            if (s)
-                  s->setEnabled(false);
+            s->setEnabled(false);
             }
 
       // courtesy key signatures
