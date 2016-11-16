@@ -2672,8 +2672,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
       qreal y         = 0.0;
 
       // TENUTO and STACCATO: always near the notehead (or stem end if beyond a stem)
-      if ((a->isTenuto() || a->isStaccato() || a->isAccent())
-         && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
+      if ((a->isTenuto() || a->isStaccato() || a->isAccent()) && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
             bool bottom;                        // true: artic. is below chord | false: artic. is above chord
             bool alignToStem = false;
             // if there area voices, articulation is on stem side

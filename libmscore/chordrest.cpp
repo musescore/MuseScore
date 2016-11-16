@@ -539,8 +539,8 @@ void ChordRest::layoutArticulations()
                   }
             }
 
-      staffTopY = qMin(staffTopY, qreal(chordTopY - distance0 - 0.5 * _spatium));
-      staffBotY = qMax(staffBotY, qreal(chordBotY + distance0 + 0.5 * _spatium));
+      staffTopY = qMin(staffTopY, chordTopY - distance0 - 0.5 * _spatium);
+      staffBotY = qMax(staffBotY, chordBotY + distance0 + 0.5 * _spatium);
 
       qreal dy = 0.0;
 

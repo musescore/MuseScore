@@ -72,7 +72,6 @@ QVariant SlurTieSegment::getProperty(P_ID propertyId) const
             case P_ID::SLUR_DIRECTION:
                   return slurTie()->getProperty(propertyId);
             case P_ID::SLUR_UOFF1:
-printf("get uoff1\n");
                   return ups(Grip::START).off;
             case P_ID::SLUR_UOFF2:
                   return ups(Grip::BEZIER1).off;
@@ -96,7 +95,6 @@ bool SlurTieSegment::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::SLUR_DIRECTION:
                   return slurTie()->setProperty(propertyId, v);
             case P_ID::SLUR_UOFF1:
-printf("set uoff1\n");
                   ups(Grip::START).off = v.toPointF();
                   break;
             case P_ID::SLUR_UOFF2:
@@ -129,7 +127,6 @@ QVariant SlurTieSegment::propertyDefault(P_ID id) const
             case P_ID::SLUR_UOFF2:
             case P_ID::SLUR_UOFF3:
             case P_ID::SLUR_UOFF4:
-printf("uoff default\n");
                   return QPointF();
             default:
                   return SpannerSegment::propertyDefault(id);
@@ -143,7 +140,6 @@ printf("uoff default\n");
 void SlurTieSegment::reset()
       {
       Element::reset();
-printf("slur tie reset\n");
       undoResetProperty(P_ID::SLUR_UOFF1);
       undoResetProperty(P_ID::SLUR_UOFF2);
       undoResetProperty(P_ID::SLUR_UOFF3);
@@ -158,14 +154,7 @@ printf("slur tie reset\n");
 
 void SlurTieSegment::writeSlur(Xml& xml, int no) const
       {
-      if (ups(Grip::START).off.isNull()
-         && ups(Grip::END).off.isNull()
-         && ups(Grip::BEZIER1).off.isNull()
-         && ups(Grip::BEZIER2).off.isNull()
-         && userOff().isNull()
-         && visible()
-         && (color() == Qt::black)
-            )
+      if (autoplace() && visible() && (color() == Qt::black))
             return;
 
       xml.stag(QString("SlurSegment no=\"%1\"").arg(no));
@@ -200,6 +189,7 @@ void SlurTieSegment::read(XmlReader& e)
             else if (!Element::readProperties(e))
                   e.unknown();
             }
+      setAutoplace(false);
       }
 
 //---------------------------------------------------------
