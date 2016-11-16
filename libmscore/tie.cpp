@@ -246,9 +246,8 @@ void TieSegment::setGrip(Grip n, const QPointF& pt)
 
 void TieSegment::editDrag(const EditData& ed)
       {
-      ups(ed.curGrip).off += ed.delta;
-
       Grip g = ed.curGrip;
+      ups(g).off += ed.delta;
 
       if (g == Grip::START || g == Grip::END) {
             computeBezier();
@@ -268,7 +267,7 @@ void TieSegment::editDrag(const EditData& ed)
                                  && tie->startNote()->chord()->tick() < note->chord()->tick()) {
                                     ed.view->setDropTarget(note);
                                     if (note != tie->endNote()) {
-                                          changeAnchor(ed.view, ed.curGrip, note);
+                                          changeAnchor(ed.view, g, note);
                                           return;
                                           }
                                     }
@@ -286,13 +285,13 @@ void TieSegment::editDrag(const EditData& ed)
                         ed.view->setDropTarget(0);
                   }
             }
-      else if (ed.curGrip == Grip::BEZIER1 || ed.curGrip == Grip::BEZIER2)
+      else if (g == Grip::BEZIER1 || g == Grip::BEZIER2)
             computeBezier();
-      else if (ed.curGrip == Grip::SHOULDER) {
-            ups(ed.curGrip).off = QPointF();
+      else if (g == Grip::SHOULDER) {
+            ups(g).off = QPointF();
             computeBezier(ed.delta);
             }
-      else if (ed.curGrip == Grip::DRAG) {
+      else if (g == Grip::DRAG) {
             ups(Grip::DRAG).off = QPointF();
             setUserOff(userOff() + ed.delta);
             }
@@ -305,7 +304,6 @@ void TieSegment::editDrag(const EditData& ed)
             setAutoAdjust(0.0, 0.0);
             setUserOff(userOff() + offset);
             }
-
       undoChangeProperty(P_ID::AUTOPLACE, false);
       }
 
@@ -328,8 +326,8 @@ void TieSegment::computeBezier(QPointF p6o)
       // pp5      drag
       // pp6      shoulder
       //
-      QPointF pp1 = ups(Grip::START).p + ups(Grip::START).off * _spatium;
-      QPointF pp2 = ups(Grip::END).p   + ups(Grip::END).off   * _spatium;
+      QPointF pp1 = ups(Grip::START).p + ups(Grip::START).off;
+      QPointF pp2 = ups(Grip::END).p   + ups(Grip::END).off;
 
       QPointF p2 = pp2 - pp1;       // normalize to zero
       if (p2.x() == 0.0) {
@@ -364,14 +362,14 @@ void TieSegment::computeBezier(QPointF p6o)
       QPointF p3(c1, -shoulderH);
       QPointF p4(c2, -shoulderH);
 
-      qreal w = (score()->styleS(StyleIdx::SlurMidWidth).val() - score()->styleS(StyleIdx::SlurEndWidth).val()) * _spatium;
+      qreal w = score()->styleP(StyleIdx::SlurMidWidth) - score()->styleP(StyleIdx::SlurEndWidth);
       QPointF th(0.0, w);    // thickness of slur
 
-      QPointF p3o = p6o + t.map(ups(Grip::BEZIER1).off * _spatium);
-      QPointF p4o = p6o + t.map(ups(Grip::BEZIER2).off * _spatium);
+      QPointF p3o = p6o + t.map(ups(Grip::BEZIER1).off);
+      QPointF p4o = p6o + t.map(ups(Grip::BEZIER2).off);
 
       if(!p6o.isNull()) {
-            QPointF p6i = t.inverted().map(p6o) / _spatium;
+            QPointF p6i = t.inverted().map(p6o);
             ups(Grip::BEZIER1).off += p6i ;
             ups(Grip::BEZIER2).off += p6i;
             }
@@ -410,7 +408,7 @@ void TieSegment::computeBezier(QPointF p6o)
       shapePath             = t.map(shapePath);
       ups(Grip::BEZIER1).p  = t.map(p3);
       ups(Grip::BEZIER2).p  = t.map(p4);
-      ups(Grip::END).p      = t.map(p2) - ups(Grip::END).off * _spatium;
+      ups(Grip::END).p      = t.map(p2) - ups(Grip::END).off;
       ups(Grip::DRAG).p     = t.map(p5);
       ups(Grip::SHOULDER).p = t.map(p6);
 
@@ -430,7 +428,6 @@ void TieSegment::computeBezier(QPointF p6o)
 void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       {
       if (autoplace()) {
-            // TODO: must be saved when switching to autoplace
             for (UP& up : _ups)
                   up.off = QPointF();
             }

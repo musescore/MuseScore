@@ -35,8 +35,8 @@ class TieSegment : public SlurTieSegment {
       void changeAnchor(MuseScoreView*, Grip, Element*);
 
    public:
-      TieSegment(Score* s) : SlurTieSegment(s) {}
-      TieSegment(const TieSegment& s) : SlurTieSegment(s) {}
+      TieSegment(Score* s) : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }
+      TieSegment(const TieSegment& s) : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }
       virtual TieSegment* clone() const override   { return new TieSegment(*this); }
       virtual Element::Type type() const override  { return Element::Type::TIE_SEGMENT; }
       virtual int subtype() const override         { return static_cast<int>(spanner()->type()); }
