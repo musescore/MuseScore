@@ -2654,6 +2654,7 @@ bool Chord::setProperty(P_ID propertyId, const QVariant& v)
 //---------------------------------------------------------
 //   layoutArticulation
 //    called from ChordRest()->layoutArticulations()
+//    assumes there is only one articulation
 //---------------------------------------------------------
 
 QPointF Chord::layoutArticulation(Articulation* a)
@@ -2672,7 +2673,9 @@ QPointF Chord::layoutArticulation(Articulation* a)
       qreal y         = 0.0;
 
       // TENUTO and STACCATO: always near the notehead (or stem end if beyond a stem)
-      if ((a->isTenuto() || a->isStaccato() || a->isAccent()) && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
+      if ((a->isTenuto() || a->isStaccato() || a->isAccent())
+         && (aa != ArticulationAnchor::TOP_STAFF
+         && aa != ArticulationAnchor::BOTTOM_STAFF)) {
             bool bottom;                        // true: artic. is below chord | false: artic. is above chord
             bool alignToStem = false;
             // if there area voices, articulation is on stem side
@@ -2699,13 +2702,13 @@ QPointF Chord::layoutArticulation(Articulation* a)
             if (stemSide) {                     // if artic. is really beyond a stem,
                   qreal lineDelta = up() ? -_spStaff2 : _spStaff2;    // move it 1/2sp away from stem
                   int line = lrint((pos.y() + lineDelta) / _spStaff); // round to nearest staff line
-                  if (line >= 0 && line <= staff()->lines()-1)          // if within staff, align between staff lines
+                  if (line >= 0 && line < staff()->lines())          // if within staff, align between staff lines
                         pos.ry() = (line * _spStaff) + (bottom ? _spStaff2 : -_spStaff2);
-                  else {                                                // if outside staff, add some more space (?)
+                  else {
                         qreal dy = (score()->styleS(StyleIdx::beamWidth).val() + 1) * _spatium2;
                         pos.ry() += bottom ? dy : - dy;
                         }
-                  alignToStem = a->isStaccato() && articulations().size() == 1;
+                  alignToStem = a->isStaccato();
                   }
             else {                              // if articulation is not beyond a stem
                   int lline;                    // logical line of note
