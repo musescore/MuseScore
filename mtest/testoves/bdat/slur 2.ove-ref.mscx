@@ -111,12 +111,6 @@
           </Rest>
         <Slur id="2">
           <track>0</track>
-          <SlurSegment no="0">
-            <o1 x="0" y="0"/>
-            <o2 x="0" y="0.000690424"/>
-            <o3 x="0" y="-0.0154846"/>
-            <o4 x="0" y="0"/>
-            </SlurSegment>
           <slurDirection>up</slurDirection>
           </Slur>
         <Chord>

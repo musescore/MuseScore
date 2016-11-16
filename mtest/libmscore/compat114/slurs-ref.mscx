@@ -269,12 +269,6 @@
           </LayoutBreak>
         <Slur id="5">
           <track>0</track>
-          <SlurSegment no="1">
-            <o1 x="0" y="0"/>
-            <o2 x="0" y="-0.181467"/>
-            <o3 x="0" y="0.0235572"/>
-            <o4 x="0" y="0"/>
-            </SlurSegment>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
