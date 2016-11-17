@@ -416,16 +416,16 @@ class Inspector : public QDockWidget {
       };
 
 //---------------------------------------------------------
-//   InspectorSlur
+//   InspectorSlurTie
 //---------------------------------------------------------
 
-class InspectorSlur : public InspectorElementBase {
+class InspectorSlurTie : public InspectorElementBase {
       Q_OBJECT
 
       Ui::InspectorSlur s;
 
    public:
-      InspectorSlur(QWidget* parent);
+      InspectorSlurTie(QWidget* parent);
       };
 
 //---------------------------------------------------------
