@@ -111,7 +111,7 @@
           </Rest>
         <Slur id="2">
           <track>0</track>
-          <slurDirection>up</slurDirection>
+          <up>up</up>
           </Slur>
         <Chord>
           <BeamMode>no</BeamMode>
@@ -163,7 +163,7 @@
           </Rest>
         <Slur id="3">
           <track>0</track>
-          <slurDirection>up</slurDirection>
+          <up>up</up>
           </Slur>
         <Chord>
           <BeamMode>no</BeamMode>
@@ -190,7 +190,7 @@
           </Chord>
         <Slur id="4">
           <track>0</track>
-          <slurDirection>up</slurDirection>
+          <up>up</up>
           </Slur>
         <Chord>
           <BeamMode>no</BeamMode>
@@ -259,7 +259,7 @@
           </Chord>
         <Slur id="5">
           <track>0</track>
-          <slurDirection>up</slurDirection>
+          <up>up</up>
           </Slur>
         <Chord>
           <BeamMode>no</BeamMode>
@@ -277,7 +277,7 @@
       <Measure number="6">
         <Slur id="6">
           <track>0</track>
-          <slurDirection>up</slurDirection>
+          <up>up</up>
           </Slur>
         <Chord>
           <BeamMode>no</BeamMode>

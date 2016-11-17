@@ -1797,8 +1797,8 @@ void Score::cmdFlip()
                   Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
                   undoChangeProperty(beam, P_ID::STEM_DIRECTION, dir);
                   }
-            else if (e->isSlurSegment()) {
-                  SlurTie* slur = toSlurSegment(e)->slurTie();
+            else if (e->isSlurSegment() || e->isTieSegment()) {
+                  SlurTie* slur = static_cast<SlurTieSegment*>(e)->slurTie();
                   Direction dir = slur->up() ? Direction::DOWN : Direction::UP;
                   undoChangeProperty(slur, P_ID::SLUR_DIRECTION, dir);
                   }

@@ -256,12 +256,11 @@ void TieSegment::editDrag(const EditData& ed)
             //
             if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
                   Spanner* spanner = tie();
-                  Qt::KeyboardModifiers km = qApp->keyboardModifiers();
                   Note* note = static_cast<Note*>(ed.view->elementNear(ed.pos));
                   if (note && note->isNote()
                      && ((g == Grip::END && note->tick() > tie()->tick()) || (g == Grip::START && note->tick() < tie()->tick2()))
                      ) {
-                        if (g == Grip::END && spanner->isTie()) {
+                        if (g == Grip::END) {
                               Tie* tie = toTie(spanner);
                               if (tie->startNote()->pitch() == note->pitch()
                                  && tie->startNote()->chord()->tick() < note->chord()->tick()) {
@@ -270,14 +269,6 @@ void TieSegment::editDrag(const EditData& ed)
                                           changeAnchor(ed.view, g, note);
                                           return;
                                           }
-                                    }
-                              }
-                        else if (!spanner->isTie() && km != (Qt::ShiftModifier | Qt::ControlModifier)) {
-                              Chord* c = note->chord();
-                              ed.view->setDropTarget(note);
-                              if (c != spanner->endCR()) {
-                                    changeAnchor(ed.view, g, c);
-                                    tie()->layout();
                                     }
                               }
                         }

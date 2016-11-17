@@ -117,6 +117,8 @@ class SlurTie : public Spanner {
       virtual Element::Type type() const = 0;
       bool up() const                             { return _up; }
 
+      virtual void reset() override;
+
       Direction slurDirection() const     { return _slurDirection; }
       void setSlurDirection(Direction d)  { _slurDirection = d; }
       void undoSetSlurDirection(Direction d);

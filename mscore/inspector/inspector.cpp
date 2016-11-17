@@ -234,7 +234,8 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorTextLine(this);
                               break;
                         case Element::Type::SLUR_SEGMENT:
-                              ie = new InspectorSlur(this);
+                        case Element::Type::TIE_SEGMENT:
+                              ie = new InspectorSlurTie(this);
                               break;
                         case Element::Type::BAR_LINE:
 //                              if (_element->isEditable())
@@ -1044,10 +1045,10 @@ void InspectorStafftext::setElement()
       }
 
 //---------------------------------------------------------
-//   InspectorSlur
+//   InspectorSlurTie
 //---------------------------------------------------------
 
-InspectorSlur::InspectorSlur(QWidget* parent)
+InspectorSlurTie::InspectorSlurTie(QWidget* parent)
    : InspectorElementBase(parent)
       {
       s.setupUi(addWidget());

@@ -145,7 +145,7 @@ void SlurTieSegment::reset()
       undoResetProperty(P_ID::SLUR_UOFF3);
       undoResetProperty(P_ID::SLUR_UOFF4);
       undoResetProperty(P_ID::AUTOPLACE);
-      parent()->reset();
+      slurTie()->reset();
       }
 
 //---------------------------------------------------------
@@ -244,9 +244,8 @@ bool SlurTie::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-
-      if (tag == "slurDirection")
-            _slurDirection = Direction(e.readInt());
+      if (tag == "up" || tag == "slurDirection")
+            readProperty(e, P_ID::SLUR_DIRECTION);
       else if (tag == "lineType")
             _lineType = e.readInt();
       else if (tag == "SlurSegment") {
@@ -323,7 +322,7 @@ QVariant SlurTie::propertyDefault(P_ID id) const
             case P_ID::LINE_TYPE:
                   return 0;
             case P_ID::SLUR_DIRECTION:
-                  return Direction(Direction::AUTO);
+                  return Direction_AUTO;
             default:
                   return Spanner::propertyDefault(id);
             }
@@ -477,6 +476,17 @@ void SlurTie::endEdit()
             score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF4, o.o[3]);
             }
       score()->setLayoutAll();
+      }
+
+//---------------------------------------------------------
+//   reset
+//---------------------------------------------------------
+
+void SlurTie::reset()
+      {
+      Element::reset();
+      undoResetProperty(P_ID::SLUR_DIRECTION);
+      undoResetProperty(P_ID::LINE_TYPE);
       }
 
 }

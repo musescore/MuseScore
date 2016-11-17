@@ -114,11 +114,7 @@ bool SlurSegment::edit(MuseScoreView* viewer, Grip curGrip, int key, Qt::Keyboar
             return true;
             }
 
-      if (!((modifiers & Qt::ShiftModifier)
-         && ((spannerSegmentType() == SpannerSegmentType::SINGLE)
-              || (spannerSegmentType() == SpannerSegmentType::BEGIN && curGrip == Grip::START)
-              || (spannerSegmentType() == SpannerSegmentType::END && curGrip == Grip::END)
-            )))
+      if (!((modifiers & Qt::ShiftModifier) && (isSingleType() || (isBeginType() && curGrip == Grip::START) || (isEndType() && curGrip == Grip::END))))
             return false;
 
       ChordRest* cr = 0;
@@ -151,7 +147,7 @@ bool SlurSegment::edit(MuseScoreView* viewer, Grip curGrip, int key, Qt::Keyboar
             }
       if (cr && cr != e1)
             changeAnchor(viewer, curGrip, cr);
-      undoChangeProperty(P_ID::AUTOPLACE, false);
+//      undoChangeProperty(P_ID::AUTOPLACE, false);
       return true;
       }
 
@@ -326,23 +322,11 @@ void SlurSegment::editDrag(const EditData& ed)
                   if (note && note->isNote()
                      && ((g == Grip::END && note->tick() > slurTie()->tick()) || (g == Grip::START && note->tick() < slurTie()->tick2()))
                      ) {
-                        if (g == Grip::END && spanner->isTie()) {
-                              Tie* tie = toTie(spanner);
-                              if (tie->startNote()->pitch() == note->pitch()
-                                 && tie->startNote()->chord()->tick() < note->chord()->tick()) {
-                                    ed.view->setDropTarget(note);
-                                    if (note != tie->endNote()) {
-                                          changeAnchor(ed.view, ed.curGrip, note);
-                                          return;
-                                          }
-                                    }
-                              }
-                        else if (!spanner->isTie() && km != (Qt::ShiftModifier | Qt::ControlModifier)) {
+                        if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
                               Chord* c = note->chord();
                               ed.view->setDropTarget(note);
                               if (c != spanner->endCR()) {
                                     changeAnchor(ed.view, g, c);
-                                    slurTie()->layout();
                                     }
                               }
                         }
@@ -350,8 +334,9 @@ void SlurSegment::editDrag(const EditData& ed)
                         ed.view->setDropTarget(0);
                   }
             }
-      else if (ed.curGrip == Grip::BEZIER1 || ed.curGrip == Grip::BEZIER2)
+      else if (ed.curGrip == Grip::BEZIER1 || ed.curGrip == Grip::BEZIER2) {
             computeBezier();
+            }
       else if (ed.curGrip == Grip::SHOULDER) {
             ups(ed.curGrip).off = QPointF();
             computeBezier(ed.delta);
@@ -552,8 +537,8 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             QList<Collision> pl;                // skyline
             qreal sdist = spatium() * 0.5;      // minimum distance to slur
 
-            QPointF pp1 = ups(Grip::START).p + ups(Grip::START).off;
-            QPointF pp2 = ups(Grip::END).p   + ups(Grip::END).off;
+            QPointF pp1 = ups(Grip::START).p;
+            QPointF pp2 = ups(Grip::END).p;
             Segment* ls = system()->lastMeasure()->last();
             Segment* fs = system()->firstMeasure()->first();
 
