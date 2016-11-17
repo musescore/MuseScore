@@ -135,6 +135,7 @@ class Tuplet : public DurationElement {
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;
+      void sanitizeTuplet();
       };
 
 
