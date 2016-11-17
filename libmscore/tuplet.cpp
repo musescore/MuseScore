@@ -1069,5 +1069,53 @@ void Tuplet::styleChanged()
             }
       }
 
+//---------------------------------------------------------
+//   sanitizeTuplet
+///    Check validity of tuplets and coherence between duration
+///    and baselength. Needed for importing old files due to a bug
+///    in the released version for corner-case tuplets.
+///    See issue #136406 and Pull request #2881
+//---------------------------------------------------------
+
+void Tuplet::sanitizeTuplet()
+      {
+      Fraction testDuration(0,1);
+      //int tupletTick = 2147483647;
+      for (DurationElement* de : elements()) {
+            if (de == 0)
+                  continue;
+            Fraction elementDuration(0,1);
+            if (de->isTuplet()){
+                  Tuplet* t = toTuplet(de);
+                  t->sanitizeTuplet();
+                  elementDuration = t->duration();
+                  //tupletTick = qMin(tupletTick,t->tick());
+                  }
+            else {
+                  elementDuration = de->duration();
+                  //tupletTick = qMin(tupletTick,de->tick());
+                  }
+            testDuration += elementDuration;
+            }
+      //if ((score()->mscVersion() < 206) && (tupletTick < 2147483647) && (tupletTick >= 0))
+      //      setTick(tupletTick);
+      testDuration = testDuration / ratio();
+      testDuration.reduce();
+      Fraction tupletDuration = duration().reduced();
+      Fraction baseLenDuration = (Fraction(ratio().denominator(),1) * baseLen().fraction()).reduced();
+      if (((testDuration - tupletDuration).reduced().numerator() != 0) || ((testDuration - baseLenDuration).reduced().numerator() != 0)) {
+            Fraction f = testDuration * Fraction(1, ratio().denominator());
+            f.reduce();
+            Fraction fbl(1, f.denominator());
+            if (TDuration::isValid(fbl)) {
+                  setDuration(testDuration);
+                  setBaseLen(fbl);
+                  qDebug("Tuplet %p sanitized",this);
+                  }
+            else {
+                  qDebug("Impossible to sanitize the tuplet");
+                  }
+            }
+      }
 }  // namespace Ms
 
