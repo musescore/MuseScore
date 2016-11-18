@@ -2182,15 +2182,15 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   qreal yo = 0;
                   if (s->isOttava()) {
                       // fix ottava position
-                      yo = styleS(StyleIdx::ottavaY).val() * spatium();
+                      yo = styleP(StyleIdx::ottavaPosAbove);
                       if (s->placeBelow())
                             yo = -yo + s->staff()->height();
                       }
                   else if (s->isPedal()) {
-                        yo = styleS(StyleIdx::pedalY).val() * spatium();
+                        yo = styleP(StyleIdx::pedalPosBelow);
                         }
                   else if (s->isTrill()) {
-                        yo = styleS(StyleIdx::trillY).val() * spatium();
+                        yo = styleP(StyleIdx::trillPosAbove);
                         }
                   else if (s->isTextLine()) {
                         yo = -5.0 * spatium();

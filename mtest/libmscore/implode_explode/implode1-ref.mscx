@@ -9,8 +9,6 @@
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <lastSystemFillLimit>0</lastSystemFillLimit>
-      <pedalY>0</pedalY>
-      <trillY>0</trillY>
       <concertPitch>1</concertPitch>
       <minMMRestWidth>0</minMMRestWidth>
       <page-layout>

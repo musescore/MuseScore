@@ -14,8 +14,8 @@
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <stemWidth>0.16</stemWidth>
       <lastSystemFillLimit>0.25</lastSystemFillLimit>
-      <pedalY>0</pedalY>
-      <trillY>0</trillY>
+      <pedalPosBelow>0</pedalPosBelow>
+      <trillPosAbove>0</trillPosAbove>
       <measureNumberSystem>0</measureNumberSystem>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>

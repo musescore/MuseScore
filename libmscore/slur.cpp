@@ -621,7 +621,6 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
 #endif
             }
       else {
-            printf("manual layout=== slur\n");
             if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
                   QPointF staffOffset;
                   if (system() && track() >= 0)

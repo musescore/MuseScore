@@ -137,16 +137,23 @@ enum class StyleIdx : int {
       articulationMag,
       lastSystemFillLimit,
 
-      hairpinY,
+      hairpinPlacement,
+      hairpinPosAbove,
+      hairpinPosBelow,
       hairpinHeight,
       hairpinContHeight,
       hairpinLineWidth,
 
-      pedalY,
+      pedalPlacement,
+      pedalPosAbove,
+      pedalPosBelow,
       pedalLineWidth,
       pedalLineStyle,
 
-      trillY,
+      trillPlacement,
+      trillPosAbove,
+      trillPosBelow,
+
       harmonyY,
       harmonyFretDist,
       minHarmonyDistance,
@@ -240,7 +247,9 @@ enum class StyleIdx : int {
       voltaLineWidth,
       voltaLineStyle,
 
-      ottavaY,
+      ottavaPlacement,
+      ottavaPosAbove,
+      ottavaPosBelow,
       ottavaHook,
       ottavaLineWidth,
       ottavaLineStyle,
@@ -282,6 +291,11 @@ enum class StyleIdx : int {
       spatium,
 
       autoplaceHairpinDynamicsDistance,
+
+      dynamicsPlacement,
+      dynamicsPosAbove,
+      dynamicsPosBelow,
+
       dynamicsMinDistance,
       autoplaceVerticalAlignRange,
 

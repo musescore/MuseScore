@@ -145,10 +145,14 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::staffLineWidth,          false, staffLineWidth,          resetStaffLineWidth },
       { StyleIdx::beamWidth,               false, beamWidth,               0 },
       { StyleIdx::beamMinLen,              false, beamMinLen,              0 },
-      { StyleIdx::hairpinY,                false, hairpinY,                resetHairpinY },
+
+      { StyleIdx::hairpinPlacement,        false, hairpinPlacement,        resetHairpinPlacement },
+      { StyleIdx::hairpinPosAbove,         false, hairpinPosAbove,         resetHairpinPosAbove },
+      { StyleIdx::hairpinPosBelow,         false, hairpinPosBelow,         resetHairpinPosBelow },
       { StyleIdx::hairpinLineWidth,        false, hairpinLineWidth,        resetHairpinLineWidth },
       { StyleIdx::hairpinHeight,           false, hairpinHeight,           resetHairpinHeight },
       { StyleIdx::hairpinContHeight,       false, hairpinContinueHeight,   resetHairpinContinueHeight },
+
       { StyleIdx::dotNoteDistance,         false, noteDotDistance,         0 },
       { StyleIdx::dotDotDistance,          false, dotDotDistance,          0 },
       { StyleIdx::stemWidth,               false, stemWidth,               0 },
@@ -178,13 +182,22 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::propertyDistance,        false, propertyDistance,        0 },
       { StyleIdx::voltaY,                  false, voltaY,                  resetVoltaY },
       { StyleIdx::voltaHook,               false, voltaHook,               resetVoltaHook },
-      { StyleIdx::voltaLineWidth,          false, voltaLineWidth,          resetVoltaLineWidth },
-      { StyleIdx::ottavaY,                 false, ottavaY,                 resetOttavaY },
-      { StyleIdx::ottavaHook,              false, ottavaHook,              resetOttavaHook },
+      { StyleIdx::voltaLineWidth,          false, voltaLineWidth,          resetVoltaLineWidth  },
+
+      { StyleIdx::ottavaPosAbove,          false, ottavaPosAbove,          resetOttavaPosAbove  },
+      { StyleIdx::ottavaPosBelow,          false, ottavaPosBelow,          resetOttavaPosBelow  },
+      { StyleIdx::ottavaHook,              false, ottavaHook,              resetOttavaHook      },
       { StyleIdx::ottavaLineWidth,         false, ottavaLineWidth,         resetOttavaLineWidth },
-      { StyleIdx::pedalY,                  false, pedalY,                  resetPedalY },
-      { StyleIdx::pedalLineWidth,          false, pedalLineWidth,          resetPedalLineWidth },
-      { StyleIdx::trillY,                  false, trillY,                  resetTrillY },
+
+      { StyleIdx::pedalPlacement,          false, pedalLinePlacement,      resetPedalLinePlacement  },
+      { StyleIdx::pedalPosAbove,           false, pedalLinePosAbove,       resetPedalLinePosAbove   },
+      { StyleIdx::pedalPosBelow,           false, pedalLinePosBelow,       resetPedalLinePosBelow   },
+      { StyleIdx::pedalLineWidth,          false, pedalLineWidth,          resetPedalLineWidth  },
+
+      { StyleIdx::trillPlacement,          false, trillLinePlacement,      resetTrillLinePlacement  },
+      { StyleIdx::trillPosAbove,           false, trillLinePosAbove,       resetTrillLinePosAbove   },
+      { StyleIdx::trillPosBelow,           false, trillLinePosBelow,       resetTrillLinePosBelow   },
+
       { StyleIdx::harmonyY,                false, harmonyY,                0 },
       { StyleIdx::harmonyFretDist,         false, harmonyFretDist,         0 },
       { StyleIdx::minHarmonyDistance,      false, minHarmonyDistance,      0 },
@@ -261,14 +274,23 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::MusicalSymbolFont,       false, musicalSymbolFont,            0 },
       { StyleIdx::MusicalTextFont,         false, musicalTextFont,              0 },
       { StyleIdx::autoplaceHairpinDynamicsDistance, false, autoplaceHairpinDynamicsDistance, resetAutoplaceHairpinDynamicsDistance },
-      { StyleIdx::dynamicsMinDistance,              false, dynamicsMinDistance,          resetDynamicsMinDistance },
+
+
+      { StyleIdx::dynamicsPlacement,       false, dynamicsPlacement,          resetDynamicsPlacement },
+      { StyleIdx::dynamicsPosAbove,        false, dynamicsPosAbove,           resetDynamicsPosAbove },
+      { StyleIdx::dynamicsPosBelow,        false, dynamicsPosBelow,           resetDynamicsPosBelow },
+      { StyleIdx::dynamicsMinDistance,     false, dynamicsMinDistance,        resetDynamicsMinDistance },
+
       { StyleIdx::autoplaceVerticalAlignRange,      false, autoplaceVerticalAlignRange, resetAutoplaceVerticalAlignRange },
       { StyleIdx::textLinePlacement,       false, textLinePlacement, resetTextLinePlacement },
       { StyleIdx::textLinePosAbove,        false, textLinePosAbove,             resetTextLinePosAbove },
       { StyleIdx::textLinePosBelow,        false, textLinePosBelow,             resetTextLinePosBelow },
       };
 
-      for (QComboBox* cb : std::vector<QComboBox*> { lyricsPlacement, textLinePlacement }) {
+      for (QComboBox* cb : std::vector<QComboBox*> {
+            lyricsPlacement, textLinePlacement, hairpinPlacement, pedalLinePlacement,
+            trillLinePlacement, dynamicsPlacement
+            }) {
             cb->clear();
             cb->addItem(tr("Above"), int(Element::Placement::ABOVE));
             cb->addItem(tr("Below"), int(Element::Placement::BELOW));

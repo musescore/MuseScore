@@ -168,9 +168,7 @@ void TrillSegment::layout()
             symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
 
       if (parent()) {
-            qreal yo = score()->styleP(StyleIdx::trillY);
-            if (trill()->placeBelow())
-                  yo = -yo + staff()->height() + bbox().height();
+            qreal yo = score()->styleP(trill()->placeBelow() ? StyleIdx::trillPosBelow : StyleIdx::trillPosAbove);
             rypos() = yo;
             if (autoplace()) {
                   qreal minDistance = spatium();
@@ -586,7 +584,7 @@ void Trill::undoSetTrillType(Type val)
 
 void Trill::setYoff(qreal val)
       {
-      rUserYoffset() += (val - score()->styleS(StyleIdx::trillY).val()) * spatium();
+      rUserYoffset() += val * spatium() - score()->styleP(StyleIdx::trillPosAbove);
       }
 
 //---------------------------------------------------------
