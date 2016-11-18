@@ -9,8 +9,8 @@
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <lastSystemFillLimit>0</lastSystemFillLimit>
-      <pedalY>0</pedalY>
-      <trillY>0</trillY>
+      <pedalPosBelow>0</pedalPosBelow>
+      <trillPosAbove>0</trillPosAbove>
       <minMMRestWidth>0</minMMRestWidth>
       <TextStyle>
         <halign>center</halign>

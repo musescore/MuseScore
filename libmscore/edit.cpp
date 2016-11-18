@@ -1852,6 +1852,7 @@ void Score::cmdFlip()
                || e->isHairpin()
                || e->isOttavaSegment()
                || e->isTextLineSegment()
+               || e->isPedalSegment()
                || e->isTrillSegment()) {
                   // getProperty() delegates call from spannerSegment to Spanner:
                   Element::Placement p = Element::Placement(e->getProperty(P_ID::PLACEMENT).toInt());

@@ -60,9 +60,7 @@ void OttavaSegment::layout()
 
       TextLineBaseSegment::layout();
       if (parent()) {
-            qreal yo = score()->styleP(StyleIdx::ottavaY) * mag();
-            if (ottava()->placeBelow())
-                  yo = -yo + staff()->height();
+            qreal yo = score()->styleP(ottava()->placeBelow() ? StyleIdx::ottavaPosBelow : StyleIdx::ottavaPosAbove) * mag();
             rypos() += yo;
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
@@ -90,9 +88,12 @@ void OttavaSegment::layout()
 QVariant OttavaSegment::getProperty(P_ID id) const
       {
       switch (id) {
+            case P_ID::LINE_WIDTH:
+            case P_ID::LINE_STYLE:
             case P_ID::OTTAVA_TYPE:
             case P_ID::PLACEMENT:
             case P_ID::NUMBERS_ONLY:
+            case P_ID::TEXT_STYLE_TYPE:
                   return ottava()->getProperty(id);
             default:
                   return TextLineBaseSegment::getProperty(id);
@@ -111,6 +112,7 @@ bool OttavaSegment::setProperty(P_ID id, const QVariant& v)
             case P_ID::OTTAVA_TYPE:
             case P_ID::PLACEMENT:
             case P_ID::NUMBERS_ONLY:
+            case P_ID::TEXT_STYLE_TYPE:
                   return ottava()->setProperty(id, v);
             default:
                   return TextLineBaseSegment::setProperty(id, v);
@@ -166,6 +168,7 @@ void OttavaSegment::resetProperty(P_ID id)
             case P_ID::LINE_WIDTH:
             case P_ID::LINE_STYLE:
             case P_ID::NUMBERS_ONLY:
+            case P_ID::TEXT_STYLE_TYPE:
                   return ottava()->resetProperty(id);
 
             default:
@@ -362,7 +365,7 @@ bool Ottava::setProperty(P_ID propertyId, const QVariant& val)
                         setBeginHookHeight(-beginHookHeight());
                         setEndHookHeight(-endHookHeight());
                         }
-                  TextLineBase::setProperty(propertyId, val);
+                  setPlacement(Placement(val.toInt()));
                   break;
 
             case P_ID::LINE_WIDTH:
@@ -463,11 +466,7 @@ void Ottava::undoSetOttavaType(Type val)
 
 void Ottava::setYoff(qreal val)
       {
-      qreal _spatium = spatium();
-      qreal yo(score()->styleS(StyleIdx::ottavaY).val() * _spatium);
-      if (placement() == Element::Placement::BELOW)
-            yo = -yo + staff()->height();
-      rUserYoffset() += val * _spatium - yo;
+      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? StyleIdx::ottavaPosAbove : StyleIdx::ottavaPosBelow);
       }
 
 //---------------------------------------------------------
@@ -521,6 +520,10 @@ void Ottava::resetProperty(P_ID id)
                   setOttavaType(_ottavaType);
                   break;
 
+            case P_ID::PLACEMENT:
+                  setProperty(id, propertyDefault(id));
+                  break;
+
             default:
                   return TextLineBase::resetProperty(id);
             }
@@ -539,7 +542,7 @@ void Ottava::styleChanged()
             setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::ottavaLineStyle)));
       if (numbersOnlyStyle == PropertyStyle::STYLED)
             setNumbersOnly(score()->styleB(StyleIdx::ottavaNumbersOnly));
-      setOttavaType(_ottavaType);
+//      setOttavaType(_ottavaType);       // this resets placement
       }
 
 //---------------------------------------------------------
@@ -558,7 +561,6 @@ void Ottava::reset()
             undoChangeProperty(P_ID::BEGIN_TEXT, propertyDefault(P_ID::BEGIN_TEXT), PropertyStyle::STYLED);
       if (continueTextStyle == PropertyStyle::UNSTYLED)
             undoChangeProperty(P_ID::CONTINUE_TEXT, propertyDefault(P_ID::CONTINUE_TEXT), PropertyStyle::STYLED);
-
       setOttavaType(_ottavaType);
       TextLineBase::reset();
       }
@@ -585,6 +587,8 @@ StyleIdx Ottava::getPropertyStyle(P_ID id) const
                   return StyleIdx::ottavaLineWidth;
             case P_ID::LINE_STYLE:
                   return StyleIdx::ottavaLineStyle;
+            case P_ID::PLACEMENT:
+                  return StyleIdx::ottavaPlacement;
             default:
                   break;
             }

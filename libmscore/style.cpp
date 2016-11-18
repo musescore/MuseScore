@@ -30,6 +30,10 @@ namespace Ms {
 // 120 dpi           screen resolution
 //  spatium = 20/4 points
 
+//---------------------------------------------------------
+//   styleTypes
+//---------------------------------------------------------
+
 static const StyleType styleTypes[] {
       { StyleIdx::staffUpperBorder,        "staffUpperBorder",        Spatium(7.0)  },
       { StyleIdx::staffLowerBorder,        "staffLowerBorder",        Spatium(7.0)  },
@@ -132,14 +136,23 @@ static const StyleType styleTypes[] {
 
       { StyleIdx::articulationMag,         "articulationMag",         QVariant(1.0) },
       { StyleIdx::lastSystemFillLimit,     "lastSystemFillLimit",     QVariant(0.3) },
-      { StyleIdx::hairpinY,                "hairpinY",                Spatium(7.5) },
+
+      { StyleIdx::hairpinPlacement,        "hairpinPlacement",        int(Element::Placement::BELOW)  },
+      { StyleIdx::hairpinPosAbove,         "hairpinPosAbove",         Spatium(-3.5) },
+      { StyleIdx::hairpinPosBelow,         "hairpinPosBelow",         Spatium(3.5) },
       { StyleIdx::hairpinHeight,           "hairpinHeight",           Spatium(1.2) },
       { StyleIdx::hairpinContHeight,       "hairpinContHeight",       Spatium(0.5) },
       { StyleIdx::hairpinLineWidth,        "hairpinWidth",            Spatium(0.13) },
-      { StyleIdx::pedalY,                  "pedalY",                  Spatium(8) },
+
+      { StyleIdx::pedalPlacement,          "pedalPlacement",          int(Element::Placement::BELOW)  },
+      { StyleIdx::pedalPosAbove,           "pedalPosAbove",           Spatium(-4) },
+      { StyleIdx::pedalPosBelow,           "pedalPosBelow",           Spatium(4) },
       { StyleIdx::pedalLineWidth,          "pedalLineWidth",          Spatium(.15) },
       { StyleIdx::pedalLineStyle,          "pedalListStyle",          QVariant(int(Qt::SolidLine)) },
-      { StyleIdx::trillY,                  "trillY",                  Spatium(-1) },
+
+      { StyleIdx::trillPlacement,          "trillPlacement",          int(Element::Placement::ABOVE)  },
+      { StyleIdx::trillPosAbove,           "trillPosAbove",           Spatium(-1) },
+      { StyleIdx::trillPosBelow,           "trillPosBelow",           Spatium(1) },
 
       { StyleIdx::harmonyY,                "harmonyY",                Spatium(2.5) },
       { StyleIdx::harmonyFretDist,         "harmonyFretDist",         Spatium(0.5) },
@@ -233,11 +246,15 @@ static const StyleType styleTypes[] {
 
       { StyleIdx::voltaLineWidth,          "voltaLineWidth",          Spatium(.1) },
       { StyleIdx::voltaLineStyle,          "voltaLineStyle",          QVariant(int(Qt::SolidLine)) },
-      { StyleIdx::ottavaY,                 "ottavaY",                 Spatium(-3.0) },
+
+      { StyleIdx::ottavaPlacement,         "ottavaPlacement",         int(Element::Placement::ABOVE)  },
+      { StyleIdx::ottavaPosAbove,          "ottavaPosAbove",          Spatium(-3.0) },
+      { StyleIdx::ottavaPosBelow,          "ottavaPosBelow",          Spatium(3.0) },
       { StyleIdx::ottavaHook,              "ottavaHook",              Spatium(1.9) },
       { StyleIdx::ottavaLineWidth,         "ottavaLineWidth",         Spatium(.1) },
       { StyleIdx::ottavaLineStyle,         "ottavaLineStyle",         QVariant(int(Qt::DashLine)) },
       { StyleIdx::ottavaNumbersOnly,       "ottavaNumbersOnly",       true },
+
       { StyleIdx::tabClef,                 "tabClef",                 QVariant(int(ClefType::TAB)) },
       { StyleIdx::tremoloWidth,            "tremoloWidth",            Spatium(1.2) },  // tremolo stroke width: notehead width
       { StyleIdx::tremoloBoxHeight,        "tremoloBoxHeight",        Spatium(0.65) },
@@ -270,6 +287,11 @@ static const StyleType styleTypes[] {
       { StyleIdx::spatium,                 "Spatium",                 SPATIUM20 },
 
       { StyleIdx::autoplaceHairpinDynamicsDistance, "autoplaceHairpinDynamicsDistance", Spatium(0.5) },
+
+      { StyleIdx::dynamicsPlacement,       "dynamicsPlacement",       int(Element::Placement::BELOW)  },
+      { StyleIdx::dynamicsPosAbove,        "dynamicsPosAbove",        Spatium(-3.0) },
+      { StyleIdx::dynamicsPosBelow,        "dynamicsPosBelow",        Spatium(3.0) },
+
       { StyleIdx::dynamicsMinDistance,              "dynamicsMinDistance",               Spatium(0.5) },
       { StyleIdx::autoplaceVerticalAlignRange,      "autoplaceVerticalAlignRange",     int(VerticalAlignRange::SYSTEM) },
 

@@ -204,9 +204,7 @@ void HairpinSegment::layout()
             setbbox(r.adjusted(-w*.5, -w*.5, w, w));
             }
       if (parent()) {
-            qreal yo = score()->styleP(StyleIdx::hairpinY);
-            if (hairpin()->placeAbove())
-                  yo = -yo + staff()->height() + bbox().height();
+            qreal yo = score()->styleP(hairpin()->placeBelow() ? StyleIdx::hairpinPosBelow : StyleIdx::hairpinPosAbove);
             rypos() += yo;
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
@@ -794,7 +792,7 @@ StyleIdx Hairpin::getPropertyStyle(P_ID id) const
 
 void Hairpin::setYoff(qreal val)
       {
-      rUserYoffset() += (val - score()->styleS(StyleIdx::hairpinY).val()) * spatium();
+      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? StyleIdx::hairpinPosAbove : StyleIdx::hairpinPosBelow);
       }
 
 //---------------------------------------------------------

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>920</width>
-    <height>640</height>
+    <width>1130</width>
+    <height>865</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -137,7 +137,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>0</number>
+       <number>12</number>
       </property>
       <widget class="QWidget" name="Page1">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -4082,7 +4082,7 @@
            <property name="verticalSpacing">
             <number>0</number>
            </property>
-           <item row="1" column="0">
+           <item row="3" column="0">
             <widget class="QLabel" name="label_8">
              <property name="text">
               <string>Line thickness:</string>
@@ -4092,7 +4092,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
+           <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="hairpinLineWidth">
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
@@ -4102,7 +4102,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="3">
+           <item row="3" column="3">
             <spacer>
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -4115,7 +4115,7 @@
              </property>
             </spacer>
            </item>
-           <item row="2" column="0">
+           <item row="4" column="0">
             <widget class="QLabel" name="label_9">
              <property name="text">
               <string>Height:</string>
@@ -4125,7 +4125,7 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
+           <item row="4" column="1">
             <widget class="QDoubleSpinBox" name="hairpinHeight">
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
@@ -4135,7 +4135,7 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item row="5" column="0">
             <widget class="QLabel" name="label_10">
              <property name="text">
               <string>Continue height:</string>
@@ -4145,7 +4145,7 @@
              </property>
             </widget>
            </item>
-           <item row="5" column="0">
+           <item row="7" column="0">
             <spacer>
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -4158,18 +4158,18 @@
              </property>
             </spacer>
            </item>
-           <item row="0" column="0">
+           <item row="1" column="0">
             <widget class="QLabel" name="label_95">
              <property name="text">
-              <string>Default vertical position:</string>
+              <string>Position Above:</string>
              </property>
              <property name="buddy">
-              <cstring>hairpinY</cstring>
+              <cstring>hairpinPosAbove</cstring>
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="hairpinY">
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="hairpinPosAbove">
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -4184,8 +4184,8 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="2">
-            <widget class="QToolButton" name="resetHairpinY">
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetHairpinPosAbove">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -4207,7 +4207,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="2">
+           <item row="3" column="2">
             <widget class="QToolButton" name="resetHairpinLineWidth">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -4230,7 +4230,7 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="2">
+           <item row="4" column="2">
             <widget class="QToolButton" name="resetHairpinHeight">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -4253,7 +4253,7 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="2">
+           <item row="5" column="2">
             <widget class="QToolButton" name="resetHairpinContinueHeight">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -4276,7 +4276,7 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
+           <item row="6" column="0">
             <widget class="QLabel" name="label_117">
              <property name="text">
               <string>Autoplace: Distance to dynamics:</string>
@@ -4286,7 +4286,7 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
+           <item row="5" column="1">
             <widget class="QDoubleSpinBox" name="hairpinContinueHeight">
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
@@ -4296,7 +4296,7 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
+           <item row="6" column="1">
             <widget class="QDoubleSpinBox" name="autoplaceHairpinDynamicsDistance">
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
@@ -4306,7 +4306,7 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="2">
+           <item row="6" column="2">
             <widget class="QToolButton" name="resetAutoplaceHairpinDynamicsDistance">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -4319,6 +4319,88 @@
              </property>
              <property name="accessibleName">
               <string>Reset 'Autoplace: Distance to dynamics' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_127">
+             <property name="text">
+              <string>Placement:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="hairpinPlacement"/>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="resetHairpinPlacement">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Default vertical position' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_129">
+             <property name="text">
+              <string>Position Below:</string>
+             </property>
+             <property name="buddy">
+              <cstring>hairpinPosAbove</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="hairpinPosBelow">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
+             </property>
+             <property name="minimum">
+              <double>-1000.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>-5.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetHairpinPosBelow">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Default vertical position' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -4577,7 +4659,7 @@
             <number>0</number>
            </property>
            <item row="0" column="2">
-            <widget class="QToolButton" name="resetOttavaY">
+            <widget class="QToolButton" name="resetOttavaPosAbove">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -4599,7 +4681,7 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
+           <item row="3" column="0">
             <widget class="QLabel" name="label_88">
              <property name="text">
               <string>Line thickness:</string>
@@ -4610,7 +4692,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="ottavaY">
+            <widget class="QDoubleSpinBox" name="ottavaPosAbove">
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -4622,14 +4704,14 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
+           <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="ottavaLineWidth">
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item row="2" column="0">
             <widget class="QLabel" name="label_87">
              <property name="text">
               <string>Hook height:</string>
@@ -4639,14 +4721,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="ottavaHook">
-             <property name="suffix">
-              <string extracomment="spatium unit">sp</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
+           <item row="4" column="1">
             <widget class="QComboBox" name="ottavaLineStyle">
              <item>
               <property name="text">
@@ -4675,17 +4750,24 @@
              </item>
             </widget>
            </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_81">
-             <property name="text">
-              <string>Default vertical position:</string>
-             </property>
-             <property name="buddy">
-              <cstring>ottavaY</cstring>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="ottavaHook">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_81">
+             <property name="text">
+              <string>Position Above:</string>
+             </property>
+             <property name="buddy">
+              <cstring>ottavaPosAbove</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
             <spacer name="verticalSpacer_14">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -4698,7 +4780,7 @@
              </property>
             </spacer>
            </item>
-           <item row="3" column="0">
+           <item row="4" column="0">
             <widget class="QLabel" name="label_105">
              <property name="text">
               <string>Line style:</string>
@@ -4708,7 +4790,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="2">
+           <item row="2" column="2">
             <widget class="QToolButton" name="resetOttavaHook">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -4731,7 +4813,7 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="2">
+           <item row="3" column="2">
             <widget class="QToolButton" name="resetOttavaLineWidth">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -4754,7 +4836,7 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="2">
+           <item row="4" column="2">
             <widget class="QToolButton" name="resetOttavaLineStyle">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -4820,41 +4902,18 @@
              </property>
             </widget>
            </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="Page14">
-       <layout class="QVBoxLayout" name="verticalLayout_34">
-        <item>
-         <widget class="QGroupBox" name="groupBox_21">
-          <property name="title">
-           <string>Pedal Line</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout11">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_96">
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_130">
              <property name="text">
-              <string>Default vertical position:</string>
+              <string>Position Below:</string>
              </property>
              <property name="buddy">
-              <cstring>pedalY</cstring>
+              <cstring>hairpinPosAbove</cstring>
              </property>
             </widget>
            </item>
-           <item row="2" column="1" colspan="2">
-            <widget class="QDoubleSpinBox" name="pedalLineWidth">
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1" rowspan="2" colspan="2">
-            <widget class="QDoubleSpinBox" name="pedalY">
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="ottavaPosBelow">
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -4869,7 +4928,187 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="1" colspan="2">
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetOttavaPosBelow">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Default vertical position' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="Page14">
+       <layout class="QVBoxLayout" name="verticalLayout_34">
+        <item>
+         <widget class="QGroupBox" name="groupBox_21">
+          <property name="title">
+           <string>Pedal Line</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout11">
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_96">
+             <property name="text">
+              <string>Position Above:</string>
+             </property>
+             <property name="buddy">
+              <cstring>pedalLinePosAbove</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="4">
+            <spacer name="horizontalSpacer_8">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_106">
+             <property name="text">
+              <string>Line style:</string>
+             </property>
+             <property name="buddy">
+              <cstring>pedalLineStyle</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_107">
+             <property name="text">
+              <string>Line thickness:</string>
+             </property>
+             <property name="buddy">
+              <cstring>pedalLineWidth</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <spacer name="verticalSpacer_19">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="5" column="3">
+            <widget class="QToolButton" name="resetPedalLineStyle">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Line style' setting</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QToolButton" name="resetPedalLinePosAbove">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Default vertical position' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="3">
+            <widget class="QToolButton" name="resetPedalLineWidth">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Line thickness' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_124">
+             <property name="text">
+              <string>Placement</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QToolButton" name="resetPedalLinePlacement">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Default vertical position' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="pedalLinePlacement"/>
+           </item>
+           <item row="4" column="1">
+            <widget class="QDoubleSpinBox" name="pedalLineWidth">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
             <widget class="QComboBox" name="pedalLineStyle">
              <item>
               <property name="text">
@@ -4898,93 +5137,55 @@
              </item>
             </widget>
            </item>
-           <item row="0" column="4">
-            <spacer name="horizontalSpacer_8">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+           <item row="1" column="1" rowspan="2">
+            <widget class="QDoubleSpinBox" name="pedalLinePosAbove">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
+             <property name="minimum">
+              <double>-1000.000000000000000</double>
              </property>
-            </spacer>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>-5.000000000000000</double>
+             </property>
+            </widget>
            </item>
            <item row="3" column="0">
-            <widget class="QLabel" name="label_106">
+            <widget class="QLabel" name="label_139">
              <property name="text">
-              <string>Line style:</string>
+              <string>Position Below:</string>
              </property>
              <property name="buddy">
-              <cstring>pedalLineStyle</cstring>
+              <cstring>pedalLinePosAbove</cstring>
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_107">
-             <property name="text">
-              <string>Line thickness:</string>
+           <item row="3" column="1">
+            <widget class="QDoubleSpinBox" name="pedalLinePosBelow">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
              </property>
-             <property name="buddy">
-              <cstring>pedalLineWidth</cstring>
+             <property name="minimum">
+              <double>-1000.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>-5.000000000000000</double>
              </property>
             </widget>
-           </item>
-           <item row="4" column="0">
-            <spacer name="verticalSpacer_19">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
            </item>
            <item row="3" column="3">
-            <widget class="QToolButton" name="resetPedalLineStyle">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Line style' setting</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="3">
-            <widget class="QToolButton" name="resetPedalY">
+            <widget class="QToolButton" name="resetPedalLinePosBelow">
              <property name="toolTip">
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
               <string>Reset 'Default vertical position' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="3">
-            <widget class="QToolButton" name="resetPedalLineWidth">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Line thickness' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5004,7 +5205,7 @@
            <string>Trill Line</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_14">
-           <item row="1" column="0">
+           <item row="3" column="0">
             <spacer name="verticalSpacer_18">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -5017,18 +5218,18 @@
              </property>
             </spacer>
            </item>
-           <item row="0" column="0">
+           <item row="1" column="0">
             <widget class="QLabel" name="label_97">
              <property name="text">
-              <string>Default vertical position:</string>
+              <string>Position Above:</string>
              </property>
              <property name="buddy">
-              <cstring>trillY</cstring>
+              <cstring>trillLinePosAbove</cstring>
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="trillY">
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="trillLinePosAbove">
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -5043,7 +5244,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="3">
+           <item row="1" column="3">
             <spacer name="horizontalSpacer_10">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -5056,8 +5257,78 @@
              </property>
             </spacer>
            </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetTrillLinePosAbove">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Default vertical position' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="trillLinePlacement"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_125">
+             <property name="text">
+              <string>Placement</string>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="2">
-            <widget class="QToolButton" name="resetTrillY">
+            <widget class="QToolButton" name="resetTrillLinePlacement">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Default vertical position' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_140">
+             <property name="text">
+              <string>Position Below:</string>
+             </property>
+             <property name="buddy">
+              <cstring>trillLinePosAbove</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="trillLinePosBelow">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
+             </property>
+             <property name="minimum">
+              <double>-1000.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>-5.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetTrillLinePosBelow">
              <property name="toolTip">
               <string>Reset to default</string>
              </property>
@@ -5082,7 +5353,7 @@
            <string>Dynamics</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_22">
-           <item row="0" column="0">
+           <item row="3" column="0">
             <widget class="QLabel" name="label_118">
              <property name="text">
               <string>Autoplace min. distance:</string>
@@ -5092,7 +5363,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
+           <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="dynamicsMinDistance">
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
@@ -5111,7 +5382,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="3">
+           <item row="3" column="3">
             <spacer name="horizontalSpacer_30">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -5124,7 +5395,7 @@
              </property>
             </spacer>
            </item>
-           <item row="1" column="0">
+           <item row="4" column="0">
             <spacer name="verticalSpacer_22">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -5137,13 +5408,126 @@
              </property>
             </spacer>
            </item>
-           <item row="0" column="2">
+           <item row="3" column="2">
             <widget class="QToolButton" name="resetDynamicsMinDistance">
              <property name="toolTip">
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
               <string>Reset 'Autoplace min. distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="dynamicsPosAbove">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
+             </property>
+             <property name="minimum">
+              <double>-1000.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>-5.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetDynamicsPosAbove">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Default vertical position' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="dynamicsPlacement"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_126">
+             <property name="text">
+              <string>Placement</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="resetDynamicsPlacement">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Default vertical position' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_138">
+             <property name="text">
+              <string>Position Above:</string>
+             </property>
+             <property name="buddy">
+              <cstring>trillLinePosAbove</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_141">
+             <property name="text">
+              <string>Position Below:</string>
+             </property>
+             <property name="buddy">
+              <cstring>trillLinePosAbove</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="dynamicsPosBelow">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
+             </property>
+             <property name="minimum">
+              <double>-1000.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>-5.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetDynamicsPosBelow">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Default vertical position' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7894,8 +8278,8 @@
   <tabstop>smallNoteSize</tabstop>
   <tabstop>graceNoteSize</tabstop>
   <tabstop>smallClefSize</tabstop>
-  <tabstop>hairpinY</tabstop>
-  <tabstop>resetHairpinY</tabstop>
+  <tabstop>hairpinPosAbove</tabstop>
+  <tabstop>resetHairpinPosAbove</tabstop>
   <tabstop>hairpinLineWidth</tabstop>
   <tabstop>resetHairpinLineWidth</tabstop>
   <tabstop>hairpinHeight</tabstop>
@@ -7912,8 +8296,8 @@
   <tabstop>resetVoltaLineWidth</tabstop>
   <tabstop>voltaLineStyle</tabstop>
   <tabstop>resetVoltaLineStyle</tabstop>
-  <tabstop>ottavaY</tabstop>
-  <tabstop>resetOttavaY</tabstop>
+  <tabstop>ottavaPosAbove</tabstop>
+  <tabstop>resetOttavaPosAbove</tabstop>
   <tabstop>ottavaNumbersOnly</tabstop>
   <tabstop>resetOttavaNumbersOnly</tabstop>
   <tabstop>ottavaHook</tabstop>
@@ -7922,14 +8306,14 @@
   <tabstop>resetOttavaLineWidth</tabstop>
   <tabstop>ottavaLineStyle</tabstop>
   <tabstop>resetOttavaLineStyle</tabstop>
-  <tabstop>pedalY</tabstop>
-  <tabstop>resetPedalY</tabstop>
+  <tabstop>pedalLinePosAbove</tabstop>
+  <tabstop>resetPedalLinePosAbove</tabstop>
   <tabstop>pedalLineWidth</tabstop>
   <tabstop>resetPedalLineWidth</tabstop>
   <tabstop>pedalLineStyle</tabstop>
   <tabstop>resetPedalLineStyle</tabstop>
-  <tabstop>trillY</tabstop>
-  <tabstop>resetTrillY</tabstop>
+  <tabstop>trillLinePosAbove</tabstop>
+  <tabstop>resetTrillLinePosAbove</tabstop>
   <tabstop>dynamicsMinDistance</tabstop>
   <tabstop>resetDynamicsMinDistance</tabstop>
   <tabstop>textLinePlacement</tabstop>

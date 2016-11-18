@@ -34,6 +34,7 @@ class PedalSegment : public TextLineBaseSegment {
       virtual PedalSegment* clone() const override  { return new PedalSegment(*this); }
       Pedal* pedal() const                          { return (Pedal*)spanner(); }
       virtual void layout() override;
+      virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
       virtual PropertyStyle propertyStyle(P_ID) const override;

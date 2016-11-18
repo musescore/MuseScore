@@ -239,6 +239,10 @@ BarLine handling
                   - maybe not the last Segment in a Measure (cautionary elements can follow)
 
 
+Ottava
+      Ottavas have no placement style. Placement depends on the ottava subtype and is hardcoded.
+
+
 
 ====================================================================
       Known Issues
