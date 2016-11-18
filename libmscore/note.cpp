@@ -19,7 +19,6 @@
 
 #include "note.h"
 #include "score.h"
-#include "key.h"
 #include "chord.h"
 #include "sym.h"
 #include "xml.h"
@@ -67,35 +66,141 @@ namespace Ms {
 static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead::Type::HEAD_TYPES)] = {
    {     // down stem
       { SymId::noteheadWhole,               SymId::noteheadHalf,                SymId::noteheadBlack,               SymId::noteheadDoubleWhole  },
-      { SymId::noteheadXWhole,              SymId::noteheadXHalf,               SymId::noteheadXBlack,              SymId::noteheadXWhole       },
-      { SymId::noteheadDiamondWhole,        SymId::noteheadDiamondHalf,         SymId::noteheadDiamondBlack,        SymId::noteheadDiamondWhole  },
-      { SymId::noteheadTriangleDownWhole,   SymId::noteheadTriangleDownHalf,    SymId::noteheadTriangleDownBlack,   SymId::noteheadTriangleDownDoubleWhole },
-      { SymId::noteShapeDiamondWhite,       SymId::noteShapeDiamondWhite,       SymId::noteShapeDiamondBlack,       SymId::noSym            },
-      { SymId::noteheadSlashWhiteWhole,     SymId::noteheadSlashWhiteHalf,      SymId::noteheadSlashHorizontalEnds, SymId::noteheadSlashWhiteWhole},
+      { SymId::noteheadXWhole,              SymId::noteheadXHalf,               SymId::noteheadXBlack,              SymId::noteheadXDoubleWhole  },
+      { SymId::noteheadPlusWhole,           SymId::noteheadPlusHalf,            SymId::noteheadPlusBlack,           SymId::noteheadPlusDoubleWhole  },
       { SymId::noteheadCircleXWhole,        SymId::noteheadCircleXHalf,         SymId::noteheadCircleX,             SymId::noteheadCircleXDoubleWhole},
-      { SymId::noteShapeTriangleUpWhite,    SymId::noteShapeTriangleUpWhite,    SymId::noteShapeTriangleUpBlack,    SymId::noSym            },
-      { SymId::noteShapeMoonWhite,          SymId::noteShapeMoonWhite,          SymId::noteShapeMoonBlack,          SymId::noSym            },
-      { SymId::noteShapeTriangleRightWhite, SymId::noteShapeTriangleRightWhite, SymId::noteShapeTriangleRightBlack, SymId::noSym            },
-      { SymId::noteShapeSquareWhite,        SymId::noteShapeSquareWhite,        SymId::noteShapeSquareBlack,        SymId::noSym            },
-      { SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundBlack, SymId::noSym            },
-      { SymId::noteShapeRoundWhite,         SymId::noteShapeRoundWhite,         SymId::noteShapeRoundBlack,         SymId::noSym            },
+      { SymId::noteheadWholeWithX,          SymId::noteheadHalfWithX,           SymId::noteheadVoidWithX,           SymId::noteheadDoubleWholeWithX},
+      { SymId::noteheadTriangleUpWhole,     SymId::noteheadTriangleUpHalf,      SymId::noteheadTriangleUpBlack,     SymId::noteheadTriangleUpDoubleWhole },
+      { SymId::noteheadTriangleDownWhole,   SymId::noteheadTriangleDownHalf,    SymId::noteheadTriangleDownBlack,   SymId::noteheadTriangleDownDoubleWhole },
+      { SymId::noteheadSlashedWhole1,       SymId::noteheadSlashedHalf1,        SymId::noteheadSlashedBlack1,       SymId::noteheadSlashedDoubleWhole1 },
+      { SymId::noteheadSlashedWhole2,       SymId::noteheadSlashedHalf2,        SymId::noteheadSlashedBlack2,       SymId::noteheadSlashedDoubleWhole2 },
+      { SymId::noteheadDiamondWhole,        SymId::noteheadDiamondHalf,         SymId::noteheadDiamondBlack,        SymId::noteheadDiamondDoubleWhole  },
+      { SymId::noteheadDiamondWholeOld,     SymId::noteheadDiamondHalfOld,      SymId::noteheadDiamondBlackOld,     SymId::noteheadDiamondDoubleWholeOld  },
+      { SymId::noteheadCircledWhole,        SymId::noteheadCircledHalf,         SymId::noteheadCircledBlack,        SymId::noteheadCircledDoubleWhole  },
+      { SymId::noteheadCircledWholeLarge,   SymId::noteheadCircledHalfLarge,    SymId::noteheadCircledBlackLarge,   SymId::noteheadCircledDoubleWholeLarge  },
+      { SymId::noteheadLargeArrowUpWhole,   SymId::noteheadLargeArrowUpHalf,    SymId::noteheadLargeArrowUpBlack,   SymId::noteheadLargeArrowUpDoubleWhole  },
       { SymId::noteheadWhole,               SymId::noteheadHalf,                SymId::noteheadBlack,               SymId::noteheadDoubleWholeSquare   },
+      
+      { SymId::noteheadSlashWhiteWhole,     SymId::noteheadSlashWhiteHalf,      SymId::noteheadSlashHorizontalEnds, SymId::noteheadSlashWhiteWhole},
+      
+      { SymId::noteShapeRoundWhite,         SymId::noteShapeRoundWhite,         SymId::noteShapeRoundBlack,         SymId::noteShapeRoundDoubleWhole            },
+      { SymId::noteShapeSquareWhite,        SymId::noteShapeSquareWhite,        SymId::noteShapeSquareBlack,        SymId::noteShapeSquareDoubleWhole           },
+      { SymId::noteShapeTriangleRightWhite, SymId::noteShapeTriangleRightWhite, SymId::noteShapeTriangleRightBlack, SymId::noteShapeTriangleRightDoubleWhole    },
+      { SymId::noteShapeDiamondWhite,       SymId::noteShapeDiamondWhite,       SymId::noteShapeDiamondBlack,       SymId::noteShapeDiamondDoubleWhole          },
+      { SymId::noteShapeTriangleUpWhite,    SymId::noteShapeTriangleUpWhite,    SymId::noteShapeTriangleUpBlack,    SymId::noteShapeTriangleUpDoubleWhole       },
+      { SymId::noteShapeMoonWhite,          SymId::noteShapeMoonWhite,          SymId::noteShapeMoonBlack,          SymId::noteShapeMoonDoubleWhole            },
+      { SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundBlack, SymId::noteShapeTriangleRoundDoubleWhole    },
+      
+      { SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneBlack,          SymId::noteShapeKeystoneDoubleWhole    },
+      { SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonBlack,       SymId::noteShapeQuarterMoonDoubleWhole },
+      { SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleBlack, SymId::noteShapeIsoscelesTriangleDoubleWhole   },
+      { SymId::noteShapeMoonLeftWhite,          SymId::noteShapeMoonLeftWhite,          SymId::noteShapeMoonLeftBlack,          SymId::noteShapeMoonLeftDoubleWhole    },
+      { SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftBlack,     SymId::noteShapeArrowheadLeftDoubleWhole       },
+      { SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftBlack, SymId::noteShapeTriangleRoundLeftDoubleWhole   },
+      
+      { SymId::noteDoWhole,  SymId::noteDoHalf,  SymId::noteDoBlack,  SymId::noSym            },
+      { SymId::noteReWhole,  SymId::noteReHalf,  SymId::noteReBlack,  SymId::noSym            },
+      { SymId::noteMiWhole,  SymId::noteMiHalf,  SymId::noteMiBlack,  SymId::noSym            },
+      { SymId::noteFaWhole,  SymId::noteFaHalf,  SymId::noteFaBlack,  SymId::noSym            },
+      { SymId::noteSoWhole,  SymId::noteSoHalf,  SymId::noteSoBlack,  SymId::noSym            },
+      { SymId::noteLaWhole,  SymId::noteLaHalf,  SymId::noteLaBlack,  SymId::noSym            },
+      { SymId::noteTiWhole,  SymId::noteTiHalf,  SymId::noteTiBlack,  SymId::noSym            },
+      { SymId::noteSiWhole,  SymId::noteSiHalf,  SymId::noteSiBlack,  SymId::noSym            },
+      
+      { SymId::noteASharpWhole,  SymId::noteASharpHalf,  SymId::noteASharpBlack,  SymId::noSym            },
+      { SymId::noteAWhole,       SymId::noteAHalf,       SymId::noteABlack,       SymId::noSym            },
+      { SymId::noteAFlatWhole,   SymId::noteAFlatHalf,   SymId::noteAFlatBlack,   SymId::noSym            },
+      { SymId::noteBSharpWhole,  SymId::noteBSharpHalf,  SymId::noteBSharpBlack,  SymId::noSym            },
+      { SymId::noteBWhole,       SymId::noteBHalf,       SymId::noteBBlack,       SymId::noSym            },
+      { SymId::noteBFlatWhole,   SymId::noteBFlatHalf,   SymId::noteBFlatBlack,   SymId::noSym            },
+      { SymId::noteCSharpWhole,  SymId::noteCSharpHalf,  SymId::noteCSharpBlack,  SymId::noSym            },
+      { SymId::noteCWhole,       SymId::noteCHalf,       SymId::noteCBlack,       SymId::noSym            },
+      { SymId::noteCFlatWhole,   SymId::noteCFlatHalf,   SymId::noteCFlatBlack,   SymId::noSym            },
+      { SymId::noteDSharpWhole,  SymId::noteDSharpHalf,  SymId::noteDSharpBlack,  SymId::noSym            },
+      { SymId::noteDWhole,       SymId::noteDHalf,       SymId::noteDBlack,       SymId::noSym            },
+      { SymId::noteDFlatWhole,   SymId::noteDFlatHalf,   SymId::noteDFlatBlack,   SymId::noSym            },
+      { SymId::noteESharpWhole,  SymId::noteESharpHalf,  SymId::noteESharpBlack,  SymId::noSym            },
+      { SymId::noteEWhole,       SymId::noteEHalf,       SymId::noteEBlack,       SymId::noSym            },
+      { SymId::noteEFlatWhole,   SymId::noteEFlatHalf,   SymId::noteEFlatBlack,   SymId::noSym            },
+      { SymId::noteFSharpWhole,  SymId::noteFSharpHalf,  SymId::noteFSharpBlack,  SymId::noSym            },
+      { SymId::noteFWhole,       SymId::noteFHalf,       SymId::noteFBlack,       SymId::noSym            },
+      { SymId::noteFFlatWhole,   SymId::noteFFlatHalf,   SymId::noteFFlatBlack,   SymId::noSym            },
+      { SymId::noteGSharpWhole,  SymId::noteGSharpHalf,  SymId::noteGSharpBlack,  SymId::noSym            },
+      { SymId::noteGWhole,       SymId::noteGHalf,       SymId::noteGBlack,       SymId::noSym            },
+      { SymId::noteGFlatWhole,   SymId::noteGFlatHalf,   SymId::noteGFlatBlack,   SymId::noSym            },
+      { SymId::noteHWhole,       SymId::noteHHalf,       SymId::noteHBlack,       SymId::noSym            },
+      { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym            }
+
    },
    {     // up stem
       { SymId::noteheadWhole,               SymId::noteheadHalf,                SymId::noteheadBlack,               SymId::noteheadDoubleWhole  },
-      { SymId::noteheadXWhole,              SymId::noteheadXHalf,               SymId::noteheadXBlack,              SymId::noteheadXWhole       },
-      { SymId::noteheadDiamondWhole,        SymId::noteheadDiamondHalf,         SymId::noteheadDiamondBlack,        SymId::noteheadDiamondWhole  },
-      { SymId::noteheadTriangleDownWhole,   SymId::noteheadTriangleDownHalf,    SymId::noteheadTriangleDownBlack,   SymId::noteheadTriangleDownDoubleWhole },
-      { SymId::noteShapeDiamondWhite,       SymId::noteShapeDiamondWhite,       SymId::noteShapeDiamondBlack,       SymId::noSym            },
-      { SymId::noteheadSlashWhiteWhole,     SymId::noteheadSlashWhiteHalf,      SymId::noteheadSlashHorizontalEnds, SymId::noteheadSlashWhiteWhole},
+      { SymId::noteheadXWhole,              SymId::noteheadXHalf,               SymId::noteheadXBlack,              SymId::noteheadXDoubleWhole       },
+      { SymId::noteheadPlusWhole,           SymId::noteheadPlusHalf,            SymId::noteheadPlusBlack,           SymId::noteheadPlusDoubleWhole  },
       { SymId::noteheadCircleXWhole,        SymId::noteheadCircleXHalf,         SymId::noteheadCircleX,             SymId::noteheadCircleXDoubleWhole},
-      { SymId::noteShapeTriangleUpWhite,    SymId::noteShapeTriangleUpWhite,    SymId::noteShapeTriangleUpBlack,    SymId::noSym            },
-      { SymId::noteShapeMoonWhite,          SymId::noteShapeMoonWhite,          SymId::noteShapeMoonBlack,          SymId::noSym            },
-      { SymId::noteShapeTriangleLeftWhite,  SymId::noteShapeTriangleLeftWhite,  SymId::noteShapeTriangleLeftBlack,  SymId::noSym            },
-      { SymId::noteShapeSquareWhite,        SymId::noteShapeSquareWhite,        SymId::noteShapeSquareBlack,        SymId::noSym            },
-      { SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundBlack, SymId::noSym            },
-      { SymId::noteShapeRoundWhite,         SymId::noteShapeRoundWhite,         SymId::noteShapeRoundBlack,         SymId::noSym            },
+      { SymId::noteheadWholeWithX,          SymId::noteheadHalfWithX,           SymId::noteheadVoidWithX,           SymId::noteheadDoubleWholeWithX},
+      { SymId::noteheadTriangleUpWhole,     SymId::noteheadTriangleUpHalf,      SymId::noteheadTriangleUpBlack,     SymId::noteheadTriangleUpDoubleWhole },
+      { SymId::noteheadTriangleDownWhole,   SymId::noteheadTriangleDownHalf,    SymId::noteheadTriangleDownBlack,   SymId::noteheadTriangleDownDoubleWhole },
+      { SymId::noteheadSlashedWhole1,       SymId::noteheadSlashedHalf1,        SymId::noteheadSlashedBlack1,       SymId::noteheadSlashedDoubleWhole1 },
+      { SymId::noteheadSlashedWhole2,       SymId::noteheadSlashedHalf2,        SymId::noteheadSlashedBlack2,       SymId::noteheadSlashedDoubleWhole2 },
+      { SymId::noteheadDiamondWhole,        SymId::noteheadDiamondHalf,         SymId::noteheadDiamondBlack,        SymId::noteheadDiamondDoubleWhole  },
+      { SymId::noteheadDiamondWholeOld,     SymId::noteheadDiamondHalfOld,      SymId::noteheadDiamondBlackOld,     SymId::noteheadDiamondDoubleWholeOld  },
+      { SymId::noteheadCircledWhole,        SymId::noteheadCircledHalf,         SymId::noteheadCircledBlack,        SymId::noteheadCircledDoubleWhole  },
+      { SymId::noteheadCircledWholeLarge,   SymId::noteheadCircledHalfLarge,    SymId::noteheadCircledBlackLarge,   SymId::noteheadCircledDoubleWholeLarge  },
+      // different from down, find source?
+      { SymId::noteheadLargeArrowDownWhole, SymId::noteheadLargeArrowDownHalf,  SymId::noteheadLargeArrowDownBlack, SymId::noteheadLargeArrowDownDoubleWhole  },
       { SymId::noteheadWhole,               SymId::noteheadHalf,                SymId::noteheadBlack,               SymId::noteheadDoubleWholeSquare   },
+      
+      { SymId::noteheadSlashWhiteWhole,     SymId::noteheadSlashWhiteHalf,      SymId::noteheadSlashHorizontalEnds, SymId::noteheadSlashWhiteDoubleWhole},
+      
+      { SymId::noteShapeRoundWhite,         SymId::noteShapeRoundWhite,         SymId::noteShapeRoundBlack,         SymId::noteShapeRoundDoubleWhole       },
+      { SymId::noteShapeSquareWhite,        SymId::noteShapeSquareWhite,        SymId::noteShapeSquareBlack,        SymId::noteShapeSquareDoubleWhole      },
+      // different from down
+      { SymId::noteShapeTriangleLeftWhite,  SymId::noteShapeTriangleLeftWhite,  SymId::noteShapeTriangleLeftBlack,  SymId::noteShapeTriangleLeftDoubleWhole },
+      { SymId::noteShapeDiamondWhite,       SymId::noteShapeDiamondWhite,       SymId::noteShapeDiamondBlack,       SymId::noteShapeDiamondDoubleWhole      },
+      { SymId::noteShapeTriangleUpWhite,    SymId::noteShapeTriangleUpWhite,    SymId::noteShapeTriangleUpBlack,    SymId::noteShapeTriangleUpDoubleWhole   },
+      { SymId::noteShapeMoonWhite,          SymId::noteShapeMoonWhite,          SymId::noteShapeMoonBlack,          SymId::noteShapeMoonDoubleWhole         },
+      { SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundBlack, SymId::noteShapeTriangleRoundDoubleWhole },
+      
+      { SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneBlack,          SymId::noteShapeKeystoneDoubleWhole },
+      { SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonBlack,       SymId::noteShapeQuarterMoonDoubleWhole },
+      { SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleBlack, SymId::noteShapeIsoscelesTriangleDoubleWhole },
+      { SymId::noteShapeMoonLeftWhite,          SymId::noteShapeMoonLeftWhite,          SymId::noteShapeMoonLeftBlack,          SymId::noteShapeMoonLeftDoubleWhole          },
+      { SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftBlack,     SymId::noteShapeArrowheadLeftDoubleWhole     },
+      { SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftBlack, SymId::noteShapeTriangleRoundLeftDoubleWhole },
+      
+      { SymId::noteDoWhole,  SymId::noteDoHalf,  SymId::noteDoBlack,  SymId::noSym            },
+      { SymId::noteReWhole,  SymId::noteReHalf,  SymId::noteReBlack,  SymId::noSym            },
+      { SymId::noteMiWhole,  SymId::noteMiHalf,  SymId::noteMiBlack,  SymId::noSym            },
+      { SymId::noteFaWhole,  SymId::noteFaHalf,  SymId::noteFaBlack,  SymId::noSym            },
+      { SymId::noteSoWhole,  SymId::noteSoHalf,  SymId::noteSoBlack,  SymId::noSym            },
+      { SymId::noteLaWhole,  SymId::noteLaHalf,  SymId::noteLaBlack,  SymId::noSym            },
+      { SymId::noteTiWhole,  SymId::noteTiHalf,  SymId::noteTiBlack,  SymId::noSym            },
+      { SymId::noteSiWhole,  SymId::noteSiHalf,  SymId::noteSiBlack,  SymId::noSym            },
+      
+      { SymId::noteASharpWhole,  SymId::noteASharpHalf,  SymId::noteASharpBlack,  SymId::noSym            },
+      { SymId::noteAWhole,       SymId::noteAHalf,       SymId::noteABlack,       SymId::noSym            },
+      { SymId::noteAFlatWhole,   SymId::noteAFlatHalf,   SymId::noteAFlatBlack,   SymId::noSym            },
+      { SymId::noteBSharpWhole,  SymId::noteBSharpHalf,  SymId::noteBSharpBlack,  SymId::noSym            },
+      { SymId::noteBWhole,       SymId::noteBHalf,       SymId::noteBBlack,       SymId::noSym            },
+      { SymId::noteBFlatWhole,   SymId::noteBFlatHalf,   SymId::noteBFlatBlack,   SymId::noSym            },
+      { SymId::noteCSharpWhole,  SymId::noteCSharpHalf,  SymId::noteCSharpBlack,  SymId::noSym            },
+      { SymId::noteCWhole,       SymId::noteCHalf,       SymId::noteCBlack,       SymId::noSym            },
+      { SymId::noteCFlatWhole,   SymId::noteCFlatHalf,   SymId::noteCFlatBlack,   SymId::noSym            },
+      { SymId::noteDSharpWhole,  SymId::noteDSharpHalf,  SymId::noteDSharpBlack,  SymId::noSym            },
+      { SymId::noteDWhole,       SymId::noteDHalf,       SymId::noteDBlack,       SymId::noSym            },
+      { SymId::noteDFlatWhole,   SymId::noteDFlatHalf,   SymId::noteDFlatBlack,   SymId::noSym            },
+      { SymId::noteESharpWhole,  SymId::noteESharpHalf,  SymId::noteESharpBlack,  SymId::noSym            },
+      { SymId::noteEWhole,       SymId::noteEHalf,       SymId::noteEBlack,       SymId::noSym            },
+      { SymId::noteEFlatWhole,   SymId::noteEFlatHalf,   SymId::noteEFlatBlack,   SymId::noSym            },
+      { SymId::noteFSharpWhole,  SymId::noteFSharpHalf,  SymId::noteFSharpBlack,  SymId::noSym            },
+      { SymId::noteFWhole,       SymId::noteFHalf,       SymId::noteFBlack,       SymId::noSym            },
+      { SymId::noteFFlatWhole,   SymId::noteFFlatHalf,   SymId::noteFFlatBlack,   SymId::noSym            },
+      { SymId::noteGSharpWhole,  SymId::noteGSharpHalf,  SymId::noteGSharpBlack,  SymId::noSym            },
+      { SymId::noteGWhole,       SymId::noteGHalf,       SymId::noteGBlack,       SymId::noSym            },
+      { SymId::noteGFlatWhole,   SymId::noteGFlatHalf,   SymId::noteGFlatBlack,   SymId::noSym            },
+      { SymId::noteHWhole,       SymId::noteHHalf,       SymId::noteHBlack,       SymId::noSym            },
+      { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym            }
+      
    }
 };
 
@@ -106,20 +211,75 @@ struct NoteHeadName {
 
 // same order as NoteHead::Group
 static NoteHeadName noteHeadGroupNames[] = {
-      {"normal",    QT_TRANSLATE_NOOP("noteheadnames", "Normal") },
-      {"cross",     QT_TRANSLATE_NOOP("noteheadnames", "Cross") },
-      {"diamond",   QT_TRANSLATE_NOOP("noteheadnames", "Diamond") },
-      {"triangle",  QT_TRANSLATE_NOOP("noteheadnames", "Triangle") },
-      {"mi",        QT_TRANSLATE_NOOP("noteheadnames", "Mi") },
+      {"normal",         QT_TRANSLATE_NOOP("noteheadnames", "Normal") },
+      {"cross",          QT_TRANSLATE_NOOP("noteheadnames", "Cross") },
+      {"plus",           QT_TRANSLATE_NOOP("noteheadnames", "Plus") },
+      {"xcircle",        QT_TRANSLATE_NOOP("noteheadnames", "XCircle") },
+      {"withx",          QT_TRANSLATE_NOOP("noteheadnames", "With X") },
+      {"triangle-up",    QT_TRANSLATE_NOOP("noteheadnames", "Triangle Up") },
+      {"triangle-down",  QT_TRANSLATE_NOOP("noteheadnames", "Triangle Down") },
+      {"slashed1",       QT_TRANSLATE_NOOP("noteheadnames", "Slashed bottom left to top right") },
+      {"slashed2",       QT_TRANSLATE_NOOP("noteheadnames", "Slashed top left to bottom right") },
+      {"diamond",        QT_TRANSLATE_NOOP("noteheadnames", "Diamond") },
+      {"diamond-old",    QT_TRANSLATE_NOOP("noteheadnames", "Diamond (Old)") },
+      {"circled",        QT_TRANSLATE_NOOP("noteheadnames", "Circled") },
+      {"circled-large",  QT_TRANSLATE_NOOP("noteheadnames", "Circled Large") },
+      {"large-arrow",    QT_TRANSLATE_NOOP("noteheadnames", "Large Arrow") },
+      {"altbrevis",      QT_TRANSLATE_NOOP("noteheadnames", "Alt. Brevis") },
+      
       {"slash",     QT_TRANSLATE_NOOP("noteheadnames", "Slash") },
-      {"xcircle",   QT_TRANSLATE_NOOP("noteheadnames", "XCircle") },
+      
+      // shape notes
+      {"sol",       QT_TRANSLATE_NOOP("noteheadnames", "Sol") },
+      {"la",        QT_TRANSLATE_NOOP("noteheadnames", "La") },
+      {"fa",        QT_TRANSLATE_NOOP("noteheadnames", "Fa") },
+      {"mi",        QT_TRANSLATE_NOOP("noteheadnames", "Mi") },
       {"do",        QT_TRANSLATE_NOOP("noteheadnames", "Do") },
       {"re",        QT_TRANSLATE_NOOP("noteheadnames", "Re") },
-      {"fa",        QT_TRANSLATE_NOOP("noteheadnames", "Fa") },
-      {"la",        QT_TRANSLATE_NOOP("noteheadnames", "La") },
       {"ti",        QT_TRANSLATE_NOOP("noteheadnames", "Ti") },
-      {"sol",       QT_TRANSLATE_NOOP("noteheadnames", "Sol") },
-      {"altbrevis", QT_TRANSLATE_NOOP("noteheadnames", "Alt. Brevis") }
+      
+      // not exposed
+      {"do-walker", QT_TRANSLATE_NOOP("noteheadnames", "Do (Walker)") },
+      {"re-walker", QT_TRANSLATE_NOOP("noteheadnames", "Re (Walker)") },
+      {"ti-walker", QT_TRANSLATE_NOOP("noteheadnames", "Ti (Walker)") },
+      {"do-funk",   QT_TRANSLATE_NOOP("noteheadnames", "Do (Funk)") },
+      {"re-funk",   QT_TRANSLATE_NOOP("noteheadnames", "Re (Funk)") },
+      {"ti-funk",   QT_TRANSLATE_NOOP("noteheadnames", "Ti (Funk)") },
+      
+      // note name
+      {"do-name",  QT_TRANSLATE_NOOP("noteheadnames",  "Do (Name)") },
+      {"re-name",  QT_TRANSLATE_NOOP("noteheadnames",  "Re (Name)") },
+      {"mi-name",  QT_TRANSLATE_NOOP("noteheadnames",  "Mi (Name)") },
+      {"fa-name",  QT_TRANSLATE_NOOP("noteheadnames",  "Fa (Name)") },
+      {"sol-name", QT_TRANSLATE_NOOP("noteheadnames",  "Sol (Name)") },
+      {"la-name",  QT_TRANSLATE_NOOP("noteheadnames",  "La (Name)") },
+      {"ti-name",  QT_TRANSLATE_NOOP("noteheadnames",  "Ti (Name)") },
+      {"si-name",  QT_TRANSLATE_NOOP("noteheadnames",  "Si (Name)") },
+      
+      
+      {"a-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "A Sharp (Name)") },
+      {"a-name",       QT_TRANSLATE_NOOP("noteheadnames",  "A (Name)") },
+      {"a-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "A Flat (Name)") },
+      {"b-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "B Sharp (Name)") },
+      {"b-name",       QT_TRANSLATE_NOOP("noteheadnames",  "B (Name)") },
+      {"b-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "B Flat (Name)") },
+      {"c-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "C Sharp (Name)") },
+      {"c-name",       QT_TRANSLATE_NOOP("noteheadnames",  "C (Name)") },
+      {"c-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "C Flat (Name)") },
+      {"d-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "D Sharp (Name)") },
+      {"d-name",       QT_TRANSLATE_NOOP("noteheadnames",  "D (Name)") },
+      {"d-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "D Flat (Name)") },
+      {"e-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "E Sharp (Name)") },
+      {"e-name",       QT_TRANSLATE_NOOP("noteheadnames",  "E (Name)") },
+      {"e-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "E Flat (Name)") },
+      {"f-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "F Sharp (Name)") },
+      {"f-name",       QT_TRANSLATE_NOOP("noteheadnames",  "F (Name)") },
+      {"f-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "F Flat (Name)") },
+      {"g-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "G Sharp (Name)") },
+      {"g-name",       QT_TRANSLATE_NOOP("noteheadnames",  "G (Name)") },
+      {"g-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "G Flat (Name)") },
+      {"h-name",       QT_TRANSLATE_NOOP("noteheadnames",  "H (Name)") },
+      {"h-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "H Sharp (Name)") }
       };
 
 // same order as NoteHead::Type
@@ -197,9 +357,163 @@ NoteHead::Type NoteHead::name2type(QString s)
 //   noteHead
 //---------------------------------------------------------
 
-SymId Note::noteHead(int direction, NoteHead::Group g, NoteHead::Type t)
+SymId Note::noteHead(int direction, NoteHead::Group group, NoteHead::Type t)
       {
-      return noteHeads[direction][int(g)][int(t)];
+      return noteHeads[direction][int(group)][int(t)];
+      }
+
+SymId Note::noteHead(int direction, NoteHead::Group group, NoteHead::Type t, int tpc, Key key, NoteHeadScheme scheme)
+      {
+      // shortcut
+      if (scheme == NoteHeadScheme::HEAD_NORMAL)
+            return noteHeads[direction][int(group)][int(t)];
+      // other schemes
+      if (scheme == NoteHeadScheme::HEAD_PITCHNAME || scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN) {
+            if (tpc == Tpc::TPC_A)
+                  group = NoteHead::Group::HEAD_A;
+            else if (tpc == Tpc::TPC_B) {
+                  if (scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN)
+                        group = NoteHead::Group::HEAD_H;
+                  else
+                        group = NoteHead::Group::HEAD_B;
+                  }
+            else if (tpc == Tpc::TPC_C)
+                  group = NoteHead::Group::HEAD_C;
+            else if (tpc == Tpc::TPC_D)
+                  group = NoteHead::Group::HEAD_D;
+            else if (tpc == Tpc::TPC_E)
+                  group = NoteHead::Group::HEAD_E;
+            else if (tpc == Tpc::TPC_F)
+                  group = NoteHead::Group::HEAD_F;
+            else if (tpc == Tpc::TPC_G)
+                  group = NoteHead::Group::HEAD_G;
+            else if (tpc == Tpc::TPC_A_S)
+                  group = NoteHead::Group::HEAD_A_SHARP;
+            else if (tpc == Tpc::TPC_B_S)
+                  if (scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN)
+                        group = NoteHead::Group::HEAD_H_SHARP;
+                  else
+                        group = NoteHead::Group::HEAD_B_SHARP;
+            else if (tpc == Tpc::TPC_C_S)
+                  group = NoteHead::Group::HEAD_C_SHARP;
+            else if (tpc == Tpc::TPC_D_S)
+                  group = NoteHead::Group::HEAD_D_SHARP;
+            else if (tpc == Tpc::TPC_E_S)
+                  group = NoteHead::Group::HEAD_E_SHARP;
+            else if (tpc == Tpc::TPC_F_S)
+                  group = NoteHead::Group::HEAD_F_SHARP;
+            else if (tpc == Tpc::TPC_G_S)
+                  group = NoteHead::Group::HEAD_G_SHARP;
+            else if (tpc == Tpc::TPC_A_B)
+                  group = NoteHead::Group::HEAD_A_FLAT;
+            else if (tpc == Tpc::TPC_B_B)
+                  if (scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN)
+                        group = NoteHead::Group::HEAD_B;
+                  else
+                        group = NoteHead::Group::HEAD_B_FLAT;
+            else if (tpc == Tpc::TPC_C_B)
+                  group = NoteHead::Group::HEAD_C_FLAT;
+            else if (tpc == Tpc::TPC_D_B)
+                  group = NoteHead::Group::HEAD_D_FLAT;
+            else if (tpc == Tpc::TPC_E_B)
+                  group = NoteHead::Group::HEAD_E_FLAT;
+            else if (tpc == Tpc::TPC_F_B)
+                  group = NoteHead::Group::HEAD_F_FLAT;
+            else if (tpc == Tpc::TPC_G_B)
+                  group = NoteHead::Group::HEAD_G_FLAT;
+            }
+      else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_4) {
+            int degree = tpc2degree(tpc, key);
+            switch (degree) {
+                  case 0:
+                  case 3:
+                        group = NoteHead::Group::HEAD_FA; break;
+                  case 1:
+                  case 4:
+                        group = NoteHead::Group::HEAD_SOL; break;
+                  case 2:
+                  case 5:
+                        group = NoteHead::Group::HEAD_LA; break;
+                  case 6:
+                        group = NoteHead::Group::HEAD_MI; break;
+                  }
+            }
+      else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN
+         || scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK
+         || scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER) {
+            int degree = tpc2degree(tpc, key);
+            switch (degree) {
+                  case 0:
+                        if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN)
+                              group = NoteHead::Group::HEAD_DO;
+                        else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK)
+                              group = NoteHead::Group::HEAD_DO_FUNK;
+                        else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER)
+                              group = NoteHead::Group::HEAD_DO_WALKER;
+                        break;
+                  case 1:
+                        if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN)
+                              group = NoteHead::Group::HEAD_RE;
+                        else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK)
+                              group = NoteHead::Group::HEAD_RE_FUNK;
+                        else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER)
+                              group = NoteHead::Group::HEAD_RE_WALKER;
+                        break;
+                  case 2:
+                        group = NoteHead::Group::HEAD_MI; break;
+                  case 3:
+                        group = NoteHead::Group::HEAD_FA; break;
+                  case 4:
+                        group = NoteHead::Group::HEAD_SOL; break;
+                  case 5:
+                        group = NoteHead::Group::HEAD_LA; break;
+                  case 6:
+                        if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN)
+                              group = NoteHead::Group::HEAD_TI;
+                        else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK)
+                              group = NoteHead::Group::HEAD_TI_FUNK;
+                        else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER)
+                              group = NoteHead::Group::HEAD_TI_WALKER;
+                        break;
+                  }
+            }
+      else if (scheme == NoteHeadScheme::HEAD_SOLFEGE) {
+            int degree = tpc2degree(tpc, key);
+            switch (degree) {
+                  case 0:
+                        group = NoteHead::Group::HEAD_DO_NAME; break;
+                  case 1:
+                        group = NoteHead::Group::HEAD_RE_NAME; break;
+                  case 2:
+                        group = NoteHead::Group::HEAD_MI_NAME; break;
+                  case 3:
+                        group = NoteHead::Group::HEAD_FA_NAME; break;
+                  case 4:
+                        group = NoteHead::Group::HEAD_SOL_NAME; break;
+                  case 5:
+                        group = NoteHead::Group::HEAD_LA_NAME; break;
+                  case 6:
+                        group = NoteHead::Group::HEAD_TI_NAME; break;
+                  }
+            }
+      else if (scheme == NoteHeadScheme::HEAD_SOLFEGE_FIXED) {
+            QString stepName = tpc2stepName(tpc);
+            if (stepName == "C")
+                  group = NoteHead::Group::HEAD_DO_NAME;
+            else if (stepName == "D")
+                  group = NoteHead::Group::HEAD_RE_NAME;
+            else if (stepName == "E")
+                  group = NoteHead::Group::HEAD_MI_NAME;
+            else if (stepName == "F")
+                  group = NoteHead::Group::HEAD_FA_NAME;
+            else if (stepName == "G")
+                  group = NoteHead::Group::HEAD_SOL_NAME;
+            else if (stepName == "A")
+                  group = NoteHead::Group::HEAD_LA_NAME;
+            else if (stepName == "B")
+                  group = NoteHead::Group::HEAD_SI_NAME;
+            }
+      return noteHeads[direction][int(group)][int(t)];
       };
 
 //---------------------------------------------------------
@@ -211,7 +525,7 @@ SymId Note::noteHead(int direction, NoteHead::Group g, NoteHead::Type t)
 NoteHead::Group NoteHead::headGroup() const
       {
       Group group = Group::HEAD_INVALID;
-      for (int i = 0; i < int(Group::HEAD_GROUPS); ++i) {
+      for (int i = 0; i < int(Group::HEAD_DO_WALKER); ++i) {
             if (noteHeads[0][i][1] == _sym || noteHeads[0][i][3] == _sym) {
                   group = (Group)i;
                         break;
@@ -229,6 +543,8 @@ Note::Note(Score* s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _playEvents.append(NoteEvent());    // add default play event
+      _cachedNoteheadSym = SymId::noSym;
+      _cachedSymNull = SymId::noSym;
       }
 
 Note::~Note()
@@ -490,8 +806,13 @@ SymId Note::noteHead() const
             }
       if (_headType != NoteHead::Type::HEAD_AUTO)
             ht = _headType;
-
-      SymId t = noteHead(up, _headGroup, ht);
+      Key key = Key::C;
+      NoteHeadScheme scheme = NoteHeadScheme::HEAD_NORMAL;
+      if (chord() && chord()->staff() && chord()->tick() >= 0){
+            key = chord()->staff()->key(chord()->tick());
+            scheme = chord()->staff()->staffType()->noteHeadScheme();
+            }
+      SymId t = noteHead(up, _headGroup, ht, tpc(), key, scheme);
       if (t == SymId::noSym) {
             qDebug("invalid notehead %d/%d", int(_headGroup), int(ht));
             t = noteHead(up, NoteHead::Group::HEAD_NORMAL, ht);
@@ -724,6 +1045,19 @@ void Note::remove(Element* e)
       }
 
 //---------------------------------------------------------
+//   isNoteName
+//---------------------------------------------------------
+
+bool Note::isNoteName() const
+      {
+      if (chord()) {
+            NoteHeadScheme s = chord()->staff()->staffType()->noteHeadScheme();
+            return s == NoteHeadScheme::HEAD_PITCHNAME || s == NoteHeadScheme::HEAD_PITCHNAME_GERMAN || s == NoteHeadScheme::HEAD_SOLFEGE || s == NoteHeadScheme::HEAD_SOLFEGE_FIXED;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -765,15 +1099,11 @@ void Note::draw(QPainter* painter) const
                         painter->restore();
                         }
                   }
-//            qreal mag = magS();
-//            qreal imag = 1.0 / mag;
-//            painter->scale(mag, mag);
             QFont f(tab->fretFont());
             f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
             painter->setFont(f);
             painter->setPen(c);
             painter->drawText(QPointF(bbox().x(), tab->fretFontYOffset()), s);
-//            painter->scale(imag, imag);
             }
 
       // NOT tablature
@@ -782,10 +1112,8 @@ void Note::draw(QPainter* painter) const
             // skip drawing, if second note of a cross-measure value
             if (chord()->crossMeasure() == CrossMeasure::SECOND)
                   return;
-            //
             // warn if pitch extends usable range of instrument
             // by coloring the notehead
-            //
             if (chord() && chord()->segment() && staff() && !selected()
                && !score()->printing() && MScore::warnPitchRange) {
                   const Instrument* in = part()->instrument(chord()->tick());
@@ -795,7 +1123,14 @@ void Note::draw(QPainter* painter) const
                   else if (i < in->minPitchA() || i > in->maxPitchA())
                         painter->setPen(Qt::darkYellow);
                   }
-            drawSymbol(noteHead(), painter);
+            // draw blank notehead to avoid staff and ledger lines
+            if (_cachedSymNull != SymId::noSym) {
+                  painter->save();
+                  painter->setPen(Qt::white);
+                  drawSymbol(_cachedSymNull, painter);
+                  painter->restore();
+                  }
+            drawSymbol(_cachedNoteheadSym, painter);
             }
       }
 
@@ -1599,7 +1934,19 @@ void Note::layout()
             bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
             }
       else {
-            setbbox(symBbox(noteHead()));
+            SymId nh = noteHead();
+            _cachedNoteheadSym = nh;
+            if (isNoteName()) {
+                  _cachedSymNull = SymId::noteEmptyBlack;
+                  NoteHead::Type ht = _headType == NoteHead::Type::HEAD_AUTO ? chord()->durationType().headType() : _headType;
+                  if (ht == NoteHead::Type::HEAD_WHOLE)
+                        _cachedSymNull = SymId::noteEmptyWhole;
+                  else if (ht == NoteHead::Type::HEAD_HALF)
+                        _cachedSymNull = SymId::noteEmptyHalf;
+                  }
+            else
+                  _cachedSymNull = SymId::noSym;
+            setbbox(symBbox(nh));
             if (parent() == 0)
                   return;
             }

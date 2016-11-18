@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>629</width>
-    <height>595</height>
+    <width>662</width>
+    <height>605</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -257,7 +257,41 @@
              </property>
             </widget>
            </item>
+           <item row="3" column="1">
+            <widget class="QComboBox" name="noteHeadScheme"/>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Notehead scheme:</string>
+             </property>
+            </widget>
+           </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupPreviewStandard">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>80</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>Preview</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_49">
+            <item>
+             <widget class="Ms::ScoreView" name="standardPreview" native="true"/>
+            </item>
+           </layout>
+          </widget>
          </item>
          <item>
           <spacer name="verticalSpacer_2">
@@ -1214,7 +1248,7 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
             <item>
-             <widget class="Ms::ScoreView" name="preview" native="true"/>
+             <widget class="Ms::ScoreView" name="tabPreview" native="true"/>
             </item>
            </layout>
           </widget>

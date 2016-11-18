@@ -122,6 +122,7 @@ void DrumTools::updateDrumset(const Drumset* ds)
             chord->setUp(up);
             chord->setTrack(voice);
             Note* note = new Note(gscore);
+            note->setMark(true);
             note->setParent(chord);
             note->setTrack(voice);
             note->setPitch(pitch);

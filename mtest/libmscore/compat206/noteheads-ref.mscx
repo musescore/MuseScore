@@ -169,7 +169,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>triangle</head>
+            <head>triangle-down</head>
             </Note>
           </Chord>
         </Measure>
@@ -297,7 +297,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>triangle</head>
+            <head>triangle-down</head>
             <headType>whole</headType>
             </Note>
           </Chord>
@@ -436,7 +436,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>triangle</head>
+            <head>triangle-down</head>
             <headType>half</headType>
             </Note>
           </Chord>
@@ -575,7 +575,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <head>triangle</head>
+            <head>triangle-down</head>
             <headType>breve</headType>
             </Note>
           </Chord>
