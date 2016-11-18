@@ -155,8 +155,10 @@ void Dynamic::layout()
       QPointF p(textStyle().offset(spatium()));
       if (placeAbove())
             p.ry() += score()->styleP(StyleIdx::dynamicsPosAbove);
-      else
-            p.ry() += score()->styleP(StyleIdx::dynamicsPosBelow) + staff()->height() + lineSpacing();
+      else {
+            qreal sh = staff() ? staff()->height() : 0;
+            p.ry() += score()->styleP(StyleIdx::dynamicsPosBelow) + sh + lineSpacing();
+            }
       setPos(p);
       Text::layout1();
 
