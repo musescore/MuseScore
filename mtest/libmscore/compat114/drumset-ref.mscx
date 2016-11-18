@@ -262,7 +262,7 @@
           <stem>1</stem>
           </Drum>
         <Drum pitch="56">
-          <head>triangle</head>
+          <head>triangle-down</head>
           <line>1</line>
           <voice>0</voice>
           <name>Ride (Bell)</name>
@@ -539,7 +539,7 @@
           <Note>
             <pitch>56</pitch>
             <tpc>22</tpc>
-            <head>triangle</head>
+            <head>triangle-down</head>
             </Note>
           </Chord>
         <Chord>

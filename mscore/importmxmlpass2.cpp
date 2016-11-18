@@ -1269,19 +1269,24 @@ static bool addMxmlArticulationToChord(ChordRest* cr, QString mxmlName)
 static NoteHead::Group convertNotehead(QString mxmlName)
       {
       QMap<QString, int> map; // map MusicXML notehead name to a MuseScore headgroup
-      map["slash"] = 5;
-      map["triangle"] = 3;
-      map["diamond"] = 2;
-      map["x"] = 1;
-      map["circle-x"] = 6;
-      map["do"] = 7;
-      map["re"] = 8;
-      map["mi"] = 4;
-      map["fa"] = 9;
-      map["so"] = 12;
-      map["la"] = 10;
-      map["ti"] = 11;
-      map["normal"] = 0;
+      map["slash"] = int(NoteHead::Group::HEAD_SLASH);
+      map["triangle"] = int(NoteHead::Group::HEAD_TRIANGLE_UP);
+      map["diamond"] = int(NoteHead::Group::HEAD_DIAMOND);
+      map["cross"] = int(NoteHead::Group::HEAD_PLUS);
+      map["x"] = int(NoteHead::Group::HEAD_CROSS);
+      map["circle-x"] = int(NoteHead::Group::HEAD_XCIRCLE);
+      map["inverted triangle"] = int(NoteHead::Group::HEAD_TRIANGLE_DOWN);
+      map["slashed"] = int(NoteHead::Group::HEAD_SLASHED1);
+      map["back slashed"] = int(NoteHead::Group::HEAD_SLASHED2);
+      map["normal"] = int(NoteHead::Group::HEAD_NORMAL);
+      map["do"] = int(NoteHead::Group::HEAD_DO);
+      map["re"] = int(NoteHead::Group::HEAD_RE);
+      map["mi"] = int(NoteHead::Group::HEAD_MI);
+      map["fa"] = int(NoteHead::Group::HEAD_FA);
+      map["fa up"] = int(NoteHead::Group::HEAD_FA);
+      map["so"] = int(NoteHead::Group::HEAD_SOL);
+      map["la"] = int(NoteHead::Group::HEAD_LA);
+      map["ti"] = int(NoteHead::Group::HEAD_TI);
 
       if (map.contains(mxmlName))
             return NoteHead::Group(map.value(mxmlName));

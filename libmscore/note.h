@@ -24,6 +24,7 @@
 #include "pitchspelling.h"
 #include "shape.h"
 #include "tremolo.h"
+#include "key.h"
 
 class QPainter;
 
@@ -61,18 +62,70 @@ class NoteHead : public Symbol {
       enum class Group : signed char {
             HEAD_NORMAL = 0,
             HEAD_CROSS,
-            HEAD_DIAMOND,
-            HEAD_TRIANGLE,
-            HEAD_MI,
-            HEAD_SLASH,
+            HEAD_PLUS,
             HEAD_XCIRCLE,
+            HEAD_WITHX,
+            HEAD_TRIANGLE_UP,
+            HEAD_TRIANGLE_DOWN,
+            HEAD_SLASHED1,
+            HEAD_SLASHED2,
+            HEAD_DIAMOND,
+            HEAD_DIAMOND_OLD,
+            HEAD_CIRCLED,
+            HEAD_CIRCLED_LARGE,
+            HEAD_LARGE_ARROW,
+            HEAD_BREVIS_ALT,
+
+            HEAD_SLASH,
+
+            HEAD_SOL,
+            HEAD_LA,
+            HEAD_FA,
+            HEAD_MI,
             HEAD_DO,
             HEAD_RE,
-            HEAD_FA,
-            HEAD_LA,
             HEAD_TI,
-            HEAD_SOL,
-            HEAD_BREVIS_ALT,
+            // not exposed from here
+            HEAD_DO_WALKER,
+            HEAD_RE_WALKER,
+            HEAD_TI_WALKER,
+            HEAD_DO_FUNK,
+            HEAD_RE_FUNK,
+            HEAD_TI_FUNK,
+
+            HEAD_DO_NAME,
+            HEAD_RE_NAME,
+            HEAD_MI_NAME,
+            HEAD_FA_NAME,
+            HEAD_SOL_NAME,
+            HEAD_LA_NAME,
+            HEAD_TI_NAME,
+            HEAD_SI_NAME,
+
+            HEAD_A_SHARP,
+            HEAD_A,
+            HEAD_A_FLAT,
+            HEAD_B_SHARP,
+            HEAD_B,
+            HEAD_B_FLAT,
+            HEAD_C_SHARP,
+            HEAD_C,
+            HEAD_C_FLAT,
+            HEAD_D_SHARP,
+            HEAD_D,
+            HEAD_D_FLAT,
+            HEAD_E_SHARP,
+            HEAD_E,
+            HEAD_E_FLAT,
+            HEAD_F_SHARP,
+            HEAD_F,
+            HEAD_F_FLAT,
+            HEAD_G_SHARP,
+            HEAD_G,
+            HEAD_G_FLAT,
+            HEAD_H,
+            HEAD_H_SHARP,
+
             HEAD_GROUPS,
             HEAD_INVALID = -1
             };
@@ -243,6 +296,9 @@ class Note : public Element {
       QVector<Spanner*> _spannerFor;
       QVector<Spanner*> _spannerBack;
 
+      SymId _cachedNoteheadSym; // use in draw to avoid recomputing at every update
+      SymId _cachedSymNull; // additional symbol for some transparent notehead
+
       virtual QRectF drag(EditData*) override;
       void endDrag();
       void endEdit();
@@ -250,6 +306,8 @@ class Note : public Element {
       void removeSpanner(Spanner*);
       int concertPitchIdx() const;
       void updateRelLine(int relLine, bool undoable);
+      bool isNoteName() const;
+      SymId noteHead() const;
 
    public:
       Note(Score* s = 0);
@@ -276,7 +334,6 @@ class Note : public Element {
       QPointF stemDownNW() const;
       QPointF stemUpSE() const;
 
-      SymId noteHead() const;
       NoteHead::Group headGroup() const   { return _headGroup; }
       NoteHead::Type headType() const     { return _headType;  }
       void setHeadGroup(NoteHead::Group val);
@@ -449,6 +506,7 @@ class Note : public Element {
 
       void addBracket();
 
+      static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type, int tpc, Key key, NoteHeadScheme scheme);
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);
       NoteVal noteVal() const;
 
