@@ -242,6 +242,10 @@ BarLine handling
 Ottava
       Ottavas have no placement style. Placement depends on the ottava subtype and is hardcoded.
 
+Dynamics
+      Default vertical reference position for Placement "below" (dynamicPosBelow = 0.0) is the last
+      staff line + text line height.
+
 
 
 ====================================================================
