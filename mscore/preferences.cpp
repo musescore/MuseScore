@@ -1772,7 +1772,7 @@ bool Preferences::readPluginList()
             qDebug("Cannot open plugins file <%s>", qPrintable(f.fileName()));
             return false;
             }
-      XmlReader e(&f);
+      XmlReader e(0, &f);
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   while (e.readNextStartElement()) {
@@ -1823,7 +1823,7 @@ void Preferences::writePluginList()
             qDebug("cannot create plugin file <%s>", qPrintable(f.fileName()));
             return;
             }
-      Xml xml(&f);
+      Xml xml(0, &f);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
       foreach(const PluginDescription& d, pluginList) {

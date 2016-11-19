@@ -273,14 +273,16 @@ bool compareProperty(void* val, void* defaultVal)
 //   Xml
 //---------------------------------------------------------
 
-Xml::Xml()
+Xml::Xml(Score* s)
       {
+      _score = s;
       setCodec("UTF-8");
       }
 
-Xml::Xml(QIODevice* device)
+Xml::Xml(Score* s, QIODevice* device)
    : QTextStream(device)
       {
+      _score = s;
       setCodec("UTF-8");
       }
 
@@ -873,7 +875,7 @@ int Xml::spannerId(const Spanner* s)
 
 bool Xml::canWrite(const Element* e) const
       {
-      if (!clipboardmode)
+      if (!_clipboardmode)
             return true;
       return _filter.canSelect(e);
       }
@@ -884,7 +886,7 @@ bool Xml::canWrite(const Element* e) const
 
 bool Xml::canWriteVoice(int track) const
       {
-      if (!clipboardmode)
+      if (!_clipboardmode)
             return true;
       return _filter.canSelectVoice(track);
       }

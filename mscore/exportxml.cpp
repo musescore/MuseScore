@@ -311,6 +311,7 @@ class ExportMusicXml {
 
 public:
       ExportMusicXml(Score* s)
+         : xml(s)
             {
             _score = s; tick = 0; div = 1; tenths = 40;
             millimeters = _score->spatium() * tenths / (10 * DPMM);
@@ -5465,7 +5466,7 @@ bool saveMxl(Score* score, const QString& name)
 
       QBuffer cbuf;
       cbuf.open(QIODevice::ReadWrite);
-      Xml xml;
+      Xml xml(score);
       xml.setDevice(&cbuf);
       xml.setCodec("UTF-8");
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";

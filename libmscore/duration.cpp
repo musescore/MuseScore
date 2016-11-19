@@ -127,7 +127,7 @@ void DurationElement::writeTuplet(Xml& xml)
       {
       if (tuplet() && tuplet()->elements().front() == this) {
             tuplet()->writeTuplet(xml);           // recursion
-            tuplet()->setId(xml.tupletId++);
+            tuplet()->setId(xml.nextTupletId());
             tuplet()->write(xml);
             }
       }

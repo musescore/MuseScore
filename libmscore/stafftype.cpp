@@ -1203,7 +1203,7 @@ bool StaffType::readConfigFile(const QString& fileName)
             return false;
             }
 
-      XmlReader e(&f);
+      XmlReader e(0, &f);
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   while (e.readNextStartElement()) {

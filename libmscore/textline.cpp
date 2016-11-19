@@ -38,8 +38,10 @@ void TextLineSegment::layout()
 
       TextLineBaseSegment::layout();
       if (parent()) {
-            if (textLine()->placeBelow())
-                  rypos() = staff()->height() + score()->styleP(StyleIdx::textLinePosBelow) * mag();
+            if (textLine()->placeBelow()) {
+                  qreal sh = staff() ? staff()->height() : 0.0;
+                  rypos() = sh + score()->styleP(StyleIdx::textLinePosBelow) * mag();
+                  }
             else
                   rypos() = score()->styleP(StyleIdx::textLinePosAbove) * mag();
             if (autoplace()) {

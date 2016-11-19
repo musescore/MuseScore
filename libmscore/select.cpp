@@ -669,9 +669,9 @@ QByteArray Selection::staffMimeData() const
       {
       QBuffer buffer;
       buffer.open(QIODevice::WriteOnly);
-      Xml xml(&buffer);
+      Xml xml(score(), &buffer);
       xml.header();
-      xml.clipboardmode = true;
+      xml.setClipboardmode(true);
       xml.setFilter(selectionFilter());
 
       int ticks  = tickEnd() - tickStart();
@@ -728,9 +728,9 @@ QByteArray Selection::symbolListMimeData() const
 
       QBuffer buffer;
       buffer.open(QIODevice::WriteOnly);
-      Xml xml(&buffer);
+      Xml xml(score(), &buffer);
       xml.header();
-      xml.clipboardmode = true;
+      xml.setClipboardmode(true);
 
       int         topTrack    = 1000000;
       int         bottomTrack = 0;

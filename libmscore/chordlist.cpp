@@ -1721,7 +1721,7 @@ bool ChordList::read(const QString& name)
             qDebug("ChordList::read failed: <%s>", qPrintable(path));
             return false;
             }
-      XmlReader e(&f);
+      XmlReader e(0, &f);
       docName = f.fileName();
 
       while (e.readNextStartElement()) {
@@ -1757,7 +1757,7 @@ bool ChordList::write(const QString& name) const
             return false;
             }
 
-      Xml xml(&f);
+      Xml xml(0, &f);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
 

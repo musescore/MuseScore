@@ -176,7 +176,7 @@ void ExampleView::dragEnterEvent(QDragEnterEvent* event)
 
 // qDebug("ExampleView::dragEnterEvent Symbol: <%s>", a.data());
 
-            XmlReader e(a);
+            XmlReader e(score(), a);
             QPointF dragOffset;
             Fraction duration;  // dummy
             Element::Type type = Element::readType(e, &dragOffset, &duration);

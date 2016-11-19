@@ -246,7 +246,7 @@ bool Album::read(const QString& p)
             return false;
             }
 
-      XmlReader e(&f);
+      XmlReader e(gscore, &f);
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   QString version = e.attribute("version");

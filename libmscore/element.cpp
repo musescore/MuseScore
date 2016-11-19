@@ -652,7 +652,7 @@ bool Element::intersects(const QRectF& rr) const
 void Element::writeProperties(Xml& xml) const
       {
       // copy paste should not keep links
-      if (_links && (_links->size() > 1) && !xml.clipboardmode)
+      if (_links && (_links->size() > 1) && !xml.clipboardmode())
             xml.tag("lid", _links->lid());
       if (!autoplace() && !userOff().isNull()) {
             if (isVoltaSegment()
@@ -661,14 +661,14 @@ void Element::writeProperties(Xml& xml) const
                 || isRehearsalMark()
                 || isDynamic()
                 || isSystemDivider()
-                || (xml.clipboardmode && isSLineSegment()))
+                || (xml.clipboardmode() && isSLineSegment()))
                   xml.tag("offset", userOff() / spatium());
             else
                   xml.tag("pos", pos() / score()->spatium());
             }
-      if (((track() != xml.curTrack) || (type() == Element::Type::SLUR)) && (track() != -1)) {
+      if (((track() != xml.curTrack()) || (type() == Element::Type::SLUR)) && (track() != -1)) {
             int t;
-            t = track() + xml.trackDiff;
+            t = track() + xml.trackDiff();
             xml.tag("track", t);
             }
       if (_tag != 0x1) {
@@ -1151,8 +1151,8 @@ QByteArray Element::mimeData(const QPointF& dragOffset) const
       {
       QBuffer buffer;
       buffer.open(QIODevice::WriteOnly);
-      Xml xml(&buffer);
-      xml.clipboardmode = true;
+      Xml xml(score(), &buffer);
+      xml.setClipboardmode(true);
       xml.stag("Element");
       if (isNote())
             xml.tag("duration", toNote(this)->chord()->duration());

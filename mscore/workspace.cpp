@@ -279,7 +279,7 @@ void Workspace::write()
 
       QBuffer cbuf;
       cbuf.open(QIODevice::ReadWrite);
-      Xml xml(&cbuf);
+      Xml xml(gscore, &cbuf);
       xml.header();
       xml.stag("container");
       xml.stag("rootfiles");
@@ -306,8 +306,8 @@ void Workspace::write()
       {
       QBuffer cbuf;
       cbuf.open(QIODevice::ReadWrite);
-      Xml xml(&cbuf);
-      xml.clipboardmode = true;
+      Xml xml(gscore, &cbuf);
+      xml.setClipboardmode(true);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
       xml.stag("Workspace");
@@ -378,7 +378,7 @@ void Workspace::read()
             }
 
       QByteArray ba = f.fileData(rootfile);
-      XmlReader e(ba);
+      XmlReader e(gscore, ba);
 
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {

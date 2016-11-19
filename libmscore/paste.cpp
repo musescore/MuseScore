@@ -832,7 +832,7 @@ PasteState Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
             }
       if ((_selection.isSingle() || _selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
             QByteArray data(ms->data(mimeSymbolFormat));
-            XmlReader e(data);
+            XmlReader e(this, data);
             QPointF dragOffset;
             Fraction duration(1, 4);
             Element::Type type = Element::readType(e, &dragOffset, &duration);
@@ -890,7 +890,7 @@ PasteState Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   QByteArray data(ms->data(mimeStaffListFormat));
                   if (MScore::debugMode)
                         qDebug("paste <%s>", data.data());
-                  XmlReader e(data);
+                  XmlReader e(this, data);
                   e.setPasteMode(true);
                   PasteState ps = pasteStaff(e, cr->segment(), cr->staffIdx());
                   if (ps != PasteState::PS_NO_ERROR) {
@@ -921,7 +921,7 @@ PasteState Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   QByteArray data(ms->data(mimeSymbolListFormat));
                   if (MScore::debugMode)
                         qDebug("paste <%s>", data.data());
-                  XmlReader e(data);
+                  XmlReader e(this, data);
                   pasteSymbols(e, cr);
                   }
             }
