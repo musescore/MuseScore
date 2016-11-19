@@ -15,7 +15,7 @@
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 class XmlReader;
 class ChordList;
 
@@ -114,7 +114,7 @@ class ChordToken {
       QStringList names;
       QList<RenderAction> renderList;
       void read(XmlReader&);
-      void write(Xml&) const;
+      void write(XmlWriter&) const;
       };
 
 //---------------------------------------------------------
@@ -195,7 +195,7 @@ struct ChordDescription {
       QString quality() const       { return _quality; }
       void complete(ParsedChord* pc, const ChordList*);
       void read(XmlReader&);
-      void write(Xml&) const;
+      void write(XmlWriter&) const;
       };
 
 //---------------------------------------------------------
@@ -235,7 +235,7 @@ class ChordList : public QMap<int, ChordDescription> {
       QList<ChordToken> chordTokenList;
       static int privateID;
 
-      void write(Xml& xml) const;
+      void write(XmlWriter& xml) const;
       void read(XmlReader&);
       bool read(const QString&);
       bool write(const QString&) const;

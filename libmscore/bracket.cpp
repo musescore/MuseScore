@@ -257,7 +257,7 @@ void Bracket::draw(QPainter* painter) const
 //   Bracket::write
 //---------------------------------------------------------
 
-void Bracket::write(Xml& xml) const
+void Bracket::write(XmlWriter& xml) const
       {
       switch (bracketType()) {
             case BracketType::BRACE:

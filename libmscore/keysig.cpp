@@ -313,7 +313,7 @@ void KeySig::setKey(Key key)
 //   write
 //---------------------------------------------------------
 
-void KeySig::write(Xml& xml) const
+void KeySig::write(XmlWriter& xml) const
       {
       xml.stag(name());
       Element::writeProperties(xml);

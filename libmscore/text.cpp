@@ -812,7 +812,7 @@ QString TextBlock::text(int col1, int len) const
                         if (c.isHighSurrogate())
                               continue;
                         if (col >= col1 && (len < 0 || ((col-col1) < len)))
-                              s += Xml::xmlString(c.unicode());
+                              s += XmlWriter::xmlString(c.unicode());
                         ++col;
                         }
                   }
@@ -1471,7 +1471,7 @@ void Text::genText()
                               }
                         }
                   if (format.type() == CharFormatType::TEXT)
-                        _text += Xml::xmlString(f.text);
+                        _text += XmlWriter::xmlString(f.text);
                   else {
                         for (SymId id : f.ids)
                               _text += QString("<sym>%1</sym>").arg(Sym::id2name(id));
@@ -2208,7 +2208,7 @@ void Text::deleteSelectedText()
 //   write
 //---------------------------------------------------------
 
-void Text::write(Xml& xml) const
+void Text::write(XmlWriter& xml) const
       {
       xml.stag(name());
       writeProperties(xml, true, true);
@@ -2231,7 +2231,7 @@ void Text::read(XmlReader& e)
 //   writeProperties
 //---------------------------------------------------------
 
-void Text::writeProperties(Xml& xml, bool writeText, bool writeStyle) const
+void Text::writeProperties(XmlWriter& xml, bool writeText, bool writeStyle) const
       {
       Element::writeProperties(xml);
       if (writeStyle) {
@@ -2925,7 +2925,7 @@ QString Text::tagEscape(QString s)
             s.replace(openTag, openProxy);
             s.replace(closeTag, closeProxy);
             }
-      s = Xml::xmlString(s);
+      s = XmlWriter::xmlString(s);
       for (QString tag : tags) {
             QString openTag = "<" + tag + ">";
             QString openProxy = "!!" + tag + "!!";

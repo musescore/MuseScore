@@ -41,7 +41,7 @@ class TempoText : public Text  {
       TempoText(Score*);
       virtual TempoText* clone() const override   { return new TempoText(*this); }
       virtual Element::Type type() const override { return Element::Type::TEMPO_TEXT; }
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       Segment* segment() const   { return (Segment*)parent(); }
       Measure* measure() const   { return (Measure*)parent()->parent(); }

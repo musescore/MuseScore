@@ -1045,9 +1045,9 @@ bool Palette::event(QEvent* ev)
 //   write
 //---------------------------------------------------------
 
-void Palette::write(Xml& xml) const
+void Palette::write(XmlWriter& xml) const
       {
-      xml.stag(QString("Palette name=\"%1\"").arg(Xml::xmlString(_name)));
+      xml.stag(QString("Palette name=\"%1\"").arg(XmlWriter::xmlString(_name)));
       xml.tag("gridWidth", hgrid / guiScaling);
       xml.tag("gridHeight", vgrid / guiScaling);
       xml.tag("mag", extraMag / guiScaling);
@@ -1067,7 +1067,7 @@ void Palette::write(Xml& xml) const
                   continue;
                   }
             if (!cells[i]->name.isEmpty())
-                  xml.stag(QString("Cell name=\"%1\"").arg(Xml::xmlString(cells[i]->name)));
+                  xml.stag(QString("Cell name=\"%1\"").arg(XmlWriter::xmlString(cells[i]->name)));
             else
                   xml.stag("Cell");
             if (cells[i]->drawStaff)
@@ -1245,11 +1245,11 @@ void Palette::write(const QString& p)
             }
       QBuffer cbuf;
       cbuf.open(QIODevice::ReadWrite);
-      Xml xml(gscore, &cbuf);
+      XmlWriter xml(gscore, &cbuf);
       xml.header();
       xml.stag("container");
       xml.stag("rootfiles");
-      xml.stag(QString("rootfile full-path=\"%1\"").arg(Xml::xmlString("palette.xml")));
+      xml.stag(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString("palette.xml")));
       xml.etag();
       foreach (ImageStoreItem* ip, images) {
             QString path = QString("Pictures/") + ip->hashName();
@@ -1270,7 +1270,7 @@ void Palette::write(const QString& p)
       {
       QBuffer cbuf;
       cbuf.open(QIODevice::ReadWrite);
-      Xml xml(gscore, &cbuf);
+      XmlWriter xml(gscore, &cbuf);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
       write(xml);

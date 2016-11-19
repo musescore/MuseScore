@@ -22,7 +22,7 @@ namespace Ms {
 //   MidiCoreEvent::write
 //---------------------------------------------------------
 
-void MidiCoreEvent::write(Xml& xml) const
+void MidiCoreEvent::write(XmlWriter& xml) const
       {
       switch(_type) {
             case ME_NOTEON:
@@ -207,7 +207,7 @@ bool MidiCoreEvent::isChannelEvent() const
 //   Event::write
 //---------------------------------------------------------
 
-void Event::write(Xml& xml) const
+void Event::write(XmlWriter& xml) const
       {
       switch(_type) {
             case ME_NOTE:

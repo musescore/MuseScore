@@ -80,7 +80,7 @@ void ElementLayout::layout(Element* e) const
 //    writout only differences to l
 //---------------------------------------------------------
 
-void ElementLayout::writeProperties(Xml& xml, const ElementLayout& l) const
+void ElementLayout::writeProperties(XmlWriter& xml, const ElementLayout& l) const
       {
       if ((l._align & AlignmentFlags::HMASK) != (_align & AlignmentFlags::HMASK)) {
             const char* p;
@@ -128,7 +128,7 @@ void ElementLayout::writeProperties(Xml& xml, const ElementLayout& l) const
 //   writeProperties
 //---------------------------------------------------------
 
-void ElementLayout::writeProperties(Xml& xml) const
+void ElementLayout::writeProperties(XmlWriter& xml) const
       {
       if (_align & AlignmentFlags::HCENTER)
             xml.tag("halign", "center");

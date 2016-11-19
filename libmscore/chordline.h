@@ -59,7 +59,7 @@ class ChordLine : public Element {
       virtual void setLengthY(float length)     { _lengthY = length; }
 
       virtual void read(XmlReader&);
-      virtual void write(Xml& xml) const;
+      virtual void write(XmlWriter& xml) const;
       virtual void layout();
       virtual void draw(QPainter*) const;
 

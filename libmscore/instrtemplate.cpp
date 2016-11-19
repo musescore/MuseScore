@@ -189,7 +189,7 @@ InstrumentTemplate::~InstrumentTemplate()
 //   write
 //---------------------------------------------------------
 
-void InstrumentTemplate::write(Xml& xml) const
+void InstrumentTemplate::write(XmlWriter& xml) const
       {
       xml.stag(QString("Instrument id=\"%1\"").arg(id));
       longNames.write(xml, "longName");
@@ -291,7 +291,7 @@ void InstrumentTemplate::write(Xml& xml) const
 //    output only translatable names
 //---------------------------------------------------------
 
-void InstrumentTemplate::write1(Xml& xml) const
+void InstrumentTemplate::write1(XmlWriter& xml) const
       {
       xml.stag(QString("Instrument id=\"%1\"").arg(id));
       longNames.write(xml, "longName");
@@ -545,7 +545,7 @@ bool saveInstrumentTemplates(const QString& instrTemplates)
             qDebug("cannot save instrument templates at <%s>", qPrintable(instrTemplates));
             return false;
             }
-      Xml xml(0, &qf);
+      XmlWriter xml(0, &qf);
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
       xml.stag("museScore");
       foreach(const InstrumentGenre* genre, instrumentGenres)
@@ -582,7 +582,7 @@ bool saveInstrumentTemplates1(const QString& instrTemplates)
             qDebug("cannot save instrument templates at <%s>", qPrintable(instrTemplates));
             return false;
             }
-      Xml xml(0, &qf);
+      XmlWriter xml(0, &qf);
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
       xml.stag("museScore");
       foreach(const InstrumentGenre* genre, instrumentGenres)
@@ -699,14 +699,14 @@ bool InstrumentTemplate::genreMember(const QString& name)
             return rVal;
       }
 
-void InstrumentGenre::write(Xml& xml) const
+void InstrumentGenre::write(XmlWriter& xml) const
       {
       xml.stag(QString("Genre id=\"%1\"").arg(id));
       xml.tag("name", name);
       xml.etag();
       }
 
-void InstrumentGenre::write1(Xml& xml) const
+void InstrumentGenre::write1(XmlWriter& xml) const
       {
       write(xml);
       }

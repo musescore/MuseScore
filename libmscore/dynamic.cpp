@@ -110,7 +110,7 @@ int Dynamic::velocity() const
 //   write
 //---------------------------------------------------------
 
-void Dynamic::write(Xml& xml) const
+void Dynamic::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;

@@ -134,7 +134,7 @@ bool Articulation::readProperties(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void Articulation::write(Xml& xml) const
+void Articulation::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;

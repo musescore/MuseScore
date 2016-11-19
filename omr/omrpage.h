@@ -32,7 +32,7 @@ namespace Ms {
 
 class Omr;
 class Score;
-class Xml;
+class XmlWriter;
 class XmlReader;
 class Pattern;
 class OmrPage;
@@ -200,7 +200,7 @@ class OmrPage {
 
       QList<QLine>  lines;
       QList<OmrSystem> _systems;
-      
+
       void removeBorder();
       void crop();
       void slice();
@@ -246,7 +246,7 @@ class OmrPage {
       OmrSystem* system(int idx)  { return &_systems[idx]; }
 
 
-      void write(Xml&) const;
+      void write(XmlWriter&) const;
       void read(XmlReader&);
       bool dot(int x, int y) const;
       bool isBlack(int x, int y) const;

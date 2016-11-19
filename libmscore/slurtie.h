@@ -79,7 +79,7 @@ class SlurTieSegment : public SpannerSegment {
       struct UP& ups(Grip i)                         { return _ups[int(i)]; }
       virtual Shape shape() const override           { return _shape; }
 
-      void writeSlur(Xml& xml, int no) const;
+      void writeSlur(XmlWriter& xml, int no) const;
       void read(XmlReader&);
       };
 
@@ -126,7 +126,7 @@ class SlurTie : public Spanner {
       virtual void layout2(const QPointF, int, struct UP&)  {}
       virtual bool contains(const QPointF&) const { return false; }  // not selectable
 
-      void writeProperties(Xml& xml) const;
+      void writeProperties(XmlWriter& xml) const;
       bool readProperties(XmlReader&);
 
       int lineType() const                { return _lineType; }

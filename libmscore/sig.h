@@ -18,7 +18,7 @@
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 class XmlReader;
 
 //-------------------------------------------------------------------
@@ -100,7 +100,7 @@ class SigEvent {
 
    public:
       int read(XmlReader&, int fileDivision);
-      void write(Xml&, int) const;
+      void write(XmlWriter&, int) const;
 
       constexpr SigEvent() : _bar(0) {}       ///< default SigEvent is invalid
       SigEvent(const Fraction& s, int bar = 0)
@@ -135,7 +135,7 @@ class TimeSigMap : public std::map<int, SigEvent > {
       void del(int tick);
 
       void read(XmlReader&, int fileDiv);
-      void write(Xml&) const;
+      void write(XmlWriter&) const;
       void dump() const;
 
       const SigEvent& timesig(int tick) const;

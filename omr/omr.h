@@ -26,7 +26,7 @@
 namespace Ms {
 
 class OmrView;
-class Xml;
+class XmlWriter;
 class Pdf;
 class OmrPage;
 class Ocr;
@@ -81,7 +81,7 @@ public:
             return _ocr;
             }
 #endif
-      void write(Xml&) const;
+      void write(XmlWriter&) const;
       void read(XmlReader&);
 
       double spatiumMM() const;           // spatium in millimeter
@@ -154,7 +154,7 @@ public:
             return 0;
             }
 #endif
-      void write(Xml&) const {
+      void write(XmlWriter&) const {
             }
       void read(XmlReader&)                {
             }

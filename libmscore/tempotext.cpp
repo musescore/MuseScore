@@ -41,7 +41,7 @@ TempoText::TempoText(Score* s)
 //   write
 //---------------------------------------------------------
 
-void TempoText::write(Xml& xml) const
+void TempoText::write(XmlWriter& xml) const
       {
       xml.stag("Tempo");
       xml.tag("tempo", _tempo);

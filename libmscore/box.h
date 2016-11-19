@@ -59,9 +59,9 @@ class Box : public MeasureBase {
       virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
       virtual int grips() const override { return 1; }
       virtual void layout() override;
-      virtual void write(Xml&) const override;
-      virtual void write(Xml& xml, int, bool) const override { write(xml); }
-      virtual void writeProperties(Xml&) const override;
+      virtual void write(XmlWriter&) const override;
+      virtual void write(XmlWriter& xml, int, bool) const override { write(xml); }
+      virtual void writeProperties(XmlWriter&) const override;
       virtual bool readProperties(XmlReader&) override;
       virtual void read(XmlReader&) override;
       virtual bool acceptDrop(const DropData&) const override;

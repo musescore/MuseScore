@@ -94,7 +94,7 @@ class System : public Element {
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
       virtual void change(Element* o, Element* n) override;
-      virtual void write(Xml&) const override;
+      virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;

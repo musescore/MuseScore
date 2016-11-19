@@ -38,7 +38,7 @@ StaffText::StaffText(Score* s)
 //   write
 //---------------------------------------------------------
 
-void StaffText::write(Xml& xml) const
+void StaffText::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;

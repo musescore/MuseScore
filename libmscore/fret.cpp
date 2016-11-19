@@ -390,7 +390,7 @@ void FretDiagram::layout()
 //   write
 //---------------------------------------------------------
 
-void FretDiagram::write(Xml& xml) const
+void FretDiagram::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
@@ -634,7 +634,7 @@ void FretDiagram::readMusicXML(XmlReader& e)
 //   Write MusicXML
 //---------------------------------------------------------
 
-void FretDiagram::writeMusicXML(Xml& xml) const
+void FretDiagram::writeMusicXML(XmlWriter& xml) const
       {
       qDebug("FretDiagram::writeMusicXML() this %p harmony %p", this, _harmony);
       int _strings = strings();

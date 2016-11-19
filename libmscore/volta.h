@@ -18,7 +18,7 @@
 namespace Ms {
 
 class Score;
-class Xml;
+class XmlWriter;
 class Volta;
 class Measure;
 
@@ -71,7 +71,7 @@ class Volta : public TextLineBase {
       virtual Element::Type type() const override { return Element::Type::VOLTA; }
       virtual LineSegment* createLineSegment() override;
 
-      virtual void write(Xml&) const override;
+      virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader& e) override;
 
       QList<int> endings() const           { return _endings; }

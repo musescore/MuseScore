@@ -47,7 +47,7 @@ StaffState::~StaffState()
 //   write
 //---------------------------------------------------------
 
-void StaffState::write(Xml& xml) const
+void StaffState::write(XmlWriter& xml) const
       {
       xml.stag(name());
       xml.tag("subtype", int(_staffStateType));

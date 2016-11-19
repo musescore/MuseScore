@@ -24,7 +24,7 @@
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 class Beam;
 class Tuplet;
 class Staff;
@@ -140,9 +140,9 @@ class Measure : public MeasureBase {
 
       void read(XmlReader&, int idx);
       void read(XmlReader& d) { read(d, 0); }
-      virtual void write(Xml& xml) const override { Element::write(xml); }
-      void write(Xml&, int, bool writeSystemElements) const;
-      void writeBox(Xml&) const;
+      virtual void write(XmlWriter& xml) const override { Element::write(xml); }
+      void write(XmlWriter&, int, bool writeSystemElements) const;
+      void writeBox(XmlWriter&) const;
       void readBox(XmlReader&);
       virtual bool isEditable() const override { return false; }
       void checkMeasure(int idx);

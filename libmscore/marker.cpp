@@ -209,7 +209,7 @@ void Marker::read(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void Marker::write(Xml& xml) const
+void Marker::write(XmlWriter& xml) const
       {
       xml.stag(name());
       Text::writeProperties(xml);

@@ -782,7 +782,7 @@ void Segment::swapElements(int i1, int i2)
 //   write
 //---------------------------------------------------------
 
-void Segment::write(Xml& xml) const
+void Segment::write(XmlWriter& xml) const
       {
       if (written())
             return;

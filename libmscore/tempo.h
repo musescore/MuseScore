@@ -15,7 +15,7 @@
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 
 enum class TempoType : char { INVALID = 0x0, PAUSE = 0x1, FIX = 0x2, RAMP = 0x4};
 

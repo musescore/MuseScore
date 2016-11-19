@@ -43,7 +43,7 @@ class Icon : public Element {
       QIcon icon() const                                  { return _icon;   }
       void setExtent(int v)                               { _extent = v; }
       int extent() const                                  { return _extent; }
-      virtual void write(Xml&) const override;
+      virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
       virtual void draw(QPainter*) const override;
       virtual void layout() override;

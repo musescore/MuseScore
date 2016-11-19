@@ -29,7 +29,7 @@ namespace Ms {
 
 class Element;
 class Sym;
-class Xml;
+class XmlWriter;
 class XmlReader;
 class Palette;
 
@@ -173,7 +173,7 @@ class Palette : public QWidget {
       bool read(const QString& path);
       void write(const QString& path);
       void read(XmlReader&);
-      void write(Xml&) const;
+      void write(XmlWriter&) const;
       bool read(QFile*);
       void clear();
       void setSelectable(bool val)   { _selectable = val;  }

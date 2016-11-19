@@ -22,7 +22,7 @@ namespace Ms {
 class System;
 class Text;
 class Measure;
-class Xml;
+class XmlWriter;
 class Score;
 class MeasureBase;
 
@@ -90,7 +90,7 @@ class PageFormat {
 
       QString name() const;
       void read(XmlReader&);
-      void write(Xml&) const;
+      void write(XmlWriter&) const;
       qreal evenLeftMargin() const        { return _evenLeftMargin;   }
       qreal oddLeftMargin() const         { return _oddLeftMargin;    }
       qreal evenTopMargin() const         { return _evenTopMargin;    }
@@ -147,7 +147,7 @@ class Page : public Element {
       System* system(int idx)               { return _systems[idx];   }
 
       virtual void layout();
-      virtual void write(Xml&) const;
+      virtual void write(XmlWriter&) const;
       virtual void read(XmlReader&);
 
       void appendSystem(System* s);

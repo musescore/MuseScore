@@ -139,11 +139,10 @@ class XmlReader : public QXmlStreamReader {
       };
 
 //---------------------------------------------------------
-//   Xml
-//    xml writer
+//   XmlWriter
 //---------------------------------------------------------
 
-class Xml : public QTextStream {
+class XmlWriter : public QTextStream {
       static const int BS = 2048;
 
       Score* _score;
@@ -166,8 +165,8 @@ class Xml : public QTextStream {
       void putLevel();
 
    public:
-      Xml(Score*);
-      Xml(Score* s, QIODevice* dev);
+      XmlWriter(Score*);
+      XmlWriter(Score* s, QIODevice* dev);
 
       int spannerId() const         { return _spannerId; }
       int curTick() const           { return _curTick; }
@@ -178,9 +177,7 @@ class Xml : public QTextStream {
       bool clipboardmode() const    { return _clipboardmode; }
       bool excerptmode() const      { return _excerptmode;   }
       bool writeOmr() const         { return _writeOmr;   }
-//      int tupletId() const          { return _tupletId;   }
       int nextTupletId()            { return _tupletId++;   }
-//      int beamId() const            { return _beamId;     }
       int nextBeamId()              { return _beamId++; }
 
       void setClipboardmode(bool v) { _clipboardmode = v; }
@@ -200,7 +197,7 @@ class Xml : public QTextStream {
       const Spanner* findSpanner(int id);
       int spannerId(const Spanner*);      // returns spanner id, allocates new one if none exists
 
-      void sTag(const char* name, Spatium sp) { Xml::tag(name, QVariant(sp.val())); }
+      void sTag(const char* name, Spatium sp) { XmlWriter::tag(name, QVariant(sp.val())); }
       void pTag(const char* name, PlaceText);
 
       void header();

@@ -78,7 +78,7 @@ void TremoloBar::draw(QPainter* painter) const
 //   write
 //---------------------------------------------------------
 
-void TremoloBar::write(Xml& xml) const
+void TremoloBar::write(XmlWriter& xml) const
       {
       xml.stag("TremoloBar");
       writeProperty(xml, P_ID::MAG);

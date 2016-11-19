@@ -90,7 +90,7 @@ class BarLine : public Element {
 
       virtual BarLine* clone() const override     { return new BarLine(*this); }
       virtual Element::Type type() const override { return Element::Type::BAR_LINE; }
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void draw(QPainter*) const override;
       virtual QPointF pagePos() const override;      ///< position in canvas coordinates

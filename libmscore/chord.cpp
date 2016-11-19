@@ -896,7 +896,7 @@ Note* Chord::selectedNote() const
 //   Chord::write
 //---------------------------------------------------------
 
-void Chord::write(Xml& xml) const
+void Chord::write(XmlWriter& xml) const
       {
       for (Chord* c : _graceNotes) {
             c->writeBeam(xml);

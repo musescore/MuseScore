@@ -326,7 +326,7 @@ static void readRenderList(QString val, QList<RenderAction>& renderList)
 //   writeRenderList
 //---------------------------------------------------------
 
-static void writeRenderList(Xml& xml, const QList<RenderAction>* al, const QString& name)
+static void writeRenderList(XmlWriter& xml, const QList<RenderAction>* al, const QString& name)
       {
       QString s;
 
@@ -388,7 +388,7 @@ void ChordToken::read(XmlReader& e)
 //  write
 //---------------------------------------------------------
 
-void ChordToken::write(Xml& xml) const
+void ChordToken::write(XmlWriter& xml) const
       {
       QString t = "token";
       switch (tokenClass) {
@@ -1534,7 +1534,7 @@ void ChordDescription::read(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void ChordDescription::write(Xml& xml) const
+void ChordDescription::write(XmlWriter& xml) const
       {
       if (generated && !exportOk)
             return;
@@ -1654,7 +1654,7 @@ void ChordList::read(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void ChordList::write(Xml& xml) const
+void ChordList::write(XmlWriter& xml) const
       {
       int fontIdx = 0;
       foreach (ChordFont f, fonts) {
@@ -1757,7 +1757,7 @@ bool ChordList::write(const QString& name) const
             return false;
             }
 
-      Xml xml(0, &f);
+      XmlWriter xml(0, &f);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
 

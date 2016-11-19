@@ -33,7 +33,7 @@ Fingering::Fingering(Score* s)
 //   write
 //---------------------------------------------------------
 
-void Fingering::write(Xml& xml) const
+void Fingering::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;

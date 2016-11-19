@@ -938,7 +938,7 @@ qreal System::staffCanvasYpage(int staffIdx) const
 //   write
 //---------------------------------------------------------
 
-void System::write(Xml& xml) const
+void System::write(XmlWriter& xml) const
       {
       xml.stag("System");
       if (_systemDividerLeft && _systemDividerLeft->isUserModified())

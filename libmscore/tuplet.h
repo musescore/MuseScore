@@ -105,7 +105,7 @@ class Tuplet : public DurationElement {
       Text* number() const { return _number; }
 
       virtual void read(XmlReader&) override;
-      virtual void write(Xml&) const override;
+      virtual void write(XmlWriter&) const override;
       virtual bool readProperties(XmlReader&) override;
 
       virtual void reset() override;

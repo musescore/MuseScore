@@ -43,7 +43,7 @@ BSymbol::BSymbol(const BSymbol& s)
 //   writeProperties
 //---------------------------------------------------------
 
-void BSymbol::writeProperties(Xml& xml) const
+void BSymbol::writeProperties(XmlWriter& xml) const
       {
       if (_systemFlag)
             xml.tag("systemFlag", _systemFlag);

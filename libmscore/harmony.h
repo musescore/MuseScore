@@ -151,7 +151,7 @@ class Harmony : public Text {
       const QList<HDegree>& degreeList() const;
       const ParsedChord* parsedForm();
 
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       QString harmonyName() const;
       void render(const TextStyle* ts = 0);

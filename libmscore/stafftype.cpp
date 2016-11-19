@@ -209,7 +209,7 @@ void StaffType::setLines(int val)
 //   write
 //---------------------------------------------------------
 
-void StaffType::write(Xml& xml) const
+void StaffType::write(XmlWriter& xml) const
       {
       xml.stag(QString("StaffType group=\"%1\"").arg(fileGroupNames[(int)_group]));
       if (!_xmlName.isEmpty())

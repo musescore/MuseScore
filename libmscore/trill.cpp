@@ -399,7 +399,7 @@ LineSegment* Trill::createLineSegment()
 //   Trill::write
 //---------------------------------------------------------
 
-void Trill::write(Xml& xml) const
+void Trill::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;

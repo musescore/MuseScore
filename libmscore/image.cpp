@@ -301,7 +301,7 @@ void Image::draw(QPainter* painter) const
 //   write
 //---------------------------------------------------------
 
-void Image::write(Xml& xml) const
+void Image::write(XmlWriter& xml) const
       {
       // attempt to convert the _linkPath to a path relative to the score
       //

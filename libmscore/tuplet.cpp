@@ -619,7 +619,7 @@ void Tuplet::scanElements(void* data, void (*func)(void*, Element*), bool all)
 //   write
 //---------------------------------------------------------
 
-void Tuplet::write(Xml& xml) const
+void Tuplet::write(XmlWriter& xml) const
       {
       xml.stag(QString("Tuplet id=\"%1\"").arg(_id));
       if (tuplet())

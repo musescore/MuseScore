@@ -308,7 +308,7 @@ void Pos::setFrame(unsigned pos)
 //   write
 //---------------------------------------------------------
 
-void Pos::write(Xml& xml, const char* name) const
+void Pos::write(XmlWriter& xml, const char* name) const
       {
       if (_type == TType::TICKS)
             xml.tagE(QString("%1 tick=\"%2\"").arg(name).arg(_tick));
@@ -388,7 +388,7 @@ void Pos::dump(int /*n*/) const
 //   write
 //---------------------------------------------------------
 
-void PosLen::write(Xml& xml, const char* name) const
+void PosLen::write(XmlWriter& xml, const char* name) const
       {
       if (type() == TType::TICKS)
             xml.tagE(QString("%1 tick=\"%2\" len=\"%3\"").arg(name).arg(tick()).arg(_lenTick));

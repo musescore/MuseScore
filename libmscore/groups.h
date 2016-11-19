@@ -21,7 +21,7 @@
 namespace Ms {
 
 class ChordRest;
-class Xml;
+class XmlWriter;
 class XmlReader;
 
 //---------------------------------------------------------
@@ -51,7 +51,7 @@ class Groups : public std::vector<GroupNode> {
       Groups() {}
       Groups(const std::vector<GroupNode>& l) : std::vector<GroupNode>(l) {}
 
-      void write(Xml&) const;
+      void write(XmlWriter&) const;
       void read(XmlReader&);
 
       Beam::Mode beamMode(int tick, TDuration::DurationType d) const;

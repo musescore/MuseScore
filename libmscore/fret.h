@@ -87,14 +87,14 @@ class FretDiagram : public Element {
 
       virtual Element::Type type() const override { return Element::Type::FRET_DIAGRAM; }
       virtual void layout() override;
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual QLineF dragAnchor() const override;
       virtual QPointF pagePos() const override;
 
       // read / write MusicXML
       void readMusicXML(XmlReader& de);
-      void writeMusicXML(Xml& xml) const;
+      void writeMusicXML(XmlWriter& xml) const;
 
       int strings() const    { return _strings; }
       int frets()   const    { return _frets; }

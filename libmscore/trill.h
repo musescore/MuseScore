@@ -87,7 +87,7 @@ class Trill : public SLine {
       virtual LineSegment* createLineSegment() override;
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
-      virtual void write(Xml&) const override;
+      virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
 
       void setTrillType(const QString& s);

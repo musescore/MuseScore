@@ -112,7 +112,7 @@ bool DurationElement::readProperties(XmlReader& e)
 //   writeProperties
 //---------------------------------------------------------
 
-void DurationElement::writeProperties(Xml& xml) const
+void DurationElement::writeProperties(XmlWriter& xml) const
       {
       Element::writeProperties(xml);
       if (tuplet())
@@ -123,7 +123,7 @@ void DurationElement::writeProperties(Xml& xml) const
 //   writeTuplet
 //---------------------------------------------------------
 
-void DurationElement::writeTuplet(Xml& xml)
+void DurationElement::writeTuplet(XmlWriter& xml)
       {
       if (tuplet() && tuplet()->elements().front() == this) {
             tuplet()->writeTuplet(xml);           // recursion

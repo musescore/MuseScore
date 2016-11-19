@@ -19,7 +19,7 @@
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 
 //---------------------------------------------------------
 //   TextStyleData
@@ -62,9 +62,9 @@ class TextStyleData : public QSharedData, public ElementLayout {
          QColor fg, QColor bg);
       TextStyleData();
 
-      void write(Xml&) const;
-      void writeProperties(Xml& xml) const;
-      void writeProperties(Xml& xml, const TextStyleData&) const;
+      void write(XmlWriter&) const;
+      void writeProperties(XmlWriter& xml) const;
+      void writeProperties(XmlWriter& xml, const TextStyleData&) const;
       void restyle(const TextStyleData& os, const TextStyleData& ns);
       void read(XmlReader&);
       bool readProperties(XmlReader& v);

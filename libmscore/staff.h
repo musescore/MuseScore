@@ -31,7 +31,7 @@
 namespace Ms {
 
 class InstrumentTemplate;
-class Xml;
+class XmlWriter;
 class Part;
 class Score;
 class KeyList;
@@ -150,12 +150,11 @@ class Staff : public QObject, public ScoreElement {
       int rstaff() const;
       int idx() const;
       void read(XmlReader&);
-      void write(Xml& xml) const;
+      void write(XmlWriter& xml) const;
       Part* part() const             { return _part;        }
       void setPart(Part* p)          { _part = p;           }
 
       Excerpt* excerpt() const;     //       { return score()->excerpt();     }
-//      void setExcerpt(Excerpt* e)    { _excerpt = e;        }
 
       BracketType bracket(int idx) const;
       int bracketSpan(int idx) const;

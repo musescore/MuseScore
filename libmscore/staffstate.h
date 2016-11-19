@@ -59,7 +59,7 @@ class StaffState : public Element {
 
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&);
-      virtual void write(Xml&) const;
+      virtual void write(XmlWriter&) const;
       virtual void read(XmlReader&);
       Instrument* instrument() const           { return _instrument; }
       void setInstrument(const Instrument* i)  { *_instrument = *i;    }

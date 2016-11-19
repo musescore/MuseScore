@@ -43,7 +43,7 @@ class SystemDivider : public Symbol {
       void setDividerType(Type v);
 
       virtual QRectF drag(EditData*) override;
-      virtual void write(Xml&) const override;
+      virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
       virtual void layout() override;
 

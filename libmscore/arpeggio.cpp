@@ -52,7 +52,7 @@ void Arpeggio::setHeight(qreal h)
 //   write
 //---------------------------------------------------------
 
-void Arpeggio::write(Xml& xml) const
+void Arpeggio::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;

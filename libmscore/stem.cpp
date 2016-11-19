@@ -208,7 +208,7 @@ void Stem::draw(QPainter* painter) const
 //   write
 //---------------------------------------------------------
 
-void Stem::write(Xml& xml) const
+void Stem::write(XmlWriter& xml) const
       {
       xml.stag("Stem");
       Element::writeProperties(xml);

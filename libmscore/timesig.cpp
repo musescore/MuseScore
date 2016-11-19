@@ -142,7 +142,7 @@ void TimeSig::setDenominatorString(const QString& a)
 //   write TimeSig
 //---------------------------------------------------------
 
-void TimeSig::write(Xml& xml) const
+void TimeSig::write(XmlWriter& xml) const
       {
       xml.stag("TimeSig");
       if (timeSigType() != TimeSigType::NORMAL)

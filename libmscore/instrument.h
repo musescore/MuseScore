@@ -22,7 +22,7 @@
 namespace Ms {
 
 class InstrumentTemplate;
-class Xml;
+class XmlWriter;
 class XmlReader;
 class Drumset;
 class StringData;
@@ -41,7 +41,7 @@ class StaffName {
 
       bool operator==(const StaffName&) const;
       void read(XmlReader&);
-      void write(Xml& xml, const char* name) const;
+      void write(XmlWriter& xml, const char* name) const;
       int pos() const { return _pos; }
       QString name() const { return _name; }
       };
@@ -53,7 +53,7 @@ class StaffName {
 class StaffNameList : public QList<StaffName> {
 
    public:
-      void write(Xml& xml, const char* name) const;
+      void write(XmlWriter& xml, const char* name) const;
       };
 
 //---------------------------------------------------------
@@ -65,7 +65,7 @@ struct NamedEventList {
       QString descr;
       std::vector<MidiCoreEvent> events;
 
-      void write(Xml&, const QString& name) const;
+      void write(XmlWriter&, const QString& name) const;
       void read(XmlReader&);
       bool operator==(const NamedEventList& i) const { return i.name == name && i.events == events; }
       };
@@ -79,7 +79,7 @@ struct MidiArticulation {
       QString descr;
       int velocity;           // velocity change: -100% - +100%
       int gateTime;           // gate time change: -100% - +100%
-      void write(Xml&) const;
+      void write(XmlWriter&) const;
       void read(XmlReader&);
 
       MidiArticulation() {}
@@ -120,7 +120,7 @@ struct Channel {
       QList<MidiArticulation> articulation;
 
       Channel();
-      void write(Xml&, Part *part) const;
+      void write(XmlWriter&, Part *part) const;
       void read(XmlReader&, Part *part);
       void updateInitList() const;
       bool operator==(const Channel& c) { return (name == c.name) && (channel == c.channel); }
@@ -156,7 +156,7 @@ class Instrument {
 
       void read(XmlReader&, Part *part);
       bool readProperties(XmlReader&, Part* , bool* customDrumset);
-      void write(Xml& xml, Part *part) const;
+      void write(XmlWriter& xml, Part *part) const;
       NamedEventList* midiAction(const QString& s, int channel) const;
       int channelIdx(const QString& s) const;
       void updateVelocity(int* velocity, int channel, const QString& name);

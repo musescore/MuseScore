@@ -21,7 +21,7 @@
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 struct ChordDescription;
 class PageFormat;
 class ChordList;
@@ -123,9 +123,9 @@ class TextStyle {
       void setForegroundColor(const QColor& v);
       void setBackgroundColor(const QColor& v);
       TextStyleHidden hidden() const   { return _hidden; }
-      void write(Xml& xml) const;
-      void writeProperties(Xml& xml) const;
-      void writeProperties(Xml& xml, const TextStyle&) const;
+      void write(XmlWriter& xml) const;
+      void writeProperties(XmlWriter& xml) const;
+      void writeProperties(XmlWriter& xml, const TextStyle&) const;
       void read(XmlReader& v);
       bool readProperties(XmlReader& v);
       QFont font(qreal spatium) const;

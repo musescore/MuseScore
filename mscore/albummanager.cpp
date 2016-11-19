@@ -320,7 +320,7 @@ void AlbumManager::writeAlbum()
             QMessageBox::critical(mscore, QWidget::tr("MuseScore: Open Album File"), s.arg(album->path()));
             return;
             }
-      Xml xml(gscore, &f);
+      XmlWriter xml(gscore, &f);
       album->write(xml);
       if (f.error() != QFile::NoError) {
             QString s = QWidget::tr("Write Album failed: ") + f.errorString();

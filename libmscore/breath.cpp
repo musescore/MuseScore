@@ -73,7 +73,7 @@ void Breath::layout()
 //   write
 //---------------------------------------------------------
 
-void Breath::write(Xml& xml) const
+void Breath::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;

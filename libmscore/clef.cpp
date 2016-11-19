@@ -297,7 +297,7 @@ void Clef::read(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void Clef::write(Xml& xml) const
+void Clef::write(XmlWriter& xml) const
       {
       xml.stag(name());
       if (_clefTypes._concertClef != ClefType::INVALID)

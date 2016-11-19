@@ -69,7 +69,7 @@ class Slur : public SlurTie {
       ~Slur();
       virtual Slur* clone() const override        { return new Slur(*this); }
       virtual Element::Type type() const override { return Element::Type::SLUR; }
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void layout() override;
       virtual SpannerSegment* layoutSystem(System*) override;

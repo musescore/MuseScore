@@ -60,9 +60,8 @@ public:
       int         frets() const                 { return _frets; }
       void        setFrets(int val)             { _frets = val; }
       void        read(XmlReader&);
-      void        write(Xml&) const;
-//      void        readMusicXML(XmlReader& de);
-      void        writeMusicXML(Xml& xml) const;
+      void        write(XmlWriter&) const;
+      void        writeMusicXML(XmlWriter& xml) const;
       bool operator==(const StringData& d) const { return d._frets == _frets && d.stringTable == stringTable; }
       };
 

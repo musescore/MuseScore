@@ -43,7 +43,7 @@ class BSymbol : public Element, public ElementLayout {
       virtual void layout() override;
       virtual QRectF drag(EditData*) override;
 
-      void writeProperties(Xml& xml) const;
+      void writeProperties(XmlWriter& xml) const;
       bool readProperties(XmlReader&);
 
       const QList<Element*>& leafs() const { return _leafs; }

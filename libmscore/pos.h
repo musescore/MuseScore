@@ -26,7 +26,7 @@ namespace Ms {
 
 class TempoMap;
 class TimeSigMap;
-class Xml;
+class XmlWriter;
 class XmlReader;
 
 enum class TType : char { TICKS, FRAMES };
@@ -99,7 +99,7 @@ class Pos {
       void setTick(unsigned);
       void setFrame(unsigned);
 
-      void write(Xml&, const char*) const;
+      void write(XmlWriter&, const char*) const;
       void read(XmlReader&);
       bool valid() const { return _valid && tempo && sig;  }
       void setInvalid()  { _valid = false; }
@@ -119,7 +119,7 @@ class PosLen : public Pos {
       PosLen(const PosLen&);
       void dump(int n = 0) const;
 
-      void write(Xml&, const char*) const;
+      void write(XmlWriter&, const char*) const;
       void read(XmlReader&);
       void setLenTick(unsigned);
       void setLenFrame(unsigned);

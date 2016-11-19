@@ -15,7 +15,7 @@
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 class XmlReader;
 
 //---------------------------------------------------------
@@ -32,7 +32,7 @@ class NoteEvent {
       NoteEvent(int a, int b, int c) : _pitch(a), _ontime(b), _len(c) {}
 
       void read(XmlReader&);
-      void write(Xml& xml) const;
+      void write(XmlWriter&) const;
 
       int  pitch() const     { return _pitch; }
       int ontime() const     { return _ontime; }

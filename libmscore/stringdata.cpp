@@ -72,7 +72,7 @@ void StringData::read(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void StringData::write(Xml& xml) const
+void StringData::write(XmlWriter& xml) const
       {
       xml.stag("StringData");
       xml.tag("frets", _frets);
@@ -474,7 +474,7 @@ void StringData::readMusicXML(XmlReader& e)
 //   Write MusicXML
 //---------------------------------------------------------
 
-void StringData::writeMusicXML(Xml& /*xml*/) const
+void StringData::writeMusicXML(XmlWriter& /*xml*/) const
       {
       }
 

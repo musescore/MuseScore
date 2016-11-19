@@ -90,7 +90,7 @@ void InstrumentsDialog::on_saveButton_clicked()
             return;
             }
 
-      Xml xml(0, &f);
+      XmlWriter xml(0, &f);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
       for (InstrumentGroup* g : instrumentGroups) {

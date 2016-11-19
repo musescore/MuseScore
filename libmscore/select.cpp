@@ -669,7 +669,7 @@ QByteArray Selection::staffMimeData() const
       {
       QBuffer buffer;
       buffer.open(QIODevice::WriteOnly);
-      Xml xml(score(), &buffer);
+      XmlWriter xml(score(), &buffer);
       xml.header();
       xml.setClipboardmode(true);
       xml.setFilter(selectionFilter());
@@ -728,7 +728,7 @@ QByteArray Selection::symbolListMimeData() const
 
       QBuffer buffer;
       buffer.open(QIODevice::WriteOnly);
-      Xml xml(score(), &buffer);
+      XmlWriter xml(score(), &buffer);
       xml.header();
       xml.setClipboardmode(true);
 

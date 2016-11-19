@@ -180,7 +180,7 @@ void Ambitus::setBottomTpc(int val)
 //   write
 //---------------------------------------------------------
 
-void Ambitus::write(Xml& xml) const
+void Ambitus::write(XmlWriter& xml) const
       {
       xml.stag("Ambitus");
       xml.tag(P_ID::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));

@@ -235,7 +235,7 @@ void OmrPage::identifySystems()
       {
       int numStaves = staves.size();
       if(numStaves == 0) return;
-      
+
       //
       //memory allocation
       //
@@ -253,7 +253,7 @@ void OmrPage::identifySystems()
       SysState **pred = new SysState*[numStaves];
       for (int i = 0; i < numStaves; i++)
             pred[i] = new SysState[2];
-      
+
       //
       //initialization
       //
@@ -273,7 +273,7 @@ void OmrPage::identifySystems()
                   }
             }
       scores[0][0] = 0;
-      
+
       //
       //identify solid note heads
       //
@@ -285,7 +285,7 @@ void OmrPage::identifySystems()
                   note_labels[i][j] = 0;
                   }
             }
-      
+
       //
       // search notes for each system
       //
@@ -295,7 +295,7 @@ void OmrPage::identifySystems()
 //            omrSystem.staves().append(staves[i]);
 //            omrSystem.searchNotes(note_labels[i], note_ran);
 //            }
-      
+
       //
       // System Identification
       //
@@ -314,7 +314,7 @@ void OmrPage::identifySystems()
                         for (int i = cur_staff; i <= next_staff; ++i) {
                               omrSystem.staves().append(staves[i]);
                               }
-                        
+
                         cur_score = omrSystem.searchBarLinesvar(next_staff - cur_staff + 1, note_labels + cur_staff);
                         temp_scores[cur_staff][next_staff] = cur_score;
                         hashed[cur_staff][next_staff] = 1;
@@ -379,7 +379,7 @@ void OmrPage::identifySystems()
             delete[] hashed[i];
             delete[] note_labels[i];
             }
-      
+
       delete[] note_labels;
       delete[] scores;
       delete[] pred;
@@ -967,7 +967,7 @@ void OmrSystem::searchNotes()
             qSort(r->notes().begin(), r->notes().end(), noteCompare);
             }
       }
-      
+
 //---------------------------------------------------------
 //   searchNotes
 //---------------------------------------------------------
@@ -997,7 +997,7 @@ void OmrSystem::searchNotes(int *note_labels, int ran)
                   }
             }
       }
-    
+
 //---------------------------------------------------------
 //   addText
 //---------------------------------------------------------
@@ -1144,7 +1144,7 @@ void OmrPage::removeBorder()
             if (cropR)
                   break;
             }
-            
+
       _image = _image.copy(cropL, cropT, cropR - cropL + 1, cropB - cropT + 1);
 #endif
       }
@@ -1626,7 +1626,7 @@ double OmrPage::systemDistance() const
 //   write
 //---------------------------------------------------------
 
-void OmrPage::write(Xml& xml) const
+void OmrPage::write(XmlWriter& xml) const
       {
       xml.stag("OmrPage");
       xml.tag("cropL", cropL);

@@ -90,13 +90,13 @@ class SLine : public Spanner {
       virtual SpannerSegment* layoutSystem(System*) override;
 
       bool readProperties(XmlReader& node);
-      void writeProperties(Xml& xml) const;
+      void writeProperties(XmlWriter& xml) const;
       virtual LineSegment* createLineSegment() = 0;
       void setLen(qreal l);
       using Element::bbox;
       virtual const QRectF& bbox() const override;
 
-      virtual void write(Xml&) const override;
+      virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
 
       bool diagonal() const               { return _diagonal; }

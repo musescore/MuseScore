@@ -15,7 +15,7 @@
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 class XmlReader;
 
 //---------------------------------------------------------
@@ -32,7 +32,7 @@ class Revision {
    public:
       Revision();
       void read(XmlReader&);
-      void write(Xml&) const;
+      void write(XmlWriter&) const;
       void setParent(Revision* r)              { _parent = r; }
       Revision* parent() const                 { return _parent; }
       const QList<Revision*>& branches() const { return _branches; }
@@ -51,14 +51,14 @@ class Revision {
 class Revisions {
       Revision* _trunk;
 
-      void write(Xml&, const Revision*) const;
+      void write(XmlWriter&, const Revision*) const;
 
    public:
       Revisions();
       void add(Revision*);
       QString getRevision(QString id);
       Revision* trunk() { return _trunk; }
-      void write(Xml&) const;
+      void write(XmlWriter&) const;
       };
 
 

@@ -19,7 +19,7 @@ class MasterScore;
 class Score;
 class Part;
 class Measure;
-class Xml;
+class XmlWriter;
 class Staff;
 class XmlReader;
 

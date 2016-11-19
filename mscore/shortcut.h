@@ -67,7 +67,7 @@ Shortcuts marked with the STATE_NEVER state should NEVER used directly as shortc
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 class XmlReader;
 
 //---------------------------------------------------------
@@ -159,7 +159,7 @@ class Shortcut {
       QString keysToString() const;
       static QString getMenuShortcutString(const QMenu* menu);
 
-      void write(Ms::Xml&) const;
+      void write(Ms::XmlWriter&) const;
       void read(Ms::XmlReader&);
 
       static void init();

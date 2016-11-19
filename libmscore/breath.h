@@ -56,7 +56,7 @@ class Breath : public Element {
 
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
-      virtual void write(Xml&) const override;
+      virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
       virtual QPointF pagePos() const override;      ///< position in page coordinates
 

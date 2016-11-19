@@ -17,7 +17,7 @@
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 class XmlReader;
 
 
@@ -60,7 +60,7 @@ class SynthesizerState : public std::list<SynthesizerGroup> {
             }
       SynthesizerState() : std::list<SynthesizerGroup>() {}
 
-      void write(Xml&) const;
+      void write(XmlWriter&) const;
       void read(XmlReader&);
       };
 

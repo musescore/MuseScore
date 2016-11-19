@@ -20,7 +20,7 @@
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 class Part;
 class Staff;
 class StringData;
@@ -36,8 +36,8 @@ class InstrumentGenre {
       QString name;
 
       InstrumentGenre() {}
-      void write(Xml& xml) const;
-      void write1(Xml& xml) const;
+      void write(XmlWriter& xml) const;
+      void write1(XmlWriter& xml) const;
       void read(XmlReader&);
       };
 
@@ -93,8 +93,8 @@ class InstrumentTemplate {
       bool genreMember(const QString &);
 
       void setPitchRange(const QString& s, char* a, char* b) const;
-      void write(Xml& xml) const;
-      void write1(Xml& xml) const;
+      void write(XmlWriter& xml) const;
+      void write1(XmlWriter& xml) const;
       void read(XmlReader&);
       int nstaves() const { return staves; }
       void setStaves(int val) { staves = val; }

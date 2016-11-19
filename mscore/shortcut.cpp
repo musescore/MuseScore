@@ -3753,7 +3753,7 @@ void Shortcut::save()
             qDebug("cannot save shortcuts");
             return;
             }
-      Xml xml(0, &f);
+      XmlWriter xml(0, &f);
       xml.header();
       xml.stag("Shortcuts");
       for (auto i : _sc)
@@ -3766,7 +3766,7 @@ void Shortcut::save()
 //   write
 //---------------------------------------------------------
 
-void Shortcut::write(Xml& xml) const
+void Shortcut::write(XmlWriter& xml) const
       {
       xml.stag("SC");
       xml.tag("key", _key.data());

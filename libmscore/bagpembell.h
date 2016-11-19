@@ -62,7 +62,7 @@ class BagpipeEmbellishment : public Element {
       int embelType() const                       { return _embelType;                      }
       void setEmbelType(int val)                  { _embelType = val;                       }
       virtual qreal mag() const override;
-      virtual void write(Xml&) const override;
+      virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
       virtual void layout() override;
       virtual void draw(QPainter*) const override;

@@ -57,7 +57,7 @@ class PaletteBox;
 class Palette;
 class PaletteScrollArea;
 class SelectionWindow;
-class Xml;
+class XmlWriter;
 class MagBox;
 class NewWizard;
 class ExcerptsDialog;

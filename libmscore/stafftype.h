@@ -23,7 +23,7 @@ namespace Ms {
 class Chord;
 class ChordRest;
 class Staff;
-class Xml;
+class XmlWriter;
 
 // all in spatium units
 #define STAFFTYPE_TAB_DEFAULTSTEMLEN_UP   3.0
@@ -281,7 +281,7 @@ class StaffType {
       void setShowBarlines(bool val)           { _showBarlines = val;     }
       bool showBarlines() const                { return _showBarlines;    }
 
-      void write(Xml& xml) const;
+      void write(XmlWriter& xml) const;
       void read(XmlReader&);
 
       void setSlashStyle(bool val)             { _slashStyle = val;       }

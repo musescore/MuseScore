@@ -17,7 +17,7 @@ namespace Ms {
 
 class Score;
 class MasterScore;
-class Xml;
+class XmlWriter;
 class ScoreElement;
 
 enum class P_ID : int;
@@ -68,7 +68,7 @@ class ScoreElement {
 
       void undoChangeProperty(P_ID, const QVariant&);
       void undoPushProperty(P_ID);
-      void writeProperty(Xml& xml, P_ID id) const;
+      void writeProperty(XmlWriter& xml, P_ID id) const;
 
       QList<ScoreElement*> linkList() const;
 

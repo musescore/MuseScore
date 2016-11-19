@@ -39,7 +39,7 @@ class Bend : public Element {
       virtual Element::Type type() const override { return Element::Type::BEND; }
       virtual void layout() override;
       virtual void draw(QPainter*) const override;
-      virtual void write(Xml&) const override;
+      virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader& e) override;
       QList<PitchValue>& points()                { return _points; }
       const QList<PitchValue>& points() const    { return _points; }

@@ -339,7 +339,7 @@ void SynthControl::storeButtonClicked()
             qDebug("cannot write synthesizer settings <%s>", qPrintable(s));
             return;
             }
-      Xml xml(0, &f);
+      XmlWriter xml(0, &f);
       xml.header();
       synti->state().write(xml);
 
