@@ -3753,7 +3753,7 @@ void Shortcut::save()
             qDebug("cannot save shortcuts");
             return;
             }
-      Xml xml(&f);
+      Xml xml(0, &f);
       xml.header();
       xml.stag("Shortcuts");
       for (auto i : _sc)
@@ -3822,7 +3822,7 @@ void Shortcut::load()
       if (MScore::debugMode)
             qDebug("read shortcuts from <%s>", qPrintable(f.fileName()));
 
-      XmlReader e(&f);
+      XmlReader e(0, &f);
 
       while (e.readNextStartElement()) {
             if (e.name() == "Shortcuts") {
@@ -3885,7 +3885,7 @@ static QList<Shortcut1> loadDefaultShortcuts()
             qDebug("Cannot open shortcuts");
             return list;
             }
-      XmlReader e(&f);
+      XmlReader e(0, &f);
       while (e.readNextStartElement()) {
             if (e.name() == "Shortcuts") {
                   while (e.readNextStartElement()) {

@@ -304,7 +304,7 @@ void SynthControl::recallButtonClicked()
             qDebug("cannot read synthesizer settings <%s>", qPrintable(s));
             return;
             }
-      XmlReader e(&f);
+      XmlReader e(0, &f);
       while (e.readNextStartElement()) {
             if (e.name() == "Synthesizer")
                   state.read(e);
@@ -339,7 +339,7 @@ void SynthControl::storeButtonClicked()
             qDebug("cannot write synthesizer settings <%s>", qPrintable(s));
             return;
             }
-      Xml xml(&f);
+      Xml xml(0, &f);
       xml.header();
       synti->state().write(xml);
 

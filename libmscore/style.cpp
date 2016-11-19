@@ -627,7 +627,7 @@ void MStyle::convertToUnit(const QString& tag, const QString& val)
 
 bool MStyle::load(QFile* qf)
       {
-      XmlReader e(qf);
+      XmlReader e(0, qf);
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   QString version = e.attribute("version");

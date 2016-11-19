@@ -214,8 +214,8 @@ void ChordRest::writeProperties(Xml& xml) const
       if (!isGrace()) {
             Fraction t(globalDuration());
             if (staff())
-                  t /= staff()->timeStretch(xml.curTick);
-            xml.curTick += t.ticks();
+                  t /= staff()->timeStretch(xml.curTick());
+            xml.incCurTick(t.ticks());
             }
       for (auto i : score()->spanner()) {     // TODO: dont search whole list
             Spanner* s = i.second;
@@ -1248,7 +1248,7 @@ void ChordRest::writeBeam(Xml& xml)
       {
       Beam* b = beam();
       if (b && b->elements().front() == this && (MScore::testMode || !b->generated())) {
-            b->setId(xml.beamId++);
+            b->setId(xml.nextBeamId());
             b->write(xml);
             }
       }

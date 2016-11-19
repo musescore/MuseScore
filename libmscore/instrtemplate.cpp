@@ -545,7 +545,7 @@ bool saveInstrumentTemplates(const QString& instrTemplates)
             qDebug("cannot save instrument templates at <%s>", qPrintable(instrTemplates));
             return false;
             }
-      Xml xml(&qf);
+      Xml xml(0, &qf);
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
       xml.stag("museScore");
       foreach(const InstrumentGenre* genre, instrumentGenres)
@@ -582,7 +582,7 @@ bool saveInstrumentTemplates1(const QString& instrTemplates)
             qDebug("cannot save instrument templates at <%s>", qPrintable(instrTemplates));
             return false;
             }
-      Xml xml(&qf);
+      Xml xml(0, &qf);
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
       xml.stag("museScore");
       foreach(const InstrumentGenre* genre, instrumentGenres)
@@ -614,7 +614,7 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
             return false;
             }
 
-      XmlReader e(&qf);
+      XmlReader e(0, &qf);
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   while (e.readNextStartElement()) {

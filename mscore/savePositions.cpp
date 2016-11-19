@@ -53,7 +53,7 @@ bool savePositions(Score* score, const QString& name, bool segments)
             qDebug("Open <%s> failed", qPrintable(name));
             return false;
             }
-      Xml xml(&fp);
+      Xml xml(score, &fp);
       xml.header();
       xml.stag("score");
       xml.stag("elements");

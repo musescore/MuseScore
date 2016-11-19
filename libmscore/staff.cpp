@@ -506,7 +506,7 @@ void Staff::write(Xml& xml) const
             }
 
       // for copy/paste we need to know the actual transposition
-      if (xml.clipboardmode) {
+      if (xml.clipboardmode()) {
             Interval v = part()->instrument()->transpose(); // TODO: tick?
             if (v.diatonic)
                   xml.tag("transposeDiatonic", v.diatonic);
@@ -525,7 +525,7 @@ void Staff::write(Xml& xml) const
             xml.tag("defaultTransposingClef", ClefInfo::tag(ct._transposingClef));
             }
 
-      if (small() && !xml.excerptmode)    // switch small staves to normal ones when extracting part
+      if (small() && !xml.excerptmode())    // switch small staves to normal ones when extracting part
             xml.tag("small", small());
       if (invisible())
             xml.tag("invisible", invisible());

@@ -378,11 +378,11 @@ void TestText::testReadWrite() {
       auto testrw = [](Score* score, Text* t) {
             QBuffer buffer;
             buffer.open(QIODevice::WriteOnly);
-            Xml xml(&buffer);
+            Xml xml(score, &buffer);
             t->write(xml);
             buffer.close();
 
-            XmlReader e(buffer.buffer());
+            XmlReader e(score, buffer.buffer());
             Text* text2 = new Text(score);
             e.readNextStartElement();
             text2->read(e);
@@ -391,27 +391,27 @@ void TestText::testReadWrite() {
       Text* text = new Text(score);
       text->setXmlText("test");
       testrw(score, text);
-      
+
       text = new Text(score);
       text->setXmlText("<b>Title</b><i>two</i>");
       testrw(score, text);
-      
+
       text = new Text(score);
       text->setXmlText("<i>Title</i> <b>Two</b>");
       testrw(score, text);
-      
+
       text = new Text(score);
       text->setXmlText("<i>Title</i>    <b>Two</b>");
       testrw(score, text);
-      
+
       text = new Text(score);
       text->setXmlText("<i>Title</i>\t<b>Two</b>");
       testrw(score, text);
-      
+
       text = new Text(score);
       text->setXmlText("<i>Title</i>\n<b>Two</b>");
       testrw(score, text);
-      
+
       text = new Text(score);
       text->setXmlText("<i>Ti  tle</i><b>Tw  o</b>");
       testrw(score, text);

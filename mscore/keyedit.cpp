@@ -194,7 +194,7 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
       if (data->hasFormat(mimeSymbolFormat)) {
             QByteArray a = data->data(mimeSymbolFormat);
 
-            XmlReader e(a);
+            XmlReader e(gscore, a);
 
             QPointF dragOffset;
             Fraction duration;

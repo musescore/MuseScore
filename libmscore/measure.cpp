@@ -1610,7 +1610,7 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
       else
             xml.stag(QString("Measure number=\"%1\"").arg(mno));
 
-      xml.curTick = tick();
+      xml.setCurTick(tick());
 
       if (_mmRestCount > 0)
             xml.tag("multiMeasureRest", _mmRestCount);

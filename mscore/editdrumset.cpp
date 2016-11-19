@@ -340,7 +340,7 @@ void EditDrumset::load()
       if (!fp.open(QIODevice::ReadOnly))
             return;
 
-      XmlReader e(&fp);
+      XmlReader e(0, &fp);
       nDrumset.clear();
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
@@ -378,7 +378,7 @@ void EditDrumset::save()
             return;
             }
       valueChanged();  //save last changes in name
-      Xml xml(&f);
+      Xml xml(0, &f);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
       nDrumset.save(xml);

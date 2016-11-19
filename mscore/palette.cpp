@@ -374,7 +374,7 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
             // use same code path as drag&drop
 
             QByteArray a = e->mimeData(QPointF());
-            XmlReader e(a);
+            XmlReader e(gscore, a);
             Fraction duration;  // dummy
             QPointF dragOffset;
             Element::Type type = Element::readType(e, &dragOffset, &duration);
@@ -462,7 +462,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                   int idx = cr1->staffIdx();
 
                   QByteArray a = element->mimeData(QPointF());
-                  XmlReader e(a);
+                  XmlReader e(gscore, a);
                   Fraction duration;  // dummy
                   QPointF dragOffset;
                   Element::Type type = Element::readType(e, &dragOffset, &duration);
@@ -1093,7 +1093,7 @@ void Palette::write(Xml& xml) const
 
 bool Palette::read(QFile* qf)
       {
-      XmlReader e(qf);
+      XmlReader e(gscore, qf);
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   QString version = e.attribute("version");
@@ -1135,7 +1135,7 @@ bool Palette::read(const QString& p)
 
       QByteArray ba = f.fileData("META-INF/container.xml");
 
-      XmlReader e(ba);
+      XmlReader e(gscore, ba);
       // extract first rootfile
       QString rootfile = "";
       QList<QString> images;
@@ -1245,7 +1245,7 @@ void Palette::write(const QString& p)
             }
       QBuffer cbuf;
       cbuf.open(QIODevice::ReadWrite);
-      Xml xml(&cbuf);
+      Xml xml(gscore, &cbuf);
       xml.header();
       xml.stag("container");
       xml.stag("rootfiles");
@@ -1270,7 +1270,7 @@ void Palette::write(const QString& p)
       {
       QBuffer cbuf;
       cbuf.open(QIODevice::ReadWrite);
-      Xml xml(&cbuf);
+      Xml xml(gscore, &cbuf);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
       write(xml);
@@ -1645,7 +1645,7 @@ void Palette::dropEvent(QDropEvent* event)
             }
       else if (data->hasFormat(mimeSymbolFormat)) {
             QByteArray data(event->mimeData()->data(mimeSymbolFormat));
-            XmlReader xml(data);
+            XmlReader xml(gscore, data);
             QPointF dragOffset;
             Fraction duration;
             Element::Type type = Element::readType(xml, &dragOffset, &duration);
