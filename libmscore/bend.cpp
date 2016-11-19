@@ -255,7 +255,7 @@ void Bend::draw(QPainter* painter) const
 //   write
 //---------------------------------------------------------
 
-void Bend::write(Xml& xml) const
+void Bend::write(XmlWriter& xml) const
       {
       xml.stag("Bend");
       foreach(const PitchValue& v, _points) {

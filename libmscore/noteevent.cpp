@@ -38,7 +38,7 @@ void NoteEvent::read(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void NoteEvent::write(Xml& xml) const
+void NoteEvent::write(XmlWriter& xml) const
       {
       xml.stag("Event");
       xml.tag("pitch", _pitch);

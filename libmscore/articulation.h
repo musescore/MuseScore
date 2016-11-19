@@ -91,7 +91,7 @@ class Articulation : public Element {
       virtual void layout() override;
 
       virtual void read(XmlReader&) override;
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
       virtual bool readProperties(XmlReader&) override;
 
       virtual void reset() override;

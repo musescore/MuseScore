@@ -165,7 +165,7 @@ void Spacer::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
 //   write
 //---------------------------------------------------------
 
-void Spacer::write(Xml& xml) const
+void Spacer::write(XmlWriter& xml) const
       {
       xml.stag(name());
       xml.tag("subtype", int(_spacerType));

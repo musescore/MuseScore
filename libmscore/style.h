@@ -21,7 +21,7 @@
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 struct ChordDescription;
 class PageFormat;
 class ChordList;
@@ -372,7 +372,7 @@ class MStyle {
 
       bool load(QFile* qf);
       void load(XmlReader& e);
-      void save(Xml& xml, bool optimize);
+      void save(XmlWriter& xml, bool optimize);
 
       void convertToUnit(const QString& tag, const QString& val);
 

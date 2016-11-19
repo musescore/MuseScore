@@ -649,7 +649,7 @@ bool Element::intersects(const QRectF& rr) const
 //   writeProperties
 //---------------------------------------------------------
 
-void Element::writeProperties(Xml& xml) const
+void Element::writeProperties(XmlWriter& xml) const
       {
       // copy paste should not keep links
       if (_links && (_links->size() > 1) && !xml.clipboardmode())
@@ -766,7 +766,7 @@ bool Element::readProperties(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void Element::write(Xml& xml) const
+void Element::write(XmlWriter& xml) const
       {
       xml.stag(name());
       writeProperties(xml);
@@ -826,7 +826,7 @@ void ElementList::replace(Element* o, Element* n)
 //   write
 //---------------------------------------------------------
 
-void ElementList::write(Xml& xml) const
+void ElementList::write(XmlWriter& xml) const
       {
       for (const Element* e : *this)
             e->write(xml);
@@ -1004,7 +1004,7 @@ void Line::draw(QPainter* painter) const
 //   writeProperties
 //---------------------------------------------------------
 
-void Line::writeProperties(Xml& xml) const
+void Line::writeProperties(XmlWriter& xml) const
       {
       xml.tag("lineWidth", _width / spatium());
       xml.tag("lineLen", _len / spatium());
@@ -1151,7 +1151,7 @@ QByteArray Element::mimeData(const QPointF& dragOffset) const
       {
       QBuffer buffer;
       buffer.open(QIODevice::WriteOnly);
-      Xml xml(score(), &buffer);
+      XmlWriter xml(score(), &buffer);
       xml.setClipboardmode(true);
       xml.stag("Element");
       if (isNote())

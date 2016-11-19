@@ -820,7 +820,7 @@ void Rest::remove(Element* e)
 //   Rest::write
 //---------------------------------------------------------
 
-void Rest::write(Xml& xml) const
+void Rest::write(XmlWriter& xml) const
       {
       if (_gap)
             return;

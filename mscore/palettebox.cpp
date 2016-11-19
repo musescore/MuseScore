@@ -348,7 +348,7 @@ void PaletteBox::closeAll()
 //   write
 //---------------------------------------------------------
 
-void PaletteBox::write(Xml& xml)
+void PaletteBox::write(XmlWriter& xml)
       {
       xml.stag("PaletteBox");
       for (int i = 0; i < (vbox->count() - 1); i += 2) {

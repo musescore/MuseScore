@@ -349,7 +349,7 @@ void Tremolo::layout()
 //   write
 //---------------------------------------------------------
 
-void Tremolo::write(Xml& xml) const
+void Tremolo::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;

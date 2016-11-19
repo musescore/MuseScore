@@ -174,10 +174,10 @@ class FiguredBassItem : public Element {
       virtual void      draw(QPainter* painter) const override;
       virtual void      layout() override;
       virtual void      read(XmlReader&) override;
-      virtual void      write(Xml& xml) const override;
+      virtual void      write(XmlWriter& xml) const override;
 
       // read / write MusicXML
-      void              writeMusicXML(Xml& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const;
+      void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const;
       bool              startsWithParenthesis() const;
 
       // specific API
@@ -286,10 +286,10 @@ class FiguredBass : public Text {
       virtual void      setSelected(bool f) override;
       virtual void      setVisible(bool f) override;
       virtual void      startEdit(MuseScoreView *msv, const QPointF &pt) override;
-      virtual void      write(Xml& xml) const override;
+      virtual void      write(XmlWriter& xml) const override;
 
       // read / write MusicXML
-      void              writeMusicXML(Xml& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;
+      void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;
 
 //DEBUG
 //Q_INVOKABLE Ms::FiguredBassItem* addItem();

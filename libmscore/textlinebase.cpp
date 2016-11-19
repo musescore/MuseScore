@@ -618,7 +618,7 @@ void TextLineBase::setEndText(const QString& s)
 //   write
 //---------------------------------------------------------
 
-void TextLineBase::write(Xml& xml) const
+void TextLineBase::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
@@ -687,7 +687,7 @@ QString TextLineBase::endText() const
 //    write properties different from prototype
 //---------------------------------------------------------
 
-void TextLineBase::writeProperties(Xml& xml) const
+void TextLineBase::writeProperties(XmlWriter& xml) const
       {
       writeProperty(xml, P_ID::LINE_VISIBLE);
       writeProperty(xml, P_ID::BEGIN_HOOK);

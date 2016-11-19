@@ -473,7 +473,7 @@ MeasureBase* MeasureBase::nextMM() const
 //   writeProperties
 //---------------------------------------------------------
 
-void MeasureBase::writeProperties(Xml& xml) const
+void MeasureBase::writeProperties(XmlWriter& xml) const
       {
       Element::writeProperties(xml);
       for (const Element* e : el())

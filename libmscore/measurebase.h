@@ -103,8 +103,8 @@ class MeasureBase : public Element {
       Ms::Measure* nextMeasureMM() const;
       Ms::Measure* prevMeasureMM() const;
 
-      virtual void write(Xml&) const override = 0;
-      virtual void write(Xml&, int, bool) const = 0;
+      virtual void write(XmlWriter&) const override = 0;
+      virtual void write(XmlWriter&, int, bool) const = 0;
 
       virtual void layout();
 
@@ -126,7 +126,7 @@ class MeasureBase : public Element {
 
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
-      virtual void writeProperties(Xml&) const override;
+      virtual void writeProperties(XmlWriter&) const override;
       virtual bool readProperties(XmlReader&) override;
 
       virtual int tick() const override      { return _tick;  }

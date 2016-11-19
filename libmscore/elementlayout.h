@@ -18,7 +18,7 @@
 namespace Ms {
 
 class Element;
-class Xml;
+class XmlWriter;
 class XmlReader;
 
 //---------------------------------------------------------
@@ -48,8 +48,8 @@ class ElementLayout {
       void setYoff(qreal val)             { _offset.ry() = val;        }
       void setOffsetType(OffsetType val)  { _offsetType = val;    }
       void layout(Element*) const;
-      void writeProperties(Xml& xml) const;
-      void writeProperties(Xml& xml, const ElementLayout&) const;
+      void writeProperties(XmlWriter& xml) const;
+      void writeProperties(XmlWriter& xml, const ElementLayout&) const;
       bool readProperties(XmlReader& e);
       void restyle(const ElementLayout& ol, const ElementLayout& nl);
       };

@@ -15,7 +15,7 @@
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 class Score;
 class XmlReader;
 enum class AccidentalVal : signed char;

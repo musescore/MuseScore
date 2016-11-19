@@ -2012,7 +2012,7 @@ void Beam::spatiumChanged(qreal oldValue, qreal newValue)
 //   write
 //---------------------------------------------------------
 
-void Beam::write(Xml& xml) const
+void Beam::write(XmlWriter& xml) const
       {
       if (_elements.empty())
             return;

@@ -19,7 +19,7 @@ namespace Ms {
 //   write
 //---------------------------------------------------------
 
-void SynthesizerState::write(Xml& xml) const
+void SynthesizerState::write(XmlWriter& xml) const
       {
       xml.stag("Synthesizer");
       for (const SynthesizerGroup& g : *this) {

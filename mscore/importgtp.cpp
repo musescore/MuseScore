@@ -502,7 +502,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
                               break;
                         }
                   }
-            volta->setText(Xml::xmlString(voltaTextString));
+            volta->setText(XmlWriter::xmlString(voltaTextString));
             volta->setTick(m->tick());
             volta->setTick2(m->tick() + m->ticks());
             score->addElement(volta);

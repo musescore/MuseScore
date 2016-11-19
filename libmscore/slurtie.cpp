@@ -152,7 +152,7 @@ void SlurTieSegment::reset()
 //   writeProperties
 //---------------------------------------------------------
 
-void SlurTieSegment::writeSlur(Xml& xml, int no) const
+void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
       {
       if (autoplace() && visible() && (color() == Qt::black))
             return;
@@ -224,7 +224,7 @@ SlurTie::~SlurTie()
 //   writeProperties
 //---------------------------------------------------------
 
-void SlurTie::writeProperties(Xml& xml) const
+void SlurTie::writeProperties(XmlWriter& xml) const
       {
       Element::writeProperties(xml);
       if (track() != track2() && track2() != -1)

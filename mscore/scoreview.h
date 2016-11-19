@@ -34,7 +34,7 @@ class ChordRest;
 class Rest;
 class Element;
 class Page;
-class Xml;
+class XmlWriter;
 class Note;
 class Lasso;
 class ShadowNote;
@@ -202,7 +202,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void objectPopup(const QPoint&, Element*);
       void measurePopup(const QPoint&, Measure*);
 
-      void saveChord(Xml&);
+      void saveChord(XmlWriter&);
 
       virtual bool event(QEvent* event);
       virtual bool gestureEvent(QGestureEvent*);

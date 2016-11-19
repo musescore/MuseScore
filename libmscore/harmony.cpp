@@ -189,7 +189,7 @@ Harmony::~Harmony()
 //   write
 //---------------------------------------------------------
 
-void Harmony::write(Xml& xml) const
+void Harmony::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;

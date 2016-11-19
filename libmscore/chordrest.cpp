@@ -161,7 +161,7 @@ void ChordRest::scanElements(void* data, void (*func)(void*, Element*), bool all
 //   writeProperties
 //---------------------------------------------------------
 
-void ChordRest::writeProperties(Xml& xml) const
+void ChordRest::writeProperties(XmlWriter& xml) const
       {
       DurationElement::writeProperties(xml);
 
@@ -1244,7 +1244,7 @@ bool ChordRest::isGraceAfter() const
 //   writeBeam
 //---------------------------------------------------------
 
-void ChordRest::writeBeam(Xml& xml)
+void ChordRest::writeBeam(XmlWriter& xml)
       {
       Beam* b = beam();
       if (b && b->elements().front() == this && (MScore::testMode || !b->generated())) {

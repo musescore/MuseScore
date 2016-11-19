@@ -25,7 +25,7 @@ class QPainter;
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 class MuseScoreView;
 class Segment;
 
@@ -156,7 +156,7 @@ class Clef : public Element {
       virtual void layout();
       virtual void draw(QPainter*) const;
       virtual void read(XmlReader&);
-      virtual void write(Xml&) const;
+      virtual void write(XmlWriter&) const;
 
       virtual bool isEditable() const                    { return false; }
 

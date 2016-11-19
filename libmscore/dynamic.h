@@ -94,7 +94,7 @@ class Dynamic : public Text {
       virtual QString subtypeName() const { return dynamicTypeName(); }
 
       virtual void layout() override;
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
 
       virtual bool isEditable() const override { return true; }

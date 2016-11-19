@@ -27,7 +27,7 @@ static QHash<void*, int> segs;
 //   saveMeasureEvents
 //---------------------------------------------------------
 
-static void saveMeasureEvents(Xml& xml, Measure* m, int offset)
+static void saveMeasureEvents(XmlWriter& xml, Measure* m, int offset)
       {
       for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
             int tick = s->tick() + offset;
@@ -53,7 +53,7 @@ bool savePositions(Score* score, const QString& name, bool segments)
             qDebug("Open <%s> failed", qPrintable(name));
             return false;
             }
-      Xml xml(score, &fp);
+      XmlWriter xml(score, &fp);
       xml.header();
       xml.stag("score");
       xml.stag("elements");

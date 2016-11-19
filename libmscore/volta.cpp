@@ -252,7 +252,7 @@ void Volta::read(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void Volta::write(Xml& xml) const
+void Volta::write(XmlWriter& xml) const
       {
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
       TextLineBase::writeProperties(xml);

@@ -706,7 +706,7 @@ void MStyle::load(XmlReader& e)
 //   save
 //---------------------------------------------------------
 
-void MStyle::save(Xml& xml, bool optimize)
+void MStyle::save(XmlWriter& xml, bool optimize)
       {
       xml.stag("Style");
 

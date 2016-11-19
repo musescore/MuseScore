@@ -157,7 +157,7 @@ Segment* Score::tick2segmentEnd(int track, int tick) const
             if (!cr)
                   continue;
             // TODO LVI: check if following is correct, see exceptions in
-            // ExportMusicXml::chord() and ExportMusicXml::rest()
+            // ExportMusicXmlchord() and ExportMusicXmlrest()
             int endTick = cr->tick() + cr->actualTicks();
             if (endTick < tick)
                   continue; // not found yet

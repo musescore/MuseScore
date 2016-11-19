@@ -201,7 +201,7 @@ class Accidental : public Element {
             FLAT_SLASH,
             SHARP_SLASH3,
             SHARP_SLASH2,
-            
+
             // Extended Helmholtz-Ellis accidentals (just intonation)
             DOUBLE_FLAT_ONE_ARROW_DOWN,
             FLAT_ONE_ARROW_DOWN,
@@ -310,7 +310,7 @@ class Accidental : public Element {
       void undoSetSmall(bool val);
 
       virtual void read(XmlReader&) override;
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;

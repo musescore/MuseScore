@@ -416,7 +416,7 @@ class Note : public Element {
 
       virtual void read(XmlReader&) override;
       virtual bool readProperties(XmlReader&) override;
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter&) const override;
 
       bool acceptDrop(const DropData&) const override;
       Element* drop(const DropData&);

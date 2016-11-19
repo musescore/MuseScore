@@ -18,7 +18,7 @@
 namespace Ms {
 
 class Note;
-class Xml;
+class XmlWriter;
 
 enum class BeatType : char;
 
@@ -179,7 +179,7 @@ class MidiCoreEvent {
       void setData(int t, int a, int b) { _type = t; _a = a; _b = b; }
 
       bool isChannelEvent() const;
-      void write(Xml&) const;
+      void write(XmlWriter&) const;
       bool operator==(const MidiCoreEvent& e) const {
             return e._type == _type && e._channel == _channel && e._a == _a && e._b == _b;
             }
@@ -270,7 +270,7 @@ class Event : public PlayEvent {
       ~Event();
       bool operator==(const Event&) const;
 
-      void write(Xml&) const;
+      void write(XmlWriter&) const;
       void dump() const;
 
 

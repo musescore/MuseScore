@@ -1812,7 +1812,7 @@ MasterScore* MasterScore::clone()
       {
       QBuffer buffer;
       buffer.open(QIODevice::WriteOnly);
-      Xml xml(this, &buffer);
+      XmlWriter xml(this, &buffer);
       xml.header();
 
       xml.stag("museScore version=\"" MSC_VERSION "\"");

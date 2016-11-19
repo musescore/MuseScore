@@ -298,11 +298,11 @@ class Text : public Element {
 
       virtual bool systemFlag() const     { return textStyle().systemFlag(); }
 
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
-      virtual void writeProperties(Xml& xml) const { writeProperties(xml, true, true); }
-      void writeProperties(Xml& xml, bool writeText) const { writeProperties(xml, writeText, true); }
-      void writeProperties(Xml&, bool, bool) const;
+      virtual void writeProperties(XmlWriter& xml) const { writeProperties(xml, true, true); }
+      void writeProperties(XmlWriter& xml, bool writeText) const { writeProperties(xml, writeText, true); }
+      void writeProperties(XmlWriter&, bool, bool) const;
       bool readProperties(XmlReader&);
 
       void spellCheckUnderline(bool) {}

@@ -113,7 +113,7 @@ void Jump::read(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void Jump::write(Xml& xml) const
+void Jump::write(XmlWriter& xml) const
       {
       xml.stag(name());
       Text::writeProperties(xml);

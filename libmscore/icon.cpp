@@ -19,7 +19,7 @@ namespace Ms {
 //   write
 //---------------------------------------------------------
 
-void Icon::write(Xml& xml) const
+void Icon::write(XmlWriter& xml) const
       {
       xml.stag(name());
       xml.tag("subtype", int(_iconType));

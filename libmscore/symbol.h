@@ -52,7 +52,7 @@ class Symbol : public BSymbol {
       QString symName() const;
 
       virtual void draw(QPainter*) const override;
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void layout() override;
       void setAbove(bool);
@@ -80,7 +80,7 @@ class FSymbol : public BSymbol {
       virtual Element::Type type() const  { return Element::Type::FSYMBOL; }
 
       virtual void draw(QPainter*) const;
-      virtual void write(Xml& xml) const;
+      virtual void write(XmlWriter& xml) const;
       virtual void read(XmlReader&);
       virtual void layout();
 

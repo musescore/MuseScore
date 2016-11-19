@@ -320,7 +320,7 @@ void Album::loadScores()
 //   save
 //---------------------------------------------------------
 
-void Album::save(Xml& xml)
+void Album::save(XmlWriter& xml)
       {
       xml.stag("Album");
       xml.tag("name", _name);
@@ -338,7 +338,7 @@ void Album::save(Xml& xml)
 //   write
 //---------------------------------------------------------
 
-void Album::write(Xml& xml)
+void Album::write(XmlWriter& xml)
       {
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");

@@ -69,7 +69,7 @@ class Arpeggio : public Element {
       virtual bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString&) override;
 
       virtual void read(XmlReader& e) override;
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
 
       int span() const      { return _span; }
       void setSpan(int val) { _span = val; }

@@ -110,7 +110,7 @@ void Part::read(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void Part::write(Xml& xml) const
+void Part::write(XmlWriter& xml) const
       {
       xml.stag("Part");
       foreach(const Staff* staff, _staves)
@@ -471,7 +471,7 @@ void Part::setShortName(const QString& s)
 
 void Part::setPlainLongName(const QString& s)
       {
-      setLongName(Xml::xmlString(s));
+      setLongName(XmlWriter::xmlString(s));
       }
 
 //---------------------------------------------------------
@@ -480,7 +480,7 @@ void Part::setPlainLongName(const QString& s)
 
 void Part::setPlainShortName(const QString& s)
       {
-      setShortName(Xml::xmlString(s));
+      setShortName(XmlWriter::xmlString(s));
       }
 
 //---------------------------------------------------------

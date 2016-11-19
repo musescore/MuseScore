@@ -67,7 +67,7 @@ void InstrumentChange::setInstrument(const Instrument& i)
 //   write
 //---------------------------------------------------------
 
-void InstrumentChange::write(Xml& xml) const
+void InstrumentChange::write(XmlWriter& xml) const
       {
       xml.stag("InstrumentChange");
       _instrument->write(xml, part());

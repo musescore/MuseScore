@@ -535,7 +535,7 @@ LineSegment* Hairpin::createLineSegment()
 //   write
 //---------------------------------------------------------
 
-void Hairpin::write(Xml& xml) const
+void Hairpin::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;

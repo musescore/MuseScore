@@ -95,7 +95,7 @@ QRectF SystemDivider::drag(EditData* ed)
 //   write
 //---------------------------------------------------------
 
-void SystemDivider::write(Xml& xml) const
+void SystemDivider::write(XmlWriter& xml) const
       {
       if (dividerType() == SystemDivider::Type::LEFT)
             xml.stag(QString("SystemDivider type=\"left\""));

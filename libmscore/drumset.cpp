@@ -23,7 +23,7 @@ Drumset* gpDrumset;           // guitar pro drumset
 //   save
 //---------------------------------------------------------
 
-void Drumset::save(Xml& xml) const
+void Drumset::save(XmlWriter& xml) const
       {
       for (int i = 0; i < 128; ++i) {
             if (!isValid(i))

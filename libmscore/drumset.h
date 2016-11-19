@@ -18,7 +18,7 @@
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 
 //---------------------------------------------------------
 //   DrumInstrument
@@ -58,7 +58,7 @@ class Drumset {
       const QString& name(int pitch) const      { return _drum[pitch].name;           }
       int shortcut(int pitch) const             { return _drum[pitch].shortcut;       }
 
-      void save(Xml&) const;
+      void save(XmlWriter&) const;
       void load(XmlReader&);
       bool readProperties(XmlReader&, int);
       void clear();

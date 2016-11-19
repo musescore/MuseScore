@@ -87,7 +87,7 @@ class Undo;
 class UndoCommand;
 class UndoStack;
 class Volta;
-class Xml;
+class XmlWriter;
 struct Channel;
 struct Interval;
 struct TEvent;
@@ -561,7 +561,7 @@ class Score : public QObject, public ScoreElement {
 
       int pageIdx(Page* page) const { return _pages.indexOf(page); }
 
-      bool write(Xml&, bool onlySelection);
+      bool write(XmlWriter&, bool onlySelection);
 
       QList<Staff*>& staves()                { return _staves; }
       const QList<Staff*>& staves() const    { return _staves; }
@@ -957,7 +957,7 @@ class Score : public QObject, public ScoreElement {
       MasterScore* masterScore() const    { return _masterScore; }
       void setMasterScore(MasterScore* s) { _masterScore = s;    }
       void createRevision();
-      void writeSegments(Xml& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool);
+      void writeSegments(XmlWriter& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool);
 
       const QMap<QString, QString>& metaTags() const   { return _metaTags; }
       QMap<QString, QString>& metaTags()               { return _metaTags; }

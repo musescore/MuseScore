@@ -76,7 +76,7 @@ void ScoreElement::undoPushProperty(P_ID id)
 //   writeProperty
 //---------------------------------------------------------
 
-void ScoreElement::writeProperty(Xml& xml, P_ID id) const
+void ScoreElement::writeProperty(XmlWriter& xml, P_ID id) const
       {
       xml.tag(id, getProperty(id), propertyDefault(id));
       }

@@ -391,7 +391,7 @@ QString FiguredBassItem::normalizedText() const
 //   FiguredBassItem write()
 //---------------------------------------------------------
 
-void FiguredBassItem::write(Xml& xml) const
+void FiguredBassItem::write(XmlWriter& xml) const
       {
       xml.stag("FiguredBassItem");
       xml.tagE(QString("brackets b0=\"%1\" b1=\"%2\" b2=\"%3\" b3=\"%4\" b4=\"%5\"")
@@ -893,7 +893,7 @@ void FiguredBassItem::readMusicXML(XmlReader& e, bool paren)
 // required in the decision tree to handle everything correctly.
 //---------------------------------------------------------
 
-void FiguredBassItem::writeMusicXML(Xml& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const
+void FiguredBassItem::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const
       {
       xml.stag("figure");
 
@@ -992,7 +992,7 @@ FiguredBass::~FiguredBass()
 //   write
 //---------------------------------------------------------
 
-void FiguredBass::write(Xml& xml) const
+void FiguredBass::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
@@ -1720,7 +1720,7 @@ bool FiguredBass::hasParentheses() const
 //   Write MusicXML
 //---------------------------------------------------------
 
-void FiguredBass::writeMusicXML(Xml& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const
+void FiguredBass::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const
       {
       QString stag = "figured-bass";
       if (hasParentheses())

@@ -18,7 +18,7 @@
 
 namespace Ms {
 
-class Xml;
+class XmlWriter;
 class XmlReader;
 class Palette;
 
@@ -55,7 +55,7 @@ class PaletteBox : public QDockWidget {
    public:
       PaletteBox(QWidget* parent = 0);
       void addPalette(Palette*);
-      void write(Xml&);
+      void write(XmlWriter&);
       bool read(XmlReader&);
       void clear();
       QList<Palette*> palettes() const;

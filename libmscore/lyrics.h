@@ -101,7 +101,7 @@ class Lyrics : public Text {
       virtual void layout() override;
       virtual void layout1() override;
 
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual int subtype() const override            { return _no; }
       virtual QString subtypeName() const override    { return tr("Verse %1").arg(_no + 1); }

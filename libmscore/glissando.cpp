@@ -375,7 +375,7 @@ void Glissando::layout()
 //   write
 //---------------------------------------------------------
 
-void Glissando::write(Xml& xml) const
+void Glissando::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;

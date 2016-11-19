@@ -120,7 +120,7 @@ class Hairpin : public TextLineBase {
       Spatium hairpinContHeight() const      { return _hairpinContHeight; }
       void setHairpinContHeight(Spatium val) { _hairpinContHeight = val; }
 
-      virtual void write(Xml&) const override;
+      virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
 
       virtual QVariant getProperty(P_ID id) const override;

@@ -503,7 +503,7 @@ void BarLine::draw(QPainter* painter) const
 //   write
 //---------------------------------------------------------
 
-void BarLine::write(Xml& xml) const
+void BarLine::write(XmlWriter& xml) const
       {
       xml.stag("BarLine");
       xml.tag("subtype", barLineTypeName());

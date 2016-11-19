@@ -29,7 +29,7 @@ namespace Ms {
  Definition of classes Element, ElementList, StaffLines.
 */
 
-class Xml;
+class XmlWriter;
 class Measure;
 class Staff;
 class Part;
@@ -485,10 +485,10 @@ class Element : public QObject, public ScoreElement {
       virtual void draw(QPainter*) const {}
       void drawAt(QPainter*p, const QPointF& pt) const { p->translate(pt); draw(p); p->translate(-pt);}
 
-      virtual void writeProperties(Xml& xml) const;
+      virtual void writeProperties(XmlWriter& xml) const;
       virtual bool readProperties(XmlReader&);
 
-      virtual void write(Xml&) const;
+      virtual void write(XmlWriter&) const;
       virtual void read(XmlReader&);
 
       virtual QRectF drag(EditData*);
@@ -895,8 +895,8 @@ class ElementList : public std::vector<Element*> {
       ElementList() {}
       bool remove(Element*);
       void replace(Element* old, Element* n);
-      void write(Xml&) const;
-      void write(Xml&, const char* name) const;
+      void write(XmlWriter&) const;
+      void write(XmlWriter&, const char* name) const;
       };
 
 //-------------------------------------------------------------------
@@ -949,7 +949,7 @@ public:
       virtual void layout() override;
 
       virtual void draw(QPainter*) const override;
-      void writeProperties(Xml& xml) const;
+      void writeProperties(XmlWriter& xml) const;
       bool readProperties(XmlReader&);
 
       qreal len() const          { return _len;   }

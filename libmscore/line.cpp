@@ -1046,7 +1046,7 @@ void SLine::layout()
 //    write properties different from prototype
 //---------------------------------------------------------
 
-void SLine::writeProperties(Xml& xml) const
+void SLine::writeProperties(XmlWriter& xml) const
       {
       if (!endElement())
             xml.tag("ticks", ticks());
@@ -1187,7 +1187,7 @@ const QRectF& SLine::bbox() const
 //   write
 //---------------------------------------------------------
 
-void SLine::write(Xml& xml) const
+void SLine::write(XmlWriter& xml) const
       {
       int id = xml.spannerId(this);
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));

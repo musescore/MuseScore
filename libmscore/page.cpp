@@ -403,7 +403,7 @@ void PageFormat::read(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void PageFormat::write(Xml& xml) const
+void PageFormat::write(XmlWriter& xml) const
       {
       xml.stag("page-layout");
 
@@ -621,7 +621,7 @@ bool Page::isOdd() const
 //   write
 //---------------------------------------------------------
 
-void Page::write(Xml& xml) const
+void Page::write(XmlWriter& xml) const
       {
       xml.stag("Page");
       foreach(System* system, _systems) {

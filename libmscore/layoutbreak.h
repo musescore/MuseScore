@@ -65,7 +65,7 @@ class LayoutBreak : public Element {
 
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
-      virtual void write(Xml&) const override;
+      virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
 
       Measure* measure() const            { return (Measure*)parent();   }

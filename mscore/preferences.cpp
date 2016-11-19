@@ -1823,7 +1823,7 @@ void Preferences::writePluginList()
             qDebug("cannot create plugin file <%s>", qPrintable(f.fileName()));
             return;
             }
-      Xml xml(0, &f);
+      XmlWriter xml(0, &f);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
       foreach(const PluginDescription& d, pluginList) {

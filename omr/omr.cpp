@@ -83,7 +83,7 @@ OmrView* Omr::newOmrView(ScoreView* sv)
 //   write
 //---------------------------------------------------------
 
-void Omr::write(Xml& xml) const
+void Omr::write(XmlWriter& xml) const
       {
       xml.stag("Omr");
       xml.tag("path", _path);

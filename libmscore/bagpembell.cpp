@@ -355,7 +355,7 @@ noteList BagpipeEmbellishment::getNoteList() const
 //   write
 //---------------------------------------------------------
 
-void BagpipeEmbellishment::write(Xml& xml) const
+void BagpipeEmbellishment::write(XmlWriter& xml) const
       {
       xml.stag(name());
       xml.tag("subtype", _embelType);
@@ -458,7 +458,7 @@ static void symMetrics(const char* name, const Sym& headsym)
              headsym.getAttach().y());
       }
 */
-      
+
 //---------------------------------------------------------
 //   mag
 //      return fixed magnification

@@ -1600,7 +1600,7 @@ void Measure::adjustToLen(Fraction nf)
 //   write
 //---------------------------------------------------------
 
-void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
+void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements) const
       {
       int mno = no() + 1;
       if (_len != _timesig) {

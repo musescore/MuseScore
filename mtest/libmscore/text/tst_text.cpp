@@ -378,7 +378,7 @@ void TestText::testReadWrite() {
       auto testrw = [](Score* score, Text* t) {
             QBuffer buffer;
             buffer.open(QIODevice::WriteOnly);
-            Xml xml(score, &buffer);
+            XmlWriter xml(score, &buffer);
             t->write(xml);
             buffer.close();
 

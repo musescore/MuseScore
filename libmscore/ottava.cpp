@@ -256,7 +256,7 @@ void Ottava::endEdit()
 //   write
 //---------------------------------------------------------
 
-void Ottava::write(Xml& xml) const
+void Ottava::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;

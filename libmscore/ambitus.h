@@ -88,7 +88,7 @@ class Ambitus : public Element {
       virtual void      read(XmlReader&) override;
       virtual void      scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual void      setTrack(int val) override;
-      virtual void      write(Xml&) const override;
+      virtual void      write(XmlWriter&) const override;
       virtual bool      readProperties(XmlReader&) override;
       virtual QString   accessibleInfo() const override;
       virtual QString   screenReaderInfo() const override;

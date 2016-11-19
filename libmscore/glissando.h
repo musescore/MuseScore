@@ -88,7 +88,7 @@ class Glissando : public SLine {
       virtual LineSegment* createLineSegment() override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual void layout() override;
-      virtual void write(Xml&) const override;
+      virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
 
       // Glissando specific methods

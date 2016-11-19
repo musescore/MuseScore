@@ -41,7 +41,7 @@ void Audio::read(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void Audio::write(Xml& xml) const
+void Audio::write(XmlWriter& xml) const
       {
       xml.stag("Audio");
       xml.tag("path", _path);

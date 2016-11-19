@@ -1060,7 +1060,7 @@ Slur::~Slur()
 //   write
 //---------------------------------------------------------
 
-void Slur::write(Xml& xml) const
+void Slur::write(XmlWriter& xml) const
       {
       if (broken()) {
             qDebug("broken slur not written");

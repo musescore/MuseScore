@@ -66,7 +66,7 @@ class Jump : public Text {
       Measure* measure() const         { return (Measure*)parent(); }
 
       virtual void read(XmlReader&) override;
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
 
       QString jumpTo()               const { return _jumpTo;     }
       QString playUntil()            const { return _playUntil;  }

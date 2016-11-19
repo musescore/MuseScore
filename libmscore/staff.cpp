@@ -493,7 +493,7 @@ int Staff::currentKeyTick(int tick) const
 //   write
 //---------------------------------------------------------
 
-void Staff::write(Xml& xml) const
+void Staff::write(XmlWriter& xml) const
       {
       int idx = this->idx();
       xml.stag(QString("Staff id=\"%1\"").arg(idx + 1));

@@ -72,7 +72,7 @@ void TBox::layout()
 //   write
 //---------------------------------------------------------
 
-void TBox::write(Xml& xml) const
+void TBox::write(XmlWriter& xml) const
       {
       xml.stag(name());
       Box::writeProperties(xml);

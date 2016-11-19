@@ -69,7 +69,7 @@ class Bracket : public Element {
       virtual qreal width() const override;
 
       virtual void draw(QPainter*) const override;
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void layout() override;
 

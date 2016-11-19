@@ -59,7 +59,7 @@ namespace Ms {
 //   writeMeasure
 //---------------------------------------------------------
 
-static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSystemElements)
+static void writeMeasure(XmlWriter& xml, MeasureBase* m, int staffIdx, bool writeSystemElements)
       {
       //
       // special case multi measure rest
@@ -77,7 +77,7 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
 //   write
 //---------------------------------------------------------
 
-bool Score::write(Xml& xml, bool selectionOnly)
+bool Score::write(XmlWriter& xml, bool selectionOnly)
       {
       // if we have multi measure rests and some parts are hidden,
       // then some layout information is missing:
@@ -514,11 +514,11 @@ bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
       QString fn = info.completeBaseName() + ".mscx";
       QBuffer cbuf;
       cbuf.open(QIODevice::ReadWrite);
-      Xml xml(this, &cbuf);
+      XmlWriter xml(this, &cbuf);
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
       xml.stag("container");
       xml.stag("rootfiles");
-      xml.stag(QString("rootfile full-path=\"%1\"").arg(Xml::xmlString(fn)));
+      xml.stag(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString(fn)));
       xml.etag();
       foreach(ImageStoreItem* ip, imageStore) {
             if (!ip->isUsed(this))
@@ -646,7 +646,7 @@ bool Score::saveStyle(const QString& name)
             return false;
             }
 
-      Xml xml(this, &f);
+      XmlWriter xml(this, &f);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
       _style.save(xml, false);     // save complete style
@@ -670,7 +670,7 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       {
       if (!MScore::testMode)
             MScore::testMode = enableTestMode;
-      Xml xml(this, f);
+      XmlWriter xml(this, f);
       xml.setWriteOmr(msczFormat);
       xml.header();
       if (!MScore::testMode) {
@@ -1042,7 +1042,7 @@ qDebug("createRevision");
 //          can be zero
 //---------------------------------------------------------
 
-void Score::writeSegments(Xml& xml, int strack, int etrack,
+void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
    Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick)
       {
       int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();

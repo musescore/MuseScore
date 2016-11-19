@@ -29,12 +29,12 @@ Instrument InstrumentList::defaultInstrument;
 //   write
 //---------------------------------------------------------
 
-void NamedEventList::write(Xml& xml, const QString& n) const
+void NamedEventList::write(XmlWriter& xml, const QString& n) const
       {
       xml.stag(QString("%1 name=\"%2\"").arg(n).arg(name));
       if (!descr.isEmpty())
             xml.tag("descr", descr);
-      foreach(const MidiCoreEvent& e, events)
+      for (const MidiCoreEvent& e : events)
             e.write(xml);
       xml.etag();
       }
@@ -159,7 +159,7 @@ Instrument::~Instrument()
 //   StaffName::write
 //---------------------------------------------------------
 
-void StaffName::write(Xml& xml, const char* tag) const
+void StaffName::write(XmlWriter& xml, const char* tag) const
       {
       if (!name().isEmpty()) {
             if (pos() == 0)
@@ -187,7 +187,7 @@ void StaffName::read(XmlReader& e)
 //   Instrument::write
 //---------------------------------------------------------
 
-void Instrument::write(Xml& xml, Part* part) const
+void Instrument::write(XmlWriter& xml, Part* part) const
       {
       xml.stag("Instrument");
       _longNames.write(xml, "longName");
@@ -415,7 +415,7 @@ Channel::Channel()
 //   write
 //---------------------------------------------------------
 
-void Channel::write(Xml& xml, Part* part) const
+void Channel::write(XmlWriter& xml, Part* part) const
       {
       if (name.isEmpty() || name == "normal")
             xml.stag("Channel");
@@ -611,7 +611,7 @@ int Instrument::channelIdx(const QString& s) const
 //   write
 //---------------------------------------------------------
 
-void MidiArticulation::write(Xml& xml) const
+void MidiArticulation::write(XmlWriter& xml) const
       {
       if (name.isEmpty())
             xml.stag("Articulation");
@@ -987,7 +987,7 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
 //   StaffNameList::write
 //---------------------------------------------------------
 
-void StaffNameList::write(Xml& xml, const char* name) const
+void StaffNameList::write(XmlWriter& xml, const char* name) const
       {
       for (const StaffName& sn : *this)
             sn.write(xml, name);

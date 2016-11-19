@@ -169,7 +169,7 @@ void Box::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
 //   write
 //---------------------------------------------------------
 
-void Box::write(Xml& xml) const
+void Box::write(XmlWriter& xml) const
       {
       xml.stag(name());
       writeProperties(xml);
@@ -180,7 +180,7 @@ void Box::write(Xml& xml) const
 //   writeProperties
 //---------------------------------------------------------
 
-void Box::writeProperties(Xml& xml) const
+void Box::writeProperties(XmlWriter& xml) const
       {
       writeProperty(xml, P_ID::BOX_HEIGHT);
       writeProperty(xml, P_ID::BOX_WIDTH);

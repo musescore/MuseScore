@@ -174,7 +174,7 @@ const Groups& Groups::endings(const Fraction& f)
 //   write
 //---------------------------------------------------------
 
-void Groups::write(Xml& xml) const
+void Groups::write(XmlWriter& xml) const
       {
       xml.stag("Groups");
       for (const GroupNode& n : *this)

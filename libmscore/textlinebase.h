@@ -90,10 +90,10 @@ class TextLineBase : public SLine {
 
       virtual void setScore(Score* s) override;
 
-      virtual void write(Xml& xml) const override;
+      virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
 
-      virtual void writeProperties(Xml& xml) const override;
+      virtual void writeProperties(XmlWriter& xml) const override;
       virtual bool readProperties(XmlReader& node) override;
 
       bool lineVisible() const                { return _lineVisible;          }

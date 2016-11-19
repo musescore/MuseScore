@@ -99,7 +99,7 @@ void Lyrics::scanElements(void* data, void (*func)(void*, Element*), bool /*all*
 //   write
 //---------------------------------------------------------
 
-void Lyrics::write(Xml& xml) const
+void Lyrics::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;

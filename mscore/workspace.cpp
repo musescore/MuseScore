@@ -279,11 +279,11 @@ void Workspace::write()
 
       QBuffer cbuf;
       cbuf.open(QIODevice::ReadWrite);
-      Xml xml(gscore, &cbuf);
+      XmlWriter xml(gscore, &cbuf);
       xml.header();
       xml.stag("container");
       xml.stag("rootfiles");
-      xml.stag(QString("rootfile full-path=\"%1\"").arg(Xml::xmlString("workspace.xml")));
+      xml.stag(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString("workspace.xml")));
       xml.etag();
       for (ImageStoreItem* ip : imageStore) {
             if (!ip->isUsed(gscore))
@@ -306,7 +306,7 @@ void Workspace::write()
       {
       QBuffer cbuf;
       cbuf.open(QIODevice::ReadWrite);
-      Xml xml(gscore, &cbuf);
+      XmlWriter xml(gscore, &cbuf);
       xml.setClipboardmode(true);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
