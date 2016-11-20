@@ -3199,6 +3199,17 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         "toggle-hide-empty",
+         QT_TRANSLATE_NOOP("action","Toggle Hide Empty Staves"),
+         QT_TRANSLATE_NOOP("action","Toggle hide empty staves"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
+         MsWidget::SCORE_TAB,
          STATE_TEXT_EDIT,
          "text-b",
          QT_TRANSLATE_NOOP("action","Bold Face"),
