@@ -2581,6 +2581,11 @@ void Score::cmd(const QAction* a)
             deselectAll();
             undo(new ChangeStyleVal(this, StyleIdx::createMultiMeasureRests, val));
             }
+      else if (cmd == "toggle-hide-empty") {
+            bool val = !styleB(StyleIdx::hideEmptyStaves);
+            deselectAll();
+            undo(new ChangeStyleVal(this, StyleIdx::hideEmptyStaves, val));
+            }
       else if (cmd == "add-brackets")
             cmdAddBracket();
       else if (cmd == "acciaccatura")
