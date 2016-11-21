@@ -56,7 +56,7 @@ class PartItem : public QTreeWidgetItem {
       };
 
 //---------------------------------------------------------
-//   PartiturPartsItem
+//   ScorePartsItem
 //---------------------------------------------------------
 
 class InstrumentItem : public QListWidgetItem {
