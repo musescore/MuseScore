@@ -724,7 +724,7 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
             else if (!tuplet->readProperties(e))
                   e.unknown();
             }
-      Fraction r = tuplet->ratio().reduced();  // this is wrong, but at this stage it is kept
+      Fraction r = tuplet->ratio().reduced();  // this may be wrong, but at this stage it is kept
                                                // for compatibility. It will be corrected afterwards
                                                // during "sanitize" step
       Fraction f(r.denominator(), tuplet->baseLen().fraction().denominator());
@@ -1356,7 +1356,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             int tupletDuration = tuplet->actualTicks() - 1;
             std::vector<DurationElement*> tElements = tuplet->elements();
             for (Tuplet* tuplet2 : e.tuplets()) {
-                  if (tuplet2->tuplet()) // already a nested tuplet
+                  if ((tuplet2->tuplet()) || (tuplet2->voice() != tuplet->voice())) // already a nested tuplet or in a different voice
                         continue;
                   int possibleDuration = tuplet2->duration().ticks() * tuplet->ratio().denominator() / tuplet->ratio().numerator() - 1;
                   if ((tuplet2 != tuplet) && (tuplet2->tick() >= tupletTick) && (tuplet2->tick() < tupletTick + tupletDuration) && (tuplet2->tick() + possibleDuration < tupletTick + tupletDuration)) {
