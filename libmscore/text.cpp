@@ -923,7 +923,7 @@ void Text::draw(QPainter* p) const
             QColor bg(textStyle().backgroundColor());
             p->setBrush(bg.alpha() ? QBrush(bg) : Qt::NoBrush);
             if (textStyle().circle())
-                  p->drawArc(frame, 0, 5760);
+                  p->drawEllipse(frame);
             else {
                   int r2 = textStyle().frameRound() * lrint((frame.width() / frame.height()));
                   if (r2 > 99)
