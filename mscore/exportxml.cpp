@@ -1431,13 +1431,12 @@ void ExportMusicXml::barlineLeft(Measure* m)
       if (!rs && !volta) return;
       attr.doAttr(xml, false);
       xml.stag(QString("barline location=\"left\""));
-      if (rs) {
+      if (rs)
             xml.tag("bar-style", QString("heavy-light"));
-            xml.tagE("repeat direction=\"forward\"");
-            }
-      if (volta) {
+      if (volta)
             ending(xml, volta, true);
-            }
+      if (rs)
+            xml.tagE("repeat direction=\"forward\"");
       xml.etag();
       }
 
