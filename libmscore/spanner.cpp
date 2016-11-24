@@ -172,7 +172,7 @@ void SpannerSegment::setVisible(bool f)
             _spanner->setVisible(f);
             }
       else
-            setVisible(f);
+            Element::setVisible(f);
       }
 
 //---------------------------------------------------------
