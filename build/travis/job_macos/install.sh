@@ -23,10 +23,10 @@ brew install bottles/portaudio*
 brew install jack lame
 
 #update ruby
-rvm uninstall 2.0.0-p648
-rvm uninstall 2.0.0-p643
-rvm uninstall 2.0.0
-rvm get head
+#rvm uninstall 2.0.0-p648
+#rvm uninstall 2.0.0-p643
+#rvm uninstall 2.0.0
+#rvm get head
 
 #install Qt
 which -s qmake
