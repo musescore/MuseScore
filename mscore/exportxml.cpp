@@ -1433,13 +1433,12 @@ void ExportMusicXml::barlineLeft(Measure* m)
       if (!rs && !volta) return;
       attr.doAttr(xml, false);
       xml.stag(QString("barline location=\"left\""));
-      if (rs) {
+      if (rs)
             xml.tag("bar-style", QString("heavy-light"));
-            xml.tagE("repeat direction=\"forward\"");
-            }
-      if (volta) {
+      if (volta)
             ending(xml, volta, true);
-            }
+      if (rs)
+            xml.tagE("repeat direction=\"forward\"");
       xml.etag();
       }
 
@@ -4608,12 +4607,15 @@ void ExportMusicXml::findAndExportClef(Measure* m, const int staves, const int s
       Segment* seg         = 0;
 
       if (prevMeasure)
-            cs1 = prevMeasure->findSegment(Segment::Type::Clef,  tick);
+            cs1 = prevMeasure->findSegment(Segment::Type::Clef, tick);
       else
-            cs1 = 0;
+            cs1 = m->findSegment(Segment::Type::HeaderClef, tick);
 
-      if (mmR)
-            cs3 = mmR->findSegment(Segment::Type::Clef,  tick);
+      if (mmR) {
+            cs3 = mmR->findSegment(Segment::Type::HeaderClef, tick);
+            if (!cs3)
+                  cs3 = mmR->findSegment(Segment::Type::Clef, tick);
+            }
       else
             cs3 = 0;
 
