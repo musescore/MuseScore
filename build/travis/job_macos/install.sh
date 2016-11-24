@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # do not build mac for PR
-if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
-  exit 0
-fi
+#if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
+#  exit 0
+#fi
 
 # install dependencies
 wget -c --no-check-certificate -nv -O bottles.zip https://musescore.org/sites/musescore.org/files/bottles-MuseScore-3.0.zip
