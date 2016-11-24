@@ -1050,7 +1050,7 @@ void Note::remove(Element* e)
 
 bool Note::isNoteName() const
       {
-      if (chord()) {
+      if (chord() && chord()->staff()) {
             NoteHeadScheme s = chord()->staff()->staffType()->noteHeadScheme();
             return s == NoteHeadScheme::HEAD_PITCHNAME || s == NoteHeadScheme::HEAD_PITCHNAME_GERMAN || s == NoteHeadScheme::HEAD_SOLFEGE || s == NoteHeadScheme::HEAD_SOLFEGE_FIXED;
             }
