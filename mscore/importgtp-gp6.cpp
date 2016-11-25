@@ -1431,7 +1431,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                               rm->setTrack(staffIdx * VOICES);
                               rm->setDuration(measure->len());
                               rm->setDurationType(TDuration::DurationType::V_MEASURE);
-                              Segment* segment = measure->getSegment(Segment::Type::ChordRest, 0);
+                              Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
                               segment->add(rm);
                               }
                         else
@@ -1457,7 +1457,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                                     TDuration d(l);
                                     cr->setDuration(l);
                                     cr->setDurationType(TDuration::DurationType::V_MEASURE);
-                                    Segment* segment = measure->getSegment(Segment::Type::ChordRest, 0);
+                                    Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
                                     if(!segment->cr(staffIdx * VOICES + voiceNum)) {
                                           segment->add(cr);
                                           }
