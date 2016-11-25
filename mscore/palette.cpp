@@ -976,8 +976,13 @@ QPixmap Palette::pixmap(int paletteIdx) const
       Element* e = c->element;
       e->layout();
       QRectF r = e->bbox();
-      int w    = r.width()  * cellMag;
-      int h    = r.height() * cellMag;
+      int w    = lrint(r.width()  * cellMag);
+      int h    = lrint(r.height() * cellMag);
+
+      if (w * h == 0) {
+            qDebug("zero pixmap %d %d %s", w, h, e->name());
+            return QPixmap();
+            }
 
       QPixmap pm(w, h);
       pm.fill(Qt::transparent);
