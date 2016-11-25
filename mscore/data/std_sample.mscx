@@ -9,14 +9,49 @@
       </Synthesizer>
     <Division>480</Division>
     <Style>
+      <lyricsLineThickness>0.16</lyricsLineThickness>
+      <doubleBarDistance>0.4</doubleBarDistance>
+      <repeatBarlineDotSeparation>0.16</repeatBarlineDotSeparation>
+      <bracketWidth>0.5</bracketWidth>
+      <stemWidth>0.12</stemWidth>
+      <staffLineWidth>0.13</staffLineWidth>
+      <ledgerLineLength>0.4</ledgerLineLength>
+      <beamDistance>0.25</beamDistance>
+      <hairpinWidth>0.16</hairpinWidth>
+      <pedalLineWidth>0.16</pedalLineWidth>
+      <slurEndWidth>0.1</slurEndWidth>
+      <slurMidWidth>0.22</slurMidWidth>
+      <musicalSymbolFont>Bravura</musicalSymbolFont>
+      <musicalTextFont>Bravura Text</musicalTextFont>
+      <voltaLineWidth>0.16</voltaLineWidth>
+      <ottavaLineWidth>0.16</ottavaLineWidth>
+      <tupletBracketWidth>0.16</tupletBracketWidth>
+      <TextStyle>
+        <halign>center</halign>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>-3</yoffset>
+        <offsetType>spatium</offsetType>
+        <name>Rehearsal Mark</name>
+        <family>FreeSerif</family>
+        <size>14</size>
+        <bold>1</bold>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <frameWidthS>0.16</frameWidthS>
+        <paddingWidthS>0.5</paddingWidthS>
+        <frameRound>0</frameRound>
+        <frameColor r="0" g="0" b="0" a="255"/>
+        <square>1</square>
+        <systemFlag>1</systemFlag>
+        </TextStyle>
       <page-layout>
         <page-height>226.772</page-height>
         <page-width>566.929</page-width>
         <page-margins type="both">
           <left-margin>5.66929</left-margin>
           <right-margin>5.66929</right-margin>
-          <top-margin>28.3465</top-margin>
-          <bottom-margin>28.3465</bottom-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
           </page-margins>
         </page-layout>
       <Spatium>1.764</Spatium>

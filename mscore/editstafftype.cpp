@@ -528,7 +528,7 @@ void EditStaffType::tabStemThroughCompatibility(bool checked)
 void EditStaffType::updatePreview()
       {
       setFromDlg();
-      ScoreView* preview = nullptr;
+      ExampleView* preview = nullptr;
       if (staffType.group() == StaffGroup::TAB)
              preview = tabPreview;
       else if (staffType.group() == StaffGroup::STANDARD)
