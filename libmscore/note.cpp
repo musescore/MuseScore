@@ -1164,25 +1164,12 @@ void Note::write(XmlWriter& xml) const
                   e.write(xml);
             xml.etag();
             }
-      writeProperty(xml, P_ID::PITCH);
-      // write tpc1 before tpc2 !
-      writeProperty(xml, P_ID::TPC1);
-      if (_tpc[1] != _tpc[0])
-            writeProperty(xml, P_ID::TPC2);
-      writeProperty(xml, P_ID::SMALL);
-      writeProperty(xml, P_ID::MIRROR_HEAD);
-      writeProperty(xml, P_ID::DOT_POSITION);
-      writeProperty(xml, P_ID::HEAD_GROUP);
-      writeProperty(xml, P_ID::VELO_OFFSET);
-      writeProperty(xml, P_ID::PLAY);
-      writeProperty(xml, P_ID::TUNING);
-      writeProperty(xml, P_ID::FRET);
-      writeProperty(xml, P_ID::STRING);
-      writeProperty(xml, P_ID::GHOST);
-      writeProperty(xml, P_ID::HEAD_TYPE);
-      writeProperty(xml, P_ID::VELO_TYPE);
-      writeProperty(xml, P_ID::FIXED);
-      writeProperty(xml, P_ID::FIXED_LINE);
+      for (P_ID id : { P_ID::PITCH, P_ID::TPC1, P_ID::TPC2, P_ID::SMALL, P_ID::MIRROR_HEAD, P_ID::DOT_POSITION,
+         P_ID::HEAD_GROUP, P_ID::VELO_OFFSET, P_ID::PLAY, P_ID::TUNING, P_ID::FRET, P_ID::STRING,
+         P_ID::GHOST, P_ID::HEAD_TYPE, P_ID::VELO_TYPE, P_ID::FIXED, P_ID::FIXED_LINE
+            }) {
+            writeProperty(xml, id);
+            }
 
       for (Spanner* e : _spannerFor)
             e->write(xml);
@@ -2702,6 +2689,8 @@ QVariant Note::propertyDefault(P_ID propertyId) const
                   return false;
             case P_ID::FIXED_LINE:
                   return 0;
+            case P_ID::TPC2:
+                  return getProperty(P_ID::TPC1);
             default:
                   break;
             }
