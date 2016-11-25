@@ -607,7 +607,6 @@ void Debugger::updateElement(Element* el)
                   case Element::Type::MEASURE:          ew = new MeasureView;         break;
                   case Element::Type::CHORD:            ew = new ChordDebug;          break;
                   case Element::Type::NOTE:             ew = new ShowNoteWidget;      break;
-                  case Element::Type::REPEAT_MEASURE:
                   case Element::Type::REST:             ew = new RestView;            break;
                   case Element::Type::CLEF:             ew = new ClefView;            break;
                   case Element::Type::TIMESIG:          ew = new TimeSigView;         break;

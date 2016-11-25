@@ -44,6 +44,7 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/segment.h"
 #include "libmscore/rehearsalmark.h"
+#include "libmscore/repeat.h"
 #include "libmscore/dynamic.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/volta.h"
@@ -1425,8 +1426,14 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                   else if (!currentNode.nodeName().compare("SimileMark")) {
                         if (!currentNode.toElement().text().compare("Simple") ||
                             !currentNode.toElement().text().compare("FirstOfDouble") ||
-                            !currentNode.toElement().text().compare("SecondOfDouble"))
-                              measure->cmdInsertRepeatMeasure(staffIdx);
+                            !currentNode.toElement().text().compare("SecondOfDouble")) {
+                              RepeatMeasure* rm = new RepeatMeasure(score);
+                              rm->setTrack(staffIdx * VOICES);
+                              rm->setDuration(measure->len());
+                              rm->setDurationType(TDuration::DurationType::V_MEASURE);
+                              Segment* segment = measure->getSegment(Segment::Type::ChordRest, 0);
+                              segment->add(rm);
+                              }
                         else
                               qDebug() << "WARNING: unhandle similie mark type: " << currentNode.toElement().text();
                         }
@@ -1450,9 +1457,10 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                                     TDuration d(l);
                                     cr->setDuration(l);
                                     cr->setDurationType(TDuration::DurationType::V_MEASURE);
-                                    Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
-                                    if(!segment->cr(staffIdx * VOICES + voiceNum))
+                                    Segment* segment = measure->getSegment(Segment::Type::ChordRest, 0);
+                                    if(!segment->cr(staffIdx * VOICES + voiceNum)) {
                                           segment->add(cr);
+                                          }
                                     contentAdded = true;
                                     continue;
                                     }
