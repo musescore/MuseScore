@@ -276,6 +276,10 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
         </attributes>
       <note>
         <pitch>
@@ -336,6 +340,11 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          <clef-octave-change>-1</clef-octave-change>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -396,6 +405,10 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -462,6 +475,10 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -529,6 +546,14 @@
           <beat-type>4</beat-type>
           </time>
         <staves>2</staves>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
+        <clef number="2">
+          <sign>F</sign>
+          <line>4</line>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -631,6 +656,10 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
         <transpose>
           <diatonic>-1</diatonic>
           <chromatic>-2</chromatic>
@@ -695,6 +724,10 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <clef>
+          <sign>percussion</sign>
+          <line>2</line>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -738,6 +771,10 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -782,6 +819,14 @@
           <beat-type>4</beat-type>
           </time>
         <staves>2</staves>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
+        <clef number="2">
+          <sign>F</sign>
+          <line>4</line>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -884,6 +929,10 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -962,6 +1011,11 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          <clef-octave-change>1</clef-octave-change>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -1022,6 +1076,10 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -1089,6 +1147,14 @@
           <beat-type>4</beat-type>
           </time>
         <staves>2</staves>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
+        <clef number="2">
+          <sign>F</sign>
+          <line>4</line>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -1205,6 +1271,11 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          <clef-octave-change>-1</clef-octave-change>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -1272,6 +1343,14 @@
           <beat-type>4</beat-type>
           </time>
         <staves>2</staves>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
+        <clef number="2">
+          <sign>F</sign>
+          <line>4</line>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -1374,6 +1453,10 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -1440,6 +1523,10 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
         </attributes>
       <note>
         <rest/>
@@ -1506,6 +1593,10 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
         </attributes>
       <note>
         <rest/>
