@@ -215,10 +215,10 @@
         <number>0</number>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="page">
-        <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0">
+        <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0">
          <property name="spacing">
           <number>5</number>
          </property>
@@ -272,7 +272,7 @@
          <item>
           <widget class="QGroupBox" name="groupPreviewStandard">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -287,8 +287,30 @@
             <string>Preview</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_49">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
-             <widget class="Ms::ScoreView" name="standardPreview" native="true"/>
+             <widget class="Ms::ExampleView" name="standardPreview" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="lineWidth" stdset="0">
+               <number>2</number>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -1232,7 +1254,7 @@
          <item>
           <widget class="QGroupBox" name="groupPreview">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -1247,8 +1269,30 @@
             <string>Preview</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
-             <widget class="Ms::ScoreView" name="tabPreview" native="true"/>
+             <widget class="Ms::ExampleView" name="tabPreview" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="lineWidth" stdset="0">
+               <number>2</number>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -1343,9 +1387,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Ms::ScoreView</class>
+   <class>Ms::ExampleView</class>
    <extends>QWidget</extends>
-   <header>scoreview.h</header>
+   <header>exampleview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -1432,8 +1476,8 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="OnAboveLinesButtGroup"/>
   <buttongroup name="NumLettersButtGroup"/>
+  <buttongroup name="OnAboveLinesButtGroup"/>
   <buttongroup name="ContinuousBrokenLinesbuttGroup"/>
  </buttongroups>
 </ui>

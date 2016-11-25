@@ -30,10 +30,8 @@ class ExampleView : public QFrame, public MuseScoreView {
       Q_OBJECT
 
       QTransform _matrix, imatrix;
-      QColor _bgColor;
       QColor _fgColor;
-      QPixmap* bgPixmap;
-      QPixmap* fgPixmap;
+      QPixmap* _fgPixmap;
       Element* dragElement = 0;
       const Element* dropTarget = 0;      ///< current drop target during dragMove
       QRectF dropRectangle;               ///< current drop rectangle during dragMove
@@ -55,6 +53,7 @@ class ExampleView : public QFrame, public MuseScoreView {
 
    public:
       ExampleView(QWidget* parent = 0);
+      ~ExampleView();
       virtual void layoutChanged();
       virtual void dataChanged(const QRectF&);
       virtual void updateAll();
