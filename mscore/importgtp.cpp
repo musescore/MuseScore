@@ -2258,6 +2258,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             // check to see if we are dealing with a GPX file via the extension
             if (name.endsWith(".gpx", Qt::CaseInsensitive)) {
                   gp = new GuitarPro6(score);
+                  gp->initGuitarProDrumset();
                   gp->read(&fp);
                   fp.close();
                   }
