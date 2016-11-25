@@ -395,7 +395,16 @@ void GuitarPro6::readTracks(QDomNode* track)
                   // this is a typo is guitar pro - 'defaut' is correct here
                   else if (nodeName == "SystemsDefautLayout") {}
                   else if (nodeName == "RSE") {}
-                  else if (nodeName == "GeneralMidi") {}
+                  else if (nodeName == "GeneralMidi") {
+                        if (currentNode.toElement().hasChildNodes()) {
+                              int midiChannel = currentNode.firstChildElement("PrimaryChannel").text().toInt();
+                              part->setMidiChannel(midiChannel);
+                              if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
+                                    part->instrument()->setDrumset(gpDrumset);
+                                    s->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
+                                    }
+                              }
+                        }
                   else if (nodeName == "PlaybackState") {}
                   else if (nodeName == "PlayingStyle") {}
                   else if (nodeName == "PageSetup") {}
@@ -588,121 +597,59 @@ Fraction GuitarPro6::rhythmToDuration(QString value)
 
 void GuitarPro6::readDrumNote(Note* note, int element, int variation)
       {
-      int octaveInt = 0;
-      int toneInt = 0;
+      int pitch = 44;
       /* These numbers below were determined by creating all drum
        * notes in a GPX format file and then analyzing the score.gpif
-       * file which specifies the score. */
-      if (element == 11 && variation == 0) {
-            octaveInt = 5;
-            toneInt = 0;
-            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
-      }
-      else if (element == 0 && variation == 0) {
-            octaveInt = 5;
-            toneInt = 5;
-      }
-      else if (element == 5 && variation == 0) {
-            octaveInt = 5;
-            toneInt = 7;
-      }
-      else if (element == 6 && variation == 0) {
-            octaveInt = 5;
-            toneInt = 9;
-      }
-      else if (element == 7 && variation == 0) {
-            octaveInt = 5;
-            toneInt = 11;
-      }
-      else if (element == 1 && variation == 0) {
-            octaveInt = 6;
-            toneInt = 0;
-      }
-      else if (element == 1 && variation == 1) {
-            octaveInt = 6;
-            toneInt = 0;
-            note->setHeadGroup(NoteHead::Group::HEAD_MI);
-      }
-      else if (element == 1 && variation == 2) {
-            octaveInt = 6;
-            toneInt = 0;
-            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
-      }
-      else if (element == 8 && variation == 0) {
-            octaveInt = 6;
-            toneInt = 2;
-      }
-      else if (element == 9 && variation == 0) {
-            octaveInt = 6;
-            toneInt = 4;
-      }
-      else if (element == 2 && variation == 0) {
-            octaveInt = 6;
-            toneInt = 4;
-            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE);
-      }
-      else if (element == 15 && variation == 0) {
-            octaveInt = 6;
-            toneInt = 5;
-            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
-      }
-      else if (element == 15 && variation == 1) {
-            octaveInt = 6;
-            toneInt = 5;
-            note->setHeadGroup(NoteHead::Group::HEAD_DIAMOND);
-      }
-      else if (element == 15 && variation == 2) {
-            octaveInt = 6;
-            toneInt = 5;
-            note->setHeadGroup(NoteHead::Group::HEAD_MI);
-      }
-      else if (element == 3 && variation == 0) {
-            octaveInt = 6;
-            toneInt = 5;
-            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE);
-      }
-      else if (element == 10 && variation == 0) {
-            octaveInt = 6;
-            toneInt = 7;
-            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
-      }
-      else if (element == 10 && variation == 1) {
-            octaveInt = 6;
-            toneInt = 7;
-            note->setHeadGroup(NoteHead::Group::HEAD_SLASH);
-      }
-      else if (element == 10 && variation == 2) {
-            octaveInt = 6;
-            toneInt = 7;
-            note->setHeadGroup(NoteHead::Group::HEAD_XCIRCLE);
-      }
-      else if (element == 12 && variation == 0) {
-            octaveInt = 6;
-            toneInt = 7;
-            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
-      }
-      else if (element == 4 && variation == 0) {
-            octaveInt = 6;
-            toneInt = 7;
-            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE);
-      }
-      else if (element == 14 && variation == 0) {
-            octaveInt = 6;
-            toneInt = 9;
-            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
-      }
-      else if (element == 13 && variation == 0) {
-            octaveInt = 6;
-            toneInt = 9;
-            note->setHeadGroup(NoteHead::Group::HEAD_LA);
-      }
-      else if (element == 16 && variation == 0) {
-            octaveInt = 6;
-            toneInt = 11;
-            note->setHeadGroup(NoteHead::Group::HEAD_NORMAL);
-      }
-      // multiply octaves by 12 as 12 semitones in octave
-      note->setPitch((octaveInt * 12) + toneInt);
+       * file which specifies the score and then matching as much
+       * as possible with the gpDrumset...   */
+      if (element == 11 && variation == 0)  // pedal hihat
+            pitch = 44;
+      else if (element == 0 && variation == 0) // Kick (hit)
+            pitch = 35; // or 36
+      else if (element == 5 && variation == 0) // Tom very low (hit)
+            pitch = 41;
+      else if (element == 6 && variation == 0) // Tom low (hit)
+            pitch = 43;
+      else if (element == 7 && variation == 0) // Tom medium (hit)
+            pitch = 45;
+      else if (element == 1 && variation == 0) // Snare (hit)
+            pitch = 38; //or 40
+      else if (element == 1 && variation == 1) // Snare (rim shot)
+            pitch = 37;
+      else if (element == 1 && variation == 2) // Snare (side stick)
+            pitch = 37;
+      else if (element == 8 && variation == 0) // Tom high (hit)
+            pitch = 48;
+      else if (element == 9 && variation == 0) // Tom very high (hit)
+            pitch = 50;
+      else if (element == 15 && variation == 0) // Ride (middle)
+            pitch = 51;
+      else if (element == 15 && variation == 1) // Ride (edge)
+            pitch = 59;
+      else if (element == 15 && variation == 2) // Ride (bell)
+            pitch = 59;
+      else if (element == 10 && variation == 0) // Hihat (closed)
+            pitch = 42;
+      else if (element == 10 && variation == 1) // Hihat (half)
+            pitch = 46;
+      else if (element == 10 && variation == 2) // Hihat (open)
+            pitch = 46;
+      else if (element == 12 && variation == 0) // Crash medium (hit)
+            pitch = 49;
+      else if (element == 14 && variation == 0) // Splash (hit)
+            pitch = 55;
+      else if (element == 13 && variation == 0) // Crash high (hit)
+            pitch = 57;
+      else if (element == 16 && variation == 0) // China (hit)
+            pitch = 52;
+      else if (element == 4 && variation == 0) // Cowbell high (hit)
+            pitch = 56;
+      else if (element == 3 && variation == 0) // Cowbell medium (hit)
+            pitch = 56;
+      else if (element == 2 && variation == 0) // Cowbell low (hit)
+            pitch = 56;
+
+      note->setPitch(pitch);
       }
 
 
