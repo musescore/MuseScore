@@ -993,7 +993,13 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   clef->setTrack(e.track());
                   clef->read(e);
                   clef->setGenerated(false);
-
+                  if (e.tick() == 0) {
+                        if (score->staff(staffIdx)->clef(0) != clef->clefType()) {
+                              score->staff(staffIdx)->setDefaultClefType(clef->clefType());
+                              }
+                        delete clef;
+                        continue;
+                        }
                   // there may be more than one clef segment for same tick position
                   if (!segment) {
                         // this is the first segment of measure
