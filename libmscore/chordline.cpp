@@ -243,7 +243,7 @@ void ChordLine::draw(QPainter* painter) const
             painter->setBrush(Qt::NoBrush);
 
             QPainterPath pathOffset = path;
-            float offset = 0.5;
+            qreal offset = 0.5;
 
             if (_chordLineType == ChordLineType::FALL)
                   pathOffset.translate(offset, -offset);
@@ -355,7 +355,7 @@ void ChordLine::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       qreal sp = spatium();
       if (_straight) {
             // limit the number of grips to one
-            float offset = 0.5 * sp;
+            qreal offset = 0.5 * sp;
 
             if (_chordLineType == ChordLineType::FALL)
                   grip[0].translate(QPointF(offset, -offset));
