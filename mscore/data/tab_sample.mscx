@@ -136,10 +136,6 @@
           <sigD>2</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Clef>
-          <concertClefType>TAB</concertClefType>
-          <transposingClefType>TAB</transposingClefType>
-          </Clef>
         <Chord>
           <durationType>half</durationType>
           <Note>
