@@ -167,7 +167,7 @@ void Score::endCmd(bool rollback)
             update();
             return;
             }
-      if (MScore::_error != NO_ERROR)
+      if (MScore::_error != MS_NO_ERROR)
             rollback = true;
 
       if (rollback)
