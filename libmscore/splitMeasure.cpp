@@ -15,6 +15,7 @@
 #include "segment.h"
 #include "chordrest.h"
 #include "range.h"
+#include "tuplet.h"
 
 namespace Ms {
 
@@ -31,10 +32,19 @@ void Score::cmdSplitMeasure(ChordRest* cr)
 
 //---------------------------------------------------------
 //   splitMeasure
+//    return true on success
 //---------------------------------------------------------
 
 void Score::splitMeasure(Segment* segment)
       {
+      if (segment->rtick() == 0) {
+            MScore::setError(CANNOT_SPLIT_MEASURE_FIRST_BEAT);
+            return;
+            }
+      if (segment->splitsTuplet()) {
+            MScore::setError(CANNOT_SPLIT_MEASURE_TUPLET);
+            return;
+            }
       Measure* measure = segment->measure();
 
       ScoreRange range;

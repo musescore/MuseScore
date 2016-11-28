@@ -401,6 +401,24 @@ enum class IconType : signed char {
       };
 
 //---------------------------------------------------------
+//   MScoreError
+//---------------------------------------------------------
+
+enum Error {
+      NO_ERROR,
+      NO_CHORD_REST_SELECTED,
+      CANNOT_SPLIT_TUPLET,
+      CANNOT_SPLIT_MEASURE_FIRST_BEAT,
+      CANNOT_SPLIT_MEASURE_TUPLET,
+      };
+
+struct MScoreError {
+      Error no;
+      const char* group;
+      const char* txt;
+      };
+
+//---------------------------------------------------------
 //   MPaintDevice
 //---------------------------------------------------------
 
@@ -441,6 +459,10 @@ class MScore : public QObject {
       enum class DirectionH : char { AUTO, LEFT, RIGHT };
       enum class OrnamentStyle : char { DEFAULT, BAROQUE};
       enum class GlissandoStyle : char { CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC };
+
+      static Error _error;
+      static std::vector<MScoreError> errorList;
+
       Q_ENUMS(DirectionH OrnamentStyle GlissandoStyle)
 
       static void init();
@@ -514,6 +536,10 @@ class MScore : public QObject {
 #endif
       static MPaintDevice* paintDevice();
       virtual void endCmd() { };
+
+      static void setError(Error e) { _error = e; }
+      static const char* errorMessage();
+      static const char* errorGroup();
       };
 
 //---------------------------------------------------------

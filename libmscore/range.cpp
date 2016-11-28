@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2012 Werner Schweer
+//  Copyright (C) 2012-2016 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -59,6 +59,23 @@ TrackList::~TrackList()
       }
 
 //---------------------------------------------------------
+//   appendTuplet
+//---------------------------------------------------------
+
+void TrackList::appendTuplet(Tuplet* srcTuplet, Tuplet* dstTuplet)
+      {
+      for (DurationElement* de : srcTuplet->elements()) {
+            DurationElement* e = static_cast<DurationElement*>(de->clone());
+            dstTuplet->add(e);
+            if (de->isTuplet()) {
+                  Tuplet* st = toTuplet(de);
+                  Tuplet* dt = toTuplet(e);
+                  appendTuplet(st, dt);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   append
 //---------------------------------------------------------
 
@@ -85,14 +102,12 @@ void TrackList::append(Element* e)
                   if (e->isTuplet()) {
                         Tuplet* srcTuplet = toTuplet(e);
                         Tuplet* dstTuplet = toTuplet(element);
-
-                        foreach(const DurationElement* de, srcTuplet->elements())
-                              dstTuplet->add(de->clone());
+                        appendTuplet(srcTuplet, dstTuplet);
                         }
                   else {
                         ChordRest* src = toChordRest(e);
                         Segment* s = src->segment();
-                        foreach(Element* ee, s->annotations()) {
+                        for (Element* ee : s->annotations()) {
                               if (ee->track() == e->track())
                                     _range->annotations.push_back({ s->tick(), ee->clone() });
                               }
@@ -149,15 +164,15 @@ void TrackList::read(const Segment* fs, const Segment* es)
                   continue;
                   }
             if (e->isChordRest()) {
-                  DurationElement* de = static_cast<DurationElement*>(e);
+                  DurationElement* de = toDurationElement(e);
                   gap = s->tick() - tick;
                   if (de->tuplet()) {
+                        // find top tuplet
                         Tuplet* tuplet = de->tuplet();
-                        if (tuplet->elements().front() != de) {
-                              qFatal("TrackList::read: cannot start in middle of tuplet");
-                              }
+                        while (tuplet->tuplet())
+                              tuplet = tuplet->tuplet();
                         de = tuplet;
-                        s = skipTuplet(tuplet);
+                        s  = skipTuplet(tuplet);
                         // continue with first chord/rest after tuplet
                         }
                   if (gap) {
@@ -191,7 +206,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
             if (!e->isChord())
                   continue;
             Chord* chord = toChord(e);
-            foreach(Note* n1, chord->notes()) {
+            for (Note* n1 : chord->notes()) {
                   Tie* tie = n1->tieFor();
                   if (!tie)
                         continue;
@@ -219,25 +234,98 @@ void TrackList::read(const Segment* fs, const Segment* es)
 
 //---------------------------------------------------------
 //   writeTuplet
+//    measure - current measure
+//    rest    - available time in measure
 //---------------------------------------------------------
 
-Tuplet* TrackList::writeTuplet(Tuplet* tuplet, Measure* measure, int tick) const
+Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure, Fraction& rest) const
       {
-      Tuplet* dt = tuplet->clone();
+      Score* score = measure->score();
+      Tuplet* dt   = tuplet->clone();
       dt->setParent(measure);
-      foreach (DurationElement* e, tuplet->elements()) {
-            if (e->isChordRest()) {
-                  Element* ne = e->clone();
-                  Segment::Type st = Segment::Type::ChordRest;
-                  Segment* segment = measure->getSegment(st, tick);
-                  segment->add(ne);
-                  dt->add(ne);
+      Fraction d   = tuplet->duration();
+      if (d > rest) {
+            // we must split the tuplet
+            dt->setDuration(d * Fraction(1, 2));
+            dt->setBaseLen(tuplet->baseLen().shift(1));
+            }
+      if (parent)
+            parent->add(dt);
+
+      for (DurationElement* e : tuplet->elements()) {
+            Fraction duration = e->globalDuration();
+            Tuplet* tt        = dt;
+            Fraction ratio    = Fraction(1, 1);
+            while (tt) {
+                  ratio *= tt->ratio();
+                  tt = tt->tuplet();
                   }
-            else {
-                  Tuplet* nt = writeTuplet(toTuplet(e), measure, tick);
-                  dt->add(nt);
+
+            bool firstpart = true;
+            while (duration > 0) {
+                  Fraction d  = qMin(rest, duration);
+                  if (e->isChordRest()) {
+                        Fraction dd = d * ratio;
+                        std::vector<TDuration> dl = toDurationList(dd, false);
+                        for (const TDuration& k : dl) {
+                              Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->len() - rest);
+                              Fraction gd      = k.fraction() / ratio;
+                              ChordRest* cr    = toChordRest(e->clone());
+                              cr->setScore(score);
+                              cr->setTrack(_track);
+                              segment->add(cr);
+                              cr->setDuration(k.fraction());
+                              cr->setDurationType(k);
+                              rest     -= gd;
+                              duration -= gd;
+
+                              if (cr->isChord()) {
+                                    Chord* c = toChord(cr);
+                                    if (!firstpart)
+                                          c->removeMarkings(true);
+                                    for (Note* note : c->notes()) {
+                                          if (!duration.isZero() || note->tieFor()) {
+                                                Tie* tie = new Tie(score);
+                                                note->add(tie);
+                                                }
+                                          else
+                                                note->setTieFor(0);
+                                          note->setTieBack(0);
+                                          }
+                                    }
+                              dt->add(cr);
+                              firstpart = false;
+                              }
+                        }
+                  else if (e->isTuplet()) {
+                        Tuplet* tt  = toTuplet(e);
+                        Tuplet* ttt = writeTuplet(dt, tt, measure, rest);
+                        dt          = ttt->tuplet();
+                        parent      = dt->tuplet();
+                        duration    = Fraction();
+                        }
+                  if (rest.isZero()) {
+                        if (measure->nextMeasure()) {
+                              measure = measure->nextMeasure();
+                              rest    = measure->len();
+                              if (e != tuplet->elements().back()) {
+                                    // create second part of splitted tuplet
+                                    dt = dt->clone();
+                                    dt->setParent(measure);
+                                    parent = parent->clone();
+                                    parent->setParent(measure);
+                                    parent->add(dt);
+                                    }
+                              }
+                        else {
+                              if (!duration.isZero()) {
+                                    qFatal("Tracklist::write: premature end of measure list in track %d, rest %d/%d",
+                                       _track, duration.numerator(), duration.denominator());
+                                    }
+                              }
+                        }
+                  firstpart = false;
                   }
-            tick += e->globalDuration().ticks();
             }
       return dt;
       }
@@ -253,28 +341,35 @@ bool TrackList::canWrite(const Fraction& measureLen) const
       Fraction pos;
       Fraction rest = measureLen;
 
-      int n = size();
-      for (int i = 0; i < n; ++i) {
-            Element* e = at(i);
-            if (e->isDurationElement()) {
-                  Fraction duration = static_cast<DurationElement*>(e)->duration();
-                  if (duration > rest && e->isTuplet())
+      for (Element* e : *this) {
+            if (!e->isDurationElement())
+                  continue;
+
+            Fraction duration = toDurationElement(e)->duration();
+            if (duration > rest && e->isTuplet()) {
+                  // Tuplet* t = toTuplet(e);
+                  if (duration == rest * 2) {
+                        // split tuplet in middle
+                        }
+                  else {
+                        // cannot split tuplet
                         return false;
-                  while (!duration.isZero()) {
-                        if (e->isRest() && duration >= rest && rest == measureLen) {
-                              duration -= rest;
-                              pos = measureLen;
-                              }
-                        else {
-                              Fraction d = qMin(rest, duration);
-                              duration -= d;
-                              rest -= d;
-                              pos += d;
-                              }
-                        if (pos == measureLen) {
-                              pos  = Fraction();
-                              rest = measureLen;
-                              }
+                        }
+                  }
+            while (!duration.isZero()) {
+                  if (e->isRest() && duration >= rest && rest == measureLen) {
+                        duration -= rest;
+                        pos = measureLen;
+                        }
+                  else {
+                        Fraction d = qMin(rest, duration);
+                        duration -= d;
+                        rest -= d;
+                        pos += d;
+                        }
+                  if (pos == measureLen) {
+                        pos  = Fraction();
+                        rest = measureLen;
                         }
                   }
             }
@@ -309,30 +404,30 @@ bool TrackList::write(Measure* measure) const
       Measure* m       = measure;
       Score* score     = m->score();
       Fraction rest    = m->len();
-      //Staff* staff     = score->staff(track2staff(_track));
       Segment* segment = 0;
-      int n            = size();
-      for (int i = 0; i < n; ++i) {
-            Element* e = at(i);
+
+      for (Element* e : *this) {
             if (e->isDurationElement()) {
-                  Fraction duration = static_cast<DurationElement*>(e)->duration();
+                  Fraction duration = toDurationElement(e)->duration();
 
                   if (duration > rest && e->isTuplet()) {
-                        // cannot split tuplet
-                        qDebug("TrackList::write: cannot split tuplet");
-                        return false;
+                        // experimental: allow split of tuplet in the middle
+                        if (duration != rest * 2) {
+                              MScore::setError(CANNOT_SPLIT_TUPLET);
+                              return false;
+                              }
                         }
                   //
                   // split note/rest
                   //
 
                   bool firstpart = true;
-                  while (duration.numerator() > 0) {
+                  while (duration > 0) {
                         if ((e->isRest() || e->isRepeatMeasure()) && (duration >= rest || e == back()) && (rest == m->len())) {
                               //
                               // handle full measure rest
                               //
-                              segment = m->getSegment(Segment::Type::ChordRest, m->tick() + pos.ticks());
+                              segment = m->getSegment(Segment::Type::ChordRest, pos);
                               if ((_track % VOICES) == 0) {
                                     // write only for voice 1
                                     Rest* r = new Rest(score, TDuration::DurationType::V_MEASURE);
@@ -356,7 +451,7 @@ bool TrackList::write(Measure* measure) const
                                           Rest* r = new Rest(score, k);
                                           Fraction dd(k.fraction());
                                           r->setTrack(_track);
-                                          segment = m->getSegment(Segment::Type::ChordRest, m->tick() + pos.ticks());
+                                          segment = m->getSegment(Segment::Type::ChordRest, pos);
                                           segment->add(r);
                                           duration -= dd;
                                           rest     -= dd;
@@ -364,7 +459,7 @@ bool TrackList::write(Measure* measure) const
                                           }
                                     }
                               else if (e->isChord()) {
-                                    segment = m->getSegment(Segment::Type::ChordRest, m->tick() + pos.ticks());
+                                    segment = m->getSegment(Segment::Type::ChordRest, pos);
                                     Chord* c = toChord(e)->clone();
                                     if (!firstpart)
                                           c->removeMarkings(true);
@@ -376,7 +471,7 @@ bool TrackList::write(Measure* measure) const
                                     duration -= d;
                                     rest     -= d;
                                     pos      += d;
-                                    foreach(Note* note, c->notes()) {
+                                    for (Note* note : c->notes()) {
                                           if (!duration.isZero() || note->tieFor()) {
                                                 Tie* tie = new Tie(score);
                                                 note->add(tie);
@@ -387,10 +482,9 @@ bool TrackList::write(Measure* measure) const
                                           }
                                     }
                               else if (e->isTuplet()) {
-                                    writeTuplet(toTuplet(e), m, m->tick() + pos.ticks());
-                                    duration -= d;
-                                    rest     -= d;
-                                    pos      += d;
+                                    writeTuplet(0, toTuplet(e), m, rest);
+                                    pos      = m->len() - rest;
+                                    duration = Fraction();
                                     }
                               }
                         if (pos == m->len()) {
@@ -401,23 +495,8 @@ bool TrackList::write(Measure* measure) const
                                     }
                               else {
                                     if (!duration.isZero()) {
-                                          qDebug("Tracklist::write: premature end of measure list in track %d, rest %d/%d",
+                                          qFatal("Tracklist::write: premature end of measure list in track %d, rest %d/%d",
                                              _track, duration.numerator(), duration.denominator());
-                                          ++i;
-                                          qDebug("%d elements missing", n-i);
-                                          for (; i < n; ++i) {
-                                                Element* e = at(i);
-                                                qDebug("    <%s>", e->name());
-                                                if (e->isChordRest()) {
-                                                      ChordRest* cr = toChordRest(e);
-                                                      qDebug("       %d/%d",
-                                                         cr->duration().numerator(),
-                                                         cr->duration().denominator());
-                                                      }
-                                                }
-                                          rest     = Fraction();
-                                          duration = Fraction();
-                                          Q_ASSERT(false);
                                           }
                                     }
                               }
@@ -436,12 +515,12 @@ bool TrackList::write(Measure* measure) const
                   Segment* segment;
                   if (pos.ticks() == 0 && m->tick() > 0) {
                         Measure* pm = m->prevMeasure();
-                        segment = pm->getSegmentR(Segment::Type::Clef, pm->endTick());
+                        segment = pm->getSegment(Segment::Type::Clef, pm->len());
                         }
-                  else if (pos.ticks() != 0)
-                        segment = m->getSegmentR(Segment::Type::Clef, pos.ticks());
+                  else if (!pos.isZero())
+                        segment = m->getSegment(Segment::Type::Clef, pos);
                   else
-                        segment = m->getSegmentR(Segment::Type::HeaderClef, 0);
+                        segment = m->getSegment(Segment::Type::HeaderClef, pos);
                   Element* ne = e->clone();
                   ne->setScore(score);
                   ne->setTrack(_track);
@@ -452,7 +531,8 @@ bool TrackList::write(Measure* measure) const
                         break;
                   // add the element in its own segment;
                   // but KeySig has to be at start of (current) measure
-                  Segment* segment = m->getSegmentR(Segment::segmentType(e->type()), m->tick() + ((e->isKeySig()) ? 0 : pos.ticks()));
+
+                  Segment* segment = m->getSegment(Segment::segmentType(e->type()), e->isKeySig() ? Fraction() : pos);
                   Element* ne = e->clone();
                   ne->setScore(score);
                   ne->setTrack(_track);
@@ -616,9 +696,8 @@ bool ScoreRange::write(Score* score, int tick) const
 
 void ScoreRange::fill(const Fraction& f)
       {
-      int n = tracks.size();
-      for (int i = 0; i < n; ++i)
-            tracks[i]->appendGap(f);
+      for (auto t : tracks)
+            t->appendGap(f);
       }
 
 //---------------------------------------------------------
