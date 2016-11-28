@@ -1294,7 +1294,7 @@ void MuseScore::showError()
       if (msg == 0)
             msg = new QErrorMessage(this);
       msg->showMessage(tr(MScore::errorMessage()), MScore::errorGroup());
-      MScore::setError(NO_ERROR);
+      MScore::setError(MS_NO_ERROR);
       }
 
 //---------------------------------------------------------
@@ -4455,7 +4455,7 @@ void MuseScore::cmd(QAction* a)
       if (inChordEditor)      // HACK
             return;
 
-      MScore::setError(NO_ERROR);
+      MScore::setError(MS_NO_ERROR);
 
       QString cmdn(a->data().toString());
 
@@ -4508,7 +4508,7 @@ void MuseScore::cmd(QAction* a)
 
 void MuseScore::endCmd()
       {
-      if (MScore::_error != NO_ERROR)
+      if (MScore::_error != MS_NO_ERROR)
             showError();
       if (cs) {
             setPos(cs->inputState().tick());
