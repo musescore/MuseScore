@@ -404,7 +404,7 @@ enum class IconType : signed char {
 //   MScoreError
 //---------------------------------------------------------
 
-enum Error {
+enum MsError {
       NO_ERROR,
       NO_CHORD_REST_SELECTED,
       CANNOT_SPLIT_TUPLET,
@@ -413,7 +413,7 @@ enum Error {
       };
 
 struct MScoreError {
-      Error no;
+      MsError no;
       const char* group;
       const char* txt;
       };
@@ -460,7 +460,7 @@ class MScore : public QObject {
       enum class OrnamentStyle : char { DEFAULT, BAROQUE};
       enum class GlissandoStyle : char { CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC };
 
-      static Error _error;
+      static MsError _error;
       static std::vector<MScoreError> errorList;
 
       Q_ENUMS(DirectionH OrnamentStyle GlissandoStyle)
@@ -537,7 +537,7 @@ class MScore : public QObject {
       static MPaintDevice* paintDevice();
       virtual void endCmd() { };
 
-      static void setError(Error e) { _error = e; }
+      static void setError(MsError e) { _error = e; }
       static const char* errorMessage();
       static const char* errorGroup();
       };
