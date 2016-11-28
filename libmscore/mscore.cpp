@@ -125,6 +125,18 @@ extern void initDrumset();
 extern void initScoreFonts();
 extern QString mscoreGlobalShare;
 
+#define TR(a) QT_TRANSLATE_NOOP("error", a)
+std::vector<MScoreError> MScore::errorList {
+      { NO_ERROR,                        0 },
+      { NO_CHORD_REST_SELECTED,          "nocr",     TR("No chord/rest selected:\n" "Please select a chord/rest and try again") },
+      { CANNOT_SPLIT_TUPLET,             "stuplet",  TR("Cannot split tuplet") },
+      { CANNOT_SPLIT_MEASURE_FIRST_BEAT, "smeasure", TR("Cannot split measure here:\n" "First beat of measure") },
+      { CANNOT_SPLIT_MEASURE_TUPLET,     "smeasure", TR("Cannot split measure here:\n" "Cannot split tuplet") },
+      };
+#undef TR
+
+Error MScore::_error { NO_ERROR };
+
 //---------------------------------------------------------
 //   Direction
 //---------------------------------------------------------
@@ -365,6 +377,32 @@ void MScore::defaultStyleForPartsHasChanged()
       _defaultStyleForParts = 0;
       }
 
+//---------------------------------------------------------
+//   errorMessage
+//---------------------------------------------------------
+
+const char* MScore::errorMessage()
+      {
+      for (MScoreError& e : errorList) {
+            if (e.no == _error)
+                  return e.txt;
+            }
+      return "unknown error";
+      }
+
+//---------------------------------------------------------
+//   errorGroup
+//---------------------------------------------------------
+
+const char* MScore::errorGroup()
+      {
+      for (MScoreError& e : errorList) {
+            if (e.no == _error)
+                  return e.group;
+            }
+      return "";
+      }
+
 #ifdef SCRIPT_INTERFACE
 //---------------------------------------------------------
 //   qml
@@ -455,6 +493,10 @@ MPaintDevice* MScore::paintDevice()
       return _paintDevice;
       }
 
+//---------------------------------------------------------
+//   metric
+//---------------------------------------------------------
+
 int MPaintDevice::metric(PaintDeviceMetric m) const
       {
       switch (m) {
@@ -466,6 +508,10 @@ int MPaintDevice::metric(PaintDeviceMetric m) const
             }
       return 0;
       }
+
+//---------------------------------------------------------
+//   paintEngine
+//---------------------------------------------------------
 
 QPaintEngine* MPaintDevice::paintEngine() const
       {

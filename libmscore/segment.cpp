@@ -870,15 +870,16 @@ bool Segment::setProperty(P_ID propertyId, const QVariant& v)
 
 bool Segment::splitsTuplet() const
       {
-      if (segmentType() != Type::ChordRest)
-            return false;
-      int tracks = score()->nstaves() * VOICES;
-      for (int track = 0; track < tracks; ++track) {
-            ChordRest* cr = toChordRest(element(track));
-            if (cr == 0)
+      for (Element* e : _elist) {
+            if (!(e && e->isChordRest()))
                   continue;
-            if (cr->tuplet() && cr->tuplet()->elements().front() != cr)
-                  return true;
+            ChordRest* cr = toChordRest(e);
+            Tuplet* t = cr->tuplet();
+            while (t) {
+                  if (cr != t->elements().front())
+                        return true;
+                  t = t->tuplet();
+                  }
             }
       return false;
       }

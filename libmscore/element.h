@@ -799,6 +799,11 @@ static inline const ChordRest* toChordRest(const Element* e) {
          || e->type() == Element::Type::REPEAT_MEASURE);
       return (const ChordRest*)e;
       }
+static inline DurationElement* toDurationElement(Element* e) {
+      Q_ASSERT(e == 0 || e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
+         || e->type() == Element::Type::REPEAT_MEASURE || e->type() == Element::Type::TUPLET);
+      return (DurationElement*)e;
+      }
 static inline const DurationElement* toDurationElement(const Element* e) {
       Q_ASSERT(e == 0 || e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
          || e->type() == Element::Type::REPEAT_MEASURE || e->type() == Element::Type::TUPLET);

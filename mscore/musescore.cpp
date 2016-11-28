@@ -1284,6 +1284,23 @@ MuseScore::~MuseScore()
       delete synti;
       }
 
+//---------------------------------------------------------
+//   showError
+//---------------------------------------------------------
+
+void MuseScore::showError()
+      {
+      static QErrorMessage* msg = 0;
+      if (msg == 0)
+            msg = new QErrorMessage(this);
+      msg->showMessage(tr(MScore::errorMessage()), MScore::errorGroup());
+      MScore::setError(NO_ERROR);
+      }
+
+//---------------------------------------------------------
+//   retranslate
+//---------------------------------------------------------
+
 void MuseScore::retranslate(bool firstStart)
       {
       _positionLabel->setToolTip(tr("Measure:Beat:Tick"));
@@ -4438,6 +4455,8 @@ void MuseScore::cmd(QAction* a)
       if (inChordEditor)      // HACK
             return;
 
+      MScore::setError(NO_ERROR);
+
       QString cmdn(a->data().toString());
 
       if (MScore::debugMode)
@@ -4489,6 +4508,8 @@ void MuseScore::cmd(QAction* a)
 
 void MuseScore::endCmd()
       {
+      if (MScore::_error != NO_ERROR)
+            showError();
       if (cs) {
             setPos(cs->inputState().tick());
             updateInputState(cs);

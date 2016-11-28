@@ -167,6 +167,8 @@ void Score::endCmd(bool rollback)
             update();
             return;
             }
+      if (MScore::_error != NO_ERROR)
+            rollback = true;
 
       if (rollback)
             undoStack()->current()->unwind();

@@ -707,7 +707,7 @@ void Tuplet::add(Element* e)
 #ifndef NDEBUG
       for(DurationElement* el : _elements) {
             if (el == e) {
-                  qDebug("%p Tuplet::add: %p %s already there", this, e, e->name());
+                  qDebug("%p: %p %s already there", this, e, e->name());
                   return;
                   }
             }
@@ -715,13 +715,13 @@ void Tuplet::add(Element* e)
 
       switch (e->type()) {
             case Element::Type::TEXT:
-                  _number = static_cast<Text*>(e);
+                  _number = toText(e);
                   break;
             case Element::Type::CHORD:
             case Element::Type::REST:
             case Element::Type::TUPLET: {
                   bool found = false;
-                  DurationElement* de = static_cast<DurationElement*>(e);
+                  DurationElement* de = toDurationElement(e);
                   int tick = de->tick();
                   if (tick != -1) {
                         for (unsigned int i = 0; i < _elements.size(); ++i) {
