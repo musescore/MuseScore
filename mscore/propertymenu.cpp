@@ -541,6 +541,8 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         nlb->setPause(sbp.pause());
                         nlb->setStartWithLongNames(sbp.startWithLongNames());
                         nlb->setStartWithMeasureOne(sbp.startWithMeasureOne());
+                        // propagate in parts
+                        score()->undoChangeProperty(lb, P_ID::PAUSE, sbp.pause());
                         score()->undoChangeElement(lb, nlb);
                         }
                   }
