@@ -53,6 +53,7 @@ class InputState {
       bool _noteEntryMode      { false };
       NoteEntryMethod _noteEntryMethod { NoteEntryMethod::STEPTIME };
       Slur* _slur              { 0     };
+      bool _insertMode         { false };
 
       Segment* nextInputPos() const;
 
@@ -107,6 +108,9 @@ class InputState {
 
       Slur* slur() const                  { return _slur; }
       void setSlur(Slur* s)               { _slur = s; }
+
+      bool insertMode() const             { return _insertMode; }
+      void setInsertMode(bool val)        { _insertMode = val; }
 
       void update(Element* e);
       void moveInputPos(Element* e);

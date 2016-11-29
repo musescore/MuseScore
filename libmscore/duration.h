@@ -58,6 +58,7 @@ class DurationElement : public Element {
 
       void setTuplet(Tuplet* t)           { _tuplet = t;      }
       Tuplet* tuplet() const              { return _tuplet;   }
+      Tuplet* topTuplet() const;
       virtual Beam* beam() const          { return 0;         }
       int actualTicks() const;
       Fraction actualFraction() const;
