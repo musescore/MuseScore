@@ -498,69 +498,68 @@ void Score::fixTicks()
             if (m->mmRest())
                   m->mmRest()->moveTicks(diff);
 
-//            if (!parentScore()) {
-                  //
-                  //  implement section break rest
-                  //
-                  if (m->sectionBreak() && m->pause() != 0.0)
-                        setPause(m->tick() + m->ticks(), m->pause());
+            // There is a single tempo map in root score, setPause only in rootScore
+            //
+            //  implement section break rest
+            //
+            if (!parentScore() && m->sectionBreak() && m->pause() != 0.0)
+                  setPause(m->tick() + m->ticks(), m->pause());
 
-                  //
-                  // implement fermata as a tempo change
-                  //
+            //
+            // implement fermata as a tempo change
+            //
 
-                  for (Segment* s = m->first(); s; s = s->next()) {
-                        if (s->segmentType() == Segment::Type::Breath) {
-                              qreal length = 0.0;
-                              int tick = s->tick();
-                              // find longest pause
-                              for (int i = 0, n = ntracks(); i < n; ++i) {
-                                    Element* e = s->element(i);
-                                    if (e && e->type() == Element::Type::BREATH) {
-                                          Breath* b = static_cast<Breath*>(e);
-                                          length = qMax(length, b->pause());
-                                          }
-                                    }
-                              if (length != 0.0)
-                                    setPause(tick, length);
-                              }
-                        else if (s->segmentType() == Segment::Type::TimeSig) {
-                              for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
-                                    TimeSig* ts = static_cast<TimeSig*>(s->element(staffIdx * VOICES));
-                                    if (ts)
-                                          staff(staffIdx)->addTimeSig(ts);
+            for (Segment* s = m->first(); s; s = s->next()) {
+                  if (!parentScore() && s->segmentType() == Segment::Type::Breath) {
+                        qreal length = 0.0;
+                        int tick = s->tick();
+                        // find longest pause
+                        for (int i = 0, n = ntracks(); i < n; ++i) {
+                              Element* e = s->element(i);
+                              if (e && e->type() == Element::Type::BREATH) {
+                                    Breath* b = static_cast<Breath*>(e);
+                                    length = qMax(length, b->pause());
                                     }
                               }
-                        else if (!parentScore() && (s->segmentType() == Segment::Type::ChordRest)) {
-                              foreach (Element* e, s->annotations()) {
-                                    if (e->type() == Element::Type::TEMPO_TEXT) {
-                                          const TempoText* tt = static_cast<const TempoText*>(e);
-                                          setTempo(tt->segment(), tt->tempo());
-                                          }
+                        if (length != 0.0)
+                              setPause(tick, length);
+                        }
+                  else if (s->segmentType() == Segment::Type::TimeSig) {
+                        for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+                              TimeSig* ts = static_cast<TimeSig*>(s->element(staffIdx * VOICES));
+                              if (ts)
+                                    staff(staffIdx)->addTimeSig(ts);
+                              }
+                        }
+                  else if (!parentScore() && (s->segmentType() == Segment::Type::ChordRest)) {
+                        foreach (Element* e, s->annotations()) {
+                              if (e->type() == Element::Type::TEMPO_TEXT) {
+                                    const TempoText* tt = static_cast<const TempoText*>(e);
+                                    setTempo(tt->segment(), tt->tempo());
                                     }
-                              qreal stretch = 0.0;
-                              for (int i = 0; i < s->elist().size(); ++i) {
-                                    Element* e = s->elist().at(i);
-                                    if (!e)
-                                          continue;
-                                    ChordRest* cr = static_cast<ChordRest*>(e);
-                                    int nn = cr->articulations().size();
-                                    for (int ii = 0; ii < nn; ++ii)
-                                          stretch = qMax(cr->articulations().at(ii)->timeStretch(), stretch);
-                                    if (stretch != 0.0 && stretch != 1.0) {
-                                          qreal otempo = tempomap()->tempo(cr->tick());
-                                          qreal ntempo = otempo / stretch;
-                                          setTempo(cr->tick(), ntempo);
-                                          int etick = cr->tick() + cr->actualTicks() - 1;
-                                          auto e = tempomap()->find(etick);
-                                          if (e == tempomap()->end())
-                                                setTempo(etick, otempo);
-                                          break;
-                                          }
+                              }
+                        qreal stretch = 0.0;
+                        for (int i = 0; i < s->elist().size(); ++i) {
+                              Element* e = s->elist().at(i);
+                              if (!e)
+                                    continue;
+                              ChordRest* cr = static_cast<ChordRest*>(e);
+                              int nn = cr->articulations().size();
+                              for (int ii = 0; ii < nn; ++ii)
+                                    stretch = qMax(cr->articulations().at(ii)->timeStretch(), stretch);
+                              if (stretch != 0.0 && stretch != 1.0) {
+                                    qreal otempo = tempomap()->tempo(cr->tick());
+                                    qreal ntempo = otempo / stretch;
+                                    setTempo(cr->tick(), ntempo);
+                                    int etick = cr->tick() + cr->actualTicks() - 1;
+                                    auto e = tempomap()->find(etick);
+                                    if (e == tempomap()->end())
+                                          setTempo(etick, otempo);
+                                    break;
                                     }
                               }
                         }
-//                  }
+                  }
 
             // update time signature map
             // create event if measure len and time signature are different

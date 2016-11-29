@@ -1976,8 +1976,8 @@ void ChangeElement::flip()
 
       const LinkedElements* links = oldElement->links();
       if (links) {
+            newElement->linkTo(oldElement);
             oldElement->unlink();
-            oldElement->linkTo(newElement);
             }
 
       Score* score = oldElement->score();
