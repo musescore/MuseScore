@@ -65,7 +65,7 @@ TrackList::~TrackList()
 void TrackList::appendTuplet(Tuplet* srcTuplet, Tuplet* dstTuplet)
       {
       for (DurationElement* de : srcTuplet->elements()) {
-            DurationElement* e = static_cast<DurationElement*>(de->clone());
+            DurationElement* e = toDurationElement(de->clone());
             dstTuplet->add(e);
             if (de->isTuplet()) {
                   Tuplet* st = toTuplet(de);
@@ -82,7 +82,7 @@ void TrackList::appendTuplet(Tuplet* srcTuplet, Tuplet* dstTuplet)
 void TrackList::append(Element* e)
       {
       if (e->isDurationElement()) {
-            Fraction d = static_cast<DurationElement*>(e)->duration();
+            Fraction d = toDurationElement(e)->duration();
             _duration += d;
 
             bool accumulateRest = e->isRest() && !empty() && back()->isRest();
@@ -312,9 +312,11 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                                     // create second part of splitted tuplet
                                     dt = dt->clone();
                                     dt->setParent(measure);
-                                    parent = parent->clone();
-                                    parent->setParent(measure);
-                                    parent->add(dt);
+                                    if (parent) {
+                                          parent = parent->clone();
+                                          parent->setParent(measure);
+                                          parent->add(dt);
+                                          }
                                     }
                               }
                         else {
@@ -383,11 +385,10 @@ bool TrackList::canWrite(const Fraction& measureLen) const
 void TrackList::dump() const
       {
       qDebug("TrackList: elements %d, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
-      for (int i = 0; i < size(); ++i) {
-            Element* e = at(i);
+      for (Element* e : *this) {
             qDebug("   %s", e->name());
             if (e->isDurationElement()) {
-                  Fraction d = static_cast<DurationElement*>(e)->duration();
+                  Fraction d = toDurationElement(e)->duration();
                   qDebug("     duration %d/%d", d.numerator(), d.denominator());
                   }
             }
