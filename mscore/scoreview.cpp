@@ -4823,7 +4823,6 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
             }
 
       Fraction f(cr->duration());
-      int tick    = cr->tick();
       Tuplet* ot  = cr->tuplet();
 
       f.reduce();       //measure duration might not be reduced
@@ -4850,7 +4849,7 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
       tuplet->setBaseLen(baseLen);
 
       tuplet->setTrack(cr->track());
-      tuplet->setTick(tick);
+      tuplet->setTick(cr->tick());
       Measure* measure = cr->measure();
       tuplet->setParent(measure);
 
