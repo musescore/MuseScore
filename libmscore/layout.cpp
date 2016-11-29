@@ -3409,7 +3409,7 @@ bool Score::collectPage(LayoutContext& lc)
 
 void Score::doLayout()
       {
-//      qDebug("==========================");
+// qDebug("==========================");
 
       if (_staves.empty() || first() == 0) {
             // score is empty
@@ -3485,7 +3485,7 @@ void Score::doLayout()
 
 void Score::doLayoutRange(int stick, int etick)
       {
-//      qDebug("%d-%d", stick, etick);
+// qDebug("%d-%d", stick, etick);
       if (stick == -1 || etick == -1) {
             doLayout();
             return;
