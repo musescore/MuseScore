@@ -643,31 +643,11 @@
           <velocity>96</velocity>
           <lid>5</lid>
           </Dynamic>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>6</lid>
-          <text><sym>metNoteQuarterUp</sym> = 120</text>
-          </Tempo>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>7</lid>
-          <text><sym>metNoteQuarterUp</sym> = 120</text>
-          </Tempo>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>8</lid>
-          <text><sym>metNoteQuarterUp</sym> = 120</text>
-          </Tempo>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>9</lid>
-          <text><sym>metNoteQuarterUp</sym> = 120</text>
-          </Tempo>
         <Chord>
-          <lid>10</lid>
+          <lid>6</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>11</lid>
+            <lid>7</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
@@ -681,23 +661,23 @@
         <Clef>
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
-          <lid>13</lid>
+          <lid>9</lid>
           </Clef>
         <KeySig>
-          <lid>14</lid>
+          <lid>10</lid>
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <lid>15</lid>
+          <lid>11</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <lid>16</lid>
+          <lid>12</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>17</lid>
+            <lid>13</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>2</fret>
@@ -711,23 +691,23 @@
         <Clef>
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
-          <lid>18</lid>
+          <lid>14</lid>
           </Clef>
         <KeySig>
-          <lid>19</lid>
+          <lid>15</lid>
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <lid>20</lid>
+          <lid>16</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <lid>21</lid>
+          <lid>17</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>22</lid>
+            <lid>18</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>0</fret>
@@ -741,23 +721,23 @@
         <Clef>
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
-          <lid>23</lid>
+          <lid>19</lid>
           </Clef>
         <KeySig>
-          <lid>24</lid>
+          <lid>20</lid>
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <lid>25</lid>
+          <lid>21</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <lid>26</lid>
+          <lid>22</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>27</lid>
+            <lid>23</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
@@ -771,23 +751,23 @@
         <Clef>
           <concertClefType>PERC</concertClefType>
           <transposingClefType>PERC</transposingClefType>
-          <lid>28</lid>
+          <lid>24</lid>
           </Clef>
         <KeySig>
-          <lid>29</lid>
+          <lid>25</lid>
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <lid>30</lid>
+          <lid>26</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <lid>31</lid>
+          <lid>27</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>32</lid>
+            <lid>28</lid>
             <pitch>38</pitch>
             <tpc>16</tpc>
             <fret>38</fret>
@@ -919,31 +899,11 @@
             <velocity>96</velocity>
             <lid>5</lid>
             </Dynamic>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>6</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>7</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>8</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>9</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
           <Chord>
-            <lid>10</lid>
+            <lid>6</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>11</lid>
+              <lid>7</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -959,10 +919,10 @@
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>10</lid>
+            <lid>6</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>11</lid>
+              <lid>7</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -1074,14 +1034,14 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
-            <lid>13</lid>
+            <lid>9</lid>
             </Clef>
           <KeySig>
-            <lid>14</lid>
+            <lid>10</lid>
             <accidental>0</accidental>
             </KeySig>
           <TimeSig>
-            <lid>15</lid>
+            <lid>11</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -1091,31 +1051,11 @@
             <lid>4</lid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>6</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>7</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>8</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>9</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
           <Chord>
-            <lid>16</lid>
+            <lid>12</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>17</lid>
+              <lid>13</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -1127,14 +1067,14 @@
       <Staff id="2">
         <Measure number="1">
           <KeySig>
-            <lid>14</lid>
+            <lid>10</lid>
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>16</lid>
+            <lid>12</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>17</lid>
+              <lid>13</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -1246,14 +1186,14 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
-            <lid>18</lid>
+            <lid>14</lid>
             </Clef>
           <KeySig>
-            <lid>19</lid>
+            <lid>15</lid>
             <accidental>0</accidental>
             </KeySig>
           <TimeSig>
-            <lid>20</lid>
+            <lid>16</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -1263,31 +1203,11 @@
             <lid>4</lid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>6</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>7</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>8</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>9</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
           <Chord>
-            <lid>21</lid>
+            <lid>17</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>22</lid>
+              <lid>18</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -1299,14 +1219,14 @@
       <Staff id="2">
         <Measure number="1">
           <KeySig>
-            <lid>19</lid>
+            <lid>15</lid>
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>21</lid>
+            <lid>17</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>22</lid>
+              <lid>18</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -1418,14 +1338,14 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
-            <lid>23</lid>
+            <lid>19</lid>
             </Clef>
           <KeySig>
-            <lid>24</lid>
+            <lid>20</lid>
             <accidental>0</accidental>
             </KeySig>
           <TimeSig>
-            <lid>25</lid>
+            <lid>21</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -1435,31 +1355,11 @@
             <lid>4</lid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>6</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>7</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>8</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>9</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
           <Chord>
-            <lid>26</lid>
+            <lid>22</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>27</lid>
+              <lid>23</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -1471,14 +1371,14 @@
       <Staff id="2">
         <Measure number="1">
           <KeySig>
-            <lid>24</lid>
+            <lid>20</lid>
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>26</lid>
+            <lid>22</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>27</lid>
+              <lid>23</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -1995,14 +1895,14 @@
           <Clef>
             <concertClefType>PERC</concertClefType>
             <transposingClefType>PERC</transposingClefType>
-            <lid>28</lid>
+            <lid>24</lid>
             </Clef>
           <KeySig>
-            <lid>29</lid>
+            <lid>25</lid>
             <accidental>0</accidental>
             </KeySig>
           <TimeSig>
-            <lid>30</lid>
+            <lid>26</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -2012,31 +1912,11 @@
             <lid>4</lid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>6</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>7</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>8</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>9</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
           <Chord>
-            <lid>31</lid>
+            <lid>27</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>32</lid>
+              <lid>28</lid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>38</fret>
