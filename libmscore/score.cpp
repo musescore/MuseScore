@@ -382,7 +382,7 @@ void Score::fixTicks()
             //
             //  implement section break rest
             //
-            if (m->sectionBreak() && m->pause() != 0.0)
+            if (isMaster() && m->sectionBreak() && m->pause() != 0.0)
                   setPause(m->tick() + m->ticks(), m->pause());
 
             //
@@ -390,7 +390,7 @@ void Score::fixTicks()
             //
 
             for (Segment* s = m->first(); s; s = s->next()) {
-                  if (s->segmentType() == Segment::Type::Breath) {
+                  if (isMaster() && s->segmentType() == Segment::Type::Breath) {
                         qreal length = 0.0;
                         int tick = s->tick();
                         // find longest pause

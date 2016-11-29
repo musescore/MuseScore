@@ -69,7 +69,7 @@ static const PropertyData propertyList[] = {
       { P_ID::MIRROR_HEAD,         false, "mirror",        P_TYPE::DIRECTION_H  },
       { P_ID::DOT_POSITION,        false, "dotPosition",   P_TYPE::DIRECTION  },
       { P_ID::TUNING,              false, "tuning",        P_TYPE::REAL   },
-      { P_ID::PAUSE,               false, "pause",         P_TYPE::REAL   },
+      { P_ID::PAUSE,               true, "pause",          P_TYPE::REAL   },
 
       { P_ID::BARLINE_TYPE,        false, 0,               P_TYPE::BARLINE_TYPE  },
       { P_ID::BARLINE_SPAN,        false, "barlineSpan",   P_TYPE::INT    },
