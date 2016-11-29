@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>290</width>
-    <height>168</height>
+    <width>220</width>
+    <height>135</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Articulation Inspector</string>
@@ -77,12 +74,6 @@
      </property>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Direction</string>
        </property>
@@ -90,12 +81,6 @@
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_4">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Anchor</string>
        </property>
@@ -103,12 +88,6 @@
      </item>
      <item row="1" column="1">
       <widget class="QComboBox" name="anchor">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Anchor</string>
        </property>
@@ -141,12 +120,6 @@
      </item>
      <item row="0" column="1">
       <widget class="QComboBox" name="direction">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Direction</string>
        </property>
@@ -186,12 +159,6 @@
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Time stretch</string>
        </property>
@@ -199,12 +166,6 @@
      </item>
      <item row="2" column="1">
       <widget class="QDoubleSpinBox" name="timeStretch">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Time stretch</string>
        </property>
@@ -249,12 +210,6 @@
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Ornament style</string>
        </property>
@@ -262,12 +217,6 @@
      </item>
      <item row="3" column="1">
       <widget class="QComboBox" name="ornamentStyle">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Direction</string>
        </property>
@@ -300,16 +249,6 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
-      <widget class="QCheckBox" name="playArticulation">
-       <property name="text">
-        <string>Play</string>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="2">
       <widget class="QToolButton" name="resetPlayArticulation">
        <property name="toolTip">
@@ -324,6 +263,16 @@
        <property name="icon">
         <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" colspan="2">
+      <widget class="QCheckBox" name="playArticulation">
+       <property name="text">
+        <string>Play</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
        </property>
       </widget>
      </item>

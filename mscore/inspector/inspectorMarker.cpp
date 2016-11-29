@@ -28,9 +28,9 @@ InspectorMarker::InspectorMarker(QWidget* parent)
       m.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::TEXT_STYLE_TYPE,    0, 0,     t.style,      t.resetStyle      },
-            { P_ID::MARKER_TYPE,        0, false, m.markerType, m.resetMarkerType },
-            { P_ID::LABEL,              0, false, m.jumpLabel,  m.resetJumpLabel  }
+            { P_ID::TEXT_STYLE_TYPE,    0, 0,     t.style,      t.resetStyle },
+            { P_ID::MARKER_TYPE,        0, false, m.markerType, 0            },
+            { P_ID::LABEL,              0, false, m.jumpLabel,  0            }
             };
 
       mapSignals(iiList);

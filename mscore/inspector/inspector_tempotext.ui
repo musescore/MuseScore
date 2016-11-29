@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>287</width>
-    <height>125</height>
+    <width>134</width>
+    <height>69</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Tempo Marking Inspector</string>
@@ -119,19 +116,6 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0" colspan="2">
-      <widget class="QCheckBox" name="followText">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>Follow text</string>
-       </property>
-       <property name="text">
-        <string>Follow text</string>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="tempo">
        <property name="accessibleName">
@@ -151,6 +135,19 @@
        </property>
        <property name="value">
         <double>120.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="2">
+      <widget class="QCheckBox" name="followText">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Follow text</string>
+       </property>
+       <property name="text">
+        <string>Follow text</string>
        </property>
       </widget>
      </item>

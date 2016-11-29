@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>220</width>
-    <height>164</height>
+    <width>205</width>
+    <height>135</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Chord Inspector</string>
@@ -94,12 +91,6 @@
      </item>
      <item row="5" column="0">
       <widget class="QLabel" name="label">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Stem direction</string>
        </property>
@@ -107,12 +98,6 @@
      </item>
      <item row="5" column="1">
       <widget class="QComboBox" name="stemDirection">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Stem direction</string>
        </property>
@@ -152,12 +137,6 @@
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Vertical offset</string>
        </property>
@@ -165,12 +144,6 @@
      </item>
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="offsetY">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Vertical offset</string>
        </property>
@@ -207,12 +180,6 @@
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Horizontal offset</string>
        </property>
@@ -220,12 +187,6 @@
      </item>
      <item row="0" column="1">
       <widget class="QDoubleSpinBox" name="offsetX">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Horizontal Offset</string>
        </property>
@@ -279,12 +240,6 @@
      </item>
      <item row="2" column="0" colspan="2">
       <widget class="QCheckBox" name="small">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
@@ -298,12 +253,6 @@
      </item>
      <item row="3" column="0" colspan="2">
       <widget class="QCheckBox" name="stemless">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>

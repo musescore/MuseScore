@@ -6,14 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>237</width>
-    <height>112</height>
+    <width>166</width>
+    <height>91</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string/>
-  </property>
-  <property name="whatsThis">
+  <property name="accessibleName">
    <string>Tuplet Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">

@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>219</width>
-    <height>71</height>
+    <width>168</width>
+    <height>69</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Slur Inspector</string>
@@ -77,12 +74,6 @@
      </property>
      <item row="1" column="2">
       <widget class="QToolButton" name="resetLineType">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip">
         <string>Reset to default</string>
        </property>
@@ -100,12 +91,6 @@
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Line type:</string>
        </property>
@@ -113,12 +98,6 @@
      </item>
      <item row="1" column="1">
       <widget class="QComboBox" name="lineType">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Line type</string>
        </property>
@@ -141,12 +120,6 @@
      </item>
      <item row="2" column="2">
       <widget class="QToolButton" name="resetSlurDirection">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip">
         <string>Reset to default</string>
        </property>
@@ -164,12 +137,6 @@
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_1">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Direction:</string>
        </property>
@@ -177,12 +144,6 @@
      </item>
      <item row="2" column="1">
       <widget class="QComboBox" name="slurDirection">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Direction</string>
        </property>

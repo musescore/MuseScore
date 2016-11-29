@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>331</width>
-    <height>266</height>
+    <width>234</width>
+    <height>204</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Ambitus Inspector</string>
@@ -461,19 +458,6 @@
         </widget>
        </item>
       </layout>
-     </item>
-     <item row="3" column="0" colspan="2">
-      <widget class="QCheckBox" name="hasLine">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>Has line</string>
-       </property>
-       <property name="text">
-        <string>Has line</string>
-       </property>
-      </widget>
      </item>
      <item row="3" column="2">
       <widget class="QToolButton" name="resetHasLine">
@@ -964,6 +948,19 @@
          <string>Leaning Right</string>
         </property>
        </item>
+      </widget>
+     </item>
+     <item row="3" column="0" colspan="2">
+      <widget class="QCheckBox" name="hasLine">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Has line</string>
+       </property>
+       <property name="text">
+        <string>Has line</string>
+       </property>
       </widget>
      </item>
     </layout>

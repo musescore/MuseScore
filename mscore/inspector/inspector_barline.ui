@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>260</width>
-    <height>230</height>
+    <width>245</width>
+    <height>176</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Barline Inspector</string>
@@ -84,12 +81,6 @@
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Style:</string>
        </property>
@@ -238,16 +229,6 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>Span presets:</string>
-       </property>
-       <property name="textFormat">
-        <enum>Qt::PlainText</enum>
-       </property>
-      </widget>
-     </item>
      <item row="6" column="0" colspan="3">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
@@ -290,6 +271,16 @@
         </widget>
        </item>
       </layout>
+     </item>
+     <item row="4" column="0" colspan="3">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Span presets:</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
