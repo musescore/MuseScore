@@ -312,10 +312,13 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                                     // create second part of splitted tuplet
                                     dt = dt->clone();
                                     dt->setParent(measure);
-                                    if (parent) {
-                                          parent = parent->clone();
-                                          parent->setParent(measure);
-                                          parent->add(dt);
+                                    Tuplet* pt = dt;
+                                    while (parent) {
+                                          Tuplet* tt = parent->clone();
+                                          tt->setParent(measure);
+                                          tt->add(pt);
+                                          pt = tt;
+                                          parent = parent->tuplet();
                                           }
                                     }
                               }
