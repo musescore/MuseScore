@@ -86,7 +86,7 @@
           </Text>
         </VBox>
       <Measure number="1">
-        <endRepeat>1</endRepeat>
+        <endRepeat>2</endRepeat>
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
@@ -520,7 +520,7 @@
           </Chord>
         </Measure>
       <Measure number="8">
-        <endRepeat>1</endRepeat>
+        <endRepeat>2</endRepeat>
         <endSpanner id="6"/>
         <Volta id="7">
           <lid>118</lid>
@@ -909,7 +909,7 @@
             </Text>
           </VBox>
         <Measure number="1">
-          <endRepeat>1</endRepeat>
+          <endRepeat>2</endRepeat>
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
@@ -1343,7 +1343,7 @@
             </Chord>
           </Measure>
         <Measure number="8">
-          <endRepeat>1</endRepeat>
+          <endRepeat>2</endRepeat>
           <endSpanner id="13"/>
           <Volta id="14">
             <lid>118</lid>

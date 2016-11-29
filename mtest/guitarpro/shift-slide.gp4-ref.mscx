@@ -97,42 +97,27 @@
           <lid>4</lid>
           <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
           </Tempo>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>5</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
-          </Tempo>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>6</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
-          </Tempo>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>7</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
-          </Tempo>
         <Rest>
-          <lid>8</lid>
+          <lid>5</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
-          <lid>9</lid>
+          <lid>6</lid>
           </Dynamic>
         <Chord>
-          <lid>10</lid>
+          <lid>7</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>11</lid>
+            <lid>8</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>7</fret>
             <string>3</string>
             <Glissando id="2">
               <subtype>0</subtype>
-              <lid>15</lid>
+              <lid>12</lid>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -142,13 +127,13 @@
         <Dynamic>
           <subtype>mp</subtype>
           <velocity>64</velocity>
-          <lid>12</lid>
+          <lid>9</lid>
           </Dynamic>
         <Chord>
-          <lid>13</lid>
+          <lid>10</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>14</lid>
+            <lid>11</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>9</fret>
@@ -157,7 +142,7 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>16</lid>
+          <lid>13</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
@@ -284,42 +269,27 @@
             <lid>4</lid>
             <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>5</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>6</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>7</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
-            </Tempo>
           <Rest>
-            <lid>8</lid>
+            <lid>5</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <lid>9</lid>
+            <lid>6</lid>
             </Dynamic>
           <Chord>
-            <lid>10</lid>
+            <lid>7</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>11</lid>
+              <lid>8</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               <Glissando id="3">
                 <subtype>0</subtype>
-                <lid>15</lid>
+                <lid>12</lid>
                 <diagonal>1</diagonal>
                 <lineWidth>0.15</lineWidth>
                 <anchor>3</anchor>
@@ -329,13 +299,13 @@
           <Dynamic>
             <subtype>mp</subtype>
             <velocity>64</velocity>
-            <lid>12</lid>
+            <lid>9</lid>
             </Dynamic>
           <Chord>
-            <lid>13</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>14</lid>
+              <lid>11</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>9</fret>
@@ -344,7 +314,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>16</lid>
+            <lid>13</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
@@ -360,21 +330,21 @@
             <accidental>0</accidental>
             </KeySig>
           <Rest>
-            <lid>8</lid>
+            <lid>5</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <lid>10</lid>
+            <lid>7</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>11</lid>
+              <lid>8</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               <Glissando id="4">
                 <subtype>0</subtype>
-                <lid>15</lid>
+                <lid>12</lid>
                 <diagonal>1</diagonal>
                 <lineWidth>0.15</lineWidth>
                 <anchor>3</anchor>
@@ -382,10 +352,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>13</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>14</lid>
+              <lid>11</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>9</fret>
@@ -394,7 +364,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>16</lid>
+            <lid>13</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
