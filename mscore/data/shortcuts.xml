@@ -986,6 +986,10 @@
     <key>viewmode</key>
     <seq>Ctrl+Shift+V</seq>
     </SC>
+  <SC>
+    <key>toggle-insert-mode</key>
+    <seq>Ctrl+I</seq>
+    </SC>
 
   </Shortcuts>
 

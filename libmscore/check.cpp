@@ -370,10 +370,10 @@ void Measure::checkMeasure(int staffIdx)
                         fillGap(expectedPos, currentPos - expectedPos, track, stretch);
 
                   DurationElement* de = cr;
-                  if (cr->tuplet()) {
-                        Tuplet* tuplet = cr->tuplet();
-                        seg            = skipTuplet(tuplet);
-                        de             = tuplet;
+                  Tuplet* tuplet = cr->topTuplet();
+                  if (tuplet) {
+                        seg = skipTuplet(tuplet);
+                        de  = tuplet;
                         }
                   expectedPos = currentPos + de->duration();
                   }

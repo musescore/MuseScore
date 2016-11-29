@@ -2618,6 +2618,10 @@ void Score::cmd(const QAction* a)
             cmdResequenceRehearsalMarks();
       else if (cmd == "del-empty-measures")
             cmdRemoveEmptyTrailingMeasures();
+      else if (cmd == "toggle-insert-mode") {
+            _is.setInsertMode(!_is.insertMode());
+            qDebug("toggle-insert-mode: %d", _is.insertMode());
+            }
       else
             qDebug("unknown cmd <%s>", qPrintable(cmd));
       }

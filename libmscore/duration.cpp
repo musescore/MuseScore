@@ -50,6 +50,20 @@ DurationElement::~DurationElement()
       }
 
 //---------------------------------------------------------
+//   topTuplet
+//---------------------------------------------------------
+
+Tuplet* DurationElement::topTuplet() const
+      {
+      Tuplet* t = tuplet();
+      if (t) {
+            while (t->tuplet())
+                  t = t->tuplet();
+            }
+      return t;
+      }
+
+//---------------------------------------------------------
 //   globalDuration
 //---------------------------------------------------------
 
