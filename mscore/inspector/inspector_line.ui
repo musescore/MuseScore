@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>955</width>
-    <height>380</height>
+    <width>222</width>
+    <height>172</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Line Inspector</string>
@@ -71,12 +68,6 @@
      </property>
      <item row="2" column="0">
       <widget class="QLabel" name="label_4">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Line color</string>
        </property>
@@ -145,12 +136,6 @@
      </item>
      <item row="2" column="1">
       <widget class="Awl::ColorLabel" name="lineColor">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Line color</string>
        </property>
@@ -198,12 +183,6 @@
      </item>
      <item row="0" column="2">
       <widget class="QToolButton" name="resetLineVisible">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip">
         <string>Reset to default</string>
        </property>

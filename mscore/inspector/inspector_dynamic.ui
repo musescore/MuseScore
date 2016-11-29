@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>316</width>
-    <height>186</height>
+    <width>172</width>
+    <height>91</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Dynamic Inspector</string>
@@ -82,23 +79,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QToolButton" name="resetVelocity">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Velocity' value</string>
-       </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
@@ -150,7 +130,7 @@
         <string notr="true"/>
        </property>
        <property name="icon">
-        <iconset resource="../musescore.qrc">
+        <iconset>
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
@@ -167,7 +147,7 @@
         <string notr="true"/>
        </property>
        <property name="icon">
-        <iconset resource="../musescore.qrc">
+        <iconset>
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
@@ -176,12 +156,12 @@
       <widget class="QComboBox" name="placement">
        <item>
         <property name="text">
-         <string>Below</string>
+         <string notr="true">Below</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Above</string>
+         <string notr="true">Above</string>
         </property>
        </item>
       </widget>
@@ -201,10 +181,7 @@
   <tabstop>dynRange</tabstop>
   <tabstop>resetDynRange</tabstop>
   <tabstop>velocity</tabstop>
-  <tabstop>resetVelocity</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

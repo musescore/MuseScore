@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>270</width>
-    <height>125</height>
+    <width>169</width>
+    <height>135</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Glissando Inspector</string>
@@ -168,12 +165,12 @@
        </item>
        <item>
         <property name="text">
-         <string>White keys</string>
+         <string>White Keys</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Black keys</string>
+         <string>Black Keys</string>
         </property>
        </item>
        <item>
@@ -224,29 +221,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0" colspan="2">
-      <widget class="QCheckBox" name="showText">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>Show text</string>
-       </property>
-       <property name="text">
-        <string>Show text</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QCheckBox" name="playGlissando">
-       <property name="text">
-        <string>Play</string>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="2">
       <widget class="QToolButton" name="resetPlayGlissando">
        <property name="toolTip">
@@ -261,6 +235,29 @@
        <property name="icon">
         <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <widget class="QCheckBox" name="showText">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Show text</string>
+       </property>
+       <property name="text">
+        <string>Show text</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" colspan="2">
+      <widget class="QCheckBox" name="playGlissando">
+       <property name="text">
+        <string>Play</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
        </property>
       </widget>
      </item>

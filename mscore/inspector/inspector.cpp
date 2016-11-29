@@ -458,7 +458,7 @@ InspectorVBox::InspectorVBox(QWidget* parent)
             { P_ID::RIGHT_MARGIN,  0, 0, vb.rightMargin,  vb.resetRightMargin  },
             { P_ID::TOP_MARGIN,    0, 0, vb.topMargin,    vb.resetTopMargin    },
             { P_ID::BOTTOM_MARGIN, 0, 0, vb.bottomMargin, vb.resetBottomMargin },
-            { P_ID::BOX_HEIGHT,    0, 0, vb.height,       0                    }
+            { P_ID::BOX_HEIGHT,    0, 0, vb.height,       vb.resetHeight       }
             };
       mapSignals();
       }
@@ -495,7 +495,7 @@ InspectorHBox::InspectorHBox(QWidget* parent)
       iList = {
             { P_ID::TOP_GAP,    0, 0, hb.leftGap,  hb.resetLeftGap  },
             { P_ID::BOTTOM_GAP, 0, 0, hb.rightGap, hb.resetRightGap },
-            { P_ID::BOX_WIDTH,  0, 0, hb.width,    0                }
+            { P_ID::BOX_WIDTH,  0, 0, hb.width,    hb.resetWidth    }
             };
 
       mapSignals();
@@ -888,7 +888,7 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
       std::vector<InspectorItem> il = {
             { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,     t.resetStyle     },
             { P_ID::DYNAMIC_RANGE,      0, 0, d.dynRange,  d.resetDynRange  },
-            { P_ID::VELOCITY,           0, 0, d.velocity,  d.resetVelocity  },
+            { P_ID::VELOCITY,           0, 0, d.velocity,  0                },
             { P_ID::PLACEMENT,          0, 0, d.placement, d.resetPlacement }
             };
       d.placement->clear();
@@ -932,7 +932,7 @@ InspectorLyric::InspectorLyric(QWidget* parent)
       std::vector<InspectorItem> il = {
             { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,     t.resetStyle     },
             { P_ID::PLACEMENT,          0, 0, l.placement, l.resetPlacement },
-            { P_ID::VERSE,              0, 0, l.verse,     0 }
+            { P_ID::VERSE,              0, 0, l.verse,     l.resetVerse     }
             };
       l.placement->clear();
       l.placement->addItem(tr("Above"), 0);
@@ -1009,8 +1009,6 @@ InspectorStafftext::InspectorStafftext(QWidget* parent)
             else
                   s.elementName->setText(tr("Staff Text"));
             }
-      else
-            s.elementName->setText(tr("System/Staff Text"));
 
       std::vector<InspectorItem> il = {
             { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,     t.resetStyle     },
