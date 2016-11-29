@@ -1029,12 +1029,21 @@ void GuitarPro::setTempo(int tempo, Measure* measure)
       TempoText* tt = new TempoText(score);
       tt->setTempo(double(tempo)/60.0);
       tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempo));
-
       tt->setTrack(0);
       Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
-      segment->add(tt);
-      score->setTempo(measure->tick(), tt->tempo());
-      previousTempo = tempo;
+      bool foundTempo = false;
+      for (Element* e : segment->annotations()) {
+            if (e->type() == Element::Type::TEMPO_TEXT) {
+                  foundTempo = true;
+                  delete tt;
+                  break;
+                  }
+            }
+      if (!foundTempo) {
+            segment->add(tt);
+            score->setTempo(measure->tick(), tt->tempo());
+            previousTempo = tempo;
+            }
       }
 
 //---------------------------------------------------------
@@ -1217,7 +1226,7 @@ void GuitarPro2::read(QFile* fp)
                   bar.repeatFlags = bar.repeatFlags | Repeat::START;
             if (barBits & SCORE_REPEAT_END) {
                   bar.repeatFlags = bar.repeatFlags | Repeat::END;
-                  bar.repeats = readUChar();
+                  bar.repeats = readUChar() + 1;
                   }
             if (barBits & SCORE_VOLTA) {
                   uchar voltaNumber = readUChar();
@@ -1805,7 +1814,7 @@ void GuitarPro3::read(QFile* fp)
                   bar.repeatFlags = bar.repeatFlags | Repeat::START;
             if (barBits & SCORE_REPEAT_END) {                // number of repeats
                   bar.repeatFlags = bar.repeatFlags | Repeat::END;
-                  bar.repeats = readUChar();
+                  bar.repeats = readUChar() + 1;
                   }
             if (barBits & SCORE_VOLTA) {                      // a volta
                   uchar voltaNumber = readUChar();

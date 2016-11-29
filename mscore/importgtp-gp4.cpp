@@ -534,7 +534,7 @@ void GuitarPro4::read(QFile* fp)
                   bar.repeatFlags = bar.repeatFlags | Repeat::START;
             if (barBits & SCORE_REPEAT_END) {                // number of repeats
                   bar.repeatFlags = bar.repeatFlags | Repeat::END;
-                  bar.repeats = readUChar();
+                  bar.repeats = readUChar() + 1;
                   }
             if (barBits & SCORE_VOLTA) {                      // a volta
                   uchar voltaNumber = readUChar();
