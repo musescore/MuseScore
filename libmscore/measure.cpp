@@ -3451,8 +3451,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         }
                   }
 
-            bool needClef = staff->staffType()->genClef() && (isFirstSystem || score()->styleB(StyleIdx::genClef));
-            if (needClef) {
+            if (isFirstSystem || score()->styleB(StyleIdx::genClef)) {
                   ClefTypeList cl = staff->clefType(tick());
                   Clef* clef;
                   if (!cSegment) {
@@ -3463,20 +3462,26 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         }
                   else
                         clef = toClef(cSegment->element(track));
-                  if (!clef) {
-                        //
-                        // create missing clef
-                        //
-                        clef = new Clef(score());
-                        clef->setTrack(track);
-                        clef->setGenerated(true);
-                        clef->setParent(cSegment);
-                        cSegment->add(clef);
+                  if (staff->staffType()->genClef()) {
+                        if (!clef) {
+                              //
+                              // create missing clef
+                              //
+                              clef = new Clef(score());
+                              clef->setTrack(track);
+                              clef->setGenerated(true);
+                              clef->setParent(cSegment);
+                              cSegment->add(clef);
+                              }
+                        if (clef->generated())
+                              clef->setClefType(cl);
+                        clef->setSmall(false);
+                        clef->layout();
                         }
-                  if (clef->generated())
-                        clef->setClefType(cl);
-                  clef->setSmall(false);
-                  clef->layout();
+                  else if (clef) {
+                        clef->parent()->remove(clef);
+                        delete clef;
+                        }
                   cSegment->createShape(staffIdx);
                   cSegment->setEnabled(true);
                   }
