@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>197</width>
-    <height>65</height>
+    <width>113</width>
+    <height>71</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Accidental Inspector</string>
@@ -97,12 +94,6 @@
      </item>
      <item row="0" column="1">
       <widget class="QCheckBox" name="small">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
@@ -149,12 +140,6 @@
      </item>
      <item row="0" column="1">
       <widget class="QCheckBox" name="hasBracket">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>

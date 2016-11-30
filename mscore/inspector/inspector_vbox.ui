@@ -6,14 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>258</width>
-    <height>247</height>
+    <width>189</width>
+    <height>182</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string/>
-  </property>
-  <property name="whatsThis">
+  <property name="accessibleName">
    <string>Vertical Frame Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -153,12 +150,6 @@
      </item>
      <item row="0" column="1">
       <widget class="QDoubleSpinBox" name="topGap">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="whatsThis">
         <string/>
        </property>
@@ -188,12 +179,6 @@
      </item>
      <item row="2" column="1">
       <widget class="QDoubleSpinBox" name="height">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Height</string>
        </property>
@@ -217,12 +202,6 @@
      </item>
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="bottomGap">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Bottom gap</string>
        </property>
@@ -263,12 +242,6 @@
      </item>
      <item row="6" column="1">
       <widget class="QDoubleSpinBox" name="topMargin">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Top margin</string>
        </property>
@@ -285,12 +258,6 @@
      </item>
      <item row="5" column="1">
       <widget class="QDoubleSpinBox" name="rightMargin">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Right margin</string>
        </property>
@@ -307,12 +274,6 @@
      </item>
      <item row="7" column="1">
       <widget class="QDoubleSpinBox" name="bottomMargin">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Bottom margin</string>
        </property>
@@ -399,6 +360,20 @@
       <widget class="Line" name="line">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QToolButton" name="resetHeight">
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset 'Height' value</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>

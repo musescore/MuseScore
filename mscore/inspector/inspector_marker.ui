@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>287</width>
-    <height>102</height>
+    <width>177</width>
+    <height>82</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Marker Inspector</string>
@@ -75,23 +72,6 @@
      <property name="verticalSpacing">
       <number>0</number>
      </property>
-     <item row="0" column="2">
-      <widget class="QToolButton" name="resetMarkerType">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Marker type' value</string>
-       </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
@@ -103,23 +83,6 @@
       <widget class="QLineEdit" name="jumpLabel">
        <property name="accessibleName">
         <string>Label</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QToolButton" name="resetJumpLabel">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Label' value</string>
-       </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -183,12 +146,8 @@
  </widget>
  <tabstops>
   <tabstop>markerType</tabstop>
-  <tabstop>resetMarkerType</tabstop>
   <tabstop>jumpLabel</tabstop>
-  <tabstop>resetJumpLabel</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
