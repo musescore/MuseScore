@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>252</width>
-    <height>110</height>
+    <width>146</width>
+    <height>91</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Ottava Inspector</string>

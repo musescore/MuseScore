@@ -6,18 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>303</width>
-    <height>211</height>
+    <width>219</width>
+    <height>157</height>
    </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Element Inspector</string>
@@ -113,19 +104,6 @@
        </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="3">
-      <widget class="QCheckBox" name="visible">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>Visible</string>
-       </property>
-       <property name="text">
-        <string>Visible</string>
        </property>
       </widget>
      </item>
@@ -323,6 +301,19 @@
       <widget class="QCheckBox" name="autoplace">
        <property name="text">
         <string>Automatic placement</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="3">
+      <widget class="QCheckBox" name="visible">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Visible</string>
+       </property>
+       <property name="text">
+        <string>Visible</string>
        </property>
       </widget>
      </item>

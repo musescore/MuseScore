@@ -6,21 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>411</width>
-    <height>277</height>
+    <width>147</width>
+    <height>120</height>
    </rect>
   </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="windowTitle">
-   <string/>
-  </property>
   <property name="accessibleName">
-   <string>Element Inspector</string>
+   <string>Tremolo Bar Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -179,12 +170,6 @@
      </item>
      <item row="2" column="2">
       <widget class="QToolButton" name="resetPlay">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip">
         <string>Reset to default</string>
        </property>

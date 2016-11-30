@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>206</width>
-    <height>97</height>
+    <width>127</width>
+    <height>47</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Key Signature Inspector</string>

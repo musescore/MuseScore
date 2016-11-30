@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>279</width>
-    <height>217</height>
+    <width>232</width>
+    <height>177</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string/>
   </property>
   <property name="accessibleName">
    <string>Beam Inspector</string>
@@ -102,12 +99,6 @@
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Grow right</string>
        </property>
@@ -115,12 +106,6 @@
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Grow left</string>
        </property>
@@ -128,12 +113,6 @@
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Direction</string>
        </property>
@@ -172,12 +151,6 @@
      </item>
      <item row="8" column="0">
       <widget class="QLabel" name="label_4">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="text">
         <string>Position</string>
        </property>
@@ -185,12 +158,6 @@
      </item>
      <item row="2" column="3">
       <widget class="QToolButton" name="resetDirection">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip">
         <string>Reset to default</string>
        </property>
@@ -208,12 +175,6 @@
      </item>
      <item row="8" column="2">
       <widget class="QDoubleSpinBox" name="y2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip">
         <string>Right</string>
        </property>
@@ -236,12 +197,6 @@
      </item>
      <item row="3" column="1" colspan="2">
       <widget class="QDoubleSpinBox" name="growLeft">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Grow left</string>
        </property>
@@ -255,12 +210,6 @@
      </item>
      <item row="4" column="3">
       <widget class="QToolButton" name="resetGrowRight">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip">
         <string>Reset to default</string>
        </property>
@@ -278,12 +227,6 @@
      </item>
      <item row="3" column="3">
       <widget class="QToolButton" name="resetGrowLeft">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip">
         <string>Reset to default</string>
        </property>
@@ -301,12 +244,6 @@
      </item>
      <item row="4" column="1" colspan="2">
       <widget class="QDoubleSpinBox" name="growRight">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="accessibleName">
         <string>Grow right</string>
        </property>
@@ -320,12 +257,6 @@
      </item>
      <item row="6" column="3">
       <widget class="QToolButton" name="resetUserPosition">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip">
         <string>Reset to default</string>
        </property>
@@ -341,27 +272,8 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0" colspan="3">
-      <widget class="QCheckBox" name="distribute">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>Local relayout</string>
-       </property>
-       <property name="text">
-        <string>Local relayout</string>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="3">
       <widget class="QToolButton" name="resetDistribute">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip">
         <string>Reset to default</string>
        </property>
@@ -377,40 +289,8 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="0" colspan="3">
-      <widget class="QCheckBox" name="userPosition">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>User position</string>
-       </property>
-       <property name="text">
-        <string>User position</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0" colspan="3">
-      <widget class="QCheckBox" name="noSlope">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>Horizontal</string>
-       </property>
-       <property name="text">
-        <string>Horizontal</string>
-       </property>
-      </widget>
-     </item>
      <item row="5" column="3">
       <widget class="QToolButton" name="resetNoSlope">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip">
         <string>Reset to default</string>
        </property>
@@ -423,6 +303,45 @@
        <property name="icon">
         <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" colspan="2">
+      <widget class="QCheckBox" name="noSlope">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Horizontal</string>
+       </property>
+       <property name="text">
+        <string>Horizontal</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QCheckBox" name="distribute">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Local relayout</string>
+       </property>
+       <property name="text">
+        <string>Local relayout</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0" colspan="2">
+      <widget class="QCheckBox" name="userPosition">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>User position</string>
+       </property>
+       <property name="text">
+        <string>User position</string>
        </property>
       </widget>
      </item>
