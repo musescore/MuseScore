@@ -188,11 +188,19 @@ void TempoText::textChanged()
       {
       if (!_followText)
             return;
+      // cache regexp, they are costly to create
+      static QHash<QString, QRegExp> regexps;
+      static QHash<QString, QRegExp> regexps2;
       QString s = plainText();
       s.replace(",", ".");
       s.replace("<sym>space</sym>"," ");
       for (const TempoPattern& pa : tp) {
-            QRegExp re(QString(pa.pattern)+"\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*");
+            QRegExp re;
+            if (!regexps.contains(pa.pattern)) {
+                  re = QRegExp(QString("%1\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*").arg(pa.pattern));
+                  regexps[pa.pattern] = re;
+                  }
+            re = regexps.value(pa.pattern);
             if (re.indexIn(s) != -1) {
                   QStringList sl = re.capturedTexts();
                   if (sl.size() == 2) {
@@ -208,8 +216,14 @@ void TempoText::textChanged()
                   }
             else {
                  for (const TempoPattern& pa2 : tp) {
-                       QRegExp re(QString("%1\\s*=\\s*%2\\s*").arg(pa.pattern).arg(pa2.pattern));
-                       if (re.indexIn(s) != -1) {
+                       QString key = QString("%1_%2").arg(pa.pattern).arg(pa2.pattern);
+                       QRegExp re2;
+                       if (!regexps2.contains(key)) {
+                             re2 = QRegExp(QString("%1\\s*=\\s*%2\\s*").arg(pa.pattern).arg(pa2.pattern));
+                             regexps2[key] = re2;
+                             }
+                       re2 = regexps2.value(key);
+                       if (re2.indexIn(s) != -1) {
                              _relative = pa2.f / pa.f;
                              _isRelative = true;
                              updateRelative();
