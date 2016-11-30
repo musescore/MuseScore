@@ -2130,8 +2130,10 @@ void Beam::editDrag(const EditData& ed)
       f->py2[idx] += dy;
       _userModified[idx] = true;
       setGenerated(false);
-      if (_elements.front()->isGrace())
+      if (_elements.front()->isGrace()) {
             layoutGraceNotes();
+            score()->rebuildBspTree(); // ledger lines might be deleted. See #138256
+            }
       else
             layout1();
       layout();
