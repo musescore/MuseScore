@@ -67,8 +67,9 @@ else
 fi
 
 # Build AppImageKit now to avoid conflicts with MuseScore's dependencies (LAME)
-[ -d "AppImageKit" ] || git clone --depth 1 https://github.com/probonopd/AppImageKit.git
+[ -d "AppImageKit" ] || git clone https://github.com/probonopd/AppImageKit.git
 cd AppImageKit
+git reset --hard 076a88a57d7ca1a8d77bdbf7d8e92f37eea03dab
 ./build.sh
 
 cd ..
