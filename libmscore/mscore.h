@@ -411,6 +411,13 @@ enum MsError {
       CANNOT_SPLIT_TUPLET,
       CANNOT_SPLIT_MEASURE_FIRST_BEAT,
       CANNOT_SPLIT_MEASURE_TUPLET,
+      NO_DEST,
+      DEST_TUPLET,
+      TUPLET_CROSSES_BAR,
+      DEST_LOCAL_TIME_SIGNATURE,
+      DEST_TREMOLO,
+      NO_MIME,
+      DEST_NO_CR,
       };
 
 struct MScoreError {

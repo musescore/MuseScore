@@ -133,6 +133,14 @@ std::vector<MScoreError> MScore::errorList {
       { CANNOT_SPLIT_TUPLET,             "t2", TR("Cannot split tuplet") },
       { CANNOT_SPLIT_MEASURE_FIRST_BEAT, "m1", TR("Cannot split measure here:\n" "First beat of measure") },
       { CANNOT_SPLIT_MEASURE_TUPLET,     "m2", TR("Cannot split measure here:\n" "Cannot split tuplet") },
+
+      { NO_DEST,                         "p1", TR("No destination to paste")                   },
+      { DEST_TUPLET,                     "p2", TR("Cannot paste into tuplet")                  },
+      { TUPLET_CROSSES_BAR,              "p3", TR("Tuplet cannot cross barlines")              },
+      { DEST_LOCAL_TIME_SIGNATURE,       "p4", TR("Cannot paste in local time signature")      },
+      { DEST_TREMOLO,                    "p5", TR("Cannot paste in tremolo")                   },
+      { NO_MIME,                         "p6", TR("Nothing to paste")                          },
+      { DEST_NO_CR,                      "p7", TR("Destination is not a chord or rest")        },
       };
 #undef TR
 

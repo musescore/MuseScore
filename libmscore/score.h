@@ -223,21 +223,6 @@ struct Layer {
       };
 
 //---------------------------------------------------------
-//   PasteState
-//---------------------------------------------------------
-
-enum class PasteState : char {
-      PS_NO_ERROR,
-      NO_MIME,
-      NO_DEST,
-      DEST_TUPLET,
-      DEST_NO_CR,
-      TUPLET_CROSSES_BAR,
-      DEST_LOCAL_TIME_SIGNATURE,
-      DEST_TREMOLO
-      };
-
-//---------------------------------------------------------
 //   UpdateMode
 //    There is an implied order from least invasive update
 //    to most invasive update. LayoutAll is fallback and
@@ -827,8 +812,8 @@ class Score : public QObject, public ScoreElement {
       void spatiumChanged(qreal oldValue, qreal newValue);
       void styleChanged();
 
-      PasteState cmdPaste(const QMimeData* ms, MuseScoreView* view);
-      PasteState pasteStaff(XmlReader&, Segment* dst, int staffIdx);
+      void cmdPaste(const QMimeData* ms, MuseScoreView* view);
+      void pasteStaff(XmlReader&, Segment* dst, int staffIdx);
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
