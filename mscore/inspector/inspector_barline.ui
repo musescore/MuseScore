@@ -295,6 +295,11 @@
   <tabstop>resetSpanFrom</tabstop>
   <tabstop>spanTo</tabstop>
   <tabstop>resetSpanTo</tabstop>
+  <tabstop>presetDefault</tabstop>
+  <tabstop>presetTick1</tabstop>
+  <tabstop>presetTick2</tabstop>
+  <tabstop>presetShort1</tabstop>
+  <tabstop>presetShort2</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>171</width>
-    <height>101</height>
+    <height>91</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -70,7 +70,7 @@
       <number>3</number>
      </property>
      <property name="verticalSpacing">
-      <number>6</number>
+      <number>0</number>
      </property>
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="rightGap">
