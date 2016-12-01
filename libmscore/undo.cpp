@@ -3665,10 +3665,10 @@ void LinkUnlink::doUnlink()
             qWarning("nothing found to unlink");
       }
 
-void LinkStaff::redo()   { s1->linkTo(s2); }
-void LinkStaff::undo()   { s1->unlink(s2); }
-void UnlinkStaff::redo() { s1->unlink(s2); }
-void UnlinkStaff::undo() { s1->linkTo(s2); }
+void LinkStaff::redo()   { s1->linkTo(s2); } // s1 is added
+void LinkStaff::undo()   { s2->unlink(s1); } // s1 is removed
+void UnlinkStaff::redo() { s1->unlink(s2); } // s2 is removed
+void UnlinkStaff::undo() { s2->linkTo(s1); } // s2 is added
 
 //---------------------------------------------------------
 //   ChangeStartEndSpanner::flip
