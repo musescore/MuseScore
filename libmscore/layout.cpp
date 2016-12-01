@@ -3005,7 +3005,6 @@ System* Score::collectSystem(LayoutContext& lc)
                         }
                   else if (mb->isMeasure()) {
                         Measure* m  = toMeasure(mb);
-//                        printf(" **  %5d  %.1f  real %.1f\n", mb->tick(), m->width(), cw);
                         mw          += m->width();               // measures are stretched already with basicStretch()
                         totalWeight += m->ticks() * m->basicStretch();
                         }

@@ -407,6 +407,7 @@ enum class IconType : signed char {
 enum MsError {
       MS_NO_ERROR,
       NO_CHORD_REST_SELECTED,
+      CANNOT_INSERT_TUPLET,
       CANNOT_SPLIT_TUPLET,
       CANNOT_SPLIT_MEASURE_FIRST_BEAT,
       CANNOT_SPLIT_MEASURE_TUPLET,

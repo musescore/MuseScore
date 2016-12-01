@@ -752,6 +752,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   case Element::Type::TEXT:
                   case Element::Type::INSTRUMENT_NAME:
                   case Element::Type::SLUR_SEGMENT:
+                  case Element::Type::TIE_SEGMENT:
                   case Element::Type::STAFF_LINES:
                   case Element::Type::BAR_LINE:
                   case Element::Type::STEM_SLASH:

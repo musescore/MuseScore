@@ -2961,10 +2961,6 @@ void Score::selectSimilar(Element* e, bool sameStaff)
             else
                   pattern.subtype = e->subtype();
             }
-      else if (type == Element::Type::SLUR_SEGMENT) {
-            pattern.subtype = static_cast<int>(toSlurSegment(e)->spanner()->type());
-            pattern.subtypeValid = true;
-            }
       pattern.staffStart = sameStaff ? e->staffIdx() : -1;
       pattern.staffEnd = sameStaff ? e->staffIdx() + 1 : -1;
       pattern.voice   = -1;
@@ -2995,10 +2991,6 @@ void Score::selectSimilarInRange(Element* e)
                   pattern.subtype = -1; //hack
             else
                   pattern.subtype = e->subtype();
-            pattern.subtypeValid = true;
-            }
-      else if (type == Element::Type::SLUR_SEGMENT) {
-            pattern.subtype = static_cast<int>(toSlurSegment(e)->spanner()->type());
             pattern.subtypeValid = true;
             }
       pattern.staffStart = selection().staffStart();
