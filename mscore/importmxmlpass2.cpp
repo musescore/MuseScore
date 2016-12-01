@@ -3683,13 +3683,18 @@ void MusicXMLParserPass2::transpose(const QString& partId)
       Q_ASSERT(_e.isStartElement() && _e.name() == "transpose");
 
       Interval interval;
-
+      bool diatonic = false;
+      bool chromatic = false;
       while (_e.readNextStartElement()) {
             int i = _e.readElementText().toInt();
-            if (_e.name() == "diatonic")
+            if (_e.name() == "diatonic") {
                   interval.diatonic = i;
-            else if (_e.name() == "chromatic")
+                  diatonic = true;
+                  }
+            else if (_e.name() == "chromatic") {
                   interval.chromatic = i;
+                  chromatic = true;
+                  }
             else if (_e.name() == "octave-change") {
                   interval.diatonic += i * 7;
                   interval.chromatic += i * 12;
@@ -3697,6 +3702,9 @@ void MusicXMLParserPass2::transpose(const QString& partId)
             else
                   skipLogCurrElem();
             }
+
+      if (chromatic && !diatonic)
+            interval.diatonic += chromatic2diatonic(interval.chromatic);
 
       _pass1.getPart(partId)->instrument()->setTranspose(interval);
       }
