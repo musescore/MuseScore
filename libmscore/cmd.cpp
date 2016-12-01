@@ -2726,8 +2726,7 @@ void Score::cmdExplode()
                   if (cr) {
                         XmlReader e(this, srcSelection.mimeData());
                         e.setPasteMode(true);
-                        if (pasteStaff(e, cr->segment(), cr->staffIdx()) != PasteState::PS_NO_ERROR)
-                              qDebug("explode: paste failed");
+                        pasteStaff(e, cr->segment(), cr->staffIdx());
                         }
                   }
 

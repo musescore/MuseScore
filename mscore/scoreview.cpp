@@ -2720,38 +2720,11 @@ void ScoreView::normalSwap()
 bool ScoreView::normalPaste()
       {
       _score->startCmd();
-
       const QMimeData* ms = QApplication::clipboard()->mimeData();
-      PasteState status = _score->cmdPaste(ms,this);
-      switch (status) {
-            case PasteState::NO_DEST:
-                  errorMessage->showMessage(tr("No destination to paste"), "pasteDestination");
-                  break;
-            case PasteState::DEST_TUPLET:
-                  errorMessage->showMessage(tr("Cannot paste into tuplet"), "pasteTuplet");
-                  break;
-            case PasteState::TUPLET_CROSSES_BAR:
-                  errorMessage->showMessage(tr("Tuplet cannot cross barlines"), "tupletCrossBar");
-                  _score->undoStack()->current()->unwind();
-                  break;
-            case PasteState::DEST_LOCAL_TIME_SIGNATURE:
-                  errorMessage->showMessage(tr("Cannot paste in local time signature"), "pasteLocalTimeSig");
-                  _score->undoStack()->current()->unwind();
-                  break;
-            case PasteState::DEST_TREMOLO:
-                  errorMessage->showMessage(tr("Cannot paste in tremolo"), "pasteTremolo");
-                  _score->undoStack()->current()->unwind();
-                  break;
-            default:
-                  ;
-           }
-
+      _score->cmdPaste(ms, this);
+      bool rv = MScore::_error == MS_NO_ERROR;
       _score->endCmd();
-
-      if (status == PasteState::PS_NO_ERROR)
-          return true;
-      else
-          return false;
+      return rv;
       }
 
 //---------------------------------------------------------
@@ -5804,14 +5777,9 @@ void ScoreView::cmdRepeatSelection()
             if (e) {
                   ChordRest* cr = static_cast<ChordRest*>(e);
                   _score->startCmd();
-                  if (_score->pasteStaff(xml, cr->segment(), cr->staffIdx()) != PasteState::PS_NO_ERROR) {
-                        qDebug("cmdRepeatSelection: paste fails");
-                        _score->endCmd(true);   // rollback
-                        }
-                  else {
-                        _score->setLayoutAll();
-                        _score->endCmd();
-                        }
+                  _score->pasteStaff(xml, cr->segment(), cr->staffIdx());
+                  _score->setLayoutAll();
+                  _score->endCmd();
                   }
             else
                   qDebug("ScoreView::cmdRepeatSelection: cannot paste: %p <%s>", e, e ? e->name() : "");
