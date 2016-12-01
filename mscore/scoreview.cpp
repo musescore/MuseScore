@@ -2780,11 +2780,7 @@ void ScoreView::cmd(const QAction* a)
       if (MScore::debugMode)
             qDebug("ScoreView::cmd <%s>", qPrintable(cmd));
 
-      if (cmd == "escape") {
-            sm->postEvent(new CommandEvent(cmd));
-            }
-      else if (cmd == "note-input" || cmd == "copy" || cmd == "paste"
-         || cmd == "swap" || cmd == "cut" || cmd == "fotomode") {
+      if (cmd == "escape" || cmd == "note-input" || cmd == "copy" || cmd == "paste" || cmd == "swap" || cmd == "cut" || cmd == "fotomode") {
             sm->postEvent(new CommandEvent(cmd));
             }
       else if (cmd == "lyrics") {
@@ -5462,7 +5458,6 @@ void ScoreView::cmdAddPitch(int note, bool addFlag, bool insert)
                   }
             }
 
-//      if (!(insert || noteEntryMode())) {
       if (!noteEntryMode()) {
             sm->postEvent(new CommandEvent("note-input"));
             qApp->processEvents();
@@ -5505,7 +5500,7 @@ void ScoreView::cmdAddFret(int fret)
       pos.line      = is.string();
       pos.fret      = fret;
 
-      score()->putNote(pos, false, false);
+      score()->putNote(pos, false);
       _score->endCmd();
       }
 

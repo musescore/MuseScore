@@ -655,8 +655,10 @@ class Score : public QObject, public ScoreElement {
       void cmdFullMeasureRest();
 
       void putNote(const QPointF&, bool replace, bool insert);
-      void putNote(const Position&, bool replace, bool insert);
-      void putNoteInsert(const Position&);
+      void putNote(const Position&, bool replace);
+      void insertChord(const Position&);
+      void localInsertChord(const Position&);
+      void globalInsertChord(const Position&);
 
       void cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link = true, bool spanner = true);
 

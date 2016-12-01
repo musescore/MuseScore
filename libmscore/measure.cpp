@@ -3698,7 +3698,11 @@ void Measure::setStretchedWidth(qreal w)
       qreal minWidth = score()->styleP(StyleIdx::minMeasureWidth);
       if (w < minWidth)
             w = minWidth;
-      w *= basicStretch();
+      qreal stretchableWidth = 0.0;
+      for (Segment* s = first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
+            stretchableWidth += s->width();
+            }
+      w += stretchableWidth * (basicStretch()-1.0) * ticks() / 1920.0;
       setWidth(w);
       }
 

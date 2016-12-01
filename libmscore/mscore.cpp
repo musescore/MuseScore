@@ -127,11 +127,12 @@ extern QString mscoreGlobalShare;
 
 #define TR(a) QT_TRANSLATE_NOOP("error", a)
 std::vector<MScoreError> MScore::errorList {
-      { MS_NO_ERROR,                     0, 0 },
-      { NO_CHORD_REST_SELECTED,          "nocr",     TR("No chord/rest selected:\n" "Please select a chord/rest and try again") },
-      { CANNOT_SPLIT_TUPLET,             "stuplet",  TR("Cannot split tuplet") },
-      { CANNOT_SPLIT_MEASURE_FIRST_BEAT, "smeasure", TR("Cannot split measure here:\n" "First beat of measure") },
-      { CANNOT_SPLIT_MEASURE_TUPLET,     "smeasure", TR("Cannot split measure here:\n" "Cannot split tuplet") },
+      { MS_NO_ERROR,                     0,    0 },
+      { NO_CHORD_REST_SELECTED,          "s1", TR("No chord/rest selected:\n" "Please select a chord/rest and try again") },
+      { CANNOT_INSERT_TUPLET,            "t1", TR("Cannot insert chord/rest in tuplet") },
+      { CANNOT_SPLIT_TUPLET,             "t2", TR("Cannot split tuplet") },
+      { CANNOT_SPLIT_MEASURE_FIRST_BEAT, "m1", TR("Cannot split measure here:\n" "First beat of measure") },
+      { CANNOT_SPLIT_MEASURE_TUPLET,     "m2", TR("Cannot split measure here:\n" "Cannot split tuplet") },
       };
 #undef TR
 
