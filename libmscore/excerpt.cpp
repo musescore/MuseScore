@@ -704,7 +704,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
       Score* score = srcStaff->score();
       TieMap tieMap;
 
-      score->undo(new LinkStaff(srcStaff, dstStaff));
+      score->undo(new LinkStaff(dstStaff, srcStaff));
 
       int srcStaffIdx = score->staffIdx(srcStaff);
       int dstStaffIdx = score->staffIdx(dstStaff);
