@@ -458,7 +458,7 @@ InspectorVBox::InspectorVBox(QWidget* parent)
             { P_ID::RIGHT_MARGIN,  0, 0, vb.rightMargin,  vb.resetRightMargin  },
             { P_ID::TOP_MARGIN,    0, 0, vb.topMargin,    vb.resetTopMargin    },
             { P_ID::BOTTOM_MARGIN, 0, 0, vb.bottomMargin, vb.resetBottomMargin },
-            { P_ID::BOX_HEIGHT,    0, 0, vb.height,       vb.resetHeight       }
+            { P_ID::BOX_HEIGHT,    0, 0, vb.height,       0                    }
             };
       mapSignals();
       }
@@ -495,7 +495,7 @@ InspectorHBox::InspectorHBox(QWidget* parent)
       iList = {
             { P_ID::TOP_GAP,    0, 0, hb.leftGap,  hb.resetLeftGap  },
             { P_ID::BOTTOM_GAP, 0, 0, hb.rightGap, hb.resetRightGap },
-            { P_ID::BOX_WIDTH,  0, 0, hb.width,    hb.resetWidth    }
+            { P_ID::BOX_WIDTH,  0, 0, hb.width,    0                }
             };
 
       mapSignals();
