@@ -1243,7 +1243,7 @@ class Unlink : public LinkUnlink {
 class Link : public LinkUnlink {
 
    public:
-      Link(ScoreElement* e, ScoreElement* le) : LinkUnlink(e, le) {}
+      Link(ScoreElement* e, ScoreElement* le) : LinkUnlink(le, e) {}
       virtual void undo() override { doUnlink(); }
       virtual void redo() override { doLink();   }
       UNDO_NAME("Link")

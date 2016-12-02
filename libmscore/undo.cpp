@@ -3659,8 +3659,8 @@ void LinkUnlink::doUnlink()
       else
             qWarning("current element %p has no links", e);
 
-      if (le)
-            le->unlink();
+      if (e)
+            e->unlink();
       else
             qWarning("nothing found to unlink");
       }

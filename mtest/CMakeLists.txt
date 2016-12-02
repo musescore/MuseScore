@@ -179,6 +179,7 @@ subdirs (
         libmscore/join
         libmscore/keysig
         libmscore/layout
+        libmscore/links
         libmscore/parts
         libmscore/measure
         libmscore/midi                 # one disabled
