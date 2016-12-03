@@ -52,9 +52,10 @@ class TrackList : public QList<Element*>
 
       void read(const Segment* fs, const Segment* ls);
       bool canWrite(const Fraction& f) const;
-      bool write(Measure*) const;
+      bool write(Score*, int tick) const;
 
       void appendGap(const Fraction&);
+      bool truncate(const Fraction&);
       void dump() const;
       };
 
@@ -90,6 +91,7 @@ class ScoreRange {
       Segment* first() const { return _first; }
       Segment* last() const  { return _last;  }
       void fill(const Fraction&);
+      bool truncate(const Fraction&);
 
       friend class TrackList;
       };

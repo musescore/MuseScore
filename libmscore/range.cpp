@@ -98,6 +98,7 @@ void TrackList::append(Element* e)
             else
                   {
                   Element* element = e->clone();
+                  element->setSelected(false);
                   QList<Element*>::append(element);
                   if (e->isTuplet()) {
                         Tuplet* srcTuplet = toTuplet(e);
@@ -140,6 +141,26 @@ void TrackList::appendGap(const Fraction& d)
             QList<Element*>::append(rest);
             _duration   += d;
             }
+      }
+
+//---------------------------------------------------------
+//   truncate
+//    reduce len of last gap by f
+//---------------------------------------------------------
+
+bool TrackList::truncate(const Fraction& f)
+      {
+      if (empty())
+            return true;
+      Element* e = back();
+      if (!e->isRest())
+            return false;
+      Rest* r = toRest(e);
+      if (r->duration() < f)
+            return false;
+      r->setDuration(r->duration() - f);
+      _duration -= f;
+      return true;
       }
 
 //---------------------------------------------------------
@@ -268,7 +289,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                         Fraction dd = d * ratio;
                         std::vector<TDuration> dl = toDurationList(dd, false);
                         for (const TDuration& k : dl) {
-                              Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->len() - rest);
+                              Segment* segment = measure->undoGetSegment(Segment::Type::ChordRest, measure->len() - rest);
                               Fraction gd      = k.fraction() / ratio;
                               ChordRest* cr    = toChordRest(e->clone());
                               cr->setScore(score);
@@ -324,7 +345,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                               }
                         else {
                               if (!duration.isZero()) {
-                                    qFatal("Tracklist::write: premature end of measure list in track %d, rest %d/%d",
+                                    qFatal("premature end of measure list in track %d, rest %d/%d",
                                        _track, duration.numerator(), duration.denominator());
                                     }
                               }
@@ -387,7 +408,7 @@ bool TrackList::canWrite(const Fraction& measureLen) const
 
 void TrackList::dump() const
       {
-      qDebug("TrackList: elements %d, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
+      qDebug("elements %d, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
       for (Element* e : *this) {
             qDebug("   %s", e->name());
             if (e->isDurationElement()) {
@@ -402,12 +423,16 @@ void TrackList::dump() const
 //    rewrite notes into measure list measure
 //---------------------------------------------------------
 
-bool TrackList::write(Measure* measure) const
+bool TrackList::write(Score* score, int tick) const
       {
-      Fraction pos;
+      if ((_track % VOICES) && size() <= 1)     // dont write rests in voice > 0
+            return true;
+      if (_track % VOICES)
+            printf("write voice %d\n", _track % VOICES);
+      Measure* measure = score->tick2measure(tick);
+      Fraction pos     = Fraction::fromTicks(tick - measure->tick());
       Measure* m       = measure;
-      Score* score     = m->score();
-      Fraction rest    = m->len();
+      Fraction rest    = Fraction::fromTicks(m->endTick() - tick);
       Segment* segment = 0;
 
       for (Element* e : *this) {
@@ -415,7 +440,7 @@ bool TrackList::write(Measure* measure) const
                   Fraction duration = toDurationElement(e)->duration();
 
                   if (duration > rest && e->isTuplet()) {
-                        // experimental: allow split of tuplet in the middle
+                        // experimental: allow tuplet split in the middle
                         if (duration != rest * 2) {
                               MScore::setError(CANNOT_SPLIT_TUPLET);
                               return false;
@@ -455,7 +480,7 @@ bool TrackList::write(Measure* measure) const
                                           Rest* r = new Rest(score, k);
                                           Fraction dd(k.fraction());
                                           r->setTrack(_track);
-                                          segment = m->getSegment(Segment::Type::ChordRest, pos);
+                                          segment = m->undoGetSegment(Segment::Type::ChordRest, pos);
                                           segment->add(r);
                                           duration -= dd;
                                           rest     -= dd;
@@ -463,7 +488,7 @@ bool TrackList::write(Measure* measure) const
                                           }
                                     }
                               else if (e->isChord()) {
-                                    segment = m->getSegment(Segment::Type::ChordRest, pos);
+                                    segment = m->undoGetSegment(Segment::Type::ChordRest, pos);
                                     Chord* c = toChord(e)->clone();
                                     if (!firstpart)
                                           c->removeMarkings(true);
@@ -499,7 +524,7 @@ bool TrackList::write(Measure* measure) const
                                     }
                               else {
                                     if (!duration.isZero()) {
-                                          qFatal("Tracklist::write: premature end of measure list in track %d, rest %d/%d",
+                                          qFatal("premature end of measure list in track %d, rest %d/%d",
                                              _track, duration.numerator(), duration.denominator());
                                           }
                                     }
@@ -519,12 +544,12 @@ bool TrackList::write(Measure* measure) const
                   Segment* segment;
                   if (pos.ticks() == 0 && m->tick() > 0) {
                         Measure* pm = m->prevMeasure();
-                        segment = pm->getSegment(Segment::Type::Clef, pm->len());
+                        segment = pm->undoGetSegment(Segment::Type::Clef, pm->len());
                         }
                   else if (!pos.isZero())
-                        segment = m->getSegment(Segment::Type::Clef, pos);
+                        segment = m->undoGetSegment(Segment::Type::Clef, pos);
                   else
-                        segment = m->getSegment(Segment::Type::HeaderClef, pos);
+                        segment = m->undoGetSegment(Segment::Type::HeaderClef, pos);
                   Element* ne = e->clone();
                   ne->setScore(score);
                   ne->setTrack(_track);
@@ -536,7 +561,7 @@ bool TrackList::write(Measure* measure) const
                   // add the element in its own segment;
                   // but KeySig has to be at start of (current) measure
 
-                  Segment* segment = m->getSegment(Segment::segmentType(e->type()), e->isKeySig() ? Fraction() : pos);
+                  Segment* segment = m->undoGetSegment(Segment::segmentType(e->type()), e->isKeySig() ? Fraction() : pos);
                   Element* ne = e->clone();
                   ne->setScore(score);
                   ne->setTrack(_track);
@@ -641,7 +666,7 @@ bool ScoreRange::write(Score* score, int tick) const
       {
       for (TrackList* dl : tracks) {
             int track = dl->track();
-            if (!dl->write(score->tick2measure(tick)))
+            if (!dl->write(score, tick))
                   return false;
             if ((track % VOICES) == VOICES - 1)  {
                   // clone staff if appropriate after all voices have been copied
@@ -702,6 +727,29 @@ void ScoreRange::fill(const Fraction& f)
       {
       for (auto t : tracks)
             t->appendGap(f);
+      }
+
+//---------------------------------------------------------
+//   truncate
+//    reduce len of last gap by f
+//---------------------------------------------------------
+
+bool ScoreRange::truncate(const Fraction& f)
+      {
+      printf("truncate\n");
+      for (TrackList* dl : tracks) {
+            if (dl->empty())
+                  continue;
+            Element* e = dl->back();
+            if (!e->isRest())
+                  return false;
+            Rest* r = toRest(e);
+            if (r->duration() < f)
+                  return false;
+            }
+      for (TrackList* dl : tracks)
+            dl->truncate(f);
+      return true;
       }
 
 //---------------------------------------------------------

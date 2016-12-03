@@ -811,7 +811,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   int tick  = cr->tick() + f.ticks();
 
                   if ((tuplet == 0) && (((measure->tick() - tick) % dList[0].ticks()) == 0)) {
-                        foreach(TDuration d, dList) {
+                        for (TDuration d : dList) {
                               if (ltuplet) {
                                     // take care not to recreate tuplet we just deleted
                                     Rest* r = setRest(tick, track, d.fraction(), false, 0, false);
@@ -876,6 +876,8 @@ bool Score::makeGap1(int baseTick, int staffIdx, Fraction len, int voiceOffset[V
                   continue;
             int tick = baseTick + voiceOffset[track-strack];
             Measure* m   = tick2measure(tick);
+            if ((track % VOICES) && !m->hasVoices(staffIdx))
+                  continue;
             seg = m->undoGetSegment(Segment::Type::ChordRest, tick);
 
             Fraction newLen = len - Fraction::fromTicks(voiceOffset[track-strack]);
@@ -896,7 +898,8 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
             Segment* seg1 = seg->prev(Segment::Type::ChordRest);
             for (;;) {
                   if (seg1 == 0) {
-                        qDebug("no segment before tick %d", tick);
+                        if (!(track % VOICES))
+                              qDebug("no segment before tick %d", tick);
                         // this happens only for voices other than voice 1
                         expandVoice(seg, track);
                         return makeGapVoice(seg,track,len,tick);

@@ -74,14 +74,15 @@ static void transposeChord(Chord* c, Interval srcTranspose, int tick)
 //    return false if paste fails
 //---------------------------------------------------------
 
-void Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
+bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
       {
       Q_ASSERT(dst->segmentType() == Segment::Type::ChordRest);
       QList<Chord*> graceNotes;
       int dstTick = dst->tick();
-      bool done   = false;
       bool pasted = false;
-      int tickLen = 0, staves = 0;
+      int tickLen = 0;
+      int staves  = 0;
+      bool done   = false;
       while (e.readNextStartElement()) {
             if (done)
                   break;
@@ -141,19 +142,8 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               Q_ASSERT(voiceId >= 0 && voiceId < VOICES);
                               voiceOffset[voiceId] = e.readInt();
                               }
-                        else if (tag == "move") {
-                              int tick = e.readFraction().ticks();
-                              e.initTick(tick);
-                              int shift = tick - tickStart;
-                              if (makeGap && !makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen), voiceOffset)) {
-                                    qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick + shift);
-                                    done = true; // break main loop, cannot make gap
-                                    break;
-                                    }
-                              makeGap = false; // create gap only once per staff
-                              }
-                        else if (tag == "tick") {
-                              int tick = e.readInt();
+                        else if (tag == "move" || tag == "tick") {
+                              int tick = tag == "move" ? e.readFraction().ticks() : e.readInt();
                               e.initTick(tick);
                               int shift = tick - tickStart;
                               if (makeGap && !makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen), voiceOffset)) {
@@ -171,7 +161,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               // no paste into local time signature
                               if (staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
                                     MScore::setError(DEST_LOCAL_TIME_SIGNATURE);
-                                    return;
+                                    return false;
                                     }
                               Measure* measure = tick2measure(tick);
                               tuplet->setParent(measure);
@@ -181,7 +171,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               if (rticks < ticks) {
                                     delete tuplet;
                                     MScore::setError(TUPLET_CROSSES_BAR);
-                                    return;
+                                    return false;
                                     }
                               e.addTuplet(tuplet);
                               }
@@ -194,7 +184,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               // no paste into local time signature
                               if (staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
                                     MScore::setError(DEST_LOCAL_TIME_SIGNATURE);
-                                    return;
+                                    return false;
                                     }
                               if (cr->isGrace())
                                     graceNotes.push_back(toChord(cr));
@@ -211,7 +201,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                                 int rticks = m->endTick() - tick;
                                                 if (rticks < ticks || (rticks != ticks && rticks < ticks * 2)) {
                                                       MScore::setError(DEST_TREMOLO);
-                                                      return;
+                                                      return false;
                                                       }
                                                 }
                                           for (int i = 0; i < graceNotes.size(); ++i) {
@@ -405,21 +395,15 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               }
                         }
 
-                  foreach (Tuplet* tuplet, e.tuplets()) {
-                        if (tuplet->elements().empty()) {
-                              // this should not happen and is a sign of input file corruption
-                              qDebug("Measure:pasteStaff(): empty tuplet");
-                              delete tuplet;
-                              }
-                        else {
-                              Measure* measure = tick2measure(tuplet->tick());
-                              tuplet->setParent(measure);
-                              tuplet->sortElements();
-                              }
+                  for (Tuplet* tuplet : e.tuplets()) {
+                        Q_ASSERT(!tuplet->elements().empty());
+                        Measure* measure = tick2measure(tuplet->tick());
+                        tuplet->setParent(measure);
+                        tuplet->sortElements();
                         }
                   }
             }
-      foreach (Score* s, scoreList())     // for all parts
+      for (Score* s : scoreList())     // for all parts
             s->connectTies();
 
       if (pasted) {                       //select only if we pasted something
@@ -464,6 +448,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
             if (!selection().isRange())
                   _selection.setState(SelState::RANGE);
             }
+      return true;
       }
 
 //---------------------------------------------------------
@@ -897,8 +882,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                         qDebug("paste <%s>", data.data());
                   XmlReader e(this, data);
                   e.setPasteMode(true);
-                  pasteStaff(e, cr->segment(), cr->staffIdx());
-                  if (MScore::_error != MS_NO_ERROR)
+                  if (!pasteStaff(e, cr->segment(), cr->staffIdx()))
                         return;
                   }
             }

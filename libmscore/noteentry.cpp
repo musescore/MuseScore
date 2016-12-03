@@ -551,20 +551,35 @@ void Score::localInsertChord(const Position& pos)
 
 void Score::globalInsertChord(const Position& pos)
       {
-      qDebug("not implemented");
-      ScoreRange r;
-      Segment* s1 = pos.segment;
-      Segment* s2 = lastSegment();
+      ChordRest* cr = selection().cr();
+      int track = cr ? cr->track() : -1;
+      deselectAll();
+      Segment* s1        = pos.segment;
+      Segment* s2        = lastSegment();
       TDuration duration = _is.duration();
       Fraction fraction  = duration.fraction();
+      ScoreRange r;
+
       r.read(s1, s2);
+      Fraction len = r.duration();
+      if (!r.truncate(fraction))
+            appendMeasures(1);
 
       putNote(pos, true);
-
       int dtick = s1->tick() + fraction.ticks();
-      Measure* m = tick2measure(dtick);
-      Segment* s = m->undoGetSegment(Segment::Type::ChordRest, dtick);
+      int voiceOffsets[VOICES] { 0, 0, 0, 0 };
+      len = r.duration();
+      for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
+            makeGap1(dtick, staffIdx, r.duration(), voiceOffsets);
+      r.write(this, dtick);
 
+      if (track != -1) {
+            Measure* m = tick2measure(dtick);
+            Segment* s = m->findSegment(Segment::Type::ChordRest, dtick);
+            Element* e = s->element(track);
+            if (e)
+                  select(e->isChord() ? toChord(e)->notes().front() : e);
+            }
       }
 
 

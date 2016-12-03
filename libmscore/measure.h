@@ -220,7 +220,10 @@ class Measure : public MeasureBase {
       Segment* undoGetSegmentR(Segment::Type st, int rtick);
       Segment* getSegmentR(Segment::Type st, int rtick);
       Segment* findSegmentR(Segment::Type st, int rtick) const;
-      Segment* getSegment(Segment::Type st, const Fraction& f) { return getSegmentR(st, f.ticks()); }
+
+      // preferred:
+      Segment* undoGetSegment(Segment::Type st, const Fraction& f) { return undoGetSegmentR(st, f.ticks()); }
+      Segment* getSegment(Segment::Type st, const Fraction& f)     { return getSegmentR(st, f.ticks()); }
 
       Segment* findFirst(Segment::Type st, int rtick) const;
 
