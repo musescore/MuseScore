@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>573</width>
-    <height>460</height>
+    <width>346</width>
+    <height>243</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,24 +20,11 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <widget class="QListWidget" name="textNames">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
       <property name="uniformItemSizes">
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="Ms::TextProp" name="tp" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
+     <widget class="Ms::TextProp" name="tp" native="true"/>
     </widget>
    </item>
    <item>
