@@ -630,6 +630,7 @@ void Debugger::updateElement(Element* el)
                   case Element::Type::OTTAVA:           ew = new OttavaView;          break;
                   case Element::Type::OTTAVA_SEGMENT:   ew = new TextLineSegmentView; break;
                   case Element::Type::SLUR_SEGMENT:     ew = new SlurSegmentView;     break;
+                  case Element::Type::TIE_SEGMENT:      ew = new TieSegmentView;     break;
                   case Element::Type::ACCIDENTAL:       ew = new AccidentalView;      break;
                   case Element::Type::ARTICULATION:     ew = new ArticulationView;    break;
                   case Element::Type::STEM:             ew = new StemView;            break;
@@ -2317,6 +2318,55 @@ void OttavaView::setElement(Element* e)
       {
 //      Ottava* o = static_cast<Ottava*>(e);
       TextLineView::setElement(e);
+      }
+
+//---------------------------------------------------------
+//   TieSegmentView
+//---------------------------------------------------------
+
+TieSegmentView::TieSegmentView()
+   : ShowElementBase()
+      {
+      ss.setupUi(addWidget());
+      connect(ss.slurTie, SIGNAL(clicked()), SLOT(slurTieClicked()));
+      }
+
+//---------------------------------------------------------
+//   stemClicked
+//---------------------------------------------------------
+
+void TieSegmentView::slurTieClicked()
+      {
+      emit elementChanged(toTieSegment(element())->slurTie());
+      }
+
+//---------------------------------------------------------
+//   TieSegmentView
+//---------------------------------------------------------
+
+void TieSegmentView::setElement(Element* e)
+      {
+      TieSegment* s = toTieSegment(e);
+      ShowElementBase::setElement(e);
+      ss.up1px->setValue(s->ups(Grip::START).p.x());
+      ss.up1py->setValue(s->ups(Grip::START).p.y());
+      ss.up1ox->setValue(s->ups(Grip::START).off.x());
+      ss.up1oy->setValue(s->ups(Grip::START).off.y());
+
+      ss.up2px->setValue(s->ups(Grip::BEZIER1).p.x());
+      ss.up2py->setValue(s->ups(Grip::BEZIER1).p.y());
+      ss.up2ox->setValue(s->ups(Grip::BEZIER1).off.x());
+      ss.up2oy->setValue(s->ups(Grip::BEZIER1).off.y());
+
+      ss.up3px->setValue(s->ups(Grip::BEZIER2).p.x());
+      ss.up3py->setValue(s->ups(Grip::BEZIER2).p.y());
+      ss.up3ox->setValue(s->ups(Grip::BEZIER2).off.x());
+      ss.up3oy->setValue(s->ups(Grip::BEZIER2).off.y());
+
+      ss.up4px->setValue(s->ups(Grip::END).p.x());
+      ss.up4py->setValue(s->ups(Grip::END).p.y());
+      ss.up4ox->setValue(s->ups(Grip::END).off.x());
+      ss.up4oy->setValue(s->ups(Grip::END).off.y());
       }
 
 //---------------------------------------------------------
