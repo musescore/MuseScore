@@ -561,6 +561,17 @@ void Score::globalInsertChord(const Position& pos)
       ScoreRange r;
 
       r.read(s1, s2);
+
+      int sTrack = 0;
+      int eTrack = nstaves() * VOICES;
+      int stick = s1->tick();
+      int etick = s2->tick();
+      foreach (auto i,  spanner()) {
+            Spanner* s = i.second;
+            if (s->tick() >= stick && s->tick() < etick && s->track() >= sTrack && s->track() < eTrack)
+                  undoRemoveElement(s);
+            }
+
       Fraction len = r.duration();
       if (!r.truncate(fraction))
             appendMeasures(1);

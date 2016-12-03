@@ -95,11 +95,8 @@ void TrackList::append(Element* e)
                   d += toRest(e)->duration();
                   rest->setDuration(d);
                   }
-            else
-                  {
+            else {
                   Element* element = e->clone();
-                  element->setSelected(false);
-                  QList<Element*>::append(element);
                   if (e->isTuplet()) {
                         Tuplet* srcTuplet = toTuplet(e);
                         Tuplet* dstTuplet = toTuplet(element);
@@ -112,6 +109,35 @@ void TrackList::append(Element* e)
                               if (ee->track() == e->track())
                                     _range->annotations.push_back({ s->tick(), ee->clone() });
                               }
+                        if (e->isChord()) {
+                              Chord* chord = toChord(e);
+                              bool akkumulateChord = true;
+                              for (Note* n : chord->notes()) {
+                                    if (!n->tieBack() || !n->tieBack()->generated()) {
+                                          akkumulateChord = false;
+                                          break;
+                                          }
+                                   }
+                              if (akkumulateChord && back()->isChord()) {
+                                    Chord* bc = toChord(back());
+                                    Fraction d = bc->duration();
+                                    d += bc->duration();
+                                    bc->setDuration(d);
+
+                                    // forward ties
+                                    int idx = 0;
+                                    for (Note* n : bc->notes()) {
+                                          n->setTieFor(chord->notes()[idx]->tieFor());
+                                          ++idx;
+                                          }
+                                    delete element;
+                                    element = 0;
+                                    }
+                              }
+                        }
+                  if (element) {
+                        element->setSelected(false);
+                        QList<Element*>::append(element);
                         }
                   }
             }
@@ -307,6 +333,8 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                                     for (Note* note : c->notes()) {
                                           if (!duration.isZero() || note->tieFor()) {
                                                 Tie* tie = new Tie(score);
+                                                if (!note->tieFor())
+                                                      tie->setGenerated(true);
                                                 note->add(tie);
                                                 }
                                           else
@@ -438,7 +466,6 @@ bool TrackList::write(Score* score, int tick) const
       for (Element* e : *this) {
             if (e->isDurationElement()) {
                   Fraction duration = toDurationElement(e)->duration();
-
                   if (duration > rest && e->isTuplet()) {
                         // experimental: allow tuplet split in the middle
                         if (duration != rest * 2) {
@@ -503,6 +530,8 @@ bool TrackList::write(Score* score, int tick) const
                                     for (Note* note : c->notes()) {
                                           if (!duration.isZero() || note->tieFor()) {
                                                 Tie* tie = new Tie(score);
+                                                if (!note->tieFor())
+                                                      tie->setGenerated(true);
                                                 note->add(tie);
                                                 }
                                           else
@@ -636,13 +665,13 @@ void ScoreRange::read(Segment* first, Segment* last)
       int endTrack = score->nstaves() * VOICES;
 
       spanner.clear();
+      int stick = first->tick();
+      int etick = last->tick();
       for (auto i : first->score()->spanner()) {
             Spanner* s = i.second;
-            if (s->tick() >= first->tick() && s->tick() < last->tick() &&
-               s->track() >= startTrack && s->track() < endTrack) {
+            if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
                   Spanner* ns = static_cast<Spanner*>(s->clone());
-                  ns->setTick(ns->tick() - first->tick());
-                  ns->setTick2(ns->tick2() - first->tick());
+                  ns->setTick(ns->tick() - stick);
                   spanner.push_back(ns);
                   }
             }
@@ -684,8 +713,7 @@ bool ScoreRange::write(Score* score, int tick) const
             ++track;
             }
       for (Spanner* s : spanner) {
-            s->setTick(s->tick() + first()->tick());
-            s->setTick2(s->tick2() + first()->tick());
+            s->setTick(s->tick() + tick);
             if (s->isSlur()) {
                   Slur* slur = toSlur(s);
                   if (slur->startCR()->isGrace()) {

@@ -63,6 +63,7 @@ QT5_WRAP_UI (ui_headers
       debugger/accidental.ui
       debugger/clef.ui
       debugger/slursegment.ui
+      debugger/tiesegment.ui
       debugger/spanner.ui
       debugger/tremolo.ui
       debugger/beam.ui

@@ -44,6 +44,7 @@
 #include "ui_tremolo.h"
 #include "ui_spanner.h"
 #include "ui_slursegment.h"
+#include "ui_tiesegment.h"
 #include "ui_accidental.h"
 #include "ui_clef.h"
 #include "ui_articulationbase.h"
@@ -646,6 +647,23 @@ class SlurSegmentView : public ShowElementBase {
 
    public:
       SlurSegmentView();
+      virtual void setElement(Element*);
+      };
+
+//---------------------------------------------------------
+//   TieSegmentView
+//---------------------------------------------------------
+
+class TieSegmentView : public ShowElementBase {
+      Q_OBJECT;
+
+      Ui::TieSegment ss;
+
+   private slots:
+      void slurTieClicked();
+
+   public:
+      TieSegmentView();
       virtual void setElement(Element*);
       };
 
