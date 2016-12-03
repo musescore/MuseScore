@@ -774,7 +774,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
       Score* score = srcStaff->score();
       TieMap tieMap;
 
-      score->undo(new LinkStaff(srcStaff, dstStaff));
+      score->undo(new LinkStaff(dstStaff, srcStaff));
 
       int srcStaffIdx = srcStaff->idx();
       int dstStaffIdx = dstStaff->idx();

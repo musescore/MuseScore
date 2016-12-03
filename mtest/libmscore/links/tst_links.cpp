@@ -69,7 +69,7 @@ void TestLinks::test3LinkedSameScore_99796()
       c.addTimeSig(Fraction(4,4));
       c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
-      Score* score = c.score();
+      MasterScore* score = c.score();
       score->doLayout();
       Measure* m = score->firstMeasure();
       Segment* s = m->first(Segment::Type::ChordRest);
@@ -88,7 +88,7 @@ void TestLinks::test3LinkedSameScore_99796()
       Staff* staff       = new Staff(score);
       staff->setPart(oStaff->part());
       score->undoInsertStaff(staff, 1);
-      cloneStaff(oStaff, staff);
+      Excerpt::cloneStaff(oStaff, staff);
       
       e = s->element(0);
       QVERIFY(e->type() == Element::Type::REST);
@@ -98,7 +98,7 @@ void TestLinks::test3LinkedSameScore_99796()
       Staff* staff2       = new Staff(score);
       staff2->setPart(oStaff->part());
       score->undoInsertStaff(staff2, 2);
-      cloneStaff(oStaff, staff2);
+      Excerpt::cloneStaff(oStaff, staff2);
       score->endCmd();
       
       // we should have now 3 staves and 3 linked rests
@@ -128,7 +128,7 @@ void TestLinks::test3LinkedSameScore_99796()
       QVERIFY(e->links()->size() == 2);
       
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       // now 3 staves
       QVERIFY(score->staves().size() == 3);
       e = s->element(0);
@@ -142,7 +142,7 @@ void TestLinks::test3LinkedSameScore_99796()
       QVERIFY(e->links()->size() == 3);
       
       // redo, back to 2 staves
-      score->undo()->redo();
+      score->undoStack()->redo();
       QVERIFY(score->staves().size() == 2);
       e = s->element(0);
       QVERIFY(e->type() == Element::Type::REST);
@@ -172,7 +172,7 @@ void TestLinks::test3LinkedParts_99796()
       c.addTimeSig(Fraction(4,4));
       c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
-      Score* score = c.score();
+      MasterScore* score = c.score();
       score->addText("title", "Title");
       score->doLayout();
       // delete chord
@@ -195,10 +195,9 @@ void TestLinks::test3LinkedParts_99796()
       ex.setPartScore(nscore);
       ex.setTitle("voice");
       ex.setParts(parts);
-      ::createExcerpt(&ex);
+      Excerpt::createExcerpt(&ex);
       QVERIFY(nscore);
-      nscore->setName(parts.front()->partName());
-      score->undo(new AddExcerpt(nscore));
+      score->undo(new AddExcerpt(&ex));
       score->endCmd();
       
       // add a linked staff
@@ -207,7 +206,7 @@ void TestLinks::test3LinkedParts_99796()
       Staff* staff       = new Staff(score);
       staff->setPart(oStaff->part());
       score->undoInsertStaff(staff, 1);
-      cloneStaff(oStaff, staff);
+      Excerpt::cloneStaff(oStaff, staff);
       score->endCmd();
       
       // we should have now 2 staves and 3 linked rests
@@ -221,8 +220,8 @@ void TestLinks::test3LinkedParts_99796()
       
       // delete part
       score->startCmd();
-      ::deleteExcerpt(&ex);
-      score->undo(new RemoveExcerpt(nscore));
+      score->deleteExcerpt(&ex);
+      score->undo(new RemoveExcerpt(&ex));
       
       // we should have now 2 staves and *2* linked rests
       QVERIFY(score->staves().size() == 2);
@@ -254,7 +253,7 @@ void TestLinks::test4LinkedParts_94911()
       c.addTimeSig(Fraction(4,4));
       c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
-      Score* score = c.score();
+      MasterScore* score = c.score();
       score->addText("title", "Title");
       score->doLayout();
       // delete chord
@@ -274,7 +273,7 @@ void TestLinks::test4LinkedParts_94911()
       Staff* staff       = new Staff(score);
       staff->setPart(oStaff->part());
       score->undoInsertStaff(staff, 1);
-      cloneStaff(oStaff, staff);
+      Excerpt::cloneStaff(oStaff, staff);
       score->endCmd();
 
       // we should have now 2 staves and 2 linked rests
@@ -295,14 +294,15 @@ void TestLinks::test4LinkedParts_94911()
       ex.setPartScore(nscore);
       ex.setTitle("Guitar");
       ex.setParts(parts);
-      ::createExcerpt(&ex);
+      Excerpt::createExcerpt(&ex);
       QVERIFY(nscore);
-      nscore->setName(parts.front()->partName());
-      score->undo(new AddExcerpt(nscore));
+      //nscore->setName(parts.front()->partName());
+      score->undo(new AddExcerpt(&ex));
       score->endCmd();
 
       // we should have now 2 staves and 4 linked rests
       QVERIFY(score->staves().size() == 2);
+      QVERIFY(nscore->staves().size() == 2);
       QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 4);
       e = s->element(0);
       QVERIFY(e->type() == Element::Type::REST);
@@ -315,6 +315,11 @@ void TestLinks::test4LinkedParts_94911()
       // delete second staff
       score->startCmd();
       score->cmdRemoveStaff(1);
+      for (Excerpt* excerpt : score->excerpts()) {
+            QList<Staff*> sl       = nscore->staves();
+            if (sl.size() == 0)
+                  score->undo(new RemoveExcerpt(excerpt));
+            }
       score->endCmd();
 
       // we should have now 2 staves and *4* linked rest
@@ -327,9 +332,10 @@ void TestLinks::test4LinkedParts_94911()
       qDebug() << score->excerpts().size();
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       // we should have now 2 staves and 4 linked rests
-      QVERIFY(score->staves().size() == 2);
+      QCOMPARE(nscore->staves().size(), 2);
+      QCOMPARE(score->staves().size(), 2);
       QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 4);
       e = s->element(0);
       QVERIFY(e->type() == Element::Type::REST);
@@ -340,7 +346,7 @@ void TestLinks::test4LinkedParts_94911()
       QVERIFY(score->excerpts().size() == 1);
 
       // redo
-      score->undo()->redo();
+      score->undoStack()->redo();
       // we should have now 2 staves and *4* linked rest
       // no excerpt
       QVERIFY(score->staves().size() == 1);
@@ -369,7 +375,7 @@ void TestLinks::test5LinkedParts_94911()
       c.addTimeSig(Fraction(4,4));
       c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
-      Score* score = c.score();
+      MasterScore* score = c.score();
       score->addText("title", "Title");
       score->doLayout();
       // delete chord
@@ -392,10 +398,9 @@ void TestLinks::test5LinkedParts_94911()
       ex.setPartScore(nscore);
       ex.setTitle("Guitar");
       ex.setParts(parts);
-      ::createExcerpt(&ex);
+      Excerpt::createExcerpt(&ex);
       QVERIFY(nscore);
-      nscore->setName(parts.front()->partName());
-      score->undo(new AddExcerpt(nscore));
+      score->undo(new AddExcerpt(&ex));
       score->endCmd();
 
       // we should have now 1 staff and 2 linked rests
@@ -410,11 +415,12 @@ void TestLinks::test5LinkedParts_94911()
       Staff* staff       = new Staff(score);
       staff->setPart(oStaff->part());
       score->undoInsertStaff(staff, 1);
-      cloneStaff(oStaff, staff);
+      Excerpt::cloneStaff(oStaff, staff);
       score->endCmd();
 
       // we should have now 2 staves and 3 linked rests
-      QVERIFY(score->staves().size() == 2);
+      QCOMPARE(score->staves().size(), 2);
+      QCOMPARE(nscore->staves().size(), 1);
       QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 3);
       e = s->element(0);
       QVERIFY(e->type() == Element::Type::REST);
@@ -425,7 +431,7 @@ void TestLinks::test5LinkedParts_94911()
       QVERIFY(score->excerpts().size() == 1);
 
       // undo
-      score->undo()->undo();
+      score->undoStack()->undo();
       // we should have now 1 staves and 2 linked rests
       QVERIFY(score->staves().size() == 1);
       QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 2);
@@ -435,7 +441,7 @@ void TestLinks::test5LinkedParts_94911()
       QVERIFY(score->excerpts().size() == 1);
 
       // redo
-      score->undo()->redo();
+      score->undoStack()->redo();
       // we should have now 2 staves and 3 linked rests
       QVERIFY(score->staves().size() == 2);
       QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 3);

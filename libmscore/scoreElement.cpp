@@ -133,8 +133,8 @@ void ScoreElement::unlink()
 
 void ScoreElement::undoUnlink()
       {
-//      if (_links)
-//TODO-ws            _score->undo(new Unlink(this));
+      if (_links)
+            _score->undo(new Unlink(this));
       }
 
 //---------------------------------------------------------
