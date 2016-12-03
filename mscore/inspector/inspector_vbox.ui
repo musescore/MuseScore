@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>189</width>
+    <width>199</width>
     <height>182</height>
    </rect>
   </property>
@@ -61,18 +61,15 @@
    <item>
     <layout class="QGridLayout" name="gridLayout">
      <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
+      <number>3</number>
      </property>
      <property name="rightMargin">
-      <number>0</number>
+      <number>3</number>
      </property>
-     <property name="bottomMargin">
-      <number>0</number>
+     <property name="horizontalSpacing">
+      <number>3</number>
      </property>
-     <property name="spacing">
+     <property name="verticalSpacing">
       <number>0</number>
      </property>
      <item row="5" column="0">
@@ -360,20 +357,6 @@
       <widget class="Line" name="line">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QToolButton" name="resetHeight">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Height' value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>

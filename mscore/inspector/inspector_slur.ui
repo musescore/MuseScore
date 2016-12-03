@@ -92,7 +92,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Line type:</string>
+        <string>Line type</string>
        </property>
       </widget>
      </item>
@@ -138,7 +138,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_1">
        <property name="text">
-        <string>Direction:</string>
+        <string>Direction</string>
        </property>
       </widget>
      </item>
