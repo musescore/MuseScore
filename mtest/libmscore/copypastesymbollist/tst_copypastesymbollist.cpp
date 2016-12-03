@@ -88,16 +88,7 @@ void TestCopyPasteSymbolList::copypastecommon(MasterScore* score, const char* na
             qDebug("wrong type mime data");
             return;
             }
-
-      PasteState status = score->cmdPaste(ms,0);
-      switch (status) {
-            case PasteState::NO_DEST:
-                  qDebug("no destination chord"); return;
-            case PasteState::DEST_TUPLET:
-                  qDebug("cannot paste mid-tuplet"); return;
-            default: ;
-      }
-
+      score->cmdPaste(ms,0);
       score->endCmd();
       score->doLayout();
 

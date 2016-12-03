@@ -208,10 +208,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <Rest>
-          <track>1</track>
-          <durationType>half</durationType>
-          </Rest>
         </Measure>
       <Measure number="3">
         <Rest>
