@@ -5775,10 +5775,9 @@ void ScoreView::cmdRepeatSelection()
       if (endSegment && endSegment->element(dStaff * VOICES)) {
             Element* e = endSegment->element(dStaff * VOICES);
             if (e) {
-                  ChordRest* cr = static_cast<ChordRest*>(e);
+                  ChordRest* cr = toChordRest(e);
                   _score->startCmd();
                   _score->pasteStaff(xml, cr->segment(), cr->staffIdx());
-                  _score->setLayoutAll();
                   _score->endCmd();
                   }
             else

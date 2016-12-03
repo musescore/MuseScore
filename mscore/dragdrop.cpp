@@ -706,12 +706,11 @@ void ScoreView::dropEvent(QDropEvent* event)
             if (idx != -1) {
                   Segment* seg = measure->first();
                   // assume there is always a ChordRest segment
-                  while (seg->segmentType() != Segment::Type::ChordRest)
+                  while (!seg->isChordRestType())
                         seg = seg->next();
                   score()->pasteStaff(xml, seg, idx);
                   }
             event->acceptProposedAction();
-            _score->setLayoutAll();
             _score->endCmd();
             }
       setDropTarget(0); // this also resets dropRectangle and dropAnchor

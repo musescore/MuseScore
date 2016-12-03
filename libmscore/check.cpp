@@ -346,6 +346,8 @@ void Measure::checkMeasure(int staffIdx)
       if (isMMRest())
             return;
 
+      printf("check measure\n");
+
       int strack = staffIdx * VOICES;
       int dtrack = strack + (hasVoices(staffIdx) ? VOICES : 1);
 
