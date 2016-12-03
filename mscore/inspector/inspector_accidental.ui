@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>113</width>
-    <height>71</height>
+    <height>69</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -105,23 +105,20 @@
        </property>
       </widget>
      </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QGridLayout" name="gridLayout1">
-     <property name="leftMargin">
-      <number>3</number>
-     </property>
-     <property name="rightMargin">
-      <number>3</number>
-     </property>
-     <property name="horizontalSpacing">
-      <number>3</number>
-     </property>
-     <property name="verticalSpacing">
-      <number>0</number>
-     </property>
-     <item row="0" column="2">
+     <item row="1" column="1">
+      <widget class="QCheckBox" name="hasBracket">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Has bracket</string>
+       </property>
+       <property name="text">
+        <string>Has bracket</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
       <widget class="QToolButton" name="resetHasBracket">
        <property name="toolTip">
         <string>Reset to default</string>
@@ -135,19 +132,6 @@
        <property name="icon">
         <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QCheckBox" name="hasBracket">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>Has bracket</string>
-       </property>
-       <property name="text">
-        <string>Has bracket</string>
        </property>
       </widget>
      </item>

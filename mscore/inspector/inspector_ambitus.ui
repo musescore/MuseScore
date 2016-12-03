@@ -63,9 +63,6 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetDefaultConstraint</enum>
-     </property>
      <property name="leftMargin">
       <number>3</number>
      </property>
