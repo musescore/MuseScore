@@ -91,7 +91,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Style:</string>
+        <string>Style</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>
@@ -117,7 +117,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Span from:</string>
+        <string>Span from</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>
@@ -130,7 +130,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Spanned staves:</string>
+        <string>Spanned staves</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>
@@ -166,7 +166,7 @@
      <item row="3" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Span to:</string>
+        <string>Span to</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>
@@ -225,7 +225,7 @@
      <item row="4" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Span preset:</string>
+        <string>Span preset</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>

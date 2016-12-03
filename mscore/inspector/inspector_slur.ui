@@ -103,7 +103,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Line type:</string>
+        <string>Line type</string>
        </property>
       </widget>
      </item>
@@ -163,7 +163,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Direction:</string>
+        <string>Direction</string>
        </property>
       </widget>
      </item>
