@@ -1643,19 +1643,29 @@ void Measure::adjustToLen(Fraction nf)
                   if (n < 0)  {
                         for (Segment* segment = m->last(); segment;) {
                               Segment* pseg = segment->prev();
-                              Element* e = segment->element(trk);
-                              if (e && e->isChordRest()) {
-                                    ChordRest* cr = static_cast<ChordRest*>(e);
-                                    if (cr->durationType() == TDuration::DurationType::V_MEASURE) {
-                                          int actualTicks = cr->actualTicks();
-                                          n += actualTicks;
-                                          cr->setDurationType(TDuration(actualTicks));
+                              if (segment->segmentType() == Segment::Type::ChordRest) {
+                                    for (Element* a : segment->annotations())
+                                          if (a->track() == trk)
+                                                s->undoRemoveElement(a);
+                                    Element* e = segment->element(trk);
+                                    if (e && e->isChordRest()) {
+                                          ChordRest* cr = static_cast<ChordRest*>(e);
+                                          if (cr->durationType() == TDuration::DurationType::V_MEASURE) {
+                                                int actualTicks = cr->actualTicks();
+                                                n += actualTicks;
+                                                cr->setDurationType(TDuration(actualTicks));
+                                                }
+                                          else
+                                                n += cr->actualTicks();
+                                          s->undoRemoveElement(e);
+                                          if (n >= 0)
+                                                break;
                                           }
-                                    else
-                                          n += cr->actualTicks();
-                                    s->undoRemoveElement(e);
-                                    if (n >= 0)
-                                          break;
+                                    }
+                              else if (segment->segmentType() == Segment::Type::Breath) {
+                                    Element* e = segment->element(trk);
+                                    if (e)
+                                          s->undoRemoveElement(e);
                                     }
                               segment = pseg;
                               }
