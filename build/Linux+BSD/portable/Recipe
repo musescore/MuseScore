@@ -111,7 +111,7 @@ if [ "$(arch)" = "i686" ]; then
 else
   nux_url="http://li.nux.ro/download/nux/dextop/el6/$(arch)/nux-dextop-release-0-2.el6.nux.noarch.rpm"
 fi
-rpm -Uvh "${nux_url}"
+rpm -Uvh "${nux_url}" || true # don't fail if already installed
 yum -y install lame-devel
 
 #install cmake
