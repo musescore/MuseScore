@@ -260,7 +260,7 @@ void ExcerptsDialog::addButtonClicked()
 
       foreach(QListWidgetItem* i, instrumentList->selectedItems()) {
             InstrumentItem* item = static_cast<InstrumentItem*>(i);
-            const PartItem* it     = item->partItem();
+            const PartItem* it   = item->partItem();
             if (it == 0)
                   continue;
             PartItem* pi = new PartItem(it->part(), 0);
@@ -355,11 +355,11 @@ void ExcerptsDialog::excerptChanged(QListWidgetItem* cur, QListWidgetItem*)
 
 void ExcerptsDialog::partDoubleClicked(QTreeWidgetItem* item, int)
       {
-      if (!title->isEnabled())
-            return;
       if (!item->parent()) { // top level items are PartItem
             PartItem* pi = (PartItem*)item;
-            title->setText(pi->part()->partName());
+            QString s = pi->part()->partName();
+            title->setText(s);
+            titleChanged(s);
             }
       }
 
@@ -455,12 +455,12 @@ void ExcerptsDialog::assignTracks(QMultiMap<int, int> tracks)
       int track = 0;
       for (QTreeWidgetItem* pwi = partList->itemAt(0,0); pwi; pwi = partList->itemBelow(pwi)) {
             for (int j = 0; j < pwi->childCount(); j++) {
-                  for (int h = 0; h < VOICES; h++)
-                              pwi->child(j)->setCheckState(h + 1, Qt::Unchecked);
                   for (int k = 0; k < VOICES; k++) {
                         int checkTrack = tracks.key(track, -1);
                         if (checkTrack != -1)
-                              pwi->child(j)->setCheckState((checkTrack % VOICES)+ 1, Qt::Checked);
+                              pwi->child(j)->setCheckState((checkTrack % VOICES) + 1, Qt::Checked);
+                        else
+                              pwi->child(j)->setCheckState((track % VOICES) + 1, Qt::Unchecked);
                         track++;
                         }
                   }
@@ -494,6 +494,7 @@ ExcerptItem* ExcerptsDialog::isInPartsList(Excerpt* e)
 void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       {
       Excerpt* e = static_cast<ExcerptItem*>(cur)->excerpt();
+      e->setTitle(title->text());
       if (e->partScore())
             return;
       if (e->parts().isEmpty()) {
@@ -510,7 +511,7 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
 
       // a new excerpt is created in AddExcerpt, make sure the parts are filed
       for (Excerpt* ee : e->oscore()->excerpts()) {
-            if (ee->partScore() == nscore) {
+            if (ee->partScore() == nscore && ee != e) {
                   ee->parts().clear();
                   ee->parts().append(e->parts());
                   }
