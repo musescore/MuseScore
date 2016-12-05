@@ -167,6 +167,7 @@ bool Score::read(XmlReader& e)
 
                         ex->setPartScore(s);
                         ex->setTracks(e.tracks());
+                        e.setLastMeasure(nullptr);
                         s->read(e);
                         m->addExcerpt(ex);
                         }
