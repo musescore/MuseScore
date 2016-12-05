@@ -1,3 +1,4 @@
 FROM library/centos:6
+ADD build/Linux+BSD/portable/Recipe /Recipe
 ADD https://raw.githubusercontent.com/shoogle/MuseScore/fixed-appimagekit-version/build/Linux%2BBSD/portable/Recipe /Recipe
 RUN bash -ex Recipe && yum clean all

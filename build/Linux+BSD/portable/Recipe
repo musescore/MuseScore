@@ -132,8 +132,8 @@ export PATH="${PWD}/cmake/bin:${PATH}"
 
 # If not building on Travis then might need to fetch MuseScore
 if [ ! -d "MuseScore" ]; then
-  git clone --depth 1 https://github.com/musescore/MuseScore.git
-  rm -rf MuseScore/.git
+  exit
+  # git clone --depth 1 https://github.com/musescore/MuseScore.git
 fi
 
 cd MuseScore
