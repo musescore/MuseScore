@@ -1290,48 +1290,49 @@ Element* Measure::drop(const DropData& data)
 
             case Element::Type::LAYOUT_BREAK: {
                   LayoutBreak* b = toLayoutBreak(e);
+                  Measure* measure = isMMRest() ? mmRestLast() : this;
                   switch (b->layoutBreakType()) {
                         case  LayoutBreak::PAGE:
-                              if (pageBreak()) {
+                              if (measure->pageBreak()) {
                                     delete b;
                                     b = 0;
                                     }
                               else
-                                    setLineBreak(false);
+                                    measure->setLineBreak(false);
                               break;
                         case  LayoutBreak::LINE:
-                              if (lineBreak()) {
+                              if (measure->lineBreak()) {
                                     delete b;
                                     b = 0;
                                     }
                               else
-                                    setPageBreak(false);
+                                    measure->setPageBreak(false);
                               break;
                         case  LayoutBreak::SECTION:
-                              if (sectionBreak()) {
+                              if (measure->sectionBreak()) {
                                     delete b;
                                     b = 0;
                                     }
                               else
-                                    setLineBreak(false);
+                                    measure->setLineBreak(false);
                               break;
                         case LayoutBreak::NOBREAK:
-                              if (noBreak()) {
+                              if (measure->noBreak()) {
                                     delete b;
                                     b = 0;
                                     }
                               else {
-                                    setLineBreak(false);
-                                    setPageBreak(false);
+                                    measure->setLineBreak(false);
+                                    measure->setPageBreak(false);
                                     }
                               break;
                         }
                   if (b) {
                         b->setTrack(-1);       // these are system elements
-                        b->setParent(this);
+                        b->setParent(measure);
                         score()->undoAddElement(b);
                         }
-                  cleanupLayoutBreaks(true);
+                  measure->cleanupLayoutBreaks(true);
                   return b;
                   }
 
