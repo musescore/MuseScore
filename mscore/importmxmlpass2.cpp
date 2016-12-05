@@ -2273,9 +2273,11 @@ void MusicXMLParserPass2::print(Measure* measure)
             }
       if (pm) {
             if (preferences.musicxmlImportBreaks && (newSystem || newPage)) {
-                  LayoutBreak* lb = new LayoutBreak(_score);
-                  lb->setLayoutBreakType(newSystem ? LayoutBreak::Type::LINE : LayoutBreak::Type::PAGE);
-                  pm->add(lb);
+                  if (!pm->lineBreak() && !pm->pageBreak()) {
+                        LayoutBreak* lb = new LayoutBreak(_score);
+                        lb->setLayoutBreakType(newSystem ? LayoutBreak::Type::LINE : LayoutBreak::Type::PAGE);
+                        pm->add(lb);
+                        }
                   }
             }
 
