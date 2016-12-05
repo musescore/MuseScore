@@ -1418,10 +1418,13 @@ qDebug("drop staffList");
             case Element::Type::LAYOUT_BREAK:
                   {
                   LayoutBreak* lb = static_cast<LayoutBreak*>(e);
+                  Measure* measure = isMMRest() ? mmRestLast() : this;
+                  if (!measure)
+                        return 0;
                   if (
-                        (lb->layoutBreakType() == LayoutBreak::Type::PAGE && _pageBreak)
-                     || (lb->layoutBreakType() == LayoutBreak::Type::LINE && _lineBreak)
-                     || (lb->layoutBreakType() == LayoutBreak::Type::SECTION && _sectionBreak)
+                        (lb->layoutBreakType() == LayoutBreak::Type::PAGE && measure->pageBreak())
+                     || (lb->layoutBreakType() == LayoutBreak::Type::LINE && measure->lineBreak())
+                     || (lb->layoutBreakType() == LayoutBreak::Type::SECTION && measure->sectionBreak())
                      ) {
                         //
                         // if break already set
@@ -1430,8 +1433,8 @@ qDebug("drop staffList");
                         break;
                         }
                   // make sure there is only LayoutBreak::Type::LINE or LayoutBreak::Type::PAGE
-                  if ((lb->layoutBreakType() != LayoutBreak::Type::SECTION) && (_pageBreak || _lineBreak)) {
-                        foreach(Element* le, _el) {
+                  if ((lb->layoutBreakType() != LayoutBreak::Type::SECTION) && (measure->pageBreak() || measure->lineBreak())) {
+                        foreach(Element* le, measure->el()) {
                               if (le->type() == Element::Type::LAYOUT_BREAK
                                  && (static_cast<LayoutBreak*>(le)->layoutBreakType() == LayoutBreak::Type::LINE
                                   || static_cast<LayoutBreak*>(le)->layoutBreakType() == LayoutBreak::Type::PAGE)) {
@@ -1442,7 +1445,7 @@ qDebug("drop staffList");
                         break;
                         }
                   lb->setTrack(-1);       // these are system elements
-                  lb->setParent(this);
+                  lb->setParent(measure);
                   score()->undoAddElement(lb);
                   return lb;
                   }

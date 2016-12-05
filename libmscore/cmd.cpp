@@ -2457,12 +2457,8 @@ void Score::cmd(const QAction* a)
 
             if (el && el->type() == Element::Type::BAR_LINE && el->parent()->type() == Element::Type::SEGMENT) {
                   Measure* measure = static_cast<Measure*>(el->parent()->parent());
-                  if (measure->isMMRest()) {
-                        // if measure is mm rest, then propagate to last original measure
-                        measure = measure->nextMeasure();
-                        if (measure)
-                              measure = measure->prevMeasure();
-                        }
+                  // if measure is mm rest, then propagate to last original measure
+                  measure = measure->isMMRest() ? measure->mmRestLast() : measure;
                   if (measure)
                         measure->undoSetBreak(!measure->lineBreak(), type);
                   }
