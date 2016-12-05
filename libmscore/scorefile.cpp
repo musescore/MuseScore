@@ -1129,6 +1129,7 @@ bool Score::read(XmlReader& e)
                         e.skipCurrentElement();
                   else {
                         Score* s = new Score(this, MScore::baseStyle());
+                        e.setLastMeasure(nullptr);
                         s->read(e);
                         addExcerpt(s);
                         }
