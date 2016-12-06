@@ -1364,9 +1364,9 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
       // in clipboard mode, ls might be in an mmrest
       // since we are traversing regular measures,
       // force them out of mmRest
-      Measure* lm = ls ? ls->measure() : 0;
-      Measure* fm = fs ? fs->measure() : 0;
       if (clip) {
+            Measure* lm = ls ? ls->measure() : 0;
+            Measure* fm = fs ? fs->measure() : 0;
             if (lm && lm->isMMRest()) {
                   lm = lm->mmRestLast();
                   if (lm)
