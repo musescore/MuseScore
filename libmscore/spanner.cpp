@@ -481,27 +481,30 @@ bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
       switch (propertyId) {
             case P_ID::SPANNER_TICK:
                   setTick(v.toInt());
+                  setStartElement(0);     // invalidate
+                  setEndElement(0);       //
+                  if (score() && score()->spannerMap().removeSpanner(this))
+                        score()->addSpanner(this);
                   break;
             case P_ID::SPANNER_TICKS:
                   setTicks(v.toInt());
+                  setEndElement(0);       // invalidate
                   break;
             case P_ID::TRACK:
                   setTrack(v.toInt());
-                  setStartElement(0);
+                  setStartElement(0);     // invalidate
                   break;
             case P_ID::SPANNER_TRACK2:
                   setTrack2(v.toInt());
-                  setEndElement(0);
+                  setEndElement(0);       // invalidate
                   break;
             case P_ID::ANCHOR:
                   setAnchor(Anchor(v.toInt()));
                   break;
             default:
-                  if (!Element::setProperty(propertyId, v))
-                        return false;
-                  break;
+                  return Element::setProperty(propertyId, v);
             }
-      score()->setLayoutAll();
+      triggerLayout();
       return true;
       }
 

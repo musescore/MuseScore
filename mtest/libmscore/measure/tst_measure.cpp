@@ -264,11 +264,8 @@ void TestMeasure::spanner_A()
       {
       MasterScore* score = readScore(DIR + "measure-6.mscx");
 
-      Measure* m = score->firstMeasure();
-      score->startCmd();
-      score->select(m);
+      score->select(score->firstMeasure());
       score->cmdTimeDelete();
-      score->endCmd();
       QVERIFY(saveCompareScore(score, "measure-6.mscx", DIR + "measure-6-ref.mscx"));
       delete score;
       }
@@ -285,11 +282,9 @@ void TestMeasure::spanner_B()
       {
       MasterScore* score = readScore(DIR + "measure-7.mscx");
 
-      score->startCmd();
       Measure* m = score->firstMeasure()->nextMeasure();
       score->select(m);
       score->cmdTimeDelete();
-      score->endCmd();
 
       QVERIFY(saveCompareScore(score, "measure-7.mscx", DIR + "measure-7-ref.mscx"));
       delete score;
@@ -307,11 +302,9 @@ void TestMeasure::spanner_C()
       {
       MasterScore* score = readScore(DIR + "measure-8.mscx");
 
-      score->startCmd();
       Measure* m = score->firstMeasure()->nextMeasure();
       score->select(m);
       score->cmdTimeDelete();
-      score->endCmd();
 
       QVERIFY(saveCompareScore(score, "measure-8.mscx", DIR + "measure-8-ref.mscx"));
       delete score;
@@ -329,11 +322,9 @@ void TestMeasure::spanner_D()
       {
       MasterScore* score = readScore(DIR + "measure-9.mscx");
 
-      score->startCmd();
       Measure* m = score->firstMeasure()->nextMeasure();
       score->select(m);
       score->cmdTimeDelete();
-      score->endCmd();
 
       QVERIFY(saveCompareScore(score, "measure-9.mscx", DIR + "measure-9-ref.mscx"));
       delete score;
@@ -347,11 +338,9 @@ void TestMeasure::deleteLast()
       {
       MasterScore* score = readScore(DIR + "measure-10.mscx");
 
-      score->startCmd();
       Measure* m = score->lastMeasure();
       score->select(m);
       score->cmdTimeDelete();
-      score->endCmd();
 
       QVERIFY(saveCompareScore(score, "measure-10.mscx", DIR + "measure-10-ref.mscx"));
       delete score;

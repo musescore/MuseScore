@@ -2652,7 +2652,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   selectRange(e, staffIdx);
                   break;
             }
-      update();
+//      update();
       }
 
 //---------------------------------------------------------

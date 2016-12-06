@@ -560,29 +560,35 @@ void Score::globalInsertChord(const Position& pos)
       Fraction fraction  = duration.fraction();
       ScoreRange r;
 
-      r.read(s1, s2);
+      r.read(s1, s2, false);
 
-      int sTrack = 0;
-      int eTrack = nstaves() * VOICES;
-      int stick = s1->tick();
-      int etick = s2->tick();
-      foreach (auto i,  spanner()) {
-            Spanner* s = i.second;
-            if (s->tick() >= stick && s->tick() < etick && s->track() >= sTrack && s->track() < eTrack)
-                  undoRemoveElement(s);
-            }
+      int strack = 0;                      // for now for all tracks
+      int etrack = nstaves() * VOICES;
+      int stick  = s1->tick();
+      int etick  = s2->tick();
+      int ticks  = fraction.ticks();
 
       Fraction len = r.duration();
       if (!r.truncate(fraction))
             appendMeasures(1);
 
       putNote(pos, true);
-      int dtick = s1->tick() + fraction.ticks();
+      int dtick = s1->tick() + ticks;
       int voiceOffsets[VOICES] { 0, 0, 0, 0 };
       len = r.duration();
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
             makeGap1(dtick, staffIdx, r.duration(), voiceOffsets);
       r.write(this, dtick);
+
+      for (auto i :  spanner()) {
+            Spanner* s = i.second;
+            if (s->track() >= strack && s->track() < etrack) {
+                  if (s->tick() >= stick && s->tick() < etick)
+                        s->undoChangeProperty(P_ID::SPANNER_TICK, s->tick() + ticks);
+                  else if (s->tick2() >= stick && s->tick2() < etick)
+                        s->undoChangeProperty(P_ID::SPANNER_TICKS, s->ticks() + ticks);
+                  }
+            }
 
       if (track != -1) {
             Measure* m = tick2measure(dtick);

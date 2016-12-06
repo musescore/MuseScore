@@ -96,7 +96,7 @@ bool SpannerMap::removeSpanner(Spanner* s)
                   return true;
                   }
             }
-      qFatal("Score::removeSpanner: %s (%p) not found", s->name(), s);
+      qDebug("%s (%p) not found", s->name(), s);
       return false;
       }
 

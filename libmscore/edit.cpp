@@ -228,7 +228,6 @@ Chord* Score::addChord(int tick, TDuration d, Chord* oc, bool genTie, Tuplet* tu
 
 ChordRest* Score::addClone(ChordRest* cr, int tick, const TDuration& d)
       {
-qDebug(" %s at %d %s", cr->name(), tick, qPrintable(d.fraction().print()));
       ChordRest* newcr;
       // change a RepeatMeasure() into an Rest()
       if (cr->isRepeatMeasure())
@@ -418,8 +417,6 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
 
       ScoreRange range;
       range.read(fm->first(), lm->last());
-      if (!range.canWrite(ns))
-            return false;
 
       //
       // calculate number of required measures = nm
@@ -475,7 +472,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
             undoInsertTime(lm->endTick(), fill.ticks());
 
       if (!range.write(masterScore(), fm->tick()))
-            qFatal("Cannot write measures");
+            return false;
       connectTies(true);
 
       if (noteEntryMode()) {

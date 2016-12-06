@@ -42,14 +42,11 @@ class Rest : public ChordRest {
       virtual qreal centerX() const override;
       virtual void setUserOff(const QPointF& o) override;
 
-   protected:
-      ElementList _el;              ///< symbols or images
-
    public:
       Rest(Score* s = 0);
       Rest(Score*, const TDuration&);
       Rest(const Rest&, bool link = false);
-      ~Rest();
+      ~Rest() {}
 
       virtual Element::Type type() const override { return Element::Type::REST; }
       Rest &operator=(const Rest&) = delete;
@@ -93,8 +90,6 @@ class Rest : public ChordRest {
       virtual qreal stemPosX() const;
       virtual QPointF stemPosBeam() const;
 
-      ElementList el()                            { return _el; }
-      const ElementList el() const                { return _el; }
 
       virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       virtual QVariant getProperty(P_ID propertyId) const override;

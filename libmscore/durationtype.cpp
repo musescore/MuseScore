@@ -294,7 +294,7 @@ void TDuration::shiftType(int v)
             setType(DurationType::V_INVALID);
       else {
             int newValue = int(_val) + v;
-            if ((newValue < int(DurationType::V_LONG)) || (newValue > int(DurationType::V_128TH)))
+            if ((newValue < int(DurationType::V_LONG)) || (newValue > int(DurationType::V_1024TH)))
                   setType(DurationType::V_INVALID);
             else
                   setType(DurationType(newValue));
