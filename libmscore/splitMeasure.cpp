@@ -68,6 +68,5 @@ void Score::splitMeasure(Segment* segment)
       m2->adjustToLen(Fraction::fromTicks(ticks2));
       range.write(this, m1->tick());
       }
-
 }
 

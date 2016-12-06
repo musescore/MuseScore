@@ -115,6 +115,7 @@ class FiguredBass;
 class StaffState;
 class Arpeggio;
 class Image;
+class ChordLine;
 
 enum class SymId;
 
@@ -778,6 +779,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(StaffState,    STAFF_STATE)
       CONVERT(Arpeggio,      ARPEGGIO)
       CONVERT(Image,         IMAGE)
+      CONVERT(ChordLine,     CHORDLINE)
 #undef CONVERT
       };
 
@@ -889,6 +891,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(StaffState,    STAFF_STATE)
       CONVERT(Arpeggio,      ARPEGGIO)
       CONVERT(Image,         IMAGE)
+      CONVERT(ChordLine,     CHORDLINE)
 #undef CONVERT
 
 //---------------------------------------------------------

@@ -68,11 +68,6 @@ Rest::Rest(const Rest& r, bool link)
       _mmWidth = r._mmWidth;
       }
 
-Rest::~Rest()
-      {
-      qDeleteAll(_el);
-      }
-
 //---------------------------------------------------------
 //   Rest::draw
 //---------------------------------------------------------
@@ -332,7 +327,7 @@ void Rest::layout()
       {
       if (_gap)
             return;
-      for (Element* e : _el)
+      for (Element* e : el())
             e->layout();
       if (measure() && measure()->isMMRest()) {
             static const qreal verticalLineWidth = .2;
@@ -633,7 +628,7 @@ qreal Rest::downPos() const
 void Rest::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       ChordRest::scanElements(data, func, all);
-      for (Element* e : _el)
+      for (Element* e : el())
             e->scanElements(data, func, all);
       if (!isGap())
             func(data, this);
@@ -790,7 +785,7 @@ void Rest::add(Element* e)
       switch(e->type()) {
             case Element::Type::SYMBOL:
             case Element::Type::IMAGE:
-                  _el.push_back(e);
+                  el().push_back(e);
                   break;
             default:
                   ChordRest::add(e);
@@ -807,7 +802,7 @@ void Rest::remove(Element* e)
       switch(e->type()) {
             case Element::Type::SYMBOL:
             case Element::Type::IMAGE:
-                  if (!_el.remove(e))
+                  if (!el().remove(e))
                         qDebug("Rest::remove(): cannot find %s", e->name());
                   break;
             default:
@@ -826,7 +821,7 @@ void Rest::write(XmlWriter& xml) const
             return;
       xml.stag(name());
       ChordRest::writeProperties(xml);
-      _el.write(xml);
+      el().write(xml);
       xml.etag();
       }
 

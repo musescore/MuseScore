@@ -132,6 +132,7 @@ ChordRest::~ChordRest()
       {
       qDeleteAll(_articulations);
       qDeleteAll(_lyrics);
+      qDeleteAll(_el);
       delete _tabDur;
       }
 
@@ -1069,7 +1070,7 @@ void ChordRest::add(Element* e)
       {
       e->setParent(this);
       e->setTrack(track());
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::ARTICULATION:
                   {
                   Articulation* a = toArticulation(e);
@@ -1450,6 +1451,21 @@ void ChordRest::flipLyrics(Lyrics* l)
       l->undoChangeProperty(P_ID::VERSE, verses + 1);
       l->undoChangeProperty(P_ID::AUTOPLACE, true);
       l->undoChangeProperty(P_ID::PLACEMENT, int(p));
+      }
+
+//---------------------------------------------------------
+//   removeMarkings
+//    - this is normally called after cloning a chord to tie a note over the barline
+//    - there is no special undo handling; the assumption is that undo will simply remove the cloned chord
+//    - two note tremolos are converted into simple notes
+//    - single note tremolos are optionally retained
+//---------------------------------------------------------
+
+void ChordRest::removeMarkings(bool /* keepTremolo */)
+      {
+      qDeleteAll(el());
+      qDeleteAll(articulations());
+      qDeleteAll(lyrics());
       }
 
 }

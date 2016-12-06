@@ -267,12 +267,12 @@ Chord::Chord(const Chord& c, bool link)
             }
 
       for (Element* e : c.el()) {
-            if (e->type() == Element::Type::CHORDLINE) {
-                  ChordLine* cl = static_cast<ChordLine*>(e);
+            if (e->isChordLine()) {
+                  ChordLine* cl = toChordLine(e);
                   ChordLine* ncl = new ChordLine(*cl);
                   add(ncl);
                   if (link)
-                        score()->undo(new Link(const_cast<ChordLine*>(ncl), cl));
+                        score()->undo(new Link(ncl, cl));
                   }
             }
       }
@@ -483,7 +483,7 @@ void Chord::add(Element* e)
                   _hook = toHook(e);
                   break;
             case Element::Type::CHORDLINE:
-                  _el.push_back(e);
+                  el().push_back(e);
                   break;
             case Element::Type::STEM_SLASH:
                   Q_ASSERT(!_stemSlash);
@@ -580,7 +580,7 @@ void Chord::remove(Element* e)
                   _stemSlash = 0;
                   break;
             case Element::Type::CHORDLINE:
-                  _el.remove(e);
+                  el().remove(e);
                   break;
             case Element::Type::CHORD:
                   {
@@ -950,7 +950,7 @@ void Chord::write(XmlWriter& xml) const
             _arpeggio->write(xml);
       if (_tremolo && tremoloChordType() != TremoloChordType::TremoloSecondNote)
             _tremolo->write(xml);
-      for (Element* e : _el)
+      for (Element* e : el())
             e->write(xml);
       xml.etag();
       }
@@ -1144,10 +1144,10 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
       int n = _notes.size();
       for (int i = 0; i < n; ++i)
             _notes.at(i)->scanElements(data, func, all);
-      n = _el.size();
+//      n = el().size();
       for (Chord* chord : _graceNotes)
             chord->scanElements(data, func, all);
-      for (Element* e : _el)
+      for (Element* e : el())
             e->scanElements(data, func, all);
       ChordRest::scanElements(data, func, all);
       }
@@ -1172,7 +1172,7 @@ void Chord::processSiblings(std::function<void(Element*)> func) const
             func(ll);
       for (Note* note : _notes)
             func(note);
-      for (Element* e : _el)
+      for (Element* e : el())
             func(e);
       for (Chord* chord : _graceNotes)    // process grace notes last, needed for correct shape calculation
             func(chord);
@@ -2051,7 +2051,7 @@ void Chord::layoutPitched()
                  _spaceRw = xr;
            }
 
-      for (Element* e : _el) {
+      for (Element* e : el()) {
             if (e->type() == Element::Type::SLUR)     // we cannot at this time as chordpositions are not fixed
                   continue;
             e->layout();
@@ -2384,7 +2384,7 @@ void Chord::layoutTablature()
            if (xr > _spaceRw)
                  _spaceRw = xr;
            }
-      for (Element* e : _el) {
+      for (Element* e : el()) {
             e->layout();
             if (e->type() == Element::Type::CHORDLINE) {
                   QRectF tbbox = e->bbox().translated(e->pos());
@@ -3029,18 +3029,12 @@ void Chord::removeMarkings(bool keepTremolo)
             remove(tremolo());
       if (arpeggio())
             remove(arpeggio());
-      for (Element* e : el())
-            remove(e);
-      for (Element* e : articulations())
-            remove(e);
-      for (Element* e : lyrics())
-            remove(e);
-      for (Element* e : graceNotes())
-            remove(e);
+      qDeleteAll(graceNotes());
       for (Note* n : notes()) {
             for (Element* e : n->el())
                   n->remove(e);
             }
+      ChordRest::removeMarkings(keepTremolo);
       }
 
 //---------------------------------------------------------

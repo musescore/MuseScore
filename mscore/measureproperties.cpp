@@ -260,8 +260,9 @@ void MeasureProperties::apply()
       if (m->len() != len()) {
             ScoreRange range;
             range.read(m->first(), m->last());
-            if (range.canWrite(len()))
-                  m->adjustToLen(len());
+            m->adjustToLen(len());
+#if 0
+            // handled by endCmd():
             else if (!MScore::noGui) {
                   QMessageBox::warning(0,
                      QT_TRANSLATE_NOOP("MeasureProperties", "MuseScore"),
@@ -269,6 +270,7 @@ void MeasureProperties::apply()
                      "tuplet would cross measure")
                      );
                   }
+#endif
             }
       score->select(m, SelectType::SINGLE, 0);
       score->update();
