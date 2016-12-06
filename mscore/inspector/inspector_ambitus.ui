@@ -86,6 +86,9 @@
        <property name="text">
         <string>Head group</string>
        </property>
+       <property name="buddy">
+        <cstring>noteHeadGroup</cstring>
+       </property>
       </widget>
      </item>
      <item row="0" column="1">
@@ -224,6 +227,9 @@
        </property>
        <property name="text">
         <string>Bottom note</string>
+       </property>
+       <property name="buddy">
+        <cstring>bottomTpc</cstring>
        </property>
       </widget>
      </item>
@@ -439,6 +445,9 @@
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
+         <property name="buddy">
+          <cstring>bottomOctave</cstring>
+         </property>
         </widget>
        </item>
        <item>
@@ -484,6 +493,9 @@
        <property name="text">
         <string>Line thickness</string>
        </property>
+       <property name="buddy">
+        <cstring>lineWidth</cstring>
+       </property>
       </widget>
      </item>
      <item row="5" column="0">
@@ -496,6 +508,9 @@
        </property>
        <property name="text">
         <string>Top note</string>
+       </property>
+       <property name="buddy">
+        <cstring>topTpc</cstring>
        </property>
       </widget>
      </item>
@@ -714,6 +729,9 @@
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
+         <property name="buddy">
+          <cstring>topOctave</cstring>
+         </property>
         </widget>
        </item>
        <item>
@@ -805,6 +823,9 @@
        </property>
        <property name="text">
         <string>Head type</string>
+       </property>
+       <property name="buddy">
+        <cstring>noteHeadType</cstring>
        </property>
       </widget>
      </item>
@@ -913,6 +934,9 @@
        </property>
        <property name="text">
         <string>Direction</string>
+       </property>
+       <property name="buddy">
+        <cstring>direction</cstring>
        </property>
       </widget>
      </item>

@@ -54,10 +54,10 @@
       <enum>QFrame::HLine</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
+      <enum>QFrame::Raised</enum>
      </property>
      <property name="lineWidth">
-      <number>1</number>
+      <number>2</number>
      </property>
     </widget>
    </item>
@@ -129,6 +129,9 @@
        <property name="text">
         <string>Stacking order</string>
        </property>
+       <property name="buddy">
+        <cstring>z</cstring>
+       </property>
       </widget>
      </item>
      <item row="2" column="1" colspan="2">
@@ -162,6 +165,9 @@
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Color</string>
+       </property>
+       <property name="buddy">
+        <cstring>color</cstring>
        </property>
       </widget>
      </item>
@@ -223,6 +229,9 @@
        <property name="text">
         <string>Horizontal offset</string>
        </property>
+       <property name="buddy">
+        <cstring>offsetX</cstring>
+       </property>
       </widget>
      </item>
      <item row="6" column="2">
@@ -277,6 +286,9 @@
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>Vertical offset</string>
+       </property>
+       <property name="buddy">
+        <cstring>offsetY</cstring>
        </property>
       </widget>
      </item>
