@@ -21,15 +21,15 @@ yum -y install git wget which automake unzip
 if [ ! -f "/etc/yum.repos.d/devtools-2.repo" ]; then
   wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
   yum -y install devtoolset-2-gcc devtoolset-2-gcc-c++ devtoolset-2-binutils
-  source /opt/rh/devtoolset-2/enable # enable new compiler
 fi
+source /opt/rh/devtoolset-2/enable # enable new compiler
 
 # build AppImageKit now to avoid conflicts with MuseScore's dependencies (LAME)
 if [ ! -d "AppImageKit" ]; then
   git clone https://github.com/probonopd/AppImageKit.git
   cd AppImageKit
   git reset --hard 076a88a57d7ca1a8d77bdbf7d8e92f37eea03dab
-  rm -rf .git
+  rm -rf .git*
   ./build.sh
   cd ..
 fi
@@ -84,7 +84,7 @@ fi
 export PATH="${PWD}/cmake/bin:${PATH}"
 
 # Build MuseScore on Travis but not on Docker Hub (reduce container size)
-[ -d "MuseScore" ] || exit
+[ -d "MuseScore" ] || exit 0
 
 ##########################################################################
 # BUILD MUSESCORE
