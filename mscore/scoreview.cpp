@@ -1214,10 +1214,8 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
             MeasureProperties im(obj);
             im.exec();
             }
-      if (_score->undoStack()->active()) {
-            _score->setLayoutAll();
+      if (_score->undoStack()->active())
             _score->endCmd();
-            }
       }
 
 //---------------------------------------------------------
@@ -2761,7 +2759,6 @@ void ScoreView::cmd(const QAction* a)
                   sm->postEvent(new CommandEvent("note-input"));
             Lyrics* lyrics = _score->addLyrics();
             if (lyrics) {
-                  _score->setLayoutAll();
                   startEdit(lyrics);
                   return;     // no endCmd()
                   }
@@ -2771,7 +2768,6 @@ void ScoreView::cmd(const QAction* a)
                   sm->postEvent(new CommandEvent("note-input"));
             FiguredBass* fb = _score->addFiguredBass();
             if (fb) {
-                  _score->setLayoutAll();
                   startEdit(fb);
                   return;     // no endCmd()
                   }
@@ -3151,7 +3147,6 @@ void ScoreView::cmd(const QAction* a)
                         }
                   _score->endCmd();
                   }
-            _score->setLayoutAll();
             }
 #ifdef OMR
       else if (cmd == "show-omr") {
@@ -3182,12 +3177,6 @@ void ScoreView::cmd(const QAction* a)
                   _score->cmdJoinMeasure(m1, m2);
                   }
             }
-      else if (cmd == "delete") {
-            _score->cmdDeleteSelection();
-            }
-      else if (cmd == "full-measure-rest") {
-            _score->cmdFullMeasureRest();
-            }
       else if (cmd == "next-lyric" || cmd == "prev-lyric") {
             editCmd(cmd);
             }
@@ -3201,18 +3190,6 @@ void ScoreView::cmd(const QAction* a)
                   if (spannerSegment)
                         spanners.insert(static_cast<SpannerSegment*>(e)->spanner());
                   }
-            _score->endCmd();
-            }
-      else if (cmd == "set-visible") {
-            _score->startCmd();
-            for (Element* e : _score->selection().elements())
-                  _score->undo(new ChangeProperty(e, P_ID::VISIBLE, true));
-            _score->endCmd();
-            }
-      else if (cmd == "unset-visible") {
-            _score->startCmd();
-            for (Element* e : _score->selection().elements())
-                  _score->undo(new ChangeProperty(e, P_ID::VISIBLE, false));
             _score->endCmd();
             }
 
@@ -3357,11 +3334,17 @@ void ScoreView::cmd(const QAction* a)
             cmdAddFret(13);
       else if(cmd == "fret-14")
             cmdAddFret(14);
-
       else if (cmd == "text-word-left")
             static_cast<Text*>(editObject)->movePosition(QTextCursor::WordLeft);
       else if (cmd == "text-word-right")
             static_cast<Text*>(editObject)->movePosition(QTextCursor::NextWord);
+      else if (cmd == "concert-pitch") {
+            if (styleB(StyleIdx::concertPitch) != a->isChecked()) {
+                  _score->startCmd();
+                  _score->cmdConcertPitchChanged(a->isChecked(), true);
+                  _score->endCmd();
+                  }
+            }
       else
             _score->cmd(a);
       if (_score->processMidiInput())
@@ -3589,7 +3572,6 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
             popup->addAction(getAction("edit-text-style"));
             popup->addAction(getAction("page-settings"));
             popup->addAction(getAction("load-style"));
-            _score->setLayoutAll();
             _score->update();
             popup->popup(gp);
             }
@@ -4870,7 +4852,6 @@ void ScoreView::changeVoice(int voice)
             // treat as command to move notes to another voice
             score()->changeVoice(voice);
             }
-      mscore->updateInputState(score());
       }
 
 //---------------------------------------------------------
@@ -4922,7 +4903,6 @@ void ScoreView::modifyElement(Element* el)
                   delete el;
                   return;
             }
-      cs->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -4990,8 +4970,6 @@ void ScoreView::harmonyTab(bool back)
 
       adjustCanvasPosition(harmony, false);
       ((Harmony*)editObject)->moveCursorToEnd();
-
-      _score->setLayoutAll();
       _score->update();
       }
 
@@ -5088,8 +5066,6 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
 
       adjustCanvasPosition(harmony, false);
       ((Harmony*)editObject)->moveCursorToEnd();
-
-      _score->setLayoutAll();
       _score->update();
       }
 
@@ -5159,8 +5135,6 @@ void ScoreView::harmonyTicksTab(int ticks)
 
       adjustCanvasPosition(harmony, false);
       ((Harmony*)editObject)->moveCursorToEnd();
-
-      _score->setLayoutAll();
       _score->update();
       }
 
@@ -5497,7 +5471,6 @@ void ScoreView::cmdAddChordName()
 
       _score->select(harmony, SelectType::SINGLE, 0);
       startEdit(harmony);
-      _score->setLayoutAll();
       _score->update();
       }
 
@@ -6029,7 +6002,6 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
       mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
       ((FiguredBass*)editObject)->moveCursorToEnd();
-      _score->setLayoutAll();
 //      _score->update();                         // used by lyricsTab() but not by harmonyTab(): needed or not?
       }
 
@@ -6085,7 +6057,6 @@ void ScoreView::figuredBassTicksTab(int ticks)
       mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
       ((FiguredBass*)editObject)->moveCursorToEnd();
-      _score->setLayoutAll();
       }
 
 //---------------------------------------------------------

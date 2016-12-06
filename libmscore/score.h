@@ -28,7 +28,7 @@
 #include "spannermap.h"
 #include "rehearsalmark.h"
 #include "tremolo.h"
-
+#include "layoutbreak.h"
 class QPainter;
 
 namespace Ms {
@@ -495,6 +495,18 @@ class Score : public QObject, public ScoreElement {
 
       void createPlayEvents(Chord*);
       void createGraceNotesPlayEvents(int tick, Chord* chord, int& ontime, int& trailtime);
+      void cmdPitchUp();
+      void cmdPitchDown();
+      void cmdTimeDeleteX();
+      void cmdPitchUpOctave();
+      void cmdPitchDownOctave();
+      void cmdPadNoteIncreaseTAB();
+      void cmdPadNoteDecreaseTAB();
+      void cmdToggleMmrest();
+      void cmdToggleHideEmpty();
+      void cmdSetVisible();
+      void cmdUnsetVisible();
+      void cmdToggleLayoutBreak(LayoutBreak::Type);
 
    signals:
       void posChanged(POS, unsigned);
@@ -540,7 +552,7 @@ class Score : public QObject, public ScoreElement {
       bool transpose(Note* n, Interval, bool useSharpsFlats);
       void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&, bool useInstrument = false, bool flip = false);
       bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
-         bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
+      bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
 
       bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 

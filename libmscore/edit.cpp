@@ -1965,7 +1965,7 @@ void Score::cmdDeleteSelection()
                   int tick  = -1;
                   Tuplet* tuplet = 0;
                   for (Segment* s = s1; s && (s->tick() < stick2); s = s->next1()) {
-                        if (s->element(track) && s->segmentType() == Segment::Type::Breath) {
+                        if (s->element(track) && s->isBreathType()) {
                               deleteItem(s->element(track));
                               continue;
                               }
