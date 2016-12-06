@@ -3339,7 +3339,7 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "text-word-right")
             static_cast<Text*>(editObject)->movePosition(QTextCursor::NextWord);
       else if (cmd == "concert-pitch") {
-            if (styleB(StyleIdx::concertPitch) != a->isChecked()) {
+            if (_score->styleB(StyleIdx::concertPitch) != a->isChecked()) {
                   _score->startCmd();
                   _score->cmdConcertPitchChanged(a->isChecked(), true);
                   _score->endCmd();
