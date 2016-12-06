@@ -239,7 +239,12 @@ bool TrackList::truncate(const Fraction& f)
       Rest* r = toRest(e);
       if (r->duration() < f)
             return false;
-      r->setDuration(r->duration() - f);
+      if (r->duration() == f) {
+            removeLast();
+            delete r;
+            }
+      else
+            r->setDuration(r->duration() - f);
       _duration -= f;
       return true;
       }
@@ -468,7 +473,6 @@ bool TrackList::write(Score* score, int tick) const
       for (Element* e : *this) {
             if (e->isDurationElement()) {
                   Fraction duration = toDurationElement(e)->duration();
-
                   checkRest(rest, m, duration);     // go to next measure, if necessary
                   if (duration > rest && e->isTuplet()) {
                         // experimental: allow tuplet split in the middle
@@ -760,11 +764,12 @@ void TrackList::dump() const
       {
       qDebug("elements %d, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
       for (Element* e : *this) {
-            qDebug("   %s", e->name());
             if (e->isDurationElement()) {
                   Fraction d = toDurationElement(e)->duration();
-                  qDebug("     duration %d/%d", d.numerator(), d.denominator());
+                  qDebug("   %s  %d/%d", e->name(), d.numerator(), d.denominator());
                   }
+            else
+                  qDebug("   %s", e->name());
             }
       }
 
