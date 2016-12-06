@@ -66,7 +66,17 @@ case "$1" in
   * )
     [ "$1" == "--x86_64" ] && shift || true
     # Build MuseScore AppImage inside native (64-bit x86) Docker image
-    docker run -i -v "${PWD}:/MuseScore" shoogle/musescore-x86_64:fixed-appimagekit-version /bin/bash -c \
+    tag=""
+    [ "$branch" == "master" ] || tag=":$branch"
+    if [ $(git diff --name-only HEAD HEAD~1 | grep "^build/Linux+BSD/portable/x86_64") ]; then
+      # Need to update image on Docker Hub
+      set +x # keep env secret
+      data="{\"source_type\": \"Branch\", \"source_name\": \"$branch\"}"
+      url="https://registry.hub.docker.com/u/shoogle/musescore-x86_64/trigger/$DOCKER_TRIGGER/"
+      curl -H "Content-Type: application/json" --data "$data" -X POST "$url"
+      set -x
+    fi
+    docker run -i -v "${PWD}:/MuseScore" "shoogle/musescore-x86_64$tag" /bin/bash -c \
       "/MuseScore/build/Linux+BSD/portable/x86_64/Recipe $makefile_overrides"
     ;;
 esac
