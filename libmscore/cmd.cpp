@@ -554,8 +554,7 @@ void Score::createCRSequence(Fraction f, ChordRest* cr, int tick)
 //    return segment of last created note/rest
 //---------------------------------------------------------
 
-Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd,
-   Direction stemDirection)
+Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, Direction stemDirection)
       {
       Q_ASSERT(segment->segmentType() == Segment::Type::ChordRest);
 
@@ -2317,315 +2316,6 @@ void Score::cmdMoveLyrics(Lyrics* lyrics, Direction dir)
       }
 
 //---------------------------------------------------------
-//   cmd
-//---------------------------------------------------------
-
-void Score::cmd(const QAction* a)
-      {
-      QString cmd(a ? a->data().toString() : "");
-      if (MScore::debugMode)
-            qDebug("Score::cmd <%s>", qPrintable(cmd));
-
-      //
-      // Hack for moving articulations while selected
-      //
-      Element* el = selection().element();
-      if (cmd == "pitch-up") {
-            if (el && el->isLyrics())
-                  cmdMoveLyrics(toLyrics(el), Direction::UP);
-            else if (el && (el->isArticulation() || el->isText()))
-                  el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
-            else if (el && el->isRest())
-                  cmdMoveRest(toRest(el), Direction::UP);
-            else
-                  upDown(true, UpDownMode::CHROMATIC);
-            }
-      else if (cmd == "pitch-down") {
-            if (el && el->isLyrics())
-                  cmdMoveLyrics(toLyrics(el), Direction::DOWN);
-            else if (el && (el->isArticulation() || el->isText()))
-                  el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
-            else if (el && el->isRest())
-                  cmdMoveRest(toRest(el), Direction::DOWN);
-            else
-                  upDown(false, UpDownMode::CHROMATIC);
-            }
-      else if (cmd == "add-staccato")
-            addArticulation(SymId::articStaccatoAbove);
-      else if (cmd == "add-tenuto")
-            addArticulation(SymId::articTenutoAbove);
-      else if (cmd == "add-marcato")
-            addArticulation(SymId::articMarcatoAbove);
-      else if (cmd == "add-sforzato")
-            addArticulation(SymId::articAccentAbove);
-      else if (cmd == "add-trill")
-            addArticulation(SymId::ornamentTrill);
-      else if (cmd == "add-8va")
-            cmdAddOttava(Ottava::Type::OTTAVA_8VA);
-      else if (cmd == "add-8vb")
-            cmdAddOttava(Ottava::Type::OTTAVA_8VB);
-      else if (cmd == "time-delete") {
-            printf("time delete\n");
-            Element* e = selection().element();
-            if (e && e->isBarLine() && toBarLine(e)->segment()->isEndBarLineType()) {
-                  Measure* m = toBarLine(e)->segment()->measure();
-                  cmdJoinMeasure(m, m->nextMeasure());
-                  }
-            else
-                  cmdTimeDelete();
-            }
-      else if (cmd == "pitch-up-octave") {
-            if (el && (el->isArticulation() || el->isText()))
-                  el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()));
-            else
-                  upDown(true, UpDownMode::OCTAVE);
-            }
-      else if (cmd == "pitch-down-octave") {
-            if (el && (el->isArticulation() || el->isText()))
-                  el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()));
-            else
-                  upDown(false, UpDownMode::OCTAVE);
-            }
-      else if (cmd == "note-longa"   || cmd == "note-longa-TAB")
-            padToggle(Pad::NOTE00);
-      else if (cmd == "note-breve"   || cmd == "note-breve-TAB")
-            padToggle(Pad::NOTE0);
-      else if (cmd == "pad-note-1"   || cmd == "pad-note-1-TAB")
-            padToggle(Pad::NOTE1);
-      else if (cmd == "pad-note-2"   || cmd == "pad-note-2-TAB")
-            padToggle(Pad::NOTE2);
-      else if (cmd == "pad-note-4"   || cmd == "pad-note-4-TAB")
-            padToggle(Pad::NOTE4);
-      else if (cmd == "pad-note-8"   || cmd == "pad-note-8-TAB")
-            padToggle(Pad::NOTE8);
-      else if (cmd == "pad-note-16"  || cmd == "pad-note-16-TAB")
-            padToggle(Pad::NOTE16);
-      else if (cmd == "pad-note-32"  || cmd == "pad-note-32-TAB")
-            padToggle(Pad::NOTE32);
-      else if (cmd == "pad-note-64"  || cmd == "pad-note-64-TAB")
-            padToggle(Pad::NOTE64);
-      else if (cmd == "pad-note-128" || cmd == "pad-note-128-TAB")
-            padToggle(Pad::NOTE128);
-      else if (cmd == "pad-note-increase-TAB") {
-            switch (_is.duration().type() ) {
-// cycle back from longest to shortest?
-//                  case TDuration::V_LONG:
-//                        padToggle(Pad::NOTE128);
-//                        break;
-                  case TDuration::DurationType::V_BREVE:
-                        padToggle(Pad::NOTE00);
-                        break;
-                  case TDuration::DurationType::V_WHOLE:
-                        padToggle(Pad::NOTE0);
-                        break;
-                  case TDuration::DurationType::V_HALF:
-                        padToggle(Pad::NOTE1);
-                        break;
-                  case TDuration::DurationType::V_QUARTER:
-                        padToggle(Pad::NOTE2);
-                        break;
-                  case TDuration::DurationType::V_EIGHTH:
-                        padToggle(Pad::NOTE4);
-                        break;
-                  case TDuration::DurationType::V_16TH:
-                        padToggle(Pad::NOTE8);
-                        break;
-                  case TDuration::DurationType::V_32ND:
-                        padToggle(Pad::NOTE16);
-                        break;
-                  case TDuration::DurationType::V_64TH:
-                        padToggle(Pad::NOTE32);
-                        break;
-                  case TDuration::DurationType::V_128TH:
-                        padToggle(Pad::NOTE64);
-                        break;
-                  default:
-                        break;
-                  }
-            }
-      else if (cmd == "pad-note-decrease-TAB") {
-            switch (_is.duration().type() ) {
-                  case TDuration::DurationType::V_LONG:
-                        padToggle(Pad::NOTE0);
-                        break;
-                  case TDuration::DurationType::V_BREVE:
-                        padToggle(Pad::NOTE1);
-                        break;
-                  case TDuration::DurationType::V_WHOLE:
-                        padToggle(Pad::NOTE2);
-                        break;
-                  case TDuration::DurationType::V_HALF:
-                        padToggle(Pad::NOTE4);
-                        break;
-                  case TDuration::DurationType::V_QUARTER:
-                        padToggle(Pad::NOTE8);
-                        break;
-                  case TDuration::DurationType::V_EIGHTH:
-                        padToggle(Pad::NOTE16);
-                        break;
-                  case TDuration::DurationType::V_16TH:
-                        padToggle(Pad::NOTE32);
-                        break;
-                  case TDuration::DurationType::V_32ND:
-                        padToggle(Pad::NOTE64);
-                        break;
-                  case TDuration::DurationType::V_64TH:
-                        padToggle(Pad::NOTE128);
-                        break;
-// cycle back from shortest to longest?
-//                  case TDuration::DurationType::V_128TH:
-//                        padToggle(Pad::NOTE00);
-//                        break;
-                  default:
-                        break;
-                  }
-            }
-      else if (cmd == "pad-rest")
-            padToggle(Pad::REST);
-      else if (cmd == "pad-dot")
-            padToggle(Pad::DOT);
-      else if (cmd == "pad-dotdot")
-            padToggle(Pad::DOTDOT);
-      else if (cmd == "pad-dot3")
-            padToggle(Pad::DOT3);
-      else if (cmd == "pad-dot4")
-            padToggle(Pad::DOT4);
-      else if (cmd == "beam-start")
-            cmdSetBeamMode(Beam::Mode::BEGIN);
-      else if (cmd == "beam-mid")
-            cmdSetBeamMode(Beam::Mode::MID);
-      else if (cmd == "no-beam")
-            cmdSetBeamMode(Beam::Mode::NONE);
-      else if (cmd == "beam-32")
-            cmdSetBeamMode(Beam::Mode::BEGIN32);
-      else if (cmd == "sharp2")
-            changeAccidental(AccidentalType::SHARP2);
-      else if (cmd == "sharp")
-            changeAccidental(AccidentalType::SHARP);
-      else if (cmd == "nat")
-            changeAccidental(AccidentalType::NATURAL);
-      else if (cmd == "flat")
-            changeAccidental(AccidentalType::FLAT);
-      else if (cmd == "flat2")
-            changeAccidental(AccidentalType::FLAT2);
-      else if (cmd == "flip")
-            cmdFlip();
-      else if (cmd == "stretch+")
-            cmdAddStretch(0.1);
-      else if (cmd == "stretch-")
-            cmdAddStretch(-0.1);
-      else if (cmd == "pitch-spell")
-            spell();
-      else if (cmd == "select-all")
-            cmdSelectAll();
-      else if (cmd == "select-section")
-            cmdSelectSection();
-      else if (cmd == "concert-pitch") {
-            if (styleB(StyleIdx::concertPitch) != a->isChecked())
-                  cmdConcertPitchChanged(a->isChecked(), true);
-            }
-      else if (cmd == "reset-beammode")
-            cmdResetBeamMode();
-      else if (cmd == "reset-groupings")
-            cmdResetNoteAndRestGroupings();
-      else if (cmd == "clef-violin")
-            cmdInsertClef(ClefType::G);
-      else if (cmd == "clef-bass")
-            cmdInsertClef(ClefType::F);
-      else if (cmd == "voice-x12")
-            cmdExchangeVoice(0, 1);
-      else if (cmd == "voice-x13")
-            cmdExchangeVoice(0, 2);
-      else if (cmd == "voice-x14")
-            cmdExchangeVoice(0, 3);
-      else if (cmd == "voice-x23")
-            cmdExchangeVoice(1, 2);
-      else if (cmd == "voice-x24")
-            cmdExchangeVoice(1, 3);
-      else if (cmd == "voice-x34")
-            cmdExchangeVoice(2, 3);
-      else if (cmd == "system-break" || cmd == "page-break" || cmd == "section-break") {
-            LayoutBreak::Type type;
-            if (cmd == "system-break")
-                  type = LayoutBreak::Type::LINE;
-            else if (cmd == "page-break")
-                  type = LayoutBreak::Type::PAGE;
-            else
-                  type = LayoutBreak::Type::SECTION;
-
-            if (el && el->type() == Element::Type::BAR_LINE && el->parent()->type() == Element::Type::SEGMENT) {
-                  Measure* measure = toMeasure(el->parent()->parent());
-                  // if measure is mm rest, then propagate to last original measure
-                  measure = measure->isMMRest() ? measure->mmRestLast() : measure;
-                  if (measure)
-                        measure->undoSetBreak(!measure->lineBreak(), type);
-                  }
-            }
-      else if (cmd == "reset-stretch")
-            resetUserStretch();
-      else if (cmd == "mirror-note")
-            cmdMirrorNoteHead();
-      else if (cmd == "double-duration")
-            cmdDoubleDuration();
-      else if (cmd == "half-duration")
-            cmdHalfDuration();
-      else if (cmd == "")               //Midi note received only?
-                  ;
-      else if (cmd == "add-audio")
-            addAudioTrack();
-      else if (cmd == "transpose-up")
-            transposeSemitone(1);
-      else if (cmd == "transpose-down")
-            transposeSemitone(-1);
-      else if (cmd == "toggle-mmrest") {
-            bool val = !styleB(StyleIdx::createMultiMeasureRests);
-            deselectAll();
-            undo(new ChangeStyleVal(this, StyleIdx::createMultiMeasureRests, val));
-            }
-      else if (cmd == "toggle-hide-empty") {
-            bool val = !styleB(StyleIdx::hideEmptyStaves);
-            deselectAll();
-            undo(new ChangeStyleVal(this, StyleIdx::hideEmptyStaves, val));
-            }
-      else if (cmd == "add-brackets")
-            cmdAddBracket();
-      else if (cmd == "acciaccatura")
-            cmdAddGrace(NoteType::ACCIACCATURA, MScore::division / 2);
-      else if (cmd == "appoggiatura")
-            cmdAddGrace(NoteType::APPOGGIATURA, MScore::division / 2);
-      else if (cmd == "grace4")
-            cmdAddGrace(NoteType::GRACE4, MScore::division);
-      else if (cmd == "grace16")
-            cmdAddGrace(NoteType::GRACE16, MScore::division / 4);
-      else if (cmd == "grace32")
-            cmdAddGrace(NoteType::GRACE32, MScore::division / 8);
-      else if (cmd == "grace8after")
-            cmdAddGrace(NoteType::GRACE8_AFTER, MScore::division / 2);
-      else if (cmd == "grace16after")
-            cmdAddGrace(NoteType::GRACE16_AFTER, MScore::division / 4);
-      else if (cmd == "grace32after")
-            cmdAddGrace(NoteType::GRACE32_AFTER, MScore::division / 8);
-      else if (cmd == "explode")
-            cmdExplode();
-      else if (cmd == "implode")
-            cmdImplode();
-      else if (cmd == "slash-fill")
-            cmdSlashFill();
-      else if (cmd == "slash-rhythm")
-            cmdSlashRhythm();
-      else if (cmd == "resequence-rehearsal-marks")
-            cmdResequenceRehearsalMarks();
-      else if (cmd == "del-empty-measures")
-            cmdRemoveEmptyTrailingMeasures();
-      else if (cmd == "toggle-insert-mode") {
-            _is.setInsertMode(!_is.insertMode());
-            qDebug("toggle-insert-mode: %d", _is.insertMode());
-            }
-      else
-            qDebug("unknown cmd <%s>", qPrintable(cmd));
-      }
-
-//---------------------------------------------------------
 //   cmdInsertClef
 //---------------------------------------------------------
 
@@ -2652,15 +2342,14 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
 ///   adds grace note of specified type to selected notes
 //---------------------------------------------------------
 
-void Score::cmdAddGrace (NoteType graceType, int duration) {
-      startCmd();
+void Score::cmdAddGrace (NoteType graceType, int duration)
+      {
       for (Element* e : selection().elements()) {
             if (e->type() == Element::Type::NOTE) {
                   Note* n = toNote(e);
                   setGraceNote(n->chord(), n->pitch(), graceType, duration);
                   }
             }
-      endCmd();
       }
 
 //---------------------------------------------------------
@@ -3222,9 +2911,353 @@ void Score::cmdRemoveEmptyTrailingMeasures()
                   break;
             firstMeasure = m;
             }
-      startCmd();
       deleteMeasures(firstMeasure, lastMeasure);
-      endCmd();
       }
+
+//---------------------------------------------------------
+//   cmdPitchUp
+//---------------------------------------------------------
+
+void Score::cmdPitchUp()
+      {
+      Element* el = selection().element();
+      if (el && el->isLyrics())
+            cmdMoveLyrics(toLyrics(el), Direction::UP);
+      else if (el && (el->isArticulation() || el->isText()))
+            el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
+      else if (el && el->isRest())
+            cmdMoveRest(toRest(el), Direction::UP);
+      else
+            upDown(true, UpDownMode::CHROMATIC);
+      }
+
+//---------------------------------------------------------
+//   cmdPitchDown
+//---------------------------------------------------------
+
+void Score::cmdPitchDown()
+      {
+      Element* el = selection().element();
+      if (el && el->isLyrics())
+            cmdMoveLyrics(toLyrics(el), Direction::DOWN);
+      else if (el && (el->isArticulation() || el->isText()))
+            el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
+      else if (el && el->isRest())
+            cmdMoveRest(toRest(el), Direction::DOWN);
+      else
+            upDown(false, UpDownMode::CHROMATIC);
+      }
+
+//---------------------------------------------------------
+//   cmdTimeDelete
+//---------------------------------------------------------
+
+void Score::cmdTimeDeleteX()
+      {
+      Element* e = selection().element();
+      if (e && e->isBarLine() && toBarLine(e)->segment()->isEndBarLineType()) {
+            Measure* m = toBarLine(e)->segment()->measure();
+            cmdJoinMeasure(m, m->nextMeasure());
+            }
+      else
+            cmdTimeDelete();
+      }
+
+//---------------------------------------------------------
+//   cmdPitchUpOctave
+//---------------------------------------------------------
+
+void Score::cmdPitchUpOctave()
+      {
+      Element* el = selection().element();
+      if (el && (el->isArticulation() || el->isText()))
+            el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()));
+      else
+            upDown(true, UpDownMode::OCTAVE);
+      }
+
+//---------------------------------------------------------
+//   cmdPitchDownOctave
+//---------------------------------------------------------
+
+void Score::cmdPitchDownOctave()
+      {
+      Element* el = selection().element();
+      if (el && (el->isArticulation() || el->isText()))
+            el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()));
+      else
+            upDown(false, UpDownMode::OCTAVE);
+      }
+
+//---------------------------------------------------------
+//   cmdPadNoteInclreaseTAB
+//---------------------------------------------------------
+
+void Score::cmdPadNoteIncreaseTAB()
+      {
+      switch (_is.duration().type() ) {
+// cycle back from longest to shortest?
+//          case TDuration::V_LONG:
+//                padToggle(Pad::NOTE128);
+//                break;
+            case TDuration::DurationType::V_BREVE:
+                  padToggle(Pad::NOTE00);
+                  break;
+            case TDuration::DurationType::V_WHOLE:
+                  padToggle(Pad::NOTE0);
+                  break;
+            case TDuration::DurationType::V_HALF:
+                  padToggle(Pad::NOTE1);
+                  break;
+            case TDuration::DurationType::V_QUARTER:
+                  padToggle(Pad::NOTE2);
+                  break;
+            case TDuration::DurationType::V_EIGHTH:
+                  padToggle(Pad::NOTE4);
+                  break;
+            case TDuration::DurationType::V_16TH:
+                  padToggle(Pad::NOTE8);
+                  break;
+            case TDuration::DurationType::V_32ND:
+                  padToggle(Pad::NOTE16);
+                  break;
+            case TDuration::DurationType::V_64TH:
+                  padToggle(Pad::NOTE32);
+                  break;
+            case TDuration::DurationType::V_128TH:
+                  padToggle(Pad::NOTE64);
+                  break;
+            default:
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
+//   cmdPadNoteDecreaseTAB
+//---------------------------------------------------------
+
+void Score::cmdPadNoteDecreaseTAB()
+      {
+      switch (_is.duration().type() ) {
+            case TDuration::DurationType::V_LONG:
+                  padToggle(Pad::NOTE0);
+                  break;
+            case TDuration::DurationType::V_BREVE:
+                  padToggle(Pad::NOTE1);
+                  break;
+            case TDuration::DurationType::V_WHOLE:
+                  padToggle(Pad::NOTE2);
+                  break;
+            case TDuration::DurationType::V_HALF:
+                  padToggle(Pad::NOTE4);
+                  break;
+            case TDuration::DurationType::V_QUARTER:
+                  padToggle(Pad::NOTE8);
+                  break;
+            case TDuration::DurationType::V_EIGHTH:
+                  padToggle(Pad::NOTE16);
+                  break;
+            case TDuration::DurationType::V_16TH:
+                  padToggle(Pad::NOTE32);
+                  break;
+            case TDuration::DurationType::V_32ND:
+                  padToggle(Pad::NOTE64);
+                  break;
+            case TDuration::DurationType::V_64TH:
+                  padToggle(Pad::NOTE128);
+                  break;
+// cycle back from shortest to longest?
+//          case TDuration::DurationType::V_128TH:
+//                padToggle(Pad::NOTE00);
+//                break;
+            default:
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
+//   cmdToggleLayoutBreak
+//---------------------------------------------------------
+
+void Score::cmdToggleLayoutBreak(LayoutBreak::Type type)
+      {
+      Element* el = selection().element();
+      if (el && el->isBarLine() && el->parent()->isSegment()) {
+            Measure* measure = toMeasure(el->parent()->parent());
+            // if measure is mm rest, then propagate to last original measure
+            measure = measure->isMMRest() ? measure->mmRestLast() : measure;
+            if (measure)
+                  measure->undoSetBreak(!measure->lineBreak(), type);
+            }
+      }
+
+//---------------------------------------------------------
+//   cmdToggleMmrest
+//---------------------------------------------------------
+
+void Score::cmdToggleMmrest()
+      {
+      bool val = !styleB(StyleIdx::createMultiMeasureRests);
+      deselectAll();
+      undo(new ChangeStyleVal(this, StyleIdx::createMultiMeasureRests, val));
+      }
+
+//---------------------------------------------------------
+//   cmdToggleHideEmpty
+//---------------------------------------------------------
+
+void Score::cmdToggleHideEmpty()
+      {
+      bool val = !styleB(StyleIdx::hideEmptyStaves);
+      deselectAll();
+      undo(new ChangeStyleVal(this, StyleIdx::hideEmptyStaves, val));
+      }
+
+//---------------------------------------------------------
+//   cmdSetVisible
+//---------------------------------------------------------
+
+void Score::cmdSetVisible()
+      {
+      for (Element* e : selection().elements())
+            undo(new ChangeProperty(e, P_ID::VISIBLE, true));
+      }
+
+//---------------------------------------------------------
+//   cmdUnsetVisible
+//---------------------------------------------------------
+
+void Score::cmdUnsetVisible()
+      {
+      for (Element* e : selection().elements())
+            undo(new ChangeProperty(e, P_ID::VISIBLE, false));
+      }
+
+//---------------------------------------------------------
+//   cmd
+//---------------------------------------------------------
+
+void Score::cmd(const QAction* a)
+      {
+      QString cmd(a ? a->data().toString() : "");
+      if (MScore::debugMode)
+            qDebug("Score::cmd <%s>", qPrintable(cmd));
+
+      struct ScoreCmd {
+            const char* name;
+            std::function<void()> cmd;
+            };
+      static const std::vector<ScoreCmd> cmdList {
+            { "reset-stretch",              [this]{ resetUserStretch();                                         }},
+            { "mirror-note",                [this]{ cmdMirrorNoteHead();                                        }},
+            { "double-duration",            [this]{ cmdDoubleDuration();                                        }},
+            { "half-duration",              [this]{ cmdHalfDuration ();                                         }},
+            { "add-staccato",               [this]{ addArticulation(SymId::articStaccatoAbove);                 }},
+            { "add-tenuto",                 [this]{ addArticulation(SymId::articTenutoAbove);                   }},
+            { "add-marcato",                [this]{ addArticulation(SymId::articMarcatoAbove);                  }},
+            { "add-sforzato",               [this]{ addArticulation(SymId::articAccentAbove);                   }},
+            { "add-trill",                  [this]{ addArticulation(SymId::ornamentTrill);                      }},
+            { "add-8va",                    [this]{ cmdAddOttava(Ottava::Type::OTTAVA_8VA);                     }},
+            { "add-8vb",                    [this]{ cmdAddOttava(Ottava::Type::OTTAVA_8VB);                     }},
+            { "note-longa",                 [this]{ padToggle(Pad::NOTE00);                                     }},
+            { "note-longa-TAB",             [this]{ padToggle(Pad::NOTE00);                                     }},
+            { "note-breve",                 [this]{ padToggle(Pad::NOTE0);                                      }},
+            { "note-breve-TAB",             [this]{ padToggle(Pad::NOTE0);                                      }},
+            { "pad-note-1",                 [this]{ padToggle(Pad::NOTE1);                                      }},
+            { "pad-note-1-TAB",             [this]{ padToggle(Pad::NOTE1);                                      }},
+            { "pad-note-2",                 [this]{ padToggle(Pad::NOTE2);                                      }},
+            { "pad-note-2-TAB",             [this]{ padToggle(Pad::NOTE2);                                      }},
+            { "pad-note-4",                 [this]{ padToggle(Pad::NOTE4);                                      }},
+            { "pad-note-4-TAB",             [this]{ padToggle(Pad::NOTE4);                                      }},
+            { "pad-note-8",                 [this]{ padToggle(Pad::NOTE8);                                      }},
+            { "pad-note-8-TAB",             [this]{ padToggle(Pad::NOTE8);                                      }},
+            { "pad-note-16",                [this]{ padToggle(Pad::NOTE16);                                     }},
+            { "pad-note-16-TAB",            [this]{ padToggle(Pad::NOTE16);                                     }},
+            { "pad-note-32",                [this]{ padToggle(Pad::NOTE32);                                     }},
+            { "pad-note-32-TAB",            [this]{ padToggle(Pad::NOTE32);                                     }},
+            { "pad-note-64",                [this]{ padToggle(Pad::NOTE64);                                     }},
+            { "pad-note-64-TAB",            [this]{ padToggle(Pad::NOTE64);                                     }},
+            { "pad-note-128",               [this]{ padToggle(Pad::NOTE128);                                    }},
+            { "pad-note-128-TAB",           [this]{ padToggle(Pad::NOTE128);                                    }},
+            { "reset-beammode",             [this]{ cmdResetBeamMode();                                         }},
+            { "reset-groupings",            [this]{ cmdResetNoteAndRestGroupings();                             }},
+            { "clef-violin",                [this]{ cmdInsertClef(ClefType::G);                                 }},
+            { "clef-bass",                  [this]{ cmdInsertClef(ClefType::F);                                 }},
+            { "voice-x12",                  [this]{ cmdExchangeVoice(0, 1);                                     }},
+            { "voice-x13",                  [this]{ cmdExchangeVoice(0, 2);                                     }},
+            { "voice-x14",                  [this]{ cmdExchangeVoice(0, 3);                                     }},
+            { "voice-x23",                  [this]{ cmdExchangeVoice(1, 2);                                     }},
+            { "voice-x24",                  [this]{ cmdExchangeVoice(1, 3);                                     }},
+            { "voice-x34",                  [this]{ cmdExchangeVoice(2, 3);                                     }},
+            { "pad-rest",                   [this]{ padToggle(Pad::REST);                                       }},
+            { "pad-dot",                    [this]{ padToggle(Pad::DOT);                                        }},
+            { "pad-dotdot",                 [this]{ padToggle(Pad::DOTDOT);                                     }},
+            { "pad-dot3",                   [this]{ padToggle(Pad::DOT3);                                       }},
+            { "pad-dot4",                   [this]{ padToggle(Pad::DOT4);                                       }},
+            { "beam-start",                 [this]{ cmdSetBeamMode(Beam::Mode::BEGIN);                          }},
+            { "beam-mid",                   [this]{ cmdSetBeamMode(Beam::Mode::MID);                            }},
+            { "no-beam",                    [this]{ cmdSetBeamMode(Beam::Mode::NONE);                           }},
+            { "beam-32",                    [this]{ cmdSetBeamMode(Beam::Mode::BEGIN32);                        }},
+            { "sharp2",                     [this]{ changeAccidental(AccidentalType::SHARP2);                   }},
+            { "sharp",                      [this]{ changeAccidental(AccidentalType::SHARP);                    }},
+            { "nat",                        [this]{ changeAccidental(AccidentalType::NATURAL);                  }},
+            { "flat",                       [this]{ changeAccidental(AccidentalType::FLAT);                     }},
+            { "flat2",                      [this]{ changeAccidental(AccidentalType::FLAT2);                    }},
+            { "flip",                       [this]{ cmdFlip();                                                  }},
+            { "stretch+",                   [this]{ cmdAddStretch(0.1);                                         }},
+            { "stretch-",                   [this]{ cmdAddStretch(-0.1);                                        }},
+            { "pitch-spell",                [this]{ spell();                                                    }},
+            { "select-all",                 [this]{ cmdSelectAll();                                             }},
+            { "select-section",             [this]{ cmdSelectSection();                                         }},
+            { "add-brackets",               [this]{ cmdAddBracket();                                            }},
+            { "acciaccatura",               [this]{ cmdAddGrace(NoteType::ACCIACCATURA, MScore::division / 2);  }},
+            { "appoggiatura",               [this]{ cmdAddGrace(NoteType::APPOGGIATURA, MScore::division / 2);  }},
+            { "grace4",                     [this]{ cmdAddGrace(NoteType::GRACE4, MScore::division);            }},
+            { "grace16",                    [this]{ cmdAddGrace(NoteType::GRACE16, MScore::division / 4);       }},
+            { "grace32",                    [this]{ cmdAddGrace(NoteType::GRACE32, MScore::division / 8);       }},
+            { "grace8after",                [this]{ cmdAddGrace(NoteType::GRACE8_AFTER, MScore::division / 2);  }},
+            { "grace16after",               [this]{ cmdAddGrace(NoteType::GRACE16_AFTER, MScore::division / 4); }},
+            { "grace32after",               [this]{ cmdAddGrace(NoteType::GRACE32_AFTER, MScore::division / 8); }},
+            { "explode",                    [this]{ cmdExplode();                                               }},
+            { "implode",                    [this]{ cmdImplode();                                               }},
+            { "slash-fill",                 [this]{ cmdSlashFill();                                             }},
+            { "slash-rhythm",               [this]{ cmdSlashRhythm();                                           }},
+            { "resequence-rehearsal-marks", [this]{ cmdResequenceRehearsalMarks();                              }},
+            { "del-empty-measures",         [this]{ cmdRemoveEmptyTrailingMeasures();                           }},
+            { "add-audio",                  [this]{ addAudioTrack();                                            }},
+            { "transpose-up",               [this]{ transposeSemitone(1);                                       }},
+            { "transpose-down",             [this]{ transposeSemitone(-1);                                      }},
+            { "delete",                     [this]{ cmdDeleteSelection();                                       }},
+            { "full-measure-rest",          [this]{ cmdFullMeasureRest();                                       }},
+            { "toggle-insert-mode",         [this]{ _is.setInsertMode(!_is.insertMode());                       }},
+            { "pitch-up",                   [this]{ cmdPitchUp();                                               }},
+            { "pitch-down",                 [this]{ cmdPitchDown();                                             }},
+            { "time-delete",                [this]{ cmdTimeDeleteX();                                           }},
+            { "pitch-up-octave",            [this]{ cmdPitchUpOctave();                                         }},
+            { "pitch-down-octave",          [this]{ cmdPitchDownOctave();                                       }},
+            { "pad-note-increase-TAB",      [this]{ cmdPadNoteIncreaseTAB();                                    }},
+            { "pad-note-decrease-TAB",      [this]{ cmdPadNoteDecreaseTAB();                                    }},
+//            { "concert-pitch",              [this]{ cmdConcertPitch();                                          }},
+            { "toggle-mmrest",              [this]{ cmdToggleMmrest();                                          }},
+            { "toggle-hide-empty",          [this]{ cmdToggleHideEmpty();                                       }},
+            { "set-visible",                [this]{ cmdSetVisible();                                            }},
+            { "unset-visible",              [this]{ cmdUnsetVisible();                                          }},
+            { "system-break",               [this]{ cmdToggleLayoutBreak(LayoutBreak::Type::LINE);              }},
+            { "page-break",                 [this]{ cmdToggleLayoutBreak(LayoutBreak::Type::PAGE);              }},
+            { "section-break",              [this]{ cmdToggleLayoutBreak(LayoutBreak::Type::SECTION);           }},
+            { "",                           [this]{                                                             }},
+            };
+
+      for (const auto& c : cmdList) {
+            if (cmd == c.name) {
+                  startCmd();
+                  c.cmd();
+                  endCmd();
+                  return;
+                  }
+            }
+      qDebug("unknown cmd <%s>", qPrintable(cmd));
+      }
+
 }
 

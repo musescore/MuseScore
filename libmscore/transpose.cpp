@@ -589,16 +589,12 @@ void Score::transposeSemitone(int step)
       int interval = intervalList[keyType][step > 0 ? 0 : 1];
 
       cmdSelectAll();
-      startCmd();
       if (!transpose(TransposeMode::BY_INTERVAL, dir, Key::C, interval, true, true, false)) {
-            endCmd(true);
             qDebug("Score::transposeSemitone: failed");
-            // TODO: popup message?
+            // TODO: set error message
             }
       else {
             deselectAll();
-            setLayoutAll();
-            endCmd(false);
             }
       }
 
