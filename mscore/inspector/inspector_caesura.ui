@@ -96,6 +96,9 @@
        <property name="text">
         <string>Pause</string>
        </property>
+       <property name="buddy">
+        <cstring>pause</cstring>
+       </property>
       </widget>
      </item>
      <item row="0" column="2">

@@ -54,10 +54,10 @@
       <enum>QFrame::HLine</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
+      <enum>QFrame::Raised</enum>
      </property>
      <property name="lineWidth">
-      <number>1</number>
+      <number>2</number>
      </property>
     </widget>
    </item>
