@@ -21,36 +21,50 @@
 REVISION  := `cat mscore/revision.h`
 CPUS      := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSORS_ONLN 2>/dev/null || echo 1)
 
-PREFIX    = "/usr/local"
-VERSION   = "3.0b-${REVISION}"
-#VERSION = 3.0.0
+PREFIX    := "/usr/local"
+VERSION   := "3.0b-${REVISION}"
+#VERSION := 3.0.0
 
 # Override SUFFIX and LABEL when multiple versions are installed to avoid conflicts.
-SUFFIX=""# E.g.: SUFFIX="dev" --> "mscore" becomes "mscoredev"
-LABEL=""# E.g.: LABEL="Development Build" --> "MuseScore 2" becomes "MuseScore 2 Development Build"
+SUFFIX:=""# E.g.: SUFFIX="dev" --> "mscore" becomes "mscoredev"
+LABEL:=""# E.g.: LABEL="Development Build" --> "MuseScore 2" becomes "MuseScore 2 Development Build"
 
-BUILD_LAME="ON"# Non-free, required for MP3 support. Override with "OFF" to disable.
-UPDATE_CACHE="TRUE"# Override if building a DEB or RPM, or when installing to a non-standard location.
-NO_RPATH="FALSE"# Package maintainers may want to override this (e.g. Debian)
+BUILD_LAME:="ON"# Non-free, required for MP3 support. Override with "OFF" to disable.
+UPDATE_CACHE:="TRUE"# Override if building a DEB or RPM, or when installing to a non-standard location.
+NO_RPATH:="FALSE"# Package maintainers may want to override this (e.g. Debian)
+
+BUILD_SYSTEM:="ninja"# Optionally override with "make" to use it instead. (Ninja is faster)
+
+ifeq ($(BUILD_SYSTEM), "ninja")
+  CMAKE_GENERATOR:=Ninja
+#  BUILD_FLAGS:=-l $(shell echo $$((${CPUS}*2)))
+else
+  CMAKE_GENERATOR:=Unix Makefiles
+#  BUILD_FLAGS:=-j ${CPUS}
+endif
+
+BUILD_FLAGS:=-j $(shell echo $$(((${CPUS}*3+1)/2)))
+
 
 #
 # change path to include your Qt5 installation
 #
-BINPATH      = ${PATH}
+BINPATH := ${PATH}
 
 release:
 	if test ! -d build.release; then mkdir build.release; fi; \
       cd build.release;                          \
       export PATH=${BINPATH};                    \
       cmake -DCMAKE_BUILD_TYPE=RELEASE	       \
+  	  -G"${CMAKE_GENERATOR}"                   \
   	  -DCMAKE_TOOLCHAIN_FILE="${CMAKE_TOOLCHAIN_FILE}"       \
   	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"       \
   	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"      \
   	  -DMUSESCORE_LABEL="${LABEL}"             \
   	  -DBUILD_LAME="${BUILD_LAME}"             \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..; \
-      make lrelease;                             \
-      make -j ${CPUS};                           \
+      ${BUILD_SYSTEM} lrelease;                             \
+      ${BUILD_SYSTEM} ${BUILD_FLAGS};                           \
 
 
 #freetype:
@@ -65,13 +79,14 @@ debug:
       cd build.debug;                                       \
       export PATH=${BINPATH};                               \
       cmake -DCMAKE_BUILD_TYPE=DEBUG	                    \
+  	  -G"${CMAKE_GENERATOR}"                              \
   	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"                  \
   	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"                 \
   	  -DMUSESCORE_LABEL="${LABEL}"                        \
   	  -DBUILD_LAME="${BUILD_LAME}"                        \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..;            \
-      make lrelease;                                        \
-      make -j ${CPUS};                                      \
+      ${BUILD_SYSTEM} lrelease;                           \
+      ${BUILD_SYSTEM} ${BUILD_FLAGS};                         \
 
 #
 #  win32
@@ -88,11 +103,11 @@ win32:
                   mkdir win32install;                  \
             fi;                                        \
             cd win32build;                             \
-            cmake -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=DEBUG  ..; \
-            make lrelease;                             \
-            make -j ${CPUS};                           \
-            make install;                              \
-            make package;                              \
+            cmake -G"${CMAKE_GENERATOR}" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=DEBUG  ..; \
+            ${BUILD_SYSTEM} lrelease;                  \
+            ${BUILD_SYSTEM} -j ${CPUS};                \
+            ${BUILD_SYSTEM} install;                   \
+            ${BUILD_SYSTEM} package;                   \
          else                                          \
             echo "build directory win32build does alread exist, please remove first"; \
          fi
@@ -113,7 +128,7 @@ version:
 
 install: release
 	cd build.release \
-	&& make install/strip \
+	&& ${BUILD_SYSTEM} install/strip \
 	&& if [ ${UPDATE_CACHE} = "TRUE" ]; then \
 	     update-mime-database "${PREFIX}/share/mime"; \
 	     gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"; \
@@ -126,14 +141,14 @@ install: release
 # "bin" folder to PATH and "lib" folder to LD_LIBRARY_PATH. i.e.:
 #   $  export $PATH="/path/to/Qt/bin:${PATH}"
 #   $  export $LD_LIBRARY_PATH="/path/to/Qt/lib:${LD_LIBRARY_PATH}"
-#   $  make portable
+#   $  ${BUILD_SYSTEM} portable
 # PREFIX sets install location *and* the name of the resulting AppDir.
 # Version is appended to PREFIX in CMakeLists.txt if MSCORE_UNSTABLE=FALSE.
-portable: PREFIX=MuseScore
-portable: SUFFIX=-portable
-portable: LABEL=Portable AppImage
-portable: NO_RPATH=TRUE
-portable: UPDATE_CACHE=FALSE
+portable: PREFIX:=MuseScore
+portable: SUFFIX:=-portable
+portable: LABEL:=Portable AppImage
+portable: NO_RPATH:=TRUE
+portable: UPDATE_CACHE:=FALSE
 portable: install
 	build_dir="$$(pwd)/build.release" && cd "$$(cat $${build_dir}/PREFIX.txt)" \
 	&& [ -L usr ] || ln -s . usr && mscore="mscore${SUFFIX}" \
@@ -147,7 +162,7 @@ portable: install
 
 installdebug: debug
 	cd build.debug \
-	&& make install \
+	&& ${BUILD_SYSTEM} install \
 	&& if [ ${UPDATE_CACHE} = "TRUE" ]; then \
 	     update-mime-database "${PREFIX}/share/mime"; \
 	     gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"; \
@@ -182,9 +197,9 @@ unix:
          then                                      \
             mkdir linux;                           \
             cd linux; \
-            cmake -DCMAKE_BUILD_TYPE=RELEASE  ../mscore; \
-            make -j${CPUS} -f Makefile;            \
-            make package;                          \
+            cmake -G"${CMAKE_GENERATOR}" -DCMAKE_BUILD_TYPE=RELEASE  ../mscore; \
+            ${BUILD_SYSTEM} -j${CPUS} -f Makefile; \
+            ${BUILD_SYSTEM} package;               \
          else                                      \
             echo "build directory linux does alread exist, please remove first";  \
          fi

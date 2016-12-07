@@ -112,6 +112,11 @@ fi
 mkdir cmake && wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
 export PATH=${PWD}/cmake/bin:${PATH}
 
+#install ninja (64-bit only)
+NINJA_URL=https://github.com/ninja-build/ninja/releases/download/v1.7.1/ninja-linux.zip
+mkdir ninja && wget  --no-check-certificate --quiet -P ninja ${NINJA_URL} && unzip ninja/*.zip -d ninja
+export PATH=${PWD}/ninja:${PATH}
+
 ##########################################################################
 # BUILD MUSESCORE
 ##########################################################################

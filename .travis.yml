@@ -28,6 +28,7 @@ matrix:
             - libsndfile1
             - wget
             - make
+            - ninja-build
             - ant
             - curl
             - libasound2-dev

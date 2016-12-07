@@ -538,12 +538,12 @@ subdirs(
       )
 #      thirdparty/xmlstream
 
-if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
-# With xcode, we need to have all the targets in the same project
+if (CMAKE_BUILD_TYPE MATCHES "DEBUG")
+# With ninja-build, we need to have all the targets in the same project
 add_subdirectory(mtest)
-else(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
+else(CMAKE_BUILD_TYPE MATCHES "DEBUG")
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
-endif(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
+endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
 add_subdirectory(rdoc EXCLUDE_FROM_ALL)
 add_subdirectory(miditools EXCLUDE_FROM_ALL)
