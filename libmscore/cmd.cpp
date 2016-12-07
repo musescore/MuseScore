@@ -3237,7 +3237,6 @@ void Score::cmd(const QAction* a)
             { "pitch-down-octave",          [this]{ cmdPitchDownOctave();                                       }},
             { "pad-note-increase-TAB",      [this]{ cmdPadNoteIncreaseTAB();                                    }},
             { "pad-note-decrease-TAB",      [this]{ cmdPadNoteDecreaseTAB();                                    }},
-//            { "concert-pitch",              [this]{ cmdConcertPitch();                                          }},
             { "toggle-mmrest",              [this]{ cmdToggleMmrest();                                          }},
             { "toggle-hide-empty",          [this]{ cmdToggleHideEmpty();                                       }},
             { "set-visible",                [this]{ cmdSetVisible();                                            }},
