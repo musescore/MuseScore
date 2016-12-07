@@ -36,19 +36,19 @@ fi
 
 # MuseScore's dependencies:
 yum -y install \
-  mesa-libGL-devel \
-  pulseaudio-libs-devel \
   alsa-lib-devel \
+  fontconfig-devel \
+  freetype-devel \
   jack-audio-connection-kit-devel \
-  portaudio-devel \
   libsndfile-devel \
   libvorbis-devel \
-  freetype-devel \
-  fontconfig-devel \
+  libXcomposite-devel \
   libXcursor-devel \
   libXrender-devel \
-  libXcomposite-devel \
-  libxslt-devel
+  libxslt-devel \
+  mesa-libGL-devel \
+  portaudio-devel \
+  pulseaudio-libs-devel
 
 # get Qt
 if [ ! -d "qt5" ]; then
