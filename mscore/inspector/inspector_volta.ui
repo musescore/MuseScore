@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>196</width>
+    <width>200</width>
     <height>87</height>
    </rect>
   </property>
@@ -92,7 +92,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Type</string>
+        <string>Type:</string>
        </property>
        <property name="buddy">
         <cstring>voltaType</cstring>
@@ -119,7 +119,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Text</string>
+        <string>Text:</string>
        </property>
        <property name="buddy">
         <cstring>voltaText</cstring>
@@ -129,7 +129,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Repeat list</string>
+        <string>Repeat list:</string>
        </property>
        <property name="buddy">
         <cstring>voltaRepeatList</cstring>
