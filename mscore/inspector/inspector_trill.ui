@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>190</width>
+    <width>194</width>
     <height>113</height>
    </rect>
   </property>
@@ -75,7 +75,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Type</string>
+        <string>Type:</string>
        </property>
        <property name="buddy">
         <cstring>trillType</cstring>
@@ -102,7 +102,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Ornament style</string>
+        <string>Ornament style:</string>
        </property>
        <property name="buddy">
         <cstring>ornamentStyle</cstring>
@@ -146,7 +146,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Placement</string>
+        <string>Placement:</string>
        </property>
        <property name="buddy">
         <cstring>placement</cstring>

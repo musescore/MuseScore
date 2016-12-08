@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>234</width>
+    <width>238</width>
     <height>204</height>
    </rect>
   </property>
@@ -84,7 +84,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Head group</string>
+        <string>Head group:</string>
        </property>
        <property name="buddy">
         <cstring>noteHeadGroup</cstring>
@@ -226,7 +226,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Bottom note</string>
+        <string>Bottom note:</string>
        </property>
        <property name="buddy">
         <cstring>bottomTpc</cstring>
@@ -491,7 +491,7 @@
      <item row="4" column="0">
       <widget class="QLabel" name="label_10">
        <property name="text">
-        <string>Line thickness</string>
+        <string>Line thickness:</string>
        </property>
        <property name="buddy">
         <cstring>lineWidth</cstring>
@@ -507,7 +507,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Top note</string>
+        <string>Top note:</string>
        </property>
        <property name="buddy">
         <cstring>topTpc</cstring>
@@ -822,7 +822,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Head type</string>
+        <string>Head type:</string>
        </property>
        <property name="buddy">
         <cstring>noteHeadType</cstring>
@@ -933,7 +933,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Direction</string>
+        <string>Direction:</string>
        </property>
        <property name="buddy">
         <cstring>direction</cstring>

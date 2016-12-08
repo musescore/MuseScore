@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>222</width>
+    <width>226</width>
     <height>179</height>
    </rect>
   </property>
@@ -75,7 +75,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Line color</string>
+        <string>Line color:</string>
        </property>
        <property name="buddy">
         <cstring>lineColor</cstring>
@@ -102,7 +102,7 @@
      <item row="4" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Line thickness</string>
+        <string>Line thickness:</string>
        </property>
        <property name="buddy">
         <cstring>lineWidth</cstring>
@@ -112,7 +112,7 @@
      <item row="5" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Line style</string>
+        <string>Line style:</string>
        </property>
        <property name="buddy">
         <cstring>lineStyle</cstring>
@@ -260,7 +260,7 @@
      <item row="7" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Dash gap width</string>
+        <string>Dash gap width:</string>
        </property>
        <property name="buddy">
         <cstring>dashGapLength</cstring>
@@ -270,7 +270,7 @@
      <item row="6" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Dash line length</string>
+        <string>Dash line length:</string>
        </property>
        <property name="buddy">
         <cstring>dashLineLength</cstring>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>220</width>
+    <width>224</width>
     <height>135</height>
    </rect>
   </property>
@@ -75,7 +75,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Direction</string>
+        <string>Direction:</string>
        </property>
        <property name="buddy">
         <cstring>direction</cstring>
@@ -85,7 +85,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Anchor</string>
+        <string>Anchor:</string>
        </property>
        <property name="buddy">
         <cstring>anchor</cstring>
@@ -166,7 +166,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Time stretch</string>
+        <string>Time stretch:</string>
        </property>
        <property name="buddy">
         <cstring>timeStretch</cstring>
@@ -220,7 +220,7 @@
      <item row="3" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Ornament style</string>
+        <string>Ornament style:</string>
        </property>
        <property name="buddy">
         <cstring>ornamentStyle</cstring>

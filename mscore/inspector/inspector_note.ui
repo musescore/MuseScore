@@ -181,7 +181,7 @@
      <item row="4" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Mirror head</string>
+        <string>Mirror head:</string>
        </property>
        <property name="buddy">
         <cstring>mirrorHead</cstring>
@@ -216,7 +216,7 @@
      <item row="5" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Dot position</string>
+        <string>Dot position:</string>
        </property>
        <property name="buddy">
         <cstring>dotPosition</cstring>
@@ -242,7 +242,7 @@
      <item row="3" column="0">
       <widget class="QLabel" name="label_7">
        <property name="text">
-        <string>Head type</string>
+        <string>Head type:</string>
        </property>
        <property name="buddy">
         <cstring>noteHeadType</cstring>
@@ -303,7 +303,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>Head group</string>
+        <string>Head group:</string>
        </property>
        <property name="buddy">
         <cstring>noteHeadGroup</cstring>
@@ -336,7 +336,7 @@
      <item row="11" column="0">
       <widget class="QLabel" name="fixedLineLabel">
        <property name="text">
-        <string>Line</string>
+        <string>Line:</string>
        </property>
        <property name="buddy">
         <cstring>fixedLine</cstring>
@@ -392,7 +392,7 @@
      <item row="9" column="0">
       <widget class="QLabel" name="label_9">
        <property name="text">
-        <string>Velocity</string>
+        <string>Velocity:</string>
        </property>
        <property name="buddy">
         <cstring>velocity</cstring>
@@ -402,7 +402,7 @@
      <item row="6" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Tuning</string>
+        <string>Tuning:</string>
        </property>
        <property name="buddy">
         <cstring>tuning</cstring>
@@ -435,7 +435,7 @@
      <item row="8" column="0">
       <widget class="QLabel" name="label_8">
        <property name="text">
-        <string>Velocity type</string>
+        <string>Velocity type:</string>
        </property>
        <property name="buddy">
         <cstring>velocityType</cstring>
