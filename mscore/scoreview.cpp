@@ -1066,7 +1066,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
 
 #ifndef NDEBUG
       popup->addSeparator();
-      popup->addAction(tr("Debugger"))->setData("list");
+      popup->addAction("Debugger")->setData("list");
 #endif
 
       a = popup->exec(pos);
@@ -1160,7 +1160,7 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       popup->addSeparator();
 
 #ifndef NDEBUG
-      popup->addAction(tr("Object Debugger"))->setData("list");
+      popup->addAction("Object Debugger")->setData("list");
 #endif
 
       a = popup->exec(gpos);
