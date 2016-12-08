@@ -99,7 +99,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Title</string>
+          <string>Title:</string>
          </property>
         </widget>
        </item>
@@ -120,7 +120,7 @@
        <item>
         <widget class="QLabel" name="lblDescription">
          <property name="text">
-          <string>Description</string>
+          <string>Description:</string>
          </property>
         </widget>
        </item>
@@ -172,7 +172,7 @@
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="horizontalSpacing">
-        <number>-1</number>
+        <number>6</number>
        </property>
        <property name="verticalSpacing">
         <number>0</number>
@@ -195,7 +195,7 @@
           </size>
          </property>
          <property name="text">
-          <string>License</string>
+          <string>License:</string>
          </property>
         </widget>
        </item>
@@ -238,7 +238,7 @@ p, li { white-space: pre-wrap; }
           </size>
          </property>
          <property name="text">
-          <string>Tags</string>
+          <string>Tags:</string>
          </property>
         </widget>
        </item>

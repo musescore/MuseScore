@@ -80,7 +80,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Username or email</string>
+            <string>Username or email:</string>
            </property>
           </widget>
          </item>
@@ -107,7 +107,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Password</string>
+            <string>Password:</string>
            </property>
           </widget>
          </item>
