@@ -150,6 +150,9 @@ void MeasureBase::add(Element* e)
                         setNoBreak(true);
                         break;
                   }
+            if (next())
+                  score()->setLayout(next()->endTick());
+//            score()->setLayoutAll();     // TODO
             }
       triggerLayout();
       _el.push_back(e);

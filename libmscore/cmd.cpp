@@ -2952,15 +2952,19 @@ void Score::cmdPitchDown()
 //   cmdTimeDelete
 //---------------------------------------------------------
 
-void Score::cmdTimeDeleteX()
+void Score::cmdTimeDelete()
       {
       Element* e = selection().element();
       if (e && e->isBarLine() && toBarLine(e)->segment()->isEndBarLineType()) {
             Measure* m = toBarLine(e)->segment()->measure();
             cmdJoinMeasure(m, m->nextMeasure());
             }
-      else
-            cmdTimeDelete();
+      else {
+            if (_is.insertMode())
+                  globalTimeDelete();
+            else
+                  localTimeDelete();
+            }
       }
 
 //---------------------------------------------------------
@@ -3232,7 +3236,7 @@ void Score::cmd(const QAction* a)
             { "toggle-insert-mode",         [this]{ _is.setInsertMode(!_is.insertMode());                       }},
             { "pitch-up",                   [this]{ cmdPitchUp();                                               }},
             { "pitch-down",                 [this]{ cmdPitchDown();                                             }},
-            { "time-delete",                [this]{ cmdTimeDeleteX();                                           }},
+            { "time-delete",                [this]{ cmdTimeDelete();                                            }},
             { "pitch-up-octave",            [this]{ cmdPitchUpOctave();                                         }},
             { "pitch-down-octave",          [this]{ cmdPitchDownOctave();                                       }},
             { "pad-note-increase-TAB",      [this]{ cmdPadNoteIncreaseTAB();                                    }},
