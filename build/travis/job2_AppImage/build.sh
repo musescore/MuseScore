@@ -25,9 +25,9 @@ function rebuild-docker-image() { # $1 is arch (e.g. x86_64)
   if [ $(git diff --name-only HEAD HEAD~1 | grep "^build/Linux+BSD/portable/$1") ]; then
     # Need to update image on Docker Hub
     set +x # keep env secret
-    echo "Triggering rebuild of shoogle/musescore-$1$docker_tag on Docker Hub."
+    echo "Triggering rebuild of $DOCKER_USER/musescore-$1$docker_tag on Docker Hub."
     data="{\"source_type\": \"Branch\", \"source_name\": \"$branch\"}"
-    url="https://registry.hub.docker.com/u/shoogle/musescore-$1/trigger/$DOCKER_TRIGGER/"
+    url="https://registry.hub.docker.com/u/$DOCKER_USER/musescore-$1/trigger/$DOCKER_TRIGGER/"
     curl -H "Content-Type: application/json" --data "$data" -X POST "$url"
     set -x
   fi
@@ -81,8 +81,9 @@ case "$1" in
   * )
     [ "$1" == "--x86_64" ] && shift || true
     # Build MuseScore AppImage inside native (64-bit x86) Docker image
+    DOCKER_TRIGGER=$DOCKER_TRIGGER_X86_64
     rebuild-docker-image x86_64
-    docker run -i -v "${PWD}:/MuseScore" "shoogle/musescore-x86_64$docker_tag" /bin/bash -c \
+    docker run -i -v "${PWD}:/MuseScore" "$DOCKER_USER/MuseScore:$docker_tag" /bin/bash -c \
       "/MuseScore/build/Linux+BSD/portable/x86_64/Recipe $makefile_overrides"
     ;;
 esac
