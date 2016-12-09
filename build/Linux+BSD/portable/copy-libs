@@ -24,6 +24,8 @@ main() {
     building_on_Debian_Jessie # aka "Debian 8"
   elif [ "$(grep "CentOS release 6" /etc/*release*)" ]; then
     building_on_CentOS_6
+  elif [ "$(grep "Ubuntu precise (12.04.* LTS)" /etc/*release*)" ]; then
+    building_on_Ubuntu_12-04
   else
     echo "${0}: Warning: Not running on a supported build system!" >&2
     # Try to fetch all dependencies, just in case
@@ -107,6 +109,12 @@ getCrossPlatformDependencies() {
     | sed "s|$qt_prefix/||" | xargs -n1 -I '%%%' \
         bash -c "qt_prefix='$qt_prefix' qt_dest='$qt_dest' copyQt %%%"
 }
+
+##########################################################################
+# LINUX-ONLY DEPENDENCIES (no equivalents in "mscore/CMakeLists.txt")
+# These differ depending on the distribution used to build the AppImage.
+# Note: always check the oldest supported distribution first
+##########################################################################
 
 ########################################################
 # copy libs specific if building on Debian 8 "Jessie"
@@ -233,12 +241,6 @@ building_on_Debian_Jessie() {
   #copyLib libasound_module_pcm_pulse.so #can add, but if mscore run without alsa, will complain missing
 }
 
-
-##########################################################################
-# LINUX-ONLY DEPENDENCIES (no equivalents in "mscore/CMakeLists.txt")
-# These differ depending on the distribution used to build the AppImage.
-# Note: always check the oldest supported distribution first
-##########################################################################
 building_on_CentOS_6() {
   # Needed by Centos 6.7:
   dest_dir="$lib_dest"
@@ -274,6 +276,39 @@ building_on_CentOS_6() {
   #copyLib libpulse.so.0
   #copyLib libpulsecommon-8.0.so
   #copyLib libasound_module_pcm_pulse.so  # found in /usr/lib64/alsa-lib/
+}
+
+building_on_Ubuntu_12-04() {
+  # Needed by Ubuntu 12.04
+  dest_dir="$lib_dest"
+  copyLib libopenal.so.1
+
+  dest_dir="$qt_dest/lib"
+  copyLib libEnginio.so.1
+  copyLib libicui18n.so.53
+  copyLib libicuuc.so.53
+  copyLib libicudata.so.53
+  copyLib libQt5Bluetooth.so.5
+  copyLib libQt5DBus.so.5
+  copyLib libQt5Location.so.5
+  copyLib libQt5Nfc.so.5
+  copyLib libQt5QuickParticles.so.5
+  copyLib libQt5WebChannel.so.5
+  copyLib libQt5WebEngine.so.5
+  copyLib libQt5WebSockets.so.5
+  copyLib libQt5WebView.so.5
+  copyLib libQt5WebEngineCore.so.5
+
+  # Needed by CentOS 7
+  copyLib libjack.so.0
+
+  # Needed by Fedora 22
+  copyLib libgstapp-0.10.so.0
+  copyLib libgstbase-0.10.so.0
+  copyLib libgstinterfaces-0.10.so.0
+  copyLib libgstpbutils-0.10.so.0
+  copyLib libgstreamer-0.10.so.0
+  copyLib libgstvideo-0.10.so.0
 }
 
 locateLib() {

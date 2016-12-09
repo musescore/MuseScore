@@ -22,10 +22,10 @@ docker_tag="latest" # Docker terminology for master branch
 [ "$branch" == "master" ] || docker_tag="$branch" # other branches use branch name
 
 function rebuild-docker-image() { # $1 is arch (e.g. x86_64)
-  if [ $(git diff --name-only HEAD HEAD~1 | grep "^build/Linux+BSD/portable/$1") ]; then
+  if [ "$(git diff --name-only HEAD HEAD~1 | grep "^build/Linux+BSD/portable/$1")" ]; then
     # Need to update image on Docker Hub
     set +x # keep env secret
-    echo "Triggering rebuild of $DOCKER_USER/musescore-$1$docker_tag on Docker Hub."
+    echo "Triggering rebuild of $DOCKER_USER/musescore-$1:$docker_tag on Docker Hub."
     data="{\"source_type\": \"Branch\", \"source_name\": \"$branch\"}"
     url="https://registry.hub.docker.com/u/$DOCKER_USER/musescore-$1/trigger/$DOCKER_TRIGGER/"
     curl -H "Content-Type: application/json" --data "$data" -X POST "$url"
@@ -75,7 +75,7 @@ case "$1" in
     # Build MuseScore AppImage inside 32-bit x86 Docker image
     (set +x; DOCKER_TRIGGER="$DOCKER_TRIGGER_X86_32" rebuild-docker-image x86_32)
     docker run -i -v "${PWD}:/MuseScore" "$DOCKER_USER/musescore-x86_32:$docker_tag" /bin/bash -c \
-      "/MuseScore/build/Linux+BSD/portable/x86_32/Recipe $makefile_overrides"
+      "linux32 --32bit i386 /MuseScore/build/Linux+BSD/portable/x86_32/Recipe $makefile_overrides"
     ;;
 
   * )
