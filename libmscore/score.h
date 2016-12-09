@@ -497,7 +497,6 @@ class Score : public QObject, public ScoreElement {
       void createGraceNotesPlayEvents(int tick, Chord* chord, int& ontime, int& trailtime);
       void cmdPitchUp();
       void cmdPitchDown();
-      void cmdTimeDeleteX();
       void cmdPitchUpOctave();
       void cmdPitchDownOctave();
       void cmdPadNoteIncreaseTAB();
@@ -662,7 +661,6 @@ class Score : public QObject, public ScoreElement {
       void repitchNote(const Position& pos, bool replace);
       void regroupNotesAndRests(int startTick, int endTick, int track);
       void cmdAddPitch(int pitch, bool addFlag, bool insert);
-      void cmdTimeDelete();
       void timeDelete(Measure*, Segment*, const Fraction&);
 
       void startCmd();                          // start undoable command
@@ -1113,6 +1111,10 @@ class Score : public QObject, public ScoreElement {
       virtual inline std::list<MidiInputEvent>* activeMidiPitches();
 
       virtual QString title() const;
+
+      void cmdTimeDelete();
+      void localTimeDelete();
+      void globalTimeDelete();
 
       friend class ChangeSynthesizerState;
       friend class Chord;

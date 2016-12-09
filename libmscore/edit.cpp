@@ -2809,12 +2809,20 @@ void Score::checkSpanner(int startTick, int endTick)
 static constexpr Segment::Type CR_TYPE = Segment::Type::ChordRest;
 
 //---------------------------------------------------------
-//   cmdTimeDelete
+//   globalTimeDelete
 //---------------------------------------------------------
 
-void Score::cmdTimeDelete()
+void Score::globalTimeDelete()
       {
-      startCmd();
+      qDebug("not implemented");
+      }
+
+//---------------------------------------------------------
+//   localTimeDelete
+//---------------------------------------------------------
+
+void Score::localTimeDelete()
+      {
       Segment* startSegment;
       Segment* endSegment;
 
@@ -2878,7 +2886,6 @@ void Score::cmdTimeDelete()
             };
 
       deselectAll();
-      endCmd();
       }
 
 //---------------------------------------------------------

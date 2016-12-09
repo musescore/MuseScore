@@ -751,12 +751,12 @@ void Slur::slurPos(SlurPos* sp)
             return;
             }
 
-      bool        useTablature      = staff() != nullptr && staff()->isTabStaff();
-      bool        staffHasStems     = true;     // assume staff uses stems
-      StaffType*  stt               = nullptr;
+      bool useTablature  = staff() && staff()->isTabStaff();
+      bool staffHasStems = true;     // assume staff uses stems
+      StaffType*  stt    = 0;
       if (useTablature) {
-            stt               = staff()->staffType();
-            staffHasStems     = stt->stemThrough();   // if tab with stems beside, stems do not count for slur pos
+            stt           = staff()->staffType();
+            staffHasStems = stt->stemThrough();   // if tab with stems beside, stems do not count for slur pos
             }
 
       // start and end cr, chord, and note
@@ -777,6 +777,7 @@ void Slur::slurPos(SlurPos* sp)
 
       sp->system1 = scr->measure()->system();
       sp->system2 = ecr->measure()->system();
+
       if (sp->system1 == 0 || sp->system2 == 0)
             return;
 
@@ -1137,6 +1138,7 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
 
 //---------------------------------------------------------
 //   layoutSystem
+//    layout slurSegment for system
 //---------------------------------------------------------
 
 SpannerSegment* Slur::layoutSystem(System* system)
@@ -1219,7 +1221,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
                         }
                         break;
                   }
-            sst = tick2() <= etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
+            sst = tick2() < etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
             }
       else if (tick() < stick && tick2() > etick)
             sst = SpannerSegmentType::MIDDLE;

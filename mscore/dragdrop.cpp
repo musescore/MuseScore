@@ -40,26 +40,27 @@ void ScoreView::setDropTarget(const Element* el)
       if (dropTarget != el) {
             if (dropTarget) {
                   dropTarget->setDropTarget(false);
-                  _score->addRefresh(dropTarget->canvasBoundingRect());
+//                  _score->addRefresh(dropTarget->canvasBoundingRect());
                   dropTarget = 0;
                   }
             dropTarget = el;
             if (dropTarget) {
                   dropTarget->setDropTarget(true);
-                  _score->addRefresh(dropTarget->canvasBoundingRect());
+//                  _score->addRefresh(dropTarget->canvasBoundingRect());
                   }
             }
       if (!dropAnchor.isNull()) {
             QRectF r;
             r.setTopLeft(dropAnchor.p1());
             r.setBottomRight(dropAnchor.p2());
-            _score->addRefresh(r.normalized());
+//            _score->addRefresh(r.normalized());
             dropAnchor = QLineF();
             }
       if (dropRectangle.isValid()) {
-            _score->addRefresh(dropRectangle);
+//            _score->addRefresh(dropRectangle);
             dropRectangle = QRectF();
             }
+      update();
       }
 
 //---------------------------------------------------------
@@ -83,7 +84,8 @@ void ScoreView::setDropRectangle(const QRectF& r)
             _score->addRefresh(r.normalized());
             dropAnchor = QLineF();
             }
-      _score->addRefresh(r);
+//      _score->addRefresh(r);
+      update();
       }
 
 //---------------------------------------------------------
@@ -99,10 +101,10 @@ void ScoreView::setDropAnchor(const QLineF& l)
             r.setBottomRight(dropAnchor.p2());
             r = r.normalized();
             r.adjust(-w, -w, 2*w, 2*w);
-            _score->addRefresh(r);
+//            _score->addRefresh(r);
             }
       if (dropRectangle.isValid()) {
-            _score->addRefresh(dropRectangle);
+//            _score->addRefresh(dropRectangle);
             dropRectangle = QRectF();
             }
       dropAnchor = l;
@@ -113,8 +115,9 @@ void ScoreView::setDropAnchor(const QLineF& l)
             r.setBottomRight(dropAnchor.p2());
             r = r.normalized();
             r.adjust(-w, -w, 2*w, 2*w);
-            _score->addRefresh(r);
+//            _score->addRefresh(r);
             }
+      update();
       }
 
 //---------------------------------------------------------
@@ -232,7 +235,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
 
       if (data->hasUrls()) {
             QList<QUrl>ul = data->urls();
-            foreach(const QUrl& u, ul) {
+            for (const QUrl& u : ul) {
                   if (MScore::debugMode)
                         qDebug("drag Url: %s", qPrintable(u.toString()));
                   if (u.scheme() == "file" || u.scheme() == "http") {
@@ -380,7 +383,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                         break;
                   }
 
-            _score->update();
+            // _score->update();
             return;
             }
 
@@ -402,15 +405,13 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   // special drop target Note
                   //
                   Element* el = elementAt(pos);
-                  if (el && (el->isNote() || el->isRest())) {
+                  if (el && (el->isNote() || el->isRest()))
                         setDropTarget(el);
-                        }
-                  else {
+                  else
                         setDropTarget(0);
-                        }
                   event->accept();
                   }
-            _score->update();
+//            _score->update();
             return;
             }
       QByteArray data;
@@ -424,12 +425,12 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
             data = md->data(mimeStaffListFormat);
             }
       else {
-            _score->update();
+//            _score->update();
             return;
             }
       Element* el = elementAt(pos);
       if (el == 0 || el->type() != Element::Type::MEASURE) {
-            _score->update();
+//            _score->update();
             return;
             }
       else if (etype == Element::Type::ELEMENT_LIST) {
@@ -438,7 +439,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
       else if (etype == Element::Type::STAFF_LIST || etype == Element::Type::MEASURE_LIST) {
 //TODO            el->acceptDrop(this, pos, etype, e);
             }
-      _score->update();
+//      _score->update();
       }
 
 //---------------------------------------------------------
