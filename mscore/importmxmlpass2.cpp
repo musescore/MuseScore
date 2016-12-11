@@ -1880,16 +1880,25 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const MScor
             // verify still in the same track (switching voices in the middle of a beam is not supported)
             // and in a beam ...
             // (note no check is done on correct order of beam begin/continue/end)
-            if (cr->track() == beam->track()
-                && (bm == Beam::Mode::BEGIN || bm == Beam::Mode::MID || bm == Beam::Mode::END)) {
-                  // ... and actually add cr to the beam
-                  beam->add(cr);
-                  }
-            else {
-                  qDebug("handleBeamAndStemDir() from track %d to track %d bm %hhd -> abort beam",
-                         beam->track(), cr->track(), bm);
-                  // ... or reset beam mode for all elements and remove the beam
+            if (cr->track() != beam->track()) {
+                  qDebug("handleBeamAndStemDir() from track %d to track %d -> abort beam",
+                         beam->track(), cr->track());
+                  // reset beam mode for all elements and remove the beam
                   removeBeam(beam);
+                  }
+            else if (bm == Beam::Mode::NONE) {
+                  qDebug("handleBeamAndStemDir() in beam, bm Beam::Mode::NONE -> abort beam");
+                  // reset beam mode for all elements and remove the beam
+                  removeBeam(beam);
+                  }
+            else if (!(bm == Beam::Mode::BEGIN || bm == Beam::Mode::MID || bm == Beam::Mode::END)) {
+                  qDebug("handleBeamAndStemDir() in beam, bm %d -> abort beam", static_cast<int>(bm));
+                  // reset beam mode for all elements and remove the beam
+                  removeBeam(beam);
+            }
+            else {
+                  // actually add cr to the beam
+                  beam->add(cr);
                   }
             }
       // if no beam, set stem direction on chord itself
