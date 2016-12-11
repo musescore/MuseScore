@@ -838,7 +838,7 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
             }
       else {
             el->setPlacement(placement == "above"
-               ? Element::Placement::ABOVE : Element::Placement::BELOW);
+                             ? Element::Placement::ABOVE : Element::Placement::BELOW);
             }
 
       el->setTrack(track);
@@ -1241,7 +1241,7 @@ static bool addMxmlArticulationToChord(ChordRest* cr, QString mxmlName)
       map["turn"]             = SymId::ornamentTurn;
       map["inverted-turn"]    = SymId::ornamentTurnInverted;
       map["stopped"]          = SymId::brassMuteClosed;
-// TODO map["harmonic"]         = SymId::stringsHarmonic;
+      // TODO map["harmonic"]         = SymId::stringsHarmonic;
       map["up-bow"]           = SymId::stringsUpBow;
       map["down-bow"]         = SymId::stringsDownBow;
       map["detached-legato"]  = SymId::articTenutoStaccatoAbove;
@@ -1374,7 +1374,7 @@ static void setSLinePlacement(SLine* sli, const QString placement)
             }
       else {
             sli->setPlacement(placement == "above"
-               ? Element::Placement::ABOVE : Element::Placement::BELOW);
+                              ? Element::Placement::ABOVE : Element::Placement::BELOW);
             }
       }
 
@@ -2117,7 +2117,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                         double tpo = tempo.toDouble() / 60;
                         int tick = (time + mTime).ticks();
 
-                        TempoText * t = new TempoText(_score);
+                        TempoText* t = new TempoText(_score);
                         t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER))).arg(tempo));
                         t->setTempo(tpo);
                         t->setFollowText(true);
@@ -2391,7 +2391,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
       else if (_tpoSound > 0) {
             double tpo = _tpoSound / 60;
-            TempoText * t = new TempoText(_score);
+            TempoText* t = new TempoText(_score);
             t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER))).arg(_tpoSound));
             t->setTempo(tpo);
             t->setFollowText(true);
@@ -3093,9 +3093,9 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
                   }
             }
       else if (barStyle == "tick") {
-      }
+            }
       else if (barStyle == "short") {
-      }
+            }
       else {
             qDebug("unsupported bar type <%s>", barStyle.toLatin1().data());       // TODO
             return false;
@@ -4229,15 +4229,24 @@ Note* MusicXMLParserPass2::note(const QString& partId,
        */
       bool wholeMeasureRest = isWholeMeasureRest(bRest, type, dura, Fraction::fromTicks(measure->ticks()));
       if (dura.isValid() && calcDura.isValid()) {
-            // do not report an error for whole measure rests
-            if (dura != calcDura && !wholeMeasureRest) {
+            if (dura != calcDura) {
                   errorStr = QString("calculated duration (%1) not equal to specified duration (%2)")
                         .arg(calcDura.print()).arg(dura.print());
 
-                  const int maxDiff = 3; // maximum difference considered a rounding error
-                  if (qAbs(calcDura.ticks() - dura.ticks()) <= maxDiff) {
-                        errorStr += " -> assuming rounding error";
-                        dura = calcDura;
+                  if (wholeMeasureRest) {
+                        // do not report an error for whole measure rests
+                        errorStr = "";
+                        }
+                  else if (grace && dura == Fraction(0, 1)) {
+                        // grace note (not an error)
+                        errorStr = "";
+                        }
+                  else {
+                        const int maxDiff = 3; // maximum difference considered a rounding error
+                        if (qAbs(calcDura.ticks() - dura.ticks()) <= maxDiff) {
+                              errorStr += " -> assuming rounding error";
+                              dura = calcDura;
+                              }
                         }
 
                   // Special case:
