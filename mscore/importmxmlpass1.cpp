@@ -2723,10 +2723,15 @@ void MusicXMLParserPass1::note(const QString& partId,
       Fraction calcDura = calculateFraction(type, dots, timeMod);
       if (dura.isValid() && calcDura.isValid()) {
             if (dura != calcDura) {
-                  errorStr = "calculated duration not equal to specified duration";
+                  errorStr = QString("calculated duration (%1) not equal to specified duration (%2)")
+                        .arg(calcDura.print()).arg(dura.print());
 
                   if (bRest && type == "whole" && dura.isValid()) {
                         // Sibelius whole measure rest (not an error)
+                        errorStr = "";
+                        }
+                  else if (grace && dura == Fraction(0, 1)) {
+                        // grace note (not an error)
                         errorStr = "";
                         }
                   else {
@@ -2734,6 +2739,18 @@ void MusicXMLParserPass1::note(const QString& partId,
                         if (qAbs(calcDura.ticks() - dura.ticks()) <= maxDiff) {
                               errorStr += " -> assuming rounding error";
                               dura = calcDura;
+                              }
+                        }
+
+                  // Special case:
+                  // Encore generates rests in tuplets w/o <tuplet> or <time-modification>.
+                  // Detect this by comparing the actual duration with the expected duration
+                  // based on note type. If actual is 2/3 of expected, the rest is part
+                  // of a tuplet.
+                  if (bRest && !timeMod.isValid()) {
+                        if (2 * calcDura.ticks() == 3 * dura.ticks()) {
+                              timeMod = Fraction(2, 3);
+                              errorStr += " -> assuming triplet";
                               }
                         }
                   }
@@ -2752,7 +2769,7 @@ void MusicXMLParserPass1::note(const QString& partId,
       else {
             errorStr = "calculated and specified duration invalid, using 4/4";
             dura = Fraction(4, 4);
-      }
+            }
 
       if (errorStr != "")
             logError(errorStr);

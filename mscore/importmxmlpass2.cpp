@@ -2110,7 +2110,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                         double tpo = tempo.toDouble() / 60;
                         int tick = (time + mTime).ticks();
 
-                        TempoText * t = new TempoText(_score);
+                        TempoText* t = new TempoText(_score);
                         t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER))).arg(tempo));
                         t->setTempo(tpo);
                         t->setFollowText(true);
@@ -2382,7 +2382,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
       else if (_tpoSound > 0) {
             double tpo = _tpoSound / 60;
-            TempoText * t = new TempoText(_score);
+            TempoText* t = new TempoText(_score);
             t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER))).arg(_tpoSound));
             t->setTempo(tpo);
             t->setFollowText(true);
@@ -3089,6 +3089,10 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
                   qDebug("ImportXml: warning: empty bar type");       // TODO
                   return false;
                   }
+            }
+      else if (barStyle == "tick") {
+            }
+      else if (barStyle == "short") {
             }
       else {
             qDebug("unsupported bar type <%s>", barStyle.toLatin1().data());       // TODO
@@ -4200,15 +4204,24 @@ Note* MusicXMLParserPass2::note(const QString& partId,
        */
       bool wholeMeasureRest = isWholeMeasureRest(bRest, type, dura, Fraction::fromTicks(measure->ticks()));
       if (dura.isValid() && calcDura.isValid()) {
-            // do not report an error for whole measure rests
-            if (dura != calcDura && !wholeMeasureRest) {
+            if (dura != calcDura) {
                   errorStr = QString("calculated duration (%1) not equal to specified duration (%2)")
                         .arg(calcDura.print()).arg(dura.print());
 
-                  const int maxDiff = 3; // maximum difference considered a rounding error
-                  if (qAbs(calcDura.ticks() - dura.ticks()) <= maxDiff) {
-                        errorStr += " -> assuming rounding error";
-                        dura = calcDura;
+                  if (wholeMeasureRest) {
+                        // do not report an error for whole measure rests
+                        errorStr = "";
+                        }
+                  else if (grace && dura == Fraction(0, 1)) {
+                        // grace note (not an error)
+                        errorStr = "";
+                        }
+                  else {
+                        const int maxDiff = 3; // maximum difference considered a rounding error
+                        if (qAbs(calcDura.ticks() - dura.ticks()) <= maxDiff) {
+                              errorStr += " -> assuming rounding error";
+                              dura = calcDura;
+                              }
                         }
 
                   // Special case:
