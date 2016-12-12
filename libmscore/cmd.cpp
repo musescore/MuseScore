@@ -1952,7 +1952,7 @@ Element* Score::move(const QString& cmd)
                   case Element::Type::SEGMENT: {      // from segment go to top chordrest in segment
                         Segment* seg  = toSegment(el);
                         // if segment is not chord/rest or grace, move to next chord/rest or grace segment
-                        if (!seg->isChordRest1()) {
+                        if (!seg->isChordRest()) {
                               seg = seg->next1(Segment::Type::ChordRest);
                               if (seg == 0)     // if none found, return failure
                                     return 0;

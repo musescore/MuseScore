@@ -726,7 +726,52 @@ void HBox::endEditDrag()
 
 bool HBox::isMovable() const
       {
-      return parent() && (parent()->type() == Element::Type::HBOX || parent()->type() == Element::Type::VBOX);
+      return parent() && (parent()->isHBox() || parent()->isVBox());
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant HBox::getProperty(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::CREATE_SYSTEM_HEADER:
+                  return createSystemHeader();
+            default:
+                  return Box::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool HBox::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            case P_ID::CREATE_SYSTEM_HEADER:
+                  setCreateSystemHeader(v.toBool());
+                  score()->setLayout(tick());
+                  break;
+            default:
+                  return Box::setProperty(propertyId, v);
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant HBox::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_ID::CREATE_SYSTEM_HEADER:
+                  return true;
+            default:
+                  return Box::propertyDefault(id);
+            }
       }
 
 //---------------------------------------------------------

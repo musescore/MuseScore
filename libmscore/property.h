@@ -243,6 +243,7 @@ enum class P_ID : int {
       SYMBOL,
 
       PLAY_REPEATS,
+      CREATE_SYSTEM_HEADER,
 
       END
       };

@@ -116,6 +116,8 @@ class StaffState;
 class Arpeggio;
 class Image;
 class ChordLine;
+class SlurTieSegment;
+class FretDiagram;
 
 enum class SymId;
 
@@ -694,11 +696,10 @@ class Element : public QObject, public ScoreElement {
       // DEBUG: check to catch old (now renamed) ambitious Segment->isChordRest() calls
       //    (which check the subtype)
 
-      bool isChordRest() const { Q_ASSERT(type() != Element::Type::SEGMENT); return type() == Element::Type::REST || type() == Element::Type::CHORD
-            || type() == Element::Type::REPEAT_MEASURE; }
-      bool isChordRest1() const { return type() == Element::Type::REST || type() == Element::Type::CHORD
+      bool isChordRest() const { return type() == Element::Type::REST || type() == Element::Type::CHORD
             || type() == Element::Type::REPEAT_MEASURE; }
       bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
+      bool isSlurTieSegment() const { return type() == Element::Type::SLUR_SEGMENT || type() == Element::Type::TIE_SEGMENT; }
       bool isSLine() const;
       bool isSLineSegment() const;
 
@@ -780,6 +781,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Arpeggio,      ARPEGGIO)
       CONVERT(Image,         IMAGE)
       CONVERT(ChordLine,     CHORDLINE)
+      CONVERT(FretDiagram,   FRET_DIAGRAM)
 #undef CONVERT
       };
 
@@ -810,6 +812,15 @@ static inline const DurationElement* toDurationElement(const Element* e) {
       Q_ASSERT(e == 0 || e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
          || e->type() == Element::Type::REPEAT_MEASURE || e->type() == Element::Type::TUPLET);
       return (const DurationElement*)e;
+      }
+
+static inline SlurTieSegment* toSlurTieSegment(Element* e) {
+      Q_ASSERT(e == 0 || e->type() == Element::Type::SLUR_SEGMENT || e->type() == Element::Type::TIE_SEGMENT);
+      return (SlurTieSegment*)e;
+      }
+static inline const SlurTieSegment* toSlurTieSegment(const Element* e) {
+      Q_ASSERT(e == 0 || e->type() == Element::Type::SLUR_SEGMENT || e->type() == Element::Type::TIE_SEGMENT);
+      return (const SlurTieSegment*)e;
       }
 
 #define CONVERT(a,b) \
@@ -892,6 +903,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Arpeggio,      ARPEGGIO)
       CONVERT(Image,         IMAGE)
       CONVERT(ChordLine,     CHORDLINE)
+      CONVERT(FretDiagram,   FRET_DIAGRAM)
 #undef CONVERT
 
 //---------------------------------------------------------
