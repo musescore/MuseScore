@@ -103,6 +103,8 @@ class Box : public MeasureBase {
 class HBox : public Box {
       Q_OBJECT
 
+      bool _createSystemHeader { true };
+
    public:
       HBox(Score* score);
       virtual ~HBox() {}
@@ -116,6 +118,13 @@ class HBox : public Box {
       void layout2();
       virtual bool isMovable() const override;
       virtual void computeMinWidth();
+
+      bool createSystemHeader() const      { return _createSystemHeader; }
+      void setCreateSystemHeader(bool val) { _createSystemHeader = val;  }
+
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
       };
 
 //---------------------------------------------------------

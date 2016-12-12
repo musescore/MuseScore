@@ -48,10 +48,6 @@ extern int pitchKeyAdjust(int note, Key);
 extern int line2pitch(int line, ClefType clef, Key);
 extern int y2pitch(qreal y, ClefType clef, qreal spatium);
 extern int quantizeLen(int, int);
-extern void selectNoteMessage();
-extern void selectNoteRestMessage();
-extern void selectNoteSlurMessage();
-extern void selectStavesMessage();
 extern QString pitch2string(int v);
 extern void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc,
    Interval, bool useDoubleSharpsFlats);

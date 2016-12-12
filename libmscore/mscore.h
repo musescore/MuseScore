@@ -406,7 +406,13 @@ enum class IconType : signed char {
 
 enum MsError {
       MS_NO_ERROR,
+      NO_NOTE_SELECTED,
       NO_CHORD_REST_SELECTED,
+      NO_LYRICS_SELECTED,
+      NO_NOTE_REST_SELECTED,
+      NO_NOTE_SLUR_SELECTED,
+      NO_STAFF_SELECTED,
+      NO_NOTE_FIGUREDBASS_SELECTED,
       CANNOT_INSERT_TUPLET,
       CANNOT_SPLIT_TUPLET,
       CANNOT_SPLIT_MEASURE_FIRST_BEAT,
@@ -418,6 +424,7 @@ enum MsError {
       DEST_TREMOLO,
       NO_MIME,
       DEST_NO_CR,
+      CANNOT_CHANGE_LOCAL_TIMESIG,
       };
 
 struct MScoreError {

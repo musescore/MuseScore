@@ -493,9 +493,10 @@ InspectorHBox::InspectorHBox(QWidget* parent)
       hb.setupUi(addWidget());
 
       iList = {
-            { P_ID::TOP_GAP,    0, 0, hb.leftGap,  hb.resetLeftGap  },
-            { P_ID::BOTTOM_GAP, 0, 0, hb.rightGap, hb.resetRightGap },
-            { P_ID::BOX_WIDTH,  0, 0, hb.width,    0                }
+            { P_ID::TOP_GAP,               0, 0, hb.leftGap,  hb.resetLeftGap  },
+            { P_ID::BOTTOM_GAP,            0, 0, hb.rightGap, hb.resetRightGap },
+            { P_ID::BOX_WIDTH,             0, 0, hb.width,    0                },
+            { P_ID::CREATE_SYSTEM_HEADER,  0, 0, hb.createSystemHeader, hb.resetCreateSystemHeader }
             };
 
       mapSignals();

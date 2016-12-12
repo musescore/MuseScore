@@ -60,7 +60,7 @@ Note* Score::getSelectedNote()
       Element* el = selection().element();
       if (el && el->isNote())
             return toNote(el);
-      selectNoteMessage();
+      MScore::setError(NO_NOTE_SELECTED);
       return 0;
       }
 
@@ -79,7 +79,7 @@ ChordRest* Score::getSelectedChordRest() const
             else if (el->isChord())
                   return toChord(el);
             }
-      selectNoteRestMessage();
+      MScore::setError(NO_NOTE_REST_SELECTED);
       return 0;
       }
 
@@ -103,7 +103,7 @@ void Score::getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const
                   }
             }
       if (*cr1 == 0)
-            selectNoteRestMessage();
+            MScore::setError(NO_NOTE_REST_SELECTED);
       if (*cr1 == *cr2)
             *cr2 = 0;
       }
@@ -118,7 +118,7 @@ int Score::pos()
       if (selection().activeCR())
             el = selection().activeCR();
       if (el) {
-            switch(el->type()) {
+            switch (el->type()) {
                   case Element::Type::NOTE:
                         el = el->parent();
                         // fall through
@@ -494,38 +494,6 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
       }
 
 //---------------------------------------------------------
-//   warnTupletCrossing
-//---------------------------------------------------------
-
-static void warnTupletCrossing()
-      {
-      if (!MScore::noGui) {
-            const char* tt = QT_TRANSLATE_NOOP("addRemoveTimeSig", "MuseScore");
-            const char* mt = QT_TRANSLATE_NOOP("addRemoveTimeSig", "Cannot rewrite measures:\n"
-               "Tuplet would cross measure");
-
-            QMessageBox::warning(0, qApp->translate("addRemoveTimeSig", tt),
-               qApp->translate("addRemoveTimeSig", mt));
-            }
-      }
-
-//---------------------------------------------------------
-//   warnLocalTimeSig
-//---------------------------------------------------------
-
-static void warnLocalTimeSig()
-      {
-      if (!MScore::noGui) {
-            const char* tt = QT_TRANSLATE_NOOP("addRemoveTimeSig", "MuseScore");
-            const char* mt = QT_TRANSLATE_NOOP("addRemoveTimeSig", "Cannot change local time signature:\n"
-               "Measure is not empty");
-
-            QMessageBox::warning(0, qApp->translate("addRemoveTimeSig", tt),
-               qApp->translate("addRemoveTimeSig", mt));
-            }
-      }
-
-//---------------------------------------------------------
 //   rewriteMeasures
 //    rewrite all measures up to the next time signature or section break
 //---------------------------------------------------------
@@ -539,7 +507,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
 
       // disable local time sig modifications in linked staves
       if (staffIdx != -1 && excerpts().size() > 0) {
-            warnLocalTimeSig();
+            MScore::setError(CANNOT_CHANGE_LOCAL_TIMESIG);
             return false;
             }
 
@@ -558,7 +526,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
 
                   if (!rewriteMeasures(fm1, lm, ns, staffIdx)) {
                         if (staffIdx >= 0) {
-                              warnLocalTimeSig();
+                              MScore::setError(CANNOT_CHANGE_LOCAL_TIMESIG);
                               // restore measure rests that were prematurely modified
                               Fraction fr(staff(staffIdx)->timeSig(fm->tick())->sig());
                               for (Measure* m = fm1; m; m = m->nextMeasure()) {
@@ -574,7 +542,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
                               // (if we are rewriting all staves, but one has a local time signature)
                               // TODO: detect error conditions better, have clearer error messages
                               // and perform necessary fixups
-                              warnTupletCrossing();
+                              MScore::setError(TUPLET_CROSSES_BAR);
                               }
                         for (Measure* m = fm1; m; m = m->nextMeasure()) {
                               if (m->first(Segment::Type::TimeSig))
@@ -838,7 +806,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
 void Score::cmdRemoveTimeSig(TimeSig* ts)
       {
       if (ts->isLocal() && excerpts().size() > 0) {
-            warnLocalTimeSig();
+            MScore::setError(CANNOT_CHANGE_LOCAL_TIMESIG);
             return;
             }
 
@@ -1328,7 +1296,7 @@ void Score::cmdFlip()
       {
       const QList<Element*>& el = selection().elements();
       if (el.empty()) {
-            selectNoteSlurMessage();
+            MScore::setError(NO_NOTE_SLUR_SELECTED);
             return;
             }
       for (Element* e : el) {
@@ -1356,8 +1324,8 @@ void Score::cmdFlip()
                   Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
                   undoChangeProperty(beam, P_ID::STEM_DIRECTION, dir);
                   }
-            else if (e->isSlurSegment() || e->isTieSegment()) {
-                  SlurTie* slur = static_cast<SlurTieSegment*>(e)->slurTie();
+            else if (e->isSlurTieSegment()) {
+                  SlurTie* slur = toSlurTieSegment(e)->slurTie();
                   Direction dir = slur->up() ? Direction::DOWN : Direction::UP;
                   undoChangeProperty(slur, P_ID::SLUR_DIRECTION, dir);
                   }
@@ -2254,15 +2222,11 @@ Lyrics* Score::addLyrics()
       {
       Element* el = selection().element();
       if (el == 0 || (!el->isNote() && !el->isLyrics())) {
-            QMessageBox::information(0,
-               QMessageBox::tr("MuseScore"),
-               QMessageBox::tr("No note or lyrics selected:\n"
-                  "Please select a single note or lyrics and retry operation\n"),
-               QMessageBox::Ok, QMessageBox::NoButton);
+            MScore::setError(NO_LYRICS_SELECTED);
             return 0;
             }
       ChordRest* cr;
-      if (el->type() == Element::Type::NOTE) {
+      if (el->isNote()) {
             cr = toNote(el)->chord();
             if(cr->isGrace())
                   cr = toChordRest(cr->parent());
@@ -2405,7 +2369,7 @@ void Score::colorItem(Element* element)
 void Score::cmdExchangeVoice(int s, int d)
       {
       if (!selection().isRange()) {
-            selectStavesMessage();
+            MScore::setError(NO_STAFF_SELECTED);
             return;
             }
       int t1 = selection().tickStart();
@@ -2708,7 +2672,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   else if (rmb && mb != rmb) {
                         mb->linkTo(rmb);
                         if (rmb->isTBox())
-                              static_cast<TBox*>(mb)->text()->linkTo(static_cast<TBox*>(rmb)->text());
+                              toTBox(mb)->text()->linkTo(toTBox(rmb)->text());
                         }
                   mb->setNext(im);
                   mb->setPrev(im ? im->prev() : score->last());
@@ -2830,7 +2794,7 @@ void Score::localTimeDelete()
             Element* el = selection().element();
             if (!el)
                   return;
-            ChordRest* cr = nullptr;
+            ChordRest* cr = 0;
             if (el->isNote())
                   cr = toNote(el)->chord();
             else if (el->isChordRest())
@@ -2962,7 +2926,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link
       Tremolo* tremolo = 0;
 
       for (Segment* oseg = sf; oseg && oseg->tick() < lTick; oseg = oseg->next1()) {
-            Segment* ns = nullptr; //create segment later, on demand
+            Segment* ns = 0;        //create segment later, on demand
             Measure* dm = tick2measure(oseg->tick());
 
             Element* oe = oseg->element(strack);
@@ -3086,7 +3050,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link
                                     // 'on' is the old spanner end note and 'nn' is the new spanner end note
                                     for (Spanner* oldSp : on->spannerBack()) {
                                           Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
-                                          if (newStart != nullptr) {
+                                          if (newStart) {
                                                 Spanner* newSp;
                                                 if (link)
                                                       newSp = static_cast<Spanner*>(oldSp->linkedClone());

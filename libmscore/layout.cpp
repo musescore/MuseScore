@@ -2856,6 +2856,7 @@ System* Score::collectSystem(LayoutContext& lc)
             else if (lc.curMeasure->isHBox()) {
                   lc.curMeasure->computeMinWidth();
                   ww = lc.curMeasure->width();
+                  firstMeasure = toHBox(lc.curMeasure)->createSystemHeader();
                   }
             else {
                   // vbox:

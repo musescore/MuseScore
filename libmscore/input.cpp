@@ -116,7 +116,7 @@ void InputState::moveInputPos(Element* e)
             return;
 
       Segment* s;
-      if (e->isChordRest1())
+      if (e->isChordRest())
             s = toChordRest(e)->segment();
       else
             s = toSegment(e);
