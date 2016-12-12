@@ -372,13 +372,13 @@ void Debugger::addMeasure(ElementItem* mi, Measure* measure)
       {
       int staves = cs->nstaves();
       int tracks = staves * VOICES;
-      foreach (MStaff* ms, measure->mstaves()) {
-            if (ms->vspacerUp())
-                  new ElementItem(mi, ms->vspacerUp());
-            if (ms->vspacerDown())
-                  new ElementItem(mi, ms->vspacerDown());
-            if (ms->noText())
-                  new ElementItem(mi, ms->noText());
+      for (int staffIdx = 0; staffIdx < measure->score()->nstaves(); ++staffIdx) {
+            if (measure->vspacerUp(staffIdx))
+                  new ElementItem(mi, measure->vspacerUp(staffIdx));
+            if (measure->vspacerDown(staffIdx))
+                  new ElementItem(mi, measure->vspacerDown(staffIdx));
+            if (measure->noText(staffIdx))
+                  new ElementItem(mi, measure->noText(staffIdx));
             }
       for (Segment* segment = measure->first(); segment; segment = segment->next()) {
             ElementItem* segItem = new ElementItem(mi, segment);
@@ -766,7 +766,7 @@ void MeasureView::setElement(Element* e)
       ShowElementBase::setElement(e);
 
       mb.segments->setValue(m->size());
-      mb.staves->setValue(m->mstaves().size());
+//      mb.staves->setValue(m->mstaves().size());
       mb.measureNo->setValue(m->no());
       mb.noOffset->setValue(m->noOffset());
       mb.stretch->setValue(m->userStretch());

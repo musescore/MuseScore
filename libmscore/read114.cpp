@@ -801,15 +801,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
       e.tuplets().clear();
       e.setTrack(staffIdx * VOICES);
 
-      for (int n = m->mstaves().size(); n <= staffIdx; ++n) {
-            Staff* staff = m->score()->staff(n);
-            MStaff* s    = new MStaff;
-            s->setLines(new StaffLines(m->score()));
-            s->lines()->setParent(m);
-            s->lines()->setTrack(n * VOICES);
-            s->lines()->setVisible(!staff->invisible());
-            m->mstaves().push_back(s);
-            }
+      m->createStaves(staffIdx);
 
       // tick is obsolete
       if (e.hasAttribute("tick"))
@@ -1302,27 +1294,27 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   m->setRepeatEnd(true);
                   }
             else if (tag == "vspacer" || tag == "vspacerDown") {
-                  if (!m->mstaves()[staffIdx]->vspacerDown()) {
+                  if (!m->vspacerDown(staffIdx)) {
                         Spacer* spacer = new Spacer(m->score());
                         spacer->setSpacerType(SpacerType::DOWN);
                         spacer->setTrack(staffIdx * VOICES);
                         m->add(spacer);
                         }
-                  m->mstaves()[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
+                  m->vspacerDown(staffIdx)->setGap(e.readDouble() * _spatium);
                   }
             else if (tag == "vspacer" || tag == "vspacerUp") {
-                  if (!m->mstaves()[staffIdx]->vspacerUp()) {
+                  if (!m->vspacerUp(staffIdx)) {
                         Spacer* spacer = new Spacer(m->score());
                         spacer->setSpacerType(SpacerType::UP);
                         spacer->setTrack(staffIdx * VOICES);
                         m->add(spacer);
                         }
-                  m->mstaves()[staffIdx]->vspacerUp()->setGap(e.readDouble() * _spatium);
+                  m->vspacerUp(staffIdx)->setGap(e.readDouble() * _spatium);
                   }
             else if (tag == "visible")
-                  m->mstaves()[staffIdx]->setVisible(e.readInt());
+                  m->setStaffVisible(staffIdx, e.readInt());
             else if (tag == "slashStyle")
-                  m->mstaves()[staffIdx]->setSlashStyle(e.readInt());
+                  m->setStaffSlashStyle(staffIdx, e.readInt());
             else if (tag == "Beam") {
                   Beam* beam = new Beam(m->score());
                   beam->setTrack(e.track());
@@ -1339,7 +1331,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   // noText->setFlag(ElementFlag::MOVABLE, false); ??
                   noText->setTrack(e.track());
                   noText->setParent(m);
-                  m->mstaves()[noText->staffIdx()]->setNoText(noText);
+                  m->setNoText(noText->staffIdx(), noText);
                   }
             else if (tag == "multiMeasureRest") {
                   m->setMMRestCount(e.readInt());

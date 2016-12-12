@@ -2633,10 +2633,8 @@ void ChangeStaff::flip()
       Score* score = staff->score();
       if (invisibleChanged) {
             int staffIdx = staff->idx();
-            for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-                  MStaff* mstaff = m->mstaff(staffIdx);
-                  mstaff->lines()->setVisible(!staff->invisible());
-                  }
+            for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure())
+                  m->staffLines(staffIdx)->setVisible(!staff->invisible());
             }
       staff->score()->setLayoutAll();
       staff->masterScore()->rebuildMidiMapping();
@@ -2853,8 +2851,8 @@ void ChangeVelocity::flip()
 //   ChangeMStaffProperties
 //---------------------------------------------------------
 
-ChangeMStaffProperties::ChangeMStaffProperties(MStaff* ms, bool v, bool s)
-   : mstaff(ms), visible(v), slashStyle(s)
+ChangeMStaffProperties::ChangeMStaffProperties(Measure* m, int i, bool v, bool s)
+   : measure(m), staffIdx(i), visible(v), slashStyle(s)
       {
       }
 
@@ -2864,10 +2862,10 @@ ChangeMStaffProperties::ChangeMStaffProperties(MStaff* ms, bool v, bool s)
 
 void ChangeMStaffProperties::flip()
       {
-      bool v = mstaff->visible();
-      bool s = mstaff->slashStyle();
-      mstaff->setVisible(visible);
-      mstaff->setSlashStyle(slashStyle);
+      bool v = measure->visible(staffIdx);
+      bool s = measure->slashStyle(staffIdx);
+      measure->setStaffVisible(staffIdx, visible);
+      measure->setStaffSlashStyle(staffIdx, slashStyle);
       visible    = v;
       slashStyle = s;
       }

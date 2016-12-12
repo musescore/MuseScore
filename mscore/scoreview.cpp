@@ -1964,11 +1964,10 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                                                 p.setPen(Qt::NoPen);
                                                 p.setBrush(QBrush(QColor(0, 0, 255, 60)));
                                                 for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-                                                      const MStaff* ms = m->mstaff(staffIdx);
                                                       QPointF pt(m->pos().x() + system->pos().x(), 0);
                                                       p.translate(pt);
                                                       QPointF o(0.0, m->system()->staffYpage(staffIdx));
-                                                      ms->shape().translated(o).draw(&p);
+                                                      m->staffShape(staffIdx).translated(o).draw(&p);
                                                       p.translate(-pt);
                                                       }
                                                 }
@@ -1988,7 +1987,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                                           if (mb->type() == Element::Type::MEASURE) {
                                                 const Measure* m = static_cast<const Measure*>(mb);
                                                 for (int staffIdx = 0; staffIdx < _score->nstaves(); staffIdx++) {
-                                                      if (m->mstaff(staffIdx)->corrupted()) {
+                                                      if (m->corrupted(staffIdx)) {
                                                             p.drawRect(m->staffabbox(staffIdx).adjusted(0, -_spatium, 0, _spatium));
                                                             }
                                                       }
