@@ -900,7 +900,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="36">
+      <Measure number="36" len="3/4">
         <Chord>
           <lid>169</lid>
           <durationType>quarter</durationType>
@@ -2233,7 +2233,7 @@
               </Note>
             </Chord>
           </Measure>
-        <Measure number="36">
+        <Measure number="36" len="3/4">
           <Chord>
             <lid>169</lid>
             <durationType>quarter</durationType>
@@ -3431,7 +3431,7 @@
               </Note>
             </Chord>
           </Measure>
-        <Measure number="36">
+        <Measure number="36" len="3/4">
           <Chord>
             <lid>169</lid>
             <durationType>quarter</durationType>
