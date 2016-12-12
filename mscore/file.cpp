@@ -268,9 +268,9 @@ void MuseScore::loadFiles()
       {
       QStringList files = getOpenScoreNames(
 #ifdef OMR
-         tr("All Supported Files") + " (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;" +
+         tr("All Supported Files") + " (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GP6 *.GPX);;" +
 #else
-         tr("All Supported Files") + " (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;" +
+         tr("All Supported Files") + " (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GP6 *.GPX);;" +
 #endif
          tr("MuseScore Files") + " (*.mscz *.mscx);;" +
          tr("MusicXML Files") + " (*.xml *.mxl);;" +
@@ -283,7 +283,7 @@ void MuseScore::loadFiles()
 #endif
          tr("Overture / Score Writer Files <experimental>") + " (*.ove *.scw);;" +
          tr("Bagpipe Music Writer Files <experimental>") + " (*.bww);;" +
-         tr("Guitar Pro") + " (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)",
+         tr("Guitar Pro") + " (*.GTP *.GP3 *.GP4 *.GP5 *.GT6 *.GPX)",
          tr("MuseScore: Load Score")
          );
       for (const QString& s : files)
@@ -2087,6 +2087,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
                   { "gp3",  &importGTP                },
                   { "gp4",  &importGTP                },
                   { "gp5",  &importGTP                },
+                  { "gp6",  &importGTP                },
                   { "gpx",  &importGTP                },
                   };
 
