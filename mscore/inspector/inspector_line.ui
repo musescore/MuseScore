@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>222</width>
-    <height>172</height>
+    <width>226</width>
+    <height>179</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -46,9 +46,15 @@
     </widget>
    </item>
    <item>
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
      </property>
     </widget>
    </item>
@@ -69,7 +75,10 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Line color</string>
+        <string>Line color:</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineColor</cstring>
        </property>
       </widget>
      </item>
@@ -93,14 +102,20 @@
      <item row="4" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Line thickness</string>
+        <string>Line thickness:</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineWidth</cstring>
        </property>
       </widget>
      </item>
      <item row="5" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Line style</string>
+        <string>Line style:</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineStyle</cstring>
        </property>
       </widget>
      </item>
@@ -245,14 +260,20 @@
      <item row="7" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Dash gap width</string>
+        <string>Dash gap width:</string>
+       </property>
+       <property name="buddy">
+        <cstring>dashGapLength</cstring>
        </property>
       </widget>
      </item>
      <item row="6" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Dash line length</string>
+        <string>Dash line length:</string>
+       </property>
+       <property name="buddy">
+        <cstring>dashLineLength</cstring>
        </property>
       </widget>
      </item>

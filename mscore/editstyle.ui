@@ -488,7 +488,7 @@
               <item row="0" column="0">
                <widget class="QLabel" name="label_36">
                 <property name="text">
-                 <string>Vertical align range</string>
+                 <string>Vertical align range:</string>
                 </property>
                 <property name="buddy">
                  <cstring>autoplaceVerticalAlignRange</cstring>
@@ -4261,7 +4261,7 @@
            <item row="6" column="0">
             <widget class="QLabel" name="label_117">
              <property name="text">
-              <string>Autoplace: Distance to dynamics:</string>
+              <string>Autoplace, distance to dynamics:</string>
              </property>
              <property name="buddy">
               <cstring>autoplaceHairpinDynamicsDistance</cstring>
@@ -4300,7 +4300,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace: Distance to dynamics' value</string>
+              <string>Reset 'Autoplace, distance to dynamics' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -4666,7 +4666,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Default vertical position' value</string>
+              <string>Reset Position Above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -4936,7 +4936,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Default vertical position' value</string>
+              <string>Reset 'Position Below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -4952,7 +4952,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="PagePedalTrillDynamis">
+      <widget class="QWidget" name="PagePedalTrillDynamics">
        <layout class="QVBoxLayout" name="verticalLayout_34">
         <item>
          <widget class="QGroupBox" name="groupBox_21">
@@ -5070,7 +5070,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_124">
              <property name="text">
-              <string>Placement</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>pedalLinePlacement</cstring>
@@ -5301,7 +5301,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_125">
              <property name="text">
-              <string>Placement</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>trillLinePlacement</cstring>
@@ -5499,7 +5499,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_126">
              <property name="text">
-              <string>Placement</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>dynamicsPlacement</cstring>
@@ -5565,7 +5565,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset Position below' value</string>
+              <string>Reset 'Position below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7596,7 +7596,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Min. dash length' value</string>
+              <string>Reset 'Melisma thickness' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7633,7 +7633,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_80">
              <property name="text">
-              <string>Melisma thickness</string>
+              <string>Melisma thickness:</string>
              </property>
             </widget>
            </item>
@@ -8142,7 +8142,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Min. bottom margin' value</string>
+              <string>Reset 'Align Verse Number' value</string>
              </property>
              <property name="text">
               <string notr="true"/>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>146</width>
-    <height>67</height>
+    <width>150</width>
+    <height>69</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -75,7 +75,10 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Placement</string>
+        <string>Placement:</string>
+       </property>
+       <property name="buddy">
+        <cstring>placement</cstring>
        </property>
       </widget>
      </item>
@@ -116,7 +119,10 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Verse</string>
+        <string>Verse:</string>
+       </property>
+       <property name="buddy">
+        <cstring>verse</cstring>
        </property>
       </widget>
      </item>

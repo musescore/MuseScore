@@ -809,7 +809,7 @@
              <string>Background Color</string>
             </property>
             <property name="text">
-             <string>Color</string>
+             <string>Color:</string>
             </property>
            </widget>
           </item>
@@ -836,7 +836,7 @@
                <string>Background Wallpaper</string>
               </property>
               <property name="text">
-               <string>Wallpaper</string>
+               <string>Wallpaper:</string>
               </property>
              </widget>
             </item>
@@ -954,7 +954,7 @@
                <string>Paper Wallpaper</string>
               </property>
               <property name="text">
-               <string>Wallpaper</string>
+               <string>Wallpaper:</string>
               </property>
              </widget>
             </item>
@@ -1002,7 +1002,7 @@
              <string>Paper Color</string>
             </property>
             <property name="text">
-             <string>Color</string>
+             <string>Color:</string>
             </property>
            </widget>
           </item>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>204</width>
+    <width>208</width>
     <height>177</height>
    </rect>
   </property>
@@ -88,7 +88,10 @@
      <item row="4" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Velocity change</string>
+        <string>Velocity change:</string>
+       </property>
+       <property name="buddy">
+        <cstring>veloChange</cstring>
        </property>
       </widget>
      </item>
@@ -112,7 +115,10 @@
      <item row="3" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Dynamic range</string>
+        <string>Dynamic range:</string>
+       </property>
+       <property name="buddy">
+        <cstring>dynRange</cstring>
        </property>
       </widget>
      </item>
@@ -136,7 +142,10 @@
      <item row="6" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Continue height</string>
+        <string>Continue height:</string>
+       </property>
+       <property name="buddy">
+        <cstring>hairpinContHeight</cstring>
        </property>
       </widget>
      </item>
@@ -160,7 +169,10 @@
      <item row="5" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Height</string>
+        <string>Height:</string>
+       </property>
+       <property name="buddy">
+        <cstring>hairpinHeight</cstring>
        </property>
       </widget>
      </item>
@@ -214,7 +226,10 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Type</string>
+        <string>Type:</string>
+       </property>
+       <property name="buddy">
+        <cstring>hairpinType</cstring>
        </property>
       </widget>
      </item>
@@ -273,7 +288,10 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>Placement</string>
+        <string>Placement:</string>
+       </property>
+       <property name="buddy">
+        <cstring>placement</cstring>
        </property>
       </widget>
      </item>
