@@ -47,36 +47,55 @@ class RepeatMeasure;
 ///   Per staff values of measure.
 //---------------------------------------------------------
 
-struct MStaff {
-      Text* _noText        { 0 };         ///< Measure number text object
-      StaffLines*  lines   { 0 };
-      Spacer* _vspacerUp   { 0 };
-      Spacer* _vspacerDown { 0 };
+class MStaff {
       Shape _shape;
-      bool hasVoices       { false };     ///< indicates that MStaff contains more than one voice,
+      Text* _noText         { 0 };         ///< Measure number text object
+      StaffLines*  _lines   { 0 };
+      Spacer* _vspacerUp    { 0 };
+      Spacer* _vspacerDown  { 0 };
+      bool _hasVoices       { false };    ///< indicates that MStaff contains more than one voice,
                                           ///< this changes some layout rules
-      bool _visible        { true };
-      bool _slashStyle     { false };
+      bool _visible         { true  };
+      bool _slashStyle      { false };
 #ifndef NDEBUG
-      bool _corrupted      { false };
+      bool _corrupted       { false };
 #endif
+
+   public:
       MStaff()  {}
       ~MStaff();
       MStaff(const MStaff&);
 
-      bool visible() const         { return _visible;    }
-      void setVisible(bool val)    { _visible = val;     }
-      bool slashStyle() const      { return _slashStyle; }
-      void setSlashStyle(bool val) { _slashStyle = val;  }
-
       void setScore(Score*);
       void setTrack(int);
 
-      Text* noText() const         { return _noText;     }
-      void setNoText(Text* t)      { _noText = t;        }
+      Shape& shape()                 { return _shape; }
+      const Shape& shape() const     { return _shape; }
 
-      Shape& shape()               { return _shape; }
-      const Shape& shape() const   { return _shape; }
+      Text* noText() const           { return _noText;     }
+      void setNoText(Text* t)        { _noText = t;        }
+
+      StaffLines* lines() const      { return _lines; }
+      void setLines(StaffLines* l)   { _lines = l;    }
+
+      Spacer* vspacerUp() const      { return _vspacerUp;   }
+      void setVspacerUp(Spacer* s)   { _vspacerUp = s;      }
+      Spacer* vspacerDown() const    { return _vspacerDown; }
+      void setVspacerDown(Spacer* s) { _vspacerDown = s;    }
+
+      bool hasVoices() const         { return _hasVoices;  }
+      void setHasVoices(bool val)    { _hasVoices = val;   }
+
+      bool visible() const           { return _visible;    }
+      void setVisible(bool val)      { _visible = val;     }
+
+      bool slashStyle() const        { return _slashStyle; }
+      void setSlashStyle(bool val)   { _slashStyle = val;  }
+
+#ifndef NDEBUG
+      bool corrupted() const         { return _corrupted; };
+      void setCorrupted(bool val)    { _corrupted = val; };
+#endif
       };
 
 //---------------------------------------------------------
@@ -152,13 +171,14 @@ class Measure : public MeasureBase {
       virtual void change(Element* o, Element* n) override;
       virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
 
-      System* system() const                { return (System*)parent(); }
-      std::vector<MStaff*>& mstaves()       { return _mstaves;      }
+      System* system() const                      { return (System*)parent(); }
+      std::vector<MStaff*>& mstaves()             { return _mstaves;      }
       const std::vector<MStaff*>& mstaves() const { return _mstaves;      }
-      MStaff* mstaff(int staffIdx)          { return _mstaves[staffIdx]; }
-      const MStaff* mstaff(int staffIdx) const { return _mstaves[staffIdx]; }
-      bool hasVoices(int staffIdx) const    { return _mstaves[staffIdx]->hasVoices; }
-      StaffLines* staffLines(int staffIdx)  { return _mstaves[staffIdx]->lines; }
+      MStaff* mstaff(int staffIdx)                { return _mstaves[staffIdx]; }
+      const MStaff* mstaff(int staffIdx) const    { return _mstaves[staffIdx]; }
+      bool hasVoices(int staffIdx) const          { return _mstaves[staffIdx]->hasVoices(); }
+      void setHasVoices(int staffIdx, bool v)     { return _mstaves[staffIdx]->setHasVoices(v); }
+      StaffLines* staffLines(int staffIdx)        { return _mstaves[staffIdx]->lines(); }
 
       MeasureNumberMode measureNumberMode() const     { return _noMode;      }
       void setMeasureNumberMode(MeasureNumberMode v)  { _noMode = v;         }

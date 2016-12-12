@@ -530,7 +530,7 @@ void Segment::add(Element* el)
                               v = el->visible();
 
                         if (v && int(measure()->mstaves().size() * VOICES) > track)
-                              measure()->mstaff(track / VOICES)->hasVoices = true;
+                              measure()->setHasVoices(track / VOICES, true);
                         }
                   // the tick position of a tuplet is the tick position of its
                   // first element:

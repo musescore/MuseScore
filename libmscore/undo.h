@@ -60,7 +60,7 @@ class Chord;
 class ChordRest;
 class Harmony;
 class SlurTie;
-struct MStaff;
+class MStaff;
 class MeasureBase;
 class Dynamic;
 class Selection;

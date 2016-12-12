@@ -2635,7 +2635,7 @@ void ChangeStaff::flip()
             int staffIdx = staff->idx();
             for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
                   MStaff* mstaff = m->mstaff(staffIdx);
-                  mstaff->lines->setVisible(!staff->invisible());
+                  mstaff->lines()->setVisible(!staff->invisible());
                   }
             }
       staff->score()->setLayoutAll();

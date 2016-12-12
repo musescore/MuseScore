@@ -796,10 +796,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
       for (int n = m->mstaves().size(); n <= staffIdx; ++n) {
             Staff* staff = score->staff(n);
             MStaff* s    = new MStaff;
-            s->lines     = new StaffLines(score);
-            s->lines->setParent(m);
-            s->lines->setTrack(n * VOICES);
-            s->lines->setVisible(!staff->invisible());
+            s->setLines(new StaffLines(score));
+            s->lines()->setParent(m);
+            s->lines()->setTrack(n * VOICES);
+            s->lines()->setVisible(!staff->invisible());
             m->mstaves().push_back(s);
             }
 
@@ -1200,27 +1200,27 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   m->setRepeatEnd(true);
                   }
             else if (tag == "vspacer" || tag == "vspacerDown") {
-                  if (m->mstaves()[staffIdx]->_vspacerDown == 0) {
+                  if (!m->mstaves()[staffIdx]->vspacerDown()) {
                         Spacer* spacer = new Spacer(score);
                         spacer->setSpacerType(SpacerType::DOWN);
                         spacer->setTrack(staffIdx * VOICES);
                         m->add(spacer);
                         }
-                  m->mstaves()[staffIdx]->_vspacerDown->setGap(e.readDouble() * _spatium);
+                  m->mstaves()[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
                   }
             else if (tag == "vspacer" || tag == "vspacerUp") {
-                  if (m->mstaves()[staffIdx]->_vspacerUp == 0) {
+                  if (!m->mstaves()[staffIdx]->vspacerUp()) {
                         Spacer* spacer = new Spacer(score);
                         spacer->setSpacerType(SpacerType::UP);
                         spacer->setTrack(staffIdx * VOICES);
                         m->add(spacer);
                         }
-                  m->mstaves()[staffIdx]->_vspacerUp->setGap(e.readDouble() * _spatium);
+                  m->mstaves()[staffIdx]->vspacerUp()->setGap(e.readDouble() * _spatium);
                   }
             else if (tag == "visible")
-                  m->mstaves()[staffIdx]->_visible = e.readInt();
+                  m->mstaves()[staffIdx]->setVisible(e.readInt());
             else if (tag == "slashStyle")
-                  m->mstaves()[staffIdx]->_slashStyle = e.readInt();
+                  m->mstaves()[staffIdx]->setSlashStyle(e.readInt());
             else if (tag == "Beam") {
                   Beam* beam = new Beam(score);
                   beam->setTrack(e.track());

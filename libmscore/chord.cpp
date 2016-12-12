@@ -445,7 +445,7 @@ void Chord::add(Element* e)
                               note->tieFor()->endNote()->setTieBack(note->tieFor());
                         }
                   if (voice() && measure() && note->visible())
-                        measure()->mstaff(staffIdx())->hasVoices = true;
+                        measure()->setHasVoices(staffIdx(), true);
                   }
                   break;
             case Element::Type::ARPEGGIO:
@@ -803,7 +803,7 @@ void Chord::computeUp()
             // if no stems or stem beside staves
             if (tab->slashStyle() || !tab->stemThrough()) {
                   // if measure has voices, set stem direction according to voice
-                  if (measure()->mstaff(staffIdx())->hasVoices)
+                  if (measure()->hasVoices(staffIdx()))
                         _up = !(track() % 2);
                   else                          // if only voice 1,
                         // uncondtionally set to down if not stems or according to TAB stem direction otherwise
@@ -825,14 +825,14 @@ void Chord::computeUp()
             //
             // stem direction for grace notes
             //
-            if (measure()->mstaff(staffIdx())->hasVoices)
+            if (measure()->hasVoices(staffIdx()))
                   _up = !(track() % 2);
             else
                   _up = true;
             }
       else if (staffMove())
             _up = staffMove() > 0;
-      else if (measure()->mstaff(staffIdx())->hasVoices) {
+      else if (measure()->hasVoices(staffIdx())) {
             _up = !(track() % 2);
             }
       else {

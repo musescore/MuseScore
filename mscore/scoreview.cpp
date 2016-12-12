@@ -1988,7 +1988,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                                           if (mb->type() == Element::Type::MEASURE) {
                                                 const Measure* m = static_cast<const Measure*>(mb);
                                                 for (int staffIdx = 0; staffIdx < _score->nstaves(); staffIdx++) {
-                                                      if (m->mstaff(staffIdx)->_corrupted) {
+                                                      if (m->mstaff(staffIdx)->corrupted()) {
                                                             p.drawRect(m->staffabbox(staffIdx).adjusted(0, -_spatium, 0, _spatium));
                                                             }
                                                       }

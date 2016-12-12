@@ -85,7 +85,7 @@ namespace Ms {
 MStaff::~MStaff()
       {
       delete _noText;
-      delete lines;
+      delete _lines;
       delete _vspacerUp;
       delete _vspacerDown;
       }
@@ -93,8 +93,8 @@ MStaff::~MStaff()
 MStaff::MStaff(const MStaff& m)
       {
       _noText      = 0;
-      lines        = new StaffLines(*m.lines);
-      hasVoices    = m.hasVoices;
+      _lines       = new StaffLines(*m._lines);
+      _hasVoices   = m._hasVoices;
       _vspacerUp   = 0;
       _vspacerDown = 0;
       _visible     = m._visible;
@@ -102,6 +102,38 @@ MStaff::MStaff(const MStaff& m)
 #ifndef NDEBUG
       _corrupted   = m._corrupted;
 #endif
+      }
+
+//---------------------------------------------------------
+//   MStaff::setScore
+//---------------------------------------------------------
+
+void MStaff::setScore(Score* score)
+      {
+      if (_lines)
+            _lines->setScore(score);
+      if (_vspacerUp)
+            _vspacerUp->setScore(score);
+      if (_vspacerDown)
+            _vspacerDown->setScore(score);
+      if (_noText)
+            _noText->setScore(score);
+      }
+
+//---------------------------------------------------------
+//   setTrack
+//---------------------------------------------------------
+
+void MStaff::setTrack(int track)
+      {
+      if (_lines)
+            _lines->setTrack(track);
+      if (_vspacerUp)
+            _vspacerUp->setTrack(track);
+      if (_vspacerDown)
+            _vspacerDown->setTrack(track);
+      if (_noText)
+            _noText->setTrack(track);
       }
 
 //---------------------------------------------------------
@@ -118,10 +150,10 @@ Measure::Measure(Score* s)
       for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
             MStaff* s    = new MStaff;
             Staff* staff = score()->staff(staffIdx);
-            s->lines     = new StaffLines(score());
-            s->lines->setTrack(staffIdx * VOICES);
-            s->lines->setParent(this);
-            s->lines->setVisible(!staff->invisible());
+            s->setLines(new StaffLines(score()));
+            s->lines()->setTrack(staffIdx * VOICES);
+            s->lines()->setParent(this);
+            s->lines()->setVisible(!staff->invisible());
             _mstaves.push_back(s);
             }
       setIrregular(false);
@@ -165,19 +197,6 @@ void Measure::setScore(Score* score)
       MeasureBase::setScore(score);
       for (Segment* s = first(); s; s = s->next())
             s->setScore(score);
-      }
-
-//---------------------------------------------------------
-//   MStaff::setScore
-//---------------------------------------------------------
-
-void MStaff::setScore(Score* score)
-      {
-      lines->setScore(score);
-      if (_vspacerUp)
-            _vspacerUp->setScore(score);
-      if (_vspacerDown)
-            _vspacerDown->setScore(score);
       }
 
 //---------------------------------------------------------
@@ -367,14 +386,14 @@ void Measure::layout2()
 
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             MStaff* ms = _mstaves[staffIdx];
-            Spacer* sp = ms->_vspacerDown;
+            Spacer* sp = ms->vspacerDown();
             if (sp) {
                   sp->layout();
                   int n = score()->staff(staffIdx)->lines() - 1;
                   qreal y = system()->staff(staffIdx)->y();
                   sp->setPos(_spatium * .5, y + n * _spatium);
                   }
-            sp = ms->_vspacerUp;
+            sp = ms->vspacerUp();
             if (sp) {
                   sp->layout();
                   qreal y = system()->staff(staffIdx)->y();
@@ -715,11 +734,11 @@ void Measure::add(Element* e)
                   Spacer* sp = toSpacer(e);
                   switch (sp->spacerType()) {
                         case SpacerType::UP:
-                              _mstaves[e->staffIdx()]->_vspacerUp = sp;
+                              _mstaves[e->staffIdx()]->setVspacerUp(sp);
                               break;
                         case SpacerType::DOWN:
                         case SpacerType::FIXED:
-                              _mstaves[e->staffIdx()]->_vspacerDown = sp;
+                              _mstaves[e->staffIdx()]->setVspacerDown(sp);
                               break;
                         }
                   }
@@ -781,10 +800,10 @@ void Measure::remove(Element* e)
                   switch (toSpacer(e)->spacerType()) {
                         case SpacerType::DOWN:
                         case SpacerType::FIXED:
-                              _mstaves[e->staffIdx()]->_vspacerDown = 0;
+                              _mstaves[e->staffIdx()]->setVspacerDown(0);
                               break;
                         case SpacerType::UP:
-                              _mstaves[e->staffIdx()]->_vspacerUp = 0;
+                              _mstaves[e->staffIdx()]->setVspacerUp(0);
                               break;
                         }
                   break;
@@ -974,10 +993,10 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
       for (int i = sStaff; i < eStaff; ++i) {
             Staff* staff = score()->staff(i);
             MStaff* ms   = new MStaff;
-            ms->lines    = new StaffLines(score());
-            ms->lines->setTrack(i * VOICES);
-            ms->lines->setParent(this);
-            ms->lines->setVisible(!staff->invisible());
+            ms->setLines(new StaffLines(score()));
+            ms->lines()->setTrack(i * VOICES);
+            ms->lines()->setParent(this);
+            ms->lines()->setVisible(!staff->invisible());
             score()->undo(new InsertMStaff(this, ms, i));
             }
 
@@ -1040,19 +1059,6 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
       }
 
 //---------------------------------------------------------
-//   setTrack
-//---------------------------------------------------------
-
-void MStaff::setTrack(int track)
-      {
-      lines->setTrack(track);
-      if (_vspacerUp)
-            _vspacerUp->setTrack(track);
-      if (_vspacerDown)
-            _vspacerDown->setTrack(track);
-      }
-
-//---------------------------------------------------------
 //   insertMStaff
 //---------------------------------------------------------
 
@@ -1084,10 +1090,10 @@ void Measure::insertStaff(Staff* staff, int staffIdx)
             s->insertStaff(staffIdx);
 
       MStaff* ms = new MStaff;
-      ms->lines  = new StaffLines(score());
-      ms->lines->setParent(this);
-      ms->lines->setTrack(staffIdx * VOICES);
-      ms->lines->setVisible(!staff->invisible());
+      ms->setLines(new StaffLines(score()));
+      ms->lines()->setParent(this);
+      ms->lines()->setTrack(staffIdx * VOICES);
+      ms->lines()->setVisible(!staff->invisible());
       insertMStaff(ms, staffIdx);
       }
 
@@ -1644,18 +1650,18 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements) const
             xml.etag();
             }
 
-      if (mstaff->_vspacerUp)
-            xml.tag("vspacerUp", mstaff->_vspacerUp->gap() / _spatium);
-      if (mstaff->_vspacerDown) {
-            if (mstaff->_vspacerDown->spacerType() == SpacerType::FIXED)
-                  xml.tag("vspacerFixed", mstaff->_vspacerDown->gap() / _spatium);
+      if (mstaff->vspacerUp())
+            xml.tag("vspacerUp", mstaff->vspacerUp()->gap() / _spatium);
+      if (mstaff->vspacerDown()) {
+            if (mstaff->vspacerDown()->spacerType() == SpacerType::FIXED)
+                  xml.tag("vspacerFixed", mstaff->vspacerDown()->gap() / _spatium);
             else
-                  xml.tag("vspacerDown", mstaff->_vspacerDown->gap() / _spatium);
+                  xml.tag("vspacerDown", mstaff->vspacerDown()->gap() / _spatium);
             }
-      if (!mstaff->_visible)
-            xml.tag("visible", mstaff->_visible);
-      if (mstaff->_slashStyle)
-            xml.tag("slashStyle", mstaff->_slashStyle);
+      if (!mstaff->visible())
+            xml.tag("visible", mstaff->visible());
+      if (mstaff->slashStyle())
+            xml.tag("slashStyle", mstaff->slashStyle());
 
       int strack = staff * VOICES;
       int etrack = strack + VOICES;
@@ -1694,10 +1700,10 @@ void Measure::read(XmlReader& e, int staffIdx)
       for (int n = _mstaves.size(); n <= staffIdx; ++n) {
             Staff* staff = score()->staff(n);
             MStaff* s    = new MStaff;
-            s->lines     = new StaffLines(score());
-            s->lines->setParent(this);
-            s->lines->setTrack(n * VOICES);
-            s->lines->setVisible(!staff->invisible());
+            s->setLines(new StaffLines(score()));
+            s->lines()->setParent(this);
+            s->lines()->setTrack(n * VOICES);
+            s->lines()->setVisible(!staff->invisible());
             _mstaves.push_back(s);
             }
 
@@ -2051,36 +2057,36 @@ void Measure::read(XmlReader& e, int staffIdx)
                   setRepeatEnd(true);
                   }
             else if (tag == "vspacer" || tag == "vspacerDown") {
-                  if (_mstaves[staffIdx]->_vspacerDown == 0) {
+                  if (!_mstaves[staffIdx]->vspacerDown()) {
                         Spacer* spacer = new Spacer(score());
                         spacer->setSpacerType(SpacerType::DOWN);
                         spacer->setTrack(staffIdx * VOICES);
                         add(spacer);
                         }
-                  _mstaves[staffIdx]->_vspacerDown->setGap(e.readDouble() * _spatium);
+                  _mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
                   }
             else if (tag == "vspacerFixed") {
-                  if (_mstaves[staffIdx]->_vspacerDown == 0) {
+                  if (!_mstaves[staffIdx]->vspacerDown()) {
                         Spacer* spacer = new Spacer(score());
                         spacer->setSpacerType(SpacerType::FIXED);
                         spacer->setTrack(staffIdx * VOICES);
                         add(spacer);
                         }
-                  _mstaves[staffIdx]->_vspacerDown->setGap(e.readDouble() * _spatium);
+                  _mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
                   }
             else if (tag == "vspacerUp") {
-                  if (_mstaves[staffIdx]->_vspacerUp == 0) {
+                  if (!_mstaves[staffIdx]->vspacerUp()) {
                         Spacer* spacer = new Spacer(score());
                         spacer->setSpacerType(SpacerType::UP);
                         spacer->setTrack(staffIdx * VOICES);
                         add(spacer);
                         }
-                  _mstaves[staffIdx]->_vspacerUp->setGap(e.readDouble() * _spatium);
+                  _mstaves[staffIdx]->vspacerUp()->setGap(e.readDouble() * _spatium);
                   }
             else if (tag == "visible")
-                  _mstaves[staffIdx]->_visible = e.readInt();
+                  _mstaves[staffIdx]->setVisible(e.readInt());
             else if (tag == "slashStyle")
-                  _mstaves[staffIdx]->_slashStyle = e.readInt();
+                  _mstaves[staffIdx]->setSlashStyle(e.readInt());
             else if (tag == "Beam") {
                   Beam* beam = new Beam(score());
                   beam->setTrack(e.track());
@@ -2139,7 +2145,7 @@ bool Measure::visible(int staffIdx) const
             return false;
       if (score()->staff(staffIdx)->cutaway() && isMeasureRest(staffIdx))
             return false;
-      return score()->staff(staffIdx)->show() && _mstaves[staffIdx]->_visible;
+      return score()->staff(staffIdx)->show() && _mstaves[staffIdx]->visible();
       }
 
 //---------------------------------------------------------
@@ -2148,7 +2154,7 @@ bool Measure::visible(int staffIdx) const
 
 bool Measure::slashStyle(int staffIdx) const
       {
-      return score()->staff(staffIdx)->slashStyle() || _mstaves[staffIdx]->_slashStyle || score()->staff(staffIdx)->staffType()->slashStyle();
+      return score()->staff(staffIdx)->slashStyle() || _mstaves[staffIdx]->slashStyle() || score()->staff(staffIdx)->staffType()->slashStyle();
       }
 
 //---------------------------------------------------------
@@ -2195,11 +2201,11 @@ void Measure::scanElements(void* data, void (*func)(void*, Element*), bool all)
             if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show()))
                   continue;
             MStaff* ms = _mstaves[staffIdx];
-            func(data, ms->lines);
-            if (ms->_vspacerUp)
-                  func(data, ms->_vspacerUp);
-            if (ms->_vspacerDown)
-                  func(data, ms->_vspacerDown);
+            func(data, ms->lines());
+            if (ms->vspacerUp())
+                  func(data, ms->vspacerUp());
+            if (ms->vspacerDown())
+                  func(data, ms->vspacerDown());
             if (ms->noText())
                   func(data, ms->noText());
             }
@@ -2242,7 +2248,7 @@ void Measure::sortStaves(QList<int>& dst)
       _mstaves = ms;
 
       for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx)
-            _mstaves[staffIdx]->lines->setTrack(staffIdx * VOICES);
+            _mstaves[staffIdx]->lines()->setTrack(staffIdx * VOICES);
       for (Segment& s : _segments)
             s.sortStaves(dst);
 
@@ -2302,7 +2308,7 @@ void Measure::checkMultiVoices(int staffIdx)
       {
       int strack = staffIdx * VOICES + 1;
       int etrack = staffIdx * VOICES + VOICES;
-      _mstaves[staffIdx]->hasVoices = false;
+      _mstaves[staffIdx]->setHasVoices(false);
 
       for (Segment* s = first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
             for (int track = strack; track < etrack; ++track) {
@@ -2323,7 +2329,7 @@ void Measure::checkMultiVoices(int staffIdx)
                         else
                               v = e->visible();
                         if (v) {
-                              _mstaves[staffIdx]->hasVoices = true;
+                              _mstaves[staffIdx]->setHasVoices(true);
                               return;
                               }
                         }
