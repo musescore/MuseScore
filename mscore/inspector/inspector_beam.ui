@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>232</width>
+    <width>236</width>
     <height>177</height>
    </rect>
   </property>
@@ -100,21 +100,30 @@
      <item row="4" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Grow right</string>
+        <string>Grow right:</string>
+       </property>
+       <property name="buddy">
+        <cstring>growRight</cstring>
        </property>
       </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Grow left</string>
+        <string>Grow left:</string>
+       </property>
+       <property name="buddy">
+        <cstring>growLeft</cstring>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Direction</string>
+        <string>Direction:</string>
+       </property>
+       <property name="buddy">
+        <cstring>direction</cstring>
        </property>
       </widget>
      </item>
@@ -152,7 +161,7 @@
      <item row="8" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Position</string>
+        <string>Position:</string>
        </property>
       </widget>
      </item>
@@ -306,20 +315,7 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0" colspan="2">
-      <widget class="QCheckBox" name="noSlope">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>Horizontal</string>
-       </property>
-       <property name="text">
-        <string>Horizontal</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="2">
+     <item row="1" column="0" colspan="3">
       <widget class="QCheckBox" name="distribute">
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
@@ -332,7 +328,20 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="0" colspan="2">
+     <item row="5" column="0" colspan="3">
+      <widget class="QCheckBox" name="noSlope">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Horizontal</string>
+       </property>
+       <property name="text">
+        <string>Horizontal</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0" colspan="3">
       <widget class="QCheckBox" name="userPosition">
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>

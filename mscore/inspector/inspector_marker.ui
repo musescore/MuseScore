@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>177</width>
-    <height>82</height>
+    <width>181</width>
+    <height>65</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -21,7 +21,7 @@
     <number>0</number>
    </property>
    <property name="topMargin">
-    <number>17</number>
+    <number>0</number>
    </property>
    <property name="rightMargin">
     <number>0</number>
@@ -75,7 +75,10 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Label</string>
+        <string>Label:</string>
+       </property>
+       <property name="buddy">
+        <cstring>jumpLabel</cstring>
        </property>
       </widget>
      </item>
@@ -136,7 +139,10 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Marker type</string>
+        <string>Marker type:</string>
+       </property>
+       <property name="buddy">
+        <cstring>markerType</cstring>
        </property>
       </widget>
      </item>
