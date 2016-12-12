@@ -38,6 +38,7 @@
 #include "repeat.h"
 #include "utils.h"
 #include "read206.h"
+#include "excerpt.h"
 
 #ifdef OMR
 #include "omr/omr.h"

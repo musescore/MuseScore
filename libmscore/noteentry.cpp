@@ -24,6 +24,7 @@
 #include "stringdata.h"
 #include "undo.h"
 #include "range.h"
+#include "excerpt.h"
 
 namespace Ms {
 

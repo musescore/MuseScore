@@ -610,7 +610,7 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType ct)
 static Element* findLinkedVoiceElement(Element* e, Staff* nstaff)
       {
       Excerpt* se = e->score()->excerpt();
-      Excerpt* de = nstaff->excerpt();
+      Excerpt* de = nstaff->score()->excerpt();
       int strack = e->track();
       int dtrack = nstaff->idx() * VOICES + e->voice();
 
@@ -644,7 +644,7 @@ static Element* findLinkedVoiceElement(Element* e, Staff* nstaff)
 static Chord* findLinkedChord(Chord* c, Staff* nstaff)
       {
       Excerpt* se = c->score()->excerpt();
-      Excerpt* de = nstaff->excerpt();
+      Excerpt* de = nstaff->score()->excerpt();
       int strack = c->track();
       int dtrack = nstaff->idx() * VOICES + c->voice();
 
@@ -746,7 +746,7 @@ void Score::undoExchangeVoice(Measure* measure, int v1, int v2, int staff1, int 
             for (Staff* st : sl) {
                   int stTrack = st->idx() * VOICES;
                   Measure* m = st->score()->tick2measure(tick);
-                  Excerpt* ex = st->excerpt();
+                  Excerpt* ex = st->score()->excerpt();
                   if (ex) {
                         QMultiMap<int, int> t = ex->tracks();
                         QList<int> ts = t.values(s);
@@ -1014,8 +1014,8 @@ void Score::undoAddElement(Element* element)
       Staff* ostaff = element->staff();
       int strack = -1;
       if (ostaff) {
-            if (ostaff->excerpt() && strack > -1)
-                  strack = ostaff->excerpt()->tracks().key(strack, -1);
+            if (ostaff->score()->excerpt() && strack > -1)
+                  strack = ostaff->score()->excerpt()->tracks().key(strack, -1);
             else
                   strack = ostaff->idx() * VOICES + element->track() % VOICES;
             }
@@ -1203,8 +1203,8 @@ void Score::undoAddElement(Element* element)
             int staffIdx = staff->idx();
 
             QList<int> tr;
-            if (staff->excerpt() && strack > -1)
-                  tr = staff->excerpt()->tracks().values(strack);
+            if (staff->score()->excerpt() && strack > -1)
+                  tr = staff->score()->excerpt()->tracks().values(strack);
             else
                   tr.append(strack);
 
@@ -1362,9 +1362,9 @@ void Score::undoAddElement(Element* element)
                         nsp->setTrack(ntrack);
 
                         QList<int> tl2;
-                        if (staff->excerpt() && element->isSlur()) {
+                        if (staff->score()->excerpt() && element->isSlur()) {
                               nsp->setTrack(ntrack);
-                                    tl2 = staff->excerpt()->tracks().values(sp->track2());
+                                    tl2 = staff->score()->excerpt()->tracks().values(sp->track2());
                                     if (tl2.isEmpty()) {
                                           it++;
                                           continue;
@@ -1516,8 +1516,8 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
       Staff* ostaff = cr->staff();
       int strack = ostaff->idx() * VOICES + cr->voice();
 
-      if (ostaff->excerpt() && !ostaff->excerpt()->tracks().isEmpty())
-            strack = ostaff->excerpt()->tracks().key(strack, -1);
+      if (ostaff->score()->excerpt() && !ostaff->score()->excerpt()->tracks().isEmpty())
+            strack = ostaff->score()->excerpt()->tracks().key(strack, -1);
 
       Segment::Type segmentType = Segment::Type::ChordRest;
 
@@ -1525,8 +1525,8 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
 
       foreach (Staff* staff, ostaff->staffList()) {
             QList<int> tracks;
-            if (staff->excerpt() && !staff->excerpt()->tracks().isEmpty())
-                  tracks = staff->excerpt()->tracks().values(strack);
+            if (staff->score()->excerpt() && !staff->score()->excerpt()->tracks().isEmpty())
+                  tracks = staff->score()->excerpt()->tracks().values(strack);
             else
                   tracks.append(staff->idx() * VOICES + cr->voice());
 
