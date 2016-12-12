@@ -1460,7 +1460,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                               if (ticks > 0)
                                     contentAdded = true;
                               // deal with possible anacrusis
-                              if (measureCounter == 0 && ticks < measure->ticks() && voiceNum == 0) {
+                              if (ticks < measure->ticks() && voiceNum == 0) {
                                     int mticks = measure->ticks();
                                     measure->setLen(Fraction::fromTicks(ticks));
                                     int offset = mticks - measure->ticks();

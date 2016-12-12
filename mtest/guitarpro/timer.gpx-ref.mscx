@@ -900,7 +900,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="36">
+      <Measure number="36" len="3/4">
         <Chord>
           <lid>169</lid>
           <durationType>quarter</durationType>
@@ -2272,7 +2272,7 @@
               </Note>
             </Chord>
           </Measure>
-        <Measure number="36">
+        <Measure number="36" len="3/4">
           <Chord>
             <lid>169</lid>
             <durationType>quarter</durationType>
@@ -2364,7 +2364,7 @@
             <span>1</span>
             </BarLine>
           </Measure>
-        <tick>72960</tick>
+        <tick>72480</tick>
         <Measure number="39">
           <Rest>
             <lid>186</lid>
@@ -2482,7 +2482,7 @@
             <span>1</span>
             </BarLine>
           </Measure>
-        <tick>82560</tick>
+        <tick>82080</tick>
         <Measure number="44">
           <Rest>
             <lid>209</lid>
@@ -2600,7 +2600,7 @@
             <span>1</span>
             </BarLine>
           </Measure>
-        <tick>92160</tick>
+        <tick>91680</tick>
         <Measure number="49">
           <Rest>
             <lid>232</lid>
@@ -3524,7 +3524,7 @@
               </Note>
             </Chord>
           </Measure>
-        <Measure number="36">
+        <Measure number="36" len="3/4">
           <Chord>
             <lid>169</lid>
             <durationType>quarter</durationType>
@@ -3616,7 +3616,7 @@
             <span>1</span>
             </BarLine>
           </Measure>
-        <tick>72960</tick>
+        <tick>72480</tick>
         <Measure number="39">
           <Rest>
             <lid>186</lid>
@@ -3734,7 +3734,7 @@
             <span>1</span>
             </BarLine>
           </Measure>
-        <tick>82560</tick>
+        <tick>82080</tick>
         <Measure number="44">
           <Rest>
             <lid>209</lid>
@@ -3852,7 +3852,7 @@
             <span>1</span>
             </BarLine>
           </Measure>
-        <tick>92160</tick>
+        <tick>91680</tick>
         <Measure number="49">
           <Rest>
             <lid>232</lid>
