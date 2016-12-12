@@ -14,7 +14,7 @@ def getFileList(sshKey):
 def generateHTML(pathname, lines):
     li = ""
     for l in lines:
-        if l:
+        if l and l.startswith("MuseScore"):
             li += '<li><a href="http://ftp.osuosl.org/pub/musescore-nightlies/macosx/' + l + '">' + l + "</a></li>"
 
     htmlTplPath = pathname + "/web/index.html.tpl"
@@ -32,7 +32,7 @@ def generateHTML(pathname, lines):
 def generateRSS(pathname, lines):
     li = ""
     for l in lines:
-        if l:
+        if l and l.startswith("MuseScore"):
             info = l.split("-")
             date = info[1]
             branch = info[2]
