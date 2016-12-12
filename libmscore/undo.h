@@ -767,13 +767,14 @@ class ChangeVelocity : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeMStaffProperties : public UndoCommand {
-      MStaff* mstaff;
+      Measure* measure;
+      int staffIdx;
       bool visible;
       bool slashStyle;
       void flip();
 
    public:
-      ChangeMStaffProperties(MStaff*, bool visible, bool slashStyle);
+      ChangeMStaffProperties(Measure*, int staffIdx, bool visible, bool slashStyle);
       UNDO_NAME("ChangeMStaffProperties")
       };
 

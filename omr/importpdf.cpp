@@ -219,14 +219,13 @@ void OmrState::importPdfPage(OmrPage* omrPage, qreal top)
 
       measure = score->firstMeasure();
       if (measure) {
-            MStaff *ms = measure->mstaves()[0];
-            if (!ms->vspacerUp()){
+            if (!measure->vspacerUp(0)){
                   Spacer* spacer = new Spacer(score);
                   spacer->setSpacerType(SpacerType::UP);
                   spacer->setTrack(0);
                   measure->add(spacer);
                   }
-            Spacer* sp = ms->vspacerUp();
+            Spacer* sp = measure->vspacerUp(0);
             sp->layout();
             sp->setPos(sp->rxpos(), top);
             }

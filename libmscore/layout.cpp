@@ -2044,14 +2044,14 @@ static bool validMMRestMeasure(Measure* m)
                   }
             if (s->isChordRestType()) {
                   bool restFound = false;
-                  int tracks = m->mstaves().size() * VOICES;
+                  int tracks = m->score()->ntracks();
                   for (int track = 0; track < tracks; ++track) {
                         if ((track % VOICES) == 0 && !m->score()->staff(track/VOICES)->show()) {
                               track += VOICES-1;
                               continue;
                               }
                         if (s->element(track))  {
-                              if (s->element(track)->type() != Element::Type::REST)
+                              if (!s->element(track)->isRest())
                                     return false;
                               Rest* rest = toRest(s->element(track));
                               if (rest->articulations().size() > 0) // break on fermata
@@ -3044,8 +3044,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   if (!lineMode())
                         ww  += rest * m->ticks() * stretch;
                   m->stretchMeasure(ww);
-                  for (MStaff* ms : m->mstaves())
-                        ms->lines()->layout();
+                  m->layoutStaffLines();
                   }
             else if (mb->isHBox()) {
                   mb->setPos(pos + QPointF(toHBox(mb)->topGap(), 0.0));
@@ -3193,7 +3192,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   m->staffShape(si).clear();
                   for (Segment& s : m->segments())
                         m->staffShape(si).add(s.staffShape(si).translated(s.pos()));
-                  m->staffShape(si).add(m->mstaff(si)->lines()->bbox());
+                  m->staffShape(si).add(m->staffLines(si)->bbox());
                   }
             }
 

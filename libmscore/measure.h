@@ -42,61 +42,7 @@ class Spanner;
 class Part;
 class RepeatMeasure;
 
-//---------------------------------------------------------
-//   MStaff
-///   Per staff values of measure.
-//---------------------------------------------------------
-
-class MStaff {
-      Shape _shape;
-      Text* _noText         { 0 };         ///< Measure number text object
-      StaffLines*  _lines   { 0 };
-      Spacer* _vspacerUp    { 0 };
-      Spacer* _vspacerDown  { 0 };
-      bool _hasVoices       { false };    ///< indicates that MStaff contains more than one voice,
-                                          ///< this changes some layout rules
-      bool _visible         { true  };
-      bool _slashStyle      { false };
-#ifndef NDEBUG
-      bool _corrupted       { false };
-#endif
-
-   public:
-      MStaff()  {}
-      ~MStaff();
-      MStaff(const MStaff&);
-
-      void setScore(Score*);
-      void setTrack(int);
-
-      Shape& shape()                 { return _shape; }
-      const Shape& shape() const     { return _shape; }
-
-      Text* noText() const           { return _noText;     }
-      void setNoText(Text* t)        { _noText = t;        }
-
-      StaffLines* lines() const      { return _lines; }
-      void setLines(StaffLines* l)   { _lines = l;    }
-
-      Spacer* vspacerUp() const      { return _vspacerUp;   }
-      void setVspacerUp(Spacer* s)   { _vspacerUp = s;      }
-      Spacer* vspacerDown() const    { return _vspacerDown; }
-      void setVspacerDown(Spacer* s) { _vspacerDown = s;    }
-
-      bool hasVoices() const         { return _hasVoices;  }
-      void setHasVoices(bool val)    { _hasVoices = val;   }
-
-      bool visible() const           { return _visible;    }
-      void setVisible(bool val)      { _visible = val;     }
-
-      bool slashStyle() const        { return _slashStyle; }
-      void setSlashStyle(bool val)   { _slashStyle = val;  }
-
-#ifndef NDEBUG
-      bool corrupted() const         { return _corrupted; };
-      void setCorrupted(bool val)    { _corrupted = val; };
-#endif
-      };
+class MStaff;
 
 //---------------------------------------------------------
 //   MeasureNumberMode
@@ -172,13 +118,26 @@ class Measure : public MeasureBase {
       virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
 
       System* system() const                      { return (System*)parent(); }
-      std::vector<MStaff*>& mstaves()             { return _mstaves;      }
-      const std::vector<MStaff*>& mstaves() const { return _mstaves;      }
-      MStaff* mstaff(int staffIdx)                { return _mstaves[staffIdx]; }
-      const MStaff* mstaff(int staffIdx) const    { return _mstaves[staffIdx]; }
-      bool hasVoices(int staffIdx) const          { return _mstaves[staffIdx]->hasVoices(); }
-      void setHasVoices(int staffIdx, bool v)     { return _mstaves[staffIdx]->setHasVoices(v); }
-      StaffLines* staffLines(int staffIdx)        { return _mstaves[staffIdx]->lines(); }
+//      std::vector<MStaff*>& mstaves()             { return _mstaves;      }
+//      const std::vector<MStaff*>& mstaves() const { return _mstaves;      }
+//      MStaff* mstaff(int staffIdx);
+//      const MStaff* mstaff(int staffIdx) const;
+
+      bool hasVoices(int staffIdx) const;
+      void setHasVoices(int staffIdx, bool v);
+
+      StaffLines* staffLines(int staffIdx);
+      Spacer* vspacerDown(int staffIdx) const;
+      Spacer* vspacerUp(int staffIdx) const;
+      void setStaffVisible(int staffIdx, bool visible);
+      void setStaffSlashStyle(int staffIdx, bool slashStyle);
+      bool corrupted(int staffIdx) const;
+      void setCorrupted(int staffIdx, bool val);
+      void setNoText(int staffIdx, Text*);
+      Text* noText(int staffIdx) const;
+      Shape staffShape(int staffIdx) const;
+      Shape& staffShape(int staffIdx);
+      void createStaves(int);
 
       MeasureNumberMode measureNumberMode() const     { return _noMode;      }
       void setMeasureNumberMode(MeasureNumberMode v)  { _noMode = v;         }
@@ -307,7 +266,6 @@ class Measure : public MeasureBase {
       const BarLine* endBarLine() const;
       BarLineType endBarLineType() const;
       bool endBarLineVisible() const;
-      Shape& staffShape(int staffIdx) { return mstaff(staffIdx)->shape(); }
       virtual void triggerLayout() const override;
       qreal basicStretch() const;
       qreal basicWidth() const;
@@ -315,6 +273,7 @@ class Measure : public MeasureBase {
       void checkHeader();
       void checkTrailer();
       void setStretchedWidth(qreal);
+      void layoutStaffLines();
       };
 
 }     // namespace Ms

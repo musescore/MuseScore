@@ -395,7 +395,7 @@ void System::layout2()
                   qreal d = s1.minVerticalDistance(s2) + minVerticalDistance;
                   dist    = qMax(dist, d);
 
-                  Spacer* sp = m->mstaff(si1)->vspacerDown();
+                  Spacer* sp = m->vspacerDown(si1);
                   if (sp) {
                         if (sp->spacerType() == SpacerType::FIXED) {
                               dist = staff->height() + sp->gap();
@@ -404,7 +404,7 @@ void System::layout2()
                         else
                               dist = qMax(dist, staff->height() + sp->gap());
                         }
-                  sp = m->mstaff(si2)->vspacerUp();
+                  sp = m->vspacerUp(si2);
                   if (sp)
                         dist = qMax(dist, sp->gap());
                   }
@@ -889,22 +889,20 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
                   Element* se = spanner->startElement();
                   Element* ee = spanner->endElement();
                   bool v1 = true;
-                  if (se && (se->type() == Element::Type::CHORD || se->type() == Element::Type::REST)) {
-                        ChordRest* cr = static_cast<ChordRest*>(se);
+                  if (se && se->isChordRest()) {
+                        ChordRest* cr = toChordRest(se);
                         Measure* m    = cr->measure();
-                        MStaff* mstaff = m->mstaff(cr->staffIdx());
-                        v1 = mstaff->visible();
+                        v1            = m->visible(cr->staffIdx());
                         }
                   bool v2 = true;
-                  if (!v1 && ee && (ee->type() == Element::Type::CHORD || ee->type() == Element::Type::REST)) {
-                        ChordRest* cr = static_cast<ChordRest*>(ee);
+                  if (!v1 && ee && ee->isChordRest()) {
+                        ChordRest* cr = toChordRest(ee);
                         Measure* m    = cr->measure();
-                        MStaff* mstaff = m->mstaff(cr->staffIdx());
-                        v2 = mstaff->visible();
+                        v2            = m->visible(cr->staffIdx());
                         }
                   v = v1 || v2; // hide spanner if both chords are hidden
                   }
-            if (all || (score()->staff(staffIdx)->show() && _staves[staffIdx]->show() && v) || (spanner->type() == Element::Type::VOLTA))
+            if (all || (score()->staff(staffIdx)->show() && _staves[staffIdx]->show() && v) || spanner->isVolta())
                   ss->scanElements(data, func, all);
             }
       }
@@ -1035,8 +1033,7 @@ qreal System::minDistance(System* s2) const
       for (MeasureBase* mb1 : ml) {
             if (mb1->isMeasure()) {
                   Measure* m = toMeasure(mb1);
-                  Q_ASSERT(!m->mstaves().empty());
-                  Spacer* sp = m->mstaves().back()->vspacerDown();
+                  Spacer* sp = m->vspacerDown(m->score()->nstaves()-1);
                   if (sp) {
                         if (sp->spacerType() == SpacerType::FIXED) {
                               dist = sp->gap();
@@ -1052,8 +1049,7 @@ qreal System::minDistance(System* s2) const
             for (MeasureBase* mb2 : s2->ml) {
                   if (mb2->isMeasure()) {
                         Measure* m = toMeasure(mb2);
-                        Q_ASSERT(!m->mstaves().empty());
-                        Spacer* sp = m->mstaves().front()->vspacerUp();
+                        Spacer* sp = m->vspacerUp(0);
                         if (sp)
                               dist = qMax(dist, sp->gap());
                         }
@@ -1079,7 +1075,7 @@ qreal System::minDistance(System* s2) const
                         Shape s1 = m1->staffShape(lastStaff).translated(m1->pos());
                         Shape s2 = m2->staffShape(0).translated(m2->pos());
                         qreal d  = s1.minVerticalDistance(s2) + minVerticalDistance;
-                        dist = qMax(dist, d - m1->mstaff(lastStaff)->lines()->height());
+                        dist = qMax(dist, d - m1->staffLines(lastStaff)->height());
                         }
                   }
             }

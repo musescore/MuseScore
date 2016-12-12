@@ -80,7 +80,59 @@ namespace Ms {
 
 //---------------------------------------------------------
 //   MStaff
+///   Per staff values of measure.
 //---------------------------------------------------------
+
+class MStaff {
+      Shape _shape;
+      Text* _noText         { 0 };         ///< Measure number text object
+      StaffLines*  _lines   { 0 };
+      Spacer* _vspacerUp    { 0 };
+      Spacer* _vspacerDown  { 0 };
+      bool _hasVoices       { false };    ///< indicates that MStaff contains more than one voice,
+                                          ///< this changes some layout rules
+      bool _visible         { true  };
+      bool _slashStyle      { false };
+#ifndef NDEBUG
+      bool _corrupted       { false };
+#endif
+
+   public:
+      MStaff()  {}
+      ~MStaff();
+      MStaff(const MStaff&);
+
+      void setScore(Score*);
+      void setTrack(int);
+
+      Shape shape() const            { return _shape; }
+      Shape& shape()                 { return _shape; }
+
+      Text* noText() const           { return _noText;     }
+      void setNoText(Text* t)        { _noText = t;        }
+
+      StaffLines* lines() const      { return _lines; }
+      void setLines(StaffLines* l)   { _lines = l;    }
+
+      Spacer* vspacerUp() const      { return _vspacerUp;   }
+      void setVspacerUp(Spacer* s)   { _vspacerUp = s;      }
+      Spacer* vspacerDown() const    { return _vspacerDown; }
+      void setVspacerDown(Spacer* s) { _vspacerDown = s;    }
+
+      bool hasVoices() const         { return _hasVoices;  }
+      void setHasVoices(bool val)    { _hasVoices = val;   }
+
+      bool visible() const           { return _visible;    }
+      void setVisible(bool val)      { _visible = val;     }
+
+      bool slashStyle() const        { return _slashStyle; }
+      void setSlashStyle(bool val)   { _slashStyle = val;  }
+
+#ifndef NDEBUG
+      bool corrupted() const         { return _corrupted; };
+      void setCorrupted(bool val)    { _corrupted = val; };
+#endif
+      };
 
 MStaff::~MStaff()
       {
@@ -189,6 +241,33 @@ Measure::Measure(const Measure& m)
       }
 
 //---------------------------------------------------------
+//   layoutStaffLines
+//---------------------------------------------------------
+
+void Measure::layoutStaffLines()
+      {
+      for (MStaff* ms : _mstaves)
+            ms->lines()->layout();
+      }
+
+//---------------------------------------------------------
+//   createStaves
+//---------------------------------------------------------
+
+void Measure::createStaves(int staffIdx)
+      {
+      for (int n = _mstaves.size(); n <= staffIdx; ++n) {
+            Staff* staff = score()->staff(n);
+            MStaff* s    = new MStaff;
+            s->setLines(new StaffLines(score()));
+            s->lines()->setParent(this);
+            s->lines()->setTrack(n * VOICES);
+            s->lines()->setVisible(!staff->invisible());
+            _mstaves.push_back(s);
+            }
+      }
+
+//---------------------------------------------------------
 //   setScore
 //---------------------------------------------------------
 
@@ -198,6 +277,20 @@ void Measure::setScore(Score* score)
       for (Segment* s = first(); s; s = s->next())
             s->setScore(score);
       }
+
+bool Measure::hasVoices(int staffIdx) const                     { return _mstaves[staffIdx]->hasVoices(); }
+void Measure::setHasVoices(int staffIdx, bool v)                { return _mstaves[staffIdx]->setHasVoices(v); }
+StaffLines* Measure::staffLines(int staffIdx)                   { return _mstaves[staffIdx]->lines(); }
+Spacer* Measure::vspacerDown(int staffIdx) const                { return _mstaves[staffIdx]->vspacerDown(); }
+Spacer* Measure::vspacerUp(int staffIdx) const                  { return _mstaves[staffIdx]->vspacerUp(); }
+void Measure::setStaffVisible(int staffIdx, bool visible)       { _mstaves[staffIdx]->setVisible(visible); }
+void Measure::setStaffSlashStyle(int staffIdx, bool slashStyle) { _mstaves[staffIdx]->setSlashStyle(slashStyle); }
+bool Measure::corrupted(int staffIdx) const                     { return _mstaves[staffIdx]->corrupted(); }
+void Measure::setCorrupted(int staffIdx, bool val)              { _mstaves[staffIdx]->setCorrupted(val); }
+void Measure::setNoText(int staffIdx, Text* t)                  { _mstaves[staffIdx]->setNoText(t); }
+Text* Measure::noText(int staffIdx) const                       { return _mstaves[staffIdx]->noText(); }
+Shape Measure::staffShape(int staffIdx) const                   { return _mstaves[staffIdx]->shape(); }
+Shape& Measure::staffShape(int staffIdx)                        { return _mstaves[staffIdx]->shape(); }
 
 //---------------------------------------------------------
 //   Measure
@@ -2343,7 +2436,7 @@ void Measure::checkMultiVoices(int staffIdx)
 
 bool Measure::hasVoice(int track) const
       {
-      if (track >= int(mstaves().size() * VOICES))
+      if (track >= score()->ntracks())
             return false;
       for (Segment* s = first(); s; s = s->next()) {
             if (s->segmentType() != Segment::Type::ChordRest)
