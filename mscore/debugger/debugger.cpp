@@ -373,10 +373,10 @@ void Debugger::addMeasure(ElementItem* mi, Measure* measure)
       int staves = cs->nstaves();
       int tracks = staves * VOICES;
       foreach (MStaff* ms, measure->mstaves()) {
-            if (ms->_vspacerUp)
-                  new ElementItem(mi, ms->_vspacerUp);
-            if (ms->_vspacerDown)
-                  new ElementItem(mi, ms->_vspacerDown);
+            if (ms->vspacerUp())
+                  new ElementItem(mi, ms->vspacerUp());
+            if (ms->vspacerDown())
+                  new ElementItem(mi, ms->vspacerDown());
             if (ms->noText())
                   new ElementItem(mi, ms->noText());
             }

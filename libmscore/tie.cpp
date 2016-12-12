@@ -652,7 +652,7 @@ void Tie::calculateDirection()
       if (_slurDirection == Direction::AUTO) {
             std::vector<Note*> notes = c1->notes();
             int n = notes.size();
-            if (m1->mstaff(c1->staffIdx())->hasVoices || m2->mstaff(c2->staffIdx())->hasVoices) {
+            if (m1->hasVoices(c1->staffIdx()) || m2->hasVoices(c2->staffIdx())) {
                   // in polyphonic passage, ties go on the stem side
                   _up = c1->up();
                   }
@@ -719,7 +719,7 @@ void Tie::layout()
                   }
             Chord* c1 = startNote()->chord();
             if (_slurDirection == Direction::AUTO) {
-                  if (c1->measure()->mstaff(c1->staffIdx())->hasVoices) {
+                  if (c1->measure()->hasVoices(c1->staffIdx())) {
                         // in polyphonic passage, ties go on the stem side
                         _up = c1->up();
                         }

@@ -3045,7 +3045,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         ww  += rest * m->ticks() * stretch;
                   m->stretchMeasure(ww);
                   for (MStaff* ms : m->mstaves())
-                        ms->lines->layout();
+                        ms->lines()->layout();
                   }
             else if (mb->isHBox()) {
                   mb->setPos(pos + QPointF(toHBox(mb)->topGap(), 0.0));
@@ -3193,7 +3193,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   m->staffShape(si).clear();
                   for (Segment& s : m->segments())
                         m->staffShape(si).add(s.staffShape(si).translated(s.pos()));
-                  m->staffShape(si).add(m->mstaff(si)->lines->bbox());
+                  m->staffShape(si).add(m->mstaff(si)->lines()->bbox());
                   }
             }
 

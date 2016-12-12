@@ -180,7 +180,7 @@ bool Score::sanityCheck(const QString& name)
                   Rest* fmrest0 = 0;      // full measure rest in voice 0
                   Fraction voices[VOICES] = {};
 #ifndef NDEBUG
-                  m->mstaff(staffIdx)->_corrupted = false;
+                  m->mstaff(staffIdx)->setCorrupted(false);
 #endif
                   for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
                         for (int v = 0; v < VOICES; ++v) {
@@ -201,7 +201,7 @@ bool Score::sanityCheck(const QString& name)
                         qDebug() << msg;
                         error += QString("%1\n").arg(msg);
 #ifndef NDEBUG
-                        m->mstaff(staffIdx)->_corrupted = true;
+                        m->mstaff(staffIdx)->setCorrupted(true);
 #endif
                         result = false;
                         // try to fix a bad full measure rest
@@ -218,7 +218,7 @@ bool Score::sanityCheck(const QString& name)
                               qDebug() << msg;
                               error += QString("%1\n").arg(msg);
 #ifndef NDEBUG
-                              m->mstaff(staffIdx)->_corrupted = true;
+                              m->mstaff(staffIdx)->setCorrupted(true);
 #endif
                               result = false;
                               }

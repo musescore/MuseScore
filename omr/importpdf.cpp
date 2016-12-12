@@ -172,14 +172,14 @@ int OmrState::importPdfSystem(OmrSystem* omrSystem)
             OmrMeasure* m = &omrSystem->measures()[i];
             importPdfMeasure(m, omrSystem);
             }
-          
-          
+
+
       if(score->lastMeasure()){
             LayoutBreak* b = new LayoutBreak(score);
             b->setLayoutBreakType(LayoutBreak::Type::LINE);
             score->lastMeasure()->add(b);
             }
-          
+
       return tick;
       }
 
@@ -190,10 +190,10 @@ int OmrState::importPdfSystem(OmrSystem* omrSystem)
 void OmrState::importPdfPage(OmrPage* omrPage, qreal top)
       {
       TDuration d(TDuration::DurationType::V_MEASURE);
-          
+
       int nsystems = omrPage->systems().size();
       if(nsystems == 0) return;
-      
+
       //add top margin for alignment
       MeasureBase* first_measure = score->first();
       if (first_measure == 0 || first_measure->type() != Element::Type::VBOX) {
@@ -205,11 +205,11 @@ void OmrState::importPdfPage(OmrPage* omrPage, qreal top)
             vbox->setBottomGap(0);
             score->measures()->add(vbox);
       }
-      
+
       for (int k = 0; k < nsystems; ++k) {
             importPdfSystem(omrPage->system(nsystems - k - 1));
             }
-          
+
       Measure* measure = score->lastMeasure();
       if (measure) {
             LayoutBreak* b = new LayoutBreak(score);
@@ -220,13 +220,13 @@ void OmrState::importPdfPage(OmrPage* omrPage, qreal top)
       measure = score->firstMeasure();
       if (measure) {
             MStaff *ms = measure->mstaves()[0];
-            if (!ms->_vspacerUp){
+            if (!ms->vspacerUp()){
                   Spacer* spacer = new Spacer(score);
                   spacer->setSpacerType(SpacerType::UP);
                   spacer->setTrack(0);
                   measure->add(spacer);
                   }
-            Spacer* sp = ms->_vspacerUp;
+            Spacer* sp = ms->vspacerUp();
             sp->layout();
             sp->setPos(sp->rxpos(), top);
             }
@@ -270,7 +270,7 @@ Score::FileError importPdf(MasterScore* score, const QString& path)
 
       Part* part   = new Part(score);
       OmrPage* omrPage = omr->pages().front();
-      
+
       //may need to identify maximal number of staff per system and then high some of those
       if (omrPage->systems().size() > 0) {
             for (int i = 0; i < omrPage->systems().front().staves().size(); i++) {

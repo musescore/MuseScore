@@ -1210,7 +1210,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
                               // but grace notes are exceptions
                               _up = true;
                               }
-                        else if (m1->mstaff(startCR()->staffIdx())->hasVoices && c1 && !c1->isGrace()) {
+                        else if (m1->hasVoices(startCR()->staffIdx()) && c1 && !c1->isGrace()) {
                               // in polyphonic passage, slurs go on the stem side
                               _up = startCR()->up();
                               }
@@ -1341,7 +1341,7 @@ void Slur::layout()
                         // but grace notes are exceptions
                         _up = true;
                         }
-                  else if (m1->mstaff(startCR()->staffIdx())->hasVoices && c1 && c1->noteType() == NoteType::NORMAL) {
+                  else if (m1->hasVoices(startCR()->staffIdx()) && c1 && c1->noteType() == NoteType::NORMAL) {
                         // in polyphonic passage, slurs go on the stem side
                         _up = startCR()->up();
                         }

@@ -395,7 +395,7 @@ void System::layout2()
                   qreal d = s1.minVerticalDistance(s2) + minVerticalDistance;
                   dist    = qMax(dist, d);
 
-                  Spacer* sp = m->mstaff(si1)->_vspacerDown;
+                  Spacer* sp = m->mstaff(si1)->vspacerDown();
                   if (sp) {
                         if (sp->spacerType() == SpacerType::FIXED) {
                               dist = staff->height() + sp->gap();
@@ -404,7 +404,7 @@ void System::layout2()
                         else
                               dist = qMax(dist, staff->height() + sp->gap());
                         }
-                  sp = m->mstaff(si2)->_vspacerUp;
+                  sp = m->mstaff(si2)->vspacerUp();
                   if (sp)
                         dist = qMax(dist, sp->gap());
                   }
@@ -1036,7 +1036,7 @@ qreal System::minDistance(System* s2) const
             if (mb1->isMeasure()) {
                   Measure* m = toMeasure(mb1);
                   Q_ASSERT(!m->mstaves().empty());
-                  Spacer* sp = m->mstaves().back()->_vspacerDown;
+                  Spacer* sp = m->mstaves().back()->vspacerDown();
                   if (sp) {
                         if (sp->spacerType() == SpacerType::FIXED) {
                               dist = sp->gap();
@@ -1053,7 +1053,7 @@ qreal System::minDistance(System* s2) const
                   if (mb2->isMeasure()) {
                         Measure* m = toMeasure(mb2);
                         Q_ASSERT(!m->mstaves().empty());
-                        Spacer* sp = m->mstaves().front()->_vspacerUp;
+                        Spacer* sp = m->mstaves().front()->vspacerUp();
                         if (sp)
                               dist = qMax(dist, sp->gap());
                         }
@@ -1079,7 +1079,7 @@ qreal System::minDistance(System* s2) const
                         Shape s1 = m1->staffShape(lastStaff).translated(m1->pos());
                         Shape s2 = m2->staffShape(0).translated(m2->pos());
                         qreal d  = s1.minVerticalDistance(s2) + minVerticalDistance;
-                        dist = qMax(dist, d - m1->mstaff(lastStaff)->lines->height());
+                        dist = qMax(dist, d - m1->mstaff(lastStaff)->lines()->height());
                         }
                   }
             }

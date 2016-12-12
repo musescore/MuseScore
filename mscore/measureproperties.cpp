@@ -149,14 +149,14 @@ void MeasureProperties::setMeasure(Measure* _m)
 
             item = new QTableWidgetItem(tr("visible"));
             item->setFlags(item->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-            item->setCheckState(ms->_visible ? Qt::Checked : Qt::Unchecked);
+            item->setCheckState(ms->visible() ? Qt::Checked : Qt::Unchecked);
             if (rows == 1)                // cannot be invisible if only one row
                   item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
             staves->setItem(staffIdx, 1, item);
 
             item = new QTableWidgetItem(tr("stemless"));
             item->setFlags(item->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-            item->setCheckState(ms->_slashStyle ? Qt::Checked : Qt::Unchecked);
+            item->setCheckState(ms->slashStyle() ? Qt::Checked : Qt::Unchecked);
             staves->setItem(staffIdx, 2, item);
             }
       }
