@@ -32,5 +32,20 @@ DMGFILE=applebuild/$PACKAGE_NAME-$DATE-$BRANCH-$REVISION.dmg
 
 mv applebuild/$PACKAGE_NAME-$BRANCH-$REVISION.dmg $DMGFILE
 
-scp -C -i $HOME/.ssh/osuosl_nighlies_rsa $DMGFILE musescore-nightlies@ftp-osl.osuosl.org:ftp/macosx
-ssh musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/macosx; ls MuseScoreNightly* -t | tail -n +41 | xargs rm; ~/trigger-musescore-nightlies"
+SSH_INDENTITY=$HOME/.ssh/osuosl_nighlies_rsa
+
+# transfer file
+scp -C -i $SSH_INDENTITY $DMGFILE musescore-nightlies@ftp-osl.osuosl.org:ftp/macosx
+
+# delete old files
+ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/macosx; ls MuseScoreNightly* -t | tail -n +41 | xargs rm"
+
+# create and upload index.html and RSS
+python build/travis/job_macos/updateHTML.py $SSH_INDENTITY
+scp -C -i $SSH_INDENTITY build/travis/job_macos/web/index.html musescore-nightlies@ftp-osl.osuosl.org:ftp/macosx
+scp -C -i $SSH_INDENTITY build/travis/job_macos/web/nightly.xml musescore-nightlies@ftp-osl.osuosl.org:ftp/macosx
+
+# trigger distribution
+ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
+
+
