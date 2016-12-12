@@ -83,6 +83,7 @@ class Spanner;
 class BarLine;
 enum class ClefType : signed char;
 enum class PlayEventType : char;
+class Excerpt;
 
 #define UNDO_NAME(a)  virtual const char* name() const override { return a; }
 

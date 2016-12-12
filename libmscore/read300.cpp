@@ -21,6 +21,7 @@
 #include "audio.h"
 #include "sig.h"
 #include "barline.h"
+#include "excerpt.h"
 
 #ifdef OMR
 #include "omr/omr.h"

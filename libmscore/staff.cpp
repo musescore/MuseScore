@@ -1367,16 +1367,5 @@ void Staff::scaleChanged(double oldVal, double newVal)
                   }
             }
       }
-
-//---------------------------------------------------------
-//   excerpt
-//    TODO:ws remove
-//---------------------------------------------------------
-
-Excerpt* Staff::excerpt() const
-      {
-      return score()->excerpt();
-      }
-
 }
 

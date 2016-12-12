@@ -26,7 +26,7 @@
 #include "stafftype.h"
 #include "groups.h"
 #include "scoreElement.h"
-#include "excerpt.h"
+// #include "excerpt.h"
 
 namespace Ms {
 
@@ -101,7 +101,6 @@ class Staff : public QObject, public ScoreElement {
 
    private:
       Part* _part       { 0 };
-//      Excerpt* _excerpt { 0 };
 
       ClefList clefs;
       ClefTypeList _defaultClefType;
@@ -153,8 +152,6 @@ class Staff : public QObject, public ScoreElement {
       void write(XmlWriter& xml) const;
       Part* part() const             { return _part;        }
       void setPart(Part* p)          { _part = p;           }
-
-      Excerpt* excerpt() const;     //       { return score()->excerpt();     }
 
       BracketType bracket(int idx) const;
       int bracketSpan(int idx) const;
