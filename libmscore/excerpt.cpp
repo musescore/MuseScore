@@ -551,6 +551,8 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                 // makes sure the 'other' spanner anchor element is already set up)
                                                 // 'on' is the old spanner end note and 'nn' is the new spanner end note
                                                 for (Spanner* oldSp : on->spannerBack()) {
+                                                      if (oldSp->startElement() && oldSp->endElement() && oldSp->startElement()->track() > oldSp->endElement()->track())
+                                                            continue;
                                                       Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
                                                       if (newStart != nullptr) {
                                                             Spanner* newSp = static_cast<Spanner*>(oldSp->linkedClone());
@@ -559,6 +561,19 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                             }
                                                       else {
                                                             qDebug("cloneStaves: cannot find spanner start note");
+                                                            }
+                                                      }
+                                                for (Spanner* oldSp : on->spannerFor()) {
+                                                      if (oldSp->startElement() && oldSp->endElement() && oldSp->startElement()->track() <= oldSp->endElement()->track())
+                                                            continue;
+                                                      Note* newEnd = Spanner::endElementFromSpanner(oldSp, nn);
+                                                      if (newEnd != nullptr) {
+                                                            Spanner* newSp = static_cast<Spanner*>(oldSp->linkedClone());
+                                                            newSp->setNoteSpan(nn, newEnd);
+                                                            score->addElement(newSp);
+                                                            }
+                                                      else {
+                                                            qDebug("cloneStaves: cannot find spanner end note");
                                                             }
                                                       }
                                                 }

@@ -235,8 +235,8 @@ class Note : public Element {
       QList<NoteDot*> _dots { 0, 0, 0 };
 
       NoteEventList _playEvents;
-      QList<Spanner*> _spannerFor;
-      QList<Spanner*> _spannerBack;
+      QVector<Spanner*> _spannerFor;
+      QVector<Spanner*> _spannerBack;
 
       virtual QRectF drag(EditData*) override;
       void endDrag();
@@ -406,12 +406,12 @@ class Note : public Element {
       NoteEvent* noteEvent(int idx)              { return &_playEvents[idx]; }
       void setPlayEvents(const NoteEventList& l) { _playEvents = l;    }
 
-      QList<Spanner*> spannerFor() const         { return _spannerFor;         }
-      QList<Spanner*> spannerBack() const        { return _spannerBack;        }
+      QVector<Spanner*> spannerFor() const         { return _spannerFor;         }
+      QVector<Spanner*> spannerBack() const        { return _spannerBack;        }
 
-      void addSpannerBack(Spanner* e)            { _spannerBack.push_back(e);  }
+      void addSpannerBack(Spanner* e)            { if (!_spannerBack.contains(e)) _spannerBack.push_back(e); }
       bool removeSpannerBack(Spanner* e)         { return _spannerBack.removeOne(e); }
-      void addSpannerFor(Spanner* e)             { _spannerFor.push_back(e);         }
+      void addSpannerFor(Spanner* e)             { if (!_spannerFor.contains(e)) _spannerFor.push_back(e);   }
       bool removeSpannerFor(Spanner* e)          { return _spannerFor.removeOne(e);  }
 
       void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
