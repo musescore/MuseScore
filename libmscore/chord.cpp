@@ -357,14 +357,12 @@ qreal Chord::stemPosX() const
 
 QPointF Chord::stemPos() const
       {
-      qreal _spatium = spatium();
       QPointF p(pagePos());
-
       if (staff() && staff()->isTabStaff())
-            return staff()->staffType()->chordStemPos(this) * _spatium + p;
+            return staff()->staffType()->chordStemPos(this) * spatium() + p;
 
       if (_up) {
-            qreal nhw = noteHeadWidth();
+            qreal nhw = _notes.size() == 1 ? downNote()->headWidth() : noteHeadWidth();
             p.rx() += nhw;
             p.ry() += downNote()->pos().y();
             }
