@@ -235,7 +235,7 @@ void StaffListItem::staffTypeChanged(int idx)
       PartListItem* pli = static_cast<PartListItem*>(QTreeWidgetItem::parent());
       pli->updateClefs();
 
-      if (_staff && _staff->staffType()->name() != stfType->name()) {
+      if (_staff && _staff->staffType(0)->name() != stfType->name()) {
             if (_op != ListItemOp::I_DELETE && _op != ListItemOp::ADD)
                   _op = ListItemOp::UPDATE;
             }
@@ -448,7 +448,7 @@ void InstrumentsWidget::genPartList(Score* cs)
       {
       partiturList->clear();
 
-      foreach(Part* p, cs->parts()) {
+      foreach (Part* p, cs->parts()) {
             PartListItem* pli = new PartListItem(p, partiturList);
             pli->setVisible(p->show());
             foreach (Staff* s, *p->staves()) {
@@ -468,7 +468,7 @@ void InstrumentsWidget::genPartList(Score* cs)
                               }
                         }
                   sli->setLinked(bLinked);
-                  sli->setStaffType(s->staffType());
+                  sli->setStaffType(s->staffType(0));    // TODO
                   }
             pli->updateClefs();
             partiturList->setItemExpanded(pli, true);

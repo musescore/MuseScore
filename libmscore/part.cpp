@@ -641,7 +641,7 @@ bool Part::hasPitchedStaff()
       if (!staves())
             return false;
       for (Staff* s : *staves()) {
-            if (s && s->isPitchedStaff())
+            if (s && s->isPitchedStaff(0))
                   return true;
             }
       return false;
@@ -656,7 +656,7 @@ bool Part::hasTabStaff()
       if (!staves())
             return false;
       for (Staff* s : *staves()) {
-            if (s && s->isTabStaff())
+            if (s && s->isTabStaff(0))
                   return true;
             }
       return false;
@@ -671,7 +671,7 @@ bool Part::hasDrumStaff()
       if (!staves())
             return false;
       for (Staff* s : *staves()) {
-            if (s && s->isDrumStaff())
+            if (s && s->isDrumStaff(0))
                   return true;
             }
       return false;

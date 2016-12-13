@@ -116,7 +116,7 @@ void Tuplet::layout()
             return;
             }
       // is in a TAB without stems, skip any format: tuplets are not shown
-      if (staff() && staff()->isTabStaff() && staff()->staffType()->slashStyle())
+      if (staff() && staff()->isTabStaff(tick()) && staff()->staffType(tick())->slashStyle())
             return;
 
       qreal _spatium = spatium();
@@ -582,7 +582,7 @@ void Tuplet::layout()
 void Tuplet::draw(QPainter* painter) const
       {
       // if in a TAB without stems, tuplets are not shown
-      if (staff() && staff()->isTabStaff() && staff()->staffType()->slashStyle())
+      if (staff() && staff()->isTabStaff(tick()) && staff()->staffType(tick())->slashStyle())
             return;
 
       QColor color(curColor());

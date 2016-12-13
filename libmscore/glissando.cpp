@@ -269,8 +269,8 @@ void Glissando::layout()
       int         upDown      = (0 < (anchor2->pitch() - anchor1->pitch())) - ((anchor2->pitch() - anchor1->pitch()) < 0);
       // on TAB's, glissando are by necessity on the same string, this gives an horizontal glissando line;
       // make bottom end point lower and top ending point higher
-      if (cr1->staff()->isTabStaff()) {
-                  qreal yOff = cr1->staff()->lineDistance() * 0.4 * _spatium;
+      if (cr1->staff()->isTabStaff(cr1->tick())) {
+                  qreal yOff = cr1->staff()->lineDistance(cr1->tick()) * 0.4 * _spatium;
                   offs1.ry() += yOff * upDown;
                   offs2.ry() -= yOff * upDown;
             }

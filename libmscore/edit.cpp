@@ -351,7 +351,7 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       setPlayNote(true);
       setPlayChord(true);
       select(note, SelectType::SINGLE, 0);
-      if (!chord->staff()->isTabStaff()) {
+      if (!chord->staff()->isTabStaff(chord->tick())) {
             NoteEntryMethod entryMethod = _is.noteEntryMethod();
             if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL)
                   _is.moveToNextInputPos();
@@ -876,7 +876,7 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
       NoteVal nval;
       const StringData* stringData = 0;
 
-      switch (st->staffType()->group()) {
+      switch (st->staffType(tick)->group()) {
             case StaffGroup::PERCUSSION: {
                   if (_is.rest()) {
                         error = true;

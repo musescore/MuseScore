@@ -1228,7 +1228,7 @@ void InspectorBarLine::presetShort1Clicked()
 
       bl->undoChangeProperty(P_ID::BARLINE_SPAN, 1);
       bl->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, BARLINE_SPAN_SHORT1_FROM);
-      int shortDelta = bl->staff() ? (bl->staff()->lines() - 5) * 2 : 0;
+      int shortDelta = bl->staff() ? (bl->staff()->lines(bl->tick()) - 5) * 2 : 0;
       bl->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   BARLINE_SPAN_SHORT1_TO + shortDelta);
 
       score->endCmd();
@@ -1247,7 +1247,7 @@ void InspectorBarLine::presetShort2Clicked()
 
       bl->undoChangeProperty(P_ID::BARLINE_SPAN, 1);
       bl->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, BARLINE_SPAN_SHORT2_FROM);
-      int shortDelta = bl->staff() ? (bl->staff()->lines() - 5) * 2 : 0;
+      int shortDelta = bl->staff() ? (bl->staff()->lines(bl->tick()) - 5) * 2 : 0;
       bl->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   BARLINE_SPAN_SHORT2_TO + shortDelta);
 
       score->endCmd();
@@ -1267,8 +1267,8 @@ void InspectorBarLine::manageSpanData()
       // determine MIN and MAX for SPANFROM and SPANTO
       Staff* staffFrom  = bl->staff();
       Staff* staffTo    = bl->score()->staff(bl->staffIdx() + bl->span() - 1);
-      int staffFromLines= (staffFrom ? staffFrom->lines() : 5);
-      int staffToLines  = (staffTo   ? staffTo->lines()   : 5);
+      int staffFromLines= (staffFrom ? staffFrom->lines(bl->tick()) : 5);
+      int staffToLines  = (staffTo   ? staffTo->lines(bl->tick())   : 5);
 
       // From:    min = minimum possible according to number of staff lines
       //          max = if same as To, at least 1sp (2 units) above To; if not, max possible according to num.of lines

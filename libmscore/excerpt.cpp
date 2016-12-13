@@ -146,8 +146,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             foreach (Staff* staff, *part->staves()) {
                   Staff* s = new Staff(score);
                   s->setPart(p);
-//ws:???                  s->setExcerpt(excerpt);
-                  s->setStaffType(staff->staffType());
+                  s->setStaffType(0, staff->staffType(0));              // TODO
                   s->setDefaultClefType(staff->defaultClefType());
                   score->undo(new LinkStaff(s, staff));
                   p->staves()->append(s);
@@ -206,7 +205,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
       // handle transposing instruments
       if (oscore->styleB(StyleIdx::concertPitch) != score->styleB(StyleIdx::concertPitch)) {
             for (Staff* staff : score->staves()) {
-                  if (staff->staffType()->group() == StaffGroup::PERCUSSION)
+                  if (staff->staffType(0)->group() == StaffGroup::PERCUSSION)
                         continue;
 
                   // if this staff has no transposition, and no instrument changes, we can skip it
@@ -797,7 +796,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               // only clone clef if it matches staff group and does not exists yet
                               Clef* clef = static_cast<Clef*>(oe);
                               int   tick = seg->tick();
-                              if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->staffGroup()
+                              if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->staffType(0)->group()
                                           && dstStaff->clefType(tick) != clef->clefTypeList()) {
                                     ne = oe->clone();
                                     }

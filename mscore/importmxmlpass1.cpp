@@ -908,7 +908,7 @@ Score::FileError MusicXMLParserPass1::parse()
 static bool allStaffGroupsIdentical(Part const* const p)
       {
       for (int i = 1; i < p->nstaves(); ++i) {
-            if (p->staff(0)->staffGroup() != p->staff(i)->staffGroup())
+            if (p->staff(0)->staffType(0)->group() != p->staff(i)->staffType(0)->group())
                   return false;
             }
       return true;
@@ -2142,7 +2142,7 @@ void MusicXMLParserPass1::clef(const QString& partId)
       // TODO: changed for #55501, but now staff type init is shared between pass 1 and 2
       // old code: if (0 <= n && n < staves && staffType != StaffTypes::STANDARD)
       if (0 <= n && n < staves && staffType == StaffTypes::TAB_DEFAULT)
-            _score->staff(staffIdx + n)->setStaffType(StaffType::preset(staffType));
+            _score->staff(staffIdx + n)->setStaffType(0, StaffType::preset(staffType));
       }
 
 //---------------------------------------------------------
@@ -2263,7 +2263,7 @@ void MusicXMLParserPass1::divisions()
 
 static void setStaffLines(Score* score, int staffIdx, int stafflines)
       {
-      score->staff(staffIdx)->setLines(stafflines);
+      score->staff(staffIdx)->setLines(0, stafflines);
       score->staff(staffIdx)->setBarLineTo((stafflines - 1) * 2);
       }
 
@@ -2298,7 +2298,7 @@ void MusicXMLParserPass1::staffDetails(const QString& partId)
       int staffIdx = _score->staffIdx(part) + n;
 
       StringData* t = 0;
-      if (_score->staff(staffIdx)->isTabStaff()) {
+      if (_score->staff(staffIdx)->isTabStaff(0)) {
             t = new StringData;
             t->setFrets(25);       // sensible default
             }

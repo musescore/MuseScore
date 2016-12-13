@@ -23,10 +23,9 @@
 #include "pitch.h"
 #include "cleflist.h"
 #include "keylist.h"
-#include "stafftype.h"
+#include "stafftypelist.h"
 #include "groups.h"
 #include "scoreElement.h"
-// #include "excerpt.h"
 
 namespace Ms {
 
@@ -124,8 +123,8 @@ class Staff : public QObject, public ScoreElement {
       qreal _userDist          { 0.0   };       ///< user edited extra distance
       qreal _userMag           { 1.0   };       // allowed 0.1 - 10.0
 
-      StaffType _staffType;
-      LinkedStaves* _linkedStaves { nullptr };
+      StaffTypeList _staffTypeList;
+      LinkedStaves* _linkedStaves { 0 };
       QMap<int,int> _channelList[VOICES];
       QMap<int,SwingParameters> _swingList;
       bool _playbackVoice[VOICES] { true, true, true, true };
@@ -191,7 +190,7 @@ class Staff : public QObject, public ScoreElement {
       void removeKey(int tick);
 
       bool show() const;
-      bool slashStyle() const;
+      bool slashStyle(int tick) const;
       bool small() const             { return _small;       }
       void setSmall(bool val)        { _small = val;        }
       bool invisible() const         { return _invisible;   }
@@ -206,14 +205,10 @@ class Staff : public QObject, public ScoreElement {
       HideMode hideWhenEmpty() const      { return _hideWhenEmpty;     }
       void setHideWhenEmpty(HideMode v)   { _hideWhenEmpty = v;        }
 
-      void setSlashStyle(bool val);
-      int lines() const;
-      void setLines(int);
-      qreal lineDistance() const;
-      qreal logicalLineDistance() const;
-      bool scaleNotesToLines() const;
-      int middleLine() const;
-      int bottomLine() const;
+      void setSlashStyle(int tick, bool val);
+      bool scaleNotesToLines(int tick) const;
+      int middleLine(int tick) const;
+      int bottomLine(int tick) const;
       int barLineSpan() const        { return _barLineSpan; }
       int barLineFrom() const        { return _barLineFrom; }
       int barLineTo() const          { return _barLineTo;   }
@@ -228,14 +223,18 @@ class Staff : public QObject, public ScoreElement {
       SwingParameters swing(int tick)  const;
       QMap<int,SwingParameters>* swingList() { return &_swingList; }
 
-      const StaffType* staffType() const { return &_staffType;      }
-      StaffType* staffType()             { return &_staffType;      }
+      const StaffType* staffType(int tick) const;
+      StaffType* staffType(int tick);
+      void setStaffType(int tick, const StaffType* st);
 
-      void setStaffType(const StaffType* st);
-      StaffGroup staffGroup() const    { return _staffType.group(); }
-      bool isPitchedStaff() const      { return staffGroup() == StaffGroup::STANDARD; }
-      bool isTabStaff() const          { return staffGroup() == StaffGroup::TAB; }
-      bool isDrumStaff() const         { return staffGroup() == StaffGroup::PERCUSSION; }
+      bool isPitchedStaff(int tick) const;
+      bool isTabStaff(int tick) const;
+      bool isDrumStaff(int tick) const;
+
+      int lines(int tick) const;
+      void setLines(int tick, int lines);
+      qreal lineDistance(int tick) const;
+      qreal logicalLineDistance(int tick) const;
 
       VeloList& velocities()           { return _velocities;     }
       PitchList& pitchOffsets()        { return _pitchOffsets;   }
@@ -258,7 +257,7 @@ class Staff : public QObject, public ScoreElement {
 
       void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
       bool genKeySig();
-      bool showLedgerLines();
+      bool showLedgerLines(int tick);
 
       QColor color() const                { return _color; }
       void setColor(const QColor& val)    { _color = val;    }

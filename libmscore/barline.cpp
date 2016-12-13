@@ -273,9 +273,9 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                         yp = sysStaff1a ? sysStaff1a->y() : sysStaff1->y();
                         }
                   *y1 = l1->y1() - yp;
-                  *y1 += (_spanFrom * staff1->lineDistance() * staff1->spatium()) / 2;
+                  *y1 += (_spanFrom * staff1->lineDistance(tick()) * staff1->spatium()) / 2;
                   *y2 = l2->y1() - yp;
-                  *y2 += (_spanTo   * staff2->lineDistance() * staff2->spatium()) / 2;
+                  *y2 += (_spanTo   * staff2->lineDistance(tick()) * staff2->spatium()) / 2;
                   }
             }
       else {
@@ -325,7 +325,7 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
                   Staff* staff  = score()->staff(staffIdx1 + i);
                   SysStaff* sysStaff = system->staff(staffIdx1 + i);
                   if (sysStaff->show()) {
-                        StaffType* st = staff->staffType();
+                        StaffType* st = staff->staffType(tick());
                         qreal doty1   = (st->doty1() + .5) * _spatium;
                         qreal doty2   = (st->doty2() + .5) * _spatium;
 
@@ -603,7 +603,7 @@ Element* BarLine::drop(const DropData& data)
                   if (bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) {
                         // if dropped spanFrom or spanTo are below the middle of standard staff (5 lines)
                         // adjust to the number of syaff lines
-                        int bottomSpan = (staff()->lines()-1) * 2;
+                        int bottomSpan = (staff()->lines(tick())-1) * 2;
                         int spanFrom   = bl->spanFrom() > 4 ? bottomSpan - (8 - bl->spanFrom()) : bl->spanFrom();
                         int spanTo     = bl->spanTo() > 4 ? bottomSpan - (8 - bl->spanTo()) : bl->spanTo();
                         score()->undoChangeSingleBarLineSpan(this, 1, spanFrom, spanTo);
@@ -777,7 +777,7 @@ void BarLine::endEdit()
                               Staff* staff = score()->staff(idx);
                               staff->undoChangeProperty(P_ID::BARLINE_SPAN,      0);
                               staff->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, 0);
-                              staff->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   (staff->lines()-1)*2);
+                              staff->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   (staff->lines(tick())-1)*2);
                               }
                         }
                   }
@@ -788,7 +788,7 @@ void BarLine::endEdit()
                   // set standard span for each no-longer-spanned staff
                   for (int idx = idx1; idx < idx2; ++idx) {
                         Staff* staff = score()->staff(idx);
-                        int lines = staff->lines();
+                        int lines = staff->lines(tick());
                         int spanFrom = lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
                         int spanTo = lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (lines - 1) * 2;
                         staff->undoChangeProperty(P_ID::BARLINE_SPAN,      1);
@@ -810,7 +810,7 @@ void BarLine::endEdit()
 
 void BarLine::editDrag(const EditData& ed)
       {
-      qreal lineDist = staff()->lineDistance() * spatium();
+      qreal lineDist = staff()->lineDistance(tick()) * spatium();
       qreal min, max, lastmax, y1, y2;
       getY(&y1, &y2);
       y1 -= yoff1;                  // current positions of barline ends, ignoring any in-process dragging
@@ -818,9 +818,10 @@ void BarLine::editDrag(const EditData& ed)
       if (ed.curGrip == Grip::START) {
             // min offset for top grip is line -1 (-2 for 1-line staves)
             // max offset is 1 line above bottom grip or 1 below last staff line, whichever comes first
-            min = -y1 - (staff()->lines() == 1 ? lineDist * 2 : lineDist);
+            int lines = staff()->lines(tick());
+            min = (-y1 - lines == 1) ? lineDist * 2 : lineDist;
             max = y2 - y1 - lineDist;                                   // 1 line above bottom grip
-            lastmax = (staff()->lines() - _spanFrom/2) * lineDist;      // 1 line below last staff line
+            lastmax = (lines - _spanFrom/2) * lineDist;      // 1 line below last staff line
             if (lastmax < max)
                   max = lastmax;
             // update yoff1 and bring it within limits
@@ -873,7 +874,7 @@ void BarLine::endEditDrag()
             for (staffIdx2 = staffIdx1 + 1; staffIdx2 < numOfStaves; ++staffIdx2) {
                   // compute 1st staff height, absolute top Y of 2nd staff and height of blank between the staves
                   Staff * staff1      = score()->staff(staffIdx2-1);
-                  qreal staff1Hght    = (staff1->lines()-1) * staff1->lineDistance() * spatium();
+                  qreal staff1Hght    = (staff1->lines(tick())-1) * staff1->lineDistance(tick()) * spatium();
                   qreal staff2TopY    = systTopY   + syst->staff(staffIdx2)->y();
                   qreal blnkBtwnStaff = staff2TopY - staff1TopY - staff1Hght;
                   // if bar line bottom coord is above than mid-way of blank between staves...
@@ -889,14 +890,14 @@ void BarLine::endEditDrag()
       // determine new spanFrom and spanTo values
       int newSpanFrom, newSpanTo;
       Staff * staff2    = score()->staff(staffIdx2);
-      int staff1lines   = staff()->lines();
-      int staff2lines   = staff2->lines();
+      int staff1lines   = staff()->lines(tick());
+      int staff2lines   = staff2->lines(tick());
 
       if (shiftDrag) {                    // if precision dragging
             newSpanFrom = _spanFrom;
             if (yoff1 != 0.0) {
                   // round bar line top coord to nearest line of 1st staff (in half line dist units)
-                  newSpanFrom = ((int)floor(y1 / (staff()->lineDistance() * spatium()) + 0.5 )) * 2;
+                  newSpanFrom = ((int)floor(y1 / (staff()->lineDistance(tick()) * spatium()) + 0.5 )) * 2;
                   // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
                   // except for 1-line staves
                   int minFrom = staff1lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO;
@@ -910,7 +911,7 @@ void BarLine::endEditDrag()
             if (yoff2 != 0.0) {
                   // round bar line bottom coord to nearest line of 2nd staff (in half line dist units)
                   qreal staff2TopY = systTopY + syst->staff(staffIdx2)->y();
-                  newSpanTo = ((int)floor( (ay2 - staff2TopY) / (staff2->lineDistance() * spatium()) + 0.5 )) * 2;
+                  newSpanTo = ((int)floor( (ay2 - staff2TopY) / (staff2->lineDistance(tick()) * spatium()) + 0.5 )) * 2;
                   // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
                   int maxTo = staff2lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : staff2lines * 2;
                   if (newSpanTo <  MIN_BARLINE_SPAN_FROMTO)
@@ -989,7 +990,7 @@ void BarLine::layout()
       getY(&y1, &y2);
 
       // if bar line has a staff and staff is set to hide bar lines, set null bbox
-      if (staff() && !staff()->staffType()->showBarlines())
+      if (staff() && !staff()->staffType(tick())->showBarlines())
             setbbox(QRectF());
       else {
             // bar lines not hidden

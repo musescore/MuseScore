@@ -269,7 +269,7 @@ void Score::putNote(const Position& p, bool replace)
             return;
 
       const StringData* stringData = 0;
-      switch (st->staffType()->group()) {
+      switch (st->staffType(s->tick())->group()) {
             case StaffGroup::PERCUSSION: {
                   const Drumset* ds = st->part()->instrument(s->tick())->drumset();
                   stemDirection     = ds->stemDirection(nval.pitch);
@@ -296,7 +296,7 @@ void Score::putNote(const Position& p, bool replace)
                && cr->isChord()
                && !_is.rest())
                   {
-                  if (st->isTabStaff()) {      // TAB
+                  if (st->isTabStaff(cr->tick())) {      // TAB
                         // if a note on same string already exists, update to new pitch/fret
                         foreach (Note* note, toChord(cr)->notes())
                               if (note->string() == nval.string) {       // if string is the same
@@ -343,7 +343,7 @@ void Score::putNote(const Position& p, bool replace)
                   nval.pitch = -1;
             setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction(), stemDirection);
             }
-      if (!st->isTabStaff())
+      if (!st->isTabStaff(cr->tick()))
             _is.moveToNextInputPos();
       }
 

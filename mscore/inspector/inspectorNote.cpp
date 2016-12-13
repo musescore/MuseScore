@@ -62,7 +62,7 @@ InspectorNote::InspectorNote(QWidget* parent)
             NoteHead::Group::HEAD_LA,
             NoteHead::Group::HEAD_TI
             };
-            
+
       //
       // fix order of noteheads
       //
@@ -125,7 +125,7 @@ void InspectorNote::setElement()
       n.hook->setEnabled(note->chord()->hook());
       n.beam->setEnabled(note->chord()->beam());
       n.tuplet->setEnabled(note->chord()->tuplet());
-      n.noteHeadGroup->setEnabled(note->chord()->staff()->isPitchedStaff() && note->chord()->staff()->staffType()->noteHeadScheme() == NoteHeadScheme::HEAD_NORMAL);
+      n.noteHeadGroup->setEnabled(note->chord()->staff()->isPitchedStaff(note->tick()) && note->chord()->staff()->staffType(note->tick())->noteHeadScheme() == NoteHeadScheme::HEAD_NORMAL);
       InspectorElementBase::setElement();
       bool nograce = !note->chord()->isGrace();
       s.leadingSpace->setEnabled(nograce);

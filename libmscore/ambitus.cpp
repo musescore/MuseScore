@@ -284,8 +284,8 @@ void Ambitus::layout()
       if (segm && track() > -1) {
             int tick    = segm->tick();
             stf         = score()->staff(staffIdx());
-            lineDist    = stf->lineDistance() * _spatium;
-            numOfLines  = stf->lines();
+            lineDist    = stf->lineDistance(tick) * _spatium;
+            numOfLines  = stf->lines(tick);
             clf         = stf->clef(tick);
             }
       else {                              // for use in palettes
@@ -445,9 +445,10 @@ void Ambitus::draw(QPainter* p) const
 
       // draw ledger lines (if not in a palette)
       if (segment() && track() > -1) {
+            int tick          = segment()->tick();
             Staff* stf        = score()->staff(staffIdx());
-            qreal lineDist    = stf->lineDistance();
-            int numOfLines    = stf->lines();
+            qreal lineDist    = stf->lineDistance(tick);
+            int numOfLines    = stf->lines(tick);
             qreal step        = lineDist * _spatium;
             qreal stepTolerance = step * 0.1;
             qreal ledgerOffset = score()->styleS(StyleIdx::ledgerLineLength).val() * 0.5 * _spatium;

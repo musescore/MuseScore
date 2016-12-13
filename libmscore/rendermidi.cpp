@@ -979,7 +979,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
                         }
                   }
             if (!done) {
-                  if (staffL->isPitchedStaff()) {
+                  if (staffL->isPitchedStaff(segment->tick())) {
                         bool error = false;
                         AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->staff()->idx(), lineR2, error);
                         int acci2 = int(acciv2);
@@ -1256,7 +1256,7 @@ vector<OrnamentExcursion> excursions = {
 
 bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, SymId articulationType, MScore::OrnamentStyle ornamentStyle)
       {
-      if (!note->staff()->isPitchedStaff()) // not enough info in tab staff
+      if (!note->staff()->isPitchedStaff(note->tick())) // not enough info in tab staff
             return false;
 
       vector<int> emptypattern = {};
@@ -1415,7 +1415,7 @@ bool graceNotesMerged(Chord* chord)
 //   renderChordArticulation
 //---------------------------------------------------------
 
-void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gateTime)
+void renderChordArticulation(Chord* chord, QList<NoteEventList> & ell, int & gateTime)
       {
       Segment* seg = chord->segment();
       Instrument* instr = chord->part()->instrument(seg->tick());
@@ -1428,7 +1428,7 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
 
             if (noteHasGlissando(note))
                   renderGlissando(events, note);
-            else if (chord->staff()->isPitchedStaff()  && (trill = findFirstTrill(chord)) != nullptr) {
+            else if (chord->staff()->isPitchedStaff(chord->tick())  && (trill = findFirstTrill(chord)) != nullptr) {
                   renderNoteArticulation(events, note, false, trill->trillType(), trill->ornamentStyle());
                   }
             else {

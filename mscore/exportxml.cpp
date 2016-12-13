@@ -1339,8 +1339,8 @@ static void unpitch2xml(const Note* note, QString& s, int& octave)
       // 3 line staff: 2, 4, 6       -> correction 2
       // 5 line staff: 0, 2, 4, 6, 8 -> correction 0
       // TODO handle other # staff lines ?
-      if (st->lines() == 1) line5g += 8;
-      if (st->lines() == 3) line5g += 2;
+      if (st->lines(0) == 1) line5g += 8;
+      if (st->lines(0) == 3) line5g += 2;
       // index in table1 to get step
       int stepIdx     = (line5g + 700) % 7;
       // get step
@@ -2444,7 +2444,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
             QString step;
             int alter = 0;
             int octave = 0;
-            if (chord->staff() && chord->staff()->isTabStaff()) {
+            if (chord->staff() && chord->staff()->isTabStaff(0)) {
                   tabpitch2xml(note->pitch(), note->tpc(), step, alter, octave);
                   }
             else {
@@ -2717,7 +2717,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
                   }
 
             // write tablature string / fret
-            if (chord->staff() && chord->staff()->isTabStaff())
+            if (chord->staff() && chord->staff()->isTabStaff(0))
                   if (note->fret() >= 0 && note->string() >= 0) {
                         notations.tag(xml);
                         technical.tag(xml);
@@ -4946,13 +4946,13 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
       //       currently exported as a two staff part ...
       for (int i = 0; i < staves; i++) {
             Staff* st = part->staff(i);
-            if (st->lines() != 5 || st->isTabStaff()) {
+            if (st->lines(0) != 5 || st->isTabStaff(0)) {
                   if (staves > 1)
                         xml.stag(QString("staff-details number=\"%1\"").arg(i+1));
                   else
                         xml.stag("staff-details");
-                  xml.tag("staff-lines", st->lines());
-                  if (st->isTabStaff() && instrument->stringData()) {
+                  xml.tag("staff-lines", st->lines(0));
+                  if (st->isTabStaff(0) && instrument->stringData()) {
                         QList<instrString> l = instrument->stringData()->stringList();
                         for (int i = 0; i < l.size(); i++) {
                               char step  = ' ';

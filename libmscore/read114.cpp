@@ -1099,9 +1099,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         clef->setUserOff(QPointF());
                   clef->setGenerated(false);
                   // MS3 doesn't support wrong clef for staff type: Default to G
+                  bool isDrumStaff = staff->isDrumStaff(e.tick());
                   if (clef->clefType() == ClefType::TAB
-                      || (clef->clefType() == ClefType::PERC && !staff->isDrumStaff())
-                      || (clef->clefType() != ClefType::PERC && staff->isDrumStaff())) {
+                      || (clef->clefType() == ClefType::PERC && !isDrumStaff)
+                      || (clef->clefType() != ClefType::PERC && isDrumStaff)) {
                         clef->setClefType(ClefType::G);
                         staff->clefList().erase(e.tick());
                         staff->clefList().insert(std::pair<int,ClefType>(e.tick(), ClefType::G));
@@ -1435,7 +1436,7 @@ static void readStaff(Staff* staff, XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "lines") {
                   int lines = e.readInt();
-                  staff->setLines(lines);
+                  staff->setLines(0, lines);
                   if (lines != 5) {
                         staff->setBarLineFrom(lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
                         staff->setBarLineTo(lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO   : (lines - 1) * 2);
@@ -1601,9 +1602,9 @@ static void readPart(Part* part, XmlReader& e)
                         }
                   Drumset* d = i->drumset();
                   Staff*   st = part->staff(0);
-                  if (d && st && st->lines() != 5) {
+                  if (d && st && st->lines(0) != 5) {
                         int n = 0;
-                        if (st->lines() == 1)
+                        if (st->lines(0) == 1)
                               n = 4;
                         for (int  i = 0; i < DRUM_INSTRUMENTS; ++i)
                               d->drum(i).line -= n;
@@ -1633,17 +1634,17 @@ static void readPart(Part* part, XmlReader& e)
 
       if (part->instrument()->useDrumset()) {
             for (Staff* staff : *part->staves()) {
-                  int lines = staff->lines();
+                  int lines = staff->lines(0);
                   int bf    = staff->barLineFrom();
                   int bt    = staff->barLineTo();
-                  staff->setStaffType(StaffType::getDefaultPreset(StaffGroup::PERCUSSION));
+                  staff->setStaffType(0, StaffType::getDefaultPreset(StaffGroup::PERCUSSION));
 
                   // this allows 2/3-line percussion staves to keep the double spacing they had in 1.3
 
                   if (lines == 2 || lines == 3)
-                        staff->staffType()->setLineDistance(Spatium(2.0));
+                        staff->staffType(0)->setLineDistance(Spatium(2.0));
 
-                  staff->setLines(lines);       // this also sets stepOffset
+                  staff->setLines(0, lines);       // this also sets stepOffset
                   staff->setBarLineFrom(bf);
                   staff->setBarLineTo(bt);
                   }
@@ -2218,7 +2219,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                                     Rest* r = toRest(cr);
                                     if (!r->userOff().isNull()) {
                                           int lineOffset = r->computeLineOffset();
-                                          qreal lineDist = r->staff() ? r->staff()->staffType()->lineDistance().val() : 1.0;
+                                          qreal lineDist = r->staff() ? r->staff()->staffType(cr->tick())->lineDistance().val() : 1.0;
                                           r->rUserYoffset() -= (lineOffset * .5 * lineDist * r->spatium());
                                           }
                                     }

@@ -1462,15 +1462,15 @@ void ScoreView::moveCursor()
       qreal mag               = _spatium / SPATIUM20;
       double w                = _spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag);
       Staff* staff            = score()->staff(staffIdx);
-      StaffType* staffType    = staff->staffType();
+      StaffType* staffType    = staff->staffType(is.tick());
       double lineDist         = staffType->lineDistance().val() * _spatium;
-      int lines               = staff->lines();
+      int lines               = staffType->lines();
       int strg                = is.string();          // strg refers to an instrument physical string
       x                       -= _spatium;
       int instrStrgs          = staff->part()->instrument()->stringData()->strings();
       // if on a TAB staff and InputState::_string makes sense,
       // draw cursor around single string
-      if (staff->isTabStaff() && strg >= 0 && strg <= instrStrgs) {
+      if (staff->isTabStaff(is.tick()) && strg >= 0 && strg <= instrStrgs) {
             h = lineDist;                 // cursor height is one full line distance
             y += staffType->physStringToYOffset(strg) * _spatium;
             // if frets are on lines, centre on string; if frets are above lines, 'sit' above string
@@ -1641,16 +1641,16 @@ void ScoreView::setShadowNote(const QPointF& p)
             }
       // in any empty measure, pos will be right next to barline
       // so pad this by barNoteDistance
-      qreal mag = score()->staff(pos.staffIdx)->mag();
-      qreal relX = pos.pos.x() - pos.segment->measure()->canvasPos().x();
+      qreal mag     = score()->staff(pos.staffIdx)->mag();
+      qreal relX    = pos.pos.x() - pos.segment->measure()->canvasPos().x();
       pos.pos.rx() -= qMin(relX - score()->styleP(StyleIdx::barNoteDistance) * mag, 0.0);
 
       shadowNote->setVisible(true);
-      Staff* staff      = score()->staff(pos.staffIdx);
+      Staff* staff = score()->staff(pos.staffIdx);
       shadowNote->setMag(staff->mag());
-      const Instrument* instr     = staff->part()->instrument();
+      const Instrument* instr       = staff->part()->instrument();
       NoteHead::Group noteheadGroup = NoteHead::Group::HEAD_NORMAL;
-      int line                    = pos.line;
+      int line                      = pos.line;
       NoteHead::Type noteHead       = is.duration().headType();
 
       if (instr->useDrumset()) {
@@ -1677,7 +1677,7 @@ void ScoreView::setShadowNote(const QPointF& p)
             int yo;
             Rest rest(gscore, d.type());
             rest.setDuration(d.fraction());
-            symNotehead = rest.getSymbol(is.duration().type(), 0, staff->lines(), &yo);
+            symNotehead = rest.getSymbol(is.duration().type(), 0, staff->lines(pos.segment->tick()), &yo);
             shadowNote->setState(symNotehead, voice, d, true);
             }
       else {
@@ -3296,7 +3296,7 @@ void ScoreView::cmd(const QAction* a)
             int         instrStrgs  = staff->part()->instrument()->stringData()->strings();
             // assume "string-below": if tab is upside-down, 'below' means toward instrument top (-1)
             // if not, 'below' means toward instrument bottom (+1)
-            int         delta       = (staff->staffType()->upsideDown() ? -1 : +1);
+            int         delta       = (staff->staffType(is.tick())->upsideDown() ? -1 : +1);
             if (cmd == "string-above")                      // if "above", reverse delta
                   delta = -delta;
             int         strg        = is.string() + delta;  // dest. physical string
@@ -3496,7 +3496,7 @@ void ScoreView::startNoteEntry()
       _score->update();
 
       Staff* staff = _score->staff(is.track() / VOICES);
-      switch (staff->staffType()->group()) {
+      switch (staff->staffType(is.tick())->group()) {
             case StaffGroup::STANDARD:
                   break;
             case StaffGroup::TAB: {
@@ -4300,7 +4300,7 @@ ScoreState ScoreView::mscoreState() const
       if (sm->configuration().contains(states[NOTE_ENTRY])) {
             const InputState is = _score->inputState();
             Staff* staff = _score->staff(is.track() / VOICES);
-            switch( staff->staffType()->group()) {
+            switch( staff->staffType(is.tick())->group()) {
                   case StaffGroup::STANDARD:
                         return STATE_NOTE_ENTRY_STAFF_PITCHED;
                   case StaffGroup::TAB:
@@ -4663,7 +4663,7 @@ void ScoreView::cmdChangeEnharmonic(bool up)
             Staff* staff = n->staff();
             if (staff->part()->instrument()->useDrumset())
                   continue;
-            if (staff->isTabStaff()) {
+            if (staff->isTabStaff(n->tick())) {
                   int string = n->line() + (up ? 1 : -1);
                   int fret   = staff->part()->instrument()->stringData()->fret(n->pitch(), string, staff, n->chord()->tick());
                   if (fret != -1) {

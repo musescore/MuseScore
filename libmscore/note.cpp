@@ -810,7 +810,7 @@ SymId Note::noteHead() const
       NoteHeadScheme scheme = NoteHeadScheme::HEAD_NORMAL;
       if (chord() && chord()->staff() && chord()->tick() >= 0){
             key = chord()->staff()->key(chord()->tick());
-            scheme = chord()->staff()->staffType()->noteHeadScheme();
+            scheme = chord()->staff()->staffType(tick())->noteHeadScheme();
             }
       SymId t = noteHead(up, _headGroup, ht, tpc(), key, scheme);
       if (t == SymId::noSym) {
@@ -1051,7 +1051,7 @@ void Note::remove(Element* e)
 bool Note::isNoteName() const
       {
       if (chord() && chord()->staff()) {
-            NoteHeadScheme s = chord()->staff()->staffType()->noteHeadScheme();
+            NoteHeadScheme s = chord()->staff()->staffType(tick())->noteHeadScheme();
             return s == NoteHeadScheme::HEAD_PITCHNAME || s == NoteHeadScheme::HEAD_PITCHNAME_GERMAN || s == NoteHeadScheme::HEAD_SOLFEGE || s == NoteHeadScheme::HEAD_SOLFEGE_FIXED;
             }
       return false;
@@ -1068,12 +1068,12 @@ void Note::draw(QPainter* painter) const
 
       QColor c(curColor());
       painter->setPen(c);
-      bool tablature = staff() && staff()->isTabStaff();
+      bool tablature = staff() && staff()->isTabStaff(chord()->tick());
 
       // tablature
 
       if (tablature) {
-            StaffType* tab = staff()->staffType();
+            StaffType* tab = staff()->staffType(tick());
             if (tieBack() && !tab->showBackTied())    // skip back-tied notes if not shown
                   return;
             QString s;
@@ -1442,14 +1442,14 @@ bool Note::readProperties(XmlReader& e)
 
 QRectF Note::drag(EditData* data)
       {
-      if (staff()->isDrumStaff())
+      if (staff()->isDrumStaff(tick()))
             return QRect();
       dragMode = true;
       QRectF bb(chord()->bbox());
 
       qreal _spatium = spatium();
-      bool tab       = staff()->isTabStaff();
-      qreal step     = _spatium * (tab ? staff()->staffType()->lineDistance().val() : 0.5);
+      bool tab       = staff()->isTabStaff(chord()->tick());
+      qreal step     = _spatium * (tab ? staff()->staffType(tick())->lineDistance().val() : 0.5);
       _lineOffset    = lrint(data->delta.y() / step);
       triggerLayout();
       return bb.translated(chord()->pagePos());
@@ -1479,12 +1479,12 @@ void Note::endDrag()
       Staff* staff = score()->staff(staffIdx);
       int tick     = chord()->tick();
 
-      if (staff->isTabStaff()) {
+      if (staff->isTabStaff(tick)) {
             // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
             // determine new string of dragged note (if tablature is upside down, invert _lineOffset)
             // and fret for the same pitch on the new string
             const StringData* strData = staff->part()->instrument()->stringData();
-            int nString = _string + (staff->staffType()->upsideDown() ? -_lineOffset : _lineOffset);
+            int nString = _string + (staff->staffType(tick)->upsideDown() ? -_lineOffset : _lineOffset);
             int nFret   = strData->fret(_pitch, nString, staff, tick);
             if (nFret < 0)                      // no fret?
                   return;                       // no party!
@@ -1670,7 +1670,7 @@ Element* Note::drop(const DropData& data)
                               for (ScoreElement* e : *links()) {
                                     e->undoChangeProperty(P_ID::HEAD_GROUP, int(group));
                                     Note* note = static_cast<Note*>(e);
-                                    if (note->staff() && note->staff()->isTabStaff() && group == NoteHead::Group::HEAD_CROSS)
+                                    if (note->staff() && note->staff()->isTabStaff(ch->tick()) && group == NoteHead::Group::HEAD_CROSS)
                                           e->undoChangeProperty(P_ID::GHOST, true);
                                     }
                               }
@@ -1771,7 +1771,7 @@ Element* Note::drop(const DropData& data)
 
                   // this is the glissando initial note, look for a suitable final note
                   Note* finalNote = Glissando::guessFinalNote(chord());
-                  if (finalNote != nullptr) {
+                  if (finalNote) {
                         // init glissando data
                         Glissando* gliss = toGlissando(e);
                         gliss->setAnchor(Spanner::Anchor::NOTE);
@@ -1782,7 +1782,7 @@ Element* Note::drop(const DropData& data)
                         gliss->setTrack(track());
                         gliss->setTrack2(finalNote->track());
                         // in TAB, use straight line with no text
-                        if (staff()->isTabStaff()) {
+                        if (staff()->isTabStaff(finalNote->chord()->tick())) {
                               gliss->setGlissandoType(Glissando::Type::STRAIGHT);
                               gliss->setShowText(false);
                               }
@@ -1847,10 +1847,10 @@ void Note::setDotY(Direction pos)
       bool onLine = false;
       qreal y = 0;
 
-      if (staff()->isTabStaff()) {
+      if (staff()->isTabStaff(chord()->tick())) {
             // with TAB's, dotPosX is not set:
             // get dot X from width of fret text and use TAB default spacing
-            StaffType* tab = staff()->staffType();
+            StaffType* tab = staff()->staffType(tick());
             if (tab->stemThrough() ) {
                   // if fret mark on lines, use standard processing
                   if (tab->onLines())
@@ -1882,7 +1882,7 @@ void Note::setDotY(Direction pos)
             else if (pos == Direction::DOWN && oddVoice)
                   y += 1.0;
             }
-      y *= spatium() * staff()->lineDistance();
+      y *= spatium() * staff()->lineDistance(tick());
 
       // apply to dots
 
@@ -1913,9 +1913,9 @@ void Note::setDotY(Direction pos)
 
 void Note::layout()
       {
-      bool useTablature = staff() && staff()->isTabStaff();
+      bool useTablature = staff() && staff()->isTabStaff(chord()->tick());
       if (useTablature) {
-            StaffType* tab = staff()->staffType();
+            StaffType* tab = staff()->staffType(tick());
             qreal mags = magS();
             qreal w = tabHeadWidth(tab);
             bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
@@ -1948,7 +1948,7 @@ void Note::layout2()
       {
       // for standard staves this is done in Score::layoutChords3()
       // so that the results are available there
-      if (staff()->isTabStaff())
+      if (staff()->isTabStaff(chord()->tick()))
             adjustReadPos();
 
       int dots = chord()->dots();
@@ -1957,8 +1957,8 @@ void Note::layout2()
             qreal dd = score()->point(score()->styleS(StyleIdx::dotDotDistance)) * mag();
             qreal x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
             // if TAB and stems through staff
-            if (staff()->isTabStaff()) {
-                  StaffType* tab = staff()->staffType();
+            if (staff()->isTabStaff(chord()->tick())) {
+                  StaffType* tab = staff()->staffType(tick());
                   if (tab->stemThrough()) {
                         // with TAB's, dot Y is not calculated during layoutChords3(),
                         // as layoutChords3() is not even called for TAB's;
@@ -1990,8 +1990,8 @@ void Note::layout2()
                   QPointF rp = e->readPos();
                   e->layout();
                   if (sym->sym() == SymId::noteheadParenthesisRight) {
-                        if (staff()->isTabStaff()) {
-                              StaffType* tab = staff()->staffType();
+                        if (staff()->isTabStaff(chord()->tick())) {
+                              StaffType* tab = staff()->staffType(tick());
                               w = tabHeadWidth(tab);
                               }
                         e->rxpos() += w;
@@ -2144,7 +2144,7 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       func(data, this);
       // tie segments are collected from System
-      //      if (_tieFor && !staff()->isTabStaff())  // no ties in tablature
+      //      if (_tieFor && !staff()->isTabStaff(chord->tick()))  // no ties in tablature
       //            _tieFor->scanElements(data, func, all);
       for (Element* e : _el) {
             if (score()->tagIsValid(e->tag()))
@@ -2238,7 +2238,7 @@ int Note::line() const
 void Note::setLine(int n)
       {
       _line = n;
-      int off = staff() ? staff()->staffType()->stepOffset() : 0;
+      int off = staff() ? staff()->staffType(tick())->stepOffset() : 0;
       rypos() = (_line + off) * spatium() * .5;
       }
 
@@ -2250,8 +2250,8 @@ int Note::physicalLine() const
       {
       int l = line();
       Staff *st = staff();
-      if (st && !st->scaleNotesToLines())
-            return l * (st->logicalLineDistance() / st->lineDistance());
+      if (st && !st->scaleNotesToLines(tick()))
+            return l * (st->logicalLineDistance(tick()) / st->lineDistance(tick()));
       else
             return l;
       }
@@ -2341,7 +2341,7 @@ void Note::updateRelLine(int relLine, bool undoable)
             int idx = staffIdx() + chord()->staffMove();
             int minStaff = part()->startTrack() / VOICES;
             int maxStaff = part()->endTrack() / VOICES;
-            if (idx < minStaff || idx >= maxStaff || score()->staff(idx)->staffGroup() != staff()->staffGroup())
+            if (idx < minStaff || idx >= maxStaff || score()->staff(idx)->staffType(tick())->group() != staff()->staffType(tick())->group())
                   chord()->undoChangeProperty(P_ID::STAFF_MOVE, 0);
             }
 
@@ -2744,7 +2744,7 @@ QString Note::accessibleInfo() const
       const Drumset* drumset = part()->instrument()->drumset();
       if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH)
             pitchName = chord()->noStem() ? tr("Beat Slash") : tr("Rhythm Slash");
-      else if (staff()->isDrumStaff() && drumset)
+      else if (staff()->isDrumStaff(tick()) && drumset)
             pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
       else
             pitchName = tpcUserName(false);
@@ -2763,7 +2763,7 @@ QString Note::screenReaderInfo() const
       const Drumset* drumset = part()->instrument()->drumset();
       if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH)
             pitchName = chord()->noStem() ? tr("Beat Slash") : tr("Rhythm Slash");
-      else if (staff()->isDrumStaff() && drumset)
+      else if (staff()->isDrumStaff(tick()) && drumset)
             pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
       else
             pitchName = tpcUserName(true);

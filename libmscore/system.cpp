@@ -247,10 +247,10 @@ void System::layoutSystem(qreal xo1)
             ++nVisible;
             qreal staffMag = staff->mag();
             qreal h;
-            if (staff->lines() == 1)
+            if (staff->lines(0) == 1)
                   h = 2;
             else
-                  h = (staff->lines()-1) * staff->lineDistance();
+                  h = (staff->lines(0)-1) * staff->lineDistance(0);
             h = h * staffMag * spatium();
             s->bbox().setRect(_leftMargin + xo1, 0.0, 0.0, h);
             }
@@ -364,7 +364,7 @@ void System::layout2()
 
             qreal h = staff->height();
             if (ni == visibleStaves.end()) {
-                  ss->setYOff(staff->lines() == 1 ? _spatium * staff->mag() : 0.0);
+                  ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag() : 0.0);
                   ss->bbox().setRect(_leftMargin, y, width() - _leftMargin, h);
                   break;
                   }
@@ -409,7 +409,7 @@ void System::layout2()
                         dist = qMax(dist, sp->gap());
                   }
 
-            ss->setYOff(staff->lines() == 1 ? _spatium * staff->mag() : 0.0);
+            ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag() : 0.0);
             ss->bbox().setRect(_leftMargin, y, width() - _leftMargin, h);
             y += dist;
             }
@@ -442,11 +442,11 @@ void System::layout2()
             if (_barLine) {
                   _barLine->setTrack(firstStaffInitialIdx * VOICES);
                   _barLine->setSpan(lastStaffInitialIdx - firstStaffInitialIdx + 1);
-                  if (score()->staff(firstStaffInitialIdx)->lines() == 1)
+                  if (score()->staff(firstStaffInitialIdx)->lines(s->tick()) == 1)
                         _barLine->setSpanFrom(BARLINE_SPAN_1LINESTAFF_FROM);
                   else
                         _barLine->setSpanFrom(0);
-                  int llines = score()->staff(lastStaffInitialIdx)->lines();
+                  int llines = score()->staff(lastStaffInitialIdx)->lines(s->tick());
                   int spanTo = llines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (llines - 1) * 2;
                   _barLine->setSpanTo(spanTo);
                   _barLine->layout();

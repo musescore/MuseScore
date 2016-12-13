@@ -431,7 +431,7 @@ void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       // adjust position to avoid staff line if necessary
       Staff* st = staff();
       bool reverseAdjust = false;
-      if (slurTie()->isTie() && st && !st->isTabStaff()) {
+      if (slurTie()->isTie() && st && !st->isTabStaff(slurTie()->tick())) {
             // multinote chords with ties need special handling
             // otherwise, adjusted tie might crowd an unadjusted tie unnecessarily
             Tie* t = toTie(slurTie());
@@ -450,14 +450,14 @@ void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       qreal sp = spatium();
       qreal minDistance = 0.5;
       autoAdjustOffset = QPointF();
-      if (bbox.height() < minDistance * 2 * sp && st && !st->isTabStaff()) {
+      if (bbox.height() < minDistance * 2 * sp && st && !st->isTabStaff(slurTie()->tick())) {
             // slur/tie is fairly flat
             bool up = slurTie()->up();
-            qreal ld = st->lineDistance() * sp;
+            qreal ld = st->lineDistance(tick()) * sp;
             qreal topY = bbox.top() / ld;
             qreal bottomY = bbox.bottom() / ld;
             int lineY = up ? qRound(topY) : qRound(bottomY);
-            if (lineY >= 0 && lineY < st->lines() * st->lineDistance()) {
+            if (lineY >= 0 && lineY < st->lines(tick()) * st->lineDistance(tick())) {
                   // on staff
                   if (qAbs(topY - lineY) < minDistance && qAbs(bottomY - lineY) < minDistance) {
                         // too close to line
@@ -521,10 +521,10 @@ bool TieSegment::isEdited() const
 
 void Tie::slurPos(SlurPos* sp)
       {
-      bool useTablature = staff() != nullptr && staff()->isTabStaff();
+      bool useTablature = staff() != nullptr && staff()->isTabStaff(tick());
       StaffType* stt = nullptr;
       if (useTablature)
-            stt = staff()->staffType();
+            stt = staff()->staffType(tick());
       qreal _spatium    = spatium();
       qreal hw          = startNote()->tabHeadWidth(stt);   // if stt == 0, defaults to headWidth()
       qreal __up        = _up ? -1.0 : 1.0;

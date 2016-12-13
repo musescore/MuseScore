@@ -622,7 +622,7 @@ void GuitarPro4::read(QFile* fp)
                   clefId = ClefType::PERC;
                   // instr->setUseDrumset(DrumsetKind::GUITAR_PRO);
                   instr->setDrumset(gpDrumset);
-                  staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
+                  staff->setStaffType(0, StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G8_VB;

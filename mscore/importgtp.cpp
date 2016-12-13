@@ -737,7 +737,7 @@ void GuitarPro::createMeasures()
             if (i == 0 || ts != nts) {
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                         Staff* staff = score->staff(staffIdx);
-                        StaffType* staffType = staff->staffType();
+                        StaffType* staffType = staff->staffType(tick);
                         if (staffType->genTimesig()) {
                               TimeSig* t = new TimeSig(score);
                               t->setTrack(staffIdx * VOICES);
@@ -1332,7 +1332,7 @@ void GuitarPro2::read(QFile* fp)
                   clefId = ClefType::PERC;
                   // instr->setUseDrumset(DrumsetKind::GUITAR_PRO);
                   instr->setDrumset(gpDrumset);
-                  staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
+                  staff->setStaffType(0, StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G8_VB;
@@ -1950,7 +1950,7 @@ void GuitarPro3::read(QFile* fp)
                   clefId = ClefType::PERC;
                   // instr->setUseDrumset(DrumsetKind::GUITAR_PRO);
                   instr->setDrumset(gpDrumset);
-                  staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
+                  staff->setStaffType(0, StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G8_VB;
@@ -2397,8 +2397,8 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
 
             Staff* s = new Staff(pscore);
             s->setPart(p);
-            StaffType* st = staff->staffType();
-            s->setStaffType(st);
+            StaffType* st = staff->staffType(0);
+            s->setStaffType(0, st);
 //            int idx = pscore->staffTypeIdx(st);
 //            if (idx == -1)
 //                  pscore->addStaffType(st);
@@ -2421,7 +2421,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
 
             Excerpt::cloneStaves(score, pscore, stavesMap, tracks);
 
-            if (staff->part()->instrument()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
+            if (staff->part()->instrument()->stringData()->strings() > 0 && part->staves()->front()->staffType(0)->group() == StaffGroup::STANDARD) {
                   p->setStaves(2);
                   Staff* s1 = p->staff(1);
 
@@ -2430,9 +2430,9 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
                   if (lines == 4)
                         sts = StaffTypes::TAB_4COMMON;
                   StaffType st = *StaffType::preset(sts);
-                  s1->setStaffType(&st);
-                  s1->setLines(lines);
-                  Excerpt::cloneStaff(s,s1);
+                  s1->setStaffType(0, &st);
+                  s1->setLines(0, lines);
+                  Excerpt::cloneStaff(s, s1);
                   p->staves()->front()->addBracket(BracketItem(BracketType::NORMAL, 2));
                   }
             pscore->appendPart(p);

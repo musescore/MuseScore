@@ -53,7 +53,7 @@ void Bend::layout()
 
       qreal _spatium = spatium();
 
-      if (staff() && !staff()->isTabStaff()) {
+      if (staff() && !staff()->isTabStaff(tick())) {
             setbbox(QRectF());
             if (!parent()) {
                   noteWidth = -_spatium*2;
