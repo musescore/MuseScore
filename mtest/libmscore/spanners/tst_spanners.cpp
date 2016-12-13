@@ -269,7 +269,7 @@ void TestSpanners::spanners04()
       Staff* oldStaff   = score->staff(0);
       Staff* newStaff   = new Staff(score);
       newStaff->setPart(oldStaff->part());
-      newStaff->initFromStaffType(oldStaff->staffType());
+      newStaff->initFromStaffType(oldStaff->staffType(0));
       newStaff->setDefaultClefType(ClefTypeList(ClefType::G));
 
       KeySigEvent ke;

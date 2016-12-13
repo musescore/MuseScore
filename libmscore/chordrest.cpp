@@ -495,9 +495,9 @@ void ChordRest::layoutArticulations()
       if (parent() == 0 || _articulations.empty())
             return;
       qreal _spatium = spatium();
-      bool scale     = staff()->scaleNotesToLines();
-      qreal pld      = staff()->lineDistance();
-      qreal lld      = staff()->logicalLineDistance();
+      bool scale     = staff()->scaleNotesToLines(tick());
+      qreal pld      = staff()->lineDistance(tick());
+      qreal lld      = staff()->logicalLineDistance(tick());
       qreal _spStaff = _spatium * pld;    // scaled to staff line distance for vert. pos. within a staff
 
       if (isChord() && _articulations.size() == 1) {
@@ -601,13 +601,13 @@ void ChordRest::layoutArticulations()
                         // and only if no other articulations on this side
                         //x = stem->pos().x();
                         int line   = lrint((y+0.5*_spStaff) / _spStaff);
-                        if (line < staff()->lines())  // align between staff lines
+                        if (line < staff()->lines(tick()))  // align between staff lines
                               y = line * _spStaff + _spatium * .5;
                         else
                               y += _spatium;
                         }
                   else {
-                        int lines = (staff()->lines() - 1) * 2;
+                        int lines = (staff()->lines(tick()) - 1) * 2;
                         if (line < lines)
                               y = ((line & ~1) + 3) * _spStaff;
                         else

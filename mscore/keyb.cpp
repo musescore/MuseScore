@@ -305,7 +305,7 @@ void MuseScore::updateInputState(Score* score)
       InputState& is = score->inputState();
       if (is.noteEntryMode()) {
             Staff* staff = score->staff(is.track() / VOICES);
-            switch (staff->staffType()->group()) {
+            switch (staff->staffType(is.tick())->group()) {
                   case StaffGroup::STANDARD:
                         changeState(STATE_NOTE_ENTRY_STAFF_PITCHED);
                         break;

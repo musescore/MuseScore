@@ -90,7 +90,7 @@ extern Measure* tick2measure(int tick);
 void updateNoteLines(Segment* segment, int track)
       {
       Staff* staff = segment->score()->staff(track / VOICES);
-      if (staff->isDrumStaff() || staff->isTabStaff())
+      if (staff->isDrumStaff(segment->tick()) || staff->isTabStaff(segment->tick()))
             return;
       for (Segment* s = segment->next1(); s; s = s->next1()) {
             if ((s->segmentType() & (Segment::Type::Clef | Segment::Type::HeaderClef)) && s->element(track) && !s->element(track)->generated())
@@ -456,7 +456,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
       KeySig* lks = 0;
 
       for (Staff* staff : ostaff->staffList()) {
-            if (staff->isDrumStaff())
+            if (staff->isDrumStaff(tick))
                   continue;
 
             Score* score = staff->score();
@@ -524,7 +524,7 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType ct)
       int tick = seg->tick();
       int rtick = seg->rtick();
       for (Staff* staff : ostaff->staffList()) {
-            if (staff->staffType()->group() != ClefInfo::staffGroup(ct))
+            if (staff->staffType(tick)->group() != ClefInfo::staffGroup(ct))
                   continue;
 
             Score* score     = staff->score();
@@ -2649,9 +2649,9 @@ void ChangeStaff::flip()
 
 void ChangeStaffType::flip()
       {
-      StaffType st = *staff->staffType();
+      StaffType st = *staff->staffType(0);      // TODO
 
-      staff->setStaffType(&staffType);
+      staff->setStaffType(0, &staffType);
 
       staffType = st;
 

@@ -271,7 +271,7 @@ void TimeSig::layout1()
 
       if (_staff) {
             // if staff is without time sig, format as if no text at all
-            if (!_staff->staffType()->genTimesig() ) {
+            if (!_staff->staffType(tick())->genTimesig() ) {
                   // reset position and box sizes to 0
                   pointLargeLeftParen.rx() = 0.0;
                   pn.rx() = 0.0;
@@ -282,8 +282,8 @@ void TimeSig::layout1()
                   // draw() will anyway skip any drawing if staff type has no time sigs
                   return;
                   }
-            numOfLines  = _staff->lines();
-            lineDist    = _staff->lineDistance();
+            numOfLines  = _staff->lines(tick());
+            lineDist    = _staff->lineDistance(tick());
             }
       else {
             // assume dimensions of a standard staff
@@ -366,7 +366,7 @@ void TimeSig::layout1()
 
 void TimeSig::draw(QPainter* painter) const
       {
-      if (staff() && !staff()->staffType()->genTimesig())
+      if (staff() && !staff()->staffType(tick())->genTimesig())
             return;
       painter->setPen(curColor());
       std::vector<SymId> ns = toTimeSigString(_numeratorString);

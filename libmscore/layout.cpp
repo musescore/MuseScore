@@ -88,7 +88,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       {
       Staff* staff = Score::staff(staffIdx);
 
-      if (staff->isTabStaff())
+      if (staff->isTabStaff(segment->tick()))
             return;
 
       std::vector<Note*> upStemNotes;
@@ -705,7 +705,7 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
       pd *= mag;
 
       // extra space for ledger lines
-      if (me->line <= -2 || me->line >= me->note->staff()->lines() * 2)
+      if (me->line <= -2 || me->line >= me->note->staff()->lines(me->note->chord()->tick()) * 2)
             lx = qMin(lx, -0.2 * sp);
 
       // clear left notes
@@ -765,12 +765,13 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
       int columnBottom[7] = { -1, -1, -1, -1, -1, -1, -1 };
 
       qreal sp           = staff->spatium();
-      qreal stepDistance = sp * staff->logicalLineDistance() * .5;
-      int stepOffset     = staff->staffType()->stepOffset();
+      int tick           =  notes.front()->tick();
+      qreal stepDistance = sp * staff->logicalLineDistance(tick) * .5;
+      int stepOffset     = staff->staffType(tick)->stepOffset();
 
-      qreal lx                = 10000.0;  // leftmost notehead position
-      qreal upDotPosX         = 0.0;
-      qreal downDotPosX       = 0.0;
+      qreal lx           = 10000.0;  // leftmost notehead position
+      qreal upDotPosX    = 0.0;
+      qreal downDotPosX  = 0.0;
 
       int nNotes = notes.size();
       int nAcc = 0;
@@ -2194,7 +2195,7 @@ void Score::createBeams(Measure* measure)
             Staff* stf = staff(track2staff(track));
 
             // dont compute beams for invisible staffs and tablature without stems
-            if (!stf->show() || (stf->isTabStaff() && stf->staffType()->slashStyle()))
+            if (!stf->show() || (stf->isTabStaff(measure->tick()) && stf->staffType(measure->tick())->slashStyle()))
                   continue;
 
             ChordRest* a1    = 0;      // start of (potential) beam

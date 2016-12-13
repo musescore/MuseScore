@@ -751,11 +751,11 @@ void Slur::slurPos(SlurPos* sp)
             return;
             }
 
-      bool useTablature  = staff() && staff()->isTabStaff();
+      bool useTablature  = staff() && staff()->isTabStaff(endCR()->tick());
       bool staffHasStems = true;     // assume staff uses stems
       StaffType*  stt    = 0;
       if (useTablature) {
-            stt           = staff()->staffType();
+            stt           = staff()->staffType(tick());
             staffHasStems = stt->stemThrough();   // if tab with stems beside, stems do not count for slur pos
             }
 

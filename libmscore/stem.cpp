@@ -84,13 +84,14 @@ void Stem::layout()
       qreal y1 = 0.0;                           // vertical displacement to match note attach point
       Staff* st = staff();
       if (chord()) {
-            if (st && st->isTabStaff() ) {            // TAB staves
-                  if (st->staffType()->stemThrough()) {
+            int tick = chord()->tick();
+            if (st && st->isTabStaff(tick) ) {            // TAB staves
+                  if (st->staffType(tick)->stemThrough()) {
                         // if stems through staves, gets Y pos. of stem-side note relative to chord other side
-                        qreal lineDist = st->lineDistance() * spatium();
+                        qreal lineDist = st->lineDistance(tick) * spatium();
                         y1 = (chord()->downString() - chord()->upString() ) * _up * lineDist;
                         // if fret marks above lines, raise stem beginning by 1/2 line distance
-                        if (!st->staffType()->onLines())
+                        if (!st->staffType(tick)->onLines())
                               y1 -= lineDist * 0.5;
                         // shorten stem by 1/2 lineDist to clear the note and a little more to keep 'air' betwen stem and note
                         lineDist *= 0.7 * mag();
@@ -148,7 +149,7 @@ void Stem::draw(QPainter* painter) const
             return;
 
       Staff* st = staff();
-      bool useTab = st && st->isTabStaff();
+      bool useTab = st && st->isTabStaff(chord()->tick());
 
       qreal lw = lineWidth();
       painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
@@ -158,7 +159,7 @@ void Stem::draw(QPainter* painter) const
             return;
 
       // TODO: adjust bounding rectangle in layout() for dots and for slash
-      StaffType* stt = st->staffType();
+      StaffType* stt = st->staffType(chord()->tick());
       qreal sp = spatium();
       bool _up = up();
 

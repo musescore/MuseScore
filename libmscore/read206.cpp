@@ -446,7 +446,7 @@ static void readPart(Part* part, XmlReader& e)
                   readInstrument(i, part, e);
                   Drumset* ds = i->drumset();
                   Staff*   s = part->staff(0);
-                  int lld = s ? qRound(s->logicalLineDistance()) : 1;
+                  int lld = s ? qRound(s->logicalLineDistance(0)) : 1;
                   if (ds && s && lld > 1) {
                         for (int i = 0; i < DRUM_INSTRUMENTS; ++i)
                               ds->drum(i).line /= lld;
@@ -1626,16 +1626,16 @@ static bool readScore(Score* score, XmlReader& e)
                   st->setBarLineSpan(barLineSpan);
                   }
             // check spanFrom
-            int minBarLineFrom = st->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO;
+            int minBarLineFrom = st->lines(0) == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO;
             if (st->barLineFrom() < minBarLineFrom)
                   st->setBarLineFrom(minBarLineFrom);
-            if (st->barLineFrom() > st->lines() * 2)
-                  st->setBarLineFrom(st->lines() * 2);
+            if (st->barLineFrom() > st->lines(0) * 2)
+                  st->setBarLineFrom(st->lines(0) * 2);
             // check spanTo
             Staff* stTo = st->barLineSpan() <= 1 ? st : score->staff(idx + st->barLineSpan() - 1);
             // 1-line staves have special bar line spans
-            int maxBarLineTo        = stTo->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : stTo->lines()*2;
-            int defaultBarLineTo    = stTo->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (stTo->lines() - 1) * 2;
+            int maxBarLineTo        = stTo->lines(0) == 1 ? BARLINE_SPAN_1LINESTAFF_TO : stTo->lines(0)*2;
+            int defaultBarLineTo    = stTo->lines(0) == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (stTo->lines(0) - 1) * 2;
             if (st->barLineTo() == UNKNOWN_BARLINE_TO)
                   st->setBarLineTo(defaultBarLineTo);
             if (st->barLineTo() < MIN_BARLINE_SPAN_FROMTO)

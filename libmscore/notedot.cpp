@@ -15,6 +15,7 @@
 #include "staff.h"
 #include "sym.h"
 #include "xml.h"
+#include "chord.h"
 
 namespace Ms {
 
@@ -36,7 +37,8 @@ void NoteDot::draw(QPainter* p) const
       {
       if (note() && note()->dotsHidden())     // don't draw dot if note is hidden
             return;
-      if (!staff()->isTabStaff() || staff()->staffType()->stemThrough()) {
+      int tick = note()->chord()->tick();
+      if (!staff()->isTabStaff(tick) || staff()->staffType(tick)->stemThrough()) {
             p->setPen(curColor());
             drawSymbol(SymId::augmentationDot, p);
             }

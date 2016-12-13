@@ -884,7 +884,7 @@ void StaffLines::layout()
       if (s) {
             _spatium = s->spatium();
             setMag(s->mag());
-            StaffType* st = s->staffType();
+            StaffType* st = s->staffType(measure()->tick());
             dist  = st->lineDistance().val() * _spatium;
             lines = st->lines();
             setColor(s->color());

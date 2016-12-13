@@ -130,7 +130,7 @@ void Clef::layout()
 
       // check clef visibility and type compatibility
       if (clefSeg && staff()) {
-            StaffType* staffType = staff()->staffType();
+            StaffType* staffType = staff()->staffType(tick());
             bool show            = staffType->genClef();        // check staff type allows clef display
             int tick             = clefSeg->tick();
 
@@ -213,7 +213,7 @@ void Clef::layout()
 
 void Clef::draw(QPainter* painter) const
       {
-      if (symId == SymId::noSym || (staff() && !staff()->staffType()->genClef()))
+      if (symId == SymId::noSym || (staff() && !staff()->staffType(tick())->genClef()))
             return;
       painter->setPen(curColor());
       drawSymbol(symId, painter);

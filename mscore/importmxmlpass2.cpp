@@ -491,8 +491,8 @@ static void setFirstInstrument(Part* part, const QString& partId,
 static void setStaffTypePercussion(Part* part, Drumset* drumset)
       {
       for (int j = 0; j < part->nstaves(); ++j)
-            if (part->staff(j)->lines() == 5 && !part->staff(j)->isDrumStaff())
-                  part->staff(j)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
+            if (part->staff(j)->lines(0) == 5 && !part->staff(j)->isDrumStaff(0))
+                  part->staff(j)->setStaffType(0, StaffType::preset(StaffTypes::PERC_DEFAULT));
       // set drumset for instrument
       part->instrument()->setDrumset(drumset);
       part->instrument()->channel(0)->bank = 128;
@@ -3616,10 +3616,10 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       // note that this overwrites the staff lines value set in pass 1
       // also note that clef handling should probably done in pass1
       int staffIdx = _score->staffIdx(part) + clefno;
-      int lines = _score->staff(staffIdx)->lines();
+      int lines = _score->staff(staffIdx)->lines(0);
       if (st == StaffTypes::TAB_DEFAULT || (_hasDrumset && st == StaffTypes::PERC_DEFAULT)) {
-            _score->staff(staffIdx)->setStaffType(StaffType::preset(st));
-            _score->staff(staffIdx)->setLines(lines); // preserve previously set staff lines
+            _score->staff(staffIdx)->setStaffType(0, StaffType::preset(st));
+            _score->staff(staffIdx)->setLines(0, lines); // preserve previously set staff lines
             _score->staff(staffIdx)->setBarLineTo((lines - 1) * 2);
             }
       }
@@ -4456,7 +4456,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   // correct for number of staff lines
                   // see ExportMusicXml::unpitch2xml for explanation
                   // TODO handle other # staff lines ?
-                  int staffLines = c->staff()->lines();
+                  int staffLines = c->staff()->lines(0);
                   if (staffLines == 1) line -= 8;
                   if (staffLines == 3) line -= 2;
 
@@ -5656,7 +5656,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                         else if (_e.name() == "fret") {
                               int fret = _e.readElementText().toInt();
                               if (note) {
-                                    if (note->staff()->isTabStaff())
+                                    if (note->staff()->isTabStaff(0))
                                           note->setFret(fret);
                                     }
                               else
@@ -5668,7 +5668,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                         else if (_e.name() == "string") {
                               QString txt = _e.readElementText();
                               if (note) {
-                                    if (note->staff()->isTabStaff())
+                                    if (note->staff()->isTabStaff(0))
                                           note->setString(txt.toInt() - 1);
                                     else
                                           addTextToNote(_e.lineNumber(), _e.columnNumber(), txt,

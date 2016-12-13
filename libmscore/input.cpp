@@ -42,7 +42,7 @@ StaffGroup InputState::staffGroup() const
       {
       if (_segment == 0 || _track == -1)
             return StaffGroup::STANDARD;
-      return _segment->score()->staff(_track/VOICES)->staffType()->group();
+      return _segment->score()->staff(_track/VOICES)->staffType(_segment->tick())->group();
       }
 
 //---------------------------------------------------------

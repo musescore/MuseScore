@@ -392,7 +392,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line, bool &
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
       for (Segment* segment = first(st); segment; segment = segment->next(st)) {
-            if (segment == s && staff->isPitchedStaff()) {
+            if (segment == s && staff->isPitchedStaff(tick())) {
                   ClefType clef = staff->clef(s->tick());
                   int l = relStep(line, clef);
                   return tversatz.accidentalVal(l, error);
@@ -482,7 +482,7 @@ void Measure::layout2()
             Spacer* sp = ms->vspacerDown();
             if (sp) {
                   sp->layout();
-                  int n = score()->staff(staffIdx)->lines() - 1;
+                  int n = score()->staff(staffIdx)->lines(tick()) - 1;
                   qreal y = system()->staff(staffIdx)->y();
                   sp->setPos(_spatium * .5, y + n * _spatium);
                   }
@@ -2247,7 +2247,8 @@ bool Measure::visible(int staffIdx) const
 
 bool Measure::slashStyle(int staffIdx) const
       {
-      return score()->staff(staffIdx)->slashStyle() || _mstaves[staffIdx]->slashStyle() || score()->staff(staffIdx)->staffType()->slashStyle();
+      Staff* staff = score()->staff(staffIdx);
+      return staff->slashStyle(tick()) || _mstaves[staffIdx]->slashStyle() || staff->staffType(tick())->slashStyle();
       }
 
 //---------------------------------------------------------
@@ -3209,7 +3210,7 @@ void Measure::barLinesSetSpan(Segment* seg)
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* staff   = score()->staff(staffIdx);
             int track      = staffIdx * VOICES;
-            int staffLines = staff->lines();
+            int staffLines = staff->lines(tick());
 
             // get existing bar line for this staff, if any
             BarLine* cbl = toBarLine(seg->element(track));
@@ -3238,7 +3239,7 @@ void Measure::barLinesSetSpan(Segment* seg)
                         else if (staff->show()) {
                               span        = 1;
                               spanFrom    = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
-                              spanTo      = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staff->lines() - 1) * 2;
+                              spanTo      = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staff->lines(tick()) - 1) * 2;
                               }
                         }
                   if (!staff->show()) {
@@ -3572,7 +3573,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         }
                   else
                         clef = toClef(cSegment->element(track));
-                  if (staff->staffType()->genClef()) {
+                  if (staff->staffType(tick())->genClef()) {
                         if (!clef) {
                               //
                               // create missing clef

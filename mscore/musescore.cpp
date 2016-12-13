@@ -4424,7 +4424,7 @@ void MuseScore::transpose()
       Key key = Key::C;
       for (int i = startStaffIdx; i < endStaffIdx; ++i) {
             Staff* staff = cs->staff(i);
-            if (staff->isPitchedStaff()) {
+            if (staff->isPitchedStaff(startTick)) {
                   key = staff->key(startTick);
                   if (!cs->styleB(StyleIdx::concertPitch)) {
                         int diff = staff->part()->instrument(startTick)->transpose().chromatic;

@@ -1100,17 +1100,18 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       //
       Staff* s    = staff(pos->staffIdx);
       qreal mag   = s->mag();
+      int tick    = segment->tick();
       // in TABs, step from one string to another; in other staves, step on and between lines
-      qreal lineDist = s->staffType()->lineDistance().val() * (s->isTabStaff() ? 1 : .5) * mag * spatium();
+      qreal lineDist = s->staffType(tick)->lineDistance().val() * (s->isTabStaff(measure->tick()) ? 1 : .5) * mag * spatium();
 
       pos->line  = lrint((pppp.y() - sstaff->bbox().y()) / lineDist);
-      if (s->isTabStaff()) {
-            if (pos->line < -1 || pos->line > s->lines()+1)
+      if (s->isTabStaff(measure->tick())) {
+            if (pos->line < -1 || pos->line > s->lines(tick)+1)
                   return false;
             if (pos->line < 0)
                   pos->line = 0;
-            else if (pos->line >= s->lines())
-                  pos->line = s->lines() - 1;
+            else if (pos->line >= s->lines(tick))
+                  pos->line = s->lines(tick) - 1;
             }
       else {
             int minLine   = absStep(0);
@@ -2300,12 +2301,12 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
       {
       for (int staffIdx = sidx; staffIdx < eidx; ++staffIdx) {
             Staff* staff = _staves[staffIdx];
-            if (staff->isDrumStaff())
-                  continue;
             for (auto i = km.begin(); i != km.end(); ++i) {
                   int tick = i->first;
                   Measure* measure = tick2measure(tick);
                   if (!measure)
+                        continue;
+                  if (staff->isDrumStaff(tick))
                         continue;
                   KeySigEvent oKey = i->second;
                   KeySigEvent nKey = oKey;
@@ -2420,7 +2421,7 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
       undo(new ChangeStyleVal(this, StyleIdx::concertPitch, flag));       // change style flag
 
       for (Staff* staff : _staves) {
-            if (staff->staffType()->group() == StaffGroup::PERCUSSION)
+            if (staff->staffType(0)->group() == StaffGroup::PERCUSSION)       // TODO
                   continue;
             // if this staff has no transposition, and no instrument changes, we can skip it
             Interval interval = staff->part()->instrument()->transpose();
@@ -3323,7 +3324,7 @@ void Score::appendPart(const QString& name)
       for (int i = 0; i < t->nstaves(); ++i) {
             Staff* staff = new Staff(this);
             staff->setPart(part);
-            staff->setLines(t->staffLines[i]);
+            staff->setLines(0, t->staffLines[i]);
             staff->setSmall(t->smallStaff[i]);
             if (i == 0) {
                   staff->setBracket(0, t->bracket[0]);
@@ -3837,7 +3838,7 @@ int Score::keysig()
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             Staff* st = staff(staffIdx);
             Key key = st->key(0);
-            if (st->staffType()->group() == StaffGroup::PERCUSSION || st->keySigEvent(0).custom() || st->keySigEvent(0).isAtonal())       // ignore percussion and custom / atonal key
+            if (st->staffType(0)->group() == StaffGroup::PERCUSSION || st->keySigEvent(0).custom() || st->keySigEvent(0).isAtonal())       // ignore percussion and custom / atonal key
                   continue;
             result = key;
             int diff = st->part()->instrument()->transpose().chromatic;

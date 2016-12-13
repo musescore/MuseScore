@@ -77,15 +77,15 @@ Note* Chord::upNote() const
       Note* result = _notes.back();
       if (!staff())
             return result;
-      if (staff()->isDrumStaff()) {
+      if (staff()->isDrumStaff(tick())) {
             for (Note* n : _notes) {
                   if (n->line() < result->line()) {
                         result = n;
                         }
                   }
             }
-      else if (staff()->isTabStaff()) {
-            StaffType* tab  = staff()->staffType();
+      else if (staff()->isTabStaff(tick())) {
+            StaffType* tab  = staff()->staffType(tick());
             int        line = tab->lines() - 1;      // start at bottom line
             int noteLine;
             // scan each note: if TAB strings are not in sequential order,
@@ -108,15 +108,15 @@ Note* Chord::downNote() const
       Note* result = _notes.front();
       if (!staff())
             return result;
-      if (staff()->isDrumStaff()) {
+      if (staff()->isDrumStaff(tick())) {
             for (Note* n : _notes) {
                   if (n->line() > result->line()) {
                         result = n;
                         }
                   }
             }
-      else if (staff()->isTabStaff()) {
-            StaffType* tab  = staff()->staffType();
+      else if (staff()->isTabStaff(tick())) {
+            StaffType* tab  = staff()->staffType(tick());
             int line        = 0;      // start at top line
             int noteLine;
             // scan each note: if TAB strings are not in sequential order,
@@ -138,12 +138,12 @@ Note* Chord::downNote() const
 
 int Chord::upLine() const
       {
-      return (staff() && staff()->isTabStaff()) ? upString()*2 : upNote()->line();
+      return (staff() && staff()->isTabStaff(tick())) ? upString()*2 : upNote()->line();
       }
 
 int Chord::downLine() const
       {
-      return (staff() && staff()->isTabStaff()) ? downString()*2 : downNote()->line();
+      return (staff() && staff()->isTabStaff(tick())) ? downString()*2 : downNote()->line();
       }
 
 //---------------------------------------------------------
@@ -160,9 +160,9 @@ int Chord::downLine() const
 int Chord::upString() const
       {
       // if no staff or staff not a TAB, return 0 (=topmost line)
-      if(!staff() || !staff()->isTabStaff())
+      if(!staff() || !staff()->isTabStaff(tick()))
             return 0;
-      StaffType* tab = staff()->staffType();
+      StaffType* tab = staff()->staffType(tick());
       int       line = tab->lines() - 1;      // start at bottom line
       int                     noteLine;
       // scan each note: if TAB strings are not in sequential order,
@@ -180,9 +180,9 @@ int Chord::downString() const
       {
       if (!staff())                              // if no staff, return 0
             return 0;
-      if (!staff()->isTabStaff())                // if staff not a TAB, return bottom line
-            return staff()->lines()-1;
-      StaffType* tab = staff()->staffType();
+      if (!staff()->isTabStaff(tick()))                // if staff not a TAB, return bottom line
+            return staff()->lines(tick())-1;
+      StaffType* tab = staff()->staffType(tick());
       int       line = 0;         // start at top line
       int        noteLine;
       int n = _notes.size();
@@ -345,8 +345,8 @@ qreal Chord::noteHeadWidth() const
 
 qreal Chord::stemPosX() const
       {
-      if (staff() && staff()->isTabStaff())
-            return staff()->staffType()->chordStemPosX(this) * spatium();
+      if (staff() && staff()->isTabStaff(tick()))
+            return staff()->staffType(tick())->chordStemPosX(this) * spatium();
       return _up ? noteHeadWidth() : 0.0;
       }
 
@@ -358,8 +358,9 @@ qreal Chord::stemPosX() const
 QPointF Chord::stemPos() const
       {
       QPointF p(pagePos());
-      if (staff() && staff()->isTabStaff())
-            return staff()->staffType()->chordStemPos(this) * spatium() + p;
+
+      if (staff() && staff()->isTabStaff(tick()))
+            return staff()->staffType(tick())->chordStemPos(this) * spatium() + p;
 
       if (_up) {
             qreal nhw = _notes.size() == 1 ? downNote()->headWidth() : noteHeadWidth();
@@ -383,8 +384,8 @@ QPointF Chord::stemPosBeam() const
       QPointF p(pagePos());
 
 
-      if (staff() && staff()->isTabStaff())
-            return staff()->staffType()->chordStemPosBeam(this) * _spatium + p;
+      if (staff() && staff()->isTabStaff(tick()))
+            return staff()->staffType(tick())->chordStemPosBeam(this) * _spatium + p;
 
       if (_up) {
             qreal nhw = noteHeadWidth();
@@ -628,8 +629,8 @@ void Chord::addLedgerLines()
             int idx      = staffIdx() + staffMove();
             track        = staff2track(idx);
             Staff* st    = score()->staff(idx);
-            lineBelow    = (st->lines() - 1) * 2;
-            lineDistance = st->lineDistance();
+            lineBelow    = (st->lines(tick()) - 1) * 2;
+            lineDistance = st->lineDistance(tick());
             _mag         = staff()->mag();
             staffVisible = !staff()->invisible();
             }
@@ -798,8 +799,8 @@ void Chord::computeUp()
       Q_ASSERT(!_notes.empty());
       StaffType* tab = 0;
       // TAB STAVES
-      if (staff() && staff()->isTabStaff()) {
-            tab = staff()->staffType();
+      if (staff() && staff()->isTabStaff(tick())) {
+            tab = staff()->staffType(tick());
             // if no stems or stem beside staves
             if (tab->slashStyle() || !tab->stemThrough()) {
                   // if measure has voices, set stem direction according to voice
@@ -836,7 +837,7 @@ void Chord::computeUp()
             _up = !(track() % 2);
             }
       else {
-            int   dnMaxLine   = staff()->middleLine();
+            int   dnMaxLine   = staff()->middleLine(tick());
             int   ud          = (tab ? upString()*2 : upNote()->line() ) - dnMaxLine;
             // standard case: if only 1 note or cross beaming
             if (_notes.size() == 1 || staffMove()) {
@@ -1057,7 +1058,7 @@ bool Chord::readProperties(XmlReader& e)
             gliss->setStartElement(nullptr);
             gliss->setEndElement(nullptr);
             // in TAB, use straight line with no text
-            if (score()->staff(e.track() >> 2)->isTabStaff()) {
+            if (score()->staff(e.track() >> 2)->isTabStaff(tick())) {
                   gliss->setGlissandoType(Glissando::Type::STRAIGHT);
                   gliss->setShowText(false);
                   }
@@ -1107,8 +1108,8 @@ qreal Chord::downPos() const
 qreal Chord::centerX() const
       {
       // TAB 'notes' are always centered on the stem
-      if (staff()->isTabStaff())
-            return staff()->staffType()->chordStemPosX(this) * spatium();
+      if (staff()->isTabStaff(tick()))
+            return staff()->staffType(tick())->chordStemPosX(this) * spatium();
 
       const Note* note = up() ? upNote() : downNote();
       qreal x = note->pos().x();
@@ -1136,7 +1137,7 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
       if (_tremolo && (tremoloChordType() != TremoloChordType::TremoloSecondNote))
             func(data, _tremolo);
       Staff* st = staff();
-      if ((st && st->showLedgerLines()) || !st)       // also for palette
+      if ((st && st->showLedgerLines(tick())) || !st)       // also for palette
             for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
                   func(data, ll);
       int n = _notes.size();
@@ -1212,12 +1213,12 @@ qreal Chord::defaultStemLength()
       ul = upLine();
       dl = downLine();
       Staff* st = staff();
-      qreal physicalLineDistance = st ? st->lineDistance() : 1.0;
-      qreal logicalLineDistance = st ? st->logicalLineDistance() : 1.0;
+      qreal physicalLineDistance = st ? st->lineDistance(tick()) : 1.0;
+      qreal logicalLineDistance = st ? st->logicalLineDistance(tick()) : 1.0;
 
       StaffType* tab = 0;
-      if (st && st->isTabStaff()) {
-            tab = st->staffType();
+      if (st && st->isTabStaff(tick())) {
+            tab = st->staffType(tick());
             // require stems only if TAB is not stemless and this chord has a stem
             if (!tab->slashStyle() && _stem) {
                   // if stems are beside staff, apply special formatting
@@ -1271,7 +1272,7 @@ qreal Chord::defaultStemLength()
             }
       else {
             // normal note (not grace)
-            qreal staffHeight = st ? st->lines() - 1 : 4;
+            qreal staffHeight = st ? st->lines(tick()) - 1 : 4;
             if (physicalLineDistance != 1.0 && !tab)
                   staffHeight *= physicalLineDistance;
             qreal staffHlfHgt = staffHeight * 0.5;
@@ -1344,7 +1345,7 @@ qreal Chord::defaultStemLength()
 void Chord::layoutStem1()
       {
       if (durationType().hasStem() && !(_noStem || measure()->slashStyle(staffIdx())
-         || (staff() && staff()->isTabStaff() && staff()->staffType()->slashStyle()))) {
+         || (staff() && staff()->isTabStaff(tick()) && staff()->staffType(tick())->slashStyle()))) {
             if (!_stem) {
                   Stem* stem = new Stem(score());
                   stem->setParent(this);
@@ -1405,8 +1406,8 @@ void Chord::layoutStem()
       // TAB
       //
       StaffType* tab = 0;
-      if (staff() && staff()->isTabStaff()) {
-            tab = staff()->staffType();
+      if (staff() && staff()->isTabStaff(tick())) {
+            tab = staff()->staffType(tick());
             // if stemless TAB
             if (tab->slashStyle()) {
                   // if 'grid' duration symbol of MEDIALFINAL type, it is time to compute its width
@@ -1608,7 +1609,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
       // TAB_STAFF is different, as each note has to be fretted
       // in the context of the all of the chords of the whole segment
 
-      StaffGroup staffGroup = staff()->staffType()->group();
+      StaffGroup staffGroup = staff()->staffType(tick())->group();
       if (staffGroup == StaffGroup::TAB) {
             const Instrument* instrument = part()->instrument();
             for (Chord* ch : graceNotes())
@@ -1708,7 +1709,7 @@ void Chord::layout()
       {
       if (_notes.empty())
             return;
-      if (staff() && staff()->isTabStaff())
+      if (staff() && staff()->isTabStaff(tick()))
             layoutTablature();
       else
             layoutPitched();
@@ -1991,7 +1992,7 @@ void Chord::layoutPitched()
                   int pDownLine     = pc->downNote()->line();
                   int upLine        = upNote()->line();
                   int downLine      = downNote()->line();
-                  int ledgerBelow   = staff()->lines() * 2;
+                  int ledgerBelow   = staff()->lines(tick()) * 2;
                   if (pc->_ledgerLines && ((pUpLine < 0 && upLine < 0) || (pDownLine >= ledgerBelow && downLine >= ledgerBelow))) {
                         // both chords have ledger lines above or below staff
                         llsp = ledgerLineLength;
@@ -2096,7 +2097,7 @@ void Chord::layoutTablature()
       qreal rrr         = 0.0;                  // space to leave at right of chord
       Note* upnote      = upNote();
       qreal headWidth   = symWidth(SymId::noteheadBlack);
-      StaffType* tab    = staff()->staffType();
+      StaffType* tab    = staff()->staffType(tick());
       qreal lineDist    = tab->lineDistance().val() *_spatium;
       qreal stemX       = tab->chordStemPosX(this) *_spatium;
       int   ledgerLines = 0;
@@ -2658,9 +2659,9 @@ bool Chord::setProperty(P_ID propertyId, const QVariant& v)
 QPointF Chord::layoutArticulation(Articulation* a)
       {
       qreal _spatium = spatium();
-      qreal pld      = staff()->lineDistance();
-      qreal lld      = staff()->logicalLineDistance();
-      bool scale     = staff()->scaleNotesToLines();
+      qreal pld      = staff()->lineDistance(tick());
+      qreal lld      = staff()->logicalLineDistance(tick());
+      bool scale     = staff()->scaleNotesToLines(tick());
       qreal _spStaff = _spatium * pld;    // scaled to physical staff line distance
 
       ArticulationAnchor aa = a->anchor();
@@ -2700,7 +2701,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
             if (stemSide) {                     // if artic. is really beyond a stem,
                   qreal lineDelta = up() ? -_spStaff2 : _spStaff2;    // move it 1/2sp away from stem
                   int line = lrint((pos.y() + lineDelta) / _spStaff); // round to nearest staff line
-                  if (line >= 0 && line < staff()->lines())          // if within staff, align between staff lines
+                  if (line >= 0 && line < staff()->lines(tick()))          // if within staff, align between staff lines
                         pos.ry() = (line * _spStaff) + (bottom ? _spStaff2 : -_spStaff2);
                   else {
                         qreal dy = (score()->styleS(StyleIdx::beamWidth).val() + 1) * _spatium2;
@@ -2713,7 +2714,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                   int line;                     // physical line of note
                   int staffOff;                 // offset that should account for line spacing
                   int extraOff = 0;             // offset that should not acocunt for line spacing
-                  int lines = (staff()->lines() - 1) * 2;               // num. of staff positions within staff
+                  int lines = (staff()->lines(tick()) - 1) * 2;               // num. of staff positions within staff
                   int add   = a->isAccent() ? 1 : 0; // sforzato accent needs more offset
                   if (bottom) {                 // if below chord
                         lline = downLine();                             // logical line of chord lowest note
@@ -2756,7 +2757,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                   pos.ry() += (line + staffOff) * _spStaff2;            // offset that needs to account for line distance
                   pos.ry() += extraOff * _spatium2;                     // additional offset that need not account for line distance
                   }
-            if (!staff()->isTabStaff() && !alignToStem) {
+            if (!staff()->isTabStaff(tick()) && !alignToStem) {
                   if (up())
                         pos.rx() -= upNote()->headWidth() * .5;   // move half-a-note-head to left
                   else
@@ -2768,16 +2769,16 @@ QPointF Chord::layoutArticulation(Articulation* a)
             }
 
       // Lute fingering are always in the middle of the space right below the fret mark,
-      else if (staff() && staff()->staffGroup() == StaffGroup::TAB && a->isLuteFingering()) {
+      else if (staff() && staff()->staffType(tick())->group() == StaffGroup::TAB && a->isLuteFingering()) {
             // lute fing. glyphs are vertically registered in the middle of bottom space;
             // move down of half a space to have the glyph on the line
             y = chordBotY + _spatium * 0.5;
-            if (staff()->staffType()->onLines()) {          // if fret marks are on lines
+            if (staff()->staffType(tick())->onLines()) {          // if fret marks are on lines
                   // move down by half the height of fret marks (extending below the line)
                   // and half of the remaing space below,
                   // to centre the symbol between the fret mark and the line below
                   // fretBoxH/2 + (spStaff - fretBoxH/2) / 2 becomes:
-                  y += (staff()->staffType()->fretBoxH()*0.5 + _spStaff) * 0.5;
+                  y += (staff()->staffType(tick())->fretBoxH()*0.5 + _spStaff) * 0.5;
                   }
             else {                                          // if marks are between lines
                   // move down by half a sp to pace the glyph right below the mark,
@@ -2935,7 +2936,7 @@ void Chord::setSlash(bool flag, bool stemless)
                   n->undoChangeProperty(P_ID::FIXED_LINE, 0);
                   n->undoChangeProperty(P_ID::PLAY, true);
                   n->undoChangeProperty(P_ID::VISIBLE, true);
-                  if (staff()->isDrumStaff()) {
+                  if (staff()->isDrumStaff(tick())) {
                         const Drumset* ds = part()->instrument()->drumset();
                         int pitch = n->pitch();
                         if (ds && ds->isValid(pitch)) {
@@ -2957,7 +2958,7 @@ void Chord::setSlash(bool flag, bool stemless)
       // voice-dependent attributes - line, size, offset, head
       if (track() % VOICES < 2) {
             // use middle line
-            line = staff()->middleLine();
+            line = staff()->middleLine(tick());
             }
       else {
             // set small
@@ -2965,17 +2966,17 @@ void Chord::setSlash(bool flag, bool stemless)
             // set outside the staff
             qreal y = 0.0;
             if (track() % 2) {
-                  line = staff()->bottomLine() + 1;
+                  line = staff()->bottomLine(tick()) + 1;
                   y    = 0.5 * spatium();
                   }
             else {
                   line = -1;
-                  if (!staff()->isDrumStaff())
+                  if (!staff()->isDrumStaff(tick()))
                         y = -0.5 * spatium();
                   }
             // for non-drum staves, add an additional offset
             // for drum staves, no offset, but use normal head
-            if (!staff()->isDrumStaff())
+            if (!staff()->isDrumStaff(tick()))
                   undoChangeProperty(P_ID::USER_OFF, QPointF(0.0, y));
             else
                   head = NoteHead::Group::HEAD_NORMAL;

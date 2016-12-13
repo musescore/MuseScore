@@ -75,9 +75,9 @@ Rest::Rest(const Rest& r, bool link)
 void Rest::draw(QPainter* painter) const
       {
       if (
-         (staff() && staff()->isTabStaff()
+         (staff() && staff()->isTabStaff(tick())
          // in tab staff, do not draw rests is rests are off OR if dur. symbols are on
-         && (!staff()->staffType()->showRests() || staff()->staffType()->genDurations())
+         && (!staff()->staffType(tick())->showRests() || staff()->staffType(tick())->genDurations())
          && (!measure() || !measure()->isMMRest()))        // show multi measure rest always
          || generated()
             )
@@ -343,8 +343,8 @@ void Rest::layout()
             }
 
       rxpos() = 0.0;
-      if (staff() && staff()->isTabStaff()) {
-            StaffType* tab = staff()->staffType();
+      if (staff() && staff()->isTabStaff(tick())) {
+            StaffType* tab = staff()->staffType(tick());
             // if rests are shown and note values are shown as duration symbols
             if (tab->showRests() && tab->genDurations()) {
                   TDuration::DurationType type = durationType().type();
@@ -388,10 +388,10 @@ void Rest::layout()
       qreal _spatium = spatium();
       qreal yOff     = userOff().y();
       Staff* st      = staff();
-      qreal lineDist = st ? st->staffType()->lineDistance().val() : 1.0;
+      qreal lineDist = st ? st->staffType(tick())->lineDistance().val() : 1.0;
       int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
 
-      int lines = staff() ? staff()->lines() : 5;
+      int lines = staff() ? staff()->lines(tick()) : 5;
       int lineOffset = computeLineOffset();
 
       int yo;
@@ -493,7 +493,7 @@ int Rest::computeLineOffset()
 #endif
 
       int lineOffset = 0;
-      int lines = staff() ? staff()->lines() : 5;
+      int lines = staff() ? staff()->lines(tick()) : 5;
       int assumedCenter = 4;
       int actualCenter = (lines - 1);
       int centerDiff = actualCenter - assumedCenter;
@@ -552,7 +552,7 @@ int Rest::computeLineOffset()
                   lineOffset += centerDiff;
                   if (centerDiff & 1) {
                         // round to line
-                        if (lines == 2 && staff() && staff()->lineDistance() < 2.0)
+                        if (lines == 2 && staff() && staff()->lineDistance(tick()) < 2.0)
                               ;                                         // leave alone
                         else if (lines <= 6)
                               lineOffset += lineOffset > 0 ? -1 : 1;    // round inward

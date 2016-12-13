@@ -1283,7 +1283,7 @@ void Score::upDown(bool up, UpDownMode mode)
             int string   = oNote->string();
             int fret     = oNote->fret();
 
-            switch (staff->staffType()->group()) {
+            switch (staff->staffType(oNote->chord()->tick())->group()) {
                   case StaffGroup::PERCUSSION:
                         {
                         const Drumset* ds = part->instrument()->drumset();
@@ -1300,7 +1300,7 @@ void Score::upDown(bool up, UpDownMode mode)
                         switch (mode) {
                               case UpDownMode::OCTAVE:          // move same note to next string, if possible
                                     {
-                                    StaffType* stt = staff->staffType();
+                                    StaffType* stt = staff->staffType(tick);
                                     string = stt->physStringToVisual(string);
                                     string += (up ? -1 : 1);
                                     if (string < 0 || string >= stringData->strings())
@@ -1415,7 +1415,7 @@ void Score::upDown(bool up, UpDownMode mode)
 
             // store fret change only if undoChangePitch has not been called,
             // as undoChangePitch() already manages fret changes, if necessary
-            else if (staff->staffType()->group() == StaffGroup::TAB) {
+            else if (staff->staffType(tick)->group() == StaffGroup::TAB) {
                   bool refret = false;
                   if (oNote->string() != string) {
                         undoChangeProperty(oNote, P_ID::STRING, string);
@@ -1493,7 +1493,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
       int fret      = n->fret();
       int string    = n->string();
 
-      if (st->isTabStaff()) {
+      if (st->isTabStaff(chord->tick())) {
             if (pitch != n->pitch()) {
                   //
                   // as pitch has changed, calculate new
@@ -1513,7 +1513,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
             tpc2 = tpc;
             }
 
-      if (!st->isTabStaff()) {
+      if (!st->isTabStaff(chord->tick())) {
             //
             // handle ties
             //
@@ -1681,8 +1681,8 @@ void Score::moveUp(ChordRest* cr)
 
       QList<Staff*>* staves = part->staves();
       // we know that staffMove+rstaff-1 index exists due to the previous condition.
-      if (staff->staffType()->group() != StaffGroup::STANDARD ||
-          staves->at(rstaff+staffMove-1)->staffType()->group() != StaffGroup::STANDARD) {
+      if (staff->staffType(cr->tick())->group() != StaffGroup::STANDARD ||
+          staves->at(rstaff+staffMove-1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
             qDebug("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
             }
       else  {
@@ -1690,6 +1690,7 @@ void Score::moveUp(ChordRest* cr)
             undo(new ChangeChordStaffMove(cr, staffMove - 1));
             }
       }
+
 //---------------------------------------------------------
 //   moveDown
 //---------------------------------------------------------
@@ -1710,8 +1711,8 @@ void Score::moveDown(ChordRest* cr)
 
       QList<Staff*>* staves = part->staves();
       // we know that staffMove+rstaff+1 index exists due to the previous condition.
-      if (staff->staffType()->group() != StaffGroup::STANDARD ||
-          staves->at(staffMove+rstaff+1)->staffType()->group() != StaffGroup::STANDARD) {
+      if (staff->staffType(cr->tick())->group() != StaffGroup::STANDARD ||
+          staves->at(staffMove+rstaff+1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
             qDebug("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
             }
       else  {
@@ -2174,7 +2175,7 @@ void Score::cmdMirrorNoteHead()
       foreach(Element* e, el) {
             if (e->type() == Element::Type::NOTE) {
                   Note* note = toNote(e);
-                  if (note->staff() && note->staff()->isTabStaff())
+                  if (note->staff() && note->staff()->isTabStaff(note->chord()->tick()))
                         note->score()->undoChangeProperty(e, P_ID::GHOST, !note->ghost());
                   else {
                         MScore::DirectionH d = note->userMirror();
@@ -2703,11 +2704,11 @@ void Score::cmdSlashFill()
                   int line = 0;
                   bool error = false;
                   NoteVal nv;
-                  if (staff(staffIdx)->staffType()->group() == StaffGroup::TAB)
-                        line = staff(staffIdx)->lines() / 2;
+                  if (staff(staffIdx)->staffType(s->tick())->group() == StaffGroup::TAB)
+                        line = staff(staffIdx)->lines(s->tick()) / 2;
                   else
-                        line = staff(staffIdx)->middleLine();     // staff(staffIdx)->lines() - 1;
-                  if (staff(staffIdx)->staffType()->group() == StaffGroup::PERCUSSION) {
+                        line = staff(staffIdx)->middleLine(s->tick());     // staff(staffIdx)->lines() - 1;
+                  if (staff(staffIdx)->staffType(s->tick())->group() == StaffGroup::PERCUSSION) {
                         nv.pitch = 0;
                         nv.headGroup = NoteHead::Group::HEAD_SLASH;
                         }

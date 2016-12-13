@@ -200,10 +200,10 @@ void MuseScore::editInstrList()
 
       // keep the keylist of the first pitched staff to apply it to new ones
       KeyList tmpKeymap;
-      Staff* firstStaff = nullptr;
+      Staff* firstStaff = 0;
       for (Staff* s : masterScore->staves()) {
             KeyList* km = s->keyList();
-            if (!s->isDrumStaff()) {
+            if (!s->isDrumStaff(0)) {     // TODO
                   tmpKeymap.insert(km->begin(), km->end());
                   firstStaff = s;
                   break;
@@ -356,7 +356,7 @@ void MuseScore::editInstrList()
                               const StaffType* stfType = sli->staffType();
 
                               // use selected staff type
-                              if (stfType->name() != staff->staffType()->name())
+                              if (stfType->name() != staff->staffType(0)->name())
                                     masterScore->undo(new ChangeStaffType(staff, *stfType));
                               }
                         else {
