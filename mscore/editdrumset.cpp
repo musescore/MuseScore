@@ -40,13 +40,22 @@ enum Column : char { PITCH, NOTE, SHORTCUT, NAME };
 NoteHead::Group noteHeadNames[] = {
       NoteHead::Group::HEAD_NORMAL,
       NoteHead::Group::HEAD_CROSS,
-      NoteHead::Group::HEAD_DIAMOND,
-      NoteHead::Group::HEAD_TRIANGLE_DOWN,
-      NoteHead::Group::HEAD_MI,
-      NoteHead::Group::HEAD_SLASH,
+      NoteHead::Group::HEAD_PLUS,
       NoteHead::Group::HEAD_XCIRCLE,
+      NoteHead::Group::HEAD_WITHX,
+      NoteHead::Group::HEAD_TRIANGLE_UP,
+      NoteHead::Group::HEAD_TRIANGLE_DOWN,
+      NoteHead::Group::HEAD_SLASH,
+      NoteHead::Group::HEAD_SLASHED1,
+      NoteHead::Group::HEAD_SLASHED2,
+      NoteHead::Group::HEAD_DIAMOND,
+      NoteHead::Group::HEAD_DIAMOND_OLD,
+      NoteHead::Group::HEAD_CIRCLED,
+      NoteHead::Group::HEAD_CIRCLED_LARGE,
+      NoteHead::Group::HEAD_LARGE_ARROW,
       NoteHead::Group::HEAD_DO,
       NoteHead::Group::HEAD_RE,
+      NoteHead::Group::HEAD_MI,
       NoteHead::Group::HEAD_FA,
       NoteHead::Group::HEAD_LA,
       NoteHead::Group::HEAD_TI,
@@ -245,7 +254,7 @@ void EditDrumset::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previou
       qDebug("AFTER %d", nDrumset.voice(pitch));
       stemDirection->setCurrentIndex(int(nDrumset.stemDirection(pitch)));
       NoteHead::Group nh = nDrumset.noteHead(pitch);
-      noteHead->setCurrentIndex(int(nh) + 1);
+      noteHead->setCurrentIndex(noteHead->findData(int(nh)));
       if (nDrumset.shortcut(pitch) == 0)
             shortcut->setCurrentIndex(7);
       else
@@ -270,7 +279,7 @@ void EditDrumset::valueChanged()
             return;
       int pitch = pitchList->currentItem()->data(Column::PITCH, Qt::UserRole).toInt();
       nDrumset.drum(pitch).name          = name->text();
-      nDrumset.drum(pitch).notehead      = NoteHead::Group(noteHead->currentIndex() - 1);
+      nDrumset.drum(pitch).notehead      = NoteHead::Group(noteHead->currentData().toInt());
       nDrumset.drum(pitch).line          = staffLine->value();
       nDrumset.drum(pitch).voice         = voice->currentIndex();
       nDrumset.drum(pitch).stemDirection = Direction(stemDirection->currentIndex());
