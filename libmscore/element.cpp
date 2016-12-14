@@ -84,6 +84,7 @@
 #include "volta.h"
 #include "xml.h"
 #include "systemdivider.h"
+#include "stafftypechange.h"
 
 namespace Ms {
 
@@ -133,6 +134,7 @@ static const ElementName elementNames[] = {
       ElementName("StaffText",            QT_TRANSLATE_NOOP("elementName", "Staff Text")),
       ElementName("RehearsalMark",        QT_TRANSLATE_NOOP("elementName", "Rehearsal Mark")),
       ElementName("InstrumentChange",     QT_TRANSLATE_NOOP("elementName", "Instrument Change")),
+      ElementName("StaffTypeChange",      QT_TRANSLATE_NOOP("elementName", "Staff Typeype Change")),
       ElementName("Harmony",              QT_TRANSLATE_NOOP("elementName", "Chord Symbol")),
       ElementName("FretDiagram",          QT_TRANSLATE_NOOP("elementName", "Fretboard Diagram")),
       ElementName("Bend",                 QT_TRANSLATE_NOOP("elementName", "Bend")),
@@ -1270,6 +1272,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::STAFF_TEXT:        return new StaffText(score);
             case Element::Type::REHEARSAL_MARK:    return new RehearsalMark(score);
             case Element::Type::INSTRUMENT_CHANGE: return new InstrumentChange(score);
+            case Element::Type::STAFFTYPE_CHANGE:  return new StaffTypeChange(score);
             case Element::Type::NOTEHEAD:          return new NoteHead(score);
             case Element::Type::NOTEDOT:           return new NoteDot(score);
             case Element::Type::TREMOLO:           return new Tremolo(score);

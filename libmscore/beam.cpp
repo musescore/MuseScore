@@ -260,7 +260,7 @@ bool Beam::twoBeamedNotes()
       if (c1->notes().size() != 1 || c2->notes().size() != 1)
             return false;
 
-      int upDnLimit = staff()->lines(c1->tick()) - 1;           // was '4' hard-coded in the next 2 lines
+      int upDnLimit = staff()->lines(0) - 1;           // was '4' hard-coded in the next 2 lines
       int dist1     = c1->upLine() - upDnLimit;
       int dist2     = c2->upLine() - upDnLimit;
       if ((dist1 == -dist2) || (-dist1 == dist2)) {
@@ -300,11 +300,11 @@ void Beam::layout1()
       Chord* c2 = 0;
 
       // TAB's with stem beside staves have special layout
-      if (staff()->isTabStaff(tick()) && !staff()->staffType(tick())->stemThrough()) {
+      if (staff()->isTabStaff(0) && !staff()->staffType(0)->stemThrough()) {
             //TABULATURES: all beams (and related chords) are:
             //    UP or DOWN according to TAB duration position
             //    slope 0
-            _up   = !staff()->staffType(tick())->stemsDown();
+            _up   = !staff()->staffType(0)->stemsDown();
             slope   = 0.0;
             _cross  = false;
             minMove = maxMove = 0;              // no cross-beaming in TAB's!
@@ -319,7 +319,7 @@ void Beam::layout1()
                         }
                   }
             }
-      else if (staff()->isDrumStaff(tick())) {
+      else if (staff()->isDrumStaff(0)) {
             if (_direction != Direction::AUTO)
                   _up = _direction == Direction::UP;
             else {
@@ -343,7 +343,7 @@ void Beam::layout1()
 
             int mUp     = 0;
             int mDown   = 0;
-            int upDnLimit = staff()->lines(tick()) - 1;           // was '4' hard-coded in following code
+            int upDnLimit = staff()->lines(0) - 1;           // was '4' hard-coded in following code
 
             int staffIdx = -1;
             for (ChordRest* cr : _elements) {
@@ -459,11 +459,11 @@ void Beam::layoutGraceNotes()
       //
       // determine beam stem direction
       //
-      if (staff()->isTabStaff(tick())) {
+      if (staff()->isTabStaff(0)) {
             //TABULATURES: all beams (and related chords) are:
             //    UP or DOWN according to TAB duration position
             //    slope 0
-            _up   = !staff()->staffType(tick())->stemsDown();
+            _up   = !staff()->staffType(0)->stemsDown();
             }
       else {
             if (_direction != Direction::AUTO)
@@ -1129,7 +1129,7 @@ static int adjust(qreal _spatium4, int slant, const std::vector<ChordRest*>& cl)
       // on tab staff, reduce a bit the stems (value 4 is experimental)
       // TODO : proper fix should adapt all the numeric vaues used in Beam::computeStemLen() below
       // to variable line distance
-      if (c1->staff() && c1->staff()->isTabStaff(c1->tick())) {
+      if (c1->staff() && c1->staff()->isTabStaff(0)) {
             ml = (ml != 0) ? ml - 4 : 0;
             return ml;
             }
@@ -1210,7 +1210,7 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
       qreal _spatium      = spatium();
       qreal _spatium4     = _spatium * .25;
       // TAB: scale to staff line distance for vert. pos. within a staff
-      qreal _spStaff4     = staff()->isTabStaff(tick()) ? _spatium4 * staff()->lineDistance(tick()) : _spatium4;
+      qreal _spStaff4     = staff()->isTabStaff(0) ? _spatium4 * staff()->lineDistance(0) : _spatium4;
       const ChordRest* c1 = cl.front();
       const ChordRest* c2 = cl.back();
       qreal dx            = c2->pagePos().x() - c1->pagePos().x();
@@ -1553,8 +1553,8 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
       int n = crl.size();
 
       StaffType* tab = 0;
-      if (staff()->isTabStaff(tick()) )
-            tab = staff()->staffType(tick());
+      if (staff()->isTabStaff(0) )
+            tab = staff()->staffType(0);
       if (tab && !tab->stemThrough()) {
             //
             // TAB STAVES with stems beside staves: beam position is fixed depending on TAB parameters and chordrest up/down

@@ -19,8 +19,8 @@ MuseScore {
                   for (var i = 0; i < l; i++) {
                         var e = a[i];
                         logn(e._name());
-                        var type = e.type;
-                        if (type == Element.FRET_DIAGRAM) {
+//                        var type = e.type;
+                        if (e.type == Element.FRET_DIAGRAM) {
                               log2("userMag:",    e.userMag)
                               log2("strings:",    e.strings)
                               log2("frets:",      e.frets)

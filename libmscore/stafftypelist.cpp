@@ -66,7 +66,7 @@ void StaffTypeList::setStaffType(int tick, const StaffType* st)
 //   StaffTypeList::read
 //---------------------------------------------------------
 
-void StaffTypeList::read(XmlReader& e, Score* cs)
+void StaffTypeList::read(XmlReader& /*e*/, Score* /*cs*/)
       {
 #if 0
       while (e.readNextStartElement()) {
