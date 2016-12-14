@@ -7,7 +7,7 @@ if [ "${TRAVIS_PULL_REQUEST}" = "true" ]; then
   exit 0
 fi
 
-DATE="$(date -u +%Y%m%d%H%M)"
+DATE="$(date -u +%Y-%m-%d-%H%M)"
 
 BRANCH="$TRAVIS_BRANCH"
 [ "BRANCH" ] || BRANCH="$(git rev-parse --abbrev-ref HEAD)"
