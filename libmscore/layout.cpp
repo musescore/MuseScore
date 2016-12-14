@@ -2821,6 +2821,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       qreal minWidth    = 0;
       bool firstMeasure = true;
+      bool createHeader = false;
       qreal systemWidth = pageFormat()->printableWidth() * DPI;
       system->setWidth(systemWidth);
 
@@ -2841,11 +2842,18 @@ System* Score::collectSystem(LayoutContext& lc)
                               if (!s->enabled())
                                     s->setEnabled(true);
                               }
-                        firstMeasure  = false;
                         m->addSystemHeader(lc.firstSystem);
+                        firstMeasure = false;
+                        createHeader = false;
                         }
-                  else if (m->header())
-                        m->removeSystemHeader();
+                  else {
+                        if (createHeader) {
+                              m->addSystemHeader(false);
+                              createHeader = false;
+                              }
+                        else if (m->header())
+                              m->removeSystemHeader();
+                        }
 
                   Measure* nm = m->nextMeasure();
                   if (nm)
@@ -2857,7 +2865,7 @@ System* Score::collectSystem(LayoutContext& lc)
             else if (lc.curMeasure->isHBox()) {
                   lc.curMeasure->computeMinWidth();
                   ww = lc.curMeasure->width();
-                  firstMeasure = toHBox(lc.curMeasure)->createSystemHeader();
+                  createHeader = toHBox(lc.curMeasure)->createSystemHeader();
                   }
             else {
                   // vbox:
@@ -3014,8 +3022,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
 #ifndef NDEBUG
             if (!qFuzzyCompare(mw, minWidth))
-                  printf("==layoutSystem %6d old %.1f new %.1f\n",
-                     system->measures().front()->tick(), minWidth, mw);
+                  qDebug("==layoutSystem %6d old %.1f new %.1f", system->measures().front()->tick(), minWidth, mw);
 #endif
             rest = systemWidth - minWidth;
             //
