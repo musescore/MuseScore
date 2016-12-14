@@ -118,6 +118,7 @@ class Image;
 class ChordLine;
 class SlurTieSegment;
 class FretDiagram;
+class StaffTypeChange;
 
 enum class SymId;
 
@@ -312,6 +313,7 @@ class Element : public QObject, public ScoreElement {
             STAFF_TEXT,
             REHEARSAL_MARK,
             INSTRUMENT_CHANGE,
+            STAFFTYPE_CHANGE,
             HARMONY,
             FRET_DIAGRAM,
 
@@ -749,6 +751,7 @@ class Element : public QObject, public ScoreElement {
       CONVERT(Ambitus,       AMBITUS)
       CONVERT(Bracket,       BRACKET)
       CONVERT(InstrumentChange, INSTRUMENT_CHANGE)
+      CONVERT(StaffTypeChange, STAFFTYPE_CHANGE)
       CONVERT(Hairpin,       HAIRPIN)
       CONVERT(HairpinSegment,HAIRPIN_SEGMENT)
       CONVERT(Bend,          BEND)
@@ -870,6 +873,7 @@ static inline const a* to##a(const Element* e) { Q_ASSERT(e == 0 || e->type() ==
       CONVERT(Ambitus,       AMBITUS)
       CONVERT(Bracket,       BRACKET)
       CONVERT(InstrumentChange, INSTRUMENT_CHANGE)
+      CONVERT(StaffTypeChange, STAFFTYPE_CHANGE)
       CONVERT(Text,          TEXT)
       CONVERT(Hairpin,       HAIRPIN)
       CONVERT(HairpinSegment,HAIRPIN_SEGMENT)

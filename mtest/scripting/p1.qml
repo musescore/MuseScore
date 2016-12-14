@@ -26,7 +26,7 @@ MuseScore {
                         var e    = cursor.element;
                         logn(e._name());
                         log2("type is:", type);
-                        if (type == Element.CHORD) {
+                        if (cursor.element.type == Element.CHORD) {
                             log2("  durationType:", e.durationType);
                             log2("  beamMode:", e.beamMode);
                             log2("  small:",    e.small);
