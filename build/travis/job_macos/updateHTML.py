@@ -34,9 +34,20 @@ def generateRSS(pathname, lines):
     for l in lines:
         if l and l.startswith("MuseScore"):
             info = l.split("-")
-            date = info[1]
-            branch = info[2]
-            commit = info[3]
+            if len(info) == 4:
+                date = info[1]
+                branch = info[2]
+                commit = info[3]
+            elif len(info) == 7:
+                year = info[1]
+                month = info[2]
+                day = info[3]
+                hour = info[4]
+                date = year + month + day + hour
+                branch = info[5]
+                commit = info[6]
+            else:
+                continue
             d = datetime.strptime(date, '%Y%m%d%H%M')
             from email.utils import formatdate
             li += '''
