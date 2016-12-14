@@ -624,10 +624,12 @@ Note* Spanner::startElementFromSpanner(Spanner* sp, Element* newEnd)
 
       Note*  oldStart   = static_cast<Note*>(sp->startElement());
       Note*  oldEnd     = static_cast<Note*>(sp->endElement());
+      if (oldStart == nullptr || oldEnd == nullptr)
+            return nullptr;
       Note*  newStart   = nullptr;
       Score* score      = newEnd->score();
       // determine the track where to expect the 'parallel' start element
-      int   newTrack    = newEnd->track() + (oldEnd->track() - oldStart->track());
+      int   newTrack    = (newEnd->track() - oldEnd->track()) + oldStart->track();
       // look in notes linked to oldStart for a note with the
       // same score as new score and appropriate track
       for (ScoreElement* newEl : oldStart->linkList())
@@ -656,6 +658,8 @@ Note* Spanner::endElementFromSpanner(Spanner* sp, Element* newStart)
 
       Note*  oldStart   = static_cast<Note*>(sp->startElement());
       Note*  oldEnd     = static_cast<Note*>(sp->endElement());
+      if (oldStart == nullptr || oldEnd == nullptr)
+            return nullptr;
       Note*  newEnd     = nullptr;
       Score* score      = newStart->score();
       // determine the track where to expect the 'parallel' start element

@@ -472,9 +472,9 @@ class Note : public Element {
       const QVector<Spanner*>& spannerFor() const   { return _spannerFor;         }
       const QVector<Spanner*>& spannerBack() const  { return _spannerBack;        }
 
-      void addSpannerBack(Spanner* e)            { _spannerBack.push_back(e);  }
+      void addSpannerBack(Spanner* e)            { if (!_spannerBack.contains(e)) _spannerBack.push_back(e);  }
       bool removeSpannerBack(Spanner* e)         { return _spannerBack.removeOne(e); }
-      void addSpannerFor(Spanner* e)             { _spannerFor.push_back(e);         }
+      void addSpannerFor(Spanner* e)             { if (!_spannerFor.contains(e)) _spannerFor.push_back(e);    }
       bool removeSpannerFor(Spanner* e)          { return _spannerFor.removeOne(e);  }
 
       void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
