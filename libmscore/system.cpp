@@ -129,9 +129,8 @@ void System::removeStaff(int idx)
       }
 
 //---------------------------------------------------------
-//   layout
+//   layoutSystem
 ///   Layout the System
-//    xo1 is the indent of this system
 //---------------------------------------------------------
 
 void System::layoutSystem(qreal xo1)

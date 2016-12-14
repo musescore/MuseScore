@@ -43,7 +43,7 @@ class InstrumentChange : public Text  {
       void setInstrument(Instrument&& i)    { *_instrument = i;    }
       void setInstrument(const Instrument& i);
 
-      Segment* segment() const                { return (Segment*)parent(); }
+      Segment* segment() const              { return toSegment(parent()); }
 
       virtual QRectF drag(EditData*) override;
 

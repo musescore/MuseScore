@@ -954,15 +954,15 @@ StaffType* Staff::staffType(int tick)
 //   setStaffType
 //---------------------------------------------------------
 
-void Staff::setStaffType(int tick, const StaffType* st)
+void Staff::setStaffType(int tick, const StaffType* nst)
       {
-      _staffTypeList.setStaffType(tick, st);
-#if 0
-      if (_staffType == *st)
+      StaffType* ost = &_staffTypeList.staffType(tick);
+
+      if (*ost == *nst)
             return;
-      int linesOld = lines();
-      int linesNew = st->lines();
-      _staffType = *st;
+      int linesOld = ost->lines();
+      int linesNew = nst->lines();
+      _staffTypeList.setStaffType(tick, nst);
 
       if (linesNew != linesOld) {
             int sIdx = this->idx();
@@ -979,7 +979,6 @@ void Staff::setStaffType(int tick, const StaffType* st)
             else                                // update barLineFrom/To in whole score context
                   score()->updateBarLineSpans(sIdx, linesOld, linesNew /*, true*/);
             }
-#endif
       }
 
 //---------------------------------------------------------
