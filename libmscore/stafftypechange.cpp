@@ -60,7 +60,7 @@ void StaffTypeChange::read(XmlReader& e)
 //   draw
 //---------------------------------------------------------
 
-void StaffTypeChange::draw(QPainter* painter) const
+void StaffTypeChange::draw(QPainter* /*painter*/) const
       {
       if (score()->printing() || !score()->showUnprintable())
             return;
