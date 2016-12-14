@@ -12,14 +12,14 @@
 
 <h2>Nightly builds for Mac OS</h2>
 
-<p>The nightly builds allow you to test the very latest developments and bug fixes. The goal is to catch new crashes and regressions before they reach the prereleases or stable versions. For a more detailed description see <a href="http://www.musescore.org/en/handbook/comparison-stable-prerelease-and-nightly-builds">Comparison of stable, prerelease, and nightly builds</a>. You can report any regression or bugs </p>
+<p>The nightly builds allow you to test the very latest developments, including new features and bug fixes. The goal is to catch new bugs, crashes, and regressions before they reach the prerelease or stable versions. For more information, see <a href="http://www.musescore.org/en/handbook/comparison-stable-prerelease-and-nightly-builds">Comparison of stable, prerelease, and nightly builds</a>. You can report any regressions or bugs you find via <code>Help > Report a Bug</code> within the nightly build.</p>
 
-<p>A nightly build can run side-by-side with other versions of MuseScore on the same computer. If you change the preferences in the nightly build it does not affect your preferences in the prerelease or stable versions of MuseScore. The nightly builds use a cymbal logo to visually differentiate them from normal versions of MuseScore. The cymbal is a play on the fact that nightly builds are likely to crash. If this sounds scary to you, use the latest stable release instead. For the latest stable version of MuseScore visit <a href="http://www.musescore.org/">musescore.org</a>.</p>
+<p>A nightly build can run side-by-side with other versions of MuseScore on the same computer. If you change preferences in the nightly build, it does not affect your preferences in the prerelease or stable versions of MuseScore. The nightly builds use a cymbal icon (a play on the fact that nightly builds are likely to suspend and crash) to visually differentiate them from normal versions of MuseScore. If this sounds scary to you, instead use the latest stable version of MuseScore from <a href="http://www.musescore.org/">musescore.org</a>.</p>
 
 <h3 id="instructions">Instructions</h3>
 <ol>
-<li>Download one of the "MuseScoreNightly" files from the Download section below. (The first is the most recent)</li>
-<li>Open the "dmg" file, then drag and drop MuseScoreNighly to your <code>Applications</code> folder.</li>
+<li>Download one of the "MuseScoreNightly" files from the Download section below. (The first is the most recent.)</li>
+<li>Open the DMG file, then drag and drop MuseScoreNightly to your <code>Applications</code> folder.</li>
 </ol>
 
 <h3 id="download">Download</h3>
