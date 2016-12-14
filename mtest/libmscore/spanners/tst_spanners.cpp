@@ -44,13 +44,14 @@ class TestSpanners : public QObject, public MTest
       void spanners04();            // linking a staff to a staff containing a glissando
       void spanners05();            // creating part from an existing staff containing a glissando
       void spanners06();            // add a glissando to a staff with a linked staff
-      void spanners07();            // add a glissando to a satff with an excerpt attached
+      void spanners07();            // add a glissando to a staff with an excerpt attached
       void spanners08();            // delete a lyrics with separator and undo
       void spanners09();            // remove a measure containing the end point of a LyricsLine and undo
       void spanners10();            // remove a measure containing the start point of a LyricsLine and undo
       void spanners11();            // remove a measure entirely containing a LyricsLine and undo
       void spanners12();            // remove a measure containing the middle portion of a LyricsLine and undo
       void spanners13();            // drop a line break at the middle of a LyricsLine and check LyricsLineSegments
+      void spanners14();            // creating part from an existing grand staff containing a cross staff glissando
       };
 
 //---------------------------------------------------------
@@ -599,6 +600,40 @@ void TestSpanners::spanners13()
       QVERIFY(saveCompareScore(score, "lyricsline06.mscx", DIR + "lyricsline06.mscx"));
       delete score;
       }
+
+//---------------------------------------------------------
+///  spanners14
+///   creating part from an existing grand staff containing a cross staff glissando
+//---------------------------------------------------------
+
+void TestSpanners::spanners14()
+      {
+      MasterScore* score = readScore(DIR + "glissando-cloning05.mscx");
+      QVERIFY(score);
+      score->doLayout();
+
+      // create parts
+      // (copied and adapted from void TestParts::createParts() in mtest/libmscore/parts/tst_parts.cpp)
+      QList<Part*> parts;
+      parts.append(score->parts().at(0));
+      Score* nscore = new Score(score);
+
+      Excerpt* ex = new Excerpt(score);
+      ex->setPartScore(nscore);
+      ex->setTitle(parts.front()->longName());
+      ex->setParts(parts);
+      Excerpt::createExcerpt(ex);
+      QVERIFY(nscore);
+
+//      nscore->setName(parts.front()->partName());
+
+//      QMultiMap<int, int> tracks;
+      score->Score::undo(new AddExcerpt(ex));
+
+      QVERIFY(saveCompareScore(score, "glissando-cloning05.mscx", DIR + "glissando-cloning05-ref.mscx"));
+      delete score;
+      }
+
 
 
 QTEST_MAIN(TestSpanners)
