@@ -220,14 +220,14 @@ void HairpinSegment::layout()
 
                         if (d > -minDistance)
                               ymax += d + minDistance;
-                        qreal sdy;
+                        qreal sdy = 0.0;
                         if (sd) {
                               sdy = -sd->bbox().top() * .4;
                               sd->doAutoplace();
                               if (sd->pos().y() - sdy > ymax)
                                     ymax = sd->pos().y() - sdy;
                               }
-                        qreal edy;
+                        qreal edy = 0.0;
                         if (ed) {
                               edy = -ed->bbox().top() * .4;
                               ed->doAutoplace();

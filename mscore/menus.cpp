@@ -131,7 +131,7 @@ Palette* MuseScore::newBeamPalette(PaletteType t)
             { IconType::NONE,     ""}
             };
 
-      const IconAction* a;
+      const IconAction* a = nullptr;
       switch (t) {
             case PaletteType::MASTER:
             case PaletteType::ADVANCED:
@@ -208,7 +208,7 @@ Palette* MuseScore::newDynamicsPalette(PaletteType t)
             "fp", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
             "rfz", "rf", "fz", "m", "r", "s", "z", "n"
             };
-      const std::vector<const char*>* array;
+      const std::vector<const char*>* array = nullptr;
       switch (t) {
             case PaletteType::MASTER:
                   array = &array1;
@@ -972,8 +972,8 @@ Palette* MuseScore::newClefsPalette(PaletteType t)
             ClefType::F8_VB,    ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::F_F18C, ClefType::F_19C,  ClefType::PERC,
             ClefType::PERC2, ClefType::TAB, ClefType::TAB4, ClefType::TAB_SERIF, ClefType::TAB4_SERIF
             };
-      std::vector<ClefType>* items;
-      bool more;
+      std::vector<ClefType>* items = nullptr;
+      bool more = false;
       switch (t) {
             case PaletteType::MASTER:
                   more = false;
@@ -1027,7 +1027,7 @@ Palette* MuseScore::newGraceNotePalette(PaletteType t)
             { IconType::GRACE32_AFTER, "grace32after" },
             { IconType::NONE,          "" }
             };
-      const IconAction* a;
+      const IconAction* a = nullptr;
       switch (t) {
             case PaletteType::MASTER:
             case PaletteType::ADVANCED:
