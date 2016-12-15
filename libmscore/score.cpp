@@ -2744,7 +2744,7 @@ void Score::padToggle(Pad n)
                   cr = m->findChordRest(0, 0);
             }
 
-      if (!cr)
+      if (!cr || cr->type() == Element::Type::REPEAT_MEASURE)
             return;
 
       if (cr->type() == Element::Type::CHORD && (static_cast<Chord*>(cr)->noteType() != NoteType::NORMAL)) {
@@ -2820,7 +2820,7 @@ void Score::selectSingle(Element* e, int staffIdx)
             if (e->type() == Element::Type::NOTE) {
                   e = e->parent();
                   }
-            if (e->type() == Element::Type::REST || e->type() == Element::Type::CHORD) {
+            if (e->isChordRest()) {
                   _is.setLastSegment(_is.segment());
                   _is.setSegment(static_cast<ChordRest*>(e)->segment());
                   }

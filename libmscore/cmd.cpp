@@ -2105,7 +2105,7 @@ void Score::cmdHalfDuration()
             return;
       if (el->type() == Element::Type::NOTE)
             el = el->parent();
-      if (!el->isChordRest())
+      if (!el->isChordRest() || el->type() == Element::Type::REPEAT_MEASURE)
             return;
 
       ChordRest* cr = static_cast<ChordRest*>(el);
@@ -2135,7 +2135,7 @@ void Score::cmdDoubleDuration()
             return;
       if (el->type() == Element::Type::NOTE)
             el = el->parent();
-      if (!el->isChordRest())
+      if (!el->isChordRest() || el->type() == Element::Type::REPEAT_MEASURE)
             return;
 
       ChordRest* cr = static_cast<ChordRest*>(el);
