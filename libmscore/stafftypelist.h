@@ -25,7 +25,7 @@ class XmlReader;
 //    to keep track of key signature changes
 //---------------------------------------------------------
 
-class StaffTypeList : public std::map<const int, StaffType> {
+class StaffTypeList : public std::map<int, StaffType> {
 
    public:
       StaffTypeList() {}
