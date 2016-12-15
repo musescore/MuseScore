@@ -129,8 +129,8 @@ class MStaff {
       void setSlashStyle(bool val)   { _slashStyle = val;  }
 
 #ifndef NDEBUG
-      bool corrupted() const         { return _corrupted; };
-      void setCorrupted(bool val)    { _corrupted = val; };
+      bool corrupted() const         { return _corrupted; }
+      void setCorrupted(bool val)    { _corrupted = val; }
 #endif
       };
 
@@ -285,8 +285,10 @@ Spacer* Measure::vspacerDown(int staffIdx) const                { return _mstave
 Spacer* Measure::vspacerUp(int staffIdx) const                  { return _mstaves[staffIdx]->vspacerUp(); }
 void Measure::setStaffVisible(int staffIdx, bool visible)       { _mstaves[staffIdx]->setVisible(visible); }
 void Measure::setStaffSlashStyle(int staffIdx, bool slashStyle) { _mstaves[staffIdx]->setSlashStyle(slashStyle); }
+#ifndef NDEBUG
 bool Measure::corrupted(int staffIdx) const                     { return _mstaves[staffIdx]->corrupted(); }
 void Measure::setCorrupted(int staffIdx, bool val)              { _mstaves[staffIdx]->setCorrupted(val); }
+#endif
 void Measure::setNoText(int staffIdx, Text* t)                  { _mstaves[staffIdx]->setNoText(t); }
 Text* Measure::noText(int staffIdx) const                       { return _mstaves[staffIdx]->noText(); }
 Shape Measure::staffShape(int staffIdx) const                   { return _mstaves[staffIdx]->shape(); }
