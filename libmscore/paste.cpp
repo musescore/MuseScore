@@ -417,7 +417,10 @@ PasteStatus Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
             if (styleB(StyleIdx::createMultiMeasureRests))
                   createMMRests();
             Segment* s1 = tick2segmentMM(dstTick);
-            Segment* s2 = tick2segmentMM(dstTick + tickLen);
+            Segment* s2 = tick2segmentMM(dstTick + tickLen, true);
+            //if (s2 == s2->measure()->first()) {
+            //      s2 = s2->measure()->prevMeasureMM()->last();
+            //      }
             int endStaff = dstStaff + staves;
             if (endStaff > nstaves())
                   endStaff = nstaves();

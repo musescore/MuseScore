@@ -103,10 +103,10 @@ MeasureBase* Score::tick2measureBase(int tick) const
 
 Segment* Score::tick2segmentMM(int tick, bool first, Segment::Type st) const
       {
-      return tick2segment(tick,first,st,true);
+      return tick2segment(tick, first, st, true);
       }
 
-Segment* Score::tick2segment(int tick, bool first, Segment::Type st, bool useMMrest ) const
+Segment* Score::tick2segment(int tick, bool first, Segment::Type st, bool useMMrest) const
       {
       Measure* m;
       if (useMMrest) {
@@ -121,6 +121,12 @@ Segment* Score::tick2segment(int tick, bool first, Segment::Type st, bool useMMr
       if (m == 0) {
             qDebug("   no segment for tick %d", tick);
             return 0;
+            }
+      // EndBarline of previous measure could be the segment we are looking for...
+      if (first && tick == m->tick() && st & Segment::Type::EndBarLine) {
+            Measure* pm = useMMrest ? m->prevMeasureMM() : m->prevMeasure();
+            if (pm)
+                  m = pm;
             }
       for (Segment* segment = m->first(st); segment;) {
             int t1 = segment->tick();
