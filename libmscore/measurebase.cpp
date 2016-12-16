@@ -385,18 +385,21 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
             case LayoutBreak::LINE:
                   if (lineBreak() == v)
                         return;
+                  setLineBreak(v);
                   break;
             case LayoutBreak::PAGE:
                   if (pageBreak() == v)
                         return;
                   if (v && lineBreak())
                         setLineBreak(false);
+                  setPageBreak(v);
                   break;
             case LayoutBreak::SECTION:
                   if (sectionBreak() == v)
                         return;
                   if (v && lineBreak())
                         setLineBreak(false);
+                  setSectionBreak(v);
                   break;
             case LayoutBreak::NOBREAK:
                   if (noBreak() == v)
@@ -406,6 +409,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
                         setPageBreak(false);
                         setSectionBreak(false);
                         }
+                  setNoBreak(v);
                   break;
             }
 
