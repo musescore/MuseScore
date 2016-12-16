@@ -164,7 +164,7 @@
         <Tuplet id="1">
           <normalNotes>4</normalNotes>
           <actualNotes>6</actualNotes>
-          <baseNote>eighth</baseNote>
+          <baseNote>16th</baseNote>
           <Number>
             <style>Tuplet</style>
             <text>6</text>
@@ -239,7 +239,7 @@
         <Tuplet id="2">
           <normalNotes>8</normalNotes>
           <actualNotes>10</actualNotes>
-          <baseNote>quarter</baseNote>
+          <baseNote>eighth</baseNote>
           <Number>
             <style>Tuplet</style>
             <text>10</text>
@@ -418,33 +418,6 @@
           <l1>31</l1>
           <l2>27</l2>
           </Beam>
-        <Chord>
-          <Tuplet>4</Tuplet>
-          <durationType>16th</durationType>
-          <Beam>6</Beam>
-          <Note>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <Tuplet>4</Tuplet>
-          <durationType>16th</durationType>
-          <Beam>6</Beam>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <Tuplet>4</Tuplet>
-          <durationType>16th</durationType>
-          <Beam>6</Beam>
-          <Note>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
         <Tuplet id="5">
           <direction>up</direction>
           <normalNotes>8</normalNotes>
@@ -455,6 +428,33 @@
             <text>9</text>
             </Number>
           </Tuplet>
+        <Chord>
+          <Tuplet>5</Tuplet>
+          <durationType>16th</durationType>
+          <Beam>6</Beam>
+          <Note>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <Tuplet>5</Tuplet>
+          <durationType>16th</durationType>
+          <Beam>6</Beam>
+          <Note>
+            <pitch>71</pitch>
+            <tpc>19</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <Tuplet>5</Tuplet>
+          <durationType>16th</durationType>
+          <Beam>6</Beam>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
         <Tuplet id="6">
           <Tuplet>5</Tuplet>
           <normalNotes>4</normalNotes>

@@ -1081,7 +1081,7 @@ void Tuplet::sanitizeTuplet()
       {
       Fraction tupletDuration = duration().reduced();
       Fraction baseLenDuration = (Fraction(ratio().denominator(),1) * baseLen().fraction()).reduced();
-      if (tupletDuration == baseLenDuration)
+      if ((tupletDuration - baseLenDuration).reduced().numerator() == 0)
             return;
       // Mismatch between the duration and the duration computed from the base length.
       // A tentative will now be made to retrieve the correct duration by summing up all the

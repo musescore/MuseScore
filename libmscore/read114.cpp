@@ -724,9 +724,9 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
             else if (!tuplet->readProperties(e))
                   e.unknown();
             }
-      Fraction r = tuplet->ratio().reduced();  // this may be wrong, but at this stage it is kept
-                                               // for compatibility. It will be corrected afterwards
-                                               // during "sanitize" step
+      Fraction r = (tuplet->ratio() == 1) ? tuplet->ratio() : tuplet->ratio().reduced();
+      // this may be wrong, but at this stage it is kept for compatibility. It will be corrected afterwards
+      // during "sanitize" step
       Fraction f(r.denominator(), tuplet->baseLen().fraction().denominator());
       tuplet->setDuration(f.reduced());
       if (bl != -1) {         // obsolete, even in 1.3
@@ -2376,5 +2376,4 @@ Score::FileError MasterScore::read114(XmlReader& e)
       }
 
 }
-
 
