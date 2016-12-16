@@ -118,16 +118,16 @@ void SystemDivider::read(XmlReader& e)
             SymId sym = Sym::name2id(score()->styleSt(StyleIdx::dividerLeftSym));
             setSym(sym, sf);
             setAlign(a | AlignmentFlags::LEFT);
-            setXoff(score()->styleB(StyleIdx::dividerLeftX));
-            setYoff(score()->styleB(StyleIdx::dividerLeftY));
+            setXoff(score()->styleD(StyleIdx::dividerLeftX));
+            setYoff(score()->styleD(StyleIdx::dividerLeftY));
             }
       else {
             _dividerType = SystemDivider::Type::RIGHT;
             SymId sym = Sym::name2id(score()->styleSt(StyleIdx::dividerRightSym));
             setSym(sym, sf);
             setAlign(a | AlignmentFlags::RIGHT);
-            setXoff(score()->styleB(StyleIdx::dividerRightX));
-            setYoff(score()->styleB(StyleIdx::dividerRightY));
+            setXoff(score()->styleD(StyleIdx::dividerRightX));
+            setYoff(score()->styleD(StyleIdx::dividerRightY));
             }
       Symbol::read(e);
       }
