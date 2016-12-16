@@ -49,15 +49,10 @@ void SystemDivider::layout()
       SymId sid;
       ScoreFont* sf = score()->scoreFont();
 
-      switch (_dividerType) {
-            case SystemDivider::LEFT:
-                  sid = Sym::name2id(score()->styleSt(StyleIdx::dividerLeftSym));
-                  break;
-            case SystemDivider::RIGHT:
-            default:
-                  sid = Sym::name2id(score()->styleSt(StyleIdx::dividerRightSym));
-                  break;
-            }
+      if (_dividerType == SystemDivider::LEFT)
+            sid = Sym::name2id(score()->styleSt(StyleIdx::dividerLeftSym));
+      else
+            sid = Sym::name2id(score()->styleSt(StyleIdx::dividerRightSym));
       setSym(sid, sf);
       Symbol::layout();
       }
@@ -72,12 +67,10 @@ void SystemDivider::setDividerType(SystemDivider::Type v)
       if (v == SystemDivider::LEFT) {
             setXoff(score()->styleD(StyleIdx::dividerLeftX));
             setYoff(score()->styleD(StyleIdx::dividerLeftY));
-            setAlign(AlignmentFlags::LEFT | AlignmentFlags::VCENTER);
             }
       else {
             setXoff(score()->styleD(StyleIdx::dividerRightX));
             setYoff(score()->styleD(StyleIdx::dividerRightY));
-            setAlign(AlignmentFlags::RIGHT | AlignmentFlags::VCENTER);
             }
       }
 
@@ -111,13 +104,11 @@ void SystemDivider::write(XmlWriter& xml) const
 
 void SystemDivider::read(XmlReader& e)
       {
-      Align a = align() & AlignmentFlags::VMASK;
       ScoreFont* sf = score()->scoreFont();
       if (e.attribute("type") == "left") {
             _dividerType = SystemDivider::Type::LEFT;
             SymId sym = Sym::name2id(score()->styleSt(StyleIdx::dividerLeftSym));
             setSym(sym, sf);
-            setAlign(a | AlignmentFlags::LEFT);
             setXoff(score()->styleD(StyleIdx::dividerLeftX));
             setYoff(score()->styleD(StyleIdx::dividerLeftY));
             }
@@ -125,7 +116,6 @@ void SystemDivider::read(XmlReader& e)
             _dividerType = SystemDivider::Type::RIGHT;
             SymId sym = Sym::name2id(score()->styleSt(StyleIdx::dividerRightSym));
             setSym(sym, sf);
-            setAlign(a | AlignmentFlags::RIGHT);
             setXoff(score()->styleD(StyleIdx::dividerRightX));
             setYoff(score()->styleD(StyleIdx::dividerRightY));
             }
