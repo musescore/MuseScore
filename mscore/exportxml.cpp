@@ -1413,9 +1413,7 @@ static void ending(XmlWriter& xml, Volta* v, bool left)
                         break;
                   }
             }
-      xml.tagE(QString("ending number=\"%1\" type=\"%2\"")
-               .arg(number.toLatin1().data())
-               .arg(type.toLatin1().data()));
+      xml.tagE(QString("ending number=\"%1\" type=\"%2\"").arg(number).arg(type));
       }
 
 //---------------------------------------------------------
