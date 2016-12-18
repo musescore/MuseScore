@@ -16,8 +16,6 @@
 #include "element.h"
 #include "pitchvalue.h"
 
-class QPainter;
-
 namespace Ms {
 
 //---------------------------------------------------------

@@ -30,6 +30,10 @@ const char* g_groupNames[STAFF_GROUP_MAX] = {
       QT_TRANSLATE_NOOP("staff group header name", "TABLATURE STAFF")
       };
 
+//---------------------------------------------------------
+//   noteHeadSchemes
+//---------------------------------------------------------
+
 NoteHeadScheme noteHeadSchemes[] = {
       NoteHeadScheme::HEAD_NORMAL,
       NoteHeadScheme::HEAD_PITCHNAME,

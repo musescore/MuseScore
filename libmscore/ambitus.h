@@ -17,8 +17,6 @@
 #include "note.h"
 #include "accidental.h"
 
-class QPainter;
-
 namespace Ms {
 
 //---------------------------------------------------------

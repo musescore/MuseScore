@@ -3620,7 +3620,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       if (st == StaffTypes::TAB_DEFAULT || (_hasDrumset && st == StaffTypes::PERC_DEFAULT)) {
             _score->staff(staffIdx)->setStaffType(0, StaffType::preset(st));
             _score->staff(staffIdx)->setLines(0, lines); // preserve previously set staff lines
-            _score->staff(staffIdx)->setBarLineTo((lines - 1) * 2);
+            _score->staff(staffIdx)->setBarLineTo(0);    // default
             }
       }
 

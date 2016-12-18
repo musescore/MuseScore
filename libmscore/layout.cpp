@@ -1660,57 +1660,6 @@ void Score::respace(std::vector<ChordRest*>* elements)
       }
 
 //---------------------------------------------------------
-//   updateBarLineSpans
-///   updates bar line span(s) when the number of lines of a staff changes
-//---------------------------------------------------------
-
-void Score::updateBarLineSpans(int idx, int linesOld, int linesNew)
-      {
-      int nStaves = nstaves();
-      Staff* _staff;
-
-      // scan staves and check the destination staff of each bar line span
-      // barLineSpan is not changed; barLineFrom and barLineTo are changed if they occur in the bottom half of a staff
-      // in practice, a barLineFrom/To from/to the top half of the staff is linked to the staff top line,
-      // a barLineFrom/To from/to the bottom half of the staff is linked to staff bottom line;
-      // this ensures plainchant and mensurstrich special bar lines keep their relationships to the staff lines.
-      // 1-line staves are traited as a special case.
-
-      for(int sIdx = 0; sIdx < nStaves; sIdx++) {
-            _staff = staff(sIdx);
-            // if this is the modified staff
-            if(sIdx == idx) {
-                  // if it has no bar line, set barLineTo to a default value
-                  if(_staff->barLineSpan() == 0)
-                        _staff->setBarLineTo( (linesNew-1) * 2);
-                  // if new line count is 1, set default From for 1-line staves
-                  else if(linesNew == 1)
-                        _staff->setBarLineFrom(BARLINE_SPAN_1LINESTAFF_FROM);
-                  // if old line count was 1, set default From for normal staves
-                  else if (linesOld == 1)
-                        _staff->setBarLineFrom(0);
-                  // if barLineFrom was below the staff middle position
-                  // raise or lower it to account for new number of lines
-                  else if(_staff->barLineFrom() > linesOld - 1)
-                        _staff->setBarLineFrom(_staff->barLineFrom() + (linesNew - linesOld)*2);
-            }
-
-            // if the modified staff is the destination of the current staff bar span:
-            if(sIdx + _staff->barLineSpan() - 1 == idx) {
-                  // if new line count is 1, set default To for 1-line staves
-                  if(linesNew == 1)
-                        _staff->setBarLineTo(BARLINE_SPAN_1LINESTAFF_TO);
-                  // if old line count was 1, set default To for normal staves
-                  else if (linesOld == 1)
-                        _staff->setBarLineTo((linesNew - 1) * 2);
-                  // if barLineTo was below its middle position, raise or lower it
-                  else if(_staff->barLineTo() > linesOld - 1)
-                        _staff->setBarLineTo(_staff->barLineTo() + (linesNew - linesOld)*2);
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   getEmptyPage
 //---------------------------------------------------------
 

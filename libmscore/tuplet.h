@@ -15,8 +15,6 @@
 
 #include "duration.h"
 
-class QPainter;
-
 namespace Ms {
 
 class Text;

@@ -366,8 +366,6 @@ void Rest::layout()
                   _tabDur->layout();
                   setbbox(_tabDur->bbox());
                   setPos(0.0, 0.0);             // no rest is drawn: reset any position might be set for it
-//                  _space.setLw(0.0);
-//                  _space.setRw(width());
                   return;
                   }
             // if no rests or no duration symbols, delete any dur. symbol and chain into standard staff mngmt
@@ -381,33 +379,19 @@ void Rest::layout()
 
       dotline = Rest::getDotline(durationType().type());
 
-      // DEBUG: no longer needed now that computeLineOffset returns an appropriate value?
-      //int stepOffset = 0;
-      //if (staff())
-      //      stepOffset = staff()->staffType()->stepOffset();
       qreal _spatium = spatium();
       qreal yOff     = userOff().y();
-      Staff* st      = staff();
-      qreal lineDist = st ? st->staffType(tick())->lineDistance().val() : 1.0;
+      Staff* stf     = staff();
+      StaffType*  st = stf->staffType(tick());
+      qreal lineDist = st ? st->lineDistance().val() : 1.0;
       int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
-
-      int lines = staff() ? staff()->lines(tick()) : 5;
-      int lineOffset = computeLineOffset();
+      int lines      = st ? st->lines() : 5;
+      int lineOffset = computeLineOffset(lines);
 
       int yo;
       _sym = getSymbol(durationType().type(), lineOffset / 2 + userLine, lines, &yo);
       layoutArticulations();
-      rypos() = (qreal(yo) + qreal(lineOffset/* + stepOffset*/) * .5) * lineDist * _spatium;
-
-      Spatium rs;
-      if (dots()) {
-            rs = Spatium(score()->styleS(StyleIdx::dotNoteDistance)
-               + dots() * score()->styleS(StyleIdx::dotDotDistance));
-            }
-      if (dots()) {
-            rs = Spatium(score()->styleS(StyleIdx::dotNoteDistance)
-               + dots() * score()->styleS(StyleIdx::dotDotDistance));
-            }
+      rypos() = (qreal(yo) + qreal(lineOffset) * .5) * lineDist * _spatium;
       setbbox(symBbox(_sym));
       }
 
@@ -437,10 +421,10 @@ int Rest::getDotline(TDuration::DurationType durationType)
       }
 
 //---------------------------------------------------------
-//   centerX
+//   computeLineOffset
 //---------------------------------------------------------
 
-int Rest::computeLineOffset()
+int Rest::computeLineOffset(int lines)
       {
       Segment* s = segment();
       bool offsetVoices = s && measure() && measure()->hasVoices(staffIdx());
@@ -492,11 +476,10 @@ int Rest::computeLineOffset()
             }
 #endif
 
-      int lineOffset = 0;
-      int lines = staff() ? staff()->lines(tick()) : 5;
+      int lineOffset    = 0;
       int assumedCenter = 4;
-      int actualCenter = (lines - 1);
-      int centerDiff = actualCenter - assumedCenter;
+      int actualCenter  = (lines - 1);
+      int centerDiff    = actualCenter - assumedCenter;
 
       if (offsetVoices) {
             // move rests in a multi voice context

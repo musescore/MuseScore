@@ -179,12 +179,13 @@ class StaffType {
       int _stepOffset       = 0;
       Spatium _lineDistance = Spatium(1);
 
-      bool _genClef         = true;       // create clef at beginning of system
       bool _showBarlines    = true;
+      bool _showLedgerLines = true;
       bool _slashStyle      = false;      // do not show stems
+
+      bool _genClef         = true;       // create clef at beginning of system
       bool _genTimesig      = true;       // whether time signature is shown or not
       bool _genKeysig       = true;       // create key signature at beginning of system
-      bool _showLedgerLines = true;
 
       // Standard: configurable properties
       NoteHeadScheme _noteHeadScheme = NoteHeadScheme::HEAD_NORMAL;

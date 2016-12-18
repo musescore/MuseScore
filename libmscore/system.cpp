@@ -318,7 +318,6 @@ void System::layout2()
       int firstStaffIdx        = -1;
       int lastStaffIdx         = 0;
       int firstStaffInitialIdx = -1;
-      int lastStaffInitialIdx  = 0;
       Measure* fm              = firstMeasure();
 
       for (int i = 0; i < _staves.size(); ++i) {
@@ -333,7 +332,6 @@ void System::layout2()
                   if (fm && fm->visible(i)) {
                         if (firstStaffInitialIdx == -1)
                               firstStaffInitialIdx = i;
-                        lastStaffInitialIdx = i;
                         }
                   }
             else {
@@ -432,24 +430,6 @@ void System::layout2()
                   }
             else
                   qDebug("unhandled measure type %s", m->name());
-            }
-
-      if (fm) {
-            Segment* s        = fm->first();
-            BarLine* _barLine = s->isBeginBarLineType() ? toBarLine(s->element(0)) : 0;
-
-            if (_barLine) {
-                  _barLine->setTrack(firstStaffInitialIdx * VOICES);
-                  _barLine->setSpan(lastStaffInitialIdx - firstStaffInitialIdx + 1);
-                  if (score()->staff(firstStaffInitialIdx)->lines(s->tick()) == 1)
-                        _barLine->setSpanFrom(BARLINE_SPAN_1LINESTAFF_FROM);
-                  else
-                        _barLine->setSpanFrom(0);
-                  int llines = score()->staff(lastStaffInitialIdx)->lines(s->tick());
-                  int spanTo = llines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (llines - 1) * 2;
-                  _barLine->setSpanTo(spanTo);
-                  _barLine->layout();
-                  }
             }
 
       //---------------------------------------------------

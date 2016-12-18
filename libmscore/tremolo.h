@@ -15,8 +15,6 @@
 
 #include "symbol.h"
 
-class QPainter;
-
 namespace Ms {
 
 class Chord;

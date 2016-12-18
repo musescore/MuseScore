@@ -16,8 +16,6 @@
 #include "key.h"
 #include "element.h"
 
-class QPainter;
-
 namespace Ms {
 
 class Sym;

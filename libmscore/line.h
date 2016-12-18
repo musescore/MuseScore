@@ -14,9 +14,6 @@
 #define __LINE_H__
 
 #include "spanner.h"
-// #include "mscore.h"
-
-class QPainter;
 
 namespace Ms {
 

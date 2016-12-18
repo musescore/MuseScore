@@ -2264,7 +2264,7 @@ void MusicXMLParserPass1::divisions()
 static void setStaffLines(Score* score, int staffIdx, int stafflines)
       {
       score->staff(staffIdx)->setLines(0, stafflines);
-      score->staff(staffIdx)->setBarLineTo((stafflines - 1) * 2);
+      score->staff(staffIdx)->setBarLineTo(0);  // default
       }
 
 //---------------------------------------------------------

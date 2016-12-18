@@ -286,6 +286,9 @@ void Inspector::setElements(const QList<Element*>& l)
                         case Element::Type::STAFF_TEXT:
                               ie = new InspectorStafftext(this);
                               break;
+                        case Element::Type::STAFFTYPE_CHANGE:
+                              ie = new InspectorStaffTypeChange(this);
+                              break;
                         default:
                               if (_element->isText()) {
                                     if (_element->type() == Element::Type::INSTRUMENT_NAME) // these are generated
@@ -439,6 +442,43 @@ InspectorBreak::InspectorBreak(QWidget* parent)
       iList = {         // currently empty
             };
 
+      mapSignals();
+      }
+
+//---------------------------------------------------------
+//   InspectorStaffTypeChange
+//---------------------------------------------------------
+
+InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      sl.setupUi(addWidget());
+
+      iList = {
+            { P_ID::STAFF_LINES,            0, 0, sl.lines,           sl.resetLines           },
+            { P_ID::STEP_OFFSET,            0, 0, sl.stepOffset,      sl.resetStepOffset      },
+            { P_ID::LINE_DISTANCE,          0, 0, sl.lineDistance,    sl.resetLineDistance    },
+            { P_ID::STAFF_SHOW_BARLINES,    0, 0, sl.showBarlines,    sl.resetShowBarlines    },
+            { P_ID::STAFF_SHOW_LEDGERLINES, 0, 0, sl.showLedgerlines, sl.resetShowLedgerlines },
+            { P_ID::STAFF_SLASH_STYLE,      0, 0, sl.slashStyle,      sl.resetSlashStyle      },
+            { P_ID::STAFF_NOTEHEAD_SCHEME,  0, 0, sl.noteheadScheme,  sl.resetNoteheadScheme  },
+            { P_ID::STAFF_GEN_CLEF,         0, 0, sl.genClefs,        sl.resetGenClefs        },
+            { P_ID::STAFF_GEN_TIMESIG,      0, 0, sl.genTimesig,      sl.resetGenTimesig      },
+            { P_ID::STAFF_GEN_KEYSIG,       0, 0, sl.genKeysig,       sl.resetGenKeysig       },
+            };
+
+      sl.noteheadScheme->clear();
+      for (auto i : { NoteHeadScheme::HEAD_NORMAL,
+         NoteHeadScheme::HEAD_PITCHNAME,
+         NoteHeadScheme::HEAD_PITCHNAME_GERMAN,
+         NoteHeadScheme::HEAD_SOLFEGE,
+         NoteHeadScheme::HEAD_SOLFEGE_FIXED,
+         NoteHeadScheme::HEAD_SHAPE_NOTE_4,
+         NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,
+         NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,
+         NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER} ) {
+            sl.noteheadScheme->addItem(StaffType::scheme2userName(i), int(i));
+            }
       mapSignals();
       }
 

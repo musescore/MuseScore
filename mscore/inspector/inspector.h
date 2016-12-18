@@ -18,6 +18,7 @@
 #include "ui_inspector_element.h"
 #include "ui_inspector_bend.h"
 #include "ui_inspector_break.h"
+#include "ui_inspector_stafftypechange.h"
 #include "ui_inspector_vbox.h"
 #include "ui_inspector_tbox.h"
 #include "ui_inspector_hbox.h"
@@ -103,6 +104,18 @@ class InspectorBreak : public InspectorBase {
 
    public:
       InspectorBreak(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorStaffTypeChange
+//---------------------------------------------------------
+
+class InspectorStaffTypeChange : public InspectorBase {
+      Q_OBJECT
+      Ui::InspectorStaffTypeChange sl;
+
+   public:
+      InspectorStaffTypeChange(QWidget* parent);
       };
 
 //---------------------------------------------------------

@@ -29,7 +29,6 @@
 #include "rehearsalmark.h"
 #include "tremolo.h"
 #include "layoutbreak.h"
-class QPainter;
 
 namespace Ms {
 
@@ -1025,8 +1024,6 @@ class Score : public QObject, public ScoreElement {
       //@ creates and returns a cursor to be used to navigate the score
       Q_INVOKABLE Ms::Cursor* newCursor();
 #endif
-      void updateBarLineSpans(int idx, int linesOld, int linesNew);
-
       const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }
       SpannerMap& spannerMap() { return _spanner; }
       bool isSpannerStartEnd(int tick, int track) const;

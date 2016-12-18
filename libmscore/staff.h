@@ -110,7 +110,7 @@ class Staff : public QObject, public ScoreElement {
       QList <BracketItem> _brackets;
       int _barLineSpan         { 1     };    ///< 0 - no bar line, 1 - span this staff, ...
       int _barLineFrom         { 0     };    ///< line of start staff to draw the barline from (0 = staff top line, ...)
-      int _barLineTo;                        ///< line of end staff to draw the bar line to (0= staff top line, ...)
+      int _barLineTo           { 0     };    ///< line of end staff to draw the bar line to (0= staff bottom line, ...)
 
       bool _small              { false };
       bool _invisible          { false };
@@ -124,6 +124,7 @@ class Staff : public QObject, public ScoreElement {
       qreal _userMag           { 1.0   };       // allowed 0.1 - 10.0
 
       StaffTypeList _staffTypeList;
+
       LinkedStaves* _linkedStaves { 0 };
       QMap<int,int> _channelList[VOICES];
       QMap<int,SwingParameters> _swingList;
@@ -135,7 +136,7 @@ class Staff : public QObject, public ScoreElement {
       void scaleChanged(double oldValue, double newValue);
 
    public:
-      Staff(Score* = 0);
+      Staff(Score* score = 0) : ScoreElement(score) {}
       ~Staff();
       void init(const InstrumentTemplate*, const StaffType *staffType, int);
       void initFromStaffType(const StaffType* staffType);
@@ -214,7 +215,7 @@ class Staff : public QObject, public ScoreElement {
       int barLineTo() const          { return _barLineTo;   }
       void setBarLineSpan(int val)   { _barLineSpan = val;  }
       void setBarLineFrom(int val)   { _barLineFrom = val;  }
-      void setBarLineTo(int val);
+      void setBarLineTo(int val)     { if (_barLineTo) abort(); _barLineTo = val;    }
       qreal mag() const;
       qreal height() const;
       qreal spatium() const;
@@ -225,7 +226,8 @@ class Staff : public QObject, public ScoreElement {
 
       const StaffType* staffType(int tick) const;
       StaffType* staffType(int tick);
-      void setStaffType(int tick, const StaffType* st);
+      StaffType* setStaffType(int tick, const StaffType*);
+      void staffTypeListChanged(int tick);
 
       bool isPitchedStaff(int tick) const;
       bool isTabStaff(int tick) const;

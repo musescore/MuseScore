@@ -26,8 +26,6 @@
 #include "tremolo.h"
 #include "key.h"
 
-class QPainter;
-
 namespace Ms {
 
 class Tie;

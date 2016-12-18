@@ -75,6 +75,7 @@
 #include "volta.h"
 #include "xml.h"
 #include "systemdivider.h"
+#include "stafftypechange.h"
 
 namespace Ms {
 
@@ -1220,9 +1221,10 @@ bool Measure::acceptDrop(const DropData& data) const
       QPointF pos           = data.pos;
       Element* e            = data.element;
 
+
       int staffIdx;
       Segment* seg;
-      if (score()->pos2measure(pos, &staffIdx, 0, &seg, 0) == nullptr)
+      if (!score()->pos2measure(pos, &staffIdx, 0, &seg, 0))
             return false;
 
       QRectF staffR = system()->staff(staffIdx)->bbox().translated(system()->canvasPos());
@@ -1253,6 +1255,7 @@ bool Measure::acceptDrop(const DropData& data) const
             case Element::Type::BAR_LINE:
             case Element::Type::SYMBOL:
             case Element::Type::CLEF:
+            case Element::Type::STAFFTYPE_CHANGE:
                   viewer->setDropRectangle(staffR);
                   return true;
 
@@ -1478,7 +1481,7 @@ Element* Measure::drop(const DropData& data)
 
                   // if dropped bar line refers to span rather than to subtype
                   // or if Ctrl key used
-                  if ((bl->spanFrom() && bl->spanTo() != DEFAULT_BARLINE_TO) || data.control()) {
+                  if ((bl->spanFrom() && bl->spanTo()) || data.control()) {
                         // get existing bar line for this staff, and drop the change to it
                         Segment* seg = undoGetSegment(Segment::Type::EndBarLine, tick() + ticks());
                         BarLine* cbl = toBarLine(seg->element(staffIdx * VOICES));
@@ -1518,6 +1521,29 @@ Element* Measure::drop(const DropData& data)
                         default:
                               break;
                         }
+                  break;
+
+            case Element::Type::STAFFTYPE_CHANGE:
+                  {
+                  StaffTypeChange* stc = toStaffTypeChange(e);
+                  e->setParent(this);
+                  e->setTrack(staffIdx * VOICES);
+                  StaffType* st = stc->staffType();
+                  Staff* staff = score()->staff(staffIdx);
+
+                  StaffType* nst;
+                  if (st) {
+                        nst = staff->setStaffType(tick(), st);
+                        delete st;
+                        }
+                  else {
+                        // dragged from palette
+                        st  = staff->staffType(tick());
+                        nst = staff->setStaffType(tick(), st);
+                        }
+                  stc->setStaffType(nst);
+                  score()->undoAddElement(e);
+                  }
                   break;
 
             default:
@@ -3212,7 +3238,6 @@ void Measure::barLinesSetSpan(Segment* seg)
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* staff   = score()->staff(staffIdx);
             int track      = staffIdx * VOICES;
-            int staffLines = staff->lines(tick());
 
             // get existing bar line for this staff, if any
             BarLine* cbl = toBarLine(seg->element(track));
@@ -3239,9 +3264,9 @@ void Measure::barLinesSetSpan(Segment* seg)
                         // set bar line span values to default
 
                         else if (staff->show()) {
-                              span        = 1;
-                              spanFrom    = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
-                              spanTo      = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staff->lines(tick()) - 1) * 2;
+                              span     = 1;
+                              spanFrom = 0;
+                              spanTo   = 0;
                               }
                         }
                   if (!staff->show()) {
@@ -3257,7 +3282,7 @@ void Measure::barLinesSetSpan(Segment* seg)
                   }
             else if (spanFrom == unknownSpanFrom && staff->show()) {
                   // we started a span earlier, but had not found a valid staff yet
-                  spanFrom = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
+                  spanFrom = 0;
                   }
             if (staff->show() && span) {
                   //
@@ -3299,8 +3324,8 @@ void Measure::barLinesSetSpan(Segment* seg)
                               // If NONE of the above conditions holds, the staff is the last staff of
                               // a Mensurstrich(-like) span: keep its bar line, as it may span to next staff
 
-                              if (spanTo > 0 || spanTot <= 1 || span != 1 || staffIdx == nstaves-1)
-                                    score()->undoRemoveElement(cbl);
+//TODO:barline                if (spanTo > 0 || spanTot <= 1 || span != 1 || staffIdx == nstaves-1)
+//                                    score()->undoRemoveElement(cbl);
                               }
                         }
                   }
@@ -3324,7 +3349,7 @@ void Measure::barLinesSetSpan(Segment* seg)
                               bl->setSpanFrom(spanFrom);
                               // if current actual span < target span, set spanTo to full staff height
                               if (aspan < spanTot && staffIdx < lastIdx)
-                                    bl->setSpanTo(staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffLines - 1) * 2);
+                                    bl->setSpanTo(0);
                               // if we reached target span, set spanTo to intended value
                               else
                                     bl->setSpanTo(spanTo);

@@ -808,9 +808,12 @@ SymId Note::noteHead() const
             ht = _headType;
       Key key = Key::C;
       NoteHeadScheme scheme = NoteHeadScheme::HEAD_NORMAL;
-      if (chord() && chord()->staff() && chord()->tick() >= 0){
-            key = chord()->staff()->key(chord()->tick());
-            scheme = chord()->staff()->staffType(tick())->noteHeadScheme();
+      if (chord() && chord()->staff()){
+            int tick = chord()->tick();
+            if (tick >= 0) {
+                  key    = chord()->staff()->key(tick);
+                  scheme = chord()->staff()->staffType(tick)->noteHeadScheme();
+                  }
             }
       SymId t = noteHead(up, _headGroup, ht, tpc(), key, scheme);
       if (t == SymId::noSym) {

@@ -118,11 +118,6 @@ class Measure : public MeasureBase {
       virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
 
       System* system() const                      { return (System*)parent(); }
-//      std::vector<MStaff*>& mstaves()             { return _mstaves;      }
-//      const std::vector<MStaff*>& mstaves() const { return _mstaves;      }
-//      MStaff* mstaff(int staffIdx);
-//      const MStaff* mstaff(int staffIdx) const;
-
       bool hasVoices(int staffIdx) const;
       void setHasVoices(int staffIdx, bool v);
 
@@ -147,8 +142,7 @@ class Measure : public MeasureBase {
       Fraction len() const                 { return _len;         }
       Fraction stretchedLen(Staff*) const;
       void setLen(const Fraction& f)       { _len = f;            }
-      // actual length of measure in ticks
-      virtual int ticks() const override;
+      virtual int ticks() const override;             // actual length of measure in ticks
       bool isIrregular() const             { return _timesig != _len; }
 
       int size() const                          { return _segments.size();        }
