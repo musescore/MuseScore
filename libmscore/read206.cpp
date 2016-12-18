@@ -1603,6 +1603,7 @@ static bool readScore(Score* score, XmlReader& e)
       //
       //    sanity check for barLineSpan
       //
+#if 0 // TODO:barline
       for (Staff* st : score->staves()) {
             int barLineSpan = st->barLineSpan();
             int idx = st->idx();
@@ -1650,7 +1651,7 @@ static bool readScore(Score* score, XmlReader& e)
                         }
                   }
             }
-
+#endif
       if (!score->masterScore()->omr())
             score->masterScore()->setShowOmr(false);
 

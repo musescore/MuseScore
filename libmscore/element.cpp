@@ -505,17 +505,21 @@ QPointF Element::pagePos() const
 
       if (_flags & ElementFlag::ON_STAFF) {
             System* system = 0;
+            Measure* measure = 0;
             if (parent()->isSegment())
-                  system = toSegment(parent())->system();
+                  measure = toSegment(parent())->measure();
             else if (parent()->isMeasure())           // used in measure number
-                  system = toMeasure(parent())->system();
+                  measure = toMeasure(parent());
             else if (parent()->isSystem())
                   system = toSystem(parent());
-            else {
-                  Q_ASSERT(false);
+            else
+                  qFatal("this %s parent %s\n", name(), parent()->name());
+            if (measure) {
+                  system = measure->system();
+                  p.ry() += measure->staffLines(vStaffIdx())->y();
                   }
             if (system)
-                  p.ry() += system->staffYpage(vStaffIdx());      // system->staff(si)->y() + system->y();
+                  p.ry() += system->staffYpage(vStaffIdx());
             p.rx() = pageX();
             }
       else {
@@ -537,23 +541,30 @@ QPointF Element::canvasPos() const
 
       if (_flags & ElementFlag::ON_STAFF) {
             System* system = 0;
+            Measure* measure = 0;
             if (parent()->isSegment())
-                  system = toSegment(parent())->system();
+                  measure = toSegment(parent())->measure();
+                  // system = toSegment(parent())->system();
             else if (parent()->isMeasure())     // used in measure number
-                  system = toMeasure(parent())->system();
+                  measure = toMeasure(parent());
+                  // system = toMeasure(parent())->system();
             else if (parent()->isSystem())
                   system = toSystem(parent());
             else if (parent()->isChord())       // grace chord
-                  system = toSegment(parent()->parent())->system();
-            else {
+                  measure = toSegment(parent()->parent())->measure();
+            else
                   qFatal("this %s parent %s\n", name(), parent()->name());
+            if (measure) {
+                  p.ry() += measure->staffLines(vStaffIdx())->y();
+                  system = measure->system();
+                  if (system) {
+                        Page* page = system->page();
+                        if (page)
+                              p.ry() += page->y();
+                        }
                   }
-            if (system) {
-                  p.ry() += system->staffYpage(vStaffIdx());      // system->staff(si)->y() + system->y();
-                  Page* page = system->page();
-                  if (page)
-                        p.ry() += page->y();
-                  }
+            if (system)
+                  p.ry() += system->staffYpage(vStaffIdx());
             p.rx() = canvasX();
             }
       else
@@ -842,7 +853,7 @@ StaffLines::StaffLines(Score* s)
    : Element(s)
       {
       setWidth(1.0);      // dummy
-      lines = 5;
+      _lines = 5;
       setSelectable(false);
       }
 
@@ -853,8 +864,7 @@ StaffLines::StaffLines(Score* s)
 QPointF StaffLines::pagePos() const
       {
       System* system = measure()->system();
-      return QPointF(measure()->x() + system->x(),
-         system->staff(staffIdx())->y() + system->y());
+      return QPointF(measure()->x() + system->x(), system->staff(staffIdx())->y() + system->y());
       }
 
 //---------------------------------------------------------
@@ -882,23 +892,24 @@ QPointF StaffLines::canvasPos() const
 void StaffLines::layout()
       {
       Staff* s = staff();
-      qreal _spatium;
+      qreal _spatium = spatium();
+      dist   = _spatium;
+      setPos(QPointF());
       if (s) {
-            _spatium = s->spatium();
             setMag(s->mag());
-            StaffType* st = s->staffType(measure()->tick());
-            dist  = st->lineDistance().val() * _spatium;
-            lines = st->lines();
             setColor(s->color());
+            StaffType* st = s->staffType(measure()->tick());
+            dist         *= st->lineDistance().val();
+            _lines        = st->lines();
+            if (_lines == 1)
+                  rypos() = 2 * dist;
             }
       else {
-            _spatium = score()->spatium();
-            dist  = _spatium;
-            lines = 5;
+            _lines = 5;
             setColor(MScore::defaultColor);
             }
       lw = score()->styleS(StyleIdx::staffLineWidth).val() * _spatium;
-      bbox().setRect(0.0, -lw*.5, measure()->width(), (lines-1) * dist + lw);
+      bbox().setRect(0.0, -lw*.5, measure()->width(), (_lines-1) * dist + lw);
       }
 
 //---------------------------------------------------------
@@ -907,37 +918,15 @@ void StaffLines::layout()
 
 void StaffLines::draw(QPainter* painter) const
       {
-      QPointF _pos(0.0, 0.0);
-
-      qreal x1 = _pos.x();
+      qreal x1 = pos().x();
       qreal x2 = x1 + width();
 
-      QVector<QLineF> ll(lines);
-      qreal y = _pos.y();
-      for (int i = 0; i < lines; ++i) {
+      QVector<QLineF> ll(_lines);
+      qreal y = pos().y();
+      for (int i = 0; i < _lines; ++i) {
             ll[i].setLine(x1, y, x2, y);
             y += dist;
             }
-      if (MScore::debugMode) {
-            painter->setPen(QPen(Qt::lightGray, lw, Qt::SolidLine, Qt::FlatCap));
-            y = _pos.y() - 3 * dist;
-            painter->drawLine(QLineF(x1, y, x2, y));
-            y = _pos.y() - 2 * dist;
-            painter->drawLine(QLineF(x1, y, x2, y));
-            y = _pos.y() - dist;
-            painter->drawLine(QLineF(x1, y, x2, y));
-            y = _pos.y() + lines * dist;
-            painter->drawLine(QLineF(x1, y, x2, y));
-            y = _pos.y() + (lines+1) * dist;
-            painter->drawLine(QLineF(x1, y, x2, y));
-            y = _pos.y() + (lines+2) * dist;
-            painter->drawLine(QLineF(x1, y, x2, y));
-            y = _pos.y() + (lines+3) * dist;
-            painter->drawLine(QLineF(x1, y, x2, y));
-            y = _pos.y() + (lines+4) * dist;
-            painter->drawLine(QLineF(x1, y, x2, y));
-            }
-
       painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
       painter->drawLines(ll);
       }

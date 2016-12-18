@@ -52,14 +52,20 @@ StaffType& StaffTypeList::staffType(int tick)
 //   setStaffType
 //---------------------------------------------------------
 
-void StaffTypeList::setStaffType(int tick, const StaffType* st)
+StaffType* StaffTypeList::setStaffType(int tick, const StaffType* st)
       {
       Q_ASSERT(tick >= 0);
       auto i = find(tick);
-      if (i == end())
-            insert(std::pair<int, StaffType>(tick, *st));
-      else
+      StaffType* nst;
+      if (i == end()) {
+            auto k = insert(std::pair<int, StaffType>(tick, *st));
+            nst = &(k.first->second);
+            }
+      else {
             i->second = *st;
+            nst = &i->second;
+            }
+      return nst;
       }
 
 //---------------------------------------------------------

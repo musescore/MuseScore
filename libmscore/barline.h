@@ -15,14 +15,11 @@
 
 #include "element.h"
 
-class QPainter;
-
 namespace Ms {
 
 class MuseScoreView;
 class Segment;
 
-static const int DEFAULT_BARLINE_TO             = 4 * 2;
 static const int MIN_BARLINE_FROMTO_DIST        = 2;
 static const int MIN_BARLINE_SPAN_FROMTO        = -2;
 
@@ -39,11 +36,6 @@ static const int BARLINE_SPAN_SHORT1_FROM       = 2;
 static const int BARLINE_SPAN_SHORT1_TO         = 6;
 static const int BARLINE_SPAN_SHORT2_FROM       = 1;
 static const int BARLINE_SPAN_SHORT2_TO         = 7;
-
-// used while reading a score for a default spanTo (to last staff line) toward a staff not yet read;
-// fixed once all staves are read
-
-static const int UNKNOWN_BARLINE_TO             = -6;
 
 //---------------------------------------------------------
 //   BarLineTableItem
@@ -70,7 +62,7 @@ class BarLine : public Element {
       BarLineType _barLineType { BarLineType::NORMAL };
       int _span                { 1 };           // number of staves spanned by the barline
       int _spanFrom            { 0 };           // line number on start and end staves
-      int _spanTo              { DEFAULT_BARLINE_TO };
+      int _spanTo              { 0 };
       bool _customSpan         { false };
 
       // static variables used while dragging

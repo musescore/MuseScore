@@ -15,8 +15,6 @@
 
 #include "line.h"
 
-class QPainter;
-
 namespace Ms {
 
 class Trill;

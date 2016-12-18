@@ -20,7 +20,6 @@
 
 #include "element.h"
 #include "shape.h"
-class QPainter;
 
 namespace Ms {
 

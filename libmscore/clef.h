@@ -21,8 +21,6 @@
 #include "element.h"
 #include "mscore.h"
 
-class QPainter;
-
 namespace Ms {
 
 class XmlWriter;

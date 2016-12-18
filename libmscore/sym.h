@@ -18,9 +18,6 @@
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
-class QPainter;
-
-
 namespace Ms {
 
 class TextStyle;

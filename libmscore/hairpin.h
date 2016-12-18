@@ -19,8 +19,6 @@
 #include "textlinebase.h"
 #include "mscore.h"
 
-class QPainter;
-
 namespace Ms {
 
 class Score;

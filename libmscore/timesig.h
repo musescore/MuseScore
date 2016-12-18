@@ -18,8 +18,6 @@
 #include "mscore.h"
 #include "groups.h"
 
-class QPainter;
-
 namespace Ms {
 
 class MuseScoreView;

@@ -252,6 +252,16 @@ static const PropertyData propertyList[] = {
       { P_ID::SYMBOL,              true,  "symbol",                P_TYPE::SYMID },
       { P_ID::PLAY_REPEATS,        false, "playRepeats",           P_TYPE::BOOL  },
       { P_ID::CREATE_SYSTEM_HEADER, false, "createSystemHeader",   P_TYPE::BOOL  },
+      { P_ID::STAFF_LINES,         true,  "lines",                 P_TYPE::INT   },
+      { P_ID::LINE_DISTANCE,       true,  "lineDistance",          P_TYPE::SPATIUM },
+      { P_ID::STEP_OFFSET,         true,  "stepOffset",            P_TYPE::INT   },
+      { P_ID::STAFF_SHOW_BARLINES,     false, "",                  P_TYPE::BOOL },
+      { P_ID::STAFF_SHOW_LEDGERLINES,  false, "",                  P_TYPE::BOOL },
+      { P_ID::STAFF_SLASH_STYLE,       false, "",                  P_TYPE::BOOL },
+      { P_ID::STAFF_NOTEHEAD_SCHEME,   false, "",                  P_TYPE::INT  },
+      { P_ID::STAFF_GEN_CLEF,          false, "",                  P_TYPE::BOOL },
+      { P_ID::STAFF_GEN_TIMESIG,       false, "",                  P_TYPE::BOOL },
+      { P_ID::STAFF_GEN_KEYSIG,        false, "",                  P_TYPE::BOOL },
 
       { P_ID::END,                 false, "",                      P_TYPE::INT   }
       };

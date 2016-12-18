@@ -360,6 +360,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case Element::Type::TREMOLOBAR:
                   case Element::Type::FIGURED_BASS:
                   case Element::Type::LYRICS:
+                  case Element::Type::STAFFTYPE_CHANGE:
                         {
                         QList<Element*> el = elementsAt(pos);
                         bool found = false;
@@ -555,6 +556,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case Element::Type::TREMOLOBAR:
                   case Element::Type::FIGURED_BASS:
                   case Element::Type::LYRICS:
+                  case Element::Type::STAFFTYPE_CHANGE:
                         {
                         Element* el = 0;
                         for (const Element* e : elementsAt(pos)) {

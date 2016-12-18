@@ -20,8 +20,6 @@
 #include "shape.h"
 #include "property.h"
 
-class QPainter;
-
 namespace Ms {
 
 /**
@@ -934,7 +932,7 @@ class StaffLines : public Element {
 
       qreal dist;
       qreal lw;
-      int lines;
+      int _lines;
 
    public:
       StaffLines(Score*);
@@ -947,7 +945,8 @@ class StaffLines : public Element {
       virtual QPointF pagePos() const;    ///< position in page coordinates
       virtual QPointF canvasPos() const;  ///< position in page coordinates
       qreal y1() const;
-      qreal staffHeight() const { return (lines-1) * dist; }
+      qreal staffHeight() const { return (_lines-1) * dist; }
+      int lines() const { return _lines; }
       };
 
 //---------------------------------------------------------

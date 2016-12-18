@@ -42,6 +42,7 @@ class Rest : public ChordRest {
       virtual qreal centerX() const override;
       virtual void setUserOff(const QPointF& o) override;
 
+
    public:
       Rest(Score* s = 0);
       Rest(Score*, const TDuration&);
@@ -80,16 +81,15 @@ class Rest : public ChordRest {
       int getDotline() const   { return dotline; }
       static int getDotline(TDuration::DurationType durationType);
       SymId sym() const        { return _sym;    }
-      int computeLineOffset();
       bool accent();
       void setAccent(bool flag);
+      int computeLineOffset(int lines);
 
       virtual int upLine() const;
       virtual int downLine() const;
       virtual QPointF stemPos() const;
       virtual qreal stemPosX() const;
       virtual QPointF stemPosBeam() const;
-
 
       virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       virtual QVariant getProperty(P_ID propertyId) const override;

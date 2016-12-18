@@ -16,8 +16,6 @@
 #include "element.h"
 #include "durationtype.h"
 
-class QPainter;
-
 namespace Ms {
 
 class ChordRest;

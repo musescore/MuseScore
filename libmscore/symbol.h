@@ -15,8 +15,6 @@
 
 #include "bsymbol.h"
 
-class QPainter;
-
 namespace Ms {
 
 class Segment;

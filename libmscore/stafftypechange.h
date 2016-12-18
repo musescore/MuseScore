@@ -15,11 +15,9 @@
 
 #include "element.h"
 
-class QPainter;
-
 namespace Ms {
 
-// layout break subtypes:
+class StaffType;
 
 //---------------------------------------------------------
 //   @@ StaffTypeChange
@@ -28,9 +26,11 @@ namespace Ms {
 class StaffTypeChange : public Element {
       Q_OBJECT
 
-   private:
-      QPainterPath path;
+      StaffType* _staffType { 0 };
+      qreal lw;
 
+      virtual void layout() override;
+      virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
       virtual void draw(QPainter*) const override;
 
    public:
@@ -43,6 +43,9 @@ class StaffTypeChange : public Element {
 
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
+
+      StaffType* staffType() const     { return _staffType; }
+      void setStaffType(StaffType* st) { _staffType = st; }
 
       Measure* measure() const            { return (Measure*)parent();   }
 

@@ -17,8 +17,6 @@
 #include "elementlayout.h"
 #include "instrument.h"
 
-class QPainter;
-
 namespace Ms {
 
 enum class StaffStateType : char {

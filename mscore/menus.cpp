@@ -77,6 +77,7 @@
 #include "libmscore/jump.h"
 #include "libmscore/bagpembell.h"
 #include "libmscore/ambitus.h"
+#include "libmscore/stafftypechange.h"
 
 namespace Ms {
 
@@ -1375,6 +1376,9 @@ Palette* MuseScore::newTextPalette()
       InstrumentChange* is = new InstrumentChange(gscore);
       is->setXmlText(tr("Change Instr."));
       sp->append(is, tr("Instrument change"));
+
+      StaffTypeChange* stc = new StaffTypeChange(gscore);
+      sp->append(stc, tr("Staff type change"));
 
       RehearsalMark* rhm = new RehearsalMark(gscore);
       rhm->setXmlText("B1");

@@ -19,7 +19,6 @@
 */
 
 #include "measurebase.h"
-class QPainter;
 
 namespace Ms {
 

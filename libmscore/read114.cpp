@@ -2215,6 +2215,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                               continue;
                         ChordRest* cr = toChordRest(s->element(track));
                         if (cr) {
+#if 0 // TODO
                               if (cr->isRest()) {
                                     Rest* r = toRest(cr);
                                     if (!r->userOff().isNull()) {
@@ -2223,6 +2224,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                                           r->rUserYoffset() -= (lineOffset * .5 * lineDist * r->spatium());
                                           }
                                     }
+#endif
                               if (!first) {
                                     switch (cr->beamMode()) {
                                           case Beam::Mode::AUTO:

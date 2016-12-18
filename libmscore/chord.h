@@ -21,8 +21,6 @@
 #include <functional>
 #include "chordrest.h"
 
-class QPainter;
-
 namespace Ms {
 
 class Note;

@@ -127,12 +127,13 @@ void Clef::layout()
       int   lines;
       qreal lineDist;
       Segment* clefSeg  = segment();
+      int stepOffset;
 
       // check clef visibility and type compatibility
       if (clefSeg && staff()) {
-            StaffType* staffType = staff()->staffType(tick());
-            bool show            = staffType->genClef();        // check staff type allows clef display
             int tick             = clefSeg->tick();
+            StaffType* staffType = staff()->staffType(tick);
+            bool show            = staffType->genClef();        // check staff type allows clef display
 
             // check clef is compatible with staff type group:
             if (ClefInfo::staffGroup(clefType()) != staffType->group()) {
@@ -151,12 +152,14 @@ void Clef::layout()
                      segment()->tick(), segment()->tick()/1920, staffIdx());
                   return;
                   }
-            lines    = staffType->lines();         // init values from staff type
-            lineDist = staffType->lineDistance().val();
+            lines      = staffType->lines();         // init values from staff type
+            lineDist   = staffType->lineDistance().val();
+            stepOffset = staffType->stepOffset();
             }
       else {
-            lines    = 5;
-            lineDist = 1.0;
+            lines      = 5;
+            lineDist   = 1.0;
+            stepOffset = 0;
             }
 
       qreal _spatium = spatium();
@@ -201,8 +204,7 @@ void Clef::layout()
             }
       // clefs are right aligned to Segment
       QRectF r(symBbox(symId));
-//      setPos(-r.right(), yoff * _spatium);
-      setPos(0.0, yoff * _spatium);
+      setPos(0.0, yoff * _spatium + (stepOffset * -_spatium));
 
       setbbox(r);
       }

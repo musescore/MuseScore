@@ -22,6 +22,7 @@
 #include "tempo.h"
 #include "xml.h"
 #include "system.h"
+#include "stafftypechange.h"
 
 namespace Ms {
 
@@ -522,6 +523,13 @@ bool MeasureBase::readProperties(XmlReader& e)
                   }
             else
                   delete lb;
+            }
+      else if (tag == "StaffTypeChange") {
+            StaffTypeChange* stc = new StaffTypeChange(score());
+            stc->setTrack(e.track());
+            stc->setParent(this);
+            stc->read(e);
+            add(stc);
             }
       else if (Element::readProperties(e))
             ;

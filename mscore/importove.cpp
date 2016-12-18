@@ -1460,7 +1460,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                         if(!isRestDefaultLine(notePtr, container->getNoteType()) && notePtr->getLine() != 0) {
                               double yOffset = -(double)(notePtr->getLine());
                               int stepOffset = cr->staff()->staffType(cr->tick())->stepOffset();
-                              int lineOffset = static_cast<Ms::Rest*>(cr)->computeLineOffset();
+                              int lineOffset = static_cast<Ms::Rest*>(cr)->computeLineOffset(5);
                               yOffset -= qreal(lineOffset + stepOffset);
                               yOffset *= score_->spatium()/2.0;
                               cr->setUserYoffset(yOffset);

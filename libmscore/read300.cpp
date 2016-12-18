@@ -238,6 +238,7 @@ bool Score::read(XmlReader& e)
                         }
                   st->setBarLineSpan(barLineSpan);
                   }
+#if 0 // TODO:barline
             // check spanFrom
             int minBarLineFrom = st->lines(0) == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO;
             if (st->barLineFrom() < minBarLineFrom)
@@ -248,9 +249,6 @@ bool Score::read(XmlReader& e)
             Staff* stTo = st->barLineSpan() <= 1 ? st : staff(idx + st->barLineSpan() - 1);
             // 1-line staves have special bar line spans
             int maxBarLineTo        = stTo->lines(0) == 1 ? BARLINE_SPAN_1LINESTAFF_TO : stTo->lines(0) * 2;
-            int defaultBarLineTo    = stTo->lines(0) == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (stTo->lines(0) - 1) * 2;
-            if (st->barLineTo() == UNKNOWN_BARLINE_TO)
-                  st->setBarLineTo(defaultBarLineTo);
             if (st->barLineTo() < MIN_BARLINE_SPAN_FROMTO)
                   st->setBarLineTo(MIN_BARLINE_SPAN_FROMTO);
             if (st->barLineTo() > maxBarLineTo)
@@ -259,9 +257,10 @@ bool Score::read(XmlReader& e)
             if (st->barLineSpan() == 1) {
                   if (st->barLineTo() - st->barLineFrom() < MIN_BARLINE_FROMTO_DIST) {
                         st->setBarLineFrom(0);
-                        st->setBarLineTo(defaultBarLineTo);
+                        st->setBarLineTo(0);
                         }
                   }
+#endif
             }
 
       if (!masterScore()->omr())
