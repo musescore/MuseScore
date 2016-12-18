@@ -101,6 +101,7 @@ option(OCR           "enable OCR, requires OMR" OFF)           # requires tesser
 option(SOUNDFONT3    "ogg vorbis compressed fonts" ON)         # enable ogg vorbis compressed fonts, require ogg & vorbis
 option(HAS_AUDIOFILE "enable audio export" ON)                 # requires libsndfile
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
+option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF)          # requires freetype >= 2.5.2, does not work on win
 option(BUILD_LAME    "enable mp3 export" ON)                   # requires libmp3lame (non-free), call CMake with -DBUILD_LAME="OFF" to disable
 
 SET(JACK_LONGNAME "jack (jack audio connection kit)")
@@ -219,18 +220,20 @@ SET(QT_USE_QTHELP        TRUE)
 ## freetype2 >= 2.5.2
 ##
 
-##if (APPLE)
-##      PKGCONFIG1 (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
-##      if (FREETYPE_INCLUDE_DIRS)
-##          STRING(REGEX REPLACE  "\"" "" FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
-##          STRING(REGEX REPLACE  "\"" "" FREETYPE_LIBDIR ${FREETYPE_LIBDIR})
-##          message("freetype2 detected ${FREETYPE_INCLUDE_DIRS} ${FREETYPE_LIBDIR} ${FREETYPE_LIBRARIES}")
-##      else (FREETYPE_INCLUDE_DIRS)
-##          message(FATAL_ERROR "freetype >= 2.5.2 is required\n")
-##      endif (FREETYPE_INCLUDE_DIRS)
-##else (APPLE)
-##    find_package(Freetype REQUIRED)
-##endif (APPLE)
+if (USE_SYSTEM_FREETYPE)
+      if (APPLE)
+            PKGCONFIG (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
+            if (FREETYPE_INCLUDE_DIRS)
+                  STRING(REGEX REPLACE  "\"" "" FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
+                  STRING(REGEX REPLACE  "\"" "" FREETYPE_LIBDIR ${FREETYPE_LIBDIR})
+                  message("freetype2 detected ${FREETYPE_INCLUDE_DIRS} ${FREETYPE_LIBDIR} ${FREETYPE_LIBRARIES}")
+            else (FREETYPE_INCLUDE_DIRS)
+                  message(FATAL_ERROR "freetype >= 2.5.2 is required\n")
+            endif (FREETYPE_INCLUDE_DIRS)
+      else (APPLE)
+            find_package(Freetype REQUIRED)
+      endif (APPLE)
+endif (USE_SYSTEM_FREETYPE)
 
 ##
 ## alsa >= 1.0.0
@@ -605,7 +608,9 @@ if (OSC)
       subdirs (thirdparty/ofqf)
 endif (OSC)
 
-subdirs (thirdparty/freetype)
+if (NOT USE_SYSTEM_FREETYPE)
+      subdirs (thirdparty/freetype)
+endif (NOT USE_SYSTEM_FREETYPE)
 
 
 ##
@@ -621,9 +626,13 @@ include_directories(
    ${VORBIS_INCDIR}
    ${SNDFILE_INCDIR}
    ${LAME_INCLUDE_DIR}
-#   ${FREETYPE_INCLUDE_DIRS}
-   ${PROJECT_SOURCE_DIR}/thirdparty/freetype/include
 )
+
+if (USE_SYSTEM_FREETYPE)
+      include_directories(${FREETYPE_INCLUDE_DIRS})
+else (USE_SYSTEM_FREETYPE)
+      include_directories(${PROJECT_SOURCE_DIR}/thirdparty/freetype/include)
+endif (USE_SYSTEM_FREETYPE)
 
 ##
 ##  Include packaging
