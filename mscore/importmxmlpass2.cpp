@@ -540,7 +540,7 @@ static void setPartInstruments(Part* part, const QString& partId,
                   auto instrId = (*it).second;
                   bool mustInsert = instrId != prevInstrId;
                   /*
-                  qDebug("setPartInstruments: f %s previd %s id %s mustInsert %d",
+                  qDebug("f %s previd %s id %s mustInsert %d",
                          qPrintable(f.print()),
                          qPrintable(prevInstrId),
                          qPrintable(instrId),
@@ -549,18 +549,18 @@ static void setPartInstruments(Part* part, const QString& partId,
                   if (mustInsert) {
                         int staff = score->staffIdx(part);
                         int track = staff * VOICES;
-                        qDebug("setPartInstruments: instrument change: tick %s (%d) track %d instr '%s'",
-                               qPrintable(f.print()), f.ticks(), track, qPrintable(instrId));
+                        //qDebug("instrument change: tick %s (%d) track %d instr '%s'",
+                        //       qPrintable(f.print()), f.ticks(), track, qPrintable(instrId));
                         Segment* segment = score->tick2segment(f.ticks(), true, Segment::Type::ChordRest, true);
                         if (!segment)
-                              qDebug("setPartInstruments: segment for instrument change at tick %d not found", f.ticks());  // TODO
+                              qDebug("segment for instrument change at tick %d not found", f.ticks());  // TODO
                         else if (!mxmlDrumset.contains(instrId))
-                              qDebug("setPartInstruments: changed instrument '%s' at tick %d not found in part '%s'",
+                              qDebug("changed instrument '%s' at tick %d not found in part '%s'",
                                      qPrintable(instrId), f.ticks(), qPrintable(partId));  // TODO
                         else {
                               MusicXMLDrumInstrument mxmlInstr = mxmlDrumset.value(instrId);
                               Instrument instr;
-                              qDebug("setPartInstruments: instr %p", &instr);
+                              //qDebug("instr %p", &instr);
                               instr.channel(0)->program = mxmlInstr.midiProgram;
                               instr.channel(0)->pan = mxmlInstr.midiPan;
                               instr.channel(0)->volume = mxmlInstr.midiVolume;
@@ -1605,10 +1605,10 @@ void MusicXMLParserPass2::skipLogCurrElem()
 
 Score::FileError MusicXMLParserPass2::parse(QIODevice* device)
       {
-      qDebug("MusicXMLParserPass2::parse()");
+      //qDebug("MusicXMLParserPass2::parse()");
       _e.setDevice(device);
       Score::FileError res = parse();
-      qDebug("MusicXMLParserPass2::parse() res %hhd", res);
+      //qDebug("MusicXMLParserPass2::parse() res %d", int(res));
       return res;
       }
 
@@ -2695,8 +2695,8 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track)
 
       /*
        qDebug(" txt=%s repeat=%s",
-       txt.toLatin1().data(),
-       repeat.toLatin1().data()
+       qPrintable(txt),
+       qPrintable(repeat)
        );
        */
 
@@ -3095,7 +3095,7 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
             else if (repeat == "forward")
                   type = BarLineType::START_REPEAT;
             else {
-                  qDebug("ImportXml: warning: empty bar type");       // TODO
+                  qDebug("empty bar type");       // TODO
                   return false;
                   }
             }
@@ -3104,7 +3104,7 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
       else if (barStyle == "short") {
             }
       else {
-            qDebug("unsupported bar type <%s>", barStyle.toLatin1().data());       // TODO
+            qDebug("unsupported bar type <%s>", qPrintable(barStyle));       // TODO
             return false;
             }
 
@@ -5797,7 +5797,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
             }
 
       if (tremolo) {
-            qDebug("tremolo %d type '%s' ticks %d tremStart %p", tremolo, qPrintable(tremoloType), ticks, _tremStart);
+            //qDebug("tremolo %d type '%s' ticks %d tremStart %p", tremolo, qPrintable(tremoloType), ticks, _tremStart);
             if (tremolo == 1 || tremolo == 2 || tremolo == 3 || tremolo == 4) {
                   if (tremoloType == "" || tremoloType == "single") {
                         Tremolo* t = new Tremolo(_score);

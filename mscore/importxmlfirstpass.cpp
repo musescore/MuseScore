@@ -108,7 +108,7 @@ void MusicXmlInstrList::setInstrument(const QString instr, const Fraction f)
       // TODO determine how to handle multiple instrument changes at the same time
       // current implementation keeps the first one
       if (!insert({ f, instr }).second)
-            qDebug("MusicXmlInstrList::setInstrument instr '%s', tick %s (%d): element already exists",
+            qDebug("instr '%s', tick %s (%d): element already exists",
                    qPrintable(instr), qPrintable(f.print()), f.ticks());
       //(*this)[f] = instr;
       }
@@ -128,23 +128,25 @@ void MusicXmlOctaveShiftList::addOctaveShift(const int shift, const Fraction f)
       {
       Q_ASSERT(Fraction(0, 1) <= f);
 
-      qDebug("addOctaveShift(shift %d f %s)", shift, qPrintable(f.print()));
+      //qDebug("addOctaveShift(shift %d f %s)", shift, qPrintable(f.print()));
       auto i = find(f);
       if (i == end()) {
-            qDebug("addOctaveShift: not found, inserting");
+            //qDebug("addOctaveShift: not found, inserting");
             insert({ f, shift });
             }
       else {
-            qDebug("addOctaveShift: found %d, adding", (*this)[f]);
+            //qDebug("addOctaveShift: found %d, adding", (*this)[f]);
             (*this)[f] += shift;
-            qDebug("addOctaveShift: res %d", (*this)[f]);
+            //qDebug("addOctaveShift: res %d", (*this)[f]);
             }
       }
 
 void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
       {
+      /*
       for (auto i = cbegin(); i != cend(); ++i)
             qDebug(" [%s : %d]", qPrintable((*i).first.print()), (*i).second);
+       */
 
       // to each MusicXmlOctaveShiftList entry, add the sum of all previous ones
       int currentShift = 0;
@@ -153,8 +155,10 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
             i->second = currentShift;
             }
 
+      /*
       for (auto i = cbegin(); i != cend(); ++i)
             qDebug(" [%s : %d]", qPrintable((*i).first.print()), (*i).second);
+       */
 
       }
 

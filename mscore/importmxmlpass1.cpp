@@ -408,7 +408,7 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int m
 
       //qDebug("voice mapper mapped: s=%d v=%d", s, v);
       if (s < 0 || v < 0) {
-            qDebug("ImportMusicXml: too many voices (staff=%d voice='%s' -> s=%d v=%d)",
+            qDebug("too many voices (staff=%d voice='%s' -> s=%d v=%d)",
                    mxStaff + 1, qPrintable(mxVoice), s, v);
             return false;
             }
@@ -1574,7 +1574,7 @@ typedef std::map<int,MusicXmlPartGroup*> MusicXmlPartGroupMap;
 
 static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, QString s, bool barlineSpan)
       {
-      qDebug("partGroupStart number=%d part=%d symbol=%s", n, p, s.toLatin1().data());
+      //qDebug("partGroupStart number=%d part=%d symbol=%s", n, p, qPrintable(s));
 
       if (pgs.count(n) > 0) {
             qDebug("part-group number=%d already active", n);
@@ -1595,7 +1595,7 @@ static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, QString s, b
       else if (s == "square")
             bracketType = BracketType::SQUARE;
       else {
-            qDebug("part-group symbol=%s not supported", s.toLatin1().data());
+            qDebug("part-group symbol=%s not supported", qPrintable(s));
             return;
             }
 
@@ -2468,11 +2468,7 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
                   if (prevDesc.tp == MxmlOctaveShiftDesc::Type::UP
                       || prevDesc.tp == MxmlOctaveShiftDesc::Type::DOWN) {
                         // a complete pair
-                        qDebug("octave-shift start %s delta %d",
-                               qPrintable(prevDesc.time.print()), prevDesc.size);
                         _parts[partId].addOctaveShift(staff, prevDesc.size, prevDesc.time);
-                        qDebug("octave-shift stop %s delta %d",
-                               qPrintable(desc.time.print()), -prevDesc.size);
                         _parts[partId].addOctaveShift(staff, -prevDesc.size, desc.time);
                         }
                   else
@@ -2489,11 +2485,7 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
                   MxmlOctaveShiftDesc prevDesc = _octaveShifts.value(desc.num);
                   if (prevDesc.tp == MxmlOctaveShiftDesc::Type::STOP) {
                         // a complete pair
-                        qDebug("octave-shift start %s delta %d",
-                               qPrintable(desc.time.print()), desc.size);
                         _parts[partId].addOctaveShift(staff, desc.size, desc.time);
-                        qDebug("octave-shift stop %s delta %d",
-                               qPrintable(prevDesc.time.print()), -desc.size);
                         _parts[partId].addOctaveShift(staff, -desc.size, prevDesc.time);
                         }
                   else
@@ -2534,7 +2526,7 @@ void MusicXMLParserPass1::directionType(const Fraction cTime,
                   if (0 <= n && n < MAX_NUMBER_LEVEL) {
                         short size = _e.attributes().value("size").toShort();
                         QString type = _e.attributes().value("type").toString();
-                        qDebug("octave-shift type '%s' size %d number %d", qPrintable(type), size, n);
+                        //qDebug("octave-shift type '%s' size %d number %d", qPrintable(type), size, n);
                         MxmlOctaveShiftDesc osDesc;
                         handleOctaveShift(cTime, type, size, osDesc);
                         osDesc.num = n;
