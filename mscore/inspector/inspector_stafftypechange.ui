@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>279</width>
-    <height>325</height>
+    <width>199</width>
+    <height>245</height>
    </rect>
   </property>
   <property name="accessibleName">
-   <string>Element Inspector</string>
+   <string>Staff Type Change Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -41,7 +41,7 @@
       </font>
      </property>
      <property name="text">
-      <string>StaffTypeChange</string>
+      <string>Staff Type Change</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -80,6 +80,9 @@
        <property name="text">
         <string>Lines:</string>
        </property>
+       <property name="buddy">
+        <cstring>lines</cstring>
+       </property>
       </widget>
      </item>
      <item row="0" column="1">
@@ -98,7 +101,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Horizontal offset' value</string>
+        <string>Reset 'Lines' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -113,6 +116,9 @@
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>Step offset:</string>
+       </property>
+       <property name="buddy">
+        <cstring>stepOffset</cstring>
        </property>
       </widget>
      </item>
@@ -132,7 +138,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Horizontal offset' value</string>
+        <string>Reset 'Step offset' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -147,6 +153,9 @@
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Line distance:</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineDistance</cstring>
        </property>
       </widget>
      </item>
@@ -175,7 +184,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Horizontal offset' value</string>
+        <string>Reset 'Line distance' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -202,7 +211,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Horizontal offset' value</string>
+        <string>Reset 'Notehead scheme' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -219,7 +228,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Horizontal offset' value</string>
+        <string>Reset 'Show barlines' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -236,7 +245,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Horizontal offset' value</string>
+        <string>Reset 'Show ledger lines' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -253,7 +262,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Horizontal offset' value</string>
+        <string>Reset 'Slash style' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -270,7 +279,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Horizontal offset' value</string>
+        <string>Reset 'Generate clefs' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -287,7 +296,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Horizontal offset' value</string>
+        <string>Reset 'Generate time signatures' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -304,7 +313,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Horizontal offset' value</string>
+        <string>Reset 'Generate key signatures' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -320,6 +329,9 @@
        <property name="text">
         <string>Notehead scheme:</string>
        </property>
+       <property name="buddy">
+        <cstring>noteheadScheme</cstring>
+       </property>
       </widget>
      </item>
      <item row="3" column="0" colspan="2">
@@ -332,7 +344,7 @@
      <item row="4" column="0" colspan="2">
       <widget class="QCheckBox" name="showLedgerlines">
        <property name="text">
-        <string>Show ledgerlines</string>
+        <string>Show ledger lines</string>
        </property>
       </widget>
      </item>
@@ -353,7 +365,7 @@
      <item row="9" column="0" colspan="2">
       <widget class="QCheckBox" name="genKeysig">
        <property name="text">
-        <string>Geerate key signatures</string>
+        <string>Generate key signatures</string>
        </property>
       </widget>
      </item>
@@ -361,6 +373,28 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lines</tabstop>
+  <tabstop>resetLines</tabstop>
+  <tabstop>lineDistance</tabstop>
+  <tabstop>resetLineDistance</tabstop>
+  <tabstop>stepOffset</tabstop>
+  <tabstop>resetStepOffset</tabstop>
+  <tabstop>showBarlines</tabstop>
+  <tabstop>resetShowBarlines</tabstop>
+  <tabstop>showLedgerlines</tabstop>
+  <tabstop>resetShowLedgerlines</tabstop>
+  <tabstop>slashStyle</tabstop>
+  <tabstop>resetSlashStyle</tabstop>
+  <tabstop>noteheadScheme</tabstop>
+  <tabstop>resetNoteheadScheme</tabstop>
+  <tabstop>genClefs</tabstop>
+  <tabstop>resetGenClefs</tabstop>
+  <tabstop>genTimesig</tabstop>
+  <tabstop>resetGenTimesig</tabstop>
+  <tabstop>genKeysig</tabstop>
+  <tabstop>resetGenKeysig</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>
