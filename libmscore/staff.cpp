@@ -914,6 +914,8 @@ void Staff::staffTypeListChanged(int tick)
       ++i;
       if (i != _staffTypeList.end())
             score()->setLayout(i->first);
+      else
+            score()->setLayout(score()->lastMeasure()->endTick());
       }
 
 //---------------------------------------------------------
