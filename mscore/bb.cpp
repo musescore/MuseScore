@@ -354,7 +354,7 @@ bool BBFile::read(const QString& name)
                         note.setDuration((len * MScore::division) / bbDivision);
                         track->append(note);
                         }
-                  else if (type == 0xb0) {
+                  else if (type == 0xb0 || type == 0xc0) {
                         // ignore controller
                         }
                   else if (type == 0)
@@ -739,8 +739,22 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
             //
             // process pending notes
             //
-            while (!notes.isEmpty())
-                  processPendingNotes(score, &notes, 0x7fffffff, track);
+            while (!notes.isEmpty()) {
+                  int len = processPendingNotes(score, &notes, 0x7fffffff, track);
+                  ctick += len;
+                  }
+            if (voice == 0) {
+                  Measure* measure = score->tick2measure(ctick);
+                  if (measure && (ctick < (measure->tick() + measure->ticks()))) {       // at end?
+                        TDuration d;
+                        d.setVal(measure->endTick() - ctick);
+                        Rest* rest = new Rest(score, d);
+                        rest->setDuration(d.fraction());
+                        rest->setTrack(staffIdx * VOICES);
+                        Segment* s = measure->getSegment(Segment::Type::ChordRest, ctick);
+                        s->add(rest);
+                        }
+                  }
             }
       }
 
