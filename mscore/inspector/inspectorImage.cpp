@@ -42,8 +42,9 @@ InspectorImage::InspectorImage(QWidget* parent)
             { P_ID::LOCK_ASPECT_RATIO, 0, false, b.lockAspectRatio, b.resetLockAspectRatio },
             { P_ID::SIZE_IS_SPATIUM,   0, false, b.sizeIsSpatium,   b.resetSizeIsSpatium   }
             };
+      const std::vector<InspectorPanel> ppList = { { b.title, b.panel } };
 
-      mapSignals(iiList);
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------

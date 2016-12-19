@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>176</width>
-    <height>89</height>
+    <width>226</width>
+    <height>111</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -30,18 +30,22 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QLabel" name="elementName">
+    <widget class="QToolButton" name="title">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="font">
       <font>
+       <pointsize>13</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
      <property name="text">
       <string>Dynamic</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -59,130 +63,123 @@
     </widget>
    </item>
    <item>
-    <layout class="QGridLayout" name="gridLayout">
-     <property name="leftMargin">
-      <number>3</number>
-     </property>
-     <property name="rightMargin">
-      <number>3</number>
-     </property>
-     <property name="horizontalSpacing">
-      <number>3</number>
-     </property>
-     <property name="verticalSpacing">
-      <number>0</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Dynamic range:</string>
-       </property>
-       <property name="buddy">
-        <cstring>dynRange</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Velocity:</string>
-       </property>
-       <property name="buddy">
-        <cstring>velocity</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QSpinBox" name="velocity">
-       <property name="accessibleName">
-        <string>Velocity</string>
-       </property>
-       <property name="maximum">
-        <number>127</number>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="dynRange">
-       <property name="accessibleName">
-        <string>Dynamic Range</string>
-       </property>
-       <item>
+    <widget class="QWidget" name="panel" native="true">
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="leftMargin">
+       <number>3</number>
+      </property>
+      <property name="rightMargin">
+       <number>3</number>
+      </property>
+      <property name="horizontalSpacing">
+       <number>3</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Staff</string>
+         <string>Dynamic range:</string>
         </property>
-       </item>
-       <item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Part</string>
+         <string>Velocity:</string>
         </property>
-       </item>
-       <item>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="velocity">
+        <property name="accessibleName">
+         <string>Velocity</string>
+        </property>
+        <property name="maximum">
+         <number>127</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="dynRange">
+        <property name="accessibleName">
+         <string>Dynamic Range</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Staff</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Part</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>System</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QToolButton" name="resetDynRange">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Dynamic range' value</string>
+        </property>
         <property name="text">
-         <string>System</string>
+         <string notr="true"/>
         </property>
-       </item>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QToolButton" name="resetDynRange">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Dynamic range' value</string>
-       </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QToolButton" name="resetPlacement">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Placement' value</string>
-       </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QComboBox" name="placement">
-       <item>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QToolButton" name="resetPlacement">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Placement' value</string>
+        </property>
         <property name="text">
-         <string notr="true">Below</string>
+         <string notr="true"/>
         </property>
-       </item>
-       <item>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="placement">
+        <item>
+         <property name="text">
+          <string notr="true">Below</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">Above</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label">
         <property name="text">
-         <string notr="true">Above</string>
+         <string>Placement:</string>
         </property>
-       </item>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Placement:</string>
-       </property>
-       <property name="buddy">
-        <cstring>placement</cstring>
-       </property>
-      </widget>
-     </item>
-    </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

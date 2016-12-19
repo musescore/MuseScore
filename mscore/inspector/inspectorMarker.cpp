@@ -32,8 +32,11 @@ InspectorMarker::InspectorMarker(QWidget* parent)
             { P_ID::MARKER_TYPE,        0, false, m.markerType, 0            },
             { P_ID::LABEL,              0, false, m.jumpLabel,  0            }
             };
-
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = {
+            { t.title, t.panel },
+            { m.title, m.panel }
+            };
+      mapSignals(iiList, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
 

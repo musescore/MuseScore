@@ -23,6 +23,15 @@ class Inspector;
 class Element;
 
 //---------------------------------------------------------
+//   InspectorPanel
+//---------------------------------------------------------
+
+struct InspectorPanel {
+      QToolButton* title;
+      QWidget* panel;
+};
+
+//---------------------------------------------------------
 //   InspectorItem
 //---------------------------------------------------------
 
@@ -56,13 +65,14 @@ class InspectorBase : public QWidget {
 
    protected:
       std::vector<InspectorItem> iList;
+      std::vector<InspectorPanel> pList;
       QVBoxLayout* _layout;
       Inspector* inspector;
 
       virtual void setValue(const InspectorItem&, QVariant);
       QVariant getValue(const InspectorItem&) const;
       bool isDefault(const InspectorItem&);
-      void mapSignals(const std::vector<InspectorItem>& il = std::vector<InspectorItem>());
+      void mapSignals(const std::vector<InspectorItem>& il = std::vector<InspectorItem>(), const std::vector<InspectorPanel>& pl = std::vector<InspectorPanel>());
       void setupLineStyle(QComboBox*);
 
    private slots:

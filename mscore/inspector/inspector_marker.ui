@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>181</width>
-    <height>65</height>
+    <width>228</width>
+    <height>71</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -30,18 +30,22 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QLabel" name="elementName">
+    <widget class="QToolButton" name="title">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="font">
       <font>
+       <pointsize>13</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
      <property name="text">
       <string>Marker</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -59,94 +63,90 @@
     </widget>
    </item>
    <item>
-    <layout class="QGridLayout" name="gridLayout">
-     <property name="leftMargin">
-      <number>3</number>
-     </property>
-     <property name="rightMargin">
-      <number>3</number>
-     </property>
-     <property name="horizontalSpacing">
-      <number>3</number>
-     </property>
-     <property name="verticalSpacing">
-      <number>0</number>
-     </property>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Label:</string>
-       </property>
-       <property name="buddy">
-        <cstring>jumpLabel</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="jumpLabel">
-       <property name="accessibleName">
-        <string>Label</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="markerType">
-       <property name="accessibleName">
-        <string>Marker Type</string>
-       </property>
-       <item>
+    <widget class="QWidget" name="panel" native="true">
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="leftMargin">
+       <number>3</number>
+      </property>
+      <property name="rightMargin">
+       <number>3</number>
+      </property>
+      <property name="horizontalSpacing">
+       <number>3</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>0</number>
+      </property>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Segno</string>
+         <string>Label:</string>
         </property>
-       </item>
-       <item>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="jumpLabel">
+        <property name="accessibleName">
+         <string>Label</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="markerType">
+        <property name="accessibleName">
+         <string>Marker Type</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Segno</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Segno variation</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Coda</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Varied coda</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Codetta</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Fine</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>To Coda</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Custom</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Segno variation</string>
+         <string>Marker type:</string>
         </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Coda</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Varied coda</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Codetta</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Fine</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>To Coda</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Custom</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Marker type:</string>
-       </property>
-       <property name="buddy">
-        <cstring>markerType</cstring>
-       </property>
-      </widget>
-     </item>
-    </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -28,6 +28,10 @@ QToolButton#palette {
  border: none;
 }
 
+QToolButton#title {
+ border: none;
+}
+
 /* staff text properties */
 QToolButton[voice1="true"]:checked, QToolButton[voice1="true"]:pressed { color: white; background: $voice1-bgcolor; }
 QToolButton[voice2="true"]:checked, QToolButton[voice2="true"]:pressed { color: white; background: $voice2-bgcolor; }

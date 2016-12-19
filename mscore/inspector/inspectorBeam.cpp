@@ -37,7 +37,8 @@ InspectorBeam::InspectorBeam(QWidget* parent)
             { P_ID::BEAM_POS,       0, false, b.y1,           0                   },
             { P_ID::BEAM_POS,       1, false, b.y2,           0                   }
             };
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = { {b.title, b.panel} };
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------

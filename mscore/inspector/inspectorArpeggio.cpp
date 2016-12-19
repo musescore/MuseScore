@@ -30,8 +30,11 @@ InspectorArpeggio::InspectorArpeggio(QWidget* parent)
       const std::vector<InspectorItem> iiList = {
             { P_ID::PLAY,            0, 0,     g.playArpeggio, g.resetPlayArpeggio}
             };
+      const std::vector<InspectorPanel> ppList = {
+            { g.title, g.panel }
+            };
 
-      mapSignals(iiList);
+      mapSignals(iiList, ppList);
       }
 }
 

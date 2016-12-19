@@ -25,7 +25,7 @@ InspectorText::InspectorText(QWidget* parent)
       t.setupUi(addWidget());
 
       iList.push_back({ P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    });
-
+      pList.push_back({ t.title, t.panel });
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       mapSignals();
       }
