@@ -96,7 +96,12 @@ InspectorNote::InspectorNote(QWidget* parent)
 
             { P_ID::LEADING_SPACE,  0, 2, s.leadingSpace,  s.resetLeadingSpace  },
             };
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = {
+            { s.title, s.panel },
+            { c.title, c.panel },
+            { n.title, n.panel },
+            };
+      mapSignals(iiList, ppList);
 
       connect(n.dot1,     SIGNAL(clicked()),     SLOT(dot1Clicked()));
       connect(n.dot2,     SIGNAL(clicked()),     SLOT(dot2Clicked()));

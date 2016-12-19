@@ -35,8 +35,10 @@ InspectorFretDiagram::InspectorFretDiagram(QWidget* parent)
             { P_ID::USER_OFF,     1, 0, e.offsetY,     e.resetY          },
             { P_ID::MAG,          0, 0, f.mag,         f.resetMag        }
             };
-
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = {
+            { f.title, f.panel }
+            };
+      mapSignals(iiList, ppList);
       connect(f.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
       }
 

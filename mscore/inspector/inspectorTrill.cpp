@@ -41,8 +41,12 @@ InspectorTrill::InspectorTrill(QWidget* parent)
             { P_ID::ORNAMENT_STYLE, 0, 0, t.ornamentStyle,    t.resetOrnamentStyle    },
             { P_ID::PLAY,           0, 0, t.playArticulation, t.resetPlayArticulation }
             };
+      const std::vector<InspectorPanel> ppList = {
+            { l.title, l.panel },
+            { t.title, t.panel }
+            };
 
-      mapSignals(iiList);
+      mapSignals(iiList, ppList);
       }
 }
 

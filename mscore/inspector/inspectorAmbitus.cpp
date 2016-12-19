@@ -98,7 +98,9 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
             { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
             };
 
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = { { r.title, r.panel }, { s.title, s.panel } };
+
+      mapSignals(iiList, ppList);
       connect(r.updateRange, SIGNAL(clicked()), this, SLOT(updateRange()) );
       }
 

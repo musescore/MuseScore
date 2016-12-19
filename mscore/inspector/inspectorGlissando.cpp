@@ -34,8 +34,10 @@ InspectorGlissando::InspectorGlissando(QWidget* parent)
             { P_ID::GLISSANDO_STYLE, 0, false, g.glissandoStyle, g.resetGlissandoStyle },
             { P_ID::PLAY,            0, 0,     g.playGlissando,  g.resetPlayGlissando  }
             };
-
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = {
+            { g.title, g.panel }
+            };
+      mapSignals(iiList, ppList);
       }
 }
 

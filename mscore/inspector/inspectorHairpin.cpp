@@ -35,7 +35,7 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
       h.hairpinType->addItem(tr("Crescendo Line"),      int(HairpinType::CRESC_LINE));
       h.hairpinType->addItem(tr("Decrescendo Line"),    int(HairpinType::DECRESC_LINE));
 
-      std::vector<InspectorItem> il = {
+      const std::vector<InspectorItem> il = {
             { P_ID::LINE_VISIBLE,        0, 0, l.lineVisible,       l.resetLineVisible       },
             { P_ID::DIAGONAL,            0, 0, l.diagonal,          l.resetDiagonal          },
             { P_ID::LINE_COLOR,          0, 0, l.lineColor,         l.resetLineColor         },
@@ -51,7 +51,11 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             { P_ID::HAIRPIN_HEIGHT,      0, 0, h.hairpinHeight,     h.resetHairpinHeight     },
             { P_ID::HAIRPIN_CONT_HEIGHT, 0, 0, h.hairpinContHeight, h.resetHairpinContHeight }
             };
-      mapSignals(il);
+      const std::vector<InspectorPanel> ppList = {
+            { l.title, l.panel },
+            { h.title, h.panel }
+            };
+      mapSignals(il, ppList);
       }
 
 //---------------------------------------------------------

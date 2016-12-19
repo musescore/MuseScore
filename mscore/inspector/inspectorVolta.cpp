@@ -30,7 +30,7 @@ InspectorVolta::InspectorVolta(QWidget* parent)
       //tl.setupUi(addWidget());
       v.setupUi(addWidget());
 
-      std::vector<InspectorItem> il = {
+      const std::vector<InspectorItem> il = {
             { P_ID::LINE_VISIBLE,  0, 0, l.lineVisible,    l.resetLineVisible },
             { P_ID::DIAGONAL,      0, 0, l.diagonal,       l.resetDiagonal    },
             { P_ID::LINE_COLOR,    0, 0, l.lineColor,      l.resetLineColor   },
@@ -43,8 +43,11 @@ InspectorVolta::InspectorVolta(QWidget* parent)
             { P_ID::BEGIN_TEXT,    0, 0, v.voltaText,       0  },
             { P_ID::VOLTA_ENDING,  0, 0, v.voltaRepeatList, 0  }
             };
-
-      mapSignals(il);
+      const std::vector<InspectorPanel> ppList = {
+            { l.title, l.panel },
+            { v.title, v.panel }
+            };
+      mapSignals(il, ppList);
       }
 }
 

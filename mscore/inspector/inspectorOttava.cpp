@@ -30,7 +30,7 @@ InspectorOttava::InspectorOttava(QWidget* parent)
       //tl.setupUi(addWidget());
       o.setupUi(addWidget());
 
-      std::vector<InspectorItem> il = {
+      const std::vector<InspectorItem> il = {
             { P_ID::DIAGONAL,      0, 0, l.diagonal,       l.resetDiagonal       },
             { P_ID::LINE_VISIBLE,  0, 0, l.lineVisible,    l.resetLineVisible    },
             { P_ID::LINE_COLOR,    0, 0, l.lineColor,      l.resetLineColor      },
@@ -43,8 +43,12 @@ InspectorOttava::InspectorOttava(QWidget* parent)
             { P_ID::PLACEMENT,     0, 0, o.placement,      o.resetPlacement      },
             { P_ID::NUMBERS_ONLY,  0, 0, o.numbersOnly,    o.resetNumbersOnly    }
             };
+      const std::vector<InspectorPanel> ppList = {
+            { l.title, l.panel },
+            { o.title, o.panel }
+            };
 
-      mapSignals(il);
+      mapSignals(il, ppList);
       }
 }
 

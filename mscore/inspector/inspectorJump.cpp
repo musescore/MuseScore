@@ -34,8 +34,12 @@ InspectorJump::InspectorJump(QWidget* parent)
             { P_ID::CONTINUE_AT,        0, false, j.continueAt,  0                  },
             { P_ID::PLAY_REPEATS,       0, false, j.playRepeats, j.resetPlayRepeats }
             };
+      const std::vector<InspectorPanel> ppList = {
+            { t.title, t.panel },
+            { j.title, j.panel }
+            };
 
-      mapSignals(iiList);
+      mapSignals(iiList, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
 

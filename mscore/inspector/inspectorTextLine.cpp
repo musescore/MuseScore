@@ -28,7 +28,7 @@ InspectorTextLine::InspectorTextLine(QWidget* parent)
       setupLineStyle(l.lineStyle);
       tl.setupUi(addWidget());
 
-      std::vector<InspectorItem> il = {
+      const std::vector<InspectorItem> il = {
             { P_ID::DIAGONAL,      0, 0, l.diagonal,       l.resetDiagonal    },
             { P_ID::LINE_VISIBLE,  0, 0, l.lineVisible,    l.resetLineVisible },
             { P_ID::LINE_COLOR,    0, 0, l.lineColor,      l.resetLineColor   },
@@ -38,7 +38,11 @@ InspectorTextLine::InspectorTextLine(QWidget* parent)
             { P_ID::DASH_GAP_LEN,  0, 0, l.dashGapLength,  l.resetDashGapLength     },
             { P_ID::PLACEMENT,     0, 0, tl.placement,    tl.resetPlacement  },
             };
-      mapSignals(il);
+      const std::vector<InspectorPanel> ppList = {
+            { l.title, l.panel },
+            { tl.title, tl.panel }
+            };
+      mapSignals(il, ppList);
       }
 }
 

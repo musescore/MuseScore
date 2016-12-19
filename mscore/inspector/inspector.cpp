@@ -378,7 +378,6 @@ InspectorElementBase::InspectorElementBase(QWidget* parent)
    : InspectorBase(parent)
       {
       e.setupUi(addWidget());
-
       iList = {
             { P_ID::VISIBLE,   0, 0, e.visible,    e.resetVisible   },
             { P_ID::Z,         0, 0, e.z,          e.resetZ         },
@@ -387,6 +386,7 @@ InspectorElementBase::InspectorElementBase(QWidget* parent)
             { P_ID::USER_OFF,  1, 0, e.offsetY,    e.resetY         },
             { P_ID::AUTOPLACE, 0, 0, e.autoplace,  e.resetAutoplace },
             };
+      pList = { { e.title, e.panel } };
       connect(e.resetAutoplace, SIGNAL(clicked()), SLOT(resetAutoplace()));
       connect(e.autoplace, SIGNAL(toggled(bool)),  SLOT(autoplaceChanged(bool)));
       }
@@ -558,7 +558,8 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
             { P_ID::ORNAMENT_STYLE,      0, 0, ar.ornamentStyle,    ar.resetOrnamentStyle    },
             { P_ID::PLAY,                0, 0, ar.playArticulation, ar.resetPlayArticulation }
             };
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = { { ar.title, ar.panel } };
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -590,7 +591,11 @@ InspectorRest::InspectorRest(QWidget* parent)
             { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
             { P_ID::SMALL,          0, 0, r.small,         r.resetSmall         },
             };
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = {
+            { s.title, s.panel },
+            { r.title, r.panel }
+            };
+      mapSignals(iiList, ppList);
 
       //
       // Select
@@ -665,7 +670,11 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
 //            { P_ID::TIMESIG_GLOBAL, 0, 0, t.globalTimesigZ, t.resetGlobalTimesig },
 //            { P_ID::TIMESIG_GLOBAL, 1, 0, t.globalTimesigN, t.resetGlobalTimesig }
             };
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = {
+            { s.title, s.panel },
+            { t.title, t.panel }
+            };
+      mapSignals(iiList, ppList);
       }
 
 //   InspectorTimeSig::setElement
@@ -693,7 +702,11 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
             { P_ID::SHOW_COURTESY,  0, 0, k.showCourtesy,  k.resetShowCourtesy  },
 //            { P_ID::SHOW_NATURALS,  0, 0, k.showNaturals,  k.resetShowNaturals  }
             };
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = {
+            { s.title, s.panel },
+            { k.title, k.panel }
+            };
+      mapSignals(iiList, ppList);
       }
 
 //   InspectorKeySig::setElement
@@ -720,8 +733,9 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
             { P_ID::NUMBER_TYPE,  0, 0, t.numberType,  t.resetNumberType  },
             { P_ID::BRACKET_TYPE, 0, 0, t.bracketType, t.resetBracketType }
             };
+      const std::vector<InspectorPanel> ppList = { {t.title, t.panel} };
 
-      mapSignals(iiList);
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -737,7 +751,8 @@ InspectorAccidental::InspectorAccidental(QWidget* parent)
             { P_ID::SMALL,               0, 0, a.small,       a.resetSmall       },
             { P_ID::ACCIDENTAL_BRACKET,  0, 0, a.hasBracket,  a.resetHasBracket  }
             };
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = { { a.title, a.panel } };
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -752,8 +767,8 @@ InspectorBend::InspectorBend(QWidget* parent)
       const std::vector<InspectorItem> iiList = {
             { P_ID::PLAY,         0, 0, g.playBend,    g.resetPlayBend    }
             };
-
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = { {g.title, g.panel} };
+      mapSignals(iiList, ppList);
       connect(g.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
       }
 
@@ -785,8 +800,9 @@ InspectorTremoloBar::InspectorTremoloBar(QWidget* parent)
             { P_ID::LINE_WIDTH,   0, 0, g.lineWidth,   g.resetLineWidth  },
             { P_ID::MAG,          0, 0, g.mag,         g.resetMag        }
             };
+      const std::vector<InspectorPanel> ppList = { { g.title, g.panel } };
 
-      mapSignals(iiList);
+      mapSignals(iiList, ppList);
       connect(g.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
       }
 
@@ -818,7 +834,11 @@ InspectorClef::InspectorClef(QWidget* parent)
             { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
             { P_ID::SHOW_COURTESY,  0, 0, c.showCourtesy,  c.resetShowCourtesy  }
             };
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = {
+            { s.title, s.panel },
+            { c.title, c.panel }
+            };
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -873,12 +893,16 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
       t.setupUi(addWidget());
       tt.setupUi(addWidget());
 
-      std::vector<InspectorItem> il = {
+      const std::vector<InspectorItem> il = {
             { P_ID::TEXT_STYLE_TYPE,   0, 0, t.style,       t.resetStyle       },
             { P_ID::TEMPO,             0, 0, tt.tempo,      tt.resetTempo      },
             { P_ID::TEMPO_FOLLOW_TEXT, 0, 0, tt.followText, tt.resetFollowText }
             };
-      mapSignals(il);
+      const std::vector<InspectorPanel> ppList = {
+            { t.title, t.panel },
+            { tt.title, tt.panel }
+            };
+      mapSignals(il, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       connect(tt.followText, SIGNAL(toggled(bool)), tt.tempo, SLOT(setDisabled(bool)));
       }
@@ -926,16 +950,20 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
       t.setupUi(addWidget());
       d.setupUi(addWidget());
 
-      std::vector<InspectorItem> il = {
+      const std::vector<InspectorItem> il = {
             { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,     t.resetStyle     },
             { P_ID::DYNAMIC_RANGE,      0, 0, d.dynRange,  d.resetDynRange  },
             { P_ID::VELOCITY,           0, 0, d.velocity,  0                },
             { P_ID::PLACEMENT,          0, 0, d.placement, d.resetPlacement }
             };
+      const std::vector<InspectorPanel> ppList = {
+            { t.title, t.panel },
+            { d.title, d.panel }
+            };
       d.placement->clear();
       d.placement->addItem(tr("Above"), 0);
       d.placement->addItem(tr("Below"), 1);
-      mapSignals(il);
+      mapSignals(il, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
 
@@ -970,15 +998,19 @@ InspectorLyric::InspectorLyric(QWidget* parent)
       t.setupUi(addWidget());
       l.setupUi(addWidget());
 
-      std::vector<InspectorItem> il = {
+      const std::vector<InspectorItem> il = {
             { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,     t.resetStyle     },
             { P_ID::PLACEMENT,          0, 0, l.placement, l.resetPlacement },
             { P_ID::VERSE,              0, 0, l.verse,     l.resetVerse     }
             };
+      const std::vector<InspectorPanel> ppList = {
+            { t.title, t.panel },
+            { l.title, l.panel }
+            };
       l.placement->clear();
       l.placement->addItem(tr("Above"), 0);
       l.placement->addItem(tr("Below"), 1);
-      mapSignals(il);
+      mapSignals(il, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
 
@@ -1046,19 +1078,23 @@ InspectorStafftext::InspectorStafftext(QWidget* parent)
             }
       if (sameType) {
             if (te->systemFlag())
-                  s.elementName->setText(tr("System Text"));
+                  s.title->setText(tr("System Text"));
             else
-                  s.elementName->setText(tr("Staff Text"));
+                  s.title->setText(tr("Staff Text"));
             }
 
-      std::vector<InspectorItem> il = {
+      const std::vector<InspectorItem> il = {
             { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,     t.resetStyle     },
             { P_ID::PLACEMENT,          0, 0, s.placement, s.resetPlacement },
+            };
+      const std::vector<InspectorPanel> ppList = {
+            { t.title, t.panel },
+            { s.title, s.panel }
             };
       s.placement->clear();
       s.placement->addItem(tr("Above"), 0);
       s.placement->addItem(tr("Below"), 1);
-      mapSignals(il);
+      mapSignals(il, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
 
@@ -1102,13 +1138,14 @@ InspectorSlurTie::InspectorSlurTie(QWidget* parent)
                   }
             }
       if (sameType)
-            s.elementName->setText(e->accessibleInfo());
+            s.title->setText(e->accessibleInfo());
 
       const std::vector<InspectorItem> iiList = {
             { P_ID::LINE_TYPE,       0, 0, s.lineType,      s.resetLineType      },
             { P_ID::SLUR_DIRECTION,  0, 0, s.slurDirection, s.resetSlurDirection }
             };
-      mapSignals(iiList);
+      const std::vector<InspectorPanel> ppList = { { s.title, s.panel } };
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
@@ -1143,14 +1180,18 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
       for (auto i : BarLine::barLineTable)
             b.type->addItem(qApp->translate("Palette", i.userName), int(i.type));
 
-      std::vector<InspectorItem> il = {
+      const std::vector<InspectorItem> il = {
             { P_ID::LEADING_SPACE,     0, 1, s.leadingSpace,  s.resetLeadingSpace  },
             { P_ID::BARLINE_TYPE,      0, 0, b.type,     b.resetType     },
             { P_ID::BARLINE_SPAN,      0, 0, b.span,     b.resetSpan     },
             { P_ID::BARLINE_SPAN_FROM, 0, 0, b.spanFrom, b.resetSpanFrom },
             { P_ID::BARLINE_SPAN_TO,   0, 0, b.spanTo,   b.resetSpanTo   },
             };
-      mapSignals(il);
+      const std::vector<InspectorPanel> ppList = {
+            { s.title, s.panel },
+            { b.title, b.panel }
+            };
+      mapSignals(il, ppList);
       // when any of the span parameters is changed, span data need to be managed
       connect(b.span,          SIGNAL(valueChanged(int)), SLOT(manageSpanData()));
       connect(b.spanFrom,      SIGNAL(valueChanged(int)), SLOT(manageSpanData()));
@@ -1366,12 +1407,13 @@ InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorElementBase(paren
                   }
             }
       if (sameType)
-            c.elementName->setText(b->accessibleInfo());
+            c.title->setText(b->accessibleInfo());
 
-      std::vector<InspectorItem> il = {
+      const std::vector<InspectorItem> il = {
             { P_ID::PAUSE,          0, 0, c.pause,         c.resetPause         }
             };
-      mapSignals(il);
+      const std::vector<InspectorPanel> ppList = { {c.title, c.panel} };
+      mapSignals(il, ppList);
       }
 
 }

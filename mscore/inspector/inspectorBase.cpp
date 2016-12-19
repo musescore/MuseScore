@@ -485,8 +485,37 @@ void InspectorBase::setStyleClicked(int i)
 //    initialize inspector panel
 //---------------------------------------------------------
 
-void InspectorBase::mapSignals(const std::vector<InspectorItem>& il)
+void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::vector<InspectorPanel>& pl)
       {
+      for (auto& p : pl)
+            pList.push_back(p);
+      for (auto& p : pList) {
+            QToolButton* title = p.title;
+            QWidget* panel = p.panel;
+            if (title) {
+                  title->setCheckable(true);
+                  title->setFocusPolicy(Qt::NoFocus);
+                  connect(title, &QToolButton::clicked, this, [title, panel] (bool visible) {
+                        if (panel)
+                              panel->setVisible(visible);
+                        if (title) {
+                              title->setChecked(visible);
+                              title->setArrowType(visible ? Qt::DownArrow : Qt::RightArrow);
+                              QString key = title->parent()->objectName();
+                              QSettings s;
+                              s.setValue(QString("inspector/%1_visible").arg(key), visible);
+                              }});
+                  title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+                  title->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+                  QSettings s;
+                  QString key = title->parent()->objectName();
+                  bool visible = s.value(QString("inspector/%1_visible").arg(key), true).toBool();
+                  title->setArrowType(visible ? Qt::DownArrow : Qt::RightArrow);
+                  title->setChecked(visible);
+                  if (panel)
+                        panel->setVisible(visible);
+                  }
+            }
       for (auto& i : il)
             iList.push_back(i);
       int i = 0;
