@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>221</width>
-    <height>397</height>
+    <height>423</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -18,7 +18,7 @@
     <number>0</number>
    </property>
    <property name="leftMargin">
-    <number>2</number>
+    <number>0</number>
    </property>
    <property name="topMargin">
     <number>0</number>
@@ -39,7 +39,6 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>13</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
