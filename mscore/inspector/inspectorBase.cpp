@@ -573,7 +573,7 @@ QWidget* InspectorBase::addWidget()
       {
       QWidget* w = new QWidget;
       _layout->insertWidget(_layout->count()-1, w);
-      _layout->insertSpacing(_layout->count()-1, 20);
+      _layout->insertSpacing(_layout->count()-1, 5);
       return w;
       }
 
