@@ -480,9 +480,6 @@ class DragTransition : public QEventTransition
          : QEventTransition(c, QEvent::MouseMove), canvas(c) {}
       };
 
-extern int searchStaff(const Element* element);
-
-
 } // namespace Ms
 #endif
 
