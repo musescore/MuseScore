@@ -1462,8 +1462,10 @@ void ScoreView::moveCursor()
       // if on a TAB staff and InputState::_string makes sense,
       // draw cursor around single string
       if (staff->isTabStaff() && strg > VISUAL_STRING_NONE && strg < lines) {
-            h = lineDist * 1.5;       // 1 space above strg for letters and 1/2 sp. below strg for numbers
-            y += lineDist * (strg-1); // start 1 sp. above strg to include letter position
+            h = lineDist;                 // cursor height is one full line distance
+            y += lineDist * strg;
+            // if frets are on lines, centre on string; if frets are above lines, 'sit' above string
+            y -= (staffType->onLines() ? lineDist * 0.5 : lineDist);
             // look for a note on this string in this staff
             bool        done  = false;
             Segment*    seg   = is.segment();
