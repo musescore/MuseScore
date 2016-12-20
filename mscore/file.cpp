@@ -2521,38 +2521,67 @@ QString MuseScore::getWallpaper(const QString& caption)
 // [of edit that must be coordinated with the MuseScore master code base.
 //
 bool MuseScore::saveSvg(Score* score, const QString& saveName)
-{
-    SvgGenerator printer;
-
+      {
       QString title(score->title());
-      printer.setTitle(title);
-      printer.setFileName(saveName);
-      const PageFormat* pf = score->pageFormat();
-
-      QRectF r;
-      if (trimMargin >= 0 && score->npages() == 1) {
-            QMarginsF margins(trimMargin, trimMargin, trimMargin, trimMargin);
-            r = score->pages().first()->tbbox() + margins;
-            }
-      else
-            r = QRectF(0, 0, pf->width() * DPI * score->pages().size(), pf->height() * DPI);
-      qreal w = r.width();
-      qreal h = r.height();
-
-      printer.setSize(QSize(w, h));
-      printer.setViewBox(QRectF(0, 0, w, h));
-
       score->setPrinting(true);
       MScore::pdfPrinting = true;
+      const QList<Page*>& pl = score->pages();
+      int pages = pl.size();
+      int padding = QString("%1").arg(pages).size();
+      bool overwrite = false;
+      bool noToAll = false;
+      for (int pageNumber = 0; pageNumber < pages; ++pageNumber) {
+            Page* page = pl.at(pageNumber);
+            SvgGenerator printer;
+            printer.setTitle(pages > 1 ? QString("%1 (%2)").arg(title).arg(pageNumber + 1) : title);
 
-      QPainter p(&printer);
-      p.setRenderHint(QPainter::Antialiasing, true);
-      p.setRenderHint(QPainter::TextAntialiasing, true);
-    //p.scale(mag, mag); // mag == 1 now, 1:1 scaling, the default
-      if (trimMargin >= 0 && score->npages() == 1)
-            p.translate(-r.topLeft());
+            QString fileName(saveName);
+            if (fileName.endsWith(".svg"))
+                  fileName = fileName.left(fileName.size() - 4);
+            fileName += QString("-%1.svg").arg(pageNumber + 1, padding, 10, QLatin1Char('0'));
+            if (!converterMode) {
+                  QFileInfo fip(fileName);
+                  if(fip.exists() && !overwrite) {
+                        if(noToAll)
+                              continue;
+                        QMessageBox msgBox( QMessageBox::Question, tr("Confirm Replace"),
+                              tr("\"%1\" already exists.\nDo you want to replace it?\n").arg(QDir::toNativeSeparators(fileName)),
+                              QMessageBox::Yes |  QMessageBox::YesToAll | QMessageBox::No |  QMessageBox::NoToAll);
+                        msgBox.setButtonText(QMessageBox::Yes, tr("Replace"));
+                        msgBox.setButtonText(QMessageBox::No, tr("Skip"));
+                        msgBox.setButtonText(QMessageBox::YesToAll, tr("Replace All"));
+                        msgBox.setButtonText(QMessageBox::NoToAll, tr("Skip All"));
+                        int sb = msgBox.exec();
+                        if(sb == QMessageBox::YesToAll) {
+                              overwrite = true;
+                              }
+                        else if (sb == QMessageBox::NoToAll) {
+                              noToAll = true;
+                              continue;
+                              }
+                        else if (sb == QMessageBox::No)
+                              continue;
+                        }
+                  }
+            printer.setFileName(fileName);
 
-      for (Page* page : score->pages()) {
+            QRectF r;
+            if (trimMargin >= 0) {
+                  QMarginsF margins(trimMargin, trimMargin, trimMargin, trimMargin);
+                  r = page->tbbox() + margins;
+                  }
+            else
+                  r = page->abbox();
+            qreal w = r.width();
+            qreal h = r.height();
+
+            printer.setSize(QSize(w, h));
+            printer.setViewBox(QRectF(0, 0, w, h));
+            QPainter p(&printer);
+            p.setRenderHint(QPainter::Antialiasing, true);
+            p.setRenderHint(QPainter::TextAntialiasing, true);
+            if (trimMargin >= 0)
+                  p.translate(-r.topLeft());
             // 1st pass: StaffLines
             for  (System* s : *page->systems()) {
                   for (int i = 0, n = s->staves()->size(); i < n; i++) {
@@ -2605,7 +2634,6 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
             // 2nd pass: the rest of the elements
             QList<const Element*> pel = page->elements();
             qStableSort(pel.begin(), pel.end(), elementLessThan);
-
             Element::Type eType;
             for (const Element* e : pel) {
                   // Always exclude invisible elements
@@ -2627,15 +2655,14 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                   // Paint it
                   paintElement(p, e);
             }
-            p.translate(QPointF(pf->width() * DPI, 0.0));
+            p.end(); // Writes MuseScore SVG file to disk, finally
       }
 
       // Clean up and return
       score->setPrinting(false);
       MScore::pdfPrinting = false;
-      p.end(); // Writes MuseScore SVG file to disk, finally
       return true;
-}
+      }
 
 //---------------------------------------------------------
 //   createThumbnail
