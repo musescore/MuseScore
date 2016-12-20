@@ -25,8 +25,6 @@ include_directories(
       ${CMAKE_CURRENT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
-#      ${PROJECT_SOURCE_DIR}/thirdparty/freetype/include
-      ${FREETYPE_INCLUDE_DIRS}
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
 
@@ -310,6 +308,10 @@ target_link_libraries(mscore
       kqoauth
       )
 
+if (USE_SYSTEM_FREETYPE)
+      target_link_libraries(mscore ${FREETYPE_LIBRARIES})
+endif (USE_SYSTEM_FREETYPE)
+
 if (MINGW)
       set(MSCORE_OUTPUT_NAME ${MUSESCORE_NAME})
 elseif (MSCORE_INSTALL_SUFFIX)
@@ -329,284 +331,309 @@ endif (MSCORE_OUTPUT_NAME)
 
 if (ZERBERUS)
       target_link_libraries(mscore zerberus synthesizer)
-endif ()
+endif (ZERBERUS)
 if (AEOLUS)
       target_link_libraries(mscore aeolus)
-endif ()
+endif (AEOLUS)
 if (SOUNDFONT3)
       target_link_libraries(mscore ${VORBIS_LIB} ${OGG_LIB})
-endif ()
+endif (SOUNDFONT3)
 
 if (HAS_AUDIOFILE)
       target_link_libraries(mscore audiofile ${SNDFILE_LIB})
 endif (HAS_AUDIOFILE)
 
 if (APPLE)
-      set_target_properties (mscore
-          PROPERTIES
-          MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
+      set_target_properties(mscore
+            PROPERTIES
+            MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in
+            )
       #enable dSym generation
       #set_target_properties (mscore
       #   PROPERTIES
       #      XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym")
-endif(APPLE)
+endif (APPLE)
 
 if (OSC)
       target_link_libraries(mscore ofqf)
 endif (OSC)
 
 if (MINGW)
-   add_custom_command(
-      OUTPUT ${PROJECT_BINARY_DIR}/resfile.o
-      COMMAND ${QT_WRC_EXECUTABLE} -i mscore.rc -o ${PROJECT_BINARY_DIR}/mscore.res
-      COMMAND ${QT_WINE_EXECUTABLE} /home/ws/.wine/drive_c/MingW/bin/windres.exe ${PROJECT_BINARY_DIR}/mscore.res -o ${PROJECT_BINARY_DIR}/resfile.o
-      DEPENDS ${PROJECT_SOURCE_DIR}/mscore/data/mscore.rc
-      WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/mscore/data
-      )
-   set_source_files_properties(
-      ${PROJECT_BINARY_DIR}/resfile.o
-      PROPERTIES generated true
-      )
-   # Windows: add -mconsole to LINK_FLAGS to get a console window for debug output
-   if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-     set_target_properties( mscore
-        PROPERTIES
-           COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
-           LINK_FLAGS "${PROJECT_BINARY_DIR}/resfile.o -mwindows -mconsole -L ${CROSSQT}/lib"
-        )
-   else(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-     set_target_properties( mscore
-          PROPERTIES
-             COMPILE_FLAGS "${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
-             LINK_FLAGS "-Wl,-S ${PROJECT_BINARY_DIR}/resfile.o -mwindows -L ${CROSSQT}/lib"
-          )
-   endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+      add_custom_command(
+            OUTPUT ${PROJECT_BINARY_DIR}/resfile.o
+            COMMAND ${QT_WRC_EXECUTABLE} -i mscore.rc -o ${PROJECT_BINARY_DIR}/mscore.res
+            COMMAND ${QT_WINE_EXECUTABLE} /home/ws/.wine/drive_c/MingW/bin/windres.exe ${PROJECT_BINARY_DIR}/mscore.res -o ${PROJECT_BINARY_DIR}/resfile.o
+            DEPENDS ${PROJECT_SOURCE_DIR}/mscore/data/mscore.rc
+            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/mscore/data
+            )
+      set_source_files_properties(
+            ${PROJECT_BINARY_DIR}/resfile.o
+            PROPERTIES generated true
+            )
+      # Windows: add -mconsole to LINK_FLAGS to get a console window for debug output
+      if (CMAKE_BUILD_TYPE MATCHES "DEBUG")
+            set_target_properties(mscore
+                  PROPERTIES
+                  COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+                  LINK_FLAGS "${PROJECT_BINARY_DIR}/resfile.o -mwindows -mconsole -L ${CROSSQT}/lib"
+                  )
+      else (CMAKE_BUILD_TYPE MATCHES "DEBUG")
+            set_target_properties(mscore
+                  PROPERTIES
+                  COMPILE_FLAGS "${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+                  LINK_FLAGS "-Wl,-S ${PROJECT_BINARY_DIR}/resfile.o -mwindows -L ${CROSSQT}/lib"
+            )
+      endif (CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
-   target_link_libraries(mscore
-      portaudio
-      portmidi
-      winmm
-      mscore_freetype
-      z
-      )
+      target_link_libraries(mscore
+            portaudio
+            portmidi
+            winmm
+            mscore_freetype
+            z
+            )
 
-   if (OMR)
-      target_link_libraries(mscore omr fitz jbig2dec jpeg openjpeg)
-      if (OCR)
-            target_link_libraries(mscore tesseract_api)
-      endif (OCR)
-   endif (OMR)
+      if (OMR)
+            target_link_libraries(mscore omr fitz jbig2dec jpeg openjpeg)
+            if (OCR)
+                  target_link_libraries(mscore tesseract_api)
+            endif (OCR)
+      endif (OMR)
 
-   target_link_libraries(mscore ${QT_mingw_LIBRARIES})
+      target_link_libraries(mscore ${QT_mingw_LIBRARIES})
 
-   install( TARGETS mscore RUNTIME DESTINATION bin )
+      install(TARGETS mscore RUNTIME DESTINATION bin)
 
-   # Keep dependencies in alphabetical order. Changes made to this list
-   # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
-   install( FILES
-      ${CROSS}/bin/libgcc_s_dw2-1.dll
-      ${CROSS}/bin/libstdc++-6.dll
-      ${CROSS}/bin/libwinpthread-1.dll
-      ${CROSS}/lib/libogg.dll
-      ${CROSS}/lib/libsndfile-1.dll
-      ${CROSS}/lib/libvorbis.dll
-      ${CROSS}/lib/libvorbisfile.dll
-      ${CROSS}/lib/portaudio.dll
-      ${CROSS}/opt/bin/libeay32.dll
-      ${CROSS}/opt/bin/ssleay32.dll
-      ${CROSSQT}/bin/icudt53.dll
-      ${CROSSQT}/bin/icuin53.dll
-      ${CROSSQT}/bin/icuuc53.dll
-      ${CROSSQT}/bin/Qt5CLucene.dll
-      ${CROSSQT}/bin/Qt5Core.dll
-      ${CROSSQT}/bin/Qt5Gui.dll
-      ${CROSSQT}/bin/Qt5Help.dll
-      ${CROSSQT}/bin/Qt5Multimedia.dll
-      ${CROSSQT}/bin/Qt5MultimediaWidgets.dll
-      ${CROSSQT}/bin/Qt5Network.dll
-      ${CROSSQT}/bin/Qt5OpenGL.dll
-      ${CROSSQT}/bin/Qt5Positioning.dll
-      ${CROSSQT}/bin/Qt5PrintSupport.dll
-      ${CROSSQT}/bin/Qt5Qml.dll
-      ${CROSSQT}/bin/Qt5Quick.dll
-      ${CROSSQT}/bin/Qt5Sensors.dll
-      ${CROSSQT}/bin/Qt5Sql.dll
-      ${CROSSQT}/bin/Qt5Svg.dll
-      ${CROSSQT}/bin/Qt5WebChannel.dll
-      ${CROSSQT}/bin/Qt5WebKit.dll
-      ${CROSSQT}/bin/Qt5WebKitWidgets.dll
-      ${CROSSQT}/bin/Qt5Widgets.dll
-      ${CROSSQT}/bin/Qt5Xml.dll
-      ${CROSSQT}/bin/Qt5XmlPatterns.dll
-      ${PROJECT_SOURCE_DIR}/build/qt.conf
-      DESTINATION bin)
+      # Keep dependencies in alphabetical order. Changes made to this list
+      # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
+      install(FILES
+            ${CROSS}/bin/libgcc_s_dw2-1.dll
+            ${CROSS}/bin/libstdc++-6.dll
+            ${CROSS}/bin/libwinpthread-1.dll
+            ${CROSS}/lib/libogg.dll
+            ${CROSS}/lib/libsndfile-1.dll
+            ${CROSS}/lib/libvorbis.dll
+            ${CROSS}/lib/libvorbisfile.dll
+            ${CROSS}/lib/portaudio.dll
+            ${CROSS}/opt/bin/libeay32.dll
+            ${CROSS}/opt/bin/ssleay32.dll
+            ${CROSSQT}/bin/icudt53.dll
+            ${CROSSQT}/bin/icuin53.dll
+            ${CROSSQT}/bin/icuuc53.dll
+            ${CROSSQT}/bin/Qt5CLucene.dll
+            ${CROSSQT}/bin/Qt5Core.dll
+            ${CROSSQT}/bin/Qt5Gui.dll
+            ${CROSSQT}/bin/Qt5Help.dll
+            ${CROSSQT}/bin/Qt5Multimedia.dll
+            ${CROSSQT}/bin/Qt5MultimediaWidgets.dll
+            ${CROSSQT}/bin/Qt5Network.dll
+            ${CROSSQT}/bin/Qt5OpenGL.dll
+            ${CROSSQT}/bin/Qt5Positioning.dll
+            ${CROSSQT}/bin/Qt5PrintSupport.dll
+            ${CROSSQT}/bin/Qt5Qml.dll
+            ${CROSSQT}/bin/Qt5Quick.dll
+            ${CROSSQT}/bin/Qt5Sensors.dll
+            ${CROSSQT}/bin/Qt5Sql.dll
+            ${CROSSQT}/bin/Qt5Svg.dll
+            ${CROSSQT}/bin/Qt5WebChannel.dll
+            ${CROSSQT}/bin/Qt5WebKit.dll
+            ${CROSSQT}/bin/Qt5WebKitWidgets.dll
+            ${CROSSQT}/bin/Qt5Widgets.dll
+            ${CROSSQT}/bin/Qt5Xml.dll
+            ${CROSSQT}/bin/Qt5XmlPatterns.dll
+            ${PROJECT_SOURCE_DIR}/build/qt.conf
+            DESTINATION bin
+            )
 
-    install(FILES
-      ${CROSSQT}/plugins/iconengines/qsvgicon.dll
-      DESTINATION bin/iconengines)
+      install(FILES
+            ${CROSSQT}/plugins/iconengines/qsvgicon.dll
+            DESTINATION bin/iconengines
+            )
 
-    install(FILES
-      ${CROSSQT}/plugins/imageformats/qjpeg.dll
-      ${CROSSQT}/plugins/imageformats/qmng.dll
-      ${CROSSQT}/plugins/imageformats/qsvg.dll
-      ${CROSSQT}/plugins/imageformats/qtiff.dll
-      DESTINATION bin/imageformats)
+      install(FILES
+            ${CROSSQT}/plugins/imageformats/qjpeg.dll
+            ${CROSSQT}/plugins/imageformats/qmng.dll
+            ${CROSSQT}/plugins/imageformats/qsvg.dll
+            ${CROSSQT}/plugins/imageformats/qtiff.dll
+            DESTINATION bin/imageformats
+            )
 
-    install(FILES
-      ${CROSSQT}/plugins/platforms/qwindows.dll
-      DESTINATION bin/platforms)
+      install(FILES
+            ${CROSSQT}/plugins/platforms/qwindows.dll
+            DESTINATION bin/platforms
+            )
 
-    install(FILES
-      ${CROSSQT}/plugins/printsupport/windowsprintersupport.dll
-      DESTINATION bin/printsupport)
+      install(FILES
+            ${CROSSQT}/plugins/printsupport/windowsprintersupport.dll
+            DESTINATION bin/printsupport
+            )
 
-    install(FILES
-      ${CROSSQT}/plugins/sqldrivers/qsqlite.dll
-      DESTINATION bin/sqldrivers)
+      install(FILES
+            ${CROSSQT}/plugins/sqldrivers/qsqlite.dll
+            DESTINATION bin/sqldrivers
+            )
 
-    install(DIRECTORY
-      ${CROSSQT}/qml
-      DESTINATION .
-      REGEX ".*d\\.dll" EXCLUDE
-      REGEX ".*QtGraphicalEffects.*" EXCLUDE
-      REGEX ".*QtMultimedia.*" EXCLUDE
-      REGEX ".*QtSensors.*" EXCLUDE
-      REGEX ".*QtTest.*" EXCLUDE
-      REGEX ".*QtWebkit.*" EXCLUDE)
-
+      install(DIRECTORY
+            ${CROSSQT}/qml
+            DESTINATION .
+            REGEX ".*d\\.dll" EXCLUDE
+            REGEX ".*QtGraphicalEffects.*" EXCLUDE
+            REGEX ".*QtMultimedia.*" EXCLUDE
+            REGEX ".*QtSensors.*" EXCLUDE
+            REGEX ".*QtTest.*" EXCLUDE
+            REGEX ".*QtWebkit.*" EXCLUDE
+            )
 else (MINGW)
-   target_link_libraries(mscore
-      ${ALSA_LIB}
-      ${QT_LIBRARIES}
-      mscore_freetype
-      z
-      dl
-      pthread
-      )
-    if (USE_PORTAUDIO)
-      target_link_libraries(mscore ${PORTAUDIO_LIB})
-    endif (USE_PORTAUDIO)
+      target_link_libraries(mscore
+            ${ALSA_LIB}
+            ${QT_LIBRARIES}
+            z
+            dl
+            pthread
+            )
 
-    if (USE_PULSEAUDIO)
-      target_link_libraries(mscore ${PULSEAUDIO_LIBRARY})
-    endif (USE_PULSEAUDIO)
+      if (USE_SYSTEM_FREETYPE)
+            target_link_libraries(mscore freetype)
+      else (USE_SYSTEM_FREETYPE)
+            target_link_libraries(mscore mscore_freetype)
+      endif (USE_SYSTEM_FREETYPE)
 
-   set_target_properties (
-      mscore
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wno-overloaded-virtual -Winvalid-pch"
-      )
+      if (USE_PORTAUDIO)
+            target_link_libraries(mscore ${PORTAUDIO_LIB})
+      endif (USE_PORTAUDIO)
 
-   if (OMR)
-      target_link_libraries(mscore omr fitz fontconfig jbig2dec jpeg openjpeg)
-      if (OCR)
-            target_link_libraries(mscore tesseract_api)
-      endif (OCR)
-   endif (OMR)
+      if (USE_PULSEAUDIO)
+            target_link_libraries(mscore ${PULSEAUDIO_LIBRARY})
+      endif (USE_PULSEAUDIO)
 
-   if (APPLE)
-     if (USE_PORTMIDI)
-       target_link_libraries(mscore portmidi)
-     endif (USE_PORTMIDI)
-     target_link_libraries(mscore ${OsxFrameworks})
-   else (APPLE)
-       target_link_libraries(mscore rt)
-   endif (APPLE)
-
-   # gold does not use indirect shared libraries for symbol resolution, Linux only
-   if (NOT APPLE)
-      if(USE_JACK)
-         target_link_libraries(mscore dl)
-      endif(USE_JACK)
-      target_link_libraries(mscore rt)
-   endif (NOT APPLE)
-
-   if (APPLE)
       set_target_properties(mscore
-        PROPERTIES
-           LINK_FLAGS "-stdlib=libc++"
-        )
-     xcode_pch(mscore all)
-     install (TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
-     install (FILES data/mscore.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
-     install (FILES data/musescoreDocument.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
-   else (APPLE)
-     #### PACKAGING for Linux and BSD based systems (more in top-level CMakeLists.txt) ####
-     # install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
-     install( TARGETS mscore RUNTIME DESTINATION bin )
-     if (LN_EXECUTABLE)
-        add_custom_target(mscore_alias ALL
-            COMMAND echo "Creating symlink alias for mscore executable."
-            COMMAND ${LN_EXECUTABLE} -sf "mscore${MSCORE_INSTALL_SUFFIX}" "musescore${MSCORE_INSTALL_SUFFIX}"
-            COMMAND echo 'Symlink alias: musescore${MSCORE_INSTALL_SUFFIX} -> mscore${MSCORE_INSTALL_SUFFIX}'
+            PROPERTIES
+            COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wno-overloaded-virtual -Winvalid-pch"
             )
-        install( FILES ${PROJECT_BINARY_DIR}/mscore/musescore${MSCORE_INSTALL_SUFFIX} DESTINATION bin)
-     else (LN_EXECUTABLE)
-        add_custom_target(mscore_alias ALL
-            COMMAND echo "No symlink aliases will be created."
-            VERBATIM
-            )
-     endif (LN_EXECUTABLE)
-     # install MuseScore icons (use SVGs where possible, but install PNGs as backup for systems that don't support SVG)
-     if (MSCORE_UNSTABLE)
-         set(MSCORE_ICON_BASE ../assets/musescore-icon-square) # square icons on development builds
-     else (MSCORE_UNSTABLE)
-         set(MSCORE_ICON_BASE ../assets/musescore-icon-round) # round icons on stable releases
-     endif (MSCORE_UNSTABLE)
-     install(FILES ${MSCORE_ICON_BASE}.svg RENAME mscore${MSCORE_INSTALL_SUFFIX}.svg DESTINATION share/icons/hicolor/scalable/apps)
-     install(FILES ${MSCORE_ICON_BASE}-64.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/64x64/apps)
-     # install MIME (filetype) icons for each mimetype on Linux
-     install( FILES   ../assets/mscz-icon.svg RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.svg
-        DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCZ files
-     install( FILES   ../assets/mscz-icon-48.png RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.png
-        DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MSCZ files
-     install( FILES   ../assets/mscx-icon.svg RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}+xml.svg
-        DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCX files
-     install( FILES   ../assets/mscx-icon-48.png RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}+xml.png
-        DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MSCX files
-     # use a custom icon for MusicXML files (there isn't a standard icon for MusicXML files)
-     install( FILES   ../assets/mxl-icon.svg RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}.svg
-        DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MXL (compressed MusicXML) files
-     install( FILES   ../assets/mxl-icon-48.png RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}.png
-        DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MXL (compressed MusicXML) files
-     install( FILES   ../assets/xml-icon.svg RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml.svg
-        DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .XML (MusicXML) files
-     install( FILES   ../assets/xml-icon-48.png RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml.png
-        DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .XML (MusicXML) files
-     # Note: must now run "gtk-update-icon-cache" to set the new icons. This is done in the Makefile.
-   endif (APPLE)
+
+      if (OMR)
+            target_link_libraries(mscore omr fitz fontconfig jbig2dec jpeg openjpeg)
+            if (USE_SYSTEM_FREETYPE)
+                  target_link_libraries(mscore freetype)
+            endif (USE_SYSTEM_FREETYPE)
+            if (OCR)
+                  target_link_libraries(mscore tesseract_api)
+            endif (OCR)
+      endif (OMR)
+
+      if (APPLE)
+            if (USE_PORTMIDI)
+                  target_link_libraries(mscore portmidi)
+            endif (USE_PORTMIDI)
+            target_link_libraries(mscore ${OsxFrameworks})
+      else (APPLE)
+            target_link_libraries(mscore rt)
+      endif (APPLE)
+
+      # gold does not use indirect shared libraries for symbol resolution, Linux only
+      if (NOT APPLE)
+            if (USE_JACK)
+                  target_link_libraries(mscore dl)
+            endif (USE_JACK)
+                  target_link_libraries(mscore rt)
+      endif (NOT APPLE)
+
+      if (APPLE)
+            set_target_properties(mscore
+                  PROPERTIES
+                  LINK_FLAGS "-stdlib=libc++"
+                  )
+      xcode_pch(mscore all)
+      install (TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
+      install (FILES data/mscore.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
+      install (FILES data/musescoreDocument.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
+      else (APPLE)
+            #### PACKAGING for Linux and BSD based systems (more in top-level CMakeLists.txt) ####
+            # install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
+            install(TARGETS mscore RUNTIME DESTINATION bin)
+            if (LN_EXECUTABLE)
+                  add_custom_target(mscore_alias ALL
+                        COMMAND echo "Creating symlink alias for mscore executable."
+                        COMMAND ${LN_EXECUTABLE} -sf "mscore${MSCORE_INSTALL_SUFFIX}" "musescore${MSCORE_INSTALL_SUFFIX}"
+                        COMMAND echo 'Symlink alias: musescore${MSCORE_INSTALL_SUFFIX} -> mscore${MSCORE_INSTALL_SUFFIX}'
+                        )
+                  install(FILES ${PROJECT_BINARY_DIR}/mscore/musescore${MSCORE_INSTALL_SUFFIX} DESTINATION bin)
+            else (LN_EXECUTABLE)
+                  add_custom_target(mscore_alias ALL
+                        COMMAND echo "No symlink aliases will be created."
+                        VERBATIM
+                        )
+            endif (LN_EXECUTABLE)
+
+            # install MuseScore icons (use SVGs where possible, but install PNGs as backup for systems that don't support SVG)
+            if (MSCORE_UNSTABLE)
+                  set(MSCORE_ICON_BASE ../assets/musescore-icon-square) # square icons on development builds
+            else (MSCORE_UNSTABLE)
+                  set(MSCORE_ICON_BASE ../assets/musescore-icon-round) # round icons on stable releases
+            endif (MSCORE_UNSTABLE)
+
+            install(FILES ${MSCORE_ICON_BASE}.svg RENAME mscore${MSCORE_INSTALL_SUFFIX}.svg DESTINATION share/icons/hicolor/scalable/apps)
+            install(FILES ${MSCORE_ICON_BASE}-64.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/64x64/apps)
+            # install MIME (filetype) icons for each mimetype on Linux
+            install(FILES ../assets/mscz-icon.svg
+                  RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.svg
+                  DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCZ files
+            install(FILES ../assets/mscz-icon-48.png
+                  RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.png
+                  DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MSCZ files
+            install(FILES ../assets/mscx-icon.svg
+                  RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}+xml.svg
+                  DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCX files
+            install(FILES ../assets/mscx-icon-48.png
+                  RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}+xml.png
+                  DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MSCX files
+            # use a custom icon for MusicXML files (there isn't a standard icon for MusicXML files)
+            install(FILES ../assets/mxl-icon.svg
+                  RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}.svg
+                  DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MXL (compressed MusicXML) files
+            install(FILES ../assets/mxl-icon-48.png
+                  RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}.png
+                  DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MXL (compressed MusicXML) files
+            install(FILES ../assets/xml-icon.svg
+                  RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml.svg
+                  DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .XML (MusicXML) files
+            install(FILES ../assets/xml-icon-48.png
+                  RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml.png
+                  DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .XML (MusicXML) files
+            # Note: must now run "gtk-update-icon-cache" to set the new icons. This is done in the Makefile.
+      endif (APPLE)
 endif (MINGW)
 
 if (APPLE)
-     install (FILES
-      ../fonts/gootville/Gootville.otf
-      ../fonts/gootville/GootvilleText.otf
-      ../fonts/mscore/mscore.ttf
-      ../fonts/mscore/MScoreText.ttf
-      ../fonts/MuseJazz.ttf
-      ../fonts/FreeSerif.ttf
-      ../fonts/FreeSerifBold.ttf
-      ../fonts/FreeSerifItalic.ttf
-      ../fonts/FreeSerifBoldItalic.ttf
-      ../fonts/FreeSans.ttf
-      ../fonts/mscoreTab.ttf
-      ../fonts/mscore-BC.ttf
-      ../fonts/bravura/Bravura.otf
-      ../fonts/bravura/BravuraText.otf
-     DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
-     )
+     install(FILES
+            ../fonts/gootville/Gootville.otf
+            ../fonts/gootville/GootvilleText.otf
+            ../fonts/mscore/mscore.ttf
+            ../fonts/mscore/MScoreText.ttf
+            ../fonts/MuseJazz.ttf
+            ../fonts/FreeSerif.ttf
+            ../fonts/FreeSerifBold.ttf
+            ../fonts/FreeSerifItalic.ttf
+            ../fonts/FreeSerifBoldItalic.ttf
+            ../fonts/FreeSans.ttf
+            ../fonts/mscoreTab.ttf
+            ../fonts/mscore-BC.ttf
+            ../fonts/bravura/Bravura.otf
+            ../fonts/bravura/BravuraText.otf
+            DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
+            )
      install(DIRECTORY
-      ${QT_INSTALL_PREFIX}/qml
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
-      REGEX ".*QtWebkit.*" EXCLUDE
-      REGEX ".*QtTest.*" EXCLUDE
-      REGEX ".*QtSensors.*" EXCLUDE
-      REGEX ".*QtGraphicalEffects.*" EXCLUDE
-      REGEX ".*QtMultimedia.*" EXCLUDE
-      REGEX ".*QtAudioEngine.*" EXCLUDE
-      REGEX ".*_debug\\.dylib" EXCLUDE)
+            ${QT_INSTALL_PREFIX}/qml
+            DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+            REGEX ".*QtWebkit.*" EXCLUDE
+            REGEX ".*QtTest.*" EXCLUDE
+            REGEX ".*QtSensors.*" EXCLUDE
+            REGEX ".*QtGraphicalEffects.*" EXCLUDE
+            REGEX ".*QtMultimedia.*" EXCLUDE
+            REGEX ".*QtAudioEngine.*" EXCLUDE
+            REGEX ".*_debug\\.dylib" EXCLUDE
+            )
 endif (APPLE)
 
 ADD_DEPENDENCIES(${ExecutableName} mops1)
 ADD_DEPENDENCIES(${ExecutableName} mops2)
-
