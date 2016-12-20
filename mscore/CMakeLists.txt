@@ -25,8 +25,6 @@ include_directories(
       ${CMAKE_CURRENT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
-#      ${PROJECT_SOURCE_DIR}/thirdparty/freetype/include
-      ${FREETYPE_INCLUDE_DIRS}
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
       )
 
@@ -321,6 +319,10 @@ target_link_libraries(mscore
       kqoauth
       )
 
+if (USE_SYSTEM_FREETYPE)
+      target_link_libraries(mscore ${FREETYPE_LIBRARIES})
+endif (USE_SYSTEM_FREETYPE)
+
 if (MINGW)
       set(MSCORE_OUTPUT_NAME ${MUSESCORE_NAME})
 elseif (MSCORE_INSTALL_SUFFIX)
@@ -340,13 +342,13 @@ endif (MSCORE_OUTPUT_NAME)
 
 if (ZERBERUS)
       target_link_libraries(mscore zerberus synthesizer)
-endif ()
+endif (ZERBERUS)
 if (AEOLUS)
       target_link_libraries(mscore aeolus)
-endif ()
+endif (AEOLUS)
 if (SOUNDFONT3)
       target_link_libraries(mscore ${VORBIS_LIB} ${OGG_LIB})
-endif ()
+endif (SOUNDFONT3)
 
 if (HAS_AUDIOFILE)
       target_link_libraries(mscore audiofile ${SNDFILE_LIB})
@@ -360,7 +362,7 @@ if (APPLE)
       #set_target_properties (mscore
       #    PROPERTIES
       #       XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym")
-endif(APPLE)
+endif (APPLE)
 
 if (OSC)
       target_link_libraries(mscore ofqf)
@@ -483,11 +485,17 @@ else (MINGW)
    target_link_libraries(mscore
       ${ALSA_LIB}
       ${QT_LIBRARIES}
-      mscore_freetype
       z
       dl
       pthread
       )
+
+    if (USE_SYSTEM_FREETYPE)
+         target_link_libraries(mscore freetype)
+    else (USE_SYSTEM_FREETYPE)
+         target_link_libraries(mscore mscore_freetype)
+    endif (USE_SYSTEM_FREETYPE)
+
     if (USE_PORTAUDIO)
       target_link_libraries(mscore ${PORTAUDIO_LIB})
     endif (USE_PORTAUDIO)
