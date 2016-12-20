@@ -94,6 +94,7 @@ option(OCR           "Enable OCR, requires OMR" OFF)           # Requires tesser
 option(SOUNDFONT3    "Ogg Vorbis compressed fonts" ON)         # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
 option(HAS_AUDIOFILE "Enable audio export" ON)                 # Requires libsndfile
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
+option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF)          # requires freetype >= 2.5.2, does not work on win
 option(BUILD_LAME    "Enable MP3 export" ON)                   # Requires libmp3lame (non-free), call CMake with -DBUILD_LAME="OFF" to disable
 
 SET(JACK_LONGNAME "JACK (Jack Audio Connection Kit)")
@@ -197,6 +198,25 @@ else (MINGW OR APPLE)
       SET(Mscore_INSTALL_NAME  "mscore${MSCORE_INSTALL_SUFFIX}-${MUSESCORE_VERSION}/")
       SET(Mscore_SHARE_NAME    "share/")
 endif (MINGW OR APPLE)
+
+##
+## freetype2 >= 2.5.2
+##
+
+if (USE_SYSTEM_FREETYPE)
+      if (APPLE)
+            PKGCONFIG (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
+            if (FREETYPE_INCLUDE_DIRS)
+                  STRING(REGEX REPLACE  "\"" "" FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
+                  STRING(REGEX REPLACE  "\"" "" FREETYPE_LIBDIR ${FREETYPE_LIBDIR})
+                  message("freetype2 detected ${FREETYPE_INCLUDE_DIRS} ${FREETYPE_LIBDIR} ${FREETYPE_LIBRARIES}")
+            else (FREETYPE_INCLUDE_DIRS)
+                  message(FATAL_ERROR "freetype >= 2.5.2 is required\n")
+            endif (FREETYPE_INCLUDE_DIRS)
+      else (APPLE)
+            find_package(Freetype REQUIRED)
+      endif (APPLE)
+endif (USE_SYSTEM_FREETYPE)
 
 ##
 ## ALSA >= 1.0.0
@@ -571,8 +591,9 @@ if (OSC)
       subdirs (thirdparty/ofqf)
 endif (OSC)
 
-subdirs (thirdparty/freetype)
-
+if (NOT USE_SYSTEM_FREETYPE)
+      subdirs (thirdparty/freetype)
+endif (NOT USE_SYSTEM_FREETYPE)
 
 ##
 ## Includes
@@ -587,9 +608,13 @@ include_directories(
    ${VORBIS_INCDIR}
    ${SNDFILE_INCDIR}
    ${LAME_INCLUDE_DIR}
-#   ${FREETYPE_INCLUDE_DIRS}
-   ${PROJECT_SOURCE_DIR}/thirdparty/freetype/include
 )
+
+if (USE_SYSTEM_FREETYPE)
+      include_directories(${FREETYPE_INCLUDE_DIRS})
+else (USE_SYSTEM_FREETYPE)
+      include_directories(${PROJECT_SOURCE_DIR}/thirdparty/freetype/include)
+endif (USE_SYSTEM_FREETYPE)
 
 if (OMR)
    include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler)
