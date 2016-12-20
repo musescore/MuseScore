@@ -1707,7 +1707,10 @@ Score::FileError MasterScore::read206(XmlReader& e)
       for (Staff* s : staves())
             s->updateOttava();
 
-      setCreated(false);
+      // treat reading a 2.06 file as import
+      // on save warn if old file will be overwritten
+      setCreated(true);
+
       return FileError::FILE_NO_ERROR;
       }
 
