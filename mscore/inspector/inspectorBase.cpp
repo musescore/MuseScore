@@ -531,7 +531,7 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                         QMenu* menu = new QMenu(this);
                         resetButton->setMenu(menu);
                         resetButton->setPopupMode(QToolButton::MenuButtonPopup);
-                        QAction* a = menu->addAction(tr("set style"));
+                        QAction* a = menu->addAction(tr("Set style"));
                         styleMapper->setMapping(a, i);
                         connect(a, SIGNAL(triggered()), styleMapper, SLOT(map()));
                         }
