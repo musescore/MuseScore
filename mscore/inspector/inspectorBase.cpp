@@ -322,20 +322,22 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   if (valuesAreDifferent)
                         break;
                   }
-            QColor c(preferences.isThemeDark() ? Qt::yellow : Qt::blue);
+            QColor c(preferences.isThemeDark() ? Qt::yellow : Qt::darkCyan);
 
             // ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1 }").arg(MScore::selectColor[0].name()) : "");
             ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1 }").arg(c.name()) : "");
             }
 
+      if (ii.r)
+            ii.r->setEnabled(true);
       //deal with reset if only one element, or if values are the same
-      if (!valuesAreDifferent){
+      if (!valuesAreDifferent) {
             PropertyStyle styledValue = inspector->el().front()->propertyStyle(ii.t);
             bool reset;
             if (styledValue == PropertyStyle::STYLED) {
                   // does not work for QComboBox:
                   // ii.w->setStyleSheet("* { color: gray; foreground: gray; }");
-                  ii.w->setStyleSheet("* { color: gray; }");
+                  ii.w->setStyleSheet("* { color: darkGreen; }");
                   reset = false;
                   }
             else if (styledValue == PropertyStyle::UNSTYLED) {
@@ -348,11 +350,6 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   }
             if (ii.r)
                   ii.r->setEnabled(reset);
-            }
-      else {
-            if (ii.r)
-                  ii.r->setEnabled(true);
-            ii.w->setStyleSheet("");
             }
       }
 
@@ -475,6 +472,10 @@ void InspectorBase::setStyleClicked(int i)
       e->score()->startCmd();
       QVariant val = getValue(ii);
       e->undoChangeProperty(ii.t, val, PropertyStyle::STYLED);
+      P_ID id      = ii.t;
+      P_TYPE t     = propertyType(id);
+      if (t == P_TYPE::SP_REAL)
+            val = val.toDouble() / e->score()->spatium();
       e->score()->undo(new ChangeStyleVal(e->score(), sidx, val));
       checkDifferentValues(ii);
       e->score()->endCmd();
@@ -531,7 +532,7 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                         QMenu* menu = new QMenu(this);
                         resetButton->setMenu(menu);
                         resetButton->setPopupMode(QToolButton::MenuButtonPopup);
-                        QAction* a = menu->addAction(tr("set style"));
+                        QAction* a = menu->addAction(tr("Set as style"));
                         styleMapper->setMapping(a, i);
                         connect(a, SIGNAL(triggered()), styleMapper, SLOT(map()));
                         }
