@@ -1480,6 +1480,15 @@ static void checkDivider(bool left, System* s, qreal sdd)
                   }
             divider->layout();
             divider->rypos() = divider->height() * .5 + sdd;
+            if (left) {
+                  divider->rypos() += s->score()->styleD(StyleIdx::dividerLeftY) * SPATIUM20;
+                  divider->rxpos() =  s->score()->styleD(StyleIdx::dividerLeftX) * SPATIUM20;
+                  }
+            else {
+                  divider->rypos() += s->score()->styleD(StyleIdx::dividerRightY) * SPATIUM20;
+                  divider->rxpos() =  s->score()->pageFormat()->printableWidth() * DPI - divider->width();
+                  divider->rxpos() += s->score()->styleD(StyleIdx::dividerRightX) * SPATIUM20;
+                  }
             divider->adjustReadPos();
             }
       else if (divider) {
