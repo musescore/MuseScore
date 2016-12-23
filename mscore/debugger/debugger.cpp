@@ -1553,7 +1553,7 @@ void BarLineView::setElement(Element* e)
       BarLine* barline = (BarLine*)e;
       ShowElementBase::setElement(e);
       bl.subType->setValue(int(barline->barLineType()));
-      bl.span->setValue(barline->span());
+      bl.span->setChecked(barline->spanStaff());
       bl.spanFrom->setValue(barline->spanFrom());
       bl.spanTo->setValue(barline->spanTo());
 //      bl.customSubtype->setChecked(barline->customSubtype());

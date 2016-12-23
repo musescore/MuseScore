@@ -24,7 +24,7 @@ namespace Ms {
 
 /**
  \file
- Definition of classes Element, ElementList, StaffLines.
+ Definition of classes Element, ElementList.
 */
 
 class XmlWriter;
@@ -919,34 +919,6 @@ class ElementList : public std::vector<Element*> {
       void replace(Element* old, Element* n);
       void write(XmlWriter&) const;
       void write(XmlWriter&, const char* name) const;
-      };
-
-//-------------------------------------------------------------------
-//   @@ StaffLines
-///    The StaffLines class is the graphic representation of a staff,
-///    it draws the horizontal staff lines.
-//-------------------------------------------------------------------
-
-class StaffLines : public Element {
-      Q_OBJECT
-
-      qreal dist;
-      qreal lw;
-      int _lines;
-
-   public:
-      StaffLines(Score*);
-      virtual StaffLines* clone() const    { return new StaffLines(*this); }
-      virtual Element::Type type() const   { return Element::Type::STAFF_LINES; }
-      virtual void layout();
-
-      Measure* measure() const             { return (Measure*)parent(); }
-      virtual void draw(QPainter*) const;
-      virtual QPointF pagePos() const;    ///< position in page coordinates
-      virtual QPointF canvasPos() const;  ///< position in page coordinates
-      qreal y1() const;
-      qreal staffHeight() const { return (_lines-1) * dist; }
-      int lines() const { return _lines; }
       };
 
 //---------------------------------------------------------

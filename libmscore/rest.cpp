@@ -643,7 +643,7 @@ void Rest::reset()
 
 qreal Rest::mag() const
       {
-      qreal m = staff()->mag();
+      qreal m = staff()->mag(tick());
       if (small())
             m *= score()->styleD(StyleIdx::smallNoteMag);
       return m;
@@ -727,7 +727,7 @@ void Rest::setAccent(bool flag)
             if (flag) {
                   qreal yOffset = -(bbox().bottom());
                   if (durationType() >= TDuration::DurationType::V_HALF)
-                        yOffset -= staff()->spatium() * 0.5;
+                        yOffset -= staff()->spatium(tick()) * 0.5;
                   undoChangeProperty(P_ID::USER_OFF, QPointF(0.0, yOffset));
                   }
             else {

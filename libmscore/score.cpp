@@ -543,8 +543,9 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
                   *rst = i;
                   if (pitch) {
                         Staff* s = _staves[i];
-                        ClefType clef = s->clef(segment->tick());
-                        *pitch = y2pitch(pppp.y() - sstaff->bbox().y(), clef, s->spatium());
+                        int tick = segment->tick();
+                        ClefType clef = s->clef(tick);
+                        *pitch = y2pitch(pppp.y() - sstaff->bbox().y(), clef, s->spatium(tick));
                         }
                   if (offset)
                         *offset = pppp - QPointF(segment->x(), sstaff->bbox().y());
@@ -1099,7 +1100,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       // TODO: restrict to reasonable values (pitch 0-127)
       //
       Staff* s    = staff(pos->staffIdx);
-      qreal mag   = s->mag();
+      qreal mag   = s->mag(segment->tick());
       int tick    = segment->tick();
       // in TABs, step from one string to another; in other staves, step on and between lines
       qreal lineDist = s->staffType(tick)->lineDistance().val() * (s->isTabStaff(measure->tick()) ? 1 : .5) * mag * spatium();
@@ -3325,7 +3326,7 @@ void Score::appendPart(const QString& name)
             Staff* staff = new Staff(this);
             staff->setPart(part);
             staff->setLines(0, t->staffLines[i]);
-            staff->setSmall(t->smallStaff[i]);
+            staff->setSmall(0, t->smallStaff[i]);
             if (i == 0) {
                   staff->setBracket(0, t->bracket[0]);
                   staff->setBracketSpan(0, t->nstaves());

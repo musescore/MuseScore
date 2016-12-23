@@ -421,7 +421,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                         if (instr->staffTypePreset)
                               part->staff(i)->setStaffType(0, instr->staffTypePreset);
                         part->staff(i)->setLines(0, instr->staffLines[i]);
-                        part->staff(i)->setSmall(instr->smallStaff[i]);
+                        part->staff(i)->setSmall(0, instr->smallStaff[i]);
                         part->staff(i)->setDefaultClefType(instr->clefTypes[i]);
                         }
                   }

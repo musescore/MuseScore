@@ -383,7 +383,6 @@ QPointF Chord::stemPosBeam() const
       qreal _spatium = spatium();
       QPointF p(pagePos());
 
-
       if (staff() && staff()->isTabStaff(tick()))
             return staff()->staffType(tick())->chordStemPosBeam(this) * _spatium + p;
 
@@ -396,19 +395,6 @@ QPointF Chord::stemPosBeam() const
             p.ry() += downNote()->pos().y();
 
       return p;
-      }
-
-//---------------------------------------------------------
-//   setSelected
-//---------------------------------------------------------
-
-void Chord::setSelected(bool)
-      {
-/*      Element::setSelected(f);
-      int n = _notes.size();
-      for (int i = 0; i < n; ++i)
-            _notes.at(i)->setSelected(f);
-      */
       }
 
 //---------------------------------------------------------
@@ -626,12 +612,13 @@ void Chord::addLedgerLines()
       bool staffVisible  = true;
 
       if (segment()) { //not palette
+            int tick     = segment()->tick();
             int idx      = staffIdx() + staffMove();
             track        = staff2track(idx);
             Staff* st    = score()->staff(idx);
-            lineBelow    = (st->lines(tick()) - 1) * 2;
-            lineDistance = st->lineDistance(tick());
-            _mag         = staff()->mag();
+            lineBelow    = (st->lines(tick) - 1) * 2;
+            lineDistance = st->lineDistance(tick);
+            _mag         = staff()->mag(tick);
             staffVisible = !staff()->invisible();
             }
 
@@ -669,7 +656,7 @@ void Chord::addLedgerLines()
                   }
             for (int i = from; i < n && i >=0 ; i += delta) {
                   Note* note = _notes.at(i);
-                  int l = note->physicalLine();
+                  int l = note->line();
 
                   // if 1st pass and note not below staff or 2nd pass and note not above staff
                   if ((!j && l <= lineBelow + 1) || (j && l >= -1))
@@ -1204,17 +1191,15 @@ void Chord::setScore(Score* s)
 
 qreal Chord::defaultStemLength()
       {
-      qreal _spatium = spatium();
       Note* downnote;
-      int dl, ul;
       qreal stemLen;
-      int hookIdx       = durationType().hooks();
-      downnote          = downNote();
-      ul = upLine();
-      dl = downLine();
-      Staff* st = staff();
-      qreal physicalLineDistance = st ? st->lineDistance(tick()) : 1.0;
-      qreal logicalLineDistance = st ? st->logicalLineDistance(tick()) : 1.0;
+      qreal _spatium     = spatium();
+      int hookIdx        = durationType().hooks();
+      downnote           = downNote();
+      int ul             = upLine();
+      int dl             = downLine();
+      Staff* st          = staff();
+      qreal lineDistance = st ? st->lineDistance(tick()) : 1.0;
 
       StaffType* tab = 0;
       if (st && st->isTabStaff(tick())) {
@@ -1228,10 +1213,10 @@ qreal Chord::defaultStemLength()
                         }
                   }
             }
-      else if (logicalLineDistance != 1.0) {
+      else if (lineDistance != 1.0) {
             // convert to actual distance from top of staff in sp
-            ul *= logicalLineDistance;
-            dl *= logicalLineDistance;
+            ul *= lineDistance;
+            dl *= lineDistance;
             }
 
       if (tab && !tab->onLines()) {       // if TAB and frets above strings, move 1 position up
@@ -1246,7 +1231,7 @@ qreal Chord::defaultStemLength()
       qreal shortest      = score()->styleS(StyleIdx::shortestStem).val();
 
       qreal normalStemLen = small() ? 2.5 : 3.5;
-      switch(hookIdx) {
+      switch (hookIdx) {
             case 3: normalStemLen += small() ? .5  : 0.75; break; //32nd notes
             case 4: normalStemLen += small() ? 1.0 : 1.5;  break; //64th notes
             case 5: normalStemLen += small() ? 1.5 : 2.25; break; //128th notes
@@ -1262,7 +1247,7 @@ qreal Chord::defaultStemLength()
                   }
             }
 
-      if (_noteType != NoteType::NORMAL) {
+      if (isGrace()) {
             // grace notes stems are not subject to normal
             // stem rules
             stemLen =  qAbs(ul - dl) * .5;
@@ -1273,8 +1258,8 @@ qreal Chord::defaultStemLength()
       else {
             // normal note (not grace)
             qreal staffHeight = st ? st->lines(tick()) - 1 : 4;
-            if (physicalLineDistance != 1.0 && !tab)
-                  staffHeight *= physicalLineDistance;
+            if (!tab)
+                  staffHeight *= lineDistance;
             qreal staffHlfHgt = staffHeight * 0.5;
             if (up()) {                   // stem up
                   qreal dy  = dl * .5;                      // note-side vert. pos.
@@ -1327,11 +1312,7 @@ qreal Chord::defaultStemLength()
             int n = tab[_hook ? 1 : 0][up() ? 1 : 0][odd][_tremolo->lines()-1];
             stemLen += n * .5;
             }
-      // TAB: scale stemLen according to staff line spacing
-      if (tab)
-            stemLen *= physicalLineDistance;
-
-      return stemLen * _spatium;
+      return stemLen * _spatium * lineDistance;
       }
 
 //---------------------------------------------------------
@@ -1376,7 +1357,6 @@ void Chord::layoutStem1()
 ///   Layout chord tremolo stem and hook.
 //
 //    hook: sets position
-//    stem: sets length, but not position (assumed to be set in Chord::layout())
 //-----------------------------------------------------------------------------
 
 void Chord::layoutStem()
@@ -1450,7 +1430,6 @@ void Chord::layoutStem()
       // NON-TAB (or TAB with stems through staff)
       //
       if (_stem) {
-            _stem->setLen(defaultStemLength());
             // if (isGrace())
             //      abort();
             if (_hook) {
@@ -1515,7 +1494,7 @@ void Chord::layout2()
             c->layout2();
 
       qreal _spatium = spatium();
-      qreal _mag = staff()->mag();
+      qreal _mag = staff()->mag(tick());
 
       //
       // Experimental:
@@ -1629,9 +1608,9 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
             ch->sortNotes();
             }
 
-      std::vector<Note*> lnotes(notes());  // we need a copy!
 
       if (staffGroup == StaffGroup::STANDARD) {
+            std::vector<Note*> lnotes(notes());  // we need a copy!
             for (Note* note : lnotes) {
                   if (note->tieBack() && note->tpc() == note->tieBack()->startNote()->tpc()) {
                         // same pitch
@@ -1650,6 +1629,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
             const Drumset* drumset = instrument->drumset();
             if (!drumset)
                   qWarning("no drumset");
+            std::vector<Note*> lnotes(notes());  // we need a copy!
             for (Note* note : lnotes) {
                   if (!drumset)
                         note->setLine(0);
@@ -1740,7 +1720,7 @@ void Chord::layoutPitched()
             c->layoutPitched();
 
       qreal _spatium         = spatium();
-      qreal _mag             = staff() ? staff()->mag() : 1.0;    // palette elements do not have a staff
+      qreal _mag             = staff() ? staff()->mag(tick()) : 1.0;    // palette elements do not have a staff
       qreal dotNoteDistance  = score()->styleP(StyleIdx::dotNoteDistance)  * _mag;
       qreal minNoteDistance  = score()->styleP(StyleIdx::minNoteDistance)  * _mag;
       qreal minTieLength     = score()->styleP(StyleIdx::MinTieLength)     * _mag;
@@ -2068,9 +2048,9 @@ void Chord::layoutPitched()
       for (Note* note : _notes)
             note->layout2();
 
-      QRectF bb;
-      processSiblings([&bb] (Element* e) { bb |= e->bbox().translated(e->pos()); } );
-      setbbox(bb.translated(_spatium*2, 0));
+//      QRectF bb;
+//      processSiblings([&bb] (Element* e) { bb |= e->bbox().translated(e->pos()); } );
+//      setbbox(bb.translated(_spatium*2, 0));
       }
 
 //---------------------------------------------------------
@@ -2660,8 +2640,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
       {
       qreal _spatium = spatium();
       qreal pld      = staff()->lineDistance(tick());
-      qreal lld      = staff()->logicalLineDistance(tick());
-      bool scale     = staff()->scaleNotesToLines(tick());
+      bool scale     = !staff()->isDrumStaff(tick());
       qreal _spStaff = _spatium * pld;    // scaled to physical staff line distance
 
       ArticulationAnchor aa = a->anchor();
@@ -2718,7 +2697,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                   int add   = a->isAccent() ? 1 : 0; // sforzato accent needs more offset
                   if (bottom) {                 // if below chord
                         lline = downLine();                             // logical line of chord lowest note
-                        line = scale ? lline : lline * (lld / pld);     // corresponding physical line
+                        line = lline;                                   // corresponding physical line
                         if (line < lines)                               // if note above staff bottom line
                               staffOff = 3 - ((line - add) & 1) + add;        // round to next space below
                         else                                            // if note on or below staff bottom line,
@@ -2738,7 +2717,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                         }
                   else {                        // if above chord
                         lline = upLine();                               // logical line of chord highest note
-                        line = scale ? lline : lline * (lld / pld);     // corresponding physical line
+                        line = lline;                                   // corresponding physical line
                         if (line > 0)                                   // if note below staff top line
                               staffOff = -3 + ((line + add) & 1) - add;       // round to next space above
                         else                                            // if note or or above staff top line
@@ -3042,7 +3021,7 @@ void Chord::removeMarkings(bool keepTremolo)
 
 qreal Chord::mag() const
       {
-      qreal m = staff() ? staff()->mag() : 1.0;
+      qreal m = staff() ? staff()->mag(tick()) : 1.0;
       if (small())
             m *= score()->styleD(StyleIdx::smallNoteMag);
       if (_noteType != NoteType::NORMAL)

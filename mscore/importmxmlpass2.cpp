@@ -3171,10 +3171,9 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure)
                         int track = _pass1.trackForPart(partId);
                         b->setTrack(track);
                         b->setBarLineType(BarLineType::NORMAL);
-                        b->setSpan(1);
+                        b->setSpanStaff(false);
                         b->setSpanFrom(BARLINE_SPAN_TICK1_FROM);
                         b->setSpanTo(BARLINE_SPAN_TICK1_TO);
-                        b->setCustomSpan(true);
                         Segment* segment = measure->getSegment(Segment::Type::EndBarLine, measure->endTick());
                         segment->add(b);
                         }
@@ -3183,10 +3182,9 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure)
                         int track = _pass1.trackForPart(partId);
                         b->setTrack(track);
                         b->setBarLineType(BarLineType::NORMAL);
-                        b->setSpan(1);
+                        b->setSpanStaff(0);
                         b->setSpanFrom(BARLINE_SPAN_SHORT1_FROM);
                         b->setSpanTo(BARLINE_SPAN_SHORT1_TO);
-                        b->setCustomSpan(true);
                         Segment* segment = measure->getSegment(Segment::Type::EndBarLine, measure->endTick());
                         segment->add(b);
                         }

@@ -80,7 +80,6 @@ void TestBarline::barline01()
       {
       char msg[256];
       Score* score = readScore(DIR + "barline01.mscx");
-      score->doLayout();
 
       qreal height, heightMin, heightMax;
       qreal spatium = score->spatium();
@@ -105,21 +104,22 @@ void TestBarline::barline01()
             heightMax = (sysNo == 0) ? BARLINE0_HEIGHT_MAX : BARLINE_HEIGHT_MAX;
             for (int msrNo=0; msrNo < 2; ++msrNo) {
                   BarLine* bar = nullptr;
-                  Measure* msr = static_cast<Measure*>(sys->measure(msrNo));
+                  Measure* msr = toMeasure(sys->measure(msrNo));
                   Segment* seg = msr->findSegment(Segment::Type::EndBarLine, msr->tick()+msr->ticks());
                   sprintf(msg, "No SegEndBarLine in measure %d of system %d.", msrNo+1, sysNo+1);
                   QVERIFY2(seg != nullptr, msg);
 
-                  bar = static_cast<BarLine*>(seg->element(0));
+                  bar = toBarLine(seg->element(0));
                   sprintf(msg, "No barline in measure %d of system %d.", msrNo+1, sysNo+1);
                   QVERIFY2(bar != nullptr, msg);
 
                   height      = bar->bbox().height() / spatium;
-                  sprintf(msg, "Wrong barline height in measure %d of system %d.", msrNo+1, sysNo+1);
+                  sprintf(msg, "Wrong barline height %f %f %f in measure %d of system %d.",
+                     heightMin, height, heightMax, msrNo+1, sysNo+1);
                   QVERIFY2(height > heightMin && height < heightMax, msg);
-            }
+                  }
             sysNo++;
-      }
+            }
 
 //      QVERIFY(saveCompareScore(score, "barline01.mscx", DIR + "barline01-ref.mscx"));
       delete score;
@@ -194,9 +194,7 @@ void TestBarline::barline03()
       BarLine* bar = static_cast<BarLine*>(seg->element(0));
       QVERIFY2(bar != nullptr, "No start-repeat barline in measure 5.");
 
-printf("===span %d %d %d\n", bar->span(), bar->spanFrom(), bar->spanTo());
-
-      QVERIFY2(bar->span() == 2 && bar->spanFrom() == 2 && bar->spanTo() == 6,
+      QVERIFY2(bar->spanStaff() && bar->spanFrom() == 2 && bar->spanTo() == 6,
             "Wrong span data in start-repeat barline of measure 5.");
 
 
@@ -233,10 +231,12 @@ void TestBarline::barline04()
       BarLine* bar = static_cast<BarLine*>(seg->element(0));
       QVERIFY2(bar != nullptr, "No start-repeat barline in measure 5.");
 
-      score->undoChangeSingleBarLineSpan(bar, 2, 2, 6);
+      bar->undoChangeProperty(P_ID::BARLINE_SPAN, 2);
+      bar->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, 2);
+      bar->undoChangeProperty(P_ID::BARLINE_SPAN_TO, 6);
       score->endCmd();
 
-      QVERIFY2(bar->span() == 2 && bar->spanFrom() == 2 && bar->spanTo() == 6,
+      QVERIFY2(bar->spanStaff() && bar->spanFrom() == 2 && bar->spanTo() == 6,
             "Wrong span data in start-repeat barline of measure 5.");
 
       // check start-repeat bar ine in second staff is gone

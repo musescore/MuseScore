@@ -29,13 +29,13 @@ static const int BARLINE_SPAN_1LINESTAFF_TO     = 4;
 
 // data for some preset bar line span types
 static const int BARLINE_SPAN_TICK1_FROM        = -1;
-static const int BARLINE_SPAN_TICK1_TO          = 1;
+static const int BARLINE_SPAN_TICK1_TO          = -7;
 static const int BARLINE_SPAN_TICK2_FROM        = -2;
-static const int BARLINE_SPAN_TICK2_TO          = 2;
+static const int BARLINE_SPAN_TICK2_TO          = -6;
 static const int BARLINE_SPAN_SHORT1_FROM       = 2;
-static const int BARLINE_SPAN_SHORT1_TO         = 6;
+static const int BARLINE_SPAN_SHORT1_TO         = -2;
 static const int BARLINE_SPAN_SHORT2_FROM       = 1;
-static const int BARLINE_SPAN_SHORT2_TO         = 7;
+static const int BARLINE_SPAN_SHORT2_TO         = -1;
 
 //---------------------------------------------------------
 //   BarLineTableItem
@@ -59,22 +59,28 @@ class BarLine : public Element {
       Q_PROPERTY(Ms::MSQE_BarLineType::E barLineType READ qmlBarLineType)
       Q_ENUMS(Ms::MSQE_BarLineType::E)
 
+      char _spanStaff         { false };       // span barline to next staff if true
+      char _spanFrom          { 0 };           // line number on start and end staves
+      char _spanTo            { 0 };
       BarLineType _barLineType { BarLineType::NORMAL };
-      int _span                { 1 };           // number of staves spanned by the barline
-      int _spanFrom            { 0 };           // line number on start and end staves
-      int _spanTo              { 0 };
-      bool _customSpan         { false };
+      mutable qreal y1;
+      mutable qreal y2;
+      ElementList _el;        ///< fermata or other articulations
 
       // static variables used while dragging
-      static int _origSpan, _origSpanFrom, _origSpanTo;     // original span value before editing
-      static qreal yoff1, yoff2;          // used during drag edit to extend y1 and y2
+      static bool _origSpanStaff;         // original span value before editing
+      static int _origSpanFrom;
+      static int _origSpanTo;
+      static qreal yoff1;                 // used during drag edit to extend y1 and y2
+      static qreal yoff2;
       static bool  ctrlDrag;              // used to mark if [CTRL] has been used while dragging
       static bool  shiftDrag;             // used to mark if [SHIFT] has been used while dragging
 
-      void getY(qreal*, qreal*) const;
-      ElementList _el;        ///< fermata or other articulations
-
+      void getY() const;
       void drawDots(QPainter* painter, qreal x) const;
+      void drawTips(QPainter* painter, bool reversed, qreal x) const;
+      bool isTop() const;
+      bool isBottom() const;
 
    public:
       BarLine(Score* s = 0);
@@ -87,6 +93,7 @@ class BarLine : public Element {
       virtual void draw(QPainter*) const override;
       virtual QPointF pagePos() const override;      ///< position in canvas coordinates
       virtual void layout() override;
+      void layout2();
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
@@ -97,14 +104,12 @@ class BarLine : public Element {
 
       Segment* segment() const        { return (Segment*)parent(); }
 
-      void setSpan(int val)           { _span = val;          }
+      void setSpanStaff(bool val)     { _spanStaff = val;     }
       void setSpanFrom(int val)       { _spanFrom = val;      }
       void setSpanTo(int val)         { _spanTo = val;        }
-      int span() const                { return _span;         }
+      bool spanStaff() const          { return _spanStaff;    }
       int spanFrom() const            { return _spanFrom;     }
       int spanTo() const              { return _spanTo;       }
-      bool customSpan() const         { return _customSpan;   }
-      void setCustomSpan(bool v)      { _customSpan = v;     }
 
       virtual void startEdit(MuseScoreView*, const QPointF&) override;
       virtual void endEdit() override;
@@ -112,6 +117,7 @@ class BarLine : public Element {
       virtual void endEditDrag() override;
       virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
       virtual int grips() const override { return 2; }
+      virtual Shape shape() const override;
 
       ElementList* el()                  { return &_el; }
       const ElementList* el() const      { return &_el; }

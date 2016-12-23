@@ -501,7 +501,7 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
       chord->setDurationType(d);
       chord->setDuration(d.fraction());
       chord->setNoteType(type);
-      chord->setMag(ch->staff()->mag() * styleD(StyleIdx::graceNoteMag));
+      chord->setMag(ch->staff()->mag(chord->tick()) * styleD(StyleIdx::graceNoteMag));
 
       undoAddElement(chord);
       select(note, SelectType::SINGLE, 0);
@@ -3146,7 +3146,7 @@ void Score::cmd(const QAction* a)
       {
       QString cmd(a ? a->data().toString() : "");
       if (MScore::debugMode)
-            qDebug("Score::cmd <%s>", qPrintable(cmd));
+            qDebug("<%s>", qPrintable(cmd));
 
       struct ScoreCmd {
             const char* name;

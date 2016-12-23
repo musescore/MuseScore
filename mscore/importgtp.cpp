@@ -1610,7 +1610,7 @@ void GuitarPro1::readNote(int string, Note* note)
                   gc->setDurationType(d);
                   gc->setDuration(d.fraction());
                   gc->setNoteType(NoteType::ACCIACCATURA);
-                  gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
+                  gc->setMag(note->chord()->staff()->mag(note->chord()->tick()) * score->styleD(StyleIdx::graceNoteMag));
                   note->chord()->add(gc); // sets parent + track
                   addDynamic(gn, dynamic);
 

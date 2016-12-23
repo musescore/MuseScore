@@ -49,6 +49,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
@@ -108,8 +109,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="1">
@@ -127,7 +126,6 @@
           </Rest>
         <BarLine>
           <subtype>end</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="1">
@@ -148,7 +146,6 @@
           </Rest>
         <BarLine>
           <subtype>end</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="1">
@@ -166,7 +163,6 @@
           </Rest>
         <BarLine>
           <subtype>end</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="1">
@@ -187,7 +183,6 @@
           </Rest>
         <BarLine>
           <subtype>end</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="1">
@@ -201,8 +196,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>

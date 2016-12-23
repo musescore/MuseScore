@@ -192,8 +192,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="5">
@@ -207,8 +205,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="6">
@@ -222,8 +218,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="7">
@@ -237,8 +231,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="8">
@@ -252,8 +244,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>

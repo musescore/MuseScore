@@ -243,8 +243,6 @@
             </Note>
           </Chord>
         <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="1">
@@ -411,8 +409,6 @@
             </Note>
           </Chord>
         <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>

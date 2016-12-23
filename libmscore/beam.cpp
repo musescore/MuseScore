@@ -1549,7 +1549,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
             _beamDist = score()->styleP(StyleIdx::beamWidth) * (1 + score()->styleD(StyleIdx::beamDistance));
 
       _beamDist *= mag();
-      _beamDist *= c1->staff()->mag();
+      _beamDist *= c1->staff()->mag(c1->tick());
       int n = crl.size();
 
       StaffType* tab = 0;

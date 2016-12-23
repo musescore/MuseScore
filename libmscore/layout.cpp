@@ -57,6 +57,7 @@
 #include "hook.h"
 #include "ambitus.h"
 #include "hairpin.h"
+#include "stafflines.h"
 
 namespace Ms {
 
@@ -97,7 +98,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       int downVoices     = 0;
       int startTrack     = staffIdx * VOICES;
       int endTrack       = startTrack + VOICES;
-      qreal nominalWidth = noteHeadWidth() * staff->mag();
+      qreal nominalWidth = noteHeadWidth() * staff->mag(segment->tick());
       qreal maxUpWidth   = 0.0;
       qreal maxDownWidth = 0.0;
       qreal maxUpMag     = 0.0;
@@ -175,7 +176,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   maxDownWidth = qMax(maxDownWidth, hw);
                   }
 
-            qreal sp                 = staff->spatium();
+            qreal sp                 = staff->spatium(segment->tick());
             qreal upOffset           = 0.0;      // offset to apply to upstem chords
             qreal downOffset         = 0.0;      // offset to apply to downstem chords
             qreal dotAdjust          = 0.0;      // additional chord offset to account for dots
@@ -199,7 +200,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             // amount by which actual width exceeds nominal, adjusted for staff mag() only
             qreal headDiff = maxUpWidth - nominalWidth;
             // amount by which actual width exceeds nominal, adjusted for staff & chord/note mag()
-            qreal headDiff2 = maxUpWidth - nominalWidth * (maxUpMag / staff->mag());
+            qreal headDiff2 = maxUpWidth - nominalWidth * (maxUpMag / staff->mag(segment->tick()));
             if (headDiff > centerThreshold) {
                   // larger than nominal
                   centerUp = headDiff * -0.5;
@@ -764,9 +765,9 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
       // track columns of octave-separated accidentals
       int columnBottom[7] = { -1, -1, -1, -1, -1, -1, -1 };
 
-      qreal sp           = staff->spatium();
       int tick           =  notes.front()->tick();
-      qreal stepDistance = sp * staff->logicalLineDistance(tick) * .5;
+      qreal sp           = staff->spatium(tick);
+      qreal stepDistance = sp * staff->lineDistance(tick) * .5;
       int stepOffset     = staff->staffType(tick)->stepOffset();
 
       qreal lx           = 10000.0;  // leftmost notehead position
@@ -2382,14 +2383,6 @@ void Score::getNextMeasure(LayoutContext& lc)
 
       Measure* measure = toMeasure(lc.curMeasure);
       measure->moveTicks(lc.tick - measure->tick());
-      if (isMaster() && !lc.prevMeasure) {
-            // this is the first measure of a score
-            lc.sig = measure->len();
-            tempomap()->clear();
-            tempomap()->setTempo(0, 2.0);
-            sigmap()->clear();
-            sigmap()->add(0, SigEvent(lc.sig,  measure->timesig(), 0));
-            }
 
       //
       //  implement section break rest
@@ -2402,8 +2395,9 @@ void Score::getNextMeasure(LayoutContext& lc)
       // create stem and set stem direction
       //
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+            Staff* staff           = Score::staff(staffIdx);
+            const Drumset* drumset = staff->part()->instrument()->useDrumset() ? staff->part()->instrument()->drumset() : 0;
             AccidentalState as;      // list of already set accidentals for this measure
-            Staff* staff = Score::staff(staffIdx);
             as.init(staff->key(measure->tick()));
 
             for (Segment& segment : measure->segments()) {
@@ -2417,10 +2411,46 @@ void Score::getNextMeasure(LayoutContext& lc)
                   else if (segment.isChordRestType()) {
                         int track    = staffIdx * VOICES;
                         int endTrack = track + VOICES;
+
                         for (int t = track; t < endTrack; ++t) {
                               ChordRest* cr = segment.cr(t);
-                              if (cr)
-                                    cr->layout0(&as);
+                              if (cr) {
+                                    qreal m = staff->mag(segment.tick());
+                                    if (cr->small())
+                                          m *= score()->styleD(StyleIdx::smallNoteMag);
+
+                                    if (cr->isChord()) {
+                                          Chord* chord = toChord(cr);
+                                          for (Chord* c : chord->graceNotes()) {
+                                                c->setMag(m * score()->styleD(StyleIdx::graceNoteMag));
+                                                c->computeUp();
+                                                if (c->stemDirection() != Direction_AUTO)
+                                                      c->setUp(c->stemDirection() == Direction_UP);
+                                                else
+                                                      c->setUp(!(t % 2));
+                                                c->layoutStem1();
+                                                }
+                                          chord->cmdUpdateNotes(&as);
+                                          if (drumset) {
+                                                for (Note* note : chord->notes()) {
+                                                      int pitch = note->pitch();
+                                                      if (!drumset->isValid(pitch)) {
+                                                            // qDebug("unmapped drum note %d", pitch);
+                                                            }
+                                                      else if (!note->fixed()) {
+                                                            note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
+                                                            // note->setHeadGroup(drumset->noteHead(pitch));
+                                                            note->setLine(drumset->line(pitch));
+                                                            continue;
+                                                            }
+                                                      }
+                                                }
+                                          chord->computeUp();
+                                          chord->layoutStem1();   // create stems needed to calculate spacing
+                                                                  // stem direction can change later during beam processing
+                                          }
+                                    cr->setMag(m);
+                                    }
                               }
                         }
                   else if (segment.isClefType()) {
@@ -3040,9 +3070,12 @@ System* Score::collectSystem(LayoutContext& lc)
             if (stick == -1)
                   stick = mb->tick();
             etick = mb->endTick();
-            for (Segment* s = toMeasure(mb)->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
+            Segment::Type st = Segment::Type::ChordRest;
+            for (Segment* s = toMeasure(mb)->first(st); s; s = s->next(st)) {
                   for (Element* e : s->elist()) {
-                        if (e && e->isChordRest()) {
+                        if (!e)
+                              continue;
+                        if (e->isChordRest()) {
                               ChordRest* cr = toChordRest(e);
                               if (isTopBeam(cr)) {
                                     cr->beam()->layout();
@@ -3354,7 +3387,7 @@ bool Score::collectPage(LayoutContext& lc)
                                           }
                                     }
                               else if (e->isBarLine())
-                                    e->layout();
+                                    toBarLine(e)->layout2();
                               }
                         }
                   m->layout2();
@@ -3374,7 +3407,7 @@ bool Score::collectPage(LayoutContext& lc)
 
 void Score::doLayout()
       {
-// qDebug("==========================");
+//      qDebug("==========================");
 
       if (_staves.empty() || first() == 0) {
             // score is empty

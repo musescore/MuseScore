@@ -70,6 +70,7 @@
 #include "libmscore/tempotext.h"
 #include "libmscore/sym.h"
 #include "libmscore/image.h"
+#include "libmscore/stafflines.h"
 #include "synthesizer/msynthesizer.h"
 #include "svggenerator.h"
 #include "scorePreview.h"
@@ -2640,7 +2641,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                                     if (mb->type() != Element::Type::HBOX
                                      && mb->type() != Element::Type::VBOX
                                      && static_cast<Measure*>(mb)->visible(i)) {
-                                          StaffLines* sl = static_cast<Measure*>(mb)->staffLines(i);
+                                          StaffLines* sl = toMeasure(mb)->staffLines(i);
                                           printer.setElement(sl);
                                           paintElement(p, sl);
                                           }

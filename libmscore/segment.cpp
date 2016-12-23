@@ -983,38 +983,17 @@ Ms::Element* Segment::elementAt(int track) const
 
 void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      // bar line visibility depends on spanned staves,
-      // not simply on visibility of first staff
-
-      if (segmentType() & (Segment::Type::BarLine | Segment::Type::EndBarLine
-         | Segment::Type::StartRepeatBarLine | Segment::Type::BeginBarLine)) {
-            for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-                  Element* e = element(staffIdx*VOICES);
-                  if (e == 0)             // if no element, skip
-                        continue;
-                  // if staff not visible
-                  if (!all && !(/*measure()->visible(staffIdx) && */score()->staff(staffIdx)->show())) {
-                        // if bar line spans just this staff...
-                        if (toBarLine(e)->span() <= 1
-                            // ...or span another staff but without entering INTO it...
-                            || (toBarLine(e)->span() < 2 && toBarLine(e)->spanTo() < 1) )
-                              continue;         // ...skip
-                        }
-                  e->scanElements(data, func, all);
+      for (int track = 0; track < score()->nstaves() * VOICES; ++track) {
+            int staffIdx = track/VOICES;
+            if (!all && !(measure()->visible(staffIdx) && score()->staff(staffIdx)->show())) {
+                  track += VOICES - 1;
+                  continue;
                   }
+            Element* e = element(track);
+            if (e == 0)
+                  continue;
+            e->scanElements(data, func, all);
             }
-      else
-            for (int track = 0; track < score()->nstaves() * VOICES; ++track) {
-                  int staffIdx = track/VOICES;
-                  if (!all && !(measure()->visible(staffIdx) && score()->staff(staffIdx)->show())) {
-                        track += VOICES - 1;
-                        continue;
-                        }
-                  Element* e = element(track);
-                  if (e == 0)
-                        continue;
-                  e->scanElements(data, func, all);
-                  }
       for (Element* e : annotations()) {
             if (all || e->systemFlag() || measure()->visible(e->staffIdx()))
                   e->scanElements(data,  func, all);
@@ -1097,7 +1076,7 @@ Element* Segment::getElement(int staff)
                   if (!element(i * VOICES))
                         continue;
                   BarLine* b = toBarLine(element(i*VOICES));
-                  if (i + b->span() - 1 >= staff)
+                  if (i + b->spanStaff() >= staff)
                         return element(i*VOICES);
                   }
             }
@@ -1262,7 +1241,7 @@ void Segment::createShape(int staffIdx)
       {
       Shape& s = _shapes[staffIdx];
       s.clear();
-
+#if 0
       if (segmentType() & (Type::BarLine | Type::EndBarLine | Type::StartRepeatBarLine | Type::BeginBarLine)) {
             BarLine* bl = toBarLine(element(0));
             if (bl) {
@@ -1271,6 +1250,8 @@ void Segment::createShape(int staffIdx)
                   }
             return;
             }
+#endif
+
 #if 0
       for (int voice = 0; voice < VOICES; ++voice) {
             Element* e = element(staffIdx * VOICES + voice);

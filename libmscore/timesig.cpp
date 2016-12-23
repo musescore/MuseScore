@@ -59,7 +59,7 @@ TimeSig* TimeSig::clone() const
 
 qreal TimeSig::mag() const
       {
-      return staff() ? staff()->mag() : 1.0;
+      return staff() ? staff()->mag(tick()) : 1.0;
       }
 
 //---------------------------------------------------------

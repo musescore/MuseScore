@@ -444,49 +444,6 @@ void ChordRest::undoSetSmall(bool val)
       }
 
 //---------------------------------------------------------
-//   layout0
-//---------------------------------------------------------
-
-void ChordRest::layout0(AccidentalState* as)
-      {
-      qreal m = staff()->mag();
-      if (small())
-            m *= score()->styleD(StyleIdx::smallNoteMag);
-
-      if (isChord()) {
-            Chord* chord = toChord(this);
-            for (Chord* c : chord->graceNotes())
-                  c->layout0(as);
-            if (chord->isGrace())
-                  m *= score()->styleD(StyleIdx::graceNoteMag);
-            else
-                  chord->cmdUpdateNotes(as);
-
-            const Drumset* drumset = 0;
-            if (part()->instrument()->useDrumset())
-                  drumset = part()->instrument()->drumset();
-            if (drumset) {
-                  for (Note* note : chord->notes()) {
-                        int pitch = note->pitch();
-                        if (!drumset->isValid(pitch)) {
-                              // qDebug("unmapped drum note %d", pitch);
-                              }
-                        else if (!note->fixed()) {
-                              note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
-                              // note->setHeadGroup(drumset->noteHead(pitch));
-                              note->setLine(drumset->line(pitch));
-                              continue;
-                              }
-                        }
-                  }
-            chord->computeUp();
-            chord->layoutStem1();   // create stems needed to calculate spacing
-                                    // stem direction can change later during beam processing
-            }
-      setMag(m);
-      }
-
-//---------------------------------------------------------
 //   layoutArticulations
 //---------------------------------------------------------
 
@@ -495,9 +452,8 @@ void ChordRest::layoutArticulations()
       if (parent() == 0 || _articulations.empty())
             return;
       qreal _spatium = spatium();
-      bool scale     = staff()->scaleNotesToLines(tick());
+//      bool scale     = !staff()->isDrumStaff(tick());
       qreal pld      = staff()->lineDistance(tick());
-      qreal lld      = staff()->logicalLineDistance(tick());
       qreal _spStaff = _spatium * pld;    // scaled to staff line distance for vert. pos. within a staff
 
       if (isChord() && _articulations.size() == 1) {
@@ -506,9 +462,9 @@ void ChordRest::layoutArticulations()
             }
 
       qreal x         = centerX();
-      qreal distance0 = score()->styleS(StyleIdx::propertyDistance).val()     * _spatium;
-      qreal distance1 = score()->styleS(StyleIdx::propertyDistanceHead).val() * _spatium;
-      qreal distance2 = score()->styleS(StyleIdx::propertyDistanceStem).val() * _spatium;
+      qreal distance0 = score()->styleP(StyleIdx::propertyDistance);
+      qreal distance1 = score()->styleP(StyleIdx::propertyDistanceHead);
+      qreal distance2 = score()->styleP(StyleIdx::propertyDistanceStem);
 
       qreal chordTopY = upPos();    // note position of highest note
       qreal chordBotY = downPos();  // note position of lowest note
@@ -589,8 +545,6 @@ void ChordRest::layoutArticulations()
             Chord* chord = toChord(this);
             if (bottom) {
                   int line = downLine();
-                  if (!scale)
-                        line = ceil((line * lld) / pld);
                   y = chordBotY + dy;
                   if (!headSide && isChord() && chord->stem()) {
                         Stem* stem = chord->stem();
@@ -617,9 +571,7 @@ void ChordRest::layoutArticulations()
                   }
             else {
                   int line = upLine();
-                  if (!scale)
-                        line = floor((line * lld) / pld);
-                  y = chordTopY - dy;
+                  y        = chordTopY - dy;
                   if (!headSide && type() == Element::Type::CHORD && chord->stem()) {
                         Stem* stem = chord->stem();
                         y          = chordBotY + stem->stemLen();

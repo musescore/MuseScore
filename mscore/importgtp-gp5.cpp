@@ -670,7 +670,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             gc->setDurationType(d);
             gc->setDuration(d.fraction());
             gc->setNoteType(note_type);
-            gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
+            gc->setMag(note->chord()->staff()->mag(0) * score->styleD(StyleIdx::graceNoteMag));
             note->chord()->add(gc);
             addDynamic(gn, dynamic);
 

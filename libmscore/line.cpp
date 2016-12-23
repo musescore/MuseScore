@@ -547,7 +547,7 @@ SLine::SLine(const SLine& s)
 QPointF SLine::linePos(Grip grip, System** sys) const
       {
       qreal x = 0.0;
-      qreal sp = staff()->spatium();
+      qreal sp = staff()->spatium(tick());
       switch (anchor()) {
             case Spanner::Anchor::SEGMENT:
                   {

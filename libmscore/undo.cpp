@@ -74,6 +74,7 @@
 #include "sym.h"
 #include "utils.h"
 #include "glissando.h"
+#include "stafflines.h"
 
 //      Q_LOGGING_CATEGORY(undoRedo, "undoRedo")
 
@@ -702,15 +703,6 @@ void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
             ncr->undoChangeProperty(P_ID::DURATION_TYPE, QVariant::fromValue(d));
             ncr->undoChangeProperty(P_ID::DURATION, QVariant::fromValue(d.fraction()));
             }
-      }
-
-//---------------------------------------------------------
-//   undoChangeSingleBarLineSpan
-//---------------------------------------------------------
-
-void Score::undoChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom, int spanTo)
-      {
-      undo(new ChangeSingleBarLineSpan(barLine, span, spanFrom, spanTo));
       }
 
 //---------------------------------------------------------
@@ -2315,35 +2307,6 @@ void ChangeBarLineSpan::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeSingleBarLineSpan
-//---------------------------------------------------------
-
-ChangeSingleBarLineSpan::ChangeSingleBarLineSpan(BarLine* _barLine, int _span, int _spanFrom, int _spanTo)
-      {
-      barLine     = _barLine;
-      span        = _span;
-      spanFrom    = _spanFrom;
-      spanTo      = _spanTo;
-      }
-
-void ChangeSingleBarLineSpan::flip()
-      {
-      int nspan         = barLine->span();
-      int nspanFrom     = barLine->spanFrom();
-      int nspanTo       = barLine->spanTo();
-
-      barLine->setSpan(span);
-      barLine->setSpanFrom(spanFrom);
-      barLine->setSpanTo(spanTo);
-
-      span              = nspan;
-      spanFrom          = nspanFrom;
-      spanTo            = nspanTo;
-      barLine->score()->setLayout(barLine->tick());
-      barLine->setCustomSpan(true);
-      }
-
-//---------------------------------------------------------
 //   TransposeHarmony
 //---------------------------------------------------------
 
@@ -3749,7 +3712,7 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType, bool beginB
                                           bl->setBarLineType(barType);
                                           bl->setParent(segment);
                                           bl->setTrack(0);
-                                          bl->setSpan(s->nstaves());
+                                          bl->setSpanStaff(s->nstaves());
                                           undo(new AddElement(bl));
                                           }
                                     }

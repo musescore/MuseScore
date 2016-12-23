@@ -111,7 +111,7 @@ Clef::Clef(const Clef& c)
 
 qreal Clef::mag() const
       {
-      qreal mag = staff() ? staff()->mag() : 1.0;
+      qreal mag = staff() ? staff()->mag(tick()) : 1.0;
       if (_small)
             mag *= score()->styleD(StyleIdx::smallClefMag);
       return mag;

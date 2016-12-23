@@ -168,8 +168,6 @@
             </Note>
           </Chord>
         <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="2">
@@ -193,8 +191,6 @@
             </Note>
           </Chord>
         <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="3">
@@ -218,8 +214,6 @@
             </Note>
           </Chord>
         <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>

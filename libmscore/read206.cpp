@@ -437,6 +437,40 @@ static void readInstrument(Instrument *i, Part* p, XmlReader& e)
             }
       }
 
+//---------------------------------------------------------
+//   readStaff
+//---------------------------------------------------------
+
+static void readStaff(Staff* staff, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "type") {    // obsolete
+                  int staffTypeIdx = e.readInt();
+                  qDebug("obsolete: Staff::read staffTypeIdx %d", staffTypeIdx);
+                  }
+            else if (tag == "neverHide") {
+                  bool v = e.readInt();
+                  if (v)
+                        staff->setHideWhenEmpty(Staff::HideMode::NEVER);
+                  }
+            else if (tag == "barLineSpan") {
+                  staff->setBarLineFrom(e.intAttribute("from", 0));
+                  staff->setBarLineTo(e.intAttribute("to", 0));
+                  int span     = e.readInt();
+                  staff->setBarLineSpan(span > 1);    // TODO: set flag for other staves if span > 2
+                  }
+            else if (staff->readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   readPart
+//---------------------------------------------------------
+
 static void readPart(Part* part, XmlReader& e)
       {
       while (e.readNextStartElement()) {
@@ -446,11 +480,18 @@ static void readPart(Part* part, XmlReader& e)
                   readInstrument(i, part, e);
                   Drumset* ds = i->drumset();
                   Staff*   s = part->staff(0);
-                  int lld = s ? qRound(s->logicalLineDistance(0)) : 1;
+                  int lld = s ? qRound(s->lineDistance(0)) : 1;
                   if (ds && s && lld > 1) {
                         for (int i = 0; i < DRUM_INSTRUMENTS; ++i)
                               ds->drum(i).line /= lld;
                         }
+                  }
+            else if (tag == "Staff") {
+                  Staff* staff = new Staff(part->score());
+                  staff->setPart(part);
+                  part->score()->staves().push_back(staff);
+                  part->staves()->push_back(staff);
+                  readStaff(staff, e);
                   }
             else if (part->readProperties(e))
                   ;

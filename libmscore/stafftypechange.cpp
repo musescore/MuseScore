@@ -104,7 +104,7 @@ void StaffTypeChange::draw(QPainter* painter) const
       {
       if (score()->printing() || !score()->showUnprintable())
             return;
-      qreal _spatium = spatium();
+      qreal _spatium = score()->spatium();
       qreal h  = _spatium * 2.5;
       qreal w  = _spatium * 2.5;
       painter->setPen(QPen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
@@ -143,6 +143,12 @@ QVariant StaffTypeChange::getProperty(P_ID propertyId) const
                   return _staffType->genTimesig();
             case P_ID::STAFF_GEN_KEYSIG:
                   return _staffType->genKeysig();
+            case P_ID::MAG:
+                  return _staffType->userMag();
+            case P_ID::SMALL:
+                  return _staffType->small();
+            case P_ID::STAFF_YOFFSET:
+                  return _staffType->yoffset();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -185,6 +191,15 @@ bool StaffTypeChange::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::STAFF_GEN_KEYSIG:
                   _staffType->setGenKeysig(v.toBool());
                   break;
+            case P_ID::MAG:
+                  _staffType->setUserMag(v.toDouble());
+                  break;
+            case P_ID::SMALL:
+                  _staffType->setSmall(v.toBool());
+                  break;
+            case P_ID::STAFF_YOFFSET:
+                  _staffType->setYoffset(v.value<Spatium>());
+                  break;
             default:
                   if (!Element::setProperty(propertyId, v))
                         return false;
@@ -221,6 +236,12 @@ QVariant StaffTypeChange::propertyDefault(P_ID id) const
                   return true;
             case P_ID::STAFF_GEN_KEYSIG:
                   return true;
+            case P_ID::MAG:
+                  return 1.0;
+            case P_ID::SMALL:
+                  return false;
+            case P_ID::STAFF_YOFFSET:
+                  return Spatium(0.0);
             default:
                   return Element::propertyDefault(id);
             }
