@@ -255,6 +255,11 @@ enum class P_ID : int {
       STAFF_GEN_CLEF,
       STAFF_GEN_TIMESIG,
       STAFF_GEN_KEYSIG,
+      STAFF_YOFFSET,
+      STAFF_USERDIST,
+      STAFF_BARLINE_SPAN,
+      STAFF_BARLINE_SPAN_FROM,
+      STAFF_BARLINE_SPAN_TO,
 
       END
       };
@@ -265,7 +270,7 @@ enum class P_TYPE : char {
       INT,
       REAL,
       SPATIUM,
-      SP_REAL,
+      SP_REAL,          // real value saved in (score) spatium units
       FRACTION,
       POINT,
       POINT_MM,

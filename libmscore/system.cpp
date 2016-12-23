@@ -42,6 +42,7 @@
 #include "spacer.h"
 #include "systemdivider.h"
 #include "textframe.h"
+#include "stafflines.h"
 
 namespace Ms {
 
@@ -244,7 +245,7 @@ void System::layoutSystem(qreal xo1)
                   continue;
                   }
             ++nVisible;
-            qreal staffMag = staff->mag();
+            qreal staffMag = staff->mag(0);     // ??? TODO
             qreal h;
             if (staff->lines(0) == 1)
                   h = 2;
@@ -361,7 +362,7 @@ void System::layout2()
 
             qreal h = staff->height();
             if (ni == visibleStaves.end()) {
-                  ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag() : 0.0);
+                  ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag(0) : 0.0);
                   ss->bbox().setRect(_leftMargin, y, width() - _leftMargin, h);
                   break;
                   }
@@ -406,7 +407,7 @@ void System::layout2()
                         dist = qMax(dist, sp->gap());
                   }
 
-            ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag() : 0.0);
+            ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag(0) : 0.0);
             ss->bbox().setRect(_leftMargin, y, width() - _leftMargin, h);
             y += dist;
             }

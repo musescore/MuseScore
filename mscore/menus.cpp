@@ -243,8 +243,8 @@ Palette* MuseScore::newKeySigPalette(PaletteType t)
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Key Signatures"));
       sp->setMag(1.0);
-      sp->setGrid(56, 64);
-      sp->setYOffset(0.5);
+      sp->setGrid(56, 55);
+      sp->setYOffset(1.0);
 
       for (int i = 0; i < 7; ++i) {
             KeySig* k = new KeySig(gscore);
@@ -953,8 +953,8 @@ Palette* MuseScore::newClefsPalette(PaletteType t)
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Clefs"));
       sp->setMag(0.8);
-      sp->setGrid(33, 60);
-      sp->setYOffset(0.5);
+      sp->setGrid(35, 50);
+      sp->setYOffset(1.0);
       static std::vector<ClefType> clefsBasic  {
             ClefType::G,   ClefType::F, ClefType::C3, ClefType::C4
             };

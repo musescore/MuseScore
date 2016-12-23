@@ -455,6 +455,9 @@ InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
       sl.setupUi(addWidget());
 
       iList = {
+            { P_ID::STAFF_YOFFSET,          0, 0, sl.yoffset,         sl.resetYoffset         },
+            { P_ID::SMALL,                  0, 0, sl.small,           sl.resetSmall           },
+            { P_ID::MAG,                    0, 0, sl.scale,           sl.resetScale           },
             { P_ID::STAFF_LINES,            0, 0, sl.lines,           sl.resetLines           },
             { P_ID::STEP_OFFSET,            0, 0, sl.stepOffset,      sl.resetStepOffset      },
             { P_ID::LINE_DISTANCE,          0, 0, sl.lineDistance,    sl.resetLineDistance    },
@@ -1187,15 +1190,20 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
             { P_ID::BARLINE_SPAN_FROM, 0, 0, b.spanFrom, b.resetSpanFrom },
             { P_ID::BARLINE_SPAN_TO,   0, 0, b.spanTo,   b.resetSpanTo   },
             };
+#if 0
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel },
             { b.title, b.panel }
             };
-      mapSignals(il, ppList);
+#endif
+//      mapSignals(il, ppList);
+      mapSignals(il);
+#if 0
       // when any of the span parameters is changed, span data need to be managed
       connect(b.span,          SIGNAL(valueChanged(int)), SLOT(manageSpanData()));
       connect(b.spanFrom,      SIGNAL(valueChanged(int)), SLOT(manageSpanData()));
       connect(b.spanTo,        SIGNAL(valueChanged(int)), SLOT(manageSpanData()));
+#endif
       connect(b.presetDefault, SIGNAL(clicked()),         SLOT(presetDefaultClicked()));
       connect(b.presetTick1,   SIGNAL(clicked()),         SLOT(presetTick1Clicked()));
       connect(b.presetTick2,   SIGNAL(clicked()),         SLOT(presetTick2Clicked()));
@@ -1211,7 +1219,6 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
 
 void InspectorBarLine::setElement()
       {
-      blockSpanDataSignals(true);
       InspectorElementBase::setElement();
       BarLine* bl = toBarLine(inspector->element());
 
@@ -1239,8 +1246,11 @@ void InspectorBarLine::setElement()
                   }
             ++i;
             }
+#if 0
+      blockSpanDataSignals(true);
       manageSpanData();
       blockSpanDataSignals(false);
+#endif
       }
 
 //---------------------------------------------------------
@@ -1343,6 +1353,7 @@ void InspectorBarLine::presetShort2Clicked()
 
 void InspectorBarLine::manageSpanData()
       {
+#if 0
       BarLine* bl = toBarLine(inspector->element());
 
       // determine MIN and MAX for SPANFROM and SPANTO
@@ -1359,7 +1370,6 @@ void InspectorBarLine::manageSpanData()
                         : (staffFromLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffFromLines-1) * 2 + 2);
       b.spanFrom->setMinimum(min);
       b.spanFrom->setMaximum(max);
-      b.spanFrom->setWrapping(false);
 
       // To:      min = if same as From, at least 1sp (2 units) below From; if not, min possible according to num.of lines
       //          max = max possible according to number of staff lines
@@ -1369,12 +1379,11 @@ void InspectorBarLine::manageSpanData()
 
       b.spanTo->setMinimum(min);
       b.spanTo->setMaximum(max);
-      b.spanTo->setWrapping(false);
 
       // determin MAX for SPAN
       max = bl->score()->nstaves() - bl->staffIdx();
       b.span->setMaximum(max);
-      b.span->setWrapping(false);
+#endif
       }
 
 //---------------------------------------------------------

@@ -30,6 +30,7 @@ class Stem : public Element {
       QLineF line;            // p1 is attached to notehead
       qreal _userLen;
       qreal _len;             // allways positive
+      qreal _lineWidth;
 
       virtual void startEdit(MuseScoreView*, const QPointF&);
 
@@ -62,7 +63,7 @@ class Stem : public Element {
       qreal userLen() const           { return _userLen; }
       void setUserLen(qreal l)        { _userLen = l; }
 
-      qreal lineWidth() const;
+      qreal lineWidth() const         { return _lineWidth; }
 
       QPointF hookPos() const;
       void setLen(qreal l);

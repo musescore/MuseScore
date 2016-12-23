@@ -1937,8 +1937,6 @@ void Note::layout()
             else
                   _cachedSymNull = SymId::noSym;
             setbbox(symBbox(nh));
-            if (parent() == 0)
-                  return;
             }
       }
 
@@ -1951,6 +1949,7 @@ void Note::layout2()
       {
       // for standard staves this is done in Score::layoutChords3()
       // so that the results are available there
+
       if (staff()->isTabStaff(chord()->tick()))
             adjustReadPos();
 
@@ -2235,31 +2234,6 @@ int Note::line() const
       }
 
 //---------------------------------------------------------
-//   setLine
-//---------------------------------------------------------
-
-void Note::setLine(int n)
-      {
-      _line = n;
-      int off = staff() ? staff()->staffType(tick())->stepOffset() : 0;
-      rypos() = (_line + off) * spatium() * .5;
-      }
-
-//---------------------------------------------------------
-//   physicalLine
-//---------------------------------------------------------
-
-int Note::physicalLine() const
-      {
-      int l = line();
-      Staff *st = staff();
-      if (st && !st->scaleNotesToLines(tick()))
-            return l * (st->logicalLineDistance(tick()) / st->lineDistance(tick()));
-      else
-            return l;
-      }
-
-//---------------------------------------------------------
 //   setString
 //---------------------------------------------------------
 
@@ -2339,25 +2313,32 @@ void Note::endEdit()
 
 void Note::updateRelLine(int relLine, bool undoable)
       {
-      if (staff() && chord()->staffMove()) {
+      if (!staff())
+            return;
+      int idx       = staffIdx() + chord()->staffMove();
+      Staff* stf    = score()->staff(idx);
+      StaffType* st = stf->staffType(tick());
+
+      if (chord()->staffMove()) {
             // check that destination staff makes sense (might have been deleted)
-            int idx = staffIdx() + chord()->staffMove();
+            idx          += chord()->staffMove();
             int minStaff = part()->startTrack() / VOICES;
             int maxStaff = part()->endTrack() / VOICES;
-            if (idx < minStaff || idx >= maxStaff || score()->staff(idx)->staffType(tick())->group() != staff()->staffType(tick())->group())
+            if (idx < minStaff || idx >= maxStaff || st->group() != staff()->staffType(tick())->group())
                   chord()->undoChangeProperty(P_ID::STAFF_MOVE, 0);
             }
 
-      Staff* s      = score()->staff(staffIdx() + chord()->staffMove());
-      ClefType clef = s->clef(chord()->tick());
+      ClefType clef = stf->clef(chord()->tick());
       int line      = relStep(relLine, clef);
 
-      if (line != _line) {
-            if (undoable && _line != INVALID_LINE)
-                  undoChangeProperty(P_ID::LINE, line);
-            else
-                  setLine(line);
-            }
+      if (undoable && _line != INVALID_LINE)
+            undoChangeProperty(P_ID::LINE, line);
+      else
+            setLine(line);
+
+      int off  = st->stepOffset();
+      qreal ld = st->lineDistance().val();
+      rypos()  = (_line + off * 2.0) * spatium() * .5 * ld;
       }
 
 //---------------------------------------------------------

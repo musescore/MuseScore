@@ -23,6 +23,7 @@
 #include "libmscore/keysig.h"
 #include "libmscore/barline.h"
 #include "libmscore/rest.h"
+#include "libmscore/stafflines.h"
 
 #include "preferences.h"
 #include "scoreview.h"
@@ -337,7 +338,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   barLine.setBarLineType(BarLineType::NORMAL);
                   barLine.setParent(parent);
                   barLine.setTrack(e->track());
-                  barLine.setSpan(currentStaff->barLineSpan());
+                  barLine.setSpanStaff(currentStaff->barLineSpan());
                   barLine.setSpanFrom(currentStaff->barLineFrom());
                   barLine.setSpanTo(currentStaff->barLineTo());
                   barLine.layout();

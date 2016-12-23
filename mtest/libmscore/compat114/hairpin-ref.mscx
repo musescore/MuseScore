@@ -112,7 +112,7 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="2">
         <StaffType group="pitched">
@@ -414,8 +414,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
-          <span>2</span>
           </BarLine>
         </Measure>
       </Staff>

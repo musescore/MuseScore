@@ -377,7 +377,7 @@ class Note : public Element {
       void setAccidentalType(AccidentalType type);
 
       int line() const;
-      void setLine(int n);
+      void setLine(int n)             { _line = n;      }
       int physicalLine() const;
 
       int fret() const                { return _fret;   }

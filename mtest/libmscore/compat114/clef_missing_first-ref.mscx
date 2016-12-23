@@ -106,7 +106,7 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="2">
         <StaffType group="pitched">
@@ -181,8 +181,6 @@
           <transposingClefType>G</transposingClefType>
           </Clef>
         <BarLine>
-          <subtype>normal</subtype>
-          <span>2</span>
           </BarLine>
         </Measure>
       <Measure number="2">
@@ -217,8 +215,6 @@
             </Note>
           </Chord>
         <BarLine>
-          <subtype>end</subtype>
-          <span>2</span>
           </BarLine>
         </Measure>
       </Staff>

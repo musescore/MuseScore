@@ -76,6 +76,7 @@
 #include "xml.h"
 #include "systemdivider.h"
 #include "stafftypechange.h"
+#include "stafflines.h"
 
 namespace Ms {
 
@@ -849,7 +850,7 @@ void Measure::add(Element* e)
 
             case Element::Type::HBOX:
                   if (e->staff())
-                        e->setMag(e->staff()->mag());     // ?!
+                        e->setMag(e->staff()->mag(tick()));     // ?!
                   el().push_back(e);
                   break;
 
@@ -1888,6 +1889,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         segment = getSegmentR(st, t);
                         segment->add(barLine);
                         }
+                  barLine->layout();
                   }
             else if (tag == "Chord") {
                   Chord* chord = new Chord(score());
@@ -3129,6 +3131,9 @@ void Measure::stretchMeasure(qreal targetWidth)
                         }
                   else if (t == Type::BAR_LINE) {
                         e->setPos(QPointF());
+                        if (s.isEndBarLineType()) {
+                              e->rxpos() = s.width() - e->width();  // right align
+                              }
                         e->adjustReadPos();
                         }
                   else
@@ -3223,146 +3228,21 @@ void Measure::setEndBarLineType(BarLineType val, int track, bool visible, QColor
 
 void Measure::barLinesSetSpan(Segment* seg)
       {
-      int nstaves  = score()->nstaves();
-      BarLine* bl  = 0;
-      int span     = 0;        // span counter
-      int aspan    = 0;        // actual span
-      bool mensur  = false;    // keep note of Mensurstrich case
-
-      int spanTot;             // to keep track of the target span as we count down
-      int lastIdx;
-      int spanFrom = 0;
-      int spanTo   = 0;
-      static const int unknownSpanFrom = 9999;
-
-      for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            Staff* staff   = score()->staff(staffIdx);
-            int track      = staffIdx * VOICES;
-
-            // get existing bar line for this staff, if any
-            BarLine* cbl = toBarLine(seg->element(track));
-
-            // if span counter has been counted off, get new span values
-            // and forget about any previous bar line
-
-            if (span == 0) {
-                  if (cbl && cbl->customSpan()) {     // if there is a bar line and has custom span,
-                        span     = cbl->span();       // get span values from it
-                        spanFrom = cbl->spanFrom();
-                        spanTo   = cbl->spanTo();
-                        }
-                  else {                              // otherwise, get from staff
-                        span = staff->barLineSpan();
-                        // if some span OR last staff (span==0) of a Mensurstrich case, get From/To from staff
-                        if (span || mensur) {
-                              spanFrom = staff->barLineFrom();
-                              spanTo   = staff->barLineTo();
-                              mensur   = false;
-                              }
-                        // but if staff is set to no span, a multi-staff spanning bar line
-                        // has been shortened to span less staves and following staves left without bars;
-                        // set bar line span values to default
-
-                        else if (staff->show()) {
-                              span     = 1;
-                              spanFrom = 0;
-                              spanTo   = 0;
-                              }
-                        }
-                  if (!staff->show()) {
-                        // this staff is not visible
-                        // we should recalculate spanFrom when we find a valid staff
-                        spanFrom = unknownSpanFrom;
-                        }
-                  if ((staffIdx + span) > nstaves)    // sanity check, don't span more than available staves
-                        span = nstaves - staffIdx;
-                  spanTot = span;
-                  lastIdx = staffIdx + span - 1;
-                  bl      = 0;
+      int track = 0;
+      for (Staff* staff : score()->staves()) {
+            BarLine* bl = toBarLine(seg->element(track));  // get existing bar line for this staff, if any
+            if (!bl) {
+                  bl = new BarLine(score());
+                  bl->setParent(seg);
+                  bl->setTrack(track);
+                  bl->setGenerated(true);
+                  bl->setSpanStaff(staff->barLineSpan());
+                  bl->setSpanFrom(staff->barLineFrom());
+                  bl->setSpanTo(staff->barLineTo());
+                  bl->layout();
+                  score()->addElement(bl);
                   }
-            else if (spanFrom == unknownSpanFrom && staff->show()) {
-                  // we started a span earlier, but had not found a valid staff yet
-                  spanFrom = 0;
-                  }
-            if (staff->show() && span) {
-                  //
-                  // there should be a barline in this staff
-                  // this is true even for a staff not shown because of hide empty staves
-                  // but not for a staff not shown because it is made invisible
-                  //
-                  // if we already have a bar line, keep extending this bar line down until span exhausted;
-                  // if no barline yet, re-use the bar line existing in this staff if any,
-                  // restarting actual span
-
-                  if (!bl) {
-                        bl    = cbl;
-                        aspan = 0;
-                        }
-                  if (!bl) {
-                        // no suitable bar line: create a new one
-                        bl = new BarLine(score());
-                        bl->setParent(seg);
-                        bl->setTrack(track);
-                        bl->setGenerated(true);
-                        score()->addElement(bl);
-                        }
-                  else {
-                        // if a bar line exists for this staff (cbl) but
-                        // it is not the bar line we are dealing with (bl),
-                        // we are extending down the bar line of a staff above (bl)
-                        // and the bar line for this staff (cbl) is not needed:
-                        // DELETE it
-
-                        if (cbl && cbl != bl) {
-
-                              // Mensurstrich special case:
-                              // if span arrives inside the end staff (spanTo>0) OR
-                              //          span is not multi-staff (spanTot<=1) OR
-                              //          current staff is not the last spanned staff (span!=1) OR
-                              //          staff is the last score staff
-                              //    remove bar line for this staff
-                              // If NONE of the above conditions holds, the staff is the last staff of
-                              // a Mensurstrich(-like) span: keep its bar line, as it may span to next staff
-
-//TODO:barline                if (spanTo > 0 || spanTot <= 1 || span != 1 || staffIdx == nstaves-1)
-//                                    score()->undoRemoveElement(cbl);
-                              }
-                        }
-                  }
-            else {
-                  //
-                  // there should be no barline in this staff
-                  //
-                  if (cbl)
-                        score()->undoRemoveElement(cbl);
-                  }
-
-            // if span not counted off AND we have a bar line AND this staff is shown,
-            // set bar line span values (this may result in extending down a bar line
-            // for a previous staff, if we are counting off a span > 1)
-
-            if (span) {
-                  if (bl) {
-                        ++aspan;
-                        if (staff->show()) {          // count visible staves only (whether hidden or not)
-                              bl->setSpan(aspan);     // need to update span & spanFrom even for hidden staves
-                              bl->setSpanFrom(spanFrom);
-                              // if current actual span < target span, set spanTo to full staff height
-                              if (aspan < spanTot && staffIdx < lastIdx)
-                                    bl->setSpanTo(0);
-                              // if we reached target span, set spanTo to intended value
-                              else
-                                    bl->setSpanTo(spanTo);
-                              }
-                        }
-                  --span;
-                  }
-            // if just finished (span==0) a multi-staff span (spanTot>1) ending at the top of a staff (spanTo<=0)
-            // scan this staff again, as it may have its own bar lines (Mensurstrich(-like) span)
-            if (spanTot > 1 && spanTo <= 0 && span == 0) {
-                  mensur = true;
-                  staffIdx--;
-                  }
+            track += VOICES;
             }
       }
 
@@ -3374,9 +3254,9 @@ void Measure::barLinesSetSpan(Segment* seg)
 
 qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
       {
-      int nstaves    = score()->nstaves();
-      Segment* seg   = findSegmentR(Segment::Type::EndBarLine, ticks());
-      Measure* nm    = nextMeasure();
+      int nstaves  = score()->nstaves();
+      Segment* seg = findSegmentR(Segment::Type::EndBarLine, ticks());
+      Measure* nm  = nextMeasure();
 
 #ifndef NDEBUG
       computeMinWidth();
@@ -3394,7 +3274,6 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             if (!seg)
                   seg = undoGetSegmentR(Segment::Type::EndBarLine, ticks());
             seg->setEnabled(true);
-            barLinesSetSpan(seg);
             //
             //  Set flag "hasCourtesyKeySig" if this measure needs a courtesy key sig.
             //  This flag is later used to set a double end bar line and to actually
@@ -3442,21 +3321,35 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                   }
 
             for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-                  BarLine* bl = toBarLine(seg->element(staffIdx * VOICES));
-                  if (bl) {
+                  int track = staffIdx * VOICES;
+                  BarLine* bl = toBarLine(seg->element(track));
+                  if (!bl) {
+                        Staff* staff = score()->staff(staffIdx);
+                        bl = new BarLine(score());
+                        bl->setParent(seg);
+                        bl->setTrack(track);
+                        bl->setGenerated(true);
+                        bl->setSpanStaff(staff->barLineSpan());
+                        bl->setSpanFrom(staff->barLineFrom());
+                        bl->setSpanTo(staff->barLineTo());
+                        bl->setBarLineType(t);
+                        bl->layout();
+                        score()->addElement(bl);
+                        }
+                  else {
                         // do not change bar line type if bar line is user modified
                         // and its not a repeat start/end barline (forced)
 
-                        if (bl->generated()) {
-                              bl->setBarLineType(t);
-                              bl->layout();
-                              }
-                        else {
-                              if (force) {
-                                    score()->undoChangeProperty(bl, P_ID::BARLINE_TYPE, QVariant::fromValue(t));
-                                    bl->setGenerated(true);
-                                    bl->layout();
+                        if (bl->barLineType() != t) {
+                              if (bl->generated())
+                                    bl->setBarLineType(t);
+                              else {
+                                    if (force) {
+                                          bl->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(t));
+                                          bl->setGenerated(true);
+                                          }
                                     }
+                              bl->layout();
                               }
                         }
                   }
@@ -3633,25 +3526,27 @@ void Measure::addSystemHeader(bool isFirstSystem)
       // create systemic barline
       //
       Segment* s  = findSegment(Segment::Type::BeginBarLine, tick());
-      BarLine* bl = s ? toBarLine(s->element(0)) : 0;
       int n       = score()->nstaves();
       if ((n > 1 && score()->styleB(StyleIdx::startBarlineMultiple)) || (n == 1 && score()->styleB(StyleIdx::startBarlineSingle))) {
-            if (!bl) {
-                  bl = new BarLine(score());
-                  bl->setTrack(0);
-                  bl->setGenerated(true);
-                  if (!s) {
-                        s = new Segment(this, Segment::Type::BeginBarLine, 0);
-                        add(s);
-                        }
-                  bl->setParent(s);
-                  bl->layout();
-                  s->add(bl);
-                  s->createShapes();
+            if (!s) {
+                  s = new Segment(this, Segment::Type::BeginBarLine, 0);
+                  add(s);
                   }
-            bl->setSpan(n);
-            bl->segment()->setEnabled(true);
-            bl->segment()->setHeader(true);
+            for (int track = 0; track < score()->ntracks(); track += VOICES) {
+                  BarLine* bl = toBarLine(s->element(track));
+                  if (!bl) {
+                        bl = new BarLine(score());
+                        bl->setTrack(track);
+                        bl->setGenerated(true);
+                        bl->setParent(s);
+                        bl->layout();
+                        s->add(bl);
+                        s->createShapes();
+                        bl->setSpanStaff(true);
+                        }
+                  }
+            s->setEnabled(true);
+            s->setHeader(true);
             setHeader(true);
             }
       else if (s)

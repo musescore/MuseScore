@@ -57,7 +57,6 @@ Staff* Part::staff(int idx) const
       return _staves[idx];
       }
 
-
 //---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------
@@ -97,9 +96,7 @@ bool Part::readProperties(XmlReader& e)
 void Part::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            if (readProperties(e))
-                 ;
-            else
+            if (!readProperties(e))
                   e.unknown();
             }
       if (_partName.isEmpty())

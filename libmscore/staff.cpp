@@ -515,8 +515,8 @@ void Staff::write(XmlWriter& xml) const
             xml.tag("defaultTransposingClef", ClefInfo::tag(ct._transposingClef));
             }
 
-      if (small() && !xml.excerptmode())    // switch small staves to normal ones when extracting part
-            xml.tag("small", small());
+//      if (small() && !xml.excerptmode())    // switch small staves to normal ones when extracting part
+//            xml.tag("small", small());
       if (invisible())
             xml.tag("invisible", invisible());
       if (hideWhenEmpty() != HideMode::AUTO)
@@ -531,17 +531,10 @@ void Staff::write(XmlWriter& xml) const
       for (const BracketItem& i : _brackets)
             xml.tagE(QString("bracket type=\"%1\" span=\"%2\"").arg((signed char)(i._bracket)).arg(i._bracketSpan));
 
-      // for economy and consistency, only output "from" and "to" attributes if different from default
-      if (_barLineSpan != 1 || _barLineFrom || _barLineTo) {
-            if (_barLineFrom || _barLineTo)
-                  xml.tag(QString("barLineSpan from=\"%1\" to=\"%2\"").arg(_barLineFrom).arg(_barLineTo), _barLineSpan);
-            else
-                  xml.tag("barLineSpan", _barLineSpan);
-            }
-      if (_userDist != 0.0)
-            xml.tag("distOffset", _userDist / score()->spatium());
-
-      writeProperty(xml, P_ID::MAG);
+      writeProperty(xml, P_ID::BARLINE_SPAN);
+      writeProperty(xml, P_ID::BARLINE_SPAN_FROM);
+      writeProperty(xml, P_ID::BARLINE_SPAN_TO);
+      writeProperty(xml, P_ID::STAFF_USERDIST);
       writeProperty(xml, P_ID::COLOR);
       writeProperty(xml, P_ID::PLAYBACK_VOICE1);
       writeProperty(xml, P_ID::PLAYBACK_VOICE2);
@@ -557,100 +550,103 @@ void Staff::write(XmlWriter& xml) const
 void Staff::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "type") {    // obsolete
-                  int staffTypeIdx = e.readInt();
-                  qDebug("obsolete: Staff::read staffTypeIdx %d", staffTypeIdx);
-                  }
-            else if (tag == "StaffType") {
-                  StaffType st;
-                  st.read(e);
-                  _staffTypeList.setStaffType(0, &st);
-                  }
-            else if (tag == "defaultClef") {           // sets both default transposing and concert clef
-                  QString val(e.readElementText());
-                  ClefType ct = Clef::clefType(val);
-                  setDefaultClefType(ClefTypeList(ct, ct));
-                  }
-            else if (tag == "defaultConcertClef") {
-                  QString val(e.readElementText());
-                  setDefaultClefType(ClefTypeList(Clef::clefType(val), defaultClefType()._transposingClef));
-                  }
-            else if (tag == "defaultTransposingClef") {
-                  QString val(e.readElementText());
-                  setDefaultClefType(ClefTypeList(defaultClefType()._concertClef, Clef::clefType(val)));
-                  }
-            else if (tag == "small")
-                  setSmall(e.readInt());
-            else if (tag == "invisible")
-                  setInvisible(e.readInt());
-            else if (tag == "hideWhenEmpty")
-                  setHideWhenEmpty(HideMode(e.readInt()));
-            else if (tag == "neverHide") {      // 2.0 compatibility
-                  bool v = e.readInt();
-                  if (v)
-                        setHideWhenEmpty(HideMode::NEVER);
-                  }
-            else if (tag == "cutaway")
-                  setCutaway(e.readInt());
-            else if (tag == "showIfSystemEmpty")
-                  setShowIfEmpty(e.readInt());
-            else if (tag == "hideSystemBarLine")
-                  _hideSystemBarLine = e.readInt();
-            else if (tag == "keylist")
-                  _keys.read(e, score());
-            else if (tag == "bracket") {
-                  BracketItem b;
-                  b._bracket     = BracketType(e.intAttribute("type", -1));
-                  b._bracketSpan = e.intAttribute("span", 0);
-                  _brackets.append(b);
-                  e.readNext();
-                  }
-            else if (tag == "barLineSpan") {
-                  _barLineFrom = e.intAttribute("from", 0);
-                  _barLineTo   = e.intAttribute("to", 0);
-                  _barLineSpan = e.readInt();
-                  }
-            else if (tag == "distOffset")
-                  _userDist = e.readDouble() * score()->spatium();
-            else if (tag == "mag")
-                  _userMag = e.readDouble(0.1, 10.0);
-            else if (tag == "linkedTo") {
-                  int v = e.readInt() - 1;
-                  //
-                  // if this is an excerpt, link staff to masterScore()
-                  //
-                  if (!score()->isMaster()) {
-                        Staff* st = masterScore()->staff(v);
-                        if (st)
-                              linkTo(st);
-                        else {
-                              qDebug("staff %d not found in parent", v);
-                              }
-                        }
-                  else {
-                        int idx = this->idx();
-                        if (v >= 0 && v < idx)
-                              linkTo(score()->staff(v));
-                        }
-                  }
-            else if (tag == "color")
-                  _color = e.readColor();
-            else if (tag == "transposeDiatonic")
-                  e.setTransposeDiatonic(e.readInt());
-            else if (tag == "transposeChromatic")
-                  e.setTransposeChromatic(e.readInt());
-            else if (tag == "playbackVoice1")
-                  setPlaybackVoice(0, e.readInt());
-            else if (tag == "playbackVoice2")
-                  setPlaybackVoice(1, e.readInt());
-            else if (tag == "playbackVoice3")
-                  setPlaybackVoice(2, e.readInt());
-            else if (tag == "playbackVoice4")
-                  setPlaybackVoice(3, e.readInt());
-            else
+            if (!readProperties(e))
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Staff::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "StaffType") {
+            StaffType st;
+            st.read(e);
+            _staffTypeList.setStaffType(0, &st);
+            }
+      else if (tag == "defaultClef") {           // sets both default transposing and concert clef
+            QString val(e.readElementText());
+            ClefType ct = Clef::clefType(val);
+            setDefaultClefType(ClefTypeList(ct, ct));
+            }
+      else if (tag == "defaultConcertClef") {
+            QString val(e.readElementText());
+            setDefaultClefType(ClefTypeList(Clef::clefType(val), defaultClefType()._transposingClef));
+            }
+      else if (tag == "defaultTransposingClef") {
+            QString val(e.readElementText());
+            setDefaultClefType(ClefTypeList(defaultClefType()._concertClef, Clef::clefType(val)));
+            }
+      else if (tag == "small")
+            //setSmall(e.readInt());
+            e.readInt();
+      else if (tag == "invisible")
+            setInvisible(e.readInt());
+      else if (tag == "hideWhenEmpty")
+            setHideWhenEmpty(HideMode(e.readInt()));
+      else if (tag == "cutaway")
+            setCutaway(e.readInt());
+      else if (tag == "showIfSystemEmpty")
+            setShowIfEmpty(e.readInt());
+      else if (tag == "hideSystemBarLine")
+            _hideSystemBarLine = e.readInt();
+      else if (tag == "keylist")
+            _keys.read(e, score());
+      else if (tag == "bracket") {
+            BracketItem b;
+            b._bracket     = BracketType(e.intAttribute("type", -1));
+            b._bracketSpan = e.intAttribute("span", 0);
+            _brackets.append(b);
+            e.readNext();
+            }
+      else if (tag == "barLineSpan")
+            _barLineSpan = e.readBool();
+      else if (tag == "barLineSpanFrom")
+            _barLineFrom = e.readInt();
+      else if (tag == "barLineSpanTo")
+            _barLineTo = e.readInt();
+      else if (tag == "distOffset")
+            _userDist = e.readDouble() * score()->spatium();
+      else if (tag == "mag")
+            /*_userMag =*/ e.readDouble(0.1, 10.0);
+      else if (tag == "linkedTo") {
+            int v = e.readInt() - 1;
+            //
+            // if this is an excerpt, link staff to masterScore()
+            //
+            if (!score()->isMaster()) {
+                  Staff* st = masterScore()->staff(v);
+                  if (st)
+                        linkTo(st);
+                  else {
+                        qDebug("staff %d not found in parent", v);
+                        }
+                  }
+            else {
+                  if (v >= 0 && v < idx())
+                        linkTo(score()->staff(v));
+                  }
+            }
+      else if (tag == "color")
+            _color = e.readColor();
+      else if (tag == "transposeDiatonic")
+            e.setTransposeDiatonic(e.readInt());
+      else if (tag == "transposeChromatic")
+            e.setTransposeChromatic(e.readInt());
+      else if (tag == "playbackVoice1")
+            setPlaybackVoice(0, e.readInt());
+      else if (tag == "playbackVoice2")
+            setPlaybackVoice(1, e.readInt());
+      else if (tag == "playbackVoice3")
+            setPlaybackVoice(2, e.readInt());
+      else if (tag == "playbackVoice4")
+            setPlaybackVoice(3, e.readInt());
+      else
+            return false;
+      return true;
       }
 
 //---------------------------------------------------------
@@ -660,25 +656,61 @@ void Staff::read(XmlReader& e)
 qreal Staff::height() const
       {
       int tick = 0;     // TODO
-      return (lines(tick) == 1 ? 2 : lines(tick)-1) * spatium() * staffType(tick)->lineDistance().val();
+      return (lines(tick) == 1 ? 2 : lines(tick)-1) * spatium(tick) * staffType(tick)->lineDistance().val();
       }
 
 //---------------------------------------------------------
 //   spatium
 //---------------------------------------------------------
 
-qreal Staff::spatium() const
+qreal Staff::spatium(int tick) const
       {
-      return score()->spatium() * mag();
+      return score()->spatium() * mag(tick);
       }
 
 //---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
-qreal Staff::mag() const
+qreal Staff::mag(int tick) const
       {
-      return (_small ? score()->styleD(StyleIdx::smallStaffMag) : 1.0) * userMag();
+      return (small(tick) ? score()->styleD(StyleIdx::smallStaffMag) : 1.0) * userMag(tick);
+      }
+
+//---------------------------------------------------------
+//   userMag
+//---------------------------------------------------------
+
+qreal Staff::userMag(int tick) const
+      {
+      return staffType(tick)->userMag();
+      }
+
+//---------------------------------------------------------
+//   setUserMag
+//---------------------------------------------------------
+
+void Staff::setUserMag(int tick, qreal m)
+      {
+      return staffType(tick)->setUserMag(m);
+      }
+
+//---------------------------------------------------------
+//   small
+//---------------------------------------------------------
+
+bool Staff::small(int tick) const
+      {
+      return staffType(tick)->small();
+      }
+
+//---------------------------------------------------------
+//   setSmall
+//---------------------------------------------------------
+
+void Staff::setSmall(int tick, bool val)
+      {
+      staffType(tick)->setSmall(val);
       }
 
 //---------------------------------------------------------
@@ -725,28 +757,13 @@ int Staff::channel(int tick,  int voice) const
       }
 
 //---------------------------------------------------------
-//   scaleNotesToLines
-//    returns true if logical line = physical line
-//---------------------------------------------------------
-
-bool Staff::scaleNotesToLines(int tick) const
-      {
-      // TODO: make style option
-      return !isDrumStaff(tick);
-      }
-
-//---------------------------------------------------------
 //   middleLine
 //    returns logical line number of middle staff line
 //---------------------------------------------------------
 
 int Staff::middleLine(int tick) const
       {
-      int line = lines(tick) - 1;
-      if (scaleNotesToLines(tick))
-            return line;
-      else
-            return line * lineDistance(tick) / logicalLineDistance(tick);
+      return lines(tick) - 1;
       }
 
 //---------------------------------------------------------
@@ -756,11 +773,7 @@ int Staff::middleLine(int tick) const
 
 int Staff::bottomLine(int tick) const
       {
-      int line = (lines(tick) - 1) * 2;
-      if (scaleNotesToLines(tick))
-            return line;
-      else
-            return line * lineDistance(tick) / logicalLineDistance(tick);
+      return (lines(tick) - 1) * 2;
       }
 
 //---------------------------------------------------------
@@ -939,10 +952,10 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
       {
       // set staff-type-independent parameters
       if (cidx > MAX_STAVES) {
-            setSmall(false);
+            setSmall(0, false);
             }
       else {
-            setSmall(t->smallStaff[cidx]);
+            setSmall(0, t->smallStaff[cidx]);
             setBracket(0, t->bracket[cidx]);
             setBracketSpan(0, t->bracketSpan[cidx]);
             setBarLineSpan(t->barlineSpan[cidx]);
@@ -963,7 +976,6 @@ void Staff::init(const Staff* s)
       {
       _staffTypeList     = s->_staffTypeList;
       setDefaultClefType(s->defaultClefType());
-      setSmall(s->small());
       _brackets          = s->_brackets;
       _barLineSpan       = s->_barLineSpan;
       _barLineFrom       = s->_barLineFrom;
@@ -975,7 +987,6 @@ void Staff::init(const Staff* s)
       _hideSystemBarLine = s->_hideSystemBarLine;
       _color             = s->_color;
       _userDist          = s->_userDist;
-      _userMag           = s->_userMag;
       }
 
 //---------------------------------------------------------
@@ -1160,12 +1171,8 @@ bool Staff::isTop() const
 QVariant Staff::getProperty(P_ID id) const
       {
       switch (id) {
-            case P_ID::MAG:
-                  return userMag();
             case P_ID::COLOR:
                   return color();
-            case P_ID::SMALL:
-                  return small();
             case P_ID::PLAYBACK_VOICE1:
                   return playbackVoice(0);
             case P_ID::PLAYBACK_VOICE2:
@@ -1180,6 +1187,8 @@ QVariant Staff::getProperty(P_ID id) const
                   return barLineFrom();
             case P_ID::BARLINE_SPAN_TO:
                   return barLineTo();
+            case P_ID::STAFF_USERDIST:
+                  return userDist();
             default:
                   qDebug("Staff::getProperty: unhandled id");
                   return QVariant();
@@ -1193,20 +1202,8 @@ QVariant Staff::getProperty(P_ID id) const
 bool Staff::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
-            case P_ID::MAG: {
-                  double oldVal = mag();
-                  setUserMag(v.toDouble());
-                  scaleChanged(oldVal, mag());
-                  }
-                  break;
             case P_ID::COLOR:
                   setColor(v.value<QColor>());
-                  break;
-            case P_ID::SMALL: {
-                  double oldVal = mag();
-                  setSmall(v.toBool());
-                  scaleChanged(oldVal, mag());
-                  }
                   break;
             case P_ID::PLAYBACK_VOICE1:
                   setPlaybackVoice(0, v.toBool());
@@ -1229,6 +1226,9 @@ bool Staff::setProperty(P_ID id, const QVariant& v)
             case P_ID::BARLINE_SPAN_TO:
                   setBarLineTo(v.toInt());
                   break;
+            case P_ID::STAFF_USERDIST:
+                  setUserDist(v.toReal());
+                  break;
             default:
                   qDebug("Staff::setProperty: unhandled id");
                   break;
@@ -1244,17 +1244,20 @@ bool Staff::setProperty(P_ID id, const QVariant& v)
 QVariant Staff::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case P_ID::MAG:
-                  return 1.0;
             case P_ID::COLOR:
                   return QColor(Qt::black);
-            case P_ID::SMALL:
-                  return false;
             case P_ID::PLAYBACK_VOICE1:
             case P_ID::PLAYBACK_VOICE2:
             case P_ID::PLAYBACK_VOICE3:
             case P_ID::PLAYBACK_VOICE4:
                   return true;
+            case P_ID::BARLINE_SPAN:
+                  return false;
+            case P_ID::BARLINE_SPAN_FROM:
+            case P_ID::BARLINE_SPAN_TO:
+                  return 0;
+            case P_ID::STAFF_USERDIST:
+                  return qreal(0.0);
             default:
                   return QVariant();
             }
@@ -1286,9 +1289,32 @@ void Staff::scaleChanged(double oldVal, double newVal)
             }
       }
 
-bool Staff::isPitchedStaff(int tick) const      { return staffType(tick)->group() == StaffGroup::STANDARD; }
-bool Staff::isTabStaff(int tick) const          { return staffType(tick)->group() == StaffGroup::TAB; }
-bool Staff::isDrumStaff(int tick) const         { return staffType(tick)->group() == StaffGroup::PERCUSSION; }
+//---------------------------------------------------------
+//   isPitchedStaff
+//---------------------------------------------------------
+
+bool Staff::isPitchedStaff(int tick) const
+      {
+      return staffType(tick)->group() == StaffGroup::STANDARD;
+      }
+
+//---------------------------------------------------------
+//   isTabStaff
+//---------------------------------------------------------
+
+bool Staff::isTabStaff(int tick) const
+      {
+      return staffType(tick)->group() == StaffGroup::TAB;
+      }
+
+//---------------------------------------------------------
+//   isDrumStaff
+//---------------------------------------------------------
+
+bool Staff::isDrumStaff(int tick) const
+      {
+      return staffType(tick)->group() == StaffGroup::PERCUSSION;
+      }
 
 //---------------------------------------------------------
 //   lines
@@ -1305,8 +1331,6 @@ int Staff::lines(int tick) const
 
 void Staff::setLines(int tick, int val)
       {
-      if (val == lines(tick))
-            return;
       staffType(tick)->setLines(val);     // TODO: make undoable
       }
 
@@ -1319,17 +1343,6 @@ qreal Staff::lineDistance(int tick) const
       {
       return staffType(tick)->lineDistance().val();
       }
-
-//---------------------------------------------------------
-//   logicalLineDistance
-//    distance between logical (note) lines
-//---------------------------------------------------------
-
-qreal Staff::logicalLineDistance(int tick) const
-      {
-      return scaleNotesToLines(tick) ? staffType(tick)->lineDistance().val() : 1.0;
-      }
-
 
 }
 

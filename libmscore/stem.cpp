@@ -57,15 +57,6 @@ qreal Stem::stemLen() const
       return up() ? -_len : _len;
       }
 
-//---------------------------------------------------------
-//   lineWidth
-//---------------------------------------------------------
-
-qreal Stem::lineWidth() const
-      {
-      return score()->styleP(StyleIdx::stemWidth);
-      }
-
 //-------------------------------------------------------------------
 //   layout
 //    For beamed notes this is called twice. The final stem
@@ -77,25 +68,27 @@ qreal Stem::lineWidth() const
 
 void Stem::layout()
       {
-      qreal l   = _len + _userLen;
-      qreal _up = up() ? -1.0 : 1.0;
-      l        *= _up;
+      _lineWidth = score()->styleS(StyleIdx::stemWidth).val() * spatium();
+      qreal l    = _len + _userLen;
+      qreal _up  = up() ? -1.0 : 1.0;
+      l         *= _up;
 
       qreal y1 = 0.0;                           // vertical displacement to match note attach point
-      Staff* st = staff();
+      Staff* stf = staff();
       if (chord()) {
             int tick = chord()->tick();
-            if (st && st->isTabStaff(tick) ) {            // TAB staves
-                  if (st->staffType(tick)->stemThrough()) {
+            StaffType* st = stf->staffType(tick);
+            if (st->isTabStaff() ) {            // TAB staves
+                  if (st->stemThrough()) {
                         // if stems through staves, gets Y pos. of stem-side note relative to chord other side
-                        qreal lineDist = st->lineDistance(tick) * spatium();
-                        y1 = (chord()->downString() - chord()->upString() ) * _up * lineDist;
+                        qreal lineDist = st->lineDistance().val() * spatium();
+                        y1             = (chord()->downString() - chord()->upString()) * _up * lineDist;
                         // if fret marks above lines, raise stem beginning by 1/2 line distance
-                        if (!st->staffType(tick)->onLines())
+                        if (!st->onLines())
                               y1 -= lineDist * 0.5;
                         // shorten stem by 1/2 lineDist to clear the note and a little more to keep 'air' betwen stem and note
                         lineDist *= 0.7 * mag();
-                        y1 += _up * lineDist;
+                        y1       += _up * lineDist;
                         }
                   // in other TAB types, no correction
                   }
@@ -107,10 +100,9 @@ void Stem::layout()
                   }
             }
 
-      qreal lw5  = lineWidth() * .5;
+      qreal lw5 = _lineWidth * .5;
 
       line.setLine(0.0, y1, 0.0, l);
-//      line.setLine(-lw5 * _up, y1, -lw5 * _up, l);
 
       // compute bounding rectangle
       QRectF r(line.p1(), line.p2());
@@ -148,14 +140,13 @@ void Stem::draw(QPainter* painter) const
       if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND)
             return;
 
-      Staff* st = staff();
+      Staff* st   = staff();
       bool useTab = st && st->isTabStaff(chord()->tick());
 
-      qreal lw = lineWidth();
-      painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
+      painter->setPen(QPen(curColor(), _lineWidth, Qt::SolidLine, Qt::RoundCap));
       painter->drawLine(line);
 
-      if ( !(useTab && chord()) )
+      if (!(useTab && chord()))
             return;
 
       // TODO: adjust bounding rectangle in layout() for dots and for slash
@@ -351,7 +342,7 @@ QPointF Stem::hookPos() const
       {
       QPointF p(pos() + line.p2());
 
-      qreal xoff = lineWidth() * .5;
+      qreal xoff = _lineWidth * .5;
       p.rx() += xoff;
       return p;
       }

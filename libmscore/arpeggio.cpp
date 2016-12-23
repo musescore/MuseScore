@@ -124,7 +124,7 @@ void Arpeggio::layout()
       qreal y2 = _height + _userLen2;
 
       if (staff())
-            setMag(staff()->mag());
+            setMag(staff()->mag(tick()));
       switch (arpeggioType()) {
             case ArpeggioType::NORMAL: {
                   symbolLine(SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);

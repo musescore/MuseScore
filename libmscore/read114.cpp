@@ -1443,7 +1443,7 @@ static void readStaff(Staff* staff, XmlReader& e)
                         }
                   }
             else if (tag == "small")
-                  staff->setSmall(e.readInt());
+                  staff->setSmall(0, e.readInt());
             else if (tag == "invisible")
                   staff->setInvisible(e.readInt());
             else if (tag == "slashStyle")

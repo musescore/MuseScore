@@ -126,7 +126,7 @@ void TrillSegment::layout()
             setUserOff(QPointF());
 
       if (staff())
-            setMag(staff()->mag());
+            setMag(staff()->mag(tick()));
       if (isSingleType() || isBeginType()) {
             Accidental* a = trill()->accidental();
             if (a) {

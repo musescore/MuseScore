@@ -83,7 +83,7 @@ static bool needsStaff(Element* e)
 Palette::Palette(QWidget* parent)
    : QWidget(parent)
       {
-      extraMag      = 1.0 * guiScaling;
+      extraMag      = 1.0;
       currentIdx    = -1;
       dragIdx       = -1;
       selectedIdx   = -1;
@@ -196,7 +196,7 @@ void Palette::setReadOnly(bool val)
 
 void Palette::setMag(qreal val)
       {
-      extraMag = val * guiScaling;
+      extraMag = val;
       }
 
 //---------------------------------------------------------
@@ -268,8 +268,8 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
 
 void Palette::setGrid(int hh, int vv)
       {
-      hgrid = hh * guiScaling;
-      vgrid = vv * guiScaling;
+      hgrid = hh;
+      vgrid = vv;
       QSize s(hgrid, vgrid);
       setSizeIncrement(s);
       setBaseSize(s);
@@ -819,7 +819,8 @@ static void paintPaletteElement(void* data, Element* e)
 void Palette::paintEvent(QPaintEvent* /*event*/)
       {
       qreal _spatium = gscore->spatium();
-      qreal mag = PALETTE_SPATIUM * extraMag / _spatium;
+//      qreal mag      = PALETTE_SPATIUM * extraMag * guiScaling / _spatium;
+      qreal mag      = PALETTE_SPATIUM * extraMag / _spatium;
       gscore->setSpatium(SPATIUM20);
 
       QPainter p(this);
@@ -1053,9 +1054,9 @@ bool Palette::event(QEvent* ev)
 void Palette::write(XmlWriter& xml) const
       {
       xml.stag(QString("Palette name=\"%1\"").arg(XmlWriter::xmlString(_name)));
-      xml.tag("gridWidth", hgrid / guiScaling);
-      xml.tag("gridHeight", vgrid / guiScaling);
-      xml.tag("mag", extraMag / guiScaling);
+      xml.tag("gridWidth", hgrid);
+      xml.tag("gridHeight", vgrid);
+      xml.tag("mag", extraMag);
       if (_drawGrid)
             xml.tag("grid", _drawGrid);
 
@@ -1297,11 +1298,11 @@ void Palette::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& t(e.name());
             if (t == "gridWidth")
-                  hgrid = e.readDouble() * guiScaling;
+                  hgrid = e.readDouble();
             else if (t == "gridHeight")
-                  vgrid = e.readDouble() * guiScaling;
+                  vgrid = e.readDouble();
             else if (t == "mag")
-                  extraMag = e.readDouble() * guiScaling;
+                  extraMag = e.readDouble();
             else if (t == "grid")
                   _drawGrid = e.readInt();
             else if (t == "moreElements")
@@ -1446,12 +1447,12 @@ PaletteProperties::PaletteProperties(Palette* p, QWidget* parent)
       palette = p;
 
       name->setText(palette->name());
-      cellWidth->setValue(palette->gridWidth() / guiScaling);
-      cellHeight->setValue(palette->gridHeight() / guiScaling);
+      cellWidth->setValue(palette->gridWidth());
+      cellHeight->setValue(palette->gridHeight());
       showGrid->setChecked(palette->drawGrid());
       moreElements->setChecked(palette->moreElements());
       elementOffset->setValue(palette->yOffset());
-      mag->setValue(palette->mag() / guiScaling);
+      mag->setValue(palette->mag());
 
       MuseScore::restoreGeometry(this);
       }

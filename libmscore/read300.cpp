@@ -213,13 +213,14 @@ bool Score::read(XmlReader& e)
 
       _fileDivision = MScore::division;
 
+#if 0 // TODO:barline
       //
       //    sanity check for barLineSpan
       //
       for (Staff* st : staves()) {
             int barLineSpan = st->barLineSpan();
             int idx = st->idx();
-            int n = nstaves();
+            int n   = nstaves();
             if (idx + barLineSpan > n) {
                   qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);
                   // span until last staff
@@ -238,7 +239,6 @@ bool Score::read(XmlReader& e)
                         }
                   st->setBarLineSpan(barLineSpan);
                   }
-#if 0 // TODO:barline
             // check spanFrom
             int minBarLineFrom = st->lines(0) == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO;
             if (st->barLineFrom() < minBarLineFrom)
@@ -260,8 +260,8 @@ bool Score::read(XmlReader& e)
                         st->setBarLineTo(0);
                         }
                   }
-#endif
             }
+#endif
 
       if (!masterScore()->omr())
             masterScore()->setShowOmr(false);

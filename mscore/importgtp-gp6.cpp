@@ -902,7 +902,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       // before beat grace notes have to be handled after the Tpc is set from pitch
                                                       if (!graceNode.toElement().text().compare("OnBeat")) {
                                                             chord->setDurationType(MScore::division/2);
-                                                            chord->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
+                                                            chord->setMag(note->chord()->staff()->mag(0) * score->styleD(StyleIdx::graceNoteMag));
                                                             chord->setNoteType(NoteType::GRACE4);
                                                            }
                                                       else if (!graceNode.toElement().text().compare("BeforeBeat")) {

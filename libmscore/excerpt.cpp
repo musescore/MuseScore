@@ -514,7 +514,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                                 // barline found, now check span
                                                 BarLine* bl = static_cast<BarLine*>(oe);
                                                 int oSpan1 = bl->staff()->idx();
-                                                int oSpan2 = oSpan1 + bl->span();
+                                                int oSpan2 = oSpan1 + bl->spanStaff();
                                                 if (oSpan1 <= oIdx && oIdx < oSpan2) {
                                                       // this staff is within span
                                                       // calculate adjusted span for excerpt
@@ -540,7 +540,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                           ne->setScore(score);
                                           if (oe->type() == Element::Type::BAR_LINE && adjustedBarlineSpan) {
                                                 BarLine* nbl = static_cast<BarLine*>(ne);
-                                                nbl->setSpan(adjustedBarlineSpan);
+                                                nbl->setSpanStaff(adjustedBarlineSpan);
                                                 }
                                           else if (oe->isChordRest()) {
                                                 ChordRest* ocr = static_cast<ChordRest*>(oe);

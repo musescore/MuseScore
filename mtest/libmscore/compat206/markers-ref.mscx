@@ -290,7 +290,6 @@
           <duration>4/4</duration>
           </RepeatMeasure>
         <BarLine>
-          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>

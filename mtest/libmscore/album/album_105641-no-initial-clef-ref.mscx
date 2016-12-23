@@ -163,8 +163,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="1">
@@ -190,8 +188,6 @@
           <durationType>half</durationType>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>
@@ -207,7 +203,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
@@ -246,8 +241,7 @@
           <durationType>half</durationType>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
-          <span>2</span>
+          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>
@@ -263,7 +257,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>

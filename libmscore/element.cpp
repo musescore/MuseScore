@@ -12,7 +12,7 @@
 
 /**
  \file
- Implementation of Element, ElementList, StaffLines.
+ Implementation of Element, ElementList
 */
 
 #include "element.h"
@@ -85,6 +85,7 @@
 #include "xml.h"
 #include "systemdivider.h"
 #include "stafftypechange.h"
+#include "stafflines.h"
 
 namespace Ms {
 
@@ -229,7 +230,7 @@ void Element::localSpatiumChanged(qreal oldValue, qreal newValue)
 qreal Element::spatium() const
       {
       Staff* s = staff();
-      return s ? s->spatium() : score()->spatium();
+      return s ? s->spatium(tick()) : score()->spatium();
       }
 
 //---------------------------------------------------------
@@ -843,105 +844,6 @@ void ElementList::write(XmlWriter& xml) const
       {
       for (const Element* e : *this)
             e->write(xml);
-      }
-
-//---------------------------------------------------------
-//   StaffLines
-//---------------------------------------------------------
-
-StaffLines::StaffLines(Score* s)
-   : Element(s)
-      {
-      setWidth(1.0);      // dummy
-      _lines = 5;
-      setSelectable(false);
-      }
-
-//---------------------------------------------------------
-//   pagePos
-//---------------------------------------------------------
-
-QPointF StaffLines::pagePos() const
-      {
-      System* system = measure()->system();
-      return QPointF(measure()->x() + system->x(), system->staff(staffIdx())->y() + system->y());
-      }
-
-//---------------------------------------------------------
-//   canvasPos
-//---------------------------------------------------------
-
-QPointF StaffLines::canvasPos() const
-      {
-      QPointF p(pagePos());
-      Element* e = parent();
-      while (e) {
-            if (e->type() == Element::Type::PAGE) {
-                  p += e->pos();
-                  break;
-                  }
-            e = e->parent();
-            }
-      return p;
-      }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void StaffLines::layout()
-      {
-      Staff* s = staff();
-      qreal _spatium = spatium();
-      dist   = _spatium;
-      setPos(QPointF());
-      if (s) {
-            setMag(s->mag());
-            setColor(s->color());
-            StaffType* st = s->staffType(measure()->tick());
-            dist         *= st->lineDistance().val();
-            _lines        = st->lines();
-            if (_lines == 1)
-                  rypos() = 2 * dist;
-            }
-      else {
-            _lines = 5;
-            setColor(MScore::defaultColor);
-            }
-      lw = score()->styleS(StyleIdx::staffLineWidth).val() * _spatium;
-      bbox().setRect(0.0, -lw*.5, measure()->width(), (_lines-1) * dist + lw);
-      }
-
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void StaffLines::draw(QPainter* painter) const
-      {
-      qreal x1 = pos().x();
-      qreal x2 = x1 + width();
-
-      QVector<QLineF> ll(_lines);
-      qreal y = pos().y();
-      for (int i = 0; i < _lines; ++i) {
-            ll[i].setLine(x1, y, x2, y);
-            y += dist;
-            }
-      painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
-      painter->drawLines(ll);
-      }
-
-//---------------------------------------------------------
-//   y1
-//---------------------------------------------------------
-
-qreal StaffLines::y1() const
-      {
-      System* system = measure()->system();
-      if (system == 0 || staffIdx() >= system->staves()->size())
-            return 0.0;
-
-      return system->staff(staffIdx())->y() + ipos().y();
       }
 
 //---------------------------------------------------------

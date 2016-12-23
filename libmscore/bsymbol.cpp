@@ -159,7 +159,7 @@ Element* BSymbol::drop(const DropData& data)
 void BSymbol::layout()
       {
       if (staff())
-            setMag(staff()->mag());
+            setMag(staff()->mag(tick()));
       for (Element* e : _leafs)
             e->layout();
       adjustReadPos();
