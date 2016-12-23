@@ -312,7 +312,7 @@ Score::FileError MasterScore::read300(XmlReader& e)
                   parseVersion(mscoreVersion());
                   }
             else if (tag == "programRevision")
-                  setMscoreRevision(e.readInt());
+                  setMscoreRevision(e.readIntHex());
             else if (tag == "Score") {
                   MasterScore* score;
                   if (top) {
