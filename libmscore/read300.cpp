@@ -311,7 +311,7 @@ Score::FileError MasterScore::read300(XmlReader& e)
                   parseVersion(mscoreVersion());
                   }
             else if (tag == "programRevision")
-                  setMscoreRevision(e.readInt());
+                  setMscoreRevision(e.readIntHex());
             else if (tag == "Score") {
 printf("===read score -- top %d\n", top);
                   MasterScore* score;

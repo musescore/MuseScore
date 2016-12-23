@@ -84,9 +84,10 @@ class XmlReader : public QXmlStreamReader {
       bool hasAttribute(const char* s) const;
 
       // helper routines based on readElementText():
-      int readInt()         { return readElementText().toInt();    }
-      int readInt(bool* ok) { return readElementText().toInt(ok);  }
-      double readDouble()   { return readElementText().toDouble(); }
+      int readInt()         { return readElementText().toInt();      }
+      int readInt(bool* ok) { return readElementText().toInt(ok);    }
+      int readIntHex()      { return readElementText().toInt(0, 16); }
+      double readDouble()   { return readElementText().toDouble();   }
       double readDouble(double min, double max);
       bool readBool();
       QPointF readPoint();

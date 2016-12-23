@@ -2071,7 +2071,7 @@ void PageFormat::read(XmlReader& e)
 
 //---------------------------------------------------------
 //   read206
-//    import old version > 1.3  and < 2.x files
+//    import old version > 1.3  and < 3.x files
 //---------------------------------------------------------
 
 Score::FileError MasterScore::read206(XmlReader& e)
@@ -2092,7 +2092,7 @@ Score::FileError MasterScore::read206(XmlReader& e)
                   parseVersion(mscoreVersion());
                   }
             else if (tag == "programRevision")
-                  setMscoreRevision(e.readInt());
+                  setMscoreRevision(e.readIntHex());
             else if (tag == "Score") {
                   if (!readScore(this, e))
                         return FileError::FILE_BAD_FORMAT;
