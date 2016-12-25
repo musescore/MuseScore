@@ -3158,6 +3158,7 @@ void Score::cmd(const QAction* a)
             { "double-duration",            [this]{ cmdDoubleDuration();                                        }},
             { "half-duration",              [this]{ cmdHalfDuration ();                                         }},
             { "add-staccato",               [this]{ addArticulation(SymId::articStaccatoAbove);                 }},
+            { "add-staccatissimo",          [this]{ addArticulation(SymId::articStaccatissimoAbove);            }},
             { "add-tenuto",                 [this]{ addArticulation(SymId::articTenutoAbove);                   }},
             { "add-marcato",                [this]{ addArticulation(SymId::articMarcatoAbove);                  }},
             { "add-sforzato",               [this]{ addArticulation(SymId::articAccentAbove);                   }},
