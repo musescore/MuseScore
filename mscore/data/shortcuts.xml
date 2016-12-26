@@ -982,6 +982,14 @@
     <key>toggle-insert-mode</key>
     <seq>Ctrl+I</seq>
     </SC>
+  <SC>
+    <key>add-stringsUpBow</key>
+    <seq>Shift+U</seq>
+    </SC>
+  <SC>
+    <key>add-stringsDownBow</key>
+    <seq>Shift+Z</seq>
+    </SC>
 
   </Shortcuts>
 
