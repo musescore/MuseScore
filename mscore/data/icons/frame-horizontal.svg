@@ -1,1 +1,18 @@
-<?xml version='1.0'?><svg height='24' version='1.1' width='24' xmlns='http://www.w3.org/2000/svg'><g transform='translate(-113.00083,-352.00015)'><path d='m 133.6258,364 -3.96875,-4.03125 c 0,0 -0.54369,0.48119 -0.84375,0.78125 -0.30006,0.30006 -0.39054,0.79701 0.0937,1.28125 l 0.9688,0.96875 -9.53125,0 0.96875,-0.96875 c 0.48425,-0.48424 0.39381,-0.98118 0.0937,-1.28125 -0.30006,-0.30007 -0.84375,-0.78125 -0.84375,-0.78125 l -3.9687,4.03125 3.96875,4.03125 c 0,0 0.54369,-0.48118 0.84375,-0.78125 0.30006,-0.30006 0.39054,-0.79701 -0.0937,-1.28125 l -0.96875,-1 9.5,0.0625 -0.9375,0.9375 c -0.48424,0.48424 -0.39381,0.98118 -0.0937,1.28125 0.30006,0.30007 0.84375,0.78125 0.84375,0.78125 L 133.6258,364 z' style='fill:#5999db;stroke-width:1.33333337'/><path d='m 114.5,354 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 0.5,0 0,0.5 1,0 0,-1 0,-0.5 -0.5,0 -1,0 z m -20.5,3.5 1,0 0,-2 -1,0 z m 21,1 1,0 0,-2 -1,0 z m -21,3 1,0 0,-2 -1,0 z m 21,1 1,0 0,-2 -1,0 z m -21,3 1,0 0,-2 -1,0 z m 21,1 1,0 0,-2 -1,0 z m -21,3 1,0 0,-2 -1,0 z m 21,1 1,0 0,-2 -1,0 z m -21,3 1,0 0,-2 -1,0 z m 21,1 1,0 0,-2 -1,0 z m -19.5,0.5 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z' style='fill:#5999db;stroke-width:1'/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>frame-horizontal</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Original-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="frame-horizontal">
+            <g transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000) ">
+                <rect id="rect4374" transform="translate(11.999984, 12.000000) rotate(90.000000) translate(-11.999984, -12.000000) " x="0" y="0" width="23.9999685" height="24"></rect>
+                <rect id="rect5617-3" stroke="#5999DB" stroke-width="1.00000003" stroke-dasharray="2.000000059604644,2.000000059604644" x="1.5" y="1.5" width="21" height="21"></rect>
+                <polygon id="Path" fill="#5999DB" points="8.000147 8 12.000147 4 16.000147 8"></polygon>
+                <polygon id="Path-Copy-2" fill="#5999DB" transform="translate(12.000000, 18.000000) scale(1, -1) translate(-12.000000, -18.000000) " points="8 20 12 16 16 20"></polygon>
+                <rect id="Rectangle" fill="#5999DB" x="11" y="7" width="2" height="11"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

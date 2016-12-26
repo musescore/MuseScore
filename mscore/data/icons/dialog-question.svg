@@ -1,1 +1,13 @@
-<?xml version='1.0' encoding='UTF-8' standalone='no'?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg xmlns:cc='http://creativecommons.org/ns#' xmlns:dc='http://purl.org/dc/elements/1.1/' height='47.999996' id='svg7384' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns:svg='http://www.w3.org/2000/svg' version='1.1' width='47.999996' xmlns='http://www.w3.org/2000/svg'> <title id='title9167'>MuseScore Icon Theme</title> <defs id='defs7386'/> <g id='actions' style='display:inline' transform='translate(-101.00118,-122.99996)'> <path  d='m 125.00057,123.09371 c -1.20054,0 -2.44602,0.47733 -3.375,1.40625 l -19.125,19.125 c -1.85796,1.85787 -1.85796,4.89213 0,6.75 l 19.125,19.125 c 1.85793,1.85787 4.89204,1.85787 6.75,0 l 19.125,-19.125 c 1.85796,-1.85787 1.85793,-4.89213 0,-6.75 l -19.125,-19.125 c -0.92898,-0.92892 -2.17446,-1.40625 -3.375,-1.40625 z m -0.5625,8.90625 c 4.92729,-0.276 9.2865,3.51024 9.5625,8.4375 -3e-4,4.20408 -1.13313,5.76531 -4.78125,8.53125 -0.57279,0.43092 -0.9768,0.7518 -1.125,0.9375 -0.1482,0.1863 -0.0937,0.0998 -0.0937,0.0937 0.021,1.58493 -1.41489,3 -3,3 -1.58511,0 -3.021,-1.41507 -3,-3 0,-1.50717 0.67272,-2.83026 1.40625,-3.75 0.73353,-0.91989 1.4739,-1.54914 2.15625,-2.0625 0.61215,-0.48168 1.38249,-1.15362 2.0625,-1.96875 0.2805,-0.3363 0.387,-0.92298 0.375,-1.3125 l 0,-0.0936 c -0.0948,-1.68972 -1.49778,-2.9073 -3.1875,-2.8125 -1.68972,0.0948 -2.9073,1.31028 -2.8125,3 l -6,0 c -0.276,-4.92729 3.51021,-8.7237 8.4375,-9 z m 0.5625,24 c 1.65684,0 3,1.34316 3,3 0,1.65684 -1.34316,3 -3,3 -1.65684,0 -3,-1.34316 -3,-3 0,-1.65684 1.34316,-3 3,-3 z' id='path19592' style='fill:#3b3f45;fill-opacity:1;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible'/> </g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>dialog-question</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Derived-48" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="dialog-question">
+            <polygon id="Shape" points="0 0 48 0 48 48 0 48"></polygon>
+            <path d="M42,12 L38,12 L38,30 L12,30 L12,34 C12,35.1 12.9,36 14,36 L36,36 L44,44 L44,14 C44,12.9 43.1,12 42,12 Z M34,24 L34,6 C34,4.9 33.1,4 32,4 L6,4 C4.9,4 4,4.9 4,6 L4,34 L12,26 L32,26 C33.1,26 34,25.1 34,24 Z" id="Shape" fill="#666666"></path>
+        </g>
+    </g>
+</svg>
