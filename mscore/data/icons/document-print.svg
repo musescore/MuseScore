@@ -1,1 +1,12 @@
-<?xml version='1.0'?><svg height='24.009777' version='1.1' width='24' xmlns='http://www.w3.org/2000/svg'><g transform='translate(-184.99999,-98.990229)'><path d='m 187.99999,105.99955 c -1.10457,0 -2,0.89544 -2,2.00001 l 0,4.99999 c 0,1.10458 0.89543,2 2,2 l 1,0 0,-3 16,0 0,3 1,0 c 1.10457,0 2,-0.89542 2,-2 l 0,-4.99999 c 0,-1.10457 -0.89543,-2.00001 -2,-2.00001 l -18,0 z' style='fill:#3b3f45'/><path d='m 191,100.99385 0,3 12,0 0,-3 z' style='fill:#3b3f45'/><path d='m 191,114.00001 0,7 12,0 0,-7 -12,0 z m 2,1 8,0 0,1 -8,0 0,-1 z m 0,2 8,0 0,1 -8,0 0,-1 z m 0,2 8,0 0,1 -8,0 0,-1 z' style='fill:#3b3f45'/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>document-print</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="document-print" fill="#3B3F45">
+            <path d="M19,8 L5,8 C3.34,8 2,9.34 2,11 L2,17 L6,17 L6,21 L18,21 L18,17 L22,17 L22,11 C22,9.34 20.66,8 19,8 Z M16,19 L8,19 L8,14 L16,14 L16,19 Z M19,12 C18.45,12 18,11.55 18,11 C18,10.45 18.45,10 19,10 C19.55,10 20,10.45 20,11 C20,11.55 19.55,12 19,12 Z M18,3 L6,3 L6,7 L18,7 L18,3 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

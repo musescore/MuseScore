@@ -1,1 +1,12 @@
-<?xml version='1.0' encoding='UTF-8' standalone='no'?><!-- Created with Inkscape (http://www.inkscape.org/) --><svg xmlns:cc='http://creativecommons.org/ns#' xmlns:dc='http://purl.org/dc/elements/1.1/' height='47.999996' id='svg7384' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns:svg='http://www.w3.org/2000/svg' version='1.1' width='47.999996' xmlns='http://www.w3.org/2000/svg'> <title id='title9167'>MuseScore Icon Theme</title> <defs id='defs7386'/> <g id='actions' style='display:inline' transform='translate(-221.00057,-123)'> <path inkscape:connector-curvature='0' d='m 245.00057,126.09375 c -11.55981,0 -20.90625,9.34641 -20.90625,20.90625 0,11.55981 9.34644,20.90625 20.90625,20.90625 11.55981,0 20.90625,-9.34644 20.90625,-20.90625 0,-11.55984 -9.34644,-20.90625 -20.90625,-20.90625 z m -12,17.90625 24,0 0,6 -24,0 0,-6 z' id='path10839-3' style='fill:#3b3f45;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.78124988;marker:none;visibility:visible'/> </g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>dialog-error</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Derived-48" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="dialog-error" fill="#666666">
+            <path d="M2,42 L46,42 L24,4 L2,42 Z M26,36 L22,36 L22,32 L26,32 L26,36 Z M26,28 L22,28 L22,20 L26,20 L26,28 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

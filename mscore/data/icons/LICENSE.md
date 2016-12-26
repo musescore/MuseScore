@@ -1,4 +1,4 @@
-This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
+This work is licensed under the Creative Commons Attribution 4.0 International. To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
 
 The license does not apply to the following files:
 acciaccatura.svg
@@ -34,5 +34,6 @@ timesig_prolatio11.svg
 
 Authors
 -------
-GNOME Project (http://www.gnome.org)
-Mirek Mazel
+[Material Design Icons v. 2.2.3]((https://github.com/google/material-design-icons/archive/2.2.3.zip)) by Google are licensed [CC-BY 4.0 International](https://creativecommons.org/licenses/by/4.0/)
+
+Miroslav Mazel, no attribution needed
