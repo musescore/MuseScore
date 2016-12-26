@@ -1,1 +1,15 @@
-<?xml version='1.0'?><svg height='24' version='1.1' width='24' xmlns='http://www.w3.org/2000/svg'><g transform='translate(-544.00038,-171.00001)'><rect height='1.999949' style='fill:#3b3f45;stroke-width:1' width='14.999999' x='551.00037' y='183.00006'/><rect height='1.9998981' style='fill:#3b3f45;stroke-width:1' width='14.999999' x='551.00037' y='175.00009'/><rect height='1.9999185' style='fill:#3b3f45;stroke-width:1' width='8' x='551.00037' y='179.00006'/><path d='m 503,-513 a 1,1 0 1 1 -2,0 1,1 0 1 1 2,0 z' style='fill:#3b3f45' transform='matrix(1.499995,0,0,1.4999934,-205.49711,953.99661)'/><path d='m 503,-513 a 1,1 0 1 1 -2,0 1,1 0 1 1 2,0 z' style='fill:#3b3f45' transform='matrix(1.499995,0,0,1.4999934,-205.49711,945.99661)'/><rect height='1.999949' style='fill:#3b3f45;stroke-width:1' width='4' x='551.00037' y='187.00006'/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>list-unordered</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="list-unordered">
+            <g id="ic_format_list_bulleted_24px">
+                <path d="M4,10.5 C3.17,10.5 2.5,11.17 2.5,12 C2.5,12.83 3.17,13.5 4,13.5 C4.83,13.5 5.5,12.83 5.5,12 C5.5,11.17 4.83,10.5 4,10.5 Z M4,4.5 C3.17,4.5 2.5,5.17 2.5,6 C2.5,6.83 3.17,7.5 4,7.5 C4.83,7.5 5.5,6.83 5.5,6 C5.5,5.17 4.83,4.5 4,4.5 Z M4,16.5 C3.17,16.5 2.5,17.18 2.5,18 C2.5,18.82 3.18,19.5 4,19.5 C4.82,19.5 5.5,18.82 5.5,18 C5.5,17.18 4.83,16.5 4,16.5 Z M7,19 L21,19 L21,17 L7,17 L7,19 Z M7,13 L21,13 L21,11 L7,11 L7,13 Z M7,5 L7,7 L21,7 L21,5 L7,5 Z" id="Shape" fill="#3B3F45"></path>
+                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

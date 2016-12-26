@@ -1,1 +1,12 @@
-<?xml version='1.0'?><svg height='24' version='1.1' width='24' xmlns='http://www.w3.org/2000/svg'><g transform='translate(-437.00039,-99)'><path d='m 440,107.00001 3.9999,0 4,-4.00001 1.0001,0 0,16.00001 -1.0001,0 -4,-4.00001 -3.9999,0 z' style='fill:#3b3f45;stroke-width:1'/><path d='m 451,107 0,4 0,4 1.4375,0 a 1.5120845,1.6083212 0 0 0 0.0312,-0.0312 c 2.04348,-2.17355 2.04348,-5.76396 0,-7.9375 A 1.5044115,1.6001599 0 0 0 452.4375,107 L 451,107 z' style='fill:#3b3f45;stroke-width:2.54999995'/><path d='m 454,104 0,2.59375 c 1.8141,2.57331 1.8141,6.23918 0,8.8125 l 0,2.59375 1.5625,0 c 3.25786,-3.90381 3.25786,-10.0962 0,-14 L 454,104 z' style='fill:#3b3f45;stroke-width:1.15909004'/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>sound-while-editing</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="sound-while-editing" fill="#3B3F45">
+            <path d="M3,9 L3,15 L7,15 L12,20 L12,4 L7,9 L3,9 Z M16.5,12 C16.5,10.23 15.48,8.71 14,7.97 L14,16.02 C15.48,15.29 16.5,13.77 16.5,12 Z M14,3.23 L14,5.29 C16.89,6.15 19,8.83 19,12 C19,15.17 16.89,17.85 14,18.71 L14,20.77 C18.01,19.86 21,16.28 21,12 C21,7.72 18.01,4.14 14,3.23 L14,3.23 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>
