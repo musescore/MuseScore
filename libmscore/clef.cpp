@@ -175,7 +175,7 @@ void Clef::layout()
                   break;
             case ClefType::TAB:                            // TAB clef
                   // on tablature, position clef at half the number of spaces * line distance
-                  yoff = lineDist * (lines - 1) * .5;
+                  yoff = lineDist * (lines - 1) * 0.77 ;
                   break;
             case ClefType::TAB4:                            // TAB clef 4 strings
                   // on tablature, position clef at half the number of spaces * line distance
