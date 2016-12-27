@@ -606,7 +606,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "add-stringsUpBow",
          QT_TRANSLATE_NOOP("action","Up bow"),
-         QT_TRANSLATE_NOOP("action","Toggle Up bow"),
+         QT_TRANSLATE_NOOP("action","Toggle up bow"),
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut
@@ -616,7 +616,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "add-stringsDownBow",
          QT_TRANSLATE_NOOP("action","Down bow"),
-         QT_TRANSLATE_NOOP("action","Toggle Down bow"),
+         QT_TRANSLATE_NOOP("action","Toggle down bow"),
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut
