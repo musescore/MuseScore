@@ -162,16 +162,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QSpinBox" name="span">
-        <property name="accessibleName">
-         <string>Span</string>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="2">
        <widget class="QToolButton" name="resetSpan">
         <property name="toolTip">
@@ -289,6 +279,13 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QCheckBox" name="span">
+        <property name="text">
+         <string>Span to next staff</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -297,7 +294,6 @@
  <tabstops>
   <tabstop>type</tabstop>
   <tabstop>resetType</tabstop>
-  <tabstop>span</tabstop>
   <tabstop>resetSpan</tabstop>
   <tabstop>spanFrom</tabstop>
   <tabstop>resetSpanFrom</tabstop>

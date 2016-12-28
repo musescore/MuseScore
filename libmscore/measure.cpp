@@ -1861,7 +1861,6 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "BarLine") {
                   BarLine* barLine = new BarLine(score());
                   barLine->setTrack(e.track());
-                  barLine->read(e);
 
                   //
                   //  StartRepeatBarLine: at rtick == 0, always BarLineType::START_REPEAT
@@ -1889,6 +1888,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         segment = getSegmentR(st, t);
                         segment->add(barLine);
                         }
+                  barLine->read(e);
                   barLine->layout();
                   }
             else if (tag == "Chord") {
@@ -3341,7 +3341,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                         // and its not a repeat start/end barline (forced)
 
                         if (bl->barLineType() != t) {
-                              if (bl->generated())
+                              if (bl->generated() || bl->barLineType() == BarLineType::UNKNOWN)
                                     bl->setBarLineType(t);
                               else {
                                     if (force) {
