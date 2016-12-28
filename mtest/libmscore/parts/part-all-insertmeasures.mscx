@@ -602,10 +602,6 @@ p, li { white-space: pre-wrap; }
           <lid>72</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          <lid>73</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -937,10 +933,6 @@ p, li { white-space: pre-wrap; }
           <lid>125</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          <lid>126</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -1491,10 +1483,6 @@ p, li { white-space: pre-wrap; }
             <lid>72</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            <lid>73</lid>
             </BarLine>
           </Measure>
         </Staff>
@@ -1935,11 +1923,6 @@ p, li { white-space: pre-wrap; }
             <lid>125</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            <lid>126</lid>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Tenor</name>

@@ -65,6 +65,7 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>unnamed1</trackName>
       <Instrument>

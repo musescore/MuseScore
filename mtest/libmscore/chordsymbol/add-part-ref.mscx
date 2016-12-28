@@ -103,7 +103,7 @@
         <Harmony>
           <root>14</root>
           <name>7</name>
-          <lid>6</lid>
+          <lid>5</lid>
           </Harmony>
         <Chord>
           <lid>2</lid>
@@ -118,11 +118,6 @@
           <lid>4</lid>
           <durationType>half</durationType>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          <lid>5</lid>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -230,7 +225,7 @@
           <Harmony>
             <root>14</root>
             <name>7</name>
-            <lid>6</lid>
+            <lid>5</lid>
             </Harmony>
           <Chord>
             <lid>2</lid>
@@ -245,11 +240,6 @@
             <lid>4</lid>
             <durationType>half</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            <lid>5</lid>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Classical Guitar</name>

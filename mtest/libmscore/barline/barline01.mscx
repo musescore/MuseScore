@@ -56,7 +56,7 @@
         <StaffType group="pitched">
           </StaffType>
         <bracket type="0" span="3"/>
-        <barLineSpan>3</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
@@ -93,7 +93,7 @@
         <StaffType group="pitched">
           </StaffType>
         <bracket type="-1" span="0"/>
-        <barLineSpan>0</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
@@ -130,7 +130,7 @@
         <StaffType group="pitched">
           </StaffType>
         <bracket type="-1" span="0"/>
-        <barLineSpan>0</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>

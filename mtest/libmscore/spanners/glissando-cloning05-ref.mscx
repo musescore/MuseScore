@@ -84,7 +84,7 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="1" span="2"/>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="2">
         <StaffType group="pitched">
@@ -92,7 +92,6 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         <bracket type="-1" span="0"/>
-        <barLineSpan>0</barLineSpan>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
@@ -165,7 +164,7 @@
             <Glissando id="2">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <lid>17</lid>
+              <lid>16</lid>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -200,51 +199,46 @@
             <endSpanner id="3"/>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>2</span>
-          <lid>11</lid>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="2">
       <Measure number="1">
         <TimeSig>
-          <lid>12</lid>
+          <lid>11</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <lid>13</lid>
+          <lid>12</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>14</lid>
+            <lid>13</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             </Note>
           </Chord>
         <Chord>
-          <lid>15</lid>
+          <lid>14</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>16</lid>
+            <lid>15</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <endSpanner id="2"/>
             </Note>
           </Chord>
         <Chord>
-          <lid>18</lid>
+          <lid>17</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>19</lid>
+            <lid>18</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <Glissando id="3">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <lid>20</lid>
+              <lid>19</lid>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -252,10 +246,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>21</lid>
+          <lid>20</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>22</lid>
+            <lid>21</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             </Note>
@@ -346,7 +340,7 @@
             <name>stdNormal</name>
             </StaffType>
           <bracket type="1" span="2"/>
-          <barLineSpan>2</barLineSpan>
+          <barLineSpan>1</barLineSpan>
           </Staff>
         <Staff id="2">
           <linkedTo>2</linkedTo>
@@ -355,7 +349,6 @@
             </StaffType>
           <defaultClef>F</defaultClef>
           <bracket type="-1" span="0"/>
-          <barLineSpan>0</barLineSpan>
           </Staff>
         <trackName>Piano</trackName>
         <Instrument>
@@ -432,7 +425,7 @@
               <Glissando id="4">
                 <text>gliss.</text>
                 <subtype>1</subtype>
-                <lid>17</lid>
+                <lid>16</lid>
                 <diagonal>1</diagonal>
                 <lineWidth>0.15</lineWidth>
                 <anchor>3</anchor>
@@ -467,51 +460,46 @@
               <endSpanner id="5"/>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>2</span>
-            <lid>11</lid>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
         <Measure number="1">
           <TimeSig>
-            <lid>12</lid>
+            <lid>11</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Chord>
-            <lid>13</lid>
+            <lid>12</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>14</lid>
+              <lid>13</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <lid>15</lid>
+            <lid>14</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>16</lid>
+              <lid>15</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <endSpanner id="4"/>
               </Note>
             </Chord>
           <Chord>
-            <lid>18</lid>
+            <lid>17</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>19</lid>
+              <lid>18</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <Glissando id="5">
                 <text>gliss.</text>
                 <subtype>1</subtype>
-                <lid>20</lid>
+                <lid>19</lid>
                 <diagonal>1</diagonal>
                 <lineWidth>0.15</lineWidth>
                 <anchor>3</anchor>
@@ -519,10 +507,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>21</lid>
+            <lid>20</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>22</lid>
+              <lid>21</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               </Note>

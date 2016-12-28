@@ -405,11 +405,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          <lid>42</lid>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="2">
@@ -677,11 +672,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          <lid>83</lid>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -845,10 +835,6 @@
             <duration>4/4</duration>
             </Rest>
           <move>31/1</move>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         <Measure number="3">
           <Rest>
@@ -1059,10 +1045,6 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            <lid>42</lid>
             </BarLine>
           </Measure>
         </Staff>
@@ -1223,10 +1205,6 @@
             <duration>4/4</duration>
             </Rest>
           <move>31/1</move>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         <Measure number="3">
           <Rest>
@@ -1437,11 +1415,6 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            <lid>83</lid>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Tenor</name>

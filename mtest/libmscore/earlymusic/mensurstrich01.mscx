@@ -50,7 +50,7 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="-1" span="0"/>
-        <barLineSpan from="8" to="0">2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
@@ -101,7 +101,6 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="-1" span="0"/>
-        <barLineSpan>0</barLineSpan>
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
@@ -207,10 +206,6 @@
         <Rest>
           <durationType>whole</durationType>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>2</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="2">

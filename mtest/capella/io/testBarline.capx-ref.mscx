@@ -56,6 +56,7 @@
         <StaffType group="pitched">
           </StaffType>
         <bracket type="0" span="2"/>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>unbenannt</trackName>
       <Instrument>

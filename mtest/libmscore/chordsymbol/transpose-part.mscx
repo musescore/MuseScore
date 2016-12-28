@@ -136,11 +136,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          <lid>8</lid>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -274,11 +269,6 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            <lid>8</lid>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Flute</name>

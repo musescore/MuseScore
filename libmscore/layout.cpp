@@ -3449,7 +3449,7 @@ void Score::doLayout()
       for (System* system : lc.systemList) {
             qDebug("delete system");
             for (SpannerSegment* ss : system->spannerSegments()) {
-                  qDebug("   delete spanner segment\n");
+                  qDebug("   delete spanner segment");
                   Spanner* spanner = ss->spanner();
                   spanner->spannerSegments().removeOne(ss);
                   }

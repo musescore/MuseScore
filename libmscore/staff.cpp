@@ -531,9 +531,9 @@ void Staff::write(XmlWriter& xml) const
       for (const BracketItem& i : _brackets)
             xml.tagE(QString("bracket type=\"%1\" span=\"%2\"").arg((signed char)(i._bracket)).arg(i._bracketSpan));
 
-      writeProperty(xml, P_ID::BARLINE_SPAN);
-      writeProperty(xml, P_ID::BARLINE_SPAN_FROM);
-      writeProperty(xml, P_ID::BARLINE_SPAN_TO);
+      writeProperty(xml, P_ID::STAFF_BARLINE_SPAN);
+      writeProperty(xml, P_ID::STAFF_BARLINE_SPAN_FROM);
+      writeProperty(xml, P_ID::STAFF_BARLINE_SPAN_TO);
       writeProperty(xml, P_ID::STAFF_USERDIST);
       writeProperty(xml, P_ID::COLOR);
       writeProperty(xml, P_ID::PLAYBACK_VOICE1);
@@ -1181,16 +1181,16 @@ QVariant Staff::getProperty(P_ID id) const
                   return playbackVoice(2);
             case P_ID::PLAYBACK_VOICE4:
                   return playbackVoice(3);
-            case P_ID::BARLINE_SPAN:
+            case P_ID::STAFF_BARLINE_SPAN:
                   return barLineSpan();
-            case P_ID::BARLINE_SPAN_FROM:
+            case P_ID::STAFF_BARLINE_SPAN_FROM:
                   return barLineFrom();
-            case P_ID::BARLINE_SPAN_TO:
+            case P_ID::STAFF_BARLINE_SPAN_TO:
                   return barLineTo();
             case P_ID::STAFF_USERDIST:
                   return userDist();
             default:
-                  qDebug("Staff::getProperty: unhandled id");
+                  qDebug("Staff::getProperty: unhandled id %d", int(id));
                   return QVariant();
             }
       }
@@ -1217,20 +1217,20 @@ bool Staff::setProperty(P_ID id, const QVariant& v)
             case P_ID::PLAYBACK_VOICE4:
                   setPlaybackVoice(3, v.toBool());
                   break;
-            case P_ID::BARLINE_SPAN:
+            case P_ID::STAFF_BARLINE_SPAN:
                   setBarLineSpan(v.toInt());
                   break;
-            case P_ID::BARLINE_SPAN_FROM:
+            case P_ID::STAFF_BARLINE_SPAN_FROM:
                   setBarLineFrom(v.toInt());
                   break;
-            case P_ID::BARLINE_SPAN_TO:
+            case P_ID::STAFF_BARLINE_SPAN_TO:
                   setBarLineTo(v.toInt());
                   break;
             case P_ID::STAFF_USERDIST:
                   setUserDist(v.toReal());
                   break;
             default:
-                  qDebug("Staff::setProperty: unhandled id");
+                  qDebug("Staff::setProperty: unhandled id %d", int(id));
                   break;
             }
       score()->setLayoutAll();
@@ -1251,10 +1251,10 @@ QVariant Staff::propertyDefault(P_ID id) const
             case P_ID::PLAYBACK_VOICE3:
             case P_ID::PLAYBACK_VOICE4:
                   return true;
-            case P_ID::BARLINE_SPAN:
+            case P_ID::STAFF_BARLINE_SPAN:
                   return false;
-            case P_ID::BARLINE_SPAN_FROM:
-            case P_ID::BARLINE_SPAN_TO:
+            case P_ID::STAFF_BARLINE_SPAN_FROM:
+            case P_ID::STAFF_BARLINE_SPAN_TO:
                   return 0;
             case P_ID::STAFF_USERDIST:
                   return qreal(0.0);

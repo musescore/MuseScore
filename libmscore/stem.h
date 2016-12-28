@@ -27,9 +27,9 @@ class Chord;
 class Stem : public Element {
       Q_OBJECT
 
-      QLineF line;            // p1 is attached to notehead
-      qreal _userLen;
-      qreal _len;             // allways positive
+      QLineF line;                  // p1 is attached to notehead
+      qreal _userLen   { 0.0 };
+      qreal _len       { 0.0 };     // allways positive
       qreal _lineWidth;
 
       virtual void startEdit(MuseScoreView*, const QPointF&);

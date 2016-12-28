@@ -6,6 +6,7 @@ cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning01.mscx    gli
 cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning02.mscx    glissando-cloning02-ref.mscx
 cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning03.mscx    glissando-cloning03-ref.mscx
 cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning04.mscx    glissando-cloning04-ref.mscx
+cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning05.mscx    glissando-cloning05-ref.mscx
 cp ../../../build.debug/mtest/libmscore/spanners/glissando-crsossstaff01.mscx glissando-crossstaff01-ref.mscx
 cp ../../../build.debug/mtest/libmscore/spanners/glissando-graces01.mscx     glissando-graces01-ref.mscx
 cp ../../../build.debug/mtest/libmscore/spanners/lyricsline01.mscx           lyricsline01-ref.mscx

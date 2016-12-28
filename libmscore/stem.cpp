@@ -34,9 +34,8 @@ namespace Ms {
 Stem::Stem(Score* s)
    : Element(s)
       {
-      _len     = 0.0;
-      _userLen = 0.0;
       setFlags(ElementFlag::SELECTABLE);
+      _lineWidth = score()->styleS(StyleIdx::stemWidth).val() * spatium();
       }
 
 //---------------------------------------------------------
@@ -68,7 +67,6 @@ qreal Stem::stemLen() const
 
 void Stem::layout()
       {
-      _lineWidth = score()->styleS(StyleIdx::stemWidth).val() * spatium();
       qreal l    = _len + _userLen;
       qreal _up  = up() ? -1.0 : 1.0;
       l         *= _up;

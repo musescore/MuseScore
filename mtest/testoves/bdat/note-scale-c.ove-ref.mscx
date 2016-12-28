@@ -261,7 +261,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>

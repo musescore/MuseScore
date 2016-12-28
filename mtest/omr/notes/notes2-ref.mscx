@@ -47,7 +47,7 @@
       <Staff id="1">
         <type>0</type>
         <bracket type="1" span="2"/>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="2">
         <type>0</type>

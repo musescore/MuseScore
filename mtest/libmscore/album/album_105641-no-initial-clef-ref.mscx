@@ -162,8 +162,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          </BarLine>
         </Measure>
       <Measure number="1">
         <irregular>1</irregular>
@@ -187,8 +185,6 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <BarLine>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="2">
@@ -202,9 +198,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="1">
         <Clef>
@@ -240,9 +233,6 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <BarLine>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="3">
@@ -256,9 +246,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="1">
         <KeySig>

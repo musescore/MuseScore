@@ -184,11 +184,8 @@ void Box::writeProperties(XmlWriter& xml) const
       {
       writeProperty(xml, P_ID::BOX_HEIGHT);
       writeProperty(xml, P_ID::BOX_WIDTH);
-
-      if (getProperty(P_ID::TOP_GAP) != propertyDefault(P_ID::TOP_GAP))
-            xml.tag("topGap", _topGap / spatium());
-      if (getProperty(P_ID::BOTTOM_GAP) != propertyDefault(P_ID::BOTTOM_GAP))
-            xml.tag("bottomGap", _bottomGap / spatium());
+      writeProperty(xml, P_ID::TOP_GAP);
+      writeProperty(xml, P_ID::BOTTOM_GAP);
       writeProperty(xml, P_ID::LEFT_MARGIN);
       writeProperty(xml, P_ID::RIGHT_MARGIN);
       writeProperty(xml, P_ID::TOP_MARGIN);
