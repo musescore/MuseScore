@@ -105,7 +105,7 @@ SelectionWindow::SelectionWindow(QWidget *parent, Score* score) :
 
 void SelectionWindow::retranslate()
       {
-      setWindowTitle(tr("Selection"));
+      setWindowTitle(tr("Selection Filter"));
       _listWidget->retranslate();
       }
 
