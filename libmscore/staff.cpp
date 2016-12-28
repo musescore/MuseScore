@@ -262,7 +262,7 @@ int Staff::nextClefTick(int tick) const
 
 void Staff::dumpClefs(const char* title) const
       {
-      qDebug("dump clefs (%zd): %s", clefs.size(), title);
+      qDebug("(%zd): %s", clefs.size(), title);
       for (auto& i : clefs) {
             qDebug("  %d: %d %d", i.first, int(i.second._concertClef), int(i.second._transposingClef));
             }
@@ -274,7 +274,7 @@ void Staff::dumpClefs(const char* title) const
 
 void Staff::dumpKeys(const char* title) const
       {
-      qDebug("dump keys (%zd): %s", _keys.size(), title);
+      qDebug("(%zd): %s", _keys.size(), title);
       for (auto& i : _keys) {
             qDebug("  %d: %d", i.first, int(i.second.key()));
             }
@@ -286,7 +286,7 @@ void Staff::dumpKeys(const char* title) const
 
 void Staff::dumpTimeSigs(const char* title) const
       {
-      qDebug("dump timesig size (%zd) staffIdx %d: %s", timesigs.size(), idx(), title);
+      qDebug("size (%zd) staffIdx %d: %s", timesigs.size(), idx(), title);
       for (auto& i : timesigs) {
             qDebug("  %d: %d/%d", i.first, i.second->sig().numerator(), i.second->sig().denominator());
             }
@@ -1190,7 +1190,7 @@ QVariant Staff::getProperty(P_ID id) const
             case P_ID::STAFF_USERDIST:
                   return userDist();
             default:
-                  qDebug("Staff::getProperty: unhandled id %d", int(id));
+                  qDebug("unhandled id %d", int(id));
                   return QVariant();
             }
       }
@@ -1230,7 +1230,7 @@ bool Staff::setProperty(P_ID id, const QVariant& v)
                   setUserDist(v.toReal());
                   break;
             default:
-                  qDebug("Staff::setProperty: unhandled id %d", int(id));
+                  qDebug("unhandled id %d", int(id));
                   break;
             }
       score()->setLayoutAll();
@@ -1259,6 +1259,7 @@ QVariant Staff::propertyDefault(P_ID id) const
             case P_ID::STAFF_USERDIST:
                   return qreal(0.0);
             default:
+                  qDebug("unhandled id %d", int(id));
                   return QVariant();
             }
       }

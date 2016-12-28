@@ -213,7 +213,7 @@
         </property>
        </widget>
       </item>
-      <item row="7" column="0" colspan="3">
+      <item row="8" column="0" colspan="3">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QPushButton" name="presetShort1">
@@ -231,7 +231,7 @@
         </item>
        </layout>
       </item>
-      <item row="6" column="0" colspan="3">
+      <item row="7" column="0" colspan="3">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QPushButton" name="presetDefault">
@@ -256,7 +256,7 @@
         </item>
        </layout>
       </item>
-      <item row="5" column="0" colspan="3">
+      <item row="6" column="0" colspan="3">
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>Span presets:</string>
@@ -270,6 +270,13 @@
        <widget class="QCheckBox" name="span">
         <property name="text">
          <string>Span to next staff</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0" colspan="3">
+       <widget class="QPushButton" name="setAsStaffDefault">
+        <property name="text">
+         <string>Set as staff default</string>
         </property>
        </widget>
       </item>
