@@ -220,9 +220,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QFrame* importmidiShowPanel;
       QSplitter* mainWindow;
 
-      QMenu* menuView;
-      QMenu* openRecent;
-
       MagBox* mag;
       QComboBox* viewModeCombo;
       QAction* playId;
@@ -247,7 +244,10 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       SelectionWindow* selectionWindow     { 0 };
 
       QMenu* _fileMenu;
+      QMenu* openRecent;
       QMenu* menuEdit;
+      QMenu* menuView;
+      QMenu* menuToolbars;
       QMenu* menuNotes;
       QMenu* menuLayout;
       QMenu* menuStyle;
