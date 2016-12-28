@@ -1190,14 +1190,13 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
             { P_ID::BARLINE_SPAN_FROM, 0, 0, b.spanFrom, b.resetSpanFrom },
             { P_ID::BARLINE_SPAN_TO,   0, 0, b.spanTo,   b.resetSpanTo   },
             };
-#if 0
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel },
             { b.title, b.panel }
             };
-#endif
-//      mapSignals(il, ppList);
-      mapSignals(il);
+
+      mapSignals(il, ppList);
+
 #if 0
       // when any of the span parameters is changed, span data need to be managed
       connect(b.span,          SIGNAL(valueChanged(int)), SLOT(manageSpanData()));
