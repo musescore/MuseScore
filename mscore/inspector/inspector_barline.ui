@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>260</width>
-    <height>250</height>
+    <width>245</width>
+    <height>198</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -91,6 +91,9 @@
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
         </property>
+        <property name="buddy">
+         <cstring>type</cstring>
+        </property>
        </widget>
       </item>
       <item row="0" column="2">
@@ -99,7 +102,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Type' value</string>
+         <string>Reset 'Style' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -118,6 +121,9 @@
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
         </property>
+        <property name="buddy">
+         <cstring>spanFrom</cstring>
+        </property>
        </widget>
       </item>
       <item row="1" column="0">
@@ -127,6 +133,9 @@
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
+        </property>
+        <property name="buddy">
+         <cstring>span</cstring>
         </property>
        </widget>
       </item>
@@ -169,7 +178,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Span' value</string>
+         <string>Reset 'Spanned staves' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -187,6 +196,9 @@
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
+        </property>
+        <property name="buddy">
+         <cstring>spanTo</cstring>
         </property>
        </widget>
       </item>
