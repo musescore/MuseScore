@@ -392,6 +392,7 @@ class InspectorBarLine : public InspectorElementBase {
       void presetTick2Clicked();
       void presetShort1Clicked();
       void presetShort2Clicked();
+      void setAsStaffDefault();
 
    public:
       InspectorBarLine(QWidget* parent);

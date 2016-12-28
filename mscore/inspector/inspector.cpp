@@ -1208,6 +1208,26 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
       connect(b.presetTick2,   SIGNAL(clicked()),         SLOT(presetTick2Clicked()));
       connect(b.presetShort1,  SIGNAL(clicked()),         SLOT(presetShort1Clicked()));
       connect(b.presetShort2,  SIGNAL(clicked()),         SLOT(presetShort2Clicked()));
+
+      connect(b.setAsStaffDefault, SIGNAL(clicked()),     SLOT(setAsStaffDefault()));
+      }
+
+//---------------------------------------------------------
+//   setAsStaffDefault
+//---------------------------------------------------------
+
+void InspectorBarLine::setAsStaffDefault()
+      {
+      BarLine* bl = toBarLine(inspector->element());
+      Staff* staff = bl->staff();
+      Score* score = bl->score();
+      score->startCmd();
+      staff->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN,      bl->getProperty(P_ID::BARLINE_SPAN));
+      staff->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN_FROM, bl->getProperty(P_ID::BARLINE_SPAN_FROM));
+      staff->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN_TO,   bl->getProperty(P_ID::BARLINE_SPAN_TO));
+      if (bl->barLineType() == BarLineType::NORMAL)
+            bl->setGenerated(true);
+      score->endCmd();
       }
 
 //---------------------------------------------------------
@@ -1267,7 +1287,6 @@ void InspectorBarLine::presetDefaultClicked()
       bl->undoResetProperty(P_ID::BARLINE_SPAN_TO);
 
       score->endCmd();
-      mscore->endCmd();
       }
 
 //---------------------------------------------------------
@@ -1285,7 +1304,6 @@ void InspectorBarLine::presetTick1Clicked()
       bl->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   BARLINE_SPAN_TICK1_TO);
 
       score->endCmd();
-      mscore->endCmd();
       }
 
 //---------------------------------------------------------
@@ -1303,7 +1321,6 @@ void InspectorBarLine::presetTick2Clicked()
       bl->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   BARLINE_SPAN_TICK2_TO);
 
       score->endCmd();
-      mscore->endCmd();
       }
 
 //---------------------------------------------------------
@@ -1322,7 +1339,6 @@ void InspectorBarLine::presetShort1Clicked()
       bl->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   BARLINE_SPAN_SHORT1_TO + shortDelta);
 
       score->endCmd();
-      mscore->endCmd();
       }
 
 //---------------------------------------------------------
@@ -1341,7 +1357,6 @@ void InspectorBarLine::presetShort2Clicked()
       bl->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   BARLINE_SPAN_SHORT2_TO + shortDelta);
 
       score->endCmd();
-      mscore->endCmd();
       }
 
 //---------------------------------------------------------

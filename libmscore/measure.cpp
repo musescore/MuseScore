@@ -3231,7 +3231,14 @@ void Measure::barLinesSetSpan(Segment* seg)
       int track = 0;
       for (Staff* staff : score()->staves()) {
             BarLine* bl = toBarLine(seg->element(track));  // get existing bar line for this staff, if any
-            if (!bl) {
+            if (bl) {
+                  if (bl->generated()) {
+                        bl->setSpanStaff(staff->barLineSpan());
+                        bl->setSpanFrom(staff->barLineFrom());
+                        bl->setSpanTo(staff->barLineTo());
+                        }
+                  }
+            else {
                   bl = new BarLine(score());
                   bl->setParent(seg);
                   bl->setTrack(track);
@@ -3323,8 +3330,8 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
                   int track = staffIdx * VOICES;
                   BarLine* bl = toBarLine(seg->element(track));
+                  Staff* staff = score()->staff(staffIdx);
                   if (!bl) {
-                        Staff* staff = score()->staff(staffIdx);
                         bl = new BarLine(score());
                         bl->setParent(seg);
                         bl->setTrack(track);
@@ -3340,16 +3347,25 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                         // do not change bar line type if bar line is user modified
                         // and its not a repeat start/end barline (forced)
 
-                        if (bl->barLineType() != t) {
-                              if (bl->generated() || bl->barLineType() == BarLineType::UNKNOWN)
-                                    bl->setBarLineType(t);
-                              else {
-                                    if (force) {
-                                          bl->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(t));
-                                          bl->setGenerated(true);
-                                          }
-                                    }
+                        if (bl->generated()) {
+                              bl->setSpanStaff(staff->barLineSpan());
+                              bl->setSpanFrom(staff->barLineFrom());
+                              bl->setSpanTo(staff->barLineTo());
+                              bl->setBarLineType(t);
                               bl->layout();
+                              }
+                        else {
+                              if (bl->barLineType() != t) {
+                                    if (bl->barLineType() == BarLineType::UNKNOWN)
+                                          bl->setBarLineType(t);
+                                    else {
+                                          if (force) {
+                                                bl->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(t));
+                                                bl->setGenerated(true);
+                                                }
+                                          }
+                                    bl->layout();
+                                    }
                               }
                         }
                   }
