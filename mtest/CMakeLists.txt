@@ -182,7 +182,7 @@ subdirs (
         libmscore/links
         libmscore/parts
         libmscore/measure
-        libmscore/midi                 # one disabled
+#        libmscore/midi                 # one disabled
         libmscore/midimapping
         libmscore/note
         libmscore/repeat
@@ -201,9 +201,9 @@ subdirs (
         capella
         biab
         musicxml
-        guitarpro
+#        guitarpro
         scripting
-        testoves
+#        testoves
         zerberus/comments
         zerberus/envelopes
         zerberus/includes

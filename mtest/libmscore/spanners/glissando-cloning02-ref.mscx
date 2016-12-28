@@ -153,11 +153,6 @@
           <durationType>measure</durationType>
           <duration>2/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          <lid>9</lid>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -313,11 +308,6 @@
             <durationType>measure</durationType>
             <duration>2/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            <lid>9</lid>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Flute</name>

@@ -78,7 +78,13 @@ void ScoreElement::undoPushProperty(P_ID id)
 
 void ScoreElement::writeProperty(XmlWriter& xml, P_ID id) const
       {
-      xml.tag(id, getProperty(id), propertyDefault(id));
+      if (propertyType(id) == P_TYPE::SP_REAL) {
+            qreal _spatium = score()->spatium();
+                  xml.tag(id, QVariant(getProperty(id).toReal()/_spatium),
+                     QVariant(propertyDefault(id).toReal()/_spatium));
+            }
+      else
+            xml.tag(id, getProperty(id), propertyDefault(id));
       }
 
 //---------------------------------------------------------

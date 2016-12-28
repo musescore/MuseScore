@@ -91,7 +91,6 @@ void TestKeySig::keysig()
             s = s->next();
       Element* e = s->element(0);
       score->startCmd();
-printf("****** undoRemove %s\n", e->name());
       score->undoRemoveElement(e);
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile3, reference3));
@@ -120,7 +119,6 @@ printf("****** undoRemove %s\n", e->name());
 void TestKeySig::keysig_78216()
       {
       MasterScore* score = readScore(DIR + "keysig_78216.mscx");
-      score->doLayout();
 
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();
@@ -135,7 +133,6 @@ void TestKeySig::keysig_78216()
 void TestKeySig::concertPitch()
       {
       MasterScore* score = readScore(DIR + "concert-pitch.mscx");
-      score->doLayout();
       score->cmdConcertPitchChanged(true, true);
       QVERIFY(saveCompareScore(score, "concert-pitch-01-test.mscx", DIR + "concert-pitch-01-ref.mscx"));
       score->cmdConcertPitchChanged(false, true);

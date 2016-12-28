@@ -49,7 +49,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
@@ -108,8 +107,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          </BarLine>
         </Measure>
       <Measure number="1">
         <LayoutBreak>
@@ -124,9 +121,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          </BarLine>
         </Measure>
       <Measure number="1">
         <LayoutBreak>
@@ -144,9 +138,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          </BarLine>
         </Measure>
       <Measure number="1">
         <LayoutBreak>
@@ -161,9 +152,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          </BarLine>
         </Measure>
       <Measure number="1">
         <LayoutBreak>
@@ -181,9 +169,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          </BarLine>
         </Measure>
       <Measure number="1">
         <TimeSig>
@@ -195,8 +180,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          </BarLine>
         </Measure>
       </Staff>
     </Score>

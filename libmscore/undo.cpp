@@ -2280,33 +2280,6 @@ void ChangeMeasureLen::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeBarLineSpan
-//---------------------------------------------------------
-
-ChangeBarLineSpan::ChangeBarLineSpan(Staff* _staff, int _span, int _spanFrom, int _spanTo)
-      {
-      staff       = _staff;
-      span        = _span;
-      spanFrom    = _spanFrom;
-      spanTo      = _spanTo;
-      }
-
-void ChangeBarLineSpan::flip()
-      {
-      int nspan         = staff->barLineSpan();
-      int nspanFrom     = staff->barLineFrom();
-      int nspanTo       = staff->barLineTo();
-      staff->setBarLineSpan(span);
-      staff->setBarLineFrom(spanFrom);
-      staff->setBarLineTo(spanTo);
-      span        = nspan;
-      spanFrom    = nspanFrom;
-      spanTo      = nspanTo;
-      // all bar lines of this staff across the whole score needs to be re-laid out and re-drawn
-      staff->score()->setLayoutAll();
-      }
-
-//---------------------------------------------------------
 //   TransposeHarmony
 //---------------------------------------------------------
 

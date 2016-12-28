@@ -242,8 +242,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          </BarLine>
         </Measure>
       <Measure number="1">
         <TimeSig>
@@ -408,8 +406,6 @@
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          </BarLine>
         </Measure>
       </Staff>
     </Score>

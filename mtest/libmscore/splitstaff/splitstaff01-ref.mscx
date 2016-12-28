@@ -149,7 +149,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
@@ -232,7 +231,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>

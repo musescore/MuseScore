@@ -103,7 +103,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="2">
@@ -123,7 +122,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="3">
@@ -143,7 +141,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="4">
@@ -163,7 +160,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="5">
@@ -183,7 +179,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="6">
@@ -203,7 +198,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="7">
@@ -223,7 +217,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="8">
@@ -243,7 +236,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="9">
@@ -263,7 +255,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="10">
@@ -283,7 +274,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="11">
@@ -303,7 +293,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="12">
@@ -323,7 +312,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="13">
@@ -343,7 +331,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="14">
@@ -363,7 +350,6 @@
           </Chord>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="15">

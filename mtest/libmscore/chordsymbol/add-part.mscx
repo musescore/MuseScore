@@ -113,11 +113,6 @@
           <lid>4</lid>
           <durationType>half</durationType>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          <lid>5</lid>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -235,11 +230,6 @@
             <lid>4</lid>
             <durationType>half</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            <lid>5</lid>
-            </BarLine>
           </Measure>
         </Staff>
       <name>Classical Guitar</name>

@@ -380,38 +380,6 @@ class ChangeElement : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeBarLineSpan
-//---------------------------------------------------------
-
-class ChangeBarLineSpan : public UndoCommand {
-      Staff* staff;
-      int span;
-      int spanFrom;
-      int spanTo;
-      void flip();
-
-   public:
-      ChangeBarLineSpan(Staff*, int span, int spanFrom, int spanTo);
-      UNDO_NAME("ChangeBarLineSpan")
-      };
-
-//---------------------------------------------------------
-//   ChangeSingleBarLineSpan
-//---------------------------------------------------------
-
-class ChangeSingleBarLineSpan : public UndoCommand {
-      BarLine* barLine;
-      int span;
-      int spanFrom;
-      int spanTo;
-      void flip();
-
-   public:
-      ChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom, int spanTo);
-      UNDO_NAME("ChangeSingleBarLineSpan")
-      };
-
-//---------------------------------------------------------
 //   TransposeHarmony
 //---------------------------------------------------------
 

@@ -84,6 +84,8 @@ class BarLine : public Element {
 
    public:
       BarLine(Score* s = 0);
+      virtual ~BarLine();
+      BarLine(const BarLine&);
       BarLine &operator=(const BarLine&) = delete;
 
       virtual BarLine* clone() const override     { return new BarLine(*this); }

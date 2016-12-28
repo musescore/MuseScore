@@ -133,6 +133,25 @@ BarLine::BarLine(Score* s)
       setHeight(4 * spatium()); // for use in palettes
       }
 
+BarLine::BarLine(const BarLine& bl)
+   : Element(bl)
+      {
+      _spanStaff   = bl._spanStaff;
+      _spanFrom    = bl._spanFrom;
+      _spanTo      = bl._spanTo;
+      _barLineType = bl._barLineType;
+      y1           = bl.y1;
+      y2           = bl.y2;
+
+      for (Element* e : bl._el)
+            _el.push_back(e->clone());
+      }
+
+BarLine::~BarLine()
+      {
+      qDeleteAll(_el);
+      }
+
 //---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
@@ -194,10 +213,11 @@ void BarLine::getY() const
       int nstaves     = score()->nstaves();
       bool spanStaves = false;
 
+      Measure* measure = segment()->measure();
       if (_spanStaff) {
             for (int i2 = staffIdx1 + 1; i2 < nstaves; ++i2)  {
                   Staff* s = score()->staff(i2);
-                  if (!s->invisible() && s->part()->show()) {
+                  if (!s->invisible() && s->part()->show() && measure->visible(i2)) {
                         spanStaves = true;
                         staffIdx2  = i2;
                         break;
@@ -208,8 +228,7 @@ void BarLine::getY() const
                   }
             }
 
-      Measure* measure  = segment()->measure();
-      System* system    = measure->system();
+      System* system   = measure->system();
       if (!system)
             return;
 
@@ -492,6 +511,7 @@ void BarLine::write(XmlWriter& xml) const
 
 void BarLine::read(XmlReader& e)
       {
+      resetProperty(P_ID::BARLINE_TYPE);
       resetProperty(P_ID::BARLINE_SPAN);
       resetProperty(P_ID::BARLINE_SPAN_FROM);
       resetProperty(P_ID::BARLINE_SPAN_TO);

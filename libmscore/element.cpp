@@ -1438,6 +1438,7 @@ void Element::undoChangeProperty(P_ID id, const QVariant& v, PropertyStyle ps)
 
 //---------------------------------------------------------
 //   resetProperty
+//    set property to default value
 //---------------------------------------------------------
 
 void Element::resetProperty(P_ID id)

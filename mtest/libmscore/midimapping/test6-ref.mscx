@@ -228,7 +228,7 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="1" span="2"/>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="5">
         <StaffType group="pitched">
@@ -236,7 +236,6 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         <bracket type="-1" span="0"/>
-        <barLineSpan>0</barLineSpan>
         </Staff>
       <trackName>Harpsichord</trackName>
       <Instrument>
@@ -636,7 +635,7 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="1" span="2"/>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="10">
         <StaffType group="pitched">
@@ -644,7 +643,6 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         <bracket type="-1" span="0"/>
-        <barLineSpan>0</barLineSpan>
         </Staff>
       <trackName>Reed Organ</trackName>
       <Instrument>
@@ -856,7 +854,7 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="1" span="2"/>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="15">
         <StaffType group="pitched">
@@ -864,7 +862,6 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         <bracket type="-1" span="0"/>
-        <barLineSpan>0</barLineSpan>
         </Staff>
       <trackName>Virginal</trackName>
       <Instrument>
@@ -980,7 +977,7 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="1" span="2"/>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="18">
         <StaffType group="pitched">
@@ -988,7 +985,6 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         <bracket type="-1" span="0"/>
-        <barLineSpan>0</barLineSpan>
         </Staff>
       <trackName>Harp</trackName>
       <Instrument>
@@ -1133,10 +1129,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="2">
@@ -1180,10 +1172,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="3">
@@ -1227,10 +1215,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="4">
@@ -1271,10 +1255,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>2</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="5">
@@ -1350,10 +1330,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="7">
@@ -1385,10 +1361,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="8">
@@ -1420,10 +1392,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="9">
@@ -1464,10 +1432,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>2</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="10">
@@ -1548,10 +1512,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="12">
@@ -1592,10 +1552,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="13">
@@ -1639,10 +1595,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="14">
@@ -1689,10 +1641,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>2</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="15">
@@ -1767,10 +1715,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="17">
@@ -1811,10 +1755,6 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>2</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="18">
@@ -1889,10 +1829,6 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     </Score>
