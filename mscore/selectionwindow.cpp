@@ -57,7 +57,7 @@ void SelectionListWidget::focusInEvent(QFocusEvent* e) {
       }
 
 SelectionWindow::SelectionWindow(QWidget *parent, Score* score) :
-      QDockWidget(tr("Selection"),parent)
+      QDockWidget(tr("Selection Filter"),parent)
       {
       setObjectName("selection-window");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
