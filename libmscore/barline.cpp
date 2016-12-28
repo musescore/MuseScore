@@ -349,6 +349,11 @@ void BarLine::draw(QPainter* painter) const
       painter->setPen(pen);
 
       switch (barLineType()) {
+            case BarLineType::UNKNOWN:
+            case BarLineType::NORMAL:
+                  painter->drawLine(QLineF(lw, y1, lw, y2));
+                  break;
+
             case BarLineType::BROKEN:
                   pen.setStyle(Qt::DashLine);
                   painter->setPen(pen);
@@ -358,10 +363,6 @@ void BarLine::draw(QPainter* painter) const
             case BarLineType::DOTTED:
                   pen.setStyle(Qt::DotLine);
                   painter->setPen(pen);
-
-            case BarLineType::NORMAL:
-                  painter->drawLine(QLineF(lw, y1, lw, y2));
-                  break;
 
             case BarLineType::END:
                   {
@@ -511,7 +512,7 @@ void BarLine::write(XmlWriter& xml) const
 
 void BarLine::read(XmlReader& e)
       {
-      resetProperty(P_ID::BARLINE_TYPE);
+//      resetProperty(P_ID::BARLINE_TYPE);
       resetProperty(P_ID::BARLINE_SPAN);
       resetProperty(P_ID::BARLINE_SPAN_FROM);
       resetProperty(P_ID::BARLINE_SPAN_TO);
@@ -965,9 +966,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
             case BarLineType::BROKEN:
             case BarLineType::NORMAL:
             case BarLineType::DOTTED:
-                  break;
-            default:
-                  qDebug("illegal barline type %d", int(type));
+            case BarLineType::UNKNOWN:
                   break;
             }
       return dw;

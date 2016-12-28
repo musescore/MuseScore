@@ -62,7 +62,7 @@ class BarLine : public Element {
       char _spanStaff         { false };       // span barline to next staff if true
       char _spanFrom          { 0 };           // line number on start and end staves
       char _spanTo            { 0 };
-      BarLineType _barLineType { BarLineType::NORMAL };
+      BarLineType _barLineType { BarLineType::UNKNOWN };
       mutable qreal y1;
       mutable qreal y2;
       ElementList _el;        ///< fermata or other articulations

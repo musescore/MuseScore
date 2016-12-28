@@ -371,6 +371,7 @@ MS_QML_ENUM(TextStyleType, signed char,\
 //---------------------------------------------------------
 
 MS_QML_ENUM(BarLineType, int,\
+      UNKNOWN          = 0,
       NORMAL           = 1,\
       DOUBLE           = 2,\
       START_REPEAT     = 4,\
