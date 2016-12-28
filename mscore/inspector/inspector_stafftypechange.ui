@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>333</width>
-    <height>412</height>
+    <width>199</width>
+    <height>323</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -385,7 +385,7 @@
         <string>Scale:</string>
        </property>
        <property name="buddy">
-        <cstring>lines</cstring>
+        <cstring>scale</cstring>
        </property>
       </widget>
      </item>
@@ -418,7 +418,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Lines' value</string>
+        <string>Reset 'Scale' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -435,7 +435,7 @@
         <string>Offset Y:</string>
        </property>
        <property name="buddy">
-        <cstring>lineDistance</cstring>
+        <cstring>yoffset</cstring>
        </property>
       </widget>
      </item>
@@ -445,7 +445,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Lines' value</string>
+        <string>Reset Small' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -459,7 +459,7 @@
      <item row="2" column="0" colspan="2">
       <widget class="QCheckBox" name="small">
        <property name="text">
-        <string>small</string>
+        <string>Small</string>
        </property>
       </widget>
      </item>
@@ -491,7 +491,7 @@
         <string>Reset to default</string>
        </property>
        <property name="accessibleName">
-        <string>Reset 'Lines' value</string>
+        <string>Reset 'Offset Y' value</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -507,6 +507,12 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>yoffset</tabstop>
+  <tabstop>resetYoffset</tabstop>
+  <tabstop>small</tabstop>
+  <tabstop>resetSmall</tabstop>
+  <tabstop>scale</tabstop>
+  <tabstop>resetScale</tabstop>
   <tabstop>lines</tabstop>
   <tabstop>resetLines</tabstop>
   <tabstop>lineDistance</tabstop>
@@ -527,6 +533,7 @@
   <tabstop>resetGenTimesig</tabstop>
   <tabstop>genKeysig</tabstop>
   <tabstop>resetGenKeysig</tabstop>
+  <tabstop>title</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
