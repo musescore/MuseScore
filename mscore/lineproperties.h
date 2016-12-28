@@ -40,6 +40,8 @@ class LineProperties : public QDialog, public Ui::LinePropertiesDialog {
       TextLine* otl;    // original text line
       TextLine* tl;     // cloned original text line to record changes in Text elements
 
+      virtual void hideEvent(QHideEvent*);
+
    private slots:
       virtual void accept();
       void beginTextProperties();

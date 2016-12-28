@@ -36,6 +36,7 @@ void MuseScore::showLoginDialog()
 LoginDialog::LoginDialog(LoginManager* loginManager)
  : QDialog(0)
       {
+      setObjectName("LoginDialog");
       setupUi(this);
       setStyleSheet("QLineEdit { "
             "padding: 8px 8px;"
@@ -52,6 +53,8 @@ LoginDialog::LoginDialog(LoginManager* loginManager)
                                    .arg("</a>"));
       connect(_loginManager, SIGNAL(loginSuccess()), this, SLOT(onLoginSuccess()));
       connect(_loginManager, SIGNAL(loginError(const QString&)), this, SLOT(onLoginError(const QString&)));
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -98,5 +101,15 @@ void LoginDialog::onLoginSuccess()
       setVisible(false);
       }
       
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void LoginDialog::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QDialog::hideEvent(event);
+      }
+
 }
 

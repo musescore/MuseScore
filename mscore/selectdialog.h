@@ -36,6 +36,7 @@ class SelectDialog : public QDialog, Ui::SelectDialog {
       Q_OBJECT
       const Element* e;
 
+      virtual void hideEvent(QHideEvent*);
    public:
       SelectDialog(const Element* e, QWidget* parent);
       void setPattern(ElementPattern* p);

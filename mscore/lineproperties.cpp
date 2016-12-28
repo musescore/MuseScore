@@ -22,6 +22,7 @@
 #include "preferences.h"
 #include "libmscore/sym.h"
 #include "libmscore/text.h"
+#include "musescore.h"
 
 namespace Ms {
 
@@ -49,6 +50,7 @@ static void setTextPlace(PlaceText place, QComboBox* cb)
 LineProperties::LineProperties(TextLine* l, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("LineProperties");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       otl = l;
@@ -74,6 +76,8 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
       connect(beginTextTb, SIGNAL(clicked()),    SLOT(beginTextProperties()));
       connect(continueTextTb, SIGNAL(clicked()), SLOT(continueTextProperties()));
       connect(endTextTb, SIGNAL(clicked()),      SLOT(endTextProperties()));
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -212,6 +216,16 @@ void LineProperties::endTextProperties()
       tl->createEndTextElement();
       TextProperties t(tl->endTextElement(), this);
       t.exec();
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void LineProperties::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QDialog::hideEvent(event);
       }
 }
 

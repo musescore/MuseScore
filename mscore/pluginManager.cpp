@@ -17,8 +17,6 @@
 
 namespace Ms {
 
-extern bool useFactorySettings;
-
 //---------------------------------------------------------
 //   PluginManager
 //---------------------------------------------------------
@@ -26,6 +24,7 @@ extern bool useFactorySettings;
 PluginManager::PluginManager(QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("PluginManager");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       connect(definePluginShortcut, SIGNAL(clicked()), SLOT(definePluginShortcutClicked()));
@@ -201,10 +200,7 @@ void PluginManager::clearPluginShortcutClicked()
 
 void PluginManager::writeSettings()
       {
-      QSettings settings;
-      settings.beginGroup("PluginManager");
-      settings.setValue("geometry", saveGeometry());
-      settings.endGroup();
+      MuseScore::saveGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -213,12 +209,7 @@ void PluginManager::writeSettings()
 
 void PluginManager::readSettings()
       {
-      if (!useFactorySettings) {
-            QSettings settings;
-            settings.beginGroup("PluginManager");
-            restoreGeometry(settings.value("geometry").toByteArray());
-            settings.endGroup();
-            }
+      MuseScore::restoreGeometry(this);
       }
 
 }

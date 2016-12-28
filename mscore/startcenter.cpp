@@ -28,7 +28,7 @@ void MuseScore::showStartcenter(bool val)
       if (val && startcenter == nullptr) {
             startcenter = new Startcenter;
             startcenter->addAction(a);
-            startcenter->readSettings(settings);
+            startcenter->readSettings();
             connect(startcenter, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             connect(startcenter, SIGNAL(rejected()), a, SLOT(toggle()));
             }
@@ -42,6 +42,7 @@ void MuseScore::showStartcenter(bool val)
 Startcenter::Startcenter()
  : QDialog(0)
       {
+      setObjectName("Startcenter");
       setupUi(this);
       setBackgroundRole(QPalette::Base);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -135,24 +136,18 @@ void Startcenter::openScoreClicked()
 //   writeSettings
 //---------------------------------------------------------
 
-void Startcenter::writeSettings(QSettings& settings)
+void Startcenter::writeSettings()
       {
-      settings.beginGroup("Startcenter");
-      settings.setValue("size", size());
-      settings.setValue("pos", pos());
-      settings.endGroup();
+      MuseScore::saveGeometry(this);
       }
 
 //---------------------------------------------------------
 //   readSettings
 //---------------------------------------------------------
 
-void Startcenter::readSettings(QSettings& settings)
+void Startcenter::readSettings()
       {
-      settings.beginGroup("Startcenter");
-      resize(settings.value("size", QSize(720, 570)).toSize());
-      move(settings.value("pos", QPoint(200, 100)).toPoint());
-      settings.endGroup();
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------

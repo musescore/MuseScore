@@ -20,6 +20,7 @@
 
 #include "editstringdata.h"
 #include "editpitch.h"
+#include "musescore.h"
 
 namespace Ms {
 
@@ -31,6 +32,7 @@ namespace Ms {
 EditStringData::EditStringData(QWidget *parent, QList<instrString> * strings, int * frets)
    : QDialog(parent)
       {
+      setObjectName("EditStringData");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       _strings = strings;
@@ -73,11 +75,23 @@ EditStringData::EditStringData(QWidget *parent, QList<instrString> * strings, in
       connect(stringList,   SIGNAL(doubleClicked(QModelIndex)),     SLOT(editStringClicked()));
       connect(stringList,   SIGNAL(itemClicked(QTableWidgetItem*)), SLOT(listItemClicked(QTableWidgetItem *)));
       _modified = false;
+
+      MuseScore::restoreGeometry(this);
       }
 
 EditStringData::~EditStringData()
 {
 }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void EditStringData::hideEvent(QHideEvent* ev)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(ev);
+      }
 
 //---------------------------------------------------------
 //   deleteStringClicked

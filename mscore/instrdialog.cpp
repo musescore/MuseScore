@@ -37,8 +37,6 @@
 
 namespace Ms {
 
-extern bool useFactorySettings;
-
 //---------------------------------------------------------
 //   InstrumentsDialog
 //---------------------------------------------------------
@@ -46,20 +44,14 @@ extern bool useFactorySettings;
 InstrumentsDialog::InstrumentsDialog(QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("Instruments");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QAction* a = getAction("instruments");
       connect(a, SIGNAL(triggered()), SLOT(reject()));
       addAction(a);
 
-      if (!useFactorySettings) {
-            QSettings settings;
-            settings.beginGroup("Instruments");
-            resize(settings.value("size", QSize(800, 500)).toSize());
-            move(settings.value("pos", QPoint(10, 10)).toPoint());
-            settings.endGroup();
-            }
-
+      readSettings();
       }
 
 //---------------------------------------------------------
@@ -144,11 +136,16 @@ void InstrumentsDialog::on_loadButton_clicked()
 
 void InstrumentsDialog::writeSettings()
       {
-      QSettings settings;
-      settings.beginGroup("Instruments");
-      settings.setValue("size", size());
-      settings.setValue("pos", pos());
-      settings.endGroup();
+      MuseScore::saveGeometry(this);
+      }
+
+//---------------------------------------------------------
+//   readSettings
+//---------------------------------------------------------
+
+void InstrumentsDialog::readSettings()
+      {
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------

@@ -42,6 +42,7 @@ class StaffTextProperties : public QDialog, public Ui::StaffTextProperties {
       int curTabIndex;
       void saveChannel(int channel);
 
+      virtual void hideEvent(QHideEvent*);
    private slots:
       void saveValues();
       void channelItemChanged(QTreeWidgetItem*, QTreeWidgetItem*);

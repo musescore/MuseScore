@@ -29,8 +29,6 @@
 
 namespace Ms {
 
-extern bool useFactorySettings;
-
 //---------------------------------------------------------
 //   PartEdit
 //---------------------------------------------------------
@@ -99,6 +97,7 @@ void PartEdit::setPart(Part* p, Channel* a)
 Mixer::Mixer(QWidget* parent)
    : QScrollArea(parent)
       {
+      setObjectName("Mixer");
       setWindowTitle(tr("MuseScore: Mixer"));
       setWidgetResizable(true);
       setWindowFlags(Qt::Tool);
@@ -112,13 +111,7 @@ Mixer::Mixer(QWidget* parent)
       setWidget(area);
 
       enablePlay = new EnablePlayForWidget(this);
-      if (!useFactorySettings) {
-            QSettings settings;
-            settings.beginGroup("Mixer");
-            resize(settings.value("size", QSize(484, 184)).toSize());
-            move(settings.value("pos", QPoint(10, 10)).toPoint());
-            settings.endGroup();
-            }
+      readSettings();
       }
 
 //---------------------------------------------------------
@@ -435,11 +428,17 @@ void Mixer::updateSolo(bool val)
 
 void Mixer::writeSettings()
       {
-      QSettings settings;
-      settings.beginGroup("Mixer");
-      settings.setValue("size", size());
-      settings.setValue("pos", pos());
-      settings.endGroup();
+      MuseScore::saveGeometry(this);
+      }
+
+//---------------------------------------------------------
+//   readSettings
+//---------------------------------------------------------
+
+void Mixer::readSettings()
+      {
+      resize(QSize(480, 600)); //ensure default size if no geometry in settings
+      MuseScore::restoreGeometry(this);
       }
 }
 

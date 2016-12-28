@@ -33,6 +33,7 @@ namespace Ms {
 class TupletDialog : public QDialog, Ui::TupletDialog {
       Q_OBJECT
 
+      virtual void hideEvent(QHideEvent*);
    public:
       TupletDialog(QWidget* parent = 0);
       void setupTuplet(Tuplet* tuplet);

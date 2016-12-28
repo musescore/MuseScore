@@ -88,6 +88,7 @@ class Debugger : public QDialog, public Ui::DebuggerBase {
       void updateElement(Element*);
       virtual void showEvent(QShowEvent*);
       void addMeasure(ElementItem* mi, Measure* measure);
+      void readSettings();
 
    protected:
       Score* cs;

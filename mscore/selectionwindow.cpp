@@ -59,12 +59,14 @@ void SelectionListWidget::focusInEvent(QFocusEvent* e) {
 SelectionWindow::SelectionWindow(QWidget *parent, Score* score) :
       QDockWidget(tr("Selection Filter"),parent)
       {
-      setObjectName("selection-window");
+      setObjectName("SelectionWindow");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
       _score = score;
 
       _listWidget = new SelectionListWidget;
       setWidget(_listWidget);
+
+      //?MuseScore::restoreGeometry(this);
 
       updateFilteredElements();
       connect(_listWidget, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(changeCheckbox(QListWidgetItem*)));
@@ -72,10 +74,9 @@ SelectionWindow::SelectionWindow(QWidget *parent, Score* score) :
 
 SelectionWindow::~SelectionWindow()
       {
-      QSettings settings;
-      if (isVisible()) {
-            settings.setValue("selectionWindow/pos", pos());
-            }
+      //if (isVisible()) {
+      //      MuseScore::saveGeometry(this);
+      //      }
       }
 
 //---------------------------------------------------------
@@ -162,8 +163,7 @@ void SelectionWindow::closeEvent(QCloseEvent* ev)
 
 void SelectionWindow::hideEvent(QHideEvent* ev)
       {
-      QSettings settings;
-      settings.setValue("selectionWindow/pos", pos());
+      //MuseScore::saveGeometry(this);
       QWidget::hideEvent(ev);
       }
 

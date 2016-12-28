@@ -59,6 +59,8 @@ const char* noteHeadNames[int(NoteHead::Group::HEAD_GROUPS)] = {
 EditDrumset::EditDrumset(const Drumset* ds, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("EditDrumset");
+
       nDrumset = *ds;
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -84,6 +86,8 @@ EditDrumset::EditDrumset(const Drumset* ds, QWidget* parent)
       connect(shortcut, SIGNAL(currentIndexChanged(int)), SLOT(shortcutChanged()));
       connect(loadButton, SIGNAL(clicked()), SLOT(load()));
       connect(saveButton, SIGNAL(clicked()), SLOT(save()));
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -380,5 +384,16 @@ void EditDrumset::save()
             QMessageBox::critical(this, tr("MuseScore: Write Drumset"), s);
             }
       }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void EditDrumset::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QDialog::hideEvent(event);
+      }
+
 }
 

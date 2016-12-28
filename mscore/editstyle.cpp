@@ -27,7 +27,6 @@
 #include "icons.h"
 #include "musescore.h"
 #include "libmscore/undo.h"
-#include "texteditor.h"
 #include "libmscore/harmony.h"
 #include "libmscore/chordlist.h"
 #include "libmscore/figuredbass.h"
@@ -43,6 +42,7 @@ namespace Ms {
 EditStyle::EditStyle(Score* s, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("EditStyle");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       cs = s;
@@ -302,7 +302,17 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       CR(resetHairpinContinueHeight, StyleIdx::hairpinContHeight);
 #undef CR
       connect(mapper, SIGNAL(mapped(int)), SLOT(resetStyleValue(int)));
-      resize(904, 577); // override designer values
+      MuseScore::restoreGeometry(this);
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void EditStyle::hideEvent(QHideEvent* ev)
+      {
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(ev);
       }
 
 //---------------------------------------------------------

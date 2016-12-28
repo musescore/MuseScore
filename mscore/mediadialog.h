@@ -35,6 +35,8 @@ class MediaDialog : public QDialog, Ui::MediaDialog {
       Q_OBJECT
       Score* score;
 
+      virtual void hideEvent(QHideEvent*);
+
    private slots:
       void addScanPressed();
       void removeScanPressed();

@@ -30,6 +30,7 @@
 #include "libmscore/part.h"
 #include "libmscore/segment.h"
 #include "libmscore/undo.h"
+#include "musescore.h"
 
 namespace Ms {
 
@@ -40,6 +41,7 @@ namespace Ms {
 ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("ArticulationProperties");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -97,6 +99,8 @@ ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent
       anchor->setCurrentIndex(int(articulation->anchor()));
 
       connect(this, SIGNAL(accepted()), SLOT(saveValues()));
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -125,5 +129,15 @@ void ArticulationProperties::saveValues()
             articulation->score()->undo(new ChangeProperty(articulation,
                P_ID::ARTICULATION_ANCHOR, anchor->currentIndex()));
       }
-}
 
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void ArticulationProperties::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QDialog::hideEvent(event);
+      }
+
+}

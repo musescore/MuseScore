@@ -36,6 +36,7 @@ namespace Ms {
 AlbumManager::AlbumManager(QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("AlbumManager");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       up->setIcon(*icons[int(Icons::arrowUp_ICON)]);
@@ -59,6 +60,8 @@ AlbumManager::AlbumManager(QWidget* parent)
       print->setEnabled(false);
       albumName->setEnabled(false);
       createScore->setEnabled(false);
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------
@@ -336,6 +339,16 @@ void MuseScore::showAlbumManager()
       if (albumManager == 0)
             albumManager = new AlbumManager(this);
       albumManager->show();
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void AlbumManager::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QDialog::hideEvent(event);
       }
 }
 

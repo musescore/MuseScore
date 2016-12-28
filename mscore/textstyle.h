@@ -45,6 +45,7 @@ class TextStyleDialog : public QDialog, Ui::TextStyleDialog {
       void applyToAllParts();
       void applyToScore(Score*);
 
+      virtual void hideEvent(QHideEvent*);
    private slots:
       void nameSelected(int);
       void buttonClicked(QAbstractButton*);

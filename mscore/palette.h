@@ -61,7 +61,7 @@ class PaletteProperties : public QDialog, private Ui::PaletteProperties {
 
       Palette* palette;
       virtual void accept();
-
+      virtual void hideEvent(QHideEvent*);
    public:
       PaletteProperties(Palette* p, QWidget* parent = 0);
       };
@@ -75,7 +75,7 @@ class PaletteCellProperties : public QDialog, private Ui::PaletteCellProperties 
 
       PaletteCell* cell;
       virtual void accept();
-
+      virtual void hideEvent(QHideEvent*);
    public:
       PaletteCellProperties(PaletteCell* p, QWidget* parent = 0);
       };

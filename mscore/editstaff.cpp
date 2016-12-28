@@ -37,11 +37,8 @@
 #include "musescore.h"
 #include "seq.h"
 #include "selinstrument.h"
-#include "texteditor.h"
 
 namespace Ms {
-
-extern bool useFactorySettings;
 
 //---------------------------------------------------------
 //   EditStaff
@@ -50,6 +47,7 @@ extern bool useFactorySettings;
 EditStaff::EditStaff(Staff* s, QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("EditStaff");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
@@ -63,13 +61,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       staff = nullptr;
       setStaff(s);
 
-      if (!useFactorySettings) {
-            QSettings settings;
-            settings.beginGroup("EditStaff");
-            resize(settings.value("size", QSize(484, 184)).toSize());
-            move(settings.value("pos", QPoint(10, 10)).toPoint());
-            settings.endGroup();
-            }
+      MuseScore::restoreGeometry(this);
 
       connect(buttonBox,            SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
       connect(changeInstrument,     SIGNAL(clicked()),            SLOT(showInstrumentDialog()));
@@ -135,14 +127,10 @@ void EditStaff::setStaff(Staff* s)
 //   closeEvent
 //---------------------------------------------------------
 
-void EditStaff::closeEvent(QCloseEvent* ev)
+void EditStaff::hideEvent(QHideEvent* ev)
       {
-      QSettings settings;
-      settings.beginGroup("EditStaff");
-      settings.setValue("size", size());
-      settings.setValue("pos", pos());
-      settings.endGroup();
-      QWidget::closeEvent(ev);
+      MuseScore::saveGeometry(this);
+      QWidget::hideEvent(ev);
       }
 
 //---------------------------------------------------------

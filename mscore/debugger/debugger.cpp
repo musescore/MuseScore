@@ -139,6 +139,7 @@ void ElementItem::init()
 Debugger::Debugger(QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("Debugger");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -153,14 +154,7 @@ Debugger::Debugger(QWidget* parent)
       connect(list, SIGNAL(itemCollapsed(QTreeWidgetItem*)), SLOT(itemExpanded(QTreeWidgetItem*)));
 
       list->resizeColumnToContents(0);
-      if (!useFactorySettings) {
-            QSettings settings;
-            settings.beginGroup("Debugger");
-            split->restoreState(settings.value("splitter").toByteArray());
-            resize(settings.value("size", QSize(1000, 500)).toSize());
-            move(settings.value("pos", QPoint(10, 10)).toPoint());
-            settings.endGroup();
-            }
+      readSettings();
       back->setEnabled(false);
       forward->setEnabled(false);
       connect(back,    SIGNAL(clicked()), SLOT(backClicked()));
@@ -214,11 +208,27 @@ void Debugger::layout()
 void Debugger::writeSettings()
       {
       QSettings settings;
-      settings.beginGroup("Debugger");
-      settings.setValue("size", size());
-      settings.setValue("pos", pos());
+      settings.beginGroup(objectName());
       settings.setValue("splitter", split->saveState());
       settings.endGroup();
+
+      MuseScore::saveGeometry(this);
+      }
+
+//---------------------------------------------------------
+//   readSettings
+//---------------------------------------------------------
+
+void Debugger::readSettings()
+      {
+      if (!useFactorySettings) {
+            QSettings settings;
+            settings.beginGroup(objectName());
+            split->restoreState(settings.value("splitter").toByteArray());
+            settings.endGroup();
+            }
+
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------

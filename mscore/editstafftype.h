@@ -34,6 +34,7 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       Staff* staff;
       StaffType staffType;
 
+      virtual void hideEvent(QHideEvent *);
       void blockSignals(bool block);
 
       void setFromDlg();

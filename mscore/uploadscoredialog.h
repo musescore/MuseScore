@@ -29,6 +29,7 @@ class UploadScoreDialog : public QDialog, public Ui::UploadScoreDialog
       LoginManager* _loginManager;
       int _nid;
 
+      virtual void hideEvent(QHideEvent*);
    private slots:
       void buttonBoxClicked(QAbstractButton* button);
       void uploadSuccess(const QString& url);

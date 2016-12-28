@@ -39,8 +39,6 @@
 
 namespace Ms {
 
-extern bool useFactorySettings;
-
 //---------------------------------------------------------
 //   DrumrollEditor
 //---------------------------------------------------------
@@ -48,6 +46,7 @@ extern bool useFactorySettings;
 DrumrollEditor::DrumrollEditor(QWidget* parent)
    : QMainWindow(parent)
       {
+      setObjectName("Drumroll");
       setWindowTitle(QString("MuseScore"));
 //      setIconSize(QSize(preferences.iconWidth, preferences.iconHeight));
 
@@ -166,13 +165,7 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
       addActions(ag->actions());
       connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
 
-      if (!useFactorySettings) {
-            QSettings settings;
-            settings.beginGroup("Drumroll");
-            resize(settings.value("size", QSize(900, 500)).toSize());
-            move(settings.value("pos", QPoint(10, 10)).toPoint());
-            settings.endGroup();
-            }
+      readSettings();
       }
 
 //---------------------------------------------------------
@@ -181,11 +174,16 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
 
 void DrumrollEditor::writeSettings()
       {
-      QSettings settings;
-      settings.beginGroup("Drumroll");
-      settings.setValue("size", size());
-      settings.setValue("pos", QWidget::pos());
-      settings.endGroup();
+      MuseScore::saveGeometry(this);
+      }
+
+//---------------------------------------------------------
+//   readSettings
+//---------------------------------------------------------
+
+void DrumrollEditor::readSettings()
+      {
+      MuseScore::restoreGeometry(this);
       }
 
 //---------------------------------------------------------

@@ -39,7 +39,6 @@
 
 namespace Ms {
 
-extern bool useFactorySettings;
 void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString());
 
 //---------------------------------------------------------
@@ -937,19 +936,6 @@ void InstrumentsWidget::filterInstrumentsByGenre(QTreeWidget *instrumentList, QS
                   }
             ++iList;
             }
-      }
-
-//---------------------------------------------------------
-//   writeSettings
-//---------------------------------------------------------
-
-void InstrumentsWidget::writeSettings()
-      {
-      QSettings settings;
-      settings.beginGroup("Instruments");
-      settings.setValue("size", size());
-      settings.setValue("pos", pos());
-      settings.endGroup();
       }
 
 //---------------------------------------------------------

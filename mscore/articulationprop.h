@@ -36,6 +36,7 @@ class ArticulationProperties : public QDialog, public Ui::ArticulationProperties
       Q_OBJECT
 
       Articulation* articulation;
+      virtual void hideEvent(QHideEvent*);
 
    private slots:
       void saveValues();

@@ -36,6 +36,7 @@ class TextProperties : public QDialog {
       Text* text;
       QCheckBox* cb;
 
+      virtual void hideEvent(QHideEvent*);
    private slots:
       virtual void accept();
       void resetToStyle();
