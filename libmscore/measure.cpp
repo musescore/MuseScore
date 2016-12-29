@@ -3555,10 +3555,11 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         bl->setTrack(track);
                         bl->setGenerated(true);
                         bl->setParent(s);
+                        bl->setBarLineType(BarLineType::NORMAL);
+                        bl->setSpanStaff(true);
                         bl->layout();
                         s->add(bl);
                         s->createShapes();
-                        bl->setSpanStaff(true);
                         }
                   }
             s->setEnabled(true);

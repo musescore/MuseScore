@@ -1241,7 +1241,7 @@ void Segment::createShape(int staffIdx)
       {
       Shape& s = _shapes[staffIdx];
       s.clear();
-#if 0
+#if 1
       if (segmentType() & (Type::BarLine | Type::EndBarLine | Type::StartRepeatBarLine | Type::BeginBarLine)) {
             BarLine* bl = toBarLine(element(0));
             if (bl) {
@@ -1334,7 +1334,6 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
       {
       Segment::Type st  = segmentType();
       Segment::Type nst = ns ? ns->segmentType() : Segment::Type::Invalid;
-
 
       qreal w = 0.0;
       for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
