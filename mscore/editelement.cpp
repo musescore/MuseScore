@@ -40,8 +40,8 @@ void ScoreView::startEdit(Element* e)
             qDebug("The element cannot be edited");
             return;
             }
-      if (e->type() == Element::Type::TBOX)
-            e = static_cast<TBox*>(e)->text();
+      if (e->isTBox())
+            e = toTBox(e)->text();
       editObject = e;
       sm->postEvent(new CommandEvent("edit"));
       _score->update();
@@ -71,8 +71,8 @@ void ScoreView::startEdit(Element* element, Grip startGrip)
 
 void ScoreView::startEdit()
       {
-      if (editObject->type() == Element::Type::TBOX)
-            editObject = static_cast<TBox*>(editObject)->text();
+      if (editObject->isTBox())
+            editObject = toTBox(editObject)->text();
       curElement  = 0;
       setFocus();
       if (!_score->undoStack()->active())
@@ -92,7 +92,7 @@ void ScoreView::endEdit()
       setDropTarget(0);
       if (!editObject)
             return;
-      editObject->endEditDrag();
+      editObject->endEditDrag(data);
       _score->addRefresh(editObject->canvasBoundingRect());
       for (int i = 0; i < grips; ++i)
             score()->addRefresh(grip[i]);
@@ -143,6 +143,7 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
       data.lastPos   = data.startMove;
       data.pos       = data.startMove;
       data.view      = this;
+      data.modifiers = qApp->keyboardModifiers();
 
       Element* e = elementNear(data.startMove);
       if (e && (e == editObject) && (editObject->isText())) {
@@ -174,18 +175,12 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
 
 void ScoreView::doDragEdit(QMouseEvent* ev)
       {
-      data.lastPos = data.pos;
-      data.pos     = toLogical(ev->pos());
+      data.lastPos   = data.pos;
+      data.pos       = toLogical(ev->pos());
+      data.modifiers = qApp->keyboardModifiers();
 
-      // on bar lines, Ctrl (single bar line) and Shift (precision drag) modifiers can be active independently
-      if (editObject->type() == Element::Type::BAR_LINE) {
-            if (qApp->keyboardModifiers() & Qt::ShiftModifier)
-                  BarLine::setShiftDrag(true);
-            if (qApp->keyboardModifiers() & Qt::ControlModifier)
-                  BarLine::setCtrlDrag(true);
-            }
-      // on other elements, BOTH Ctrl (vert. constrain) and Shift (horiz. constrain) modifiers = NO constrain
-      else {
+      if (!editObject->isBarLine()) {
+            // on other elements, BOTH Ctrl (vert. constrain) and Shift (horiz. constrain) modifiers = NO constrain
             if (qApp->keyboardModifiers() == Qt::ShiftModifier)
                   data.pos.setX(data.lastPos.x());
             if (qApp->keyboardModifiers() == Qt::ControlModifier)
@@ -216,7 +211,7 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
 void ScoreView::endDragEdit()
       {
       _score->addRefresh(editObject->canvasBoundingRect());
-      editObject->endEditDrag();
+      editObject->endEditDrag(data);
       setDropTarget(0);
       updateGrips();
       _score->rebuildBspTree();

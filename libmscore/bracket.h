@@ -37,8 +37,9 @@ class Bracket : public Element {
       int _lastStaff;
 
       QPainterPath path;
-
       SymId _braceSymbol;
+      Shape _shape;
+
       // horizontal scaling factor for brace symbol. Cannot be equal to magY or depend on h
       // because layout needs width of brace before knowing height of system...
       qreal _magx;
@@ -51,20 +52,22 @@ class Bracket : public Element {
       BracketType bracketType() const    { return _bracketType; }
       void setBracketType(BracketType t) { _bracketType = t;    }
 
-      int firstStaff() const           { return _firstStaff; }
-      void setFirstStaff(int val)      { _firstStaff = val;  }
+      int firstStaff() const             { return _firstStaff; }
+      void setFirstStaff(int val)        { _firstStaff = val;  }
 
-      int lastStaff() const            { return _lastStaff; }
-      void setLastStaff(int val)       { _lastStaff = val;  }
+      int lastStaff() const              { return _lastStaff; }
+      void setLastStaff(int val)         { _lastStaff = val;  }
 
-      int level() const                { return _column;           }
-      void setLevel(int v)             { _column = v;              }
-      int span() const                 { return _span;             }
+      int level() const                  { return _column;           }
+      void setLevel(int v)               { _column = v;              }
+      int span() const                   { return _span;             }
       void setSpan(int v);
-      System* system() const           { return (System*)parent(); }
+      System* system() const             { return (System*)parent(); }
 
       virtual void setHeight(qreal) override;
       virtual qreal width() const override;
+
+      virtual Shape shape() const override { return _shape; }
 
       virtual void draw(QPainter*) const override;
       virtual void write(XmlWriter& xml) const override;
@@ -76,7 +79,7 @@ class Bracket : public Element {
       virtual bool edit(MuseScoreView*, Grip, int, Qt::KeyboardModifiers, const QString&) override;
       virtual void endEdit() override;
       virtual void editDrag(const EditData&) override;
-      virtual void endEditDrag() override;
+      virtual void endEditDrag(const EditData&) override;
       virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
       virtual int grips() const override { return 1; }
       virtual QPointF gripAnchor(Grip) const override;

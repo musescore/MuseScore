@@ -113,7 +113,7 @@ class HBox : public Box {
       virtual void layout() override;
 
       virtual QRectF drag(EditData*) override;
-      virtual void endEditDrag() override;
+      virtual void endEditDrag(const EditData&) override;
       void layout2();
       virtual bool isMovable() const override;
       virtual void computeMinWidth();

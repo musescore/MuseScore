@@ -255,12 +255,20 @@ add_executable ( ${ExecutableName}
       fretproperties.cpp sectionbreakprop.cpp
       bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
-      inspector/inspector.cpp dragelement.cpp svggenerator.cpp
-      inspector/inspectorBase.cpp inspector/inspectorBeam.cpp masterpalette.cpp
-      inspector/inspectorGroupElement.cpp dragdrop.cpp inspector/inspectorImage.cpp
+      dragelement.cpp
+      svggenerator.cpp
+      masterpalette.cpp
+      dragdrop.cpp
+      waveview.cpp helpBrowser.cpp
+      inspector/inspector.cpp
+      inspector/inspectorBase.cpp
+      inspector/inspectorBeam.cpp
+      inspector/inspectorGroupElement.cpp
+      inspector/inspectorImage.cpp
       inspector/inspectorFret.cpp
       inspector/inspectorText.cpp
-      waveview.cpp helpBrowser.cpp inspector/inspectorLasso.cpp
+      inspector/inspectorLasso.cpp
+      inspector/inspectorBarline.cpp
       editelement.cpp inspector/inspectorVolta.cpp inspector/inspectorOttava.cpp enableplayforwidget.cpp
       inspector/inspectorTrill.cpp
       inspector/inspectorHairpin.cpp qmlplugin.cpp editlyrics.cpp

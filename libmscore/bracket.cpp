@@ -35,7 +35,6 @@ Bracket::Bracket(Score* s)
       _span        = 0;
       _firstStaff  = 0;
       _lastStaff   = 0;
-      _braceSymbol = SymId::brace;
       setGenerated(true);     // brackets are not saved
       }
 
@@ -112,9 +111,11 @@ void Bracket::layout()
       if (h2 == 0.0)
             return;
 
+      _shape.clear();
       switch (bracketType()) {
             case BracketType::BRACE: {
                   if (score()->styleSt(StyleIdx::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(StyleIdx::MusicalSymbolFont) == "Gonville") {
+                        _braceSymbol = SymId::noSym;
                         qreal w = score()->styleP(StyleIdx::akkoladeWidth);
 
 #define XM(a) (a+700)*w/700
@@ -142,11 +143,14 @@ void Bracket::layout()
                         path.cubicTo(XM( -  8), YM( 1320), XM(-136), YM(  624), XM( -512), YM(    0)); // c 1
                         path.cubicTo(XM( -136), YM( -624), XM(  -8), YM(-1320), XM(   -8), YM(-2048)); // c 0*/
                         setbbox(path.boundingRect());
+                        _shape.add(bbox());
                         }
                   else {
+                        _braceSymbol = SymId::brace;
                         qreal h = h2 * 2;
                         qreal w = symWidth(_braceSymbol) * _magx;
                         bbox().setRect(0, 0, w, h);
+                        _shape.add(bbox());
                         }
                   }
                   break;
@@ -154,8 +158,13 @@ void Bracket::layout()
                   qreal _spatium = spatium();
                   qreal w = score()->styleP(StyleIdx::bracketWidth) * .5;
                   qreal x = -w;
+
+                  qreal bd   = _spatium * .25;
+                  _shape.add(QRectF(x, -bd, w * 2, 2 * (h2+bd)));
+                  _shape.add(symBbox(SymId::bracketTop).translated(QPointF(-w, -bd)));
+                  _shape.add(symBbox(SymId::bracketBottom).translated(QPointF(-w, bd + 2*h2)));
+
                   w      += symWidth(SymId::bracketTop);
-                  qreal bd = _spatium * .25;
                   qreal y = - symHeight(SymId::bracketTop) - bd;
                   qreal h = (-y + h2) * 2;
                   bbox().setRect(x, y, w, h);
@@ -168,6 +177,7 @@ void Bracket::layout()
                   qreal h = (h2 + w) * 2 ;
                   w      += (.5 * spatium() + 3* w);
                   bbox().setRect(x, y, w, h);
+                  _shape.add(bbox());
                   }
                   break;
             case BracketType::LINE: {
@@ -178,11 +188,13 @@ void Bracket::layout()
                   qreal y = -bd;
                   qreal h = (-y + h2) * 2;
                   bbox().setRect(x, y, w, h);
+                  _shape.add(bbox());
                   }
                   break;
             case BracketType::NO_BRACKET:
                   break;
             }
+      _shape.translate(pos());
       }
 
 //---------------------------------------------------------
@@ -195,11 +207,11 @@ void Bracket::draw(QPainter* painter) const
             return;
       switch (bracketType()) {
             case BracketType::BRACE: {
-                  if (score()->styleSt(StyleIdx::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(StyleIdx::MusicalSymbolFont) == "Gonville") {
-                      painter->setPen(Qt::NoPen);
-                      painter->setBrush(QBrush(curColor()));
-                      painter->drawPath(path);
-                      }
+                  if (_braceSymbol == SymId::noSym) {
+                        painter->setPen(Qt::NoPen);
+                        painter->setBrush(QBrush(curColor()));
+                        painter->drawPath(path);
+                        }
                   else {
                         qreal h = 2 * h2;
                         qreal _spatium = spatium();
@@ -343,7 +355,7 @@ QPointF Bracket::gripAnchor(Grip) const
 
 void Bracket::endEdit()
       {
-      endEditDrag();
+//TODO      endEditDrag();
       }
 
 //---------------------------------------------------------
@@ -361,7 +373,7 @@ void Bracket::editDrag(const EditData& ed)
 //    snap to nearest staff
 //---------------------------------------------------------
 
-void Bracket::endEditDrag()
+void Bracket::endEditDrag(const EditData&)
       {
       qreal ay1 = pagePos().y();
       qreal ay2 = ay1 + h2 * 2;

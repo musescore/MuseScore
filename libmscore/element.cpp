@@ -599,38 +599,24 @@ qreal Element::canvasX() const
 
 //---------------------------------------------------------
 //   contains
+//    Return true if p is inside the shape of the object.
+//    Note: p is in page coordinates
 //---------------------------------------------------------
-
-/**
- Return true if \a p is inside the shape of the object.
-
- Note: \a p is in page coordinates
-*/
 
 bool Element::contains(const QPointF& p) const
       {
-      return outline().contains(p - pagePos());
+      return shape().contains(p - pagePos() + pos());
       }
 
 //---------------------------------------------------------
-//   outline
+//  intersects
+//    Return true if \a rr intersects bounding box of object.
+//    Note: \a rr is in page coordinates
 //---------------------------------------------------------
 
-/**
-  Returns the shape of this element as a QPainterPath in local
-  coordinates. The shape is used for collision detection and
-  hit tests (contains())
-
-  The default implementation calls bbox() to return a simple rectangular
-  shape, but subclasses can reimplement this function to return a more
-  accurate shape for non-rectangular elements.
-*/
-
-QPainterPath Element::outline() const
+bool Element::intersects(const QRectF& rr) const
       {
-      QPainterPath pp;
-      pp.addRect(bbox());
-      return pp;
+      return shape().intersects(rr.translated(-pagePos() + pos()));
       }
 
 //---------------------------------------------------------
@@ -642,21 +628,6 @@ Shape Element::shape() const
       Shape shape;
       shape.add(bbox().translated(pos()));
       return shape;
-      }
-
-//---------------------------------------------------------
-//  intersects
-//---------------------------------------------------------
-
-/**
- Return true if \a rr intersects bounding box of object.
-
- Note: \a rr is in page coordinates
-*/
-
-bool Element::intersects(const QRectF& rr) const
-      {
-      return outline().intersects(rr.translated(-pagePos()));
       }
 
 //---------------------------------------------------------

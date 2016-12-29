@@ -32,8 +32,6 @@ namespace Ms {
 
 qreal BarLine::yoff1;
 qreal BarLine::yoff2;
-bool BarLine::ctrlDrag;
-bool BarLine::shiftDrag;
 bool BarLine::_origSpanStaff;
 int BarLine::_origSpanFrom;
 int BarLine::_origSpanTo;
@@ -150,15 +148,6 @@ BarLine::BarLine(const BarLine& bl)
 BarLine::~BarLine()
       {
       qDeleteAll(_el);
-      }
-
-//---------------------------------------------------------
-//   mag
-//---------------------------------------------------------
-
-qreal BarLine::mag() const
-      {
-      return staff() ? staff()->mag(tick()) : 1.0;
       }
 
 //---------------------------------------------------------
@@ -668,22 +657,12 @@ void BarLine::startEdit(MuseScoreView*, const QPointF&)
 
 void BarLine::endEdit()
       {
-      shiftDrag = false;
-
-      // if no change, do nothing
-      if (_spanStaff == _origSpanStaff &&_spanFrom == _origSpanFrom && _spanTo == _origSpanTo) {
-            ctrlDrag = false;
-            return;
-            }
-      // if bar line has custom span, assume any span edit is local to this bar line
-//      if (_customSpan)
-//            ctrlDrag = true;
       // for mid-measure barlines, edit is local
 //      bool midMeasure = false;
-      if (segment()->isBarLine()) {
-            ctrlDrag = true;
+//      if (segment()->isBarLine()) {
+//            ctrlDrag = true;
 //            midMeasure = true;
-            }
+//            }
 #if 0 // TODO
       if (ctrlDrag) {                           // if single bar line edit
             char newSpanStaff = _spanStaff;          // copy edited span values
@@ -767,9 +746,9 @@ void BarLine::endEdit()
                         // otherwise remove them
                         if (_spanTo > 0 || !(idx == idx2-1 && idx != score()->nstaves()-1)) {
                               Staff* staff = score()->staff(idx);
-                              staff->undoChangeProperty(P_ID::BARLINE_SPAN,      0);
-                              staff->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, 0);
-                              staff->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   (staff->lines(tick())-1)*2);
+                              staff->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN,      0);
+                              staff->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN_FROM, 0);
+                              staff->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN_TO,   (staff->lines(tick())-1)*2);
                               }
                         }
                   }
@@ -783,17 +762,17 @@ void BarLine::endEdit()
                         int lines = staff->lines(tick());
                         int spanFrom = 0;
                         int spanTo   = 0;
-                        staff->undoChangeProperty(P_ID::BARLINE_SPAN,      1);
-                        staff->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, spanFrom);
-                        staff->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   spanTo);
+                        staff->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN,      1);
+                        staff->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN_FROM, spanFrom);
+                        staff->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN_TO,   spanTo);
                         }
                   }
             }
 #endif
       // update span for the staff the edited bar line belongs to
-      staff()->undoChangeProperty(P_ID::BARLINE_SPAN,      _spanStaff);
-      staff()->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, _spanFrom);
-      staff()->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   _spanTo);
+      staff()->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN,      _spanStaff);
+      staff()->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN_FROM, _spanFrom);
+      staff()->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN_TO,   _spanTo);
       }
 
 //---------------------------------------------------------
@@ -839,7 +818,7 @@ void BarLine::editDrag(const EditData& ed)
 //    snap to nearest staff / staff line
 //---------------------------------------------------------
 
-void BarLine::endEditDrag()
+void BarLine::endEditDrag(const EditData&)
       {
       if (yoff1 == 0.0 && yoff2 == 0.0)         // if no drag, do nothing
             return;
@@ -978,6 +957,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
 
 void BarLine::layout()
       {
+      setMag(score()->styleB(StyleIdx::scaleBarlines) && staff() ? staff()->mag(tick()) : 1.0);
       y1 = 0;
       y2 = 0;
 
@@ -1054,7 +1034,7 @@ void BarLine::layout()
 Shape BarLine::shape() const
       {
       Shape shape;
-      shape.add(QRectF(0.0, 0.0, width(), spatium() * 4).translated(pos()));
+      shape.add(QRectF(0.0, 0.0, width(), height()).translated(pos()));
       return shape;
       }
 
@@ -1109,21 +1089,8 @@ void BarLine::layout2()
                               break;
                         }
                   }
-            bbox().setTop(r.top());
-            bbox().setBottom(r.bottom());
+            bbox() = QRectF(bbox().x(), r.y(), bbox().width(), r.height());
             }
-      }
-
-//---------------------------------------------------------
-//   shape
-//---------------------------------------------------------
-
-QPainterPath BarLine::outline() const
-      {
-      QPainterPath p;
-      qreal d = spatium() * .3;
-      p.addRect(bbox().adjusted(-d, .0, d, .0));
-      return p;
       }
 
 //---------------------------------------------------------

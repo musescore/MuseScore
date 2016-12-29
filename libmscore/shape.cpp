@@ -67,7 +67,7 @@ qreal Shape::minHorizontalDistance(const Shape& a) const
                   qreal ay1 = r1.top();
                   qreal ay2 = r1.bottom();
 //                  if (intersects(ay1, ay2, by1, by2))
-                  if (intersects(ay1, ay2, by1, by2)
+                  if (Ms::intersects(ay1, ay2, by1, by2)
                      || ((r1.height() == 0.0) && (r2.height() == 0.0) && (ay1 == by1))
                      || ((r1.width() == 0.0) || (r2.width() == 0.0)))
                         dist = qMax(dist, r1.right() - r2.left());
@@ -91,7 +91,7 @@ qreal Shape::minVerticalDistance(const Shape& a) const
             for (const QRectF& r1 : *this) {
                   qreal ax1 = r1.left();
                   qreal ax2 = r1.right();
-                  if (intersects(ax1, ax2, bx1, bx2))
+                  if (Ms::intersects(ax1, ax2, bx1, bx2))
                         dist = qMax(dist, r1.bottom() - r2.top());
                   }
             }
@@ -209,6 +209,43 @@ void Shape::remove(const Shape& s)
       for (const QRectF& r : s)
             remove(r);
       }
+
+//---------------------------------------------------------
+//   contains
+//---------------------------------------------------------
+
+bool Shape::contains(const QPointF& p) const
+      {
+      for (const QRectF& r : *this) {
+            if (r.contains(p))
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   intersects
+//---------------------------------------------------------
+
+bool Shape::intersects(const QRectF& rr) const
+      {
+      for (const QRectF& r : *this) {
+            if (r.intersects(rr))
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   paint
+//---------------------------------------------------------
+
+void Shape::paint(QPainter& p)
+      {
+      for (const QRectF& r : *this)
+            p.drawRect(r);
+      }
+
 
 #ifdef DEBUG_SHAPES
 

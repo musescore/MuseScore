@@ -176,7 +176,6 @@ class Harmony : public Text {
       virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
       virtual void localSpatiumChanged(qreal oldValue, qreal newValue) override;
       void setHarmony(const QString& s);
-      virtual QPainterPath outline() const override;
       void calculateBoundingRect();
 
       virtual QString accessibleInfo() const override;
