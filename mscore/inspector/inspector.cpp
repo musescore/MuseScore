@@ -290,19 +290,17 @@ void Inspector::setElements(const QList<Element*>& l)
                         case Element::Type::STAFFTYPE_CHANGE:
                               ie = new InspectorStaffTypeChange(this);
                               break;
+                        case Element::Type::BRACKET:
+                              ie = new InspectorBracket(this);
+                              break;
+                        case Element::Type::INSTRUMENT_NAME:
+                              ie = new InspectorEmpty(this);
+                              break;
                         default:
-                              if (_element->isText()) {
-                                    if (_element->type() == Element::Type::INSTRUMENT_NAME) // these are generated
-                                          ie = new InspectorEmpty(this);
-                                    else
-                                          ie = new InspectorText(this);
-                                    }
-                              else {
-                                    if (_element->type() == Element::Type::BRACKET) // these are generated
-                                          ie = new InspectorEmpty(this);
-                                    else
-                                          ie = new InspectorElement(this);
-                                    }
+                              if (_element->isText())
+                                    ie = new InspectorText(this);
+                              else
+                                    ie = new InspectorElement(this);
                               break;
                         }
                   }
@@ -1195,6 +1193,20 @@ InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorElementBase(paren
             };
       const std::vector<InspectorPanel> ppList = { {c.title, c.panel} };
       mapSignals(il, ppList);
+      }
+
+//---------------------------------------------------------
+//   InspectorBracket
+//---------------------------------------------------------
+
+InspectorBracket::InspectorBracket(QWidget* parent) : InspectorBase(parent)
+      {
+      b.setupUi(addWidget());
+
+      const std::vector<InspectorItem> il = {
+            { P_ID::BRACKET_COLUMN, 0, 0, b.column, b.resetColumn }
+            };
+      mapSignals(il);
       }
 
 }

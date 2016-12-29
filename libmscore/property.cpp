@@ -269,6 +269,7 @@ static const PropertyData propertyList[] = {
       { P_ID::STAFF_BARLINE_SPAN_FROM, false, "barLineSpanFrom",       P_TYPE::INT             },
       { P_ID::STAFF_BARLINE_SPAN_TO,   false, "barLineSpanTo",         P_TYPE::INT             },
 
+      { P_ID::BRACKET_COLUMN,          false, "level",                 P_TYPE::INT             },
       { P_ID::END, false, "", P_TYPE::INT }
       };
 
