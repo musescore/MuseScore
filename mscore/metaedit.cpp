@@ -38,7 +38,7 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
       score = s;
       dirty = false;
 
-      level->setValue(score->mscVersion());
+      level->setValue(score->mscRealVersion());
       level->setDisabled(true);
       version->setText(score->mscoreVersion());
       version->setDisabled(true);
