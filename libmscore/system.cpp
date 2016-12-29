@@ -229,7 +229,6 @@ void System::layoutSystem(qreal xo1)
 
       _leftMargin = xoff2;
 
-
       qreal bd = score()->styleP(StyleIdx::bracketDistance);
       if ( _brackets.size() > 0) {
             for (int i = 0; i < bracketLevels; ++i)

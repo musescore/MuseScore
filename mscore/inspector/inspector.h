@@ -44,6 +44,7 @@
 #include "ui_inspector_fret.h"
 #include "ui_inspector_tremolo.h"
 #include "ui_inspector_caesura.h"
+#include "ui_inspector_bracket.h"
 
 namespace Ms {
 
@@ -422,11 +423,23 @@ class InspectorSlurTie : public InspectorElementBase {
 class InspectorCaesura : public InspectorElementBase {
       Q_OBJECT
 
-//      UiInspectorElement e;
       Ui::InspectorCaesura c;
 
    public:
       InspectorCaesura(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorBracket
+//---------------------------------------------------------
+
+class InspectorBracket : public InspectorBase {
+      Q_OBJECT
+
+      Ui::InspectorBracket b;
+
+   public:
+      InspectorBracket(QWidget* parent);
       };
 
 //---------------------------------------------------------

@@ -194,7 +194,6 @@ void Bracket::layout()
             case BracketType::NO_BRACKET:
                   break;
             }
-      _shape.translate(pos());
       }
 
 //---------------------------------------------------------
@@ -213,9 +212,9 @@ void Bracket::draw(QPainter* painter) const
                         painter->drawPath(path);
                         }
                   else {
-                        qreal h = 2 * h2;
+                        qreal h        = 2 * h2;
                         qreal _spatium = spatium();
-                        qreal mag = h / (4 *_spatium);
+                        qreal mag      = h / (4 *_spatium);
                         painter->setPen(curColor());
                         painter->save();
                         painter->scale(_magx, mag);
@@ -323,14 +322,6 @@ void Bracket::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Bracket::startEdit(MuseScoreView*, const QPointF&)
-      {
-      }
-
-//---------------------------------------------------------
 //   updateGrips
 //---------------------------------------------------------
 
@@ -341,21 +332,13 @@ void Bracket::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       }
 
 //---------------------------------------------------------
-//   gripAnchor
-//---------------------------------------------------------
-
-QPointF Bracket::gripAnchor(Grip) const
-      {
-      return QPointF();
-      }
-
-//---------------------------------------------------------
 //   endEdit
 //---------------------------------------------------------
 
 void Bracket::endEdit()
       {
-//TODO      endEditDrag();
+      EditData d;
+      endEditDrag(d);
       }
 
 //---------------------------------------------------------
@@ -485,6 +468,8 @@ QVariant Bracket::getProperty(P_ID id) const
       switch (id) {
             case P_ID::SYSTEM_BRACKET:
                   return int(bracketType());
+            case P_ID::BRACKET_COLUMN:
+                  return _column;
             default:
                   return Element::getProperty(id);
             }
@@ -500,11 +485,19 @@ bool Bracket::setProperty(P_ID id, const QVariant& v)
             case P_ID::SYSTEM_BRACKET:
                   staff()->setBracket(level(), BracketType(v.toInt()));   // change bracket type global
                   // setBracketType(BracketType(v.toInt()));
-                  score()->setLayoutAll();
+                  break;
+            case P_ID::BRACKET_COLUMN: {
+                  int oldColumn = _column;
+                  _column = v.toInt();          // TODO
+                  staff()->swapBracket(oldColumn, _column, _bracketType);
+                  staff()->setBracketSpan(_column, _lastStaff - _firstStaff + 1);
+                  score()->moveBracket(staffIdx(), oldColumn, _column);
+                  }
                   break;
             default:
                   return Element::setProperty(id, v);
             }
+      score()->setLayoutAll();
       return true;
       }
 
@@ -517,6 +510,8 @@ QVariant Bracket::propertyDefault(P_ID id) const
       switch (id) {
             case P_ID::SYSTEM_BRACKET:
                   return int(BracketType::NORMAL);
+            case P_ID::BRACKET_COLUMN:
+                  return 0;
             default:
                   return Element::propertyDefault(id);
             }

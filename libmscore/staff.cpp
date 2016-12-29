@@ -86,6 +86,19 @@ void Staff::setBracket(int idx, BracketType val)
       }
 
 //---------------------------------------------------------
+//   swapBracket
+//---------------------------------------------------------
+
+void Staff::swapBracket(int oldIdx, int newIdx, BracketType val)
+      {
+      for (int i = _brackets.size(); i <= newIdx; ++i)
+            _brackets.append(BracketItem());
+      _brackets.swap(oldIdx, newIdx);
+      while (!_brackets.empty() && (_brackets.last()._bracket == BracketType::NO_BRACKET))
+            _brackets.removeLast();
+      }
+
+//---------------------------------------------------------
 //   setBracketSpan
 //---------------------------------------------------------
 

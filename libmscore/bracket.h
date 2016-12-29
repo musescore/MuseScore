@@ -75,14 +75,12 @@ class Bracket : public Element {
       virtual void layout() override;
 
       virtual bool isEditable() const override { return true; }
-      virtual void startEdit(MuseScoreView*, const QPointF&) override;
       virtual bool edit(MuseScoreView*, Grip, int, Qt::KeyboardModifiers, const QString&) override;
       virtual void endEdit() override;
       virtual void editDrag(const EditData&) override;
       virtual void endEditDrag(const EditData&) override;
       virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
       virtual int grips() const override { return 1; }
-      virtual QPointF gripAnchor(Grip) const override;
 
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
