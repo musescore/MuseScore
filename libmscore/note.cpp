@@ -2950,7 +2950,7 @@ Shape Note::shape() const
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
       if (_accidental)
             shape.add(_accidental->bbox().translated(_accidental->pos()));
-      return shape.translated(pos());
+      return shape;
       }
 
 }

@@ -1252,23 +1252,9 @@ void Segment::createShape(int staffIdx)
             }
 #endif
 
-#if 0
-      for (int voice = 0; voice < VOICES; ++voice) {
-            Element* e = element(staffIdx * VOICES + voice);
-            if (e && e->visible()) {
-                  if (e->isChordRest()) {
-                        ChordRest* cr = toChordRest(e);
-                        int si = cr->vStaffIdx();
-                        _shapes[si].add(e->shape());
-                        }
-                  else
-                        s.add(e->shape());
-                  }
-            }
-#endif
       for (Element* e : _elist) {
             if (e && e->vStaffIdx() == staffIdx)
-                  s.add(e->shape());
+                  s.add(e->shape().translated(e->pos()));
             }
       for (Element* e : _annotations) {
             // probably only allow for lyrics and chordnames
@@ -1279,7 +1265,7 @@ void Segment::createShape(int staffIdx)
                && !e->isSymbol()
                && !e->isFSymbol()
                && !e->isStaffText())
-                  s.add(e->shape());
+                  s.add(e->shape().translated(e->pos()));
             }
       }
 

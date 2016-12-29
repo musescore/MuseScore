@@ -2384,7 +2384,7 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
 
       p.setPen(QPen(Qt::red, 0.0));
 //      p.drawRect(e->bbox());
-      e->shape().translated(-e->pos()).paint(p);
+      e->shape().paint(p);
 
       p.setPen(QPen(Qt::red, 0.0));
       qreal w = 5.0 / p.matrix().m11();

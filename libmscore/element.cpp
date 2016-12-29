@@ -605,7 +605,7 @@ qreal Element::canvasX() const
 
 bool Element::contains(const QPointF& p) const
       {
-      return shape().contains(p - pagePos() + pos());
+      return shape().contains(p - pagePos());
       }
 
 //---------------------------------------------------------
@@ -616,7 +616,7 @@ bool Element::contains(const QPointF& p) const
 
 bool Element::intersects(const QRectF& rr) const
       {
-      return shape().intersects(rr.translated(-pagePos() + pos()));
+      return shape().intersects(rr.translated(-pagePos()));
       }
 
 //---------------------------------------------------------
@@ -626,7 +626,7 @@ bool Element::intersects(const QRectF& rr) const
 Shape Element::shape() const
       {
       Shape shape;
-      shape.add(bbox().translated(pos()));
+      shape.add(bbox());
       return shape;
       }
 
