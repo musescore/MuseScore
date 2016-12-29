@@ -1104,7 +1104,6 @@ MuseScore::MuseScore()
       menuFormat->addSeparator();
 
       menuFormat->addAction(getAction("reset-beammode"));
-      menuFormat->addAction(getAction("reset-groupings"));
       menuFormat->addAction(getAction("reset"));
       menuFormat->addSeparator();
 
@@ -1138,6 +1137,7 @@ MuseScore::MuseScore()
       menuTools->addSeparator();
 
       menuTools->addAction(getAction("pitch-spell"));
+      menuTools->addAction(getAction("reset-groupings"));
       menuTools->addAction(getAction("resequence-rehearsal-marks"));
       menuTools->addSeparator();
 
