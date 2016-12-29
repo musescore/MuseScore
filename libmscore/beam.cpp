@@ -549,35 +549,6 @@ void Beam::layout()
       }
 
 //---------------------------------------------------------
-//   outline
-//---------------------------------------------------------
-
-QPainterPath Beam::outline() const
-      {
-      QPainterPath pp;
-      qreal lw2 = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
-      for (const QLineF* bs : beamSegments) {
-            QPolygonF a(5);
-            a[0] = QPointF(bs->x1(), bs->y1()-lw2);
-            a[1] = QPointF(bs->x2(), bs->y2()-lw2);
-            a[2] = QPointF(bs->x2(), bs->y2()+lw2);
-            a[3] = QPointF(bs->x1(), bs->y1()+lw2);
-            a[4] = QPointF(bs->x1(), bs->y1()-lw2);
-            pp.addPolygon(a);
-            }
-      return pp;
-      }
-
-//---------------------------------------------------------
-//   contains
-//---------------------------------------------------------
-
-bool Beam::contains(const QPointF& p) const
-      {
-      return outline().contains(p - pagePos());
-      }
-
-//---------------------------------------------------------
 //   absLimit
 //---------------------------------------------------------
 

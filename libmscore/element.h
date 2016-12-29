@@ -193,6 +193,8 @@ struct DropData {
 
 struct EditData {
       MuseScoreView* view;
+      Qt::KeyboardModifiers modifiers;
+
       Grip curGrip;
       QPointF startMove;
       QPointF pos;
@@ -476,11 +478,10 @@ class Element : public QObject, public ScoreElement {
       QRectF canvasBoundingRect() const           { return bbox().translated(canvasPos()); }
       virtual void setbbox(const QRectF& r) const { _bbox = r;           }
       virtual void addbbox(const QRectF& r) const { _bbox |= r;          }
-      virtual bool contains(const QPointF& p) const;
+      bool contains(const QPointF& p) const;
       bool intersects(const QRectF& r) const;
-      virtual QPainterPath outline() const;
       virtual Shape shape() const;
-      virtual qreal baseLine() const          { return -height();       }
+      virtual qreal baseLine() const              { return -height();       }
 
       virtual Element::Type type() const = 0;
       virtual int subtype() const   { return -1; }  // for select gui
@@ -502,9 +503,9 @@ class Element : public QObject, public ScoreElement {
       virtual void startEdit(MuseScoreView*, const QPointF&);
       virtual bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString& s);
       virtual void editDrag(const EditData&);
-      virtual void endEditDrag()                               {}
+      virtual void endEditDrag(const EditData&)                {}
       virtual void endEdit()                                   {}
-      virtual void updateGrips(Grip*, QVector<QRectF>&) const      { }
+      virtual void updateGrips(Grip*, QVector<QRectF>&) const  {}
       virtual bool nextGrip(Grip*) const;
       virtual int grips() const                { return 0; }
       virtual bool prevGrip(Grip*) const;

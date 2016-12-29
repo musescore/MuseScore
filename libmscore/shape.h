@@ -50,6 +50,10 @@ class Shape : std::vector<QRectF> {
       bool empty() const { return std::vector<QRectF>::empty(); }
       void clear()       { std::vector<QRectF>::clear();       }
 
+      bool contains(const QPointF&) const;
+      bool intersects(const QRectF& rr) const;
+      void paint(QPainter&);
+
 #ifdef DEBUG_SHAPES
       void dump(const char*) const;
 #endif

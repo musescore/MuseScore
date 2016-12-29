@@ -32,7 +32,6 @@
 #include "ui_inspector_timesig.h"
 #include "ui_inspector_keysig.h"
 #include "ui_inspector_volta.h"
-#include "ui_inspector_barline.h"
 #include "ui_inspector_tuplet.h"
 #include "ui_inspector_accidental.h"
 #include "ui_inspector_tempotext.h"
@@ -370,32 +369,6 @@ class InspectorStafftext : public InspectorElementBase {
 
    public:
       InspectorStafftext(QWidget* parent);
-      virtual void setElement() override;
-      };
-
-//---------------------------------------------------------
-//   InspectorBarLine
-//---------------------------------------------------------
-
-class InspectorBarLine : public InspectorElementBase {
-      Q_OBJECT
-
-      Ui::InspectorSegment s;
-      Ui::InspectorBarLine b;
-
-      void  blockSpanDataSignals(bool val);
-
-   private slots:
-      void manageSpanData();
-      void presetDefaultClicked();
-      void presetTick1Clicked();
-      void presetTick2Clicked();
-      void presetShort1Clicked();
-      void presetShort2Clicked();
-      void setAsStaffDefault();
-
-   public:
-      InspectorBarLine(QWidget* parent);
       virtual void setElement() override;
       };
 

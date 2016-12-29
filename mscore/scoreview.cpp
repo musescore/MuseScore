@@ -2374,26 +2374,6 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
       if (!MScore::showBoundingRect)
             return;
       const Element* e = _e;
-#if 0
-      if (e->type() == Element::Type::NOTE) {
-            e = e->parent();
-            const ChordRest* cr = static_cast<const ChordRest*>(e);
-            p.setPen(Qt::red);
-            p.setBrush(Qt::NoBrush);
-            QRectF bb = cr->bbox();
-            qreal x1, y1, x2, y2;
-            bb.getCoords(&x1, &y1, &x2, &y2);
-
-            QPointF pos(e->pagePos());
-            p.translate(pos);
-            Space sp = cr->space();
-            QRectF r;
-            r.setCoords(-sp.lw(), y1, sp.rw(), y2);
-            p.drawRect(r);
-            p.translate(-pos);
-            return;
-            }
-#endif
       //
       //  draw bounding box rectangle for all
       //  selected Elements
@@ -2403,8 +2383,8 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
       p.setBrush(Qt::NoBrush);
 
       p.setPen(QPen(Qt::red, 0.0));
-      // p.drawPath(e->shape());
-      p.drawRect(e->bbox());
+//      p.drawRect(e->bbox());
+      e->shape().translated(-e->pos()).paint(p);
 
       p.setPen(QPen(Qt::red, 0.0));
       qreal w = 5.0 / p.matrix().m11();
@@ -6103,13 +6083,13 @@ Element* ScoreView::elementNear(QPointF p)
             return 0;
             }
 
-      p -= page->pos();
-      double w  = (preferences.proximity * .5) / matrix().m11();
+      p       -= page->pos();
+      double w = (preferences.proximity * .5) / matrix().m11();
       QRectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
       QList<Element*> el = page->items(r);
       QList<Element*> ll;
-      foreach (Element* e, el) {
+      for (Element* e : el) {
             e->itemDiscovered = 0;
             if (!e->selectable() || e->type() == Element::Type::PAGE)
                   continue;
@@ -6117,11 +6097,11 @@ Element* ScoreView::elementNear(QPointF p)
                   ll.append(e);
             }
       int n = ll.size();
-      if ((n == 0) || ((n == 1) && (ll[0]->type() == Element::Type::MEASURE))) {
+      if ((n == 0) || ((n == 1) && (ll[0]->isMeasure()))) {
             //
             // if no relevant element hit, look nearby
             //
-            foreach (Element* e, el) {
+            for (Element* e : el) {
                   if (e->type() == Element::Type::PAGE || !e->selectable())
                         continue;
                   if (e->intersects(r))

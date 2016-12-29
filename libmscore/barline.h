@@ -73,8 +73,6 @@ class BarLine : public Element {
       static int _origSpanTo;
       static qreal yoff1;                 // used during drag edit to extend y1 and y2
       static qreal yoff2;
-      static bool  ctrlDrag;              // used to mark if [CTRL] has been used while dragging
-      static bool  shiftDrag;             // used to mark if [SHIFT] has been used while dragging
 
       void getY() const;
       void drawDots(QPainter* painter, qreal x) const;
@@ -99,7 +97,6 @@ class BarLine : public Element {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
-      virtual QPainterPath outline() const override;
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
       virtual bool isEditable() const override    { return true; }
@@ -116,7 +113,7 @@ class BarLine : public Element {
       virtual void startEdit(MuseScoreView*, const QPointF&) override;
       virtual void endEdit() override;
       virtual void editDrag(const EditData&) override;
-      virtual void endEditDrag() override;
+      virtual void endEditDrag(const EditData&) override;
       virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
       virtual int grips() const override { return 2; }
       virtual Shape shape() const override;
@@ -143,10 +140,6 @@ class BarLine : public Element {
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID propertyId) const override;
 
-      virtual qreal mag() const override;
-
-      static void  setCtrlDrag(bool val)   { ctrlDrag = val; }
-      static void  setShiftDrag(bool val)  { shiftDrag = val; }
       static qreal layoutWidth(Score*, BarLineType, qreal mag);
 
       virtual Element* nextElement() override;

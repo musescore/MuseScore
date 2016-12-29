@@ -122,8 +122,6 @@ class Beam : public Element {
       void setBeamDirection(Direction d);
       Direction beamDirection() const     { return _direction; }
 
-      virtual QPainterPath outline() const override;
-      virtual bool contains(const QPointF& p) const override;
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
 

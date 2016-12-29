@@ -71,7 +71,6 @@ class SlurTieSegment : public SpannerSegment {
       virtual QVariant propertyDefault(P_ID id) const override;
       virtual void reset() override;
       virtual void move(const QPointF& s) override;
-      virtual QPainterPath outline() const override { return shapePath; }
       virtual bool isEditable() const override { return true; }
 
       void setSlurOffset(Grip i, const QPointF& val) { _ups[int(i)].off = val;  }

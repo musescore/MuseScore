@@ -711,7 +711,7 @@ QRectF HBox::drag(EditData* data)
 //   endEditDrag
 //---------------------------------------------------------
 
-void HBox::endEditDrag()
+void HBox::endEditDrag(const EditData&)
       {
       score()->setLayout(tick());
       score()->update();
