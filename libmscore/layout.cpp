@@ -3204,7 +3204,8 @@ System* Score::collectSystem(LayoutContext& lc)
             std::vector<SpannerSegment*> voltaSegments;
             for (auto interval : spanners) {
                   Spanner* sp = interval.value;
-                  if (sp->tick() < etick && sp->tick2() >= stick) {
+                  // if (sp->tick() < etick && sp->tick2() >= stick) {
+                  if (sp->tick() < etick && sp->tick2() > stick) {
                         if (sp->isOttava() && sp->ticks() == 0) {       // sanity check?
                               sp->setTick2(lastMeasure()->endTick());
                               sp->staff()->updateOttava();
