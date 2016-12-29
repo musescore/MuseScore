@@ -905,7 +905,7 @@ Shape Rest::shape() const
             if (parent() && measure() && measure()->isMMRest())
                   shape.add(QRectF(0.0, 0.0, score()->styleP(StyleIdx::minMMRestWidth), height()));
             else
-                  shape.add(bbox().translated(pos()));
+                  shape.add(bbox());
             }
       return shape;
       }
