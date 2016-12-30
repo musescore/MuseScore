@@ -1,1 +1,12 @@
-<?xml version='1.0'?><svg height='24' version='1.1' width='24' xmlns='http://www.w3.org/2000/svg'><g transform='translate(-77.000389,-98.999974)'><path d='m 78.72943,102 c -0.39678,0 -0.729045,0.3189 -0.729045,0.69975 l 0,16.60065 c 0,0.393 0.319275,0.6996 0.729045,0.6996 l 18.95517,0 c 0.40977,0 0.72903,-0.30645 0.72903,-0.6996 l 1.58676,-7.5999 c 0,-0.38085 -0.332325,-0.70635 -0.72903,-0.7008 l -15.73881,0 -1.415205,5.7075 c 0,0.36495 -0.306015,0.65865 -0.68616,0.65865 -0.380115,0 -0.684075,-0.2937 -0.68616,-0.65865 l -0.0465,-7.70715 16.54443,0 c 0,0 0.324855,-3 -0.66255,-3 l -10.58067,0 0,-3.3 c 0,-0.38085 -0.33258,-0.69975 -0.72906,-0.69975 L 82.07434,102 l -2.658855,0 z' style='fill:#3b3f45'/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>document-open</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="document-open" fill="#3B3F45">
+            <path d="M4.00986535,6 C4.00995307,6.00045743 4,18 4,18 L20,18 L20,8 L11.1715729,8 L9.17157288,6 L4.00986535,6 Z M20,6 C21.105,6 22,6.895 22,8 L22,18 C22,19.105 21.105,20 20,20 L4,20 C2.895,20 2,19.105 2,18 L2.01,6 C2.01,4.895 2.895,4 4,4 L10,4 L12,6 L20,6 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

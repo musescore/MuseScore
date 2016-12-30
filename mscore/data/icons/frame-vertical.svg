@@ -1,1 +1,18 @@
-<?xml version='1.0'?><svg height='24' version='1.1' width='24' xmlns='http://www.w3.org/2000/svg'><g transform='translate(-77.000151,-352)'><path d='m 89,355.375 -4.03125,3.96875 c 0,0 0.481186,0.5437 0.78125,0.84375 0.300064,0.30006 0.797011,0.39054 1.28125,-0.0937 L 88,359.125 l 0,9.53125 -0.96875,-0.96875 c -0.484238,-0.48424 -0.981185,-0.3938 -1.28125,-0.0937 -0.300066,0.30006 -0.78125,0.84375 -0.78125,0.84375 L 89,372.40625 93.03125,368.4375 c 0,0 -0.481185,-0.54369 -0.78125,-0.84375 -0.300064,-0.30005 -0.797011,-0.39054 -1.28125,0.0937 l -1,0.96875 0.0625,-9.5 0.9375,0.9375 c 0.484238,0.48424 0.981185,0.39381 1.28125,0.0937 0.300066,-0.30005 0.78125,-0.84375 0.78125,-0.84375 L 89,355.375 z' style='fill:#5999db;stroke-width:1.33333337'/><path d='m 78.5,354 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 0.5,0 0,0.5 1,0 0,-1 0,-0.5 -0.5,0 -1,0 z m -20.5,3.5 1,0 0,-2 -1,0 z m 21,1 1,0 0,-2 -1,0 z m -21,3 1,0 0,-2 -1,0 z m 21,1 1,0 0,-2 -1,0 z m -21,3 1,0 0,-2 -1,0 z m 21,1 1,0 0,-2 -1,0 z m -21,3 1,0 0,-2 -1,0 z m 21,1 1,0 0,-2 -1,0 z m -21,3 1,0 0,-2 -1,0 z m 21,1 1,0 0,-2 -1,0 z m -19.5,0.5 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z' style='fill:#5999db;stroke-width:1'/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>frame-vertical</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Original-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="frame-vertical">
+            <g>
+                <rect id="rect4374" transform="translate(11.999984, 12.000000) rotate(90.000000) translate(-11.999984, -12.000000) " x="0" y="0" width="23.9999685" height="24"></rect>
+                <rect id="rect5617-3" stroke="#5999DB" stroke-width="1.00000003" stroke-dasharray="2.000000059604644,2.000000059604644" x="1.5" y="1.5" width="21" height="21"></rect>
+                <polygon id="Path" fill="#5999DB" points="8.000147 8 12.000147 4 16.000147 8"></polygon>
+                <polygon id="Path-Copy-2" fill="#5999DB" transform="translate(12.000000, 18.000000) scale(1, -1) translate(-12.000000, -18.000000) " points="8 20 12 16 16 20"></polygon>
+                <rect id="Rectangle" fill="#5999DB" x="11" y="7" width="2" height="11"></rect>
+            </g>
+        </g>
+    </g>
+</svg>
