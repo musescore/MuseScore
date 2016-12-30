@@ -254,6 +254,11 @@ void XmlReader::checkTuplets()
                      tuplet->id(), tuplet);
                   delete tuplet;
                   }
+            else {
+                  //sort tuplet elements. Needed for nested tuplets #22537
+                  tuplet->sortElements();
+                  tuplet->sanitizeTuplet();
+                  }
             }
       }
 

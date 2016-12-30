@@ -152,7 +152,7 @@
           <numberType>1</numberType>
           <normalNotes>4</normalNotes>
           <actualNotes>6</actualNotes>
-          <baseNote>eighth</baseNote>
+          <baseNote>16th</baseNote>
           <Number>
             <style>Tuplet</style>
             <text>6:4</text>
@@ -228,7 +228,7 @@
           <numberType>1</numberType>
           <normalNotes>8</normalNotes>
           <actualNotes>10</actualNotes>
-          <baseNote>quarter</baseNote>
+          <baseNote>eighth</baseNote>
           <Number>
             <style>Tuplet</style>
             <text>10:8</text>

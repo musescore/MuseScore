@@ -719,10 +719,14 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
                   }
             else if (tag == "baseLen")    // obsolete even in 1.3
                   bl = e.readInt();
+            else if (tag == "tick")
+                  tuplet->setTick(e.readInt());
             else if (!tuplet->readProperties(e))
                   e.unknown();
             }
       Fraction r = (tuplet->ratio() == 1) ? tuplet->ratio() : tuplet->ratio().reduced();
+      // this may be wrong, but at this stage it is kept for compatibility. It will be corrected afterwards
+      // during "sanitize" step
       Fraction f(r.denominator(), tuplet->baseLen().fraction().denominator());
       tuplet->setDuration(f.reduced());
       if (bl != -1) {         // obsolete, even in 1.3
@@ -1344,6 +1348,30 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   ;
             else
                   e.unknown();
+            }
+      // For nested tuplets created with MuseScore 1.3 tuplet dialog (i.e. "Other..." dialog),
+      // the parent tuplet was not set. Try to infere if the tuplet was actually a nested tuplet
+      for (Tuplet* tuplet : e.tuplets()) {
+            int tupletTick = tuplet->tick();
+            int tupletDuration = tuplet->actualTicks() - 1;
+            std::vector<DurationElement*> tElements = tuplet->elements();
+            for (Tuplet* tuplet2 : e.tuplets()) {
+                  if ((tuplet2->tuplet()) || (tuplet2->voice() != tuplet->voice())) // already a nested tuplet or in a different voice
+                        continue;
+                  int possibleDuration = tuplet2->duration().ticks() * tuplet->ratio().denominator() / tuplet->ratio().numerator() - 1;
+                  if ((tuplet2 != tuplet) && (tuplet2->tick() >= tupletTick) && (tuplet2->tick() < tupletTick + tupletDuration) && (tuplet2->tick() + possibleDuration < tupletTick + tupletDuration)) {
+                        bool found = false;
+                        for (DurationElement* de : tElements) {
+                              if (de == tuplet2)
+                                    found = true;
+                              }
+                        if (!found) {
+                              qDebug("Adding tuplet %p as nested tuplet to tuplet %p",tuplet2,tuplet);
+                              tuplet2->setTuplet(tuplet);
+                              tuplet->add(tuplet2);
+                              }
+                        }
+                  }
             }
       e.checkTuplets();
       }

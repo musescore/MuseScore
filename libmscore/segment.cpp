@@ -535,7 +535,7 @@ void Segment::add(Element* el)
                   // the tick position of a tuplet is the tick position of its
                   // first element:
                   ChordRest* cr = toChordRest(el);
-                  if (cr->tuplet() && !cr->tuplet()->elements().empty() && cr->tuplet()->elements().front() == cr)
+                  if (cr->tuplet() && !cr->tuplet()->elements().empty() && cr->tuplet()->elements().front() == cr && cr->tuplet()->tick() < 0)
                         cr->tuplet()->setTick(cr->tick());
                   }
                   // fall through
