@@ -5,6 +5,11 @@ set -e # exit on error
 set -x # echo commands
 
 
+# build MuseScore
+make revision
+make debug CPUS=2 PREFIX="$HOME/software"
+make installdebug CPUS=2 PREFIX="$HOME/software"
+
 # update translation on transifex
 if [ "$TRAVIS" == true ] && [ "$TRAVIS_PULL_REQUEST" == false ] ; then
 pip install --user transifex-client
@@ -17,11 +22,10 @@ token =
 username = $TRANSIFEX_USER
 EOL
 
+cd build.debug
+make lupdate
+cd -
+
 tx push -s
 
 fi
-
-# build MuseScore
-make revision
-make debug CPUS=2 PREFIX="$HOME/software"
-make installdebug CPUS=2 PREFIX="$HOME/software"
