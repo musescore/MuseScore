@@ -6,8 +6,8 @@ set -x # echo commands
 
 
 # update translation on transifex
-if [ "$TRAVIS" = true ] && [ "$TRAVIS_PULL_REQUEST" == false ] ; then
-pip install transifex-client
+if [ "$TRAVIS" == true ] && [ "$TRAVIS_PULL_REQUEST" == false ] ; then
+pip install --user transifex-client
 
 cat > ~/.transifexrc <<EOL
 [https://www.transifex.com]
