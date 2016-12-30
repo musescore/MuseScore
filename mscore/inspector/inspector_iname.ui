@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>209</width>
-    <height>119</height>
+    <width>147</width>
+    <height>69</height>
    </rect>
   </property>
   <property name="accessibleName">
-   <string>Breath/Caesura Inspector</string>
+   <string>Instrument Name Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -88,6 +88,9 @@
         <property name="text">
          <string>Layout position:</string>
         </property>
+        <property name="buddy">
+         <cstring>layoutPosition</cstring>
+        </property>
        </widget>
       </item>
       <item row="0" column="2">
@@ -96,7 +99,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Pause' value</string>
+         <string>Reset 'Layout position' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
