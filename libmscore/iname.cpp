@@ -26,7 +26,6 @@ InstrumentName::InstrumentName(Score* s)
    : Text(s)
       {
       setInstrumentNameType(InstrumentNameType::SHORT);
-      _layoutPos = 0;
       }
 
 //---------------------------------------------------------
@@ -79,6 +78,52 @@ void InstrumentName::endEdit()
       else
             instrument->setShortName(s);
       score()->undo(new ChangePart(part, instrument, part->name()));
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant InstrumentName::getProperty(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::INAME_LAYOUT_POSITION:
+                  return _layoutPos;
+            default:
+                  return Text::getProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool InstrumentName::setProperty(P_ID id, const QVariant& v)
+      {
+      switch (id) {
+            case P_ID::INAME_LAYOUT_POSITION:
+                  _layoutPos = v.toInt();
+printf("%p set layoutPos %d\n", this, _layoutPos);
+                  break;
+            default:
+                  return Text::setProperty(id, v);
+            }
+      score()->setLayoutAll();
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant InstrumentName::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::INAME_LAYOUT_POSITION:
+                  return 0;
+            default:
+                  return Text::propertyDefault(id);
+            }
       }
 
 }

@@ -262,6 +262,7 @@ enum class P_ID : int {
       STAFF_BARLINE_SPAN_TO,
 
       BRACKET_COLUMN,
+      INAME_LAYOUT_POSITION,
 
       END
       };
