@@ -409,6 +409,21 @@ void TieSegment::computeBezier(QPointF p6o)
 
       path.translate(staffOffset);
       shapePath.translate(staffOffset);
+
+      QPainterPath p;
+      p.moveTo(QPointF());
+      p.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
+      _shape.clear();
+      QPointF start;
+      start = t.map(start);
+      int nbShapes = 15;
+      for (int i = 1; i <= nbShapes; i++) {
+            QPointF point = t.map(p.pointAtPercent(i/float(nbShapes)));
+            QRectF re(start, point);
+            re.translate(staffOffset);
+            _shape.add(re);
+            start = point;
+            }
       }
 
 //---------------------------------------------------------

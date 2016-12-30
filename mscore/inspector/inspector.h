@@ -45,6 +45,7 @@
 #include "ui_inspector_tremolo.h"
 #include "ui_inspector_caesura.h"
 #include "ui_inspector_bracket.h"
+#include "ui_inspector_iname.h"
 
 namespace Ms {
 
@@ -440,6 +441,19 @@ class InspectorBracket : public InspectorBase {
 
    public:
       InspectorBracket(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorIname
+//---------------------------------------------------------
+
+class InspectorIname : public InspectorBase {
+      Q_OBJECT
+
+      Ui::InspectorIname i;
+
+   public:
+      InspectorIname(QWidget* parent);
       };
 
 //---------------------------------------------------------

@@ -239,10 +239,7 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorSlurTie(this);
                               break;
                         case Element::Type::BAR_LINE:
-//                              if (_element->isEditable())
-                                    ie = new InspectorBarLine(this);
-//                              else
-//                                    ie = new InspectorEmpty(this);
+                              ie = new InspectorBarLine(this);
                               break;
                         case Element::Type::JUMP:
                               ie = new InspectorJump(this);
@@ -294,7 +291,7 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorBracket(this);
                               break;
                         case Element::Type::INSTRUMENT_NAME:
-                              ie = new InspectorEmpty(this);
+                              ie = new InspectorIname(this);
                               break;
                         default:
                               if (_element->isText())
@@ -1205,6 +1202,20 @@ InspectorBracket::InspectorBracket(QWidget* parent) : InspectorBase(parent)
 
       const std::vector<InspectorItem> il = {
             { P_ID::BRACKET_COLUMN, 0, 0, b.column, b.resetColumn }
+            };
+      mapSignals(il);
+      }
+
+//---------------------------------------------------------
+//   InspectorIname
+//---------------------------------------------------------
+
+InspectorIname::InspectorIname(QWidget* parent) : InspectorBase(parent)
+      {
+      i.setupUi(addWidget());
+
+      const std::vector<InspectorItem> il = {
+            { P_ID::INAME_LAYOUT_POSITION, 0, 0, i.layoutPosition, i.resetLayoutPosition }
             };
       mapSignals(il);
       }

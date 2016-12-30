@@ -554,7 +554,7 @@ void System::setInstrumentNames(bool longName)
       for (SysStaff* staff : _staves) {
             Staff* s = score()->staff(staffIdx);
             if (!s->isTop() || !s->show()) {
-                  foreach (InstrumentName* t, staff->instrumentNames)
+                  for (InstrumentName* t : staff->instrumentNames)
                         score()->removeElement(t);
                   ++staffIdx;
                   continue;
@@ -564,7 +564,7 @@ void System::setInstrumentNames(bool longName)
             const QList<StaffName>& names = longName? part->longNames(tick) : part->shortNames(tick);
 
             int idx = 0;
-            foreach (const StaffName& sn, names) {
+            for (const StaffName& sn : names) {
                   InstrumentName* iname = staff->instrumentNames.value(idx);
                   if (iname == 0) {
                         iname = new InstrumentName(score());
@@ -572,10 +572,10 @@ void System::setInstrumentNames(bool longName)
                         iname->setParent(this);
                         iname->setTrack(staffIdx * VOICES);
                         iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
+                        iname->setLayoutPos(sn.pos());
                         score()->addElement(iname);
                         }
                   iname->setXmlText(sn.name());
-                  iname->setLayoutPos(sn.pos());
                   ++idx;
                   }
             for (; idx < staff->instrumentNames.size(); ++idx)

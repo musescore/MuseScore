@@ -224,13 +224,13 @@ void Bracket::draw(QPainter* painter) const
                   }
                   break;
             case BracketType::NORMAL: {
-                  qreal h = 2 * h2;
+                  qreal h        = 2 * h2;
                   qreal _spatium = spatium();
-                  qreal w = score()->styleP(StyleIdx::bracketWidth);
+                  qreal w        = score()->styleP(StyleIdx::bracketWidth);
+                  qreal bd       = _spatium * .25;
                   QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
                   painter->setPen(pen);
-                  qreal bd   = _spatium * .25;
-                  painter->drawLine(QLineF(0.0, -bd, 0.0, h + bd));
+                  painter->drawLine(QLineF(0.0, -bd - w * .5, 0.0, h + bd + w * .5));
                   qreal x    =  -w * .5;
                   qreal y1   = -bd;
                   qreal y2   = h + bd;

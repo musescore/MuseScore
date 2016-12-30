@@ -64,7 +64,7 @@ class Part : public QObject, public ScoreElement {
       Q_PROPERTY(int          startTrack        READ startTrack)
       Q_PROPERTY(int          volume            READ volume       WRITE setVolume)
 
-      QString _partName;           ///< used in tracklist (mixer)
+      QString _partName;            ///< used in tracklist (mixer)
       InstrumentList _instruments;
       QList<Staff*> _staves;
       QString _id;                  ///< used for MusicXml import

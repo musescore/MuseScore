@@ -132,6 +132,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_tremolo.ui
       inspector/inspector_caesura.ui
       inspector/inspector_bracket.ui
+      inspector/inspector_iname.ui
       ${SCRIPT_UI}
       )
 
