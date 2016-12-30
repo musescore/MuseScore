@@ -49,3 +49,21 @@ scp -C -i $SSH_INDENTITY build/travis/job_macos/web/nightly.xml musescore-nightl
 ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
 
 
+# update translation on transifex
+pip install --user transifex-client
+
+cat > ~/.transifexrc <<EOL
+[https://www.transifex.com]
+hostname = https://www.transifex.com
+password = $TRANSIFEX_PASSWORD
+token =
+username = $TRANSIFEX_USER
+EOL
+
+make -f Makefile.osx lupdate
+
+tx push -s
+
+
+
+
