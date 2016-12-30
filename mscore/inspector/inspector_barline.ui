@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>260</width>
-    <height>265</height>
+    <width>245</width>
+    <height>198</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -155,7 +155,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Spanned staves' value</string>
+         <string>Reset 'Span to next staff' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -288,6 +288,7 @@
  <tabstops>
   <tabstop>type</tabstop>
   <tabstop>resetType</tabstop>
+  <tabstop>span</tabstop>
   <tabstop>resetSpan</tabstop>
   <tabstop>spanFrom</tabstop>
   <tabstop>resetSpanFrom</tabstop>
@@ -298,6 +299,7 @@
   <tabstop>presetTick2</tabstop>
   <tabstop>presetShort1</tabstop>
   <tabstop>presetShort2</tabstop>
+  <tabstop>title</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
