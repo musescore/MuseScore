@@ -28,7 +28,7 @@ ResourceManager::ResourceManager(QWidget *parent) :
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QDir dir;
       dir.mkpath(dataPath + "/locale");
-      baseAddr = "http://extensions.musescore.org/2.0.2/";
+      baseAddr = "http://extensions.musescore.org/2.1/";
       displayPlugins();
       displayLanguages();
       languagesTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
