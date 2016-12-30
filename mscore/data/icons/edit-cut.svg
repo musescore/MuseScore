@@ -1,1 +1,12 @@
-<?xml version='1.0'?><svg height='16.016466' version='1.1' width='16' xmlns='http://www.w3.org/2000/svg'><g transform='translate(-41.0004,-123)'><rect height='4' rx='0.53033006' ry='0.53033006' style='fill:#3b3f45' width='6' x='46.000393' y='123'/><path d='m 43.53125,124 c -0.292435,0 -0.647518,0.036 -1,0.3125 C 42.178768,124.58897 42,125.08125 42,125.4375 l 0,12.03125 c 0,0.384 0.128379,0.81517 0.4375,1.125 0.284782,0.28544 0.709992,0.38602 1.09375,0.375 l 0,0.0312 0.09375,0 4.375,0 0,-2 -4,0 0,-11 1,0 0,-2 -1.46875,0 z M 53,124 l 0,2 1,0 0,5 2,0 0,-5.625 c 0,-0.33333 -0.119574,-0.72959 -0.40625,-1 C 55.307075,124.10459 54.924184,124 54.625,124 L 53,124 z' style='fill:#3b3f45;stroke-width:2'/><path d='M 50.90625,133 A 1.0001,1.0001 0 0 0 50,134 l 0,4 a 1.0001,1.0001 0 1 0 2,0 l 0,-3 3,0 a 1.0001,1.0001 0 1 0 0,-2 l -4,0 a 1.0001,1.0001 0 0 0 -0.09375,0 z' style='fill:#3b3f45;stroke-width:2;enable-background:new'/><path d='m 50.78125,133 a 1.0001,1.0001 0 0 0 -0.5,1.71875 l 4,4 a 1.016466,1.016466 0 1 0 1.4375,-1.4375 l -4,-4 A 1.0001,1.0001 0 0 0 50.78125,133 z' style='fill:#3b3f45;stroke-width:2;enable-background:new'/><rect height='1' style='fill:#3b3f45;stroke-width:2;enable-background:new' transform='scale(1,-1)' width='1' x='50.000584' y='-134'/><rect height='1' style='fill:#3b3f45;fill-rule:nonzero;stroke-width:2' transform='scale(1,-1)' width='1' x='55.000584' y='-134'/><rect height='1' style='fill:#3b3f45;fill-rule:nonzero;stroke-width:2' transform='scale(1,-1)' width='1' x='50.000584' y='-139'/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>edit-cut</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="edit-cut" fill="#3B3F45">
+            <path d="M9.64,7.64 C9.87,7.14 10,6.59 10,6 C10,3.79 8.21,2 6,2 C3.79,2 2,3.79 2,6 C2,8.21 3.79,10 6,10 C6.59,10 7.14,9.87 7.64,9.64 L10,12 L7.64,14.36 C7.14,14.13 6.59,14 6,14 C3.79,14 2,15.79 2,18 C2,20.21 3.79,22 6,22 C8.21,22 10,20.21 10,18 C10,17.41 9.87,16.86 9.64,16.36 L12,14 L19,21 L22,21 L22,20 L9.64,7.64 Z M6,8 C4.9,8 4,7.11 4,6 C4,4.89 4.9,4 6,4 C7.1,4 8,4.89 8,6 C8,7.11 7.1,8 6,8 Z M6,20 C4.9,20 4,19.11 4,18 C4,16.89 4.9,16 6,16 C7.1,16 8,16.89 8,18 C8,19.11 7.1,20 6,20 Z M12,12.5 C11.72,12.5 11.5,12.28 11.5,12 C11.5,11.72 11.72,11.5 12,11.5 C12.28,11.5 12.5,11.72 12.5,12 C12.5,12.28 12.28,12.5 12,12.5 Z M19,3 L13,9 L15,11 L22,4 L22,3 L19,3 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>
