@@ -294,7 +294,7 @@ void MuseScore::loadFiles()
          tr("Capella Files") + " (*.cap *.capx);;" +
          tr("BB Files <experimental>") + " (*.mgu *.MGU *.sgu *.SGU);;" +
 #ifdef OMR
-         tr("PDF Files <experimental OMR>)" + " (*.pdf);;" +
+         tr("PDF Files <experimental OMR>)") + " (*.pdf);;" +
 #endif
          tr("Overture / Score Writer Files <experimental>") + " (*.ove *.scw);;" +
          tr("Bagpipe Music Writer Files <experimental>") + " (*.bww);;" +
