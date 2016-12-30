@@ -164,7 +164,7 @@ QPointF BarLine::pagePos() const
       if (system) {
             // get first not hidden staff
             int startIdx        = staffIdx();
-            int endIdx          = startIdx + spanStaff() ? 1 : 0;
+            int endIdx          = startIdx + (spanStaff() ? 1 : 0);
             int staffIdx1       = startIdx;
             Staff* staff1       = score()->staff(staffIdx1);
             SysStaff* sysStaff1 = system->staff(staffIdx1);
