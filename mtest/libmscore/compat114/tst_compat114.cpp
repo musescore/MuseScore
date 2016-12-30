@@ -74,6 +74,8 @@ void TestCompat114::compat_data()
       QTest::newRow("markers") << "markers";
       QTest::newRow("drumset") << "drumset";
       QTest::newRow("tuplets") << "tuplets";
+      QTest::newRow("tuplets_1") << "tuplets_1";
+      QTest::newRow("tuplets_2") << "tuplets_2";
       }
 
 //---------------------------------------------------------

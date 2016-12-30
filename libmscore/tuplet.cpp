@@ -1069,5 +1069,55 @@ void Tuplet::styleChanged()
             }
       }
 
+//---------------------------------------------------------
+//   sanitizeTuplet
+///    Check validity of tuplets and coherence between duration
+///    and baselength. Needed for importing old files due to a bug
+///    in the released version for corner-case tuplets.
+///    See issue #136406 and Pull request #2881
+//---------------------------------------------------------
+
+void Tuplet::sanitizeTuplet()
+      {
+      Fraction tupletDuration = duration().reduced();
+      Fraction baseLenDuration = (Fraction(ratio().denominator(),1) * baseLen().fraction()).reduced();
+      if ((tupletDuration - baseLenDuration).reduced().numerator() == 0)
+            return;
+      // Mismatch between the duration and the duration computed from the base length.
+      // A tentative will now be made to retrieve the correct duration by summing up all the
+      // durations of the elements constituting the tuplet. This does not work for
+      // not-completely filled tuplets, such as tuplets in voices > 0 with
+      // gaps (for example, a tuplet in second voice with a deleted chordrest element)
+      Fraction testDuration(0,1);
+      for (DurationElement* de : elements()) {
+            if (de == 0)
+                  continue;
+            Fraction elementDuration(0,1);
+            if (de->isTuplet()){
+                  Tuplet* t = toTuplet(de);
+                  t->sanitizeTuplet();
+                  elementDuration = t->duration();
+                  }
+            else {
+                  elementDuration = de->duration();
+                  }
+            testDuration += elementDuration;
+            }
+      testDuration = testDuration / ratio();
+      testDuration.reduce();
+      if (((testDuration - tupletDuration).reduced().numerator() != 0) || ((testDuration - baseLenDuration).reduced().numerator() != 0)) {
+            Fraction f = testDuration * Fraction(1, ratio().denominator());
+            f.reduce();
+            Fraction fbl(1, f.denominator());
+            if (TDuration::isValid(fbl)) {
+                  setDuration(testDuration);
+                  setBaseLen(fbl);
+                  qDebug("Tuplet %p sanitized",this);
+                  }
+            else {
+                  qDebug("Impossible to sanitize the tuplet");
+                  }
+            }
+      }
 }  // namespace Ms
 
