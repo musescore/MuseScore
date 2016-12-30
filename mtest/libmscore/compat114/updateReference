@@ -26,3 +26,5 @@ cp $S/tremolo2notes-test.mscx            tremolo2notes-ref.mscx
 cp $S/markers-test.mscx                  markers-ref.mscx
 cp $S/drumset-test.mscx                  drumset-ref.mscx
 cp $S/tuplets-test.mscx                  tuplets-ref.mscx
+cp $S/tuplets_1-test.mscx                tuplets_1-ref.mscx
+cp $S/tuplets_2-test.mscx                tuplets_2-ref.mscx
