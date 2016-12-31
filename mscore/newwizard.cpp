@@ -159,7 +159,7 @@ TitleWizard::TitleWizard(QWidget* parent)
 NewWizardPage1::NewWizardPage1(QWidget* parent)
    : QWizardPage(parent)
       {
-      setTitle(tr("Create New Score"));
+      setTitle(tr("Create New Score..."));
       setSubTitle(tr("This wizard creates a new score"));
       setAccessibleName(QWizardPage::title());
       setAccessibleDescription(QWizardPage::subTitle());
@@ -189,7 +189,7 @@ NewWizardPage2::NewWizardPage2(QWidget* parent)
    : QWizardPage(parent)
       {
       setFinalPage(true);
-      setTitle(tr("Create New Score"));
+      setTitle(tr("Create New Score..."));
       setSubTitle(tr("Define a set of instruments. Each instrument"
                      " is represented by one or more staves"));
       setAccessibleName(title());
@@ -249,7 +249,7 @@ NewWizardPage3::NewWizardPage3(QWidget* parent)
    : QWizardPage(parent)
       {
       setFinalPage(true);
-      setTitle(tr("Create New Score"));
+      setTitle(tr("Create New Score..."));
       setSubTitle(tr("Create Time Signature"));
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
@@ -268,7 +268,7 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
    : QWizardPage(parent)
       {
       setFinalPage(true);
-      setTitle(tr("Create New Score"));
+      setTitle(tr("Create New Score..."));
       setSubTitle(tr("Select Template File:"));
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
@@ -354,7 +354,7 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
    : QWizardPage(parent)
       {
       setFinalPage(true);
-      setTitle(tr("Create New Score"));
+      setTitle(tr("Create New Score..."));
       setSubTitle(tr("Select Key Signature and Tempo:"));
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
