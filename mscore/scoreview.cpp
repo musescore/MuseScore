@@ -1024,8 +1024,12 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       QAction* a = popup->addSeparator();
       
       // Set Slur or Tie according to the selected object
-      if (obj->type() != Element::Type::SLUR_SEGMENT)
-            a->setText(obj->userName());
+      if (obj->type() != Element::Type::SLUR_SEGMENT) {
+            if ((obj->type() == Element::Type::STAFF_TEXT) && obj->systemFlag())
+                  a->setText(tr("System Text"));
+            else
+                  a->setText(obj->userName());
+            }
       else if (static_cast<SlurSegment*>(obj)->spanner()->type() == Element::Type::SLUR)
             a->setText(tr("Slur"));
       else if (static_cast<SlurSegment*>(obj)->spanner()->type() == Element::Type::TIE)
