@@ -330,10 +330,6 @@ class Score : public QObject, public ScoreElement {
       Q_PROPERTY(int                            ntracks           READ ntracks)
       Q_PROPERTY(Ms::PageFormat*                pageFormat        READ pageFormat     WRITE undoChangePageFormat)
       Q_PROPERTY(QQmlListProperty<Ms::Part>     parts             READ qmlParts)
-//      Q_PROPERTY(QString                        composer          READ composer)
-//      Q_PROPERTY(QString                        poet              READ poet)
-//      Q_PROPERTY(QString                        subtitle          READ subtitle)
-//      Q_PROPERTY(QString                        title             READ title)
 
    public:
       enum class FileError : char {
@@ -1061,11 +1057,6 @@ class Score : public QObject, public ScoreElement {
       Element* firstElement();
       Element* lastElement();
 
-//      QString title();
-//      QString subtitle();
-//      QString composer();
-//      QString poet();
-
       int nmeasures();
       bool hasLyrics();
       bool hasHarmonies();
@@ -1116,6 +1107,20 @@ class Score : public QObject, public ScoreElement {
       friend class Chord;
       };
 
+//-----------------------------------------------------------------------------
+//   Movements
+//    A movement is a unit of a larger work that may stand
+//    by itself as a complete composition.
+//    A MuseScore score fille can contain several movements represented as
+//    MasterScore's. A MasterScore can have several parts represented
+//    as Score. MasterScores are connected in a double linked list.
+//-----------------------------------------------------------------------------
+
+class Movements : public std::list<MasterScore*> {
+   public:
+      Movements() : std::list<MasterScore*>() {}
+      };
+
 //---------------------------------------------------------
 //   MasterScore
 //---------------------------------------------------------
@@ -1128,20 +1133,23 @@ class MasterScore : public Score {
       RepeatList* _repeatList;
       QList<Excerpt*> _excerpts;
       Revisions* _revisions;
+      MasterScore* _next      { 0 };
+      MasterScore* _prev      { 0 };
+      Movements* _movements   { 0 };
 
       CmdState _cmdState;     // modified during cmd processing
 
-      Omr* _omr;
-      bool _showOmr;
+      Omr* _omr               { 0 };
+      bool _showOmr           { false };
 
-      int _midiPortCount { 0 };     // A count of JACK/ALSA midi out ports
+      int _midiPortCount      { 0 };                  // A count of JACK/ALSA midi out ports
       QQueue<MidiInputEvent> _midiInputQueue;         // MIDI events that have yet to be processed
       std::list<MidiInputEvent> _activeMidiPitches;   // MIDI keys currently being held down
       QList<MidiMapping> _midiMapping;
-      bool isSimpleMidiMaping; // midi mapping is simple if all ports and channels
-                               // don't decrease and don't have gaps
-      QSet<int> occupiedMidiChannels;     // each entry is port*16+channel, port range: 0-inf, channel: 0-15
-      unsigned int searchMidiMappingFrom; // makes getting next free MIDI mapping faster
+      bool isSimpleMidiMaping;                        // midi mapping is simple if all ports and channels
+                                                      // don't decrease and don't have gaps
+      QSet<int> occupiedMidiChannels;                 // each entry is port*16+channel, port range: 0-inf, channel: 0-15
+      unsigned int searchMidiMappingFrom;             // makes getting next free MIDI mapping faster
 
       void parseVersion(const QString&);
       void reorderMidiMapping();
@@ -1149,6 +1157,11 @@ class MasterScore : public Score {
       int updateMidiMapping();
 
       QFileInfo info;
+
+      bool read(XmlReader&);
+      void addMovement(MasterScore* score);
+      void setPrev(MasterScore* s) { _prev = s; }
+      void setNext(MasterScore* s) { _next = s; }
 
    public:
       MasterScore();
@@ -1165,6 +1178,10 @@ class MasterScore : public Score {
       virtual const QList<Excerpt*>& excerpts() const override        { return _excerpts;   }
       virtual QQueue<MidiInputEvent>* midiInputQueue() override       { return &_midiInputQueue;    }
       virtual std::list<MidiInputEvent>* activeMidiPitches() override { return &_activeMidiPitches; }
+
+      MasterScore* next()    { return _next;     }
+      MasterScore* prev()    { return _prev;     }
+      Movements* movements() { return _movements; }
 
       virtual void setUpdateAll() override                            { _cmdState.setUpdateMode(UpdateMode::UpdateAll);  }
       virtual void setLayoutAll() override                            { _cmdState.setUpdateMode(UpdateMode::LayoutAll);  }

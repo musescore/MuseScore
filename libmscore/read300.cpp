@@ -274,6 +274,41 @@ bool Score::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
+bool MasterScore::read(XmlReader& e)
+      {
+      if (!Score::read(e))
+            return false;
+      int id = 1;
+      for (LinkedElements* le : e.linkIds())
+            le->setLid(this, id++);
+      for (Staff* s : staves())
+            s->updateOttava();
+      setCreated(false);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   addMovement
+//---------------------------------------------------------
+
+void MasterScore::addMovement(MasterScore* score)
+      {
+      if (!_movements)
+            _movements = new Movements;
+      _movements->push_back(score);
+      score->_movements = _movements;
+      MasterScore* ps = 0;
+      for (MasterScore* s : *_movements) {
+            s->setPrev(ps);
+            s->setNext(0);
+            ps = s;
+            }
+      }
+
+//---------------------------------------------------------
 //   read300
 //---------------------------------------------------------
 
@@ -288,8 +323,12 @@ Score::FileError MasterScore::read300(XmlReader& e)
             else if (tag == "programRevision")
                   setMscoreRevision(e.readInt());
             else if (tag == "Score") {
-                  if (!read(e))
+                  MasterScore* score = this;
+                  if (_movements)
+                        score = new MasterScore();
+                  if (!score->read(e))
                         return FileError::FILE_BAD_FORMAT;
+                  addMovement(score);
                   }
             else if (tag == "Revision") {
                   Revision* revision = new Revision;

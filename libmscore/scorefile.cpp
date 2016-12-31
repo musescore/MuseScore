@@ -815,20 +815,12 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
 
 Score::FileError MasterScore::loadMsc(QString name, bool ignoreVersionError)
       {
-      fileInfo()->setFile(name);
-
       QFile f(name);
       if (!f.open(QIODevice::ReadOnly)) {
             MScore::lastError = f.errorString();
             return FileError::FILE_OPEN_ERROR;
             }
-
-      if (name.endsWith(".mscz"))
-            return loadCompressedMsc(&f, ignoreVersionError);
-      else {
-            XmlReader r(this, &f);
-            return read1(r, ignoreVersionError);
-            }
+      return loadMsc(name, &f, ignoreVersionError);
       }
 
 Score::FileError MasterScore::loadMsc(QString name, QIODevice* io, bool ignoreVersionError)

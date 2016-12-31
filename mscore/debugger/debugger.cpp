@@ -438,6 +438,16 @@ void Debugger::updateList(Score* s)
       if (!isVisible())
             return;
 
+      if (s->masterScore()->movements()) {
+            QTreeWidgetItem* mi = new QTreeWidgetItem(list, int(Element::Type::INVALID));
+            mi->setText(0, "Movements");
+            for (MasterScore* ms : *s->masterScore()->movements()) {
+                  QTreeWidgetItem* s = new QTreeWidgetItem(mi, int(Element::Type::INVALID));
+                  s->setText(0, ms->metaTag("movementTitle"));
+                  }
+            }
+
+
       QTreeWidgetItem* li = new QTreeWidgetItem(list, int(Element::Type::INVALID));
       li->setText(0, "Global");
       for (auto i : s->spanner()) {

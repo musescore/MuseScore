@@ -4209,10 +4209,6 @@ MasterScore::MasterScore()
       _revisions   = new Revisions;
       setMasterScore(this);
 
-//      _undoRedo    = false;
-      _omr         = 0;
-      _showOmr     = false;
-
 #if defined(Q_OS_WIN)
       metaTags().insert("platform", "Microsoft Windows");
 #elif defined(Q_OS_MAC)
