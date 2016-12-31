@@ -150,6 +150,9 @@
         <layout class="QVBoxLayout" name="buttons">
          <item>
           <widget class="QPushButton" name="newAllButton">
+           <property name="toolTip">
+            <string>Generate new part for each instrument</string>
+           </property>
            <property name="text">
             <string>New All</string>
            </property>
