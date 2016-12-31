@@ -734,7 +734,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
       QStringList fl;
       fl.append(tr("PNG Bitmap Graphic") + " (*.png)");
       fl.append(tr("PDF File") + " (*.pdf)");
-      fl.append(tr("Scalable Vector Graphic") + " (*.svg)");
+      fl.append(tr("Scalable Vector Graphics") + " (*.svg)");
 
       QString selectedFilter;
       QString filter = fl.join(";;");

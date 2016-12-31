@@ -1553,7 +1553,7 @@ void MuseScore::exportFile()
       QStringList fl;
       fl.append(tr("PDF File") + " (*.pdf)");
       fl.append(tr("PNG Bitmap Graphic") + " (*.png)");
-      fl.append(tr("Scalable Vector Graphic") + " (*.svg)");
+      fl.append(tr("Scalable Vector Graphics") + " (*.svg)");
 #ifdef HAS_AUDIOFILE
       fl.append(tr("Wave Audio") + " (*.wav)");
       fl.append(tr("FLAC Audio") + " (*.flac)");
@@ -1629,7 +1629,7 @@ bool MuseScore::exportParts()
       QStringList fl;
       fl.append(tr("PDF File") + " (*.pdf)");
       fl.append(tr("PNG Bitmap Graphic") + " (*.png)");
-      fl.append(tr("Scalable Vector Graphic") + " (*.svg)");
+      fl.append(tr("Scalable Vector Graphics") + " (*.svg)");
 #ifdef HAS_AUDIOFILE
       fl.append(tr("Wave Audio") + " (*.wav)");
       fl.append(tr("FLAC Audio") + " (*.flac)");
