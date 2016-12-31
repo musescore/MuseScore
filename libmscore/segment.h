@@ -240,11 +240,8 @@ class Segment : public Element {
       qreal minHorizontalDistance(Segment*, bool isSystemGap) const;
 
       // some helper function
-      ChordRest* cr(int track) const                    {
-            Q_ASSERT(_segmentType == Type::ChordRest);
-            return (ChordRest*)(_elist[track]);
-            };
-      bool isType(const Segment::Type t) const { return static_cast<int>(_segmentType) & static_cast<int>(t); }
+      ChordRest* cr(int track) const        { return toChordRest(_elist[track]); }
+      bool isType(Segment::Type t) const    { return _segmentType == t; }
       bool isBeginBarLineType() const       { return _segmentType == Type::BeginBarLine; }
       bool isClefType() const               { return _segmentType == Type::Clef; }
       bool isHeaderClefType() const         { return _segmentType == Type::HeaderClef; }
