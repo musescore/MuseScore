@@ -294,7 +294,7 @@ void MuseScore::loadFiles()
          tr("Capella Files") + " (*.cap *.capx);;" +
          tr("BB Files <experimental>") + " (*.mgu *.MGU *.sgu *.SGU);;" +
 #ifdef OMR
-         tr("PDF Files <experimental OMR>)") + " (*.pdf);;" +
+         tr("PDF Files <experimental OMR>") + " (*.pdf);;" +
 #endif
          tr("Overture / Score Writer Files <experimental>") + " (*.ove *.scw);;" +
          tr("Bagpipe Music Writer Files <experimental>") + " (*.bww);;" +
@@ -1553,7 +1553,7 @@ void MuseScore::exportFile()
       QStringList fl;
       fl.append(tr("PDF File") + " (*.pdf)");
       fl.append(tr("PNG Bitmap Graphic") + " (*.png)");
-      fl.append(tr("Scalable Vector Graphic") + " (*.svg)");
+      fl.append(tr("Scalable Vector Graphics") + " (*.svg)");
 #ifdef HAS_AUDIOFILE
       fl.append(tr("Wave Audio") + " (*.wav)");
       fl.append(tr("FLAC Audio") + " (*.flac)");
@@ -1629,7 +1629,7 @@ bool MuseScore::exportParts()
       QStringList fl;
       fl.append(tr("PDF File") + " (*.pdf)");
       fl.append(tr("PNG Bitmap Graphic") + " (*.png)");
-      fl.append(tr("Scalable Vector Graphic") + " (*.svg)");
+      fl.append(tr("Scalable Vector Graphics") + " (*.svg)");
 #ifdef HAS_AUDIOFILE
       fl.append(tr("Wave Audio") + " (*.wav)");
       fl.append(tr("FLAC Audio") + " (*.flac)");
