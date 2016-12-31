@@ -2968,7 +2968,10 @@ QString Text::accessibleInfo() const
                   rez = qApp->translate("TextStyle",ts.at(int(textStyleType())).name().toUtf8());
                   break;
             default:
-                  rez = Element::accessibleInfo();
+                  if ((type() == Element::Type::STAFF_TEXT) && systemFlag())
+                        rez = tr("System Text");
+                  else
+                        rez = Element::accessibleInfo();
                   break;
             }
       QString s = plainText(true).simplified();
