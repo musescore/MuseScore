@@ -84,7 +84,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Direction</string>
+        <string>Direction:</string>
        </property>
       </widget>
      </item>
@@ -97,7 +97,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Anchor</string>
+        <string>Anchor:</string>
        </property>
       </widget>
      </item>
@@ -170,10 +170,14 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetDirection">
        <property name="accessibleName">
-        <string>Reset Direction value</string>
+        <string>Reset 'Direction' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -186,7 +190,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Time stretch</string>
+        <string>Time stretch:</string>
        </property>
       </widget>
      </item>
@@ -209,20 +213,28 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetAnchor">
        <property name="accessibleName">
-        <string>Reset Anchor value</string>
+        <string>Reset 'Anchor' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="2" column="2">
       <widget class="QToolButton" name="resetTimeStretch">
        <property name="accessibleName">
-        <string>Reset Time stretch value</string>
+        <string>Reset 'Time stretch' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -235,7 +247,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Ornament Style</string>
+        <string>Ornament Style:</string>
        </property>
       </widget>
      </item>
@@ -265,30 +277,38 @@
      <item row="3" column="2">
       <widget class="QToolButton" name="resetOrnamentStyle">
        <property name="accessibleName">
-        <string>Reset Ornament Type value</string>
+        <string>Reset 'Ornament style' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
        </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QCheckBox" name="playArticulation">
-       <property name="text">
-        <string>Play</string>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="4" column="2">
       <widget class="QToolButton" name="resetPlayArticulation">
        <property name="accessibleName">
-        <string>Reset Play value</string>
+        <string>Reset 'Play' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" colspan="2">
+      <widget class="QCheckBox" name="playArticulation">
+       <property name="text">
+        <string>Play</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -308,6 +328,8 @@
   <tabstop>playArticulation</tabstop>
   <tabstop>resetPlayArticulation</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

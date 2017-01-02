@@ -60,8 +60,8 @@ void PaletteBoxButton::contextMenuEvent(QContextMenuEvent* event)
       actionEdit->setDisabled(_systemPalette);
 
       menu.addSeparator();
-      QAction* actionSave = menu.addAction(tr("Save Palette"));
-      QAction* actionLoad = menu.addAction(tr("Load Palette"));
+      QAction* actionSave = menu.addAction(tr("Save Palette..."));
+      QAction* actionLoad = menu.addAction(tr("Load Palette..."));
       actionLoad->setDisabled(_systemPalette);
 
       menu.addSeparator();

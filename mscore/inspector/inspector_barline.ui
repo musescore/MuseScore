@@ -91,7 +91,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Style</string>
+        <string>Style:</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>
@@ -107,17 +107,21 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Type value</string>
+        <string>Reset 'Style' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Span from</string>
+        <string>Span from:</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>
@@ -130,7 +134,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Spanned staves</string>
+        <string>Spanned staves:</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>
@@ -166,7 +170,7 @@
      <item row="3" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Span to</string>
+        <string>Span to:</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>
@@ -189,10 +193,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Span value</string>
+        <string>Reset 'Spanned staves' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -202,10 +210,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Span from value</string>
+        <string>Reset 'Span from' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -215,17 +227,21 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Span to value</string>
+        <string>Reset 'Span to' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Span preset</string>
+        <string>Span preset:</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>
@@ -248,10 +264,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Span type value</string>
+        <string>Reset 'Span preset' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -271,6 +291,8 @@
   <tabstop>spanType</tabstop>
   <tabstop>resetSpanType</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

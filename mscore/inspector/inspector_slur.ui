@@ -87,10 +87,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Line type value</string>
+        <string>Reset' Line type' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -103,7 +107,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Line type</string>
+        <string>Line type:</string>
        </property>
       </widget>
      </item>
@@ -147,10 +151,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Direction value</string>
+        <string>Reset 'Direction' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -163,7 +171,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Direction</string>
+        <string>Direction:</string>
        </property>
       </widget>
      </item>
@@ -205,6 +213,8 @@
   <tabstop>slurDirection</tabstop>
   <tabstop>resetSlurDirection</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

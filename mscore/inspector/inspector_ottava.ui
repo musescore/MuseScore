@@ -78,7 +78,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Type</string>
+        <string>Type:</string>
        </property>
       </widget>
      </item>
@@ -88,17 +88,21 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Type value</string>
+        <string>Reset 'Type' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Placement</string>
+        <string>Placement:</string>
        </property>
       </widget>
      </item>
@@ -162,10 +166,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Placement value</string>
+        <string>Reset 'Placement' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -188,10 +196,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Numbers only value</string>
+        <string>Reset 'Numbers only' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -207,6 +219,8 @@
   <tabstop>numbersOnly</tabstop>
   <tabstop>resetNumbersOnly</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

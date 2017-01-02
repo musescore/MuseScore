@@ -73,9 +73,6 @@
       <number>3</number>
      </property>
      <property name="verticalSpacing">
-      <number>0</number>
-     </property>
-     <property name="verticalSpacing">
       <number>6</number>
      </property>
      <item row="1" column="1">
@@ -106,7 +103,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Width</string>
+        <string>Width:</string>
        </property>
       </widget>
      </item>
@@ -160,14 +157,14 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Left gap</string>
+        <string>Left gap:</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Right gap</string>
+        <string>Right gap:</string>
        </property>
       </widget>
      </item>
@@ -177,10 +174,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Left gap value</string>
+        <string>Reset 'Left gap' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -190,10 +191,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Right gap value</string>
+        <string>Reset 'Right gap' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -208,6 +213,8 @@
   <tabstop>resetRightGap</tabstop>
   <tabstop>width</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>720</width>
-    <height>526</height>
+    <height>539</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -275,7 +275,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>Scale</string>
+             <string>Scale:</string>
             </property>
            </widget>
           </item>

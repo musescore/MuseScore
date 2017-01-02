@@ -78,10 +78,14 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetY">
        <property name="accessibleName">
-        <string>Reset Vertical offset value</string>
+        <string>Reset 'Vertical offset' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -94,7 +98,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Stem direction</string>
+        <string>Stem direction:</string>
        </property>
       </widget>
      </item>
@@ -129,10 +133,14 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetX">
        <property name="accessibleName">
-        <string>Reset Horizontal offset value</string>
+        <string>Reset 'Horizontal offset' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -145,7 +153,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Vertical offset</string>
+        <string>Vertical offset:</string>
        </property>
       </widget>
      </item>
@@ -180,10 +188,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Stem direction value</string>
+        <string>Reset 'Stem direction' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -196,7 +208,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Horizontal offset</string>
+        <string>Horizontal offset:</string>
        </property>
       </widget>
      </item>
@@ -231,10 +243,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Small Value</string>
+        <string>Reset 'Small' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -244,10 +260,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Stemless value</string>
+        <string>Reset 'Stemless' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>

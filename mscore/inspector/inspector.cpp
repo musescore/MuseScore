@@ -458,7 +458,7 @@ InspectorSpacer::InspectorSpacer(QWidget* parent)
       sp.setupUi(addWidget());
 
       iList = {
-            { P_ID::SPACE, 0, false, sp.height, sp.resetHeight  }
+            { P_ID::SPACE, 0, false, sp.height, 0 }
             };
       mapSignals();
       }

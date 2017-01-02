@@ -159,10 +159,10 @@ TitleWizard::TitleWizard(QWidget* parent)
 NewWizardPage1::NewWizardPage1(QWidget* parent)
    : QWizardPage(parent)
       {
-      setTitle(tr("Create New Score"));
-      setSubTitle(tr("This wizard creates a new score"));
+      setTitle(tr("Create New Score..."));
+      setSubTitle(tr("This wizard creates a new score.\nEnter score information:"));
       //crash setAccessibleName(title());
-      setAccessibleName(tr("Create New Score"));
+      setAccessibleName(tr("Create New Score..."));
       setAccessibleDescription(subTitle());
 
       w = new TitleWizard;
@@ -189,9 +189,8 @@ void NewWizardPage1::initializePage()
 NewWizardPage2::NewWizardPage2(QWidget* parent)
    : QWizardPage(parent)
       {
-      setTitle(tr("Create New Score"));
-      setSubTitle(tr("Define a set of instruments. Each instrument"
-                     " is represented by one or more staves"));
+      setTitle(tr("Create New Score..."));
+      setSubTitle(tr("Select instruments:"));
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
       complete = false;
@@ -239,8 +238,8 @@ void NewWizardPage2::createInstruments(Score* s)
 NewWizardPage3::NewWizardPage3(QWidget* parent)
    : QWizardPage(parent)
       {
-      setTitle(tr("Create New Score"));
-      setSubTitle(tr("Create Time Signature"));
+      setTitle(tr("Create New Score..."));
+      setSubTitle(tr("Select time signature:"));
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
 
@@ -257,8 +256,8 @@ NewWizardPage3::NewWizardPage3(QWidget* parent)
 NewWizardPage4::NewWizardPage4(QWidget* parent)
    : QWizardPage(parent)
       {
-      setTitle(tr("Create New Score"));
-      setSubTitle(tr("Select Template File:"));
+      setTitle(tr("Create New Score..."));
+      setSubTitle(tr("Select template file:"));
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
 
@@ -341,8 +340,8 @@ QString NewWizardPage4::templatePath() const
 NewWizardPage5::NewWizardPage5(QWidget* parent)
    : QWizardPage(parent)
       {
-      setTitle(tr("Create New Score"));
-      setSubTitle(tr("Select Key Signature and Tempo:"));
+      setTitle(tr("Create New Score..."));
+      setSubTitle(tr("Select key signature and tempo:"));
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
 

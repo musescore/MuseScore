@@ -43,7 +43,7 @@
      <item row="5" column="1">
       <widget class="QPushButton" name="add">
        <property name="text">
-        <string>Add Score</string>
+        <string>Add Score...</string>
        </property>
       </widget>
      </item>
@@ -87,6 +87,10 @@
        <property name="text">
         <string notr="true"/>
        </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/arrow_up.svg</normaloff>:/data/icons/arrow_up.svg</iconset>
+       </property>
       </widget>
      </item>
      <item row="1" column="1">
@@ -116,6 +120,10 @@
        <property name="text">
         <string notr="true"/>
        </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/arrow_down.svg</normaloff>:/data/icons/arrow_down.svg</iconset>
+       </property>
       </widget>
      </item>
     </layout>
@@ -141,7 +149,7 @@
         <string>Load an existing album</string>
        </property>
        <property name="text">
-        <string>Load</string>
+        <string>Load...</string>
        </property>
       </widget>
      </item>
@@ -248,7 +256,9 @@
   <tabstop>checkBoxAddPageBreak</tabstop>
   <tabstop>createScore</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

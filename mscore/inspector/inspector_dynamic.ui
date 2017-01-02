@@ -78,7 +78,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Dynamic range</string>
+        <string>Dynamic range:</string>
        </property>
       </widget>
      </item>
@@ -88,17 +88,21 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Velocity value</string>
+        <string>Reset 'Velocity' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Velocity</string>
+        <string>Velocity:</string>
        </property>
       </widget>
      </item>
@@ -140,10 +144,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Dynamic range value</string>
+        <string>Reset 'Dynamic range' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -157,6 +165,8 @@
   <tabstop>velocity</tabstop>
   <tabstop>resetVelocity</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>
