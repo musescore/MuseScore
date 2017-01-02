@@ -84,7 +84,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Trailing space</string>
+        <string>Trailing space:</string>
        </property>
       </widget>
      </item>
@@ -147,7 +147,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Leading space</string>
+        <string>Leading space:</string>
        </property>
       </widget>
      </item>
@@ -157,10 +157,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Leading space value</string>
+        <string>Reset 'Leading space' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -170,10 +174,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Trailing space value</string>
+        <string>Reset 'Trailing space' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>

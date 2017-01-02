@@ -90,10 +90,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Tuning value</string>
+        <string>Reset 'Tuning' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -135,10 +139,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Velocity value</string>
+        <string>Reset 'Velocity' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -247,7 +255,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Mirror head</string>
+        <string>Mirror head:</string>
        </property>
        <property name="buddy">
         <cstring>mirrorHead</cstring>
@@ -294,7 +302,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Dot position</string>
+        <string>Dot position:</string>
        </property>
        <property name="buddy">
         <cstring>dotPosition</cstring>
@@ -323,19 +331,6 @@
        </property>
       </widget>
      </item>
-     <item row="10" column="0">
-      <widget class="QCheckBox" name="fixed">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>Fix to line</string>
-       </property>
-       <property name="text">
-        <string>Fix to line</string>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_7">
        <property name="sizePolicy">
@@ -345,7 +340,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Head type</string>
+        <string>Head type:</string>
        </property>
        <property name="buddy">
         <cstring>noteHeadType</cstring>
@@ -398,10 +393,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Velocity type value</string>
+        <string>Reset 'Velocity type' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -414,7 +413,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Head group</string>
+        <string>Head group:</string>
        </property>
        <property name="buddy">
         <cstring>noteHeadGroup</cstring>
@@ -433,17 +432,21 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Dot position value</string>
+        <string>Reset 'Dot position' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="11" column="0">
       <widget class="QLabel" name="fixedLineLabel">
        <property name="text">
-        <string>Line</string>
+        <string>Line:</string>
        </property>
       </widget>
      </item>
@@ -459,10 +462,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Play value</string>
+        <string>Reset 'Play' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -478,10 +485,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Small value</string>
+        <string>Reset 'Small' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -494,7 +505,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Velocity</string>
+        <string>Velocity:</string>
        </property>
        <property name="buddy">
         <cstring>velocity</cstring>
@@ -510,7 +521,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Tuning</string>
+        <string>Tuning:</string>
        </property>
        <property name="buddy">
         <cstring>tuning</cstring>
@@ -542,10 +553,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Mirror head value</string>
+        <string>Reset 'Mirror head' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -558,7 +573,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Velocity type</string>
+        <string>Velocity type:</string>
        </property>
        <property name="buddy">
         <cstring>velocityType</cstring>
@@ -577,10 +592,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Head group value</string>
+        <string>Reset 'Head group' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -596,10 +615,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Head type value</string>
+        <string>Reset 'Head type' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -609,10 +632,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Fix to line</string>
+        <string>Reset 'Fix to line' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -622,10 +649,27 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Line</string>
+        <string>Reset 'Line' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="0" colspan="2">
+      <widget class="QCheckBox" name="fixed">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Fix to line</string>
+       </property>
+       <property name="text">
+        <string>Fix to line</string>
        </property>
       </widget>
      </item>
@@ -653,6 +697,8 @@
   <tabstop>velocity</tabstop>
   <tabstop>resetVelocity</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>270</width>
-    <height>125</height>
+    <height>135</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,12 +53,6 @@
    </item>
    <item>
     <widget class="QFrame" name="frame">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>6</height>
-      </size>
-     </property>
      <property name="frameShape">
       <enum>QFrame::HLine</enum>
      </property>
@@ -87,51 +81,63 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Text</string>
+        <string>Text:</string>
        </property>
       </widget>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_1">
        <property name="text">
-        <string>Type</string>
+        <string>Type:</string>
        </property>
       </widget>
      </item>
      <item row="1" column="2">
       <widget class="QToolButton" name="resetText">
        <property name="accessibleName">
-        <string>Reset Text value</string>
+        <string>Reset 'Text' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="0" column="2">
       <widget class="QToolButton" name="resetType">
        <property name="accessibleName">
-        <string>Reset Type value</string>
+        <string>Reset 'Type' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Style</string>
+        <string>Style:</string>
        </property>
       </widget>
      </item>
      <item row="3" column="2">
       <widget class="QToolButton" name="resetGlissandoStyle">
        <property name="accessibleName">
-        <string>Reset Style value</string>
+        <string>Reset 'Style' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -189,10 +195,14 @@
      <item row="2" column="2">
       <widget class="QToolButton" name="resetShowText">
        <property name="accessibleName">
-        <string>Reset Show text value</string>
+        <string>Reset 'Show text' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -209,23 +219,27 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item row="4" column="2">
+      <widget class="QToolButton" name="resetPlayGlissando">
+       <property name="accessibleName">
+        <string>Reset 'Play' value</string>
+       </property>
+       <property name="text">
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" colspan="2">
       <widget class="QCheckBox" name="playGlissando">
        <property name="text">
         <string>Play</string>
        </property>
        <property name="checked">
         <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QToolButton" name="resetPlayGlissando">
-       <property name="accessibleName">
-        <string>Reset Play value</string>
-       </property>
-       <property name="text">
-        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -241,6 +255,8 @@
   <tabstop>showText</tabstop>
   <tabstop>resetShowText</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

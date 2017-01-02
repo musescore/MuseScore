@@ -63,9 +63,6 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
      <property name="leftMargin">
       <number>0</number>
      </property>
@@ -76,6 +73,9 @@
       <number>0</number>
      </property>
      <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="spacing">
       <number>0</number>
      </property>
      <item row="0" column="1" colspan="2">
@@ -98,7 +98,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Type</string>
+        <string>Type:</string>
        </property>
       </widget>
      </item>
@@ -108,10 +108,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Type value</string>
+        <string>Reset 'Type' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -119,6 +123,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

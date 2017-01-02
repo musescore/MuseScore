@@ -63,10 +63,10 @@
       <enum>QFrame::HLine</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
+      <enum>QFrame::Raised</enum>
      </property>
      <property name="lineWidth">
-      <number>1</number>
+      <number>2</number>
      </property>
     </widget>
    </item>
@@ -93,7 +93,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Vertical offset</string>
+        <string>Vertical offset:</string>
        </property>
       </widget>
      </item>
@@ -140,7 +140,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Color</string>
+        <string>Color:</string>
        </property>
       </widget>
      </item>
@@ -153,10 +153,14 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Reset Horizontal offset value</string>
+        <string>Reset 'Horizontal offset' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -194,10 +198,14 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Reset Vertical offset value</string>
+        <string>Reset 'Vertical offset' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -216,7 +224,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Horizontal offset</string>
+        <string>Horizontal offset:</string>
        </property>
       </widget>
      </item>
@@ -229,17 +237,25 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Reset Color value</string>
+        <string>Reset 'Color' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="3" column="2">
       <widget class="QToolButton" name="hRaster">
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/raster-horizontal.svg</normaloff>:/data/icons/raster-horizontal.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -248,11 +264,12 @@
      </item>
      <item row="4" column="2">
       <widget class="QToolButton" name="vRaster">
-       <property name="accessibleName">
-        <string/>
-       </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/raster-vertical.svg</normaloff>:/data/icons/raster-vertical.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -315,10 +332,14 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Reset Visible value</string>
+        <string>Reset 'Visible' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>

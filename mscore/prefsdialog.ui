@@ -221,7 +221,11 @@
                <string>Opens a file dialog for selecting the starting score</string>
               </property>
               <property name="text">
-               <string/>
+               <string notr="true"/>
+              </property>
+              <property name="icon">
+               <iconset resource="musescore.qrc">
+                <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
               </property>
              </widget>
             </item>
@@ -401,7 +405,11 @@
              <string>Opens a folder dialog for selecting the score folder</string>
             </property>
             <property name="text">
-             <string/>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
             </property>
            </widget>
           </item>
@@ -417,7 +425,11 @@
              <string>Opens a folder dialog for selecting the style folder</string>
             </property>
             <property name="text">
-             <string/>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
             </property>
            </widget>
           </item>
@@ -476,7 +488,11 @@
              <string>Opens a folder dialog for selecting the plugin folder</string>
             </property>
             <property name="text">
-             <string/>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
             </property>
            </widget>
           </item>
@@ -515,7 +531,11 @@
              <string>Opens a folder dialog for selecting the template folder</string>
             </property>
             <property name="text">
-             <string/>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
             </property>
            </widget>
           </item>
@@ -531,7 +551,11 @@
              <string>Opens a folder dialog for selecting the image folder</string>
             </property>
             <property name="text">
-             <string/>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
             </property>
            </widget>
           </item>
@@ -547,7 +571,11 @@
              <string>Opens a dialog for configuring the SoundFont folders</string>
             </property>
             <property name="text">
-             <string/>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit.svg</normaloff>:/data/icons/edit.svg</iconset>
             </property>
            </widget>
           </item>
@@ -814,7 +842,7 @@
              <string>Background Color</string>
             </property>
             <property name="text">
-             <string>Color</string>
+             <string>Color:</string>
             </property>
            </widget>
           </item>
@@ -841,7 +869,7 @@
                <string>Background Wallpaper</string>
               </property>
               <property name="text">
-               <string>Wallpaper</string>
+               <string>Wallpaper:</string>
               </property>
              </widget>
             </item>
@@ -873,7 +901,11 @@
                <string>Opens a file dialog for selecting the wallpaper file</string>
               </property>
               <property name="text">
-               <string/>
+               <string notr="true"/>
+              </property>
+              <property name="icon">
+               <iconset resource="musescore.qrc">
+                <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
               </property>
              </widget>
             </item>
@@ -958,7 +990,7 @@
                <string>Paper Wallpaper</string>
               </property>
               <property name="text">
-               <string>Wallpaper</string>
+               <string>Wallpaper:</string>
               </property>
              </widget>
             </item>
@@ -990,7 +1022,11 @@
                <string>Opens a file dialog for selecting the wallpaper file</string>
               </property>
               <property name="text">
-               <string/>
+               <string notr="true"/>
+              </property>
+              <property name="icon">
+               <iconset resource="musescore.qrc">
+                <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
               </property>
              </widget>
             </item>
@@ -1002,7 +1038,7 @@
              <string>Paper Color</string>
             </property>
             <property name="text">
-             <string>Color</string>
+             <string>Color:</string>
             </property>
            </widget>
           </item>
@@ -1321,7 +1357,12 @@
              <string>Rewind is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1337,7 +1378,12 @@
              <string>Rewind record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1360,7 +1406,12 @@
              <string>Is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1376,7 +1427,12 @@
              <string>Toggle play record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1422,7 +1478,12 @@
              <string>Whole note is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1435,7 +1496,12 @@
              <string>Half note is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1448,7 +1514,12 @@
              <string>Whole note record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1461,7 +1532,12 @@
              <string>Half note record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1504,7 +1580,12 @@
              <string>Rest is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1517,7 +1598,12 @@
              <string>Quarter note is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1530,7 +1616,12 @@
              <string>Quarter note record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1543,7 +1634,12 @@
              <string>Eighth note is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1556,7 +1652,12 @@
              <string>Eighth note record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1596,7 +1697,12 @@
              <string>Augmentation dot is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1609,7 +1715,12 @@
              <string>Augmentation dot record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1622,7 +1733,12 @@
              <string>Double augmentation dot is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1635,7 +1751,12 @@
              <string>Double augmentation dot record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1648,7 +1769,12 @@
              <string>Tie is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1661,7 +1787,12 @@
              <string>Tie record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1674,7 +1805,12 @@
              <string>Rest record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1749,7 +1885,12 @@
              <string>Play is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1765,7 +1906,12 @@
              <string>Stop is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1781,7 +1927,12 @@
              <string>Play record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1797,7 +1948,12 @@
              <string>Stop record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1823,7 +1979,12 @@
              <string>Note input is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1839,7 +2000,12 @@
              <string>Note input record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1862,7 +2028,12 @@
              <string>16th note is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1875,7 +2046,12 @@
              <string>16th note record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1888,7 +2064,12 @@
              <string>32nd note is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1901,7 +2082,12 @@
              <string>32nd note record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1934,7 +2120,12 @@
              <string>64th note is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1947,7 +2138,12 @@
              <string>64th note record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1960,7 +2156,12 @@
              <string>Undo is active</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/darkgreendot.svg</normaloff>
+              <normalon>:/data/greendot.svg</normalon>:/data/darkgreendot.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1973,7 +2174,12 @@
              <string>Undo record</string>
             </property>
             <property name="text">
-             <string notr="true">...</string>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/recordOff.svg</normaloff>
+              <normalon>:/data/recordOn.svg</normalon>:/data/recordOff.svg</iconset>
             </property>
            </widget>
           </item>
@@ -2122,7 +2328,11 @@
              <string>Opens a file dialog for selecting a instrument list file</string>
             </property>
             <property name="text">
-             <string/>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
             </property>
            </widget>
           </item>
@@ -2178,7 +2388,11 @@
              <string>Opens a file dialog for selecting a style file</string>
             </property>
             <property name="text">
-             <string/>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
             </property>
            </widget>
           </item>
@@ -2214,7 +2428,11 @@
              <string>Opens a file dialog for selecting a style file for part</string>
             </property>
             <property name="text">
-             <string/>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
             </property>
            </widget>
           </item>
@@ -2240,7 +2458,11 @@
              <string>Opens a file dialog for selecting a instrument list file</string>
             </property>
             <property name="text">
-             <string/>
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
             </property>
            </widget>
           </item>
@@ -2851,8 +3073,9 @@
               <property name="accessibleDescription">
                <string>Opens a file dialog for selecting a style file</string>
               </property>
-              <property name="text">
-               <string>Browse...</string>
+              <property name="icon">
+               <iconset resource="musescore.qrc">
+                <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
               </property>
              </widget>
             </item>
@@ -3715,6 +3938,8 @@
   <tabstop>drawAntialiased</tabstop>
   <tabstop>proximity</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

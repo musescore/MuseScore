@@ -75,33 +75,17 @@
      <property name="verticalSpacing">
       <number>0</number>
      </property>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Scale to frame size</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1" colspan="2">
-      <widget class="QCheckBox" name="autoscale">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>Scale to frame size</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="3">
       <widget class="QToolButton" name="resetAutoscale">
        <property name="accessibleName">
-        <string>Reset Scale to frame size value</string>
+        <string>Reset 'Scale to frame size' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -155,14 +139,14 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Size</string>
+        <string>Size:</string>
        </property>
       </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Scale</string>
+        <string>Scale:</string>
        </property>
       </widget>
      </item>
@@ -231,20 +215,28 @@
      <item row="4" column="3">
       <widget class="QToolButton" name="resetLockAspectRatio">
        <property name="accessibleName">
-        <string>Reset Lock aspect ratio value</string>
+        <string>Reset 'Lock aspect ratio' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="5" column="3">
       <widget class="QToolButton" name="resetSizeIsSpatium">
        <property name="accessibleName">
-        <string>Reset Size in staff space units value</string>
+        <string>Reset 'Size in staff space units' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -280,6 +272,19 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="0" colspan="3">
+      <widget class="QCheckBox" name="autoscale">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Scale to frame size</string>
+       </property>
+       <property name="text">
+        <string>Scale to frame size</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
@@ -296,6 +301,8 @@
   <tabstop>sizeIsSpatium</tabstop>
   <tabstop>resetSizeIsSpatium</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

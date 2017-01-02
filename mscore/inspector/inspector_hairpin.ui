@@ -84,10 +84,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Type value</string>
+        <string>Reset 'Type' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -111,7 +115,7 @@
      <item row="3" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Dynamic range</string>
+        <string>Dynamic range:</string>
        </property>
       </widget>
      </item>
@@ -121,24 +125,28 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Height value</string>
+        <string>Reset 'Height' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="6" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Continue height</string>
+        <string>Continue height:</string>
        </property>
       </widget>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Velocity change</string>
+        <string>Velocity change:</string>
        </property>
       </widget>
      </item>
@@ -152,30 +160,27 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QCheckBox" name="useTextLine">
-       <property name="text">
-        <string>Text line</string>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="2">
       <widget class="QToolButton" name="resetVeloChange">
        <property name="toolTip">
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Velocity change value</string>
+        <string>Reset 'Velocity change' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="5" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Height</string>
+        <string>Height:</string>
        </property>
       </widget>
      </item>
@@ -198,10 +203,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Continue height value</string>
+        <string>Reset 'Continue height' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -211,30 +220,21 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Dynamic range value</string>
+        <string>Reset 'Dynamic range' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QCheckBox" name="hairpinCircledTip">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>Circled tip</string>
-       </property>
-       <property name="text">
-        <string>Circled tip</string>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Type</string>
+        <string>Type:</string>
        </property>
       </widget>
      </item>
@@ -244,10 +244,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Circled tip value</string>
+        <string>Reset 'Circled tip' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -288,8 +292,35 @@
      </item>
      <item row="0" column="2">
       <widget class="QToolButton" name="resetUseTextLine">
+       <property name="accessibleName">
+        <string>Reset 'Text line' value</string>
+       </property>
        <property name="text">
-        <string>...</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="2">
+      <widget class="QCheckBox" name="useTextLine">
+       <property name="text">
+        <string>Text line</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QCheckBox" name="hairpinCircledTip">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Circled tip</string>
+       </property>
+       <property name="text">
+        <string>Circled tip</string>
        </property>
       </widget>
      </item>
@@ -313,6 +344,8 @@
   <tabstop>hairpinContHeight</tabstop>
   <tabstop>resetHairpinContHeight</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

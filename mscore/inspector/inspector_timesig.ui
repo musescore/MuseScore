@@ -63,9 +63,6 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
      <property name="leftMargin">
       <number>0</number>
      </property>
@@ -76,6 +73,9 @@
       <number>0</number>
      </property>
      <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="spacing">
       <number>0</number>
      </property>
      <item row="0" column="2">
@@ -90,10 +90,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Show courtesy value</string>
+        <string>Reset 'Show courtesy' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -124,6 +128,8 @@
   <tabstop>showCourtesy</tabstop>
   <tabstop>resetShowCourtesy</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

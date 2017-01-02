@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>287</width>
-    <height>68</height>
+    <height>84</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,9 +63,6 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
      <property name="leftMargin">
       <number>0</number>
      </property>
@@ -78,6 +75,9 @@
      <property name="bottomMargin">
       <number>0</number>
      </property>
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="sizePolicy">
@@ -87,7 +87,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Type</string>
+        <string>Type:</string>
        </property>
       </widget>
      </item>
@@ -124,10 +124,14 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Trill type</string>
+        <string>Reset 'Type' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -140,7 +144,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Ornament Style</string>
+        <string>Ornament Style:</string>
        </property>
       </widget>
      </item>
@@ -167,17 +171,7 @@
        </item>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QToolButton" name="resetOrnamentStyle">
-       <property name="accessibleName">
-        <string>Reset Ornament Type value</string>
-       </property>
-       <property name="text">
-        <string notr="true">...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
+     <item row="2" column="0" colspan="2">
       <widget class="QCheckBox" name="playArticulation">
        <property name="text">
         <string>Play</string>
@@ -187,13 +181,31 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QToolButton" name="resetPlayArticulation">
+     <item row="1" column="3">
+      <widget class="QToolButton" name="resetOrnamentStyle">
        <property name="accessibleName">
-        <string>Reset Play value</string>
+        <string>Reset 'Ornament style' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QToolButton" name="resetPlayArticulation">
+       <property name="accessibleName">
+        <string>Reset 'Play' value</string>
+       </property>
+       <property name="text">
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -201,6 +213,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

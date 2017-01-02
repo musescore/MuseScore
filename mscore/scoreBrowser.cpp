@@ -142,7 +142,7 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
             f.setBold(true);
             }
       else if (fi.completeBaseName() == "Create_New_Score") {
-            item->setText(tr("Create New Score"));
+            item->setText(tr("Create New Score..."));
             f.setBold(true);
             }
       else {

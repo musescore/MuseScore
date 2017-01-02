@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>904</width>
-    <height>580</height>
+    <height>597</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,11 +89,11 @@
             </item>
             <item row="1" column="1">
              <widget class="QComboBox" name="musicalTextFont">
-            <item>
-                <property name="text">
-                    <string>Bravura Text</string>
-                </property>
-            </item>
+              <item>
+               <property name="text">
+                <string>Bravura Text</string>
+               </property>
+              </item>
               <item>
                <property name="text">
                 <string>Emmentaler Text</string>
@@ -4208,7 +4208,11 @@
              <item row="0" column="2">
               <widget class="QToolButton" name="chordDescriptionFileButton">
                <property name="text">
-                <string notr="true">...</string>
+                <string notr="true"/>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
                </property>
               </widget>
              </item>
@@ -5812,7 +5816,9 @@
   <tabstop>tupletStemRightDistance</tabstop>
   <tabstop>tupletNoteRightDistance</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pageList</sender>

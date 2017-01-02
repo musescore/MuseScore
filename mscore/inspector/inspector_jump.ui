@@ -50,12 +50,6 @@
    </item>
    <item>
     <widget class="QFrame" name="frame">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>6</height>
-      </size>
-     </property>
      <property name="frameShape">
       <enum>QFrame::HLine</enum>
      </property>
@@ -91,21 +85,21 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Jump to</string>
+        <string>Jump to:</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Play until</string>
+        <string>Play unti:l</string>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Continue at</string>
+        <string>Continue at:</string>
        </property>
       </widget>
      </item>
@@ -126,30 +120,42 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetJumpTo">
        <property name="accessibleName">
-        <string>Reset Jump to value</string>
+        <string>Reset 'Jump to' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="1" column="2">
       <widget class="QToolButton" name="resetPlayUntil">
        <property name="accessibleName">
-        <string>Reset Play until value</string>
+        <string>Reset 'Play until' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
      <item row="2" column="2">
       <widget class="QToolButton" name="resetContinueAt">
        <property name="accessibleName">
-        <string>Reset Continue at value</string>
+        <string>Reset 'Continue at' value</string>
        </property>
        <property name="text">
-        <string notr="true">...</string>
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../musescore.qrc">
+         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
