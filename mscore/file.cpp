@@ -1946,6 +1946,7 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       Score* firstScore = cs[0];
 
       QPrinter printerDev(QPrinter::HighResolution);
+      printerDev.setResolution(preferences.exportPdfDpi);
       const PageFormat* pf = firstScore->pageFormat();
       printerDev.setPaperSize(pf->size(), QPrinter::Inch);
 
