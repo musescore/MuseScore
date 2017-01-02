@@ -1895,7 +1895,17 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
       printerDev.setCreator("MuseScore Version: " VERSION);
       if (!printerDev.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
-      printerDev.setTitle(cs->name());
+
+      QString title = cs->metaTag("workTitle");
+      if (title.isEmpty()) // workTitle unset?
+            title = cs->rootScore()->title(); // fall back to (root)score's tab title
+      if (cs != cs->rootScore()) { // excerpt?
+            QString partname = cs->metaTag("partName");
+            if (partname.isEmpty()) // partName unset?
+                  partname = cs->title(); // fall back to excerpt's tab title
+            title += " - " + partname;
+            }
+      printerDev.setTitle(title); // set PDF's meta data for Title
 
       QPainter p;
       if (!p.begin(&printerDev))
@@ -1935,7 +1945,12 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       if (!printerDev.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
       printerDev.setColorMode(QPrinter::Color);
-      printerDev.setDocName(firstScore->name());
+
+      QString title = firstScore->metaTag("workTitle");
+      if (title.isEmpty()) // workTitle unset?
+            title = firstScore->title(); // fall back to (root)score's tab title
+      title += " - " + tr("Score and Parts");
+      printerDev.setDocName(title);
       printerDev.setOutputFormat(QPrinter::PdfFormat);
 
       printerDev.setOutputFileName(saveName);
