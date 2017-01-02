@@ -1590,14 +1590,14 @@ void MuseScore::exportFile()
 #ifdef Q_OS_WIN
       if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
             if (!cs->isMaster())
-                  name = QString("%1/%2-%3").arg(saveDirectory).arg(cs->masterScore()->fileInfo()->completeBaseName()).arg(createDefaultFileName(cs->name()));
+                  name = QString("%1/%2-%3").arg(saveDirectory).arg(cs->masterScore()->fileInfo()->completeBaseName()).arg(createDefaultFileName(cs->title()));
             else
                   name = QString("%1/%2").arg(saveDirectory).arg(cs->masterScore()->fileInfo()->completeBaseName());
             }
       else
 #endif
       if (!cs->isMaster())
-            name = QString("%1/%2-%3.%4").arg(saveDirectory).arg(cs->masterScore()->fileInfo()->completeBaseName()).arg(createDefaultFileName(cs->name())).arg(saveFormat);
+            name = QString("%1/%2-%3.%4").arg(saveDirectory).arg(cs->masterScore()->fileInfo()->completeBaseName()).arg(createDefaultFileName(cs->title())).arg(saveFormat);
       else
             name = QString("%1/%2.%3").arg(saveDirectory).arg(cs->masterScore()->fileInfo()->completeBaseName()).arg(saveFormat);
 
@@ -1897,7 +1897,17 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
       printerDev.setCreator("MuseScore Version: " VERSION);
       if (!printerDev.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
-      printerDev.setTitle(cs->title());
+
+      QString title = cs->metaTag("workTitle");
+      if (title.isEmpty()) // workTitle unset?
+            title = cs->masterScore()->title(); // fall back to (master)score's tab title
+      if (!cs->isMaster()) { // excerpt?
+            QString partname = cs->metaTag("partName");
+            if (partname.isEmpty()) // partName unset?
+                  partname = cs->title(); // fall back to excerpt's tab title
+            title += " - " + partname;
+            }
+      printerDev.setTitle(title); // set PDF's meta data for Title
 
       QPainter p;
       if (!p.begin(&printerDev))
@@ -1936,6 +1946,7 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       Score* firstScore = cs[0];
 
       QPrinter printerDev(QPrinter::HighResolution);
+      printerDev.setResolution(preferences.exportPdfDpi);
       const PageFormat* pf = firstScore->pageFormat();
       printerDev.setPaperSize(pf->size(), QPrinter::Inch);
 
@@ -1944,7 +1955,12 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       if (!printerDev.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
       printerDev.setColorMode(QPrinter::Color);
-      printerDev.setDocName(firstScore->title());
+
+      QString title = firstScore->metaTag("workTitle");
+      if (title.isEmpty()) // workTitle unset?
+            title = firstScore->title(); // fall back to (master)score's tab title
+      title += " - " + tr("Score and Parts");
+      printerDev.setDocName(title);
       printerDev.setOutputFormat(QPrinter::PdfFormat);
 
       printerDev.setOutputFileName(saveName);
