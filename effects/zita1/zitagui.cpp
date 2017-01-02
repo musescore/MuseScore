@@ -109,14 +109,9 @@ void ZitaEffectGui::mouseMoveEvent(QMouseEvent* e)
       {
       if (r == -1)
             return;
-      int dx = e->globalX() - mx;
       int dy = e->globalY() - my;
-      if (dy > 0 && dy > dx)
-            dx = dy;
-      else if (dy < 0 && dy < dx)
-            dx = dy;
       qreal v = oval;
-      v = v + dx * .01;
+      v = v - dy * .01;
       if (v < 0)
             v = 0;
       else if (v > 1.0)
