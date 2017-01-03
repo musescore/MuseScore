@@ -44,7 +44,8 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
-        <defaultClef>F8vb</defaultClef>
+        <defaultConcertClef>F8vb</defaultConcertClef>
+        <defaultTransposingClef>F</defaultTransposingClef>
         </Staff>
       <trackName>Electric Bass</trackName>
       <Instrument>
@@ -55,8 +56,11 @@
         <maxPitchP>65</maxPitchP>
         <minPitchA>28</minPitchA>
         <maxPitchA>65</maxPitchA>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
         <instrumentId>pluck.bass.electric</instrumentId>
-        <clef>F8vb</clef>
+        <concertClef>F8vb</concertClef>
+        <transposingClef>F</transposingClef>
         <StringData>
           <frets>24</frets>
           <string>28</string>
