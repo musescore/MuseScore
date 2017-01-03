@@ -5183,8 +5183,7 @@ void MuseScore::showSearchDialog()
 
             qDebug("Line edit %p", searchCombo->lineEdit());
 
-            // does not work: connect(searchCombo->lineEdit(), SIGNAL(returnPressed()), SLOT(endSearch()));
-            connect(searchCombo->lineEdit(), SIGNAL(editingFinished()), SLOT(endSearch()));
+            connect(searchCombo->lineEdit(), SIGNAL(returnPressed()), SLOT(endSearch()));
             }
 
       searchCombo->clearEditText();
