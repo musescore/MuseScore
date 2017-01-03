@@ -160,13 +160,10 @@ void Inspector::setElements(const QList<Element*>& l)
 
             bool sameTypes = true;
             for (Element* ee : _el) {
-                  if (_element->type() != ee->type())
+                  if (((_element->type() != ee->type()) && // different and
+                      (!_element->isSlurTieSegment() || !ee->isSlurTieSegment())) || // neither Slur nor Tie either side, or
+                      (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(_element)->chord()->isGrace())) // HACK
                         sameTypes = false;
-                  else {
-                        // HACK:
-                        if (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(_element)->chord()->isGrace())
-                              sameTypes = false;
-                        }
                   }
             if (!sameTypes)
                   ie = new InspectorGroupElement(this);
@@ -1065,17 +1062,17 @@ InspectorStafftext::InspectorStafftext(QWidget* parent)
 
       Element* e = inspector->element();
       Text* te = static_cast<Text*>(e);
-      bool sameType = true;
+      bool sameTypes = true;
 
       for (const auto& ee : inspector->el()) {
             Text* tt = static_cast<Text*>(ee);
 
             if (tt->systemFlag() != te->systemFlag()) {
-                  sameType = false;
+                  sameTypes = false;
                   break;
                   }
             }
-      if (sameType) {
+      if (sameTypes) {
             if (te->systemFlag())
                   s.title->setText(tr("System Text"));
             else
@@ -1128,15 +1125,15 @@ InspectorSlurTie::InspectorSlurTie(QWidget* parent)
       s.setupUi(addWidget());
 
       Element* e = inspector->element();
-      bool sameType = true;
+      bool sameTypes = true;
 
       for (const auto& ee : inspector->el()) {
             if (ee->accessibleInfo() != e->accessibleInfo()) {
-                  sameType = false;
+                  sameTypes = false;
                   break;
                   }
             }
-      if (sameType)
+      if (sameTypes)
             s.title->setText(e->accessibleInfo());
 
       const std::vector<InspectorItem> iiList = {
@@ -1175,14 +1172,14 @@ InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorElementBase(paren
       c.setupUi(addWidget());
 
       Breath* b = toBreath(inspector->element());
-      bool sameType = true;
+      bool sameTypes = true;
       for (const auto& ee : inspector->el()) {
             if (ee->accessibleInfo() != b->accessibleInfo()) {
-                  sameType = false;
+                  sameTypes = false;
                   break;
                   }
             }
-      if (sameType)
+      if (sameTypes)
             c.title->setText(b->accessibleInfo());
 
       const std::vector<InspectorItem> il = {
