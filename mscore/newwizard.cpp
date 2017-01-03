@@ -159,11 +159,10 @@ TitleWizard::TitleWizard(QWidget* parent)
 NewWizardPage1::NewWizardPage1(QWidget* parent)
    : QWizardPage(parent)
       {
-      setTitle(tr("Create New Score..."));
-      setSubTitle(tr("This wizard creates a new score.\nEnter score information:"));
-      //crash setAccessibleName(title());
-      setAccessibleName(tr("Create New Score..."));
-      setAccessibleDescription(subTitle());
+      setTitle(tr("Create New Score"));
+      setSubTitle(tr("Enter score information:"));
+      setAccessibleName(QWizardPage::title());
+      setAccessibleDescription(QWizardPage::subTitle());
 
       w = new TitleWizard;
 
@@ -189,8 +188,8 @@ void NewWizardPage1::initializePage()
 NewWizardPage2::NewWizardPage2(QWidget* parent)
    : QWizardPage(parent)
       {
-      setTitle(tr("Create New Score..."));
-      setSubTitle(tr("Select instruments:"));
+      setTitle(tr("Create New Score"));
+      setSubTitle(tr("Choose instruments on the left to add to instrument list on the right:"));
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
       complete = false;
@@ -238,8 +237,8 @@ void NewWizardPage2::createInstruments(Score* s)
 NewWizardPage3::NewWizardPage3(QWidget* parent)
    : QWizardPage(parent)
       {
-      setTitle(tr("Create New Score..."));
-      setSubTitle(tr("Select time signature:"));
+      setTitle(tr("Create New Score"));
+      setSubTitle(tr("Choose time signature:"));
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
 
@@ -256,8 +255,8 @@ NewWizardPage3::NewWizardPage3(QWidget* parent)
 NewWizardPage4::NewWizardPage4(QWidget* parent)
    : QWizardPage(parent)
       {
-      setTitle(tr("Create New Score..."));
-      setSubTitle(tr("Select template file:"));
+      setTitle(tr("Create New Score"));
+      setSubTitle(tr("Choose template file:"));
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
 
@@ -268,7 +267,7 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
       if(fil.isEmpty()){
           fil.append(QFileInfo(QFile(":data/Empty_Score.mscz")));
           }
-      
+
       QDir myTemplatesDir(preferences.myTemplatesPath);
       fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
 
@@ -340,8 +339,8 @@ QString NewWizardPage4::templatePath() const
 NewWizardPage5::NewWizardPage5(QWidget* parent)
    : QWizardPage(parent)
       {
-      setTitle(tr("Create New Score..."));
-      setSubTitle(tr("Select key signature and tempo:"));
+      setTitle(tr("Create New Score"));
+      setSubTitle(tr("Choose key signature and tempo:"));
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
 
@@ -404,7 +403,7 @@ NewWizard::NewWizard(QWidget* parent)
       setWizardStyle(QWizard::ClassicStyle);
       setPixmap(QWizard::LogoPixmap, QPixmap(":/data/mscore.png"));
       setPixmap(QWizard::WatermarkPixmap, QPixmap());
-      setWindowTitle(tr("MuseScore: Create New Score"));
+      setWindowTitle(tr("MuseScore: New Score Wizard"));
 
       setOption(QWizard::NoCancelButton, false);
       setOption(QWizard::CancelButtonOnLeft, true);
