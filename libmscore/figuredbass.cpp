@@ -1186,7 +1186,7 @@ qDebug("FiguredBass: duration indicator end line not implemented");
 void FiguredBass::draw(QPainter* painter) const
       {
       // if not printing, draw duration line(s)
-      if (!score()->printing() ) {
+      if (!score()->printing() && !score()->showUnprintable()) {
             for (qreal len : _lineLenghts) {
                   if (len > 0) {
                         painter->setPen(QPen(Qt::lightGray, 1));
