@@ -1197,7 +1197,7 @@ qDebug("FiguredBass: duration indicator end line not implemented");
 void FiguredBass::draw(QPainter* painter) const
       {
       // if not printing, draw duration line(s)
-      if( !score()->printing() ) {
+      if (!score()->printing() && score()->showUnprintable()) {
             foreach(qreal len, _lineLenghts)
                   if(len > 0) {
                         painter->setPen(QPen(Qt::lightGray, 1));
@@ -1205,14 +1205,14 @@ void FiguredBass::draw(QPainter* painter) const
                         }
             }
       // if in edit mode or with custom style, use standard text drawing
-      if(editMode() || textStyleType() != TextStyleType::FIGURED_BASS)
+      if (editMode() || textStyleType() != TextStyleType::FIGURED_BASS)
             Text::draw(painter);
       // not edit mode:
       else {
-            if(items.size() < 1)                            // if not parseable into f.b. items
+            if (items.size() < 1)                            // if not parseable into f.b. items
                   Text::draw(painter);                      // draw as standard text
             else
-                  for(FiguredBassItem* item : items) {      // if parseable into f.b. items
+                  for (FiguredBassItem* item : items) {      // if parseable into f.b. items
                         painter->translate(item->pos());    // draw each item in its proper position
                         item->draw(painter);
                         painter->translate(-item->pos());
@@ -1230,10 +1230,10 @@ void FiguredBass::draw(QPainter* painter) const
 //---------------------------------------------------------
 
 void FiguredBass::startEdit(MuseScoreView * msv, const QPointF & pt)
-{
+      {
       Text::layout();               // convert layout to standard Text conventions
       Text::startEdit(msv, pt);
-}
+      }
 
 void FiguredBass::endEdit()
       {
@@ -1243,7 +1243,7 @@ void FiguredBass::endEdit()
       // as the standard text editor keeps inserting spurious HTML formatting and styles
       // retrieve and work only on the plain text
       QString txt = plainText();
-      if(txt.isEmpty()) {                       // if no text, nothing to do
+      if (txt.isEmpty()) {                       // if no text, nothing to do
             setXmlText(txt);                       // clear the stored text: the empty f.b. element will be deleted
             return;
             }
@@ -1285,7 +1285,7 @@ void FiguredBass::endEdit()
 void FiguredBass::setSelected(bool flag)
       {
       Element::setSelected(flag);
-      for(FiguredBassItem* item : items) {
+      for (FiguredBassItem* item : items) {
             item->setSelected(flag);
             }
       }
