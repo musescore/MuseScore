@@ -1711,20 +1711,41 @@ Shortcut Shortcut::_sc[] = {
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
          },
-//      {
-//         MsWidget::MAIN_WINDOW,
-//         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
-//         "toggle-transport",
-//         QT_TRANSLATE_NOOP("action","Transport"),
-//         QT_TRANSLATE_NOOP("action","Transport toolbar")
-//         },
-//      {
-//         MsWidget::MAIN_WINDOW,
-//         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
-//         "toggle-noteinput",
-//         QT_TRANSLATE_NOOP("action","Note Input"),
-//         QT_TRANSLATE_NOOP("action","Note input toolbar")
-//         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
+         "toggle-fileoperations",
+         QT_TRANSLATE_NOOP("action","File Operations"),
+         QT_TRANSLATE_NOOP("action","File operations toolbar")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
+         "toggle-transport",
+         QT_TRANSLATE_NOOP("action","Playback Controls"),
+         QT_TRANSLATE_NOOP("action","Playback controls toolbar")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
+         "toggle-concertpitch",
+         QT_TRANSLATE_NOOP("action","Concert Pitch"),
+         QT_TRANSLATE_NOOP("action","Concert pitch toolbar")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
+         "toggle-imagecapture",
+         QT_TRANSLATE_NOOP("action","Image Capture"),
+         QT_TRANSLATE_NOOP("action","Image capture toolbar")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
+         "toggle-noteinput",
+         QT_TRANSLATE_NOOP("action","Note Input"),
+         QT_TRANSLATE_NOOP("action","Note input toolbar")
+         },
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,

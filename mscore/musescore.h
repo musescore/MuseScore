@@ -221,6 +221,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QSplitter* mainWindow;
 
       QMenu* menuView;
+      QMenu* menuToolbars;
       QMenu* openRecent;
 
       MagBox* mag;
@@ -230,6 +231,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QProgressBar* _progressBar           { 0 };
       PreferenceDialog* preferenceDialog   { 0 };
       QToolBar* cpitchTools;
+      QToolBar* fotoTools;
       QToolBar* fileTools;
       QToolBar* transportTools;
       QToolBar* entryTools;

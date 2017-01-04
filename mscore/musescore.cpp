@@ -601,7 +601,7 @@ MuseScore::MuseScore()
       connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
       fileTools->addWidget(viewModeCombo);
 
-      transportTools = addToolBar(tr("Transport Tools"));
+      transportTools = addToolBar(tr("Playback Controls"));
       transportTools->setObjectName("transport-tools");
 #ifdef HAS_MIDI
       transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("midi-on")));
@@ -622,9 +622,9 @@ MuseScore::MuseScore()
       cpitchTools->setObjectName("pitch-tools");
       cpitchTools->addWidget(new AccessibleToolButton( cpitchTools, getAction("concert-pitch")));
 
-      QToolBar* foto = addToolBar(tr("Image Capture"));
-      foto->setObjectName("foto-tools");
-      foto->addWidget(new AccessibleToolButton(foto, getAction("fotomode")));
+      fotoTools = addToolBar(tr("Image Capture"));
+      fotoTools->setObjectName("foto-tools");
+      fotoTools->addWidget(new AccessibleToolButton(fotoTools, getAction("fotomode")));
 
       addToolBarBreak();
 
@@ -828,16 +828,38 @@ MuseScore::MuseScore()
       menuView->addAction(getAction("zoomout"));
       menuView->addSeparator();
 
-//      a = getAction("toggle-transport");
-//      a->setCheckable(true);
-//      a->setChecked(transportTools->isVisible());
-//      connect(transportTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
-//      menuView->addAction(a);
+      menuToolbars = menuView->addMenu(tr("&Toolbars"));
 
-//      a = getAction("toggle-noteinput");
-//      a->setCheckable(true);
-//      a->setChecked(true);
-//      menuView->addAction(a);
+      a = getAction("toggle-fileoperations");
+      a->setCheckable(true);
+      a->setChecked(fileTools->isVisible());
+      connect(fileTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+      menuToolbars->addAction(a);
+
+      a = getAction("toggle-transport");
+      a->setCheckable(true);
+      a->setChecked(transportTools->isVisible());
+      connect(transportTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+      menuToolbars->addAction(a);
+
+      a = getAction("toggle-concertpitch");
+      a->setCheckable(true);
+      a->setChecked(cpitchTools->isVisible());
+      connect(cpitchTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+      menuToolbars->addAction(a);
+
+      a = getAction("toggle-imagecapture");
+      a->setCheckable(true);
+      a->setChecked(fotoTools->isVisible());
+      connect(fotoTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+      menuToolbars->addAction(a);
+
+      a = getAction("toggle-noteinput");
+      a->setCheckable(true);
+      a->setChecked(entryTools->isVisible());
+      connect(entryTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+      menuToolbars->addAction(a);
+
 
       a = getAction("toggle-statusbar");
       a->setCheckable(true);
@@ -2966,10 +2988,20 @@ void MuseScore::readSettings()
       splitter->restoreState(settings.value("splitter").toByteArray());
       settings.endGroup();
 
-//      QAction* a = getAction("toggle-transport");
-//      a->setChecked(!transportTools->isHidden());
-//      a = getAction("toggle-noteinput");
-//      a->setChecked(!entryTools->isHidden());
+      QAction* a = getAction("toggle-fileoperations");
+      a->setChecked(!fileTools->isHidden());
+
+      a = getAction("toggle-transport");
+      a->setChecked(!transportTools->isHidden());
+
+      a = getAction("toggle-concertpitch");
+      a->setChecked(!cpitchTools->isHidden());
+
+      a = getAction("toggle-imagecapture");
+      a->setChecked(!fotoTools->isHidden());
+
+      a = getAction("toggle-noteinput");
+      a->setChecked(!entryTools->isHidden());
       }
 
 //---------------------------------------------------------
@@ -4373,10 +4405,16 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showSelectionWindow(a->isChecked());
       else if (cmd == "show-keys")
             ;
-//      else if (cmd == "toggle-transport")
-//            transportTools->setVisible(!transportTools->isVisible());
-//      else if (cmd == "toggle-noteinput")
-//            entryTools->setVisible(!entryTools->isVisible());
+      else if (cmd == "toggle-fileoperations")
+            fileTools->setVisible(!fileTools->isVisible());
+      else if (cmd == "toggle-transport")
+            transportTools->setVisible(!transportTools->isVisible());
+      else if (cmd == "toggle-concertpitch")
+            cpitchTools->setVisible(!cpitchTools->isVisible());
+      else if (cmd == "toggle-imagecapture")
+            fotoTools->setVisible(!fotoTools->isVisible());
+      else if (cmd == "toggle-noteinput")
+            entryTools->setVisible(!entryTools->isVisible());
       else if (cmd == "local-help")
             showContextHelp();
       else if (cmd == "follow")
