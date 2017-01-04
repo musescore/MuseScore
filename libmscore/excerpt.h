@@ -66,7 +66,7 @@ class Excerpt : public QObject {
       void setTitle(const QString& s) { _title = s;    }
 
       static QList<Excerpt*> createAllExcerpt(MasterScore* score);
-      static QString createName(const QString& partName, QList<Excerpt*>);
+      static QString createName(const QString& partName, QList<Excerpt*>&);
       static void createExcerpt(Excerpt*);
       static void cloneStaves(Score* oscore, Score* score, const QList<int>& map, QMultiMap<int, int>& allTracks);
       static void cloneStaff(Staff* ostaff, Staff* nstaff);
