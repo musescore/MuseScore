@@ -1155,22 +1155,27 @@ QList<Excerpt*> Excerpt::createAllExcerpt(MasterScore *score)
 //   createName
 //---------------------------------------------------------
 
-QString Excerpt::createName(const QString& partName, QList<Excerpt*> excerptList)
+QString Excerpt::createName(const QString& partName, QList<Excerpt*>& excerptList)
       {
-      QString n = partName.simplified();
-      QString name;
-      int count = excerptList.count();
-      for (int i = 0;; ++i) {
-            name = i ? QString("%1-%2").arg(n).arg(i) : QString("%1").arg(n);
-            Excerpt* ee = 0;
-            for (int k = 0; k < count; ++k) {
-                  ee = excerptList[k];
-                  if (ee->title() == name)
-                        break;
-                  }
-            if ((ee == 0) || (ee->title() != name))
+      QString name = partName.simplified();
+      int count = 0;    // no of occurences of partName
+      
+      for (Excerpt* e : excerptList) {
+            // if <partName> already exists, change <partName> to <partName 1>
+            if (e->title().compare(name) == 0) {
+                  e->setTitle(e->title() + " 1");
+                  count = 1;
                   break;
+                  }
+          
+            QRegExp rx("^(.+)\\s\\d+$");
+            if (rx.indexIn(e->title()) > -1 && rx.cap(1) == name)
+                  count++;
             }
+      
+      if (count > 0)
+            name += QString(" %1").arg(count + 1);
+      
       return name;
       }
 
