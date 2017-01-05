@@ -322,7 +322,7 @@ void GuitarPro::addPalmMute(Note* note)
       {
       QString palmMute = "P.M.";
       TextStyle textStyle;
-      textStyle.setAlign(AlignmentFlags::CENTER);
+      textStyle.setAlign(Align::CENTER);
       addTextToNote(palmMute, textStyle, note);
       }
 
@@ -335,7 +335,7 @@ void GuitarPro::addLetRing(Note* note)
       QString letRing = "let ring";
       TextStyle textStyle;
       textStyle.setItalic(true);
-      textStyle.setAlign(AlignmentFlags::CENTER);
+      textStyle.setAlign(Align::CENTER);
       addTextToNote(letRing, textStyle, note);
       }
 
@@ -347,7 +347,7 @@ void GuitarPro::addTap(Note* note)
       {
       QString tap = "T";
       TextStyle textStyle;
-      textStyle.setAlign(AlignmentFlags::CENTER);
+      textStyle.setAlign(Align::CENTER);
       addTextToNote(tap, textStyle, note);
       }
 
@@ -359,7 +359,7 @@ void GuitarPro::addSlap(Note* note)
       {
       QString slap = "S";
       TextStyle textStyle;
-      textStyle.setAlign(AlignmentFlags::CENTER);
+      textStyle.setAlign(Align::CENTER);
       addTextToNote(slap, textStyle, note);
       }
 
@@ -371,7 +371,7 @@ void GuitarPro::addPop(Note* note)
       {
       QString pop = "P";
       TextStyle textStyle;
-      textStyle.setAlign(AlignmentFlags::CENTER);
+      textStyle.setAlign(Align::CENTER);
       addTextToNote(pop, textStyle, note);
       }
 
@@ -2387,7 +2387,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
       foreach(Part* part, score->parts()) {
             QMultiMap<int, int> tracks;
             Score* pscore = new Score(static_cast<MasterScore*>(score));
-            pscore->style()->set(StyleIdx::createMultiMeasureRests, true);
+            pscore->style().set(StyleIdx::createMultiMeasureRests, true);
 
             QList<int> stavesMap;
             Part*   p = new Part(pscore);

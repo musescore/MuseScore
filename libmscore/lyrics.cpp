@@ -316,7 +316,7 @@ void Lyrics::layout1()
 
       ChordRest* cr = chordRest();
       Align ta = textStyle().align();
-      if (ta & AlignmentFlags::HCENTER) {
+      if (ta & Align::HCENTER) {
             //
             // center under notehead, not origin
             // however, lyrics that are melismas or have verse numbers will be forced to left alignment
@@ -328,7 +328,7 @@ void Lyrics::layout1()
             else                                // force left alignment
                   x += width() * .5 - cr->x() - leftAdjust;
             }
-      else if (!(ta & AlignmentFlags::RIGHT)) {
+      else if (!(ta & Align::RIGHT)) {
             // even for left aligned syllables, ignore leading verse numbers and/or punctuation
             x -= leftAdjust;
             }

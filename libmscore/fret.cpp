@@ -171,15 +171,15 @@ QLineF FretDiagram::dragAnchor() const
             qreal y  = 0.0;
             qreal tw = width();
             qreal th = height();
-            if (_align & AlignmentFlags::BOTTOM)
+            if (_align & Align::BOTTOM)
                   y = th;
-            else if (_align & AlignmentFlags::VCENTER)
+            else if (_align & Align::VCENTER)
                   y = (th * .5);
-            else if (_align & AlignmentFlags::BASELINE)
+            else if (_align & Align::BASELINE)
                   y = baseLine();
-            if (_align & AlignmentFlags::RIGHT)
+            if (_align & Align::RIGHT)
                   x = tw;
-            else if (_align & AlignmentFlags::HCENTER)
+            else if (_align & Align::HCENTER)
                   x = (tw * .5);
             return QLineF(p1, abbox().topLeft() + QPointF(x, y));
             }

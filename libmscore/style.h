@@ -13,10 +13,8 @@
 #ifndef __STYLE_H__
 #define __STYLE_H__
 
-#include "mscore.h"
-#include "spatium.h"
-#include "articulation.h"
-#include "page.h"
+#include "pageformat.h"
+#include "textstyle.h"
 #include "chordlist.h"
 
 namespace Ms {
@@ -24,7 +22,6 @@ namespace Ms {
 class XmlWriter;
 struct ChordDescription;
 class PageFormat;
-class ChordList;
 class Element;
 
 //---------------------------------------------------------
@@ -33,7 +30,7 @@ class Element;
 //    Keep in sync with styleTypes[] in style.cpp
 //---------------------------------------------------------
 
-enum class StyleIdx : int {
+enum class StyleIdx {
       NOSTYLE = -1,
       staffUpperBorder,
       staffLowerBorder,
@@ -309,24 +306,6 @@ enum class StyleIdx : int {
       };
 
 //---------------------------------------------------------
-//   StyleType
-//---------------------------------------------------------
-
-struct StyleType {
-      StyleIdx _idx;
-      const char* _name;       // xml name for read()/write()
-      QVariant _defaultValue;
-
-   public:
-      StyleIdx  styleIdx() const            { return _idx;          }
-      int idx() const                       { return int(_idx);     }
-      const char*  valueType() const        { return _defaultValue.typeName();    }
-      const char*      name() const         { return _name;         }
-      const QVariant&  defaultValue() const { return _defaultValue; }
-      };
-
-
-//---------------------------------------------------------
 //   MStyle
 //---------------------------------------------------------
 
@@ -339,14 +318,10 @@ class MStyle {
       PageFormat _pageFormat;
 
       bool _customChordList;        // if true, chordlist will be saved as part of score
-
       void precomputeValues();
 
    public:
       MStyle();
-      MStyle(const MStyle&);
-      MStyle& operator=(const MStyle&);
-      // ~MStyle() {}
 
       bool isDefault(StyleIdx idx) const;
       const ChordDescription* chordDescription(int id) const;

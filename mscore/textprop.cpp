@@ -82,7 +82,7 @@ void TextProp::setScore(bool onlyStyle, Score* score)
       styles->clear();
 
       styles->blockSignals(true);
-      const QList<TextStyle>& scoreStyles = score->style()->textStyles();
+      const QList<TextStyle>& scoreStyles = score->style().textStyles();
       for (int i = 0, n = scoreStyles.size(); i < n; ++i) {
             // if style not hidden in this context, add to combo with index in score style list as userData
             if ( !(scoreStyles.at(i).hidden() & TextStyleHidden::IN_LISTS) )
@@ -140,18 +140,18 @@ void TextProp::setTextStyle(const TextStyle& s)
 
       systemFlag->setChecked(s.systemFlag());
       Align a = s.align();
-      if (a & AlignmentFlags::HCENTER)
+      if (a & Align::HCENTER)
             alignHCenter->setChecked(true);
-      else if (a & AlignmentFlags::RIGHT)
+      else if (a & Align::RIGHT)
             alignRight->setChecked(true);
       else
             alignLeft->setChecked(true);
 
-      if (a & AlignmentFlags::VCENTER)
+      if (a & Align::VCENTER)
             alignVCenter->setChecked(true);
-      else if (a & AlignmentFlags::BOTTOM)
+      else if (a & Align::BOTTOM)
             alignBottom->setChecked(true);
-      else if (a & AlignmentFlags::BASELINE)
+      else if (a & Align::BASELINE)
             alignBaseline->setChecked(true);
       else
             alignTop->setChecked(true);
@@ -217,18 +217,18 @@ TextStyle TextProp::textStyle() const
       ts.setSizeIsSpatiumDependent(sizeIsSpatiumDependent->isChecked());
       ts.setSquare(square->isChecked());
 
-      Align a = 0;
+      Align a = Align::LEFT;
       if (alignHCenter->isChecked())
-            a |= AlignmentFlags::HCENTER;
+            a = a | Align::HCENTER;
       else if (alignRight->isChecked())
-            a |= AlignmentFlags::RIGHT;
+            a = a | Align::RIGHT;
 
       if (alignVCenter->isChecked())
-            a |= AlignmentFlags::VCENTER;
+            a = a | Align::VCENTER;
       else if (alignBottom->isChecked())
-            a |= AlignmentFlags::BOTTOM;
+            a = a | Align::BOTTOM;
       else if (alignBaseline->isChecked())
-            a |= AlignmentFlags::BASELINE;
+            a = a | Align::BASELINE;
       ts.setAlign(a);
       return ts;
       }

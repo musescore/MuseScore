@@ -16,6 +16,7 @@
 namespace Ms {
 
 class Segment;
+class Page;
 
 //---------------------------------------------------------
 //   LayoutContext
@@ -23,28 +24,32 @@ class Segment;
 //---------------------------------------------------------
 
 struct LayoutContext {
+      Score* score             { 0    };
       bool startWithLongNames  { true };
       bool firstSystem         { true };
-      int curPage              { 0 };      // index in Score->_pages
+      Page* page               { 0 };
+      int curPage              { 0 };      // index in Score->page()s
       int tick                 { 0 };
       Fraction sig;
 
       QList<System*> systemList;          // reusable systems
+
+      System* prevSystem       { 0 };     // used during page layout
       System* curSystem        { 0 };
+
       MeasureBase* systemOldMeasure;
       bool rangeDone           { false };
-      System* pageOldSystem    { 0 };
-      bool systemChanged       { false };
-      bool pageChanged         { false };
 
       MeasureBase* prevMeasure { 0 };
       MeasureBase* curMeasure  { 0 };
       MeasureBase* nextMeasure { 0 };
       int measureNo            { 0 };
-      bool rangeLayout         { false };
       int endTick;
 
+      void layout();
       int adjustMeasureNo(MeasureBase*);
+      void getEmptyPage();
+      void collectPage();
       };
 
 //---------------------------------------------------------

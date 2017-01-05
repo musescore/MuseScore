@@ -431,16 +431,16 @@ void TextStyle::setCircle(bool v)                        { d->circle = v;     }
 void TextStyle::setSystemFlag(bool v)                    { d->systemFlag = v; }
 void TextStyle::setForegroundColor(const QColor& v)      { d->foregroundColor = v; }
 void TextStyle::setBackgroundColor(const QColor& v)      { d->backgroundColor = v; }
-void TextStyle::write(XmlWriter& xml) const                    { d->write(xml); }
-void TextStyle::read(XmlReader& v)               { d->read(v); }
+void TextStyle::write(XmlWriter& xml) const              { d->write(xml); }
+void TextStyle::read(XmlReader& v)                       { d->read(v); }
 QFont TextStyle::font(qreal space) const                 { return d->font(space); }
 QRectF TextStyle::bbox(qreal sp, const QString& s) const { return d->bbox(sp, s); }
 QFontMetricsF TextStyle::fontMetrics(qreal space) const  { return d->fontMetrics(space); }
 bool TextStyle::operator!=(const TextStyle& s) const     { return d->operator!=(*s.d); }
 void TextStyle::layout(Element* e) const                 { d->layout(e); }
-void TextStyle::writeProperties(XmlWriter& xml) const          { d->writeProperties(xml); }
+void TextStyle::writeProperties(XmlWriter& xml) const    { d->writeProperties(xml); }
 void TextStyle::writeProperties(XmlWriter& xml, const TextStyle& r) const { d->writeProperties(xml, *r.d); }
 void TextStyle::restyle(const TextStyle& os, const TextStyle& ns) { d->restyle(*os.d, *ns.d); }
-bool TextStyle::readProperties(XmlReader& v)     { return d->readProperties(v); }
+bool TextStyle::readProperties(XmlReader& v)             { return d->readProperties(v); }
 
 }

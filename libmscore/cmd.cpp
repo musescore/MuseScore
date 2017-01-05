@@ -96,13 +96,11 @@ void CmdState::reset()
 
 void CmdState::setTick(int t)
       {
-      if (_updateMode == UpdateMode::LayoutAll)
-            return;
       if (_startTick == -1 || t < _startTick)
             _startTick = t;
       if (_endTick == -1 || t > _endTick)
             _endTick = t;
-      setUpdateMode(UpdateMode::LayoutRange);
+      setUpdateMode(UpdateMode::Layout);
       }
 
 //---------------------------------------------------------
@@ -162,6 +160,7 @@ void Score::undoRedo(bool undo)
 
 void Score::endCmd(bool rollback)
       {
+      qDebug("++++%p", this);
       if (!undoStack()->active()) {
             qDebug("Score::endCmd(): no cmd active");
             update();
@@ -195,40 +194,49 @@ void Score::endCmd(bool rollback)
 
 void Score::update()
       {
-      CmdState& cs = cmdState();
-      if (cs.layoutAll()) {
-            for (Score* s : scoreList())
-                  s->doLayout();
-            cs._setUpdateMode(UpdateMode::UpdateAll);
-            }
-      else if (cs.layoutRange()) {
-            for (Score* s : scoreList())
-                  s->doLayoutRange(cs.startTick(), cs.endTick());
-            cs._setUpdateMode(UpdateMode::UpdateAll);
-            }
-      if (cs.updateAll()) {
-            for (Score* s : scoreList()) {
-                  for (MuseScoreView* v : s->viewer)
-                        v->updateAll();
+      for (MasterScore* ms : *movements()) {
+            CmdState& cs = ms->cmdState();
+            if (cs.layoutRange()) {
+                  for (Score* s : ms->scoreList())
+                        s->doLayoutRange(cs.startTick(), cs.endTick());
+                  for (Score* s : scoreList()) {
+                        for (MuseScoreView* v : s->viewer)
+                              v->updateAll();
+                        }
+                  cs._setUpdateMode(UpdateMode::DoNothing);
+                  const InputState& is = inputState();
+                  if (is.noteEntryMode() && is.segment()) {
+                        setPlayPos(is.segment()->tick());
+                        }
+                  if (_playlistDirty) {
+                        emit playlistChanged();
+                        _playlistDirty = false;
+                        }
+                  break;
                   }
-            cs._setUpdateMode(UpdateMode::DoNothing);
-            }
-      else if (cs.updateRange()) {
-            // updateRange updates only current score
-            qreal d = spatium() * .5;
-            _updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
-            for (MuseScoreView* v : viewer)
-                  v->dataChanged(_updateState.refresh);
-            _updateState.refresh = QRectF();
-            }
-
-      const InputState& is = inputState();
-      if (is.noteEntryMode() && is.segment()) {
-            setPlayPos(is.segment()->tick());
-            }
-      if (_playlistDirty) {
-            emit playlistChanged();
-            _playlistDirty = false;
+            if (cs.updateAll()) {
+                  for (Score* s : scoreList()) {
+                        for (MuseScoreView* v : s->viewer)
+                              v->updateAll();
+                        }
+                  cs._setUpdateMode(UpdateMode::DoNothing);
+                  }
+            else if (cs.updateRange()) {
+                  // updateRange updates only current score
+                  qreal d = spatium() * .5;
+                  _updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
+                  for (MuseScoreView* v : viewer)
+                        v->dataChanged(_updateState.refresh);
+                  _updateState.refresh = QRectF();
+                  }
+            const InputState& is = inputState();
+            if (is.noteEntryMode() && is.segment()) {
+                  setPlayPos(is.segment()->tick());
+                  }
+            if (_playlistDirty) {
+                  emit playlistChanged();
+                  _playlistDirty = false;
+                  }
             }
       }
 
@@ -306,21 +314,21 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
             if (t) {
                   st = t->textStyleType();
                   if (st >= TextStyleType::DEFAULT)
-                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), textStyle(st));
+                        t->textStyle().restyle(MScore::baseStyle().textStyle(st), textStyle(st));
                   }
             // continue
             t = tl->continueTextElement();
             if (t) {
                   st = t->textStyleType();
                   if (st >= TextStyleType::DEFAULT)
-                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), textStyle(st));
+                        t->textStyle().restyle(MScore::baseStyle().textStyle(st), textStyle(st));
                   }
             // end
             t = tl->endTextElement();
             if (t) {
                   st = t->textStyleType();
                   if (st >= TextStyleType::DEFAULT)
-                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), textStyle(st));
+                        t->textStyle().restyle(MScore::baseStyle().textStyle(st), textStyle(st));
                   }
             }
       undoAddElement(spanner);

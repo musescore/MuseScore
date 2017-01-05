@@ -324,7 +324,9 @@ MasterScore* MuseScore::readScore(const QString& name)
       if (name.isEmpty())
             return 0;
 
-      MasterScore* score = new MasterScore(MScore::baseStyle());  // start with built-in style
+      MasterScore* score = new MasterScore();
+      score->setMovements(new Movements());
+      score->setStyle(MScore::baseStyle());
       setMidiReopenInProgress(name);
       Score::FileError rv = Ms::readScore(score, name, false);
       if (rv == Score::FileError::FILE_TOO_OLD || rv == Score::FileError::FILE_TOO_NEW || rv == Score::FileError::FILE_CORRUPTED) {
@@ -333,7 +335,9 @@ MasterScore* MuseScore::readScore(const QString& name)
                         // dont read file again if corrupted
                         // the check routine may try to fix it
                         delete score;
-                        score = new MasterScore(MScore::baseStyle());
+                        score = new MasterScore();
+                        score->setMovements(new Movements());
+                        score->setStyle(MScore::baseStyle());
                         rv = Ms::readScore(score, name, true);
                         }
                   else
@@ -499,14 +503,18 @@ void MuseScore::newFile()
 
       QList<Excerpt*> excerpts;
       if (!newWizard->emptyScore()) {
-            MasterScore* tscore = new MasterScore(MScore::defaultStyle());
+            MasterScore* tscore = new MasterScore();
+            tscore->setMovements(new Movements());
+            tscore->setStyle(MScore::defaultStyle());
             Score::FileError rv = Ms::readScore(tscore, tp, false);
             if (rv != Score::FileError::FILE_NO_ERROR) {
                   readScoreError(newWizard->templatePath(), rv, false);
                   delete tscore;
                   return;
                   }
-            score = new MasterScore(tscore->style());
+            score = new MasterScore();
+            score->setMovements(new Movements());
+            score->setStyle(tscore->style());
             // create instruments from template
             for (Part* tpart : tscore->parts()) {
                   Part* part = new Part(score);
@@ -554,16 +562,18 @@ void MuseScore::newFile()
             delete tscore;
             }
       else {
-            score = new MasterScore(MScore::defaultStyle());
+            score = new MasterScore();
+            score->setMovements(new Movements());
+            score->setStyle(MScore::defaultStyle());
             newWizard->createInstruments(score);
             }
       score->setCreated(true);
       score->masterScore()->fileInfo()->setFile(createDefaultName());
 
-      if (!score->style()->chordList()->loaded()) {
-            if (score->style()->value(StyleIdx::chordsXmlFile).toBool())
-                  score->style()->chordList()->read("chords.xml");
-            score->style()->chordList()->read(score->style()->value(StyleIdx::chordDescriptionFile).toString());
+      if (!score->style().chordList()->loaded()) {
+            if (score->styleB(StyleIdx::chordsXmlFile))
+                  score->style().chordList()->read("chords.xml");
+            score->style().chordList()->read(score->styleSt(StyleIdx::chordDescriptionFile));
             }
       if (!newWizard->title().isEmpty())
             score->masterScore()->fileInfo()->setFile(newWizard->title());
@@ -749,7 +759,7 @@ void MuseScore::newFile()
 
       for (Excerpt* x : excerpts) {
             Score* xs = new Score(static_cast<MasterScore*>(score));
-            xs->style()->set(StyleIdx::createMultiMeasureRests, true);
+            xs->style().set(StyleIdx::createMultiMeasureRests, true);
             x->setPartScore(xs);
             xs->setExcerpt(x);
             score->excerpts().append(x);
@@ -2112,12 +2122,12 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
                   QFile f(preferences.importStyleFile);
                   // silently ignore style file on error
                   if (f.open(QIODevice::ReadOnly))
-                        score->style()->load(&f);
+                        score->style().load(&f);
                   }
             else {
-                  if (score->style()->value(StyleIdx::chordsXmlFile).toBool())
-                        score->style()->chordList()->read("chords.xml");
-                  score->style()->chordList()->read(score->styleSt(StyleIdx::chordDescriptionFile));
+                  if (score->styleB(StyleIdx::chordsXmlFile))
+                        score->style().chordList()->read("chords.xml");
+                  score->style().chordList()->read(score->styleSt(StyleIdx::chordDescriptionFile));
                   }
             bool found = false;
             for (auto i : imports) {

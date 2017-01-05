@@ -134,7 +134,7 @@ void Marker::adjustReadPos()
                   uo = userOff();
                   uo.rx() -= segment()->pos().x();
                   // 1.2 is always HCENTER aligned
-                  if ((textStyle().align() & AlignmentFlags::HMASK) == 0)    // AlignmentFlags::LEFT
+                  if ((textStyle().align() & Align::HMASK) == 0)    // Align::LEFT
                         uo.rx() -= bbox().width() * .5;
                   }
             else
@@ -179,7 +179,7 @@ void Marker::layout()
       Text::layout1();
       // although normally laid out to parent (measure) width,
       // force to center over barline if left-aligned
-      if (layoutToParentWidth() && !(textStyle().align() & (AlignmentFlags::RIGHT|AlignmentFlags::HCENTER)))
+      if (layoutToParentWidth() && !(textStyle().align() & (Align::RIGHT|Align::HCENTER)))
             rxpos() -= width() * 0.5;
       adjustReadPos();
       }

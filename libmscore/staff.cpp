@@ -89,7 +89,7 @@ void Staff::setBracket(int idx, BracketType val)
 //   swapBracket
 //---------------------------------------------------------
 
-void Staff::swapBracket(int oldIdx, int newIdx, BracketType /*val*/)
+void Staff::swapBracket(int oldIdx, int newIdx)
       {
       for (int i = _brackets.size(); i <= newIdx; ++i)
             _brackets.append(BracketItem());

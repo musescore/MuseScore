@@ -518,7 +518,7 @@ void Measure::layout2()
                         smn = system()->firstMeasure() == this;
                   else {
                         smn = (no() == 0 && score()->styleB(StyleIdx::showMeasureNumberOne)) ||
-                              ( ((no()+1) % score()->style(StyleIdx::measureNumberInterval).toInt()) == 0 );
+                              ( ((no()+1) % score()->styleI(StyleIdx::measureNumberInterval)) == 0 );
                         }
                   }
             }
@@ -1323,7 +1323,7 @@ Element* Measure::drop(const DropData& data)
                   // except where the source element had explicitly overridden these via text properties
                   // palette text style will be relative to baseStyle, so rebase this to score
                   if (st >= TextStyleType::DEFAULT && fromPalette)
-                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
+                        t->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
                   }
                   score()->undoAddElement(e);
                   return e;

@@ -737,14 +737,14 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                   if (pw2 < defx) {
                         // found composer
                         addText2(vbox, score, w->words,
-                                 TextStyleType::COMPOSER, AlignmentFlags::RIGHT | AlignmentFlags::BOTTOM,
+                                 TextStyleType::COMPOSER, Align::RIGHT | Align::BOTTOM,
                                  (miny - w->defaultY) * score->spatium() / (10 * DPI));
                         }
                   // poet is in the left column
                   else if (defx < pw1) {
                         // found poet
                         addText2(vbox, score, w->words,
-                                 TextStyleType::POET, AlignmentFlags::LEFT | AlignmentFlags::BOTTOM,
+                                 TextStyleType::POET, Align::LEFT | Align::BOTTOM,
                                  (miny - w->defaultY) * score->spatium() / (10 * DPI));
                         }
                   // save others (in the middle column) to be handled later
@@ -787,7 +787,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             CreditWords* w = creditMap.value(keys.at(keys.size() - 1));
             //qDebug("title='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
-                     TextStyleType::TITLE, AlignmentFlags::HCENTER | AlignmentFlags::TOP,
+                     TextStyleType::TITLE, Align::HCENTER | Align::TOP,
                      (maxy - w->defaultY) * score->spatium() / (10 * DPI));
             }
 
@@ -796,7 +796,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             CreditWords* w = creditMap.value(keys.at(i));
             //qDebug("subtitle='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
-                     TextStyleType::SUBTITLE, AlignmentFlags::HCENTER | AlignmentFlags::TOP,
+                     TextStyleType::SUBTITLE, Align::HCENTER | Align::TOP,
                      (maxy - w->defaultY) * score->spatium() / (10 * DPI));
             }
 
@@ -1324,7 +1324,7 @@ static void updateStyles(Score* score,
       // loop over all text styles (except the empty, always hidden, first one)
       // set all text styles to the MusicXML defaults
       for (int i = int(TextStyleType::DEFAULT) + 1; i < int(TextStyleType::TEXT_STYLES); ++i) {
-            TextStyle ts = score->style()->textStyle(TextStyleType(i));
+            TextStyle ts = score->style().textStyle(TextStyleType(i));
             if (i == int(TextStyleType::LYRIC1) || i == int(TextStyleType::LYRIC2)) {
                   if (lyricFamily != "") ts.setFamily(lyricFamily);
                   if (fLyricSize > 0.001) ts.setSize(fLyricSize);
@@ -1333,7 +1333,7 @@ static void updateStyles(Score* score,
                   if (wordFamily != "") ts.setFamily(wordFamily);
                   if (fWordSize > 0.001 && mustSetSize(i)) ts.setSize(fWordSize);
                   }
-            score->style()->setTextStyle(ts);
+            score->style().setTextStyle(ts);
             }
       }
 
@@ -1385,7 +1385,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                         else if (_e.name() == "system-distance") {
                               Spatium val(_e.readElementText().toDouble() / 10.0);
                               if (preferences.musicxmlImportLayout) {
-                                    _score->style()->set(StyleIdx::minSystemDistance, val);
+                                    _score->style().set(StyleIdx::minSystemDistance, val);
                                     qDebug("system distance %f", val.val());
                                     }
                               }
@@ -1400,7 +1400,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                         if (_e.name() == "staff-distance") {
                               Spatium val(_e.readElementText().toDouble() / 10.0);
                               if (preferences.musicxmlImportLayout)
-                                    _score->style()->set(StyleIdx::staffDistance, val);
+                                    _score->style().set(StyleIdx::staffDistance, val);
                               }
                         else
                               skipLogCurrElem();

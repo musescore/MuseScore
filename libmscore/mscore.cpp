@@ -57,6 +57,7 @@
 #include "excerpt.h"
 #include "spatium.h"
 #include "barline.h"
+#include "pageformat.h"
 
 namespace Ms {
 
@@ -76,9 +77,9 @@ bool MScore::useFallbackFont       = true;
 bool  MScore::saveTemplateMode = false;
 bool  MScore::noGui = false;
 
-MStyle* MScore::_defaultStyle;
-MStyle* MScore::_defaultStyleForParts;
-MStyle* MScore::_baseStyle;
+MStyle  MScore::_defaultStyle;
+MStyle  MScore::_defaultStyleForParts;
+MStyle  MScore::_baseStyle;
 QString MScore::_globalShare;
 int     MScore::_vRaster;
 int     MScore::_hRaster;
@@ -101,7 +102,7 @@ qreal   MScore::nudgeStep;
 qreal   MScore::nudgeStep10;
 qreal   MScore::nudgeStep50;
 int     MScore::defaultPlayDuration;
-// QString MScore::partStyle;
+
 QString MScore::lastError;
 int     MScore::division    = 480; // 3840;   // pulses per quarter note (PPQ) // ticks per beat
 int     MScore::sampleRate  = 44100;
@@ -241,12 +242,10 @@ void MScore::init()
       qRegisterMetaType<Glissando::Type>("GlissandoType");
 
       //classed enumerations
-      qRegisterMetaType<MSQE_TextStyleType::E>("TextStyleType");
-      qRegisterMetaType<MSQE_BarLineType::E>("BarLineType");
+//      qRegisterMetaType<MSQE_TextStyleType::E>("TextStyleType");
+//      qRegisterMetaType<MSQE_BarLineType::E>("BarLineType");
 #endif
       qRegisterMetaType<Fraction>("Fraction");
-
-//      DPMM = DPI / INCH;       // dots/mm
 
 #ifdef Q_OS_WIN
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
@@ -287,10 +286,19 @@ void MScore::init()
       frameMarginColor    = QColor("#5999db");
       bgColor.setNamedColor("#dddddd");
 
-      _defaultStyle         = new MStyle();
-      Ms::initStyle(_defaultStyle);
-      _defaultStyleForParts = 0;
-      _baseStyle            = new MStyle(*_defaultStyle);
+      //
+      //  initialize styles
+      //
+      Ms::initStyle(&_defaultStyle);
+      _baseStyle            = _defaultStyle;
+      _defaultStyleForParts = _defaultStyle;
+      QSettings s;
+      QString partStyle = s.value("partStyle").toString();
+      if (!partStyle.isEmpty()) {
+            QFile f(partStyle);
+            if (f.open(QIODevice::ReadOnly))
+                  _defaultStyleForParts.load(&f);
+            }
 
       //
       //  load internal fonts
@@ -335,64 +343,14 @@ void MScore::init()
       }
 
 //---------------------------------------------------------
-//   defaultStyle
-//---------------------------------------------------------
-
-MStyle* MScore::defaultStyle()
-      {
-      return _defaultStyle;
-      }
-
-//---------------------------------------------------------
-//   defaultStyleForParts
-//---------------------------------------------------------
-
-MStyle* MScore::defaultStyleForParts()
-      {
-      if (!_defaultStyleForParts) {
-            QSettings s;
-            QString partStyle = s.value("partStyle").toString();
-            if (!partStyle.isEmpty()) {
-                  QFile f(partStyle);
-                  if (f.open(QIODevice::ReadOnly)) {
-                        MStyle* s = new MStyle(*defaultStyle());
-                        if (s->load(&f))
-                              _defaultStyleForParts = s;
-                        else
-                              delete s;
-                        }
-                  }
-            }
-      return _defaultStyleForParts;
-      }
-
-//---------------------------------------------------------
-//   baseStyle
-//---------------------------------------------------------
-
-MStyle* MScore::baseStyle()
-      {
-      return _baseStyle;
-      }
-
-//---------------------------------------------------------
-//   setDefaultStyle
-//---------------------------------------------------------
-
-void MScore::setDefaultStyle(MStyle* s)
-      {
-      delete _defaultStyle;
-      _defaultStyle = s;
-      }
-
-//---------------------------------------------------------
 //   defaultStyleForPartsHasChanged
 //---------------------------------------------------------
 
 void MScore::defaultStyleForPartsHasChanged()
       {
-      delete _defaultStyleForParts;
-      _defaultStyleForParts = 0;
+// TODO ??
+//      delete _defaultStyleForParts;
+//      _defaultStyleForParts = 0;
       }
 
 //---------------------------------------------------------
@@ -464,7 +422,6 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<Part>       ("MuseScore", 1, 0, "Part");
             qmlRegisterType<Staff>      ("MuseScore", 1, 0, "Staff");
             qmlRegisterType<Harmony>    ("MuseScore", 1, 0, "Harmony");
-            qmlRegisterType<PageFormat> ("MuseScore", 1, 0, "PageFormat");
             qmlRegisterType<TimeSig>    ("MuseScore", 1, 0, "TimeSig");
             qmlRegisterType<KeySig>     ("MuseScore", 1, 0, "KeySig");
             qmlRegisterType<Slur>       ("MuseScore", 1, 0, "Slur");
@@ -489,8 +446,8 @@ QQmlEngine* MScore::qml()
                "Element", tr("you cannot create an element"));
 
             //classed enumerations
-            qmlRegisterUncreatableType<MSQE_TextStyleType>("MuseScore", 1, 0, "TextStyleType", tr("You can't create an enum"));
-            qmlRegisterUncreatableType<MSQE_BarLineType>("MuseScore", 1, 0, "BarLineType", tr("You can't create an enum"));
+//            qmlRegisterUncreatableType<MSQE_TextStyleType>("MuseScore", 1, 0, "TextStyleType", tr("You can't create an enum"));
+//            qmlRegisterUncreatableType<MSQE_BarLineType>("MuseScore", 1, 0, "BarLineType", tr("You can't create an enum"));
 
             //-----------virtual classes
             qmlRegisterType<ChordRest>();

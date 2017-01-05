@@ -489,7 +489,7 @@ bool Bracket::setProperty(P_ID id, const QVariant& v)
             case P_ID::BRACKET_COLUMN: {
                   int oldColumn = _column;
                   _column = v.toInt();          // TODO
-                  staff()->swapBracket(oldColumn, _column, _bracketType);
+                  staff()->swapBracket(oldColumn, _column);
                   staff()->setBracketSpan(_column, _lastStaff - _firstStaff + 1);
                   score()->moveBracket(staffIdx(), oldColumn, _column);
                   }

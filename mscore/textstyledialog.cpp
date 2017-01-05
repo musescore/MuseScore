@@ -45,7 +45,7 @@ TextStyleDialog::TextStyleDialog(QWidget* parent, Score* score)
       buttonApplyToAllParts = bb->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
       buttonApplyToAllParts->setEnabled(!cs->isMaster());
 
-      styles = cs->style()->textStyles();
+      styles = cs->style().textStyles();
       tp->setScore(true, cs);
 
       textNames->clear();
@@ -165,7 +165,7 @@ void TextStyleDialog::apply()
 void TextStyleDialog::applyToScore(Score* s)
       {
       int count = textNames->count();
-      int numOfStyles = s->style()->textStyles().size();
+      int numOfStyles = s->style().textStyles().size();
       for (int i = 0; i < count; ++i) {
             int listIdx = textNames->item(i)->data(Qt::UserRole).toInt();
             if (listIdx < numOfStyles) {         // style already exists in score text styles

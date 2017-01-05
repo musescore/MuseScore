@@ -534,6 +534,14 @@ void TimeSigMap::dump() const
                i->first, qPrintable(i->second.timesig().print()), i->second.bar());
       }
 
+//---------------------------------------------------------
+//   dUnitTicks
+//---------------------------------------------------------
+
+int TimeSigFrac::dUnitTicks() const
+      {
+      return (4 * MScore::division) / denominator();
+      }
 
 }
 

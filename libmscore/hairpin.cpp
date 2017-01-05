@@ -705,11 +705,11 @@ QVariant Hairpin::propertyDefault(P_ID id) const
             case P_ID::DYNAMIC_RANGE:
                   return int(Dynamic::Range::PART);
             case P_ID::LINE_WIDTH:
-                  return score()->style(StyleIdx::hairpinLineWidth);
+                  return score()->styleV(StyleIdx::hairpinLineWidth);
             case P_ID::HAIRPIN_HEIGHT:
-                  return score()->style(StyleIdx::hairpinHeight);
+                  return score()->styleV(StyleIdx::hairpinHeight);
             case P_ID::HAIRPIN_CONT_HEIGHT:
-                  return score()->style(StyleIdx::hairpinContHeight);
+                  return score()->styleV(StyleIdx::hairpinContHeight);
             case P_ID::LINE_STYLE:
                   if (_hairpinType == HairpinType::CRESC_HAIRPIN || _hairpinType == HairpinType::DECRESC_HAIRPIN)
                         return int(Qt::SolidLine);

@@ -199,6 +199,7 @@ void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
 
 void MeasureBaseList::remove(MeasureBase* fm, MeasureBase* lm)
       {
+      printf("remove measures %p %p\n", fm, lm);
       --_size;
       for (MeasureBase* m = fm; m != lm; m = m->next())
             --_size;
@@ -257,7 +258,7 @@ Score::Score()
       _pos[int(POS::LEFT)]    = 0;
       _pos[int(POS::RIGHT)]   = 0;
       _fileDivision           = MScore::division;
-      _style    = *(MScore::defaultStyle());
+      _style  = MScore::defaultStyle();
       accInfo = tr("No selection");
       }
 
@@ -265,30 +266,31 @@ Score::Score(MasterScore* parent)
    : Score{}
       {
       _masterScore = parent;
-      if (MScore::defaultStyleForParts())
-            _style = *MScore::defaultStyleForParts();
-      else {
+// TODO
+//      if (MScore::defaultStyleForParts())
+//            style() = *MScore::defaultStyleForParts();
+//      else {
             // inherit most style settings from parent
-            _style = *parent->style();
+            style() = parent->style();
 
             // but borrow defaultStyle page layout settings
-            const PageFormat* pf = MScore::defaultStyle()->pageFormat();
-            _style.setPageFormat(*pf);
-            _style.set(StyleIdx::spatium, MScore::defaultStyle()->value(StyleIdx::spatium));
+            const PageFormat* pf = MScore::defaultStyle().pageFormat();
+            style().setPageFormat(*pf);
+            style().set(StyleIdx::spatium, MScore::defaultStyle().value(StyleIdx::spatium));
 
             // and force some style settings that just make sense for parts
-            _style.set(StyleIdx::concertPitch, false);
-            _style.set(StyleIdx::createMultiMeasureRests, true);
-            _style.set(StyleIdx::dividerLeft, false);
-            _style.set(StyleIdx::dividerRight, false);
-            }
+            style().set(StyleIdx::concertPitch, false);
+            style().set(StyleIdx::createMultiMeasureRests, true);
+            style().set(StyleIdx::dividerLeft, false);
+            style().set(StyleIdx::dividerRight, false);
+//            }
       _synthesizerState = parent->_synthesizerState;
       }
 
-Score::Score(MasterScore* parent, const MStyle* s)
+Score::Score(MasterScore* parent, const MStyle& s)
    : Score{parent}
       {
-      _style  = *s;
+      _style  = s;
       }
 
 //---------------------------------------------------------
@@ -308,7 +310,7 @@ Score::~Score()
       qDeleteAll(_parts);
       qDeleteAll(_staves);
       qDeleteAll(_systems);
-      qDeleteAll(_pages);
+//      qDeleteAll(_pages);
       _masterScore = 0;
       }
 
@@ -3015,7 +3017,7 @@ void Score::lassoSelect(const QRectF& bbox)
       {
       select(0, SelectType::SINGLE, 0);
       QRectF fr(bbox.normalized());
-      foreach(Page* page, _pages) {
+      foreach(Page* page, pages()) {
             QRectF pr(page->bbox());
             QRectF frr(fr.translated(-page->pos()));
             if (pr.right() < frr.left())
@@ -4123,8 +4125,7 @@ void Score::cropPage(qreal margins)
                   QRectF ttbox = page->tbbox();
 
                   PageFormat* curFormat = pageFormat();
-                  PageFormat f;
-                  f.copy(*curFormat);
+                  PageFormat f = *curFormat;
 
                   qreal margin = margins / INCH;
                   f.setSize(QSizeF((ttbox.width() / DPI) + 2 * margin, (ttbox.height()/ DPI) + 2 * margin));
@@ -4190,9 +4191,7 @@ QVariant Score::propertyDefault(P_ID id) const
 
 void Score::setStyle(const MStyle& s)
       {
-      if (style()->value(StyleIdx::spatium) != s.value(StyleIdx::spatium))
-            spatiumChanged(style()->value(StyleIdx::spatium).toDouble(), s.value(StyleIdx::spatium).toDouble());
-      _style = s;
+      style() = s;
       }
 
 //---------------------------------------------------------
@@ -4204,7 +4203,6 @@ MasterScore::MasterScore()
       {
       _tempomap    = new TempoMap;
       _sigmap      = new TimeSigMap();
-      _undo        = new UndoStack();
       _repeatList  = new RepeatList(this);
       _revisions   = new Revisions;
       setMasterScore(this);
@@ -4232,17 +4230,18 @@ MasterScore::MasterScore()
       metaTags().insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
       }
 
-MasterScore::MasterScore(const MStyle* s)
+MasterScore::MasterScore(const MStyle& s)
    : MasterScore{}
       {
-      setStyle(*s);
+      _movements = new Movements;
+      _movements->push_back(this);
+      setStyle(s);
       }
 
 MasterScore::~MasterScore()
       {
       delete _revisions;
       delete _repeatList;
-      delete _undo;
       delete _sigmap;
       delete _tempomap;
       qDeleteAll(_excerpts);
@@ -4333,6 +4332,59 @@ int Score::staffIdx(const Part* part) const
             idx += p->nstaves();
             }
       return idx;
+      }
+
+//---------------------------------------------------------
+//   setUpdateAll
+//---------------------------------------------------------
+
+void MasterScore::setUpdateAll()
+      {
+      _cmdState.setUpdateMode(UpdateMode::UpdateAll);
+      }
+
+//---------------------------------------------------------
+//   setLayoutAll
+//---------------------------------------------------------
+
+void MasterScore::setLayoutAll()
+      {
+      _cmdState.setTick(0);
+      _cmdState.setTick(measures()->last() ? measures()->last()->endTick() : 0);
+      }
+
+//---------------------------------------------------------
+//   setLayout
+//---------------------------------------------------------
+
+void MasterScore::setLayout(int t)
+      {
+      _cmdState.setTick(t);
+      }
+
+//---------------------------------------------------------
+//   isTopScore
+//---------------------------------------------------------
+
+bool Score::isTopScore() const
+      {
+      return !(isMaster() && static_cast<const MasterScore*>(this)->prev());
+      }
+
+//---------------------------------------------------------
+//   Movements
+//---------------------------------------------------------
+
+Movements::Movements()
+   : std::list<MasterScore*>()
+      {
+      _undo = new UndoStack();
+      }
+
+Movements::~Movements()
+      {
+      qDeleteAll(_pages);
+      delete _undo;
       }
 
 }

@@ -278,14 +278,14 @@ void System::layoutSystem(qreal xo1)
             SysStaff* s = staff(idx);
             if (s->show() && p->show()) {
                   for (InstrumentName* t : s->instrumentNames) {
-                        switch (t->textStyle().align() & AlignmentFlags::HMASK) {
-                              case int(AlignmentFlags::LEFT):
+                        switch (int(t->textStyle().align()) & int(Align::HMASK)) {
+                              case int(Align::LEFT):
                                     t->rxpos() = 0;
                                     break;
-                              case int(AlignmentFlags::HCENTER):
+                              case int(Align::HCENTER):
                                     t->rxpos() = (xoff2 - point(instrumentNameOffset) + xo1) * .5;
                                     break;
-                              case int(AlignmentFlags::RIGHT):
+                              case int(Align::RIGHT):
                               default:
                                     t->rxpos() = xoff2 - point(instrumentNameOffset) + xo1;
                                     break;
@@ -1149,7 +1149,7 @@ void System::moveBracket(int staffIdx, int srcCol, int dstCol)
 
 bool System::pageBreak() const
       {
-      return  ml.back()->pageBreak();
+      return  ml.empty() ? false : ml.back()->pageBreak();
       }
 
 //---------------------------------------------------------

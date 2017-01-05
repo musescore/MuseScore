@@ -14,6 +14,7 @@
 #define __MSCORE_H__
 
 #include "config.h"
+#include "style.h"
 
 namespace Ms {
 
@@ -60,8 +61,6 @@ static constexpr int MSCVERSION = 300;
 //    2.07  irregular, breakMMrest, more style options, system divider, bass string for tab (3.0)
 
 //    3.00  (Version 3.0 alpha)
-
-
 
 
 class MStyle;
@@ -121,6 +120,7 @@ static const int  FRET_NONE               = -1;       // no ordinal for a fret
 //    be applied when necessary.
 //---------------------------------------------------------
 
+#if 0
 #define MS_QML_ENUM(name, storageType, ...)\
       enum class name : storageType {\
             __VA_ARGS__\
@@ -133,6 +133,7 @@ static const int  FRET_NONE               = -1;       // no ordinal for a fret
                   __VA_ARGS__\
             };\
       };
+#endif
 
 //---------------------------------------------------------
 //   Direction
@@ -184,32 +185,6 @@ enum class BracketType : signed char {
 
 enum class PlaceText : char {
       AUTO, ABOVE, BELOW, LEFT
-      };
-
-//---------------------------------------------------------
-//   AlignmentFlags
-//---------------------------------------------------------
-
-enum class AlignmentFlags : char {
-      LEFT     = 0,
-      RIGHT    = 1,
-      HCENTER  = 2,
-      TOP      = 0,
-      BOTTOM   = 4,
-      VCENTER  = 8,
-      BASELINE = 16,
-      CENTER = AlignmentFlags::HCENTER | AlignmentFlags::VCENTER,
-      HMASK = AlignmentFlags::LEFT | AlignmentFlags::RIGHT | AlignmentFlags::HCENTER,
-      VMASK = AlignmentFlags::TOP | AlignmentFlags::BOTTOM | AlignmentFlags::VCENTER | AlignmentFlags::BASELINE
-      };
-
-//---------------------------------------------------------
-//   OffsetType
-//---------------------------------------------------------
-
-enum class OffsetType : char {
-      ABS,       ///< offset in point units
-      SPATIUM    ///< offset in staff space units
       };
 
 //---------------------------------------------------------
@@ -314,63 +289,12 @@ enum class NoteHeadScheme : char {
       };
 
 //---------------------------------------------------------
-//   Text Style Type
-//    Enumerate the list of built-in text styles.
-//    Must be in sync with list in setDefaultStyle().
-//---------------------------------------------------------
-
-MS_QML_ENUM(TextStyleType, signed char,\
-      DEFAULT = 0,\
-      TITLE,\
-      SUBTITLE,\
-      COMPOSER,\
-      POET,\
-      LYRIC1,\
-      LYRIC2,\
-      FINGERING,\
-      LH_GUITAR_FINGERING,\
-      RH_GUITAR_FINGERING,\
-      \
-      STRING_NUMBER,\
-      INSTRUMENT_LONG,\
-      INSTRUMENT_SHORT,\
-      INSTRUMENT_EXCERPT,\
-      DYNAMICS,\
-      EXPRESSION,\
-      TEMPO,\
-      METRONOME,\
-      MEASURE_NUMBER,\
-      TRANSLATOR,\
-      \
-      TUPLET,\
-      SYSTEM,\
-      STAFF,\
-      HARMONY,\
-      REHEARSAL_MARK,\
-      REPEAT_LEFT,       /* align to start of measure */\
-      REPEAT_RIGHT,      /* align to end of measure */\
-      VOLTA,\
-      FRAME,\
-      \
-      TEXTLINE,\
-      GLISSANDO,\
-      OTTAVA,\
-      PEDAL,\
-      HAIRPIN,\
-      BEND,\
-      HEADER,\
-      FOOTER,\
-      INSTRUMENT_CHANGE,\
-      FIGURED_BASS,\
-      \
-      TEXT_STYLES\
-      )
-
-//---------------------------------------------------------
 //   BarLineType
 //---------------------------------------------------------
 
-MS_QML_ENUM(BarLineType, int,\
+// MS_QML_ENUM(BarLineType, int,
+
+enum class BarLineType {
       UNKNOWN          = 0,
       NORMAL           = 1,\
       DOUBLE           = 2,\
@@ -380,7 +304,7 @@ MS_QML_ENUM(BarLineType, int,\
       END              = 0x20,\
       END_START_REPEAT = 0x40,\
       DOTTED           = 0x80\
-      )
+      };
 
 constexpr BarLineType operator| (BarLineType t1, BarLineType t2) {
       return static_cast<BarLineType>(static_cast<int>(t1) | static_cast<int>(t2));
@@ -457,10 +381,10 @@ class MPaintDevice : public QPaintDevice {
 class MScore : public QObject {
       Q_OBJECT
 
-      static MStyle* _defaultStyle;       // buildin modified by preferences
-      static MStyle* _defaultStyleForParts;
+      static MStyle _defaultStyle;       // buildin modified by preferences
+      static MStyle _defaultStyleForParts;
+      static MStyle _baseStyle;          // buildin initial style
 
-      static MStyle* _baseStyle;          // buildin initial style
       static QString _globalShare;
       static int _hRaster, _vRaster;
       static bool _verticalOrientation;
@@ -483,11 +407,11 @@ class MScore : public QObject {
 
       static void init();
 
-      static MStyle* defaultStyle();
-      static MStyle* defaultStyleForParts();
-      static MStyle* baseStyle();
-      static void setDefaultStyle(MStyle*);
       static void defaultStyleForPartsHasChanged();
+      static void setDefaultStyle(const MStyle& s) { _defaultStyle = s; }
+      static MStyle& defaultStyle()                { return _defaultStyle;         }
+      static const MStyle& defaultStyleForParts()  { return _defaultStyleForParts; }
+      static const MStyle& baseStyle()             { return _baseStyle;            }
 
       static const QString& globalShare()   { return _globalShare; }
       static qreal hRaster()                { return _hRaster;     }
@@ -579,9 +503,6 @@ inline static int limit(int val, int min, int max)
             return min;
       return val;
       }
-
-Q_DECLARE_FLAGS(Align, AlignmentFlags);
-Q_DECLARE_OPERATORS_FOR_FLAGS(Align);
 
 //---------------------------------------------------------
 //   qml access to containers

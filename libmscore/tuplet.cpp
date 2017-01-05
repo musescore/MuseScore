@@ -35,9 +35,9 @@ Tuplet::Tuplet(Score* s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
 
-      _direction    = score()->style(StyleIdx::tupletDirection).value<Direction>();
-      _numberType   = NumberType(score()->style(StyleIdx::tupletNumberType).toInt());
-      _bracketType  = BracketType(score()->style(StyleIdx::tupletBracketType).toInt());
+      _direction    = score()->styleV(StyleIdx::tupletDirection).value<Direction>();
+      _numberType   = NumberType(score()->styleI(StyleIdx::tupletNumberType));
+      _bracketType  = BracketType(score()->styleI(StyleIdx::tupletBracketType));
 
       _ratio        = Fraction(1, 1);
       _number       = 0;
@@ -961,11 +961,11 @@ QVariant Tuplet::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_ID::DIRECTION:
-                  return score()->style(StyleIdx::tupletDirection);
+                  return score()->styleV(StyleIdx::tupletDirection);
             case P_ID::NUMBER_TYPE:
-                  return score()->style(StyleIdx::tupletNumberType);
+                  return score()->styleV(StyleIdx::tupletNumberType);
             case P_ID::BRACKET_TYPE:
-                  return score()->style(StyleIdx::tupletBracketType);
+                  return score()->styleV(StyleIdx::tupletBracketType);
             case P_ID::NORMAL_NOTES:
             case P_ID::ACTUAL_NOTES:
                   return 0;
@@ -1058,7 +1058,7 @@ void Tuplet::resetProperty(P_ID id)
 void Tuplet::styleChanged()
       {
       if (directionStyle == PropertyStyle::STYLED)
-            setDirection(score()->style(StyleIdx::tupletDirection).value<Direction>());
+            setDirection(score()->styleV(StyleIdx::tupletDirection).value<Direction>());
       if (numberStyle == PropertyStyle::STYLED)
             setNumberType(NumberType(score()->styleI(StyleIdx::tupletNumberType)));
       if (bracketStyle == PropertyStyle::STYLED)

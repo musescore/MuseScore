@@ -63,7 +63,7 @@ ChordStyleEditor::ChordStyleEditor(QWidget* parent)
 void ChordStyleEditor::setScore(Score* s)
       {
       score = s;
-      setChordList(s->style()->chordList());
+      setChordList(s->style().chordList());
       }
 
 //---------------------------------------------------------
@@ -574,7 +574,7 @@ static void updateHarmony(void*, Element* e)
 void ChordStyleEditor::accept()
       {
       canvas->updateChordDescription();
-      score->style()->setChordList(chordList);
+      score->style().setChordList(chordList);
       chordList = 0;
 
       score->scanElements(0, updateHarmony);

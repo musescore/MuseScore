@@ -74,10 +74,10 @@ static void writeMeasure(XmlWriter& xml, MeasureBase* m, int staffIdx, bool writ
       }
 
 //---------------------------------------------------------
-//   write
+//   writeMovement
 //---------------------------------------------------------
 
-bool Score::write(XmlWriter& xml, bool selectionOnly)
+void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
       {
       // if we have multi measure rests and some parts are hidden,
       // then some layout information is missing:
@@ -116,15 +116,8 @@ bool Score::write(XmlWriter& xml, bool selectionOnly)
                   }
             }
 
-      switch (_layoutMode) {
-            case LayoutMode::PAGE:
-            case LayoutMode::FLOAT:
-            case LayoutMode::SYSTEM:
-                  break;
-            case LayoutMode::LINE:
-                  xml.tag("layoutMode", "line");
-                  break;
-            }
+      if (_layoutMode == LayoutMode::LINE)
+            xml.tag("layoutMode", "line");
 
 #ifdef OMR
       if (masterScore()->omr() && xml.writeOmr())
@@ -150,7 +143,7 @@ bool Score::write(XmlWriter& xml, bool selectionOnly)
             }
       xml.tag("currentLayer", _currentLayer);
 
-      if (!MScore::testMode)
+      if (isTopScore() && !MScore::testMode)
             _synthesizerState.write(xml);
 
       if (pageNumberOffset())
@@ -158,7 +151,8 @@ bool Score::write(XmlWriter& xml, bool selectionOnly)
       xml.tag("Division", MScore::division);
       xml.setCurTrack(-1);
 
-      _style.save(xml, true);      // save only differences to buildin style
+      if (isTopScore())                   // only top score
+            style().save(xml, true);       // save only differences to buildin style
 
       xml.tag("showInvisible",   _showInvisible);
       xml.tag("showUnprintable", _showUnprintable);
@@ -171,13 +165,6 @@ bool Score::write(XmlWriter& xml, bool selectionOnly)
             // do not output "platform" and "creationDate" in test mode
             if ((!MScore::testMode  && !MScore::saveTemplateMode) || (i.key() != "platform" && i.key() != "creationDate"))
                   xml.tag(QString("metaTag name=\"%1\"").arg(i.key().toHtmlEscaped()), i.value());
-            }
-
-      if (!selectionOnly) {
-            xml.stag("PageList");
-            for (Page* page : _pages)
-                  page->write(xml);
-            xml.etag();
             }
 
       xml.setCurTrack(0);
@@ -247,7 +234,25 @@ bool Score::write(XmlWriter& xml, bool selectionOnly)
             endCmd();
             undoRedo(true);   // undo
             }
-      return true;
+      }
+
+//---------------------------------------------------------
+//   write
+//---------------------------------------------------------
+
+void Score::write(XmlWriter& xml, bool selectionOnly)
+      {
+      if (isMaster()) {
+            MasterScore* score = static_cast<MasterScore*>(this);
+            while (score->prev())
+                  score = score->prev();
+            while (score) {
+                  score->writeMovement(xml, selectionOnly);
+                  score = score->next();
+                  }
+            }
+      else
+            writeMovement(xml, selectionOnly);
       }
 
 //---------------------------------------------------------
@@ -615,7 +620,7 @@ bool Score::loadStyle(const QString& fn)
       {
       QFile f(fn);
       if (f.open(QIODevice::ReadOnly)) {
-            MStyle st = _style;
+            MStyle st = style();
             if (st.load(&f)) {
                   undo(new ChangeStyle(this, st));
                   return true;
@@ -649,7 +654,7 @@ bool Score::saveStyle(const QString& name)
       XmlWriter xml(this, &f);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
-      _style.save(xml, false);     // save complete style
+      style().save(xml, false);     // save complete style
       xml.etag();
       if (f.error() != QFile::NoError) {
             MScore::lastError = tr("Write Style failed: %1").arg(f.errorString());
@@ -678,11 +683,9 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
             xml.tag("programVersion", VERSION);
             xml.tag("programRevision", revision);
             }
-      else {
+      else
             xml.stag("museScore version=\"3.00\"");
-            }
-      if (!write(xml, onlySelection))
-            return false;
+      write(xml, onlySelection);
       xml.etag();
       if (isMaster())
             masterScore()->revisions()->write(xml);

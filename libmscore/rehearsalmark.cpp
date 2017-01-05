@@ -39,11 +39,11 @@ void RehearsalMark::layout()
       if (s) {
             if (!s->rtick()) {
                   // first CR of measure, decide whether to align to barline
-                  if (!s->prev() && align() & AlignmentFlags::CENTER) {
+                  if (!s->prev() && align() & Align::CENTER) {
                         // measure with no clef / keysig / timesig
                         rxpos() -= s->x();
                         }
-                  else if (align() & AlignmentFlags::RIGHT) {
+                  else if (align() & Align::RIGHT) {
                         // measure with clef / keysig / timesig, rehearsal mark right aligned
                         // align left edge of rehearsal to barline if that is further to left
                         qreal leftX = bbox().x();

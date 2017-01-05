@@ -383,8 +383,8 @@ Score::FileError importBB(MasterScore* score, const QString& name)
             qDebug("Cannot open file <%s>", qPrintable(name));
             return Score::FileError::FILE_OPEN_ERROR;
             }
-      score->style()->set(StyleIdx::chordsXmlFile, true);
-      score->style()->chordList()->read("chords.xml");
+      score->style().set(StyleIdx::chordsXmlFile, true);
+      score->style().chordList()->read("chords.xml");
       *(score->sigmap()) = bb.siglist();
 
       QList<BBTrack*>* tracks = bb.tracks();

@@ -118,6 +118,7 @@ Ms::Element* QmlPlugin::newElement(int t)
 
 Score* QmlPlugin::newScore(const QString& name, const QString& part, int measures)
       {
+#if 0 // TODO
       if (msc->currentScore())
             msc->currentScore()->endCmd();
       MasterScore* score = new MasterScore(MScore::defaultStyle());
@@ -132,6 +133,8 @@ Score* QmlPlugin::newScore(const QString& name, const QString& part, int measure
       QQmlEngine::setObjectOwnership(score, QQmlEngine::CppOwnership);
       score->startCmd();
       return score;
+#endif
+      return 0;
       }
 
 //---------------------------------------------------------

@@ -56,8 +56,8 @@ struct BarLineTableItem {
 class BarLine : public Element {
       Q_OBJECT
 
-      Q_PROPERTY(Ms::MSQE_BarLineType::E barLineType READ qmlBarLineType)
-      Q_ENUMS(Ms::MSQE_BarLineType::E)
+//      Q_PROPERTY(Ms::MSQE_BarLineType::E barLineType READ qmlBarLineType)
+//      Q_ENUMS(Ms::MSQE_BarLineType::E)
 
       char _spanStaff         { false };       // span barline to next staff if true
       char _spanFrom          { 0 };           // line number on start and end staves
@@ -131,7 +131,7 @@ class BarLine : public Element {
       BarLineType barLineType() const    { return _barLineType;  }
       static BarLineType barLineType(const QString&);
 
-      Ms::MSQE_BarLineType::E qmlBarLineType() const { return static_cast<Ms::MSQE_BarLineType::E>(_barLineType); }
+//      Ms::MSQE_BarLineType::E qmlBarLineType() const { return static_cast<Ms::MSQE_BarLineType::E>(_barLineType); }
 
       virtual int subtype() const override         { return int(_barLineType); }
       virtual QString subtypeName() const override { return qApp->translate("barline", barLineTypeName().toUtf8()); }
@@ -152,7 +152,7 @@ class BarLine : public Element {
       };
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::MSQE_BarLineType::E);
+// Q_DECLARE_METATYPE(Ms::MSQE_BarLineType::E);
 
 #endif
 

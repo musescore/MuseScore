@@ -441,7 +441,7 @@ void MsScWriter::header(const QString title, const QString type,
             score->measures()->add(vbox);
             }
       if (!footer.isEmpty())
-            score->style()->set(Ms::StyleIdx::oddFooterC, footer);
+            score->style().set(Ms::StyleIdx::oddFooterC, footer);
 
       Ms::Part* part = score->staff(0)->part();
       part->setPlainLongName(instrumentName());
@@ -549,7 +549,7 @@ Score::FileError importBww(MasterScore* score, const QString& path)
       Bww::Lexer lex(&fp);
       Bww::MsScWriter wrt;
       wrt.setScore(score);
-      score->style()->set(StyleIdx::measureSpacing, 1.0);
+      score->style().set(StyleIdx::measureSpacing, 1.0);
       Bww::Parser p(lex, wrt);
       p.parse();
 

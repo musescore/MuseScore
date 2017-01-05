@@ -71,12 +71,6 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">tuplet</metaTag>
-    <PageList>
-      <Page>
-        <System>
-          </System>
-        </Page>
-      </PageList>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
@@ -138,8 +132,6 @@
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
-          <textN></textN>
-          <textD></textD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
@@ -267,8 +259,6 @@
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
-          <textN></textN>
-          <textD></textD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>

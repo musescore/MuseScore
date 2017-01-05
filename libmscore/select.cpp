@@ -50,6 +50,7 @@
 #include "staff.h"
 #include "part.h"
 #include "accidental.h"
+#include "articulation.h"
 
 namespace Ms {
 
@@ -835,29 +836,29 @@ Enabling copying of more element types requires enabling pasting in Score::paste
 */
                   case Element::Type::ARTICULATION:
                         // ignore articulations not attached to chords/rest
-                        if (e->parent()->type() == Element::Type::CHORD) {
-                              Chord* par = static_cast<Chord*>( (static_cast<Articulation*>(e))->parent() );
+                        if (e->parent()->isChord()) {
+                              Chord* par = toChord(e->parent());
                               seg = par->segment();
                               break;
                               }
-                        else if (e->parent()->type() == Element::Type::REST) {
-                              Rest* par = static_cast<Rest*>( (static_cast<Articulation*>(e))->parent() );
+                        else if (e->parent()->isRest()) {
+                              Rest* par = toRest(e->parent());
                               seg = par->segment();
                               break;
                               }
                         continue;
                   case Element::Type::FIGURED_BASS:
-                        seg = (static_cast<FiguredBass*>(e))->segment();
+                        seg = toFiguredBass(e)->segment();
                         break;
                   case Element::Type::HARMONY:
                         // ignore chord sybols not attached to segment
-                        if (e->parent()->type() == Element::Type::SEGMENT) {
-                              seg = static_cast<Segment*>( (static_cast<Harmony*>(e))->parent() );
+                        if (e->parent()->isSegment()) {
+                              seg = toSegment(e->parent());
                               break;
                               }
                         continue;
                   case Element::Type::LYRICS:
-                        seg = (static_cast<Lyrics*>(e))->segment();
+                        seg = toLyrics(e)->segment();
                         break;
                   default:
                         continue;

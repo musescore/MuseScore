@@ -250,7 +250,7 @@ QVariant Pedal::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::LINE_WIDTH:
-                  return score()->style(StyleIdx::pedalLineWidth);
+                  return score()->styleV(StyleIdx::pedalLineWidth);
 
             case P_ID::LINE_STYLE:
                   return int(score()->styleI(StyleIdx::pedalLineStyle));

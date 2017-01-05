@@ -164,7 +164,18 @@ static const StyleVal2 style114[] = {
 
 #define MM(x) ((x)/INCH)
 
-const PaperSize paperSizes114[] = {
+//---------------------------------------------------------
+//   PaperSize
+//---------------------------------------------------------
+
+struct PaperSize {
+      const char* name;
+      qreal w, h;            // size in inch
+      PaperSize(const char* n, qreal wi, qreal hi)
+         : name(n), w(wi), h(hi) {}
+      };
+
+static const PaperSize paperSizes114[] = {
       PaperSize("Custom",    MM(1),    MM(1)),
       PaperSize("A4",        MM(210),  MM(297)),
       PaperSize("B5",        MM(176),  MM(250)),
@@ -210,7 +221,7 @@ static const PaperSize* getPaperSize114(const QString& name)
                   return &paperSizes114[i];
             }
       qDebug("unknown paper size");
-      return &paperSizes[0];
+      return &paperSizes114[0];
       }
 
 //---------------------------------------------------------
@@ -1768,11 +1779,12 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
                         }
                   }
             else if (tag == "page-height")
-                  pf->size().rheight() = e.readDouble() * 0.5 / PPI;
+                  pf->setSize(QSizeF(pf->size().width(), e.readDouble() * 0.5 / PPI));
             else if (tag == "page-width")
-                  pf->size().rwidth() = e.readDouble() * .5 / PPI;
+                  pf->setSize(QSizeF(e.readDouble() * 0.5 / PPI, pf->size().height()));
             else if (tag == "pageFormat") {
-                  pf->setSize(getPaperSize114(e.readElementText()));
+                  const PaperSize* s = getPaperSize114(e.readElementText());
+                  pf->setSize(QSizeF(s->w, s->h));
                   }
             else if (tag == "page-offset") {
                   e.readInt();
@@ -1781,7 +1793,7 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
                   e.unknown();
             }
       if (landscape)
-            pf->size().transpose();
+            pf->setSize(pf->size().transposed());
       qreal w1 = pf->size().width() - pf->oddLeftMargin() - _oddRightMargin;
       qreal w2 = pf->size().width() - pf->evenLeftMargin() - _evenRightMargin;
       pf->setPrintableWidth(qMin(w1, w2));     // silently adjust right margins
@@ -1809,8 +1821,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             else if (tag == "Spatium")
                   style->set(StyleIdx::spatium, e.readDouble() * DPMM);
             else if (tag == "page-layout") {
-                  PageFormat pf;
-                  pf.copy(*style->pageFormat());
+                  PageFormat pf = *style->pageFormat();
                   readPageFormat(&pf, e);
                   style->setPageFormat(pf);
                   }
@@ -1927,19 +1938,19 @@ static void readStyle(MStyle* style, XmlReader& e)
 Score::FileError MasterScore::read114(XmlReader& e)
       {
       for (unsigned int i = 0; i < sizeof(style114)/sizeof(*style114); ++i)
-            style()->set(style114[i].idx, style114[i].val);
+            style().set(style114[i].idx, style114[i].val);
 
       // old text style defaults
-      TextStyle ts = style()->textStyle("Chord Symbol");
+      TextStyle ts = style().textStyle("Chord Symbol");
       ts.setYoff(-4.0);
-      style()->setTextStyle(ts);
-      ts = style()->textStyle("Rehearsal Mark");
+      style().setTextStyle(ts);
+      ts = style().textStyle("Rehearsal Mark");
       ts.setSquare(false);
       ts.setFrameRound(20);
-      style()->setTextStyle(ts);
-      ts = style()->textStyle("Dynamics");
+      style().setTextStyle(ts);
+      ts = style().textStyle("Dynamics");
       ts.setItalic(false);
-      style()->setTextStyle(ts);
+      style().setTextStyle(ts);
 
       TempoMap tm;
       while (e.readNextStartElement()) {
@@ -2003,12 +2014,12 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   setShowPageborders(e.readInt());
             else if (tag == "Style") {
                   qreal sp = spatium();
-                  readStyle(style(), e);
+                  readStyle(&style(), e);
                   //style()->load(e);
                   // adjust this now so chords render properly on read
                   // other style adjustments can wait until reading is finished
-                  if (style(StyleIdx::useGermanNoteNames).toBool())
-                        style()->set(StyleIdx::useStandardNoteNames, false);
+                  if (styleB(StyleIdx::useGermanNoteNames))
+                        style().set(StyleIdx::useStandardNoteNames, false);
                   if (_layoutMode == LayoutMode::FLOAT) {
                         // style should not change spatium in
                         // float mode
@@ -2031,14 +2042,13 @@ Score::FileError MasterScore::read114(XmlReader& e)
                         s.setFamily("MuseJazz Text");
 
                   if (s.name() == "Lyrics Odd Lines" || s.name() == "Lyrics Even Lines")
-                        s.setAlign((s.align() & ~ Align(AlignmentFlags::VMASK)) | AlignmentFlags::BASELINE);
+                        s.setAlign(Align(int(s.align()) & int(~Align::VMASK)) | Align::BASELINE);
 
-                  style()->setTextStyle(s);
+                  style().setTextStyle(s);
                   }
             else if (tag == "page-layout") {
                   if (_layoutMode != LayoutMode::FLOAT && _layoutMode != LayoutMode::SYSTEM) {
-                        PageFormat pf;
-                        pf.copy(*pageFormat());
+                        PageFormat pf = *pageFormat();
                         readPageFormat(&pf, e);
                         setPageFormat(pf);
                         }
@@ -2304,19 +2314,19 @@ Score::FileError MasterScore::read114(XmlReader& e)
 
       // adjust some styles
       Spatium lmbd = styleS(StyleIdx::lyricsMinBottomDistance);
-      style()->set(StyleIdx::lyricsMinBottomDistance, Spatium(lmbd.val() + 4.0));
-      if (style(StyleIdx::hideEmptyStaves).toBool())        // http://musescore.org/en/node/16228
-            style()->set(StyleIdx::dontHideStavesInFirstSystem, false);
-      if (style(StyleIdx::showPageNumberOne).toBool()) {    // http://musescore.org/en/node/21207
-            style()->set(StyleIdx::evenFooterL, QString("$P"));
-            style()->set(StyleIdx::oddFooterR, QString("$P"));
+      style().set(StyleIdx::lyricsMinBottomDistance, Spatium(lmbd.val() + 4.0));
+      if (styleB(StyleIdx::hideEmptyStaves))        // http://musescore.org/en/node/16228
+            style().set(StyleIdx::dontHideStavesInFirstSystem, false);
+      if (styleB(StyleIdx::showPageNumberOne)) {    // http://musescore.org/en/node/21207
+            style().set(StyleIdx::evenFooterL, QString("$P"));
+            style().set(StyleIdx::oddFooterR, QString("$P"));
             }
-      if (style(StyleIdx::minEmptyMeasures).toInt() == 0)
-            style()->set(StyleIdx::minEmptyMeasures, 1);
-      style()->set(StyleIdx::frameSystemDistance, style(StyleIdx::frameSystemDistance).toDouble() + 6.0);
+      if (styleI(StyleIdx::minEmptyMeasures) == 0)
+            style().set(StyleIdx::minEmptyMeasures, 1);
+      style().set(StyleIdx::frameSystemDistance, styleS(StyleIdx::frameSystemDistance) + Spatium(6.0));
       // hack: net overall effect of layout changes has been for things to take slightly more room
       qreal adjustedSpacing = qMax(styleD(StyleIdx::measureSpacing) * 0.95, 1.0);
-      style()->set(StyleIdx::measureSpacing, adjustedSpacing);
+      style().set(StyleIdx::measureSpacing, adjustedSpacing);
 
       _showOmr = false;
 
@@ -2353,7 +2363,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
             if (!excerpt->parts().isEmpty()) {
                   Score* nscore = new Score(this);
                   excerpt->setPartScore(nscore);
-                  nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
+                  nscore->style().set(StyleIdx::createMultiMeasureRests, true);
                   Excerpt::createExcerpt(excerpt);
                   }
             }
@@ -2361,8 +2371,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
       // volta offsets in older scores are hardcoded to be relative to a voltaY of -2.0sp
       // we'll force this and live with it for the score
       // but we wait until now to do it so parts don't have this issue
-      if (style(StyleIdx::voltaY) == MScore::baseStyle()->value(StyleIdx::voltaY))
-            style()->set(StyleIdx::voltaY, -2.0f);
+      if (styleV(StyleIdx::voltaY) == MScore::baseStyle().value(StyleIdx::voltaY))
+            style().set(StyleIdx::voltaY, -2.0f);
 
       fixTicks();
       rebuildMidiMapping();

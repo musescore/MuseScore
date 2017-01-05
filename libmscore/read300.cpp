@@ -89,15 +89,15 @@ bool Score::read(XmlReader& e)
             else if (tag == "showMargins")
                   _showPageborders = e.readInt();
             else if (tag == "Style") {
-                  qreal sp = _style.value(StyleIdx::spatium).toDouble();
-                  _style.load(e);
+                  qreal sp = style().value(StyleIdx::spatium).toDouble();
+                  style().load(e);
                   // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
                   if (_layoutMode == LayoutMode::FLOAT) {
                         // style should not change spatium in
                         // float mode
-                        _style.set(StyleIdx::spatium, sp);
+                        style().set(StyleIdx::spatium, sp);
                         }
-                  _scoreFont = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
+                  _scoreFont = ScoreFont::fontFactory(style().value(StyleIdx::MusicalSymbolFont).toString());
                   }
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);
@@ -171,17 +171,6 @@ bool Score::read(XmlReader& e)
                         e.setLastMeasure(nullptr);
                         s->read(e);
                         m->addExcerpt(ex);
-                        }
-                  }
-            else if (tag == "PageList") {
-                  while (e.readNextStartElement()) {
-                        if (e.name() == "Page") {
-                              Page* page = new Page(this);
-                              _pages.append(page);
-                              page->read(e);
-                              }
-                        else
-                              e.unknown();
                         }
                   }
             else if (tag == "name") {
@@ -296,13 +285,13 @@ bool MasterScore::read(XmlReader& e)
 
 void MasterScore::addMovement(MasterScore* score)
       {
-      if (!_movements)
-            _movements = new Movements;
-      _movements->push_back(score);
       score->_movements = _movements;
+      _movements->push_back(score);
       MasterScore* ps = 0;
       for (MasterScore* s : *_movements) {
             s->setPrev(ps);
+            if (ps)
+                  ps->setNext(s);
             s->setNext(0);
             ps = s;
             }
@@ -314,6 +303,7 @@ void MasterScore::addMovement(MasterScore* score)
 
 Score::FileError MasterScore::read300(XmlReader& e)
       {
+      bool top = true;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "programVersion") {
@@ -323,12 +313,17 @@ Score::FileError MasterScore::read300(XmlReader& e)
             else if (tag == "programRevision")
                   setMscoreRevision(e.readInt());
             else if (tag == "Score") {
-                  MasterScore* score = this;
-                  if (_movements)
+                  MasterScore* score;
+                  if (top) {
+                        score = this;
+                        top   = false;
+                        }
+                  else {
                         score = new MasterScore();
+                        addMovement(score);
+                        }
                   if (!score->read(e))
                         return FileError::FILE_BAD_FORMAT;
-                  addMovement(score);
                   }
             else if (tag == "Revision") {
                   Revision* revision = new Revision;
@@ -336,15 +331,8 @@ Score::FileError MasterScore::read300(XmlReader& e)
                   revisions()->add(revision);
                   }
             }
-
-      int id = 1;
-      for (LinkedElements* le : e.linkIds())
-            le->setLid(this, id++);
-
-      for (Staff* s : staves())
-            s->updateOttava();
-
-      setCreated(false);
+      for (MasterScore* ms : *_movements)
+            printf("=====%p %p %p\n", ms, ms->prev(), ms->next());
       return FileError::FILE_NO_ERROR;
       }
 

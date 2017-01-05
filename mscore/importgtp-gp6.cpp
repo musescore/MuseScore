@@ -873,7 +873,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             if (harmonicText.compare("Natural")) {
                                                                   harmonicNote->setFret(fretNum.toInt());
                                                                   TextStyle textStyle;
-                                                                  textStyle.setAlign(AlignmentFlags::CENTER);
+                                                                  textStyle.setAlign(Align::CENTER);
                                                                   addTextToNote(harmonicText, textStyle, harmonicNote);
                                                                   }
                                                             }
@@ -1086,7 +1086,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       // if a barre fret has been specified
                                                       if (barreFret.compare("")) {
                                                             TextStyle textStyle;
-                                                            textStyle.setAlign(AlignmentFlags::CENTER);
+                                                            textStyle.setAlign(Align::CENTER);
                                                             if (halfBarre)
                                                                   addTextToNote("1/2B " + barreFret, textStyle, note);
                                                             else
@@ -1161,7 +1161,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 if (!timerNode.isNull()) {
                                                       int time = timerNode.toElement().text().toInt();
                                                       TextStyle textStyle;
-                                                      textStyle.setAlign(AlignmentFlags::CENTER);
+                                                      textStyle.setAlign(Align::CENTER);
                                                       int minutes = time/60;
                                                       int seconds = time % 60;
                                                       addTextToNote(QString::number(minutes) + ":" + (seconds < 10 ? "0" + QString::number(seconds) : QString::number(seconds)), textStyle, note);
@@ -1169,7 +1169,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 QDomNode textNode = currentNode.parentNode().firstChildElement("FreeText");
                                                 if (!textNode.isNull()) {
                                                       TextStyle textStyle;
-                                                      textStyle.setAlign(AlignmentFlags::CENTER);
+                                                      textStyle.setAlign(Align::CENTER);
                                                       addTextToNote(textNode.toElement().text(), textStyle, note);
                                                       }
                                                 QDomNode ghostNode = currentNote.parentNode().firstChildElement("AntiAccent");
