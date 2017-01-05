@@ -30,6 +30,7 @@
 #include "inspectorFret.h"
 #include "inspectorText.h"
 #include "inspectorBarline.h"
+#include "inspectorFingering.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "bendproperties.h"
@@ -292,6 +293,9 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         case Element::Type::INSTRUMENT_NAME:
                               ie = new InspectorIname(this);
+                              break;
+                        case Element::Type::FINGERING:
+                              ie = new InspectorFingering(this);
                               break;
                         default:
                               if (_element->isText())

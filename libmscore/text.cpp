@@ -2478,88 +2478,6 @@ QLineF Text::dragAnchor() const
       }
 
 //---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
-QVariant Text::getProperty(P_ID propertyId) const
-      {
-      switch (propertyId) {
-            case P_ID::TEXT_STYLE:
-                  return QVariant::fromValue(_textStyle);
-            case P_ID::TEXT_STYLE_TYPE:
-                  return QVariant(int(_styleIndex));
-            case P_ID::TEXT:
-                  return xmlText();
-            default:
-                  return Element::getProperty(propertyId);
-            }
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool Text::setProperty(P_ID propertyId, const QVariant& v)
-      {
-      score()->addRefresh(canvasBoundingRect());
-      bool rv = true;
-      switch (propertyId) {
-            case P_ID::TEXT_STYLE:
-                  setTextStyle(v.value<TextStyle>());
-                  break;
-            case P_ID::TEXT_STYLE_TYPE:
-                  setTextStyleType(v.value<TextStyleType>());
-                  setGenerated(false);
-                  break;
-            case P_ID::TEXT:
-                  setXmlText(v.toString());
-                  break;
-            default:
-                  rv = Element::setProperty(propertyId, v);
-                  break;
-            }
-      triggerLayout();
-      return rv;
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant Text::propertyDefault(P_ID id) const
-      {
-      TextStyleType idx;
-      switch (type()) {
-            case Element::Type::DYNAMIC:           idx = TextStyleType::DYNAMICS; break;
-            case Element::Type::FIGURED_BASS:      idx = TextStyleType::FIGURED_BASS; break;
-            case Element::Type::FINGERING:         idx = TextStyleType::FINGERING; break;
-            case Element::Type::HARMONY:           idx = TextStyleType::HARMONY; break;
-            case Element::Type::INSTRUMENT_CHANGE: idx = TextStyleType::INSTRUMENT_CHANGE; break;
-            // case Element::Type::INSTRUMENT_NAME: would need to differentiate long & short
-            // probably best handle this with another override
-            case Element::Type::JUMP:              idx = TextStyleType::REPEAT_RIGHT; break;
-            case Element::Type::LYRICS:            idx = TextStyleType::LYRIC1; break;
-            case Element::Type::MARKER:            idx = TextStyleType::REPEAT_RIGHT; break;
-            case Element::Type::REHEARSAL_MARK:    idx = TextStyleType::REHEARSAL_MARK; break;
-            case Element::Type::STAFF_TEXT:        idx = TextStyleType::STAFF; break;
-            case Element::Type::TEMPO_TEXT:        idx = TextStyleType::TEMPO; break;
-            default:
-                  // if we cannot determine type, give up
-                  return Element::propertyDefault(id);
-            }
-      switch (id) {
-            case P_ID::TEXT_STYLE_TYPE:
-                  return int(idx);
-            case P_ID::TEXT_STYLE:
-                  return score()->textStyle(idx).name();
-            case P_ID::TEXT:
-                  return QString("");
-            default:
-                  return Element::propertyDefault(id);
-            }
-      }
-
-//---------------------------------------------------------
 //   paste
 //---------------------------------------------------------
 
@@ -3173,5 +3091,88 @@ void Text::inputTransition(QInputMethodEvent* ie)
                   }
             }
       }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Text::getProperty(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::TEXT_STYLE:
+                  return QVariant::fromValue(_textStyle);
+            case P_ID::TEXT_STYLE_TYPE:
+                  return QVariant(int(_styleIndex));
+            case P_ID::TEXT:
+                  return xmlText();
+            default:
+                  return Element::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Text::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      score()->addRefresh(canvasBoundingRect());
+      bool rv = true;
+      switch (propertyId) {
+            case P_ID::TEXT_STYLE:
+                  setTextStyle(v.value<TextStyle>());
+                  break;
+            case P_ID::TEXT_STYLE_TYPE:
+                  setTextStyleType(v.value<TextStyleType>());
+                  setGenerated(false);
+                  break;
+            case P_ID::TEXT:
+                  setXmlText(v.toString());
+                  break;
+            default:
+                  rv = Element::setProperty(propertyId, v);
+                  break;
+            }
+      triggerLayout();
+      return rv;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Text::propertyDefault(P_ID id) const
+      {
+      TextStyleType idx;
+      switch (type()) {
+            case Element::Type::DYNAMIC:           idx = TextStyleType::DYNAMICS; break;
+            case Element::Type::FIGURED_BASS:      idx = TextStyleType::FIGURED_BASS; break;
+            case Element::Type::FINGERING:         idx = TextStyleType::FINGERING; break;
+            case Element::Type::HARMONY:           idx = TextStyleType::HARMONY; break;
+            case Element::Type::INSTRUMENT_CHANGE: idx = TextStyleType::INSTRUMENT_CHANGE; break;
+            // case Element::Type::INSTRUMENT_NAME: would need to differentiate long & short
+            // probably best handle this with another override
+            case Element::Type::JUMP:              idx = TextStyleType::REPEAT_RIGHT; break;
+            case Element::Type::LYRICS:            idx = TextStyleType::LYRIC1; break;
+            case Element::Type::MARKER:            idx = TextStyleType::REPEAT_RIGHT; break;
+            case Element::Type::REHEARSAL_MARK:    idx = TextStyleType::REHEARSAL_MARK; break;
+            case Element::Type::STAFF_TEXT:        idx = TextStyleType::STAFF; break;
+            case Element::Type::TEMPO_TEXT:        idx = TextStyleType::TEMPO; break;
+            default:
+                  // if we cannot determine type, give up
+                  return Element::propertyDefault(id);
+            }
+      switch (id) {
+            case P_ID::TEXT_STYLE_TYPE:
+                  return int(idx);
+            case P_ID::TEXT_STYLE:
+                  return score()->textStyle(idx).name();
+            case P_ID::TEXT:
+                  return QString("");
+            default:
+                  return Element::propertyDefault(id);
+            }
+      }
+
 }
 

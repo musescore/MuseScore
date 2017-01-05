@@ -225,7 +225,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                || e->type() == Element::Type::REHEARSAL_MARK
                || e->type() == Element::Type::MARKER
                || e->type() == Element::Type::JUMP
-               || e->type() == Element::Type::FINGERING
                || e->type() == Element::Type::LYRICS
                || e->type() == Element::Type::FIGURED_BASS) {
             genPropertyMenuText(e, popup);

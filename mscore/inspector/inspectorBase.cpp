@@ -61,6 +61,8 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
             v = w->property("value");
       else if (qobject_cast<QSpinBox*>(w))
             v = w->property("value");
+      else if (qobject_cast<QFontComboBox*>(w))
+            v = static_cast<QFontComboBox*>(w)->currentFont().family();
       else if (qobject_cast<QComboBox*>(w)) {
             QComboBox* cb = qobject_cast<QComboBox*>(w);
             int val = cb->currentIndex();
@@ -163,6 +165,8 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
             static_cast<QDoubleSpinBox*>(w)->setValue(val.toDouble());
       else if (qobject_cast<QSpinBox*>(w))
             static_cast<QSpinBox*>(w)->setValue(val.toInt());
+      else if (qobject_cast<QFontComboBox*>(w))
+            static_cast<QFontComboBox*>(w)->setCurrentFont(QFont(val.toString()));
       else if (qobject_cast<QComboBox*>(w)) {
             int ival = val.toInt();
             QComboBox* cb = qobject_cast<QComboBox*>(w);
@@ -543,6 +547,8 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                   connect(w, SIGNAL(valueChanged(double)), valueMapper, SLOT(map()));
             else if (qobject_cast<QSpinBox*>(w))
                   connect(w, SIGNAL(valueChanged(int)), valueMapper, SLOT(map()));
+            else if (qobject_cast<QFontComboBox*>(w))
+                  connect(w, SIGNAL(currentFontChanged(const QFont&)), valueMapper, SLOT(map()));
             else if (qobject_cast<QComboBox*>(w))
                   connect(w, SIGNAL(currentIndexChanged(int)), valueMapper, SLOT(map()));
             else if (qobject_cast<QCheckBox*>(w))

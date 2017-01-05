@@ -272,6 +272,22 @@ static const PropertyData propertyList[] = {
       { P_ID::BRACKET_COLUMN,          false, "level",                 P_TYPE::INT             },
       { P_ID::INAME_LAYOUT_POSITION,   false, "layoutPosition",        P_TYPE::INT             },
 
+      { P_ID::FONT_FACE,               false, "fontFace",              P_TYPE::FONT            },
+      { P_ID::FONT_SIZE,               false, "fontSize",              P_TYPE::REAL            },
+      { P_ID::FONT_BOLD,               false, "fontBold",              P_TYPE::BOOL            },
+      { P_ID::FONT_ITALIC,             false, "fontItalic",            P_TYPE::BOOL            },
+      { P_ID::FONT_UNDERLINE,          false, "fontUnderline",         P_TYPE::BOOL            },
+      { P_ID::FONT_FRAME,              false, "fontFrame",             P_TYPE::BOOL            },
+      { P_ID::FONT_FRAME_SQUARE,       false, "fontFrameSquare",       P_TYPE::BOOL            },
+      { P_ID::FONT_FRAME_CIRCLE,       false, "fontFrameCircle",       P_TYPE::BOOL            },
+      { P_ID::FONT_FRAME_WDITH,        false, "fontFrameWidth",        P_TYPE::SPATIUM         },
+      { P_ID::FONT_FRAME_PADDING,      false, "fontFramePadding",      P_TYPE::SPATIUM         },
+      { P_ID::FONT_FRAME_ROUND,        false, "fontFrameRound",        P_TYPE::INT             },
+      { P_ID::FONT_FRAME_COLOR,        false, "fontFrameColor",        P_TYPE::COLOR           },
+      { P_ID::FONT_SPATIUM_DEPENDENT,  false, "fontSpatiumSize",       P_TYPE::BOOL            },
+      { P_ID::FONT_BG_COLOR,           false, "FontBgColor",           P_TYPE::COLOR           },
+      { P_ID::FONT_FG_COLOR,           false, "FontFgColor",           P_TYPE::COLOR           },
+
       { P_ID::END, false, "", P_TYPE::INT }
       };
 
@@ -332,6 +348,7 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case P_TYPE::SCALE:
             case P_TYPE::SIZE:
                   return QVariant(e.readSize());
+            case P_TYPE::FONT:
             case P_TYPE::STRING:
                   return QVariant(e.readElementText());
             case P_TYPE::GLISSANDO_STYLE: {

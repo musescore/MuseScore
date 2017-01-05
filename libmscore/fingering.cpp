@@ -106,5 +106,57 @@ QString Fingering::accessibleInfo() const
       return QString("%1: %2").arg(rez).arg(plainText());
       }
 
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Fingering::getProperty(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::FONT_FACE:
+                  return textStyle().family();
+            case P_ID::FONT_BOLD:
+                  return textStyle().bold();
+            default:
+                  return Text::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Fingering::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            case P_ID::FONT_FACE:
+                  textStyle().setFamily(v.toString());
+                  break;
+            case P_ID::FONT_BOLD:
+                  textStyle().setBold(v.toBool());
+                  break;
+            default:
+                  return Text::setProperty(propertyId, v);
+            }
+      triggerLayout();
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Fingering::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::FONT_FACE:
+                  return score()->textStyle(TextStyleType::FINGERING).family();
+            case P_ID::FONT_BOLD:
+                  return score()->textStyle(TextStyleType::FINGERING).bold();
+            default:
+                  return Text::propertyDefault(id);
+            }
+      }
+
 }
 

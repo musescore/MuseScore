@@ -2787,7 +2787,6 @@ System* Score::collectSystem(LayoutContext& lc)
       if (!lc.curMeasure)
             return 0;
       System* system = getNextSystem(lc);
-      printf("====collect system %p %d\n", system, int(system->measures().size()));
       system->setInstrumentNames(lc.startWithLongNames);
 
       qreal minWidth    = 0;
@@ -2932,7 +2931,6 @@ System* Score::collectSystem(LayoutContext& lc)
                         if (lc.curMeasure && lc.curMeasure->isMeasure()) {
                               restoreBeams(toMeasure(lc.curMeasure));
                               toMeasure(lc.curMeasure)->stretchMeasure(lc.curMeasure->width());
-                              printf("====restore measure %d\n", lc.curMeasure->no());
                               }
                         break;
                         }
