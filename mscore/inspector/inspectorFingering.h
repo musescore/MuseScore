@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2013 Werner Schweer and others
+//  Copyright (C) 2017 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -10,26 +10,26 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __INSPECTOR_ARPEGGIO_H__
-#define __INSPECTOR_ARPEGGIO_H__
+#ifndef __INSPECTOR_FINGERING_H__
+#define __INSPECTOR_FINGERING_H__
 
 #include "inspector.h"
-#include "ui_inspector_arpeggio.h"
+#include "ui_inspector_fingering.h"
 #include "libmscore/property.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorArpeggio
+//   InspectorFingering
 //---------------------------------------------------------
 
-class InspectorArpeggio : public InspectorElementBase {
+class InspectorFingering : public InspectorElementBase {
       Q_OBJECT
 
-      Ui::InspectorArpeggio g;
+      Ui::InspectorFingering f;
 
    public:
-      InspectorArpeggio(QWidget* parent);
+      InspectorFingering(QWidget* parent);
       };
 
 

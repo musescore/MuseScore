@@ -239,7 +239,7 @@ class Text : public Element {
 
       virtual void draw(QPainter*) const override;
       virtual void setColor(const QColor& c) override;
-      virtual QColor color() const             { return textStyle().foregroundColor(); }
+      virtual QColor color() const             { return _textStyle.foregroundColor(); }
 
       virtual void setTextStyle(const TextStyle& st);
       const TextStyle& textStyle() const      { return _textStyle; }
@@ -319,9 +319,9 @@ class Text : public Element {
 
       virtual QLineF dragAnchor() const override;
 
-      QVariant getProperty(P_ID propertyId) const;
-      bool setProperty(P_ID propertyId, const QVariant& v);
-      virtual QVariant propertyDefault(P_ID id) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
 
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;

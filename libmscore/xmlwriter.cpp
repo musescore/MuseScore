@@ -178,6 +178,8 @@ void XmlWriter::tag(P_ID id, QVariant data, QVariant defaultData)
             case P_TYPE::SIZE:
             case P_TYPE::COLOR:
             case P_TYPE::DIRECTION:
+            case P_TYPE::STRING:
+            case P_TYPE::FONT:
                   tag(name, data);
                   break;
             case P_TYPE::ORNAMENT_STYLE:

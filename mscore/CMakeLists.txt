@@ -133,6 +133,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_caesura.ui
       inspector/inspector_bracket.ui
       inspector/inspector_iname.ui
+      inspector/inspector_fingering.ui
       ${SCRIPT_UI}
       )
 
@@ -271,15 +272,35 @@ add_executable ( ${ExecutableName}
       inspector/inspectorText.cpp
       inspector/inspectorLasso.cpp
       inspector/inspectorBarline.cpp
-      editelement.cpp inspector/inspectorVolta.cpp inspector/inspectorOttava.cpp enableplayforwidget.cpp
+      inspector/inspectorVolta.cpp
+      inspector/inspectorOttava.cpp
       inspector/inspectorTrill.cpp
-      inspector/inspectorHairpin.cpp qmlplugin.cpp editlyrics.cpp
-      musicxmlfonthandler.cpp musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
-      savePositions.cpp inspector/inspectorJump.cpp inspector/inspectorMarker.cpp
-      inspector/inspectorGlissando.cpp inspector/inspectorNote.cpp inspector/inspectorAmbitus.cpp
+      inspector/inspectorHairpin.cpp
+      inspector/inspectorJump.cpp
+      inspector/inspectorMarker.cpp
+      inspector/inspectorGlissando.cpp
+      inspector/inspectorNote.cpp
+      inspector/inspectorAmbitus.cpp
       inspector/inspectorArpeggio.cpp
-      paletteBoxButton.cpp driver.cpp exportmidi.cpp noteGroups.cpp
-      pathlistdialog.cpp exampleview.cpp inspector/inspectorTextLine.cpp miconengine.cpp
+      inspector/inspectorFingering.cpp
+      inspector/inspectorTextLine.cpp
+      enableplayforwidget.cpp
+      editelement.cpp
+      qmlplugin.cpp
+      editlyrics.cpp
+      musicxmlfonthandler.cpp
+      musicxmlsupport.cpp
+      exportxml.cpp
+      importxml.cpp
+      importxmlfirstpass.cpp
+      savePositions.cpp
+      paletteBoxButton.cpp
+      driver.cpp
+      exportmidi.cpp
+      noteGroups.cpp
+      pathlistdialog.cpp
+      exampleview.cpp
+      miconengine.cpp
       importmidi/importmidi.cpp
       importmidi/importmidi_panel.cpp importmidi/importmidi_operations.cpp
       importmidi/importmidi_model.cpp importmidi/importmidi_delegate.cpp

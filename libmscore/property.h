@@ -264,6 +264,22 @@ enum class P_ID : int {
       BRACKET_COLUMN,
       INAME_LAYOUT_POSITION,
 
+      FONT_FACE,
+      FONT_SIZE,
+      FONT_BOLD,
+      FONT_ITALIC,
+      FONT_UNDERLINE,
+      FONT_FRAME,
+      FONT_FRAME_SQUARE,
+      FONT_FRAME_CIRCLE,
+      FONT_FRAME_WDITH,
+      FONT_FRAME_PADDING,
+      FONT_FRAME_ROUND,
+      FONT_FRAME_COLOR,
+      FONT_SPATIUM_DEPENDENT,
+      FONT_BG_COLOR,
+      FONT_FG_COLOR,
+
       END
       };
 
@@ -300,6 +316,7 @@ enum class P_TYPE : char {
       HEAD_TYPE,         // enum class Notehead::Type
       HEAD_GROUP,       // enum class Notehead::Group
       ZERO_INT,         // displayed with offset +1
+      FONT,
       };
 
 extern QVariant getProperty(P_ID type, XmlReader& e);
