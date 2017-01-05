@@ -60,6 +60,7 @@ AlbumManager::AlbumManager(QWidget* parent)
       createScore->setEnabled(false);
 
       MuseScore::restoreGeometry(this);
+      createNewClicked();
       }
 
 //---------------------------------------------------------
@@ -337,6 +338,9 @@ void MuseScore::showAlbumManager()
       if (albumManager == 0)
             albumManager = new AlbumManager(this);
       albumManager->show();
+      
+      // focus on album name on opening the Album Manager
+      albumManager->albumName->setFocus();
       }
 
 //---------------------------------------------------------
