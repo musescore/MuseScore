@@ -71,7 +71,7 @@ void TestEarlymusic::earlymusic01()
       QVERIFY(dur.type() == TDuration::DurationType::V_BREVE);
 
       // set crossMeasureValue flag ON: score should not change
-      MStyle newStyle = *score->style();
+      MStyle newStyle = score->style();
       newStyle.set(StyleIdx::crossMeasureValues, true);
       score->startCmd();
       score->deselectAll();

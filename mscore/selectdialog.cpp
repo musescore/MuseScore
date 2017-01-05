@@ -29,6 +29,7 @@
 #include "libmscore/system.h"
 #include "libmscore/score.h"
 #include "libmscore/slur.h"
+#include "libmscore/articulation.h"
 #include "musescore.h"
 
 namespace Ms {
@@ -58,7 +59,7 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
                   subtype->setText(qApp->translate("TextStyle", e->subtypeName().toUtf8()));
                   break;
             case Element::Type::ARTICULATION: // comes translated, but from a different method
-                  subtype->setText(static_cast<const Articulation*>(e)->userName());
+                  subtype->setText(toArticulation(e)->userName());
                   break;
             // other come translated or don't need any or are too difficult to implement
             default: subtype->setText(e->subtypeName());

@@ -768,7 +768,7 @@ Element* ChordRest::drop(const DropData& data)
                   TextStyleType st = tt->textStyleType();
                   //tt->setTextStyleType(st);
                   if (st >= TextStyleType::DEFAULT && fromPalette)
-                        tt->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
+                        tt->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
                   score()->undoAddElement(tt);
                   }
                   return e;
@@ -780,7 +780,7 @@ Element* ChordRest::drop(const DropData& data)
                   TextStyleType st = d->textStyleType();
                   //d->setTextStyleType(st);
                   if (st >= TextStyleType::DEFAULT && fromPalette)
-                        d->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
+                        d->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
                   d->setParent(segment());
                   score()->undoAddElement(d);
                   }
@@ -843,7 +843,7 @@ Element* ChordRest::drop(const DropData& data)
                   // palette text style will be relative to baseStyle, so rebase this to score
                   //f->setTextStyleType(st);
                   if (st >= TextStyleType::DEFAULT && fromPalette)
-                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
+                        t->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
                   if (e->type() == Element::Type::REHEARSAL_MARK && fromPalette)
                         t->setXmlText(score()->createRehearsalMarkText(static_cast<RehearsalMark*>(e)));
                   }

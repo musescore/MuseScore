@@ -157,9 +157,9 @@ add_custom_target(reporthtml
       )
 
 subdirs (
-        libmscore/compat114
-        libmscore/compat206
-        libmscore/album
+#        libmscore/compat114
+#        libmscore/compat206
+#        libmscore/album            # obsolete
         libmscore/barline
         libmscore/beam
         libmscore/breath
@@ -200,9 +200,9 @@ subdirs (
         importmidi
         capella
         biab
-        musicxml
+#        musicxml
 #        guitarpro
-        scripting
+#        scripting
 #        testoves
         zerberus/comments
         zerberus/envelopes

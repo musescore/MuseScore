@@ -71,7 +71,7 @@ void LayoutBreak::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  setProperty(P_ID::LAYOUT_BREAK, Ms::getProperty(P_ID::LAYOUT_BREAK, e));
+                  setLayoutBreakType(Type(Ms::getProperty(P_ID::LAYOUT_BREAK, e).toInt()));
             else if (tag == "pause")
                   _pause = e.readDouble();
             else if (tag == "startWithLongNames")

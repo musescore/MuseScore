@@ -304,7 +304,7 @@ void TestParts::styleScore()
       MasterScore* score = readScore(DIR + "partStyle.mscx");
       QVERIFY(score);
       createParts(score);
-      score->style()->set(StyleIdx::clefLeftMargin, 4.0);
+      score->style().set(StyleIdx::clefLeftMargin, 4.0);
       QVERIFY(saveCompareScore(score, "partStyle-score-test.mscx", DIR + "partStyle-score-ref.mscx"));
       delete score;
       }

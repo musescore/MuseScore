@@ -57,6 +57,9 @@ PageSettings::PageSettings(QWidget* parent)
 
       MuseScore::restoreGeometry(this);
 
+      for (int i = 0; i < QPageSize::LastPageSize; ++i)
+            pageGroup->addItem(QPageSize::name(QPageSize::PageSizeId(i)), i);
+
       connect(mmButton,             SIGNAL(clicked()),            SLOT(mmClicked()));
       connect(inchButton,           SIGNAL(clicked()),            SLOT(inchClicked()));
       connect(buttonApply,          SIGNAL(clicked()),            SLOT(apply()));
@@ -107,18 +110,6 @@ void PageSettings::setScore(MasterScore* s)
       cs  = s;
       MasterScore* sl = s->clone();
       preview->setScore(sl);
-
-      const PageFormat* pf = s->pageFormat();
-      pageGroup->clear();
-      int index = 0;
-      const PaperSize* ps = pf->paperSize();
-      for (int i = 0; paperSizes[i].name; ++i) {
-            if (ps == &paperSizes[i])
-                  index = i;
-            pageGroup->addItem(qApp->translate("paperSizes", paperSizes[i].name));
-            }
-
-      pageGroup->setCurrentIndex(index);
       buttonApplyToAllParts->setEnabled(!s->isMaster());
       updateValues();
       updatePreview(0);
@@ -193,18 +184,8 @@ void PageSettings::updateValues()
       pageHeight->setSingleStep(singleStepSize);
 
       const PageFormat* pf = sc->pageFormat();
-      int index = 0;
-      const PaperSize* ps = pf->paperSize();
-      for (int i = 0; true; ++i) {
-            if (ps == &paperSizes[i]) {
-                  index = i;
-                  break;
-                  }
-            }
-      pageGroup->setCurrentIndex(index);
-//      QString s;
+      pageGroup->setCurrentIndex(int(QPageSize::id(pf->size(), QPageSize::Inch, QPageSize::FuzzyOrientationMatch)));
 
-      //qreal printableWidthValue = pf->printableWidth();
       qreal widthValue = pf->size().width();
       if (mm) {
             oddPageTopMargin->setValue(pf->oddTopMargin() * INCH);
@@ -321,8 +302,7 @@ void PageSettings::landscapeClicked()
 
 void PageSettings::twosidedToggled(bool flag)
       {
-      PageFormat pf;
-      pf.copy(*preview->score()->pageFormat());
+      PageFormat pf = *preview->score()->pageFormat();
       pf.setTwosided(flag);
       preview->score()->setPageFormat(pf);
       updateValues();
@@ -403,12 +383,15 @@ void PageSettings::done(int val)
 
 void PageSettings::pageFormatSelected(int size)
       {
-      if (size > 0) {
-            PageFormat pf;
-            pf.copy(*preview->score()->pageFormat());
-            pf.setSize(&paperSizes[size]);
+      if (size >= 0) {
+            int id = pageGroup->currentData().toInt();
+            PageFormat pf = *preview->score()->pageFormat();
+            QSizeF s = QPageSize::size(QPageSize::PageSizeId(id), QPageSize::Inch);
+            pf.setSize(s);
+
             double f  = mmUnit ? 1.0/INCH : 1.0;
-            pf.setPrintableWidth(pf.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
+            pf.setPrintableWidth(s.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
+
             preview->score()->setPageFormat(pf);
             updateValues();
             updatePreview(0);
@@ -423,8 +406,7 @@ void PageSettings::otmChanged(double val)
       {
       if (mmUnit)
             val /= INCH;
-      PageFormat pf;
-      pf.copy(*preview->score()->pageFormat());
+      PageFormat pf = *preview->score()->pageFormat();
       pf.setOddTopMargin(val);
       preview->score()->setPageFormat(pf);
       updatePreview(1);
@@ -449,8 +431,7 @@ void PageSettings::olmChanged(double val)
             evenPageLeftMargin->setValue(val * (mmUnit ? INCH : 1.0));
             evenPageLeftMargin->blockSignals(false);
             }
-      PageFormat pf;
-      pf.copy(*preview->score()->pageFormat());
+      PageFormat pf = *preview->score()->pageFormat();
       pf.setPrintableWidth(pf.width() - pf.oddRightMargin() - val);
       pf.setOddLeftMargin(val);
       preview->score()->setPageFormat(pf);
@@ -467,8 +448,7 @@ void PageSettings::ormChanged(double val)
       if (mmUnit)
             val /= INCH;
 
-      PageFormat pf;
-      pf.copy(*preview->score()->pageFormat());
+      PageFormat pf = *preview->score()->pageFormat();
 
       if (twosided->isChecked()) {
             evenPageLeftMargin->blockSignals(true);
@@ -496,8 +476,7 @@ void PageSettings::obmChanged(double val)
       {
       if (mmUnit)
             val /= INCH;
-      PageFormat pf;
-      pf.copy(*preview->score()->pageFormat());
+      PageFormat pf = *preview->score()->pageFormat();
       pf.setOddBottomMargin(val);
       preview->score()->setPageFormat(pf);
 
@@ -512,8 +491,7 @@ void PageSettings::etmChanged(double val)
       {
       if (mmUnit)
             val /= INCH;
-      PageFormat pf;
-      pf.copy(*preview->score()->pageFormat());
+      PageFormat pf = *preview->score()->pageFormat();
       pf.setEvenTopMargin(val);
       preview->score()->setPageFormat(pf);
 
@@ -534,8 +512,7 @@ void PageSettings::elmChanged(double val)
             oddPageRightMargin->setValue(val * (mmUnit ? INCH : 1.0));
             oddPageRightMargin->blockSignals(false);
             }
-      PageFormat pf;
-      pf.copy(*preview->score()->pageFormat());
+      PageFormat pf = *preview->score()->pageFormat();
       pf.setPrintableWidth(pf.width() - pf.evenRightMargin() - val);
       pf.setEvenLeftMargin(val);
       preview->score()->setPageFormat(pf);
@@ -558,8 +535,7 @@ void PageSettings::ermChanged(double val)
             oddPageLeftMargin->blockSignals(false);
             }
 
-      PageFormat pf;
-      pf.copy(*preview->score()->pageFormat());
+      PageFormat pf = *preview->score()->pageFormat();
       pf.setPrintableWidth(pf.width() - pf.evenLeftMargin() - val);
       pf.setOddLeftMargin(val);
       preview->score()->setPageFormat(pf);
@@ -574,8 +550,7 @@ void PageSettings::ebmChanged(double val)
       {
       if (mmUnit)
             val /= INCH;
-      PageFormat pf;
-      pf.copy(*preview->score()->pageFormat());
+      PageFormat pf = *preview->score()->pageFormat();
       pf.setEvenBottomMargin(val);
       preview->score()->setPageFormat(pf);
       updatePreview(1);
@@ -616,8 +591,7 @@ void PageSettings::pageHeightChanged(double val)
             val2 /= INCH;
             }
       pageGroup->setCurrentIndex(0);      // custom
-      PageFormat f;
-      f.copy(*preview->score()->pageFormat());
+      PageFormat f = *preview->score()->pageFormat();
       f.setSize(QSizeF(val2, val));
       preview->score()->setPageFormat(f);
 
@@ -642,8 +616,7 @@ void PageSettings::pageWidthChanged(double val)
             val2 /= INCH;
             }
       pageGroup->setCurrentIndex(0);      // custom
-      PageFormat f;
-      f.copy(*preview->score()->pageFormat());
+      PageFormat f = *preview->score()->pageFormat();
       f.setSize(QSizeF(val, val2));
       preview->score()->setPageFormat(f);
 

@@ -301,6 +301,7 @@ void Album::load(XmlReader& e)
 
 void Album::loadScores()
       {
+#if 0 // TODO
       for (AlbumItem* item : _scores) {
             if (item->score || item->path.isEmpty())
                   continue;
@@ -314,6 +315,7 @@ void Album::loadScores()
             score->loadMsc(item->path, false);
             item->score = score;
             }
+#endif
       }
 
 //---------------------------------------------------------

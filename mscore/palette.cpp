@@ -864,7 +864,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 
       // QPen pen(palette().color(QPalette::Normal, QPalette::Text));
       QPen pen(Qt::black);
-      pen.setWidthF(MScore::defaultStyle()->value(StyleIdx::staffLineWidth).toDouble() * PALETTE_SPATIUM * extraMag);
+      pen.setWidthF(MScore::defaultStyle().value(StyleIdx::staffLineWidth).toDouble() * PALETTE_SPATIUM * extraMag);
 
       for (int idx = 0; idx < ccp()->size(); ++idx) {
             int yoffset  = gscore->spatium() * _yOffset;

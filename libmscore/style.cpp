@@ -31,8 +31,21 @@ namespace Ms {
 //  spatium = 20/4 points
 
 //---------------------------------------------------------
-//   styleTypes
+//   StyleType
 //---------------------------------------------------------
+
+struct StyleType {
+      StyleIdx _idx;
+      const char* _name;       // xml name for read()/write()
+      QVariant _defaultValue;
+
+   public:
+      StyleIdx  styleIdx() const            { return _idx;          }
+      int idx() const                       { return int(_idx);     }
+      const char*  valueType() const        { return _defaultValue.typeName();    }
+      const char*      name() const         { return _name;         }
+      const QVariant&  defaultValue() const { return _defaultValue; }
+      };
 
 static const StyleType styleTypes[] {
       { StyleIdx::staffUpperBorder,        "staffUpperBorder",        Spatium(7.0)  },
@@ -344,54 +357,54 @@ void initStyle(MStyle* s)
       {
 #define MM(x) ((x)/INCH)
 #define N(x)  QT_TRANSLATE_NOOP ("TextStyle", x)
-#define LT    AlignmentFlags::LEFT | AlignmentFlags::TOP
-#define LB    AlignmentFlags::LEFT | AlignmentFlags::BASELINE
-#define HCB   AlignmentFlags::HCENTER | AlignmentFlags::BASELINE
+#define LT    Align::LEFT    | Align::TOP
+#define LB    Align::LEFT    | Align::BASELINE
+#define HCB   Align::HCENTER | Align::BASELINE
 
       // this is an empty style, no offsets are allowed
       // never show this style
       s->addTextStyle(TextStyle(N(""),                        ff, 10, false, false, false, LB,    QPointF(), OffsetType::SPATIUM, false, false, false, Spatium(.2), Spatium(.5), 25, QColor(Qt::black), false, false, QColor(Qt::black), QColor(255, 255, 255, 0), TextStyleHidden::ALWAYS));
-      s->addTextStyle(TextStyle(N("Title"),                   ff, 24, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::TOP,      QPointF(), OffsetType::ABS));
-      s->addTextStyle(TextStyle(N("Subtitle"),                ff, 14, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::TOP,      QPointF(0, MM(10)), OffsetType::ABS));
-      s->addTextStyle(TextStyle(N("Composer"),                ff, 12, false, false, false, AlignmentFlags::RIGHT   | AlignmentFlags::BOTTOM,   QPointF(), OffsetType::ABS));
-      s->addTextStyle(TextStyle(N("Lyricist"),                ff, 12, false, false, false, AlignmentFlags::LEFT    | AlignmentFlags::BOTTOM,   QPointF(), OffsetType::ABS));
-      s->addTextStyle(TextStyle(N("Lyrics Odd Lines"),        ff, 11, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 6), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(N("Lyrics Even Lines"),       ff, 11, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 6), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(N("Fingering"),               ff,  8, false, false, false, AlignmentFlags::CENTER,                             QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(N("LH Guitar Fingering"),     ff,  8, false, false, false, AlignmentFlags::RIGHT   | AlignmentFlags::VCENTER,  QPointF(-0.5, 0), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(N("RH Guitar Fingering"),     ff,  8, false, false, false, AlignmentFlags::CENTER,                             QPointF(),        OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(N("String Number"),           ff,  8, false, false, false, AlignmentFlags::CENTER,                             QPointF(0, -2.0), OffsetType::SPATIUM, true, true, true, Spatium(.1), Spatium(.2), 0, Qt::black, true, false));
-      s->addTextStyle(TextStyle(N("Instrument Name (Long)"),  ff, 12, false, false, false, AlignmentFlags::RIGHT | AlignmentFlags::VCENTER,    QPointF(),        OffsetType::ABS, true));
-      s->addTextStyle(TextStyle(N("Instrument Name (Short)"), ff, 12, false, false, false, AlignmentFlags::RIGHT | AlignmentFlags::VCENTER,    QPointF(),        OffsetType::ABS, true));
+      s->addTextStyle(TextStyle(N("Title"),                   ff, 24, false, false, false, Align::HCENTER | Align::TOP,      QPointF(), OffsetType::ABS));
+      s->addTextStyle(TextStyle(N("Subtitle"),                ff, 14, false, false, false, Align::HCENTER | Align::TOP,      QPointF(0, MM(10)), OffsetType::ABS));
+      s->addTextStyle(TextStyle(N("Composer"),                ff, 12, false, false, false, Align::RIGHT   | Align::BOTTOM,   QPointF(), OffsetType::ABS));
+      s->addTextStyle(TextStyle(N("Lyricist"),                ff, 12, false, false, false, Align::LEFT    | Align::BOTTOM,   QPointF(), OffsetType::ABS));
+      s->addTextStyle(TextStyle(N("Lyrics Odd Lines"),        ff, 11, false, false, false, Align::HCENTER | Align::BASELINE, QPointF(0, 6), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("Lyrics Even Lines"),       ff, 11, false, false, false, Align::HCENTER | Align::BASELINE, QPointF(0, 6), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("Fingering"),               ff,  8, false, false, false, Align::CENTER,                             QPointF(), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("LH Guitar Fingering"),     ff,  8, false, false, false, Align::RIGHT   | Align::VCENTER,  QPointF(-0.5, 0), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("RH Guitar Fingering"),     ff,  8, false, false, false, Align::CENTER,                             QPointF(),        OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("String Number"),           ff,  8, false, false, false, Align::CENTER,                             QPointF(0, -2.0), OffsetType::SPATIUM, true, true, true, Spatium(.1), Spatium(.2), 0, Qt::black, true, false));
+      s->addTextStyle(TextStyle(N("Instrument Name (Long)"),  ff, 12, false, false, false, Align::RIGHT | Align::VCENTER,    QPointF(),        OffsetType::ABS, true));
+      s->addTextStyle(TextStyle(N("Instrument Name (Short)"), ff, 12, false, false, false, Align::RIGHT | Align::VCENTER,    QPointF(),        OffsetType::ABS, true));
       s->addTextStyle(TextStyle(N("Instrument Name (Part)"),  ff, 18, false, false, false, LT, QPointF(),        OffsetType::ABS));
 
       // dynamics size is 12pt for bravura-text
       s->addTextStyle(TextStyle(N("Dynamics"),                ff, 12, false, true,  false, HCB, QPointF(0.0, 0.0), OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(N("Expression"),              ff, 11, false, true,  false, LB,  QPointF(0, -6.0),  OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(N("Tempo"),                   ff, 12, true,  false, false, LB,  QPointF(0, -4.0),  OffsetType::SPATIUM, true, false, false, Spatium(.2), Spatium(.5), 0, Qt::black, false, true));
-      s->addTextStyle(TextStyle(N("Metronome"),               ff, 12, true,  false, false, AlignmentFlags::LEFT));
-      s->addTextStyle(TextStyle(N("Measure Number"),          ff, 8,  false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::BOTTOM, QPointF(.0, -2.0), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(N("Translator"),              ff, 11, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::TOP, QPointF(0, 6)));
-      s->addTextStyle(TextStyle(N("Tuplet"),                  ff, 10, false, true,  false, AlignmentFlags::CENTER, QPointF(), OffsetType::ABS, true));
-      s->addTextStyle(TextStyle(N("System"),                  ff, 10, false, false, false, AlignmentFlags::LEFT, QPointF(0, -4.0), OffsetType::SPATIUM, true, false, false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true));
-      s->addTextStyle(TextStyle(N("Staff"),                   ff, 10, false, false, false, AlignmentFlags::LEFT, QPointF(0, -4.0), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("Metronome"),               ff, 12, true,  false, false, Align::LEFT));
+      s->addTextStyle(TextStyle(N("Measure Number"),          ff, 8,  false, false, false, Align::HCENTER | Align::BOTTOM, QPointF(.0, -2.0), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("Translator"),              ff, 11, false, false, false, Align::HCENTER | Align::TOP, QPointF(0, 6)));
+      s->addTextStyle(TextStyle(N("Tuplet"),                  ff, 10, false, true,  false, Align::CENTER, QPointF(), OffsetType::ABS, true));
+      s->addTextStyle(TextStyle(N("System"),                  ff, 10, false, false, false, Align::LEFT, QPointF(0, -4.0), OffsetType::SPATIUM, true, false, false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true));
+      s->addTextStyle(TextStyle(N("Staff"),                   ff, 10, false, false, false, Align::LEFT, QPointF(0, -4.0), OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(N("Chord Symbol"),            ff, 12, false, false, false, LB, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(N("Rehearsal Mark"),          ff, 14, true,  false, false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, -3.0), OffsetType::SPATIUM, true, true, true, Spatium(.2), Spatium(.5), 0, Qt::black, false, true));
+      s->addTextStyle(TextStyle(N("Rehearsal Mark"),          ff, 14, true,  false, false, Align::HCENTER | Align::BASELINE, QPointF(0, -3.0), OffsetType::SPATIUM, true, true, true, Spatium(.2), Spatium(.5), 0, Qt::black, false, true));
       s->addTextStyle(TextStyle(N("Repeat Text Left"),        ff, 20, false, false, false, LB, QPointF(0, -2.0), OffsetType::SPATIUM, true, false, false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true));
-      s->addTextStyle(TextStyle(N("Repeat Text Right"),       ff, 12, false, false, false, AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true, false, false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true));
+      s->addTextStyle(TextStyle(N("Repeat Text Right"),       ff, 12, false, false, false, Align::RIGHT | Align::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true, false, false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true));
       s->addTextStyle(TextStyle(N("Volta"),                   ff, 11, true,  false, false, LB, QPointF(0.5, 1.9), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(N("Frame"),                   ff, 12, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::TOP));
-      s->addTextStyle(TextStyle(N("Text Line"),               ff, 12, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(N("Glissando"),               ff,  8, false, true,  false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(N("Ottava"),                  ff, 12, false, true,  false, AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("Frame"),                   ff, 12, false, false, false, Align::LEFT    | Align::TOP));
+      s->addTextStyle(TextStyle(N("Text Line"),               ff, 12, false, false, false, Align::LEFT    | Align::VCENTER, QPointF(), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("Glissando"),               ff,  8, false, true,  false, Align::HCENTER | Align::BASELINE, QPointF(), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("Ottava"),                  ff, 12, false, true,  false, Align::LEFT    | Align::VCENTER, QPointF(), OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(N("Pedal"),                   ff, 12, false, false, false, LB, QPointF(0.0, 0.15), OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(N("Hairpin"),                 ff, 12, false, true,  false, LB, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(N("Bend"),                    ff,  8, false, false, false, AlignmentFlags::CENTER | AlignmentFlags::BOTTOM, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(N("Header"),                  ff,  8, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::TOP));
-      s->addTextStyle(TextStyle(N("Footer"),                  ff,  8, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::BOTTOM, QPointF(0.0, MM(5)), OffsetType::ABS));
-      s->addTextStyle(TextStyle(N("Instrument Change"),       ff, 12, true,  false, false, AlignmentFlags::LEFT | AlignmentFlags::BOTTOM, QPointF(0, -3.0), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("Bend"),                    ff,  8, false, false, false, Align::CENTER  | Align::BOTTOM, QPointF(), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(N("Header"),                  ff,  8, false, false, false, Align::HCENTER | Align::TOP));
+      s->addTextStyle(TextStyle(N("Footer"),                  ff,  8, false, false, false, Align::HCENTER | Align::BOTTOM, QPointF(0.0, MM(5)), OffsetType::ABS));
+      s->addTextStyle(TextStyle(N("Instrument Change"),       ff, 12, true,  false, false, Align::LEFT    | Align::BOTTOM, QPointF(0, -3.0), OffsetType::SPATIUM, true));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Figured Bass"), "MScoreBC", 8, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(0, 6), OffsetType::SPATIUM, true, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Figured Bass"), "MScoreBC", 8, false, false, false, Align::LEFT | Align::TOP, QPointF(0, 6), OffsetType::SPATIUM, true, false,
          false, Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
          false, QColor(Qt::black), QColor(255, 255, 255, 0),                   // default params
          TextStyleHidden::IN_EDITOR));                                         // don't show in Style Editor
@@ -442,7 +455,7 @@ void MStyle::precomputeValues()
 
 bool MStyle::isDefault(StyleIdx idx) const
       {
-      return _values[int(idx)] == MScore::baseStyle()->value(idx);
+      return _values[int(idx)] == MScore::baseStyle().value(idx);
       }
 
 //---------------------------------------------------------
@@ -467,31 +480,6 @@ void MStyle::setChordList(ChordList* cl, bool custom)
       }
 
 //---------------------------------------------------------
-//   MStyle
-//---------------------------------------------------------
-
-MStyle::MStyle(const MStyle& s)
-      {
-      _values            = s._values;
-      _precomputedValues = s._precomputedValues;
-      _chordList         = s._chordList;
-      _textStyles        = s._textStyles;
-      _pageFormat.copy(s._pageFormat);
-      _customChordList   = s._customChordList;
-      }
-
-MStyle& MStyle::operator=(const MStyle& s)
-      {
-      _values            = s._values;
-      _precomputedValues = s._precomputedValues;
-      _chordList         = s._chordList;
-      _textStyles        = s._textStyles;
-      _pageFormat.copy(s._pageFormat);
-      _customChordList   = s._customChordList;
-      return *this;
-      }
-
-//---------------------------------------------------------
 //   TextStyle
 //---------------------------------------------------------
 
@@ -513,8 +501,7 @@ const TextStyle& MStyle::textStyle(const QString& name) const
             if (s.name() == name)
                   return s;
             }
-      qFatal("TextStyle <%s> not found", qPrintable(name));
-      return _textStyles[0];
+      qFatal("TextStyle <%s> not found, styles %d", qPrintable(name), _textStyles.size());
       }
 
 //---------------------------------------------------------
@@ -733,7 +720,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
                   qFatal("bad style type");
             }
       for (int i = 0; i < int(TextStyleType::TEXT_STYLES); ++i) {
-            if (!optimize || _textStyles[i] != MScore::baseStyle()->textStyle(TextStyleType(i)))
+            if (!optimize || _textStyles[i] != MScore::baseStyle().textStyle(TextStyleType(i)))
                   _textStyles[i].write(xml);
             }
       for (int i = int(TextStyleType::TEXT_STYLES); i < _textStyles.size(); ++i)
@@ -743,7 +730,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             _chordList.write(xml);
             xml.etag();
             }
-      if (!MScore::saveTemplateMode || (_pageFormat.name() != "A4" && _pageFormat.name() != "Letter"))
+//      if (!MScore::saveTemplateMode || (_pageFormat.name() != "A4" && _pageFormat.name() != "Letter"))
+      if (!MScore::saveTemplateMode)
             _pageFormat.write(xml);
       xml.tag("Spatium", value(StyleIdx::spatium).toDouble() / DPMM);
       xml.etag();
@@ -755,7 +743,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
 
 void MStyle::setPageFormat(const PageFormat& pf)
       {
-      _pageFormat.copy(pf);
+      _pageFormat = pf;
       }
 
 }

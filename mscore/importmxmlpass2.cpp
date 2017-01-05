@@ -57,6 +57,7 @@
 #include "libmscore/volta.h"
 #include "libmscore/textline.h"
 #include "libmscore/barline.h"
+#include "libmscore/articulation.h"
 
 #include "importmxmlpass2.h"
 #include "musicxmlfonthandler.h"
@@ -2231,7 +2232,7 @@ void MusicXMLParserPass2::measureStyle(Measure* measure)
                   int multipleRest = _e.readElementText().toInt();
                   if (multipleRest > 1) {
                         _multiMeasureRestCount = multipleRest;
-                        _score->style()->set(StyleIdx::createMultiMeasureRests, true);
+                        _score->style().set(StyleIdx::createMultiMeasureRests, true);
                         measure->setBreakMultiMeasureRest(true);
                         }
                   else
@@ -2892,7 +2893,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
       else {
             // TBD: what happens when an unknown pedal type is found ?
             Symbol* s = new Symbol(_score);
-            s->setAlign(AlignmentFlags::LEFT | AlignmentFlags::BASELINE);
+            s->setAlign(Align::LEFT | Align::BASELINE);
             s->setOffsetType(OffsetType::SPATIUM);
             if (type == "start")
                   s->setSym(SymId::keyboardPedalPed);

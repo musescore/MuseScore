@@ -14,7 +14,7 @@
 #define __AL_SIG_H__
 
 #include "fraction.h"
-#include "mscore.h"
+// #include "mscore.h"
 
 namespace Ms {
 
@@ -54,7 +54,7 @@ class TimeSigFrac : public Fraction {
       // However, the meter is still considered to be compound (at least for our purposes).
       bool isBeatedCompound(qreal tempo) const { return tempo2beatsPerMinute(tempo) >= 60.0; }
 
-      int dUnitTicks()        const   { return (4 * MScore::division) / denominator(); }
+      int dUnitTicks()        const;
       int ticksPerMeasure()   const   { return numerator() * dUnitTicks(); }
 
       int dUnitsPerBeat()     const   { return isCompound() ? 3 : 1; }

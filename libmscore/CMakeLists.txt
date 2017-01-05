@@ -66,7 +66,7 @@ add_library (
       synthesizerstate.cpp mcursor.cpp groups.cpp mscoreview.cpp
       noteline.cpp spannermap.cpp
       bagpembell.cpp ambitus.cpp keylist.cpp scoreElement.cpp
-      shape.cpp systemdivider.cpp midimapping.cpp stafflines.cpp
+      shape.cpp systemdivider.cpp midimapping.cpp stafflines.cpp pageformat.cpp
       read114.cpp read206.cpp read300.cpp stafftypelist.cpp stafftypechange.cpp
       )
 

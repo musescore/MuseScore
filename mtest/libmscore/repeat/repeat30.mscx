@@ -41,16 +41,6 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">repeat30 single-measure section at beginning of score, then section with end repeat</metaTag>
-    <PageList>
-      <Page>
-        <System>
-          </System>
-        <System>
-          </System>
-        <System>
-          </System>
-        </Page>
-      </PageList>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
@@ -106,7 +96,7 @@
         <height>10</height>
         <Text>
           <style>Title</style>
-          <text>repeat30 single-measure section at beginning of score, 
+          <text>repeat30 single-measure section at beginning of score,
 then section with end repeat</text>
           </Text>
         </VBox>

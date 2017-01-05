@@ -54,7 +54,7 @@ void InspectorJump::setElement()
 
       t.style->blockSignals(true);
       t.style->clear();
-      const QList<TextStyle>& ts = score->style()->textStyles();
+      const QList<TextStyle>& ts = score->style().textStyles();
       int n = ts.size();
       for (int i = 0; i < n; ++i) {
             if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )

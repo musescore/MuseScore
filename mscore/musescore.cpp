@@ -564,7 +564,7 @@ MuseScore::MuseScore()
       if (!preferences.defaultStyleFile.isEmpty()) {
             QFile f(preferences.defaultStyleFile);
             if (f.open(QIODevice::ReadOnly)) {
-                  MScore::defaultStyle()->load(&f);
+                  MScore::defaultStyle().load(&f);
                   f.close();
                   }
             }
@@ -2470,14 +2470,14 @@ static void loadScores(const QStringList& argv)
                               {
                               MasterScore* score = mscore->readScore(preferences.startScore);
                               if (preferences.startScore.startsWith(":/") && score) {
-                                    score->setPageFormat(*MScore::defaultStyle()->pageFormat());
+                                    score->setPageFormat(*MScore::defaultStyle().pageFormat());
                                     score->doLayout();
                                     score->setCreated(true);
                                     }
                               if (score == 0) {
                                     score = mscore->readScore(":/data/My_First_Score.mscz");
                                     if (score) {
-                                          score->setPageFormat(*MScore::defaultStyle()->pageFormat());
+                                          score->setPageFormat(*MScore::defaultStyle().pageFormat());
                                           score->doLayout();
                                           score->setCreated(true);
                                           }
@@ -2529,7 +2529,7 @@ static bool doConvert(Score* cs, QString fn)
       if (!styleFile.isEmpty()) {
             QFile f(styleFile);
             if (f.open(QIODevice::ReadOnly))
-                  cs->style()->load(&f);
+                  cs->style().load(&f);
             }
       if (fn.endsWith(".mscx")) {
             QFileInfo fi(fn);
@@ -2562,7 +2562,7 @@ static bool doConvert(Score* cs, QString fn)
                         for (Excerpt* e : excerpts) {
                               Score* nscore = new Score(e->oscore());
                               e->setPartScore(nscore);
-                              nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
+                              nscore->style().set(StyleIdx::createMultiMeasureRests, true);
                               Excerpt::createExcerpt(e);
                               cs->startCmd();
                               cs->undo(new AddExcerpt(e));
@@ -2588,7 +2588,7 @@ static bool doConvert(Score* cs, QString fn)
                               e->setPartScore(nscore);
                               nscore->setExcerpt(e);
                               // nscore->setName(e->title()); // needed before AddExcerpt
-                              nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
+                              nscore->style().set(StyleIdx::createMultiMeasureRests, true);
                               Excerpt::createExcerpt(e);
                               cs->startCmd();
                               cs->undo(new AddExcerpt(e));
@@ -2724,7 +2724,7 @@ static bool processNonGui(const QStringList& argv)
                   if (!styleFile.isEmpty()) {
                         QFile f(styleFile);
                         if (f.open(QIODevice::ReadOnly))
-                              cs->style()->load(&f);
+                              cs->style().load(&f);
                         }
                   LayoutMode layoutMode = cs->layoutMode();
                   if (layoutMode != LayoutMode::PAGE) {
@@ -5565,11 +5565,10 @@ int main(int argc, char* av[])
       MScore::init();                                      // initialize libmscore
       if (!MScore::testMode) {
             QSizeF psf = QPrinter().paperSize(QPrinter::Inch);
-            PaperSize ps("system", psf.width(), psf.height());
             PageFormat pf;
-            pf.setSize(&ps);
+            pf.setSize(psf);
             pf.setPrintableWidth(psf.width() - 20.0 / INCH);
-            MScore::defaultStyle()->setPageFormat(pf);
+            MScore::defaultStyle().setPageFormat(pf);
             }
 
 #ifdef SCRIPT_INTERFACE
@@ -5742,8 +5741,11 @@ int main(int argc, char* av[])
       mscore = new MuseScore();
 
       // create a score for internal use
-      gscore = new MasterScore(MScore::baseStyle());
-      gscore->style()->set(StyleIdx::MusicalTextFont, QString("Bravura Text"));
+      gscore = new MasterScore();
+      gscore->setMovements(new Movements());
+      gscore->setStyle(MScore::baseStyle());
+
+      gscore->style().set(StyleIdx::MusicalTextFont, QString("Bravura Text"));
       ScoreFont* scoreFont = ScoreFont::fontFactory("Bravura");
       gscore->setScoreFont(scoreFont);
       gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / SPATIUM20);

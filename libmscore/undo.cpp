@@ -2476,7 +2476,7 @@ ChangePageFormat::ChangePageFormat(Score* cs, PageFormat* p, qreal s, int po)
       {
       score      = cs;
       pf         = new PageFormat;
-      pf->copy(*p);
+      *pf        = *p;
       spatium    = s;
       pageOffset = po;
       }
@@ -2492,9 +2492,8 @@ ChangePageFormat::~ChangePageFormat()
 
 void ChangePageFormat::flip()
       {
-      PageFormat f;
-      f.copy(*(score->pageFormat()));
-      qreal os    = score->spatium();
+      PageFormat f = *(score->pageFormat());
+      qreal os     = score->spatium();
       int po       = score->pageNumberOffset();
 
       score->setPageFormat(*pf);
@@ -2505,8 +2504,8 @@ void ChangePageFormat::flip()
       score->setPageNumberOffset(pageOffset);
       score->setLayoutAll();
 
-      pf->copy(f);
-      spatium = os;
+      *pf         = f;
+      spatium    = os;
       pageOffset = po;
       }
 
@@ -2664,8 +2663,8 @@ static void updateTextStyle(void* a, Element* e)
 
 void ChangeTextStyle::flip()
       {
-      TextStyle os = score->style()->textStyle(style.name());
-      score->style()->setTextStyle(style);
+      TextStyle os = score->style().textStyle(style.name());
+      score->style().setTextStyle(style);
       QString s(style.name());
       score->scanElements(&s, updateTextStyle);
       style = os;
@@ -2678,7 +2677,7 @@ void ChangeTextStyle::flip()
 
 void AddTextStyle::undo()
       {
-      score->style()->removeTextStyle(style);
+      score->style().removeTextStyle(style);
       }
 
 //---------------------------------------------------------
@@ -2687,7 +2686,7 @@ void AddTextStyle::undo()
 
 void AddTextStyle::redo()
       {
-      score->style()->addTextStyle(style);
+      score->style().addTextStyle(style);
       }
 
 //---------------------------------------------------------
@@ -2713,11 +2712,11 @@ static void updateTimeSigs(void*, Element* e)
 
 void ChangeStyle::flip()
       {
-      MStyle tmp = *score->style();
+      MStyle tmp = score->style();
 
-      if (score->style(StyleIdx::concertPitch) != style.value(StyleIdx::concertPitch))
+      if (score->styleV(StyleIdx::concertPitch) != style.value(StyleIdx::concertPitch))
             score->cmdConcertPitchChanged(style.value(StyleIdx::concertPitch).toBool(), true);
-      if (score->style(StyleIdx::MusicalSymbolFont) != style.value(StyleIdx::MusicalSymbolFont)) {
+      if (score->styleV(StyleIdx::MusicalSymbolFont) != style.value(StyleIdx::MusicalSymbolFont)) {
             score->setScoreFont(ScoreFont::fontFactory(style.value(StyleIdx::MusicalSymbolFont).toString()));
             score->scanElements(0, updateTimeSigs);
             }
@@ -2732,12 +2731,12 @@ void ChangeStyle::flip()
 
 void ChangeStyleVal::flip()
       {
-      QVariant v = score->style(idx);
+      QVariant v = score->styleV(idx);
       if (v != value) {
-            score->style()->set(idx, value);
+            score->style().set(idx, value);
             if (idx == StyleIdx::chordDescriptionFile) {
-                  score->style()->chordList()->unload();
-                  score->style()->chordList()->read(value.toString());
+                  score->style().chordList()->unload();
+                  score->style().chordList()->read(value.toString());
                   }
             score->styleChanged();
             }

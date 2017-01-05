@@ -514,7 +514,7 @@ void EditStyle::on_comboFBFont_currentIndexChanged(int index)
 void EditStyle::applyToAllParts()
       {
       for (Excerpt* e : cs->masterScore()->excerpts()) {
-            e->partScore()->undo(new ChangeStyle(e->partScore(), *cs->style()));
+            e->partScore()->undo(new ChangeStyle(e->partScore(), cs->style()));
             e->partScore()->update();
             }
       }
@@ -597,7 +597,7 @@ QVariant EditStyle::getValue(StyleIdx idx)
 
 void EditStyle::setValues()
       {
-      const MStyle& lstyle = *cs->style();
+      const MStyle& lstyle = cs->style();
       for (const StyleWidget& sw : styleWidgets) {
             if (sw.widget)
                   sw.widget->blockSignals(true);
@@ -939,7 +939,7 @@ void EditStyle::valueChanged(int i)
 
       const StyleWidget& sw = styleWidget(idx);
       if (sw.reset)
-            sw.reset->setEnabled(!cs->style()->isDefault(idx));
+            sw.reset->setEnabled(!cs->style().isDefault(idx));
       }
 
 //---------------------------------------------------------
@@ -949,7 +949,7 @@ void EditStyle::valueChanged(int i)
 void EditStyle::resetStyleValue(int i)
       {
       StyleIdx idx = (StyleIdx)i;
-      cs->undo(new ChangeStyleVal(cs, idx, MScore::defaultStyle()->value(idx)));
+      cs->undo(new ChangeStyleVal(cs, idx, MScore::defaultStyle().value(idx)));
       setValues();
       cs->update();
       }

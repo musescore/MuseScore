@@ -1756,6 +1756,7 @@ void Score::deleteItem(Element* el)
 
 void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
       {
+      printf("deleteMeasures %p %p\n", is,ie);
 #if 0
       if (!selection().isRange())
             return;
@@ -1786,10 +1787,11 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
 
 
       // get the last deleted timesig & keysig in order to restore after deletion
-      TimeSig* lastDeletedSig = 0;
-      KeySig* lastDeletedKeySig = 0;
       KeySigEvent lastDeletedKeySigEvent;
+      TimeSig* lastDeletedSig   = 0;
+      KeySig* lastDeletedKeySig = 0;
       bool transposeKeySigEvent = false;
+
       for (MeasureBase* mb = ie;; mb = mb->prev()) {
             if (mb->isMeasure()) {
                   Measure* m = toMeasure(mb);
@@ -1821,10 +1823,11 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
       int endTick   = ie->tick();
 
       undoInsertTime(is->tick(), -(ie->endTick() - is->tick()));
-      foreach (Score* score, scoreList()) {
+      for (Score* score : scoreList()) {
             Measure* is = score->tick2measure(startTick);
             Measure* ie = score->tick2measure(endTick);
 
+printf("undoRemoveMeasures %p %p\n", is, ie);
             score->undoRemoveMeasures(is, ie);
 
             // adjust views
@@ -2793,6 +2796,7 @@ void Score::globalTimeDelete()
 
 void Score::localTimeDelete()
       {
+printf("local time delete\n");
       Segment* startSegment;
       Segment* endSegment;
 
@@ -2830,8 +2834,10 @@ void Score::localTimeDelete()
       else
             ie = lastMeasure();
 
+printf("A\n");
       for (;;) {
             if (is->tick() != startSegment->tick()) {
+printf("B\n");
                   int tick = startSegment->tick();
                   int len;
                   if (ie == is)
@@ -2845,13 +2851,16 @@ void Score::localTimeDelete()
                   }
             int endTick = endSegment ? endSegment->tick() : ie->endTick();
             if (ie->endTick() != endTick) {
+printf("C\n");
                   int len  = endSegment->tick() - ie->tick();
                   timeDelete(toMeasure(ie), toMeasure(ie)->first(), Fraction::fromTicks(len));
                   if (is == ie)
                         break;
                   ie = ie->prev();
                   }
+printf("D\n");
             deleteMeasures(is, ie);
+printf("E\n");
             break;
             };
 
@@ -3182,6 +3191,6 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link
             }
 
       //Layout
-      doLayoutRange(start, lTick);
+//TODO ??      doLayoutRange(start, lTick);
       }
 }

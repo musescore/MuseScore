@@ -156,8 +156,10 @@ void TimeSig::write(XmlWriter& xml) const
             xml.tag("stretchD", stretch().denominator());
             }
       if (customText) {
-            xml.tag("textN", _numeratorString);
-            xml.tag("textD", _denominatorString);
+            if (!_numeratorString.isEmpty())
+                  xml.tag("textN", _numeratorString);
+            if (!_denominatorString.isEmpty())
+                  xml.tag("textD", _denominatorString);
             }
       if (!_groups.empty())
             _groups.write(xml);

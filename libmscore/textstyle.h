@@ -13,21 +13,116 @@
 #ifndef __TEXTSTYLE_H__
 #define __TEXTSTYLE_H__
 
-#include "mscore.h"
+// #include "mscore.h"
 #include "spatium.h"
-#include "articulation.h"
-#include "page.h"
-#include "chordlist.h"
+// #include "articulation.h"
+// #include "page.h"
+// #include "chordlist.h"
 
 namespace Ms {
 
 class XmlWriter;
+class XmlReader;
 struct ChordDescription;
 class PageFormat;
-class ChordList;
 class Element;
-
 class TextStyleData;
+
+//---------------------------------------------------------
+//   TextStyleType
+//    Enumerate the list of built-in text styles.
+//    Must be in sync with list in setDefaultStyle().
+//---------------------------------------------------------
+
+enum class TextStyleType : char {
+      DEFAULT = 0,
+      TITLE,
+      SUBTITLE,
+      COMPOSER,
+      POET,
+      LYRIC1,
+      LYRIC2,
+      FINGERING,
+      LH_GUITAR_FINGERING,
+      RH_GUITAR_FINGERING,
+
+      STRING_NUMBER,
+      INSTRUMENT_LONG,
+      INSTRUMENT_SHORT,
+      INSTRUMENT_EXCERPT,
+      DYNAMICS,
+      EXPRESSION,
+      TEMPO,
+      METRONOME,
+      MEASURE_NUMBER,
+      TRANSLATOR,
+
+      TUPLET,
+      SYSTEM,
+      STAFF,
+      HARMONY,
+      REHEARSAL_MARK,
+      REPEAT_LEFT,       // align to start of measure
+      REPEAT_RIGHT,      // align to end of measure
+      VOLTA,
+      FRAME,
+
+      TEXTLINE,
+      GLISSANDO,
+      OTTAVA,
+      PEDAL,
+      HAIRPIN,
+      BEND,
+      HEADER,
+      FOOTER,
+      INSTRUMENT_CHANGE,
+      FIGURED_BASS,
+
+      TEXT_STYLES
+      };
+
+//---------------------------------------------------------
+//   OffsetType
+//---------------------------------------------------------
+
+enum class OffsetType : char {
+      ABS,       ///< offset in point units
+      SPATIUM    ///< offset in staff space units
+      };
+
+//---------------------------------------------------------
+//   Align
+//---------------------------------------------------------
+
+enum class Align : char {
+      LEFT     = 0,
+      RIGHT    = 1,
+      HCENTER  = 2,
+      TOP      = 0,
+      BOTTOM   = 4,
+      VCENTER  = 8,
+      BASELINE = 16,
+      CENTER = Align::HCENTER | Align::VCENTER,
+      HMASK  = Align::LEFT    | Align::RIGHT    | Align::HCENTER,
+      VMASK  = Align::TOP     | Align::BOTTOM   | Align::VCENTER | Align::BASELINE
+      };
+
+constexpr Align operator| (Align a1, Align a2) {
+      return static_cast<Align>(static_cast<char>(a1) | static_cast<char>(a2));
+      }
+// constexpr Align operator& (Align a1, Align a2) {
+//      return static_cast<Align>(static_cast<char>(a1) & static_cast<char>(a2));
+//      }
+constexpr bool operator& (Align a1, Align a2) {
+      return static_cast<char>(a1) & static_cast<char>(a2);
+      }
+constexpr Align operator~ (Align a) {
+      return static_cast<Align>(~static_cast<char>(a));
+      }
+
+//---------------------------------------------------------
+//   TextStyleHidden
+//---------------------------------------------------------
 
 enum class TextStyleHidden : unsigned char {
       NEVER     = 0,

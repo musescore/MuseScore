@@ -32,6 +32,7 @@
 #include "chord.h"
 #include "tremolo.h"
 #include "slur.h"
+#include "articulation.h"
 
 namespace Ms {
 

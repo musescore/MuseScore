@@ -186,9 +186,9 @@ class Text : public Element {
       Q_OBJECT
 
       Q_PROPERTY(QString text READ xmlText WRITE undoSetText)
-      Q_PROPERTY(Ms::MSQE_TextStyleType::E textStyleType READ qmlTextStyleType WRITE qmlUndoSetTextStyleType)
+//      Q_PROPERTY(Ms::MSQE_TextStyleType::E textStyleType READ qmlTextStyleType WRITE qmlUndoSetTextStyleType)
 
-      Q_ENUMS(Ms::MSQE_TextStyleType::E)
+//      Q_ENUMS(Ms::MSQE_TextStyleType::E)
 
       QString _text;
       QString oldText;      // used to remember original text in edit mode
@@ -250,8 +250,8 @@ class Text : public Element {
 
       Align align() const { return _textStyle.align(); }
 
-      Ms::MSQE_TextStyleType::E qmlTextStyleType() const { return static_cast<Ms::MSQE_TextStyleType::E>(_styleIndex); }
-      void qmlUndoSetTextStyleType(Ms::MSQE_TextStyleType::E st) { undoChangeProperty(P_ID::TEXT_STYLE_TYPE, int(st)); }
+//      Ms::MSQE_TextStyleType::E qmlTextStyleType() const { return static_cast<Ms::MSQE_TextStyleType::E>(_styleIndex); }
+//      void qmlUndoSetTextStyleType(Ms::MSQE_TextStyleType::E st) { undoChangeProperty(P_ID::TEXT_STYLE_TYPE, int(st)); }
 
       void setPlainText(const QString&);
       void setXmlText(const QString&);
@@ -353,6 +353,6 @@ class Text : public Element {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::MSQE_TextStyleType::E);
+// Q_DECLARE_METATYPE(Ms::MSQE_TextStyleType::E);
 
 #endif

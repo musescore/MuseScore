@@ -155,12 +155,6 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <PageList>
-      <Page>
-        <System>
-          </System>
-        </Page>
-      </PageList>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
@@ -215,7 +209,6 @@
           </Rest>
         </Measure>
       <Measure number="1" len="128/4">
-        <multiMeasureRest>32</multiMeasureRest>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>

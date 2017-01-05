@@ -20,6 +20,7 @@
 #include "tie.h"
 #include "part.h"
 #include "navigate.h"
+#include "articulation.h"
 
 namespace Ms {
 

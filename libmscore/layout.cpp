@@ -58,6 +58,7 @@
 #include "ambitus.h"
 #include "hairpin.h"
 #include "stafflines.h"
+#include "articulation.h"
 
 namespace Ms {
 
@@ -75,7 +76,7 @@ namespace Ms {
 
 void Score::rebuildBspTree()
       {
-      for (Page* page : _pages)
+      for (Page* page : pages())
             page->rebuildBspTree();
       }
 
@@ -1292,18 +1293,6 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
       }
 
 //---------------------------------------------------------
-//   addPage
-//---------------------------------------------------------
-
-Page* Score::addPage()
-      {
-      Page* page = new Page(this);
-      page->setNo(_pages.size());
-      _pages.push_back(page);
-      return page;
-      }
-
-//---------------------------------------------------------
 //   connectTies
 ///   Rebuild tie connections.
 //---------------------------------------------------------
@@ -1673,36 +1662,32 @@ void Score::respace(std::vector<ChordRest*>* elements)
 //   getEmptyPage
 //---------------------------------------------------------
 
-Page* Score::getEmptyPage(LayoutContext& lc)
+void LayoutContext::getEmptyPage()
       {
-      Page* page;
-
-      if (lc.curPage >= _pages.size()) {
-            page = addPage();
-            lc.pageOldSystem = 0;
+      if (curPage >= score->npages()) {
+            Page* page = new Page(score);
+            page->setNo(score->pages().size());
+            score->pages().push_back(page);
             }
       else {
-            page = _pages[lc.curPage];
-            lc.pageOldSystem = page->systems().empty() ? 0 : page->systems().back();
+            page = score->pages()[curPage];
             }
-      page->setNo(lc.curPage);
+      page->setNo(curPage);
       page->layout();
       qreal x, y;
       if (MScore::verticalOrientation()) {
             x = 0.0;
-            y = (lc.curPage == 0) ? 0.0 : _pages[lc.curPage - 1]->pos().y() + page->height() + MScore::verticalPageGap;
+            y = (curPage == 0) ? 0.0 : score->pages()[curPage - 1]->pos().y() + page->height() + MScore::verticalPageGap;
             }
       else {
             y = 0.0;
-            x = (lc.curPage == 0) ? 0.0 : _pages[lc.curPage - 1]->pos().x()
+            x = (curPage == 0) ? 0.0 : score->pages()[curPage - 1]->pos().x()
                + page->width()
-               + (((lc.curPage+_pageNumberOffset) & 1) ? MScore::horizontalPageGapOdd : MScore::horizontalPageGapEven);
+               + (((curPage+score->pageNumberOffset()) & 1) ? MScore::horizontalPageGapOdd : MScore::horizontalPageGapEven);
             }
-      ++lc.curPage;
+      ++curPage;
       page->setPos(x, y);
       page->systems().clear();
-
-      return page;
       }
 
 //---------------------------------------------------------
@@ -1731,7 +1716,6 @@ System* Score::getNextSystem(LayoutContext& lc)
             for (int i = 0; i < dn; ++i)
                   system->removeStaff(system->staves()->size()-1);
             }
-      lc.curSystem = system;
       return system;
       }
 
@@ -2056,7 +2040,7 @@ static bool breakMultiMeasureRest(Measure* m)
       for (Element* e : m->el()) {
             if (e->isMarker()) {
                   Marker* mark = toMarker(e);
-                  if (!(mark->textStyle().align() & AlignmentFlags::RIGHT))
+                  if (!(mark->textStyle().align() & Align::RIGHT))
                         return true;
                   }
             }
@@ -2069,7 +2053,7 @@ static bool breakMultiMeasureRest(Measure* m)
                         return true;
                   else if (e->isMarker()) {
                         Marker* mark = toMarker(e);
-                        if (mark->textStyle().align() & AlignmentFlags::RIGHT)
+                        if (mark->textStyle().align() & Align::RIGHT)
                               return true;
                         }
                   }
@@ -2800,11 +2784,10 @@ static void restoreBeams(Measure* m)
 
 System* Score::collectSystem(LayoutContext& lc)
       {
-      if (!lc.curMeasure) {
-            lc.curSystem = 0;
+      if (!lc.curMeasure)
             return 0;
-            }
       System* system = getNextSystem(lc);
+      printf("====collect system %p %d\n", system, int(system->measures().size()));
       system->setInstrumentNames(lc.startWithLongNames);
 
       qreal minWidth    = 0;
@@ -2942,12 +2925,15 @@ System* Score::collectSystem(LayoutContext& lc)
 
             getNextMeasure(lc);
             minWidth += ww;
-            if (lc.rangeLayout && lc.endTick < lc.prevMeasure->tick()) {
+            if (lc.endTick < lc.prevMeasure->tick()) {
                   // TODO: we may check if another measure fits in this system
                   if (lc.prevMeasure == lc.systemOldMeasure) {
                         lc.rangeDone = true;
-                        if (lc.curMeasure && lc.curMeasure->isMeasure())
+                        if (lc.curMeasure && lc.curMeasure->isMeasure()) {
                               restoreBeams(toMeasure(lc.curMeasure));
+                              toMeasure(lc.curMeasure)->stretchMeasure(lc.curMeasure->width());
+                              printf("====restore measure %d\n", lc.curMeasure->no());
+                              }
                         break;
                         }
                   }
@@ -3260,7 +3246,6 @@ System* Score::collectSystem(LayoutContext& lc)
             lc.firstSystem        = lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
             lc.startWithLongNames = lc.firstSystem && lm->sectionBreakElement()->startWithLongNames();
             }
-      lc.systemChanged = lc.systemOldMeasure != (system->measures().empty() ? 0 : system->measures().back());
       return system;
       }
 
@@ -3268,79 +3253,120 @@ System* Score::collectSystem(LayoutContext& lc)
 //   collectPage
 //---------------------------------------------------------
 
-bool Score::collectPage(LayoutContext& lc)
+void LayoutContext::collectPage()
       {
-      if (!lc.curSystem)
-            return false;
+      const qreal slb = score->styleP(StyleIdx::staffLowerBorder);
+      bool breakPages = score->layoutMode() != LayoutMode::SYSTEM;
+      qreal y         = prevSystem ? prevSystem->y() + prevSystem->height() : page->tm();
+      qreal ey        = page->height() - page->bm();
 
-      const qreal slb = styleP(StyleIdx::staffLowerBorder);
-      bool breakPages = layoutMode() != LayoutMode::SYSTEM;
+      System* nextSystem = 0;
+      int systemIdx = -1;
 
-      Page* page = getEmptyPage(lc);
-      qreal y    = page->tm();
-      qreal ey   = page->height() - page->bm();
-      System* s1 = 0;               // previous system
-      System* s2 = lc.curSystem;
-
-      for (;;) {
+      for (int k = 0;;++k) {
             //
             // calculate distance to previous system
             //
             qreal distance;
-            if (s1) {
-                  distance = s1->minDistance(s2);
-                  }
+            if (prevSystem)
+                  distance = prevSystem->minDistance(curSystem);
             else {
                   // this is the first system on page
-                  VBox* vbox = s2->vbox();
-                  distance   = vbox ? 0.0 : styleP(StyleIdx::staffUpperBorder);
+                  VBox* vbox = curSystem->vbox();
+                  distance   = vbox ? 0.0 : score->styleP(StyleIdx::staffUpperBorder);
                   }
-            distance += _staves.front()->userDist();
+            distance += score->staves().front()->userDist();
 
             y += distance;
-            s2->setPos(page->lm(), y);
-            page->appendSystem(s2);
-            y += s2->height();
+            curSystem->setPos(page->lm(), y);
+            for (System* s : page->systems()) {
+                  if (s == curSystem)
+                        qDebug("=================================bad system %d\n", k);
+                  }
+            page->appendSystem(curSystem);
+            y += curSystem->height();
 
             //
             //  check for page break or if next system will fit on page
             //
-            if (lc.rangeDone) {
+            if (rangeDone) {
                   // take next system unchanged
-                  System* s    = lc.systemList.empty() ? 0 : lc.systemList.takeFirst();
-                  lc.curSystem = s;
-                  if (s)
-                        _systems.append(lc.curSystem);
+                  if (systemIdx > 0) {
+                        nextSystem = score->systems().value(systemIdx++);
+                        if (!nextSystem) {
+                              // TODO: handle next movement
+                              }
+                        }
+                  else {
+                        nextSystem = systemList.empty() ? 0 : systemList.takeFirst();
+                        if (nextSystem)
+                              score->systems().append(nextSystem);
+                        else if (score->isMaster()) {
+                              MasterScore* ms = static_cast<MasterScore*>(score)->next();
+                              if (ms) {
+                                    score     = ms;
+                                    systemIdx = 0;
+                                    nextSystem = score->systems().value(systemIdx++);
+                                    }
+                              }
+                        }
                   }
             else {
-                  collectSystem(lc);
+                  nextSystem = score->collectSystem(*this);
+                  if (!nextSystem && score->isMaster()) {
+                        MasterScore* ms = static_cast<MasterScore*>(score)->next();
+                        if (ms) {
+                              score = ms;
+                              QList<System*>& systems = ms->systems();
+                              if (systems.empty() || systems.front()->measures().empty()) {
+                                    systemList = systems;
+                                    systems.clear();
+                                    measureNo          = 0;
+                                    startWithLongNames = true;
+                                    firstSystem        = true;
+                                    tick               = 0;
+                                    prevMeasure        = 0;
+                                    curMeasure         = 0;
+                                    nextMeasure        = ms->measures()->first();
+                                    ms->getNextMeasure(*this);
+                                    nextSystem         = ms->collectSystem(*this);
+                                    ms->setScoreFont(ScoreFont::fontFactory(ms->styleSt(StyleIdx::MusicalSymbolFont)));
+                                    ms->setNoteHeadWidth(ms->scoreFont()->width(SymId::noteheadBlack, ms->spatium() / SPATIUM20));
+                                    }
+                              else {
+                                    rangeDone = true;
+                                    systemIdx = 0;
+                                    nextSystem = score->systems().value(systemIdx++);
+                                    }
+                              }
+                        }
                   }
-            System* s3     = lc.curSystem;
-            bool breakPage = !s3 || (breakPages && s2->pageBreak());
+            prevSystem = curSystem;
+            Q_ASSERT(curSystem != nextSystem);
+            curSystem  = nextSystem;
+
+            bool breakPage = !curSystem || (breakPages && prevSystem->pageBreak());
 
             if (!breakPage) {
-                  qreal dist = s2->minDistance(s3) + s3->height();
-                  VBox* vbox = s3->vbox();
+                  qreal dist = prevSystem->minDistance(curSystem) + curSystem->height();
+                  VBox* vbox = curSystem->vbox();
                   if (vbox)
                         dist += vbox->bottomGap();
-                  else if (!s2->hasFixedDownDistance())
-                        dist += qMax(s3->minBottom(), slb);
+                  else if (!prevSystem->hasFixedDownDistance())
+                        dist += qMax(curSystem->minBottom(), slb);
                   breakPage  = (y + dist) >= ey;
                   }
             if (breakPage) {
-                  // dont use currentSystem
-                  VBox* vbox = s2->vbox();
-                  qreal dist = vbox ? vbox->bottomGap() : qMax(s2->minBottom(), slb);
+                  VBox* vbox = prevSystem->vbox();
+                  qreal dist = vbox ? vbox->bottomGap() : qMax(prevSystem->minBottom(), slb);
                   layoutPage(page, ey - (y + dist));
                   break;
                   }
-            s1 = s2;    // current system becomes previous
-            s2 = s3;    // next system becomes current
             }
 
       int stick = -1;
-      int tracks = nstaves() * VOICES;
       for (System* s : page->systems()) {
+            Score* score = s->score();
             for (MeasureBase* mb : s->measures()) {
                   if (!mb->isMeasure())
                         continue;
@@ -3348,13 +3374,13 @@ bool Score::collectPage(LayoutContext& lc)
                   if (stick == -1)
                         stick = m->tick();
 
-                  for (int track = 0; track < tracks; ++track) {
+                  for (int track = 0; track < score->ntracks(); ++track) {
                         for (Segment* segment = m->first(); segment; segment = segment->next()) {
                               Element* e = segment->element(track);
                               if (!e)
                                     continue;
                               if (e->isChordRest()) {
-                                    if (!staff(track2staff(track))->show())
+                                    if (!score->staff(track2staff(track))->show())
                                           continue;
                                     ChordRest* cr = toChordRest(e);
                                     if (notTopBeam(cr))                   // layout cross staff beams
@@ -3395,87 +3421,16 @@ bool Score::collectPage(LayoutContext& lc)
                   }
             }
       page->rebuildBspTree();
-      lc.pageChanged = lc.systemChanged || (lc.pageOldSystem != (page->systems().empty() ? 0 : page->systems().back()));
-      return true;
       }
 
 //---------------------------------------------------------
 //   doLayout
-//    input:      list of measures
-//    output:     list of systems
-//                list of pages
+//    do a complete (re-) layout
 //---------------------------------------------------------
 
 void Score::doLayout()
       {
-//      qDebug("==========================");
-
-      if (_staves.empty() || first() == 0) {
-            // score is empty
-            _pages.clear();
-
-            Page* page = addPage();
-            page->layout();
-            page->setNo(0);
-            page->setPos(0.0, 0.0);
-            page->rebuildBspTree();
-            qDebug("layout: empty score");
-            return;
-            }
-
-      _scoreFont     = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
-      _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
-
-      if (cmdState().layoutFlags & LayoutFlag::FIX_PITCH_VELO)
-            updateVelo();
-      if (cmdState().layoutFlags & LayoutFlag::PLAY_EVENTS)
-            createPlayEvents();
-
-      LayoutContext lc;
-      lc.rangeDone = false;
-      _systems.swap(lc.systemList);
-      getNextMeasure(lc);
-      getNextMeasure(lc);
-
-      collectSystem(lc);
-      while (collectPage(lc))
-            ;
-      if (_layoutMode == LayoutMode::LINE) {
-            Page* page = _pages[0];
-            page->setWidth(page->system(0)->width());
-            }
-
-      // remove not needed systems
-      // TODO: make undoable
-      for (System* system : lc.systemList) {
-            qDebug("delete system");
-            for (SpannerSegment* ss : system->spannerSegments()) {
-                  qDebug("   delete spanner segment");
-                  Spanner* spanner = ss->spanner();
-                  spanner->spannerSegments().removeOne(ss);
-                  }
-            }
-      // remove not needed pages
-      // TODO: make undoable
-      while (_pages.size() > lc.curPage)
-            _pages.takeLast();
-
-      for (auto s : _spanner.map()) {     // TODO: this invalidates the bsp tree
-            Spanner* sp = s.second;
-            if (sp->isSlur())
-                  sp->layout();
-            }
-
-      for (MuseScoreView* v : viewer)
-            v->layoutChanged();
-
-      // _mscVersion is used during read and first layout
-      // but then it's used for drag and drop and should be set to new version
-      _mscVersion = MSCVERSION;     // for later drag & drop usage
-#ifndef NDEBUG
-      if (MScore::showCorruptedMeasures)
-            sanityCheck();
-#endif
+      doLayoutRange(0, -1);
       }
 
 //---------------------------------------------------------
@@ -3484,18 +3439,15 @@ void Score::doLayout()
 
 void Score::doLayoutRange(int stick, int etick)
       {
-// qDebug("%d-%d", stick, etick);
-      if (stick == -1 || etick == -1) {
-            doLayout();
-            return;
-            }
+qDebug("%p %d-%d", this, stick, etick);
       if (stick < 0)
             stick = 0;
+      if (etick < 0)
+            etick = lastMeasure()->endTick();
+
       LayoutContext lc;
-      lc.rangeLayout = true;
-      lc.rangeDone   = false;
       lc.endTick     = etick;
-      _scoreFont     = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
+      _scoreFont     = ScoreFont::fontFactory(style().value(StyleIdx::MusicalSymbolFont).toString());
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
       if (cmdState().layoutFlags & LayoutFlag::FIX_PITCH_VELO)
@@ -3510,55 +3462,128 @@ void Score::doLayoutRange(int stick, int etick)
       Measure* m = tick2measure(stick);
 
       // start layout one measure earlier to handle clefs and cautionary elements
-      if (m->prevMeasureMM()) {
+      if (m->prevMeasureMM())
             m = m->prevMeasureMM();
-            }
 
       // if the first measure of the score is part of a multi measure rest
       // m->system() will return a nullptr. We need to find the multi measure
       // rest which replaces the measure range
+
       if (!m->system() && m->hasMMRest())
             m = m->mmRest();
-      Q_ASSERT(m->system());
 
-      Page* p    = m->system()->page();
-      System* s  = p->systems().front();
+      lc.score        = m->score();
+      System* system  = m->system();
+      int systemIndex = _systems.indexOf(system);
+      if (system && systemIndex >= 0) {
+            lc.page         = system->page();
+            lc.curPage      = pageIdx(lc.page);
+            if (lc.curPage == -1)
+                  lc.curPage = 0;
+            lc.curSystem   = m->system();
+            lc.systemList  = _systems.mid(systemIndex);
+            lc.nextMeasure = tick2measure(system->measure(0)->tick());
+            _systems.erase(_systems.begin() + systemIndex, _systems.end());
+            if (!lc.nextMeasure->prevMeasure())
+                  lc.measureNo = 0;
+            else
+                  lc.measureNo = lc.nextMeasure->no();
+            }
+      else {
+            lc.page        = 0;
+            lc.curPage     = 0;
+            lc.curMeasure  = 0;
+            lc.nextMeasure = _measures.first();
+            lc.measureNo   = 0;
+            lc.curSystem   = 0;
+            lc.score       = this;
+            }
 
-      int systemIndex  = _systems.indexOf(s);
-      lc.systemList    = _systems.mid(systemIndex);
-      _systems.erase(_systems.begin() + systemIndex, _systems.end());
-      lc.curPage       = _pages.indexOf(p);
-      lc.curSystem     = systemIndex > 0 ? _systems[systemIndex-1] : 0;
-      lc.prevMeasure   = 0;
-      lc.curMeasure    = s->measure(0)->prev();
-      lc.nextMeasure   = s->measure(0);
-      lc.measureNo     = lc.nextMeasure->no();
-      lc.tick          = lc.nextMeasure->tick();
+      lc.prevMeasure = 0;
+      lc.tick        = lc.nextMeasure->tick();
 
       getNextMeasure(lc);
-      collectSystem(lc);
+      lc.curSystem = collectSystem(lc);
 
-      //---------------------------------------------------
-      //    layout score
-      //---------------------------------------------------
-
-      while (collectPage(lc)) {
-            Page* page     = _pages[lc.curPage-1];
-            System* s      = page->system(0);
-            MeasureBase* m = s->measures().back();
-            if (lc.rangeDone && m->tick() > etick) {
-                  break;
+      if (!lc.page) {
+            lc.page = new Page(this);
+            pages().push_back(lc.page);
+            lc.prevSystem  = 0;
+            }
+      else {
+            QList<System*>& systems = lc.page->systems();
+            int i = systems.indexOf(lc.curSystem);
+            if (i == -1)
+                  systems.clear();
+            else {
+                  systems.erase(systems.begin() + i, systems.end());
+                  lc.prevSystem  = systems.empty() ? 0 : systems.back();
                   }
             }
-      if (!lc.curSystem) {
-            while (_pages.size() > lc.curPage)        // Remove not needed pages. TODO: make undoable:
-                  _pages.takeLast();
+      lc.page->bbox().setRect(0.0, 0.0, loWidth(), loHeight());
+      lc.page->setNo(lc.curPage);
+      qreal x = 0.0;
+      qreal y = 0.0;
+      if (lc.curPage) {
+            Page* prevPage = pages()[lc.curPage-1];
+            if (MScore::verticalOrientation())
+                  y = prevPage->pos().y() + lc.page->height() + MScore::verticalPageGap;
+            else {
+                  qreal gap = (lc.curPage + pageNumberOffset()) & 1 ? MScore::horizontalPageGapOdd : MScore::horizontalPageGapEven;
+                  x = prevPage->pos().x() + lc.page->width() + gap;
+                  }
             }
+      ++lc.curPage;
+      lc.page->setPos(x, y);
 
-      _systems.append(lc.systemList);
+      lc.layout();
 
       for (MuseScoreView* v : viewer)
             v->layoutChanged();
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void LayoutContext::layout()
+      {
+      for (;;) {
+            collectPage();
+            System* s      = page->system(0);
+            MeasureBase* m = s->measures().back();
+            if (!curSystem || (rangeDone && m->tick() > endTick))
+                  break;
+            Page* prevPage = page;
+            if (curPage >= score->npages()) {
+                  page = new Page(score);
+                  score->pages().push_back(page);
+                  }
+            else {
+                  page = score->pages()[curPage];
+                  page->systems().clear();
+                  }
+            page->bbox().setRect(0.0, 0.0, score->loWidth(), score->loHeight());
+            page->setNo(curPage);
+            qreal x = 0.0;
+            qreal y = 0.0;
+            if (curPage) {
+                  if (MScore::verticalOrientation())
+                        y = prevPage->pos().y() + page->height() + MScore::verticalPageGap;
+                  else {
+                        qreal gap = (curPage + score->pageNumberOffset()) & 1 ? MScore::horizontalPageGapOdd : MScore::horizontalPageGapEven;
+                        x = prevPage->pos().x() + page->width() + gap;
+                        }
+                  }
+            ++curPage;
+            page->setPos(x, y);
+            prevSystem  = 0;
+            }
+      if (!curSystem) {
+            while (score->npages() > curPage)        // Remove not needed pages. TODO: make undoable:
+                  score->pages().takeLast();
+            }
+      score->systems().append(systemList);     // TODO
       }
 
 }

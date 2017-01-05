@@ -1625,7 +1625,7 @@ Element* Note::drop(const DropData& data)
                   TextStyleType st = f->textStyleType();
                   //f->setTextStyleType(st);
                   if (st >= TextStyleType::DEFAULT && fromPalette)
-                        f->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
+                        f->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
                   }
                   return e;
 

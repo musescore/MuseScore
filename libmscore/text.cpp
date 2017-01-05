@@ -320,11 +320,11 @@ void TextBlock::layout(Text* t)
                   }
             }
       qreal rx;
-      if (t->textStyle().align() & AlignmentFlags::RIGHT)
+      if (t->textStyle().align() & Align::RIGHT)
             rx = layoutWidth-_bbox.right();
-      else if (t->textStyle().align() & AlignmentFlags::HCENTER)
+      else if (t->textStyle().align() & Align::HCENTER)
             rx = (layoutWidth - (_bbox.left() + _bbox.right())) * .5;
-      else  // AlignmentFlags::LEFT
+      else  // Align::LEFT
             rx = -_bbox.left();
       rx += lm;
       for (TextFragment& f : _text)
@@ -1263,11 +1263,11 @@ void Text::layout1()
       else
             setPos(QPointF());
 
-      if (textStyle().align() & AlignmentFlags::BOTTOM)
+      if (textStyle().align() & Align::BOTTOM)
             yoff += h - bb.bottom();
-      else if (textStyle().align() & AlignmentFlags::VCENTER)
+      else if (textStyle().align() & Align::VCENTER)
             yoff +=  (h - (bb.top() + bb.bottom())) * .5;
-      else if (textStyle().align() & AlignmentFlags::BASELINE)
+      else if (textStyle().align() & Align::BASELINE)
             yoff += h * .5 - _layout.front().lineSpacing();
       else
             yoff += -bb.top();
@@ -2305,7 +2305,7 @@ bool Text::readProperties(XmlReader& e)
                   //st = TextStyleType(i);
                   }
             else {
-                  st = score()->style()->textStyleType(val);
+                  st = score()->style().textStyleType(val);
                   }
             setTextStyleType(st);
             }
@@ -2957,7 +2957,7 @@ QString Text::unEscape(QString s)
 QString Text::accessibleInfo() const
       {
       QString rez;
-      const QList<TextStyle>& ts = score()->style()->textStyles();
+      const QList<TextStyle>& ts = score()->style().textStyles();
       switch (textStyleType()) {
             case TextStyleType::TITLE:
             case TextStyleType::SUBTITLE:
@@ -3007,7 +3007,7 @@ int Text::subtype() const
 QString Text::subtypeName() const
       {
       QString rez;
-      const QList<TextStyle>& ts = score()->style()->textStyles();
+      const QList<TextStyle>& ts = score()->style().textStyles();
       switch (textStyleType()) {
             case TextStyleType::TITLE:
             case TextStyleType::SUBTITLE:

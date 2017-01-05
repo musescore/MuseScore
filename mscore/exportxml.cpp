@@ -1181,11 +1181,11 @@ void ExportMusicXml::credits(XmlWriter& xml)
                         QString just;
                         QString val;
 
-                        if (al & AlignmentFlags::RIGHT) {
+                        if (al & Align::RIGHT) {
                               just = "right";
                               tx   = w - rm;
                               }
-                        else if (al & AlignmentFlags::HCENTER) {
+                        else if (al & Align::HCENTER) {
                               just = "center";
                               // tx already set correctly
                               }
@@ -1194,15 +1194,15 @@ void ExportMusicXml::credits(XmlWriter& xml)
                               tx   = lm;
                               }
 
-                        if (al & AlignmentFlags::BOTTOM) {
+                        if (al & Align::BOTTOM) {
                               val = "bottom";
                               ty -= ph;
                               }
-                        else if (al & AlignmentFlags::VCENTER) {
+                        else if (al & Align::VCENTER) {
                               val = "middle";
                               ty -= ph / 2;
                               }
-                        else if (al & AlignmentFlags::BASELINE) {
+                        else if (al & Align::BASELINE) {
                               val = "baseline";
                               ty -= ph / 2;
                               }

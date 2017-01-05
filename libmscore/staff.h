@@ -155,7 +155,7 @@ class Staff : public QObject, public ScoreElement {
       BracketType bracket(int idx) const;
       int bracketSpan(int idx) const;
       void setBracket(int idx, BracketType val);
-      void swapBracket(int oldIdx, int newIdx, BracketType /*val*/);
+      void swapBracket(int oldIdx, int newIdx);
       void setBracketSpan(int idx, int val);
       int bracketLevels() const      { return _brackets.size(); }
       void addBracket(BracketItem);

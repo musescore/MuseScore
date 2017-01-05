@@ -53,6 +53,7 @@
 #include "libmscore/breath.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/sym.h"
+#include "libmscore/articulation.h"
 
 extern QString rtf2html(const QString &);
 
@@ -342,14 +343,14 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         // qDebug("setText %s (%f %f)(%f %f) <%s>",
                         //            qPrintable(st->font().family()),
                         //            st->pos().x(), st->pos().y(), p.x(), p.y(), qPrintable(st->text()));
-                        Align textalign = AlignmentFlags::LEFT;
+                        Align textalign = Align::LEFT;
                         switch (st->textalign()) {
-                              case 0:   textalign = AlignmentFlags::LEFT;    break;
-                              case 1:   textalign = AlignmentFlags::HCENTER; break;
-                              case 2:   textalign = AlignmentFlags::RIGHT;   break;
+                              case 0:   textalign = Align::LEFT;    break;
+                              case 1:   textalign = Align::HCENTER; break;
+                              case 2:   textalign = Align::RIGHT;   break;
                               default:                                       break;
                               }
-                        text->textStyle().setAlign(textalign | AlignmentFlags::BASELINE);
+                        text->textStyle().setAlign(textalign | Align::BASELINE);
                         text->textStyle().setYoff(2.0);
                         text->setTrack(track);
                         s->add(text);
@@ -1109,12 +1110,12 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       if (cap->systems.isEmpty())
             return;
 
-      score->style()->set(StyleIdx::measureSpacing, 1.0);
+      score->style().set(StyleIdx::measureSpacing, 1.0);
       score->setSpatium(cap->normalLineDist * DPMM);
-      score->style()->set(StyleIdx::smallStaffMag, cap->smallLineDist / cap->normalLineDist);
-      score->style()->set(StyleIdx::minSystemDistance, Spatium(8));
-      score->style()->set(StyleIdx::maxSystemDistance, Spatium(12));
-      // score->style()->set(StyleIdx::hideEmptyStaves, true);
+      score->style().set(StyleIdx::smallStaffMag, cap->smallLineDist / cap->normalLineDist);
+      score->style().set(StyleIdx::minSystemDistance, Spatium(8));
+      score->style().set(StyleIdx::maxSystemDistance, Spatium(12));
+      // score->style().set(StyleIdx::hideEmptyStaves, true);
 
 #if 1
       foreach(CapSystem* csys, cap->systems) {

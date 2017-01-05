@@ -296,11 +296,11 @@ void Preferences::write()
       s.setValue("pngTransparent",     pngTransparent);
       s.setValue("language",           language);
 
-      s.setValue("paperWidth",  MScore::defaultStyle()->pageFormat()->width());
-      s.setValue("paperHeight", MScore::defaultStyle()->pageFormat()->height());
+      s.setValue("paperWidth",  MScore::defaultStyle().pageFormat()->width());
+      s.setValue("paperHeight", MScore::defaultStyle().pageFormat()->height());
 
-      s.setValue("twosided",    MScore::defaultStyle()->pageFormat()->twosided());
-      s.setValue("spatium",     MScore::defaultStyle()->value(StyleIdx::spatium).toDouble() / DPI);
+      s.setValue("twosided",    MScore::defaultStyle().pageFormat()->twosided());
+      s.setValue("spatium",     MScore::defaultStyle().value(StyleIdx::spatium).toDouble() / DPI);
 
       s.setValue("mag", mag);
       s.setValue("showMidiControls", showMidiControls);
@@ -1519,13 +1519,13 @@ bool Preferences::readDefaultStyle()
       {
       if (defaultStyleFile.isEmpty())
             return false;
-      MStyle* style = new MStyle(*MScore::defaultStyle());
+      MStyle style = MScore::defaultStyle();
       QFile f(defaultStyleFile);
       if (!f.open(QIODevice::ReadOnly))
             return false;
-      bool rv = style->load(&f);
+      bool rv = style.load(&f);
       if (rv)
-            MScore::setDefaultStyle(style);     // transfer ownership
+            MScore::setDefaultStyle(style);
       f.close();
       return rv;
       }
@@ -1911,7 +1911,7 @@ void Preferences::updatePluginList()
 void PreferenceDialog::printShortcutsClicked()
       {
       QPrinter printer(QPrinter::HighResolution);
-      MStyle* s = MScore::defaultStyle();
+      MStyle* s = &MScore::defaultStyle();
       const PageFormat* pf = s->pageFormat();
       printer.setPaperSize(pf->size(), QPrinter::Inch);
 

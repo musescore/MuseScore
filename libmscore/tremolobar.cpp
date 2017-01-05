@@ -171,7 +171,7 @@ QVariant TremoloBar::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::LINE_WIDTH:
-                  return score()->style(StyleIdx::voltaLineWidth);
+                  return score()->styleV(StyleIdx::voltaLineWidth);
             case P_ID::MAG:
                   return 1.0;
             case P_ID::PLAY:

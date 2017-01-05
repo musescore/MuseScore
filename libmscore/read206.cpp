@@ -39,6 +39,7 @@
 #include "utils.h"
 #include "read206.h"
 #include "excerpt.h"
+#include "articulation.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -1410,8 +1411,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             else if (tag == "Spatium")
                   style->set(StyleIdx::spatium, e.readDouble() * DPMM);
             else if (tag == "page-layout") {
-                  PageFormat pf;
-                  pf.copy(*style->pageFormat());
+                  PageFormat pf = *style->pageFormat();
                   pf.read(e);
                   style->setPageFormat(pf);
                   }
@@ -1522,17 +1522,17 @@ static bool readScore(Score* score, XmlReader& e)
             else if (tag == "showMargins")
                   score->setShowPageborders(e.readInt());
             else if (tag == "Style") {
-                  qreal sp = score->style()->value(StyleIdx::spatium).toDouble();
-                  readStyle(score->style(), e);
-                  if (score->style()->value(StyleIdx::MusicalTextFont).toString() == "MuseJazz")
-                        score->style()->set(StyleIdx::MusicalTextFont, "MuseJazz Text");
+                  qreal sp = score->style().value(StyleIdx::spatium).toDouble();
+                  readStyle(&score->style(), e);
+                  if (score->style().value(StyleIdx::MusicalTextFont).toString() == "MuseJazz")
+                        score->style().set(StyleIdx::MusicalTextFont, "MuseJazz Text");
                   // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
                   if (score->layoutMode() == LayoutMode::FLOAT) {
                         // style should not change spatium in
                         // float mode
-                        score->style()->set(StyleIdx::spatium, sp);
+                        score->style().set(StyleIdx::spatium, sp);
                         }
-                  score->setScoreFont(ScoreFont::fontFactory(score->style()->value(StyleIdx::MusicalSymbolFont).toString()));
+                  score->setScoreFont(ScoreFont::fontFactory(score->style().value(StyleIdx::MusicalSymbolFont).toString()));
                   }
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(score);
@@ -1602,6 +1602,8 @@ static bool readScore(Score* score, XmlReader& e)
                         }
                   }
             else if (tag == "PageList") {
+                  e.skipCurrentElement();
+#if 0
                   while (e.readNextStartElement()) {
                         if (e.name() == "Page") {
                               Page* page = new Page(score);
@@ -1611,6 +1613,7 @@ static bool readScore(Score* score, XmlReader& e)
                         else
                               e.unknown();
                         }
+#endif
                   }
             else if (tag == "name") {
                   QString n = e.readElementText();
@@ -1712,15 +1715,15 @@ static bool readScore(Score* score, XmlReader& e)
 Score::FileError MasterScore::read206(XmlReader& e)
       {
       for (unsigned int i = 0; i < sizeof(style206)/sizeof(*style206); ++i)
-            style()->set(style206[i].idx, style206[i].val);
+            style().set(style206[i].idx, style206[i].val);
       // old text style default
-      TextStyle ts = style()->textStyle("Rehearsal Mark");
+      TextStyle ts = style().textStyle("Rehearsal Mark");
       ts.setSquare(false);
       ts.setFrameRound(20);
-      style()->setTextStyle(ts);
-      ts = style()->textStyle("Dynamics");
+      style().setTextStyle(ts);
+      ts = style().textStyle("Dynamics");
       ts.setItalic(false);
-      style()->setTextStyle(ts);
+      style().setTextStyle(ts);
 
       qDebug("read206");
       while (e.readNextStartElement()) {

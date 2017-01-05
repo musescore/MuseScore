@@ -352,7 +352,7 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
                   return 0;
 
             case P_ID::LINE_WIDTH:
-                  return score()->style(StyleIdx::voltaLineWidth);
+                  return score()->styleV(StyleIdx::voltaLineWidth);
 
             case P_ID::BEGIN_TEXT_PLACE:
             case P_ID::CONTINUE_TEXT_PLACE:
@@ -366,7 +366,7 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
 
             case P_ID::BEGIN_HOOK_HEIGHT:
             case P_ID::END_HOOK_HEIGHT:
-                  return score()->style(StyleIdx::voltaHook);
+                  return score()->styleV(StyleIdx::voltaHook);
 
             case P_ID::TEXT_STYLE_TYPE:
                   return int(TextStyleType::VOLTA);

@@ -137,7 +137,6 @@ MasterScore* MTest::readCreatedScore(const QString& name)
       MasterScore* score = new MasterScore(mscore->baseStyle());
       QFileInfo fi(name);
       score->setName(fi.completeBaseName());
-//      MScore::testMode = true;
       QString csl  = fi.suffix().toLower();
 
       Score::FileError rv;
