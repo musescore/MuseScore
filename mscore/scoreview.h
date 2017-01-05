@@ -67,7 +67,8 @@ enum class TEXT : char {
       SYSTEM,
       STAFF,
       REHEARSAL_MARK,
-      INSTRUMENT_CHANGE
+      INSTRUMENT_CHANGE,
+      FINGERING
       };
 
 //---------------------------------------------------------
