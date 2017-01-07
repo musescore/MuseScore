@@ -2515,6 +2515,9 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
                   {
                   QKeyEvent* e = static_cast<QKeyEvent*>(event);
                   if(obj->isWidgetType() && e->key() == Qt::Key_Escape && e->modifiers() == Qt::NoModifier) {
+                        // Close the search dialog when Escape is pressed:
+                        if(_searchDialog != 0)
+                              endSearch();
                         if (isActiveWindow()) {
                               obj->event(e);
                               if(currentScoreView())
@@ -4809,8 +4812,7 @@ void MuseScore::showSearchDialog()
 
             qDebug("Line edit %p", searchCombo->lineEdit());
 
-            // does not work: connect(searchCombo->lineEdit(), SIGNAL(returnPressed()), SLOT(endSearch()));
-            connect(searchCombo->lineEdit(), SIGNAL(editingFinished()), SLOT(endSearch()));
+            connect(searchCombo->lineEdit(), SIGNAL(returnPressed()), SLOT(endSearch()));
             }
 
       searchCombo->clearEditText();
