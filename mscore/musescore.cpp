@@ -2871,6 +2871,9 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
                   {
                   QKeyEvent* e = static_cast<QKeyEvent*>(event);
                   if(obj->isWidgetType() && e->key() == Qt::Key_Escape && e->modifiers() == Qt::NoModifier) {
+                        // Treat the search dialog independently: end the search when Escape key is pressed:
+                        if(_searchDialog != 0 )
+                            endSearch();
                         if (isActiveWindow()) {
                               obj->event(e);
                               if(currentScoreView())
