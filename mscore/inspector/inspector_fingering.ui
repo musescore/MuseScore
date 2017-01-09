@@ -82,7 +82,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Bold' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -109,7 +109,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Font face' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
