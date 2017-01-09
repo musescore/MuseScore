@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>249</width>
-    <height>211</height>
+    <width>203</width>
+    <height>202</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -81,6 +81,9 @@
         <property name="text">
          <string>Right margin:</string>
         </property>
+        <property name="buddy">
+         <cstring>rightMargin</cstring>
+        </property>
        </widget>
       </item>
       <item row="0" column="2">
@@ -124,6 +127,9 @@
        <widget class="QLabel" name="label_7">
         <property name="text">
          <string>Bottom margin:</string>
+        </property>
+        <property name="buddy">
+         <cstring>bottomMargin</cstring>
         </property>
        </widget>
       </item>
@@ -176,6 +182,9 @@
         <property name="text">
          <string>Top gap:</string>
         </property>
+        <property name="buddy">
+         <cstring>topGap</cstring>
+        </property>
        </widget>
       </item>
       <item row="2" column="1">
@@ -198,6 +207,9 @@
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Height:</string>
+        </property>
+        <property name="buddy">
+         <cstring>height</cstring>
         </property>
        </widget>
       </item>
@@ -225,6 +237,9 @@
         <property name="text">
          <string>Top margin:</string>
         </property>
+        <property name="buddy">
+         <cstring>topMargin</cstring>
+        </property>
        </widget>
       </item>
       <item row="4" column="0">
@@ -232,12 +247,18 @@
         <property name="text">
          <string>Left margin:</string>
         </property>
+        <property name="buddy">
+         <cstring>leftMargin</cstring>
+        </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Bottom gap:</string>
+        </property>
+        <property name="buddy">
+         <cstring>bottomGap</cstring>
         </property>
        </widget>
       </item>
@@ -370,6 +391,7 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>title</tabstop>
   <tabstop>topGap</tabstop>
   <tabstop>resetTopGap</tabstop>
   <tabstop>bottomGap</tabstop>

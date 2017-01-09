@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>205</width>
-    <height>124</height>
+    <height>129</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -88,6 +88,9 @@
         <property name="text">
          <string>Jump to:</string>
         </property>
+        <property name="buddy">
+         <cstring>jumpTo</cstring>
+        </property>
        </widget>
       </item>
       <item row="1" column="0">
@@ -95,12 +98,18 @@
         <property name="text">
          <string>Play until:</string>
         </property>
+        <property name="buddy">
+         <cstring>playUntil</cstring>
+        </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>Continue at:</string>
+        </property>
+        <property name="buddy">
+         <cstring>continueAt</cstring>
         </property>
        </widget>
       </item>
@@ -148,9 +157,12 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>title</tabstop>
   <tabstop>jumpTo</tabstop>
   <tabstop>playUntil</tabstop>
   <tabstop>continueAt</tabstop>
+  <tabstop>playRepeats</tabstop>
+  <tabstop>resetPlayRepeats</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
