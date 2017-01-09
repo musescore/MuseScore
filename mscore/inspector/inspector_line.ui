@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>291</width>
-    <height>218</height>
+    <width>226</width>
+    <height>201</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -81,6 +81,9 @@
         <property name="text">
          <string>Line color:</string>
         </property>
+        <property name="buddy">
+         <cstring>lineColor</cstring>
+        </property>
        </widget>
       </item>
       <item row="2" column="2">
@@ -105,12 +108,18 @@
         <property name="text">
          <string>Line thickness:</string>
         </property>
+        <property name="buddy">
+         <cstring>lineWidth</cstring>
+        </property>
        </widget>
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Line style:</string>
+        </property>
+        <property name="buddy">
+         <cstring>lineStyle</cstring>
         </property>
        </widget>
       </item>
@@ -257,12 +266,18 @@
         <property name="text">
          <string>Dash gap width:</string>
         </property>
+        <property name="buddy">
+         <cstring>dashGapLength</cstring>
+        </property>
        </widget>
       </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Dash line length:</string>
+        </property>
+        <property name="buddy">
+         <cstring>dashLineLength</cstring>
         </property>
        </widget>
       </item>
@@ -359,6 +374,9 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>title</tabstop>
+  <tabstop>lineVisible</tabstop>
+  <tabstop>resetLineVisible</tabstop>
   <tabstop>diagonal</tabstop>
   <tabstop>resetDiagonal</tabstop>
   <tabstop>resetLineColor</tabstop>
@@ -366,6 +384,10 @@
   <tabstop>resetLineWidth</tabstop>
   <tabstop>lineStyle</tabstop>
   <tabstop>resetLineStyle</tabstop>
+  <tabstop>dashLineLength</tabstop>
+  <tabstop>resetDashLineLength</tabstop>
+  <tabstop>dashGapLength</tabstop>
+  <tabstop>resetDashGapLength</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

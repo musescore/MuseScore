@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>82</width>
-    <height>60</height>
+    <width>80</width>
+    <height>69</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -112,6 +112,7 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>title</tabstop>
   <tabstop>small</tabstop>
   <tabstop>resetSmall</tabstop>
  </tabstops>
