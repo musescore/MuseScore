@@ -664,7 +664,7 @@ Palette* MuseScore::newArticulationsPalette(PaletteType t)
                         SymId::articStaccatissimoStrokeAbove,
                         SymId::articStaccatissimoWedgeAbove,
                         SymId::articStressAbove,
-                        SymId::articTenutoAccentBelow,
+                        SymId::articTenutoAccentAbove,
                         SymId::articUnstressAbove,
 
                         SymId::articSoftAccentAbove,                    // supplemental articulations
