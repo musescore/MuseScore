@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>212</width>
-    <height>83</height>
+    <width>159</width>
+    <height>93</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -62,7 +62,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="" native="true">
+    <widget class="QWidget" name="widget" native="true">
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>3</number>
@@ -138,6 +138,12 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>title</tabstop>
+  <tabstop>setColor</tabstop>
+  <tabstop>setVisible</tabstop>
+  <tabstop>setInvisible</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
