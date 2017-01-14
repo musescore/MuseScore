@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>249</width>
-    <height>187</height>
+    <width>203</width>
+    <height>182</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -81,12 +81,18 @@
         <property name="text">
          <string>Bottom gap:</string>
         </property>
+        <property name="buddy">
+         <cstring>bottomGap</cstring>
+        </property>
        </widget>
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
          <string>Top margin:</string>
+        </property>
+        <property name="buddy">
+         <cstring>topMargin</cstring>
         </property>
        </widget>
       </item>
@@ -148,6 +154,9 @@
         <property name="text">
          <string>Bottom margin:</string>
         </property>
+        <property name="buddy">
+         <cstring>bottomMargin</cstring>
+        </property>
        </widget>
       </item>
       <item row="4" column="2">
@@ -171,6 +180,9 @@
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>Right margin:</string>
+        </property>
+        <property name="buddy">
+         <cstring>rightMargin</cstring>
         </property>
        </widget>
       </item>
@@ -291,6 +303,9 @@
         <property name="text">
          <string>Top gap:</string>
         </property>
+        <property name="buddy">
+         <cstring>topGap</cstring>
+        </property>
        </widget>
       </item>
       <item row="1" column="1">
@@ -317,6 +332,9 @@
         <property name="text">
          <string>Left margin:</string>
         </property>
+        <property name="buddy">
+         <cstring>leftMargin</cstring>
+        </property>
        </widget>
       </item>
       <item row="5" column="1">
@@ -341,6 +359,7 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>title</tabstop>
   <tabstop>topGap</tabstop>
   <tabstop>resetTopGap</tabstop>
   <tabstop>bottomGap</tabstop>

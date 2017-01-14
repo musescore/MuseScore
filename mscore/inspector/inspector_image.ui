@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>260</width>
-    <height>166</height>
+    <width>227</width>
+    <height>153</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -133,12 +133,18 @@
         <property name="text">
          <string>Size:</string>
         </property>
+        <property name="buddy">
+         <cstring>sizeWidth</cstring>
+        </property>
        </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Scale:</string>
+        </property>
+        <property name="buddy">
+         <cstring>scaleWidth</cstring>
         </property>
        </widget>
       </item>
@@ -277,6 +283,7 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>title</tabstop>
   <tabstop>autoscale</tabstop>
   <tabstop>resetAutoscale</tabstop>
   <tabstop>sizeWidth</tabstop>

@@ -281,7 +281,7 @@ class MasterScore;
 //   Movements
 //    A movement is a unit of a larger work that may stand
 //    by itself as a complete composition.
-//    A MuseScore score fille can contain several movements represented as
+//    A MuseScore score file can contain several movements represented as
 //    MasterScore's. A MasterScore can have several parts represented
 //    as Score. MasterScores are connected in a double linked list.
 //-----------------------------------------------------------------------------

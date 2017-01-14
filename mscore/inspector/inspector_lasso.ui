@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>293</width>
-    <height>77</height>
+    <width>235</width>
+    <height>87</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -49,7 +49,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="" native="true">
+    <widget class="QWidget" name="widget" native="true">
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>3</number>
@@ -67,6 +67,9 @@
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Position:</string>
+        </property>
+        <property name="buddy">
+         <cstring>posX</cstring>
         </property>
        </widget>
       </item>
@@ -126,6 +129,9 @@
         <property name="text">
          <string>Size:</string>
         </property>
+        <property name="buddy">
+         <cstring>sizeWidth</cstring>
+        </property>
        </widget>
       </item>
       <item row="2" column="1">
@@ -163,6 +169,7 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>title</tabstop>
   <tabstop>posX</tabstop>
   <tabstop>posY</tabstop>
   <tabstop>sizeWidth</tabstop>
