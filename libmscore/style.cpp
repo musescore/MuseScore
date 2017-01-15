@@ -431,7 +431,7 @@ MStyle::MStyle()
       _customChordList = false;
       for (const StyleType& t : styleTypes)
             _values[t.idx()] = t.defaultValue();
-      precomputeValues();
+      //precomputeValues();
       };
 
 //---------------------------------------------------------
