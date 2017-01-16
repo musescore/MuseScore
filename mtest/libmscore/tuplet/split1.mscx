@@ -16,32 +16,6 @@
       <pedalPosBelow>0</pedalPosBelow>
       <trillPosAbove>0</trillPosAbove>
       <minMMRestWidth>0</minMMRestWidth>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <offsetType>spatium</offsetType>
-        <name>Dynamics</name>
-        <family>FreeSerif</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-3</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Rehearsal Mark</name>
-        <family>FreeSerif</family>
-        <size>14</size>
-        <bold>1</bold>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <frameWidthS>0.2</frameWidthS>
-        <paddingWidthS>0.5</paddingWidthS>
-        <frameRound>20</frameRound>
-        <frameColor r="0" g="0" b="0" a="255"/>
-        <systemFlag>1</systemFlag>
-        </TextStyle>
       <page-layout>
         <page-height>1683.78</page-height>
         <page-width>1190.55</page-width>

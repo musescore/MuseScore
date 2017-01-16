@@ -644,11 +644,12 @@ class Element : public QObject, public ScoreElement {
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
       virtual void resetProperty(P_ID);
+      virtual void initSubStyle(SubStyle);
 
-      void undoChangeProperty(P_ID, const QVariant&, PropertyStyle ps = PropertyStyle::NOSTYLE);
+      void undoChangeProperty(P_ID, const QVariant&, PropertyFlags ps = PropertyFlags::NOSTYLE);
       void undoResetProperty(P_ID);
       bool custom(P_ID) const;
-      void readProperty(XmlReader&, P_ID);
+      bool readProperty(const QStringRef&, XmlReader&, P_ID);
       virtual bool isUserModified() const;
 
       virtual void styleChanged() {}

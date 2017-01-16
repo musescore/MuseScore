@@ -169,8 +169,8 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   newName->setXmlText(staffName);
                   newName->setParent(parent);
                   newName->setTrack(e->track());
-                  newName->textStyle().setFamily("FreeSans");
-                  newName->textStyle().setSizeIsSpatiumDependent(true);
+                  newName->setFamily("FreeSans");
+                  newName->setSizeIsSpatiumDependent(true);
                   newName->layout();
                   newName->setPlainText(newName->plainText());
                   newName->layout();
@@ -294,11 +294,10 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       // Draw measure text number
       QString text = QString("#%1").arg(_currentMeasure->no()+1);
       Text* newElement = new Text(_score);
-      newElement->setTextStyleType(TextStyleType::DEFAULT);
       newElement->setFlag(ElementFlag::MOVABLE, false);
       newElement->setXmlText(text);
-      newElement->textStyle().setFamily("FreeSans");
-      newElement->textStyle().setSizeIsSpatiumDependent(true);
+      newElement->setFamily("FreeSans");
+      newElement->setSizeIsSpatiumDependent(true);
       newElement->setColor(color);
       newElement->sameLayout();
       pos = QPointF(_score->styleP(StyleIdx::clefLeftMargin) + _widthClef, _y + newElement->height());
@@ -358,8 +357,8 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   newName->setParent(parent);
                   newName->setTrack(e->track());
                   newName->setColor(color);
-                  newName->textStyle().setFamily("FreeSans");
-                  newName->textStyle().setSizeIsSpatiumDependent(true);
+                  newName->setFamily("FreeSans");
+                  newName->setSizeIsSpatiumDependent(true);
                   newName->layout();
                   newName->setPlainText(newName->plainText());
                   newName->layout();

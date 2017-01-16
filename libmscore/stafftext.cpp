@@ -23,10 +23,9 @@ namespace Ms {
 //---------------------------------------------------------
 
 StaffText::StaffText(Score* s)
-   : Text(s)
+   : Text(SubStyle::STAFF, s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      setTextStyleType(TextStyleType::STAFF);
       setPlacement(Placement::ABOVE);     // default
       _setAeolusStops = false;
       _swing = false;
@@ -181,7 +180,9 @@ void StaffText::layout()
       {
       if (autoplace())
             setUserOff(QPointF());
-      QPointF p(textStyle().offset(spatium()));
+
+      // TODO: add above/below offset properties
+      QPointF p(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
       if (placement() == Element::Placement::BELOW)
             p.ry() =  - p.ry() + lineHeight();
       setPos(p);
@@ -229,6 +230,8 @@ Segment* StaffText::segment() const
 QVariant StaffText::propertyDefault(P_ID id) const
       {
       switch(id) {
+            case P_ID::SUB_STYLE:
+                  return int(SubStyle::STAFF);
             case P_ID::PLACEMENT:
                   return int(Placement::ABOVE);
             default:

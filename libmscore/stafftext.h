@@ -48,9 +48,9 @@ class StaffText : public Text  {
       virtual Element::Type type() const                  { return Element::Type::STAFF_TEXT; }
       virtual void write(XmlWriter& xml) const;
       virtual void read(XmlReader&);
-      virtual int subtype() const                         { return (int) textStyleType(); }
+      virtual int subtype() const                         { return (int) subStyle(); }
       virtual void layout() override;
-      virtual QString subtypeName() const                 { return textStyle().name(); }
+      virtual QString subtypeName() const                 { return "??"; }
       virtual QVariant propertyDefault(P_ID id) const override;
 
       Segment* segment() const;

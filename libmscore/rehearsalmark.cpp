@@ -20,9 +20,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 RehearsalMark::RehearsalMark(Score* s)
-   : Text(s)
+   : Text(SubStyle::REHEARSAL_MARK, s)
       {
-      setTextStyleType(TextStyleType::REHEARSAL_MARK);
       }
 
 //---------------------------------------------------------
@@ -33,7 +32,8 @@ void RehearsalMark::layout()
       {
       if (autoplace())
             setUserOff(QPointF());
-      setPos(textStyle().offset(spatium()));
+//      setPos(textStyle().offset(spatium()));
+      setPos(QPointF());
       Text::layout1();
       Segment* s = segment();
       if (s) {
@@ -58,6 +58,20 @@ void RehearsalMark::layout()
                   if (d > 0)
                         setUserOff(QPointF(0.0, -d));
                   }
+            }
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant RehearsalMark::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::SUB_STYLE:
+                  return int(SubStyle::REHEARSAL_MARK);
+            default:
+                  return Text::propertyDefault(id);
             }
       }
 

@@ -103,17 +103,17 @@ QVariant VoltaSegment::propertyDefault(P_ID id) const
 //   propertyStyle
 //---------------------------------------------------------
 
-PropertyStyle VoltaSegment::propertyStyle(P_ID id) const
+PropertyFlags VoltaSegment::propertyFlags(P_ID id) const
       {
       switch (id) {
             case P_ID::VOLTA_TYPE:
-                  return PropertyStyle::NOSTYLE;
+                  return PropertyFlags::NOSTYLE;
 
             case P_ID::LINE_WIDTH:
-                  return volta()->propertyStyle(id);
+                  return volta()->propertyFlags(id);
 
             default:
-                  return TextLineBaseSegment::propertyStyle(id);
+                  return TextLineBaseSegment::propertyFlags(id);
             }
       }
 
@@ -152,7 +152,7 @@ void VoltaSegment::styleChanged()
 Volta::Volta(Score* s)
    : TextLineBase(s)
       {
-      setBeginText("1.", TextStyleType::VOLTA);
+      setBeginText("1.", SubStyle::VOLTA);
 
       setBeginTextPlace(PlaceText::BELOW);
       setContinueTextPlace(PlaceText::BELOW);
@@ -199,7 +199,7 @@ void Volta::undoSetVoltaType(Type val)
 
 void Volta::setText(const QString& s)
       {
-      setBeginText(s, TextStyleType::VOLTA);
+      setBeginText(s, SubStyle::VOLTA);
       }
 
 //---------------------------------------------------------
@@ -236,7 +236,7 @@ void Volta::read(XmlReader& e)
                   }
             else if (tag == "lineWidth") {
                   setLineWidth(Spatium(e.readDouble()));
-                  lineWidthStyle = PropertyStyle::UNSTYLED;
+                  lineWidthStyle = PropertyFlags::UNSTYLED;
                   }
             else if (tag == "subtype") {  // obsolete
                   int st = e.readInt();
@@ -319,11 +319,11 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
                   setEndings(val.value<QList<int>>());
                   break;
             case P_ID::LINE_WIDTH:
-                  lineWidthStyle = PropertyStyle::UNSTYLED;
+                  lineWidthStyle = PropertyFlags::UNSTYLED;
                   setLineWidth(val.value<Spatium>());
                   break;
             case P_ID::LINE_STYLE:
-                  lineStyleStyle = PropertyStyle::UNSTYLED;
+                  lineStyleStyle = PropertyFlags::UNSTYLED;
                   setLineStyle(Qt::PenStyle(val.toInt()));
                   break;
             default:
@@ -368,8 +368,8 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
             case P_ID::END_HOOK_HEIGHT:
                   return score()->styleV(StyleIdx::voltaHook);
 
-            case P_ID::TEXT_STYLE_TYPE:
-                  return int(TextStyleType::VOLTA);
+            case P_ID::SUB_STYLE:
+                  return int(SubStyle::VOLTA);
 
             default:
                   return TextLineBase::propertyDefault(propertyId);
@@ -387,20 +387,20 @@ void Volta::setYoff(qreal val)
       }
 
 //---------------------------------------------------------
-//   propertyStyle
+//   propertyFlags
 //---------------------------------------------------------
 
-PropertyStyle Volta::propertyStyle(P_ID id) const
+PropertyFlags Volta::propertyFlags(P_ID id) const
       {
       switch (id) {
             case P_ID::VOLTA_TYPE:
-                  return PropertyStyle::NOSTYLE;
+                  return PropertyFlags::NOSTYLE;
 
             case P_ID::LINE_WIDTH:
                   return lineWidthStyle;
 
             default:
-                  return TextLineBase::propertyStyle(id);
+                  return TextLineBase::propertyFlags(id);
             }
       }
 
@@ -417,12 +417,12 @@ void Volta::resetProperty(P_ID id)
 
             case P_ID::LINE_WIDTH:
                   setProperty(id, propertyDefault(id));
-                  lineWidthStyle = PropertyStyle::STYLED;
+                  lineWidthStyle = PropertyFlags::STYLED;
                   break;
 
             case P_ID::LINE_STYLE:
                   setProperty(id, propertyDefault(id));
-                  lineStyleStyle = PropertyStyle::STYLED;
+                  lineStyleStyle = PropertyFlags::STYLED;
                   break;
 
             default:
@@ -437,9 +437,9 @@ void Volta::resetProperty(P_ID id)
 
 void Volta::styleChanged()
       {
-      if (lineWidthStyle == PropertyStyle::STYLED)
+      if (lineWidthStyle == PropertyFlags::STYLED)
             setLineWidth(score()->styleS(StyleIdx::voltaLineWidth));
-      if (lineStyleStyle == PropertyStyle::STYLED)
+      if (lineStyleStyle == PropertyFlags::STYLED)
             setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::voltaLineStyle)));
       }
 
@@ -449,8 +449,8 @@ void Volta::styleChanged()
 
 void Volta::reset()
       {
-      if (lineWidthStyle == PropertyStyle::UNSTYLED)
-            undoChangeProperty(P_ID::LINE_WIDTH, propertyDefault(P_ID::LINE_WIDTH), PropertyStyle::STYLED);
+      if (lineWidthStyle == PropertyFlags::UNSTYLED)
+            undoChangeProperty(P_ID::LINE_WIDTH, propertyDefault(P_ID::LINE_WIDTH), PropertyFlags::STYLED);
       TextLineBase::reset();
       }
 

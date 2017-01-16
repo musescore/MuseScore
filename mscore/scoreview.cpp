@@ -5410,11 +5410,11 @@ void ScoreView::cmdAddText(TEXT type)
                         measure = _score->insertMeasure(Element::Type::VBOX, measure);
                   s = new Text(_score);
                   switch(type) {
-                        case TEXT::TITLE:    s->setTextStyleType(TextStyleType::TITLE);    break;
-                        case TEXT::SUBTITLE: s->setTextStyleType(TextStyleType::SUBTITLE); break;
-                        case TEXT::COMPOSER: s->setTextStyleType(TextStyleType::COMPOSER); break;
-                        case TEXT::POET:     s->setTextStyleType(TextStyleType::POET);     break;
-                        case TEXT::PART:     s->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT); break;
+                        case TEXT::TITLE:    s->initSubStyle(SubStyle::TITLE);    break;
+                        case TEXT::SUBTITLE: s->initSubStyle(SubStyle::SUBTITLE); break;
+                        case TEXT::COMPOSER: s->initSubStyle(SubStyle::COMPOSER); break;
+                        case TEXT::POET:     s->initSubStyle(SubStyle::POET);     break;
+                        case TEXT::PART:     s->initSubStyle(SubStyle::INSTRUMENT_EXCERPT); break;
                         default: /* can't happen, but need to keep compiler happy */ break;
                         }
                   s->setParent(measure);
@@ -5441,11 +5441,11 @@ void ScoreView::cmdAddText(TEXT type)
                   s = new StaffText(_score);
                   if (type == TEXT::SYSTEM) {
                         s->setTrack(0);
-                        s->setTextStyleType(TextStyleType::SYSTEM);
+                        s->initSubStyle(SubStyle::SYSTEM);
                         }
                   else {
                         s->setTrack(cr->track());
-                        s->setTextStyleType(TextStyleType::STAFF);
+                        s->initSubStyle(SubStyle::STAFF);
                         }
                   s->setParent(cr->segment());
                   }
@@ -5457,7 +5457,7 @@ void ScoreView::cmdAddText(TEXT type)
                         break;
                   s = new StaffText(_score);
                   s->setTrack(cr->track());
-                  s->setTextStyleType(TextStyleType::EXPRESSION);
+                  s->initSubStyle(SubStyle::EXPRESSION);
                   s->setPlacement(Element::Placement::BELOW);
                   s->setParent(cr->segment());
                   }
@@ -5469,7 +5469,6 @@ void ScoreView::cmdAddText(TEXT type)
                         break;
                   s = new InstrumentChange(_score);
                   s->setTrack(cr->track());
-                  s->setTextStyleType(TextStyleType::INSTRUMENT_CHANGE);
                   s->setParent(cr->segment());
                   }
                   break;

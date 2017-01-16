@@ -268,6 +268,30 @@ void XmlWriter::tag(P_ID id, QVariant data, QVariant defaultData)
             case P_TYPE::HEAD_TYPE:
                   tag(name, NoteHead::type2name(NoteHead::Type(data.toInt())));
                   break;
+            case P_TYPE::SUB_STYLE:
+                  tag(name, subStyleName(SubStyle(data.toInt())));
+                  break;
+            case P_TYPE::ALIGN: {
+                  Align a = Align(data.toInt());
+                  const char* h;
+                  if (a & Align::HCENTER)
+                        h = "center";
+                  else if (a & Align::RIGHT)
+                        h = "right";
+                  else
+                        h = "left";
+                  const char* v;
+                  if (a & Align::BOTTOM)
+                        v = "bottom";
+                  else if (a & Align::VCENTER)
+                        v = "center";
+                  else if (a & Align::BASELINE)
+                        v = "baseline";
+                  else
+                        v = "top";
+                  tag(name, QString("%1,%2").arg(h).arg(v));
+                  }
+                  break;
             default:
                   Q_ASSERT(false);
             }

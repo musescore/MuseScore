@@ -14,7 +14,6 @@
 #define __SIMPLETEXT_H__
 
 #include "element.h"
-#include "textstyle.h"
 #include "elementlayout.h"
 
 namespace Ms {
@@ -80,7 +79,7 @@ class TextCursor {
       int _selectColumn  { 0 };
 
    public:
-      TextCursor() {}
+      TextCursor(Text* t) : _text(t) {}
 
       bool hasSelection() const { return (_selectLine != _line) || (_selectColumn != _column); }
       void clearSelection();
@@ -98,7 +97,7 @@ class TextCursor {
       void setSelectColumn(int val) { _selectColumn = val; }
       void setText(Text* t)         { _text = t; }
       int columns() const;
-      void initFromStyle(const TextStyle& s);
+      void init();
       };
 
 class Text;
@@ -179,29 +178,52 @@ class TextBlock {
 ///    Graphic representation of a text.
 //
 //   @P text           string  the raw text
-//   @P textStyleType  enum   (TextStyleType.DEFAULT, .TITLE, .SUBTITLE, .COMPOSER, .POET, .LYRIC1, .LYRIC2, .FINGERING, .LH_GUITAR_FINGERING, .RH_GUITAR_FINGERING, .STRING_NUMBER, .INSTRUMENT_LONG, .INSTRUMENT_SHORT, .INSTRUMENT_EXCERPT, .DYNAMICS, .EXPRESSION, .TEMPO, .METRONOME, .MEASURE_NUMBER, .TRANSLATOR, .TUPLET, .SYSTEM, .STAFF, .HARMONY, .REHEARSAL_MARK, .REPEAT_LEFT, .REPEAT_RIGHT, .VOLTA, .FRAME, .TEXTLINE, .GLISSANDO, .OTTAVA, .PEDAL, .HAIRPIN, .BEND, .HEADER, .FOOTER, .INSTRUMENT_CHANGE, .FIGURED_BASS)
 //---------------------------------------------------------
 
 class Text : public Element {
       Q_OBJECT
 
-      Q_PROPERTY(QString text READ xmlText WRITE undoSetText)
-//      Q_PROPERTY(Ms::MSQE_TextStyleType::E textStyleType READ qmlTextStyleType WRITE qmlUndoSetTextStyleType)
+#define PROP(a,b,c)                \
+      a _ ## b;                           \
+      PropertyFlags _ ## b ## Style { PropertyFlags::STYLED }; \
+      public:                        \
+      const a& b() const   { return _ ## b;    } \
+      void c(const a& val) { _ ## b = val; }     \
+      private:
 
-//      Q_ENUMS(Ms::MSQE_TextStyleType::E)
+      PROP(QString, family,                 setFamily)
+      PROP(qreal,   size,                   setSize)
+      PROP(bool,    bold,                   setBold)
+      PROP(bool,    italic,                 setItalic)
+      PROP(bool,    underline,              setUnderline)
+      PROP(QColor,  bgColor,                setBgColor)
+      PROP(QColor,  frameColor,             setFrameColor)
+      PROP(Align,   align,                  setAlign)
+      PROP(bool,    hasFrame,               setHasFrame)
+      PROP(bool,    circle,                 setCircle)
+      PROP(bool,    square,                 setSquare)
+      PROP(bool,    sizeIsSpatiumDependent, setSizeIsSpatiumDependent)
+      PROP(Spatium, frameWidth,             setFrameWidth)
+      PROP(Spatium, paddingWidth,           setPaddingWidth)
+      PROP(int,     frameRound,             setFrameRound)
+      PROP(QPointF, offset,                 setOffset)            // inch or spatium
+      PROP(OffsetType, offsetType,          setOffsetType)
+#undef PROP
+
+      bool _systemFlag              { false };
+
+      SubStyle _subStyle;
 
       QString _text;
       QString oldText;      // used to remember original text in edit mode
       QString preEdit;
       QList<TextBlock> _layout;
-      TextStyleType _styleIndex;
 
       bool _layoutToParentWidth     { false };
       bool _editMode                { false };
       int  hexState                 { -1    };
-      TextStyle _textStyle;
 
-      TextCursor* _cursor;       // used during editing
+      TextCursor* _cursor           { 0     };       // used during editing
 
       QRectF cursorRect() const;
       const TextBlock& curLine() const;
@@ -217,9 +239,12 @@ class Text : public Element {
       void editInsertText(const QString&);
       QChar currentCharacter() const;
 
+      void setPropertyFlags(P_ID, PropertyFlags);
+      PropertyFlags* propertyFlagsP(P_ID id);
+
    protected:
+
       QColor textColor() const;
-      QColor frameColor() const;
       QRectF frame;           // calculated in layout()
       void layoutFrame();
       void layoutEdit();
@@ -228,8 +253,13 @@ class Text : public Element {
 
    public:
       Text(Score* = 0);
+      Text(SubStyle, Score* = 0);
       Text(const Text&);
       ~Text();
+
+      SubStyle subStyle() const                    { return _subStyle; }
+      void setSubStyle(SubStyle ss)                { _subStyle = ss;   }
+      virtual void initSubStyle(SubStyle) override;
 
       virtual Text* clone() const override         { return new Text(*this); }
       virtual Element::Type type() const override  { return Element::Type::TEXT; }
@@ -238,26 +268,15 @@ class Text : public Element {
       Text &operator=(const Text&) = delete;
 
       virtual void draw(QPainter*) const override;
-      virtual void setColor(const QColor& c) override;
-      virtual QColor color() const             { return _textStyle.foregroundColor(); }
-
-      virtual void setTextStyle(const TextStyle& st);
-      const TextStyle& textStyle() const      { return _textStyle; }
-      TextStyle& textStyle()                  { return _textStyle; }
-      TextStyleType textStyleType() const     { return _styleIndex; }
-      void setTextStyleType(TextStyleType);
-      void restyle(TextStyleType);
-
-      Align align() const { return _textStyle.align(); }
-
-//      Ms::MSQE_TextStyleType::E qmlTextStyleType() const { return static_cast<Ms::MSQE_TextStyleType::E>(_styleIndex); }
-//      void qmlUndoSetTextStyleType(Ms::MSQE_TextStyleType::E st) { undoChangeProperty(P_ID::TEXT_STYLE_TYPE, int(st)); }
 
       void setPlainText(const QString&);
       void setXmlText(const QString&);
       QString xmlText() const                 { return _text; }
       QString plainText(bool noSym = false) const;
       void insertText(const QString&);
+
+      virtual bool systemFlag() const override  { return _systemFlag; }
+      void setSystemFlag(bool val)            { _systemFlag = val; }
 
       bool editMode() const                   { return _editMode; }
 
@@ -296,8 +315,6 @@ class Text : public Element {
       void insertSym(SymId);
       void selectAll();
 
-      virtual bool systemFlag() const     { return textStyle().systemFlag(); }
-
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void writeProperties(XmlWriter& xml) const { writeProperties(xml, true, true); }
@@ -314,14 +331,9 @@ class Text : public Element {
 
       TextCursor* cursor() { return _cursor; }
 
-      void setAbove(bool val) {  textStyle().setYoff(val ? -2.0 : 7.0); }
       void dragTo(const QPointF&);
 
       virtual QLineF dragAnchor() const override;
-
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
-      virtual QVariant propertyDefault(P_ID id) const override;
 
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
@@ -347,12 +359,22 @@ class Text : public Element {
       void endHexState();
       void inputTransition(QInputMethodEvent*);
 
+      QFont font() const;
+      QFontMetricsF fontMetrics() const;
+
+
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual PropertyFlags propertyFlags(P_ID) const override;
+      virtual void resetProperty(P_ID id) override;
+      virtual StyleIdx getPropertyStyle(P_ID) const override;
+      virtual void reset() override;
+
       friend class TextCursor;
       };
 
 
 }     // namespace Ms
-
-// Q_DECLARE_METATYPE(Ms::MSQE_TextStyleType::E);
 
 #endif

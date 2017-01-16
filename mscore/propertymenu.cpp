@@ -25,8 +25,6 @@
 #include "lineproperties.h"
 #include "tremolobarprop.h"
 #include "timesigproperties.h"
-#include "textstyledialog.h"
-#include "textproperties.h"
 #include "sectionbreakprop.h"
 #include "stafftextproperties.h"
 #include "fretproperties.h"
@@ -115,8 +113,8 @@ void ScoreView::genPropertyMenuText(Element* e, QMenu* popup)
                   }
             popup->addMenu(menuLayer);
             }
-      popup->addAction(tr("Text Style..."))->setData("text-style");
-      popup->addAction(tr("Text Properties..."))->setData("text-props");
+//      popup->addAction(tr("Text Style..."))->setData("text-style");
+//      popup->addAction(tr("Text Properties..."))->setData("text-props");
       }
 
 //---------------------------------------------------------
@@ -203,8 +201,8 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   }
             }
       else if (e->type() == Element::Type::DYNAMIC) {
-            popup->addAction(tr("Text Style..."))->setData("text-style");
-            popup->addAction(tr("Text Properties..."))->setData("text-props");
+//            popup->addAction(tr("Text Style..."))->setData("text-style");
+//            popup->addAction(tr("Text Properties..."))->setData("text-props");
             }
       else if (e->type() == Element::Type::TEXTLINE_SEGMENT
          || e->type() == Element::Type::OTTAVA_SEGMENT
@@ -231,12 +229,12 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::Type::HARMONY) {
             genPropertyMenu1(e, popup);
-            popup->addAction(tr("Text Style..."))->setData("text-style");
+//            popup->addAction(tr("Text Style..."))->setData("text-style");
             }
       else if (e->type() == Element::Type::TEMPO_TEXT) {
             genPropertyMenu1(e, popup);
-            popup->addAction(tr("Text Style..."))->setData("text-style");
-            popup->addAction(tr("Text Properties..."))->setData("text-props");
+//            popup->addAction(tr("Text Style..."))->setData("text-style");
+//            popup->addAction(tr("Text Properties..."))->setData("text-props");
             }
       else if (e->type() == Element::Type::KEYSIG) {
             genPropertyMenu1(e, popup);
@@ -249,8 +247,8 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   }
             }
       else if (e->type() == Element::Type::STAFF_STATE && static_cast<StaffState*>(e)->staffStateType() == StaffStateType::INSTRUMENT) {
-            popup->addAction(tr("Text Style..."))->setData("text-style");
-            popup->addAction(tr("Text Properties..."))->setData("text-props");
+//            popup->addAction(tr("Text Style..."))->setData("text-style");
+//            popup->addAction(tr("Text Properties..."))->setData("text-props");
             popup->addAction(tr("Change Instrument Properties..."))->setData("ss-props");
             }
       else if (e->type() == Element::Type::SLUR_SEGMENT) {
@@ -305,15 +303,15 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::Type::INSTRUMENT_CHANGE) {
             genPropertyMenu1(e, popup);
-            popup->addAction(tr("Text Style..."))->setData("text-style");
-            popup->addAction(tr("Text Properties..."))->setData("text-props");
+//            popup->addAction(tr("Text Style..."))->setData("text-style");
+//            popup->addAction(tr("Text Properties..."))->setData("text-props");
             popup->addAction(tr("Change Instrument..."))->setData("ch-instr");
             }
       else if (e->type() == Element::Type::FRET_DIAGRAM) {
             popup->addAction(tr("Fretboard Diagram Properties..."))->setData("fret-props");
             }
       else if (e->type() == Element::Type::INSTRUMENT_NAME) {
-            popup->addAction(tr("Text Style..."))->setData("text-style");
+//            popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Staff Properties..."))->setData("staff-props");
             }
       else
@@ -347,48 +345,42 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             mscore->addImage(score(), static_cast<HBox*>(e));
             }
       else if (cmd == "frame-text") {
-            Text* t = new Text(score());
-            t->setTextStyleType(TextStyleType::FRAME);
+            Text* t = new Text(SubStyle::FRAME, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "title-text") {
-            Text* t = new Text(score());
-            t->setTextStyleType(TextStyleType::TITLE);
+            Text* t = new Text(SubStyle::TITLE, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "subtitle-text") {
-            Text* t = new Text(score());
-            t->setTextStyleType(TextStyleType::SUBTITLE);
+            Text* t = new Text(SubStyle::SUBTITLE, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "composer-text") {
-            Text* t = new Text(score());
-            t->setTextStyleType(TextStyleType::COMPOSER);
+            Text* t = new Text(SubStyle::COMPOSER, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "poet-text") {
-            Text* t = new Text(score());
-            t->setTextStyleType(TextStyleType::POET);
+            Text* t = new Text(SubStyle::POET, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "part-text") {
-            Text* t = new Text(score());
-            t->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT);
+            Text* t = new Text(SubStyle::INSTRUMENT_EXCERPT, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
@@ -451,6 +443,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   score->setPlaylistDirty();
                   }
             }
+#if 0
       else if (cmd == "text-style") {
             Text* t = static_cast<Text*>(e);
             QString name = t->textStyle().name();
@@ -465,17 +458,18 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             int rv = tp.exec();
             if (rv) {
                   qDebug("text-props %d %d", int(ot->textStyleType()), int(nText->textStyleType()));
-                  if (ot->textStyleType() != nText->textStyleType()) {
-                        nText->restyle(ot->textStyleType());
-                        ot->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, int(nText->textStyleType()));
-                        }
-                  if (ot->textStyle() != nText->textStyle())
-                        ot->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue<TextStyle>(nText->textStyle()));
+//                  if (ot->textStyleType() != nText->textStyleType()) {
+//                        nText->restyle(ot->textStyleType());
+//                        ot->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, int(nText->textStyleType()));
+//                        }
+//                  if (ot->textStyle() != nText->textStyle())
+//                        ot->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue<TextStyle>(nText->textStyle()));
                   if (ot->xmlText() != nText->xmlText())
                         ot->undoChangeProperty(P_ID::TEXT, nText->xmlText());
                   }
             delete nText;
             }
+#endif
       else if (cmd == "key-courtesy") {
             KeySig* ks = static_cast<KeySig*>(e);
             score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), !ks->showCourtesy() /*, ks->showNaturals()*/));

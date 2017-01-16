@@ -48,7 +48,7 @@ QJsonObject ScoreFont::_glyphnamesJson;
 //---------------------------------------------------------
 
 QHash<QString, SymId> Sym::lnhash;
-QVector<const char*> Sym::symNames = {
+const std::array<const char*, int(SymId::lastSym)+1> Sym::symNames = {
       "noSym",
       "4stringTabClef",
       "6stringTabClef",
@@ -2679,7 +2679,7 @@ QVector<const char*> Sym::symNames = {
       "space"
       };
 
-QVector<QString> Sym::symUserNames = {
+const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = {
       QT_TRANSLATE_NOOP("symUserNames", "No symbol"),
       "4-string tab clef",
       "6-string tab clef",
@@ -5589,8 +5589,12 @@ QVector<oldName> oldNames = {
 
 SymId Sym::userName2id(const QString& s)
       {
-      int val = symUserNames.indexOf(s);
-      return (val == -1) ? SymId::noSym : (SymId)(val);
+      int idx = 0;
+      for (const char* a : symUserNames) {
+            if (strcmp(a, qPrintable(s)) == 0)
+                  return SymId(idx);
+            }
+      return SymId::noSym;
       }
 
 //---------------------------------------------------------

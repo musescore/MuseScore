@@ -331,8 +331,6 @@ Score::FileError MasterScore::read300(XmlReader& e)
                   revisions()->add(revision);
                   }
             }
-      for (MasterScore* ms : *_movements)
-            printf("=====%p %p %p\n", ms, ms->prev(), ms->next());
       return FileError::FILE_NO_ERROR;
       }
 

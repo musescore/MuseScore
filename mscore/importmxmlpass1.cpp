@@ -26,6 +26,7 @@
 #include "libmscore/sym.h"
 #include "libmscore/symbol.h"
 #include "libmscore/timesig.h"
+#include "libmscore/style.h"
 
 #include "importmxmlpass1.h"
 #include "importmxmlpass2.h"
@@ -598,14 +599,13 @@ static void determineMeasureStart(const QVector<Fraction>& ml, QVector<Fraction>
 //---------------------------------------------------------
 
 /**
- Add text \a strTxt to VBox \a vbx using TextStyleType \a stl.
+ Add text \a strTxt to VBox \a vbx using SubStyle \a stl.
  */
 
-static void addText(VBox* vbx, Score* s, QString strTxt, TextStyleType stl)
+static void addText(VBox* vbx, Score* s, QString strTxt, SubStyle stl)
       {
       if (!strTxt.isEmpty()) {
-            Text* text = new Text(s);
-            text->setTextStyleType(stl);
+            Text* text = new Text(stl, s);
             text->setXmlText(strTxt);
             vbx->add(text);
             }
@@ -616,18 +616,17 @@ static void addText(VBox* vbx, Score* s, QString strTxt, TextStyleType stl)
 //---------------------------------------------------------
 
 /**
- Add text \a strTxt to VBox \a vbx using TextStyleType \a stl.
+ Add text \a strTxt to VBox \a vbx using SubStyle \a stl.
  Also sets Align and Yoff.
  */
 
-static void addText2(VBox* vbx, Score* s, QString strTxt, TextStyleType stl, Align v, double yoffs)
+static void addText2(VBox* vbx, Score* s, QString strTxt, SubStyle stl, Align v, double yoffs)
       {
       if (!strTxt.isEmpty()) {
-            Text* text = new Text(s);
-            text->setTextStyleType(stl);
+            Text* text = new Text(stl, s);
             text->setXmlText(strTxt);
-            text->textStyle().setAlign(v);
-            text->textStyle().setYoff(yoffs);
+            text->setAlign(v);
+            text->setOffset(QPointF(0.0, yoffs));
             vbx->add(text);
             }
       }
@@ -737,14 +736,14 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                   if (pw2 < defx) {
                         // found composer
                         addText2(vbox, score, w->words,
-                                 TextStyleType::COMPOSER, Align::RIGHT | Align::BOTTOM,
+                                 SubStyle::COMPOSER, Align::RIGHT | Align::BOTTOM,
                                  (miny - w->defaultY) * score->spatium() / (10 * DPI));
                         }
                   // poet is in the left column
                   else if (defx < pw1) {
                         // found poet
                         addText2(vbox, score, w->words,
-                                 TextStyleType::POET, Align::LEFT | Align::BOTTOM,
+                                 SubStyle::POET, Align::LEFT | Align::BOTTOM,
                                  (miny - w->defaultY) * score->spatium() / (10 * DPI));
                         }
                   // save others (in the middle column) to be handled later
@@ -787,7 +786,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             CreditWords* w = creditMap.value(keys.at(keys.size() - 1));
             //qDebug("title='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
-                     TextStyleType::TITLE, Align::HCENTER | Align::TOP,
+                     SubStyle::TITLE, Align::HCENTER | Align::TOP,
                      (maxy - w->defaultY) * score->spatium() / (10 * DPI));
             }
 
@@ -796,7 +795,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             CreditWords* w = creditMap.value(keys.at(i));
             //qDebug("subtitle='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
-                     TextStyleType::SUBTITLE, Align::HCENTER | Align::TOP,
+                     SubStyle::SUBTITLE, Align::HCENTER | Align::TOP,
                      (maxy - w->defaultY) * score->spatium() / (10 * DPI));
             }
 
@@ -826,11 +825,11 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             if (!metaPoet.isEmpty()) strPoet = metaPoet;
             if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
 
-            addText(vbox, score, strTitle.toHtmlEscaped(),      TextStyleType::TITLE);
-            addText(vbox, score, strSubTitle.toHtmlEscaped(),   TextStyleType::SUBTITLE);
-            addText(vbox, score, strComposer.toHtmlEscaped(),   TextStyleType::COMPOSER);
-            addText(vbox, score, strPoet.toHtmlEscaped(),       TextStyleType::POET);
-            addText(vbox, score, strTranslator.toHtmlEscaped(), TextStyleType::TRANSLATOR);
+            addText(vbox, score, strTitle.toHtmlEscaped(),      SubStyle::TITLE);
+            addText(vbox, score, strSubTitle.toHtmlEscaped(),   SubStyle::SUBTITLE);
+            addText(vbox, score, strComposer.toHtmlEscaped(),   SubStyle::COMPOSER);
+            addText(vbox, score, strPoet.toHtmlEscaped(),       SubStyle::POET);
+            addText(vbox, score, strTranslator.toHtmlEscaped(), SubStyle::TRANSLATOR);
             }
 
       if (vbox) {
@@ -1287,23 +1286,23 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
 static bool mustSetSize(const int i)
       {
       return
-            i == int(TextStyleType::TITLE)
-            || i == int(TextStyleType::SUBTITLE)
-            || i == int(TextStyleType::COMPOSER)
-            || i == int(TextStyleType::POET)
-            || i == int(TextStyleType::INSTRUMENT_LONG)
-            || i == int(TextStyleType::INSTRUMENT_SHORT)
-            || i == int(TextStyleType::INSTRUMENT_EXCERPT)
-            || i == int(TextStyleType::TEMPO)
-            || i == int(TextStyleType::METRONOME)
-            || i == int(TextStyleType::TRANSLATOR)
-            || i == int(TextStyleType::SYSTEM)
-            || i == int(TextStyleType::STAFF)
-            || i == int(TextStyleType::REPEAT_LEFT)
-            || i == int(TextStyleType::REPEAT_RIGHT)
-            || i == int(TextStyleType::TEXTLINE)
-            || i == int(TextStyleType::GLISSANDO)
-            || i == int(TextStyleType::INSTRUMENT_CHANGE);
+            i == int(SubStyle::TITLE)
+            || i == int(SubStyle::SUBTITLE)
+            || i == int(SubStyle::COMPOSER)
+            || i == int(SubStyle::POET)
+            || i == int(SubStyle::INSTRUMENT_LONG)
+            || i == int(SubStyle::INSTRUMENT_SHORT)
+            || i == int(SubStyle::INSTRUMENT_EXCERPT)
+            || i == int(SubStyle::TEMPO)
+            || i == int(SubStyle::METRONOME)
+            || i == int(SubStyle::TRANSLATOR)
+            || i == int(SubStyle::SYSTEM)
+            || i == int(SubStyle::STAFF)
+            || i == int(SubStyle::REPEAT_LEFT)
+            || i == int(SubStyle::REPEAT_RIGHT)
+            || i == int(SubStyle::TEXTLINE)
+            || i == int(SubStyle::GLISSANDO)
+            || i == int(SubStyle::INSTRUMENT_CHANGE);
       }
 
 //---------------------------------------------------------
@@ -1323,17 +1322,31 @@ static void updateStyles(Score* score,
 
       // loop over all text styles (except the empty, always hidden, first one)
       // set all text styles to the MusicXML defaults
-      for (int i = int(TextStyleType::DEFAULT) + 1; i < int(TextStyleType::TEXT_STYLES); ++i) {
+#if 0 // TODO:ws
+      for (int i = int(SubStyle::DEFAULT) + 1; i < int(SubStyle::TEXT_STYLES); ++i) {
             TextStyle ts = score->style().textStyle(TextStyleType(i));
-            if (i == int(TextStyleType::LYRIC1) || i == int(TextStyleType::LYRIC2)) {
-                  if (lyricFamily != "") ts.setFamily(lyricFamily);
-                  if (fLyricSize > 0.001) ts.setSize(fLyricSize);
+            if (i == int(SubStyle::LYRIC1) || i == int(SubStyle::LYRIC2)) {
+                  if (lyricFamily != "")
+                        ts.setFamily(lyricFamily);
+                  if (fLyricSize > 0.001)
+                        ts.setSize(fLyricSize);
                   }
             else {
-                  if (wordFamily != "") ts.setFamily(wordFamily);
-                  if (fWordSize > 0.001 && mustSetSize(i)) ts.setSize(fWordSize);
+                  if (wordFamily != "")
+                        ts.setFamily(wordFamily);
+                  if (fWordSize > 0.001 && mustSetSize(i))
+                        ts.setSize(fWordSize);
                   }
             score->style().setTextStyle(ts);
+            }
+#endif
+      if (lyricFamily != "") {
+            score->style().set(StyleIdx::lyricsOddFontFace, lyricFamily);
+            score->style().set(StyleIdx::lyricsEvenFontFace, lyricFamily);
+            }
+      if (fLyricSize > 0.001) {
+            score->style().set(StyleIdx::lyricsOddFontSize, fLyricSize);
+            score->style().set(StyleIdx::lyricsEvenFontSize, fLyricSize);
             }
       }
 

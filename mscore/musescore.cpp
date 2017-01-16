@@ -22,7 +22,6 @@
 #include "preferences.h"
 #include "prefsdialog.h"
 #include "icons.h"
-#include "textstyledialog.h"
 #include "libmscore/xml.h"
 #include "seq.h"
 #include "libmscore/tempo.h"
@@ -942,7 +941,7 @@ MuseScore::MuseScore()
       menuView->addSeparator();
 
       menuToolbars = new QMenu();
-            
+
       a = getAction("toggle-fileoperations");
       a->setCheckable(true);
       a->setChecked(fileTools->isVisible());
@@ -1117,7 +1116,7 @@ MuseScore::MuseScore()
       menuFormat->setObjectName("Format");
 
       menuFormat->addAction(getAction("edit-style"));
-      menuFormat->addAction(getAction("edit-text-style"));
+//      menuFormat->addAction(getAction("edit-text-style"));
       menuFormat->addAction(getAction("page-settings"));
       menuFormat->addSeparator();
 
@@ -3383,7 +3382,7 @@ void MuseScore::readSettings()
 
       a = getAction("toggle-imagecapture");
       a->setChecked(!fotoTools->isHidden());
-            
+
       a = getAction("toggle-noteinput");
       a->setChecked(!entryTools->isHidden());
       }
@@ -4854,10 +4853,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             EditStyle es(cs, this);
             es.exec();
             }
-      else if (cmd == "edit-text-style") {
-            TextStyleDialog es(0, cs);
-            es.exec();
-            }
+//      else if (cmd == "edit-text-style") {
+//            TextStyleDialog es(0, cs);
+//            es.exec();
+//            }
       else if (cmd == "edit-info") {
             MetaEditDialog med(cs, 0);
             med.exec();
@@ -5323,6 +5322,7 @@ int main(int argc, char* av[])
 #ifndef NDEBUG
       qSetMessagePattern("%{file}:%{function}: %{message}");
       checkProperties();
+      Ms::checkStyles();
 #endif
 
       QApplication::setDesktopSettingsAware(true);

@@ -77,7 +77,6 @@ bool MScore::useFallbackFont       = true;
 bool  MScore::saveTemplateMode = false;
 bool  MScore::noGui = false;
 
-MStyle  MScore::_defaultStyle;
 MStyle  MScore::_defaultStyleForParts;
 MStyle  MScore::_baseStyle;
 QString MScore::_globalShare;
@@ -198,8 +197,8 @@ void Direction::fillComboBox(QComboBox* cb)
       cb->addItem(qApp->translate("Direction", "down"), int(DOWN));
       }
 
-static Spatium doubleToSpatium(double d)       { return Spatium(d); }
-static TextStyleType intToTextStyleType(int i) { return TextStyleType(i); }
+static Spatium doubleToSpatium(double d) { return Spatium(d); }
+// static SubStyle intToSubStyle(int i)     { return SubStyle(i); }
 
 //---------------------------------------------------------
 //   init
@@ -210,9 +209,9 @@ void MScore::init()
       if (!QMetaType::registerConverter<Spatium, double>(&Spatium::toDouble))
             qFatal("registerConverter Spatium::toDouble failed");
       if (!QMetaType::registerConverter<double, Spatium>(&doubleToSpatium))
-            qFatal("registerConverter douobleToSpatium failed");
-      if (!QMetaType::registerConverter<int, TextStyleType>(&intToTextStyleType))
-            qFatal("registerConverter intToTextStyleType failed");
+            qFatal("registerConverter doubleToSpatium failed");
+//      if (!QMetaType::registerConverter<int, SubStyle>(&intToSubStyle))
+//            qFatal("registerConverter intToSubStyle failed");
 
 #ifdef SCRIPT_INTERFACE
       qRegisterMetaType<Element::Type>     ("ElementType");
@@ -242,7 +241,7 @@ void MScore::init()
       qRegisterMetaType<Glissando::Type>("GlissandoType");
 
       //classed enumerations
-//      qRegisterMetaType<MSQE_TextStyleType::E>("TextStyleType");
+//      qRegisterMetaType<MSQE_StyledPropertyListIdx::E>("StyledPropertyListIdx");
 //      qRegisterMetaType<MSQE_BarLineType::E>("BarLineType");
 #endif
       qRegisterMetaType<Fraction>("Fraction");
@@ -289,7 +288,6 @@ void MScore::init()
       //
       //  initialize styles
       //
-      Ms::initStyle(&_defaultStyle);
       _baseStyle            = _defaultStyle;
       _defaultStyleForParts = _defaultStyle;
       QSettings s;
@@ -446,7 +444,7 @@ QQmlEngine* MScore::qml()
                "Element", tr("you cannot create an element"));
 
             //classed enumerations
-//            qmlRegisterUncreatableType<MSQE_TextStyleType>("MuseScore", 1, 0, "TextStyleType", tr("You can't create an enum"));
+//            qmlRegisterUncreatableType<MSQE_StyledPropertyListIdx>("MuseScore", 1, 0, "StyledPropertyListIdx", tr("You can't create an enum"));
 //            qmlRegisterUncreatableType<MSQE_BarLineType>("MuseScore", 1, 0, "BarLineType", tr("You can't create an enum"));
 
             //-----------virtual classes

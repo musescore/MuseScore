@@ -5,16 +5,6 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <offsetType>spatium</offsetType>
-        <name>Chord Symbol</name>
-        <family>FreeSerif</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <systemFlag>1</systemFlag>
-        </TextStyle>
       <page-layout>
         <page-height>1584</page-height>
         <page-width>1224</page-width>
@@ -222,16 +212,6 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <TextStyle>
-          <halign>left</halign>
-          <valign>baseline</valign>
-          <offsetType>spatium</offsetType>
-          <name>Chord Symbol</name>
-          <family>FreeSerif</family>
-          <size>12</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <systemFlag>1</systemFlag>
-          </TextStyle>
         <page-layout>
           <page-height>1683.78</page-height>
           <page-width>1190.55</page-width>
@@ -347,16 +327,6 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <TextStyle>
-          <halign>left</halign>
-          <valign>baseline</valign>
-          <offsetType>spatium</offsetType>
-          <name>Chord Symbol</name>
-          <family>FreeSerif</family>
-          <size>12</size>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <systemFlag>1</systemFlag>
-          </TextStyle>
         <page-layout>
           <page-height>1683.78</page-height>
           <page-width>1190.55</page-width>

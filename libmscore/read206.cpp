@@ -1266,7 +1266,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Segment")
                   segment->read(e);
             else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(score);
+                  Text* noText = new Text(SubStyle::MEASURE_NUMBER, score);
                   noText->read(e);
                   noText->setFlag(ElementFlag::ON_STAFF, true);
                   // noText->setFlag(ElementFlag::MOVABLE, false); ??
@@ -1400,6 +1400,7 @@ static void readStyle(MStyle* style, XmlReader& e)
                   tag = "lyricsPosBelow";
 
             if (tag == "TextStyle") {
+#if 0 // TODO
                   TextStyle s;
                   s.read(e);
                   // convert old 2.0 text styles
@@ -1407,6 +1408,8 @@ static void readStyle(MStyle* style, XmlReader& e)
                   if (s.family() == "MuseJazz")
                         s.setFamily("MuseJazz Text");
                   style->setTextStyle(s);
+#endif
+                  e.skipCurrentElement();
                   }
             else if (tag == "Spatium")
                   style->set(StyleIdx::spatium, e.readDouble() * DPMM);
@@ -1429,8 +1432,9 @@ static void readStyle(MStyle* style, XmlReader& e)
                   chordListTag = true;
                   }
             else {
-                  QString val(e.readElementText());
-                  style->convertToUnit(tag, val);
+//                  QString val(e.readElementText());
+//                  style->convertToUnit(tag, val);
+                  style->readProperties(e);
                   }
             }
 
@@ -1717,6 +1721,7 @@ Score::FileError MasterScore::read206(XmlReader& e)
       for (unsigned int i = 0; i < sizeof(style206)/sizeof(*style206); ++i)
             style().set(style206[i].idx, style206[i].val);
       // old text style default
+#if 0
       TextStyle ts = style().textStyle("Rehearsal Mark");
       ts.setSquare(false);
       ts.setFrameRound(20);
@@ -1724,7 +1729,7 @@ Score::FileError MasterScore::read206(XmlReader& e)
       ts = style().textStyle("Dynamics");
       ts.setItalic(false);
       style().setTextStyle(ts);
-
+#endif
       qDebug("read206");
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());

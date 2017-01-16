@@ -50,7 +50,7 @@ class HairpinSegment : public TextLineBaseSegment {
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
-      virtual PropertyStyle propertyStyle(P_ID) const override;
+      virtual PropertyFlags propertyFlags(P_ID) const override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual Shape shape() const override;
@@ -77,12 +77,12 @@ class Hairpin : public TextLineBase {
       HairpinType _hairpinType;
       int _veloChange;
       Dynamic::Range _dynRange;
-      PropertyStyle lineWidthStyle;
+      PropertyFlags lineWidthStyle;
 
       Spatium _hairpinHeight;
       Spatium _hairpinContHeight;
-      PropertyStyle hairpinHeightStyle;
-      PropertyStyle hairpinContHeightStyle;
+      PropertyFlags hairpinHeightStyle;
+      PropertyFlags hairpinContHeightStyle;
 
       static Spatium editHairpinHeight;
       virtual void startEdit(MuseScoreView*, const QPointF&) override;
@@ -124,7 +124,7 @@ class Hairpin : public TextLineBase {
       virtual QVariant getProperty(P_ID id) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID id) const override;
-      virtual PropertyStyle propertyStyle(P_ID id) const override;
+      virtual PropertyFlags propertyFlags(P_ID id) const override;
       virtual void resetProperty(P_ID id) override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;
 

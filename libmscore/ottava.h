@@ -47,7 +47,7 @@ class OttavaSegment : public TextLineBaseSegment {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
-      virtual PropertyStyle propertyStyle(P_ID) const override;
+      virtual PropertyFlags propertyFlags(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
       };
@@ -75,11 +75,11 @@ class Ottava : public TextLineBase {
    private:
       Type _ottavaType;
       bool _numbersOnly;
-      PropertyStyle numbersOnlyStyle  { PropertyStyle::STYLED };
-      PropertyStyle lineWidthStyle    { PropertyStyle::STYLED };
-      PropertyStyle lineStyleStyle    { PropertyStyle::STYLED };
-      PropertyStyle beginTextStyle    { PropertyStyle::STYLED };
-      PropertyStyle continueTextStyle { PropertyStyle::STYLED };
+      PropertyFlags numbersOnlyStyle  { PropertyFlags::STYLED };
+      PropertyFlags lineWidthStyle    { PropertyFlags::STYLED };
+      PropertyFlags lineStyleStyle    { PropertyFlags::STYLED };
+      PropertyFlags beginTextStyle    { PropertyFlags::STYLED };
+      PropertyFlags continueTextStyle { PropertyFlags::STYLED };
 
       int _pitchShift;
 
@@ -109,13 +109,13 @@ class Ottava : public TextLineBase {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
-      virtual PropertyStyle propertyStyle(P_ID) const override;
+      virtual PropertyFlags propertyFlags(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;
-
-      virtual void setYoff(qreal) override;
       virtual void styleChanged() override;
       virtual void reset() override;
+
+      virtual void setYoff(qreal) override;
 
       virtual QString accessibleInfo() const override;
       };

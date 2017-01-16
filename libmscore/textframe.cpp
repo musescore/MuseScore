@@ -34,10 +34,9 @@ TBox::TBox(Score* score)
    : VBox(score)
       {
       setBoxHeight(Spatium(1));
-      _text  = new Text(score);
+      _text  = new Text(SubStyle::FRAME, score);
       _text->setLayoutToParentWidth(true);
       _text->setParent(this);
-      _text->setTextStyleType(TextStyleType::FRAME);
       }
 
 TBox::TBox(const TBox& tbox)
@@ -119,7 +118,7 @@ Element* TBox::drop(const DropData& data)
                   {
                   Text* t = static_cast<Text*>(e);
                   _text->undoSetText(t->xmlText());
-                  _text->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(t->textStyle()));
+//TODO                  _text->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(t->textStyle()));
                   delete e;
                   return _text;
                   }
@@ -139,7 +138,7 @@ void TBox::add(Element* e)
             // does not normally happen, since drop() handles this directly
             Text* t = static_cast<Text*>(e);
             _text->undoSetText(t->xmlText());
-            _text->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(t->textStyle()));
+//TODO            _text->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(t->textStyle()));
             }
       else {
             VBox::add(e);
@@ -158,10 +157,9 @@ void TBox::remove(Element* el)
             // replace with new empty text element
             // this keeps undo/redo happier than just clearing the text
             qDebug("TBox::remove() - replacing _text");
-            _text = new Text(score());
+            _text = new Text(SubStyle::FRAME, score());
             _text->setLayoutToParentWidth(true);
             _text->setParent(this);
-            _text->setTextStyleType(TextStyleType::FRAME);
            }
       else {
             VBox::remove(el);

@@ -1723,12 +1723,12 @@ void Score::setSelection(const Selection& s)
 //   getText
 //---------------------------------------------------------
 
-Text* Score::getText(TextStyleType subtype)
+Text* Score::getText(SubStyle subStyle)
       {
       MeasureBase* m = first();
       if (m && m->type() == Element::Type::VBOX) {
-            foreach(Element* e, m->el()) {
-                  if (e->type() == Element::Type::TEXT && toText(e)->textStyleType() == subtype)
+            for (Element* e : m->el()) {
+                  if (e->type() == Element::Type::TEXT && toText(e)->subStyle() == subStyle)
                         return toText(e);
                   }
             }
@@ -3366,9 +3366,9 @@ void Score::addText(const QString& type, const QString& txt)
             }
       Text* text = new Text(this);
       if (type == "title")
-            text->setTextStyleType(TextStyleType::TITLE);
+            text->initSubStyle(SubStyle::TITLE);
       else if (type == "subtitle")
-            text->setTextStyleType(TextStyleType::SUBTITLE);
+            text->initSubStyle(SubStyle::SUBTITLE);
       text->setParent(measure);
       text->setXmlText(txt);
       undoAddElement(text);
@@ -3604,7 +3604,7 @@ void Score::setImportedFilePath(const QString& filePath)
 QString Score::title()
       {
       QString fn;
-      Text* t = getText(TextStyleType::TITLE);
+      Text* t = getText(SubStyle::TITLE);
       if (t)
             fn = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
 
@@ -3627,7 +3627,7 @@ QString Score::title()
 QString Score::subtitle()
       {
       QString fn;
-      Text* t = getText(TextStyleType::SUBTITLE);
+      Text* t = getText(SubStyle::SUBTITLE);
       if (t)
             fn = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
 
@@ -3641,7 +3641,7 @@ QString Score::subtitle()
 QString Score::composer()
       {
       QString fn;
-      Text* t = getText(TextStyleType::COMPOSER);
+      Text* t = getText(SubStyle::COMPOSER);
       if (t)
             fn = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
 
@@ -3658,7 +3658,7 @@ QString Score::composer()
 QString Score::poet()
       {
       QString fn;
-      Text* t = getText(TextStyleType::POET);
+      Text* t = getText(SubStyle::POET);
       if (t)
             fn = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
 

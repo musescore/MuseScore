@@ -280,7 +280,7 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorLyric(this);
                               break;
                         case Element::Type::STAFF_TEXT:
-                              ie = new InspectorStafftext(this);
+                              ie = new InspectorStaffText(this);
                               break;
                         case Element::Type::STAFFTYPE_CHANGE:
                               ie = new InspectorStaffTypeChange(this);
@@ -350,9 +350,9 @@ void Inspector::changeEvent(QEvent *event)
 //   setupUi
 //---------------------------------------------------------
 
-void UiInspectorElement::setupUi(QWidget *InspectorElement)
+void UiInspectorElement::setupUi(QWidget* inspectorElement)
       {
-      Ui::InspectorElement::setupUi(InspectorElement);
+      Ui::InspectorElement::setupUi(inspectorElement);
 
       QAction* a = getAction("hraster");
       a->setCheckable(true);
@@ -894,7 +894,6 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
       tt.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
-            { P_ID::TEXT_STYLE_TYPE,   0, 0, t.style,       t.resetStyle       },
             { P_ID::TEMPO,             0, 0, tt.tempo,      tt.resetTempo      },
             { P_ID::TEMPO_FOLLOW_TEXT, 0, 0, tt.followText, tt.resetFollowText }
             };
@@ -905,27 +904,6 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
       mapSignals(il, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       connect(tt.followText, SIGNAL(toggled(bool)), tt.tempo, SLOT(setDisabled(bool)));
-      }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorTempoText::setElement()
-      {
-      Element* e = inspector->element();
-      Score* score = e->score();
-
-      t.style->blockSignals(true);
-      t.style->clear();
-      const QList<TextStyle>& ts = score->style().textStyles();
-      int n = ts.size();
-      for (int i = 0; i < n; ++i) {
-            if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
-                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toUtf8().data()), i);
-            }
-      t.style->blockSignals(false);
-      InspectorBase::setElement();
       }
 
 //---------------------------------------------------------
@@ -951,10 +929,23 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
       d.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
-            { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,     t.resetStyle     },
-            { P_ID::DYNAMIC_RANGE,      0, 0, d.dynRange,  d.resetDynRange  },
-            { P_ID::VELOCITY,           0, 0, d.velocity,  0                },
-            { P_ID::PLACEMENT,          0, 0, d.placement, d.resetPlacement }
+            { P_ID::FONT_FACE,        0, 0, t.fontFace,     t.resetFontFace     },
+            { P_ID::FONT_SIZE,        0, 0, t.fontSize,     t.resetFontSize     },
+            { P_ID::FONT_BOLD,        0, 0, t.bold,         t.resetBold         },
+            { P_ID::FONT_ITALIC,      0, 0, t.italic,       t.resetItalic       },
+            { P_ID::FONT_UNDERLINE,   0, 0, t.underline,    t.resetUnderline    },
+            { P_ID::FRAME,            0, 0, t.hasFrame,     t.resetHasFrame     },
+            { P_ID::FRAME_FG_COLOR,   0, 0, t.frameColor,   t.resetFrameColor   },
+            { P_ID::FRAME_BG_COLOR,   0, 0, t.bgColor,      t.resetBgColor      },
+            { P_ID::FRAME_CIRCLE,     0, 0, t.circle,       t.resetCircle       },
+            { P_ID::FRAME_SQUARE,     0, 0, t.square,       t.resetSquare       },
+            { P_ID::FRAME_WIDTH,      0, 0, t.frameWidth,   t.resetFrameWidth   },
+            { P_ID::FRAME_PADDING,    0, 0, t.paddingWidth, t.resetPaddingWidth },
+            { P_ID::FRAME_ROUND,      0, 0, t.frameRound,   t.resetFrameRound   },
+            { P_ID::ALIGN,            0, 0, t.align,        t.resetAlign        },
+            { P_ID::DYNAMIC_RANGE,    0, 0, d.dynRange,     d.resetDynRange     },
+            { P_ID::VELOCITY,         0, 0, d.velocity,     0                   },
+            { P_ID::PLACEMENT,        0, 0, d.placement,    d.resetPlacement    }
             };
       const std::vector<InspectorPanel> ppList = {
             { t.title, t.panel },
@@ -968,27 +959,6 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorDynamic::setElement()
-      {
-      Element* e = inspector->element();
-      Score* score = e->score();
-
-      t.style->blockSignals(true);
-      t.style->clear();
-      const QList<TextStyle>& ts = score->style().textStyles();
-      int n = ts.size();
-      for (int i = 0; i < n; ++i) {
-            if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
-                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toUtf8().data()), i);
-            }
-      t.style->blockSignals(false);
-      InspectorElementBase::setElement();
-      }
-
-//---------------------------------------------------------
 //   InspectorLyric
 //---------------------------------------------------------
 
@@ -999,7 +969,6 @@ InspectorLyric::InspectorLyric(QWidget* parent)
       l.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
-            { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,     t.resetStyle     },
             { P_ID::PLACEMENT,          0, 0, l.placement, l.resetPlacement },
             { P_ID::VERSE,              0, 0, l.verse,     l.resetVerse     }
             };
@@ -1034,31 +1003,10 @@ void InspectorLyric::valueChanged(int idx)
       }
 
 //---------------------------------------------------------
-//   setElement
+//   InspectorStaffText
 //---------------------------------------------------------
 
-void InspectorLyric::setElement()
-      {
-      Element* e = inspector->element();
-      Score* score = e->score();
-
-      t.style->blockSignals(true);
-      t.style->clear();
-      const QList<TextStyle>& ts = score->style().textStyles();
-      int n = ts.size();
-      for (int i = 0; i < n; ++i) {
-            if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
-                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toUtf8().data()), i);
-            }
-      t.style->blockSignals(false);
-      InspectorElementBase::setElement();
-      }
-
-//---------------------------------------------------------
-//   InspectorStafftext
-//---------------------------------------------------------
-
-InspectorStafftext::InspectorStafftext(QWidget* parent)
+InspectorStaffText::InspectorStaffText(QWidget* parent)
    : InspectorElementBase(parent)
       {
       t.setupUi(addWidget());
@@ -1084,8 +1032,21 @@ InspectorStafftext::InspectorStafftext(QWidget* parent)
             }
 
       const std::vector<InspectorItem> il = {
-            { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,     t.resetStyle     },
-            { P_ID::PLACEMENT,          0, 0, s.placement, s.resetPlacement },
+            { P_ID::FONT_FACE,        0, 0, t.fontFace,     t.resetFontFace     },
+            { P_ID::FONT_SIZE,        0, 0, t.fontSize,     t.resetFontSize     },
+            { P_ID::FONT_BOLD,        0, 0, t.bold,         t.resetBold         },
+            { P_ID::FONT_ITALIC,      0, 0, t.italic,       t.resetItalic       },
+            { P_ID::FONT_UNDERLINE,   0, 0, t.underline,    t.resetUnderline    },
+            { P_ID::FRAME,            0, 0, t.hasFrame,     t.resetHasFrame     },
+            { P_ID::FRAME_FG_COLOR,   0, 0, t.frameColor,   t.resetFrameColor   },
+            { P_ID::FRAME_BG_COLOR,   0, 0, t.bgColor,      t.resetBgColor      },
+            { P_ID::FRAME_CIRCLE,     0, 0, t.circle,       t.resetCircle       },
+            { P_ID::FRAME_SQUARE,     0, 0, t.square,       t.resetSquare       },
+            { P_ID::FRAME_WIDTH,      0, 0, t.frameWidth,   t.resetFrameWidth   },
+            { P_ID::FRAME_PADDING,    0, 0, t.paddingWidth, t.resetPaddingWidth },
+            { P_ID::FRAME_ROUND,      0, 0, t.frameRound,   t.resetFrameRound   },
+            { P_ID::ALIGN,            0, 0, t.align,        t.resetAlign        },
+            { P_ID::PLACEMENT,        0, 0, s.placement,    s.resetPlacement    }
             };
       const std::vector<InspectorPanel> ppList = {
             { t.title, t.panel },
@@ -1096,27 +1057,6 @@ InspectorStafftext::InspectorStafftext(QWidget* parent)
       s.placement->addItem(tr("Below"), 1);
       mapSignals(il, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
-      }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorStafftext::setElement()
-      {
-      Element* e = inspector->element();
-      Score* score = e->score();
-
-      t.style->blockSignals(true);
-      t.style->clear();
-      const QList<TextStyle>& ts = score->style().textStyles();
-      int n = ts.size();
-      for (int i = 0; i < n; ++i) {
-            if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
-                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toUtf8().data()), i);
-            }
-      t.style->blockSignals(false);
-      InspectorElementBase::setElement();
       }
 
 //---------------------------------------------------------

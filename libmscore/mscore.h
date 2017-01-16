@@ -537,7 +537,6 @@ Q_DECLARE_METATYPE(Ms::Direction);
 //Q_DECLARE_METATYPE(Ms::MSQE_Direction::E);
 Q_DECLARE_METATYPE(Ms::Direction::E);
 Q_DECLARE_METATYPE(Ms::MScore::DirectionH);
-Q_DECLARE_METATYPE(Ms::TextStyleType);
 Q_DECLARE_METATYPE(Ms::BarLineType);
 
 #endif

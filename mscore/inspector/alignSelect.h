@@ -10,29 +10,41 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __INSPECTOR_FINGERING_H__
-#define __INSPECTOR_FINGERING_H__
+#ifndef __ALIGN_SELECT_H__
+#define __ALIGN_SELECT_H__
 
-#include "inspector.h"
-#include "ui_inspector_text.h"
-#include "ui_inspector_fingering.h"
+#include "ui_align_select.h"
 
 namespace Ms {
 
+enum class Align : char;
+
 //---------------------------------------------------------
-//   InspectorFingering
+//   AlignSelect
 //---------------------------------------------------------
 
-class InspectorFingering : public InspectorElementBase {
+class AlignSelect : public QWidget, public Ui::AlignSelect {
       Q_OBJECT
 
-      Ui::InspectorText t;
-      Ui::InspectorFingering f;
+      QButtonGroup* g1;
+      QButtonGroup* g2;
+
+      void blockAlign(bool val);
+
+   private slots:
+      void _alignChanged();
+
+   signals:
+      void alignChanged(Align);
 
    public:
-      InspectorFingering(QWidget* parent);
+      AlignSelect(QWidget* parent);
+      Align align() const;
+      void setAlign(Align);
       };
 
+}
 
-} // namespace Ms
+
 #endif
+

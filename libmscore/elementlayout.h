@@ -13,13 +13,50 @@
 #ifndef __ELEMENTLAYOUT_H__
 #define __ELEMENTLAYOUT_H__
 
-#include "mscore.h"
-
 namespace Ms {
 
 class Element;
 class XmlWriter;
 class XmlReader;
+
+//---------------------------------------------------------
+//   OffsetType
+//---------------------------------------------------------
+
+enum class OffsetType : char {
+      ABS,       ///< offset in point units
+      SPATIUM    ///< offset in staff space units
+      };
+
+//---------------------------------------------------------
+//   Align
+//---------------------------------------------------------
+
+enum class Align : char {
+      LEFT     = 0,
+      RIGHT    = 1,
+      HCENTER  = 2,
+      TOP      = 0,
+      BOTTOM   = 4,
+      VCENTER  = 8,
+      BASELINE = 16,
+      CENTER = Align::HCENTER | Align::VCENTER,
+      HMASK  = Align::LEFT    | Align::RIGHT    | Align::HCENTER,
+      VMASK  = Align::TOP     | Align::BOTTOM   | Align::VCENTER | Align::BASELINE
+      };
+
+constexpr Align operator| (Align a1, Align a2) {
+      return static_cast<Align>(static_cast<char>(a1) | static_cast<char>(a2));
+      }
+// constexpr Align operator& (Align a1, Align a2) {
+//      return static_cast<Align>(static_cast<char>(a1) & static_cast<char>(a2));
+//      }
+constexpr bool operator& (Align a1, Align a2) {
+      return static_cast<char>(a1) & static_cast<char>(a2);
+      }
+constexpr Align operator~ (Align a) {
+      return static_cast<Align>(~static_cast<char>(a));
+      }
 
 //---------------------------------------------------------
 //   ElementLayout

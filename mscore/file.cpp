@@ -389,7 +389,7 @@ bool MuseScore::saveFile(MasterScore* score)
             return false;
       if (score->created()) {
             QString fn = score->masterScore()->fileInfo()->fileName();
-            Text* t = score->getText(TextStyleType::TITLE);
+            Text* t = score->getText(SubStyle::TITLE);
             if (t)
                   fn = t->plainText(true);
             QString name = createDefaultFileName(fn);
@@ -705,28 +705,24 @@ void MuseScore::newFile()
                   delete nvb;
                   }
             if (!title.isEmpty()) {
-                  Text* s = new Text(score);
-                  s->setTextStyleType(TextStyleType::TITLE);
+                  Text* s = new Text(SubStyle::TITLE, score);
                   s->setPlainText(title);
                   measure->add(s);
                   score->setMetaTag("workTitle", title);
                   }
             if (!subtitle.isEmpty()) {
-                  Text* s = new Text(score);
-                  s->setTextStyleType(TextStyleType::SUBTITLE);
+                  Text* s = new Text(SubStyle::SUBTITLE, score);
                   s->setPlainText(subtitle);
                   measure->add(s);
                   }
             if (!composer.isEmpty()) {
-                  Text* s = new Text(score);
-                  s->setTextStyleType(TextStyleType::COMPOSER);
+                  Text* s = new Text(SubStyle::COMPOSER, score);
                   s->setPlainText(composer);
                   measure->add(s);
                   score->setMetaTag("composer", composer);
                   }
             if (!poet.isEmpty()) {
-                  Text* s = new Text(score);
-                  s->setTextStyleType(TextStyleType::POET);
+                  Text* s = new Text(SubStyle::POET, score);
                   s->setPlainText(poet);
                   measure->add(s);
                   // the poet() functions returns data called lyricist in the dialog
@@ -1818,6 +1814,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
                   writeSessionFile(false);
                   }
             }
+#if 0
       else if (ext == "xml") {
             // save as MusicXML *.xml file
             rv = saveXml(cs, fn);
@@ -1830,6 +1827,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             // save as midi file *.mid
             rv = saveMidi(cs, fn);
             }
+#endif
       else if (ext == "pdf") {
             // save as pdf file *.pdf
             rv = savePdf(cs, fn);

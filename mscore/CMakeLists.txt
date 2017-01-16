@@ -42,8 +42,8 @@ QT5_WRAP_UI (ui_headers
       transposedialog.ui lineproperties.ui excerptsdialog.ui  stafftext.ui tupletdialog.ui
       articulation.ui metaedit.ui palette.ui selectdialog.ui selectnotedialog.ui
       synthcontrol.ui splitstaff.ui cellproperties.ui keyedit.ui selectinstr.ui
-      fretdprops.ui editstafftype.ui sectionbreak.ui  bend.ui tremolobar.ui textproperties.ui
-      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui textstyledialog.ui albummanager.ui layer.ui
+      fretdprops.ui editstafftype.ui sectionbreak.ui  bend.ui tremolobar.ui
+      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui
       omrpanel.ui masterpalette.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui
@@ -134,6 +134,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_bracket.ui
       inspector/inspector_iname.ui
       inspector/inspector_fingering.ui
+      inspector/align_select.ui
       ${SCRIPT_UI}
       )
 
@@ -243,18 +244,21 @@ add_executable ( ${ExecutableName}
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
       excerptsdialog.cpp metaedit.cpp magbox.cpp
       capella.cpp capxml.cpp exportaudio.cpp palettebox.cpp
-      textproperties.cpp synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
+      synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
-      updatechecker.cpp importove.cpp ove.cpp ruler.cpp
-      importgtp.cpp importgtp-gp4.cpp importgtp-gp5.cpp importgtp-gp6.cpp fotomode.cpp drumtools.cpp
+      updatechecker.cpp
+      importove.cpp
+      ove.cpp
+      ruler.cpp
+      importgtp.cpp importgtp-gp4.cpp importgtp-gp5.cpp importgtp-gp6.cpp
+      fotomode.cpp drumtools.cpp
       selinstrument.cpp editstafftype.cpp texttools.cpp
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
       workspace.cpp chordview.cpp
       album.cpp albummanager.cpp
-      textstyledialog.cpp
       lineproperties.cpp stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp
-      articulationprop.cpp textprop.cpp
+      articulationprop.cpp
       fretproperties.cpp sectionbreakprop.cpp
       bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
@@ -284,6 +288,7 @@ add_executable ( ${ExecutableName}
       inspector/inspectorArpeggio.cpp
       inspector/inspectorFingering.cpp
       inspector/inspectorTextLine.cpp
+      inspector/alignSelect.cpp
       enableplayforwidget.cpp
       editelement.cpp
       qmlplugin.cpp

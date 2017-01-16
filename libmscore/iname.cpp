@@ -58,7 +58,7 @@ void InstrumentName::setInstrumentNameType(const QString& s)
 void InstrumentName::setInstrumentNameType(InstrumentNameType st)
       {
       _instrumentNameType = st;
-      setTextStyleType(st == InstrumentNameType::SHORT ? TextStyleType::INSTRUMENT_SHORT : TextStyleType::INSTRUMENT_LONG);
+      initSubStyle(st == InstrumentNameType::SHORT ? SubStyle::INSTRUMENT_SHORT : SubStyle::INSTRUMENT_LONG);
       }
 
 //---------------------------------------------------------

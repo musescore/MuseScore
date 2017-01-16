@@ -642,6 +642,7 @@ class ChangePart : public UndoCommand {
       UNDO_NAME("ChangePart")
       };
 
+#if 0
 //---------------------------------------------------------
 //   ChangeTextStyle
 //---------------------------------------------------------
@@ -670,6 +671,7 @@ class AddTextStyle : public UndoCommand {
       virtual void redo();
       UNDO_NAME("AddTextStyle")
       };
+#endif
 
 //---------------------------------------------------------
 //   ChangeStyle
@@ -1000,12 +1002,12 @@ class ChangeProperty : public UndoCommand {
       ScoreElement* element;
       P_ID id;
       QVariant property;
-      PropertyStyle propertyStyle;
+      PropertyFlags propertyStyle;
 
       void flip();
 
    public:
-      ChangeProperty(ScoreElement* e, P_ID i, const QVariant& v, PropertyStyle ps = PropertyStyle::NOSTYLE)
+      ChangeProperty(ScoreElement* e, P_ID i, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
          : element(e), id(i), property(v), propertyStyle(ps) {}
       P_ID getId() const  { return id; }
       UNDO_NAME("ChangeProperty")

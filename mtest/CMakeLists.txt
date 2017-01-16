@@ -183,7 +183,7 @@ subdirs (
         libmscore/parts
         libmscore/measure
 #        libmscore/midi                 # one disabled
-        libmscore/midimapping
+#        libmscore/midimapping
         libmscore/note
         libmscore/repeat
         libmscore/rhythmicGrouping

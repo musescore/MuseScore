@@ -92,6 +92,7 @@ struct Interval;
 struct TEvent;
 struct LayoutContext;
 
+enum class SubStyle;
 enum class ClefType : signed char;
 enum class BeatType : char;
 enum class SymId;
@@ -610,7 +611,7 @@ class Score : public QObject, public ScoreElement {
       void undoChangeUserMirror(Note*, MScore::DirectionH);
       void undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent);
       void undoChangeClef(Staff* ostaff, Segment*, ClefType st);
-      void undoChangeProperty(ScoreElement*, P_ID, const QVariant&, PropertyStyle ps = PropertyStyle::NOSTYLE);
+      void undoChangeProperty(ScoreElement*, P_ID, const QVariant&, PropertyFlags ps = PropertyFlags::NOSTYLE);
       void undoPropertyChanged(Element*, P_ID, const QVariant& v);
       void undoPropertyChanged(ScoreElement*, P_ID, const QVariant& v);
       inline virtual UndoStack* undoStack() const;
@@ -799,9 +800,6 @@ class Score : public QObject, public ScoreElement {
       qreal    styleD(StyleIdx idx) const  { Q_ASSERT(!strcmp(MStyle::valueType(idx),"double"));      return style().value(idx).toDouble();  }
       int      styleI(StyleIdx idx) const  { Q_ASSERT(!strcmp(MStyle::valueType(idx),"int"));         return style().value(idx).toInt();  }
 
-      const TextStyle& textStyle(TextStyleType idx) const { return style().textStyle(idx); }
-      const TextStyle& textStyle(const QString& s) const  { return style().textStyle(s); }
-
       qreal spatium() const                    { return styleD(StyleIdx::spatium);    }
       void setSpatium(qreal v)                 { style().set(StyleIdx::spatium, v);  }
       PageFormat* pageFormat()                 { return style().pageFormat(); }
@@ -868,7 +866,7 @@ class Score : public QObject, public ScoreElement {
 
       bool defaultsRead() const                      { return _defaultsRead;    }
       void setDefaultsRead(bool b)                   { _defaultsRead = b;       }
-      Text* getText(TextStyleType subtype);
+      Text* getText(SubStyle subtype);
 
       void lassoSelect(const QRectF&);
       void lassoSelectEnd();

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>278</width>
-    <height>91</height>
+    <width>417</width>
+    <height>242</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -76,60 +76,6 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="resetFontBold">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Bold' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Font face:</string>
-        </property>
-        <property name="buddy">
-         <cstring>fontFace</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QFontComboBox" name="fontFace"/>
-      </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetFontFace">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font face' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="2">
-       <widget class="QCheckBox" name="fontBold">
-        <property name="text">
-         <string>Bold</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>

@@ -244,8 +244,8 @@ bool SlurTie::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      if (tag == "up" || tag == "slurDirection")
-            readProperty(e, P_ID::SLUR_DIRECTION);
+      if (readProperty(tag, e, P_ID::SLUR_DIRECTION))
+            ;
       else if (tag == "lineType")
             _lineType = e.readInt();
       else if (tag == "SlurSegment") {

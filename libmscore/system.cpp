@@ -278,7 +278,7 @@ void System::layoutSystem(qreal xo1)
             SysStaff* s = staff(idx);
             if (s->show() && p->show()) {
                   for (InstrumentName* t : s->instrumentNames) {
-                        switch (int(t->textStyle().align()) & int(Align::HMASK)) {
+                        switch (int(t->align()) & int(Align::HMASK)) {
                               case int(Align::LEFT):
                                     t->rxpos() = 0;
                                     break;
@@ -290,7 +290,7 @@ void System::layoutSystem(qreal xo1)
                                     t->rxpos() = xoff2 - point(instrumentNameOffset) + xo1;
                                     break;
                               }
-                        t->rxpos() += t->textStyle().offset(t->spatium()).x();
+//                        t->rxpos() += t->offset(t->spatium()).x();
                         }
                   }
             idx += p->nstaves();
@@ -518,7 +518,8 @@ void System::layout2()
                                     y2 = staff(staffIdx + 2)->bbox().bottom();
                                     break;
                               }
-                        t->rypos() = y1 + (y2 - y1) * .5 + t->textStyle().offset(t->spatium()).y();
+                        // t->rypos() = y1 + (y2 - y1) * .5 + t->offset(t->spatium()).y();
+                        t->rypos() = y1 + (y2 - y1) * .5;
                         }
                   }
             staffIdx += nstaves;

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>137</width>
-    <height>76</height>
+    <width>336</width>
+    <height>468</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -63,7 +63,7 @@
    </item>
    <item>
     <widget class="QWidget" name="panel" native="true">
-     <layout class="QGridLayout" name="gridLayout">
+     <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0">
       <property name="leftMargin">
        <number>3</number>
       </property>
@@ -83,29 +83,19 @@
        <number>0</number>
       </property>
       <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Style:</string>
-        </property>
-        <property name="buddy">
-         <cstring>style</cstring>
+         <string>Font face:</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="style">
-        <property name="accessibleName">
-         <string>Style</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetStyle">
+      <item row="0" column="3">
+       <widget class="QToolButton" name="resetFontFace">
         <property name="toolTip">
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Style' value</string>
+         <string>Reset 'Direction' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -116,10 +106,378 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0" colspan="2">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Font size:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QToolButton" name="resetFontSize">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="1" colspan="2">
+       <widget class="QDoubleSpinBox" name="frameWidth">
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+        <property name="buddy">
+         <cstring>style</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="3">
+       <widget class="QToolButton" name="resetFrameWidth">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="1" colspan="2">
+       <widget class="QSpinBox" name="frameRound"/>
+      </item>
+      <item row="4" column="3">
+       <widget class="QToolButton" name="resetItalic">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1" colspan="2">
+       <widget class="Awl::ColorLabel" name="frameColor">
+        <property name="accessibleName">
+         <string>Color:</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="3">
+       <widget class="QToolButton" name="resetSquare">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <widget class="QFontComboBox" name="fontFace">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="1" colspan="2">
+       <widget class="QDoubleSpinBox" name="paddingWidth">
+        <property name="singleStep">
+         <double>0.200000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="2">
+       <widget class="QSpinBox" name="fontSize"/>
+      </item>
+      <item row="5" column="3">
+       <widget class="QToolButton" name="resetUnderline">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="3">
+       <widget class="QToolButton" name="resetCircle">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="3">
+       <widget class="QToolButton" name="resetPaddingWidth">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="16" column="0" colspan="4">
        <widget class="QPushButton" name="resetToStyle">
         <property name="text">
          <string>Reset Text to Style</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Padding width:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QToolButton" name="resetBold">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="3">
+       <widget class="QToolButton" name="resetFrameRound">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Frame color:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Frame round:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Frame width:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="3">
+       <widget class="QToolButton" name="resetHasFrame">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="3">
+       <widget class="QToolButton" name="resetFrameColor">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="3">
+       <widget class="QCheckBox" name="bold">
+        <property name="text">
+         <string>Bold</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="3">
+       <widget class="QCheckBox" name="italic">
+        <property name="text">
+         <string>Italic</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0" colspan="3">
+       <widget class="QCheckBox" name="underline">
+        <property name="text">
+         <string>Underline</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0" colspan="3">
+       <widget class="QCheckBox" name="hasFrame">
+        <property name="text">
+         <string>Frame</string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0" colspan="3">
+       <widget class="QCheckBox" name="circle">
+        <property name="text">
+         <string>Circle</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="0" colspan="3">
+       <widget class="QCheckBox" name="square">
+        <property name="text">
+         <string>Square</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Align:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="3">
+       <widget class="QToolButton" name="resetAlign">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1" colspan="2">
+       <widget class="Ms::AlignSelect" name="align" native="true"/>
+      </item>
+      <item row="10" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Background:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="3">
+       <widget class="QToolButton" name="resetBgColor">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1" colspan="2">
+       <widget class="Awl::ColorLabel" name="bgColor">
+        <property name="accessibleName">
+         <string>Color:</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
         </property>
        </widget>
       </item>
@@ -128,12 +486,20 @@
    </item>
   </layout>
  </widget>
- <tabstops>
-  <tabstop>title</tabstop>
-  <tabstop>style</tabstop>
-  <tabstop>resetStyle</tabstop>
-  <tabstop>resetToStyle</tabstop>
- </tabstops>
+ <customwidgets>
+  <customwidget>
+   <class>Awl::ColorLabel</class>
+   <extends>QFrame</extends>
+   <header>awl/colorlabel.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Ms::AlignSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/alignSelect.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

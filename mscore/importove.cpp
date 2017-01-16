@@ -324,10 +324,10 @@ OVE::Staff* getStaff(const OVE::OveSong* ove, int track) {
       return 0;
       }
 
-void addText(VBox* & vbox, Score* s, QString strTxt, TextStyleType stl) {
+void addText(VBox* & vbox, Score* s, QString strTxt, SubStyle stl) {
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s);
-            text->setTextStyleType(stl);
+            text->initSubStyle(stl);
             text->setPlainText(strTxt);
             if(vbox == 0) {
                   vbox = new VBox(s);
@@ -342,7 +342,7 @@ void OveToMScore::convertHeader() {
       if( !titles.empty() && !titles[0].isEmpty() ) {
             QString title = titles[0];
             score_->setMetaTag("movementTitle", title);
-            addText(vbox, score_, title, TextStyleType::TITLE);
+            addText(vbox, score_, title, SubStyle::TITLE);
             }
 
       QList<QString> copyrights = ove_->getCopyrights();
@@ -354,19 +354,19 @@ void OveToMScore::convertHeader() {
       QList<QString> annotates = ove_->getAnnotates();
       if( !annotates.empty() && !annotates[0].isEmpty() ) {
             QString annotate = annotates[0];
-            addText(vbox, score_, annotate, TextStyleType::POET);
+            addText(vbox, score_, annotate, SubStyle::POET);
             }
 
       QList<QString> writers = ove_->getWriters();
       if(!writers.empty()) {
             QString composer = writers[0];
             score_->setMetaTag("composer", composer);
-            addText(vbox, score_, composer, TextStyleType::COMPOSER);
+            addText(vbox, score_, composer, SubStyle::COMPOSER);
             }
 
       if(writers.size() > 1) {
             QString lyricist = writers[1];
-            addText(vbox, score_, lyricist, TextStyleType::POET);
+            addText(vbox, score_, lyricist, SubStyle::POET);
             }
 
       if (vbox) {
@@ -1276,7 +1276,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
             if(textPtr->getTextType() == OVE::Text::Type::Rehearsal){
                   Text* text = new RehearsalMark(score_);
                   text->setPlainText(textPtr->getText());
-                  text->setAbove(true);
+//TODO:ws                  text->setAbove(true);
                   text->setTrack(track);
 
                   Segment* s = measure->getSegment(Segment::Type::ChordRest, mtt_->getTick(measure->no(), 0));
@@ -1341,7 +1341,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
                   t->setVisible(false);
                   }
             t->setXmlText(textTempo);
-            t->setAbove(true);
+//TODO:ws            t->setAbove(true);
             t->setTrack(track);
 
             Segment* s = measure->getSegment(Segment::Type::ChordRest, absTick);
@@ -2292,9 +2292,8 @@ void OveToMScore::convertExpressions(Measure* measure, int part, int staff, int 
       for(int i=0; i<expressions.size(); ++i){
             OVE::Expressions* expressionPtr = static_cast<OVE::Expressions*>(expressions[i]);
             int absTick = mtt_->getTick(measure->no(), expressionPtr->getTick());
-            Text* t = new Text(score_);
+            Text* t = new Text(SubStyle::EXPRESSION, score_);
 
-            t->setTextStyleType(TextStyleType::EXPRESSION);
             t->setPlainText(expressionPtr->getText());
             t->setTrack(track);
 

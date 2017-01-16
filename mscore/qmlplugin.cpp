@@ -116,7 +116,7 @@ Ms::Element* QmlPlugin::newElement(int t)
 //   newScore
 //---------------------------------------------------------
 
-Score* QmlPlugin::newScore(const QString& name, const QString& part, int measures)
+Score* QmlPlugin::newScore(const QString& /*name*/, const QString& /*part*/, int /*measures*/)
       {
 #if 0 // TODO
       if (msc->currentScore())

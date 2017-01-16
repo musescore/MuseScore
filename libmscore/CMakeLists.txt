@@ -50,7 +50,7 @@ add_library (
       rendermidi.cpp repeat.cpp repeatlist.cpp rest.cpp
       score.cpp segment.cpp select.cpp shadownote.cpp slur.cpp tie.cpp slurtie.cpp
       spacer.cpp spanner.cpp staff.cpp staffstate.cpp
-      stafftext.cpp stafftype.cpp stem.cpp style.cpp textstyle.cpp symbol.cpp
+      stafftext.cpp stafftype.cpp stem.cpp style.cpp symbol.cpp
       sym.cpp system.cpp stringdata.cpp tempotext.cpp text.cpp
       textframe.cpp textline.cpp textlinebase.cpp timesig.cpp
       tremolobar.cpp tremolo.cpp trill.cpp tuplet.cpp
@@ -67,7 +67,9 @@ add_library (
       noteline.cpp spannermap.cpp
       bagpembell.cpp ambitus.cpp keylist.cpp scoreElement.cpp
       shape.cpp systemdivider.cpp midimapping.cpp stafflines.cpp pageformat.cpp
-      read114.cpp read206.cpp read300.cpp stafftypelist.cpp stafftypechange.cpp
+#      read114.cpp
+      read206.cpp
+      read300.cpp stafftypelist.cpp stafftypechange.cpp
       )
 
 set_target_properties (

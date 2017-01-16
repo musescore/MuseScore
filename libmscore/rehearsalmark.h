@@ -30,6 +30,7 @@ class RehearsalMark : public Text  {
       virtual Element::Type type() const override   { return Element::Type::REHEARSAL_MARK; }
       Segment* segment() const                      { return (Segment*)parent(); }
       virtual void layout() override;
+      virtual QVariant propertyDefault(P_ID id) const override;
       };
 
 

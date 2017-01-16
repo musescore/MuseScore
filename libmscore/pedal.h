@@ -37,7 +37,7 @@ class PedalSegment : public TextLineBaseSegment {
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
-      virtual PropertyStyle propertyStyle(P_ID) const override;
+      virtual PropertyFlags propertyFlags(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
 
@@ -51,8 +51,8 @@ class PedalSegment : public TextLineBaseSegment {
 class Pedal : public TextLineBase {
       Q_OBJECT
 
-      PropertyStyle lineWidthStyle;
-      PropertyStyle lineStyleStyle;
+      PropertyFlags lineWidthStyle;
+      PropertyFlags lineStyleStyle;
 
    protected:
       QPointF linePos(Grip, System**) const override;
@@ -67,7 +67,7 @@ class Pedal : public TextLineBase {
 
       virtual bool setProperty(P_ID propertyId, const QVariant& val) override;
       virtual QVariant propertyDefault(P_ID propertyId) const override;
-      virtual PropertyStyle propertyStyle(P_ID id) const override;
+      virtual PropertyFlags propertyFlags(P_ID id) const override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
 

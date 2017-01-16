@@ -153,8 +153,7 @@ void TextLineBaseSegment::setText(Text* t)
                   _text->setParent(this);
                   }
             else {
-                  _text->setTextStyleType(t->textStyleType());
-                  _text->setTextStyle(t->textStyle());
+                  _text->initSubStyle(t->subStyle());
                   _text->setXmlText(t->xmlText());
                   }
             _text->setTrack(track());
@@ -196,8 +195,7 @@ void TextLineBaseSegment::layout()
                   _endText->setParent(this);
                   }
             else {
-                  _endText->setTextStyleType(tl->_endText->textStyleType());
-                  _endText->setTextStyle(tl->_endText->textStyle());
+                  _endText->initSubStyle(tl->_endText->subStyle());
                   _endText->setXmlText(tl->_endText->xmlText());
                   }
             _endText->setTrack(track());
@@ -502,9 +500,8 @@ void TextLineBase::setScore(Score* s)
 void TextLineBase::createBeginTextElement()
       {
       if (!_beginText) {
-            _beginText = new Text(score());
+            _beginText = new Text(SubStyle(propertyDefault(P_ID::SUB_STYLE).toInt()), score());
             _beginText->setParent(this);
-            _beginText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
             }
       }
 
@@ -515,9 +512,8 @@ void TextLineBase::createBeginTextElement()
 void TextLineBase::createContinueTextElement()
       {
       if (!_continueText) {
-            _continueText = new Text(score());
+            _continueText = new Text(SubStyle(propertyDefault(P_ID::SUB_STYLE).toInt()), score());
             _continueText->setParent(this);
-            _continueText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
             }
       }
 
@@ -528,9 +524,8 @@ void TextLineBase::createContinueTextElement()
 void TextLineBase::createEndTextElement()
       {
       if (!_endText) {
-            _endText = new Text(score());
+            _endText = new Text(SubStyle(propertyDefault(P_ID::SUB_STYLE).toInt()), score());
             _endText->setParent(this);
-            _endText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
             }
       }
 
@@ -538,13 +533,14 @@ void TextLineBase::createEndTextElement()
 //   setBeginText
 //---------------------------------------------------------
 
-void TextLineBase::setBeginText(const QString& s, TextStyleType textStyle)
+void TextLineBase::setBeginText(const QString& s, SubStyle subStyle)
       {
       if (!_beginText) {
-            _beginText = new Text(score());
+            _beginText = new Text(subStyle, score());
             _beginText->setParent(this);
             }
-      _beginText->setTextStyleType(textStyle);
+      else
+            _beginText->initSubStyle(subStyle);
       _beginText->setXmlText(s);
       }
 
@@ -563,13 +559,14 @@ void TextLineBase::setBeginText(const QString& s)
 //   setContinueText
 //---------------------------------------------------------
 
-void TextLineBase::setContinueText(const QString& s, TextStyleType textStyle)
+void TextLineBase::setContinueText(const QString& s, SubStyle textStyle)
       {
       if (!_continueText) {
-            _continueText = new Text(score());
+            _continueText = new Text(textStyle, score());
             _continueText->setParent(this);
             }
-      _continueText->setTextStyleType(textStyle);
+      else
+            _continueText->initSubStyle(textStyle);
       _continueText->setXmlText(s);
       }
 
@@ -588,7 +585,7 @@ void TextLineBase::setContinueText(const QString& s)
 //   setEndText
 //---------------------------------------------------------
 
-void TextLineBase::setEndText(const QString& s, TextStyleType textStyle)
+void TextLineBase::setEndText(const QString& s, SubStyle textStyle)
       {
       if (s.isEmpty()) {
             delete _endText;
@@ -596,10 +593,11 @@ void TextLineBase::setEndText(const QString& s, TextStyleType textStyle)
             return;
             }
       if (!_endText) {
-            _endText = new Text(score());
+            _endText = new Text(textStyle, score());
             _endText->setParent(this);
             }
-      _endText->setTextStyleType(textStyle);
+      else
+            _endText->initSubStyle(textStyle);
       _endText->setXmlText(s);
       }
 
@@ -702,38 +700,20 @@ void TextLineBase::writeProperties(XmlWriter& xml) const
 
       SLine::writeProperties(xml);
 
-      if (_beginText) {
-            bool textDiff  = _beginText->xmlText() != propertyDefault(P_ID::BEGIN_TEXT).toString();
-            bool styleDiff = _beginText->textStyle() != propertyDefault(P_ID::BEGIN_TEXT_STYLE).value<TextStyle>();
-            if (styleDiff)
-                  textDiff = true;
-            if (textDiff || styleDiff) {
-                  xml.stag("beginText");
-                  _beginText->writeProperties(xml, textDiff, styleDiff);
-                  xml.etag();
-                  }
+      if (_beginText && !_beginText->generated()) {
+            xml.stag("beginText");
+            _beginText->writeProperties(xml);
+            xml.etag();
             }
-      if (_continueText) {
-            bool textDiff  = _continueText->xmlText() != propertyDefault(P_ID::CONTINUE_TEXT).toString();
-            bool styleDiff = _continueText->textStyle() != propertyDefault(P_ID::CONTINUE_TEXT_STYLE).value<TextStyle>();
-            if (styleDiff)
-                  textDiff = true;
-            if (textDiff || styleDiff) {
-                  xml.stag("continueText");
-                  _continueText->writeProperties(xml, textDiff, styleDiff);
-                  xml.etag();
-                  }
+      if (_continueText && !_continueText->generated()) {
+            xml.stag("continueText");
+            _continueText->writeProperties(xml);
+            xml.etag();
             }
-      if (_endText) {
-            bool textDiff  = _endText->xmlText() != propertyDefault(P_ID::END_TEXT).toString();
-            bool styleDiff = _endText->textStyle() != propertyDefault(P_ID::END_TEXT_STYLE).value<TextStyle>();
-            if (styleDiff)
-                  textDiff = true;
-            if (textDiff || styleDiff) {
-                  xml.stag("endText");
-                  _endText->writeProperties(xml, textDiff, styleDiff);
-                  xml.etag();
-                  }
+      if (_endText && !_endText->generated()) {
+            xml.stag("endText");
+            _endText->writeProperties(xml);
+            xml.etag();
             }
       }
 
@@ -811,9 +791,8 @@ bool TextLineBase::readProperties(XmlReader& e)
             _endTextPlace = readPlacement(e);
       else if (tag == "beginText") {
             if (!_beginText) {
-                  _beginText = new Text(score());
+                  _beginText = new Text(SubStyle(propertyDefault(P_ID::SUB_STYLE).toInt()), score());
                   _beginText->setParent(this);
-                  _beginText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
                   }
             else
                   _beginText->setXmlText("");
@@ -821,9 +800,8 @@ bool TextLineBase::readProperties(XmlReader& e)
             }
       else if (tag == "continueText") {
             if (!_continueText) {
-                  _continueText = new Text(score());
+                  _continueText = new Text(SubStyle(propertyDefault(P_ID::SUB_STYLE).toInt()), score());
                   _continueText->setParent(this);
-                  _continueText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
                   }
             else
                   _continueText->setXmlText("");
@@ -831,9 +809,8 @@ bool TextLineBase::readProperties(XmlReader& e)
             }
       else if (tag == "endText") {
             if (!_endText) {
-                  _endText = new Text(score());
+                  _endText = new Text(SubStyle(propertyDefault(P_ID::SUB_STYLE).toInt()), score());
                   _endText->setParent(this);
-                  _endText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
                   }
             else
                   _endText->setXmlText("");
@@ -963,12 +940,14 @@ QVariant TextLineBase::propertyDefault(P_ID id) const
                   return QString("");
             case P_ID::LINE_VISIBLE:
                   return true;
-            case P_ID::BEGIN_TEXT_STYLE:
-            case P_ID::CONTINUE_TEXT_STYLE:
-            case P_ID::END_TEXT_STYLE:
-                  return QVariant::fromValue(score()->textStyle(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt())));
+#if 0
+            case P_ID::BEGIN_SUB_STYLE:
+            case P_ID::CONTINUE_SUB_STYLE:
+            case P_ID::END_SUB_STYLE:
+//                  return QVariant::fromValue(score()->textStyleV(ertyDefault(P_ID::TEXT_STYLE_TYPE).toInt())));
             case P_ID::TEXT_STYLE_TYPE:
-                  return int(TextStyleType::TEXTLINE);
+                  return int(StyledPropertyListIdx::TEXTLINE);
+#endif
 
             default:
                   return SLine::propertyDefault(id);

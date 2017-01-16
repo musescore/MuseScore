@@ -31,7 +31,7 @@ InstrumentChange::InstrumentChange(Score* s)
    : Text(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      setTextStyleType(TextStyleType::INSTRUMENT_CHANGE);
+      initSubStyle(SubStyle::INSTRUMENT_CHANGE);
       _instrument = new Instrument();
       }
 
@@ -39,7 +39,7 @@ InstrumentChange::InstrumentChange(const Instrument& i, Score* s)
    : Text(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      setTextStyleType(TextStyleType::INSTRUMENT_CHANGE);
+      initSubStyle(SubStyle::INSTRUMENT_CHANGE);
       _instrument = new Instrument(i);
       }
 
@@ -47,7 +47,7 @@ InstrumentChange::InstrumentChange(const InstrumentChange& is)
    : Text(is)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      setTextStyleType(TextStyleType::INSTRUMENT_CHANGE);
+      initSubStyle(SubStyle::INSTRUMENT_CHANGE);
       _instrument = new Instrument(*is._instrument);
       }
 
@@ -121,6 +121,8 @@ QVariant InstrumentChange::getProperty(P_ID propertyId) const
 QVariant InstrumentChange::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
+            case P_ID::SUB_STYLE:
+                  return int(SubStyle::INSTRUMENT_CHANGE);
             default:
                   return Text::propertyDefault(propertyId);
             }

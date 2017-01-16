@@ -195,9 +195,9 @@ MasterScore* ScoreElement::masterScore() const
 //   propertyStyle
 //---------------------------------------------------------
 
-PropertyStyle ScoreElement::propertyStyle(P_ID) const
+PropertyFlags ScoreElement::propertyFlags(P_ID) const
       {
-      return PropertyStyle::NOSTYLE;
+      return PropertyFlags::NOSTYLE;
       }
 
 //---------------------------------------------------------

@@ -28,7 +28,6 @@ InspectorMarker::InspectorMarker(QWidget* parent)
       m.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::TEXT_STYLE_TYPE,    0, 0,     t.style,      t.resetStyle },
             { P_ID::MARKER_TYPE,        0, false, m.markerType, 0            },
             { P_ID::LABEL,              0, false, m.jumpLabel,  0            }
             };
@@ -38,27 +37,6 @@ InspectorMarker::InspectorMarker(QWidget* parent)
             };
       mapSignals(iiList, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
-      }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorMarker::setElement()
-      {
-      Element* e = inspector->element();
-      Score* score = e->score();
-
-      t.style->blockSignals(true);
-      t.style->clear();
-      const QList<TextStyle>& ts = score->style().textStyles();
-      int n = ts.size();
-      for (int i = 0; i < n; ++i) {
-            if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
-                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toUtf8().data()), i);
-            }
-      t.style->blockSignals(false);
-      InspectorElementBase::setElement();
       }
 
 }

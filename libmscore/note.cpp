@@ -1311,7 +1311,6 @@ bool Note::readProperties(XmlReader& e)
             _line = e.readInt();
       else if (tag == "Fingering") {
             Fingering* f = new Fingering(score());
-            f->setTextStyleType(TextStyleType::FINGERING);
             f->read(e);
             add(f);
             }
@@ -1603,7 +1602,6 @@ bool Note::acceptDrop(const DropData& data) const
 Element* Note::drop(const DropData& data)
       {
       Element* e = data.element;
-      bool fromPalette = (e->track() == -1);
 
       Chord* ch = chord();
       switch(e->type()) {
@@ -1619,14 +1617,6 @@ Element* Note::drop(const DropData& data)
             case Element::Type::FINGERING:
                   e->setParent(this);
                   score()->undoAddElement(e);
-                  {
-                  // set style
-                  Fingering* f = toFingering(e);
-                  TextStyleType st = f->textStyleType();
-                  //f->setTextStyleType(st);
-                  if (st >= TextStyleType::DEFAULT && fromPalette)
-                        f->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
-                  }
                   return e;
 
             case Element::Type::SLUR:
