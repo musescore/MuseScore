@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>417</width>
-    <height>242</height>
+    <width>65</width>
+    <height>47</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -83,13 +83,7 @@
  </widget>
  <tabstops>
   <tabstop>title</tabstop>
-  <tabstop>fontFace</tabstop>
-  <tabstop>resetFontFace</tabstop>
-  <tabstop>fontBold</tabstop>
-  <tabstop>resetFontBold</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
