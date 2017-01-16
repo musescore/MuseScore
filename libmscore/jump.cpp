@@ -22,12 +22,12 @@ namespace Ms {
 //---------------------------------------------------------
 
 const JumpTypeTable jumpTypeTable[] = {
-      { Jump::Type::DC,         TextStyleType::REPEAT_RIGHT, "D.C.",         "start", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo")        },
-      { Jump::Type::DC_AL_FINE, TextStyleType::REPEAT_RIGHT, "D.C. al Fine", "start", "fine", "" ,     QT_TRANSLATE_NOOP("jumpType", "Da Capo al Fine")},
-      { Jump::Type::DC_AL_CODA, TextStyleType::REPEAT_RIGHT, "D.C. al Coda", "start", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "Da Capo al Coda")},
-      { Jump::Type::DS_AL_CODA, TextStyleType::REPEAT_RIGHT, "D.S. al Coda", "segno", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda")   },
-      { Jump::Type::DS_AL_FINE, TextStyleType::REPEAT_RIGHT, "D.S. al Fine", "segno", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "D.S. al Fine")   },
-      { Jump::Type::DS,         TextStyleType::REPEAT_RIGHT, "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.")           }
+      { Jump::Type::DC,         SubStyle::REPEAT_RIGHT, "D.C.",         "start", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo")        },
+      { Jump::Type::DC_AL_FINE, SubStyle::REPEAT_RIGHT, "D.C. al Fine", "start", "fine", "" ,     QT_TRANSLATE_NOOP("jumpType", "Da Capo al Fine")},
+      { Jump::Type::DC_AL_CODA, SubStyle::REPEAT_RIGHT, "D.C. al Coda", "start", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "Da Capo al Coda")},
+      { Jump::Type::DS_AL_CODA, SubStyle::REPEAT_RIGHT, "D.S. al Coda", "segno", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda")   },
+      { Jump::Type::DS_AL_FINE, SubStyle::REPEAT_RIGHT, "D.S. al Fine", "segno", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "D.S. al Fine")   },
+      { Jump::Type::DS,         SubStyle::REPEAT_RIGHT, "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.")           }
       };
 
 int jumpTypeTableSize()
@@ -40,10 +40,9 @@ int jumpTypeTableSize()
 //---------------------------------------------------------
 
 Jump::Jump(Score* s)
-   : Text(s)
+   : Text(SubStyle::REPEAT_RIGHT, s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
-      setTextStyleType(TextStyleType::REPEAT_RIGHT);
       setLayoutToParentWidth(true);
       _playRepeats = false;
       }
@@ -60,7 +59,7 @@ void Jump::setJumpType(Type t)
                   setJumpTo(p.jumpTo);
                   setPlayUntil(p.playUntil);
                   setContinueAt(p.continueAt);
-                  setTextStyleType(p.textStyleType);
+                  initSubStyle(p.subStyle);
                   break;
                   }
             }
@@ -106,7 +105,7 @@ void Jump::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-//      setTextStyleType(TextStyleType::REPEAT_RIGHT);    // do not reset text style!
+//      setSubStyle(SubStyle::REPEAT_RIGHT);    // do not reset text style!
       }
 
 //---------------------------------------------------------

@@ -30,7 +30,6 @@ class InspectorText : public InspectorElementBase {
 
    public:
       InspectorText(QWidget* parent);
-      virtual void setElement() override;
       };
 
 }

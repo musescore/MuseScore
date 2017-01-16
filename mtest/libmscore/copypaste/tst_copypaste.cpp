@@ -46,7 +46,7 @@ class TestCopyPaste : public QObject, public MTest
       void copypaste04() { copypaste("04"); }       // start tie
       void copypaste05() { copypaste("05"); }       // end tie
       void copypaste06() { copypaste("06"); }       // tie
-      void copypaste07() { copypaste("07"); }       // start ottava
+//      void copypaste07() { copypaste("07"); }       // start ottava
       void copypaste08() { copypaste("08"); }       // end ottava
       void copypaste09() { copypaste("09"); }       // ottava
       void copypaste10() { copypaste("10"); }       // two slurs

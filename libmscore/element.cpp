@@ -1391,7 +1391,7 @@ QVariant Element::propertyDefault(P_ID id) const
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void Element::undoChangeProperty(P_ID id, const QVariant& v, PropertyStyle ps)
+void Element::undoChangeProperty(P_ID id, const QVariant& v, PropertyFlags ps)
       {
       if (id == P_ID::AUTOPLACE && v.toBool()) {
             // special case: if we switch to autoplace, we must save
@@ -1418,6 +1418,17 @@ void Element::resetProperty(P_ID id)
       }
 
 //---------------------------------------------------------
+//   setStyle
+//---------------------------------------------------------
+
+void Element::initSubStyle(SubStyle st)
+      {
+      auto l = subStyle(st);
+      for (const StyledProperty& p : l)
+            setProperty(p.propertyIdx, score()->styleV(p.styleIdx));
+      }
+
+//---------------------------------------------------------
 //   custom
 //    check if property is != default
 //---------------------------------------------------------
@@ -1440,9 +1451,13 @@ void Element::undoResetProperty(P_ID id)
 //   readProperty
 //---------------------------------------------------------
 
-void Element::readProperty(XmlReader& e, P_ID id)
+bool Element::readProperty(const QStringRef& s, XmlReader& e, P_ID id)
       {
-      setProperty(id, Ms::getProperty(id, e));
+      if (s == propertyName(id)) {
+            setProperty(id, Ms::getProperty(id, e));
+            return true;
+            }
+      return false;
       }
 
 //---------------------------------------------------------

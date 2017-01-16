@@ -19,10 +19,10 @@ class XmlReader;
 enum class StyleIdx : int;
 
 //---------------------------------------------------------
-//   PropertyStyle
+//   PropertyFlags
 //---------------------------------------------------------
 
-enum class PropertyStyle : char {
+enum class PropertyFlags : char {
       NOSTYLE, UNSTYLED, STYLED
       };
 
@@ -100,8 +100,6 @@ enum class P_ID : int {
       LOCK_ASPECT_RATIO,
 
       SIZE_IS_SPATIUM,
-      TEXT_STYLE,
-      TEXT_STYLE_TYPE,
       TEXT,
       HTML_TEXT,
       USER_MODIFIED,
@@ -264,21 +262,26 @@ enum class P_ID : int {
       BRACKET_COLUMN,
       INAME_LAYOUT_POSITION,
 
+      SUB_STYLE,
+
       FONT_FACE,
       FONT_SIZE,
       FONT_BOLD,
       FONT_ITALIC,
       FONT_UNDERLINE,
-      FONT_FRAME,
-      FONT_FRAME_SQUARE,
-      FONT_FRAME_CIRCLE,
-      FONT_FRAME_WDITH,
-      FONT_FRAME_PADDING,
-      FONT_FRAME_ROUND,
-      FONT_FRAME_COLOR,
+      FRAME,
+      FRAME_SQUARE,
+      FRAME_CIRCLE,
+      FRAME_WIDTH,
+      FRAME_PADDING,
+      FRAME_ROUND,
+      FRAME_FG_COLOR,
+      FRAME_BG_COLOR,
       FONT_SPATIUM_DEPENDENT,
-      FONT_BG_COLOR,
-      FONT_FG_COLOR,
+      ALIGN,
+      OFFSET,
+      OFFSET_TYPE,
+      SYSTEM_FLAG,
 
       END
       };
@@ -317,6 +320,8 @@ enum class P_TYPE : char {
       HEAD_GROUP,       // enum class Notehead::Group
       ZERO_INT,         // displayed with offset +1
       FONT,
+      SUB_STYLE,
+      ALIGN,
       };
 
 extern QVariant getProperty(P_ID type, XmlReader& e);

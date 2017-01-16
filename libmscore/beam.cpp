@@ -62,10 +62,10 @@ Beam::Beam(Score* s)
       _grow1           = 1.0;
       _grow2           = 1.0;
       editFragment     = -1;
-      _isGrace          = false;
-      _cross            = false;
+      _isGrace         = false;
+      _cross           = false;
       _noSlope         = score()->styleB(StyleIdx::beamNoSlope);
-      noSlopeStyle     = PropertyStyle::STYLED;
+      noSlopeStyle     = PropertyFlags::STYLED;
       }
 
 //---------------------------------------------------------
@@ -2039,7 +2039,7 @@ void Beam::read(XmlReader& e)
                   setDistribute(e.readInt());
             else if (tag == "noSlope") {
                   setNoSlope(e.readInt());
-                  noSlopeStyle = PropertyStyle::UNSTYLED;
+                  noSlopeStyle = PropertyFlags::UNSTYLED;
                   }
             else if (tag == "growLeft")
                   setGrowLeft(e.readDouble());
@@ -2178,8 +2178,8 @@ void Beam::reset()
             }
       if (beamDirection() != Direction::AUTO)
             undoChangeProperty(P_ID::STEM_DIRECTION, Direction(Direction::AUTO));
-      if (noSlopeStyle == PropertyStyle::UNSTYLED)
-            undoChangeProperty(P_ID::BEAM_NO_SLOPE, propertyDefault(P_ID::BEAM_NO_SLOPE), PropertyStyle::STYLED);
+      if (noSlopeStyle == PropertyFlags::UNSTYLED)
+            undoChangeProperty(P_ID::BEAM_NO_SLOPE, propertyDefault(P_ID::BEAM_NO_SLOPE), PropertyFlags::STYLED);
 
       setGenerated(true);
       }
@@ -2371,7 +2371,7 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::BEAM_NO_SLOPE:
                   setNoSlope(v.toBool());
-                  noSlopeStyle = PropertyStyle::UNSTYLED;
+                  noSlopeStyle = PropertyFlags::UNSTYLED;
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
@@ -2405,17 +2405,17 @@ QVariant Beam::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
-//   propertyStyle
+//   propertyFlags
 //---------------------------------------------------------
 
-PropertyStyle Beam::propertyStyle(P_ID id) const
+PropertyFlags Beam::propertyFlags(P_ID id) const
       {
       switch (id) {
             case P_ID::BEAM_NO_SLOPE:
                   return noSlopeStyle;
 
             default:
-                  return Element::propertyStyle(id);
+                  return Element::propertyFlags(id);
             }
       }
 
@@ -2428,7 +2428,7 @@ void Beam::resetProperty(P_ID id)
       switch (id) {
             case P_ID::BEAM_NO_SLOPE:
                   setNoSlope(score()->styleB(StyleIdx::beamNoSlope));
-                  noSlopeStyle = PropertyStyle::STYLED;
+                  noSlopeStyle = PropertyFlags::STYLED;
                   break;
 
             default:
@@ -2443,7 +2443,7 @@ void Beam::resetProperty(P_ID id)
 
 void Beam::styleChanged()
       {
-      if (noSlopeStyle == PropertyStyle::STYLED)
+      if (noSlopeStyle == PropertyFlags::STYLED)
             setNoSlope(score()->styleB(StyleIdx::beamNoSlope));
       }
 

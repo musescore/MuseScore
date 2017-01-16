@@ -925,9 +925,9 @@ void EditStyle::valueChanged(int i)
                           cs->undo(new ChangeStyleVal(cs, i.first, i.second));
                           }
                     if (scoreFont->textEnclosureThickness()) {
-                           TextStyle ts = cs->textStyle(TextStyleType::REHEARSAL_MARK);
-                           ts.setFrameWidth(Spatium(scoreFont->textEnclosureThickness()));
-                           cs->undo(new ChangeTextStyle(cs, ts));
+//                           TextStyle ts = cs->textStyle(TextStyleType::REHEARSAL_MARK);
+//                           ts.setFrameWidth(Spatium(scoreFont->textEnclosureThickness()));
+//TODO                           cs->undo(new ChangeTextStyle(cs, ts));
                            }
                     }
               setValue = true;

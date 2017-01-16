@@ -18,6 +18,7 @@
 
 namespace Ms {
 
+enum class SubStyle;
 class TextLineBase;
 class Element;
 class Text;
@@ -119,9 +120,9 @@ class TextLineBase : public SLine {
       void createContinueTextElement();
       void createEndTextElement();
 
-      void setBeginText(const QString& s, TextStyleType style);
-      void setContinueText(const QString& s, TextStyleType style);
-      void setEndText(const QString& s, TextStyleType style);
+      void setBeginText(const QString& s, SubStyle style);
+      void setContinueText(const QString& s, SubStyle style);
+      void setEndText(const QString& s, SubStyle style);
 
       void setBeginText(const QString&);
       void setContinueText(const QString&);

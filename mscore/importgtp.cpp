@@ -312,18 +312,13 @@ void GuitarPro::initGuitarProDrumset()
       gpDrumset->drum(87) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Surdo"), NoteHead::Group::HEAD_NORMAL, 3, Direction::UP);
       }
 
-
-
 //---------------------------------------------------------
 //   addPalmMate
 //---------------------------------------------------------
 
 void GuitarPro::addPalmMute(Note* note)
       {
-      QString palmMute = "P.M.";
-      TextStyle textStyle;
-      textStyle.setAlign(Align::CENTER);
-      addTextToNote(palmMute, textStyle, note);
+      addTextToNote("P.M.", Align::CENTER, note);
       }
 
 //---------------------------------------------------------
@@ -332,11 +327,8 @@ void GuitarPro::addPalmMute(Note* note)
 
 void GuitarPro::addLetRing(Note* note)
       {
-      QString letRing = "let ring";
-      TextStyle textStyle;
-      textStyle.setItalic(true);
-      textStyle.setAlign(Align::CENTER);
-      addTextToNote(letRing, textStyle, note);
+      Text* t = addTextToNote("let ring", Align::CENTER, note);
+      t->setItalic(true);
       }
 
 //---------------------------------------------------------
@@ -345,10 +337,7 @@ void GuitarPro::addLetRing(Note* note)
 
 void GuitarPro::addTap(Note* note)
       {
-      QString tap = "T";
-      TextStyle textStyle;
-      textStyle.setAlign(Align::CENTER);
-      addTextToNote(tap, textStyle, note);
+      addTextToNote("T", Align::CENTER, note);
       }
 
 //---------------------------------------------------------
@@ -357,10 +346,7 @@ void GuitarPro::addTap(Note* note)
 
 void GuitarPro::addSlap(Note* note)
       {
-      QString slap = "S";
-      TextStyle textStyle;
-      textStyle.setAlign(Align::CENTER);
-      addTextToNote(slap, textStyle, note);
+      addTextToNote("S", Align::CENTER, note);
       }
 
 //---------------------------------------------------------
@@ -369,23 +355,21 @@ void GuitarPro::addSlap(Note* note)
 
 void GuitarPro::addPop(Note* note)
       {
-      QString pop = "P";
-      TextStyle textStyle;
-      textStyle.setAlign(Align::CENTER);
-      addTextToNote(pop, textStyle, note);
+      addTextToNote("P", Align::CENTER, note);
       }
 
 //---------------------------------------------------------
 //   addTextToNote
 //---------------------------------------------------------
 
-void GuitarPro::addTextToNote(QString string, TextStyle textStyle, Note* note)
+Text* GuitarPro::addTextToNote(QString string, Align a, Note* note)
       {
       Text* text = new Text(score);
-      text->setTextStyle(textStyle);
+      text->setAlign(a);
       text->setPlainText(string);
-      text->setAbove(true);
+//TODO:ws      text->setAbove(true);
       note->add(text);
+      return text;
       }
 
 //---------------------------------------------------------
@@ -1346,6 +1330,7 @@ void GuitarPro2::read(QFile* fp)
             segment->add(clef);
 
             if (capo > 0) {
+#if 0 // TODO:ws
                   Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
                   StaffText* st = new StaffText(score);
                   st->setTextStyleType(TextStyleType::STAFF);
@@ -1353,6 +1338,7 @@ void GuitarPro2::read(QFile* fp)
                   st->setParent(s);
                   st->setTrack(i * VOICES);
                   measure->add(st);
+#endif
             }
 
             Channel* ch = instr->channel(0);
@@ -1964,6 +1950,7 @@ void GuitarPro3::read(QFile* fp)
             segment->add(clef);
 
             if (capo > 0) {
+#if 0 // TODO:ws
                   Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
                   StaffText* st = new StaffText(score);
                   st->setTextStyleType(TextStyleType::STAFF);
@@ -1971,6 +1958,7 @@ void GuitarPro3::read(QFile* fp)
                   st->setParent(s);
                   st->setTrack(i * VOICES);
                   measure->add(st);
+#endif
             }
 
             Channel* ch = instr->channel(0);
@@ -2342,14 +2330,14 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
       if (!gp->title.isEmpty()) {
             Text* s = new Text(score);
             // s->setSubtype(TEXT_TITLE);
-            s->setTextStyleType(TextStyleType::TITLE);
+//TODO:ws            s->setTextStyleType(TextStyleType::TITLE);
             s->setPlainText(gp->title);
             m->add(s);
             }
       if (!gp->subtitle.isEmpty() && !gp->artist.isEmpty() && !gp->album.isEmpty()) {
             Text* s = new Text(score);
             // s->setSubtype(TEXT_SUBTITLE);
-            s->setTextStyleType(TextStyleType::SUBTITLE);
+//TODO:ws            s->setTextStyleType(TextStyleType::SUBTITLE);
             QString str;
             if (!gp->subtitle.isEmpty())
                   str.append(gp->subtitle);
@@ -2369,7 +2357,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
       if (!gp->composer.isEmpty()) {
             Text* s = new Text(score);
             // s->setSubtype(TEXT_COMPOSER);
-            s->setTextStyleType(TextStyleType::COMPOSER);
+//TODO:ws            s->setTextStyleType(TextStyleType::COMPOSER);
             s->setPlainText(gp->composer);
             m->add(s);
             }
@@ -2448,7 +2436,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
                   measure = mb;
                   }
             Text* txt = new Text(pscore);
-            txt->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT);
+//TODO:ws            txt->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT);
             txt->setPlainText(part->longName());
             measure->add(txt);
 

@@ -427,8 +427,8 @@ class Note : public Element {
       NoteType noteType() const;
       QString  noteTypeUserName() const;
 
-      ElementList el()                            { return _el; }
-      const ElementList el() const                { return _el; }
+      ElementList& el()                           { return _el; }
+      const ElementList& el() const               { return _el; }
       QQmlListProperty<Ms::Element> qmlElements() { return QmlListAccess<Ms::Element>(this, _el); }
 
       int subchannel() const                    { return _subchannel; }
@@ -452,7 +452,7 @@ class Note : public Element {
       void setOffTimeOffset(int v);
 
       int customizeVelocity(int velo) const;
-      NoteDot* dot(int n)                       { return _dots[n];          }
+      NoteDot* dot(int n)                         { return _dots[n];          }
       const QVector<NoteDot*>& dots() const       { return _dots;             }
       QVector<NoteDot*>& dots()                   { return _dots;             }
 

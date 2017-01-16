@@ -80,12 +80,11 @@ static Dyn dynList[] = {
 //---------------------------------------------------------
 
 Dynamic::Dynamic(Score* s)
-   : Text(s)
+   : Text(SubStyle::DYNAMICS, s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _velocity = -1;
       _dynRange = Range::PART;
-      setTextStyleType(TextStyleType::DYNAMICS);
       _dynamicType  = Type::OTHER;
       }
 
@@ -139,8 +138,8 @@ void Dynamic::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-      if (textStyleType() == TextStyleType::DEFAULT)
-            setTextStyleType(TextStyleType::DYNAMICS);
+      if (subStyle() == SubStyle::DEFAULT)
+            initSubStyle(SubStyle::DYNAMICS);
       }
 
 //---------------------------------------------------------
@@ -152,7 +151,7 @@ void Dynamic::layout()
       if (autoplace())
             setUserOff(QPointF());
 
-      QPointF p(textStyle().offset(spatium()));
+      QPointF p;
       if (placeAbove())
             p.ry() += score()->styleP(StyleIdx::dynamicsPosAbove);
       else {
@@ -357,8 +356,8 @@ bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Dynamic::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_ID::TEXT_STYLE_TYPE:
-                  return int(TextStyleType::DYNAMICS);
+            case P_ID::SUB_STYLE:
+                  return int(SubStyle::DYNAMICS);
             case P_ID::DYNAMIC_RANGE:
                   return int(Range::PART);
             case P_ID::VELOCITY:

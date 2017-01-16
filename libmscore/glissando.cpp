@@ -98,8 +98,9 @@ void GlissandoSegment::draw(QPainter* painter) const
             score()->scoreFont()->draw(ids, painter, magS(), QPointF(x, -(b.y() + b.height()*0.5) ), scale);
 //            MScore::pdfPrinting = tmp;
             }
+#if 0 // TODO
       if (glissando()->showText()) {
-            const TextStyle& st = score()->textStyle(TextStyleType::GLISSANDO);
+            const TextStyle& st = score()->textStyle(StyledPropertyListIdx::GLISSANDO);
             QRectF r = st.fontMetrics(_spatium).boundingRect(glissando()->text());
             // if text longer than available space, skip it
             if (r.width() < l) {
@@ -111,6 +112,7 @@ void GlissandoSegment::draw(QPainter* painter) const
                   painter->drawText(QPointF(x, -yOffset), glissando()->text());
                   }
             }
+#endif
       painter->restore();
       }
 

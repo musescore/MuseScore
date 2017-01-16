@@ -247,6 +247,15 @@ Dynamics
       staff line + text line height.
 
 
+Styles & Properties
+      There is a connection between style values and property values as some properties
+      can be styled. The StyleIdx of a property style can be found by calling
+            StyleIdx Element::getPropertyStyle(P_ID)
+      If the property has no style, then StyleIDx::NOSTYLE is returned.
+
+      A property can have different style values depending on the element type.
+
+
 
 ====================================================================
       Known Issues

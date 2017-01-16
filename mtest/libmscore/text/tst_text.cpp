@@ -56,7 +56,7 @@ void TestText::initTestCase()
 void TestText::testDelete()
       {
       Text* text = new Text(score);
-      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
+      text->initSubStyle(SubStyle::DYNAMICS);
 
       text->setPlainText("aaa bbb ccc\nddd eee fff\nggg hhh iii");
       text->layout();
@@ -78,7 +78,7 @@ void TestText::testDelete()
 void TestText::testText()
       {
       Text* text = new Text(score);
-      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
+      text->initSubStyle(SubStyle::DYNAMICS);
 
       text->startEdit(0, QPoint());
       text->layout();
@@ -153,7 +153,7 @@ void TestText::testText()
 void TestText::testSpecialSymbols()
       {
       Text* text = new Text(score);
-      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
+      text->initSubStyle(SubStyle::DYNAMICS);
 
       text->startEdit(0, QPoint());
       text->layout();
@@ -195,7 +195,7 @@ void TestText::testSpecialSymbols()
 void TestText::testPaste()
       {
       Text* text = new Text(score);
-      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
+      text->initSubStyle(SubStyle::DYNAMICS);
 
       text->startEdit(0, QPoint());
       text->layout();
@@ -243,7 +243,7 @@ void TestText::testPaste()
 void TestText::testTextProperties()
       {
       Text* text = new Text(score);
-      text->setTextStyle(score->textStyle(TextStyleType::STAFF));
+      text->initSubStyle(SubStyle::STAFF);
 
       text->startEdit(0, QPoint());
       text->layout();

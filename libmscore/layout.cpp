@@ -1395,9 +1395,9 @@ void Score::layoutFingering(Fingering* f)
       {
       if (f == 0)
             return;
-      TextStyleType tst = f->textStyleType();
-      if (tst != TextStyleType::FINGERING && tst != TextStyleType::RH_GUITAR_FINGERING && tst != TextStyleType::STRING_NUMBER)
-            return;
+//      StyledPropertyListIdx tst = f->textStyleType();
+//      if (tst != StyledPropertyListIdx::FINGERING && tst != StyledPropertyListIdx::RH_GUITAR_FINGERING && tst != StyledPropertyListIdx::STRING_NUMBER)
+//            return;
 
       Note* note   = f->note();
       Chord* chord = note->chord();
@@ -2040,7 +2040,7 @@ static bool breakMultiMeasureRest(Measure* m)
       for (Element* e : m->el()) {
             if (e->isMarker()) {
                   Marker* mark = toMarker(e);
-                  if (!(mark->textStyle().align() & Align::RIGHT))
+                  if (!(mark->align() & Align::RIGHT))
                         return true;
                   }
             }
@@ -2053,7 +2053,7 @@ static bool breakMultiMeasureRest(Measure* m)
                         return true;
                   else if (e->isMarker()) {
                         Marker* mark = toMarker(e);
-                        if (mark->textStyle().align() & Align::RIGHT)
+                        if (mark->align() & Align::RIGHT)
                               return true;
                         }
                   }
@@ -3457,30 +3457,35 @@ qDebug("%p %d-%d", this, stick, etick);
       //    initialize layout context lc
       //---------------------------------------------------
 
-      Measure* m = tick2measure(stick);
+      MeasureBase* m = tick2measure(stick);
+      if (m == 0)
+            m = first();
 
       // start layout one measure earlier to handle clefs and cautionary elements
       if (m->prevMeasureMM())
             m = m->prevMeasureMM();
+      else if (m->prev())
+            m = m->prev();
 
       // if the first measure of the score is part of a multi measure rest
       // m->system() will return a nullptr. We need to find the multi measure
       // rest which replaces the measure range
 
-      if (!m->system() && m->hasMMRest())
-            m = m->mmRest();
+      if (!m->system() && m->isMeasure() && toMeasure(m)->hasMMRest())
+            m = toMeasure(m)->mmRest();
 
       lc.score        = m->score();
       System* system  = m->system();
       int systemIndex = _systems.indexOf(system);
-      if (system && systemIndex >= 0) {
+
+      if (system && systemIndex >= 0 && stick > 0) {
             lc.page         = system->page();
             lc.curPage      = pageIdx(lc.page);
             if (lc.curPage == -1)
                   lc.curPage = 0;
-            lc.curSystem   = m->system();
+            lc.curSystem   = system;
             lc.systemList  = _systems.mid(systemIndex);
-            lc.nextMeasure = tick2measure(system->measure(0)->tick());
+            lc.nextMeasure = system->measure(0); // tick2measure(system->measure(0)->tick());
             _systems.erase(_systems.begin() + systemIndex, _systems.end());
             if (!lc.nextMeasure->prevMeasure())
                   lc.measureNo = 0;

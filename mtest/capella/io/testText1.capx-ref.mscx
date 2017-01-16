@@ -73,23 +73,19 @@
           </TimeSig>
         <StaffText>
           <pos x="25" y="-13"/>
-          <halign>center</halign>
-          <valign>baseline</valign>
-          <xoffset>0</xoffset>
-          <yoffset>2</yoffset>
           <family>Arial</family>
           <size>24</size>
           <bold>1</bold>
+          <align>center,baseline</align>
+          <offset x="0" y="2"/>
           <text>Test text 1</text>
           </StaffText>
         <StaffText>
           <pos x="25" y="-8"/>
-          <halign>center</halign>
-          <valign>baseline</valign>
-          <xoffset>0</xoffset>
-          <yoffset>2</yoffset>
           <family>Arial</family>
           <bold>1</bold>
+          <align>center,baseline</align>
+          <offset x="0" y="2"/>
           <text>This is the subtitle</text>
           </StaffText>
         <Chord>
@@ -204,12 +200,10 @@
           </Chord>
         <StaffText>
           <pos x="5" y="-4"/>
-          <halign>center</halign>
-          <valign>baseline</valign>
-          <xoffset>0</xoffset>
-          <yoffset>2</yoffset>
           <family>Arial</family>
           <bold>1</bold>
+          <align>center,baseline</align>
+          <offset x="0" y="2"/>
           <text>MuseScore testfile
 Leon Vinken</text>
           </StaffText>

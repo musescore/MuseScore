@@ -152,7 +152,7 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       if (s.isEmpty())
             return;
       Text text(score());
-      text.setTextStyleType(area < 3 ? TextStyleType::HEADER : TextStyleType::FOOTER);
+//TODO      text.setStyledPropertyListIdx(area < 3 ? StyledPropertyListIdx::HEADER : StyledPropertyListIdx::FOOTER);
       text.setParent(const_cast<Page*>(this));
       text.setLayoutToParentWidth(true);
 
@@ -165,7 +165,7 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
             case 4: flags = Align::HCENTER | Align::BOTTOM; break;
             case 5: flags = Align::RIGHT   | Align::BOTTOM; break;
             }
-      text.textStyle().setAlign(flags);
+      text.setAlign(flags);
       text.setXmlText(s);
       text.layout();
       p->translate(text.pos());

@@ -12,6 +12,7 @@
 
 #include "inspectorText.h"
 #include "libmscore/score.h"
+#include "icons.h"
 
 namespace Ms {
 
@@ -24,31 +25,27 @@ InspectorText::InspectorText(QWidget* parent)
       {
       t.setupUi(addWidget());
 
-      iList.push_back({ P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    });
-      pList.push_back({ t.title, t.panel });
-      connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
-      mapSignals();
-      }
+      const std::vector<InspectorItem> iiList = {
+            { P_ID::FONT_FACE,      0, 0, t.fontFace,     t.resetFontFace     },
+            { P_ID::FONT_SIZE,      0, 0, t.fontSize,     t.resetFontSize     },
+            { P_ID::FONT_BOLD,      0, 0, t.bold,         t.resetBold         },
+            { P_ID::FONT_ITALIC,    0, 0, t.italic,       t.resetItalic       },
+            { P_ID::FONT_UNDERLINE, 0, 0, t.underline,    t.resetUnderline    },
+            { P_ID::FRAME,          0, 0, t.hasFrame,     t.resetHasFrame     },
+            { P_ID::FRAME_FG_COLOR, 0, 0, t.frameColor,   t.resetFrameColor   },
+            { P_ID::FRAME_BG_COLOR, 0, 0, t.bgColor,      t.resetBgColor      },
+            { P_ID::FRAME_CIRCLE,   0, 0, t.circle,       t.resetCircle       },
+            { P_ID::FRAME_SQUARE,   0, 0, t.square,       t.resetSquare       },
+            { P_ID::FRAME_WIDTH,    0, 0, t.frameWidth,   t.resetFrameWidth   },
+            { P_ID::FRAME_PADDING,  0, 0, t.paddingWidth, t.resetPaddingWidth },
+            { P_ID::FRAME_ROUND,    0, 0, t.frameRound,   t.resetFrameRound   },
+            { P_ID::ALIGN,          0, 0, t.align,        t.resetAlign        }
+            };
+      const std::vector<InspectorPanel> ppList = {
+            { t.title, t.panel }
+            };
 
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorText::setElement()
-      {
-      Element* e = inspector->element();
-      Score* score = e->score();
-
-      t.style->blockSignals(true);
-      t.style->clear();
-      const QList<TextStyle>& ts = score->style().textStyles();
-      int n = ts.size();
-      for (int i = 0; i < n; ++i) {
-            if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
-                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toUtf8().data()), i);
-            }
-      t.style->blockSignals(false);
-      InspectorElementBase::setElement();
+      mapSignals(iiList, ppList);
       }
 
 }

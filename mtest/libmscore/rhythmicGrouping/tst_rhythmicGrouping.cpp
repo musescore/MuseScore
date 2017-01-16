@@ -56,7 +56,6 @@ void TestRhythmicGrouping::initTestCase()
 void TestRhythmicGrouping::group(const char* p1, const char* p2, int staves)
       {
       MasterScore* score = readScore(DIR + p1);
-      score->doLayout();
 
       if (!staves) {
             score->cmdSelectAll();

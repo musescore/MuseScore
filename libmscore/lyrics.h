@@ -72,7 +72,7 @@ class Lyrics : public Text {
                               ///< (melisma)
       Syllabic _syllabic;
       LyricsLine* _separator;
-      PropertyStyle placementStyle;
+      PropertyFlags placementStyle;
 
    protected:
       int _no;                ///< row index
@@ -133,7 +133,7 @@ class Lyrics : public Text {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID id) const override;
-      virtual PropertyStyle propertyStyle(P_ID) const override;
+      virtual PropertyFlags propertyFlags(P_ID) const override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;
       virtual void reset() override;
       virtual void styleChanged() override;

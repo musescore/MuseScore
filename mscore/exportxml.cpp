@@ -1093,13 +1093,12 @@ static void defaults(XmlWriter& xml, Score* s, double& millimeters, const int& t
 
       // font defaults
       // as MuseScore supports dozens of different styles, while MusicXML only has defaults
-      // for music (TODO), words and lyrics, use TextStyleType STAFF (typically used for words)
+      // for music (TODO), words and lyrics, use SubStyle STAFF (typically used for words)
       // and LYRIC1 to get MusicXML defaults
-      const TextStyle tsStaff = s->textStyle(TextStyleType::STAFF);
-      const TextStyle tsLyric = s->textStyle(TextStyleType::LYRIC1);
+
       // TODO xml.tagE("music-font font-family=\"TBD\" font-size=\"TBD\"");
-      xml.tagE(QString("word-font font-family=\"%1\" font-size=\"%2\"").arg(tsStaff.family()).arg(tsStaff.size()));
-      xml.tagE(QString("lyric-font font-family=\"%1\" font-size=\"%2\"").arg(tsLyric.family()).arg(tsLyric.size()));
+      xml.tagE(QString("word-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(StyleIdx::staffFontFace)).arg(s->styleD(StyleIdx::staffFontSize)));
+      xml.tagE(QString("lyric-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(StyleIdx::lyricsOddFontFace)).arg(s->styleD(StyleIdx::lyricsOddFontSize)));
       xml.etag();
       }
 
@@ -1110,12 +1109,10 @@ static void defaults(XmlWriter& xml, Score* s, double& millimeters, const int& t
 
 static void creditWords(XmlWriter& xml, Score* s, double x, double y, QString just, QString val, const QList<TextFragment>& words)
       {
-      // set the default words format
-      const TextStyle tsStaff = s->textStyle(TextStyleType::STAFF);
       const QString mtf = s->styleSt(StyleIdx::MusicalTextFont);
       CharFormat defFmt;
-      defFmt.setFontFamily(tsStaff.family());
-      defFmt.setFontSize(tsStaff.size());
+      defFmt.setFontFamily(s->styleSt(StyleIdx::staffFontFace));
+      defFmt.setFontSize(s->styleD(StyleIdx::staffFontSize));
 
       // export formatted
       xml.stag("credit page=\"1\"");
@@ -1175,9 +1172,9 @@ void ExportMusicXml::credits(XmlWriter& xml)
 
                         double tx = w / 2;
                         double ty = h - getTenthsFromDots(text->pagePos().y());
-                        QString styleName = text->textStyle().name();
+//                        QString styleName = text->textStyle().name();
 
-                        Align al = text->textStyle().align();
+                        Align al = text->align();
                         QString just;
                         QString val;
 
@@ -1220,9 +1217,8 @@ void ExportMusicXml::credits(XmlWriter& xml)
             // put copyright at the bottom center of the page
             // note: as the copyright metatag contains plain text, special XML characters must be escaped
             TextFragment f(XmlWriter::xmlString(rights));
-            const TextStyle tsFooter = _score->textStyle(TextStyleType::FOOTER);
-            f.changeFormat(FormatId::FontFamily, tsFooter.family());
-            f.changeFormat(FormatId::FontSize, tsFooter.size());
+            f.changeFormat(FormatId::FontFamily, _score->styleSt(StyleIdx::footerFontFace));
+            f.changeFormat(FormatId::FontSize, _score->styleD(StyleIdx::footerFontSize));
             QList<TextFragment> list;
             list.append(f);
             creditWords(xml, _score, w / 2, bm, "center", "bottom", list);
@@ -2683,11 +2679,11 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
                         notations.tag(xml);
                         technical.tag(xml);
                         QString t = MScoreTextToMXML::toPlainText(f->xmlText());
-                        if (f->textStyleType() == TextStyleType::RH_GUITAR_FINGERING)
+                        if (f->subStyle() == SubStyle::RH_GUITAR_FINGERING)
                               xml.tag("pluck", t);
-                        else if (f->textStyleType() == TextStyleType::LH_GUITAR_FINGERING)
+                        else if (f->subStyle() == SubStyle::LH_GUITAR_FINGERING)
                               xml.tag("fingering", t);
-                        else if (f->textStyleType() == TextStyleType::FINGERING) {
+                        else if (f->subStyle() == SubStyle::FINGERING) {
                               // for generic fingering, try to detect plucking
                               // (backwards compatibility with MuseScore 1.x)
                               // p, i, m, a, c represent the plucking finger
@@ -2696,7 +2692,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
                               else
                                     xml.tag("fingering", t);
                               }
-                        else if (f->textStyleType() == TextStyleType::STRING_NUMBER) {
+                        else if (f->subStyle() == SubStyle::STRING_NUMBER) {
                               bool ok;
                               int i = t.toInt(&ok);
                               if (ok) {
@@ -3179,14 +3175,12 @@ static void wordsMetrome(XmlWriter& xml, Score* s, Text const* const text)
       QList<TextFragment>       wordsRight; // words right of metronome
 
       // set the default words format
-      const TextStyle tsStaff = s->textStyle(TextStyleType::STAFF);
       const QString mtf = s->styleSt(StyleIdx::MusicalTextFont);
       CharFormat defFmt;
-      defFmt.setFontFamily(tsStaff.family());
-      defFmt.setFontSize(tsStaff.size());
+      defFmt.setFontFamily(s->styleSt(StyleIdx::staffFontFace));
+      defFmt.setFontSize(s->styleD(StyleIdx::staffFontSize));
 
       if (findMetronome(list, wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
-
             if (wordsLeft.size() > 0) {
                   xml.stag("direction-type");
                   QString attr; // TODO TBD
@@ -3222,8 +3216,8 @@ static void wordsMetrome(XmlWriter& xml, Score* s, Text const* const text)
       else {
             xml.stag("direction-type");
             QString attr;
-            if (text->textStyle().hasFrame()) {
-                  if (text->textStyle().circle())
+            if (text->hasFrame()) {
+                  if (text->circle())
                         attr = " enclosure=\"circle\"";
                   else
                         attr = " enclosure=\"rectangle\"";
@@ -3293,13 +3287,12 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       directionTag(xml, attr, rmk);
       xml.stag("direction-type");
       QString attr;
-      if (!rmk->textStyle().hasFrame()) attr = " enclosure=\"none\"";
+      if (!rmk->hasFrame()) attr = " enclosure=\"none\"";
       // set the default words format
-      const TextStyle tsStaff = _score->textStyle(TextStyleType::STAFF);
       const QString mtf = _score->styleSt(StyleIdx::MusicalTextFont);
       CharFormat defFmt;
-      defFmt.setFontFamily(tsStaff.family());
-      defFmt.setFontSize(tsStaff.size());
+      defFmt.setFontFamily(_score->styleSt(StyleIdx::staffFontFace));
+      defFmt.setFontSize(_score->styleD(StyleIdx::staffFontSize));
       // write formatted
       MScoreTextToMXML mttm("rehearsal", attr, defFmt, mtf);
       mttm.writeTextFragments(rmk->fragmentList(), xml);
@@ -3660,11 +3653,10 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const int trk)
                         xml.tag("syllabic", s);
                         QString attr; // TODO TBD
                         // set the default words format
-                        const TextStyle tsStaff = _score->textStyle(TextStyleType::LYRIC1);
-                        const QString mtf = _score->styleSt(StyleIdx::MusicalTextFont);
+                        const QString mtf       = _score->styleSt(StyleIdx::MusicalTextFont);
                         CharFormat defFmt;
-                        defFmt.setFontFamily(tsStaff.family());
-                        defFmt.setFontSize(tsStaff.size());
+                        defFmt.setFontFamily(_score->styleSt(StyleIdx::lyricsEvenFontFace));
+                        defFmt.setFontSize(_score->styleD(StyleIdx::lyricsOddFontSize));
                         // write formatted
                         MScoreTextToMXML mttm("text", attr, defFmt, mtf);
                         mttm.writeTextFragments(l->fragmentList(), xml);
@@ -5522,7 +5514,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
       int rootTpc = h->rootTpc();
       if (rootTpc != Tpc::TPC_INVALID) {
             QString tagName = "harmony";
-            bool frame = h->textStyle().hasFrame();
+            bool frame = h->hasFrame();
             tagName += QString(" print-frame=\"%1\"").arg(frame ? "yes" : "no"); // .append(relative));
             tagName += color2xml(h);
             xml.stag(tagName);
@@ -5615,7 +5607,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             // export an unrecognized Chord
             // which may contain arbitrary text
             //
-            if (h->textStyle().hasFrame())
+            if (h->hasFrame())
                   xml.stag(QString("harmony print-frame=\"yes\""));     // .append(relative));
             else
                   xml.stag(QString("harmony print-frame=\"no\""));      // .append(relative));

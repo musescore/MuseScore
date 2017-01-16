@@ -281,9 +281,9 @@ void HarmonyCanvas::paintEvent(QPaintEvent* event)
             FSymbol* sb = static_cast<FSymbol*>(dragElement);
 
             double _spatium = 2.0 * PALETTE_SPATIUM / extraMag;
-            const TextStyle* st = &gscore->textStyle(TextStyleType::HARMONY);
-            QFont ff(st->font(_spatium * MScore::pixelRatio));
-            ff.setFamily(sb->font().family());
+//TODO:ws            const TextStyle* st = &gscore->textStyle(TextStyleType::HARMONY);
+//            QFont ff(st->font(_spatium * MScore::pixelRatio));
+//            ff.setFamily(sb->font().family());
 
             QString s;
             int code = sb->code();
@@ -293,7 +293,7 @@ void HarmonyCanvas::paintEvent(QPaintEvent* event)
                   }
             else
                   s = QChar(code);
-            p.setFont(ff);
+//TODO:ws            p.setFont(ff);
             QPen pen(Qt::yellow);
             p.setPen(pen);
             p.drawText(dragElement->pos(), s);
@@ -306,6 +306,7 @@ void HarmonyCanvas::paintEvent(QPaintEvent* event)
 
 void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, double& y, int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase)
       {
+#if 0 // TODO:ws
       QStack<QPointF> stack;
       int fontIdx = 0;
       double _spatium = 2.0 * PALETTE_SPATIUM / extraMag;
@@ -390,6 +391,7 @@ void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, dou
                         }
                   }
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -468,6 +470,7 @@ void HarmonyCanvas::setChordDescription(ChordDescription* sd, ChordList* sl)
 
 void HarmonyCanvas::dropEvent(QDropEvent* event)
       {
+#if 0       // TODO:ws
       if (dragElement && dragElement->type() == Element::Type::FSYMBOL) {
             FSymbol* sb = static_cast<FSymbol*>(dragElement);
 
@@ -495,6 +498,7 @@ void HarmonyCanvas::dropEvent(QDropEvent* event)
             dragElement = 0;
             update();
             }
+#endif
       }
 
 //---------------------------------------------------------

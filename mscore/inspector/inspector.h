@@ -319,7 +319,6 @@ class InspectorTempoText : public InspectorElementBase {
 
    public:
       InspectorTempoText(QWidget* parent);
-      virtual void setElement() override;
       virtual void postInit() override;
       };
 
@@ -330,13 +329,11 @@ class InspectorTempoText : public InspectorElementBase {
 class InspectorDynamic : public InspectorElementBase {
       Q_OBJECT
 
-//      UiInspectorElement e;
       Ui::InspectorText t;
       Ui::InspectorDynamic d;
 
    public:
       InspectorDynamic(QWidget* parent);
-      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
@@ -346,7 +343,6 @@ class InspectorDynamic : public InspectorElementBase {
 class InspectorLyric : public InspectorElementBase {
       Q_OBJECT
 
-//      UiInspectorElement e;
       Ui::InspectorText t;
       Ui::InspectorLyric l;
 
@@ -355,23 +351,20 @@ class InspectorLyric : public InspectorElementBase {
 
    public:
       InspectorLyric(QWidget* parent);
-      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
 //   InspectorLyric
 //---------------------------------------------------------
 
-class InspectorStafftext : public InspectorElementBase {
+class InspectorStaffText : public InspectorElementBase {
       Q_OBJECT
 
-//      UiInspectorElement e;
       Ui::InspectorText t;
-      Ui::InspectorStafftext s;
+      Ui::InspectorStaffText s;
 
    public:
-      InspectorStafftext(QWidget* parent);
-      virtual void setElement() override;
+      InspectorStaffText(QWidget* parent);
       };
 
 //---------------------------------------------------------

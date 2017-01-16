@@ -23,9 +23,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 Fingering::Fingering(Score* s)
-  : Text(s)
+  : Text(SubStyle::FINGERING, s)
       {
-      setTextStyleType(TextStyleType::FINGERING);
       setFlag(ElementFlag::HAS_TAG, true);
       }
 
@@ -78,29 +77,13 @@ void Fingering::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   reset
-//---------------------------------------------------------
-
-void Fingering::reset()
-      {
-      QPointF o(userOff());
-      score()->layoutFingering(this);
-      QPointF no;
-      TextStyleType tst = textStyleType();
-      if (tst == TextStyleType::FINGERING || tst == TextStyleType::RH_GUITAR_FINGERING || tst == TextStyleType::STRING_NUMBER)
-            no = userOff();
-      setUserOff(o);
-      score()->undoChangeProperty(this, P_ID::USER_OFF, no);
-      }
-
-//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
 QString Fingering::accessibleInfo() const
       {
       QString rez = Element::accessibleInfo();
-      if (textStyleType() == TextStyleType::STRING_NUMBER) {
+      if (subStyle() == SubStyle::STRING_NUMBER) {
             rez += " " + tr("String number");
             }
       return QString("%1: %2").arg(rez).arg(plainText());
@@ -113,10 +96,6 @@ QString Fingering::accessibleInfo() const
 QVariant Fingering::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_ID::FONT_FACE:
-                  return textStyle().family();
-            case P_ID::FONT_BOLD:
-                  return textStyle().bold();
             default:
                   return Text::getProperty(propertyId);
             }
@@ -129,12 +108,6 @@ QVariant Fingering::getProperty(P_ID propertyId) const
 bool Fingering::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::FONT_FACE:
-                  textStyle().setFamily(v.toString());
-                  break;
-            case P_ID::FONT_BOLD:
-                  textStyle().setBold(v.toBool());
-                  break;
             default:
                   return Text::setProperty(propertyId, v);
             }
@@ -149,13 +122,81 @@ bool Fingering::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Fingering::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case P_ID::FONT_FACE:
-                  return score()->textStyle(TextStyleType::FINGERING).family();
-            case P_ID::FONT_BOLD:
-                  return score()->textStyle(TextStyleType::FINGERING).bold();
+            case P_ID::SUB_STYLE:
+                  return int(SubStyle::FINGERING);
             default:
                   return Text::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   propertyStyle
+//---------------------------------------------------------
+
+PropertyFlags Fingering::propertyFlags(P_ID id) const
+      {
+      switch (id) {
+            default:
+                  return Text::propertyFlags(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   resetProperty
+//---------------------------------------------------------
+
+void Fingering::resetProperty(P_ID id)
+      {
+      switch (id) {
+            default:
+                  return Text::resetProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx Fingering::getPropertyStyle(P_ID id) const
+      {
+      switch (id) {
+            default:
+                  return Text::getPropertyStyle(id);
+            }
+      return StyleIdx::NOSTYLE;
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//    reset all styled values to actual style
+//---------------------------------------------------------
+
+void Fingering::styleChanged()
+      {
+      Text::styleChanged();
+      }
+
+//---------------------------------------------------------
+//   reset
+//---------------------------------------------------------
+
+void Fingering::reset()
+      {
+      QPointF o(userOff());
+      score()->layoutFingering(this);
+      QPointF no = userOff();
+      setUserOff(o);
+      score()->undoChangeProperty(this, P_ID::USER_OFF, no);
+      Text::reset();
+      }
+
+//---------------------------------------------------------
+//   subtypeName
+//---------------------------------------------------------
+
+QString Fingering::subtypeName() const
+      {
+      return subStyleName(subStyle());
       }
 
 }

@@ -1020,8 +1020,8 @@ bool Chord::readProperties(XmlReader& e)
             ss->read(e);
             add(ss);
             }
-      else if (tag == "StemDirection")
-            readProperty(e, P_ID::STEM_DIRECTION);
+      else if (readProperty(tag, e, P_ID::STEM_DIRECTION))
+            ;
       else if (tag == "noStem")
             _noStem = e.readInt();
       else if (tag == "Arpeggio") {

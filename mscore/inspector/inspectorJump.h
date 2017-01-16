@@ -33,7 +33,6 @@ class InspectorJump : public InspectorElementBase {
 
    public:
       InspectorJump(QWidget* parent);
-      virtual void setElement() override;
       };
 
 

@@ -96,7 +96,7 @@ class Harmony : public Text {
       void render(const QString&, qreal&, qreal&);
       void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
       virtual void styleChanged() override     { render(); }
-      virtual void setTextStyle(const TextStyle& st) override;
+//      virtual void setTextStyle(const TextStyle& st) override;
 
    public:
       Harmony(Score* = 0);
@@ -180,6 +180,8 @@ class Harmony : public Text {
 
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;
+
+      virtual QVariant propertyDefault(P_ID id) const override;
       };
 
 

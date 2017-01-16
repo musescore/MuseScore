@@ -470,7 +470,6 @@ static void readNote(Note* note, XmlReader& e)
                   }
             else if (tag == "Text") {
                   Fingering* f = new Fingering(note->score());
-                  f->setTextStyleType(TextStyleType::FINGERING);
                   f->read(e);
                   note->add(f);
                   }
@@ -1255,7 +1254,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               // force the marker type for correct display
                               m->setXmlText("");
                               m->setMarkerType(m->markerType());
-                              m->setTextStyleType(TextStyleType::REPEAT_LEFT);
+                              m->setStyledPropertyListIdx(StyledPropertyListIdx::REPEAT_LEFT);
                               }
                         }
                   m->add(el);
@@ -1341,7 +1340,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Segment")
                   segment->read(e);
             else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(m->score());
+                  Text* noText = new Text(SubStyle::MEASURE_NUMBER, m->score());
                   noText->read(e);
                   noText->setFlag(ElementFlag::ON_STAFF, true);
                   // noText->setFlag(ElementFlag::MOVABLE, false); ??
@@ -1814,9 +1813,10 @@ static void readStyle(MStyle* style, XmlReader& e)
                   tag = "lyricsPosBelow";
 
             if (tag == "TextStyle") {
-                  TextStyle s;
-                  s.read(e);
-                  style->setTextStyle(s);
+//                  TextStyle s;
+//TODO                  s.read(e);
+//                  style->setTextStyle(s);
+                  e.skipCurrentElement();
                   }
             else if (tag == "Spatium")
                   style->set(StyleIdx::spatium, e.readDouble() * DPMM);
@@ -1922,7 +1922,7 @@ static void readStyle(MStyle* style, XmlReader& e)
       qreal _spatium = style->value(StyleIdx::spatium).toDouble();
       qreal spMM = _spatium / DPMM;
       for (int i = 0; i < n; ++i) {
-            TextStyle* s = &style->textStyle(TextStyleType(i));
+            TextStyle* s = &style->textStyle(StyledPropertyListIdx(i));
             if (s->frameWidthMM() != 0.0)
                   s->setFrameWidth(Spatium(s->frameWidthMM() / spMM));
             if (s->paddingWidthMM() != 0.0)
@@ -1937,6 +1937,7 @@ static void readStyle(MStyle* style, XmlReader& e)
 
 Score::FileError MasterScore::read114(XmlReader& e)
       {
+#if 0
       for (unsigned int i = 0; i < sizeof(style114)/sizeof(*style114); ++i)
             style().set(style114[i].idx, style114[i].val);
 
@@ -1951,7 +1952,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
       ts = style().textStyle("Dynamics");
       ts.setItalic(false);
       style().setTextStyle(ts);
-
+#endif
       TempoMap tm;
       while (e.readNextStartElement()) {
             e.setTrack(-1);
@@ -2027,6 +2028,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
                         }
                   }
             else if (tag == "TextStyle") {
+                  e.skipCurrentElement();
+#if 0 // TODO
                   TextStyle s;
                   s.read(e);
 
@@ -2045,6 +2048,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                         s.setAlign(Align(int(s.align()) & int(~Align::VMASK)) | Align::BASELINE);
 
                   style().setTextStyle(s);
+#endif
                   }
             else if (tag == "page-layout") {
                   if (_layoutMode != LayoutMode::FLOAT && _layoutMode != LayoutMode::SYSTEM) {

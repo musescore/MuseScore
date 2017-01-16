@@ -872,9 +872,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             harmonicNote->setTpcFromPitch();
                                                             if (harmonicText.compare("Natural")) {
                                                                   harmonicNote->setFret(fretNum.toInt());
-                                                                  TextStyle textStyle;
-                                                                  textStyle.setAlign(Align::CENTER);
-                                                                  addTextToNote(harmonicText, textStyle, harmonicNote);
+                                                                  addTextToNote(harmonicText, Align::CENTER, harmonicNote);
                                                                   }
                                                             }
                                                       currentProperty = currentProperty.nextSibling();
@@ -1085,12 +1083,10 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
 
                                                       // if a barre fret has been specified
                                                       if (barreFret.compare("")) {
-                                                            TextStyle textStyle;
-                                                            textStyle.setAlign(Align::CENTER);
                                                             if (halfBarre)
-                                                                  addTextToNote("1/2B " + barreFret, textStyle, note);
+                                                                  addTextToNote("1/2B " + barreFret, Align::CENTER, note);
                                                             else
-                                                                  addTextToNote("B " + barreFret, textStyle, note);
+                                                                  addTextToNote("B " + barreFret, Align::CENTER, note);
                                                             }
                                                       }
                                                 QDomNode dynamicsNode = currentNode.parentNode().firstChildElement("Dynamic");
@@ -1160,17 +1156,13 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 QDomNode timerNode = currentNode.parentNode().firstChildElement("Timer");
                                                 if (!timerNode.isNull()) {
                                                       int time = timerNode.toElement().text().toInt();
-                                                      TextStyle textStyle;
-                                                      textStyle.setAlign(Align::CENTER);
                                                       int minutes = time/60;
                                                       int seconds = time % 60;
-                                                      addTextToNote(QString::number(minutes) + ":" + (seconds < 10 ? "0" + QString::number(seconds) : QString::number(seconds)), textStyle, note);
+                                                      addTextToNote(QString::number(minutes) + ":" + (seconds < 10 ? "0" + QString::number(seconds) : QString::number(seconds)), Align::CENTER, note);
                                                       }
                                                 QDomNode textNode = currentNode.parentNode().firstChildElement("FreeText");
                                                 if (!textNode.isNull()) {
-                                                      TextStyle textStyle;
-                                                      textStyle.setAlign(Align::CENTER);
-                                                      addTextToNote(textNode.toElement().text(), textStyle, note);
+                                                      addTextToNote(textNode.toElement().text(), Align::CENTER, note);
                                                       }
                                                 QDomNode ghostNode = currentNote.parentNode().firstChildElement("AntiAccent");
                                                 if (!ghostNode.isNull()) {
@@ -1306,7 +1298,6 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                     QString argument = currentProperty.attributes().namedItem("name").toAttr().value();
                                     if (!argument.compare("Rasgueado")) {
                                           StaffText* st = new StaffText(score);
-                                          st->setTextStyleType(TextStyleType::STAFF);
                                           st->setXmlText("rasg.");
                                           st->setParent(segment);
                                           st->setTrack(track);
@@ -1640,7 +1631,6 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         ts->setLargeParentheses(true);
                         s->add(ts);
                         StaffText* st = new StaffText(score);
-                        st->setTextStyleType(TextStyleType::STAFF);
                         st->setXmlText("Free time");
                         st->setParent(s);
                         st->setTrack(stave);
@@ -1662,7 +1652,6 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                   if (!bars[measureCounter].direction.compare("Fine") || (bars[measureCounter].direction.compare("") && !bars[measureCounter].directionStyle.compare("Jump"))) {
                         Segment* s = measure->getSegment(Segment::Type::KeySig, measure->tick());
                         StaffText* st = new StaffText(score);
-                        st->setTextStyleType(TextStyleType::STAFF);
                         if (!bars[measureCounter].direction.compare("Fine"))
                               st->setXmlText("fine");
                         else if (!bars[measureCounter].direction.compare("DaCapo"))

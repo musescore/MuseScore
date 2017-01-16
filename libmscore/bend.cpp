@@ -47,6 +47,7 @@ Bend::Bend(Score* s)
 
 void Bend::layout()
       {
+#if 0 // TODO
       // during mtest, there may be no score. If so, exit.
       if (!score())
             return;
@@ -73,7 +74,7 @@ void Bend::layout()
             }
       QRectF bb;
 
-      const TextStyle* st = &score()->textStyle(TextStyleType::BEND);
+      const TextStyle* st = &score()->textStyle(StyledPropertyListIdx::BEND);
       QFontMetricsF fm(st->fontMetrics(_spatium));
 
       int n   = _points.size();
@@ -152,6 +153,7 @@ void Bend::layout()
       setbbox(bb);
       setPos(0.0, 0.0);
       adjustReadPos();
+#endif
       }
 
 //---------------------------------------------------------
@@ -164,8 +166,9 @@ void Bend::draw(QPainter* painter) const
       painter->setPen(pen);
       painter->setBrush(QBrush(curColor()));
 
+#if 0 //TODO
       qreal _spatium = spatium();
-      const TextStyle* st = &score()->textStyle(TextStyleType::BEND);
+      const TextStyle* st = &score()->textStyle(StyledPropertyListIdx::BEND);
       QFont f = st->font(_spatium * MScore::pixelRatio);
       painter->setFont(f);
 
@@ -249,6 +252,7 @@ void Bend::draw(QPainter* painter) const
             x = x2;
             y = y2;
             }
+#endif
       }
 
 //---------------------------------------------------------

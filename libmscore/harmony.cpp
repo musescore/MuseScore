@@ -24,7 +24,6 @@
 #include "utils.h"
 #include "sym.h"
 #include "xml.h"
-#include "textstyle.h"
 
 namespace Ms {
 
@@ -139,7 +138,7 @@ qDebug("ResolveDegreeList: not found in table");
 //---------------------------------------------------------
 
 Harmony::Harmony(Score* s)
-   : Text(s)
+   : Text(SubStyle::HARMONY, s)
       {
       _rootTpc    = Tpc::TPC_INVALID;
       _baseTpc    = Tpc::TPC_INVALID;
@@ -150,7 +149,6 @@ Harmony::Harmony(Score* s)
       _leftParen  = false;
       _rightParen = false;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      setTextStyleType(TextStyleType::HARMONY); // call after setting of _id
       }
 
 Harmony::Harmony(const Harmony& h)
@@ -769,6 +767,7 @@ void Harmony::endEdit()
       score()->setLayoutAll();
       }
 
+#if 0
 //---------------------------------------------------------
 //   setTextStyle
 //---------------------------------------------------------
@@ -778,6 +777,7 @@ void Harmony::setTextStyle(const TextStyle& st)
       Text::setTextStyle(st);
       render();
       }
+#endif
 
 //---------------------------------------------------------
 //   setHarmony
@@ -1048,16 +1048,16 @@ void Harmony::layout()
             qDebug("Harmony %s with fret diagram as parent", qPrintable(_textName)); // not possible?
             yy = score()->styleP(StyleIdx::harmonyFretDist);
             }
-      yy += textStyle().offset(_spatium).y();
+//TODO      yy += textStyle().offset(_spatium).y();
       if (!editMode()) {
             qreal hb = lineHeight() - Text::baseLine();
-            if (textStyle().align() & Align::BOTTOM)
+            if (align() & Align::BOTTOM)
                   yy -= hb;
-            else if (textStyle().align() & Align::VCENTER) {
+            else if (align() & Align::VCENTER) {
                   yy -= hb;
                   yy += (height() * .5);
                   }
-            else if (textStyle().align() & Align::BASELINE) {
+            else if (align() & Align::BASELINE) {
                   }
             else { // Align::TOP
                   yy -= hb;
@@ -1065,14 +1065,14 @@ void Harmony::layout()
                   }
             }
 
-      qreal xx = textStyle().offset(_spatium).x();
+      qreal xx = 0.0; // offset(_spatium).x();
       if (!editMode()) {
             qreal cw = symWidth(SymId::noteheadBlack);
-            if (textStyle().align() & Align::RIGHT) {
+            if (align() & Align::RIGHT) {
                   xx += cw;
                   xx -= width();
                   }
-            else if (textStyle().align() & Align::HCENTER) {
+            else if (align() & Align::HCENTER) {
                   xx += (cw * .5);
                   xx -= (width() * .5);
                   }
@@ -1097,7 +1097,7 @@ void Harmony::layout()
 //            mstaff->distanceUp = qMax(mstaff->distanceUp, dist + _spatium);
             }
 
-      if (textStyle().hasFrame()) {
+      if (hasFrame()) {
             QRectF saveBbox = bbox();
             setbbox(bboxtight());
             layoutFrame();
@@ -1139,6 +1139,7 @@ void Harmony::draw(QPainter* painter) const
             Text::draw(painter);
             return;
             }
+#if 0 //TODO
       if (textStyle().hasFrame()) {
             if (textStyle().frameWidth().val() != 0.0) {
                   QColor color = frameColor();
@@ -1159,6 +1160,7 @@ void Harmony::draw(QPainter* painter) const
                   painter->drawRoundedRect(frame, textStyle().frameRound(), r2);
                   }
             }
+#endif
       painter->setBrush(Qt::NoBrush);
       QColor color = textColor();
       painter->setPen(color);
@@ -1342,6 +1344,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
 
 void Harmony::render(const TextStyle* st)
       {
+#if 0 // TODO
       int capo = score()->styleI(StyleIdx::capoPosition);
 
       if (st == 0)
@@ -1424,6 +1427,7 @@ void Harmony::render(const TextStyle* st)
 
       if (_rightParen)
             render(" )", x, y);
+#endif
       }
 
 //---------------------------------------------------------
@@ -1603,6 +1607,20 @@ QString Harmony::screenReaderInfo() const
             rez = QString("%1 / %2").arg(rez).arg(tpc2name(_baseTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
 
       return rez;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Harmony::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::SUB_STYLE:
+                  return int(SubStyle::HARMONY);
+            default:
+                  return Text::propertyDefault(id);
+            }
       }
 
 }

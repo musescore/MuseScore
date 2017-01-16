@@ -106,8 +106,8 @@ class TestParts : public QObject, public MTest
 
       void appendMeasure();
       void insertMeasure();
-      void styleScore();
-      void styleScoreReload();
+//      void styleScore();
+//      void styleScoreReload();
 //      void stylePartDefault();
 //      void styleScoreDefault();
 //      void staffStyles();
@@ -295,6 +295,7 @@ void TestParts::insertMeasure()
       delete score;
       }
 
+#if 0
 //---------------------------------------------------------
 //   styleScore
 //---------------------------------------------------------
@@ -319,6 +320,7 @@ void TestParts::styleScoreReload()
       QVERIFY(saveCompareScore(partScore, "partStyle-score-reload-test.mscx", DIR + "partStyle-score-reload-ref.mscx"));
       delete partScore;
       }
+#endif
 
 //---------------------------------------------------------
 //   stylePartDefault

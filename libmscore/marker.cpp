@@ -40,11 +40,10 @@ int markerTypeTableSize()
 //---------------------------------------------------------
 
 Marker::Marker(Score* s)
-   : Text(s)
+   : Text(SubStyle::REPEAT_LEFT, s)
       {
       _markerType = Type::FINE;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      setTextStyleType(TextStyleType::REPEAT_LEFT);
       setLayoutToParentWidth(true);
       }
 
@@ -84,13 +83,13 @@ void Marker::setMarkerType(Type t)
 
             case Type::FINE:
                   txt = "Fine";
-                  setTextStyleType(TextStyleType::REPEAT_RIGHT);
+                  initSubStyle(SubStyle::REPEAT_RIGHT);
                   setLabel("fine");
                   break;
 
             case Type::TOCODA:
                   txt = "To Coda";
-                  setTextStyleType(TextStyleType::REPEAT_RIGHT);
+                  initSubStyle(SubStyle::REPEAT_RIGHT);
                   setLabel("coda");
                   break;
 
@@ -175,11 +174,12 @@ Marker::Type Marker::markerType(const QString& s) const
 
 void Marker::layout()
       {
-      setPos(textStyle().offset(spatium()));
+      // setPos(textStyle().offset(spatium()));
+      setPos(QPointF());
       Text::layout1();
       // although normally laid out to parent (measure) width,
       // force to center over barline if left-aligned
-      if (layoutToParentWidth() && !(textStyle().align() & (Align::RIGHT|Align::HCENTER)))
+      if (layoutToParentWidth() && !(align() & (Align::RIGHT|Align::HCENTER)))
             rxpos() -= width() * 0.5;
       adjustReadPos();
       }

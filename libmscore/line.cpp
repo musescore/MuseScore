@@ -1053,13 +1053,13 @@ void SLine::writeProperties(XmlWriter& xml) const
       Spanner::writeProperties(xml);
       if (_diagonal)
             xml.tag("diagonal", _diagonal);
-      if (propertyStyle(P_ID::LINE_WIDTH) != PropertyStyle::STYLED)
+      if (propertyFlags(P_ID::LINE_WIDTH) != PropertyFlags::STYLED)
             xml.tag("lineWidth", lineWidth().val());
-      if (propertyStyle(P_ID::LINE_STYLE) == PropertyStyle::UNSTYLED || (lineStyle() != Qt::SolidLine)) {
-            if (propertyStyle(P_ID::LINE_STYLE) != PropertyStyle::STYLED)
+      if (propertyFlags(P_ID::LINE_STYLE) == PropertyFlags::UNSTYLED || (lineStyle() != Qt::SolidLine)) {
+            if (propertyFlags(P_ID::LINE_STYLE) != PropertyFlags::STYLED)
                   xml.tag("lineStyle", int(lineStyle()));
             }
-      if (propertyStyle(P_ID::LINE_COLOR) == PropertyStyle::UNSTYLED || (lineColor() != MScore::defaultColor))
+      if (propertyFlags(P_ID::LINE_COLOR) == PropertyFlags::UNSTYLED || (lineColor() != MScore::defaultColor))
             xml.tag("lineColor", lineColor());
 
       writeProperty(xml, P_ID::ANCHOR);

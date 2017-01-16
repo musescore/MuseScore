@@ -765,10 +765,10 @@ Element* ChordRest::drop(const DropData& data)
                   TempoText* tt = static_cast<TempoText*>(e);
                   tt->setTrack(0);
                   tt->setParent(segment());
-                  TextStyleType st = tt->textStyleType();
-                  //tt->setTextStyleType(st);
-                  if (st >= TextStyleType::DEFAULT && fromPalette)
-                        tt->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
+//TODO                  StyledPropertyListIdx st = tt->textStyleType();
+//                  //tt->setStyledPropertyListIdx(st);
+//                  if (st >= StyledPropertyListIdx::DEFAULT && fromPalette)
+//                        tt->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
                   score()->undoAddElement(tt);
                   }
                   return e;
@@ -777,10 +777,10 @@ Element* ChordRest::drop(const DropData& data)
                   {
                   Dynamic* d = static_cast<Dynamic*>(e);
                   d->setTrack(track());
-                  TextStyleType st = d->textStyleType();
-                  //d->setTextStyleType(st);
-                  if (st >= TextStyleType::DEFAULT && fromPalette)
-                        d->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
+//TODO                  StyledPropertyListIdx st = d->textStyleType();
+                  //d->setStyledPropertyListIdx(st);
+//                  if (st >= StyledPropertyListIdx::DEFAULT && fromPalette)
+//                        d->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
                   d->setParent(segment());
                   score()->undoAddElement(d);
                   }
@@ -825,8 +825,7 @@ Element* ChordRest::drop(const DropData& data)
             case Element::Type::STAFF_TEXT:
             case Element::Type::STAFF_STATE:
             case Element::Type::INSTRUMENT_CHANGE:
-                  if (e->type() == Element::Type::INSTRUMENT_CHANGE
-                     && part()->instruments()->find(tick()) != part()->instruments()->end()) {
+                  if (e->isInstrumentChange() && part()->instruments()->find(tick()) != part()->instruments()->end()) {
                         qDebug()<<"InstrumentChange already exists at tick = "<<tick();
                         delete e;
                         return 0;
@@ -835,18 +834,6 @@ Element* ChordRest::drop(const DropData& data)
             case Element::Type::REHEARSAL_MARK:
                   e->setParent(segment());
                   e->setTrack((track() / VOICES) * VOICES);
-                  {
-                  Text* t = static_cast<Text*>(e);
-                  TextStyleType st = t->textStyleType();
-                  // for palette items, we want to use current score text style settings
-                  // except where the source element had explicitly overridden these via text properties
-                  // palette text style will be relative to baseStyle, so rebase this to score
-                  //f->setTextStyleType(st);
-                  if (st >= TextStyleType::DEFAULT && fromPalette)
-                        t->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
-                  if (e->type() == Element::Type::REHEARSAL_MARK && fromPalette)
-                        t->setXmlText(score()->createRehearsalMarkText(static_cast<RehearsalMark*>(e)));
-                  }
                   score()->undoAddElement(e);
                   return e;
 

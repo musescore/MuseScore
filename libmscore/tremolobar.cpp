@@ -29,7 +29,7 @@ TremoloBar::TremoloBar(Score* s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setLineWidth(score()->styleS(StyleIdx::tremoloBarLineWidth));
-      lineWidthStyle = PropertyStyle::STYLED;
+      lineWidthStyle = PropertyFlags::STYLED;
       }
 
 //---------------------------------------------------------
@@ -189,7 +189,7 @@ bool TremoloBar::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
             case P_ID::LINE_WIDTH:
-                  lineWidthStyle = PropertyStyle::UNSTYLED;
+                  lineWidthStyle = PropertyFlags::UNSTYLED;
                   setLineWidth(v.value<Spatium>());
                   break;
             case P_ID::MAG:
@@ -210,14 +210,14 @@ bool TremoloBar::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyStyle
 //---------------------------------------------------------
 
-PropertyStyle TremoloBar::propertyStyle(P_ID id) const
+PropertyFlags TremoloBar::propertyFlags(P_ID id) const
       {
       switch (id) {
             case P_ID::LINE_WIDTH:
                   return lineWidthStyle;
 
             default:
-                  return Element::propertyStyle(id);
+                  return Element::propertyFlags(id);
             }
       }
 
@@ -230,7 +230,7 @@ void TremoloBar::resetProperty(P_ID id)
       switch (id) {
             case P_ID::LINE_WIDTH:
                   setProperty(id, propertyDefault(id));
-                  lineWidthStyle = PropertyStyle::STYLED;
+                  lineWidthStyle = PropertyFlags::STYLED;
                   break;
 
             default:
@@ -245,7 +245,7 @@ void TremoloBar::resetProperty(P_ID id)
 
 void TremoloBar::styleChanged()
       {
-      if (lineWidthStyle == PropertyStyle::STYLED)
+      if (lineWidthStyle == PropertyFlags::STYLED)
             setLineWidth(score()->styleS(StyleIdx::voltaLineWidth));
       }
 
@@ -255,8 +255,8 @@ void TremoloBar::styleChanged()
 
 void TremoloBar::reset()
       {
-      if (lineWidthStyle == PropertyStyle::UNSTYLED)
-            undoChangeProperty(P_ID::LINE_WIDTH, propertyDefault(P_ID::LINE_WIDTH), PropertyStyle::STYLED);
+      if (lineWidthStyle == PropertyFlags::UNSTYLED)
+            undoChangeProperty(P_ID::LINE_WIDTH, propertyDefault(P_ID::LINE_WIDTH), PropertyFlags::STYLED);
       Element::reset();
       }
 

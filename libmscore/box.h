@@ -43,8 +43,8 @@ class Box : public MeasureBase {
       qreal _topMargin              { 0.0   };
       qreal _bottomMargin           { 0.0   };
       bool editMode                 { false };
-      PropertyStyle topGapStyle     { PropertyStyle::STYLED };
-      PropertyStyle bottomGapStyle  { PropertyStyle::STYLED };
+      PropertyFlags topGapStyle     { PropertyFlags::STYLED };
+      PropertyFlags bottomGapStyle  { PropertyFlags::STYLED };
       qreal dragX;                        // used during drag of hbox
 
    public:
@@ -88,7 +88,7 @@ class Box : public MeasureBase {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
-      virtual PropertyStyle propertyStyle(P_ID id) const override;
+      virtual PropertyFlags propertyFlags(P_ID id) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
       virtual StyleIdx getPropertyStyle(P_ID id) const override;

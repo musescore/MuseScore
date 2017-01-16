@@ -306,31 +306,33 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
             tick2 = endSegment->tick();
       spanner->setTick2(tick2);
       TextLine* tl = dynamic_cast<TextLine*>(spanner);
+#if 0 // TODO
       if (tl) {
-            TextStyleType st;
+            StyledPropertyListIdx st;
             Text* t;
             // begin
             t = tl->beginTextElement();
             if (t) {
                   st = t->textStyleType();
-                  if (st >= TextStyleType::DEFAULT)
+                  if (st >= StyledPropertyListIdx::DEFAULT)
                         t->textStyle().restyle(MScore::baseStyle().textStyle(st), textStyle(st));
                   }
             // continue
             t = tl->continueTextElement();
             if (t) {
                   st = t->textStyleType();
-                  if (st >= TextStyleType::DEFAULT)
+                  if (st >= StyledPropertyListIdx::DEFAULT)
                         t->textStyle().restyle(MScore::baseStyle().textStyle(st), textStyle(st));
                   }
             // end
             t = tl->endTextElement();
             if (t) {
                   st = t->textStyleType();
-                  if (st >= TextStyleType::DEFAULT)
+                  if (st >= StyledPropertyListIdx::DEFAULT)
                         t->textStyle().restyle(MScore::baseStyle().textStyle(st), textStyle(st));
                   }
             }
+#endif
       undoAddElement(spanner);
       }
 

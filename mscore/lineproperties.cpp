@@ -11,7 +11,7 @@
 //=============================================================================
 
 #include "lineproperties.h"
-#include "textproperties.h"
+// #include "textproperties.h"
 #include "libmscore/textline.h"
 #include "libmscore/style.h"
 #include "libmscore/system.h"
@@ -153,6 +153,7 @@ void LineProperties::accept()
       else if (tl->endText().isEmpty())
             tl->setEndText("");
 
+#if 0 //TODO
       if (tl->beginTextElement()) {
             Text* t  = tl->beginTextElement();
             Text* ot = tl->beginTextElement();
@@ -179,6 +180,7 @@ void LineProperties::accept()
                   ot->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(t->textStyle()));
                   }
             }
+#endif
 
       // ...
       QDialog::accept();
@@ -190,9 +192,9 @@ void LineProperties::accept()
 
 void LineProperties::beginTextProperties()
       {
-      tl->createBeginTextElement();
-      TextProperties t(tl->beginTextElement(), this);
-      t.exec();
+//      tl->createBeginTextElement();
+//      TextProperties t(tl->beginTextElement(), this);
+//      t.exec();
       }
 
 //---------------------------------------------------------
@@ -201,9 +203,9 @@ void LineProperties::beginTextProperties()
 
 void LineProperties::continueTextProperties()
       {
-      tl->createContinueTextElement();
-      TextProperties t(tl->continueTextElement(), this);
-      t.exec();
+//      tl->createContinueTextElement();
+//      TextProperties t(tl->continueTextElement(), this);
+//      t.exec();
       }
 
 //---------------------------------------------------------
@@ -212,9 +214,9 @@ void LineProperties::continueTextProperties()
 
 void LineProperties::endTextProperties()
       {
-      tl->createEndTextElement();
-      TextProperties t(tl->endTextElement(), this);
-      t.exec();
+//      tl->createEndTextElement();
+//      TextProperties t(tl->endTextElement(), this);
+//      t.exec();
       }
 
 //---------------------------------------------------------

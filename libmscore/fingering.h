@@ -14,6 +14,7 @@
 #define __FINGERING_H__
 
 #include "text.h"
+#include "property.h"
 
 namespace Ms {
 
@@ -37,15 +38,19 @@ class Fingering : public Text {
       virtual void layout() override;
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
-      virtual void reset() override;
-      virtual int subtype() const override         { return (int) textStyleType(); }
-      virtual QString subtypeName() const override { return textStyle().name(); }
+      virtual int subtype() const override         { return (int) subStyle(); }
+      virtual QString subtypeName() const override;
 
       virtual QString accessibleInfo() const override;
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(P_ID id) const override;
+      virtual PropertyFlags propertyFlags(P_ID) const override;
+      virtual void resetProperty(P_ID id) override;
+      virtual StyleIdx getPropertyStyle(P_ID) const override;
+      virtual void styleChanged() override;
+      virtual void reset() override;
       };
 
 

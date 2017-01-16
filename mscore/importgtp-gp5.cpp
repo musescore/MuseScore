@@ -444,7 +444,6 @@ void GuitarPro5::readTracks()
             if (capo > 0) {
                   Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
                   StaffText* st = new StaffText(score);
-                  st->setTextStyleType(TextStyleType::STAFF);
                   st->setPlainText(QString("Capo. fret ") + QString::number(capo));
                   st->setParent(s);
                   st->setTrack(i * VOICES);

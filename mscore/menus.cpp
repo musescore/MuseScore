@@ -527,21 +527,21 @@ Palette* MuseScore::newFingeringPalette()
       finger = "pimac";
       for (unsigned i = 0; i < strlen(finger); ++i) {
             Fingering* f = new Fingering(gscore);
-            f->setTextStyleType(TextStyleType::RH_GUITAR_FINGERING);
+            f->initSubStyle(SubStyle::RH_GUITAR_FINGERING);
             f->setXmlText(QString(finger[i]));
             sp->append(f, tr("RH Guitar Fingering %1").arg(finger[i]));
             }
-      finger = "012345";
-      for (unsigned i = 0; i < strlen(finger); ++i) {
+      for (char c : "012345") {
             Fingering* f = new Fingering(gscore);
-            f->setTextStyleType(TextStyleType::LH_GUITAR_FINGERING);
-            f->setXmlText(QString(finger[i]));
-            sp->append(f, tr("LH Guitar Fingering %1").arg(finger[i]));
+            f->initSubStyle(SubStyle::LH_GUITAR_FINGERING);
+            f->setXmlText(QString(c));
+            sp->append(f, tr("LH Guitar Fingering %1").arg(c));
             }
+
       const char* stringnumber = "0123456";
       for (unsigned i = 0; i < strlen(stringnumber); ++i) {
             Fingering* f = new Fingering(gscore);
-            f->setTextStyleType(TextStyleType::STRING_NUMBER);
+            f->initSubStyle(SubStyle::STRING_NUMBER);
             f->setXmlText(QString(stringnumber[i]));
             sp->append(f, tr("String number %1").arg(stringnumber[i]));
             }
@@ -1186,9 +1186,9 @@ Palette* MuseScore::newLinesPalette(PaletteType t)
             pedal->setBeginText("<sym>keyboardPedalPed</sym>");
             pedal->setContinueText("(<sym>keyboardPedalPed</sym>)");
             pedal->setEndText("<sym>keyboardPedalUp</sym>");
-            Align align = pedal->endTextElement()->textStyle().align();
+            Align align = pedal->endTextElement()->align();
             align = Align(int(align) & int(Align::VMASK)) | Align::HCENTER;
-            pedal->endTextElement()->textStyle().setAlign(align);
+            pedal->endTextElement()->setAlign(align);
             pedal->setLineVisible(false);
             sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
             }
@@ -1363,12 +1363,11 @@ Palette* MuseScore::newTextPalette()
       sp->setDrawGrid(true);
 
       StaffText* st = new StaffText(gscore);
-      st->setTextStyleType(TextStyleType::STAFF);
       st->setXmlText(tr("Staff Text"));
       sp->append(st, tr("Staff text"));
 
       st = new StaffText(gscore);
-      st->setTextStyleType(TextStyleType::EXPRESSION);
+      st->initSubStyle(SubStyle::EXPRESSION);
       st->setXmlText(tr("Expression"));
       st->setPlacement(Element::Placement::BELOW);
       sp->append(st, tr("Expression text"));
@@ -1385,13 +1384,13 @@ Palette* MuseScore::newTextPalette()
       sp->append(rhm, tr("Rehearsal mark"));
 
       st = new StaffText(gscore);
-      st->setTextStyleType(TextStyleType::TEMPO);
+      st->initSubStyle(SubStyle::TEMPO);
       st->setXmlText(tr("Swing"));
       st->setSwing(true);
       sp->append(st, tr("Swing"));
 
       st = new StaffText(gscore);
-      st->setTextStyleType(TextStyleType::SYSTEM);
+      st->initSubStyle(SubStyle::SYSTEM);
       st->setXmlText(tr("System Text"));
       sp->append(st, tr("System text"));
 

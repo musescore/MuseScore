@@ -956,15 +956,23 @@ bool FiguredBassItem::startsWithParenthesis() const
 //---------------------------------------------------------
 
 FiguredBass::FiguredBass(Score* s)
-   : Text(s)
+   : Text(SubStyle::FIGURED_BASS, s)
       {
       setFlag(ElementFlag::ON_STAFF, true);
       setOnNote(true);
-      setTextStyleType(TextStyleType::FIGURED_BASS);
-      TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(StyleIdx::figuredBassFontSize),
-                  false, false, false, Align::LEFT | Align::TOP, QPointF(0, score()->styleD(StyleIdx::figuredBassYOffset)), OffsetType::SPATIUM);
+#if 0  // TODO
+      TextStyle st(
+         g_FBFonts[0].family,
+         score()->styleD(StyleIdx::figuredBassFontSize),
+         false,
+         false,
+         false,
+         Align::LEFT | Align::TOP,
+         QPointF(0, score()->styleD(StyleIdx::figuredBassYOffset)),
+         OffsetType::SPATIUM);
       st.setSizeIsSpatiumDependent(true);
-      setTextStyle(st);
+      setSubStyle(st);
+#endif
       setTicks(0);
       items.clear();
       }
@@ -1005,9 +1013,9 @@ void FiguredBass::write(XmlWriter& xml) const
       if (items.size() < 1)
             Text::writeProperties(xml, true);
       else {
-            if (textStyleType() != TextStyleType::FIGURED_BASS)
-                  // if all items parsed and not unstiled, we simply have a special style: write it
-                  xml.tag("style", textStyle().name());
+//            if (textStyleType() != StyledPropertyListIdx::FIGURED_BASS)
+//                  // if all items parsed and not unstiled, we simply have a special style: write it
+//                  xml.tag("style", textStyle().name());
             for(FiguredBassItem* item : items)
                   item->write(xml);
             Element::writeProperties(xml);
@@ -1041,7 +1049,7 @@ void FiguredBass::read(XmlReader& e)
                   normalizedText.append(pItem->normalizedText());
                   }
 //            else if (tag == "style")
-//                  setTextStyleType(e.readElementText());
+//                  setStyledPropertyListIdx(e.readElementText());
             else if (!Text::readProperties(e))
                   e.unknown();
             }
@@ -1059,17 +1067,18 @@ void FiguredBass::layout()
       qreal yOff  = score()->styleD(StyleIdx::figuredBassYOffset);
       qreal _sp   = spatium();
       // if 'our' style, force 'our' style data from FiguredBass parameters
-      if (textStyleType() == TextStyleType::FIGURED_BASS) {
-            TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(StyleIdx::figuredBassFontSize),
+#if 0
+      if (textStyleType() == StyledPropertyListIdx::FIGURED_BASS) {
+            TextStyle st(g_FBFonts[0].family, score()->styleD(StyleIdx::figuredBassFontSize),
                         false, false, false, Align::LEFT | Align::TOP, QPointF(0, yOff),
                         OffsetType::SPATIUM);
             st.setSizeIsSpatiumDependent(true);
             setTextStyle(st);
             }
-
+#endif
       // if in edit mode or if style has been changed,
       // do nothing else, keeping default laying out and formatting
-      if (editMode() || items.size() < 1 || textStyleType() != TextStyleType::FIGURED_BASS) {
+      if (editMode() || items.size() < 1 || subStyle() != SubStyle::FIGURED_BASS) {
             Text::layout();
             return;
             }
@@ -1195,7 +1204,7 @@ void FiguredBass::draw(QPainter* painter) const
                   }
             }
       // if in edit mode or with custom style, use standard text drawing
-      if (editMode() || textStyleType() != TextStyleType::FIGURED_BASS)
+      if (editMode() || subStyle() != SubStyle::FIGURED_BASS)
             Text::draw(painter);
       else {                                                // not edit mode:
             if (items.size() < 1)                           // if not parseable into f.b. items

@@ -45,12 +45,12 @@ class TestSpanners : public QObject, public MTest
       void spanners05();            // creating part from an existing staff containing a glissando
       void spanners06();            // add a glissando to a staff with a linked staff
       void spanners07();            // add a glissando to a staff with an excerpt attached
-      void spanners08();            // delete a lyrics with separator and undo
+//      void spanners08();            // delete a lyrics with separator and undo
       void spanners09();            // remove a measure containing the end point of a LyricsLine and undo
       void spanners10();            // remove a measure containing the start point of a LyricsLine and undo
       void spanners11();            // remove a measure entirely containing a LyricsLine and undo
       void spanners12();            // remove a measure containing the middle portion of a LyricsLine and undo
-      void spanners13();            // drop a line break at the middle of a LyricsLine and check LyricsLineSegments
+//      void spanners13();            // drop a line break at the middle of a LyricsLine and check LyricsLineSegments
       void spanners14();            // creating part from an existing grand staff containing a cross staff glissando
       };
 
@@ -382,7 +382,7 @@ void TestSpanners::spanners07()
       QVERIFY(saveCompareScore(score, "glissando-cloning04.mscx", DIR + "glissando-cloning04-ref.mscx"));
       delete score;
       }
-
+#if 0
 //---------------------------------------------------------
 ///  spanners08
 ///   Delete a lyrics with separator and undo
@@ -431,7 +431,7 @@ void TestSpanners::spanners08()
       QVERIFY(saveCompareScore(score, "lyricsline01.mscx", DIR + "lyricsline01.mscx"));
       delete score;
       }
-
+#endif
 //---------------------------------------------------------
 ///  spanners09
 ///   Remove a measure containing the end point of a LyricsLine and undo
@@ -563,7 +563,7 @@ void TestSpanners::spanners12()
       QVERIFY(saveCompareScore(score, "lyricsline05.mscx", DIR + "lyricsline05.mscx"));
       delete score;
       }
-
+#if 0
 //---------------------------------------------------------
 ///  spanners13
 ///   Drop a line break at a bar line inthe middle of a LyricsLine and check LyricsLineSegments are correct
@@ -600,6 +600,7 @@ void TestSpanners::spanners13()
       QVERIFY(saveCompareScore(score, "lyricsline06.mscx", DIR + "lyricsline06.mscx"));
       delete score;
       }
+#endif
 
 //---------------------------------------------------------
 ///  spanners14

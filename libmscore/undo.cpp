@@ -355,16 +355,16 @@ void SaveState::redo()
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void Score::undoChangeProperty(ScoreElement* e, P_ID t, const QVariant& st, PropertyStyle ps)
+void Score::undoChangeProperty(ScoreElement* e, P_ID t, const QVariant& st, PropertyFlags ps)
       {
       if (propertyLink(t)) {
             for (ScoreElement* ee : e->linkList()) {
-                  if (ee->getProperty(t) != st || ee->propertyStyle(t) != ps)
+                  if (ee->getProperty(t) != st || ee->propertyFlags(t) != ps)
                         undo(new ChangeProperty(ee, t, st, ps));
                   }
             }
       else {
-            if (e->getProperty(t) != st || e->propertyStyle(t) != ps)
+            if (e->getProperty(t) != st || e->propertyFlags(t) != ps)
                   undo(new ChangeProperty(e, t, st, ps));
             }
       }
@@ -1090,7 +1090,7 @@ void Score::undoAddElement(Element* element)
             // don't link part name
             if (et == Element::Type::TEXT) {
                   Text* t = static_cast<Text*>(element);
-                  if (t->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT)
+                  if (t->subStyle() == SubStyle::INSTRUMENT_EXCERPT)
                         links = 0;
                   }
             if (links == 0) {
@@ -2631,6 +2631,7 @@ void ChangePart::flip()
       instrument = oi;
       }
 
+#if 0
 //---------------------------------------------------------
 //   ChangeTextStyle
 //---------------------------------------------------------
@@ -2688,6 +2689,7 @@ void AddTextStyle::redo()
       {
       score->style().addTextStyle(style);
       }
+#endif
 
 //---------------------------------------------------------
 //   ChangeStyle
@@ -3304,8 +3306,8 @@ void ChangeProperty::flip()
 //            static_cast<Element*>(element)->score()->removeSpanner(static_cast<Spanner*>(element));
 
       QVariant v       = element->getProperty(id);
-      PropertyStyle ps = element->propertyStyle(id);
-      if (propertyStyle == PropertyStyle::STYLED)
+      PropertyFlags ps = element->propertyFlags(id);
+      if (propertyStyle == PropertyFlags::STYLED)
             element->resetProperty(id);
       else
             element->setProperty(id, property);

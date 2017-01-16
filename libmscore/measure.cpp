@@ -547,11 +547,10 @@ void Measure::layout2()
                   t->setTrack(staffIdx * VOICES);
             if (smn && ((staffIdx == nn) || nas)) {
                   if (t == 0) {
-                        t = new Text(score());
+                        t = new Text(SubStyle::MEASURE_NUMBER, score());
                         t->setFlag(ElementFlag::ON_STAFF, true);
                         t->setTrack(staffIdx * VOICES);
                         t->setGenerated(true);
-                        t->setTextStyleType(TextStyleType::MEASURE_NUMBER);
                         t->setParent(this);
                         add(t);
                         }
@@ -1317,13 +1316,13 @@ Element* Measure::drop(const DropData& data)
                   e->setTrack(0);
                   {
                   // code borrowed from ChordRest::drop()
-                  Text* t = static_cast<Text*>(e);
-                  TextStyleType st = t->textStyleType();
+//                  Text* t = static_cast<Text*>(e);
+//                  StyledPropertyListIdx st = t->textStyleType();
                   // for palette items, we want to use current score text style settings
                   // except where the source element had explicitly overridden these via text properties
                   // palette text style will be relative to baseStyle, so rebase this to score
-                  if (st >= TextStyleType::DEFAULT && fromPalette)
-                        t->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
+//                  if (st >= StyledPropertyListIdx::DEFAULT && fromPalette)
+//                        t->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
                   }
                   score()->undoAddElement(e);
                   return e;
@@ -2220,7 +2219,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "Segment")
                   segment->read(e);
             else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(score());
+                  Text* noText = new Text(SubStyle::MEASURE_NUMBER, score());
                   noText->read(e);
                   noText->setFlag(ElementFlag::ON_STAFF, true);
                   noText->setTrack(e.track());

@@ -21,7 +21,7 @@ class XmlWriter;
 class ScoreElement;
 
 enum class P_ID : int;
-enum class PropertyStyle : char;
+enum class PropertyFlags : char;
 enum class StyleIdx : int;
 
 //---------------------------------------------------------
@@ -63,7 +63,7 @@ class ScoreElement {
       virtual bool setProperty(P_ID, const QVariant&) = 0;
       virtual QVariant propertyDefault(P_ID) const { return QVariant(); }
       virtual void resetProperty(P_ID id);
-      virtual PropertyStyle propertyStyle(P_ID) const;
+      virtual PropertyFlags propertyFlags(P_ID) const;
       virtual StyleIdx getPropertyStyle(P_ID) const;
 
       void undoChangeProperty(P_ID, const QVariant&);

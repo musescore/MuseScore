@@ -28,13 +28,11 @@ namespace Ms {
 class InspectorMarker : public InspectorElementBase {
       Q_OBJECT
 
-//      UiInspectorElement b;
       Ui::InspectorText t;
       Ui::InspectorMarker  m;
 
    public:
       InspectorMarker(QWidget* parent);
-      virtual void setElement() override;
       };
 
 

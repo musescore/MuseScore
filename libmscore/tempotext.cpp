@@ -27,14 +27,13 @@ namespace Ms {
 //---------------------------------------------------------
 
 TempoText::TempoText(Score* s)
-   : Text(s)
+   : Text(SubStyle::TEMPO, s)
       {
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
       _relative = 1.0;
       _isRelative = false;
       setPlacement(Element::Placement::ABOVE);
-      setTextStyleType(TextStyleType::TEMPO);
       }
 
 //---------------------------------------------------------
@@ -71,7 +70,7 @@ void TempoText::read(XmlReader& e)
             // Reset text in old version to
             // style.
             //
-//TODO            if (textStyle() != TextStyleType::INVALID) {
+//TODO            if (textStyle() != StyledPropertyListIdx::INVALID) {
 //                  setStyled(true);
 //                  styleChanged();
 //                  }
@@ -311,6 +310,7 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
 QVariant TempoText::propertyDefault(P_ID id) const
       {
       switch(id) {
+            case P_ID::SUB_STYLE:         return int(SubStyle::TEMPO);
             case P_ID::TEMPO:             return 2.0;
             case P_ID::TEMPO_FOLLOW_TEXT: return false;
             case P_ID::PLACEMENT:         return int(Element::Placement::ABOVE);
@@ -328,7 +328,7 @@ void TempoText::layout()
       {
       if (autoplace())
             setUserOff(QPointF());
-      setPos(textStyle().offset(spatium()));
+//      setPos(textStyle().offset(spatium()));
       Text::layout1();
 
       // tempo text on first chordrest of measure should align over time sig if present

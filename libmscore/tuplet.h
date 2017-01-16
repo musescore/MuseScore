@@ -48,9 +48,9 @@ class Tuplet : public DurationElement {
       Direction _direction;
       NumberType _numberType;
       BracketType _bracketType;
-      PropertyStyle directionStyle  { PropertyStyle::STYLED };
-      PropertyStyle numberStyle     { PropertyStyle::STYLED };
-      PropertyStyle bracketStyle    { PropertyStyle::STYLED };
+      PropertyFlags directionStyle  { PropertyFlags::STYLED };
+      PropertyFlags numberStyle     { PropertyFlags::STYLED };
+      PropertyFlags bracketStyle    { PropertyFlags::STYLED };
 
       bool _hasBracket;
 
@@ -131,7 +131,7 @@ class Tuplet : public DurationElement {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(P_ID id) const override;
-      virtual PropertyStyle propertyStyle(P_ID) const override;
+      virtual PropertyFlags propertyFlags(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;

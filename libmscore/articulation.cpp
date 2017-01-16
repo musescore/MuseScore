@@ -109,8 +109,8 @@ bool Articulation::readProperties(XmlReader& e)
             }
       else if (tag == "anchor")
             _anchor = ArticulationAnchor(e.readInt());
-      else if (tag == "direction")
-            readProperty(e, P_ID::DIRECTION);
+      else if (readProperty(tag, e, P_ID::DIRECTION))
+            ;
       else if ( tag == "ornamentStyle")
             setProperty(P_ID::ORNAMENT_STYLE, Ms::getProperty(P_ID::ORNAMENT_STYLE, e));
       else if ( tag == "play")
@@ -462,18 +462,18 @@ const char* Articulation::articulationName() const
 //   propertyStyle
 //---------------------------------------------------------
 
-PropertyStyle Articulation::propertyStyle(P_ID id) const
+PropertyFlags Articulation::propertyFlags(P_ID id) const
       {
       switch (id) {
             case P_ID::DIRECTION:
             case P_ID::TIME_STRETCH:
             case P_ID::ARTICULATION_ANCHOR:
-                  return PropertyStyle::NOSTYLE;
+                  return PropertyFlags::NOSTYLE;
 
             default:
                   break;
             }
-      return Element::propertyStyle(id);
+      return Element::propertyFlags(id);
       }
 
 //---------------------------------------------------------
