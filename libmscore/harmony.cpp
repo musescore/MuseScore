@@ -1025,7 +1025,7 @@ void Harmony::layout()
             }
 
       qreal yy = 0.0;
-      qreal _spatium  = spatium();
+      //qreal _spatium  = spatium();
 
       if (parent()->type() == Element::Type::SEGMENT) {
             Segment* s = static_cast<Segment*>(parent());
@@ -1342,7 +1342,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
 //    construct Chord Symbol
 //---------------------------------------------------------
 
-void Harmony::render(const TextStyle* st)
+void Harmony::render(const TextStyle* /*st*/)
       {
 #if 0 // TODO
       int capo = score()->styleI(StyleIdx::capoPosition);

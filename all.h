@@ -29,6 +29,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <math.h>
+#include <array>
 
 #include <QtGui>
 #include <QLoggingCategory>

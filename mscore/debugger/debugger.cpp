@@ -1361,12 +1361,13 @@ void TextView::textChanged()
 
 void TextView::setElement(Element* e)
       {
+#if 0
       Text* te = (Text*)e;
 
 //      tb.textStyle->clear();
 //      for (int i = 0; i < int(TextStyleType::TEXT_STYLES); ++i)
 //            tb.textStyle->addItem(e->score()->textStyle(TextStyleType(i)).name());
-#if 0
+
       TextStyle ts = te->textStyle();
       ShowElementBase::setElement(e);
       tb.text->setPlainText(te->xmlText());
@@ -1396,14 +1397,15 @@ HarmonyView::HarmonyView()
 //   setElement
 //---------------------------------------------------------
 
-void HarmonyView::setElement(Element* e)
+void HarmonyView::setElement(Element* /*e*/)
       {
+#if 0
       Harmony* harmony = (Harmony*)e;
 
 //      tb.textStyle->clear();
 //      for (int i = 0; i < int(TextStyleType::TEXT_STYLES); ++i)
 //            tb.textStyle->addItem(e->score()->textStyle(TextStyleType(i)).name());
-#if 0
+
       const TextStyle& ts = harmony->textStyle();
       ShowElementBase::setElement(e);
       tb.text->setPlainText(harmony->xmlText());
@@ -1589,12 +1591,13 @@ DynamicView::DynamicView()
 
 void DynamicView::setElement(Element* e)
       {
+#if 0
       Dynamic* dynamic = (Dynamic*)e;
 
 //      tb.textStyle->clear();
 //      for (int i = int(TextStyleType::DEFAULT); i < int(TextStyleType::TEXT_STYLES); ++i)
 //            tb.textStyle->addItem(e->score()->textStyle(TextStyleType(i)).name());
-#if 0
+
       const TextStyle& ts = dynamic->textStyle();
       tb.text->setPlainText(dynamic->xmlText());
       tb.xoffset->setValue(ts.offset().x());

@@ -4862,21 +4862,20 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       // in order to work correctly, this should probably be adjusted to account for spatium
       // but in any case, we don't support import relative-x/y for other elements
       // no reason to do so for chord symbols
+#if 0 // TODO:ws
       double rx = 0.0;        // 0.1 * e.attribute("relative-x", "0").toDouble();
       double ry = 0.0;        // -0.1 * e.attribute("relative-y", "0").toDouble();
 
-#if 0 // TODO:ws
       double styleYOff = _score->textStyle(SubStyle::HARMONY).offset().y();
       OffsetType offsetType = _score->textStyle(SubStyle::HARMONY).offsetType();
       if (offsetType == OffsetType::ABS) {
             styleYOff = styleYOff * DPMM / _score->spatium();
             }
-#endif
 
       // TODO: check correct dy handling
       // previous code: double dy = -0.1 * e.attribute("default-y", QString::number(styleYOff* -10)).toDouble();
       double dy = -0.1 * _e.attributes().value("default-y").toDouble();
-
+#endif
       bool printObject = _e.attributes().value("print-object") != "no";
       QString printFrame = _e.attributes().value("print-frame").toString();
       QString printStyle = _e.attributes().value("print-style").toString();

@@ -656,7 +656,7 @@ static void readChord(Chord* chord, XmlReader& e)
 //---------------------------------------------------------
 //   convertOldTextStyleNames
 //---------------------------------------------------------
-
+#if 0
 static QString convertOldTextStyleNames(const QString& s)
       {
       QString rs(s);
@@ -665,6 +665,8 @@ static QString convertOldTextStyleNames(const QString& s)
             rs = "Repeat Text Right";
       return rs;
       }
+#endif
+
 
 //---------------------------------------------------------
 //   ArticulationNames

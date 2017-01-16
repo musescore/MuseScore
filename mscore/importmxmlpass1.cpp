@@ -1282,7 +1282,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
 // the word-font setting applies. Setting all sizes to the size specified
 // gives bad results, e.g. for measure numbers, so a selection is made.
 // Some tweaking may still be required.
-
+#if 0
 static bool mustSetSize(const int i)
       {
       return
@@ -1304,6 +1304,7 @@ static bool mustSetSize(const int i)
             || i == int(SubStyle::GLISSANDO)
             || i == int(SubStyle::INSTRUMENT_CHANGE);
       }
+#endif
 
 //---------------------------------------------------------
 //   updateStyles
@@ -1317,7 +1318,7 @@ static void updateStyles(Score* score,
                          const QString& wordFamily, const QString& wordSize,
                          const QString& lyricFamily, const QString& lyricSize)
       {
-      const float fWordSize = wordSize.toFloat();   // note conversion error results in value 0.0
+//TODO:ws       const float fWordSize = wordSize.toFloat();   // note conversion error results in value 0.0
       const float fLyricSize = lyricSize.toFloat(); // but avoid comparing float with exact value later
 
       // loop over all text styles (except the empty, always hidden, first one)

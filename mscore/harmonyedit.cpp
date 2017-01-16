@@ -280,8 +280,8 @@ void HarmonyCanvas::paintEvent(QPaintEvent* event)
       if (dragElement && dragElement->type() == Element::Type::FSYMBOL) {
             FSymbol* sb = static_cast<FSymbol*>(dragElement);
 
-            double _spatium = 2.0 * PALETTE_SPATIUM / extraMag;
-//TODO:ws            const TextStyle* st = &gscore->textStyle(TextStyleType::HARMONY);
+//TODO:ws             double _spatium = 2.0 * PALETTE_SPATIUM / extraMag;
+//            const TextStyle* st = &gscore->textStyle(TextStyleType::HARMONY);
 //            QFont ff(st->font(_spatium * MScore::pixelRatio));
 //            ff.setFamily(sb->font().family());
 

@@ -1298,7 +1298,7 @@ Element* Measure::drop(const DropData& data)
       if (staffIdx < 0)
             return 0;
       Staff* staff = score()->staff(staffIdx);
-      bool fromPalette = (e->track() == -1);
+      //bool fromPalette = (e->track() == -1);
 
       switch (e->type()) {
             case Element::Type::MEASURE_LIST:
