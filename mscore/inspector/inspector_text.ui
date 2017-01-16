@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>336</width>
-    <height>468</height>
+    <width>163</width>
+    <height>362</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -87,6 +87,9 @@
         <property name="text">
          <string>Font face:</string>
         </property>
+        <property name="buddy">
+         <cstring>fontFace</cstring>
+        </property>
        </widget>
       </item>
       <item row="0" column="3">
@@ -95,7 +98,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Font face' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -111,6 +114,9 @@
         <property name="text">
          <string>Font size:</string>
         </property>
+        <property name="buddy">
+         <cstring>fontSize</cstring>
+        </property>
        </widget>
       </item>
       <item row="1" column="3">
@@ -119,7 +125,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Font size' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -135,7 +141,7 @@
         <property name="singleStep">
          <double>0.100000000000000</double>
         </property>
-        <property name="buddy">
+        <property name="buddy" stdset="0">
          <cstring>style</cstring>
         </property>
        </widget>
@@ -146,7 +152,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Frame width' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -166,7 +172,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Italic' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -193,7 +199,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Square' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -230,7 +236,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Underline' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -247,7 +253,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Circle' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -264,7 +270,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Padding width' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -287,6 +293,9 @@
         <property name="text">
          <string>Padding width:</string>
         </property>
+        <property name="buddy">
+         <cstring>paddingWidth</cstring>
+        </property>
        </widget>
       </item>
       <item row="2" column="3">
@@ -295,7 +304,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Bold' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -312,7 +321,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Frame round' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -328,6 +337,9 @@
         <property name="text">
          <string>Frame color:</string>
         </property>
+        <property name="buddy">
+         <cstring>frameColor</cstring>
+        </property>
        </widget>
       </item>
       <item row="15" column="0">
@@ -335,12 +347,18 @@
         <property name="text">
          <string>Frame round:</string>
         </property>
+        <property name="buddy">
+         <cstring>frameRound</cstring>
+        </property>
        </widget>
       </item>
       <item row="13" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Frame width:</string>
+        </property>
+        <property name="buddy">
+         <cstring>frameWidth</cstring>
         </property>
        </widget>
       </item>
@@ -350,7 +368,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Frame' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -367,7 +385,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Frame color' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -433,7 +451,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Align' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -452,6 +470,9 @@
         <property name="text">
          <string>Background:</string>
         </property>
+        <property name="buddy">
+         <cstring>bgColor</cstring>
+        </property>
        </widget>
       </item>
       <item row="10" column="3">
@@ -460,7 +481,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Background' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -500,6 +521,35 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>title</tabstop>
+  <tabstop>fontFace</tabstop>
+  <tabstop>resetFontFace</tabstop>
+  <tabstop>fontSize</tabstop>
+  <tabstop>resetFontSize</tabstop>
+  <tabstop>bold</tabstop>
+  <tabstop>resetBold</tabstop>
+  <tabstop>italic</tabstop>
+  <tabstop>resetItalic</tabstop>
+  <tabstop>underline</tabstop>
+  <tabstop>resetUnderline</tabstop>
+  <tabstop>resetAlign</tabstop>
+  <tabstop>hasFrame</tabstop>
+  <tabstop>resetHasFrame</tabstop>
+  <tabstop>resetFrameColor</tabstop>
+  <tabstop>resetBgColor</tabstop>
+  <tabstop>circle</tabstop>
+  <tabstop>resetCircle</tabstop>
+  <tabstop>square</tabstop>
+  <tabstop>resetSquare</tabstop>
+  <tabstop>frameWidth</tabstop>
+  <tabstop>resetFrameWidth</tabstop>
+  <tabstop>paddingWidth</tabstop>
+  <tabstop>resetPaddingWidth</tabstop>
+  <tabstop>frameRound</tabstop>
+  <tabstop>resetFrameRound</tabstop>
+  <tabstop>resetToStyle</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>
