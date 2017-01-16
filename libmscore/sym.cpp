@@ -48,7 +48,7 @@ QJsonObject ScoreFont::_glyphnamesJson;
 //---------------------------------------------------------
 
 QHash<QString, SymId> Sym::lnhash;
-const std::array<const char*, int(SymId::lastSym)+1> Sym::symNames = {
+const std::array<const char*, int(SymId::lastSym)+1> Sym::symNames = { {
       "noSym",
       "4stringTabClef",
       "6stringTabClef",
@@ -2677,9 +2677,9 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symNames = {
       "noteLongaSquareUp",
       "noteLongaSquareDown",
       "space"
-      };
+      } };
 
-const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = {
+const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       QT_TRANSLATE_NOOP("symUserNames", "No symbol"),
       "4-string tab clef",
       "6-string tab clef",
@@ -5314,7 +5314,7 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = {
       "noteLongaSquareUp",
       "noteLongaSquareDown",
       "Space"
-      };
+      } };
 
 //---------------------------------------------------------
 //   Conversion table of old symbol names (1.3)

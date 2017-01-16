@@ -2278,7 +2278,7 @@ void Text::read(XmlReader& e)
 //   writeProperties
 //---------------------------------------------------------
 
-void Text::writeProperties(XmlWriter& xml, bool writeText, bool writeStyle) const
+void Text::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
       {
       Element::writeProperties(xml);
       writeProperty(xml, P_ID::SUB_STYLE);
@@ -2312,7 +2312,7 @@ bool Text::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      static const std::array<P_ID, 15> pids {
+      static const std::array<P_ID, 15> pids { {
             P_ID::FONT_FACE,
             P_ID::FONT_SIZE,
             P_ID::FONT_BOLD,
@@ -2327,7 +2327,7 @@ bool Text::readProperties(XmlReader& e)
             P_ID::FRAME_FG_COLOR,
             P_ID::FRAME_BG_COLOR,
             P_ID::FONT_SPATIUM_DEPENDENT,
-            };
+            } };
 
       for (P_ID i :pids) {
             if (readProperty(tag, e, i)) {

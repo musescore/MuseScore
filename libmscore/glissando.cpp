@@ -65,7 +65,7 @@ void GlissandoSegment::layout()
 void GlissandoSegment::draw(QPainter* painter) const
       {
       painter->save();
-      qreal _spatium = spatium();
+      //qreal _spatium = spatium();
 
       QPen pen(glissando()->curColor());
       pen.setWidthF(glissando()->lineWidth().val() * spatium());
