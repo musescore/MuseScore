@@ -1244,7 +1244,6 @@ bool Staff::setProperty(P_ID id, const QVariant& v)
                   break;
             default:
                   qDebug("unhandled id %s", propertyName(id));
-                  abort();
                   break;
             }
       score()->setLayoutAll();
