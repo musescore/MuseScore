@@ -3357,6 +3357,8 @@ void Text::setPropertyFlags(P_ID id, PropertyFlags f)
       PropertyFlags* p = propertyFlagsP(id);
       if (p)
             *p = f;
+      else
+            Element::setPropertyFlags(id, f);
       }
 
 //---------------------------------------------------------
@@ -3397,7 +3399,7 @@ PropertyFlags* Text::propertyFlagsP(P_ID id)
             case P_ID::ALIGN:
                   return &_alignStyle;
             default:
-                  qDebug("unknown id: %d", int(id));
+                  // qDebug("unknown id: %d %s", int(id), propertyName(id));
                   break;
             }
       return 0;

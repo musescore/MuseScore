@@ -29,7 +29,7 @@ class Element;
 struct InspectorPanel {
       QToolButton* title;
       QWidget* panel;
-};
+      };
 
 //---------------------------------------------------------
 //   InspectorItem
