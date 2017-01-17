@@ -70,7 +70,7 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
                   val = cb->itemData(val).toInt();
             v = val;
             }
-      else if (qobject_cast<QCheckBox*>(w))
+      else if (qobject_cast<QCheckBox*>(w) || qobject_cast<QPushButton*>(w) || qobject_cast<QToolButton*>(w))
             v = w->property("checked");
       else if (qobject_cast<QLineEdit*>(w))
             v =  w->property("text");
@@ -184,6 +184,10 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
             }
       else if (qobject_cast<QCheckBox*>(w))
             static_cast<QCheckBox*>(w)->setChecked(val.toBool());
+      else if (qobject_cast<QPushButton*>(w))
+            static_cast<QPushButton*>(w)->setChecked(val.toBool());
+      else if (qobject_cast<QToolButton*>(w))
+            static_cast<QToolButton*>(w)->setChecked(val.toBool());
       else if (qobject_cast<QLineEdit*>(w))
             static_cast<QLineEdit*>(w)->setText(val.toString());
       else if (qobject_cast<Awl::ColorLabel*>(w))
@@ -555,7 +559,7 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                   connect(w, SIGNAL(currentFontChanged(const QFont&)), valueMapper, SLOT(map()));
             else if (qobject_cast<QComboBox*>(w))
                   connect(w, SIGNAL(currentIndexChanged(int)), valueMapper, SLOT(map()));
-            else if (qobject_cast<QCheckBox*>(w))
+            else if (qobject_cast<QCheckBox*>(w) || qobject_cast<QPushButton*>(w) || qobject_cast<QToolButton*>(w))
                   connect(w, SIGNAL(toggled(bool)), valueMapper, SLOT(map()));
             else if (qobject_cast<QLineEdit*>(w))
                   connect(w, SIGNAL(textChanged(const QString&)), valueMapper, SLOT(map()));
