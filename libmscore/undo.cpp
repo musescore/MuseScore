@@ -3307,10 +3307,12 @@ void ChangeProperty::flip()
 
       QVariant v       = element->getProperty(id);
       PropertyFlags ps = element->propertyFlags(id);
-      if (propertyStyle == PropertyFlags::STYLED)
-            element->resetProperty(id);
-      else
+
+//      if (propertyStyle == PropertyFlags::STYLED)
+//            element->resetProperty(id);
+//      else
             element->setProperty(id, property);
+            element->setPropertyFlags(id, ps);
 
 #if 0
       if (id == P_ID::SPANNER_TICK) {
@@ -3337,10 +3339,6 @@ void ChangeMetaText::flip()
       score->setMetaTag(id, text);
       text = s;
       }
-
-      PlayEventType eventListType = PlayEventType::User;
-
-      void flip();
 
 //---------------------------------------------------------
 //   ChangeEventList

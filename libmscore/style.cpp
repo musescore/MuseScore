@@ -408,6 +408,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::fingeringFrameRound,           "fingeringFrameRound",           0 },
       { StyleIdx::fingeringFrameFgColor,         "fingeringFrameFgColor",         QColor(0, 0, 0, 255) },
       { StyleIdx::fingeringFrameBgColor,         "fingeringFrameBgColor",         QColor(255, 255, 255, 0) },
+      { StyleIdx::fingeringOffset,               "fingeringOffset",               QPointF() },
 
       { StyleIdx::lhGuitarFingeringFontFace,     "lhGuitarFingeringFontFace",     "FreeSerif" },
       { StyleIdx::lhGuitarFingeringFontSize,     "lhGuitarFingeringFontSize",     8.0 },
@@ -760,6 +761,7 @@ const std::vector<StyledProperty> fingeringStyle {
       { StyleIdx::fingeringFrameRound,                P_ID::FRAME_ROUND            },
       { StyleIdx::fingeringFrameFgColor,              P_ID::FRAME_FG_COLOR         },
       { StyleIdx::fingeringFrameBgColor,              P_ID::FRAME_BG_COLOR         },
+      { StyleIdx::fingeringOffset,                    P_ID::OFFSET                 },
       };
 
 const std::vector<StyledProperty> lhGuitarFingeringStyle {
@@ -777,6 +779,7 @@ const std::vector<StyledProperty> lhGuitarFingeringStyle {
       { StyleIdx::lhGuitarFingeringFrameRound,        P_ID::FRAME_ROUND            },
       { StyleIdx::lhGuitarFingeringFrameFgColor,      P_ID::FRAME_FG_COLOR         },
       { StyleIdx::lhGuitarFingeringFrameBgColor,      P_ID::FRAME_BG_COLOR         },
+      { StyleIdx::lhGuitarFingeringOffset,            P_ID::OFFSET                 },
       };
 
 const std::vector<StyledProperty> rhGuitarFingeringStyle {
@@ -794,6 +797,7 @@ const std::vector<StyledProperty> rhGuitarFingeringStyle {
       { StyleIdx::rhGuitarFingeringFrameRound,        P_ID::FRAME_ROUND            },
       { StyleIdx::rhGuitarFingeringFrameFgColor,      P_ID::FRAME_FG_COLOR         },
       { StyleIdx::rhGuitarFingeringFrameBgColor,      P_ID::FRAME_BG_COLOR         },
+      { StyleIdx::rhGuitarFingeringOffset,            P_ID::OFFSET                 },
       };
 
 const std::vector<StyledProperty> stringNumberStyle {
@@ -811,6 +815,7 @@ const std::vector<StyledProperty> stringNumberStyle {
       { StyleIdx::stringNumberFrameRound,             P_ID::FRAME_ROUND            },
       { StyleIdx::stringNumberFrameFgColor,           P_ID::FRAME_FG_COLOR         },
       { StyleIdx::stringNumberFrameBgColor,           P_ID::FRAME_BG_COLOR         },
+      { StyleIdx::stringNumberOffset,                 P_ID::OFFSET                 },
       };
 
 const std::vector<StyledProperty> longInstrumentStyle {

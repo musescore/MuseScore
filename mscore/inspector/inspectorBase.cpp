@@ -443,6 +443,10 @@ void InspectorBase::valueChanged(int idx, bool reset)
       score->endCmd();
       inspector->setInspectorEdit(false);
       postInit();
+
+      // a subStyle change may change several other values:
+      if (id == P_ID::SUB_STYLE)
+            setElement();
       }
 
 //---------------------------------------------------------

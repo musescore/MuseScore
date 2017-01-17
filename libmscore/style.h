@@ -391,6 +391,7 @@ enum class StyleIdx {
       fingeringFrameRound,
       fingeringFrameFgColor,
       fingeringFrameBgColor,
+      fingeringOffset,
 
       lhGuitarFingeringFontFace,
       lhGuitarFingeringFontSize,

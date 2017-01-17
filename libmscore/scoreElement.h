@@ -64,6 +64,7 @@ class ScoreElement {
       virtual QVariant propertyDefault(P_ID) const { return QVariant(); }
       virtual void resetProperty(P_ID id);
       virtual PropertyFlags propertyFlags(P_ID) const;
+      virtual void setPropertyFlags(P_ID, PropertyFlags) {}
       virtual StyleIdx getPropertyStyle(P_ID) const;
 
       void undoChangeProperty(P_ID, const QVariant&);
