@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>150</width>
-    <height>115</height>
+    <width>113</width>
+    <height>91</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -125,7 +125,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Has bracket' value</string>
+         <string>Reset 'Small' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -144,7 +144,9 @@
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>small</tabstop>
+  <tabstop>resetSmall</tabstop>
   <tabstop>hasBracket</tabstop>
+  <tabstop>resetHasBracket</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
