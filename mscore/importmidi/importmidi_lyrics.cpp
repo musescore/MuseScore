@@ -215,7 +215,7 @@ void addLyricsToScore(
             QString text = MidiCharset::convertToCharset(it->second);
             if (originalTime != ReducedFraction(0, 1) || !isTitlePrefix(text)) { // not title
                   score->addLyrics(quantizedTime.ticks(), staffAddTo->idx(),
-                                   removeSlashes(text));
+                                   removeSlashes(text).toHtmlEscaped());
                   }
             }
       }
