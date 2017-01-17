@@ -1410,6 +1410,15 @@ void Element::undoChangeProperty(P_ID id, const QVariant& v, PropertyFlags ps)
                   undoResetProperty(P_ID::SLUR_UOFF4);
                   }
             }
+      else if (id == P_ID::SUB_STYLE) {
+            //
+            // change a list of properties
+            //
+            auto l = subStyle(SubStyle(v.toInt()));
+            // Change to SubStyle defaults
+            for (const StyledProperty& p : l)
+                  score()->undoChangeProperty(this, p.propertyIdx, score()->styleV(p.styleIdx), PropertyFlags::STYLED);
+            }
       score()->undoChangeProperty(this, id, v, ps);
       }
 

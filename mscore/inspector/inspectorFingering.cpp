@@ -42,11 +42,18 @@ InspectorFingering::InspectorFingering(QWidget* parent)
             { P_ID::FRAME_PADDING,    0, 0, t.paddingWidth, t.resetPaddingWidth },
             { P_ID::FRAME_ROUND,      0, 0, t.frameRound,   t.resetFrameRound   },
             { P_ID::ALIGN,            0, 0, t.align,        t.resetAlign        },
+            { P_ID::SUB_STYLE,        0, 0, f.subStyle,     f.resetSubStyle     },
             };
       const std::vector<InspectorPanel> ppList = {
             { t.title, t.panel },
             { f.title, f.panel }
             };
+
+      f.subStyle->clear();
+      f.subStyle->addItem("Fingering",           int(SubStyle::FINGERING));
+      f.subStyle->addItem("RH guitar fingering", int(SubStyle::LH_GUITAR_FINGERING));
+      f.subStyle->addItem("LH guitar fingering", int(SubStyle::RH_GUITAR_FINGERING));
+      f.subStyle->addItem("String number",       int(SubStyle::STRING_NUMBER));
 
       mapSignals(iiList, ppList);
       }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>65</width>
-    <height>47</height>
+    <width>277</width>
+    <height>215</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -76,6 +76,33 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Substyle:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="subStyle"/>
+      </item>
+      <item row="0" column="2">
+       <widget class="QToolButton" name="resetSubStyle">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Small' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -84,6 +111,8 @@
  <tabstops>
   <tabstop>title</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

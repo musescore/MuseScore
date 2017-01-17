@@ -3318,7 +3318,7 @@ StyleIdx Text::getPropertyStyle(P_ID id) const
             if (sp.propertyIdx == id)
                   return sp.styleIdx;
             }
-      return StyleIdx::NOSTYLE;
+      return Element::getPropertyStyle(id);
       }
 
 //---------------------------------------------------------

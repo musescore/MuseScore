@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>122</width>
-    <height>91</height>
+    <width>150</width>
+    <height>115</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -76,23 +76,6 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetSmall">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Small' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QCheckBox" name="small">
         <property name="focusPolicy">
@@ -136,6 +119,23 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="2">
+       <widget class="QToolButton" name="resetSmall">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Has bracket' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -144,9 +144,7 @@
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>small</tabstop>
-  <tabstop>resetSmall</tabstop>
   <tabstop>hasBracket</tabstop>
-  <tabstop>resetHasBracket</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
