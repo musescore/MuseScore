@@ -45,6 +45,7 @@ InspectorText::InspectorText(QWidget* parent)
             { t.title, t.panel }
             };
 
+      connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       mapSignals(iiList, ppList);
       }
 
