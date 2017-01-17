@@ -3154,8 +3154,6 @@ QVariant Text::getProperty(P_ID propertyId) const
                   return offset();
             case P_ID::OFFSET_TYPE:
                   return int(offsetType());
-            case P_ID::SYSTEM_FLAG:
-                  return systemFlag();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -3241,9 +3239,6 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::OFFSET_TYPE:
                   setOffsetType(OffsetType(v.toInt()));
-                  break;
-            case P_ID::SYSTEM_FLAG:
-                  setSystemFlag(v.toBool());
                   break;
             default:
                   rv = Element::setProperty(propertyId, v);

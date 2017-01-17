@@ -210,8 +210,6 @@ class Text : public Element {
       PROP(OffsetType, offsetType,          setOffsetType)
 #undef PROP
 
-      bool _systemFlag              { false };
-
       SubStyle _subStyle;
 
       QString _text;
@@ -274,9 +272,6 @@ class Text : public Element {
       QString xmlText() const                 { return _text; }
       QString plainText(bool noSym = false) const;
       void insertText(const QString&);
-
-      virtual bool systemFlag() const override  { return _systemFlag; }
-      void setSystemFlag(bool val)            { _systemFlag = val; }
 
       bool editMode() const                   { return _editMode; }
 

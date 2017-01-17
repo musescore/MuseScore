@@ -149,23 +149,24 @@ enum class ElementFlag {
       GENERATED       = 0x00000080,
       VISIBLE         = 0x00000100,
       AUTOPLACE       = 0x00000200,
+      SYSTEM          = 0x00000400,
 
       // measure flags
-      REPEAT_END      = 0x00000400,
-      REPEAT_START    = 0x00000800,
-      REPEAT_JUMP     = 0x00001000,
-      IRREGULAR       = 0x00002000,
-      LINE_BREAK      = 0x00004000,
-      PAGE_BREAK      = 0x00008000,
-      SECTION_BREAK   = 0x00010000,
-      NO_BREAK        = 0x00020000,
-      HEADER          = 0x00040000,
-      TRAILER         = 0x00080000,    // also used in segment
-      KEYSIG          = 0x00100000,
+      REPEAT_END      = 0x00000800,
+      REPEAT_START    = 0x00001000,
+      REPEAT_JUMP     = 0x00002000,
+      IRREGULAR       = 0x00004000,
+      LINE_BREAK      = 0x00008000,
+      PAGE_BREAK      = 0x00010000,
+      SECTION_BREAK   = 0x00020000,
+      NO_BREAK        = 0x00040000,
+      HEADER          = 0x00080000,
+      TRAILER         = 0x00100000,    // also used in segment
+      KEYSIG          = 0x00200000,
       // segment flags
-      ENABLED         = 0x00200000,    // used for segments
-      EMPTY           = 0x00400000,
-      WRITTEN         = 0x00800000,
+      ENABLED         = 0x00400000,    // used for segments
+      EMPTY           = 0x00800000,
+      WRITTEN         = 0x01000000,
       };
 
 typedef QFlags<ElementFlag> ElementFlags;
@@ -615,7 +616,8 @@ class Element : public QObject, public ScoreElement {
       static Element::Type name2type(const QStringRef&);
       static Element* name2Element(const QStringRef&, Score*);
 
-      virtual bool systemFlag() const  { return false;  }
+      virtual bool systemFlag() const          { return flag(ElementFlag::SYSTEM);  }
+      void setSystemFlag(bool v) const { setFlag(ElementFlag::SYSTEM, v);  }
 
       bool header() const              { return flag(ElementFlag::HEADER);        }
       void setHeader(bool v)           { setFlag(ElementFlag::HEADER, v);         }
