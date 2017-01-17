@@ -288,9 +288,18 @@ void MScore::init()
       //
       //  initialize styles
       //
+      QSettings s;
+      QString defStyle = s.value("defaultStyle").toString();
+      if (!defStyle.isEmpty()) {
+            QFile f(defStyle);
+            if (f.open(QIODevice::ReadOnly)) {
+                  _defaultStyle.load(&f);
+                  f.close();
+                  }
+            }
+      _defaultStyle.precomputeValues();
       _baseStyle            = _defaultStyle;
       _defaultStyleForParts = _defaultStyle;
-      QSettings s;
       QString partStyle = s.value("partStyle").toString();
       if (!partStyle.isEmpty()) {
             QFile f(partStyle);

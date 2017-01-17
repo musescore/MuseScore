@@ -1927,8 +1927,8 @@ int Element::tick() const
       while (e) {
             if (e->isSegment())
                   return toSegment(e)->tick();
-            else if (e->isMeasure())
-                  return toMeasure(e)->tick();
+            else if (e->isMeasureBase())
+                  return toMeasureBase(e)->tick();
             e = e->parent();
             }
       return -1;

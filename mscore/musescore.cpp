@@ -560,14 +560,6 @@ MuseScore::MuseScore()
       setAcceptDrops(true);
       setFocusPolicy(Qt::NoFocus);
 
-      if (!preferences.defaultStyleFile.isEmpty()) {
-            QFile f(preferences.defaultStyleFile);
-            if (f.open(QIODevice::ReadOnly)) {
-                  MScore::defaultStyle().load(&f);
-                  f.close();
-                  }
-            }
-
       if (!converterMode && !pluginMode) {
             _loginManager = new LoginManager(this);
 #if 0
