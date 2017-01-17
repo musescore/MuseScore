@@ -1308,6 +1308,7 @@ QVariant Element::getProperty(P_ID propertyId) const
             case P_ID::PLACEMENT: return int(_placement);
             case P_ID::AUTOPLACE: return autoplace();
             case P_ID::Z:         return z();
+            case P_ID::SYSTEM_FLAG: return systemFlag();
             default:
                   return QVariant();
             }
@@ -1348,6 +1349,9 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::Z:
                   setZ(v.toInt());
                   break;
+            case P_ID::SYSTEM_FLAG:
+                  setSystemFlag(v.toBool());
+                  break;
             default:
                   qFatal("Element::setProperty: unknown <%s>(%d), data <%s>",
                      propertyName(propertyId), static_cast<int>(propertyId), qPrintable(v.toString()));
@@ -1381,6 +1385,8 @@ QVariant Element::propertyDefault(P_ID id) const
                   return true;
             case P_ID::Z:
                   return int(type()) * 100;
+            case P_ID::SYSTEM_FLAG:
+                  return false;
             default:    // not all properties have a default
                   break;
             }
