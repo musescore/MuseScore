@@ -710,11 +710,11 @@ class MStyle {
       PageFormat _pageFormat;
 
       bool _customChordList;        // if true, chordlist will be saved as part of score
-      void precomputeValues();
 
    public:
       MStyle();
 
+      void precomputeValues();
       QVariant value(StyleIdx idx) const  { return _values[int(idx)]; }
       qreal pvalue(StyleIdx idx) const    { return _precomputedValues[int(idx)]; }
       void set(StyleIdx idx, const QVariant& v);

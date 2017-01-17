@@ -117,6 +117,7 @@ class ChordLine;
 class SlurTieSegment;
 class FretDiagram;
 class StaffTypeChange;
+class MeasureBase;
 
 enum class SymId;
 
@@ -695,15 +696,7 @@ class Element : public QObject, public ScoreElement {
       //
       //    bool             isChordRest()
       //---------------------------------------------------
-      // DEBUG: check to catch old (now renamed) ambitious Segment->isChordRest() calls
-      //    (which check the subtype)
 
-      bool isChordRest() const { return type() == Element::Type::REST || type() == Element::Type::CHORD
-            || type() == Element::Type::REPEAT_MEASURE; }
-      bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
-      bool isSlurTieSegment() const { return type() == Element::Type::SLUR_SEGMENT || type() == Element::Type::TIE_SEGMENT; }
-      bool isSLine() const;
-      bool isSLineSegment() const;
 
 #define CONVERT(a,b) \
       bool is##a() const { return type() == Element::Type::b; }
@@ -786,6 +779,14 @@ class Element : public QObject, public ScoreElement {
       CONVERT(ChordLine,     CHORDLINE)
       CONVERT(FretDiagram,   FRET_DIAGRAM)
 #undef CONVERT
+
+      bool isChordRest() const { return type() == Element::Type::REST || type() == Element::Type::CHORD
+            || type() == Element::Type::REPEAT_MEASURE; }
+      bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
+      bool isSlurTieSegment() const { return type() == Element::Type::SLUR_SEGMENT || type() == Element::Type::TIE_SEGMENT; }
+      bool isSLine() const;
+      bool isSLineSegment() const;
+      bool isMeasureBase() const { return isMeasure() || isVBox() || isHBox() || isTBox() || isFBox(); }
       };
 
       //---------------------------------------------------
@@ -824,6 +825,14 @@ static inline SlurTieSegment* toSlurTieSegment(Element* e) {
 static inline const SlurTieSegment* toSlurTieSegment(const Element* e) {
       Q_ASSERT(e == 0 || e->type() == Element::Type::SLUR_SEGMENT || e->type() == Element::Type::TIE_SEGMENT);
       return (const SlurTieSegment*)e;
+      }
+static inline const MeasureBase* toMeasureBase(const Element* e) {
+     Q_ASSERT(e == 0 || e->isMeasure() || e->isVBox() || e->isHBox() || e->isTBox() || e->isFBox());
+      return (const MeasureBase*)e;
+      }
+static inline MeasureBase* toMeasureBase(Element* e) {
+     Q_ASSERT(e == 0 || e->isMeasure() || e->isVBox() || e->isHBox() || e->isTBox() || e->isFBox());
+      return (MeasureBase*)e;
       }
 
 #define CONVERT(a,b) \
