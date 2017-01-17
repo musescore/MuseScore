@@ -237,7 +237,6 @@ class Text : public Element {
       void editInsertText(const QString&);
       QChar currentCharacter() const;
 
-      void setPropertyFlags(P_ID, PropertyFlags);
       PropertyFlags* propertyFlagsP(P_ID id);
 
    protected:
@@ -361,6 +360,7 @@ class Text : public Element {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(P_ID id) const override;
+      virtual void setPropertyFlags(P_ID, PropertyFlags) override;
       virtual PropertyFlags propertyFlags(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;

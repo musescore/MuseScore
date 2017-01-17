@@ -1,9 +1,8 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
-//  Copyright (C) 2013 Werner Schweer
+//  Copyright (C) 2013-2017 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -43,10 +42,6 @@ InspectorFingering::InspectorFingering(QWidget* parent)
             { P_ID::FRAME_PADDING,    0, 0, t.paddingWidth, t.resetPaddingWidth },
             { P_ID::FRAME_ROUND,      0, 0, t.frameRound,   t.resetFrameRound   },
             { P_ID::ALIGN,            0, 0, t.align,        t.resetAlign        },
-
-//            { P_ID::FONT_FACE, 0, 0, f.fontFace, f.resetFontFace },
-//            { P_ID::FONT_SIZE, 0, 0, f.fontSize, f.resetFontSize },
-//            { P_ID::FONT_BOLD, 0, 0, f.fontBold, f.resetFontBold }
             };
       const std::vector<InspectorPanel> ppList = {
             { t.title, t.panel },

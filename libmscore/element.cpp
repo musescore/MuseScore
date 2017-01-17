@@ -1430,8 +1430,10 @@ void Element::resetProperty(P_ID id)
 void Element::initSubStyle(SubStyle st)
       {
       auto l = subStyle(st);
-      for (const StyledProperty& p : l)
+      for (const StyledProperty& p : l) {
             setProperty(p.propertyIdx, score()->styleV(p.styleIdx));
+            setPropertyFlags(p.propertyIdx, PropertyFlags::STYLED);
+            }
       }
 
 //---------------------------------------------------------

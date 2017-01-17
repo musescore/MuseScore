@@ -249,7 +249,7 @@ bool InspectorBase::dirty() const
 
 void InspectorBase::setElement()
       {
-      for  (const InspectorItem& ii : iList) {
+      for (const InspectorItem& ii : iList) {
             P_ID id    = ii.t;
             P_TYPE pt  = propertyType(id);
 
@@ -297,6 +297,8 @@ void InspectorBase::setElement()
 void InspectorBase::checkDifferentValues(const InspectorItem& ii)
       {
       bool valuesAreDifferent = false;
+      QColor c(preferences.isThemeDark() ? Qt::yellow : Qt::darkCyan);
+
       if (inspector->el().size() > 1) {
             P_ID id      = ii.t;
             P_TYPE pt    = propertyType(id);
@@ -331,35 +333,30 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   if (valuesAreDifferent)
                         break;
                   }
-            QColor c(preferences.isThemeDark() ? Qt::yellow : Qt::darkCyan);
-
-            // ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1 }").arg(MScore::selectColor[0].name()) : "");
             ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1 }").arg(c.name()) : "");
             }
 
-      if (ii.r)
-            ii.r->setEnabled(true);
       //deal with reset if only one element, or if values are the same
+      bool reset = true;
       if (!valuesAreDifferent) {
             PropertyFlags styledValue = inspector->el().front()->propertyFlags(ii.t);
-            bool reset;
-            if (styledValue == PropertyFlags::STYLED) {
-                  // does not work for QComboBox:
-                  // ii.w->setStyleSheet("* { color: gray; foreground: gray; }");
-                  ii.w->setStyleSheet("* { color: darkGreen; }");
-                  reset = false;
+            switch (styledValue) {
+                  case PropertyFlags::STYLED:
+                        ii.w->setStyleSheet(QString("* { color: %1 }").arg(c.name()));
+                        reset = false;
+                        break;
+                  case PropertyFlags::UNSTYLED:
+                        ii.w->setStyleSheet("");
+                        reset = true;
+                        break;
+                  case PropertyFlags::NOSTYLE:
+                        reset = !isDefault(ii);
+                        ii.w->setStyleSheet("");
+                        break;
                   }
-            else if (styledValue == PropertyFlags::UNSTYLED) {
-                  ii.w->setStyleSheet("");
-                  reset = true;
-                  }
-            else {
-                  reset = !isDefault(ii);
-                  ii.w->setStyleSheet("");
-                  }
-            if (ii.r)
-                  ii.r->setEnabled(reset);
             }
+      if (ii.r)
+            ii.r->setEnabled(reset);
       }
 
 //---------------------------------------------------------
