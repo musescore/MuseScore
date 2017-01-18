@@ -25,6 +25,7 @@ namespace Ms {
 
 class Note;
 enum class SymId;
+enum class AccidentalVal : signed char;
 
 //---------------------------------------------------------
 //   AccidentalRole

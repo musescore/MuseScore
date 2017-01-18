@@ -15,6 +15,7 @@
 
 #include "element.h"
 #include "elementlayout.h"
+#include "property.h"
 
 namespace Ms {
 

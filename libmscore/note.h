@@ -227,8 +227,8 @@ class Note : public Element {
       Q_PROPERTY(Ms::Tie*                       tieBack           READ tieBack)
       Q_PROPERTY(Ms::Tie*                       tieFor            READ tieFor)
       Q_PROPERTY(int                            tpc               READ tpc)
-      Q_PROPERTY(int                            tpc1              READ tpc1               WRITE undoSetTpc1)
-      Q_PROPERTY(int                            tpc2              READ tpc2               WRITE undoSetTpc2)
+//      Q_PROPERTY(int                            tpc1              READ tpc1               WRITE undoSetTpc1)
+//      Q_PROPERTY(int                            tpc2              READ tpc2               WRITE undoSetTpc2)
       Q_PROPERTY(qreal                          tuning            READ tuning             WRITE undoSetTuning)
 //TODO-WS      Q_PROPERTY(Ms::MScore::Direction          userDotPosition   READ userDotPosition    WRITE undoSetUserDotPosition)
       Q_PROPERTY(Ms::MScore::DirectionH         userMirror        READ userMirror         WRITE undoSetUserMirror)
@@ -366,8 +366,8 @@ class Note : public Element {
       void setTpcFromPitch();
       int tpc1default(int pitch) const;
       int tpc2default(int pitch) const;
-      void undoSetTpc1(int tpc)      { undoChangeProperty(P_ID::TPC1, tpc); }
-      void undoSetTpc2(int tpc)      { undoChangeProperty(P_ID::TPC2, tpc); }
+//      void undoSetTpc1(int tpc)      { undoChangeProperty(P_ID::TPC1, tpc); }
+//      void undoSetTpc2(int tpc)      { undoChangeProperty(P_ID::TPC2, tpc); }
       int transposeTpc(int tpc);
 
       Accidental* accidental() const      { return _accidental; }

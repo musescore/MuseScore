@@ -30,7 +30,7 @@ enum class PropertyFlags : char {
 //   Element Properties
 //------------------------------------------------------------------------
 
-enum class P_ID : int {
+enum class P_ID {
       SUBTYPE,
       SELECTED,
       GENERATED,

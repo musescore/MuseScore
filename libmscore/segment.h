@@ -20,6 +20,7 @@
 
 #include "element.h"
 #include "shape.h"
+#include "mscore.h"
 
 namespace Ms {
 

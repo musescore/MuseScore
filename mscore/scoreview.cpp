@@ -4621,9 +4621,9 @@ void ScoreView::cmdChangeEnharmonic(bool up)
                               // change both spellings
                               int t = n->transposeTpc(tpc);
                               if (n->concertPitch())
-                                    n->undoSetTpc2(t);
+                                    n->undoChangeProperty(P_ID::TPC2, t);
                               else
-                                    n->undoSetTpc1(t);
+                                    n->undoChangeProperty(P_ID::TPC1, t);
                               }
                         }
                   }

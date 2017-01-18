@@ -14,6 +14,7 @@
 #define __OTTAVA_H__
 
 #include "textlinebase.h"
+#include "property.h"
 
 namespace Ms {
 

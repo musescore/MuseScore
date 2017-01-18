@@ -68,7 +68,10 @@ class Sequencer;
 
 enum class HairpinType : char;
 
-static constexpr int VOICES = 4;
+#ifndef VOICES
+#define VOICES 4
+#endif
+
 inline int staff2track(int staffIdx) { return staffIdx << 2; }
 inline int track2staff(int voice)    { return voice >> 2;    }
 inline int track2voice(int track)    { return track & 3;     }

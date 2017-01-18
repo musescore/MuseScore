@@ -41,6 +41,7 @@
 
 #include "svggenerator.h"
 #include "paintengine_p.h"
+#include "libmscore/mscore.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // FOR GRADIENT FUNCTIONALITY THAT IS NOT IMPLEMENTED (YET):
