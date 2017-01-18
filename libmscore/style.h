@@ -758,6 +758,7 @@ class MStyle {
 const std::vector<StyledProperty>& subStyle(const char*);
 const std::vector<StyledProperty>& subStyle(SubStyle);
 const char* subStyleName(SubStyle);
+QString subStyleUserName(SubStyle);
 SubStyle subStyleFromName(const QString&);
 
 #ifndef NDEBUG

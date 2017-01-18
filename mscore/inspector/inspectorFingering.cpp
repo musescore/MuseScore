@@ -50,10 +50,10 @@ InspectorFingering::InspectorFingering(QWidget* parent)
             };
 
       f.subStyle->clear();
-      f.subStyle->addItem("Fingering",           int(SubStyle::FINGERING));
-      f.subStyle->addItem("RH guitar fingering", int(SubStyle::LH_GUITAR_FINGERING));
-      f.subStyle->addItem("LH guitar fingering", int(SubStyle::RH_GUITAR_FINGERING));
-      f.subStyle->addItem("String number",       int(SubStyle::STRING_NUMBER));
+      f.subStyle->addItem(subStyleUserName(SubStyle::FINGERING),           int(SubStyle::FINGERING));
+      f.subStyle->addItem(subStyleUserName(SubStyle::LH_GUITAR_FINGERING), int(SubStyle::LH_GUITAR_FINGERING));
+      f.subStyle->addItem(subStyleUserName(SubStyle::RH_GUITAR_FINGERING), int(SubStyle::RH_GUITAR_FINGERING));
+      f.subStyle->addItem(subStyleUserName(SubStyle::STRING_NUMBER),       int(SubStyle::STRING_NUMBER));
 
       mapSignals(iiList, ppList);
       }
