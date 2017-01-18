@@ -1097,47 +1097,47 @@ struct StyledPropertyListName {
 //---------------------------------------------------------
 
 static const std::array<StyledPropertyListName, int(SubStyle::SUBSTYLES)> namedStyles { {
-      { "default",                 &defaultStyle,                   SubStyle::DEFAULT },
-      { "Title",                   &titleStyle,                     SubStyle::TITLE },
-      { "Subtitle",                &subTitleStyle,                  SubStyle::SUBTITLE },
-      { "Composer",                &composerStyle,                  SubStyle::COMPOSER },
-      { "Lyricist",                &lyricistStyle,                  SubStyle::POET },
-      { "Lyrics Odd Lines",        &lyricsOddStyle,                 SubStyle::LYRIC1 },
-      { "Lyrics Even Lines",       &lyricsEvenStyle,                SubStyle::LYRIC2 },
-      { "Fingering",               &fingeringStyle,                 SubStyle::FINGERING },
-      { "LH Guitar Fingering",     &lhGuitarFingeringStyle,         SubStyle::LH_GUITAR_FINGERING },
-      { "RH Guitar Fingering",     &rhGuitarFingeringStyle,         SubStyle::RH_GUITAR_FINGERING },
-      { "String Number",           &stringNumberStyle,              SubStyle::STRING_NUMBER },
-      { "Instrument Name (Long)",  &longInstrumentStyle,            SubStyle::INSTRUMENT_LONG },
-      { "Instrument Name (Short)", &shortInstrumentStyle,           SubStyle::INSTRUMENT_SHORT },
-      { "Instrument Name (Part)",  &partInstrumentStyle,            SubStyle::INSTRUMENT_EXCERPT },
-      { "Dynamics",                &dynamicsStyle,                  SubStyle::DYNAMICS },
-      { "Expression",              &expressionStyle,                SubStyle::EXPRESSION },
-      { "Tempo",                   &tempoStyle,                     SubStyle::TEMPO },
-      { "Metronome",               &metronomeStyle,                 SubStyle::METRONOME },
-      { "Measure Number",          &measureNumberStyle,             SubStyle::MEASURE_NUMBER },
-      { "Translator",              &translatorStyle,                SubStyle::TRANSLATOR },
-      { "Tuplet",                  &tupletStyle,                    SubStyle::TUPLET },
-      { "System",                  &systemStyle,                    SubStyle::SYSTEM },
-      { "Staff",                   &staffStyle,                     SubStyle::STAFF },
-      { "Chord Symbol",            &chordSymbolStyle,               SubStyle::HARMONY },
-      { "Rehearsal Mark",          &rehearsalMarkStyle,             SubStyle::REHEARSAL_MARK },
-      { "Repeat Text Left",        &repeatLeftStyle,                SubStyle::REPEAT_LEFT },
-      { "Repeat Text Right",       &repeatRightStyle,               SubStyle::REPEAT_RIGHT },
-      { "Volta",                   &voltaStyle,                     SubStyle::VOLTA },
-      { "Frame",                   &frameStyle,                     SubStyle::FRAME },
-      { "Text Line",               &textLineStyle,                  SubStyle::TEXTLINE },
-      { "Glissando",               &glissandoStyle,                 SubStyle::GLISSANDO },
-      { "Ottava",                  &ottavaStyle,                    SubStyle::OTTAVA },
-      { "Pedal",                   &pedalStyle,                     SubStyle::PEDAL },
-      { "Hairpin",                 &hairpinStyle,                   SubStyle::HAIRPIN },
-      { "Bend",                    &bendStyle,                      SubStyle::BEND },
-      { "Header",                  &headerStyle,                    SubStyle::HEADER },
-      { "Footer",                  &footerStyle,                    SubStyle::FOOTER },
-      { "Instrument Change",       &instrumentChangeStyle,          SubStyle::INSTRUMENT_CHANGE },
-      { "Figured Bass",            &figuredBassStyle,               SubStyle::FIGURED_BASS },
-      { "User-1",                  &user1Style,                     SubStyle::USER1 },
-      { "User-2",                  &user2Style,                     SubStyle::USER2 },
+      { QT_TRANSLATE_NOOP("TextStyle", "default"),                 &defaultStyle,                   SubStyle::DEFAULT },
+      { QT_TRANSLATE_NOOP("TextStyle", "Title"),                   &titleStyle,                     SubStyle::TITLE },
+      { QT_TRANSLATE_NOOP("TextStyle", "Subtitle"),                &subTitleStyle,                  SubStyle::SUBTITLE },
+      { QT_TRANSLATE_NOOP("TextStyle", "Composer"),                &composerStyle,                  SubStyle::COMPOSER },
+      { QT_TRANSLATE_NOOP("TextStyle", "Lyricist"),                &lyricistStyle,                  SubStyle::POET },
+      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Odd Lines"),        &lyricsOddStyle,                 SubStyle::LYRIC1 },
+      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Even Lines"),       &lyricsEvenStyle,                SubStyle::LYRIC2 },
+      { QT_TRANSLATE_NOOP("TextStyle", "Fingering"),               &fingeringStyle,                 SubStyle::FINGERING },
+      { QT_TRANSLATE_NOOP("TextStyle", "LH Guitar Fingering"),     &lhGuitarFingeringStyle,         SubStyle::LH_GUITAR_FINGERING },
+      { QT_TRANSLATE_NOOP("TextStyle", "RH Guitar Fingering"),     &rhGuitarFingeringStyle,         SubStyle::RH_GUITAR_FINGERING },
+      { QT_TRANSLATE_NOOP("TextStyle", "String Number"),           &stringNumberStyle,              SubStyle::STRING_NUMBER },
+      { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Long)"),  &longInstrumentStyle,            SubStyle::INSTRUMENT_LONG },
+      { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Short)"), &shortInstrumentStyle,           SubStyle::INSTRUMENT_SHORT },
+      { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Part)"),  &partInstrumentStyle,            SubStyle::INSTRUMENT_EXCERPT },
+      { QT_TRANSLATE_NOOP("TextStyle", "Dynamics"),                &dynamicsStyle,                  SubStyle::DYNAMICS },
+      { QT_TRANSLATE_NOOP("TextStyle", "Expression"),              &expressionStyle,                SubStyle::EXPRESSION },
+      { QT_TRANSLATE_NOOP("TextStyle", "Tempo"),                   &tempoStyle,                     SubStyle::TEMPO },
+      { QT_TRANSLATE_NOOP("TextStyle", "Metronome"),               &metronomeStyle,                 SubStyle::METRONOME },
+      { QT_TRANSLATE_NOOP("TextStyle", "Measure Number"),          &measureNumberStyle,             SubStyle::MEASURE_NUMBER },
+      { QT_TRANSLATE_NOOP("TextStyle", "Translator"),              &translatorStyle,                SubStyle::TRANSLATOR },
+      { QT_TRANSLATE_NOOP("TextStyle", "Tuplet"),                  &tupletStyle,                    SubStyle::TUPLET },
+      { QT_TRANSLATE_NOOP("TextStyle", "System"),                  &systemStyle,                    SubStyle::SYSTEM },
+      { QT_TRANSLATE_NOOP("TextStyle", "Staff"),                   &staffStyle,                     SubStyle::STAFF },
+      { QT_TRANSLATE_NOOP("TextStyle", "Chord Symbol"),            &chordSymbolStyle,               SubStyle::HARMONY },
+      { QT_TRANSLATE_NOOP("TextStyle", "Rehearsal Mark"),          &rehearsalMarkStyle,             SubStyle::REHEARSAL_MARK },
+      { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Left"),        &repeatLeftStyle,                SubStyle::REPEAT_LEFT },
+      { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Right"),       &repeatRightStyle,               SubStyle::REPEAT_RIGHT },
+      { QT_TRANSLATE_NOOP("TextStyle", "Volta"),                   &voltaStyle,                     SubStyle::VOLTA },
+      { QT_TRANSLATE_NOOP("TextStyle", "Frame"),                   &frameStyle,                     SubStyle::FRAME },
+      { QT_TRANSLATE_NOOP("TextStyle", "Text Line"),               &textLineStyle,                  SubStyle::TEXTLINE },
+      { QT_TRANSLATE_NOOP("TextStyle", "Glissando"),               &glissandoStyle,                 SubStyle::GLISSANDO },
+      { QT_TRANSLATE_NOOP("TextStyle", "Ottava"),                  &ottavaStyle,                    SubStyle::OTTAVA },
+      { QT_TRANSLATE_NOOP("TextStyle", "Pedal"),                   &pedalStyle,                     SubStyle::PEDAL },
+      { QT_TRANSLATE_NOOP("TextStyle", "Hairpin"),                 &hairpinStyle,                   SubStyle::HAIRPIN },
+      { QT_TRANSLATE_NOOP("TextStyle", "Bend"),                    &bendStyle,                      SubStyle::BEND },
+      { QT_TRANSLATE_NOOP("TextStyle", "Header"),                  &headerStyle,                    SubStyle::HEADER },
+      { QT_TRANSLATE_NOOP("TextStyle", "Footer"),                  &footerStyle,                    SubStyle::FOOTER },
+      { QT_TRANSLATE_NOOP("TextStyle", "Instrument Change"),       &instrumentChangeStyle,          SubStyle::INSTRUMENT_CHANGE },
+      { QT_TRANSLATE_NOOP("TextStyle", "Figured Bass"),            &figuredBassStyle,               SubStyle::FIGURED_BASS },
+      { QT_TRANSLATE_NOOP("TextStyle", "User-1"),                  &user1Style,                     SubStyle::USER1 },
+      { QT_TRANSLATE_NOOP("TextStyle", "User-2"),                  &user2Style,                     SubStyle::USER2 },
       } };
 
 //---------------------------------------------------------
@@ -1180,6 +1180,15 @@ SubStyle subStyleFromName(const QString& name)
 const char* subStyleName(SubStyle idx)
       {
       return namedStyles[int(idx)].name;
+      }
+
+//---------------------------------------------------------
+//   subStyleUserName
+//---------------------------------------------------------
+
+QString subStyleUserName(SubStyle idx)
+      {
+      return qApp->translate("TextStyle", subStyleName(idx));
       }
 
 //---------------------------------------------------------
