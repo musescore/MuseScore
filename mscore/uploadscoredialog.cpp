@@ -134,10 +134,12 @@ void UploadScoreDialog::uploadSuccess(const QString& url)
       setVisible(false);
       Score* score = mscore->currentScore()->rootScore();
       QMap<QString, QString>  metatags = score->metaTags();
-      metatags.insert("source", url);
-      score->startCmd();
-      score->undo(new ChangeMetaTags(score, metatags));
-      score->endCmd();
+      if (metatags.value("source") != url) {
+            metatags.insert("source", url);
+            score->startCmd();
+            score->undo(new ChangeMetaTags(score, metatags));
+            score->endCmd();
+      }
       QMessageBox::information(this,
                tr("Success"),
                tr("Finished! %1Go to my score%2.")
