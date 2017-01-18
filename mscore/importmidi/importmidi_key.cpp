@@ -59,6 +59,8 @@ void assignKeyListToStaff(const KeyList &kl, Staff *staff)
             ks->setKey(key);
             ks->setMag(staff->mag());
             Measure* m = score->tick2measure(tick);
+            if (!m)
+                  continue;
             Segment* seg = m->getSegment(ks, tick);
             seg->add(ks);
             }
