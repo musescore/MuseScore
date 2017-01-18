@@ -4955,7 +4955,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"x", "gui-scaling"}, "Set scaling factor for GUI elements", "factor"));
       parser.addOption(QCommandLineOption({"D", "monitor-resolution"}, "Specify monitor resolution", "dpi"));
       parser.addOption(QCommandLineOption({"S", "style"}, "Load style file", "style"));
-      parser.addOption(QCommandLineOption({"p", "plugin"}, "Execure named plugin", "name"));
+      parser.addOption(QCommandLineOption({"p", "plugin"}, "Execute named plugin", "name"));
       parser.addOption(QCommandLineOption(      "template-mode", "Save template mode, no page size"));
       parser.addOption(QCommandLineOption({"F", "factory-settings"}, "Use factory settings"));
       parser.addOption(QCommandLineOption({"R", "revert-settings"}, "Revert to default preferences"));
