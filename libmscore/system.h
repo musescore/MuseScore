@@ -89,7 +89,7 @@ class System : public Element {
       System(Score*);
       ~System();
       virtual System* clone() const override      { return new System(*this); }
-      virtual Element::Type type() const override { return Element::Type::SYSTEM; }
+      virtual ElementType type() const override { return ElementType::SYSTEM; }
 
       virtual void add(Element*) override;
       virtual void remove(Element*) override;

@@ -402,7 +402,7 @@ void LineSegment::editDrag(const EditData& ed)
             // if we touch a different note, change anchor
             //
             Element* e = ed.view->elementNear(ed.pos);
-            if (e && e->type() == Element::Type::NOTE) {
+            if (e && e->type() == ElementType::NOTE) {
                   SLine* l = line();
                   if (ed.curGrip == Grip::END && e != line()->endElement()) {
                         qDebug("LineSegment: move end anchor");
@@ -554,7 +554,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                   ChordRest* cr;
                   if (grip == Grip::START) {
                         cr = static_cast<ChordRest*>(startElement());
-                        if (cr && type() == Element::Type::OTTAVA) {
+                        if (cr && type() == ElementType::OTTAVA) {
                               // some sources say to center the text over the notehead
                               // others say to start the text just to left of notehead
                               // some say to include accidental, others don't
@@ -567,7 +567,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                         }
                   else {
                         cr = static_cast<ChordRest*>(endElement());
-                        if (type() == Element::Type::OTTAVA) {
+                        if (type() == ElementType::OTTAVA) {
                               if (cr && cr->durationType() == TDuration::DurationType::V_MEASURE) {
                                     x = cr->x() + cr->width() + sp;
                                     }
@@ -602,7 +602,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                           }
                                     }
                               }
-                        else if (type() == Element::Type::LYRICSLINE && static_cast<Lyrics*>(parent())->ticks() > 0) {
+                        else if (type() == ElementType::LYRICSLINE && static_cast<Lyrics*>(parent())->ticks() > 0) {
                               // melisma line
                               // it is possible CR won't be in correct track
                               // prefer element in current track if available
@@ -616,7 +616,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                               // layout to right edge of CR
                               if (cr) {
                                     qreal maxRight = 0.0;
-                                    if (cr->type() == Element::Type::CHORD) {
+                                    if (cr->type() == ElementType::CHORD) {
                                           // chord bbox() is unreliable, look at notes
                                           // this also allows us to more easily ignore ledger lines
                                           for (Note* n : static_cast<Chord*>(cr)->notes())
@@ -629,12 +629,12 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     x = maxRight; // cr->width()
                                     }
                              }
-                        else if (type() == Element::Type::HAIRPIN || type() == Element::Type::TRILL
-                                    || type() == Element::Type::TEXTLINE || type() == Element::Type::LYRICSLINE) {
+                        else if (type() == ElementType::HAIRPIN || type() == ElementType::TRILL
+                                    || type() == ElementType::TEXTLINE || type() == ElementType::LYRICSLINE) {
                               // (for LYRICSLINE, this is hyphen; melisma line is handled above)
                               // lay out to just before next chordrest on this staff, or barline
                               // tick2 actually tells us the right chordrest to look for
-                              if (cr && endElement()->parent() && endElement()->parent()->type() == Element::Type::SEGMENT) {
+                              if (cr && endElement()->parent() && endElement()->parent()->type() == ElementType::SEGMENT) {
                                     qreal x2 = cr->x() /* TODO + cr->space().rw() */;
                                     Segment* currentSeg = static_cast<Segment*>(endElement()->parent());
                                     Segment* seg = score()->tick2segmentMM(tick2(), false, Segment::Type::ChordRest);
@@ -655,7 +655,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                                 seg = currentSeg->measure()->last();
                                           // allow lyrics hyphen to extend to barline
                                           // other lines stop 1sp short
-                                          qreal gap = (type() == Element::Type::LYRICSLINE) ? 0.0 : sp;
+                                          qreal gap = (type() == ElementType::LYRICSLINE) ? 0.0 : sp;
                                           x2 = qMax(x2, seg->x() - gap);
                                           }
                                     x = x2 - endElement()->parent()->x();
@@ -721,7 +721,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                         // align to barline
                         if (seg && seg->segmentType() == Segment::Type::EndBarLine) {
                               Element* e = seg->element(0);
-                              if (e && e->type() == Element::Type::BAR_LINE) {
+                              if (e && e->type() == ElementType::BAR_LINE) {
                                     BarLineType blt = static_cast<BarLine*>(e)->barLineType();
                                     switch (blt) {
                                           case BarLineType::END_REPEAT:
@@ -993,7 +993,7 @@ void SLine::layout()
                   qreal len = p2.x() - p1.x();
                   // enforcing a minimum length would be possible but inadvisable
                   // the line length calculations are tuned well enough that this should not be needed
-                  //if (anchor() == Anchor::SEGMENT && type() != Element::Type::PEDAL)
+                  //if (anchor() == Anchor::SEGMENT && type() != ElementType::PEDAL)
                   //      len = qMax(1.0 * spatium(), len);
                   lineSegm->setPos(p1);
                   lineSegm->setPos2(QPointF(len, p2.y() - p1.y()));
@@ -1025,7 +1025,7 @@ void SLine::layout()
                               offset = e->width();
                         // enforcing a minimum length would be possible but inadvisable
                         // the line length calculations are tuned well enough that this should not be needed
-                        //if (type() != Element::Type::PEDAL)
+                        //if (type() != ElementType::PEDAL)
                         //      minLen = 1.0 * spatium();
                         }
 //                  qreal firstCRSegX = firstCRSeg ? firstCRSeg->pos().x() : 0;       // DEBUG

@@ -536,7 +536,7 @@ void PianoView::updateNotes()
       for (Segment* s = staff->score()->firstSegment(st); s; s = s->next1(st)) {
             for (int track = startTrack; track < endTrack; ++track) {
                   Chord* chord = static_cast<Chord*>(s->element(track));
-                  if (chord == 0 || chord->type() != Element::Type::CHORD)
+                  if (chord == 0 || chord->type() != ElementType::CHORD)
                         continue;
                   addChord(chord);
                   }

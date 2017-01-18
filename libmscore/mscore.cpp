@@ -214,7 +214,7 @@ void MScore::init()
 //            qFatal("registerConverter intToSubStyle failed");
 
 #ifdef SCRIPT_INTERFACE
-      qRegisterMetaType<Element::Type>     ("ElementType");
+      qRegisterMetaType<ElementType>     ("ElementType");
       qRegisterMetaType<Note::ValueType>   ("ValueType");
 
       qRegisterMetaType<Direction::E>("Direction");

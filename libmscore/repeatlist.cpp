@@ -30,7 +30,7 @@ Volta* Score::searchVolta(int tick) const
       {
       for (const std::pair<int,Spanner*>& p : _spanner.map()) {
             Spanner* s = p.second;
-            if (s->type() != Element::Type::VOLTA)
+            if (s->type() != ElementType::VOLTA)
                   continue;
             Volta* volta = static_cast<Volta*>(s);
             if (tick >= volta->tick() && tick < volta->tick2())
@@ -51,7 +51,7 @@ Measure* Score::searchLabel(const QString& s)
             return lastMeasure();
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             for (auto e : m->el()) {
-                  if (e->type() == Element::Type::MARKER) {
+                  if (e->type() == ElementType::MARKER) {
                         const Marker* marker = static_cast<const Marker*>(e);
                         if (marker->label() == s)
                               return m;
@@ -73,7 +73,7 @@ Measure* Score::searchLabelWithinSectionFirst(const QString& s, Measure* section
             return sectionEndMeasure;
       for (Measure* m = sectionStartMeasure; m && (m != sectionEndMeasure->nextMeasure()); m = m->nextMeasure()) {
             for (auto e : m->el()) {
-                  if (e->type() == Element::Type::MARKER) {
+                  if (e->type() == ElementType::MARKER) {
                         const Marker* marker = static_cast<const Marker*>(e);
                         if (marker->label() == s)
                               return m;

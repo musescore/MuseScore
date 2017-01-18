@@ -318,7 +318,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               int tick = e.tick();
                               Measure* m = tick2measure(tick);
                               Segment* seg = m->undoGetSegment(Segment::Type::ChordRest, tick);
-                              if (seg->findAnnotationOrElement(Element::Type::HARMONY, e.track(), e.track())) {
+                              if (seg->findAnnotationOrElement(ElementType::HARMONY, e.track(), e.track())) {
                                     QList<Element*> elements;
                                     foreach (Element* el, seg->annotations()) {
                                           if (el->isHarmony() && el->track() == e.track()) {
@@ -821,7 +821,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
             XmlReader e(this, data);
             QPointF dragOffset;
             Fraction duration(1, 4);
-            Element::Type type = Element::readType(e, &dragOffset, &duration);
+            ElementType type = Element::readType(e, &dragOffset, &duration);
 
             QList<Element*> els;
             if (_selection.isSingle())
@@ -829,7 +829,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
             else
                   els.append(_selection.elements());
 
-            if (type != Element::Type::INVALID) {
+            if (type != ElementType::INVALID) {
                   Element* el = Element::create(type, this);
                   if (el) {
                         el->read(e);

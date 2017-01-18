@@ -78,7 +78,7 @@ void Symbol::layout()
 
 void Symbol::draw(QPainter* p) const
       {
-      if (type() != Element::Type::NOTEDOT || !staff()->isTabStaff(tick())) {
+      if (type() != ElementType::NOTEDOT || !staff()->isTabStaff(tick())) {
             p->setPen(curColor());
             if (_scoreFont)
                   _scoreFont->draw(_sym, p, magS(), QPointF());
@@ -161,7 +161,7 @@ void Symbol::read(XmlReader& e)
 
 QLineF BSymbol::dragAnchor() const
       {
-      if (parent() && parent()->type() == Element::Type::SEGMENT) {
+      if (parent() && parent()->type() == ElementType::SEGMENT) {
             System* system = segment()->measure()->system();
             qreal y        = system->staffCanvasYpage(staffIdx());
 //            QPointF anchor(segment()->pageX(), y);
@@ -179,7 +179,7 @@ QLineF BSymbol::dragAnchor() const
 
 QPointF BSymbol::pagePos() const
       {
-      if (parent() && (parent()->type() == Element::Type::SEGMENT)) {
+      if (parent() && (parent()->type() == ElementType::SEGMENT)) {
             QPointF p(pos());
             System* system = segment()->measure()->system();
             if (system) {
@@ -198,7 +198,7 @@ QPointF BSymbol::pagePos() const
 
 QPointF BSymbol::canvasPos() const
       {
-      if (parent() && (parent()->type() == Element::Type::SEGMENT)) {
+      if (parent() && (parent()->type() == ElementType::SEGMENT)) {
             QPointF p(pos());
             Segment* s = static_cast<Segment*>(parent());
 

@@ -171,8 +171,8 @@ void ChordRest::writeProperties(XmlWriter& xml) const
       //    REST  - Beam::Mode::NONE
       //    CHORD - Beam::Mode::AUTO
       //
-      if ((type() == Element::Type::REST && _beamMode != Beam::Mode::NONE)
-         || (type() == Element::Type::CHORD && _beamMode != Beam::Mode::AUTO)) {
+      if ((type() == ElementType::REST && _beamMode != Beam::Mode::NONE)
+         || (type() == ElementType::CHORD && _beamMode != Beam::Mode::AUTO)) {
             QString s;
             switch(_beamMode) {
                   case Beam::Mode::AUTO:    s = "auto"; break;
@@ -245,7 +245,7 @@ bool ChordRest::readProperties(XmlReader& e)
       if (tag == "durationType") {
             setDurationType(e.readElementText());
             if (actualDurationType().type() != TDuration::DurationType::V_MEASURE) {
-                  if (score()->mscVersion() < 112 && (type() == Element::Type::REST) &&
+                  if (score()->mscVersion() < 112 && (type() == ElementType::REST) &&
                               // for backward compatibility, convert V_WHOLE rests to V_MEASURE
                               // if long enough to fill a measure.
                               // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
@@ -317,7 +317,7 @@ bool ChordRest::readProperties(XmlReader& e)
             int i = e.readInt();
             if (i == 0)
                   i = mticks;
-            if ((type() == Element::Type::REST) && (mticks == i)) {
+            if ((type() == ElementType::REST) && (mticks == i)) {
                   setDurationType(TDuration::DurationType::V_MEASURE);
                   setDuration(Fraction::fromTicks(i));
                   }
@@ -355,7 +355,7 @@ bool ChordRest::readProperties(XmlReader& e)
                               spanner->setTicks(spanner->ticks() - e.tick() - 1);
                         spanner->setTick(e.tick());
                         spanner->setTrack(track());
-                        if (spanner->type() == Element::Type::SLUR)
+                        if (spanner->type() == ElementType::SLUR)
                               spanner->setStartElement(this);
                         if (e.pasteMode()) {
                               for (ScoreElement* e : spanner->linkList()) {
@@ -367,7 +367,7 @@ bool ChordRest::readProperties(XmlReader& e)
                                           ChordRest* cr = static_cast<ChordRest*>(ee);
                                           if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack(cr->track());
-                                                if (ls->type() == Element::Type::SLUR)
+                                                if (ls->type() == ElementType::SLUR)
                                                       ls->setStartElement(cr);
                                                 break;
                                                 }
@@ -378,7 +378,7 @@ bool ChordRest::readProperties(XmlReader& e)
                   else if (atype == "stop") {
                         spanner->setTick2(e.tick());
                         spanner->setTrack2(track());
-                        if (spanner->type() == Element::Type::SLUR)
+                        if (spanner->type() == ElementType::SLUR)
                               spanner->setEndElement(this);
                         Chord* start = static_cast<Chord*>(spanner->startElement());
                         if (start)
@@ -393,7 +393,7 @@ bool ChordRest::readProperties(XmlReader& e)
                                           ChordRest* cr = static_cast<ChordRest*>(ee);
                                           if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack2(cr->track());
-                                                if (ls->type() == Element::Type::SLUR)
+                                                if (ls->type() == ElementType::SLUR)
                                                       ls->setEndElement(cr);
                                                 break;
                                                 }
@@ -572,7 +572,7 @@ void ChordRest::layoutArticulations()
             else {
                   int line = upLine();
                   y        = chordTopY - dy;
-                  if (!headSide && type() == Element::Type::CHORD && chord->stem()) {
+                  if (!headSide && type() == ElementType::CHORD && chord->stem()) {
                         Stem* stem = chord->stem();
                         y          = chordBotY + stem->stemLen();
                         if (chord->beam())
@@ -687,7 +687,7 @@ Element* ChordRest::drop(const DropData& data)
       Measure* m       = measure();
       bool fromPalette = (e->track() == -1);
       switch (e->type()) {
-            case Element::Type::BREATH:
+            case ElementType::BREATH:
                   {
                   Breath* b = toBreath(e);
                   b->setPos(QPointF());
@@ -710,7 +710,7 @@ Element* ChordRest::drop(const DropData& data)
                   }
                   return e;
 
-            case Element::Type::BAR_LINE:
+            case ElementType::BAR_LINE:
                   if (data.control())
                         score()->splitMeasure(segment());
                   else {
@@ -741,11 +741,11 @@ Element* ChordRest::drop(const DropData& data)
                   delete e;
                   return 0;
 
-            case Element::Type::CLEF:
+            case ElementType::CLEF:
                   score()->cmdInsertClef(toClef(e), this);
                   break;
 
-            case Element::Type::TIMESIG:
+            case ElementType::TIMESIG:
                   if (measure()->system()) {
                         DropData ndd = data;
                         // adding from palette sets pos, but normal paste does not
@@ -760,7 +760,7 @@ Element* ChordRest::drop(const DropData& data)
                         return 0;
                         }
 
-            case Element::Type::TEMPO_TEXT:
+            case ElementType::TEMPO_TEXT:
                   {
                   TempoText* tt = static_cast<TempoText*>(e);
                   tt->setTrack(0);
@@ -773,7 +773,7 @@ Element* ChordRest::drop(const DropData& data)
                   }
                   return e;
 
-            case Element::Type::DYNAMIC:
+            case ElementType::DYNAMIC:
                   {
                   Dynamic* d = static_cast<Dynamic*>(e);
                   d->setTrack(track());
@@ -785,15 +785,15 @@ Element* ChordRest::drop(const DropData& data)
                   score()->undoAddElement(d);
                   }
                   return e;
-            case Element::Type::FRET_DIAGRAM:
-            case Element::Type::TREMOLOBAR:
-            case Element::Type::SYMBOL:
+            case ElementType::FRET_DIAGRAM:
+            case ElementType::TREMOLOBAR:
+            case ElementType::SYMBOL:
                   e->setTrack(track());
                   e->setParent(segment());
                   score()->undoAddElement(e);
                   return e;
 
-            case Element::Type::NOTE:
+            case ElementType::NOTE:
                   {
                   Note* note = static_cast<Note*>(e);
                   NoteVal nval;
@@ -806,7 +806,7 @@ Element* ChordRest::drop(const DropData& data)
                   }
                   break;
 
-            case Element::Type::HARMONY:
+            case ElementType::HARMONY:
                   {
                   // transpose
                   Harmony* harmony = static_cast<Harmony*>(e);
@@ -821,23 +821,23 @@ Element* ChordRest::drop(const DropData& data)
                   harmony->render();
                   }
                   // fall through
-            case Element::Type::TEXT:
-            case Element::Type::STAFF_TEXT:
-            case Element::Type::STAFF_STATE:
-            case Element::Type::INSTRUMENT_CHANGE:
+            case ElementType::TEXT:
+            case ElementType::STAFF_TEXT:
+            case ElementType::STAFF_STATE:
+            case ElementType::INSTRUMENT_CHANGE:
                   if (e->isInstrumentChange() && part()->instruments()->find(tick()) != part()->instruments()->end()) {
                         qDebug()<<"InstrumentChange already exists at tick = "<<tick();
                         delete e;
                         return 0;
                         }
                   // fall through
-            case Element::Type::REHEARSAL_MARK:
+            case ElementType::REHEARSAL_MARK:
                   e->setParent(segment());
                   e->setTrack((track() / VOICES) * VOICES);
                   score()->undoAddElement(e);
                   return e;
 
-            case Element::Type::FIGURED_BASS:
+            case ElementType::FIGURED_BASS:
                   {
                   bool bNew;
                   FiguredBass * fb = static_cast<FiguredBass *>(e);
@@ -852,12 +852,12 @@ Element* ChordRest::drop(const DropData& data)
                   return e;
                   }
 
-            case Element::Type::IMAGE:
+            case ElementType::IMAGE:
                   e->setParent(segment());
                   score()->undoAddElement(e);
                   return e;
 
-            case Element::Type::ICON:
+            case ElementType::ICON:
                   {
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case IconType::SBEAM:
@@ -885,7 +885,7 @@ Element* ChordRest::drop(const DropData& data)
                   delete e;
                   break;
 
-            case Element::Type::KEYSIG:
+            case ElementType::KEYSIG:
                   {
                   KeySig* ks    = static_cast<KeySig*>(e);
                   KeySigEvent k = ks->keySigEvent();
@@ -1010,7 +1010,7 @@ void ChordRest::add(Element* e)
       e->setParent(this);
       e->setTrack(track());
       switch (e->type()) {
-            case Element::Type::ARTICULATION:
+            case ElementType::ARTICULATION:
                   {
                   Articulation* a = toArticulation(e);
                   _articulations.push_back(a);
@@ -1018,7 +1018,7 @@ void ChordRest::add(Element* e)
                         score()->fixTicks();          // update tempo map
                   }
                   break;
-            case Element::Type::LYRICS:
+            case ElementType::LYRICS:
                   _lyrics.push_back(toLyrics(e));
                   break;
             default:
@@ -1034,7 +1034,7 @@ void ChordRest::add(Element* e)
 void ChordRest::remove(Element* e)
       {
       switch (e->type()) {
-            case Element::Type::ARTICULATION:
+            case ElementType::ARTICULATION:
                   {
                   Articulation* a = toArticulation(e);
                   if (!_articulations.removeOne(a))
@@ -1043,7 +1043,7 @@ void ChordRest::remove(Element* e)
                         score()->fixTicks();           // update tempo map
                   }
                   break;
-            case Element::Type::LYRICS: {
+            case ElementType::LYRICS: {
                   toLyrics(e)->removeFromScore();
                   auto i = std::find(_lyrics.begin(), _lyrics.end(), toLyrics(e));
                   if (i != _lyrics.end())
@@ -1295,12 +1295,12 @@ QString ChordRest::accessibleExtraInfo() const
                   Spanner* s = interval.value;
                   if (!score()->selectionFilter().canSelect(s))
                         continue;
-                  if (s->type() == Element::Type::VOLTA || //voltas are added for barlines
-                      s->type() == Element::Type::TIE    ) //ties are added in notes
+                  if (s->type() == ElementType::VOLTA || //voltas are added for barlines
+                      s->type() == ElementType::TIE    ) //ties are added in notes
                         continue;
 
                   Segment* seg = 0;
-                  if (s->type() == Element::Type::SLUR) {
+                  if (s->type() == ElementType::SLUR) {
                         if (s->tick() == tick() && s->track() == track())
                               rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
                         if (s->tick2() == tick() && s->track2() == track())

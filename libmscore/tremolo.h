@@ -51,7 +51,7 @@ class Tremolo : public Element {
       Tremolo(const Tremolo&);
       Tremolo &operator=(const Tremolo&) = delete;
       virtual Tremolo* clone() const     { return new Tremolo(*this); }
-      virtual Element::Type type() const { return Element::Type::TREMOLO; }
+      virtual ElementType type() const { return ElementType::TREMOLO; }
       virtual int subtype() const         { return (int) _tremoloType; }
       virtual QString subtypeName() const;
 

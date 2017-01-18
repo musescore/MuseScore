@@ -75,7 +75,7 @@ class Articulation : public Element {
       Articulation &operator=(const Articulation&) = delete;
 
       virtual Articulation* clone() const override   { return new Articulation(*this); }
-      virtual Element::Type type() const override    { return Element::Type::ARTICULATION; }
+      virtual ElementType type() const override    { return ElementType::ARTICULATION; }
 
       virtual qreal mag() const override;
 

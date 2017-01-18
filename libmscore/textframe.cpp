@@ -114,7 +114,7 @@ Element* TBox::drop(const DropData& data)
       {
       Element* e = data.element;
       switch (e->type()) {
-            case Element::Type::TEXT:
+            case ElementType::TEXT:
                   {
                   Text* t = static_cast<Text*>(e);
                   _text->undoSetText(t->xmlText());
@@ -134,7 +134,7 @@ Element* TBox::drop(const DropData& data)
 
 void TBox::add(Element* e)
       {
-      if (e->type() == Element::Type::TEXT) {
+      if (e->type() == ElementType::TEXT) {
             // does not normally happen, since drop() handles this directly
             Text* t = static_cast<Text*>(e);
             _text->undoSetText(t->xmlText());

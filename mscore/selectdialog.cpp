@@ -48,17 +48,17 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
       type->setText(qApp->translate("elementName", e->userName().toUtf8()));
 
       switch (e->type()) {
-            case Element::Type::ACCIDENTAL:
+            case ElementType::ACCIDENTAL:
                   subtype->setText(qApp->translate("accidental", e->subtypeName().toUtf8()));
                   break;
-            case Element::Type::SLUR_SEGMENT:
+            case ElementType::SLUR_SEGMENT:
                   subtype->setText(qApp->translate("elementName", e->subtypeName().toUtf8()));
                   break;
-            case Element::Type::FINGERING:
-            case Element::Type::STAFF_TEXT:
+            case ElementType::FINGERING:
+            case ElementType::STAFF_TEXT:
                   subtype->setText(qApp->translate("TextStyle", e->subtypeName().toUtf8()));
                   break;
-            case Element::Type::ARTICULATION: // comes translated, but from a different method
+            case ElementType::ARTICULATION: // comes translated, but from a different method
                   subtype->setText(toArticulation(e)->userName());
                   break;
             // other come translated or don't need any or are too difficult to implement
@@ -100,7 +100,7 @@ void SelectDialog::setPattern(ElementPattern* p)
       p->system  = 0;
       if (sameSystem->isChecked()) {
             do {
-                  if (e->type() == Element::Type::SYSTEM) {
+                  if (e->type() == ElementType::SYSTEM) {
                         p->system = static_cast<const System*>(e);
                         break;
                         }

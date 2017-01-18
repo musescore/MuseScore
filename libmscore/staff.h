@@ -92,7 +92,7 @@ struct SwingParameters {
 ///    Global staff data not directly related to drawing.
 //---------------------------------------------------------
 
-class Staff : public QObject, public ScoreElement {
+class Staff : public ScoreElement {
       Q_OBJECT
 
    public:
@@ -140,7 +140,7 @@ class Staff : public QObject, public ScoreElement {
       void initFromStaffType(const StaffType* staffType);
       void init(const Staff*);
 
-      virtual const char* name() const override { return "Staff"; }
+      virtual ElementType type() const override { return ElementType::STAFF; }
 
       bool isTop() const;
       QString partName() const;

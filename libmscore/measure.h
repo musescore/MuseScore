@@ -99,7 +99,7 @@ class Measure : public MeasureBase {
       Measure(const Measure&);
       ~Measure();
       virtual Measure* clone() const override     { return new Measure(*this); }
-      virtual Element::Type type() const override { return Element::Type::MEASURE; }
+      virtual ElementType type() const override { return ElementType::MEASURE; }
       virtual void setScore(Score* s) override;
       Measure* cloneMeasure(Score*, TieMap*);
 

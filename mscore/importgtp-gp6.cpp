@@ -665,7 +665,7 @@ void GuitarPro6::makeTie(Note* note) {
       while (segment) {
             Element* e = segment->element(track);
             if (e) {
-                  if (e->type() == Element::Type::CHORD) {
+                  if (e->type() == ElementType::CHORD) {
                         Chord* chord2 = static_cast<Chord*>(e);
                         foreach(Note* note2, chord2->notes()) {
                               if (note2->string() == note->string()) {
@@ -1195,7 +1195,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             delete art;
                                                       }
 
-                                                if (cr && (cr->type() == Element::Type::CHORD) && slide > 0)
+                                                if (cr && (cr->type() == ElementType::CHORD) && slide > 0)
                                                 createSlide(slide, cr, staffIdx);
                                                 note->setTpcFromPitch();
 
@@ -1205,7 +1205,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       Segment* prevSeg = segment->prev1(Segment::Type::ChordRest);
                                                       Element* e = prevSeg->element(track);
                                                       if (e)
-                                                            if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST) {
+                                                            if (e->type() == ElementType::CHORD || e->type() == ElementType::REST) {
                                                                   ChordRest* crPrev = static_cast<Chord*>(e);
                                                                   createOttava(false, track, crPrev, ottavaValue);
                                                                   }
@@ -1330,7 +1330,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               tuplet->add(cr);
                         TDuration d(l);
                         cr->setDuration(l);
-                        if (cr->type() == Element::Type::REST && l >= measure->len()) {
+                        if (cr->type() == ElementType::REST && l >= measure->len()) {
                               cr->setDurationType(TDuration::DurationType::V_MEASURE);
                               cr->setDuration(measure->len());
                               }
@@ -1492,7 +1492,7 @@ bool checkForHold(Segment* segment, QList<PitchValue> points)
       if (!prevSeg)
             return false;
       foreach (Element* e, prevSeg->annotations()) {
-            if (e->type() == Element::Type::TREMOLOBAR) {
+            if (e->type() == ElementType::TREMOLOBAR) {
                   QList<PitchValue> prevPoints = ((TremoloBar*)e)->points();
                   if (prevPoints.length() != points.length())
                         break;
@@ -1559,7 +1559,7 @@ void GuitarPro6::addTremoloBar(Segment* segment, int track, int whammyOrigin, in
             if (!prevSeg)
                   return;
             foreach (Element* e, prevSeg->annotations()) {
-                  if (e->type() == Element::Type::TREMOLOBAR) {
+                  if (e->type() == ElementType::TREMOLOBAR) {
                         QList<PitchValue> prevPoints = ((TremoloBar*)e)->points();
                         QList<PitchValue> points;
                         points.append(PitchValue(0, prevPoints[prevPoints.length()-1].pitch, false));

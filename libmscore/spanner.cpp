@@ -584,7 +584,7 @@ void Spanner::computeEndElement()
                         if (qAbs(_ticks - nticks) > fudge) {
                               qDebug("%s ticks changed, %d -> %d", name(), _ticks, nticks);
                               setTicks(nticks);
-                              if (type() == Element::Type::OTTAVA)
+                              if (type() == ElementType::OTTAVA)
                                     staff()->updateOttava();
                               }
                         }
@@ -705,7 +705,7 @@ Chord* Spanner::startChord()
       Q_ASSERT(_anchor == Anchor::CHORD);
       if (!_startElement)
             _startElement = score()->findCR(tick(), track());
-      Q_ASSERT(_startElement->type() == Element::Type::CHORD);
+      Q_ASSERT(_startElement->type() == ElementType::CHORD);
       return static_cast<Chord*>(_startElement);
       }
 
@@ -717,10 +717,10 @@ Chord* Spanner::endChord()
       {
       Q_ASSERT(_anchor == Anchor::CHORD);
 
-      if (!_endElement && type() == Element::Type::SLUR) {
+      if (!_endElement && type() == ElementType::SLUR) {
             Segment* s = score()->tick2segmentMM(tick2(), false, Segment::Type::ChordRest);
             _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
-            if (_endElement->type() != Element::Type::CHORD)
+            if (_endElement->type() != ElementType::CHORD)
                   _endElement = nullptr;
             }
       return static_cast<Chord*>(_endElement);
@@ -745,7 +745,7 @@ ChordRest* Spanner::startCR()
 ChordRest* Spanner::endCR()
       {
       Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
-      if (!_endElement && type() == Element::Type::SLUR) {
+      if (!_endElement && type() == ElementType::SLUR) {
             Segment* s = score()->tick2segmentMM(tick2(), false, Segment::Type::ChordRest);
             _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
             }
@@ -776,7 +776,7 @@ Segment* Spanner::endSegment() const
 
 Measure* Spanner::startMeasure() const
       {
-      Q_ASSERT(!_endElement || _endElement->type() == Element::Type::MEASURE);
+      Q_ASSERT(!_endElement || _endElement->type() == ElementType::MEASURE);
       return static_cast<Measure*>(_startElement);
       }
 
@@ -786,7 +786,7 @@ Measure* Spanner::startMeasure() const
 
 Measure* Spanner::endMeasure() const
       {
-      Q_ASSERT(!_endElement || _endElement->type() == Element::Type::MEASURE);
+      Q_ASSERT(!_endElement || _endElement->type() == ElementType::MEASURE);
       return static_cast<Measure*>(_endElement);
       }
 
@@ -831,7 +831,7 @@ void Spanner::setStartElement(Element* e)
       {
 #ifndef NDEBUG
       if (_anchor == Anchor::NOTE)
-            Q_ASSERT(!e || e->type() == Element::Type::NOTE);
+            Q_ASSERT(!e || e->type() == ElementType::NOTE);
 #endif
       _startElement = e;
       }
@@ -844,7 +844,7 @@ void Spanner::setEndElement(Element* e)
       {
 #ifndef NDEBUG
       if (_anchor == Anchor::NOTE)
-            Q_ASSERT(!e || e->type() == Element::Type::NOTE);
+            Q_ASSERT(!e || e->type() == ElementType::NOTE);
 #endif
       _endElement = e;
       }

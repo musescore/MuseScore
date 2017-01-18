@@ -150,7 +150,7 @@ void addTitleToScore(Score *score, const QString &string, int textCounter)
       text->setPlainText(string.right(string.size() - TEXT_PREFIX.size()));
 
       MeasureBase* measure = score->first();
-      if (measure->type() != Element::Type::VBOX) {
+      if (!measure->isVBox()) {
             measure = new VBox(score);
             measure->setTick(0);
             measure->setNext(score->first());

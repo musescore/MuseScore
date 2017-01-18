@@ -303,8 +303,7 @@ void TestCopyPaste::copyPaste2Voice5()
 
       //paste to quarter rest
       Element* dest = m1->first()->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->element(0);
-      QVERIFY(dest->type() == Element::Type::REST
-              && static_cast<ChordRest*>(dest)->durationType() == TDuration::DurationType::V_QUARTER);
+      QVERIFY(dest->isRest() && static_cast<ChordRest*>(dest)->durationType() == TDuration::DurationType::V_QUARTER);
       score->select(dest);
 
       score->startCmd();
@@ -383,7 +382,7 @@ void TestCopyPaste::copypaste2Voice6()
       //paste to 16th rest
       Element* dest = m1->first(segTypeCR)->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->element(0);
       qDebug() << int(dest->type());
-      QVERIFY(dest->type() == Element::Type::REST
+      QVERIFY(dest->isRest()
               && static_cast<ChordRest*>(dest)->durationType() == TDuration::DurationType::V_16TH);
       score->select(dest);
 

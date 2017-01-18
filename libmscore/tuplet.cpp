@@ -712,12 +712,12 @@ void Tuplet::add(Element* e)
 #endif
 
       switch (e->type()) {
-            case Element::Type::TEXT:
+            case ElementType::TEXT:
                   _number = toText(e);
                   break;
-            case Element::Type::CHORD:
-            case Element::Type::REST:
-            case Element::Type::TUPLET: {
+            case ElementType::CHORD:
+            case ElementType::REST:
+            case ElementType::TUPLET: {
                   bool found = false;
                   DurationElement* de = toDurationElement(e);
                   int tick = de->tick();
@@ -749,13 +749,13 @@ void Tuplet::add(Element* e)
 void Tuplet::remove(Element* e)
       {
       switch (e->type()) {
-            case Element::Type::TEXT:
+            case ElementType::TEXT:
                   if (e == _number)
                         _number = 0;
                   break;
-            case Element::Type::CHORD:
-            case Element::Type::REST:
-            case Element::Type::TUPLET: {
+            case ElementType::CHORD:
+            case ElementType::REST:
+            case ElementType::TUPLET: {
                   auto i = std::find(_elements.begin(), _elements.end(), static_cast<DurationElement*>(e));
                   if (i == _elements.end()) {
                         qDebug("Tuplet::remove: cannot find element <%s>", e->name());

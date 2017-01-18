@@ -36,7 +36,7 @@ class TrillSegment : public LineSegment {
    public:
       TrillSegment(Score* s) : LineSegment(s)      {}
       Trill* trill() const                         { return (Trill*)spanner(); }
-      virtual Element::Type type() const override  { return Element::Type::TRILL_SEGMENT; }
+      virtual ElementType type() const override  { return ElementType::TRILL_SEGMENT; }
       virtual TrillSegment* clone() const override { return new TrillSegment(*this); }
       virtual void draw(QPainter*) const override;
       virtual bool acceptDrop(const DropData&) const override;
@@ -79,7 +79,7 @@ class Trill : public SLine {
       Trill(Score* s);
       virtual ~Trill();
       virtual Trill* clone() const override       { return new Trill(*this); }
-      virtual Element::Type type() const override { return Element::Type::TRILL; }
+      virtual ElementType type() const override { return ElementType::TRILL; }
 
       virtual void layout() override;
       virtual LineSegment* createLineSegment() override;

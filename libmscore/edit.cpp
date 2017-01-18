@@ -119,12 +119,12 @@ int Score::pos()
             el = selection().activeCR();
       if (el) {
             switch (el->type()) {
-                  case Element::Type::NOTE:
+                  case ElementType::NOTE:
                         el = el->parent();
                         // fall through
-                  case Element::Type::REPEAT_MEASURE:
-                  case Element::Type::REST:
-                  case Element::Type::CHORD:
+                  case ElementType::REPEAT_MEASURE:
+                  case ElementType::REST:
+                  case ElementType::CHORD:
                         return toChordRest(el)->tick();
                   default:
                         break;
@@ -1403,7 +1403,7 @@ void Score::deleteItem(Element* el)
             return;
 
       switch (el->type()) {
-            case Element::Type::INSTRUMENT_NAME: {
+            case ElementType::INSTRUMENT_NAME: {
                   Part* part = el->part();
                   InstrumentName* in = toInstrumentName(el);
                   if (in->instrumentNameType() == InstrumentNameType::LONG)
@@ -1413,7 +1413,7 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
-            case Element::Type::TIMESIG: {
+            case ElementType::TIMESIG: {
                   // timesig might already be removed
                   TimeSig* ts = toTimeSig(el);
                   Segment* s = ts->segment();
@@ -1427,11 +1427,11 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
-            case Element::Type::KEYSIG:
+            case ElementType::KEYSIG:
                   undoRemoveElement(el);
                   break;
 
-            case Element::Type::NOTE:
+            case ElementType::NOTE:
                   {
                   Chord* chord = toChord(el->parent());
                   if (chord->notes().size() > 1) {
@@ -1443,7 +1443,7 @@ void Score::deleteItem(Element* el)
                   el = chord;
                   }
 
-            case Element::Type::CHORD:
+            case ElementType::CHORD:
                   {
                   Chord* chord = toChord(el);
                   removeChordRest(chord, false);
@@ -1486,7 +1486,7 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
-            case Element::Type::REPEAT_MEASURE:
+            case ElementType::REPEAT_MEASURE:
                   {
                   RepeatMeasure* rm = toRepeatMeasure(el);
                   removeChordRest(rm, false);
@@ -1499,7 +1499,7 @@ void Score::deleteItem(Element* el)
                   undoAddCR(rest, segment->measure(), segment->tick());
                   }
 
-            case Element::Type::REST:
+            case ElementType::REST:
                   //
                   // only allow for voices != 0
                   //    e.g. voice 0 rests cannot be removed
@@ -1603,14 +1603,14 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
-            case Element::Type::ACCIDENTAL:
+            case ElementType::ACCIDENTAL:
                   if (el->parent()->isNote())
                         changeAccidental(toNote(el->parent()), AccidentalType::NONE);
                   else
                         undoRemoveElement(el);
                   break;
 
-            case Element::Type::BAR_LINE: {
+            case ElementType::BAR_LINE: {
                   BarLine* bl = toBarLine(el);
                   Segment* s = bl->segment();
                   Measure* m = s->measure();
@@ -1632,22 +1632,22 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
-            case Element::Type::TUPLET:
+            case ElementType::TUPLET:
                   cmdDeleteTuplet(toTuplet(el), true);
                   break;
 
-            case Element::Type::MEASURE: {
+            case ElementType::MEASURE: {
                   Measure* m = toMeasure(el);
                   undoRemoveMeasures(m, m);
                   undoInsertTime(m->tick(), -(m->endTick() - m->tick()));
                   }
                   break;
 
-            case Element::Type::BRACKET:
+            case ElementType::BRACKET:
                   undoRemoveBracket(toBracket(el));
                   break;
 
-            case Element::Type::LAYOUT_BREAK:
+            case ElementType::LAYOUT_BREAK:
                   {
                   undoRemoveElement(el);
                   LayoutBreak* lb = toLayoutBreak(el);
@@ -1665,7 +1665,7 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
-            case Element::Type::CLEF:
+            case ElementType::CLEF:
                   {
                   Clef* clef = toClef(el);
                   Measure* m = clef->measure();
@@ -1695,8 +1695,8 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
-            case Element::Type::REHEARSAL_MARK:
-            case Element::Type::TEMPO_TEXT:
+            case ElementType::REHEARSAL_MARK:
+            case ElementType::TEMPO_TEXT:
                   {
                   Segment* s = toSegment(el->parent());
                   Measure* m = s->measure();
@@ -1717,27 +1717,27 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
-            case Element::Type::OTTAVA_SEGMENT:
-            case Element::Type::HAIRPIN_SEGMENT:
-            case Element::Type::TRILL_SEGMENT:
-            case Element::Type::TEXTLINE_SEGMENT:
-            case Element::Type::VOLTA_SEGMENT:
-            case Element::Type::SLUR_SEGMENT:
-            case Element::Type::TIE_SEGMENT:
-            case Element::Type::PEDAL_SEGMENT:
-            case Element::Type::GLISSANDO_SEGMENT:
+            case ElementType::OTTAVA_SEGMENT:
+            case ElementType::HAIRPIN_SEGMENT:
+            case ElementType::TRILL_SEGMENT:
+            case ElementType::TEXTLINE_SEGMENT:
+            case ElementType::VOLTA_SEGMENT:
+            case ElementType::SLUR_SEGMENT:
+            case ElementType::TIE_SEGMENT:
+            case ElementType::PEDAL_SEGMENT:
+            case ElementType::GLISSANDO_SEGMENT:
                   {
                   el = static_cast<SpannerSegment*>(el)->spanner();
                   undoRemoveElement(el);
                   }
                   break;
 
-            case Element::Type::STEM_SLASH:           // cannot delete this elements
-            case Element::Type::HOOK:
+            case ElementType::STEM_SLASH:           // cannot delete this elements
+            case ElementType::HOOK:
                   qDebug("cannot remove %s", el->name());
                   break;
 
-            case Element::Type::TEXT:
+            case ElementType::TEXT:
                   if (el->parent()->isTBox())
                         undoChangeProperty(el, P_ID::TEXT, QString());
                   else
@@ -2542,7 +2542,7 @@ static MeasureBase* searchMeasureBase(Score* score, MeasureBase* mb)
 //    If measure is zero, append new MeasureBase.
 //---------------------------------------------------------
 
-MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool createEmptyMeasures)
+MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmptyMeasures)
       {
       int tick;
       int ticks = 0;
@@ -2576,7 +2576,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
             if (score == this)
                   omb = mb;
 
-            if (type == Element::Type::MEASURE) {
+            if (type == ElementType::MEASURE) {
                   if (isMaster())
                         omb = toMeasure(mb);
 
@@ -2690,7 +2690,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
             }
       undoInsertTime(tick, ticks);
 
-      if (omb && type == Element::Type::MEASURE && !createEmptyMeasures) {
+      if (omb && type == ElementType::MEASURE && !createEmptyMeasures) {
             //
             // fill measure with rest
             //

@@ -45,7 +45,7 @@ class StaffText : public Text  {
    public:
       StaffText(Score* = 0);
       virtual StaffText* clone() const                    { return new StaffText(*this); }
-      virtual Element::Type type() const                  { return Element::Type::STAFF_TEXT; }
+      virtual ElementType type() const                  { return ElementType::STAFF_TEXT; }
       virtual void write(XmlWriter& xml) const;
       virtual void read(XmlReader&);
       virtual int subtype() const                         { return (int) subStyle(); }

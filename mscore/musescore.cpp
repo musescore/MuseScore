@@ -303,7 +303,7 @@ void InsertMeasuresDialog::accept()
       {
       int n = insmeasures->value();
       if (mscore->currentScore())
-            mscore->currentScoreView()->cmdInsertMeasures(n, Element::Type::MEASURE);
+            mscore->currentScoreView()->cmdInsertMeasures(n, ElementType::MEASURE);
       done(1);
       }
 
@@ -2080,7 +2080,7 @@ void MeasuresDialog::accept()
       {
       int n = measures->value();
       if (mscore->currentScore())
-            mscore->currentScoreView()->cmdAppendMeasures(n, Element::Type::MEASURE);
+            mscore->currentScoreView()->cmdAppendMeasures(n, ElementType::MEASURE);
       done(1);
       }
 
@@ -3194,7 +3194,7 @@ void MuseScore::changeState(ScoreState val)
             if (e->isText()) {
                   textTools()->setText(static_cast<Text*>(e));
                   textTools()->updateTools();
-                  if (e->type() != Element::Type::FIGURED_BASS && e->type() != Element::Type::HARMONY)   // do not show text tools for f.b.
+                  if (e->type() != ElementType::FIGURED_BASS && e->type() != ElementType::HARMONY)   // do not show text tools for f.b.
                         textTools()->show();
                   }
             if (_inspector)
@@ -3389,11 +3389,11 @@ void MuseScore::play(Element* e) const
       if (noSeq || !(seq && seq->isRunning()) || !preferences.playNotes)
             return;
 
-      if (e->type() == Element::Type::NOTE) {
+      if (e->type() == ElementType::NOTE) {
             Note* note = static_cast<Note*>(e);
             play(e, note->ppitch());
             }
-      else if (e->type() == Element::Type::CHORD) {
+      else if (e->type() == ElementType::CHORD) {
             seq->stopNotes();
             Chord* c = static_cast<Chord*>(e);
             Part* part = c->staff()->part();
@@ -3412,7 +3412,7 @@ void MuseScore::play(Element* e, int pitch) const
       {
       if (noSeq || !(seq && seq->isRunning()))
             return;
-      if (preferences.playNotes && e->type() == Element::Type::NOTE) {
+      if (preferences.playNotes && e->type() == ElementType::NOTE) {
             Note* note = static_cast<Note*>(e);
             int tick = note->chord()->tick();
             if (tick < 0)
@@ -4571,7 +4571,7 @@ void MuseScore::endCmd()
             if (e && (cs->playNote() || cs->playChord())
                         && entryMethod != NoteEntryMethod::REALTIME_AUTO
                         && entryMethod != NoteEntryMethod::REALTIME_MANUAL) {
-                  if (cs->playChord() && preferences.playChordOnAddNote &&  e->type() == Element::Type::NOTE)
+                  if (cs->playChord() && preferences.playChordOnAddNote &&  e->type() == ElementType::NOTE)
                         play(static_cast<Note*>(e)->chord());
                   else
                         play(e);

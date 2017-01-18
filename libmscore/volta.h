@@ -34,7 +34,7 @@ class VoltaSegment : public TextLineBaseSegment {
 
    public:
       VoltaSegment(Score* s) : TextLineBaseSegment(s) {}
-      virtual Element::Type type() const override   { return Element::Type::VOLTA_SEGMENT; }
+      virtual ElementType type() const override   { return ElementType::VOLTA_SEGMENT; }
       virtual VoltaSegment* clone() const override  { return new VoltaSegment(*this); }
       Volta* volta() const                          { return (Volta*)spanner(); }
       virtual void layout() override;
@@ -68,7 +68,7 @@ class Volta : public TextLineBase {
 
       Volta(Score* s);
       virtual Volta* clone()       const override { return new Volta(*this); }
-      virtual Element::Type type() const override { return Element::Type::VOLTA; }
+      virtual ElementType type() const override { return ElementType::VOLTA; }
       virtual LineSegment* createLineSegment() override;
 
       virtual void write(XmlWriter&) const override;

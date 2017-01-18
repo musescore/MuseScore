@@ -425,7 +425,7 @@ class TabDurationSymbol : public Element {
       virtual void draw(QPainter*) const;
       virtual bool isEditable() const           { return false; }
       virtual void layout();
-      virtual Element::Type type() const        { return Element::Type::TAB_DURATION_SYMBOL; }
+      virtual ElementType type() const        { return ElementType::TAB_DURATION_SYMBOL; }
 
       TabBeamGrid beamGrid()                    { return _beamGrid; }
       void layout2();               // second step of layout: after horiz. pos. are defined, compute width of 'grid beams'

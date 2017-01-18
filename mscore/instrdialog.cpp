@@ -476,7 +476,7 @@ void MuseScore::editInstrList()
       // there should be at least one measure
       //
       if (masterScore->measures()->size() == 0)
-            masterScore->insertMeasure(Element::Type::MEASURE, 0, false);
+            masterScore->insertMeasure(ElementType::MEASURE, 0, false);
 
       for (Excerpt* excerpt : masterScore->excerpts()) {
             QList<Staff*> sl       = excerpt->partScore()->staves();

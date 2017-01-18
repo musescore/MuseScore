@@ -259,7 +259,7 @@ class Text : public Element {
       virtual void initSubStyle(SubStyle) override;
 
       virtual Text* clone() const override         { return new Text(*this); }
-      virtual Element::Type type() const override  { return Element::Type::TEXT; }
+      virtual ElementType type() const override  { return ElementType::TEXT; }
       virtual bool mousePress(const QPointF&, QMouseEvent* ev) override;
 
       Text &operator=(const Text&) = delete;

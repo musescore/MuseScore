@@ -420,7 +420,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             while (segment) {
                   Element* e = segment->element(track);
                   if (e) {
-                        if (e->type() == Element::Type::CHORD) {
+                        if (e->type() == ElementType::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
                               foreach(Note* note2, chord2->notes()) {
                                     if (note2->string() == string) {
@@ -790,7 +790,7 @@ void GuitarPro4::read(QFile* fp)
                               }
 
                         cr->setDuration(l);
-                        if (cr->type() == Element::Type::REST && (pause == 0 || l >= measure->len())) {
+                        if (cr->type() == ElementType::REST && (pause == 0 || l >= measure->len())) {
                               cr->setDurationType(TDuration::DurationType::V_MEASURE);
                               cr->setDuration(measure->len());
                               }
@@ -821,7 +821,7 @@ void GuitarPro4::read(QFile* fp)
                                     note->setTpcFromPitch();
                                     }
                               }
-                        if (cr && (cr->type() == Element::Type::CHORD))
+                        if (cr && (cr->type() == ElementType::CHORD))
                               applyBeatEffects(static_cast<Chord*>(cr), beatEffects);
 
                         // if we see that a tied note has been constructed do not create the tie
@@ -848,7 +848,7 @@ void GuitarPro4::read(QFile* fp)
                               }
                         else if (slurs[staffIdx] && hasSlur) {
                               }
-                        if (cr && (cr->type() == Element::Type::CHORD) && slide > 0)
+                        if (cr && (cr->type() == ElementType::CHORD) && slide > 0)
                               createSlide(convertGP4SlideNum(slide), cr, staffIdx);
                         restsForEmptyBeats(segment, measure, cr, l, track, tick);
                         createSlur(hasSlur, staffIdx, cr);

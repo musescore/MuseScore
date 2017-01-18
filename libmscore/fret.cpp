@@ -128,7 +128,7 @@ QPointF FretDiagram::pagePos() const
       {
       if (parent() == 0)
             return pos();
-      if (parent()->type() == Element::Type::SEGMENT) {
+      if (parent()->type() == ElementType::SEGMENT) {
             Measure* m = static_cast<Segment*>(parent())->measure();
             System* system = m->system();
             qreal yp = y();
@@ -150,7 +150,7 @@ QLineF FretDiagram::dragAnchor() const
       for (Element* e = parent(); e; e = e->parent())
             xp += e->x();
       qreal yp;
-      if (parent()->type() == Element::Type::SEGMENT) {
+      if (parent()->type() == ElementType::SEGMENT) {
             System* system = static_cast<Segment*>(parent())->measure()->system();
             yp = system->staffCanvasYpage(staffIdx());
             }
@@ -159,7 +159,7 @@ QLineF FretDiagram::dragAnchor() const
       QPointF p1(xp, yp);
       return QLineF(p1, canvasPos());
 #if 0 // TODOxx
-      if (parent()->type() == Element::Type::SEGMENT) {
+      if (parent()->type() == ElementType::SEGMENT) {
             Segment* s     = static_cast<Segment*>(parent());
             Measure* m     = s->measure();
             System* system = m->system();
@@ -511,7 +511,7 @@ void FretDiagram::setFingering(int string, int finger)
 void FretDiagram::add(Element* e)
       {
       e->setParent(this);
-      if (e->type() == Element::Type::HARMONY) {
+      if (e->type() == ElementType::HARMONY) {
             _harmony = static_cast<Harmony*>(e);
             _harmony->setTrack(track());
             }
@@ -537,7 +537,7 @@ void FretDiagram::remove(Element* e)
 
 bool FretDiagram::acceptDrop(const DropData& data) const
       {
-      return data.element->type() == Element::Type::HARMONY;
+      return data.element->type() == ElementType::HARMONY;
       }
 
 //---------------------------------------------------------
@@ -547,7 +547,7 @@ bool FretDiagram::acceptDrop(const DropData& data) const
 Element* FretDiagram::drop(const DropData& data)
       {
       Element* e = data.element;
-      if (e->type() == Element::Type::HARMONY) {
+      if (e->type() == ElementType::HARMONY) {
             Harmony* h = static_cast<Harmony*>(e);
             h->setParent(parent());
             h->setTrack((track() / VOICES) * VOICES);

@@ -30,7 +30,7 @@ class PedalSegment : public TextLineBaseSegment {
 
    public:
       PedalSegment(Score* s) : TextLineBaseSegment(s) {}
-      virtual Element::Type type() const override   { return Element::Type::PEDAL_SEGMENT; }
+      virtual ElementType type() const override   { return ElementType::PEDAL_SEGMENT; }
       virtual PedalSegment* clone() const override  { return new PedalSegment(*this); }
       Pedal* pedal() const                          { return (Pedal*)spanner(); }
       virtual void layout() override;
@@ -60,7 +60,7 @@ class Pedal : public TextLineBase {
    public:
       Pedal(Score* s);
       virtual Pedal* clone() const override       { return new Pedal(*this); }
-      virtual Element::Type type() const override { return Element::Type::PEDAL; }
+      virtual ElementType type() const override { return ElementType::PEDAL; }
       virtual void read(XmlReader&) override;
       LineSegment* createLineSegment();
       virtual void setYoff(qreal) override;

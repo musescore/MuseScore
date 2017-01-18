@@ -30,7 +30,7 @@ class Fingering : public Text {
    public:
       Fingering(Score* s);
       virtual Fingering* clone() const override   { return new Fingering(*this); }
-      virtual Element::Type type() const override { return Element::Type::FINGERING; }
+      virtual ElementType type() const override { return ElementType::FINGERING; }
 
       Note* note() const { return (Note*)parent(); }
 

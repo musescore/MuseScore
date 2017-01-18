@@ -37,7 +37,7 @@ class SystemDivider : public Symbol {
       SystemDivider(const SystemDivider&);
 
       virtual SystemDivider* clone() const override   { return new SystemDivider(*this); }
-      virtual Element::Type type() const override     { return Element::Type::SYSTEM_DIVIDER; }
+      virtual ElementType type() const override     { return ElementType::SYSTEM_DIVIDER; }
 
       Type dividerType() const                        { return _dividerType; }
       void setDividerType(Type v);

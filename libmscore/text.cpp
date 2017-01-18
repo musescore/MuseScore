@@ -269,21 +269,21 @@ void TextBlock::layout(Text* t)
       if (e && t->layoutToParentWidth()) {
             layoutWidth = e->width();
             switch(e->type()) {
-                  case Element::Type::HBOX:
-                  case Element::Type::VBOX:
-                  case Element::Type::TBOX: {
+                  case ElementType::HBOX:
+                  case ElementType::VBOX:
+                  case ElementType::TBOX: {
                         Box* b = static_cast<Box*>(e);
                         layoutWidth -= ((b->leftMargin() + b->rightMargin()) * DPMM);
                         lm = b->leftMargin() * DPMM;
                         }
                         break;
-                  case Element::Type::PAGE: {
+                  case ElementType::PAGE: {
                         Page* p = static_cast<Page*>(e);
                         layoutWidth -= (p->lm() + p->rm());
                         lm = p->lm();
                         }
                         break;
-                  case Element::Type::MEASURE: {
+                  case ElementType::MEASURE: {
                         Measure* m = static_cast<Measure*>(e);
                         layoutWidth = m->bbox().width();
                         }
@@ -1289,18 +1289,18 @@ void Text::layout1()
       qreal h    = 0;
       if (parent()) {
             if (layoutToParentWidth()) {
-                  if (parent()->type() == Element::Type::HBOX || parent()->type() == Element::Type::VBOX || parent()->type() == Element::Type::TBOX) {
+                  if (parent()->type() == ElementType::HBOX || parent()->type() == ElementType::VBOX || parent()->type() == ElementType::TBOX) {
                         // consider inner margins of frame
                         Box* b = static_cast<Box*>(parent());
                         yoff = b->topMargin()  * DPMM;
                         h  = b->height() - yoff - b->bottomMargin() * DPMM;
                         }
-                  else if (parent()->type() == Element::Type::PAGE) {
+                  else if (parent()->type() == ElementType::PAGE) {
                         Page* p = static_cast<Page*>(parent());
                         h = p->height() - p->tm() - p->bm();
                         yoff = p->tm();
                         }
-                  else if (parent()->type() == Element::Type::MEASURE)
+                  else if (parent()->type() == ElementType::MEASURE)
                         h = 0;
                   else
                         h  = parent()->height();
@@ -1609,7 +1609,7 @@ void Text::endEdit()
 
       genText();
 
-      if (_text != oldText || type() == Element::Type::HARMONY) {
+      if (_text != oldText || type() == ElementType::HARMONY) {
             // avoid creating unnecessary state on undo stack if edit did not change anything
             // but go ahead and do this anyhow for chord symbols no matter what
             // the code to special case transposition relies on the fact
@@ -1626,7 +1626,7 @@ void Text::endEdit()
                   // that returns us to the initial empty text created upon startEdit()
                   // (except this is needed for empty text frames to ensure that adding text marks score dity)
 
-                  if (!oldText.isEmpty() || (parent() && parent()->type() == Element::Type::TBOX)) {
+                  if (!oldText.isEmpty() || (parent() && parent()->type() == ElementType::TBOX)) {
                         // oldText is good for original element
                         // but use original text for each linked element
                         // these can differ (eg, for chord symbols in transposing parts)
@@ -1767,13 +1767,13 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                         break;
 
                   case Qt::Key_Left:
-                        if (!movePosition(ctrlPressed ? QTextCursor::WordLeft : QTextCursor::Left, mm) && type() == Element::Type::LYRICS)
+                        if (!movePosition(ctrlPressed ? QTextCursor::WordLeft : QTextCursor::Left, mm) && type() == ElementType::LYRICS)
                               return false;
                         s.clear();
                         break;
 
                   case Qt::Key_Right:
-                        if (!movePosition(ctrlPressed ? QTextCursor::NextWord : QTextCursor::Right, mm) && type() == Element::Type::LYRICS)
+                        if (!movePosition(ctrlPressed ? QTextCursor::NextWord : QTextCursor::Right, mm) && type() == ElementType::LYRICS)
                               return false;
                         s.clear();
                         break;
@@ -1895,7 +1895,7 @@ void Text::editInsertText(const QString& s)
       if (!s.isEmpty())
             insertText(s);
       layout1();
-      if (parent() && parent()->type() == Element::Type::TBOX) {
+      if (parent() && parent()->type() == ElementType::TBOX) {
             TBox* tbox = static_cast<TBox*>(parent());
             tbox->layout();
             System* system = tbox->system();
@@ -2387,7 +2387,7 @@ void Text::insertSym(SymId id)
 
 QRectF Text::pageRectangle() const
       {
-      if (parent() && (parent()->type() == Element::Type::HBOX || parent()->type() == Element::Type::VBOX || parent()->type() == Element::Type::TBOX)) {
+      if (parent() && (parent()->type() == ElementType::HBOX || parent()->type() == ElementType::VBOX || parent()->type() == ElementType::TBOX)) {
             Box* box = static_cast<Box*>(parent());
             QRectF r = box->abbox();
             qreal x = r.x() + box->leftMargin() * DPMM;
@@ -2400,7 +2400,7 @@ QRectF Text::pageRectangle() const
 
             return QRectF(x, y, w, h);
             }
-      if (parent() && parent()->type() == Element::Type::PAGE) {
+      if (parent() && parent()->type() == ElementType::PAGE) {
             Page* box  = static_cast<Page*>(parent());
             QRectF r = box->abbox();
             qreal x = r.x() + box->lm();
@@ -2433,7 +2433,7 @@ QLineF Text::dragAnchor() const
       for (Element* e = parent(); e; e = e->parent())
             xp += e->x();
       qreal yp;
-      if (parent()->type() == Element::Type::SEGMENT) {
+      if (parent()->type() == ElementType::SEGMENT) {
             System* system = static_cast<Segment*>(parent())->measure()->system();
             yp = system->staffCanvasYpage(staffIdx());
             }
@@ -2523,7 +2523,7 @@ void Text::paste()
           }
       layoutEdit();
       score()->setUpdateAll();
-      if (type() == Element::Type::INSTRUMENT_NAME)
+      if (type() == ElementType::INSTRUMENT_NAME)
             score()->setLayoutAll();
       triggerLayout();
       }
@@ -2550,7 +2550,7 @@ bool Text::mousePress(const QPointF& p, QMouseEvent* ev)
 void Text::layoutEdit()
       {
       layout();
-      if (parent() && parent()->type() == Element::Type::TBOX) {
+      if (parent() && parent()->type() == ElementType::TBOX) {
             TBox* tbox = static_cast<TBox*>(parent());
             tbox->layout();
             System* system = tbox->system();
@@ -2570,8 +2570,8 @@ void Text::layoutEdit()
 
 bool Text::acceptDrop(const DropData& data) const
       {
-      Element::Type type = data.element->type();
-      return type == Element::Type::SYMBOL || type == Element::Type::FSYMBOL;
+      ElementType type = data.element->type();
+      return type == ElementType::SYMBOL || type == ElementType::FSYMBOL;
       }
 
 //---------------------------------------------------------
@@ -2583,7 +2583,7 @@ Element* Text::drop(const DropData& data)
       Element* e = data.element;
 
       switch(e->type()) {
-            case Element::Type::SYMBOL:
+            case ElementType::SYMBOL:
                   {
                   SymId id = static_cast<Symbol*>(e)->sym();
                   delete e;
@@ -2602,7 +2602,7 @@ Element* Text::drop(const DropData& data)
                   }
                   return 0;
 
-            case Element::Type::FSYMBOL:
+            case ElementType::FSYMBOL:
                   {
                   int code = static_cast<FSymbol*>(e)->code();
                   delete e;
@@ -2862,7 +2862,7 @@ QString Text::accessibleInfo() const
                   break;
 #endif
             default:
-                  if ((type() == Element::Type::STAFF_TEXT) && systemFlag())
+                  if ((type() == ElementType::STAFF_TEXT) && systemFlag())
                         rez = tr("System Text");
                   else
                         rez = Element::accessibleInfo();

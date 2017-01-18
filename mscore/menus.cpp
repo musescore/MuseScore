@@ -347,7 +347,8 @@ Palette* MuseScore::newAccidentalsPalette(PaletteType t)
       const Shortcut* s = Shortcut::getShortcut("add-brackets");
       QAction* action = s->action();
       QIcon icon(action->icon());
-      ik->setAction("add-brackets", icon);
+      QByteArray ba("add-brackets");
+      ik->setAction(ba, icon);
       sp->append(ik, s->help());
       return sp;
       }

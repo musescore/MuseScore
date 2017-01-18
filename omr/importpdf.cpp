@@ -196,7 +196,7 @@ void OmrState::importPdfPage(OmrPage* omrPage, qreal top)
 
       //add top margin for alignment
       MeasureBase* first_measure = score->first();
-      if (first_measure == 0 || first_measure->type() != Element::Type::VBOX) {
+      if (first_measure == 0 || first_measure->isVBox()) {
             VBox* vbox = new VBox(score);
             vbox->setNext(score->first());
             vbox->setTick(0);

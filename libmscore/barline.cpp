@@ -540,11 +540,11 @@ void BarLine::read(XmlReader& e)
 
 bool BarLine::acceptDrop(const DropData& data) const
       {
-      Element::Type type = data.element->type();
-      if (type == Element::Type::BAR_LINE)
+      ElementType type = data.element->type();
+      if (type == ElementType::BAR_LINE)
             return true;
       else {
-            return (type == Element::Type::ARTICULATION
+            return (type == ElementType::ARTICULATION
                && segment()
                && segment()->isEndBarLineType());
             }
@@ -558,9 +558,9 @@ bool BarLine::acceptDrop(const DropData& data) const
 Element* BarLine::drop(const DropData& data)
       {
       Element* e = data.element;
-      Element::Type type = e->type();
+      ElementType type = e->type();
 
-      if (type == Element::Type::BAR_LINE) {
+      if (type == ElementType::BAR_LINE) {
             BarLine* bl    = toBarLine(e);
             BarLineType st = bl->barLineType();
 
@@ -618,7 +618,7 @@ Element* BarLine::drop(const DropData& data)
             return 0;
             }
 
-      else if (type == Type::ARTICULATION) {
+      else if (type == ElementType::ARTICULATION) {
             Articulation* atr = toArticulation(e);
             atr->setParent(this);
             atr->setTrack(track());
@@ -1103,7 +1103,7 @@ void BarLine::add(Element* e)
       {
       e->setParent(this);
       switch (e->type()) {
-            case Element::Type::ARTICULATION:
+            case ElementType::ARTICULATION:
                   _el.push_back(e);
                   setGenerated(false);
                   break;
@@ -1121,7 +1121,7 @@ void BarLine::add(Element* e)
 void BarLine::remove(Element* e)
       {
       switch(e->type()) {
-            case Element::Type::ARTICULATION:
+            case ElementType::ARTICULATION:
                   if (!_el.remove(e))
                         qDebug("BarLine::remove(): cannot find %s", e->name());
                   break;
@@ -1260,9 +1260,9 @@ QString BarLine::accessibleExtraInfo() const
             //jumps
             for (const Element* e : m->el()) {
                   if (!score()->selectionFilter().canSelect(e)) continue;
-                  if (e->type() == Element::Type::JUMP)
+                  if (e->type() == ElementType::JUMP)
                         rez= QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
-                  if (e->type() == Element::Type::MARKER) {
+                  if (e->type() == ElementType::MARKER) {
                         const Marker* m = toMarker(e);
                         if (m->markerType() == Marker::Type::FINE)
                               rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
@@ -1291,7 +1291,7 @@ QString BarLine::accessibleExtraInfo() const
             Spanner* s = interval.value;
             if (!score()->selectionFilter().canSelect(s))
                   continue;
-            if (s->type() == Element::Type::VOLTA) {
+            if (s->type() == ElementType::VOLTA) {
                   if (s->tick() == tick)
                         rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
                   if (s->tick2() == tick)

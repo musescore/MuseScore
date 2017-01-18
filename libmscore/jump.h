@@ -63,7 +63,7 @@ class Jump : public Text {
       QString jumpTypeUserName() const;
 
       virtual Jump* clone()          const override { return new Jump(*this); }
-      virtual Element::Type type()   const override { return Element::Type::JUMP; }
+      virtual ElementType type()   const override { return ElementType::JUMP; }
 
       Measure* measure() const         { return (Measure*)parent(); }
 

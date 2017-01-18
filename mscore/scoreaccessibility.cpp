@@ -117,8 +117,8 @@ void ScoreAccessibility::currentInfoChanged()
                         seg = score->lastSegment()->prev1MM(Segment::Type::ChordRest);
 
                   if (seg->tick() != score->lastSegment()->prev1MM(Segment::Type::ChordRest)->tick() &&
-                      s->type() != Element::Type::SLUR                                               &&
-                      s->type() != Element::Type::TIE                                                )
+                      s->type() != ElementType::SLUR                                               &&
+                      s->type() != ElementType::TIE                                                )
                         seg = seg->prev1MM(Segment::Type::ChordRest);
 
                   bar_beat = barbeat(seg);
@@ -216,17 +216,17 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
       int ticks = 0;
       TimeSigMap* tsm = e->score()->sigmap();
       Element* p = e;
-      while(p && p->type() != Element::Type::SEGMENT && p->type() != Element::Type::MEASURE)
+      while(p && p->type() != ElementType::SEGMENT && p->type() != ElementType::MEASURE)
             p = p->parent();
 
       if (!p) {
             return std::pair<int, float>(0, 0);
             }
-      else if (p->type() == Element::Type::SEGMENT) {
+      else if (p->type() == ElementType::SEGMENT) {
             Segment* seg = static_cast<Segment*>(p);
             tsm->tickValues(seg->tick(), &bar, &beat, &ticks);
             }
-      else if (p->type() == Element::Type::MEASURE) {
+      else if (p->type() == ElementType::MEASURE) {
             Measure* m = static_cast<Measure*>(p);
             bar = m->no();
             beat = -1;

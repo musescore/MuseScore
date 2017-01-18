@@ -112,7 +112,7 @@ class Chord : public ChordRest {
       virtual void undoUnlink() override;
 
       virtual void setScore(Score* s);
-      virtual Element::Type type() const         { return Element::Type::CHORD; }
+      virtual ElementType type() const         { return ElementType::CHORD; }
       virtual qreal mag() const;
 
       virtual void write(XmlWriter& xml) const override;

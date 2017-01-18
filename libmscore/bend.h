@@ -34,7 +34,7 @@ class Bend : public Element {
    public:
       Bend(Score* s);
       virtual Bend* clone() const override        { return new Bend(*this); }
-      virtual Element::Type type() const override { return Element::Type::BEND; }
+      virtual ElementType type() const override { return ElementType::BEND; }
       virtual void layout() override;
       virtual void draw(QPainter*) const override;
       virtual void write(XmlWriter&) const override;

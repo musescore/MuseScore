@@ -59,7 +59,7 @@ class Marker : public Text {
       QString markerTypeUserName() const;
 
       virtual Marker* clone() const override      { return new Marker(*this); }
-      virtual Element::Type type() const override { return Element::Type::MARKER; }
+      virtual ElementType type() const override { return ElementType::MARKER; }
 
       Measure* measure() const         { return (Measure*)parent(); }
 

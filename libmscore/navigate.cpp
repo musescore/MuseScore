@@ -166,7 +166,7 @@ ChordRest* prevChordRest(ChordRest* cr, bool skipGrace)
       for (Segment* seg = cr->segment()->prev1MM(st); seg; seg = seg->prev1MM(st)) {
             ChordRest* e = toChordRest(seg->element(track));
             if (e) {
-                  if (e->type() == Element::Type::CHORD && !skipGrace) {
+                  if (e->type() == ElementType::CHORD && !skipGrace) {
                         QVector<Chord*> cl = toChord(e)->graceNotesAfter();
                         if (!cl.empty())
                               return cl.last();

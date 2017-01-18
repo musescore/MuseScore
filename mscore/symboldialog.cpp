@@ -110,7 +110,7 @@ void SymbolDialog::systemFlagChanged(int state)
       bool sysFlag = state == Qt::Checked;
       for (int i = 0; i < sp->size(); ++i) {
             Element* e = sp->element(i);
-            if (e && e->type() == Element::Type::SYMBOL)
+            if (e && e->type() == ElementType::SYMBOL)
                   static_cast<Symbol*>(e)->setSystemFlag(sysFlag);
             }
       }

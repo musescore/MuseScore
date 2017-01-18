@@ -622,7 +622,7 @@ int Part::harmonyCount()
       Segment::Type st = Segment::Type::ChordRest;
       for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             for (Element* e : seg->annotations()) {
-                  if (e->type() == Element::Type::HARMONY && e->track() >= startTrack() && e->track() < endTrack())
+                  if (e->type() == ElementType::HARMONY && e->track() >= startTrack() && e->track() < endTrack())
                         count++;
                   }
             }

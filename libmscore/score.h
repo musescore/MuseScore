@@ -333,7 +333,7 @@ class Movements : public std::list<MasterScore*> {
 //    a Score has always an associated MasterScore
 //---------------------------------------------------------------------------------------
 
-class Score : public QObject, public ScoreElement {
+class Score : public ScoreElement {
       Q_OBJECT
       Q_PROPERTY(int                            duration          READ duration)
       Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
@@ -539,7 +539,7 @@ class Score : public QObject, public ScoreElement {
 
       QQmlListProperty<Ms::Excerpt> qmlExcerpts() { return QmlListAccess<Ms::Excerpt>(this, excerpts()); }
 
-      virtual const char* name() const override { return "Score"; }
+      virtual ElementType type() const override { return ElementType::SCORE; }
 
       void rebuildBspTree();
       bool noStaves() const         { return _staves.empty(); }
@@ -1017,7 +1017,7 @@ class Score : public QObject, public ScoreElement {
       void cmdSelectSection();
       void respace(std::vector<ChordRest*>* elements);
       void transposeSemitone(int semitone);
-      MeasureBase* insertMeasure(Element::Type type, MeasureBase*,
+      MeasureBase* insertMeasure(ElementType type, MeasureBase*,
          bool createEmptyMeasures = false);
       Audio* audio() const         { return _audio;    }
       void setAudio(Audio* a)      { _audio = a;       }

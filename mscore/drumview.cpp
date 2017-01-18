@@ -286,7 +286,7 @@ void DrumView::setStaff(Staff* s, Pos* l)
       for (Segment* s = staff->score()->firstSegment(); s; s = s->next1()) {
             for (int track = startTrack; track < endTrack; ++track) {
                   Element* e = s->element(track);
-                  if (e == 0 || e->type() != Element::Type::CHORD)
+                  if (e == 0 || e->type() != ElementType::CHORD)
                         continue;
                   Chord* chord = static_cast<Chord*>(e);
                   foreach(Note* n, chord->notes()) {

@@ -30,7 +30,7 @@ class Lasso : public Element {
    public:
       Lasso(Score*);
       virtual Lasso* clone() const override        { return new Lasso(*this); }
-      virtual Element::Type type() const override  { return Element::Type::LASSO; }
+      virtual ElementType type() const override  { return ElementType::LASSO; }
       virtual void draw(QPainter*) const override;
       virtual bool isEditable() const override     { return true; }
       virtual void editDrag(const EditData&) override;

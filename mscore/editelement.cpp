@@ -103,18 +103,18 @@ void ScoreView::endEdit()
 
       _score->addRefresh(editObject->canvasBoundingRect());
 
-      Element::Type tp = editObject->type();
-      if (tp == Element::Type::LYRICS)
+      ElementType tp = editObject->type();
+      if (tp == ElementType::LYRICS)
             lyricsEndEdit();
-      else if (tp == Element::Type::HARMONY)
+      else if (tp == ElementType::HARMONY)
             harmonyEndEdit();
-      else if (tp == Element::Type::FIGURED_BASS)
+      else if (tp == ElementType::FIGURED_BASS)
             figuredBassEndEdit();
       else if (editObject->isText()) {
             Text* text = static_cast<Text*>(editObject);
             // remove text if empty
             // dont do this for TBOX
-            if (text->empty() && text->parent() && text->parent()->type() != Element::Type::TBOX)
+            if (text->empty() && text->parent() && text->parent()->type() != ElementType::TBOX)
                   _score->undoRemoveElement(text);
             }
 

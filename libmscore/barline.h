@@ -87,7 +87,7 @@ class BarLine : public Element {
       BarLine &operator=(const BarLine&) = delete;
 
       virtual BarLine* clone() const override     { return new BarLine(*this); }
-      virtual Element::Type type() const override { return Element::Type::BAR_LINE; }
+      virtual ElementType type() const override { return ElementType::BAR_LINE; }
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void draw(QPainter*) const override;

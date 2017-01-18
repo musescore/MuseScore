@@ -139,7 +139,7 @@ class NoteHead : public Symbol {
       NoteHead(Score* s = 0) : Symbol(s) {}
       NoteHead &operator=(const NoteHead&) = delete;
       virtual NoteHead* clone() const override    { return new NoteHead(*this); }
-      virtual Element::Type type() const override { return Element::Type::NOTEHEAD; }
+      virtual ElementType type() const override { return ElementType::NOTEHEAD; }
 
       Group headGroup() const;
 
@@ -314,7 +314,7 @@ class Note : public Element {
 
       Note& operator=(const Note&) = delete;
       virtual Note* clone() const override  { return new Note(*this, false); }
-      Element::Type type() const override   { return Element::Type::NOTE; }
+      ElementType type() const override   { return ElementType::NOTE; }
 
       virtual qreal mag() const override;
 

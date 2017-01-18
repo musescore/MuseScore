@@ -346,7 +346,7 @@ Element* Accidental::drop(const DropData& data)
       {
       Element* e = data.element;
       switch(e->type()) {
-            case Element::Type::ICON :
+            case ElementType::ICON :
                   if (toIcon(e)->iconType() == IconType::BRACKETS && !_hasBracket)
                         undoSetHasBracket(true);
                   break;
