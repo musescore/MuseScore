@@ -261,7 +261,7 @@ void TestParts::appendMeasure()
       createParts(score);
 
       score->startCmd();
-      score->insertMeasure(Element::Type::MEASURE, 0);
+      score->insertMeasure(ElementType::MEASURE, 0);
       score->endCmd();
 
       QVERIFY(saveCompareScore(score, "part-all-appendmeasures.mscx", DIR + "part-all-appendmeasures.mscx"));
@@ -284,7 +284,7 @@ void TestParts::insertMeasure()
 
       score->startCmd();
       Measure* m = score->firstMeasure();
-      score->insertMeasure(Element::Type::MEASURE, m);
+      score->insertMeasure(ElementType::MEASURE, m);
       score->endCmd();
 
       // QVERIFY(saveCompareScore(score, "part-all-insertmeasures.mscx", DIR + "part-all-insertmeasures.mscx"));
@@ -592,7 +592,7 @@ MasterScore* TestParts::doRemoveFingering()
       Note* note   = chord->upNote();
       Element* fingering = 0;
       foreach(Element* e, note->el()) {
-            if (e->type() == Element::Type::FINGERING) {
+            if (e->type() == ElementType::FINGERING) {
                   fingering = e;
                   break;
                   }
@@ -716,7 +716,7 @@ MasterScore* TestParts::doRemoveSymbol()
       Note* note   = chord->upNote();
       Element* se = 0;
       foreach(Element* e, note->el()) {
-            if (e->type() == Element::Type::SYMBOL) {
+            if (e->type() == ElementType::SYMBOL) {
                   se = e;
                   break;
                   }
@@ -840,7 +840,7 @@ MasterScore* TestParts::doRemoveChordline()
 
       Element* se = 0;
       foreach(Element* e, chord->el()) {
-            if (e->type() == Element::Type::CHORDLINE) {
+            if (e->type() == ElementType::CHORDLINE) {
                   se = e;
                   break;
                   }

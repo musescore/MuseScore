@@ -45,7 +45,7 @@ class TremoloBar : public Element {
    public:
       TremoloBar(Score* s);
       virtual TremoloBar* clone() const override  { return new TremoloBar(*this); }
-      virtual Element::Type type() const override { return Element::Type::TREMOLOBAR; }
+      virtual ElementType type() const override { return ElementType::TREMOLOBAR; }
       virtual void layout() override;
       virtual void draw(QPainter*) const override;
       virtual void write(XmlWriter&) const override;

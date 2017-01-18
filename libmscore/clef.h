@@ -143,7 +143,7 @@ class Clef : public Element {
       Clef(const Clef&);
       ~Clef() {}
       virtual Clef* clone() const        { return new Clef(*this); }
-      virtual Element::Type type() const { return Element::Type::CLEF; }
+      virtual ElementType type() const { return ElementType::CLEF; }
       virtual qreal mag() const;
 
       Segment* segment() const           { return (Segment*)parent(); }

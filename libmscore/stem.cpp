@@ -274,7 +274,7 @@ void Stem::reset()
 bool Stem::acceptDrop(const DropData& data) const
       {
       Element* e = data.element;
-      if ((e->type() == Element::Type::TREMOLO) && (static_cast<Tremolo*>(e)->tremoloType() <= TremoloType::R64)) {
+      if ((e->type() == ElementType::TREMOLO) && (static_cast<Tremolo*>(e)->tremoloType() <= TremoloType::R64)) {
             return true;
             }
       return false;
@@ -290,7 +290,7 @@ Element* Stem::drop(const DropData& data)
       Chord* ch  = chord();
 
       switch(e->type()) {
-            case Element::Type::TREMOLO:
+            case ElementType::TREMOLO:
                   e->setParent(ch);
                   score()->undoAddElement(e);
                   return e;

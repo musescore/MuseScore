@@ -547,7 +547,7 @@ void MuseScore::newFile()
                   excerpts.append(x);
                   }
             MeasureBase* mb = tscore->first();
-            if (mb && mb->type() == Element::Type::VBOX) {
+            if (mb && mb->type() == ElementType::VBOX) {
                   VBox* tvb = static_cast<VBox*>(mb);
                   nvb = new VBox(score);
                   nvb->setBoxHeight(tvb->boxHeight());
@@ -694,7 +694,7 @@ void MuseScore::newFile()
 
       if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !poet.isEmpty()) {
             MeasureBase* measure = score->measures()->first();
-            if (measure->type() != Element::Type::VBOX) {
+            if (measure->type() != ElementType::VBOX) {
                   MeasureBase* nm = nvb ? nvb : new VBox(score);
                   nm->setTick(0);
                   nm->setNext(measure);
@@ -2662,8 +2662,8 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                               }
                         if (byMeasure) { // Draw visible staff lines by measure
                               for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
-                                    if (mb->type() != Element::Type::HBOX
-                                     && mb->type() != Element::Type::VBOX
+                                    if (mb->type() != ElementType::HBOX
+                                     && mb->type() != ElementType::VBOX
                                      && static_cast<Measure*>(mb)->visible(i)) {
                                           StaffLines* sl = toMeasure(mb)->staffLines(i);
                                           printer.setElement(sl);
@@ -2685,7 +2685,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
             // 2nd pass: the rest of the elements
             QList<Element*> pel = page->elements();
             qStableSort(pel.begin(), pel.end(), elementLessThan);
-            Element::Type eType;
+            ElementType eType;
             for (const Element* e : pel) {
                   // Always exclude invisible elements
                   if (!e->visible())
@@ -2693,7 +2693,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
 
                   eType = e->type();
                   switch (eType) { // In future sub-type code, this switch() grows, and eType gets used
-                  case Element::Type::STAFF_LINES : // Handled in the 1st pass above
+                  case ElementType::STAFF_LINES : // Handled in the 1st pass above
                         continue; // Exclude from 2nd pass
                         break;
                   default:

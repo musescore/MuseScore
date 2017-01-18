@@ -87,7 +87,7 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
 
 bool TimeSig::acceptDrop(const DropData& data) const
       {
-      return data.element->type() == Element::Type::TIMESIG;
+      return data.element->type() == ElementType::TIMESIG;
       }
 
 //---------------------------------------------------------
@@ -97,7 +97,7 @@ bool TimeSig::acceptDrop(const DropData& data) const
 Element* TimeSig::drop(const DropData& data)
       {
       Element* e = data.element;
-      if (e->type() == Element::Type::TIMESIG) {
+      if (e->type() == ElementType::TIMESIG) {
             // change timesig applies to all staves, can't simply set subtype
             // for this one only
             // ownership of e is transferred to cmdAddTimeSig

@@ -170,128 +170,128 @@ void Inspector::setElements(const QList<Element*>& l)
                   ie = new InspectorGroupElement(this);
             else if (_element) {
                   switch(_element->type()) {
-                        case Element::Type::FBOX:
-                        case Element::Type::VBOX:
+                        case ElementType::FBOX:
+                        case ElementType::VBOX:
                               ie = new InspectorVBox(this);
                               break;
-                        case Element::Type::TBOX:
+                        case ElementType::TBOX:
                               ie = new InspectorTBox(this);
                               break;
-                        case Element::Type::HBOX:
+                        case ElementType::HBOX:
                               ie = new InspectorHBox(this);
                               break;
-                        case Element::Type::ARTICULATION:
+                        case ElementType::ARTICULATION:
                               ie = new InspectorArticulation(this);
                               break;
-                        case Element::Type::SPACER:
+                        case ElementType::SPACER:
                               ie = new InspectorSpacer(this);
                               break;
-                        case Element::Type::NOTE:
+                        case ElementType::NOTE:
                               ie = new InspectorNote(this);
                               break;
-                        case Element::Type::ACCIDENTAL:
+                        case ElementType::ACCIDENTAL:
                               ie = new InspectorAccidental(this);
                               break;
-                        case Element::Type::REST:
+                        case ElementType::REST:
                               ie = new InspectorRest(this);
                               break;
-                        case Element::Type::CLEF:
+                        case ElementType::CLEF:
                               ie = new InspectorClef(this);
                               break;
-                        case Element::Type::TIMESIG:
+                        case ElementType::TIMESIG:
                               ie = new InspectorTimeSig(this);
                               break;
-                        case Element::Type::KEYSIG:
+                        case ElementType::KEYSIG:
                               ie = new InspectorKeySig(this);
                               break;
-                        case Element::Type::TUPLET:
+                        case ElementType::TUPLET:
                               ie = new InspectorTuplet(this);
                               break;
-                        case Element::Type::BEAM:
+                        case ElementType::BEAM:
                               ie = new InspectorBeam(this);
                               break;
-                        case Element::Type::IMAGE:
+                        case ElementType::IMAGE:
                               ie = new InspectorImage(this);
                               break;
-                        case Element::Type::LASSO:
+                        case ElementType::LASSO:
                               ie = new InspectorLasso(this);
                               break;
-                        case Element::Type::VOLTA_SEGMENT:
+                        case ElementType::VOLTA_SEGMENT:
                               ie = new InspectorVolta(this);
                               break;
-                        case Element::Type::OTTAVA_SEGMENT:
+                        case ElementType::OTTAVA_SEGMENT:
                               ie = new InspectorOttava(this);
                               break;
-                        case Element::Type::TRILL_SEGMENT:
+                        case ElementType::TRILL_SEGMENT:
                               ie = new InspectorTrill(this);
                               break;
-                        case Element::Type::HAIRPIN_SEGMENT:
+                        case ElementType::HAIRPIN_SEGMENT:
                               ie = new InspectorHairpin(this);
                               break;
-                        case Element::Type::TEXTLINE_SEGMENT:
-                        case Element::Type::PEDAL_SEGMENT:
+                        case ElementType::TEXTLINE_SEGMENT:
+                        case ElementType::PEDAL_SEGMENT:
                               ie = new InspectorTextLine(this);
                               break;
-                        case Element::Type::SLUR_SEGMENT:
-                        case Element::Type::TIE_SEGMENT:
+                        case ElementType::SLUR_SEGMENT:
+                        case ElementType::TIE_SEGMENT:
                               ie = new InspectorSlurTie(this);
                               break;
-                        case Element::Type::BAR_LINE:
+                        case ElementType::BAR_LINE:
                               ie = new InspectorBarLine(this);
                               break;
-                        case Element::Type::JUMP:
+                        case ElementType::JUMP:
                               ie = new InspectorJump(this);
                               break;
-                        case Element::Type::MARKER:
+                        case ElementType::MARKER:
                               ie = new InspectorMarker(this);
                               break;
-                        case Element::Type::GLISSANDO:
-                        case Element::Type::GLISSANDO_SEGMENT:
+                        case ElementType::GLISSANDO:
+                        case ElementType::GLISSANDO_SEGMENT:
                               ie = new InspectorGlissando(this);
                               break;
-                        case Element::Type::TEMPO_TEXT:
+                        case ElementType::TEMPO_TEXT:
                               ie = new InspectorTempoText(this);
                               break;
-                        case Element::Type::DYNAMIC:
+                        case ElementType::DYNAMIC:
                               ie = new InspectorDynamic(this);
                               break;
-                        case Element::Type::AMBITUS:
+                        case ElementType::AMBITUS:
                               ie = new InspectorAmbitus(this);
                               break;
-                        case Element::Type::FRET_DIAGRAM:
+                        case ElementType::FRET_DIAGRAM:
                               ie = new InspectorFretDiagram(this);
                               break;
-                        case Element::Type::LAYOUT_BREAK:
+                        case ElementType::LAYOUT_BREAK:
                               ie = new InspectorBreak(this);
                               break;
-                        case Element::Type::BEND:
+                        case ElementType::BEND:
                               ie = new InspectorBend(this);
                               break;
-                        case Element::Type::TREMOLOBAR:
+                        case ElementType::TREMOLOBAR:
                               ie = new InspectorTremoloBar(this);
                               break;
-                        case Element::Type::ARPEGGIO:
+                        case ElementType::ARPEGGIO:
                               ie = new InspectorArpeggio(this);
                               break;
-                        case Element::Type::BREATH:
+                        case ElementType::BREATH:
                               ie = new InspectorCaesura(this);
                               break;
-                        case Element::Type::LYRICS:
+                        case ElementType::LYRICS:
                               ie = new InspectorLyric(this);
                               break;
-                        case Element::Type::STAFF_TEXT:
+                        case ElementType::STAFF_TEXT:
                               ie = new InspectorStaffText(this);
                               break;
-                        case Element::Type::STAFFTYPE_CHANGE:
+                        case ElementType::STAFFTYPE_CHANGE:
                               ie = new InspectorStaffTypeChange(this);
                               break;
-                        case Element::Type::BRACKET:
+                        case ElementType::BRACKET:
                               ie = new InspectorBracket(this);
                               break;
-                        case Element::Type::INSTRUMENT_NAME:
+                        case ElementType::INSTRUMENT_NAME:
                               ie = new InspectorIname(this);
                               break;
-                        case Element::Type::FINGERING:
+                        case ElementType::FINGERING:
                               ie = new InspectorFingering(this);
                               break;
                         default:
@@ -853,11 +853,11 @@ void InspectorClef::setElement()
       // try to locate the 'other clef' of a courtesy / main pair
       Clef* clef = toClef(inspector->element());
       // if not in a clef-segment-measure hierachy, do nothing
-      if (!clef->parent() || clef->parent()->type() != Element::Type::SEGMENT)
+      if (!clef->parent() || clef->parent()->type() != ElementType::SEGMENT)
             return;
       Segment*    segm = toSegment(clef->parent());
       int         segmTick = segm->tick();
-      if (!segm->parent() || segm->parent()->type() != Element::Type::MEASURE)
+      if (!segm->parent() || segm->parent()->type() != ElementType::MEASURE)
             return;
 
       Measure* meas = toMeasure(segm->parent());

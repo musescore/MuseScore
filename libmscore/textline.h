@@ -30,7 +30,7 @@ class TextLineSegment : public TextLineBaseSegment {
 
    public:
       TextLineSegment(Score* s);
-      virtual Element::Type type() const override     { return Element::Type::TEXTLINE_SEGMENT; }
+      virtual ElementType type() const override     { return ElementType::TEXTLINE_SEGMENT; }
       virtual TextLineSegment* clone() const override { return new TextLineSegment(*this); }
       TextLine* textLine() const                      { return (TextLine*)spanner(); }
       virtual void layout() override;
@@ -55,7 +55,7 @@ class TextLine : public TextLineBase {
       ~TextLine() {}
 
       virtual TextLine* clone() const           { return new TextLine(*this); }
-      virtual Element::Type type() const        { return Element::Type::TEXTLINE; }
+      virtual ElementType type() const        { return ElementType::TEXTLINE; }
       virtual void styleChanged() override;
       virtual void reset() override;
       virtual LineSegment* createLineSegment() override;

@@ -37,7 +37,7 @@ class LedgerLine : public Line {
       LedgerLine(Score*);
       LedgerLine &operator=(const LedgerLine&) = delete;
       virtual LedgerLine* clone() const override { return new LedgerLine(*this); }
-      virtual Element::Type type() const override { return Element::Type::LEDGER_LINE; }
+      virtual ElementType type() const override { return ElementType::LEDGER_LINE; }
       virtual QPointF pagePos() const override;      ///< position in page coordinates
       Chord* chord() const { return (Chord*)parent(); }
       virtual void layout() override;

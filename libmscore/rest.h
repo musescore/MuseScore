@@ -49,7 +49,7 @@ class Rest : public ChordRest {
       Rest(const Rest&, bool link = false);
       ~Rest() {}
 
-      virtual Element::Type type() const override { return Element::Type::REST; }
+      virtual ElementType type() const override { return ElementType::REST; }
       Rest &operator=(const Rest&) = delete;
 
       virtual Rest* clone() const override        { return new Rest(*this, false); }

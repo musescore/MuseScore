@@ -170,7 +170,7 @@ class FiguredBassItem : public Element {
 
       // standard re-implemented virtual functions
       virtual FiguredBassItem*      clone() const override     { return new FiguredBassItem(*this); }
-      virtual Element::Type         type() const override      { return Element::Type::INVALID; }
+      virtual ElementType         type() const override      { return ElementType::INVALID; }
       virtual void      draw(QPainter* painter) const override;
       virtual void      layout() override;
       virtual void      read(XmlReader&) override;
@@ -278,7 +278,7 @@ class FiguredBass : public Text {
 
       // standard re-implemented virtual functions
       virtual FiguredBass*    clone() const override     { return new FiguredBass(*this); }
-      virtual Element::Type   type() const override      { return Element::Type::FIGURED_BASS; }
+      virtual ElementType   type() const override      { return ElementType::FIGURED_BASS; }
       virtual void      draw(QPainter* painter) const override;
       virtual void      endEdit() override;
       virtual void      layout() override;

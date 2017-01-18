@@ -85,7 +85,7 @@ class FretDiagram : public Element {
 
       static FretDiagram* fromString(Score* score, const QString &s);
 
-      virtual Element::Type type() const override { return Element::Type::FRET_DIAGRAM; }
+      virtual ElementType type() const override { return ElementType::FRET_DIAGRAM; }
       virtual void layout() override;
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;

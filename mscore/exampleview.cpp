@@ -205,7 +205,7 @@ void ExampleView::dragEnterEvent(QDragEnterEvent* event)
             XmlReader e(score(), a);
             QPointF dragOffset;
             Fraction duration;  // dummy
-            Element::Type type = Element::readType(e, &dragOffset, &duration);
+            ElementType type = Element::readType(e, &dragOffset, &duration);
 
             dragElement = Element::create(type, _score);
             if (dragElement) {
@@ -250,14 +250,14 @@ void ExampleView::dragMoveEvent(QDragMoveEvent* event)
       {
       event->acceptProposedAction();
 
-      if (!dragElement || dragElement->type() != Element::Type::ICON)
+      if (!dragElement || dragElement->type() != ElementType::ICON)
             return;
 
       QPointF pos(imatrix.map(QPointF(event->pos())));
       QList<Element*> el = elementsAt(pos);
       bool found = false;
       foreach(const Element* e, el) {
-            if (e->type() == Element::Type::NOTE) {
+            if (e->type() == ElementType::NOTE) {
                   setDropTarget(const_cast<Element*>(e));
                   found = true;
                   break;
@@ -308,13 +308,13 @@ void ExampleView::dropEvent(QDropEvent* event)
 
       if (!dragElement)
            return;
-      if (dragElement->type() != Element::Type::ICON) {
+      if (dragElement->type() != ElementType::ICON) {
             delete dragElement;
             dragElement = 0;
             return;
             }
       foreach (Element* e, elementsAt(pos)) {
-            if (e->type() == Element::Type::NOTE) {
+            if (e->type() == ElementType::NOTE) {
                   Icon* icon = static_cast<Icon*>(dragElement);
                   Chord* chord = static_cast<Note*>(e)->chord();
                   switch (icon->iconType()) {
@@ -351,7 +351,7 @@ void ExampleView::mousePressEvent(QMouseEvent* event)
       {
       QPointF pos(imatrix.map(QPointF(event->pos())));
       foreach (Element* e, elementsAt(pos)) {
-            if (e->type() == Element::Type::NOTE) {
+            if (e->type() == ElementType::NOTE) {
                   emit noteClicked(static_cast<Note*>(e));
                   break;
                   }

@@ -560,7 +560,7 @@ void Image::layout()
 
       qreal f = _sizeIsSpatium ? spatium() : DPMM;
       // if autoscale && inside a box, scale to box relevant size
-      if (autoScale() && parent() && ((parent()->type() == Element::Type::HBOX || parent()->type() == Element::Type::VBOX))) {
+      if (autoScale() && parent() && ((parent()->type() == ElementType::HBOX || parent()->type() == ElementType::VBOX))) {
             if (_lockAspectRatio) {
                   QSizeF size(imageSize());
                   qreal ratio = size.width() / size.height();

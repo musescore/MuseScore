@@ -41,7 +41,7 @@ class HairpinSegment : public TextLineBaseSegment {
       HairpinSegment(Score* s) : TextLineBaseSegment(s) {}
       Hairpin* hairpin() const                       { return (Hairpin*)spanner(); }
       virtual HairpinSegment* clone() const override { return new HairpinSegment(*this); }
-      virtual Element::Type type() const override    { return Element::Type::HAIRPIN_SEGMENT; }
+      virtual ElementType type() const override    { return ElementType::HAIRPIN_SEGMENT; }
       virtual void draw(QPainter*) const override;
       virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
       virtual int grips() const override { return 4; }
@@ -91,7 +91,7 @@ class Hairpin : public TextLineBase {
    public:
       Hairpin(Score* s);
       virtual Hairpin* clone() const override     { return new Hairpin(*this); }
-      virtual Element::Type type() const override { return Element::Type::HAIRPIN;  }
+      virtual ElementType type() const override { return ElementType::HAIRPIN;  }
 
       HairpinType hairpinType() const      { return _hairpinType; }
       void setHairpinType(HairpinType val);

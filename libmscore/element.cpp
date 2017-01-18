@@ -91,106 +91,6 @@ namespace Ms {
 
 // extern bool showInvisible;
 
-//
-// list has to be synchronized with Element::Type enum
-//
-static const ElementName elementNames[] = {
-      ElementName("invalid",              QT_TRANSLATE_NOOP("elementName", "invalid")),
-      ElementName("Symbol",               QT_TRANSLATE_NOOP("elementName", "Symbol")),
-      ElementName("Text",                 QT_TRANSLATE_NOOP("elementName", "Text")),
-      ElementName("InstrumentName",       QT_TRANSLATE_NOOP("elementName", "Instrument Name")),
-      ElementName("SlurSegment",          QT_TRANSLATE_NOOP("elementName", "Slur Segment")),
-      ElementName("TieSegment",           QT_TRANSLATE_NOOP("elementName", "Tie Segment")),
-      ElementName("StaffLines",           QT_TRANSLATE_NOOP("elementName", "Staff Lines")),
-      ElementName("BarLine",              QT_TRANSLATE_NOOP("elementName", "Barline")),
-      ElementName("SystemDivider",        QT_TRANSLATE_NOOP("elementName", "System Divider")),
-      ElementName("StemSlash",            QT_TRANSLATE_NOOP("elementName", "Stem Slash")),
-      ElementName("Line",                 QT_TRANSLATE_NOOP("elementName", "Line")),
-
-      ElementName("Arpeggio",             QT_TRANSLATE_NOOP("elementName", "Arpeggio")),
-      ElementName("Accidental",           QT_TRANSLATE_NOOP("elementName", "Accidental")),
-      ElementName("LedgerLine",           QT_TRANSLATE_NOOP("elementName", "Ledger Line")),
-      ElementName("Stem",                 QT_TRANSLATE_NOOP("elementName", "Stem")),
-      ElementName("Note",                 QT_TRANSLATE_NOOP("elementName", "Note")),
-      ElementName("Clef",                 QT_TRANSLATE_NOOP("elementName", "Clef")),
-      ElementName("KeySig",               QT_TRANSLATE_NOOP("elementName", "Key Signature")),
-      ElementName("Ambitus",              QT_TRANSLATE_NOOP("elementName", "Ambitus")),
-      ElementName("TimeSig",              QT_TRANSLATE_NOOP("elementName", "Time Signature")),
-      ElementName("Rest",                 QT_TRANSLATE_NOOP("elementName", "Rest")),
-      ElementName("Breath",               QT_TRANSLATE_NOOP("elementName", "Breath")),
-      ElementName("RepeatMeasure",        QT_TRANSLATE_NOOP("elementName", "Repeat Measure")),
-      ElementName("Tie",                  QT_TRANSLATE_NOOP("elementName", "Tie")),
-      ElementName("Articulation",         QT_TRANSLATE_NOOP("elementName", "Articulation")),
-      ElementName("ChordLine",            QT_TRANSLATE_NOOP("elementName", "Chord Line")),
-      ElementName("Dynamic",              QT_TRANSLATE_NOOP("elementName", "Dynamic")),
-      ElementName("Beam",                 QT_TRANSLATE_NOOP("elementName", "Beam")),
-      ElementName("Hook",                 QT_TRANSLATE_NOOP("elementName", "Hook")),
-      ElementName("Lyrics",               QT_TRANSLATE_NOOP("elementName", "Lyrics")),
-      ElementName("FiguredBass",          QT_TRANSLATE_NOOP("elementName", "Figured Bass")),
-      ElementName("Marker",               QT_TRANSLATE_NOOP("elementName", "Marker")),
-      ElementName("Jump",                 QT_TRANSLATE_NOOP("elementName", "Jump")),
-      ElementName("Fingering",            QT_TRANSLATE_NOOP("elementName", "Fingering")),
-      ElementName("Tuplet",               QT_TRANSLATE_NOOP("elementName", "Tuplet")),
-      ElementName("Tempo",                QT_TRANSLATE_NOOP("elementName", "Tempo")),
-      ElementName("StaffText",            QT_TRANSLATE_NOOP("elementName", "Staff Text")),
-      ElementName("RehearsalMark",        QT_TRANSLATE_NOOP("elementName", "Rehearsal Mark")),
-      ElementName("InstrumentChange",     QT_TRANSLATE_NOOP("elementName", "Instrument Change")),
-      ElementName("StaffTypeChange",      QT_TRANSLATE_NOOP("elementName", "Staff Typeype Change")),
-      ElementName("Harmony",              QT_TRANSLATE_NOOP("elementName", "Chord Symbol")),
-      ElementName("FretDiagram",          QT_TRANSLATE_NOOP("elementName", "Fretboard Diagram")),
-      ElementName("Bend",                 QT_TRANSLATE_NOOP("elementName", "Bend")),
-      ElementName("TremoloBar",           QT_TRANSLATE_NOOP("elementName", "Tremolo Bar")),
-      ElementName("Volta",                QT_TRANSLATE_NOOP("elementName", "Volta")),
-      ElementName("HairpinSegment",       QT_TRANSLATE_NOOP("elementName", "Hairpin Segment")),
-      ElementName("OttavaSegment",        QT_TRANSLATE_NOOP("elementName", "Ottava Segment")),
-      ElementName("TrillSegment",         QT_TRANSLATE_NOOP("elementName", "Trill Segment")),
-      ElementName("TextLineSegment",      QT_TRANSLATE_NOOP("elementName", "Text Line Segment")),
-      ElementName("VoltaSegment",         QT_TRANSLATE_NOOP("elementName", "Volta Segment")),
-      ElementName("PedalSegment",         QT_TRANSLATE_NOOP("elementName", "Pedal Segment")),
-      ElementName("LyricsLineSegment",    QT_TRANSLATE_NOOP("elementName", "Melisma Line Segment")),
-      ElementName("GlissandoSegment",     QT_TRANSLATE_NOOP("elementName", "Glissando Segment")),
-      ElementName("LayoutBreak",          QT_TRANSLATE_NOOP("elementName", "Layout Break")),
-      ElementName("Spacer",               QT_TRANSLATE_NOOP("elementName", "Spacer")),
-      ElementName("StaffState",           QT_TRANSLATE_NOOP("elementName", "Staff State")),
-      ElementName("NoteHead",             QT_TRANSLATE_NOOP("elementName", "Notehead")),
-      ElementName("NoteDot",              QT_TRANSLATE_NOOP("elementName", "Note Dot")),
-      ElementName("Tremolo",              QT_TRANSLATE_NOOP("elementName", "Tremolo")),
-      ElementName("Image",                QT_TRANSLATE_NOOP("elementName", "Image")),
-      ElementName("Measure",              QT_TRANSLATE_NOOP("elementName", "Measure")),
-      ElementName("Selection",            QT_TRANSLATE_NOOP("elementName", "Selection")),
-      ElementName("Lasso",                QT_TRANSLATE_NOOP("elementName", "Lasso")),
-      ElementName("ShadowNote",           QT_TRANSLATE_NOOP("elementName", "Shadow Note")),
-      ElementName("TabDurationSymbol",    QT_TRANSLATE_NOOP("elementName", "Tab Duration Symbol")),
-      ElementName("FSymbol",              QT_TRANSLATE_NOOP("elementName", "Font Symbol")),
-      ElementName("Page",                 QT_TRANSLATE_NOOP("elementName", "Page")),
-      ElementName("HairPin",              QT_TRANSLATE_NOOP("elementName", "Hairpin")),
-      ElementName("Ottava",               QT_TRANSLATE_NOOP("elementName", "Ottava")),
-      ElementName("Pedal",                QT_TRANSLATE_NOOP("elementName", "Pedal")),
-      ElementName("Trill",                QT_TRANSLATE_NOOP("elementName", "Trill")),
-      ElementName("TextLine",             QT_TRANSLATE_NOOP("elementName", "Text Line")),
-      ElementName("TextLineBase",         QT_TRANSLATE_NOOP("elementName", "Text Line Base")),  // remove
-      ElementName("NoteLine",             QT_TRANSLATE_NOOP("elementName", "Note Line")),
-      ElementName("LyricsLine",           QT_TRANSLATE_NOOP("elementName", "Melisma Line")),
-      ElementName("Glissando",            QT_TRANSLATE_NOOP("elementName", "Glissando")),
-      ElementName("Bracket",              QT_TRANSLATE_NOOP("elementName", "Bracket")),
-      ElementName("Segment",              QT_TRANSLATE_NOOP("elementName", "Segment")),
-      ElementName("System",               QT_TRANSLATE_NOOP("elementName", "System")),
-      ElementName("Compound",             QT_TRANSLATE_NOOP("elementName", "Compound")),
-      ElementName("Chord",                QT_TRANSLATE_NOOP("elementName", "Chord")),
-      ElementName("Slur",                 QT_TRANSLATE_NOOP("elementName", "Slur")),
-      ElementName("Element",              QT_TRANSLATE_NOOP("elementName", "Element")),
-      ElementName("ElementList",          QT_TRANSLATE_NOOP("elementName", "Element List")),
-      ElementName("StaffList",            QT_TRANSLATE_NOOP("elementName", "Staff List")),
-      ElementName("MeasureList",          QT_TRANSLATE_NOOP("elementName", "Measure List")),
-      ElementName("HBox",                 QT_TRANSLATE_NOOP("elementName", "Horizontal Frame")),
-      ElementName("VBox",                 QT_TRANSLATE_NOOP("elementName", "Vertical Frame")),
-      ElementName("TBox",                 QT_TRANSLATE_NOOP("elementName", "Text Frame")),
-      ElementName("FBox",                 QT_TRANSLATE_NOOP("elementName", "Fretboard Diagram Frame")),
-      ElementName("Icon",                 QT_TRANSLATE_NOOP("elementName", "Icon")),
-      ElementName("Ossia",                QT_TRANSLATE_NOOP("elementName", "Ossia")),
-      ElementName("BagpipeEmbellishment", QT_TRANSLATE_NOOP("elementName", "Bagpipe Embellishment"))
-      };
-
 //---------------------------------------------------------
 //   DropData
 //---------------------------------------------------------
@@ -246,27 +146,9 @@ qreal Element::magS() const
 //   name
 //---------------------------------------------------------
 
-const char* Element::name() const
-      {
-      return name(type());
-      }
-
-//---------------------------------------------------------
-//   name
-//---------------------------------------------------------
-
 QString Element::subtypeName() const
       {
       return "";
-      }
-
-//---------------------------------------------------------
-//   userName
-//---------------------------------------------------------
-
-QString Element::userName() const
-      {
-      return qApp->translate("elementName", elementNames[int(type())].userName);
       }
 
 //---------------------------------------------------------
@@ -274,7 +156,7 @@ QString Element::userName() const
 //---------------------------------------------------------
 
 Element::Element(Score* s) :
-   QObject(0), ScoreElement(s)
+   ScoreElement(s)
       {
       _placement     = Placement::BELOW;
       _track         = -1;
@@ -286,7 +168,7 @@ Element::Element(Score* s) :
       }
 
 Element::Element(const Element& e)
-   : QObject(0), ScoreElement(e)
+   : ScoreElement(e)
       {
       _parent     = e._parent;
       _z          = e._z;
@@ -453,7 +335,7 @@ QRectF Element::drag(EditData* data)
       setUserOff(QPointF(x, y));
       setGenerated(false);
 
-      if (type() == Type::TEXT) {         // TODO: check for other types
+      if (type() == ElementType::TEXT) {         // TODO: check for other types
             //
             // restrict move to page boundaries
             //
@@ -461,7 +343,7 @@ QRectF Element::drag(EditData* data)
             Page* p = 0;
             Element* e = this;
             while (e) {
-                  if (e->type() == Element::Type::PAGE) {
+                  if (e->type() == ElementType::PAGE) {
                         p = static_cast<Page*>(e);
                         break;
                         }
@@ -651,7 +533,7 @@ void Element::writeProperties(XmlWriter& xml) const
             else
                   xml.tag("pos", pos() / score()->spatium());
             }
-      if (((track() != xml.curTrack()) || (type() == Element::Type::SLUR)) && (track() != -1)) {
+      if (((track() != xml.curTrack()) || (type() == ElementType::SLUR)) && (track() != -1)) {
             int t;
             t = track() + xml.trackDiff();
             xml.tag("track", t);
@@ -1033,7 +915,7 @@ QByteArray Element::mimeData(const QPointF& dragOffset) const
 //    return new position of QDomElement in e
 //---------------------------------------------------------
 
-Element::Type Element::readType(XmlReader& e, QPointF* dragOffset,
+ElementType Element::readType(XmlReader& e, QPointF* dragOffset,
    Fraction* duration)
       {
       while (e.readNextStartElement()) {
@@ -1045,8 +927,8 @@ Element::Type Element::readType(XmlReader& e, QPointF* dragOffset,
                         else if (tag == "duration")
                               *duration = e.readFraction();
                         else {
-                              Element::Type type = name2type(tag);
-                              if (type == Element::Type::INVALID)
+                              ElementType type = name2type(tag);
+                              if (type == ElementType::INVALID)
                                     break;
                               return type;
                         }
@@ -1054,7 +936,7 @@ Element::Type Element::readType(XmlReader& e, QPointF* dragOffset,
             else
                   e.unknown();
             }
-      return Element::Type::INVALID;
+      return ElementType::INVALID;
       }
 
 //---------------------------------------------------------
@@ -1105,131 +987,111 @@ void Element::remove(Element* e)
 //    Element factory
 //---------------------------------------------------------
 
-Element* Element::create(Element::Type type, Score* score)
+Element* Element::create(ElementType type, Score* score)
       {
       switch(type) {
-            case Element::Type::VOLTA:             return new Volta(score);
-            case Element::Type::OTTAVA:            return new Ottava(score);
-            case Element::Type::TEXTLINE:          return new TextLine(score);
-            case Element::Type::NOTELINE:          return new NoteLine(score);
-            case Element::Type::LYRICSLINE:        return new LyricsLine(score);
-            case Element::Type::TRILL:             return new Trill(score);
-            case Element::Type::PEDAL:             return new Pedal(score);
-            case Element::Type::HAIRPIN:           return new Hairpin(score);
-            case Element::Type::CLEF:              return new Clef(score);
-            case Element::Type::KEYSIG:            return new KeySig(score);
-            case Element::Type::TIMESIG:           return new TimeSig(score);
-            case Element::Type::BAR_LINE:          return new BarLine(score);
-            case Element::Type::SYSTEM_DIVIDER:    return new SystemDivider(score);
-            case Element::Type::ARPEGGIO:          return new Arpeggio(score);
-            case Element::Type::BREATH:            return new Breath(score);
-            case Element::Type::GLISSANDO:         return new Glissando(score);
-            case Element::Type::BRACKET:           return new Bracket(score);
-            case Element::Type::ARTICULATION:      return new Articulation(score);
-            case Element::Type::CHORDLINE:         return new ChordLine(score);
-            case Element::Type::ACCIDENTAL:        return new Accidental(score);
-            case Element::Type::DYNAMIC:           return new Dynamic(score);
-            case Element::Type::TEXT:              return new Text(score);
-            case Element::Type::INSTRUMENT_NAME:   return new InstrumentName(score);
-            case Element::Type::STAFF_TEXT:        return new StaffText(score);
-            case Element::Type::REHEARSAL_MARK:    return new RehearsalMark(score);
-            case Element::Type::INSTRUMENT_CHANGE: return new InstrumentChange(score);
-            case Element::Type::STAFFTYPE_CHANGE:  return new StaffTypeChange(score);
-            case Element::Type::NOTEHEAD:          return new NoteHead(score);
-            case Element::Type::NOTEDOT:           return new NoteDot(score);
-            case Element::Type::TREMOLO:           return new Tremolo(score);
-            case Element::Type::LAYOUT_BREAK:      return new LayoutBreak(score);
-            case Element::Type::MARKER:            return new Marker(score);
-            case Element::Type::JUMP:              return new Jump(score);
-            case Element::Type::REPEAT_MEASURE:    return new RepeatMeasure(score);
-            case Element::Type::ICON:              return new Icon(score);
-            case Element::Type::NOTE:              return new Note(score);
-            case Element::Type::SYMBOL:            return new Symbol(score);
-            case Element::Type::FSYMBOL:           return new FSymbol(score);
-            case Element::Type::CHORD:             return new Chord(score);
-            case Element::Type::REST:              return new Rest(score);
-            case Element::Type::SPACER:            return new Spacer(score);
-            case Element::Type::STAFF_STATE:       return new StaffState(score);
-            case Element::Type::TEMPO_TEXT:        return new TempoText(score);
-            case Element::Type::HARMONY:           return new Harmony(score);
-            case Element::Type::FRET_DIAGRAM:      return new FretDiagram(score);
-            case Element::Type::BEND:              return new Bend(score);
-            case Element::Type::TREMOLOBAR:        return new TremoloBar(score);
-            case Element::Type::LYRICS:            return new Lyrics(score);
-            case Element::Type::FIGURED_BASS:      return new FiguredBass(score);
-            case Element::Type::STEM:              return new Stem(score);
-            case Element::Type::SLUR:              return new Slur(score);
-            case Element::Type::FINGERING:          return new Fingering(score);
-            case Element::Type::HBOX:              return new HBox(score);
-            case Element::Type::VBOX:              return new VBox(score);
-            case Element::Type::TBOX:              return new TBox(score);
-            case Element::Type::FBOX:              return new FBox(score);
-            case Element::Type::MEASURE:           return new Measure(score);
-            case Element::Type::TAB_DURATION_SYMBOL: return new TabDurationSymbol(score);
-            case Element::Type::OSSIA:               return new Ossia(score);
-            case Element::Type::IMAGE:             return new Image(score);
-            case Element::Type::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(score);
-            case Element::Type::AMBITUS:           return new Ambitus(score);
+            case ElementType::VOLTA:             return new Volta(score);
+            case ElementType::OTTAVA:            return new Ottava(score);
+            case ElementType::TEXTLINE:          return new TextLine(score);
+            case ElementType::NOTELINE:          return new NoteLine(score);
+            case ElementType::LYRICSLINE:        return new LyricsLine(score);
+            case ElementType::TRILL:             return new Trill(score);
+            case ElementType::PEDAL:             return new Pedal(score);
+            case ElementType::HAIRPIN:           return new Hairpin(score);
+            case ElementType::CLEF:              return new Clef(score);
+            case ElementType::KEYSIG:            return new KeySig(score);
+            case ElementType::TIMESIG:           return new TimeSig(score);
+            case ElementType::BAR_LINE:          return new BarLine(score);
+            case ElementType::SYSTEM_DIVIDER:    return new SystemDivider(score);
+            case ElementType::ARPEGGIO:          return new Arpeggio(score);
+            case ElementType::BREATH:            return new Breath(score);
+            case ElementType::GLISSANDO:         return new Glissando(score);
+            case ElementType::BRACKET:           return new Bracket(score);
+            case ElementType::ARTICULATION:      return new Articulation(score);
+            case ElementType::CHORDLINE:         return new ChordLine(score);
+            case ElementType::ACCIDENTAL:        return new Accidental(score);
+            case ElementType::DYNAMIC:           return new Dynamic(score);
+            case ElementType::TEXT:              return new Text(score);
+            case ElementType::INSTRUMENT_NAME:   return new InstrumentName(score);
+            case ElementType::STAFF_TEXT:        return new StaffText(score);
+            case ElementType::REHEARSAL_MARK:    return new RehearsalMark(score);
+            case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(score);
+            case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(score);
+            case ElementType::NOTEHEAD:          return new NoteHead(score);
+            case ElementType::NOTEDOT:           return new NoteDot(score);
+            case ElementType::TREMOLO:           return new Tremolo(score);
+            case ElementType::LAYOUT_BREAK:      return new LayoutBreak(score);
+            case ElementType::MARKER:            return new Marker(score);
+            case ElementType::JUMP:              return new Jump(score);
+            case ElementType::REPEAT_MEASURE:    return new RepeatMeasure(score);
+            case ElementType::ICON:              return new Icon(score);
+            case ElementType::NOTE:              return new Note(score);
+            case ElementType::SYMBOL:            return new Symbol(score);
+            case ElementType::FSYMBOL:           return new FSymbol(score);
+            case ElementType::CHORD:             return new Chord(score);
+            case ElementType::REST:              return new Rest(score);
+            case ElementType::SPACER:            return new Spacer(score);
+            case ElementType::STAFF_STATE:       return new StaffState(score);
+            case ElementType::TEMPO_TEXT:        return new TempoText(score);
+            case ElementType::HARMONY:           return new Harmony(score);
+            case ElementType::FRET_DIAGRAM:      return new FretDiagram(score);
+            case ElementType::BEND:              return new Bend(score);
+            case ElementType::TREMOLOBAR:        return new TremoloBar(score);
+            case ElementType::LYRICS:            return new Lyrics(score);
+            case ElementType::FIGURED_BASS:      return new FiguredBass(score);
+            case ElementType::STEM:              return new Stem(score);
+            case ElementType::SLUR:              return new Slur(score);
+            case ElementType::FINGERING:          return new Fingering(score);
+            case ElementType::HBOX:              return new HBox(score);
+            case ElementType::VBOX:              return new VBox(score);
+            case ElementType::TBOX:              return new TBox(score);
+            case ElementType::FBOX:              return new FBox(score);
+            case ElementType::MEASURE:           return new Measure(score);
+            case ElementType::TAB_DURATION_SYMBOL: return new TabDurationSymbol(score);
+            case ElementType::OSSIA:               return new Ossia(score);
+            case ElementType::IMAGE:             return new Image(score);
+            case ElementType::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(score);
+            case ElementType::AMBITUS:           return new Ambitus(score);
 
-            case Element::Type::TEXTLINE_BASE:
-            case Element::Type::TEXTLINE_SEGMENT:
-            case Element::Type::GLISSANDO_SEGMENT:
-            case Element::Type::SLUR_SEGMENT:
-            case Element::Type::TIE_SEGMENT:
-            case Element::Type::STEM_SLASH:
-            case Element::Type::LINE:
-            case Element::Type::TIE:
-            case Element::Type::PAGE:
-            case Element::Type::BEAM:
-            case Element::Type::HOOK:
-            case Element::Type::TUPLET:
-            case Element::Type::HAIRPIN_SEGMENT:
-            case Element::Type::OTTAVA_SEGMENT:
-            case Element::Type::TRILL_SEGMENT:
-            case Element::Type::VOLTA_SEGMENT:
-            case Element::Type::PEDAL_SEGMENT:
-            case Element::Type::LYRICSLINE_SEGMENT:
-            case Element::Type::LEDGER_LINE:
-            case Element::Type::STAFF_LINES:
-            case Element::Type::SELECTION:
-            case Element::Type::LASSO:
-            case Element::Type::SHADOW_NOTE:
-            case Element::Type::SEGMENT:
-            case Element::Type::SYSTEM:
-            case Element::Type::COMPOUND:
-            case Element::Type::ELEMENT:
-            case Element::Type::ELEMENT_LIST:
-            case Element::Type::STAFF_LIST:
-            case Element::Type::MEASURE_LIST:
-            case Element::Type::MAXTYPE:
-            case Element::Type::INVALID:
+            case ElementType::TEXTLINE_BASE:
+            case ElementType::TEXTLINE_SEGMENT:
+            case ElementType::GLISSANDO_SEGMENT:
+            case ElementType::SLUR_SEGMENT:
+            case ElementType::TIE_SEGMENT:
+            case ElementType::STEM_SLASH:
+            case ElementType::LINE:
+            case ElementType::TIE:
+            case ElementType::PAGE:
+            case ElementType::BEAM:
+            case ElementType::HOOK:
+            case ElementType::TUPLET:
+            case ElementType::HAIRPIN_SEGMENT:
+            case ElementType::OTTAVA_SEGMENT:
+            case ElementType::TRILL_SEGMENT:
+            case ElementType::VOLTA_SEGMENT:
+            case ElementType::PEDAL_SEGMENT:
+            case ElementType::LYRICSLINE_SEGMENT:
+            case ElementType::LEDGER_LINE:
+            case ElementType::STAFF_LINES:
+            case ElementType::SELECTION:
+            case ElementType::LASSO:
+            case ElementType::SHADOW_NOTE:
+            case ElementType::SEGMENT:
+            case ElementType::SYSTEM:
+            case ElementType::COMPOUND:
+            case ElementType::ELEMENT:
+            case ElementType::ELEMENT_LIST:
+            case ElementType::STAFF_LIST:
+            case ElementType::MEASURE_LIST:
+            case ElementType::MAXTYPE:
+            case ElementType::INVALID:
+            case ElementType::PART:
+            case ElementType::STAFF:
+            case ElementType::SCORE:
                   break;
             }
       qDebug("cannot create type %d <%s>", int(type), Element::name(type));
       return 0;
-      }
-
-//---------------------------------------------------------
-//   name
-//---------------------------------------------------------
-
-const char* Element::name(Element::Type type)
-      {
-      return elementNames[int(type)].name;
-      }
-
-//---------------------------------------------------------
-//   name2type
-//---------------------------------------------------------
-
-Element::Type Element::name2type(const QStringRef& s)
-      {
-      for (int i = 0; i < int(Element::Type::MAXTYPE); ++i) {
-            if (s == elementNames[i].name)
-                  return Element::Type(i);
-            }
-qDebug("name2type: invalid type <%s>", s.toUtf8().data());
-      return Element::Type::INVALID;
       }
 
 //---------------------------------------------------------
@@ -1238,8 +1100,8 @@ qDebug("name2type: invalid type <%s>", s.toUtf8().data());
 
 Element* Element::name2Element(const QStringRef& s, Score* sc)
       {
-      Element::Type type = Element::name2type(s);
-      if (type == Element::Type::INVALID)
+      ElementType type = Element::name2type(s);
+      if (type == ElementType::INVALID)
             return 0;
       return Element::create(type, sc);
       }
@@ -1394,45 +1256,6 @@ QVariant Element::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
-//   undoChangeProperty
-//---------------------------------------------------------
-
-void Element::undoChangeProperty(P_ID id, const QVariant& v, PropertyFlags ps)
-      {
-      if (id == P_ID::AUTOPLACE && v.toBool()) {
-            // special case: if we switch to autoplace, we must save
-            // user offset values
-            undoResetProperty(P_ID::USER_OFF);
-            if (isSlurSegment()) {
-                  undoResetProperty(P_ID::SLUR_UOFF1);
-                  undoResetProperty(P_ID::SLUR_UOFF2);
-                  undoResetProperty(P_ID::SLUR_UOFF3);
-                  undoResetProperty(P_ID::SLUR_UOFF4);
-                  }
-            }
-      else if (id == P_ID::SUB_STYLE) {
-            //
-            // change a list of properties
-            //
-            auto l = subStyle(SubStyle(v.toInt()));
-            // Change to SubStyle defaults
-            for (const StyledProperty& p : l)
-                  score()->undoChangeProperty(this, p.propertyIdx, score()->styleV(p.styleIdx), PropertyFlags::STYLED);
-            }
-      score()->undoChangeProperty(this, id, v, ps);
-      }
-
-//---------------------------------------------------------
-//   resetProperty
-//    set property to default value
-//---------------------------------------------------------
-
-void Element::resetProperty(P_ID id)
-      {
-      setProperty(id, propertyDefault(id));
-      }
-
-//---------------------------------------------------------
 //   setStyle
 //---------------------------------------------------------
 
@@ -1456,15 +1279,6 @@ bool Element::custom(P_ID id) const
       }
 
 //---------------------------------------------------------
-//   undoResetProperty
-//---------------------------------------------------------
-
-void Element::undoResetProperty(P_ID id)
-      {
-      undoChangeProperty(id, propertyDefault(id));
-      }
-
-//---------------------------------------------------------
 //   readProperty
 //---------------------------------------------------------
 
@@ -1478,70 +1292,27 @@ bool Element::readProperty(const QStringRef& s, XmlReader& e, P_ID id)
       }
 
 //---------------------------------------------------------
-//   isSLine
-//---------------------------------------------------------
-
-bool Element::isSLine() const
-      {
-      return isHairpin() || isOttava() || isPedal()
-         || isTrill() || isVolta() || isTextLine() || isNoteLine() || isGlissando();
-      }
-
-//---------------------------------------------------------
-//   isSLine
-//---------------------------------------------------------
-
-bool Element::isSLineSegment() const
-      {
-      return isHairpinSegment() || isOttavaSegment() || isPedalSegment()
-         || isTrillSegment() || isVoltaSegment() || isTextLineSegment()
-         || isGlissandoSegment();
-      }
-
-//---------------------------------------------------------
-//   isText
-//---------------------------------------------------------
-
-bool Element::isText() const
-      {
-      return type()  == Element::Type::TEXT
-         || type() == Element::Type::LYRICS
-         || type() == Element::Type::DYNAMIC
-         || type() == Element::Type::FINGERING
-         || type() == Element::Type::HARMONY
-         || type() == Element::Type::MARKER
-         || type() == Element::Type::JUMP
-         || type() == Element::Type::STAFF_TEXT
-         || type() == Element::Type::REHEARSAL_MARK
-         || type() == Element::Type::INSTRUMENT_CHANGE
-         || type() == Element::Type::FIGURED_BASS
-         || type() == Element::Type::TEMPO_TEXT
-         || type() == Element::Type::INSTRUMENT_NAME
-         ;
-      }
-
-//---------------------------------------------------------
 //   isPrintable
 //---------------------------------------------------------
 
 bool Element::isPrintable() const
       {
       switch (type()) {
-            case Element::Type::PAGE:
-            case Element::Type::SYSTEM:
-            case Element::Type::MEASURE:
-            case Element::Type::SEGMENT:
-            case Element::Type::VBOX:
-            case Element::Type::HBOX:
-            case Element::Type::TBOX:
-            case Element::Type::FBOX:
-            case Element::Type::SPACER:
-            case Element::Type::SHADOW_NOTE:
-            case Element::Type::LASSO:
-            case Element::Type::ELEMENT_LIST:
-            case Element::Type::STAFF_LIST:
-            case Element::Type::MEASURE_LIST:
-            case Element::Type::SELECTION:
+            case ElementType::PAGE:
+            case ElementType::SYSTEM:
+            case ElementType::MEASURE:
+            case ElementType::SEGMENT:
+            case ElementType::VBOX:
+            case ElementType::HBOX:
+            case ElementType::TBOX:
+            case ElementType::FBOX:
+            case ElementType::SPACER:
+            case ElementType::SHADOW_NOTE:
+            case ElementType::LASSO:
+            case ElementType::ELEMENT_LIST:
+            case ElementType::STAFF_LIST:
+            case ElementType::MEASURE_LIST:
+            case ElementType::SELECTION:
                   return false;
             default:
                   return true;
@@ -1554,7 +1325,7 @@ bool Element::isPrintable() const
 
 Element* Element::findMeasure()
       {
-      if (type() == Element::Type::MEASURE)
+      if (type() == ElementType::MEASURE)
             return this;
       else if (_parent)
             return _parent->findMeasure();
@@ -1806,27 +1577,27 @@ Element* Element::nextElement()
       Element* p = this;
       while (p) {
             switch (p->type()) {
-                  case Element::Type::NOTE:
+                  case ElementType::NOTE:
                         if(static_cast<Note*>(p)->chord()->isGrace())
                               break;
                         return p;
-                  case Element::Type::REST:
+                  case ElementType::REST:
                         return p;
-                  case Element::Type::CHORD: {
+                  case ElementType::CHORD: {
                         Chord* c = static_cast<Chord*>(p);
                         if (!c->isGrace())
                               return c->notes().back();
                         }
                         break;
-                  case Element::Type::SEGMENT: {
+                  case ElementType::SEGMENT: {
                         Segment* s = static_cast<Segment*>(p);
                         return s->firstElement(staffIdx());
                         }
-                  case Element::Type::MEASURE: {
+                  case ElementType::MEASURE: {
                         Measure* m = static_cast<Measure*>(p);
                         return m->nextElementStaff(staffIdx());
                         }
-                  case Element::Type::SYSTEM: {
+                  case ElementType::SYSTEM: {
                         System* sys = static_cast<System*>(p);
                         return sys->nextElement();
                         }
@@ -1851,27 +1622,27 @@ Element* Element::prevElement()
       Element* p = this;
       while (p) {
             switch (p->type()) {
-                  case Element::Type::NOTE:
+                  case ElementType::NOTE:
                         if(static_cast<Note*>(p)->chord()->isGrace())
                               break;
                         return p;
-                  case Element::Type::REST:
+                  case ElementType::REST:
                         return p;
-                  case Element::Type::CHORD: {
+                  case ElementType::CHORD: {
                         Chord* c = static_cast<Chord*>(p);
                         if (!c->isGrace())
                               return c->notes().front();
                         }
                         break;
-                  case Element::Type::SEGMENT: {
+                  case ElementType::SEGMENT: {
                         Segment* s = static_cast<Segment*>(p);
                         return s->lastElement(staffIdx());
                         }
-                  case Element::Type::MEASURE: {
+                  case ElementType::MEASURE: {
                         Measure* m = static_cast<Measure*>(p);
                         return m->prevElementStaff(staffIdx());
                         }
-                  case Element::Type::SYSTEM: {
+                  case ElementType::SYSTEM: {
                         System* sys = static_cast<System*>(p);
                         return sys->prevElement();
                         }

@@ -90,7 +90,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             // search prev chord
             while ((nextSegment = nextSegment->prev1(Segment::Type::ChordRest))) {
                   Element* el = nextSegment->element(track);
-                  if (el &&  el->type() == Element::Type::CHORD)
+                  if (el &&  el->type() == ElementType::CHORD)
                         break;
                   }
             }
@@ -98,7 +98,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             // search next chord
             while ((nextSegment = nextSegment->next1(Segment::Type::ChordRest))) {
                   Element* el = nextSegment->element(track);
-                  if (el &&  el->type() == Element::Type::CHORD)
+                  if (el &&  el->type() == ElementType::CHORD)
                         break;
                   }
             }
@@ -212,7 +212,7 @@ void ScoreView::lyricsMinus()
       Segment* nextSegment = segment;
       while ((nextSegment = nextSegment->next1(Segment::Type::ChordRest))) {
             Element* el = nextSegment->element(track);
-            if (el &&  el->type() == Element::Type::CHORD)
+            if (el &&  el->type() == ElementType::CHORD)
                   break;
             }
       if (nextSegment == 0)
@@ -305,7 +305,7 @@ void ScoreView::lyricsUnderscore()
       Segment* nextSegment = segment;
       while ((nextSegment = nextSegment->next1(Segment::Type::ChordRest))) {
             Element* el = nextSegment->element(track);
-            if (el &&  el->type() == Element::Type::CHORD)
+            if (el &&  el->type() == ElementType::CHORD)
                   break;
             }
 
@@ -322,7 +322,7 @@ void ScoreView::lyricsUnderscore()
             segment = segment->prev1(Segment::Type::ChordRest);
             // if the segment has a rest in this track, stop going back
             Element* e = segment ? segment->element(track) : 0;
-            if (e && e->type() != Element::Type::CHORD)
+            if (e && e->type() != ElementType::CHORD)
                   break;
             }
 

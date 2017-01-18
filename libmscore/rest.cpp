@@ -181,35 +181,35 @@ QRectF Rest::drag(EditData* data)
 bool Rest::acceptDrop(const DropData& data) const
       {
       Element* e = data.element;
-      Element::Type type = e->type();
+      ElementType type = e->type();
       if (
-            (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::NBEAM)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM64)
-         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
-         || (type == Element::Type::ARTICULATION && static_cast<Articulation*>(e)->isFermata())
-         || (type == Element::Type::CLEF)
-         || (type == Element::Type::KEYSIG)
-         || (type == Element::Type::TIMESIG)
-         || (type == Element::Type::STAFF_TEXT)
-         || (type == Element::Type::BAR_LINE)
-         || (type == Element::Type::BREATH)
-         || (type == Element::Type::CHORD)
-         || (type == Element::Type::NOTE)
-         || (type == Element::Type::STAFF_STATE)
-         || (type == Element::Type::INSTRUMENT_CHANGE)
-         || (type == Element::Type::DYNAMIC)
-         || (type == Element::Type::HARMONY)
-         || (type == Element::Type::TEMPO_TEXT)
-         || (type == Element::Type::STAFF_TEXT)
-         || (type == Element::Type::REHEARSAL_MARK)
-         || (type == Element::Type::FRET_DIAGRAM)
-         || (type == Element::Type::TREMOLOBAR)
-         || (type == Element::Type::IMAGE)
-         || (type == Element::Type::SYMBOL)
-         || (type == Element::Type::REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)
+            (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::NBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM64)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
+         || (type == ElementType::ARTICULATION && static_cast<Articulation*>(e)->isFermata())
+         || (type == ElementType::CLEF)
+         || (type == ElementType::KEYSIG)
+         || (type == ElementType::TIMESIG)
+         || (type == ElementType::STAFF_TEXT)
+         || (type == ElementType::BAR_LINE)
+         || (type == ElementType::BREATH)
+         || (type == ElementType::CHORD)
+         || (type == ElementType::NOTE)
+         || (type == ElementType::STAFF_STATE)
+         || (type == ElementType::INSTRUMENT_CHANGE)
+         || (type == ElementType::DYNAMIC)
+         || (type == ElementType::HARMONY)
+         || (type == ElementType::TEMPO_TEXT)
+         || (type == ElementType::STAFF_TEXT)
+         || (type == ElementType::REHEARSAL_MARK)
+         || (type == ElementType::FRET_DIAGRAM)
+         || (type == ElementType::TREMOLOBAR)
+         || (type == ElementType::IMAGE)
+         || (type == ElementType::SYMBOL)
+         || (type == ElementType::REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)
          ) {
             return true;
             }
@@ -224,7 +224,7 @@ Element* Rest::drop(const DropData& data)
       {
       Element* e = data.element;
       switch (e->type()) {
-            case Element::Type::ARTICULATION:
+            case ElementType::ARTICULATION:
                   {
                   Articulation* a = toArticulation(e);
                   if (!a->isFermata() || !score()->addArticulation(this, a)) {
@@ -234,7 +234,7 @@ Element* Rest::drop(const DropData& data)
                   }
                   return e;
 
-            case Element::Type::CHORD:
+            case ElementType::CHORD:
                   {
                   Chord* c              = static_cast<Chord*>(e);
                   Note* n               = c->upNote();
@@ -255,15 +255,15 @@ Element* Rest::drop(const DropData& data)
                   delete e;
                   }
                   break;
-            case Element::Type::REPEAT_MEASURE:
+            case ElementType::REPEAT_MEASURE:
                   delete e;
                   if (durationType().type() == TDuration::DurationType::V_MEASURE) {
                         measure()->cmdInsertRepeatMeasure(staffIdx());
                         }
                   break;
 
-            case Element::Type::SYMBOL:
-            case Element::Type::IMAGE:
+            case ElementType::SYMBOL:
+            case ElementType::IMAGE:
                   e->setParent(this);
                   score()->undoAddElement(e);
                   return e;
@@ -453,7 +453,7 @@ int Rest::computeLineOffset(int lines)
                   Element* e = s->element(baseTrack + v);
                   if (v <= 1) {
                         // try to find match in other voice (1 or 2)
-                        if (e && e->type() == Element::Type::REST) {
+                        if (e && e->type() == ElementType::REST) {
                               Rest* r = static_cast<Rest*>(e);
                               if (r->globalDuration() == globalDuration()) {
                                     matchFound = true;
@@ -766,8 +766,8 @@ void Rest::add(Element* e)
       e->setTrack(track());
 
       switch(e->type()) {
-            case Element::Type::SYMBOL:
-            case Element::Type::IMAGE:
+            case ElementType::SYMBOL:
+            case ElementType::IMAGE:
                   el().push_back(e);
                   break;
             default:
@@ -783,8 +783,8 @@ void Rest::add(Element* e)
 void Rest::remove(Element* e)
       {
       switch(e->type()) {
-            case Element::Type::SYMBOL:
-            case Element::Type::IMAGE:
+            case ElementType::SYMBOL:
+            case ElementType::IMAGE:
                   if (!el().remove(e))
                         qDebug("Rest::remove(): cannot find %s", e->name());
                   break;

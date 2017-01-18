@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2015 Werner Schweer
+//  Copyright (C) 2017 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -15,10 +15,99 @@
 
 namespace Ms {
 
-class Score;
+class ScoreElement;
 class MasterScore;
 class XmlWriter;
-class ScoreElement;
+class Measure;
+class Staff;
+class Part;
+class Score;
+class Sym;
+class MuseScoreView;
+class Segment;
+class TextStyle;
+class Element;
+class BarLine;
+class Articulation;
+class Marker;
+class Clef;
+class KeySig;
+class TimeSig;
+class TempoText;
+class Breath;
+class Box;
+class HBox;
+class VBox;
+class TBox;
+class FBox;
+class ChordRest;
+class Slur;
+class Tie;
+class Glissando;
+class GlissandoSegment;
+class SystemDivider;
+class RehearsalMark;
+class Harmony;
+class Volta;
+class Jump;
+class StaffText;
+class Ottava;
+class Note;
+class Chord;
+class Rest;
+class LayoutBreak;
+class Tremolo;
+class System;
+class Lyrics;
+class LyricsLine;
+class LyricsLineSegment;
+class Stem;
+class SlurSegment;
+class TieSegment;
+class OttavaSegment;
+class Beam;
+class Hook;
+class StemSlash;
+class Spacer;
+class StaffLines;
+class Ambitus;
+class Bracket;
+class InstrumentChange;
+class Text;
+class Hairpin;
+class HairpinSegment;
+class Bend;
+class TremoloBar;
+class RepeatMeasure;
+class Tuplet;
+class NoteDot;
+class Dynamic;
+class InstrumentName;
+class DurationElement;
+class Accidental;
+class TextLine;
+class TextLineSegment;
+class Pedal;
+class PedalSegment;
+class LedgerLine;
+class Icon;
+class VoltaSegment;
+class NoteLine;
+class Trill;
+class TrillSegment;
+class Symbol;
+class FSymbol;
+class Fingering;
+class NoteHead;
+class FiguredBass;
+class StaffState;
+class Arpeggio;
+class Image;
+class ChordLine;
+class SlurTieSegment;
+class FretDiagram;
+class StaffTypeChange;
+class MeasureBase;
 
 enum class P_ID : int;
 enum class PropertyFlags : char;
@@ -39,25 +128,149 @@ class LinkedElements : public QList<ScoreElement*> {
       int lid() const   { return _lid;    }
       };
 
+//-------------------------------------------------------------------
+//    The value of this enum determines the "stacking order"
+//    of elements on the canvas.
+//   Note: keep in sync with array elementNames[] in scoreElement.cpp
+//-------------------------------------------------------------------
+
+enum class ElementType : char {
+      INVALID = 0,
+      PART,
+      STAFF,
+      SCORE,
+      SYMBOL,
+      TEXT,
+      INSTRUMENT_NAME,
+      SLUR_SEGMENT,
+      TIE_SEGMENT,
+      STAFF_LINES,
+      BAR_LINE,
+      SYSTEM_DIVIDER,
+      STEM_SLASH,
+      LINE,
+      ARPEGGIO,
+      ACCIDENTAL,
+      LEDGER_LINE,
+      STEM,                   // list STEM before NOTE: notes in TAB might 'break' stems
+      NOTE,                   // and this requires stems to be drawn before notes
+      CLEF,                   // elements from CLEF to TIMESIG need to be in the order
+      KEYSIG,                 // in which they appear in a measure
+      AMBITUS,
+      TIMESIG,
+      REST,
+      BREATH,
+      REPEAT_MEASURE,
+      TIE,
+      ARTICULATION,
+      CHORDLINE,
+      DYNAMIC,
+      BEAM,
+      HOOK,
+      LYRICS,
+      FIGURED_BASS,
+      MARKER,
+      JUMP,
+      FINGERING,
+      TUPLET,
+      TEMPO_TEXT,
+      STAFF_TEXT,
+      REHEARSAL_MARK,
+      INSTRUMENT_CHANGE,
+      STAFFTYPE_CHANGE,
+      HARMONY,
+      FRET_DIAGRAM,
+      BEND,
+      TREMOLOBAR,
+      VOLTA,
+      HAIRPIN_SEGMENT,
+      OTTAVA_SEGMENT,
+      TRILL_SEGMENT,
+      TEXTLINE_SEGMENT,
+      VOLTA_SEGMENT,
+      PEDAL_SEGMENT,
+      LYRICSLINE_SEGMENT,
+      GLISSANDO_SEGMENT,
+      LAYOUT_BREAK,
+      SPACER,
+      STAFF_STATE,
+      NOTEHEAD,
+      NOTEDOT,
+      TREMOLO,
+      IMAGE,
+      MEASURE,
+      SELECTION,
+      LASSO,
+      SHADOW_NOTE,
+      TAB_DURATION_SYMBOL,
+      FSYMBOL,
+      PAGE,
+      HAIRPIN,
+      OTTAVA,
+      PEDAL,
+      TRILL,
+      TEXTLINE,
+      TEXTLINE_BASE,
+      NOTELINE,
+      LYRICSLINE,
+      GLISSANDO,
+      BRACKET,
+      SEGMENT,
+      SYSTEM,
+      COMPOUND,
+      CHORD,
+      SLUR,
+      ELEMENT,
+      ELEMENT_LIST,
+      STAFF_LIST,
+      MEASURE_LIST,
+      HBOX,
+      VBOX,
+      TBOX,
+      FBOX,
+      ICON,
+      OSSIA,
+      BAGPIPE_EMBELLISHMENT,
+
+      MAXTYPE
+      };
+
 //---------------------------------------------------------
-//   ScoreElement
+//   ElementName
 //---------------------------------------------------------
 
-class ScoreElement {
+struct ElementName {
+      ElementType type;
+      const char* name;
+      const char* userName;
+      };
+
+//---------------------------------------------------------
+//   ScoreElement
+//    @P type       enum (Element.ACCIDENTAL, .ACCIDENTAL, .AMBITUS, .ARPEGGIO, .BAGPIPE_EMBELLISHMENT, .BAR_LINE, .BEAM, .BEND, .BRACKET, .BREATH, .CHORD, .CHORDLINE, .CLEF, .COMPOUND, .DYNAMIC, .ELEMENT, .ELEMENT_LIST, .FBOX, .FIGURED_BASS, .FINGERING, .FRET_DIAGRAM, .FSYMBOL, .GLISSANDO, .GLISSANDO_SEGMENT, .HAIRPIN, .HAIRPIN_SEGMENT, .HARMONY, .HBOX, .HOOK, .ICON, .IMAGE, .INSTRUMENT_CHANGE, .INSTRUMENT_NAME, .JUMP, .KEYSIG, .LASSO, .LAYOUT_BREAK, .LEDGER_LINE, .LINE, .LYRICS, .LYRICSLINE, .LYRICSLINE_SEGMENT, .MARKER, .MEASURE, .MEASURE_LIST, .NOTE, .NOTEDOT, .NOTEHEAD, .NOTELINE, .OSSIA, .OTTAVA, .OTTAVA_SEGMENT, .PAGE, .PEDAL, .PEDAL_SEGMENT, .REHEARSAL_MARK, .REPEAT_MEASURE, .REST, .SEGMENT, .SELECTION, .SHADOW_NOTE, .SLUR, .SLUR_SEGMENT, .SPACER, .STAFF_LINES, .STAFF_LIST, .STAFF_STATE, .STAFF_TEXT, .STEM, .STEM_SLASH, .SYMBOL, .SYSTEM, .TAB_DURATION_SYMBOL, .TBOX, .TEMPO_TEXT, .TEXT, .TEXTLINE, .TEXTLINE_SEGMENT, .TIE, .TIMESIG, .TREMOLO, .TREMOLOBAR, .TRILL, .TRILL_SEGMENT, .TUPLET, .VBOX, .VOLTA, .VOLTA_SEGMENT) (read only)
+//---------------------------------------------------------
+
+class ScoreElement : public QObject {
+      Q_OBJECT
       Score* _score;
 
    protected:
       LinkedElements* _links { 0 };
 
    public:
-      ScoreElement(Score* s) : _score(s)   {}
+      ScoreElement(Score* s) : QObject(0), _score(s)   {}
       ScoreElement(const ScoreElement& se);
       virtual ~ScoreElement();
 
       Score* score() const                 { return _score;      }
       MasterScore* masterScore() const;
       virtual void setScore(Score* s)      { _score = s;         }
-      virtual const char* name() const = 0;
+      virtual const char* name() const;
+      virtual QString userName() const;
+      virtual ElementType type() const = 0;
+
+      static ElementType name2type(const QStringRef&);
+      static const char* name(ElementType);
 
       virtual QVariant getProperty(P_ID) const = 0;
       virtual bool setProperty(P_ID, const QVariant&) = 0;
@@ -67,7 +280,10 @@ class ScoreElement {
       virtual void setPropertyFlags(P_ID, PropertyFlags) {}
       virtual StyleIdx getPropertyStyle(P_ID) const;
 
-      void undoChangeProperty(P_ID, const QVariant&);
+      void undoChangeProperty(P_ID id, const QVariant&, PropertyFlags ps);
+      void undoChangeProperty(P_ID id, const QVariant&);
+      void undoResetProperty(P_ID id);
+
       void undoPushProperty(P_ID);
       void writeProperty(XmlWriter& xml, P_ID id) const;
 
@@ -79,7 +295,237 @@ class ScoreElement {
       int lid() const                         { return _links ? _links->lid() : 0; }
       const LinkedElements* links() const     { return _links;      }
       void setLinks(LinkedElements* le)       { _links = le;        }
+
+      //---------------------------------------------------
+      // check type
+      //
+      // Example for ChordRest:
+      //
+      //    bool             isChordRest()
+      //---------------------------------------------------
+
+
+#define CONVERT(a,b) \
+      bool is##a() const { return type() == ElementType::b; }
+
+      CONVERT(Note,          NOTE)
+      CONVERT(Rest,          REST)
+      CONVERT(Chord,         CHORD)
+      CONVERT(BarLine,       BAR_LINE)
+      CONVERT(Articulation,  ARTICULATION)
+      CONVERT(Marker,        MARKER)
+      CONVERT(Clef,          CLEF)
+      CONVERT(KeySig,        KEYSIG)
+      CONVERT(TimeSig,       TIMESIG)
+      CONVERT(Measure,       MEASURE)
+      CONVERT(TempoText,     TEMPO_TEXT)
+      CONVERT(Breath,        BREATH)
+      CONVERT(HBox,          HBOX)
+      CONVERT(VBox,          VBOX)
+      CONVERT(TBox,          TBOX)
+      CONVERT(FBox,          FBOX)
+      CONVERT(Tie,           TIE)
+      CONVERT(Slur,          SLUR)
+      CONVERT(Glissando,     GLISSANDO)
+      CONVERT(GlissandoSegment,     GLISSANDO_SEGMENT)
+      CONVERT(SystemDivider, SYSTEM_DIVIDER)
+      CONVERT(RehearsalMark, REHEARSAL_MARK)
+      CONVERT(Harmony,       HARMONY)
+      CONVERT(Volta,         VOLTA)
+      CONVERT(Jump,          JUMP)
+      CONVERT(StaffText,     STAFF_TEXT)
+      CONVERT(Ottava,        OTTAVA)
+      CONVERT(LayoutBreak,   LAYOUT_BREAK)
+      CONVERT(Segment,       SEGMENT)
+      CONVERT(Tremolo,       TREMOLO)
+      CONVERT(System,        SYSTEM)
+      CONVERT(Lyrics,        LYRICS)
+      CONVERT(Stem,          STEM)
+      CONVERT(Beam,          BEAM)
+      CONVERT(Hook,          HOOK)
+      CONVERT(StemSlash,     STEM_SLASH)
+      CONVERT(SlurSegment,   SLUR_SEGMENT)
+      CONVERT(TieSegment,    TIE_SEGMENT)
+      CONVERT(Spacer,        SPACER)
+      CONVERT(StaffLines,    STAFF_LINES)
+      CONVERT(Ambitus,       AMBITUS)
+      CONVERT(Bracket,       BRACKET)
+      CONVERT(InstrumentChange, INSTRUMENT_CHANGE)
+      CONVERT(StaffTypeChange, STAFFTYPE_CHANGE)
+      CONVERT(Hairpin,       HAIRPIN)
+      CONVERT(HairpinSegment,HAIRPIN_SEGMENT)
+      CONVERT(Bend,          BEND)
+      CONVERT(TremoloBar,    TREMOLOBAR)
+      CONVERT(RepeatMeasure, REPEAT_MEASURE)
+      CONVERT(Tuplet,        TUPLET)
+      CONVERT(NoteDot,       NOTEDOT)
+      CONVERT(Dynamic,       DYNAMIC)
+      CONVERT(InstrumentName, INSTRUMENT_NAME)
+      CONVERT(Accidental,    ACCIDENTAL)
+      CONVERT(TextLine,      TEXTLINE)
+      CONVERT(TextLineSegment,      TEXTLINE_SEGMENT)
+      CONVERT(Pedal,         PEDAL)
+      CONVERT(PedalSegment,  PEDAL_SEGMENT)
+      CONVERT(OttavaSegment, OTTAVA_SEGMENT)
+      CONVERT(LedgerLine,    LEDGER_LINE)
+      CONVERT(Icon,          ICON)
+      CONVERT(VoltaSegment,  VOLTA_SEGMENT)
+      CONVERT(NoteLine,      NOTELINE)
+      CONVERT(Trill,         TRILL)
+      CONVERT(TrillSegment,  TRILL_SEGMENT)
+      CONVERT(Symbol,        SYMBOL)
+      CONVERT(FSymbol,       FSYMBOL)
+      CONVERT(Fingering,     FINGERING)
+      CONVERT(NoteHead,      NOTEHEAD)
+      CONVERT(LyricsLine,    LYRICSLINE)
+      CONVERT(LyricsLineSegment, LYRICSLINE_SEGMENT)
+      CONVERT(FiguredBass,   FIGURED_BASS)
+      CONVERT(StaffState,    STAFF_STATE)
+      CONVERT(Arpeggio,      ARPEGGIO)
+      CONVERT(Image,         IMAGE)
+      CONVERT(ChordLine,     CHORDLINE)
+      CONVERT(FretDiagram,   FRET_DIAGRAM)
+#undef CONVERT
+
+      bool isChordRest() const       { return isRest() || isChord() || isRepeatMeasure(); }
+      bool isDurationElement() const { return isChordRest() || isTuplet(); }
+      bool isSlurTieSegment() const  { return isSlurSegment() || isTieSegment(); }
+      bool isSLine() const;
+      bool isSLineSegment() const;
+      bool isMeasureBase() const { return isMeasure() || isVBox() || isHBox() || isTBox() || isFBox(); }
+      bool isText() const;
       };
+
+//---------------------------------------------------
+// safe casting of ScoreElement
+//
+// Example for ChordRest:
+//
+//    ChordRest* toChordRest(Element* e)
+//---------------------------------------------------
+
+static inline ChordRest* toChordRest(ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
+         || e->type() == ElementType::REPEAT_MEASURE);
+      return (ChordRest*)e;
+      }
+static inline const ChordRest* toChordRest(const ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
+         || e->type() == ElementType::REPEAT_MEASURE);
+      return (const ChordRest*)e;
+      }
+static inline DurationElement* toDurationElement(ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
+         || e->type() == ElementType::REPEAT_MEASURE || e->type() == ElementType::TUPLET);
+      return (DurationElement*)e;
+      }
+static inline const DurationElement* toDurationElement(const ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
+         || e->type() == ElementType::REPEAT_MEASURE || e->type() == ElementType::TUPLET);
+      return (const DurationElement*)e;
+      }
+
+static inline SlurTieSegment* toSlurTieSegment(ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
+      return (SlurTieSegment*)e;
+      }
+static inline const SlurTieSegment* toSlurTieSegment(const ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
+      return (const SlurTieSegment*)e;
+      }
+static inline const MeasureBase* toMeasureBase(const ScoreElement* e) {
+     Q_ASSERT(e == 0 || e->isMeasure() || e->isVBox() || e->isHBox() || e->isTBox() || e->isFBox());
+      return (const MeasureBase*)e;
+      }
+static inline MeasureBase* toMeasureBase(ScoreElement* e) {
+     Q_ASSERT(e == 0 || e->isMeasure() || e->isVBox() || e->isHBox() || e->isTBox() || e->isFBox());
+      return (MeasureBase*)e;
+      }
+
+#define CONVERT(a,b) \
+static inline a* to##a(ScoreElement* e)             { Q_ASSERT(e == 0 || e->type() == ElementType::b); return (a*)e; } \
+static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->type() == ElementType::b); return (const a*)e; }
+
+      CONVERT(Note,          NOTE)
+      CONVERT(Rest,          REST)
+      CONVERT(Chord,         CHORD)
+      CONVERT(BarLine,       BAR_LINE)
+      CONVERT(Articulation,  ARTICULATION)
+      CONVERT(Marker,        MARKER)
+      CONVERT(Clef,          CLEF)
+      CONVERT(KeySig,        KEYSIG)
+      CONVERT(TimeSig,       TIMESIG)
+      CONVERT(Measure,       MEASURE)
+      CONVERT(TempoText,     TEMPO_TEXT)
+      CONVERT(Breath,        BREATH)
+      CONVERT(HBox,          HBOX)
+      CONVERT(VBox,          VBOX)
+      CONVERT(TBox,          TBOX)
+      CONVERT(FBox,          FBOX)
+      CONVERT(Tie,           TIE)
+      CONVERT(Slur,          SLUR)
+      CONVERT(Glissando,     GLISSANDO)
+      CONVERT(GlissandoSegment,     GLISSANDO_SEGMENT)
+      CONVERT(SystemDivider, SYSTEM_DIVIDER)
+      CONVERT(RehearsalMark, REHEARSAL_MARK)
+      CONVERT(Harmony,       HARMONY)
+      CONVERT(Volta,         VOLTA)
+      CONVERT(Jump,          JUMP)
+      CONVERT(StaffText,     STAFF_TEXT)
+      CONVERT(Ottava,        OTTAVA)
+      CONVERT(LayoutBreak,   LAYOUT_BREAK)
+      CONVERT(Segment,       SEGMENT)
+      CONVERT(Tremolo,       TREMOLO)
+      CONVERT(System,        SYSTEM)
+      CONVERT(Lyrics,        LYRICS)
+      CONVERT(Stem,          STEM)
+      CONVERT(Beam,          BEAM)
+      CONVERT(Hook,          HOOK)
+      CONVERT(StemSlash,     STEM_SLASH)
+      CONVERT(SlurSegment,   SLUR_SEGMENT)
+      CONVERT(TieSegment,    TIE_SEGMENT)
+      CONVERT(Spacer,        SPACER)
+      CONVERT(StaffLines,    STAFF_LINES)
+      CONVERT(Ambitus,       AMBITUS)
+      CONVERT(Bracket,       BRACKET)
+      CONVERT(InstrumentChange, INSTRUMENT_CHANGE)
+      CONVERT(StaffTypeChange, STAFFTYPE_CHANGE)
+      CONVERT(Text,          TEXT)
+      CONVERT(Hairpin,       HAIRPIN)
+      CONVERT(HairpinSegment,HAIRPIN_SEGMENT)
+      CONVERT(Bend,          BEND)
+      CONVERT(TremoloBar,    TREMOLOBAR)
+      CONVERT(RepeatMeasure, REPEAT_MEASURE)
+      CONVERT(Tuplet,        TUPLET)
+      CONVERT(NoteDot,       NOTEDOT)
+      CONVERT(Dynamic,       DYNAMIC)
+      CONVERT(InstrumentName, INSTRUMENT_NAME)
+      CONVERT(Accidental,    ACCIDENTAL)
+      CONVERT(TextLine,      TEXTLINE)
+      CONVERT(TextLineSegment,      TEXTLINE_SEGMENT)
+      CONVERT(Pedal,         PEDAL)
+      CONVERT(PedalSegment,  PEDAL_SEGMENT)
+      CONVERT(OttavaSegment, OTTAVA_SEGMENT)
+      CONVERT(LedgerLine,    LEDGER_LINE)
+      CONVERT(Icon,          ICON)
+      CONVERT(VoltaSegment,  VOLTA_SEGMENT)
+      CONVERT(NoteLine,      NOTELINE)
+      CONVERT(Trill,         TRILL)
+      CONVERT(TrillSegment,  TRILL_SEGMENT)
+      CONVERT(Symbol,        SYMBOL)
+      CONVERT(FSymbol,       FSYMBOL)
+      CONVERT(Fingering,     FINGERING)
+      CONVERT(NoteHead,      NOTEHEAD)
+      CONVERT(LyricsLine,    LYRICSLINE)
+      CONVERT(LyricsLineSegment, LYRICSLINE_SEGMENT)
+      CONVERT(FiguredBass,   FIGURED_BASS)
+      CONVERT(StaffState,    STAFF_STATE)
+      CONVERT(Arpeggio,      ARPEGGIO)
+      CONVERT(Image,         IMAGE)
+      CONVERT(ChordLine,     CHORDLINE)
+      CONVERT(FretDiagram,   FRET_DIAGRAM)
+#undef CONVERT
+
 }
 
 #endif

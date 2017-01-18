@@ -38,7 +38,7 @@ class StaffTypeChange : public Element {
       StaffTypeChange(const StaffTypeChange&);
       virtual StaffTypeChange* clone() const override { return new StaffTypeChange(*this); }
 
-      virtual Element::Type type() const override { return Element::Type::STAFFTYPE_CHANGE; }
+      virtual ElementType type() const override { return ElementType::STAFFTYPE_CHANGE; }
       virtual bool systemFlag() const override    { return false;  }
 
       virtual void write(XmlWriter&) const override;

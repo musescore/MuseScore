@@ -119,7 +119,7 @@ class Segment : public Element {
       ~Segment();
 
       virtual Segment* clone() const      { return new Segment(*this); }
-      virtual Element::Type type() const  { return Element::Type::SEGMENT; }
+      virtual ElementType type() const    { return ElementType::SEGMENT; }
 
       virtual void setScore(Score*);
 
@@ -176,8 +176,10 @@ class Segment : public Element {
 
       void sortStaves(QList<int>& dst);
       const char* subTypeName() const;
+
       static const char* subTypeName(Type);
-      static Type segmentType(Element::Type type);
+      static Type segmentType(ElementType type);
+
       Type segmentType() const                   { return _segmentType; }
       void setSegmentType(Type t);
 
@@ -202,7 +204,7 @@ class Segment : public Element {
       const std::vector<Element*>& annotations() const { return _annotations;        }
       void clearAnnotations();
       void removeAnnotation(Element* e);
-      bool findAnnotationOrElement(Element::Type type, int minTrack, int maxTrack);
+      bool findAnnotationOrElement(ElementType type, int minTrack, int maxTrack);
 
       QQmlListProperty<Ms::Element> qmlAnnotations()  { return QmlListAccess<Ms::Element>(this, _annotations); }
 

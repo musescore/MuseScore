@@ -791,10 +791,10 @@ Segment* Measure::undoGetSegmentR(Segment::Type type, int t)
 void Measure::add(Element* e)
       {
       e->setParent(this);
-      Element::Type type = e->type();
+      ElementType type = e->type();
 
       switch (type) {
-            case Element::Type::SEGMENT:
+            case ElementType::SEGMENT:
                   {
                   Segment* seg     = toSegment(e);
                   int t            = seg->rtick();
@@ -820,12 +820,12 @@ void Measure::add(Element* e)
                   }
                   break;
 
-            case Element::Type::TEXT:
+            case ElementType::TEXT:
                   if (e->staffIdx() < int(_mstaves.size()))
                         _mstaves[e->staffIdx()]->setNoText(toText(e));
                   break;
 
-            case Element::Type::SPACER:
+            case ElementType::SPACER:
                   {
                   Spacer* sp = toSpacer(e);
                   switch (sp->spacerType()) {
@@ -839,21 +839,21 @@ void Measure::add(Element* e)
                         }
                   }
                   break;
-            case Element::Type::JUMP:
+            case ElementType::JUMP:
                   setRepeatJump(true);
                   // fall through
 
-            case Element::Type::MARKER:
+            case ElementType::MARKER:
                   el().push_back(e);
                   break;
 
-            case Element::Type::HBOX:
+            case ElementType::HBOX:
                   if (e->staff())
                         e->setMag(e->staff()->mag(tick()));     // ?!
                   el().push_back(e);
                   break;
 
-            case Element::Type::MEASURE:
+            case ElementType::MEASURE:
                   _mmRest = toMeasure(e);
                   break;
 
@@ -874,7 +874,7 @@ void Measure::remove(Element* e)
       Q_ASSERT(e->score() == score());
 
       switch (e->type()) {
-            case Element::Type::SEGMENT:
+            case ElementType::SEGMENT:
                   {
                   Segment* s = toSegment(e);
                   _segments.remove(s);
@@ -888,11 +888,11 @@ void Measure::remove(Element* e)
                   }
                   break;
 
-            case Element::Type::TEXT:
+            case ElementType::TEXT:
                   _mstaves[e->staffIdx()]->setNoText(nullptr);
                   break;
 
-            case Element::Type::SPACER:
+            case ElementType::SPACER:
                   switch (toSpacer(e)->spacerType()) {
                         case SpacerType::DOWN:
                         case SpacerType::FIXED:
@@ -904,21 +904,21 @@ void Measure::remove(Element* e)
                         }
                   break;
 
-            case Element::Type::JUMP:
+            case ElementType::JUMP:
                   setRepeatJump(false);
                   // fall through
 
-            case Element::Type::MARKER:
-            case Element::Type::HBOX:
+            case ElementType::MARKER:
+            case ElementType::HBOX:
                   if (!el().remove(e)) {
                         qDebug("Measure(%p)::remove(%s,%p) not found", this, e->name(), e);
                         }
                   break;
 
-            case Element::Type::CLEF:
-            case Element::Type::CHORD:
-            case Element::Type::REST:
-            case Element::Type::TIMESIG:
+            case ElementType::CLEF:
+            case ElementType::CHORD:
+            case ElementType::REST:
+            case ElementType::TIMESIG:
                   for (Segment* segment = first(); segment; segment = segment->next()) {
                         int staves = score()->nstaves();
                         int tracks = staves * VOICES;
@@ -933,7 +933,7 @@ void Measure::remove(Element* e)
                   qDebug("Measure::remove: %s %p not found", e->name(), e);
                   break;
 
-            case Element::Type::MEASURE:
+            case ElementType::MEASURE:
                   _mmRest = 0;
                   break;
 
@@ -1231,35 +1231,35 @@ bool Measure::acceptDrop(const DropData& data) const
       staffR &= canvasBoundingRect();
 
       switch (e->type()) {
-            case Element::Type::MEASURE_LIST:
-            case Element::Type::JUMP:
-            case Element::Type::MARKER:
-            case Element::Type::LAYOUT_BREAK:
-            case Element::Type::STAFF_LIST:
+            case ElementType::MEASURE_LIST:
+            case ElementType::JUMP:
+            case ElementType::MARKER:
+            case ElementType::LAYOUT_BREAK:
+            case ElementType::STAFF_LIST:
                   viewer->setDropRectangle(canvasBoundingRect());
                   return true;
 
-            case Element::Type::KEYSIG:
-            case Element::Type::TIMESIG:
+            case ElementType::KEYSIG:
+            case ElementType::TIMESIG:
                   if (data.modifiers & Qt::ControlModifier)
                         viewer->setDropRectangle(staffR);
                   else
                         viewer->setDropRectangle(canvasBoundingRect());
                   return true;
 
-            case Element::Type::BRACKET:
-            case Element::Type::REPEAT_MEASURE:
-            case Element::Type::MEASURE:
-            case Element::Type::SPACER:
-            case Element::Type::IMAGE:
-            case Element::Type::BAR_LINE:
-            case Element::Type::SYMBOL:
-            case Element::Type::CLEF:
-            case Element::Type::STAFFTYPE_CHANGE:
+            case ElementType::BRACKET:
+            case ElementType::REPEAT_MEASURE:
+            case ElementType::MEASURE:
+            case ElementType::SPACER:
+            case ElementType::IMAGE:
+            case ElementType::BAR_LINE:
+            case ElementType::SYMBOL:
+            case ElementType::CLEF:
+            case ElementType::STAFFTYPE_CHANGE:
                   viewer->setDropRectangle(staffR);
                   return true;
 
-            case Element::Type::ICON:
+            case ElementType::ICON:
                   switch (toIcon(e)->iconType()) {
                         case IconType::VFRAME:
                         case IconType::HFRAME:
@@ -1301,17 +1301,17 @@ Element* Measure::drop(const DropData& data)
       //bool fromPalette = (e->track() == -1);
 
       switch (e->type()) {
-            case Element::Type::MEASURE_LIST:
+            case ElementType::MEASURE_LIST:
                   delete e;
                   break;
 
-            case Element::Type::STAFF_LIST:
+            case ElementType::STAFF_LIST:
 //TODO                  score()->pasteStaff(e, this, staffIdx);
                   delete e;
                   break;
 
-            case Element::Type::MARKER:
-            case Element::Type::JUMP:
+            case ElementType::MARKER:
+            case ElementType::JUMP:
                   e->setParent(this);
                   e->setTrack(0);
                   {
@@ -1327,15 +1327,15 @@ Element* Measure::drop(const DropData& data)
                   score()->undoAddElement(e);
                   return e;
 
-            case Element::Type::DYNAMIC:
-            case Element::Type::FRET_DIAGRAM:
+            case ElementType::DYNAMIC:
+            case ElementType::FRET_DIAGRAM:
                   e->setParent(seg);
                   e->setTrack(staffIdx * VOICES);
                   score()->undoAddElement(e);
                   return e;
 
-            case Element::Type::IMAGE:
-            case Element::Type::SYMBOL:
+            case ElementType::IMAGE:
+            case ElementType::SYMBOL:
                   e->setParent(seg);
                   e->setTrack(staffIdx * VOICES);
                   e->layout();
@@ -1346,7 +1346,7 @@ Element* Measure::drop(const DropData& data)
                   score()->undoAddElement(e);
                   return e;
 
-            case Element::Type::BRACKET:
+            case ElementType::BRACKET:
                   {
                   Bracket* b = toBracket(e);
                   int level = 0;
@@ -1364,12 +1364,12 @@ Element* Measure::drop(const DropData& data)
                   }
                   return 0;
 
-            case Element::Type::CLEF:
+            case ElementType::CLEF:
                   score()->undoChangeClef(staff, first(), toClef(e)->clefType());
                   delete e;
                   break;
 
-            case Element::Type::KEYSIG:
+            case ElementType::KEYSIG:
                   {
                   KeySigEvent k = toKeySig(e)->keySigEvent();
                   delete e;
@@ -1387,12 +1387,12 @@ Element* Measure::drop(const DropData& data)
                   break;
                   }
 
-            case Element::Type::TIMESIG:
+            case ElementType::TIMESIG:
                   score()->cmdAddTimeSig(this, staffIdx, toTimeSig(e),
                      data.modifiers & Qt::ControlModifier);
                   return 0;
 
-            case Element::Type::LAYOUT_BREAK: {
+            case ElementType::LAYOUT_BREAK: {
                   LayoutBreak* b = toLayoutBreak(e);
                   Measure* measure = isMMRest() ? mmRestLast() : this;
                   switch (b->layoutBreakType()) {
@@ -1440,7 +1440,7 @@ Element* Measure::drop(const DropData& data)
                   return b;
                   }
 
-            case Element::Type::SPACER:
+            case ElementType::SPACER:
                   {
                   Spacer* spacer = toSpacer(e);
                   spacer->setTrack(staffIdx * VOICES);
@@ -1475,7 +1475,7 @@ Element* Measure::drop(const DropData& data)
                   return spacer;
                   }
 
-            case Element::Type::BAR_LINE:
+            case ElementType::BAR_LINE:
                   {
                   BarLine* bl = toBarLine(e);
 
@@ -1496,34 +1496,34 @@ Element* Measure::drop(const DropData& data)
                   break;
                   }
 
-            case Element::Type::REPEAT_MEASURE:
+            case ElementType::REPEAT_MEASURE:
                   {
                   delete e;
                   return cmdInsertRepeatMeasure(staffIdx);
                   }
-            case Element::Type::ICON:
+            case ElementType::ICON:
                   switch(toIcon(e)->iconType()) {
                         case IconType::VFRAME:
-                              score()->insertMeasure(Element::Type::VBOX, this);
+                              score()->insertMeasure(ElementType::VBOX, this);
                               break;
                         case IconType::HFRAME:
-                              score()->insertMeasure(Element::Type::HBOX, this);
+                              score()->insertMeasure(ElementType::HBOX, this);
                               break;
                         case IconType::TFRAME:
-                              score()->insertMeasure(Element::Type::TBOX, this);
+                              score()->insertMeasure(ElementType::TBOX, this);
                               break;
                         case IconType::FFRAME:
-                              score()->insertMeasure(Element::Type::FBOX, this);
+                              score()->insertMeasure(ElementType::FBOX, this);
                               break;
                         case IconType::MEASURE:
-                              score()->insertMeasure(Element::Type::MEASURE, this);
+                              score()->insertMeasure(ElementType::MEASURE, this);
                               break;
                         default:
                               break;
                         }
                   break;
 
-            case Element::Type::STAFFTYPE_CHANGE:
+            case ElementType::STAFFTYPE_CHANGE:
                   {
                   StaffTypeChange* stc = toStaffTypeChange(e);
                   e->setParent(this);
@@ -3078,9 +3078,9 @@ void Measure::stretchMeasure(qreal targetWidth)
             for (Element* e : s.elist()) {
                   if (!e)
                         continue;
-                  Element::Type t = e->type();
+                  ElementType t = e->type();
                   int staffIdx    = e->staffIdx();
-                  if (t == Element::Type::REPEAT_MEASURE || (t == Element::Type::REST && (isMMRest() || toRest(e)->isFullMeasureRest()))) {
+                  if (t == ElementType::REPEAT_MEASURE || (t == ElementType::REST && (isMMRest() || toRest(e)->isFullMeasureRest()))) {
                         //
                         // element has to be centered in free space
                         //    x1 - left measure position of free space
@@ -3120,15 +3120,15 @@ void Measure::stretchMeasure(qreal targetWidth)
                               s.createShape(staffIdx);  // DEBUG
                               }
                         }
-                  else if (t == Type::REST)
+                  else if (t == ElementType::REST)
                         e->rxpos() = 0;
-                  else if (t == Type::CHORD) {
+                  else if (t == ElementType::CHORD) {
                         Chord* c = toChord(e);
                         c->layout2();
                         if (c->tremolo())
                               c->tremolo()->layout();
                         }
-                  else if (t == Type::BAR_LINE) {
+                  else if (t == ElementType::BAR_LINE) {
                         e->setPos(QPointF());
                         if (s.isEndBarLineType()) {
                               e->rxpos() = s.width() - e->width();  // right align

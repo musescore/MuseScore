@@ -50,7 +50,7 @@ class Page : public Element {
       Page(Score*);
       ~Page();
       virtual Page* clone() const           { return new Page(*this); }
-      virtual Element::Type type() const    { return Element::Type::PAGE; }
+      virtual ElementType type() const    { return ElementType::PAGE; }
       const QList<System*>& systems() const { return _systems;   }
       QList<System*>& systems()             { return _systems;   }
       System* system(int idx)               { return _systems[idx];   }

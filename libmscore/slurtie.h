@@ -113,7 +113,7 @@ class SlurTie : public Spanner {
       SlurTie(const SlurTie&);
       ~SlurTie();
 
-      virtual Element::Type type() const = 0;
+      virtual ElementType type() const = 0;
       bool up() const                             { return _up; }
 
       virtual void reset() override;

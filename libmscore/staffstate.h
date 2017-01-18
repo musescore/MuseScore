@@ -48,7 +48,7 @@ class StaffState : public Element {
       ~StaffState();
 
       virtual StaffState* clone() const  { return new StaffState(*this); }
-      virtual Element::Type type() const { return Element::Type::STAFF_STATE; }
+      virtual ElementType type() const { return ElementType::STAFF_STATE; }
 
       void setStaffStateType(const QString&);
       void setStaffStateType(StaffStateType st) { _staffStateType = st; }

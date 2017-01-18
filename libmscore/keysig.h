@@ -42,7 +42,7 @@ class KeySig : public Element {
       KeySig(const KeySig&);
       virtual KeySig* clone() const override       { return new KeySig(*this); }
       virtual void draw(QPainter*) const override;
-      virtual Element::Type type() const override { return Element::Type::KEYSIG; }
+      virtual ElementType type() const override { return ElementType::KEYSIG; }
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
       virtual void layout() override;

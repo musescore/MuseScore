@@ -393,7 +393,7 @@ void Bracket::endEditDrag(const EditData&)
 
 bool Bracket::acceptDrop(const DropData& data) const
       {
-      return data.element->type() == Element::Type::BRACKET;
+      return data.element->type() == ElementType::BRACKET;
       }
 
 //---------------------------------------------------------

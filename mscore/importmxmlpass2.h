@@ -67,10 +67,10 @@ struct MusicXmlTupletDesc {
 
 struct MusicXmlSpannerDesc {
       SLine* sp;
-      Element::Type tp;
+      ElementType tp;
       int nr;
-      MusicXmlSpannerDesc(SLine* _sp, Element::Type _tp, int _nr) : sp(_sp), tp(_tp), nr(_nr) {}
-      MusicXmlSpannerDesc(Element::Type _tp, int _nr) : sp(0), tp(_tp), nr(_nr) {}
+      MusicXmlSpannerDesc(SLine* _sp, ElementType _tp, int _nr) : sp(_sp), tp(_tp), nr(_nr) {}
+      MusicXmlSpannerDesc(ElementType _tp, int _nr) : sp(0), tp(_tp), nr(_nr) {}
       };
 
 //---------------------------------------------------------

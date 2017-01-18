@@ -326,7 +326,7 @@ QPointF Pedal::linePos(Grip grip, System** sys) const
             ChordRest* c = static_cast<ChordRest*>(startElement());
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-            if (c->type() == Element::Type::REST && c->durationType() == TDuration::DurationType::V_MEASURE)
+            if (c->type() == ElementType::REST && c->durationType() == TDuration::DurationType::V_MEASURE)
                   x -= c->x();
             if (beginHook() && beginHookType() == HookType::HOOK_45)
                   x += nhw * .5;
@@ -371,7 +371,7 @@ QPointF Pedal::linePos(Grip grip, System** sys) const
             else if (c) {
                   s = c->segment()->system();
                   x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-                  if (c->type() == Element::Type::REST && c->durationType() == TDuration::DurationType::V_MEASURE)
+                  if (c->type() == ElementType::REST && c->durationType() == TDuration::DurationType::V_MEASURE)
                         x -= c->x();
                   }
             if (!s) {

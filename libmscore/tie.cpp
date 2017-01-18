@@ -862,7 +862,7 @@ void Tie::setStartNote(Note* note)
 
 Note* Tie::startNote() const
       {
-      Q_ASSERT(!startElement() || startElement()->type() == Element::Type::NOTE);
+      Q_ASSERT(!startElement() || startElement()->type() == ElementType::NOTE);
       return static_cast<Note*>(startElement());
       }
 
@@ -872,7 +872,7 @@ Note* Tie::startNote() const
 
 Note* Tie::endNote() const
       {
-      Q_ASSERT(!endElement() || endElement()->type() == Element::Type::NOTE);
+      Q_ASSERT(!endElement() || endElement()->type() == ElementType::NOTE);
       return static_cast<Note*>(endElement());
       }
 

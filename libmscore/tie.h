@@ -38,7 +38,7 @@ class TieSegment : public SlurTieSegment {
       TieSegment(Score* s) : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }
       TieSegment(const TieSegment& s) : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }
       virtual TieSegment* clone() const override   { return new TieSegment(*this); }
-      virtual Element::Type type() const override  { return Element::Type::TIE_SEGMENT; }
+      virtual ElementType type() const override  { return ElementType::TIE_SEGMENT; }
       virtual int subtype() const override         { return static_cast<int>(spanner()->type()); }
       virtual QString subtypeName() const override { return name(spanner()->type()); }
       virtual void draw(QPainter*) const override;
@@ -74,7 +74,7 @@ class Tie : public SlurTie {
    public:
       Tie(Score* = 0);
       virtual Tie* clone() const override         { return new Tie(*this);  }
-      virtual Element::Type type() const override { return Element::Type::TIE; }
+      virtual ElementType type() const override { return ElementType::TIE; }
 
       void setStartNote(Note* note);
       void setEndNote(Note* note)                 { setEndElement((Element*)note); }

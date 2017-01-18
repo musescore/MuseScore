@@ -34,7 +34,7 @@ class InstrumentChange : public Text  {
       ~InstrumentChange();
 
       virtual InstrumentChange* clone() const override { return new InstrumentChange(*this); }
-      virtual Element::Type type() const override      { return Element::Type::INSTRUMENT_CHANGE; }
+      virtual ElementType type() const override      { return ElementType::INSTRUMENT_CHANGE; }
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
 

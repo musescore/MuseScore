@@ -161,7 +161,7 @@ void Box::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       QRectF r(abbox());
       if (isHBox())
             grip[0].translate(QPointF(r.right(), r.top() + r.height() * .5));
-      else if (type() == Element::Type::VBOX)
+      else if (type() == ElementType::VBOX)
             grip[0].translate(QPointF(r.x() + r.width() * .5, r.bottom()));
       }
 
@@ -330,7 +330,7 @@ bool Box::readProperties(XmlReader& e)
 
 void Box::add(Element* e)
       {
-      if (e->type() == Element::Type::TEXT)
+      if (e->type() == ElementType::TEXT)
             static_cast<Text*>(e)->setLayoutToParentWidth(true);
       MeasureBase::add(e);
       }
@@ -532,7 +532,7 @@ HBox::HBox(Score* score)
 
 void HBox::layout()
       {
-      if (parent() && parent()->type() == Element::Type::VBOX) {
+      if (parent() && parent()->type() == ElementType::VBOX) {
             VBox* vb = static_cast<VBox*>(parent());
             qreal x = vb->leftMargin() * DPMM;
             qreal y = vb->topMargin() * DPMM;
@@ -564,17 +564,17 @@ void HBox::layout2()
 
 bool Box::acceptDrop(const DropData& data) const
       {
-      Element::Type t = data.element->type();
+      ElementType t = data.element->type();
       if (data.element->flag(ElementFlag::ON_STAFF))
             return false;
       switch (t) {
-            case Type::LAYOUT_BREAK:
-            case Type::TEXT:
-            case Type::STAFF_TEXT:
-            case Type::IMAGE:
-            case Type::SYMBOL:
+            case ElementType::LAYOUT_BREAK:
+            case ElementType::TEXT:
+            case ElementType::STAFF_TEXT:
+            case ElementType::IMAGE:
+            case ElementType::SYMBOL:
                   return true;
-            case Type::ICON:
+            case ElementType::ICON:
                   switch (toIcon(data.element)->iconType()) {
                         case IconType::VFRAME:
                         case IconType::TFRAME:
@@ -585,8 +585,8 @@ bool Box::acceptDrop(const DropData& data) const
                               break;
                         }
                   break;
-            case Type::BAR_LINE:
-                  return type() == Type::HBOX;
+            case ElementType::BAR_LINE:
+                  return type() == ElementType::HBOX;
             default:
                   break;
             }
@@ -603,7 +603,7 @@ Element* Box::drop(const DropData& data)
       if (e->flag(ElementFlag::ON_STAFF))
             return 0;
       switch (e->type()) {
-            case Type::LAYOUT_BREAK:
+            case ElementType::LAYOUT_BREAK:
                   {
                   LayoutBreak* lb = static_cast<LayoutBreak*>(e);
                   if (pageBreak() || lineBreak()) {
@@ -619,7 +619,7 @@ Element* Box::drop(const DropData& data)
                               break;
                               }
                         for (Element* elem : el()) {
-                              if (elem->type() == Element::Type::LAYOUT_BREAK) {
+                              if (elem->type() == ElementType::LAYOUT_BREAK) {
                                     score()->undoChangeElement(elem, e);
                                     break;
                                     }
@@ -632,7 +632,7 @@ Element* Box::drop(const DropData& data)
                   return lb;
                   }
 
-            case Type::STAFF_TEXT:
+            case ElementType::STAFF_TEXT:
                   {
                   Text* text = new Text(SubStyle::FRAME, score());
                   text->setParent(this);
@@ -642,33 +642,33 @@ Element* Box::drop(const DropData& data)
                   return text;
                   }
 
-            case Type::ICON:
+            case ElementType::ICON:
                   switch (toIcon(e)->iconType()) {
                         case IconType::VFRAME:
-                              score()->insertMeasure(Element::Type::VBOX, this);
+                              score()->insertMeasure(ElementType::VBOX, this);
                               break;
                         case IconType::TFRAME:
-                              score()->insertMeasure(Element::Type::TBOX, this);
+                              score()->insertMeasure(ElementType::TBOX, this);
                               break;
                         case IconType::FFRAME:
-                              score()->insertMeasure(Element::Type::FBOX, this);
+                              score()->insertMeasure(ElementType::FBOX, this);
                               break;
                         case IconType::MEASURE:
-                              score()->insertMeasure(Element::Type::MEASURE, this);
+                              score()->insertMeasure(ElementType::MEASURE, this);
                               break;
                         default:
                               break;
                         }
                   break;
 
-            case Type::TEXT:
-            case Type::IMAGE:
-            case Type::SYMBOL:
+            case ElementType::TEXT:
+            case ElementType::IMAGE:
+            case ElementType::SYMBOL:
                   e->setParent(this);
                   score()->undoAddElement(e);
                   return e;
 
-            case Type::BAR_LINE: {
+            case ElementType::BAR_LINE: {
                   MeasureBase* mb = next();
                   if (!mb || !mb->isMeasure()) {
                         delete e;
@@ -693,7 +693,7 @@ QRectF HBox::drag(EditData* data)
       QRectF r(canvasBoundingRect());
       qreal diff = data->delta.x();
       qreal x1   = userOff().x() + diff;
-      if (parent()->type() == Element::Type::VBOX) {
+      if (parent()->type() == ElementType::VBOX) {
             VBox* vb = static_cast<VBox*>(parent());
             qreal x2 = parent()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
             if (x1 < 0.0)
@@ -835,7 +835,7 @@ void FBox::layout()
 void FBox::add(Element* e)
       {
       e->setParent(this);
-      if (e->type() == Element::Type::FRET_DIAGRAM) {
+      if (e->type() == ElementType::FRET_DIAGRAM) {
 //            FretDiagram* fd = static_cast<FretDiagram*>(e);
 //            fd->setFlag(ElementFlag::MOVABLE, false);
             }

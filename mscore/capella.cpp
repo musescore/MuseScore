@@ -230,7 +230,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                           default:
                                                 break;
                                           }
-                                    if (cr->type() == Element::Type::CHORD)
+                                    if (cr->type() == ElementType::CHORD)
                                           switch (code) {
 #if 0 // TODO-ws
                                                 case 't':   //  trill
@@ -488,7 +488,7 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
                   continue;
             ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
             if (cr) {
-                  if ((graceNumber > 0) && (cr->type() == Element::Type::CHORD)) { // the spanner is ending on a grace note
+                  if ((graceNumber > 0) && (cr->type() == ElementType::CHORD)) { // the spanner is ending on a grace note
                         Chord* chord = static_cast<Chord*>(cr);
                         foreach(Chord* cc, chord->graceNotes()) {
                               --graceNumber;
@@ -968,7 +968,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               //    to->relPos.x(), to->relPos.y(), to->width, to->yxRatio, qPrintable(ss));
                               s->setXmlText(ss);
                               MeasureBase* measure = score->measures()->first();
-                              if (measure->type() != Element::Type::VBOX) {
+                              if (measure->type() != ElementType::VBOX) {
                                     MeasureBase* mb = new VBox(score);
                                     mb->setTick(0);
                                     score->addMeasure(mb, measure);
@@ -1258,7 +1258,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       if (cap->topDist) {
             VBox* mb = 0;
             MeasureBaseList* mbl = score->measures();
-            if (mbl->size() && mbl->first()->type() == Element::Type::VBOX)
+            if (mbl->size() && mbl->first()->type() == ElementType::VBOX)
                   mb = static_cast<VBox*>(mbl->first());
             else {
                   VBox* vb = new VBox(score);

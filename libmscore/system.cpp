@@ -624,16 +624,16 @@ void System::add(Element* el)
 
       el->setParent(this);
       switch(el->type()) {
-            case Element::Type::INSTRUMENT_NAME:
+            case ElementType::INSTRUMENT_NAME:
 // qDebug("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
                   _staves[el->staffIdx()]->instrumentNames.append(static_cast<InstrumentName*>(el));
                   break;
 
-            case Element::Type::BEAM:
+            case ElementType::BEAM:
                   score()->addElement(el);
                   break;
 
-            case Element::Type::BRACKET:
+            case ElementType::BRACKET:
                   {
                   Bracket* b   = static_cast<Bracket*>(el);
                   int staffIdx = b->staffIdx();
@@ -653,23 +653,23 @@ void System::add(Element* el)
                   }
                   break;
 
-            case Element::Type::MEASURE:
-            case Element::Type::HBOX:
-            case Element::Type::VBOX:
-            case Element::Type::TBOX:
-            case Element::Type::FBOX:
+            case ElementType::MEASURE:
+            case ElementType::HBOX:
+            case ElementType::VBOX:
+            case ElementType::TBOX:
+            case ElementType::FBOX:
                   score()->addElement(static_cast<MeasureBase*>(el));
                   break;
-            case Element::Type::TEXTLINE_SEGMENT:
-            case Element::Type::HAIRPIN_SEGMENT:
-            case Element::Type::OTTAVA_SEGMENT:
-            case Element::Type::TRILL_SEGMENT:
-            case Element::Type::VOLTA_SEGMENT:
-            case Element::Type::SLUR_SEGMENT:
-            case Element::Type::TIE_SEGMENT:
-            case Element::Type::PEDAL_SEGMENT:
-            case Element::Type::LYRICSLINE_SEGMENT:
-            case Element::Type::GLISSANDO_SEGMENT:
+            case ElementType::TEXTLINE_SEGMENT:
+            case ElementType::HAIRPIN_SEGMENT:
+            case ElementType::OTTAVA_SEGMENT:
+            case ElementType::TRILL_SEGMENT:
+            case ElementType::VOLTA_SEGMENT:
+            case ElementType::SLUR_SEGMENT:
+            case ElementType::TIE_SEGMENT:
+            case ElementType::PEDAL_SEGMENT:
+            case ElementType::LYRICSLINE_SEGMENT:
+            case ElementType::GLISSANDO_SEGMENT:
                   {
                   SpannerSegment* ss = static_cast<SpannerSegment*>(el);
 #ifndef NDEBUG
@@ -681,7 +681,7 @@ void System::add(Element* el)
                   }
                   break;
 
-            case Element::Type::SYSTEM_DIVIDER:
+            case ElementType::SYSTEM_DIVIDER:
                   {
                   SystemDivider* sd = static_cast<SystemDivider*>(el);
                   if (sd->dividerType() == SystemDivider::Type::LEFT)
@@ -704,42 +704,42 @@ void System::add(Element* el)
 void System::remove(Element* el)
       {
       switch (el->type()) {
-            case Element::Type::INSTRUMENT_NAME:
+            case ElementType::INSTRUMENT_NAME:
                   _staves[el->staffIdx()]->instrumentNames.removeOne(static_cast<InstrumentName*>(el));
                   break;
-            case Element::Type::BEAM:
+            case ElementType::BEAM:
                   score()->removeElement(el);
                   break;
-            case Element::Type::BRACKET:
+            case ElementType::BRACKET:
                   {
                   Bracket* b = static_cast<Bracket*>(el);
                   if (!_brackets.removeOne(b))
                         qDebug("System::remove: bracket not found");
                   }
                   break;
-            case Element::Type::MEASURE:
-            case Element::Type::HBOX:
-            case Element::Type::VBOX:
-            case Element::Type::TBOX:
-            case Element::Type::FBOX:
+            case ElementType::MEASURE:
+            case ElementType::HBOX:
+            case ElementType::VBOX:
+            case ElementType::TBOX:
+            case ElementType::FBOX:
                   score()->removeElement(el);
                   break;
-            case Element::Type::TEXTLINE_SEGMENT:
-            case Element::Type::HAIRPIN_SEGMENT:
-            case Element::Type::OTTAVA_SEGMENT:
-            case Element::Type::TRILL_SEGMENT:
-            case Element::Type::VOLTA_SEGMENT:
-            case Element::Type::SLUR_SEGMENT:
-            case Element::Type::TIE_SEGMENT:
-            case Element::Type::PEDAL_SEGMENT:
-            case Element::Type::LYRICSLINE_SEGMENT:
-            case Element::Type::GLISSANDO_SEGMENT:
+            case ElementType::TEXTLINE_SEGMENT:
+            case ElementType::HAIRPIN_SEGMENT:
+            case ElementType::OTTAVA_SEGMENT:
+            case ElementType::TRILL_SEGMENT:
+            case ElementType::VOLTA_SEGMENT:
+            case ElementType::SLUR_SEGMENT:
+            case ElementType::TIE_SEGMENT:
+            case ElementType::PEDAL_SEGMENT:
+            case ElementType::LYRICSLINE_SEGMENT:
+            case ElementType::GLISSANDO_SEGMENT:
                   if (!_spannerSegments.removeOne(static_cast<SpannerSegment*>(el))) {
                         qDebug("System::remove: %p(%s) not found, score %p", el, el->name(), score());
                         Q_ASSERT(score() == el->score());
                         }
                   break;
-            case Element::Type::SYSTEM_DIVIDER:
+            case ElementType::SYSTEM_DIVIDER:
                   if (el == _systemDividerLeft)
                         _systemDividerLeft = 0;
                   else {
@@ -1104,7 +1104,7 @@ qreal System::minTop() const
       {
       qreal dist = 0.0;
       for (MeasureBase* mb : ml) {
-            if (mb->type() != Element::Type::MEASURE)
+            if (mb->type() != ElementType::MEASURE)
                   continue;
             for (Segment* s = static_cast<Measure*>(mb)->first(); s; s = s->next())
                   dist = qMin(dist, s->staffShape(0).top());
@@ -1122,7 +1122,7 @@ qreal System::minBottom() const
       qreal dist = 0.0;
       int staffIdx = score()->nstaves() - 1;
       for (MeasureBase* mb : ml) {
-            if (mb->type() != Element::Type::MEASURE)
+            if (mb->type() != ElementType::MEASURE)
                   continue;
             for (Segment* s = static_cast<Measure*>(mb)->first(); s; s = s->next())
                   dist = qMax(dist, s->staffShape(staffIdx).bottom());

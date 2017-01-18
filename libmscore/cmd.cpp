@@ -252,7 +252,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
       Segment* segment;
       MeasureBase* mb = pos2measure(pos, &staffIdx, 0, &segment, 0);
       // ignore if we do not have a measure
-      if (mb == 0 || mb->type() != Element::Type::MEASURE) {
+      if (mb == 0 || mb->type() != ElementType::MEASURE) {
             qDebug("cmdAddSpanner: cannot put object here");
             delete spanner;
             return;
@@ -668,7 +668,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
       if (tie)
             connectTies();
       if (nr) {
-            if (_is.slur() && nr->type() == Element::Type::NOTE) {
+            if (_is.slur() && nr->type() == ElementType::NOTE) {
                   //
                   // extend slur
                   //
@@ -926,7 +926,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
             if (n > 1) {
                   int crtick = cr1->tick() + cr1->actualTicks();
                   Measure* measure = tick2measure(crtick);
-                  if (cr1->type() == Element::Type::CHORD) {
+                  if (cr1->type() == ElementType::CHORD) {
                         // split Chord
                         Chord* c = toChord(cr1);
                         for (int i = 1; i < n; ++i) {
@@ -982,7 +982,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
             Measure* m = cr->measure()->nextMeasure();
             if (m == 0) {
                   qDebug("EOS reached");
-                  insertMeasure(Element::Type::MEASURE, 0, false);
+                  insertMeasure(ElementType::MEASURE, 0, false);
                   m = cr->measure()->nextMeasure();
                   if (m == 0) {
                         qDebug("===EOS reached");
@@ -1775,11 +1775,11 @@ void Score::cmdResetBeamMode()
                   ChordRest* cr = toChordRest(seg->element(track));
                   if (cr == 0)
                         continue;
-                  if (cr->type() == Element::Type::CHORD) {
+                  if (cr->type() == ElementType::CHORD) {
                         if (cr->beamMode() != Beam::Mode::AUTO)
                               undoChangeProperty(cr, P_ID::BEAM_MODE, int(Beam::Mode::AUTO));
                         }
-                  else if (cr->type() == Element::Type::REST) {
+                  else if (cr->type() == ElementType::REST) {
                         if (cr->beamMode() != Beam::Mode::NONE)
                               undoChangeProperty(cr, P_ID::BEAM_MODE, int(Beam::Mode::NONE));
                         }
@@ -1951,16 +1951,16 @@ Element* Score::move(const QString& cmd)
             if (!el)
                   return 0;
             switch (el->type()) {
-                  case Element::Type::NOTE:           // a note is a valid target
+                  case ElementType::NOTE:           // a note is a valid target
                         trg = el;
                         cr  = toNote(el)->chord();
                         break;
-                  case Element::Type::CHORD:          // a chord or a rest are valid targets
-                  case Element::Type::REST:
+                  case ElementType::CHORD:          // a chord or a rest are valid targets
+                  case ElementType::REST:
                         trg = el;
                         cr  = toChordRest(trg);
                         break;
-                  case Element::Type::SEGMENT: {      // from segment go to top chordrest in segment
+                  case ElementType::SEGMENT: {      // from segment go to top chordrest in segment
                         Segment* seg  = toSegment(el);
                         // if segment is not chord/rest or grace, move to next chord/rest or grace segment
                         if (!seg->isChordRest()) {
@@ -1992,7 +1992,7 @@ Element* Score::move(const QString& cmd)
             // if something found and command is forward, the element found is the destination
             if (trg && cmd == "next-chord") {
                   // if chord, go to topmost note
-                  if (trg->type() == Element::Type::CHORD)
+                  if (trg->type() == ElementType::CHORD)
                         trg = toChord(trg)->upNote();
                   setPlayNote(true);
                   select(trg, SelectType::SINGLE, 0);
@@ -2096,7 +2096,7 @@ Element* Score::move(const QString& cmd)
             }
 
       if (el) {
-            if (el->type() == Element::Type::CHORD)
+            if (el->type() == ElementType::CHORD)
                   el = toChord(el)->upNote();       // originally downNote
             setPlayNote(true);
             if (noteEntryMode()) {
@@ -2183,7 +2183,7 @@ void Score::cmdMirrorNoteHead()
       {
       const QList<Element*>& el = selection().elements();
       foreach(Element* e, el) {
-            if (e->type() == Element::Type::NOTE) {
+            if (e->type() == ElementType::NOTE) {
                   Note* note = toNote(e);
                   if (note->staff() && note->staff()->isTabStaff(note->chord()->tick()))
                         note->score()->undoChangeProperty(e, P_ID::GHOST, !note->ghost());
@@ -2208,7 +2208,7 @@ void Score::cmdHalfDuration()
       Element* el = selection().element();
       if (el == 0)
             return;
-      if (el->type() == Element::Type::NOTE)
+      if (el->type() == ElementType::NOTE)
             el = el->parent();
       if (!el->isChordRest())
             return;
@@ -2217,7 +2217,7 @@ void Score::cmdHalfDuration()
       TDuration d = _is.duration().shift(1);
       if (!d.isValid())
             return;
-      if (cr->type() == Element::Type::CHORD && (toChord(cr)->noteType() != NoteType::NORMAL)) {
+      if (cr->type() == ElementType::CHORD && (toChord(cr)->noteType() != NoteType::NORMAL)) {
             //
             // handle appoggiatura and acciaccatura
             //
@@ -2238,7 +2238,7 @@ void Score::cmdDoubleDuration()
       Element* el = selection().element();
       if (el == 0)
             return;
-      if (el->type() == Element::Type::NOTE)
+      if (el->type() == ElementType::NOTE)
             el = el->parent();
       if (!el->isChordRest())
             return;
@@ -2247,7 +2247,7 @@ void Score::cmdDoubleDuration()
       TDuration d = _is.duration().shift(-1);
       if (!d.isValid())
             return;
-      if (cr->type() == Element::Type::CHORD && (toChord(cr)->noteType() != NoteType::NORMAL)) {
+      if (cr->type() == ElementType::CHORD && (toChord(cr)->noteType() != NoteType::NORMAL)) {
             //
             // handle appoggiatura and acciaccatura
             //
@@ -2266,15 +2266,15 @@ void Score::cmdDoubleDuration()
 void Score::cmdAddBracket()
       {
       for(Element* el : selection().elements()) {
-            if (el->type() == Element::Type::NOTE) {
+            if (el->type() == ElementType::NOTE) {
                   Note* n = toNote(el);
                   n->addBracket();
                   }
-            else if (el->type() == Element::Type::ACCIDENTAL) {
+            else if (el->type() == ElementType::ACCIDENTAL) {
                   Accidental* acc = toAccidental(el);
                   acc->undoSetHasBracket(true);
                   }
-            else if (el->type() == Element::Type::HARMONY) {
+            else if (el->type() == ElementType::HARMONY) {
                   Harmony* h = toHarmony(el);
                   h->setLeftParen(true);
                   h->setRightParen(true);
@@ -2356,7 +2356,7 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
 void Score::cmdAddGrace (NoteType graceType, int duration)
       {
       for (Element* e : selection().elements()) {
-            if (e->type() == Element::Type::NOTE) {
+            if (e->type() == ElementType::NOTE) {
                   Note* n = toNote(e);
                   setGraceNote(n->chord(), n->pitch(), graceType, duration);
                   }
@@ -2406,7 +2406,7 @@ void Score::cmdExplode()
                   int n = 0;
                   for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                         Element* e = s->element(srcTrack);
-                        if (e && e->type() == Element::Type::CHORD) {
+                        if (e && e->type() == ElementType::CHORD) {
                               Chord* c = toChord(e);
                               n = qMax(n, int(c->notes().size()));
                               }
@@ -2434,7 +2434,7 @@ void Score::cmdExplode()
                   int track = (srcStaff + i) * VOICES;
                   for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                         Element* e = s->element(track);
-                        if (e && e->type() == Element::Type::CHORD) {
+                        if (e && e->type() == ElementType::CHORD) {
                               Chord* c = toChord(e);
                               std::vector<Note*> notes = c->notes();
                               int nnotes = notes.size();
@@ -2685,7 +2685,7 @@ void Score::cmdSlashFill()
                               if (!cr)
                                     needGap[voice] = true;
                               // chord == keep looking for an available voice
-                              else if (cr->type() == Element::Type::CHORD)
+                              else if (cr->type() == ElementType::CHORD)
                                     continue;
                               // full measure rest == OK to use voice
                               else if (cr->durationType() == TDuration::DurationType::V_MEASURE)
@@ -2695,7 +2695,7 @@ void Score::cmdSlashFill()
                               bool ok = true;
                               for (Segment* ns = s->next(Segment::Type::ChordRest); ns && ns != endSegment; ns = ns->next(Segment::Type::ChordRest)) {
                                     ChordRest* ncr = toChordRest(ns->element(track + voice));
-                                    if (ncr && ncr->type() == Element::Type::CHORD) {
+                                    if (ncr && ncr->type() == ElementType::CHORD) {
                                           ok = false;
                                           break;
                                           }
@@ -2768,7 +2768,7 @@ void Score::cmdSlashRhythm()
       QList<Chord*> chords;
       // loop through all notes in selection
       foreach (Element* e, selection().elements()) {
-            if (e->voice() >= 2 && e->type() == Element::Type::REST) {
+            if (e->voice() >= 2 && e->type() == ElementType::REST) {
                   Rest* r = toRest(e);
                   if (r->links()) {
                         for (ScoreElement* e : *r->links()) {
@@ -2780,7 +2780,7 @@ void Score::cmdSlashRhythm()
                         r->setAccent(!r->accent());
                   continue;
                   }
-            else if (e->type() == Element::Type::NOTE) {
+            else if (e->type() == ElementType::NOTE) {
                   Note* n = toNote(e);
                   if (n->noteType() != NoteType::NORMAL)
                         continue;
@@ -2820,7 +2820,7 @@ void Score::cmdResequenceRehearsalMarks()
       RehearsalMark* last = 0;
       for (Segment* s = selection().startSegment(); s && s != selection().endSegment(); s = s->next1()) {
             for (Element* e : s->annotations()) {
-                  if (e->type() == Element::Type::REHEARSAL_MARK) {
+                  if (e->type() == ElementType::REHEARSAL_MARK) {
                         RehearsalMark* rm = toRehearsalMark(e);
                         if (last) {
                               QString rmText = nextRehearsalMarkText(last, rm);

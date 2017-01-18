@@ -240,7 +240,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   }
 
             cr->setDuration(l);
-            if (cr->type() == Element::Type::REST && (pause == 0 || l >= measure->len())) {
+            if (cr->type() == ElementType::REST && (pause == 0 || l >= measure->len())) {
                   cr->setDurationType(TDuration::DurationType::V_MEASURE);
                   cr->setDuration(measure->len());
                   }
@@ -276,7 +276,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   cr->add(lyrics);
             }
       int rr = readChar();
-      if (cr && (cr->type() == Element::Type::CHORD)) {
+      if (cr && (cr->type() == ElementType::CHORD)) {
             Chord* chord = static_cast<Chord*>(cr);
             applyBeatEffects(chord, beatEffects);
             if (rr == ARPEGGIO_DOWN)
@@ -289,7 +289,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             int rrr = readChar();
 qDebug("  3beat read 0x%02x", rrr);
            }
-      if (cr && (cr->type() == Element::Type::CHORD) && slide > 0)
+      if (cr && (cr->type() == ElementType::CHORD) && slide > 0)
             createSlide(slide, cr, staffIdx);
       restsForEmptyBeats(segment, measure, cr, l, track, tick);
       return cr ? cr->actualTicks() : measure->ticks();
@@ -902,7 +902,7 @@ bool GuitarPro5::readNote(int string, Note* note)
             while (segment) {
                   Element* e = segment->element(track);
                   if (e) {
-                        if (e->type() == Element::Type::CHORD) {
+                        if (e->type() == ElementType::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
                               foreach(Note* note2, chord2->notes()) {
                                     if (note2->string() == string) {

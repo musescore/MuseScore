@@ -635,6 +635,18 @@ enum class StyleIdx {
       figuredBassFontItalic,
       figuredBassFontUnderline,
 
+      user1FontFace,
+      user1FontSize,
+      user1FontBold,
+      user1FontItalic,
+      user1FontUnderline,
+
+      user2FontFace,
+      user2FontSize,
+      user2FontBold,
+      user2FontItalic,
+      user2FontUnderline,
+
       STYLES
       };
 
@@ -696,6 +708,8 @@ enum class SubStyle {
       FOOTER,
       INSTRUMENT_CHANGE,
       FIGURED_BASS,
+      USER1,
+      USER2,
       SUBSTYLES
       };
 

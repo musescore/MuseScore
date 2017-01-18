@@ -555,7 +555,7 @@ void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx)
             Segment* prevSeg = cr->segment()->prev1(Segment::Type::ChordRest);
             Element* prevElem = prevSeg->element(staffIdx);
             if (prevElem) {
-                  if (prevElem->type() == Element::Type::CHORD) {
+                  if (prevElem->type() == ElementType::CHORD) {
                         Chord* prevChord = static_cast<Chord*>(prevElem);
                         /** TODO we should not just take the top note here
                         * but the /correct/ note need to check whether GP
@@ -1019,7 +1019,7 @@ void GuitarPro::setTempo(int tempo, Measure* measure)
       Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
       bool foundTempo = false;
       for (Element* e : segment->annotations()) {
-            if (e->type() == Element::Type::TEMPO_TEXT) {
+            if (e->type() == ElementType::TEMPO_TEXT) {
                   foundTempo = true;
                   delete tt;
                   break;
@@ -1692,7 +1692,7 @@ void GuitarPro1::readNote(int string, Note* note)
             while (segment) {
                   Element* e = segment->element(track);
                   if (e) {
-                        if (e->type() == Element::Type::CHORD) {
+                        if (e->type() == ElementType::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
                               foreach(Note* note2, chord2->notes()) {
                                     if (note2->string() == string) {
@@ -2097,7 +2097,7 @@ void GuitarPro3::read(QFile* fp)
 
                         cr->setDuration(l);
 
-                        if (cr->type() == Element::Type::REST && l >= measure->len()) {
+                        if (cr->type() == ElementType::REST && l >= measure->len()) {
                               cr->setDurationType(TDuration::DurationType::V_MEASURE);
                               cr->setDuration(measure->len());
                               }
@@ -2126,7 +2126,7 @@ void GuitarPro3::read(QFile* fp)
                                     note->setTpcFromPitch();
                                     }
                               }
-                        if (cr && (cr->type() == Element::Type::CHORD)) {
+                        if (cr && (cr->type() == ElementType::CHORD)) {
                               applyBeatEffects(static_cast<Chord*>(cr), beatEffects);
                               if (slide > 0)
                                     createSlide(slide, cr, staffIdx);
@@ -2320,7 +2320,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             }
       else  {
             m = score->measures()->first();
-            if (m->type() != Element::Type::VBOX) {
+            if (m->type() != ElementType::VBOX) {
                   MeasureBase* mb = new VBox(score);
                   mb->setTick(0);
                   score->addMeasure(mb, m);
@@ -2429,7 +2429,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             // create excerpt title
             //
             MeasureBase* measure = pscore->first();
-            if (!measure || (measure->type() != Element::Type::VBOX)) {
+            if (!measure || (measure->type() != ElementType::VBOX)) {
                   MeasureBase* mb = new VBox(pscore);
                   mb->setTick(0);
                   pscore->addMeasure(mb, measure);

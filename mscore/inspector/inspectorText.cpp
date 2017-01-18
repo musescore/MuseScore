@@ -24,6 +24,7 @@ InspectorText::InspectorText(QWidget* parent)
    : InspectorElementBase(parent)
       {
       t.setupUi(addWidget());
+      f.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
             { P_ID::FONT_FACE,      0, 0, t.fontFace,     t.resetFontFace     },
@@ -39,11 +40,25 @@ InspectorText::InspectorText(QWidget* parent)
             { P_ID::FRAME_WIDTH,    0, 0, t.frameWidth,   t.resetFrameWidth   },
             { P_ID::FRAME_PADDING,  0, 0, t.paddingWidth, t.resetPaddingWidth },
             { P_ID::FRAME_ROUND,    0, 0, t.frameRound,   t.resetFrameRound   },
-            { P_ID::ALIGN,          0, 0, t.align,        t.resetAlign        }
+            { P_ID::ALIGN,          0, 0, t.align,        t.resetAlign        },
+            { P_ID::SUB_STYLE,      0, 0, f.subStyle,     f.resetSubStyle     },
             };
+
       const std::vector<InspectorPanel> ppList = {
-            { t.title, t.panel }
+            { t.title, t.panel },
+            { f.title, f.panel }
             };
+
+      f.subStyle->clear();
+      f.subStyle->addItem("Frame",     int(SubStyle::FRAME));
+      f.subStyle->addItem("Title",     int(SubStyle::TITLE));
+      f.subStyle->addItem("Subtitle",  int(SubStyle::SUBTITLE));
+      f.subStyle->addItem("Lyricist",  int(SubStyle::COMPOSER));
+      f.subStyle->addItem("Poet",      int(SubStyle::POET));
+      f.subStyle->addItem("Header",    int(SubStyle::HEADER));
+      f.subStyle->addItem("Footer",    int(SubStyle::FOOTER));
+      f.subStyle->addItem("User-1",    int(SubStyle::USER1));
+      f.subStyle->addItem("User-2",    int(SubStyle::USER2));
 
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       mapSignals(iiList, ppList);

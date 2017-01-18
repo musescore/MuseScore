@@ -50,7 +50,7 @@ class Ambitus : public Element {
       void initFrom(Ambitus* a);
 
       // getters and setters
-      virtual Element::Type type() const override     { return Element::Type::AMBITUS;    }
+      virtual ElementType type() const override     { return ElementType::AMBITUS;    }
       NoteHead::Group noteHeadGroup() const           { return _noteHeadGroup;}
       NoteHead::Type noteHeadType() const             { return _noteHeadType; }
       MScore::DirectionH direction() const            { return _dir;          }

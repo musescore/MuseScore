@@ -89,7 +89,7 @@ class Lyrics : public Text {
       Lyrics(const Lyrics&);
       ~Lyrics();
       virtual Lyrics* clone() const override          { return new Lyrics(*this); }
-      virtual Element::Type type() const override     { return Element::Type::LYRICS; }
+      virtual ElementType type() const override     { return ElementType::LYRICS; }
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
@@ -155,7 +155,7 @@ class LyricsLine : public SLine {
       LyricsLine(const LyricsLine&);
 
       virtual LyricsLine* clone() const override      { return new LyricsLine(*this); }
-      virtual Element::Type type() const override     { return Element::Type::LYRICSLINE; }
+      virtual ElementType type() const override     { return ElementType::LYRICSLINE; }
       virtual void layout() override;
       virtual LineSegment* createLineSegment() override;
       virtual void removeUnmanaged() override;
@@ -180,7 +180,7 @@ public:
       LyricsLineSegment(Score* s);
 
       virtual LyricsLineSegment* clone() const override     { return new LyricsLineSegment(*this); }
-      virtual Element::Type type() const override           { return Element::Type::LYRICSLINE_SEGMENT; }
+      virtual ElementType type() const override           { return ElementType::LYRICSLINE_SEGMENT; }
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
       LyricsLine* lyricsLine() const                        { return (LyricsLine*)spanner(); }

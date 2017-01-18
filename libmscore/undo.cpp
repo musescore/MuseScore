@@ -1012,19 +1012,19 @@ void Score::undoAddElement(Element* element)
                   strack = ostaff->idx() * VOICES + element->track() % VOICES;
             }
 
-      Element::Type et = element->type();
+      ElementType et = element->type();
 
       //
       // some elements are replicated for all parts regardless of
       // linking:
       //
 
-      if ((et == Element::Type::REHEARSAL_MARK)
-         || ((et == Element::Type::STAFF_TEXT) && toStaffText(element)->systemFlag())
-         || (et == Element::Type::JUMP)
-         || (et == Element::Type::MARKER)
-         || (et == Element::Type::TEMPO_TEXT)
-         || (et == Element::Type::VOLTA)
+      if ((et == ElementType::REHEARSAL_MARK)
+         || ((et == ElementType::STAFF_TEXT) && toStaffText(element)->systemFlag())
+         || (et == ElementType::JUMP)
+         || (et == ElementType::MARKER)
+         || (et == ElementType::TEMPO_TEXT)
+         || (et == ElementType::VOLTA)
          ) {
             foreach(Score* s, scoreList())
                   staffList.append(s->staff(0));
@@ -1039,7 +1039,7 @@ void Score::undoAddElement(Element* element)
                         ne = element;
                   else {
                         // only create linked volta for first staff
-                        if (et == Element::Type::VOLTA && element->track() != 0)
+                        if (et == ElementType::VOLTA && element->track() != 0)
                               continue;
                         ne = element->linkedClone();
                         ne->setScore(score);
@@ -1047,7 +1047,7 @@ void Score::undoAddElement(Element* element)
                         ne->setTrack(staffIdx * VOICES + element->voice());
                         }
 
-                  if (et == Element::Type::VOLTA) {
+                  if (et == ElementType::VOLTA) {
                         Spanner* nsp = static_cast<Spanner*>(ne);
                         Spanner* sp = static_cast<Spanner*>(element);
                         int staffIdx1 = sp->track() / VOICES;
@@ -1056,7 +1056,7 @@ void Score::undoAddElement(Element* element)
                         nsp->setTrack2((staffIdx + diff) * VOICES + (sp->track2() % VOICES));
                         undo(new AddElement(nsp));
                         }
-                  else if (et == Element::Type::MARKER || et == Element::Type::JUMP) {
+                  else if (et == ElementType::MARKER || et == ElementType::JUMP) {
                         Measure* om = toMeasure(element->parent());
                         Measure* m  = score->tick2measure(om->tick());
                         ne->setTrack(element->track());
@@ -1076,19 +1076,19 @@ void Score::undoAddElement(Element* element)
             return;
             }
 
-      if (et == Element::Type::FINGERING
-         || (et == Element::Type::IMAGE  && !element->parent()->isSegment())
-         || (et == Element::Type::SYMBOL && !element->parent()->isSegment())
-         || et == Element::Type::NOTE
-         || et == Element::Type::TEXT
-         || et == Element::Type::GLISSANDO
-         || et == Element::Type::BEND
-         || (et == Element::Type::CHORD && toChord(element)->isGrace())
+      if (et == ElementType::FINGERING
+         || (et == ElementType::IMAGE  && !element->parent()->isSegment())
+         || (et == ElementType::SYMBOL && !element->parent()->isSegment())
+         || et == ElementType::NOTE
+         || et == ElementType::TEXT
+         || et == ElementType::GLISSANDO
+         || et == ElementType::BEND
+         || (et == ElementType::CHORD && toChord(element)->isGrace())
             ) {
             Element* parent       = element->parent();
             const LinkedElements* links = parent->links();
             // don't link part name
-            if (et == Element::Type::TEXT) {
+            if (et == ElementType::TEXT) {
                   Text* t = static_cast<Text*>(element);
                   if (t->subStyle() == SubStyle::INSTRUMENT_EXCERPT)
                         links = 0;
@@ -1144,7 +1144,7 @@ void Score::undoAddElement(Element* element)
             return;
             }
 
-      if (et == Element::Type::LAYOUT_BREAK) {
+      if (et == ElementType::LAYOUT_BREAK) {
             LayoutBreak* lb = toLayoutBreak(element);
             if (lb->layoutBreakType() == LayoutBreak::Type::SECTION) {
                   Measure* m = lb->measure();
@@ -1164,27 +1164,27 @@ void Score::undoAddElement(Element* element)
             }
 
       if (ostaff == 0 || (
-         et    != Element::Type::ARTICULATION
-         && et != Element::Type::CHORDLINE
-         && et != Element::Type::LYRICS
-         && et != Element::Type::SLUR
-         && et != Element::Type::TIE
-         && et != Element::Type::NOTE
-         && et != Element::Type::INSTRUMENT_CHANGE
-         && et != Element::Type::HAIRPIN
-         && et != Element::Type::OTTAVA
-         && et != Element::Type::TRILL
-         && et != Element::Type::TEXTLINE
-         && et != Element::Type::PEDAL
-         && et != Element::Type::BREATH
-         && et != Element::Type::DYNAMIC
-         && et != Element::Type::STAFF_TEXT
-         && et != Element::Type::TREMOLO
-         && et != Element::Type::ARPEGGIO
-         && et != Element::Type::SYMBOL
-         && et != Element::Type::TREMOLOBAR
-         && et != Element::Type::FRET_DIAGRAM
-         && et != Element::Type::HARMONY)
+         et    != ElementType::ARTICULATION
+         && et != ElementType::CHORDLINE
+         && et != ElementType::LYRICS
+         && et != ElementType::SLUR
+         && et != ElementType::TIE
+         && et != ElementType::NOTE
+         && et != ElementType::INSTRUMENT_CHANGE
+         && et != ElementType::HAIRPIN
+         && et != ElementType::OTTAVA
+         && et != ElementType::TRILL
+         && et != ElementType::TEXTLINE
+         && et != ElementType::PEDAL
+         && et != ElementType::BREATH
+         && et != ElementType::DYNAMIC
+         && et != ElementType::STAFF_TEXT
+         && et != ElementType::TREMOLO
+         && et != ElementType::ARPEGGIO
+         && et != ElementType::SYMBOL
+         && et != ElementType::TREMOLOBAR
+         && et != ElementType::FRET_DIAGRAM
+         && et != ElementType::HARMONY)
             ) {
             undo(new AddElement(element));
             return;
@@ -1231,12 +1231,12 @@ void Score::undoAddElement(Element* element)
                               switch (element->type()) {
                                     // exclude certain element types except on corresponding staff in part
                                     // this should be same list excluded in cloneStaff()
-                                    case Element::Type::STAFF_TEXT:
-                                    case Element::Type::FRET_DIAGRAM:
-                                    case Element::Type::HARMONY:
-                                    case Element::Type::FIGURED_BASS:
-                                    case Element::Type::DYNAMIC:
-                                    case Element::Type::LYRICS:   // not normally segment-attached
+                                    case ElementType::STAFF_TEXT:
+                                    case ElementType::FRET_DIAGRAM:
+                                    case ElementType::HARMONY:
+                                    case ElementType::FIGURED_BASS:
+                                    case ElementType::DYNAMIC:
+                                    case ElementType::LYRICS:   // not normally segment-attached
                                           continue;
                                     default:
                                           break;
@@ -1395,7 +1395,7 @@ void Score::undoAddElement(Element* element)
                               }
                         undo(new AddElement(nsp));
                         }
-                  else if (et == Element::Type::GLISSANDO)
+                  else if (et == ElementType::GLISSANDO)
                         undo(new AddElement(static_cast<Spanner*>(ne)));
                   else if (element->isTremolo() && toTremolo(element)->twoNotes()) {
                         Tremolo* tremolo = toTremolo(element);
@@ -1502,7 +1502,7 @@ void Score::undoAddElement(Element* element)
 
 void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
       {
-      Q_ASSERT(cr->type() != Element::Type::CHORD || !(static_cast<Chord*>(cr)->notes()).empty());
+      Q_ASSERT(cr->type() != ElementType::CHORD || !(static_cast<Chord*>(cr)->notes()).empty());
       Q_ASSERT(cr->isChordRest());
 
       Staff* ostaff = cr->staff();
@@ -3321,7 +3321,7 @@ void ChangeProperty::flip()
             // and expects to find the Ottava spanner(s) in the score lists;
             // thus, the above (re)setProperty() left the staff pitchOffset map in a wrong state
             // as the spanner has been removed from the score lists; redo the map here
-            if (static_cast<Element*>(element)->type() == Element::Type::OTTAVA)
+            if (static_cast<Element*>(element)->type() == ElementType::OTTAVA)
                   static_cast<Element*>(element)->staff()->updateOttava();
             }
 #endif

@@ -16,6 +16,7 @@
 #include "inspector.h"
 #include "inspectorBase.h"
 #include "ui_inspector_text.h"
+#include "ui_inspector_frametext.h"
 
 namespace Ms {
 
@@ -27,6 +28,7 @@ class InspectorText : public InspectorElementBase {
       Q_OBJECT
 
       Ui::InspectorText t;
+      Ui::InspectorFrameText f;
 
    public:
       InspectorText(QWidget* parent);

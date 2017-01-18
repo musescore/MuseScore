@@ -145,7 +145,7 @@ void MusicXmlLyricsExtend::setExtend(const int no, const int track, const int ti
       QList<Lyrics*> list;
       foreach(Lyrics* l, _lyrics) {
             Element* const el = l->parent();
-            if (el->type() == Element::Type::CHORD) {       // TODO: rest also possible ?
+            if (el->type() == ElementType::CHORD) {       // TODO: rest also possible ?
                   ChordRest* const par = static_cast<ChordRest*>(el);
                   if (par->track() == track && (no == -1 || l->no() == no)) {
                         int lct = lastChordTicks(l->segment(), track, tick);
@@ -514,7 +514,7 @@ static QString findDeleteStaffText(Segment* s, int track)
       //qDebug("findDeleteWords(s %p track %d)", s, track);
       foreach (Element* e, s->annotations()) {
             //qDebug("findDeleteWords e %p type %hhd track %d", e, e->type(), e->track());
-            if (e->type() != Element::Type::STAFF_TEXT || e->track() < track || e->track() >= track+VOICES)
+            if (e->type() != ElementType::STAFF_TEXT || e->track() < track || e->track() >= track+VOICES)
                   continue;
             Text* t = static_cast<Text*>(e);
             //qDebug("findDeleteWords t %p text '%s'", t, qPrintable(t->text()));
@@ -819,7 +819,7 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
 
       // move to correct position
       // TODO: handle rx, ry
-      if (el->type() == Element::Type::SYMBOL) {
+      if (el->type() == ElementType::SYMBOL) {
             qreal y = 0;
             // calc y offset assuming five line staff and default style
             // note that required y offset is element type dependent
@@ -947,7 +947,7 @@ static void determineTupletTypeAndCount(Tuplet* t, int& tupletType, int& tupletC
       int elemCount   = 0; // number of tuplet elements handled
 
       foreach (DurationElement* de, t->elements()) {
-            if (de->type() == Element::Type::CHORD || de->type() == Element::Type::REST) {
+            if (de->type() == ElementType::CHORD || de->type() == ElementType::REST) {
                   ChordRest* cr = static_cast<ChordRest*>(de);
                   if (elemCount == 0) {
                         // first note: init variables
@@ -1136,7 +1136,7 @@ void addTupletToChord(ChordRest* cr, Tuplet*& tuplet, bool& tuplImpl,
                   // TODO determine usefulness of following check
                   int totalDuration = 0;
                   foreach (DurationElement* de, tuplet->elements()) {
-                        if (de->type() == Element::Type::CHORD || de->type() == Element::Type::REST) {
+                        if (de->type() == ElementType::CHORD || de->type() == ElementType::REST) {
                               totalDuration+=de->globalDuration().ticks();
                               }
                         }
@@ -1357,7 +1357,7 @@ static void setSLinePlacement(SLine* sli, const QString placement)
 
       // calc y offset assuming five line staff and default style
       // note that required y offset is element type dependent
-      if (sli->type() == Element::Type::HAIRPIN) {
+      if (sli->type() == ElementType::HAIRPIN) {
             if (placement == "above") {
                   const qreal stafflines = 5;       // assume five line staff, but works OK-ish for other sizes too
                   qreal offsAbove = -6 - (stafflines - 1);
@@ -1933,7 +1933,7 @@ static void markUserAccidentals(const int firstStaff,
       for (Ms::Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
             for (int track = 0; track < staves * VOICES; ++track) {
                   Element* e = segment->element(firstStaff * VOICES + track);
-                  if (!e || e->type() != Ms::Element::Type::CHORD)
+                  if (!e || e->type() != Ms::ElementType::CHORD)
                         continue;
                   Chord* chord = static_cast<Chord*>(e);
                   foreach (Note* nt, chord->notes()) {
@@ -2268,7 +2268,7 @@ void MusicXMLParserPass2::print(Measure* measure)
             if (blankPage == 1) {       // blank title page, insert a VBOX if needed
                   pm = measure->prev();
                   if (pm == 0) {
-                        pm = _score->insertMeasure(Element::Type::VBOX, measure);
+                        pm = _score->insertMeasure(ElementType::VBOX, measure);
                         }
                   }
             }
@@ -2744,16 +2744,16 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
                   b->setLineStyle(Qt::DotLine);
             else
                   logError(QString("unsupported line-type: %1").arg(lineType.toString()));
-            starts.append(MusicXmlSpannerDesc(b, Element::Type::TEXTLINE, number));
+            starts.append(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
             }
       else if (type == "stop") {
-            TextLine* b = static_cast<TextLine*>(_pass2.getSpanner(MusicXmlSpannerDesc(Element::Type::TEXTLINE, number)));
+            TextLine* b = static_cast<TextLine*>(_pass2.getSpanner(MusicXmlSpannerDesc(ElementType::TEXTLINE, number)));
             if (b) {
                   b->setEndHook(lineEnd != "none");
                   if (lineEnd == "up")
                         b->setEndHookHeight(-1 * b->endHookHeight());
                   }
-            stops.append(MusicXmlSpannerDesc(Element::Type::TEXTLINE, number));
+            stops.append(MusicXmlSpannerDesc(ElementType::TEXTLINE, number));
             }
       _e.skipCurrentElement();
       }
@@ -2784,12 +2784,12 @@ void MusicXMLParserDirection::dashes(const QString& type, const int number,
             b->setEndHook(false);
             b->setLineStyle(Qt::DashLine);
             // TODO brackets and dashes now share the same storage
-            // because they both use Element::Type::TEXTLINE
+            // because they both use ElementType::TEXTLINE
             // use mxml specific type instead
-            starts.append(MusicXmlSpannerDesc(b, Element::Type::TEXTLINE, number));
+            starts.append(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
             }
       else if (type == "stop")
-            stops.append(MusicXmlSpannerDesc(Element::Type::TEXTLINE, number));
+            stops.append(MusicXmlSpannerDesc(ElementType::TEXTLINE, number));
       _e.skipCurrentElement();
       }
 
@@ -2819,11 +2819,11 @@ void MusicXMLParserDirection::octaveShift(const QString& type, const int number,
                   if (type ==   "up" && ottavasize ==  8) o->setOttavaType(Ottava::Type::OTTAVA_8VB);
                   if (type ==   "up" && ottavasize == 15) o->setOttavaType(Ottava::Type::OTTAVA_15MB);
 
-                  starts.append(MusicXmlSpannerDesc(o, Element::Type::OTTAVA, number));
+                  starts.append(MusicXmlSpannerDesc(o, ElementType::OTTAVA, number));
                   }
             }
       else if (type == "stop")
-            stops.append(MusicXmlSpannerDesc(Element::Type::OTTAVA, number));
+            stops.append(MusicXmlSpannerDesc(ElementType::OTTAVA, number));
       _e.skipCurrentElement();
       }
 
@@ -2852,10 +2852,10 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
                         p->setBeginHook(true);
                   p->setEndHook(true);
                   // if (placement == "") placement = "below";  // TODO ? set default
-                  starts.append(MusicXmlSpannerDesc(p, Element::Type::PEDAL, 0));
+                  starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, 0));
                   }
             else if (type == "stop")
-                  stops.append(MusicXmlSpannerDesc(Element::Type::PEDAL, 0));
+                  stops.append(MusicXmlSpannerDesc(ElementType::PEDAL, 0));
             else if (type == "change") {
 #if 0
                   TODO
@@ -2917,13 +2917,13 @@ void MusicXMLParserDirection::wedge(const QString& type, const int number,
                               ? HairpinType::CRESC_HAIRPIN : HairpinType::DECRESC_HAIRPIN);
             if (niente == "yes")
                   h->setHairpinCircledTip(true);
-            starts.append(MusicXmlSpannerDesc(h, Element::Type::HAIRPIN, number));
+            starts.append(MusicXmlSpannerDesc(h, ElementType::HAIRPIN, number));
             }
       else if (type == "stop") {
-            Hairpin* h = static_cast<Hairpin*>(_pass2.getSpanner(MusicXmlSpannerDesc(Element::Type::HAIRPIN, number)));
+            Hairpin* h = static_cast<Hairpin*>(_pass2.getSpanner(MusicXmlSpannerDesc(ElementType::HAIRPIN, number)));
             if (niente == "yes")
                   h->setHairpinCircledTip(true);
-            stops.append(MusicXmlSpannerDesc(Element::Type::HAIRPIN, number));
+            stops.append(MusicXmlSpannerDesc(ElementType::HAIRPIN, number));
             }
       _e.skipCurrentElement();
       }
@@ -2934,14 +2934,14 @@ void MusicXMLParserDirection::wedge(const QString& type, const int number,
 
 void MusicXMLParserPass2::addSpanner(const MusicXmlSpannerDesc& d)
       {
-      if (d.tp == Element::Type::HAIRPIN && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
+      if (d.tp == ElementType::HAIRPIN && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
             _hairpins[d.nr] = d.sp;
-      else if (d.tp == Element::Type::OTTAVA && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
+      else if (d.tp == ElementType::OTTAVA && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
             _ottavas[d.nr] = d.sp;
-      else if (d.tp == Element::Type::PEDAL && 0 == d.nr)
+      else if (d.tp == ElementType::PEDAL && 0 == d.nr)
             _pedal = d.sp;
       // TODO: check MAX_BRACKETS vs MAX_NUMBER_LEVEL
-      else if (d.tp == Element::Type::TEXTLINE && 0 <= d.nr && d.nr < MAX_BRACKETS)
+      else if (d.tp == ElementType::TEXTLINE && 0 <= d.nr && d.nr < MAX_BRACKETS)
             _brackets[d.nr] = d.sp;
       }
 
@@ -2951,14 +2951,14 @@ void MusicXMLParserPass2::addSpanner(const MusicXmlSpannerDesc& d)
 
 SLine* MusicXMLParserPass2::getSpanner(const MusicXmlSpannerDesc& d)
       {
-      if (d.tp == Element::Type::HAIRPIN && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
+      if (d.tp == ElementType::HAIRPIN && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
             return _hairpins[d.nr];
-      else if (d.tp == Element::Type::OTTAVA && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
+      else if (d.tp == ElementType::OTTAVA && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
             return _ottavas[d.nr];
-      else if (d.tp == Element::Type::PEDAL && 0 == d.nr)
+      else if (d.tp == ElementType::PEDAL && 0 == d.nr)
             return _pedal;
       // TODO: check MAX_BRACKETS vs MAX_NUMBER_LEVEL
-      else if (d.tp == Element::Type::TEXTLINE && 0 <= d.nr && d.nr < MAX_BRACKETS)
+      else if (d.tp == ElementType::TEXTLINE && 0 <= d.nr && d.nr < MAX_BRACKETS)
             return _brackets[d.nr];
       return 0;
       }
@@ -2969,14 +2969,14 @@ SLine* MusicXMLParserPass2::getSpanner(const MusicXmlSpannerDesc& d)
 
 void MusicXMLParserPass2::clearSpanner(const MusicXmlSpannerDesc& d)
       {
-      if (d.tp == Element::Type::HAIRPIN && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
+      if (d.tp == ElementType::HAIRPIN && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
             _hairpins[d.nr] = 0;
-      else if (d.tp == Element::Type::OTTAVA && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
+      else if (d.tp == ElementType::OTTAVA && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL)
             _ottavas[d.nr] = 0;
-      else if (d.tp == Element::Type::PEDAL && 0 == d.nr)
+      else if (d.tp == ElementType::PEDAL && 0 == d.nr)
             _pedal = 0;
       // TODO: check MAX_BRACKETS vs MAX_NUMBER_LEVEL
-      else if (d.tp == Element::Type::TEXTLINE && 0 <= d.nr && d.nr < MAX_BRACKETS)
+      else if (d.tp == ElementType::TEXTLINE && 0 <= d.nr && d.nr < MAX_BRACKETS)
             _brackets[d.nr] = 0;
       }
 
@@ -5741,7 +5741,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
             }
 
       // no support for arpeggio on rest
-      if (!arpeggioType.isEmpty() && cr->type() == Element::Type::CHORD) {
+      if (!arpeggioType.isEmpty() && cr->type() == ElementType::CHORD) {
             Arpeggio* a = new Arpeggio(_score);
             if (arpeggioType == "none")
                   a->setArpeggioType(ArpeggioType::NORMAL);

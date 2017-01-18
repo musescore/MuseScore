@@ -1027,12 +1027,12 @@ void Harmony::layout()
       qreal yy = 0.0;
       //qreal _spatium  = spatium();
 
-      if (parent()->type() == Element::Type::SEGMENT) {
+      if (parent()->type() == ElementType::SEGMENT) {
             Segment* s = static_cast<Segment*>(parent());
             // look for fret diagram
             bool fretsFound = false;
             for (Element* e : s->annotations()) {
-                  if (e->type() == Element::Type::FRET_DIAGRAM && e->track() == track()) {
+                  if (e->type() == ElementType::FRET_DIAGRAM && e->track() == track()) {
                         yy -= score()->styleP(StyleIdx::fretY);
                         e->layout();
                         yy -= e->height();
@@ -1044,7 +1044,7 @@ void Harmony::layout()
             if (!fretsFound)
                   yy -= score()->styleP(StyleIdx::harmonyY);
             }
-      else if (parent()->type() == Element::Type::FRET_DIAGRAM) {
+      else if (parent()->type() == ElementType::FRET_DIAGRAM) {
             qDebug("Harmony %s with fret diagram as parent", qPrintable(_textName)); // not possible?
             yy = score()->styleP(StyleIdx::harmonyFretDist);
             }
@@ -1090,7 +1090,7 @@ void Harmony::layout()
             setReadPos(QPointF());
             }
 
-      if (parent()->type() == Element::Type::FRET_DIAGRAM && parent()->parent()->type() == Element::Type::SEGMENT) {
+      if (parent()->type() == ElementType::FRET_DIAGRAM && parent()->parent()->type() == ElementType::SEGMENT) {
             qDebug("Harmony %s with fret diagram as parent and segment as grandparent", qPrintable(_textName));
 //            MStaff* mstaff = static_cast<Segment*>(parent()->parent())->measure()->mstaff(staffIdx());
 //WS            qreal dist = -(bbox().top());

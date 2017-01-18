@@ -54,8 +54,8 @@ void Score::splitMeasure(Segment* segment)
       undoInsertTime(measure->tick(), -measure->ticks());
 
       // create empty measures:
-      Measure* m2 = toMeasure(insertMeasure(Element::Type::MEASURE, measure->next(), true));
-      Measure* m1 = toMeasure(insertMeasure(Element::Type::MEASURE, m2, true));
+      Measure* m2 = toMeasure(insertMeasure(ElementType::MEASURE, measure->next(), true));
+      Measure* m1 = toMeasure(insertMeasure(ElementType::MEASURE, m2, true));
 
       int tick = segment->tick();
       m1->setTick(measure->tick());

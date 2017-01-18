@@ -969,7 +969,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                                     Chord* pch = 0;       // previous chord
                                     if (ss) {
                                           ChordRest* cr = static_cast<ChordRest*>(ss->element(track));
-                                          if (cr && cr->type() == Element::Type::CHORD)
+                                          if (cr && cr->type() == ElementType::CHORD)
                                                 pch = static_cast<Chord*>(cr);
                                           }
                                     if (pch) {
@@ -1235,7 +1235,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   Element* el = Element::name2Element(tag, m->score());
                   // hack - needed because tick tags are unreliable in 1.3 scores
                   // for symbols attached to anything but a measure
-                  if (el->type() == Element::Type::SYMBOL)
+                  if (el->type() == ElementType::SYMBOL)
                         el->setParent(m);    // this will get reset when adding to segment
                   el->setTrack(e.track());
                   el->read(e);
@@ -2293,7 +2293,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   }
             }
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
-            if (mb->type() == Element::Type::VBOX) {
+            if (mb->type() == ElementType::VBOX) {
                   Box* b  = static_cast<Box*>(mb);
                   qreal y = styleP(StyleIdx::staffUpperBorder);
                   b->setBottomGap(y);

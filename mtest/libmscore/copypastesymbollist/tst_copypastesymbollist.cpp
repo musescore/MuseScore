@@ -32,23 +32,23 @@ class TestCopyPasteSymbolList : public QObject, public MTest
       Q_OBJECT
 
       void copypastecommon(MasterScore*, const char*);
-      void copypaste(const char*, Element::Type);
-      void copypastepart(const char*, Element::Type);
-      void copypastedifferentvoice(const char*, Element::Type);
+      void copypaste(const char*, ElementType);
+      void copypastepart(const char*, ElementType);
+      void copypastedifferentvoice(const char*, ElementType);
 
    private slots:
       void initTestCase();
-      void copypasteArticulation()  { copypaste("articulation", Element::Type::ARTICULATION); }
-      void copypasteChordNames()    { copypaste("chordnames", Element::Type::HARMONY); }
-      void copypasteChordNames1()   { copypaste("chordnames-01", Element::Type::HARMONY); }
-      void copypasteFiguredBass() {} //   { copypaste("figuredbass", Element::Type::FIGURED_BASS); }
-      void copypasteLyrics()        { copypaste("lyrics", Element::Type::LYRICS); }
+      void copypasteArticulation()  { copypaste("articulation", ElementType::ARTICULATION); }
+      void copypasteChordNames()    { copypaste("chordnames", ElementType::HARMONY); }
+      void copypasteChordNames1()   { copypaste("chordnames-01", ElementType::HARMONY); }
+      void copypasteFiguredBass() {} //   { copypaste("figuredbass", ElementType::FIGURED_BASS); }
+      void copypasteLyrics()        { copypaste("lyrics", ElementType::LYRICS); }
 
-      void copypasteRange()         { copypastepart("range", Element::Type::ARTICULATION); }
-      void copypasteRange1()        { copypastedifferentvoice("range-01", Element::Type::ARTICULATION); }
+      void copypasteRange()         { copypastepart("range", ElementType::ARTICULATION); }
+      void copypasteRange1()        { copypastedifferentvoice("range-01", ElementType::ARTICULATION); }
 
-      void copypasteArticulationRest()   { copypaste("articulation-rest", Element::Type::ARTICULATION); }
-      void copypasteFermataRest()        { copypaste("fermata-rest", Element::Type::ARTICULATION); }
+      void copypasteArticulationRest()   { copypaste("articulation-rest", ElementType::ARTICULATION); }
+      void copypasteFermataRest()        { copypaste("fermata-rest", ElementType::ARTICULATION); }
 
       };
 
@@ -102,7 +102,7 @@ void TestCopyPasteSymbolList::copypastecommon(MasterScore* score, const char* na
 //    select all elements of type and copy paste
 //---------------------------------------------------------
 
-void TestCopyPasteSymbolList::copypaste(const char* name, Element::Type type)
+void TestCopyPasteSymbolList::copypaste(const char* name, ElementType type)
       {
       MasterScore* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
       score->doLayout();
@@ -120,7 +120,7 @@ void TestCopyPasteSymbolList::copypaste(const char* name, Element::Type type)
 //    in the first staff and copy paste
 //---------------------------------------------------------
 
-void TestCopyPasteSymbolList::copypastepart(const char* name, Element::Type type)
+void TestCopyPasteSymbolList::copypastepart(const char* name, ElementType type)
       {
       MasterScore* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
       score->doLayout();
@@ -143,7 +143,7 @@ void TestCopyPasteSymbolList::copypastepart(const char* name, Element::Type type
 //    in both staves and copy paste
 //---------------------------------------------------------
 
-void TestCopyPasteSymbolList::copypastedifferentvoice(const char* name, Element::Type type)
+void TestCopyPasteSymbolList::copypastedifferentvoice(const char* name, ElementType type)
       {
       MasterScore* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
       score->doLayout();

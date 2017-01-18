@@ -1065,6 +1065,22 @@ const std::vector<StyledProperty> figuredBassStyle {
       { StyleIdx::figuredBassFontUnderline,           P_ID::FONT_UNDERLINE         },
       };
 
+const std::vector<StyledProperty> user1Style {
+      { StyleIdx::user1FontFace,                      P_ID::FONT_FACE              },
+      { StyleIdx::user1FontSize,                      P_ID::FONT_SIZE              },
+      { StyleIdx::user1FontBold,                      P_ID::FONT_BOLD              },
+      { StyleIdx::user1FontItalic,                    P_ID::FONT_ITALIC            },
+      { StyleIdx::user1FontUnderline,                 P_ID::FONT_UNDERLINE         },
+      };
+
+const std::vector<StyledProperty> user2Style {
+      { StyleIdx::user2FontFace,                      P_ID::FONT_FACE              },
+      { StyleIdx::user2FontSize,                      P_ID::FONT_SIZE              },
+      { StyleIdx::user2FontBold,                      P_ID::FONT_BOLD              },
+      { StyleIdx::user2FontItalic,                    P_ID::FONT_ITALIC            },
+      { StyleIdx::user2FontUnderline,                 P_ID::FONT_UNDERLINE         },
+      };
+
 //---------------------------------------------------------
 //   StyledPropertyListName
 //---------------------------------------------------------
@@ -1119,7 +1135,9 @@ static const std::array<StyledPropertyListName, int(SubStyle::SUBSTYLES)> namedS
       { "Header",                  &headerStyle,                    SubStyle::HEADER },
       { "Footer",                  &footerStyle,                    SubStyle::FOOTER },
       { "Instrument Change",       &instrumentChangeStyle,          SubStyle::INSTRUMENT_CHANGE },
-      { "Figured Bass",            &figuredBassStyle,               SubStyle::FIGURED_BASS }
+      { "Figured Bass",            &figuredBassStyle,               SubStyle::FIGURED_BASS },
+      { "User-1",                  &user1Style,                     SubStyle::USER1 },
+      { "User-2",                  &user2Style,                     SubStyle::USER2 },
       } };
 
 //---------------------------------------------------------

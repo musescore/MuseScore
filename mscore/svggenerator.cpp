@@ -137,7 +137,7 @@ static void translate_dashPattern(QVector<qreal> pattern, const qreal& width, QS
 // Gets the contents of the SVG class attribute, based on element type/name
 static QString getClass(const Ms::Element *e)
 {
-    Ms::Element::Type eType;
+    Ms::ElementType eType;
               QString eName;
 
     // Add element type as "class"
@@ -1116,7 +1116,7 @@ void SvgPaintEngine::updateState(const QPaintEngineState &state)
 
     // stateString = Attribute Settings
 
-    // SVG class attribute, based on Ms::Element::Type
+    // SVG class attribute, based on Ms::ElementType
     stateStream << SVG_CLASS << getClass(_element) << SVG_QUOTE;
 
     // Brush and Pen attributes

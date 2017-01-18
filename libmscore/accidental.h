@@ -276,7 +276,7 @@ class Accidental : public Element {
    public:
       Accidental(Score* s = 0);
       virtual Accidental* clone() const override  { return new Accidental(*this); }
-      virtual Element::Type type() const override { return Element::Type::ACCIDENTAL; }
+      virtual ElementType type() const override { return ElementType::ACCIDENTAL; }
 
       QString subtypeUserName() const;
       void setSubtype(const QString& s);

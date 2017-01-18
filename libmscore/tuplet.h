@@ -72,7 +72,7 @@ class Tuplet : public DurationElement {
       Tuplet(const Tuplet&);
       ~Tuplet();
       virtual Tuplet* clone() const override      { return new Tuplet(*this); }
-      virtual Element::Type type() const override { return Element::Type::TUPLET; }
+      virtual ElementType type() const override { return ElementType::TUPLET; }
       virtual void setTrack(int val) override;
 
       virtual void add(Element*) override;

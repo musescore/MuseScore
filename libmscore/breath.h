@@ -42,7 +42,7 @@ class Breath : public Element {
 
    public:
       Breath(Score* s);
-      virtual Element::Type type() const override { return Element::Type::BREATH; }
+      virtual ElementType type() const override { return ElementType::BREATH; }
       virtual Breath* clone() const override      { return new Breath(*this); }
 
       void setSymId(SymId id)          { _symId = id; }
