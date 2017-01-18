@@ -14,6 +14,7 @@
 #define __TUPLET_H__
 
 #include "duration.h"
+#include "property.h"
 
 namespace Ms {
 

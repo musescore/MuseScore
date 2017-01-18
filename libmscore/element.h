@@ -13,12 +13,10 @@
 #ifndef __ELEMENT_H__
 #define __ELEMENT_H__
 
-#include "mscore.h"
 #include "spatium.h"
 #include "fraction.h"
 #include "scoreElement.h"
 #include "shape.h"
-#include "property.h"
 
 namespace Ms {
 
@@ -27,70 +25,15 @@ namespace Ms {
  Definition of classes Element, ElementList.
 */
 
-class XmlWriter;
-class Measure;
-class Staff;
-class Part;
-class Score;
-class Sym;
-class MuseScoreView;
-class Segment;
-class TextStyle;
-class Element;
-class BarLine;
-class Articulation;
-class Marker;
-class Clef;
-class KeySig;
-class TimeSig;
-class TempoText;
-class Breath;
-class Box;
-class HBox;
-class VBox;
-class TBox;
-class FBox;
-class ChordRest;
-class Slur;
-class Tie;
-class Glissando;
-class GlissandoSegment;
-class SystemDivider;
-class RehearsalMark;
-class Harmony;
-class Volta;
-class Jump;
-class StaffText;
-class Ottava;
-class Note;
-class Chord;
-class Rest;
-class LayoutBreak;
-class Tremolo;
-class System;
-class Lyrics;
-class LyricsLine;
-class LyricsLineSegment;
-class Stem;
-class SlurSegment;
-class TieSegment;
-class OttavaSegment;
-class Beam;
-class Hook;
-class StemSlash;
-class Spacer;
-class StaffLines;
-class Ambitus;
-class Bracket;
-class InstrumentChange;
-class Text;
-class Hairpin;
-class HairpinSegment;
-class Bend;
-class TremoloBar;
-class RepeatMeasure;
+#ifndef VOICES
+#define VOICES 4
+#endif
 
+class XmlReader;
+class XmlWriter;
 enum class SymId;
+enum class P_ID;
+enum class SubStyle;
 
 //---------------------------------------------------------
 //   Grip

@@ -19,6 +19,7 @@
 */
 
 #include "measurebase.h"
+#include "property.h"
 
 namespace Ms {
 

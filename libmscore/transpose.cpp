@@ -695,12 +695,12 @@ void Score::transpositionChanged(Part* part, Interval oldV, int tickStart, int t
                               for (Chord* gc : c->graceNotes()) {
                                     for (Note* n : gc->notes()) {
                                           int tpc = transposeTpc(n->tpc1(), v, true);
-                                          n->undoSetTpc2(tpc);
+                                          n->undoChangeProperty(P_ID::TPC2, tpc);
                                           }
                                     }
                               for (Note* n : c->notes()) {
                                     int tpc = transposeTpc(n->tpc1(), v, true);
-                                    n->undoSetTpc2(tpc);
+                                    n->undoChangeProperty(P_ID::TPC2, tpc);
                                     }
                               }
                         // find chord symbols

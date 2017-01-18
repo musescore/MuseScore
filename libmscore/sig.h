@@ -14,7 +14,6 @@
 #define __AL_SIG_H__
 
 #include "fraction.h"
-// #include "mscore.h"
 
 namespace Ms {
 

@@ -14,6 +14,7 @@
 #define __SLURTIE_H__
 
 #include "spanner.h"
+#include "mscore.h"
 
 namespace Ms {
 

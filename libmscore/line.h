@@ -14,6 +14,7 @@
 #define __LINE_H__
 
 #include "spanner.h"
+#include "mscore.h"
 
 namespace Ms {
 

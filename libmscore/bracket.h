@@ -19,6 +19,7 @@ namespace Ms {
 
 class MuseScoreView;
 class System;
+enum class BracketType : signed char;
 
 //---------------------------------------------------------
 //   @@ Bracket
