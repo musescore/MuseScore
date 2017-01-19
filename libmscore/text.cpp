@@ -3170,66 +3170,51 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
       switch (propertyId) {
             case P_ID::FONT_FACE:
                   setFamily(v.toString());
-                  _familyStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::FONT_SIZE:
                   setSize(v.toReal());
-                  _sizeStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::FONT_BOLD:
                   setBold(v.toBool());
-                  _boldStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::FONT_ITALIC:
                   setItalic(v.toBool());
-                  _italicStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::FONT_UNDERLINE:
                   setUnderline(v.toBool());
-                  _underlineStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::FRAME:
                   setHasFrame(v.toBool());
-                  _hasFrameStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::FRAME_SQUARE:
                   setSquare(v.toBool());
-                  _squareStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::FRAME_CIRCLE:
                   setCircle(v.toBool());
-                  _circleStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::FRAME_WIDTH:
                   setFrameWidth(v.value<Spatium>());
-                  _frameWidthStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::FRAME_PADDING:
                   setPaddingWidth(v.value<Spatium>());
-                  _paddingWidthStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::FRAME_ROUND:
                   setFrameRound(v.toInt());
-                  _frameRoundStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::FRAME_FG_COLOR:
                   setFrameColor(v.value<QColor>());
-                  _frameColorStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::FRAME_BG_COLOR:
                   setBgColor(v.value<QColor>());
-                  _bgColorStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::FONT_SPATIUM_DEPENDENT:
                   setSizeIsSpatiumDependent(v.toBool());
-                  _sizeIsSpatiumDependentStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::TEXT:
                   setXmlText(v.toString());
                   break;
             case P_ID::ALIGN:
                   setAlign(Align(v.toInt()));
-                  _alignStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::SUB_STYLE:
                   setSubStyle(SubStyle(v.toInt()));
