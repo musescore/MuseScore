@@ -3308,11 +3308,8 @@ void ChangeProperty::flip()
       QVariant v       = element->getProperty(id);
       PropertyFlags ps = element->propertyFlags(id);
 
-//      if (propertyStyle == PropertyFlags::STYLED)
-//            element->resetProperty(id);
-//      else
-            element->setProperty(id, property);
-            element->setPropertyFlags(id, ps);
+      element->setProperty(id, property);
+      element->setPropertyFlags(id, flags);
 
 #if 0
       if (id == P_ID::SPANNER_TICK) {
@@ -3326,7 +3323,7 @@ void ChangeProperty::flip()
             }
 #endif
       property = v;
-      propertyStyle = ps;
+      flags = ps;
       }
 
 //---------------------------------------------------------
