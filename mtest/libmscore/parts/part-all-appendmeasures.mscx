@@ -260,7 +260,6 @@
           </Chord>
         <StaffText>
           <lid>30</lid>
-          <style>System</style>
           <text>system-text</text>
           </StaffText>
         <Chord>
@@ -1140,7 +1139,6 @@
             </Chord>
           <StaffText>
             <lid>30</lid>
-            <style>System</style>
             <text>system-text</text>
             </StaffText>
           <Chord>
@@ -1635,11 +1633,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <StaffText>
-            <lid>30</lid>
-            <style>System</style>
-            <text>system-text</text>
-            </StaffText>
           <Chord>
             <lid>131</lid>
             <durationType>quarter</durationType>

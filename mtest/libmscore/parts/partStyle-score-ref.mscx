@@ -7,14 +7,6 @@
     <Style>
       <frameSystemDistance>21</frameSystemDistance>
       <clefLeftMargin>4</clefLeftMargin>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>top</valign>
-        <offsetType>absolute</offsetType>
-        <name>Title</name>
-        <family>Arial</family>
-        <size>48</size>
-        </TextStyle>
       <page-layout>
         <page-height>1190.55</page-height>
         <page-width>1683.78</page-width>
@@ -305,14 +297,6 @@
       <Style>
         <frameSystemDistance>21</frameSystemDistance>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <TextStyle>
-          <halign>center</halign>
-          <valign>top</valign>
-          <offsetType>absolute</offsetType>
-          <name>Title</name>
-          <family>Arial</family>
-          <size>48</size>
-          </TextStyle>
         <page-layout>
           <page-height>1683.78</page-height>
           <page-width>1190.55</page-width>
@@ -495,14 +479,6 @@
       <Style>
         <frameSystemDistance>21</frameSystemDistance>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <TextStyle>
-          <halign>center</halign>
-          <valign>top</valign>
-          <offsetType>absolute</offsetType>
-          <name>Title</name>
-          <family>Arial</family>
-          <size>48</size>
-          </TextStyle>
         <page-layout>
           <page-height>1683.78</page-height>
           <page-width>1190.55</page-width>
