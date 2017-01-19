@@ -2327,16 +2327,16 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
       p.translate(-pos);
       if (e->parent()) {
             const Element* ee = e->parent();
-            if (e->type() == ElementType::NOTE)
-                  ee = static_cast<const Note*>(e)->chord()->segment();
-            else if (e->type() == ElementType::CLEF)
-                  ee = static_cast<const Clef*>(e)->segment();
+            if (e->isNote())
+                  ee = toNote(e)->chord()->segment();
+            else if (e->isClef())
+                  ee = toClef(e)->segment();
 
             p.setPen(QPen(Qt::green, 0.0));
 
             p.drawRect(ee->pageBoundingRect());
 
-            if (ee->type() == ElementType::SEGMENT) {
+            if (ee->isSegment()) {
                   QPointF pt = ee->pagePos();
                   p.setPen(QPen(Qt::blue, 0.0));
                   p.drawLine(QLineF(pt.x()-w, pt.y()-h, pt.x()+w, pt.y()+h));
@@ -6016,11 +6016,12 @@ Element* ScoreView::elementNear(QPointF p)
       double w = (preferences.proximity * .5) / matrix().m11();
       QRectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
+printf("elementNear\n");
       QList<Element*> el = page->items(r);
       QList<Element*> ll;
       for (Element* e : el) {
             e->itemDiscovered = 0;
-            if (!e->selectable() || e->type() == ElementType::PAGE)
+            if (!e->selectable() || e->isPage())
                   continue;
             if (e->contains(p))
                   ll.append(e);
@@ -6031,7 +6032,7 @@ Element* ScoreView::elementNear(QPointF p)
             // if no relevant element hit, look nearby
             //
             for (Element* e : el) {
-                  if (e->type() == ElementType::PAGE || !e->selectable())
+                  if (e->isPage() || !e->selectable())
                         continue;
                   if (e->intersects(r))
                         ll.append(e);

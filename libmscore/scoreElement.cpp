@@ -180,7 +180,7 @@ void ScoreElement::undoChangeProperty(P_ID id, const QVariant& v)
 
 void ScoreElement::undoChangeProperty(P_ID id, const QVariant& v, PropertyFlags ps)
       {
-      if (id == P_ID::AUTOPLACE && v.toBool()) {
+      if (id == P_ID::AUTOPLACE && v.toBool() && !getProperty(id).toBool()) {
             // special case: if we switch to autoplace, we must save
             // user offset values
             undoResetProperty(P_ID::USER_OFF);

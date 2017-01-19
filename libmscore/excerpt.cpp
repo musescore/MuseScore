@@ -803,10 +803,10 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                         Element* oe = seg->element(srcTrack);
                         if (oe == 0 || oe->generated())
                               continue;
-                        if (oe->type() == ElementType::TIMESIG)
+                        if (oe->isTimeSig())
                               continue;
-                        Element* ne = nullptr;
-                        if (oe->type() == ElementType::CLEF) {
+                        Element* ne = 0;
+                        if (oe->isClef()) {
                               // only clone clef if it matches staff group and does not exists yet
                               Clef* clef = static_cast<Clef*>(oe);
                               int   tick = seg->tick();
@@ -822,7 +822,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               ne->setParent(seg);
                               ne->setScore(score);
                               if (ne->isChordRest()) {
-                                    ChordRest* ncr = static_cast<ChordRest*>(ne);
+                                    ChordRest* ncr = toChordRest(ne);
                                     if (ncr->tuplet()) {
                                           ncr->setTuplet(0); //TODO nested tuplets
                                           }
@@ -830,8 +830,8 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               score->undoAddElement(ne);
                               }
                         if (oe->isChordRest()) {
-                              ChordRest* ocr = static_cast<ChordRest*>(oe);
-                              ChordRest* ncr = static_cast<ChordRest*>(ne);
+                              ChordRest* ocr = toChordRest(oe);
+                              ChordRest* ncr = toChordRest(ne);
                               Tuplet* ot     = ocr->tuplet();
                               if (ot)
                                     cloneTuplets(ocr, ncr, ot, tupletMap, m, dstTrack);
@@ -845,7 +845,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               qDeleteAll(ncr->lyrics());
                               ncr->lyrics().clear();
 
-                              foreach (Element* e, seg->annotations()) {
+                              for (Element* e : seg->annotations()) {
                                     if (e->generated() || e->systemFlag())
                                           continue;
                                     if (e->track() != srcTrack)
@@ -868,9 +868,9 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                                 score->undoAddElement(ne);
                                           }
                                     }
-                              if (oe->type() == ElementType::CHORD) {
-                                    Chord* och = static_cast<Chord*>(ocr);
-                                    Chord* nch = static_cast<Chord*>(ncr);
+                              if (oe->isChord()) {
+                                    Chord* och = toChord(ocr);
+                                    Chord* nch = toChord(ncr);
                                     int n = och->notes().size();
                                     for (int i = 0; i < n; ++i) {
                                           Note* on = och->notes().at(i);

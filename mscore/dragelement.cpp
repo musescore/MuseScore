@@ -50,14 +50,13 @@ void ScoreView::startDrag()
       data.startMove  -= dragElement->userOff();
       _score->startCmd();
 
-      if (dragElement->type() == ElementType::MEASURE) {
+      if (dragElement->isMeasure()) {
             staffUserDist = dragStaff->userDist();
             }
       else {
-            foreach(Element* e, _score->selection().elements())
+            for (Element* e : _score->selection().elements())
                   e->setStartDragPosition(e->userOff());
             }
-      _score->update();
       }
 
 //---------------------------------------------------------
@@ -147,7 +146,7 @@ void ScoreView::endDrag()
             score()->undo(new ChangeStaffUserDist(dragStaff, userDist));
             }
       else {
-            foreach (Element* e, _score->selection().elements()) {
+            for (Element* e : _score->selection().elements()) {
                   e->endDrag();
                   if (e->userOff() != e->startDragPosition()) {
                         e->undoChangeProperty(P_ID::AUTOPLACE, false);
@@ -155,7 +154,6 @@ void ScoreView::endDrag()
                         }
                   }
             }
-      _score->setLayoutAll();
       dragElement = 0;
       setDropTarget(0); // this also resets dropAnchor
       _score->endCmd();

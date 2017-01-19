@@ -57,7 +57,7 @@ enum class ElementFlag {
       SELECTABLE      = 0x00000002,
       MOVABLE         = 0x00000004,
       SEGMENT         = 0x00000008,
-      HAS_TAG         = 0x00000010,
+      HAS_TAG         = 0x00000010,   // true if this is a layered element
       ON_STAFF        = 0x00000020,   // parent is Segment() type
       SELECTED        = 0x00000040,
       GENERATED       = 0x00000080,
@@ -275,7 +275,7 @@ class Element : public ScoreElement {
       virtual void addbbox(const QRectF& r) const { _bbox |= r;          }
       bool contains(const QPointF& p) const;
       bool intersects(const QRectF& r) const;
-      virtual Shape shape() const;
+      virtual Shape shape() const                 { return Shape(bbox());   }
       virtual qreal baseLine() const              { return -height();       }
 
       virtual int subtype() const                 { return -1; }  // for select gui

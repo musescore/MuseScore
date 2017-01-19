@@ -277,12 +277,11 @@ class Text : public Element {
 
       virtual void layout() override;
       virtual void layout1();
-      void sameLayout();
       qreal lineSpacing() const;
       qreal lineHeight() const;
       virtual qreal baseLine() const override;
 
-      bool empty() const                { return _text.isEmpty(); }
+      bool empty() const                  { return _text.isEmpty(); }
       void clear()                        { _text.clear();          }
 
       bool layoutToParentWidth() const    { return _layoutToParentWidth; }

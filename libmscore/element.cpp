@@ -224,8 +224,8 @@ void Element::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 void Element::reset()
       {
-      undoChangeProperty(P_ID::AUTOPLACE, propertyDefault(P_ID::AUTOPLACE));
-      undoChangeProperty(P_ID::PLACEMENT, propertyDefault(P_ID::PLACEMENT));
+      undoResetProperty(P_ID::AUTOPLACE);
+      undoResetProperty(P_ID::PLACEMENT);
       }
 
 //---------------------------------------------------------
@@ -332,6 +332,7 @@ QRectF Element::drag(EditData* data)
             int n = lrint(y / vRaster);
             y = vRaster * n;
             }
+
       setUserOff(QPointF(x, y));
       setGenerated(false);
 
@@ -499,17 +500,6 @@ bool Element::contains(const QPointF& p) const
 bool Element::intersects(const QRectF& rr) const
       {
       return shape().intersects(rr.translated(-pagePos()));
-      }
-
-//---------------------------------------------------------
-//   shape
-//---------------------------------------------------------
-
-Shape Element::shape() const
-      {
-      Shape shape;
-      shape.add(bbox());
-      return shape;
       }
 
 //---------------------------------------------------------
@@ -1161,16 +1151,26 @@ void Element::undoSetPlacement(Placement v)
 QVariant Element::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_ID::TRACK:     return track();
-            case P_ID::GENERATED: return generated();
-            case P_ID::COLOR:     return color();
-            case P_ID::VISIBLE:   return visible();
-            case P_ID::SELECTED:  return selected();
-            case P_ID::USER_OFF:  return _userOff;
-            case P_ID::PLACEMENT: return int(_placement);
-            case P_ID::AUTOPLACE: return autoplace();
-            case P_ID::Z:         return z();
-            case P_ID::SYSTEM_FLAG: return systemFlag();
+            case P_ID::TRACK:
+                  return track();
+            case P_ID::GENERATED:
+                  return generated();
+            case P_ID::COLOR:
+                  return color();
+            case P_ID::VISIBLE:
+                  return visible();
+            case P_ID::SELECTED:
+                  return selected();
+            case P_ID::USER_OFF:
+                  return _userOff;
+            case P_ID::PLACEMENT:
+                  return int(_placement);
+            case P_ID::AUTOPLACE:
+                  return autoplace();
+            case P_ID::Z:
+                  return z();
+            case P_ID::SYSTEM_FLAG:
+                  return systemFlag();
             default:
                   return QVariant();
             }
