@@ -591,6 +591,8 @@ Note::Note(const Note& n, bool link)
 
       // types in _el: SYMBOL, IMAGE, FINGERING, TEXT, BEND
       for (Element* e : n._el) {
+            if (e->isFingering() && staff()->isTabStaff(tick()))    // tablature has no fingering
+                  continue;
             Element* ce = e->clone();
             add(ce);
             if (link)
@@ -1546,11 +1548,12 @@ bool Note::acceptDrop(const DropData& data) const
                   }
             return true;
             }
+      bool isTablature = staff()->isTabStaff(tick());
       return (type == ElementType::ARTICULATION
          || type == ElementType::CHORDLINE
          || type == ElementType::TEXT
          || type == ElementType::REHEARSAL_MARK
-         || type == ElementType::FINGERING
+         || (type == ElementType::FINGERING && !isTablature)
          || type == ElementType::ACCIDENTAL
          || type == ElementType::BREATH
          || type == ElementType::ARPEGGIO
@@ -1603,7 +1606,9 @@ Element* Note::drop(const DropData& data)
       {
       Element* e = data.element;
 
+      bool isTablature = staff()->isTabStaff(tick());
       Chord* ch = chord();
+
       switch(e->type()) {
             case ElementType::REHEARSAL_MARK:
                   return ch->drop(data);
@@ -1615,9 +1620,14 @@ Element* Note::drop(const DropData& data)
                   return e;
 
             case ElementType::FINGERING:
-                  e->setParent(this);
-                  score()->undoAddElement(e);
-                  return e;
+                  if (!isTablature) {
+                        e->setParent(this);
+                        score()->undoAddElement(e);
+                        return e;
+                        }
+                  else
+                        delete e;
+                  return 0;
 
             case ElementType::SLUR:
                   delete e;

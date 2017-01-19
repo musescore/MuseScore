@@ -1385,76 +1385,6 @@ void Score::connectTies(bool silent)
       }
 
 //---------------------------------------------------------
-//   layoutFingering
-//    - place numbers above a note execpt for the last
-//      staff in a multi stave part (piano)
-//    - does not handle chords
-//---------------------------------------------------------
-
-void Score::layoutFingering(Fingering* f)
-      {
-      if (f == 0)
-            return;
-//      StyledPropertyListIdx tst = f->textStyleType();
-//      if (tst != StyledPropertyListIdx::FINGERING && tst != StyledPropertyListIdx::RH_GUITAR_FINGERING && tst != StyledPropertyListIdx::STRING_NUMBER)
-//            return;
-
-      Note* note   = f->note();
-      Chord* chord = note->chord();
-      Staff* staff = chord->staff();
-      Part* part   = staff->part();
-      int n        = part->nstaves();
-      bool voices  = chord->measure()->hasVoices(staff->idx());
-      bool below   = voices ? !chord->up() : (n > 1) && (staff->rstaff() == n-1);
-      bool tight   = voices && !chord->beam();
-
-      f->layout();
-      qreal x = 0.0;
-      qreal y = 0.0;
-      qreal headWidth = note->headWidth();
-      qreal headHeight = note->headHeight();
-      qreal fh = headHeight;        // TODO: fingering number height
-
-      if (chord->notes().size() == 1) {
-            x = headWidth * .5;
-            if (below) {
-                  // place fingering below note
-                  y = fh + spatium() * .4;
-                  if (tight) {
-                        y += 0.5 * spatium();
-                        if (chord->stem())
-                              x += 0.5 * spatium();
-                        }
-                  else if (chord->stem() && !chord->up()) {
-                        // on stem side
-                        y += chord->stem()->height();
-                        x -= spatium() * .4;
-                        }
-                  }
-            else {
-                  // place fingering above note
-                  y = -headHeight - spatium() * .4;
-                  if (tight) {
-                        y -= 0.5 * spatium();
-                        if (chord->stem())
-                              x -= 0.5 * spatium();
-                        }
-                  else if (chord->stem() && chord->up()) {
-                        // on stem side
-                        y -= chord->stem()->height();
-                        x += spatium() * .4;
-                        }
-                  }
-            }
-      else {
-            x -= spatium();
-            }
-      f->setUserOff(QPointF(x, y));
-      if (x != 0 && y != 0)
-            f->setAutoplace(false);
-      }
-
-//---------------------------------------------------------
 //   checkDivider
 //---------------------------------------------------------
 
@@ -3418,7 +3348,8 @@ void LayoutContext::collectPage()
                   m->layout2();
                   }
             }
-      page->rebuildBspTree();
+//      printf("%p ====set rebuild\n", page);
+//      page->rebuildBspTree();
       }
 
 //---------------------------------------------------------
@@ -3460,7 +3391,6 @@ qDebug("%p %d-%d", this, stick, etick);
       MeasureBase* m = tick2measure(stick);
       if (m == 0)
             m = first();
-
       // start layout one measure earlier to handle clefs and cautionary elements
       if (m->prevMeasureMM())
             m = m->prevMeasureMM();
@@ -3476,34 +3406,37 @@ qDebug("%p %d-%d", this, stick, etick);
 
       lc.score        = m->score();
       System* system  = m->system();
-      int systemIndex = _systems.indexOf(system);
 
-      if (system && systemIndex >= 0 && stick > 0) {
+      if (system) {
+            int systemIndex = _systems.indexOf(system);
             lc.page         = system->page();
             lc.curPage      = pageIdx(lc.page);
             if (lc.curPage == -1)
                   lc.curPage = 0;
             lc.curSystem   = system;
             lc.systemList  = _systems.mid(systemIndex);
-            lc.nextMeasure = system->measure(0); // tick2measure(system->measure(0)->tick());
-            _systems.erase(_systems.begin() + systemIndex, _systems.end());
-            if (!lc.nextMeasure->prevMeasure())
-                  lc.measureNo = 0;
+
+//            if (system == _systems.front())
+            if (systemIndex == 0)
+                  lc.nextMeasure = _measures.first();
             else
+                  lc.nextMeasure = _systems[systemIndex-1]->measures().back()->next();
+
+            _systems.erase(_systems.begin() + systemIndex, _systems.end());
+            if (!lc.nextMeasure->prevMeasure()) {
+                  lc.measureNo = 0;
+                  lc.tick      = 0;
+                  }
+            else {
                   lc.measureNo = lc.nextMeasure->no();
+                  lc.tick      = lc.nextMeasure->tick();
+                  }
             }
       else {
-            lc.page        = 0;
-            lc.curPage     = 0;
-            lc.curMeasure  = 0;
             lc.nextMeasure = _measures.first();
-            lc.measureNo   = 0;
-            lc.curSystem   = 0;
-            lc.score       = this;
             }
 
       lc.prevMeasure = 0;
-      lc.tick        = lc.nextMeasure->tick();
 
       getNextMeasure(lc);
       lc.curSystem = collectSystem(lc);
@@ -3553,6 +3486,7 @@ void LayoutContext::layout()
       {
       for (;;) {
             collectPage();
+            page->rebuildBspTree();
             System* s      = page->system(0);
             MeasureBase* m = s->measures().back();
             if (!curSystem || (rangeDone && m->tick() > endTick))

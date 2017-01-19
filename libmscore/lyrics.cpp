@@ -964,8 +964,7 @@ void Lyrics::styleChanged()
 
 void Lyrics::reset()
       {
-      if (placementStyle == PropertyFlags::UNSTYLED)
-            undoChangeProperty(P_ID::PLACEMENT, propertyDefault(P_ID::PLACEMENT), PropertyFlags::STYLED);
+      undoResetProperty(P_ID::PLACEMENT);
       Text::reset();
       }
 

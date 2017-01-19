@@ -980,7 +980,6 @@ class Score : public ScoreElement {
       //@ sets the metatag named 'tag' to 'val'
       Q_INVOKABLE void setMetaTag(const QString& tag, const QString& val);
 
-      void layoutFingering(Fingering*);
       void cmdSplitMeasure(ChordRest*);
       void splitMeasure(Segment*);
       void cmdJoinMeasure(Measure*, Measure*);

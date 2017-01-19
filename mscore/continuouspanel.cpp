@@ -292,6 +292,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       QColor color(MScore::layoutBreakColor);
 
       // Draw measure text number
+      // TODO: simplify (no Text element)
       QString text = QString("#%1").arg(_currentMeasure->no()+1);
       Text* newElement = new Text(_score);
       newElement->setFlag(ElementFlag::MOVABLE, false);
@@ -299,7 +300,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       newElement->setFamily("FreeSans");
       newElement->setSizeIsSpatiumDependent(true);
       newElement->setColor(color);
-      newElement->sameLayout();
+      newElement->layout1();
       pos = QPointF(_score->styleP(StyleIdx::clefLeftMargin) + _widthClef, _y + newElement->height());
       painter.translate(pos);
       newElement->draw(&painter);

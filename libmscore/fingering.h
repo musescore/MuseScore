@@ -32,7 +32,7 @@ class Fingering : public Text {
       virtual Fingering* clone() const override   { return new Fingering(*this); }
       virtual ElementType type() const override { return ElementType::FINGERING; }
 
-      Note* note() const { return (Note*)parent(); }
+      Note* note() const { return toNote(parent()); }
 
       virtual void draw(QPainter*) const override;
       virtual void layout() override;

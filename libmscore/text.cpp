@@ -1238,23 +1238,14 @@ void Text::createLayout()
       }
 
 //---------------------------------------------------------
-//   sameLayout
-//   Updates the text, but keeps the same postition and textStyle
-//---------------------------------------------------------
-
-void Text::sameLayout()
-      {
-      layout1();
-      adjustReadPos();
-      }
-
-//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void Text::layout()
       {
       QPointF o(_offset * (_offsetType == OffsetType::SPATIUM ? spatium() : DPI));
+      if (subStyle() == SubStyle::FINGERING)
+            printf("layout fingering %f %f\n", o.x(), o.y());
       setPos(o);
       layout1();
       adjustReadPos();
@@ -3286,10 +3277,8 @@ void Text::resetProperty(P_ID id)
 
 void Text::reset()
       {
-      for (const StyledProperty& p : Ms::subStyle(_subStyle)) {
-            if (propertyFlags(p.propertyIdx) == PropertyFlags::UNSTYLED)
-                  undoChangeProperty(p.propertyIdx, propertyDefault(p.propertyIdx), PropertyFlags::STYLED);
-            }
+      for (const StyledProperty& p : Ms::subStyle(_subStyle))
+            undoResetProperty(p.propertyIdx);
       Element::reset();
       }
 

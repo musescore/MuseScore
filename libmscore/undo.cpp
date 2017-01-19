@@ -1085,20 +1085,18 @@ void Score::undoAddElement(Element* element)
          || et == ElementType::BEND
          || (et == ElementType::CHORD && toChord(element)->isGrace())
             ) {
-            Element* parent       = element->parent();
+            Element* parent = element->parent();
             const LinkedElements* links = parent->links();
             // don't link part name
             if (et == ElementType::TEXT) {
-                  Text* t = static_cast<Text*>(element);
+                  Text* t = toText(element);
                   if (t->subStyle() == SubStyle::INSTRUMENT_EXCERPT)
                         links = 0;
                   }
             if (links == 0) {
                   undo(new AddElement(element));
-                  if (element->isFingering() && !element->isNudged())
-                        element->score()->layoutFingering(toFingering(element));
 #ifndef QT_NO_DEBUG
-                  else if (element->isChord()) {
+                  if (element->isChord()) {
                         for (Note* n : toChord(element)->notes()) {
                         //      if(n->tpc() == Tpc::TPC_INVALID)
                         //            n->setTpcFromPitch();
@@ -1108,7 +1106,7 @@ void Score::undoAddElement(Element* element)
 #endif
                   return;
                   }
-            foreach (ScoreElement* ee, *links) {
+            for (ScoreElement* ee : *links) {
                   Element* e = static_cast<Element*>(ee);
                   Element* ne;
                   if (e == parent)
@@ -1123,6 +1121,8 @@ void Score::undoAddElement(Element* element)
                               else              //couldn't find suitable start note
                                     continue;
                               }
+                        else if (element->isFingering() && e->staff()->isTabStaff(e->tick()))
+                              continue;   // tablature has no fingering
                         else
                               ne = element->linkedClone();
                         }
@@ -1130,10 +1130,8 @@ void Score::undoAddElement(Element* element)
                   ne->setSelected(false);
                   ne->setParent(e);
                   undo(new AddElement(ne));
-                  if (ne->isFingering())
-                        e->score()->layoutFingering(toFingering(ne));
 #ifndef QT_NO_DEBUG
-                  else if (ne->isChord()) {
+                  if (ne->isChord()) {
                         for (Note* n : toChord(ne)->notes()) {
                               Q_ASSERT(n->tpc() != Tpc::TPC_INVALID);
                         //      n->setTpcFromPitch();

@@ -108,6 +108,7 @@ class SlurTieSegment;
 class FretDiagram;
 class StaffTypeChange;
 class MeasureBase;
+class Page;
 
 enum class P_ID : int;
 enum class PropertyFlags : char;
@@ -385,6 +386,7 @@ class ScoreElement : public QObject {
       CONVERT(Image,         IMAGE)
       CONVERT(ChordLine,     CHORDLINE)
       CONVERT(FretDiagram,   FRET_DIAGRAM)
+      CONVERT(Page,          PAGE)
 #undef CONVERT
 
       bool isChordRest() const       { return isRest() || isChord() || isRepeatMeasure(); }
@@ -524,6 +526,7 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->type
       CONVERT(Image,         IMAGE)
       CONVERT(ChordLine,     CHORDLINE)
       CONVERT(FretDiagram,   FRET_DIAGRAM)
+      CONVERT(Page,          PAGE)
 #undef CONVERT
 
 }

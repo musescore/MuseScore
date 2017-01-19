@@ -15,6 +15,10 @@
 #include "staff.h"
 #include "undo.h"
 #include "xml.h"
+#include "chord.h"
+#include "part.h"
+#include "measure.h"
+#include "stem.h"
 
 namespace Ms {
 
@@ -25,7 +29,7 @@ namespace Ms {
 Fingering::Fingering(Score* s)
   : Text(SubStyle::FINGERING, s)
       {
-      setFlag(ElementFlag::HAS_TAG, true);
+      setFlag(ElementFlag::HAS_TAG, true);      // this is a layered element
       }
 
 //---------------------------------------------------------
@@ -59,10 +63,59 @@ void Fingering::read(XmlReader& e)
 
 void Fingering::layout()
       {
-      if (staff() && staff()->isTabStaff(tick()))     // in TAB staves
-            setbbox(QRectF());                  // fingerings have no area
-      else
-            Text::layout();
+      Text::layout();
+
+      if (autoplace()) {
+            Chord* chord = note()->chord();
+            Staff* staff = chord->staff();
+            Part* part   = staff->part();
+            int n        = part->nstaves();
+            bool voices  = chord->measure()->hasVoices(staff->idx());
+            bool below   = voices ? !chord->up() : (n > 1) && (staff->rstaff() == n-1);
+            bool tight   = voices && !chord->beam();
+
+            qreal x = 0.0;
+            qreal y = 0.0;
+            qreal headWidth = note()->headWidth();
+            qreal headHeight = note()->headHeight();
+            qreal fh = headHeight;        // TODO: fingering number height
+
+            if (chord->notes().size() == 1) {
+                  x = headWidth * .5;
+                  if (below) {
+                        // place fingering below note
+                        y = fh + spatium() * .4;
+                        if (tight) {
+                              y += 0.5 * spatium();
+                              if (chord->stem())
+                                    x += 0.5 * spatium();
+                              }
+                        else if (chord->stem() && !chord->up()) {
+                              // on stem side
+                              y += chord->stem()->height();
+                              x -= spatium() * .4;
+                              }
+                        }
+                  else {
+                        // place fingering above note
+                        y = -headHeight - spatium() * .4;
+                        if (tight) {
+                              y -= 0.5 * spatium();
+                              if (chord->stem())
+                                    x -= 0.5 * spatium();
+                              }
+                        else if (chord->stem() && chord->up()) {
+                              // on stem side
+                              y -= chord->stem()->height();
+                              x += spatium() * .4;
+                              }
+                        }
+                  }
+            else {
+                  x -= spatium();
+                  }
+            setUserOff(QPointF(x, y));
+            }
       }
 
 //---------------------------------------------------------
@@ -71,8 +124,6 @@ void Fingering::layout()
 
 void Fingering::draw(QPainter* painter) const
       {
-      if (staff() && staff()->isTabStaff(tick()))     // hide fingering in TAB staves
-            return;
       Text::draw(painter);
       }
 
@@ -182,11 +233,6 @@ void Fingering::styleChanged()
 
 void Fingering::reset()
       {
-      QPointF o(userOff());
-      score()->layoutFingering(this);
-      QPointF no = userOff();
-      setUserOff(o);
-      score()->undoChangeProperty(this, P_ID::USER_OFF, no);
       Text::reset();
       }
 
