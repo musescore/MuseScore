@@ -231,7 +231,7 @@ QVariant StaffText::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_ID::SUB_STYLE:
-                  return int(SubStyle::STAFF);
+                  return systemFlag() ? int(SubStyle::SYSTEM) : int(SubStyle::STAFF);
             case P_ID::PLACEMENT:
                   return int(Placement::ABOVE);
             default:

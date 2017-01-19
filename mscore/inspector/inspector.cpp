@@ -1024,12 +1024,8 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
                   break;
                   }
             }
-      if (sameTypes) {
-            if (te->systemFlag())
-                  s.title->setText(tr("System Text"));
-            else
-                  s.title->setText(tr("Staff Text"));
-            }
+      if (sameTypes)
+            s.title->setText(te->systemFlag() ? tr("System Text") : tr("Staff Text"));
 
       const std::vector<InspectorItem> il = {
             { P_ID::FONT_FACE,        0, 0, t.fontFace,     t.resetFontFace     },
@@ -1046,7 +1042,8 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
             { P_ID::FRAME_PADDING,    0, 0, t.paddingWidth, t.resetPaddingWidth },
             { P_ID::FRAME_ROUND,      0, 0, t.frameRound,   t.resetFrameRound   },
             { P_ID::ALIGN,            0, 0, t.align,        t.resetAlign        },
-            { P_ID::PLACEMENT,        0, 0, s.placement,    s.resetPlacement    }
+            { P_ID::PLACEMENT,        0, 0, s.placement,    s.resetPlacement    },
+            { P_ID::SUB_STYLE,        0, 0, s.subStyle,     s.resetSubStyle     }
             };
       const std::vector<InspectorPanel> ppList = {
             { t.title, t.panel },
@@ -1055,6 +1052,18 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       s.placement->clear();
       s.placement->addItem(tr("Above"), 0);
       s.placement->addItem(tr("Below"), 1);
+
+      s.subStyle->clear();
+      if (te->systemFlag())
+            s.subStyle->addItem(subStyleUserName(SubStyle::SYSTEM), int(SubStyle::SYSTEM));
+      else
+            s.subStyle->addItem(subStyleUserName(SubStyle::STAFF), int(SubStyle::STAFF));
+      for (auto ss : { SubStyle::TEMPO, SubStyle::METRONOME, SubStyle::REHEARSAL_MARK, SubStyle::REPEAT_LEFT,
+         SubStyle::REPEAT_RIGHT, SubStyle::VOLTA, SubStyle::USER1, SubStyle::USER2 } )
+            {
+            s.subStyle->addItem(subStyleUserName(ss), int(ss));
+            }
+
       mapSignals(il, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
