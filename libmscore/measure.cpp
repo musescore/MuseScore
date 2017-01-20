@@ -2108,6 +2108,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "Symbol"
                || tag == "Tempo"
                || tag == "StaffText"
+               || tag == "SystemText"
                || tag == "RehearsalMark"
                || tag == "InstrumentChange"
                || tag == "StaffState"

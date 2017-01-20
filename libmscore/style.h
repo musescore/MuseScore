@@ -514,7 +514,7 @@ enum class StyleIdx {
       systemFontItalic,
       systemFontUnderline,
       systemOffset,
-      systemSystemFlag,
+//      systemSystemFlag,
 
       staffFontFace,
       staffFontSize,
@@ -522,7 +522,7 @@ enum class StyleIdx {
       staffFontItalic,
       staffFontUnderline,
       staffOffset,
-      staffSystemFlag,
+//      staffSystemFlag,
 
       chordSymbolFontFace,
       chordSymbolFontSize,

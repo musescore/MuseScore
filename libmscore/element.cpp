@@ -65,6 +65,7 @@
 #include "staff.h"
 #include "staffstate.h"
 #include "stafftext.h"
+#include "systemtext.h"
 #include "stafftype.h"
 #include "stem.h"
 #include "style.h"
@@ -1004,6 +1005,7 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::TEXT:              return new Text(score);
             case ElementType::INSTRUMENT_NAME:   return new InstrumentName(score);
             case ElementType::STAFF_TEXT:        return new StaffText(score);
+            case ElementType::SYSTEM_TEXT:       return new SystemText(score);
             case ElementType::REHEARSAL_MARK:    return new RehearsalMark(score);
             case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(score);
             case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(score);

@@ -3389,18 +3389,18 @@ void MuseScore::play(Element* e) const
       if (noSeq || !(seq && seq->isRunning()) || !preferences.playNotes)
             return;
 
-      if (e->type() == ElementType::NOTE) {
-            Note* note = static_cast<Note*>(e);
+      if (e->isNote()) {
+            Note* note = toNote(e);
             play(e, note->ppitch());
             }
-      else if (e->type() == ElementType::CHORD) {
+      else if (e->isChord()) {
             seq->stopNotes();
-            Chord* c = static_cast<Chord*>(e);
+            Chord* c   = toChord(e);
             Part* part = c->staff()->part();
-            int tick = c->segment() ? c->segment()->tick() : 0;
+            int tick   = c->segment() ? c->segment()->tick() : 0;
             seq->seek(tick);
             Instrument* instr = part->instrument(tick);
-            foreach(Note* n, c->notes()) {
+            for (Note* n : c->notes()) {
                   const Channel* channel = instr->channel(n->subchannel());
                   seq->startNote(channel->channel, n->ppitch(), 80, n->tuning());
                   }
@@ -3412,7 +3412,7 @@ void MuseScore::play(Element* e, int pitch) const
       {
       if (noSeq || !(seq && seq->isRunning()))
             return;
-      if (preferences.playNotes && e->type() == ElementType::NOTE) {
+      if (preferences.playNotes && e->isNote()) {
             Note* note = static_cast<Note*>(e);
             int tick = note->chord()->tick();
             if (tick < 0)

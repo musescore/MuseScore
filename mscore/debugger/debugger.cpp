@@ -1361,22 +1361,16 @@ void TextView::textChanged()
 
 void TextView::setElement(Element* e)
       {
-#if 0
-      Text* te = (Text*)e;
+      Text* te = static_cast<Text*>(e);
 
-//      tb.textStyle->clear();
-//      for (int i = 0; i < int(TextStyleType::TEXT_STYLES); ++i)
-//            tb.textStyle->addItem(e->score()->textStyle(TextStyleType(i)).name());
+      tb.subStyle->setText(subStyleName(te->subStyle()));
 
-      TextStyle ts = te->textStyle();
       ShowElementBase::setElement(e);
       tb.text->setPlainText(te->xmlText());
-      tb.xoffset->setValue(ts.offset().x());
-      tb.yoffset->setValue(ts.offset().y());
-      tb.offsetType->setCurrentIndex(int(ts.offsetType()));
-      tb.textStyle->setCurrentIndex(int(te->textStyleType()));
+      tb.xoffset->setValue(te->offset().x());
+      tb.yoffset->setValue(te->offset().y());
+      tb.offsetType->setCurrentIndex(int(te->offsetType()));
       tb.layoutToParentWidth->setChecked(te->layoutToParentWidth());
-#endif
       }
 
 //---------------------------------------------------------
@@ -1591,24 +1585,16 @@ DynamicView::DynamicView()
 
 void DynamicView::setElement(Element* e)
       {
-#if 0
-      Dynamic* dynamic = (Dynamic*)e;
+      Dynamic* dynamic = toDynamic(e);
 
-//      tb.textStyle->clear();
-//      for (int i = int(TextStyleType::DEFAULT); i < int(TextStyleType::TEXT_STYLES); ++i)
-//            tb.textStyle->addItem(e->score()->textStyle(TextStyleType(i)).name());
-
-      const TextStyle& ts = dynamic->textStyle();
       tb.text->setPlainText(dynamic->xmlText());
-      tb.xoffset->setValue(ts.offset().x());
-      tb.yoffset->setValue(ts.offset().y());
-      tb.offsetType->setCurrentIndex(int(ts.offsetType()));
-//TODO      tb.textStyle->setCurrentIndex(dynamic->textStyleType());
+      tb.xoffset->setValue(dynamic->offset().x());
+      tb.yoffset->setValue(dynamic->offset().y());
+      tb.offsetType->setCurrentIndex(int(dynamic->offsetType()));
       tb.layoutToParentWidth->setChecked(dynamic->layoutToParentWidth());
 
       ShowElementBase::setElement(e);
       bl.subType->setValue(int(dynamic->dynamicType()));
-#endif
       }
 
 //---------------------------------------------------------

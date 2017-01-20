@@ -454,6 +454,7 @@ void Segment::add(Element* el)
             case ElementType::FRET_DIAGRAM:
             case ElementType::TEMPO_TEXT:
             case ElementType::STAFF_TEXT:
+            case ElementType::SYSTEM_TEXT:
             case ElementType::REHEARSAL_MARK:
             case ElementType::MARKER:
             case ElementType::IMAGE:
@@ -603,6 +604,7 @@ void Segment::remove(Element* el)
             case ElementType::MARKER:
             case ElementType::REHEARSAL_MARK:
             case ElementType::STAFF_TEXT:
+            case ElementType::SYSTEM_TEXT:
             case ElementType::SYMBOL:
             case ElementType::TAB_DURATION_SYMBOL:
             case ElementType::TEMPO_TEXT:
@@ -1264,6 +1266,7 @@ void Segment::createShape(int staffIdx)
                && !e->isDynamic()
                && !e->isSymbol()
                && !e->isFSymbol()
+               && !e->isSystemText()
                && !e->isStaffText())
                   s.add(e->shape().translated(e->pos()));
             }

@@ -6016,7 +6016,6 @@ Element* ScoreView::elementNear(QPointF p)
       double w = (preferences.proximity * .5) / matrix().m11();
       QRectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
-printf("elementNear\n");
       QList<Element*> el = page->items(r);
       QList<Element*> ll;
       for (Element* e : el) {

@@ -280,6 +280,7 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorLyric(this);
                               break;
                         case ElementType::STAFF_TEXT:
+                        case ElementType::SYSTEM_TEXT:
                               ie = new InspectorStaffText(this);
                               break;
                         case ElementType::STAFFTYPE_CHANGE:
@@ -1013,19 +1014,9 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       s.setupUi(addWidget());
 
       Element* e = inspector->element();
-      Text* te = static_cast<Text*>(e);
-      bool sameTypes = true;
+      Text* te   = static_cast<Text*>(e);
 
-      for (const auto& ee : inspector->el()) {
-            Text* tt = static_cast<Text*>(ee);
-
-            if (tt->systemFlag() != te->systemFlag()) {
-                  sameTypes = false;
-                  break;
-                  }
-            }
-      if (sameTypes)
-            s.title->setText(te->systemFlag() ? tr("System Text") : tr("Staff Text"));
+      s.title->setText(te->isSystemText() ? tr("System Text") : tr("Staff Text"));
 
       const std::vector<InspectorItem> il = {
             { P_ID::FONT_FACE,        0, 0, t.fontFace,     t.resetFontFace     },
@@ -1055,7 +1046,7 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
 
       s.subStyle->clear();
       for (auto ss : { SubStyle::SYSTEM, SubStyle::STAFF, SubStyle::TEMPO, SubStyle::METRONOME, SubStyle::REHEARSAL_MARK,
-                       SubStyle::REPEAT_LEFT, SubStyle::REPEAT_RIGHT, SubStyle::VOLTA, SubStyle::USER1, SubStyle::USER2 } )
+         SubStyle::REPEAT_LEFT, SubStyle::REPEAT_RIGHT, SubStyle::VOLTA, SubStyle::USER1, SubStyle::USER2 } )
             {
             s.subStyle->addItem(subStyleUserName(ss), int(ss));
             }

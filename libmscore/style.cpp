@@ -531,7 +531,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::systemFontItalic,              "systemFontItalic",             false },
       { StyleIdx::systemFontUnderline,           "systemFontUnderline",          false },
       { StyleIdx::systemOffset,                  "systemOffset",                 QPointF(0.0, -4.0) },
-      { StyleIdx::systemSystemFlag,              "systemSystemFlag",             true },
+//      { StyleIdx::systemSystemFlag,              "systemSystemFlag",             true },
 
       { StyleIdx::staffFontFace,                 "staffFontFace",                "FreeSerif" },
       { StyleIdx::staffFontSize,                 "staffFontSize",                10.0 },
@@ -539,7 +539,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::staffFontItalic,               "staffFontItalic",              false },
       { StyleIdx::staffFontUnderline,            "staffFontUnderline",           false },
       { StyleIdx::staffOffset,                   "staffOffset",                  QPointF(0.0, -4.0) },
-      { StyleIdx::staffSystemFlag,               "staffSystemFlag",              false },
+//      { StyleIdx::staffSystemFlag,               "staffSystemFlag",              false },
 
       { StyleIdx::chordSymbolFontFace,           "chordSymbolFontFace",          "FreeSerif" },
       { StyleIdx::chordSymbolFontSize,           "chordSymbolFontSize",          12.0 },
@@ -909,7 +909,7 @@ const std::vector<StyledProperty> systemStyle {
       { StyleIdx::systemFontItalic,                   P_ID::FONT_ITALIC            },
       { StyleIdx::systemFontUnderline,                P_ID::FONT_UNDERLINE         },
       { StyleIdx::systemOffset,                       P_ID::OFFSET                 },
-      { StyleIdx::systemSystemFlag,                   P_ID::SYSTEM_FLAG            },
+//      { StyleIdx::systemSystemFlag,                   P_ID::SYSTEM_FLAG            },
       };
 
 const std::vector<StyledProperty> staffStyle {
@@ -919,7 +919,7 @@ const std::vector<StyledProperty> staffStyle {
       { StyleIdx::staffFontItalic,                    P_ID::FONT_ITALIC            },
       { StyleIdx::staffFontUnderline,                 P_ID::FONT_UNDERLINE         },
       { StyleIdx::staffOffset,                        P_ID::OFFSET                 },
-      { StyleIdx::staffSystemFlag,                    P_ID::SYSTEM_FLAG            },
+//      { StyleIdx::staffSystemFlag,                    P_ID::SYSTEM_FLAG            },
       };
 
 const std::vector<StyledProperty> chordSymbolStyle {
