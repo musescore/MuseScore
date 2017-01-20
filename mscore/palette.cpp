@@ -380,6 +380,7 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
             ElementType type = Element::readType(e, &dragOffset, &duration);
             dropData.element = Element::create(type, score);
             dropData.element->read(e);
+            dropData.element->styleChanged();   // update to local style
 
             Element* el = target->drop(dropData);
             if (el)
