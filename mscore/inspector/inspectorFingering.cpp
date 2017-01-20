@@ -50,10 +50,10 @@ InspectorFingering::InspectorFingering(QWidget* parent)
             };
 
       f.subStyle->clear();
-      f.subStyle->addItem(subStyleUserName(SubStyle::FINGERING),           int(SubStyle::FINGERING));
-      f.subStyle->addItem(subStyleUserName(SubStyle::LH_GUITAR_FINGERING), int(SubStyle::LH_GUITAR_FINGERING));
-      f.subStyle->addItem(subStyleUserName(SubStyle::RH_GUITAR_FINGERING), int(SubStyle::RH_GUITAR_FINGERING));
-      f.subStyle->addItem(subStyleUserName(SubStyle::STRING_NUMBER),       int(SubStyle::STRING_NUMBER));
+      for (auto ss : { SubStyle::FINGERING, SubStyle::LH_GUITAR_FINGERING, SubStyle::RH_GUITAR_FINGERING, SubStyle::STRING_NUMBER } )
+            {
+            f.subStyle->addItem(subStyleUserName(ss), int(ss));
+            }
 
       mapSignals(iiList, ppList);
       }
