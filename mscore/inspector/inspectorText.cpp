@@ -50,17 +50,11 @@ InspectorText::InspectorText(QWidget* parent)
             };
 
       f.subStyle->clear();
-      f.subStyle->addItem(subStyleUserName(SubStyle::FRAME),              int(SubStyle::FRAME));
-      f.subStyle->addItem(subStyleUserName(SubStyle::TITLE),              int(SubStyle::TITLE));
-      f.subStyle->addItem(subStyleUserName(SubStyle::SUBTITLE),           int(SubStyle::SUBTITLE));
-      f.subStyle->addItem(subStyleUserName(SubStyle::COMPOSER),           int(SubStyle::COMPOSER));
-      f.subStyle->addItem(subStyleUserName(SubStyle::POET),               int(SubStyle::POET));
-      f.subStyle->addItem(subStyleUserName(SubStyle::INSTRUMENT_EXCERPT), int(SubStyle::INSTRUMENT_EXCERPT));
-      f.subStyle->addItem(subStyleUserName(SubStyle::TRANSLATOR),         int(SubStyle::TRANSLATOR));
-      f.subStyle->addItem(subStyleUserName(SubStyle::HEADER),             int(SubStyle::HEADER));
-      f.subStyle->addItem(subStyleUserName(SubStyle::FOOTER),             int(SubStyle::FOOTER));
-      f.subStyle->addItem(subStyleUserName(SubStyle::USER1),              int(SubStyle::USER1));
-      f.subStyle->addItem(subStyleUserName(SubStyle::USER2),              int(SubStyle::USER2));
+      for (auto ss : { SubStyle::FRAME, SubStyle::TITLE, SubStyle::SUBTITLE,SubStyle::COMPOSER, SubStyle::POET, SubStyle::INSTRUMENT_EXCERPT,
+                       SubStyle::TRANSLATOR, SubStyle::HEADER, SubStyle::FOOTER, SubStyle::USER1, SubStyle::USER2 } )
+            {
+            f.subStyle->addItem(subStyleUserName(ss), int(ss));
+            }
 
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       mapSignals(iiList, ppList);
