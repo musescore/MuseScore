@@ -460,6 +460,7 @@ void ScoreView::dropEvent(QDropEvent* event)
 
       if (dragElement) {
             bool applyUserOffset = false;
+            dragElement->styleChanged();
             _score->startCmd();
             Q_ASSERT(dragElement->score() == score());
             _score->addRefresh(dragElement->canvasBoundingRect());

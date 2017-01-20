@@ -3300,10 +3300,8 @@ StyleIdx Text::getPropertyStyle(P_ID id) const
 void Text::styleChanged()
       {
       for (const StyledProperty& p : Ms::subStyle(_subStyle)) {
-            if (propertyFlags(p.propertyIdx) == PropertyFlags::STYLED) {
+            if (propertyFlags(p.propertyIdx) == PropertyFlags::STYLED)
                   setProperty(p.propertyIdx, propertyDefault(p.propertyIdx));
-                  setPropertyFlags(p.propertyIdx, PropertyFlags::STYLED);
-                  }
             }
       Element::styleChanged();
       }
