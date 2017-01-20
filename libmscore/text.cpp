@@ -1244,8 +1244,6 @@ void Text::createLayout()
 void Text::layout()
       {
       QPointF o(_offset * (_offsetType == OffsetType::SPATIUM ? spatium() : DPI));
-      if (subStyle() == SubStyle::FINGERING)
-            printf("layout fingering %f %f\n", o.x(), o.y());
       setPos(o);
       layout1();
       adjustReadPos();

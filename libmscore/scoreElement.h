@@ -109,6 +109,7 @@ class FretDiagram;
 class StaffTypeChange;
 class MeasureBase;
 class Page;
+class SystemText;
 
 enum class P_ID : int;
 enum class PropertyFlags : char;
@@ -176,6 +177,7 @@ enum class ElementType : char {
       TUPLET,
       TEMPO_TEXT,
       STAFF_TEXT,
+      SYSTEM_TEXT,
       REHEARSAL_MARK,
       INSTRUMENT_CHANGE,
       STAFFTYPE_CHANGE,
@@ -387,6 +389,7 @@ class ScoreElement : public QObject {
       CONVERT(ChordLine,     CHORDLINE)
       CONVERT(FretDiagram,   FRET_DIAGRAM)
       CONVERT(Page,          PAGE)
+      CONVERT(SystemText,    SYSTEM_TEXT)
 #undef CONVERT
 
       bool isChordRest() const       { return isRest() || isChord() || isRepeatMeasure(); }
@@ -527,6 +530,7 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->type
       CONVERT(ChordLine,     CHORDLINE)
       CONVERT(FretDiagram,   FRET_DIAGRAM)
       CONVERT(Page,          PAGE)
+      CONVERT(SystemText,    SYSTEM_TEXT)
 #undef CONVERT
 
 }

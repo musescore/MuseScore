@@ -27,21 +27,23 @@ StaffText::StaffText(Score* s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setPlacement(Placement::ABOVE);     // default
-      _setAeolusStops = false;
-      _swing = false;
-      clearAeolusStops();
+      setSwingParameters(MScore::division / 2, 60);
+      }
+
+StaffText::StaffText(SubStyle ss, Score* s)
+   : Text(ss, s)
+      {
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
+      setPlacement(Placement::ABOVE);     // default
       setSwingParameters(MScore::division / 2, 60);
       }
 
 //---------------------------------------------------------
-//   write
+//   writeProperties
 //---------------------------------------------------------
 
-void StaffText::write(XmlWriter& xml) const
+void StaffText::writeProperties(XmlWriter& xml) const
       {
-      if (!xml.canWrite(this))
-            return;
-      xml.stag("StaffText");
       for (ChannelActions s : _channelActions) {
             int channel = s.channel;
             for (QString name : s.midiActionNames)
@@ -67,6 +69,18 @@ void StaffText::write(XmlWriter& xml) const
             xml.tagE(QString("swing unit=\"%1\" ratio= \"%2\"").arg(swingUnit).arg(swingRatio));
             }
       Text::writeProperties(xml);
+      }
+
+//---------------------------------------------------------
+//   write
+//---------------------------------------------------------
+
+void StaffText::write(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag("StaffText");
+      writeProperties(xml);
       xml.etag();
       }
 
@@ -231,7 +245,7 @@ QVariant StaffText::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_ID::SUB_STYLE:
-                  return systemFlag() ? int(SubStyle::SYSTEM) : int(SubStyle::STAFF);
+                  return int(SubStyle::STAFF);
             case P_ID::PLACEMENT:
                   return int(Placement::ABOVE);
             default:

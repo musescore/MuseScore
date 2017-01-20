@@ -10,27 +10,27 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __REHEARSALMARK_H__
-#define __REHEARSALMARK_H__
+#ifndef __SYSTEMTEXT_H__
+#define __SYSTEMTEXT_H__
 
-#include "text.h"
+#include "stafftext.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   @@ RehearsalMark
+//   SystemText
 //---------------------------------------------------------
 
-class RehearsalMark : public Text  {
+class SystemText : public StaffText  {
       Q_OBJECT
 
    public:
-      RehearsalMark(Score* score);
-      virtual RehearsalMark* clone() const override { return new RehearsalMark(*this); }
-      virtual ElementType type() const override     { return ElementType::REHEARSAL_MARK; }
+      SystemText(Score* score);
+      virtual SystemText* clone() const override    { return new SystemText(*this); }
+      virtual ElementType type() const override     { return ElementType::SYSTEM_TEXT; }
       Segment* segment() const                      { return (Segment*)parent(); }
-      virtual void layout() override;
       virtual QVariant propertyDefault(P_ID id) const override;
+      virtual void write(XmlWriter& xml) const;
       };
 
 
