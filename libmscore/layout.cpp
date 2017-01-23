@@ -1406,7 +1406,7 @@ static void checkDivider(bool left, System* s, qreal sdd)
                   }
             else {
                   divider->rypos() += s->score()->styleD(StyleIdx::dividerRightY) * SPATIUM20;
-                  divider->rxpos() =  s->score()->pageFormat()->printableWidth() * DPI - divider->width();
+                  divider->rxpos() =  s->score()->styleD(StyleIdx::pagePrintableWidth) * DPI - divider->width();
                   divider->rxpos() += s->score()->styleD(StyleIdx::dividerRightX) * SPATIUM20;
                   }
             divider->adjustReadPos();
@@ -2722,7 +2722,7 @@ System* Score::collectSystem(LayoutContext& lc)
       qreal minWidth    = 0;
       bool firstMeasure = true;
       bool createHeader = false;
-      qreal systemWidth = pageFormat()->printableWidth() * DPI;
+      qreal systemWidth = styleD(StyleIdx::pagePrintableWidth) * DPI;
       system->setWidth(systemWidth);
 
       while (lc.curMeasure) {    // collect measure for system

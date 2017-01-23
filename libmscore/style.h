@@ -13,7 +13,6 @@
 #ifndef __STYLE_H__
 #define __STYLE_H__
 
-#include "pageformat.h"
 #include "chordlist.h"
 
 namespace Ms {
@@ -21,7 +20,6 @@ namespace Ms {
 enum class P_ID : int;
 class XmlWriter;
 struct ChordDescription;
-class PageFormat;
 class Element;
 
 //---------------------------------------------------------
@@ -32,6 +30,18 @@ class Element;
 
 enum class StyleIdx {
       NOSTYLE = -1,
+
+      pageWidth,
+      pageHeight,
+      pagePrintableWidth,
+      pageEvenLeftMargin,
+      pageOddLeftMargin,
+      pageEvenTopMargin,
+      pageEvenBottomMargin,
+      pageOddTopMargin,
+      pageOddBottomMargin,
+      pageTwosided,
+
       staffUpperBorder,
       staffLowerBorder,
       staffDistance,
@@ -724,8 +734,6 @@ class MStyle {
       std::array<qreal, int(StyleIdx::STYLES)> _precomputedValues;
 
       ChordList _chordList;
-      PageFormat _pageFormat;
-
       bool _customChordList;        // if true, chordlist will be saved as part of score
 
    public:
@@ -747,10 +755,6 @@ class MStyle {
       void load(XmlReader& e);
       void save(XmlWriter& xml, bool optimize);
       bool readProperties(XmlReader&);
-
-      PageFormat* pageFormat()             { return &_pageFormat; }
-      const PageFormat* pageFormat() const { return &_pageFormat; }
-      void setPageFormat(const PageFormat& pf);
 
       static const char* valueType(const StyleIdx);
       static const char* valueName(const StyleIdx);

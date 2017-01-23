@@ -62,7 +62,6 @@ class MuseScoreView;
 class Note;
 class Omr;
 class Page;
-class PageFormat;
 class Parameter;
 class Part;
 class RepeatList;
@@ -606,8 +605,6 @@ class Score : public ScoreElement {
       void undoChangeInvisible(Element*, bool);
       void undoChangeBracketSpan(Staff* staff, int column, int span);
       void undoChangeTuning(Note*, qreal);
-      void undoChangePageFormat(PageFormat*);
-      void undoChangePageFormat(PageFormat*, qreal spatium, int);
       void undoChangeUserMirror(Note*, MScore::DirectionH);
       void undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent);
       void undoChangeClef(Staff* ostaff, Segment*, ClefType st);
@@ -621,6 +618,7 @@ class Score : public ScoreElement {
       void undoRemoveBracket(Bracket*);
       void undoInsertTime(int tick, int len);
       void undoChangeBarLine(Measure*, BarLineType, bool beginBarLine = false);
+      void undoChangeStyleVal(StyleIdx idx, const QVariant& v);
 
       void setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
@@ -802,9 +800,6 @@ class Score : public ScoreElement {
 
       qreal spatium() const                    { return styleD(StyleIdx::spatium);    }
       void setSpatium(qreal v)                 { style().set(StyleIdx::spatium, v);  }
-      PageFormat* pageFormat()                 { return style().pageFormat(); }
-      const PageFormat* pageFormat() const     { return style().pageFormat(); }
-      void setPageFormat(const PageFormat& pf) { style().setPageFormat(pf);   }
 
       bool genCourtesyTimesig() const          { return styleB(StyleIdx::genCourtesyTimesig); }
       bool genCourtesyClef() const             { return styleB(StyleIdx::genCourtesyClef); }
@@ -1104,7 +1099,7 @@ class Score : public ScoreElement {
       QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 
       //@ ??
-      Q_INVOKABLE void cropPage(qreal margins);
+//      Q_INVOKABLE void cropPage(qreal margins);
       bool sanityCheck(const QString& name = QString());
 
       bool checkKeys();

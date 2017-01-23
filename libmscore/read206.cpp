@@ -50,6 +50,55 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   @@ PageFormat
+//---------------------------------------------------------
+
+class PageFormat {
+      QSizeF _size;
+      qreal _printableWidth;        // _width - left margin - right margin
+      qreal _evenLeftMargin;        // values in inch
+      qreal _oddLeftMargin;
+      qreal _evenTopMargin;
+      qreal _evenBottomMargin;
+      qreal _oddTopMargin;
+      qreal _oddBottomMargin;
+      bool _twosided;
+
+   public:
+      PageFormat();
+
+      const QSizeF& size() const          { return _size;          }    // size in inch
+      qreal width() const                 { return _size.width();  }
+      qreal height() const                { return _size.height(); }
+      void setSize(const QSizeF& s)       { _size = s;             }
+
+      void read(XmlReader&);
+      void write(XmlWriter&) const;
+      qreal evenLeftMargin() const        { return _evenLeftMargin;   }
+      qreal oddLeftMargin() const         { return _oddLeftMargin;    }
+      qreal evenTopMargin() const         { return _evenTopMargin;    }
+      qreal evenBottomMargin() const      { return _evenBottomMargin; }
+      qreal oddTopMargin() const          { return _oddTopMargin;     }
+      qreal oddBottomMargin() const       { return _oddBottomMargin;  }
+      qreal printableWidth() const        { return _printableWidth;   }
+
+      void setEvenLeftMargin(qreal val)   { _evenLeftMargin = val;   }
+      void setOddLeftMargin(qreal val)    { _oddLeftMargin = val;    }
+      void setEvenTopMargin(qreal val)    { _evenTopMargin = val;    }
+      void setEvenBottomMargin(qreal val) { _evenBottomMargin = val; }
+      void setOddTopMargin(qreal val)     { _oddTopMargin = val;     }
+      void setOddBottomMargin(qreal val)  { _oddBottomMargin = val;  }
+      void setPrintableWidth(qreal val)   { _printableWidth = val;   }
+
+      bool twosided() const               { return _twosided; }
+      void setTwosided(bool val)          { _twosided = val;  }
+
+      // convenience functions
+      qreal evenRightMargin() const       { return _size.width() - _printableWidth - _evenLeftMargin; }
+      qreal oddRightMargin() const        { return _size.width() - _printableWidth - _oddLeftMargin;  }
+      };
+
+//---------------------------------------------------------
 //   StyleVal206
 //---------------------------------------------------------
 
@@ -1391,6 +1440,11 @@ static void readStaffContent(Score* score, XmlReader& e)
                   }
             }
       }
+
+//---------------------------------------------------------
+//   readStyle
+//---------------------------------------------------------
+
 static void readStyle(MStyle* style, XmlReader& e)
       {
       QString oldChordDescriptionFile = style->value(StyleIdx::chordDescriptionFile).toString();
@@ -1416,9 +1470,12 @@ static void readStyle(MStyle* style, XmlReader& e)
             else if (tag == "Spatium")
                   style->set(StyleIdx::spatium, e.readDouble() * DPMM);
             else if (tag == "page-layout") {
+                  e.skipCurrentElement();
+#if 0 // TODO
                   PageFormat pf = *style->pageFormat();
                   pf.read(e);
                   style->setPageFormat(pf);
+#endif
                   }
             else if (tag == "displayInConcertPitch")
                   style->set(StyleIdx::concertPitch, QVariant(bool(e.readInt())));
@@ -1433,11 +1490,8 @@ static void readStyle(MStyle* style, XmlReader& e)
                         }
                   chordListTag = true;
                   }
-            else {
-//                  QString val(e.readElementText());
-//                  style->convertToUnit(tag, val);
+            else
                   style->readProperties(e);
-                  }
             }
 
       // if we just specified a new chord description file
@@ -1607,20 +1661,8 @@ static bool readScore(Score* score, XmlReader& e)
                         m->addExcerpt(ex);
                         }
                   }
-            else if (tag == "PageList") {
+            else if (tag == "PageList")
                   e.skipCurrentElement();
-#if 0
-                  while (e.readNextStartElement()) {
-                        if (e.name() == "Page") {
-                              Page* page = new Page(score);
-                              score->pages().append(page);
-                              page->read(e);
-                              }
-                        else
-                              e.unknown();
-                        }
-#endif
-                  }
             else if (tag == "name") {
                   QString n = e.readElementText();
                   if (!score->isMaster())             //ignore the name if it's not a child score
@@ -1714,25 +1756,87 @@ static bool readScore(Score* score, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   read
+//  <page-layout>
+//      <page-height>
+//      <page-width>
+//      <landscape>1</landscape>
+//      <page-margins type="both">
+//         <left-margin>28.3465</left-margin>
+//         <right-margin>28.3465</right-margin>
+//         <top-margin>28.3465</top-margin>
+//         <bottom-margin>56.6929</bottom-margin>
+//         </page-margins>
+//      </page-layout>
+//---------------------------------------------------------
+
+void PageFormat::read(XmlReader& e)
+      {
+      qreal _oddRightMargin  = 0.0;
+      qreal _evenRightMargin = 0.0;
+      QString type;
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "page-margins") {
+                  type = e.attribute("type","both");
+                  qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        qreal val = e.readDouble() * 0.5 / PPI;
+                        if (tag == "left-margin")
+                              lm = val;
+                        else if (tag == "right-margin")
+                              rm = val;
+                        else if (tag == "top-margin")
+                              tm = val;
+                        else if (tag == "bottom-margin")
+                              bm = val;
+                        else
+                              e.unknown();
+                        }
+                  _twosided = type == "odd" || type == "even";
+                  if (type == "odd" || type == "both") {
+                        _oddLeftMargin   = lm;
+                        _oddRightMargin  = rm;
+                        _oddTopMargin    = tm;
+                        _oddBottomMargin = bm;
+                        }
+                  if (type == "even" || type == "both") {
+                        _evenLeftMargin   = lm;
+                        _evenRightMargin  = rm;
+                        _evenTopMargin    = tm;
+                        _evenBottomMargin = bm;
+                        }
+                  }
+            else if (tag == "page-height")
+                  _size.rheight() = e.readDouble() * 0.5 / PPI;
+            else if (tag == "page-width")
+                  _size.rwidth() = e.readDouble() * .5 / PPI;
+            else
+                  e.unknown();
+            }
+      qreal w1        = _size.width() - _oddLeftMargin - _oddRightMargin;
+      qreal w2        = _size.width() - _evenLeftMargin - _evenRightMargin;
+      _printableWidth = qMin(w1, w2);     // silently adjust right margins
+      }
+
+//---------------------------------------------------------
 //   read206
 //    import old version > 1.3  and < 2.x files
 //---------------------------------------------------------
 
 Score::FileError MasterScore::read206(XmlReader& e)
       {
+      qDebug("read206");
+
       for (unsigned int i = 0; i < sizeof(style206)/sizeof(*style206); ++i)
             style().set(style206[i].idx, style206[i].val);
       // old text style default
-#if 0
-      TextStyle ts = style().textStyle("Rehearsal Mark");
-      ts.setSquare(false);
-      ts.setFrameRound(20);
-      style().setTextStyle(ts);
-      ts = style().textStyle("Dynamics");
-      ts.setItalic(false);
-      style().setTextStyle(ts);
-#endif
-      qDebug("read206");
+      style().set(StyleIdx::rehearsalMarkFrameSquare, false);
+      style().set(StyleIdx::rehearsalMarkFrameRound, 20);
+      style().set(StyleIdx::dynamicsFontItalic, false);
+
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "programVersion") {

@@ -51,6 +51,17 @@ struct StyleType {
 #define MM(x) ((x)/INCH)
 
 static const StyleType styleTypes[] {
+      { StyleIdx::pageWidth,               "pageWidth",               210.0/INCH },
+      { StyleIdx::pageHeight,              "pageHeight",              297.0/INCH }, // A4
+      { StyleIdx::pagePrintableWidth,      "pagePrintableWidth",      190.0/INCH },
+      { StyleIdx::pageEvenLeftMargin,      "pageEvenLeftMargin",      10.0/INCH  },
+      { StyleIdx::pageOddLeftMargin,       "pageOddLeftMargin",       10.0/INCH  },
+      { StyleIdx::pageEvenTopMargin,       "pageEvenTopMargin",       10.0/INCH  },
+      { StyleIdx::pageEvenBottomMargin,    "pageEvenBottomMargin",    20.0/INCH  },
+      { StyleIdx::pageOddTopMargin,        "pageOddTopMargin",        10.0/INCH  },
+      { StyleIdx::pageOddBottomMargin,     "pageOddBottomMargin",     20.0/INCH  },
+      { StyleIdx::pageTwosided,            "pageTwosided",            true       },
+
       { StyleIdx::staffUpperBorder,        "staffUpperBorder",        Spatium(7.0)  },
       { StyleIdx::staffLowerBorder,        "staffLowerBorder",        Spatium(7.0)  },
       { StyleIdx::staffDistance,           "staffDistance",           Spatium(6.5)  },
@@ -1376,7 +1387,8 @@ void MStyle::load(XmlReader& e)
             else if (tag == "Spatium")
                   set(StyleIdx::spatium, e.readDouble() * DPMM);
             else if (tag == "page-layout")
-                  _pageFormat.read(e);
+                  // _pageFormat.read(e);
+                  e.skipCurrentElement();
             else if (tag == "displayInConcertPitch")
                   set(StyleIdx::concertPitch, QVariant(bool(e.readInt())));
             else if (tag == "ChordList") {
@@ -1452,20 +1464,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             _chordList.write(xml);
             xml.etag();
             }
-//      if (!MScore::saveTemplateMode || (_pageFormat.name() != "A4" && _pageFormat.name() != "Letter"))
-      if (!MScore::saveTemplateMode)
-            _pageFormat.write(xml);
       xml.tag("Spatium", value(StyleIdx::spatium).toDouble() / DPMM);
       xml.etag();
-      }
-
-//---------------------------------------------------------
-//   setPageFormat
-//---------------------------------------------------------
-
-void MStyle::setPageFormat(const PageFormat& pf)
-      {
-      _pageFormat = pf;
       }
 
 #ifndef NDEBUG

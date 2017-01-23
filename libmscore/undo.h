@@ -66,7 +66,6 @@ class Dynamic;
 class Selection;
 class Text;
 struct Channel;
-class PageFormat;
 class TextStyle;
 class Tuplet;
 class KeySig;
@@ -571,26 +570,6 @@ class ChangePatch : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangePageFormat
-//---------------------------------------------------------
-
-class ChangePageFormat : public UndoCommand {
-      Score* score;
-      PageFormat* pf;
-      qreal spatium;
-      int pageOffset;
-
-      void flip();
-
-   public:
-      ChangePageFormat(Score*, PageFormat*, qreal sp, int po);
-      ~ChangePageFormat();
-      virtual void undo() { flip(); }
-      virtual void redo() { flip(); }
-      UNDO_NAME("ChangePageFormat")
-      };
-
-//---------------------------------------------------------
 //   ChangeStaff
 //---------------------------------------------------------
 
@@ -641,37 +620,6 @@ class ChangePart : public UndoCommand {
       ChangePart(Part*, Instrument*, const QString& name);
       UNDO_NAME("ChangePart")
       };
-
-#if 0
-//---------------------------------------------------------
-//   ChangeTextStyle
-//---------------------------------------------------------
-
-class ChangeTextStyle : public UndoCommand {
-      Score* score;
-      TextStyle style;
-      void flip();
-
-   public:
-      ChangeTextStyle(Score*, const TextStyle& style);
-      UNDO_NAME("ChangeTextStyle")
-      };
-
-//---------------------------------------------------------
-//   AddTextStyle
-//---------------------------------------------------------
-
-class AddTextStyle : public UndoCommand {
-      Score* score;
-      TextStyle style;
-
-   public:
-      AddTextStyle(Score* s, const TextStyle& st) : score(s), style(st) {}
-      virtual void undo();
-      virtual void redo();
-      UNDO_NAME("AddTextStyle")
-      };
-#endif
 
 //---------------------------------------------------------
 //   ChangeStyle

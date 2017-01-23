@@ -1477,12 +1477,10 @@ void MuseScore::printFile()
             }
 
       QPrinter printerDev(QPrinter::HighResolution);
-      const PageFormat* pf = cs->pageFormat();
-      QPageSize ps(QPageSize::id(pf->size(), QPageSize::Inch));
+      QSizeF size(cs->styleD(StyleIdx::pageWidth), cs->styleD(StyleIdx::pageHeight));
+      QPageSize ps(QPageSize::id(size, QPageSize::Inch));
       printerDev.setPageSize(ps);
-      printerDev.setPageOrientation(
-            pf->size().width() > pf->size().height() ? QPageLayout::Landscape : QPageLayout::Portrait
-         );
+      printerDev.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
 
       printerDev.setCreator("MuseScore Version: " VERSION);
       printerDev.setFullPage(true);
@@ -1899,8 +1897,9 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
 
       QPdfWriter printerDev(saveName);
       printerDev.setResolution(preferences.exportPdfDpi);
-      const PageFormat* pf = cs->pageFormat();
-      printerDev.setPageSize(QPageSize(pf->size(), QPageSize::Inch));
+      QSizeF size(cs->styleD(StyleIdx::pageWidth), cs->styleD(StyleIdx::pageHeight));
+      QPageSize ps(QPageSize::id(size, QPageSize::Inch));
+      printerDev.setPageSize(ps);
 
       printerDev.setCreator("MuseScore Version: " VERSION);
       if (!printerDev.setPageMargins(QMarginsF()))
@@ -1923,9 +1922,9 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
 
-      p.setViewport(QRect(0.0, 0.0, pf->size().width() * printerDev.logicalDpiX(),
-         pf->size().height()*printerDev.logicalDpiY()));
-      p.setWindow(QRect(0.0, 0.0, pf->size().width() * DPI, pf->size().height() * DPI));
+      p.setViewport(QRect(0.0, 0.0, size.width() * printerDev.logicalDpiX(),
+         size.height()*printerDev.logicalDpiY()));
+      p.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
 
       double pr = MScore::pixelRatio;
       MScore::pixelRatio = DPI / printerDev.logicalDpiX();
@@ -1955,8 +1954,9 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
 
       QPrinter printerDev(QPrinter::HighResolution);
       printerDev.setResolution(preferences.exportPdfDpi);
-      const PageFormat* pf = firstScore->pageFormat();
-      printerDev.setPaperSize(pf->size(), QPrinter::Inch);
+
+      QSizeF size(firstScore->styleD(StyleIdx::pageWidth), firstScore->styleD(StyleIdx::pageHeight));
+      printerDev.setPaperSize(size, QPrinter::Inch);
 
       printerDev.setCreator("MuseScore Version: " VERSION);
       printerDev.setFullPage(true);
@@ -1980,9 +1980,9 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
 
-      p.setViewport(QRect(0.0, 0.0, pf->size().width() * printerDev.logicalDpiX(),
-         pf->size().height()*printerDev.logicalDpiY()));
-      p.setWindow(QRect(0.0, 0.0, pf->size().width() * DPI, pf->size().height() * DPI));
+      p.setViewport(QRect(0.0, 0.0, size.width() * printerDev.logicalDpiX(),
+         size.height() * printerDev.logicalDpiY()));
+      p.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
 
       double pr = MScore::pixelRatio;
       MScore::pixelRatio = DPI / printerDev.logicalDpiX();
@@ -1998,8 +1998,8 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             s->doLayout();
             s->setPrinting(true);
 
-            const PageFormat* pf = s->pageFormat();
-            printerDev.setPaperSize(pf->size(), QPrinter::Inch);
+//            const PageFormat* pf = s->pageFormat();
+//            printerDev.setPaperSize(pf->size(), QPrinter::Inch);
 
             const QList<Page*> pl = s->pages();
             int pages    = pl.size();

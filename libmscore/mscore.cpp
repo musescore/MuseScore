@@ -57,7 +57,6 @@
 #include "excerpt.h"
 #include "spatium.h"
 #include "barline.h"
-#include "pageformat.h"
 
 namespace Ms {
 
@@ -306,6 +305,7 @@ void MScore::init()
             if (f.open(QIODevice::ReadOnly))
                   _defaultStyleForParts.load(&f);
             }
+
 
       //
       //  load internal fonts

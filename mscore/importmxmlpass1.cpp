@@ -643,14 +643,13 @@ static void addText2(VBox* vbx, Score* s, QString strTxt, SubStyle stl, Align v,
 
 static void doCredits(Score* score, const CreditWordsList& credits, const int pageWidth, const int pageHeight)
       {
-      const PageFormat* pf = score->pageFormat();
       /*
       qDebug("MusicXml::doCredits()");
       qDebug("page format set (inch) w=%g h=%g tm=%g spatium=%g DPMM=%g DPI=%g",
              pf->width(), pf->height(), pf->oddTopMargin(), score->spatium(), DPMM, DPI);
       */
       // page width, height and odd top margin in tenths
-      const double ph  = pf->height() * 10 * DPI / score->spatium();
+      const double ph  = score->styleD(StyleIdx::pageHeight) * 10 * DPI / score->spatium();
       const int pw1 = pageWidth / 3;
       const int pw2 = pageWidth * 2 / 3;
       const int ph2 = pageHeight / 2;
@@ -1389,8 +1388,8 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
             else if (_e.name() == "page-layout") {
                   PageFormat pf;
                   pageLayout(pf, millimeter / (tenths * INCH), pageWidth, pageHeight);
-                  if (preferences.musicxmlImportLayout)
-                        _score->setPageFormat(pf);
+//TODO:ws                  if (preferences.musicxmlImportLayout)
+//                        _score->setPageFormat(pf);
                   }
             else if (_e.name() == "system-layout") {
                   while (_e.readNextStartElement()) {
@@ -1487,18 +1486,18 @@ void MusicXMLParserPass1::pageLayout(PageFormat& pf, const qreal conversion,
                         else
                               skipLogCurrElem();
                         }
-                  pf.setTwosided(type == "odd" || type == "even");
+                  pf.twosided = type == "odd" || type == "even";
                   if (type == "odd" || type == "both") {
-                        pf.setOddLeftMargin(lm);
+                        pf.oddLeftMargin = lm;
                         _oddRightMargin = rm;
-                        pf.setOddTopMargin(tm);
-                        pf.setOddBottomMargin(bm);
+                        pf.oddTopMargin = tm;
+                        pf.oddBottomMargin = bm;
                         }
                   if (type == "even" || type == "both") {
-                        pf.setEvenLeftMargin(lm);
+                        pf.evenLeftMargin = lm;
                         _evenRightMargin = rm;
-                        pf.setEvenTopMargin(tm);
-                        pf.setEvenBottomMargin(bm);
+                        pf.evenTopMargin = tm;
+                        pf.evenBottomMargin = bm;
                         }
                   }
             else if (_e.name() == "page-height") {
@@ -1516,10 +1515,10 @@ void MusicXMLParserPass1::pageLayout(PageFormat& pf, const qreal conversion,
             else
                   skipLogCurrElem();
             }
-      pf.setSize(size);
-      qreal w1 = size.width() - pf.oddLeftMargin() - _oddRightMargin;
-      qreal w2 = size.width() - pf.evenLeftMargin() - _evenRightMargin;
-      pf.setPrintableWidth(qMax(w1, w2));   // silently adjust right margins
+      pf.size = size;
+      qreal w1 = size.width() - pf.oddLeftMargin - _oddRightMargin;
+      qreal w2 = size.width() - pf.evenLeftMargin - _evenRightMargin;
+      pf.printableWidth = qMax(w1, w2);   // silently adjust right margins
       }
 
 //---------------------------------------------------------

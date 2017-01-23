@@ -47,8 +47,8 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
             chord->setBeamMode(_groups.beamMode(tick, t));
             chords->push_back(chord);
             }
-      c.score()->pageFormat()->setEvenLeftMargin(0.0);
-      c.score()->pageFormat()->setOddLeftMargin(0.0);
+      c.score()->style().set(StyleIdx::pageEvenLeftMargin, 0.0);
+      c.score()->style().set(StyleIdx::pageOddLeftMargin, 0.0);
 
       c.score()->parts().front()->setLongName("");
       c.score()->style().set(StyleIdx::linearStretch, 1.3);

@@ -1040,6 +1040,7 @@ void ExportMusicXml::calcDivisions()
 #endif
       }
 
+#if 0
 //---------------------------------------------------------
 //   writePageFormat
 //---------------------------------------------------------
@@ -1070,6 +1071,7 @@ static void writePageFormat(const PageFormat* pf, XmlWriter& xml, double convers
 
       xml.etag();
       }
+#endif
 
 //---------------------------------------------------------
 //   defaults
@@ -1084,9 +1086,9 @@ static void defaults(XmlWriter& xml, Score* s, double& millimeters, const int& t
       xml.tag("millimeters", millimeters);
       xml.tag("tenths", tenths);
       xml.etag();
-      const PageFormat* pf = s->pageFormat();
-      if (pf)
-            writePageFormat(pf, xml, INCH / millimeters * tenths);
+//TODO:ws      const PageFormat* pf = s->pageFormat();
+//      if (pf)
+//            writePageFormat(pf, xml, INCH / millimeters * tenths);
 
       // TODO: also write default system layout here
       // when exporting only manual or no breaks, system-distance is not written at all
@@ -1153,14 +1155,12 @@ void ExportMusicXml::credits(XmlWriter& xml)
       QString rights = _score->metaTag("copyright");
 
       // determine page formatting
-      const PageFormat* pf = _score->pageFormat();
-      if (!pf) return;
-      const double h  = getTenthsFromInches(pf->size().height());
-      const double w  = getTenthsFromInches(pf->size().width());
-      const double lm = getTenthsFromInches(pf->oddLeftMargin());
-      const double rm = getTenthsFromInches(pf->oddRightMargin());
+      const double h  = getTenthsFromInches(_score->styleD(StyleIdx::pageHeight));
+      const double w  = getTenthsFromInches(_score->styleD(StyleIdx::pageWidth));
+      const double lm = getTenthsFromInches(_score->styleD(StyleIdx::pageOddLeftMargin));
+      const double rm = getTenthsFromInches(_score->styleD(StyleIdx::pagePrintableWidth) - _score->styleD(StyleIdx::pageOddLeftMargin));
       //const double tm = getTenthsFromInches(pf->oddTopMargin());
-      const double bm = getTenthsFromInches(pf->oddBottomMargin());
+      const double bm = getTenthsFromInches(_score->styleD(StyleIdx::pageOddBottomMargin));
       //qDebug("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
 
       // write the credits
@@ -2395,8 +2395,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
       qDebug(" newtick=%d", tick);
 #endif
 
-      const PageFormat* pf = _score->pageFormat();
-      const double pageHeight  = getTenthsFromInches(pf->size().height());
+      const double pageHeight  = getTenthsFromInches(_score->styleD(StyleIdx::pageHeight));
       // const double pageWidth  = getTenthsFromInches(pf->size().width());
 
       for (Note* note : nl) {
@@ -2405,7 +2404,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
             attr.doAttr(xml, false);
             QString noteTag = QString("note");
 
-            if (preferences.musicxmlExportLayout && pf) {
+            if (preferences.musicxmlExportLayout) {
                   double measureX = getTenthsFromDots(chord->measure()->pagePos().x());
                   double measureY = pageHeight - getTenthsFromDots(chord->measure()->pagePos().y());
                   double noteX = getTenthsFromDots(note->pagePos().x());
@@ -4513,11 +4512,11 @@ void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
 
             if (doLayout) {
                   xml.stag(QString("print%1").arg(newThing));
-                  const PageFormat* pf = score()->pageFormat();
-                  const double pageWidth  = getTenthsFromInches(pf->size().width());
-                  const double lm = getTenthsFromInches(pf->oddLeftMargin());
-                  const double rm = getTenthsFromInches(pf->oddRightMargin());
-                  const double tm = getTenthsFromInches(pf->oddTopMargin());
+                  const double pageWidth  = getTenthsFromInches(score()->styleD(StyleIdx::pageWidth));
+                  const double lm = getTenthsFromInches(score()->styleD(StyleIdx::pageOddLeftMargin));
+                  const double rm = getTenthsFromInches(score()->styleD(StyleIdx::pageWidth)
+                      - score()->styleD(StyleIdx::pagePrintableWidth) - score()->styleD(StyleIdx::pageOddLeftMargin));
+                  const double tm = getTenthsFromInches(score()->styleD(StyleIdx::pageOddTopMargin));
 
                   // System Layout
 

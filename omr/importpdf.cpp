@@ -248,23 +248,19 @@ Score::FileError importPdf(MasterScore* score, const QString& path)
       if (sp == 0.0)
             sp = 1.5;
       score->setSpatium(sp * DPMM);
-      score->style().set(StyleIdx::lastSystemFillLimit, 0.0);
-      score->style().set(StyleIdx::staffLowerBorder, 0.0);
-      score->style().set(StyleIdx::measureSpacing, 1.0);
-      score->style().set(StyleIdx::frameSystemDistance, 0);
-
-      PageFormat pF = *score->pageFormat();
-      pF.setEvenLeftMargin(5.0 * DPMM / DPI);
-      pF.setEvenTopMargin(0);
-      pF.setEvenBottomMargin(0);
-      pF.setOddLeftMargin(5.0 * DPMM / DPI);
-      pF.setOddTopMargin(0);
-      pF.setOddBottomMargin(0);
-      score->setPageFormat(pF);
-
-      score->style().set(StyleIdx::minSystemDistance,   Spatium(omr->systemDistance()));
-      score->style().set(StyleIdx::maxSystemDistance,   Spatium(omr->systemDistance()));
-      score->style().set(StyleIdx::akkoladeDistance,    Spatium(omr->staffDistance()));
+      score->style().set(StyleIdx::lastSystemFillLimit,  0.0);
+      score->style().set(StyleIdx::staffLowerBorder,     0.0);
+      score->style().set(StyleIdx::measureSpacing,       1.0);
+      score->style().set(StyleIdx::frameSystemDistance,  0);
+      score->style().set(StyleIdx::pageEvenLeftMargin,   5.0 * DPMM / DPI);
+      score->style().set(StyleIdx::pageEvenTopMargin,    0);
+      score->style().set(StyleIdx::pageEvenBottomMargin, 0);
+      score->style().set(StyleIdx::pageOddLeftMargin,    5.0 * DPMM / DPI);
+      score->style().set(StyleIdx::pageOddTopMargin,     0);
+      score->style().set(StyleIdx::pageOddBottomMargin,  0);
+      score->style().set(StyleIdx::minSystemDistance,    Spatium(omr->systemDistance()));
+      score->style().set(StyleIdx::maxSystemDistance,    Spatium(omr->systemDistance()));
+      score->style().set(StyleIdx::akkoladeDistance,     Spatium(omr->staffDistance()));
 
       Part* part   = new Part(score);
       OmrPage* omrPage = omr->pages().front();
