@@ -162,6 +162,10 @@ void Inspector::setElements(const QList<Element*>& l)
             bool sameTypes = true;
             for (Element* ee : _el) {
                   if (((_element->type() != ee->type()) && // different and
+                      (!_element->isSystemText()     || !ee->isStaffText())  && // neither system text nor
+                      (!_element->isStaffText()      || !ee->isSystemText()) && // staff text either side and
+                      (!_element->isPedalSegment()   || !ee->isTextLineSegment()) && // neither pedal nor
+                      (!_element->isTextLineSegment()|| !ee->isPedalSegment())    && // text line either side and
                       (!_element->isSlurTieSegment() || !ee->isSlurTieSegment())) || // neither Slur nor Tie either side, or
                       (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(_element)->chord()->isGrace())) // HACK
                         sameTypes = false;
@@ -1014,9 +1018,16 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       s.setupUi(addWidget());
 
       Element* e = inspector->element();
-      Text* te   = static_cast<Text*>(e);
+      bool sameTypes = true;
 
-      s.title->setText(te->isSystemText() ? tr("System Text") : tr("Staff Text"));
+      for (const auto& ee : inspector->el()) {
+            if (e->isSystemText() != ee->isSystemText()) {
+                  sameTypes = false;
+                  break;
+                  }
+            }
+      if (sameTypes)
+            s.title->setText(e->isSystemText() ? tr("System Text") : tr("Staff Text"));
 
       const std::vector<InspectorItem> il = {
             { P_ID::FONT_FACE,        0, 0, t.fontFace,     t.resetFontFace     },
