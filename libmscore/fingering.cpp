@@ -65,7 +65,7 @@ void Fingering::layout()
       {
       Text::layout();
 
-      if (autoplace()) {
+      if (autoplace() && note()) {
             Chord* chord = note()->chord();
             Staff* staff = chord->staff();
             Part* part   = staff->part();
