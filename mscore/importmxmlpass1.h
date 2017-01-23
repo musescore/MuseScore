@@ -27,6 +27,22 @@
 
 namespace Ms {
 
+//---------------------------------------------------------
+//   PageFormat
+//---------------------------------------------------------
+
+struct PageFormat {
+      QSizeF size;
+      qreal printableWidth;        // _width - left margin - right margin
+      qreal evenLeftMargin;        // values in inch
+      qreal oddLeftMargin;
+      qreal evenTopMargin;
+      qreal evenBottomMargin;
+      qreal oddTopMargin;
+      qreal oddBottomMargin;
+      bool twosided;
+      };
+
 typedef QMap<QString, Part*> PartMap;
 typedef std::map<int,MusicXmlPartGroup*> MusicXmlPartGroupMap;
 

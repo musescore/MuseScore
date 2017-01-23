@@ -2461,14 +2461,14 @@ static void loadScores(const QStringList& argv)
                               {
                               MasterScore* score = mscore->readScore(preferences.startScore);
                               if (preferences.startScore.startsWith(":/") && score) {
-                                    score->setPageFormat(*MScore::defaultStyle().pageFormat());
+                                    // TODO score->setPageFormat(*MScore::defaultStyle().pageFormat());
                                     score->doLayout();
                                     score->setCreated(true);
                                     }
                               if (score == 0) {
                                     score = mscore->readScore(":/data/My_First_Score.mscz");
                                     if (score) {
-                                          score->setPageFormat(*MScore::defaultStyle().pageFormat());
+                                          // TODO score->setPageFormat(*MScore::defaultStyle().pageFormat());
                                           score->doLayout();
                                           score->setCreated(true);
                                           }
@@ -5557,10 +5557,9 @@ int main(int argc, char* av[])
       MScore::init();                                      // initialize libmscore
       if (!MScore::testMode) {
             QSizeF psf = QPrinter().paperSize(QPrinter::Inch);
-            PageFormat pf;
-            pf.setSize(psf);
-            pf.setPrintableWidth(psf.width() - 20.0 / INCH);
-            MScore::defaultStyle().setPageFormat(pf);
+            MScore::defaultStyle().set(StyleIdx::pageWidth, psf.width());
+            MScore::defaultStyle().set(StyleIdx::pageHeight, psf.height());
+            MScore::defaultStyle().set(StyleIdx::pagePrintableWidth, psf.width()-20.0/INCH);
             }
 
 #ifdef SCRIPT_INTERFACE

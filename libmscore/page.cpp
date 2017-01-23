@@ -564,8 +564,8 @@ QList<Element*> Page::elements()
 
 qreal Page::tm() const
       {
-      const PageFormat* pf = score()->pageFormat();
-      return ((!pf->twosided() || isOdd()) ? pf->oddTopMargin() : pf->evenTopMargin()) * DPI;
+      return ((!score()->styleB(StyleIdx::pageTwosided) || isOdd())
+         ? score()->styleD(StyleIdx::pageOddTopMargin) : score()->styleD(StyleIdx::pageEvenTopMargin)) * DPI;
       }
 
 //---------------------------------------------------------
@@ -574,8 +574,8 @@ qreal Page::tm() const
 
 qreal Page::bm() const
       {
-      const PageFormat* pf = score()->pageFormat();
-      return ((!pf->twosided() || isOdd()) ? pf->oddBottomMargin() : pf->evenBottomMargin()) * DPI;
+      return ((!score()->styleB(StyleIdx::pageTwosided) || isOdd())
+         ? score()->styleD(StyleIdx::pageOddBottomMargin) : score()->styleD(StyleIdx::pageEvenBottomMargin)) * DPI;
       }
 
 //---------------------------------------------------------
@@ -584,8 +584,8 @@ qreal Page::bm() const
 
 qreal Page::lm() const
       {
-      const PageFormat* pf = score()->pageFormat();
-      return ((!pf->twosided() || isOdd()) ? pf->oddLeftMargin() : pf->evenLeftMargin()) * DPI;
+      return ((!score()->styleB(StyleIdx::pageTwosided) || isOdd())
+         ? score()->styleD(StyleIdx::pageOddLeftMargin) : score()->styleD(StyleIdx::pageEvenLeftMargin)) * DPI;
       }
 
 //---------------------------------------------------------
@@ -594,8 +594,7 @@ qreal Page::lm() const
 
 qreal Page::rm() const
       {
-      const PageFormat* pf = score()->pageFormat();
-      return ((!pf->twosided() || isOdd()) ? pf->oddRightMargin() : pf->evenRightMargin()) * DPI;
+      return score()->styleD(StyleIdx::pagePrintableWidth) * DPI - lm();
       }
 
 //---------------------------------------------------------

@@ -266,24 +266,37 @@ Score::Score(MasterScore* parent)
    : Score{}
       {
       _masterScore = parent;
-// TODO
-//      if (MScore::defaultStyleForParts())
-//            style() = *MScore::defaultStyleForParts();
-//      else {
+      QString partStyle = QSettings().value("partStyle").toString();
+      if (!partStyle.isEmpty())
+            style() = MScore::defaultStyleForParts();
+      else {
             // inherit most style settings from parent
             style() = parent->style();
 
             // but borrow defaultStyle page layout settings
-            const PageFormat* pf = MScore::defaultStyle().pageFormat();
-            style().setPageFormat(*pf);
-            style().set(StyleIdx::spatium, MScore::defaultStyle().value(StyleIdx::spatium));
+            for (auto i :
+               {
+               StyleIdx::pageWidth,
+               StyleIdx::pageHeight,
+               StyleIdx::pagePrintableWidth,
+               StyleIdx::pageEvenLeftMargin,
+               StyleIdx::pageOddLeftMargin,
+               StyleIdx::pageEvenTopMargin,
+               StyleIdx::pageEvenBottomMargin,
+               StyleIdx::pageOddTopMargin,
+               StyleIdx::pageOddBottomMargin,
+               StyleIdx::pageTwosided,
+               StyleIdx::spatium
+               } ) {
+                  style().set(i, MScore::defaultStyle().value(i));
+                  }
 
             // and force some style settings that just make sense for parts
             style().set(StyleIdx::concertPitch, false);
             style().set(StyleIdx::createMultiMeasureRests, true);
             style().set(StyleIdx::dividerLeft, false);
             style().set(StyleIdx::dividerRight, false);
-//            }
+            }
       _synthesizerState = parent->_synthesizerState;
       }
 
@@ -2421,7 +2434,7 @@ void Score::sortStaves(QList<int>& dst)
 
 void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
       {
-      undo(new ChangeStyleVal(this, StyleIdx::concertPitch, flag));       // change style flag
+      undoChangeStyleVal(StyleIdx::concertPitch, flag);       // change style flag
 
       for (Staff* staff : _staves) {
             if (staff->staffType(0)->group() == StaffGroup::PERCUSSION)       // TODO
@@ -3173,7 +3186,7 @@ qreal Score::tempo(int tick) const
 
 qreal Score::loWidth() const
       {
-      return pageFormat()->size().width() * DPI;
+      return styleD(StyleIdx::pageWidth) * DPI;
       }
 
 //---------------------------------------------------------
@@ -3182,7 +3195,7 @@ qreal Score::loWidth() const
 
 qreal Score::loHeight() const
       {
-      return pageFormat()->size().height() * DPI;
+      return styleD(StyleIdx::pageHeight) * DPI;
       }
 
 //---------------------------------------------------------
@@ -4112,6 +4125,7 @@ void Score::changeVoice(int voice)
       endCmd();
       }
 
+#if 0
 //---------------------------------------------------------
 //   cropPage - crop a single page score to the content
 ///    margins will be applied on the 4 sides
@@ -4123,9 +4137,6 @@ void Score::cropPage(qreal margins)
             Page* page = pages()[0];
             if (page) {
                   QRectF ttbox = page->tbbox();
-
-                  PageFormat* curFormat = pageFormat();
-                  PageFormat f = *curFormat;
 
                   qreal margin = margins / INCH;
                   f.setSize(QSizeF((ttbox.width() / DPI) + 2 * margin, (ttbox.height()/ DPI) + 2 * margin));
@@ -4144,6 +4155,7 @@ void Score::cropPage(qreal margins)
                   }
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   getProperty

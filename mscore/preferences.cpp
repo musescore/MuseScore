@@ -296,10 +296,10 @@ void Preferences::write()
       s.setValue("pngTransparent",     pngTransparent);
       s.setValue("language",           language);
 
-      s.setValue("paperWidth",  MScore::defaultStyle().pageFormat()->width());
-      s.setValue("paperHeight", MScore::defaultStyle().pageFormat()->height());
+      s.setValue("paperWidth",  MScore::defaultStyle().value(StyleIdx::pageWidth).toReal());
+      s.setValue("paperHeight", MScore::defaultStyle().value(StyleIdx::pageHeight).toReal());
 
-      s.setValue("twosided",    MScore::defaultStyle().pageFormat()->twosided());
+      s.setValue("twosided",    MScore::defaultStyle().value(StyleIdx::pageTwosided).toBool());
       s.setValue("spatium",     MScore::defaultStyle().value(StyleIdx::spatium).toDouble() / DPI);
 
       s.setValue("mag", mag);
@@ -1911,9 +1911,10 @@ void Preferences::updatePluginList()
 void PreferenceDialog::printShortcutsClicked()
       {
       QPrinter printer(QPrinter::HighResolution);
-      MStyle* s = &MScore::defaultStyle();
-      const PageFormat* pf = s->pageFormat();
-      printer.setPaperSize(pf->size(), QPrinter::Inch);
+      MStyle& s = MScore::defaultStyle();
+      qreal pageW = s.value(StyleIdx::pageWidth).toReal();
+      qreal pageH = s.value(StyleIdx::pageHeight).toReal();
+      printer.setPaperSize(QSizeF(pageW, pageH), QPrinter::Inch);
 
       printer.setCreator("MuseScore Version: " VERSION);
       printer.setFullPage(true);

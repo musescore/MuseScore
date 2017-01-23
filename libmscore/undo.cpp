@@ -403,6 +403,15 @@ void Score::undoPropertyChanged(ScoreElement* e, P_ID t, const QVariant& st)
       }
 
 //---------------------------------------------------------
+//   undoChangeStyleVal
+//---------------------------------------------------------
+
+void Score::undoChangeStyleVal(StyleIdx idx, const QVariant& v)
+      {
+      undo(new ChangeStyleVal(this, idx, v));
+      }
+
+//---------------------------------------------------------
 //   undoChangeElement
 //---------------------------------------------------------
 
@@ -1663,24 +1672,6 @@ void Score::undoChangeUserMirror(Note* n, MScore::DirectionH d)
       }
 
 //---------------------------------------------------------
-//   undoChangePageFormat
-//---------------------------------------------------------
-
-void Score::undoChangePageFormat(PageFormat* p)
-      {
-      undoChangePageFormat(p, spatium(), pageNumberOffset());
-      }
-
-//---------------------------------------------------------
-//   undoChangePageFormat
-//---------------------------------------------------------
-
-void Score::undoChangePageFormat(PageFormat* p, qreal v, int pageOffset)
-      {
-      undo(new ChangePageFormat(this, p, v, pageOffset));
-      }
-
-//---------------------------------------------------------
 //   undoChangeTpc
 //    TODO-TPC: check
 //---------------------------------------------------------
@@ -2466,47 +2457,6 @@ void ChangePatch::flip()
 
       MScore::seq->sendEvent(event);
       channel->updateInitList();
-      }
-
-//---------------------------------------------------------
-//   ChangePageFormat
-//---------------------------------------------------------
-
-ChangePageFormat::ChangePageFormat(Score* cs, PageFormat* p, qreal s, int po)
-      {
-      score      = cs;
-      pf         = new PageFormat;
-      *pf        = *p;
-      spatium    = s;
-      pageOffset = po;
-      }
-
-ChangePageFormat::~ChangePageFormat()
-      {
-      delete pf;
-      }
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangePageFormat::flip()
-      {
-      PageFormat f = *(score->pageFormat());
-      qreal os     = score->spatium();
-      int po       = score->pageNumberOffset();
-
-      score->setPageFormat(*pf);
-      if (os != spatium) {
-            score->setSpatium(spatium);
-            score->spatiumChanged(os, spatium);
-            }
-      score->setPageNumberOffset(pageOffset);
-      score->setLayoutAll();
-
-      *pf         = f;
-      spatium    = os;
-      pageOffset = po;
       }
 
 //---------------------------------------------------------
