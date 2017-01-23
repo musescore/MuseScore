@@ -1590,6 +1590,7 @@ bool Note::acceptDrop(const DropData& data) const
          || (type == ElementType::SLUR)
          || (type == ElementType::HAIRPIN)
          || (type == ElementType::STAFF_TEXT)
+         || (type == ElementType::SYSTEM_TEXT)
          || (type == ElementType::TEMPO_TEXT)
          || (type == ElementType::BEND)
          || (type == ElementType::TREMOLOBAR)

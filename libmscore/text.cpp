@@ -2836,25 +2836,18 @@ QString Text::unEscape(QString s)
 
 QString Text::accessibleInfo() const
       {
-#if 0 // TODO
       QString rez;
-      const QList<TextStyle>& ts = score()->style().textStyles();
-      switch (textStyleType()) {
-#if 0
-            case StyledPropertyListIdx::TITLE:
-            case StyledPropertyListIdx::SUBTITLE:
-            case StyledPropertyListIdx::COMPOSER:
-            case StyledPropertyListIdx::POET:
-            case StyledPropertyListIdx::TRANSLATOR:
-            case StyledPropertyListIdx::MEASURE_NUMBER:
-                  rez = qApp->translate("TextStyle",ts.at(int(textStyleType())).name().toUtf8());
+      switch (subStyle()) {
+            case SubStyle::TITLE:
+            case SubStyle::SUBTITLE:
+            case SubStyle::COMPOSER:
+            case SubStyle::POET:
+            case SubStyle::TRANSLATOR:
+            case SubStyle::MEASURE_NUMBER:
+                  rez = subStyleUserName(subStyle());
                   break;
-#endif
             default:
-                  if ((type() == ElementType::STAFF_TEXT) && systemFlag())
-                        rez = tr("System Text");
-                  else
-                        rez = Element::accessibleInfo();
+                  rez = Element::accessibleInfo();
                   break;
             }
       QString s = plainText(true).simplified();
@@ -2863,8 +2856,6 @@ QString Text::accessibleInfo() const
             s += "...";
             }
       return  QString("%1: %2").arg(rez).arg(s);
-#endif
-      return QString();
       }
 
 //---------------------------------------------------------
@@ -2892,20 +2883,17 @@ int Text::subtype() const
 QString Text::subtypeName() const
       {
       QString rez;
-#if 0
-      const QList<TextStyle>& ts = score()->style().textStyles();
-      switch (textStyleType()) {
-            case StyledPropertyListIdx::TITLE:
-            case StyledPropertyListIdx::SUBTITLE:
-            case StyledPropertyListIdx::COMPOSER:
-            case StyledPropertyListIdx::POET:
-            case StyledPropertyListIdx::FRAME:
-            case StyledPropertyListIdx::INSTRUMENT_EXCERPT:
-                  rez = qApp->translate("TextStyle",ts.at(int(textStyleType())).name().toUtf8());
+      switch (subStyle()) {
+            case SubStyle::TITLE:
+            case SubStyle::SUBTITLE:
+            case SubStyle::COMPOSER:
+            case SubStyle::POET:
+            case SubStyle::FRAME:
+            case SubStyle::INSTRUMENT_EXCERPT:
+                  rez = subStyleUserName(subStyle());
                   break;
             default: rez = "";
             }
-#endif
       return rez;
       }
 

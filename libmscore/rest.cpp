@@ -193,6 +193,7 @@ bool Rest::acceptDrop(const DropData& data) const
          || (type == ElementType::CLEF)
          || (type == ElementType::KEYSIG)
          || (type == ElementType::TIMESIG)
+         || (type == ElementType::SYSTEM_TEXT)
          || (type == ElementType::STAFF_TEXT)
          || (type == ElementType::BAR_LINE)
          || (type == ElementType::BREATH)

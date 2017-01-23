@@ -24,6 +24,12 @@ SystemText::SystemText(Score* s)
       setSystemFlag(true);
       }
 
+SystemText::SystemText(SubStyle ss, Score* s)
+   : StaffText(ss, s)
+      {
+      setSystemFlag(true);
+      }
+
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------

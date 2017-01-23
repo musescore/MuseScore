@@ -86,9 +86,9 @@ void Score::updateSwing()
             return;
       for (Segment* s = fm->first(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
             for (const Element* e : s->annotations()) {
-                  if (e->type() != ElementType::STAFF_TEXT)
+                  if (!e->isStaffText())
                         continue;
-                  const StaffText* st = static_cast<const StaffText*>(e);
+                  const StaffText* st = toStaffText(e);
                   if (st->xmlText().isEmpty())
                         continue;
                   Staff* staff = st->staff();
@@ -123,15 +123,15 @@ void MasterScore::updateChannel()
             return;
       for (Segment* s = fm->first(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
             for (const Element* e : s->annotations()) {
-                  if (e->type() == ElementType::INSTRUMENT_CHANGE) {
+                  if (e->isInstrumentChange()) {
                         Staff* staff = Score::staff(e->staffIdx());
                         for (int voice = 0; voice < VOICES; ++voice)
                               staff->channelList(voice)->insert(s->tick(), 0);
                         continue;
                         }
-                  if (e->type() != ElementType::STAFF_TEXT)
+                  if (!e->isStaffText())
                         continue;
-                  const StaffText* st = static_cast<const StaffText*>(e);
+                  const StaffText* st = toStaffText(e);
                   for (int voice = 0; voice < VOICES; ++voice) {
                         QString an(st->channelName(voice));
                         if (an.isEmpty())

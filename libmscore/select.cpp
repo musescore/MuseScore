@@ -782,6 +782,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   case ElementType::TUPLET:
                   case ElementType::TEMPO_TEXT:
                   case ElementType::STAFF_TEXT:
+                  case ElementType::SYSTEM_TEXT:
                   case ElementType::REHEARSAL_MARK:
                   case ElementType::INSTRUMENT_CHANGE:
                   case ElementType::FRET_DIAGRAM:

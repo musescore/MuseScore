@@ -26,6 +26,7 @@ class SystemText : public StaffText  {
 
    public:
       SystemText(Score* score);
+      SystemText(SubStyle, Score* = 0);
       virtual SystemText* clone() const override    { return new SystemText(*this); }
       virtual ElementType type() const override     { return ElementType::SYSTEM_TEXT; }
       Segment* segment() const                      { return (Segment*)parent(); }

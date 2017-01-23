@@ -761,30 +761,7 @@ Element* ChordRest::drop(const DropData& data)
                         }
 
             case ElementType::TEMPO_TEXT:
-                  {
-                  TempoText* tt = static_cast<TempoText*>(e);
-                  tt->setTrack(0);
-                  tt->setParent(segment());
-//TODO                  StyledPropertyListIdx st = tt->textStyleType();
-//                  //tt->setStyledPropertyListIdx(st);
-//                  if (st >= StyledPropertyListIdx::DEFAULT && fromPalette)
-//                        tt->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
-                  score()->undoAddElement(tt);
-                  }
-                  return e;
-
             case ElementType::DYNAMIC:
-                  {
-                  Dynamic* d = static_cast<Dynamic*>(e);
-                  d->setTrack(track());
-//TODO                  StyledPropertyListIdx st = d->textStyleType();
-                  //d->setStyledPropertyListIdx(st);
-//                  if (st >= StyledPropertyListIdx::DEFAULT && fromPalette)
-//                        d->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
-                  d->setParent(segment());
-                  score()->undoAddElement(d);
-                  }
-                  return e;
             case ElementType::FRET_DIAGRAM:
             case ElementType::TREMOLOBAR:
             case ElementType::SYMBOL:
@@ -823,6 +800,7 @@ Element* ChordRest::drop(const DropData& data)
                   // fall through
             case ElementType::TEXT:
             case ElementType::STAFF_TEXT:
+            case ElementType::SYSTEM_TEXT:
             case ElementType::STAFF_STATE:
             case ElementType::INSTRUMENT_CHANGE:
                   if (e->isInstrumentChange() && part()->instruments()->find(tick()) != part()->instruments()->end()) {
