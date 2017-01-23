@@ -1020,7 +1020,7 @@ void Score::undoAddElement(Element* element)
       //
 
       if ((et == ElementType::REHEARSAL_MARK)
-         || ((et == ElementType::STAFF_TEXT) && toStaffText(element)->systemFlag())
+         || (et == ElementType::SYSTEM_TEXT)
          || (et == ElementType::JUMP)
          || (et == ElementType::MARKER)
          || (et == ElementType::TEMPO_TEXT)
@@ -1177,6 +1177,7 @@ void Score::undoAddElement(Element* element)
          && et != ElementType::BREATH
          && et != ElementType::DYNAMIC
          && et != ElementType::STAFF_TEXT
+         && et != ElementType::SYSTEM_TEXT
          && et != ElementType::TREMOLO
          && et != ElementType::ARPEGGIO
          && et != ElementType::SYMBOL
@@ -1230,6 +1231,7 @@ void Score::undoAddElement(Element* element)
                                     // exclude certain element types except on corresponding staff in part
                                     // this should be same list excluded in cloneStaff()
                                     case ElementType::STAFF_TEXT:
+                                    case ElementType::SYSTEM_TEXT:
                                     case ElementType::FRET_DIAGRAM:
                                     case ElementType::HARMONY:
                                     case ElementType::FIGURED_BASS:

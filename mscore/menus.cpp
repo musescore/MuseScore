@@ -66,6 +66,7 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/chordline.h"
 #include "libmscore/stafftext.h"
+#include "libmscore/systemtext.h"
 #include "libmscore/instrchange.h"
 #include "workspace.h"
 #include "libmscore/icon.h"
@@ -1367,8 +1368,7 @@ Palette* MuseScore::newTextPalette()
       st->setXmlText(tr("Staff Text"));
       sp->append(st, tr("Staff text"));
 
-      st = new StaffText(gscore);
-      st->initSubStyle(SubStyle::EXPRESSION);
+      st = new StaffText(SubStyle::EXPRESSION, gscore);
       st->setXmlText(tr("Expression"));
       st->setPlacement(Element::Placement::BELOW);
       sp->append(st, tr("Expression text"));
@@ -1384,14 +1384,12 @@ Palette* MuseScore::newTextPalette()
       rhm->setXmlText("B1");
       sp->append(rhm, tr("Rehearsal mark"));
 
-      st = new StaffText(gscore);
-      st->initSubStyle(SubStyle::TEMPO);
+      st = new StaffText(SubStyle::TEMPO, gscore);
       st->setXmlText(tr("Swing"));
       st->setSwing(true);
       sp->append(st, tr("Swing"));
 
-      st = new StaffText(gscore);
-      st->initSubStyle(SubStyle::SYSTEM);
+      st = new SystemText(gscore);
       st->setXmlText(tr("System Text"));
       sp->append(st, tr("System text"));
 

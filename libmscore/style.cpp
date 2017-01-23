@@ -531,6 +531,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::systemFontItalic,              "systemFontItalic",             false },
       { StyleIdx::systemFontUnderline,           "systemFontUnderline",          false },
       { StyleIdx::systemOffset,                  "systemOffset",                 QPointF(0.0, -4.0) },
+      { StyleIdx::systemOffsetType,              "defaultOffsetType",            int(OffsetType::SPATIUM)   },
 //      { StyleIdx::systemSystemFlag,              "systemSystemFlag",             true },
 
       { StyleIdx::staffFontFace,                 "staffFontFace",                "FreeSerif" },
@@ -539,7 +540,8 @@ static const StyleType styleTypes[] {
       { StyleIdx::staffFontItalic,               "staffFontItalic",              false },
       { StyleIdx::staffFontUnderline,            "staffFontUnderline",           false },
       { StyleIdx::staffOffset,                   "staffOffset",                  QPointF(0.0, -4.0) },
-//      { StyleIdx::staffSystemFlag,               "staffSystemFlag",              false },
+      { StyleIdx::staffOffsetType,               "defaultOffsetType",            int(OffsetType::SPATIUM)   },
+//      { StyleIdx::staffSystemFlag,               "staffSystemFlag",             false },
 
       { StyleIdx::chordSymbolFontFace,           "chordSymbolFontFace",          "FreeSerif" },
       { StyleIdx::chordSymbolFontSize,           "chordSymbolFontSize",          12.0 },
@@ -909,6 +911,7 @@ const std::vector<StyledProperty> systemStyle {
       { StyleIdx::systemFontItalic,                   P_ID::FONT_ITALIC            },
       { StyleIdx::systemFontUnderline,                P_ID::FONT_UNDERLINE         },
       { StyleIdx::systemOffset,                       P_ID::OFFSET                 },
+      { StyleIdx::systemOffsetType,                   P_ID::OFFSET_TYPE            },
 //      { StyleIdx::systemSystemFlag,                   P_ID::SYSTEM_FLAG            },
       };
 
@@ -919,6 +922,7 @@ const std::vector<StyledProperty> staffStyle {
       { StyleIdx::staffFontItalic,                    P_ID::FONT_ITALIC            },
       { StyleIdx::staffFontUnderline,                 P_ID::FONT_UNDERLINE         },
       { StyleIdx::staffOffset,                        P_ID::OFFSET                 },
+      { StyleIdx::staffOffsetType,                    P_ID::OFFSET_TYPE            },
 //      { StyleIdx::staffSystemFlag,                    P_ID::SYSTEM_FLAG            },
       };
 

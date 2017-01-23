@@ -341,6 +341,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case ElementType::FINGERING:
                   case ElementType::TEMPO_TEXT:
                   case ElementType::STAFF_TEXT:
+                  case ElementType::SYSTEM_TEXT:
                   case ElementType::NOTEHEAD:
                   case ElementType::TREMOLO:
                   case ElementType::LAYOUT_BREAK:
@@ -538,6 +539,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::FINGERING:
                   case ElementType::TEMPO_TEXT:
                   case ElementType::STAFF_TEXT:
+                  case ElementType::SYSTEM_TEXT:
                   case ElementType::NOTEHEAD:
                   case ElementType::TREMOLO:
                   case ElementType::LAYOUT_BREAK:
