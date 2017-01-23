@@ -77,6 +77,7 @@
 #include "libmscore/stringdata.h"
 #include "libmscore/sym.h"
 #include "libmscore/system.h"
+#include "libmscore/systemtext.h"
 #include "libmscore/textframe.h"
 #include "libmscore/text.h"
 #include "libmscore/timesig.h"
@@ -5433,20 +5434,25 @@ void ScoreView::cmdAddText(TEXT type)
                   }
                   break;
             case TEXT::STAFF:
-            case TEXT::SYSTEM:
                   {
                   ChordRest* cr = _score->getSelectedChordRest();
                   if (!cr)
                         break;
                   s = new StaffText(_score);
-                  if (type == TEXT::SYSTEM) {
-                        s->setTrack(0);
-                        s->initSubStyle(SubStyle::SYSTEM);
-                        }
-                  else {
-                        s->setTrack(cr->track());
-                        s->initSubStyle(SubStyle::STAFF);
-                        }
+                  s->setTrack(cr->track());
+                  s->initSubStyle(SubStyle::STAFF);
+
+                  s->setParent(cr->segment());
+                  }
+                  break;
+            case TEXT::SYSTEM:
+                  {
+                  ChordRest* cr = _score->getSelectedChordRest();
+                  if (!cr)
+                        break;
+                  s = new SystemText(_score);
+                  s->setTrack(0);
+                  s->initSubStyle(SubStyle::SYSTEM);
                   s->setParent(cr->segment());
                   }
                   break;
