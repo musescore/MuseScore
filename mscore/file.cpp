@@ -1812,7 +1812,6 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
                   writeSessionFile(false);
                   }
             }
-#if 0
       else if (ext == "xml") {
             // save as MusicXML *.xml file
             rv = saveXml(cs, fn);
@@ -1825,7 +1824,6 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             // save as midi file *.mid
             rv = saveMidi(cs, fn);
             }
-#endif
       else if (ext == "pdf") {
             // save as pdf file *.pdf
             rv = savePdf(cs, fn);
