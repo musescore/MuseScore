@@ -33,7 +33,7 @@ class PageFormat {
       bool _twosided;
 
    public:
-      PageFormat();
+      PageFormat() {}
 
       const QSizeF& size() const          { return _size;          }    // size in inch
       qreal width() const                 { return _size.width();  }
