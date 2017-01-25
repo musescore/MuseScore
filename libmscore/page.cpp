@@ -594,7 +594,7 @@ qreal Page::lm() const
 
 qreal Page::rm() const
       {
-      return score()->styleD(StyleIdx::pagePrintableWidth) * DPI - lm();
+      return (score()->styleD(StyleIdx::pageWidth) - score()->styleD(StyleIdx::pagePrintableWidth)) * DPI - lm();
       }
 
 //---------------------------------------------------------

@@ -1254,7 +1254,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               // force the marker type for correct display
                               m->setXmlText("");
                               m->setMarkerType(m->markerType());
-                              m->setStyledPropertyListIdx(StyledPropertyListIdx::REPEAT_LEFT);
+                              m->setSubStyle(SubStyle::REPEAT_LEFT);
                               }
                         }
                   m->add(el);
@@ -1821,9 +1821,10 @@ static void readStyle(MStyle* style, XmlReader& e)
             else if (tag == "Spatium")
                   style->set(StyleIdx::spatium, e.readDouble() * DPMM);
             else if (tag == "page-layout") {
-                  PageFormat pf = *style->pageFormat();
-                  readPageFormat(&pf, e);
-                  style->setPageFormat(pf);
+                  PageFormat pf;
+                  initPageFormat(style, &pf);
+                  pf.read(e);
+                  setPageFormat(style, pf);
                   }
             else if (tag == "displayInConcertPitch")
                   style->set(StyleIdx::concertPitch, QVariant(bool(e.readInt())));
@@ -1882,7 +1883,7 @@ static void readStyle(MStyle* style, XmlReader& e)
                         continue;
 #endif
                   QString val(e.readElementText());
-                  style->convertToUnit(tag, val);
+//TODO                  style->convertToUnit(tag, val);
                   }
             }
 
@@ -1912,7 +1913,7 @@ static void readStyle(MStyle* style, XmlReader& e)
                   style->chordList()->read("chords.xml");
             style->chordList()->read(newChordDescriptionFile);
             }
-
+#if 0 // TODO
       //
       //  Compatibility with old scores/styles:
       //  translate old frameWidthMM and paddingWidthMM
@@ -1928,6 +1929,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             if (s->paddingWidthMM() != 0.0)
                   s->setPaddingWidth(Spatium(s->paddingWidthMM() / spMM));
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -2052,9 +2054,10 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   }
             else if (tag == "page-layout") {
                   if (_layoutMode != LayoutMode::FLOAT && _layoutMode != LayoutMode::SYSTEM) {
-                        PageFormat pf = *pageFormat();
-                        readPageFormat(&pf, e);
-                        setPageFormat(pf);
+                        PageFormat pf;
+                        initPageFormat(&style(), &pf);
+                        pf.read(e);
+                        setPageFormat(&style(), pf);
                         }
                   else
                         e.skipCurrentElement();

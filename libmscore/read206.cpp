@@ -40,6 +40,7 @@
 #include "read206.h"
 #include "excerpt.h"
 #include "articulation.h"
+#include "elementlayout.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -48,55 +49,6 @@
 
 
 namespace Ms {
-
-//---------------------------------------------------------
-//   @@ PageFormat
-//---------------------------------------------------------
-
-class PageFormat {
-      QSizeF _size;
-      qreal _printableWidth;        // _width - left margin - right margin
-      qreal _evenLeftMargin;        // values in inch
-      qreal _oddLeftMargin;
-      qreal _evenTopMargin;
-      qreal _evenBottomMargin;
-      qreal _oddTopMargin;
-      qreal _oddBottomMargin;
-      bool _twosided;
-
-   public:
-      PageFormat();
-
-      const QSizeF& size() const          { return _size;          }    // size in inch
-      qreal width() const                 { return _size.width();  }
-      qreal height() const                { return _size.height(); }
-      void setSize(const QSizeF& s)       { _size = s;             }
-
-      void read(XmlReader&);
-      void write(XmlWriter&) const;
-      qreal evenLeftMargin() const        { return _evenLeftMargin;   }
-      qreal oddLeftMargin() const         { return _oddLeftMargin;    }
-      qreal evenTopMargin() const         { return _evenTopMargin;    }
-      qreal evenBottomMargin() const      { return _evenBottomMargin; }
-      qreal oddTopMargin() const          { return _oddTopMargin;     }
-      qreal oddBottomMargin() const       { return _oddBottomMargin;  }
-      qreal printableWidth() const        { return _printableWidth;   }
-
-      void setEvenLeftMargin(qreal val)   { _evenLeftMargin = val;   }
-      void setOddLeftMargin(qreal val)    { _oddLeftMargin = val;    }
-      void setEvenTopMargin(qreal val)    { _evenTopMargin = val;    }
-      void setEvenBottomMargin(qreal val) { _evenBottomMargin = val; }
-      void setOddTopMargin(qreal val)     { _oddTopMargin = val;     }
-      void setOddBottomMargin(qreal val)  { _oddBottomMargin = val;  }
-      void setPrintableWidth(qreal val)   { _printableWidth = val;   }
-
-      bool twosided() const               { return _twosided; }
-      void setTwosided(bool val)          { _twosided = val;  }
-
-      // convenience functions
-      qreal evenRightMargin() const       { return _size.width() - _printableWidth - _evenLeftMargin; }
-      qreal oddRightMargin() const        { return _size.width() - _printableWidth - _oddLeftMargin;  }
-      };
 
 //---------------------------------------------------------
 //   StyleVal206
@@ -294,6 +246,302 @@ struct StyleVal2 {
       };
 
 //---------------------------------------------------------
+//   setPageFormat
+//    set Style from PageFormat
+//---------------------------------------------------------
+
+void setPageFormat(MStyle* style, const PageFormat& pf)
+      {
+      style->set(StyleIdx::pageWidth,            pf.size().width());
+      style->set(StyleIdx::pageHeight,           pf.size().height());
+      style->set(StyleIdx::pagePrintableWidth,   pf.printableWidth());
+      style->set(StyleIdx::pageEvenLeftMargin,   pf.evenLeftMargin());
+      style->set(StyleIdx::pageOddLeftMargin,    pf.oddLeftMargin());
+      style->set(StyleIdx::pageEvenTopMargin,    pf.evenTopMargin());
+      style->set(StyleIdx::pageEvenBottomMargin, pf.evenBottomMargin());
+      style->set(StyleIdx::pageOddTopMargin,     pf.oddTopMargin());
+      style->set(StyleIdx::pageOddBottomMargin,  pf.oddBottomMargin());
+      style->set(StyleIdx::pageTwosided,         pf.twosided());
+      }
+
+//---------------------------------------------------------
+//   initPageFormat
+//    initialize PageFormat from Style
+//---------------------------------------------------------
+
+void initPageFormat(MStyle* style, PageFormat* pf)
+      {
+      QSizeF sz;
+      sz.setWidth(style->value(StyleIdx::pageWidth).toReal());
+      sz.setHeight(style->value(StyleIdx::pageHeight).toReal());
+      pf->setSize(sz);
+      pf->setPrintableWidth(style->value(StyleIdx::pagePrintableWidth).toReal());
+      pf->setEvenLeftMargin(style->value(StyleIdx::pageEvenLeftMargin).toReal());
+      pf->setOddLeftMargin(style->value(StyleIdx::pageOddLeftMargin).toReal());
+      pf->setEvenTopMargin(style->value(StyleIdx::pageEvenTopMargin).toReal());
+      pf->setEvenBottomMargin(style->value(StyleIdx::pageEvenBottomMargin).toReal());
+      pf->setOddTopMargin(style->value(StyleIdx::pageOddTopMargin).toReal());
+      pf->setOddBottomMargin(style->value(StyleIdx::pageOddBottomMargin).toReal());
+      pf->setTwosided(style->value(StyleIdx::pageTwosided).toBool());
+      }
+
+//---------------------------------------------------------
+//   readTextStyle
+//---------------------------------------------------------
+
+static void readTextStyle(MStyle* style, XmlReader& e)
+      {
+      Spatium frameWidth(0.0);
+      QString name = e.attribute("name");
+      QString family = "FreeSerif";
+      double size = 10;
+      bool bold = false;
+      bool italic = false;
+      bool underline = false;
+      Align align = Align::LEFT;
+      bool sizeIsSpatiumDependent = true;
+      bool hasFrame = false;
+      double frameWidthMM = 0.0;
+      double paddingWidthMM = 0.0;
+      Spatium paddingWidth(0.0);
+      int frameRound = 0;
+      QColor frameColor = QColor(0, 0, 0, 255);
+      QColor foregroundColor = QColor(0, 0, 0, 255);
+      QColor backgroundColor = QColor(255, 255, 255, 0);
+      bool circle = false;
+      bool systemFlag = false;
+      QPointF offset;
+      OffsetType offsetType = OffsetType::SPATIUM;
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+
+            if (tag == "name")
+                  name = e.readElementText();
+            else if (tag == "family")
+                  family = e.readElementText();
+            else if (tag == "size")
+                  size = e.readDouble();
+            else if (tag == "bold")
+                  bold = e.readInt();
+            else if (tag == "italic")
+                  italic = e.readInt();
+            else if (tag == "underline")
+                  underline = e.readInt();
+            else if (tag == "align")
+                  align = Align(e.readInt());
+            else if (tag == "anchor")     // obsolete
+                  e.skipCurrentElement();
+
+            else if (tag == "halign") {
+                  const QString& val(e.readElementText());
+                  if (val == "center")
+                        align = align | Align::HCENTER;
+                  else if (val == "right")
+                        align = align | Align::RIGHT;
+                  else if (val == "left")
+                        ;
+                  else
+                        qDebug("Text::readProperties: unknown alignment: <%s>", qPrintable(val));
+                  }
+            else if (tag == "valign") {
+                  const QString& val(e.readElementText());
+                  if (val == "center")
+                        align = align | Align::VCENTER;
+                  else if (val == "bottom")
+                        align = align | Align::BOTTOM;
+                  else if (val == "baseline")
+                        align = align | Align::BASELINE;
+                  else if (val == "top")
+                        ;
+                  else
+                        qDebug("Text::readProperties: unknown alignment: <%s>", qPrintable(val));
+                  }
+            else if (tag == "xoffset") {
+                  qreal xo = e.readDouble();
+                  if (offsetType == OffsetType::ABS)
+                        xo /= INCH;
+                  offset.setX(xo);
+                  }
+            else if (tag == "yoffset") {
+                  qreal yo = e.readDouble();
+                  if (offsetType == OffsetType::ABS)
+                        yo /= INCH;
+                  offset.setY(yo);
+                  }
+            else if (tag == "rxoffset" || tag == "ryoffset")         // obsolete
+                  e.readDouble();
+            else if (tag == "offsetType") {
+                  const QString& val(e.readElementText());
+                  OffsetType ot = OffsetType::ABS;
+                  if (val == "spatium" || val == "1")
+                        ot = OffsetType::SPATIUM;
+                  if (ot != offsetType) {
+                        offsetType = ot;
+                        if (ot == OffsetType::ABS)
+                              offset /= INCH;  // convert spatium -> inch
+                        else
+                              offset *= INCH;  // convert inch -> spatium
+                        }
+                  }
+            else if (tag == "sizeIsSpatiumDependent" || tag == "spatiumSizeDependent")
+                  sizeIsSpatiumDependent = e.readInt();
+            else if (tag == "frameWidth") { // obsolete
+                  hasFrame = true;
+                  frameWidthMM = e.readDouble();
+                  }
+            else if (tag == "frameWidthS") {
+                  hasFrame = true;
+                  frameWidth = Spatium(e.readDouble());
+                  }
+            else if (tag == "frame")
+                  hasFrame = e.readInt();
+            else if (tag == "paddingWidth")          // obsolete
+                  paddingWidthMM = e.readDouble();
+            else if (tag == "paddingWidthS")
+                  paddingWidth = Spatium(e.readDouble());
+            else if (tag == "frameRound")
+                  frameRound = e.readInt();
+            else if (tag == "frameColor")
+                  frameColor = e.readColor();
+            else if (tag == "foregroundColor")
+                  foregroundColor = e.readColor();
+            else if (tag == "backgroundColor")
+                  backgroundColor = e.readColor();
+            else if (tag == "circle")
+                  circle = e.readInt();
+            else if (tag == "systemFlag")
+                  systemFlag = e.readInt();
+            else
+                  e.unknown();
+            }
+      if (family == "MuseJazz")
+            family = "MuseJazz Text";
+
+      struct StyleTable {
+            const char* name;
+            SubStyle ss;
+            } styleTable[] = {
+            { "",                        SubStyle::DEFAULT },
+            { "Title",                   SubStyle::TITLE },
+            { "Subtitle",                SubStyle::SUBTITLE },
+            { "Composer",                SubStyle::COMPOSER },
+            { "Lyricist",                SubStyle::POET },
+            { "Lyrics Odd Lines",        SubStyle::LYRIC1 },
+            { "Lyrics Even Lines",       SubStyle::LYRIC2 },
+            { "Fingering",               SubStyle::FINGERING },
+            { "LH Guitar Fingering",     SubStyle::LH_GUITAR_FINGERING },
+            { "RH Guitar Fingering",     SubStyle::RH_GUITAR_FINGERING },
+            { "String Number",           SubStyle::STRING_NUMBER },
+            { "Instrument Name (Long)",  SubStyle::INSTRUMENT_LONG },
+            { "Instrument Name (Short)", SubStyle::INSTRUMENT_SHORT },
+            { "Instrument Name (Part)",  SubStyle::INSTRUMENT_EXCERPT },
+            { "Dynamics",                SubStyle::DYNAMICS },
+            { "Technique",               SubStyle::EXPRESSION },
+            { "Tempo",                   SubStyle::TEMPO },
+            { "Metronome",               SubStyle::METRONOME },
+            { "Measure Number",          SubStyle::MEASURE_NUMBER },
+            { "Translator",              SubStyle::TRANSLATOR },
+            { "Tuplet",                  SubStyle::TUPLET },
+            { "System",                  SubStyle::SYSTEM },
+            { "Staff",                   SubStyle::STAFF },
+            { "Chord Symbol",            SubStyle::HARMONY },
+            { "Rehearsal Mark",          SubStyle::REHEARSAL_MARK },
+            { "Repeat Text Left",        SubStyle::REPEAT_LEFT },
+            { "Repeat Text Right",       SubStyle::REPEAT_RIGHT },
+            { "Repeat Text",             SubStyle::REPEAT_LEFT },
+            { "Volta",                   SubStyle::VOLTA },
+            { "Frame",                   SubStyle::FRAME },
+            { "Text Line",               SubStyle::TEXTLINE },
+            { "Glissando",               SubStyle::GLISSANDO },
+            { "Ottava",                  SubStyle::OTTAVA },
+            { "Pedal",                   SubStyle::PEDAL },
+            { "Hairpin",                 SubStyle::HAIRPIN },
+            { "Bend",                    SubStyle::BEND },
+            { "Header",                  SubStyle::HEADER },
+            { "Footer",                  SubStyle::FOOTER },
+            { "Instrument Change",       SubStyle::INSTRUMENT_CHANGE },
+            { "Figured Bass",            SubStyle::FIGURED_BASS },
+            };
+      SubStyle ss = SubStyle::SUBSTYLES;
+      for (const auto& i : styleTable) {
+            if (name == i.name) {
+                  ss = i.ss;
+                  break;
+                  }
+            }
+      if (ss != SubStyle::SUBSTYLES) {
+            const std::vector<StyledProperty>& spl = subStyle(ss);
+            for (const auto& i : spl) {
+                  QVariant value;
+                  switch (i.propertyIdx) {
+                        case P_ID::SUB_STYLE:
+                              value = int(ss);
+                              break;
+                        case P_ID::FONT_FACE:
+                              value = family;
+                              break;
+                        case P_ID::FONT_SIZE:
+                              value = size;
+                              break;
+                        case P_ID::FONT_BOLD:
+                              value = bold;
+                              break;
+                        case P_ID::FONT_ITALIC:
+                              value = italic;
+                              break;
+                        case P_ID::FONT_UNDERLINE:
+                              value = underline;
+                              break;
+                        case P_ID::FRAME:
+                              value = hasFrame;
+                              break;
+                        case P_ID::FRAME_SQUARE:
+                              value = false;
+                              break;
+                        case P_ID::FRAME_CIRCLE:
+                              value = circle;
+                              break;
+                        case P_ID::FRAME_WIDTH:
+                              value = frameWidth;
+                              break;
+                        case P_ID::FRAME_PADDING:
+                              value = paddingWidth;
+                              break;
+                        case P_ID::FRAME_ROUND:
+                              value = frameRound;
+                              break;
+                        case P_ID::FRAME_FG_COLOR:
+                              value = frameColor;
+                              break;
+                        case P_ID::FRAME_BG_COLOR:
+                              value = backgroundColor;
+                              break;
+                        case P_ID::FONT_SPATIUM_DEPENDENT:
+                              value = sizeIsSpatiumDependent;
+                              break;
+                        case P_ID::ALIGN:
+                              value = int(align);
+                              break;
+                        case P_ID::OFFSET:
+                              value = offset;
+                              break;
+                        case P_ID::OFFSET_TYPE:
+                              value = int(offsetType);
+                              break;
+                        case P_ID::SYSTEM_FLAG:
+                              value = systemFlag;
+                              break;
+                        default:
+                              qDebug("unhandled property %s", propertyName(i.propertyIdx));
+                              break;
+                        }
+                  style->set(i.styleIdx, value);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   readAccidental
 //---------------------------------------------------------
 
@@ -309,18 +557,29 @@ static void readAccidental(Accidental* a, XmlReader& e)
             else if (tag == "subtype") {
                   QString text = e.readElementText();
                   const static std::map<QString, AccidentalType> accMap = {
-                           {"none", AccidentalType::NONE}, {"sharp", AccidentalType::SHARP},
-                           {"flat", AccidentalType::FLAT}, {"natural", AccidentalType::NATURAL},
-                           {"double sharp", AccidentalType::SHARP2}, {"double flat", AccidentalType::FLAT2},
-                           {"flat-slash", AccidentalType::FLAT_SLASH}, {"flat-slash2", AccidentalType::FLAT_SLASH2},
-                           {"mirrored-flat2", AccidentalType::MIRRORED_FLAT2}, {"mirrored-flat", AccidentalType::MIRRORED_FLAT},
-                           {"sharp-slash", AccidentalType::SHARP_SLASH}, {"sharp-slash2", AccidentalType::SHARP_SLASH2},
-                           {"sharp-slash3", AccidentalType::SHARP_SLASH3}, {"sharp-slash4", AccidentalType::SHARP_SLASH4},
-                           {"sharp arrow up", AccidentalType::SHARP_ARROW_UP}, {"sharp arrow down", AccidentalType::SHARP_ARROW_DOWN},
-                           {"flat arrow up", AccidentalType::FLAT_ARROW_UP}, {"flat arrow down", AccidentalType::FLAT_ARROW_DOWN},
-                           {"natural arrow up", AccidentalType::NATURAL_ARROW_UP}, {"natural arrow down", AccidentalType::NATURAL_ARROW_DOWN},
-                           {"sori", AccidentalType::SORI}, {"koron", AccidentalType::KORON}
-                        };
+                     {"none",               AccidentalType::NONE},
+                     {"sharp",              AccidentalType::SHARP},
+                     {"flat",               AccidentalType::FLAT},
+                     {"natural",            AccidentalType::NATURAL},
+                     {"double sharp",       AccidentalType::SHARP2},
+                     {"double flat",        AccidentalType::FLAT2},
+                     {"flat-slash",         AccidentalType::FLAT_SLASH},
+                     {"flat-slash2",        AccidentalType::FLAT_SLASH2},
+                     {"mirrored-flat2",     AccidentalType::MIRRORED_FLAT2},
+                     {"mirrored-flat",      AccidentalType::MIRRORED_FLAT},
+                     {"sharp-slash",        AccidentalType::SHARP_SLASH},
+                     {"sharp-slash2",       AccidentalType::SHARP_SLASH2},
+                     {"sharp-slash3",       AccidentalType::SHARP_SLASH3},
+                     {"sharp-slash4",       AccidentalType::SHARP_SLASH4},
+                     {"sharp arrow up",     AccidentalType::SHARP_ARROW_UP},
+                     {"sharp arrow down",   AccidentalType::SHARP_ARROW_DOWN},
+                     {"flat arrow up",      AccidentalType::FLAT_ARROW_UP},
+                     {"flat arrow down",    AccidentalType::FLAT_ARROW_DOWN},
+                     {"natural arrow up",   AccidentalType::NATURAL_ARROW_UP},
+                     {"natural arrow down", AccidentalType::NATURAL_ARROW_DOWN},
+                     {"sori",               AccidentalType::SORI},
+                     {"koron",              AccidentalType::KORON}
+                     };
                   auto it = accMap.find(text);
                   if (it == accMap.end()) {
                         qDebug("invalid type %s", qPrintable(text));
@@ -1455,27 +1714,15 @@ static void readStyle(MStyle* style, XmlReader& e)
             if (tag == "lyricsDistance")        // was renamed
                   tag = "lyricsPosBelow";
 
-            if (tag == "TextStyle") {
-#if 0 // TODO
-                  TextStyle s;
-                  s.read(e);
-                  // convert old 2.0 text styles
-                  s.setName(convertOldTextStyleNames(s.name()));
-                  if (s.family() == "MuseJazz")
-                        s.setFamily("MuseJazz Text");
-                  style->setTextStyle(s);
-#endif
-                  e.skipCurrentElement();
-                  }
+            if (tag == "TextStyle")
+                  readTextStyle(style, e);
             else if (tag == "Spatium")
                   style->set(StyleIdx::spatium, e.readDouble() * DPMM);
             else if (tag == "page-layout") {
-                  e.skipCurrentElement();
-#if 0 // TODO
-                  PageFormat pf = *style->pageFormat();
+                  PageFormat pf;
+                  initPageFormat(style, &pf);
                   pf.read(e);
-                  style->setPageFormat(pf);
-#endif
+                  setPageFormat(style, pf);
                   }
             else if (tag == "displayInConcertPitch")
                   style->set(StyleIdx::concertPitch, QVariant(bool(e.readInt())));
@@ -1820,6 +2067,7 @@ void PageFormat::read(XmlReader& e)
       qreal w2        = _size.width() - _evenLeftMargin - _evenRightMargin;
       _printableWidth = qMin(w1, w2);     // silently adjust right margins
       }
+
 
 //---------------------------------------------------------
 //   read206
