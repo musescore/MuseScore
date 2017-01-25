@@ -585,6 +585,7 @@ enum class StyleIdx {
       frameFontBold,
       frameFontItalic,
       frameFontUnderline,
+      frameAlign,
 
       textLineFontFace,
       textLineFontSize,

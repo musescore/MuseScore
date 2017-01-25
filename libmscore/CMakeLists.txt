@@ -67,7 +67,7 @@ add_library (
       noteline.cpp spannermap.cpp
       bagpembell.cpp ambitus.cpp keylist.cpp scoreElement.cpp
       shape.cpp systemdivider.cpp midimapping.cpp stafflines.cpp
-#      read114.cpp
+      read114.cpp
       read206.cpp
       read300.cpp stafftypelist.cpp stafftypechange.cpp
       )

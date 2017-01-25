@@ -2720,7 +2720,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
 
 static QPixmap createThumbnail(const QString& name)
       {
-      MasterScore* score = new MasterScore;
+      MasterScore* score = new MasterScore(MScore::defaultStyle());
       Score::FileError error = readScore(score, name, true);
       if (error != Score::FileError::FILE_NO_ERROR) {
             delete score;

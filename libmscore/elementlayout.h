@@ -93,5 +93,8 @@ class ElementLayout {
 
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Align);
+
 #endif
 

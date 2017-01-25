@@ -23,6 +23,7 @@
 #include "tuplet.h"
 #include "layout.h"
 #include "property.h"
+#include "elementlayout.h"
 
 namespace Ms {
 
@@ -336,7 +337,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::defaultFontBold,               "defaultFontBold",               false },
       { StyleIdx::defaultFontItalic,             "defaultFontItalic",             false },
       { StyleIdx::defaultFontUnderline,          "defaultFontUnderline",          false },
-      { StyleIdx::defaultAlign,                  "defaultAlign",                  int(Align::LEFT) },
+      { StyleIdx::defaultAlign,                  "defaultAlign",                  QVariant::fromValue(Align::LEFT) },
       { StyleIdx::defaultFrame,                  "defaultFrame",                  false },
       { StyleIdx::defaultFrameSquare,            "defaultFrameSquare",            false },
       { StyleIdx::defaultFrameCircle,            "defaultFrameCircle",            false },
@@ -355,7 +356,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::titleFontBold,                 "titleFontBold",                 false },
       { StyleIdx::titleFontItalic,               "titleFontItalic",               false },
       { StyleIdx::titleFontUnderline,            "titleFontUnderline",            false },
-      { StyleIdx::titleAlign,                    "titleAlign",                    int(Align::HCENTER | Align::TOP) },
+      { StyleIdx::titleAlign,                    "titleAlign",                    QVariant::fromValue(Align::HCENTER | Align::TOP) },
       { StyleIdx::titleOffset,                   "titleOffset",                   QPointF() },
       { StyleIdx::titleOffsetType,               "titleOffsetType",               int(OffsetType::ABS)   },
 
@@ -365,7 +366,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::subTitleFontBold,              "subTitleFontBold",              false },
       { StyleIdx::subTitleFontItalic,            "subTtitleFontItalic",           false },
       { StyleIdx::subTitleFontUnderline,         "subTitleFontUnderline",         false },
-      { StyleIdx::subTitleAlign,                 "subTitleAlign",                 int(Align::HCENTER | Align::TOP) },
+      { StyleIdx::subTitleAlign,                 "subTitleAlign",                 QVariant::fromValue(Align::HCENTER | Align::TOP) },
       { StyleIdx::subTitleOffset,                "subTitleOffset",                QPointF(0.0, MM(10.0)) },
       { StyleIdx::subTitleOffsetType,            "subTitleOffsetType",            int(OffsetType::ABS)   },
 
@@ -375,7 +376,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::composerFontBold,              "composerFontBold",              false },
       { StyleIdx::composerFontItalic,            "composerFontItalic",            false },
       { StyleIdx::composerFontUnderline,         "composerFontUnderline",         false },
-      { StyleIdx::composerAlign,                 "composerAlign",                 int(Align::RIGHT | Align::BOTTOM) },
+      { StyleIdx::composerAlign,                 "composerAlign",                 QVariant::fromValue(Align::RIGHT | Align::BOTTOM) },
       { StyleIdx::composerOffset,                "composerOffset",                QPointF() },
       { StyleIdx::composerOffsetType,            "composerOffsetType",            int(OffsetType::ABS)   },
 
@@ -385,7 +386,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::lyricistFontBold,              "lyricistFontBold",              false },
       { StyleIdx::lyricistFontItalic,            "lyricistFontItalic",            false },
       { StyleIdx::lyricistFontUnderline,         "lyricistFontUnderline",         false },
-      { StyleIdx::lyricistAlign,                 "lyricistAlign",                 int(Align::LEFT | Align::BOTTOM) },
+      { StyleIdx::lyricistAlign,                 "lyricistAlign",                 QVariant::fromValue(Align::LEFT | Align::BOTTOM) },
       { StyleIdx::lyricistOffset,                "lyricistOffset",                QPointF() },
       { StyleIdx::lyricistOffsetType,            "lyricistOffsetType",            int(OffsetType::ABS)   },
 
@@ -394,7 +395,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::lyricsOddFontBold,             "lyricsOddFontBold",             false },
       { StyleIdx::lyricsOddFontItalic,           "lyricsOddFontItalic",           false },
       { StyleIdx::lyricsOddFontUnderline,        "lyricsOddFontUnderline",        false },
-      { StyleIdx::lyricsOddAlign,                "lyricistOddAlign",              int(Align::HCENTER | Align::BASELINE) },
+      { StyleIdx::lyricsOddAlign,                "lyricistOddAlign",              QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
       { StyleIdx::lyricsOddOffset,               "lyricistOddOffset",             QPointF(0.0, 6.0) },
 
       { StyleIdx::lyricsEvenFontFace,            "lyricsEvenFontFace",            "FreeSerif" },
@@ -402,7 +403,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::lyricsEvenFontBold,            "lyricsEvenFontBold",            false },
       { StyleIdx::lyricsEvenFontItalic,          "lyricsEvenFontItalic",          false },
       { StyleIdx::lyricsEvenFontUnderline,       "lyricsEventFontUnderline",      false },
-      { StyleIdx::lyricsEvenAlign,               "lyricistEvenAlign",             int(Align::HCENTER | Align::BASELINE) },
+      { StyleIdx::lyricsEvenAlign,               "lyricistEvenAlign",             QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
       { StyleIdx::lyricsEvenOffset,              "lyricistEvenOffset",            QPointF(0.0, 6.0) },
 
       { StyleIdx::fingeringFontFace,             "fingeringFontFace",             "FreeSerif" },
@@ -410,7 +411,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::fingeringFontBold,             "fingeringFontBold",             false },
       { StyleIdx::fingeringFontItalic,           "fingeringFontItalic",           false },
       { StyleIdx::fingeringFontUnderline,        "fingeringFontUnderline",        false },
-      { StyleIdx::fingeringAlign,                "fingeringAlign",                int(Align::CENTER) },
+      { StyleIdx::fingeringAlign,                "fingeringAlign",                QVariant::fromValue(Align::CENTER) },
       { StyleIdx::fingeringFrame,                "fingeringFrame",                false },
       { StyleIdx::fingeringFrameSquare,          "fingeringFrameSquare",          false },
       { StyleIdx::fingeringFrameCircle,          "fingeringFrameCircle",          false },
@@ -426,7 +427,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::lhGuitarFingeringFontBold,     "lhGuitarFingeringFontBold",     false },
       { StyleIdx::lhGuitarFingeringFontItalic,   "lhGuitarFingeringFontItalic",   false },
       { StyleIdx::lhGuitarFingeringFontUnderline,"lhGuitarFingeringFontUnderline",false },
-      { StyleIdx::lhGuitarFingeringAlign,        "lhGuitarFingeringAlign",        int(Align::RIGHT | Align::VCENTER) },
+      { StyleIdx::lhGuitarFingeringAlign,        "lhGuitarFingeringAlign",        QVariant::fromValue(Align::RIGHT | Align::VCENTER) },
       { StyleIdx::lhGuitarFingeringFrame,        "lhGuitarFingeringFrame",        false },
       { StyleIdx::lhGuitarFingeringFrameSquare,  "lhGuitarFingeringFrameSquare",  false },
       { StyleIdx::lhGuitarFingeringFrameCircle,  "lhGuitarFingeringFrameCircle",  false },
@@ -442,7 +443,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::rhGuitarFingeringFontBold,     "rhGuitarFingeringFontBold",     false },
       { StyleIdx::rhGuitarFingeringFontItalic,   "rhGuitarFingeringFontItalic",   false },
       { StyleIdx::rhGuitarFingeringFontUnderline,"rhGuitarFingeringFontUnderline",false },
-      { StyleIdx::rhGuitarFingeringAlign,        "rhGuitarFingeringAlign",        int(Align::CENTER) },
+      { StyleIdx::rhGuitarFingeringAlign,        "rhGuitarFingeringAlign",        QVariant::fromValue(Align::CENTER) },
       { StyleIdx::rhGuitarFingeringFrame,        "rhGuitarFingeringFrame",        false },
       { StyleIdx::rhGuitarFingeringFrameSquare,  "rhGuitarFingeringFrameSquare",  false },
       { StyleIdx::rhGuitarFingeringFrameCircle,  "rhGuitarFingeringFrameCircle",  false },
@@ -458,7 +459,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::stringNumberFontBold,          "stringNumberFontBold",          false },
       { StyleIdx::stringNumberFontItalic,        "stringNumberFontItalic",        false },
       { StyleIdx::stringNumberFontUnderline,     "stringNumberFontUnderline",     false },
-      { StyleIdx::stringNumberAlign,             "stringNumberAlign",             int(Align::CENTER) },
+      { StyleIdx::stringNumberAlign,             "stringNumberAlign",             QVariant::fromValue(Align::CENTER) },
       { StyleIdx::stringNumberFrame,             "stringNumberFrame",             true },
       { StyleIdx::stringNumberFrameSquare,       "stringNumberFrameSquare",       false },
       { StyleIdx::stringNumberFrameCircle,       "stringNumberFrameCircle",       true },
@@ -492,21 +493,21 @@ static const StyleType styleTypes[] {
       { StyleIdx::dynamicsFontBold,              "dynamicsFontBold",             false },
       { StyleIdx::dynamicsFontItalic,            "dynamicsFontItalic",           true },
       { StyleIdx::dynamicsFontUnderline,         "dynamicsFontUnderline",        false },
-      { StyleIdx::dynamicsAlign,                 "dynamicsAlign",                int(Align::HCENTER | Align::BASELINE) },
+      { StyleIdx::dynamicsAlign,                 "dynamicsAlign",                QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
 
       { StyleIdx::expressionFontFace,            "expressionFontFace",           "FreeSerif" },
       { StyleIdx::expressionFontSize,            "expressionFontSize",           11.0 },
       { StyleIdx::expressionFontBold,            "expressionFontBold",           false },
       { StyleIdx::expressionFontItalic,          "expressionFontItalic",         true },
       { StyleIdx::expressionFontUnderline,       "expressionFontUnderline",      false },
-      { StyleIdx::expressionAlign,               "expressionAlign",              int(Align::LEFT | Align::BASELINE) },
+      { StyleIdx::expressionAlign,               "expressionAlign",              QVariant::fromValue(Align::LEFT | Align::BASELINE) },
 
       { StyleIdx::tempoFontFace,                 "tempoFontFace",                "FreeSerif" },
       { StyleIdx::tempoFontSize,                 "tempoFontSize",                12.0 },
       { StyleIdx::tempoFontBold,                 "tempoFontBold",                true },
       { StyleIdx::tempoFontItalic,               "tempoFontItalic",              false },
       { StyleIdx::tempoFontUnderline,            "tempoFontUnderline",           false },
-      { StyleIdx::tempoAlign,                    "tempoAlign",                   int(Align::LEFT | Align::BASELINE) },
+      { StyleIdx::tempoAlign,                    "tempoAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
       { StyleIdx::tempoOffset,                   "tempoOffset",                  QPointF(0.0, -4.0) },
       { StyleIdx::tempoSystemFlag,               "tempoSystemFlag",              true },
 
@@ -595,7 +596,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::voltaFontBold,                 "voltaFontBold",                true },
       { StyleIdx::voltaFontItalic,               "voltaFontItalic",              false },
       { StyleIdx::voltaFontUnderline,            "voltaFontUnderline",           false },
-      { StyleIdx::voltaAlign,                    "voltaAlign",                   int(Align::LEFT | Align::BASELINE) },
+      { StyleIdx::voltaAlign,                    "voltaAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
       { StyleIdx::voltaOffset,                   "voltaOffset",                  QPointF(0.5, 1.9) },
 
       { StyleIdx::frameFontFace,                 "frameFontFace",                "FreeSerif" },
@@ -603,6 +604,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::frameFontBold,                 "frameFontBold",                false },
       { StyleIdx::frameFontItalic,               "frameFontItalic",              false },
       { StyleIdx::frameFontUnderline,            "frameFontUnderline",           false },
+      { StyleIdx::frameAlign,                    "frameAlign",                   QVariant::fromValue(Align::LEFT) },
 
       { StyleIdx::textLineFontFace,              "textLineFontFace",             "FreeSerif" },
       { StyleIdx::textLineFontSize,              "textLineFontSize",             12.0 },
@@ -664,6 +666,19 @@ static const StyleType styleTypes[] {
       { StyleIdx::figuredBassFontBold,           "figuredBassFontBold",          false },
       { StyleIdx::figuredBassFontItalic,         "figuredBassFontItalic",        false },
       { StyleIdx::figuredBassFontUnderline,      "figuredBassFontUnderline",     false },
+
+      { StyleIdx::user1FontFace,                 "user1FontFace",                "FreeSerif" },
+      { StyleIdx::user1FontSize,                 "user1FontSize",                10.0 },
+      { StyleIdx::user1FontBold,                 "user1FontBold",                false },
+      { StyleIdx::user1FontItalic,               "user1FontItalic",              false },
+      { StyleIdx::user1FontUnderline,            "user1FontUnderline",           false },
+
+      { StyleIdx::user2FontFace,                 "user2FontFace",                "FreeSerif" },
+      { StyleIdx::user2FontSize,                 "user2FontSize",                10.0 },
+      { StyleIdx::user2FontBold,                 "user2FontBold",                false },
+      { StyleIdx::user2FontItalic,               "user2FontItalic",              false },
+      { StyleIdx::user2FontUnderline,            "user2FontUnderline",           false },
+
       };
 #undef MM
 
@@ -997,6 +1012,7 @@ const std::vector<StyledProperty> frameStyle {
       { StyleIdx::frameFontBold,                      P_ID::FONT_BOLD              },
       { StyleIdx::frameFontItalic,                    P_ID::FONT_ITALIC            },
       { StyleIdx::frameFontUnderline,                 P_ID::FONT_UNDERLINE         },
+      { StyleIdx::frameAlign,                         P_ID::ALIGN                  },
       };
 
 const std::vector<StyledProperty> textLineStyle {
@@ -1270,7 +1286,7 @@ void MStyle::precomputeValues()
 
 bool MStyle::isDefault(StyleIdx idx) const
       {
-      return _values[int(idx)] == MScore::baseStyle().value(idx);
+      return value(idx) == MScore::baseStyle().value(idx);
       }
 
 //---------------------------------------------------------
@@ -1337,8 +1353,39 @@ bool MStyle::readProperties(XmlReader& e)
                         set(idx, QVariant::fromValue(Direction(val.toInt())));
                   else if (!strcmp("QString", type))
                         set(idx, QVariant(val));
+                  else if (!strcmp("Ms::Align", type)) {
+                        QStringList sl = val.split(',');
+                        if (sl.size() != 2) {
+                              qDebug("bad align text <%s>", qPrintable(val));
+                              return true;
+                              }
+                        Align align = Align::LEFT;
+                        if (sl[0] == "center")
+                              align = align | Align::HCENTER;
+                        else if (sl[0] == "right")
+                              align = align | Align::RIGHT;
+                        else if (sl[0] == "left")
+                              ;
+                        else {
+                              qDebug("bad align text <%s>", qPrintable(sl[0]));
+                              return true;
+                              }
+                        if (sl[1] == "center")
+                              align = align | Align::VCENTER;
+                        else if (sl[1] == "bottom")
+                              align = align | Align::BOTTOM;
+                        else if (sl[1] == "baseline")
+                              align = align | Align::BASELINE;
+                        else if (sl[1] == "top")
+                              ;
+                        else {
+                              qDebug("bad align text <%s>", qPrintable(sl[1]));
+                              return true;
+                              }
+                        set(idx, QVariant::fromValue(align));
+                        }
                   else {
-                        qFatal("MStyle::load: unhandled type %s", type);
+                        qFatal("unhandled type %s", type);
                         }
                   return true;
                   }
