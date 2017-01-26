@@ -124,19 +124,21 @@ done
 
 # Workaround:
 # fix Homebrew libraries with hard coded absolute path, see QTBUG-56814
-BIN_FILE=${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
-for P in `otool -L $BIN_FILE | awk '{print $1}'`
+FOLDER_NAME=${VOLUME}/${APPNAME}.app/Contents/Frameworks
+for P in `ls -d $FOLDER_NAME/*.* | awk '{print $1}'`
 do
-    FNAME=$(echo $P | sed "s,@executable_path/../Frameworks,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
-    for P1 in `otool -L $FNAME | awk '{print $1}'`
-    do
-        if [[ "$P1" == /usr/local/Cellar*.dylib ]]
-        then
-            PATHNAME=$(dirname $P1)
-            PSLASH1=$(echo $P1 | sed "s,$PATHNAME,@executable_path/../Frameworks,g")
-            install_name_tool -change $P1 $PSLASH1 $FNAME
-        fi
-    done
+    if [[ "$P" == *.dylib ]]
+    then
+        for P1 in `otool -L $P | awk '{print $1}'`
+        do
+            if [[ "$P1" == /usr/local/Cellar*.dylib ]]
+            then
+                PATHNAME=$(dirname $P1)
+                PSLASH1=$(echo $P1 | sed "s,$PATHNAME,@executable_path/../Frameworks,g")
+                install_name_tool -change $P1 $PSLASH1 $P
+            fi
+        done
+    fi
 done
 
 for f in $(find "${VOLUME}/${APPNAME}.app/Contents" -iname "*");
