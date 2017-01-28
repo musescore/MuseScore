@@ -83,6 +83,7 @@ class MTrack {
       bool isDivisionInTps;       // ticks per second
       bool hadInitialNotes;
 
+      std::multimap<ReducedFraction, int> volumes;
       std::multimap<ReducedFraction, MidiChord> chords;
       std::multimap<ReducedFraction, MidiTuplet::TupletData> tuplets;   // <tupletOnTime, ...>
 
