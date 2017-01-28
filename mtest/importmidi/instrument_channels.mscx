@@ -67,6 +67,7 @@
           </Articulation>
         <Channel>
           <program value="48"/>
+          <controller ctrl="7" value="50"/>
           <midiPort>0</midiPort>
           <midiChannel>0</midiChannel>
           </Channel>
@@ -129,6 +130,7 @@
           </Articulation>
         <Channel>
           <program value="56"/>
+          <controller ctrl="7" value="33"/>
           <midiPort>1</midiPort>
           <midiChannel>0</midiChannel>
           </Channel>
@@ -186,6 +188,7 @@
           </Articulation>
         <Channel>
           <program value="57"/>
+          <controller ctrl="7" value="37"/>
           <midiPort>1</midiPort>
           <midiChannel>2</midiChannel>
           </Channel>
