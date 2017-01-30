@@ -50,14 +50,14 @@ class Ambitus : public Element {
       void initFrom(Ambitus* a);
 
       // getters and setters
-      virtual ElementType type() const override     { return ElementType::AMBITUS;    }
+      virtual ElementType type() const override       { return ElementType::AMBITUS; }
       NoteHead::Group noteHeadGroup() const           { return _noteHeadGroup;}
       NoteHead::Type noteHeadType() const             { return _noteHeadType; }
       MScore::DirectionH direction() const            { return _dir;          }
       bool hasLine() const                            { return _hasLine;      }
       Spatium lineWidth() const                       { return _lineWidth;    }
-      int topOctave() const                           { return _topPitch / 12;}
-      int bottomOctave() const                        { return _bottomPitch / 12;}
+      int topOctave() const                           { return (_topPitch / 12) - 1; }
+      int bottomOctave() const                        { return (_bottomPitch / 12) - 1; }
       int topPitch() const                            { return _topPitch;     }
       int bottomPitch() const                         { return _bottomPitch;  }
       int topTpc() const                              { return _topTpc;       }
