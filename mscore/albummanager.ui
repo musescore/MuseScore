@@ -127,11 +127,12 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>add</tabstop>
-  <tabstop>remove</tabstop>
   <tabstop>scoreList</tabstop>
   <tabstop>up</tabstop>
   <tabstop>down</tabstop>
+  <tabstop>add</tabstop>
+  <tabstop>addNew</tabstop>
+  <tabstop>remove</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>

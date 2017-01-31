@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>404</width>
-    <height>162</height>
+    <width>174</width>
+    <height>91</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -82,7 +82,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Has bracket' value</string>
+         <string>Reset 'Bracket type' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -118,6 +118,9 @@
         <property name="text">
          <string>Bracket type:</string>
         </property>
+        <property name="buddy">
+         <cstring>bracket</cstring>
+        </property>
        </widget>
       </item>
       <item row="0" column="1" colspan="2">
@@ -142,6 +145,7 @@
   <tabstop>title</tabstop>
   <tabstop>small</tabstop>
   <tabstop>resetSmall</tabstop>
+  <tabstop>bracket</tabstop>
   <tabstop>resetBracket</tabstop>
  </tabstops>
  <resources>
