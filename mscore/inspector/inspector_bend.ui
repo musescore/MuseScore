@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>407</width>
-    <height>224</height>
+    <width>299</width>
+    <height>180</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -347,6 +347,22 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>title</tabstop>
+  <tabstop>fontFace</tabstop>
+  <tabstop>resetFontFace</tabstop>
+  <tabstop>fontSize</tabstop>
+  <tabstop>resetFontSize</tabstop>
+  <tabstop>bold</tabstop>
+  <tabstop>resetBold</tabstop>
+  <tabstop>italic</tabstop>
+  <tabstop>resetItalic</tabstop>
+  <tabstop>underline</tabstop>
+  <tabstop>resetUnderline</tabstop>
+  <tabstop>playBend</tabstop>
+  <tabstop>resetPlayBend</tabstop>
+  <tabstop>properties</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>
