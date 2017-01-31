@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>113</width>
-    <height>91</height>
+    <width>404</width>
+    <height>162</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -76,34 +76,8 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="0" column="1">
-       <widget class="QCheckBox" name="small">
-        <property name="focusPolicy">
-         <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="accessibleName">
-         <string>Small</string>
-        </property>
-        <property name="text">
-         <string>Small</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QCheckBox" name="hasBracket">
-        <property name="focusPolicy">
-         <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="accessibleName">
-         <string>Has bracket</string>
-        </property>
-        <property name="text">
-         <string>Has bracket</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="resetHasBracket">
+      <item row="1" column="3">
+       <widget class="QToolButton" name="resetBracket">
         <property name="toolTip">
          <string>Reset to default</string>
         </property>
@@ -119,7 +93,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
+      <item row="0" column="3">
        <widget class="QToolButton" name="resetSmall">
         <property name="toolTip">
          <string>Reset to default</string>
@@ -136,6 +110,29 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="2">
+       <widget class="QComboBox" name="bracket"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Bracket type:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <widget class="QCheckBox" name="small">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="accessibleName">
+         <string>Small</string>
+        </property>
+        <property name="text">
+         <string>Small</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -145,8 +142,7 @@
   <tabstop>title</tabstop>
   <tabstop>small</tabstop>
   <tabstop>resetSmall</tabstop>
-  <tabstop>hasBracket</tabstop>
-  <tabstop>resetHasBracket</tabstop>
+  <tabstop>resetBracket</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

@@ -552,7 +552,7 @@ static void readAccidental(Accidental* a, XmlReader& e)
             if (tag == "bracket") {
                   int i = e.readInt();
                   if (i == 0 || i == 1)
-                        a->setHasBracket(i);
+                        a->setBracket(AccidentalBracket(i));
                   }
             else if (tag == "subtype") {
                   QString text = e.readElementText();

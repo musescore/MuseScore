@@ -347,10 +347,16 @@ Palette* MuseScore::newAccidentalsPalette(PaletteType t)
       ik->setIconType(IconType::BRACKETS);
       const Shortcut* s = Shortcut::getShortcut("add-brackets");
       QAction* action = s->action();
-      QIcon icon(action->icon());
-      QByteArray ba("add-brackets");
-      ik->setAction(ba, icon);
+      ik->setAction(QByteArray("add-brackets"), action->icon());
       sp->append(ik, s->help());
+
+      ik = new Icon(gscore);
+      ik->setIconType(IconType::PARENTHESIS);
+      s = Shortcut::getShortcut("add-parenthesis");
+      action = s->action();
+      ik->setAction(QByteArray("add-parenthesis"), action->icon());
+      sp->append(ik, s->help());
+
       return sp;
       }
 

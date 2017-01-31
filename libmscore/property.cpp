@@ -119,7 +119,7 @@ static const PropertyData propertyList[] = {
       { P_ID::SPACE,                   "space",                   false, "space",                 P_TYPE::SP_REAL         },
       { P_ID::TEMPO,                   "tempo",                   true,  "tempo",                 P_TYPE::TEMPO           },
       { P_ID::TEMPO_FOLLOW_TEXT,       "tempo_follow_text",       true,  "followText",            P_TYPE::BOOL            },
-      { P_ID::ACCIDENTAL_BRACKET,      "accidental_bracket",      false, "bracket",               P_TYPE::BOOL            },
+      { P_ID::ACCIDENTAL_BRACKET,      "accidental_bracket",      false, "bracket",               P_TYPE::INT             },
       { P_ID::NUMERATOR_STRING,        "numerator_string",        false, "textN",                 P_TYPE::STRING          },
       { P_ID::DENOMINATOR_STRING,      "denominator_string",      false, "textD",                 P_TYPE::STRING          },
       { P_ID::FBPREFIX,                "fbprefix",                false, "prefix",                P_TYPE::INT             },

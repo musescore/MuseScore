@@ -3245,6 +3245,16 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "add-parenthesis",
+         QT_TRANSLATE_NOOP("action","Add Parenthesis to Element"),
+         QT_TRANSLATE_NOOP("action","Add parenthesis to Element"),
+         0,
+         Icons::parenthesis_ICON,
+         Qt::WindowShortcut
+         },
+      {
+         MsWidget::SCORE_TAB,
          STATE_NORMAL,
          "toggle-mmrest",
          QT_TRANSLATE_NOOP("action","Toggle Create Multimeasure Rest"),

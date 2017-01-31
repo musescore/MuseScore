@@ -1587,7 +1587,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                                           case -2: at = Ms::AccidentalType::FLAT2; break;
                                           }
                                     a->setAccidentalType(at);
-                                    a->setHasBracket(bracket);
+                                    a->setBracket(AccidentalBracket(bracket));
                                     a->setRole(Ms::AccidentalRole::USER);
                                     note->add(a);
                                     }
