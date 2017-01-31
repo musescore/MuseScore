@@ -5064,7 +5064,7 @@ Accidental* MusicXMLParserPass2::accidental()
             Accidental* a = new Accidental(_score);
             a->setAccidentalType(type);
             if (editorial || cautionary || parentheses) {
-                  a->setHasBracket(cautionary || parentheses);
+                  a->setBracket(AccidentalBracket(cautionary || parentheses));
                   a->setRole(AccidentalRole::USER);
                   }
             return a;

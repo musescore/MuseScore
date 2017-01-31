@@ -2530,7 +2530,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
             if (acc) {
                   QString s = accidentalType2MxmlString(acc->accidentalType());
                   if (s != "") {
-                        if (note->accidental()->hasBracket())
+                        if (note->accidental()->bracket() != AccidentalBracket::NONE)
                               xml.tag("accidental parentheses=\"yes\"", s);
                         else
                               xml.tag("accidental", s);

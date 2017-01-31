@@ -235,14 +235,14 @@ static void readAccidental(Accidental* a, XmlReader& e)
             if (tag == "bracket") {
                   int i = e.readInt();
                   if (i == 0 || i == 1)
-                        a->setHasBracket(i);
+                        a->setBracket(AccidentalBracket(i));
                   }
             else if (tag == "subtype") {
                   QString text(e.readElementText());
                   bool isInt;
                   int i = text.toInt(&isInt);
                   if (isInt) {
-                        a->setHasBracket(i & 0x8000);
+                        a->setBracket(i & 0x8000 ? AccidentalBracket::PARENTHESIS : AccidentalBracket::BRACKET);
                         i &= ~0x8000;
                         AccidentalType at;
                         switch (i) {
@@ -250,31 +250,31 @@ static void readAccidental(Accidental* a, XmlReader& e)
                                     at = AccidentalType::NONE;
                                     break;
                               case 6:
-                                    a->setHasBracket(true);
+                                    a->setBracket(AccidentalBracket::PARENTHESIS);
                               case 1:
                               case 11:
                                     at = AccidentalType::SHARP;
                                     break;
                               case 7:
-                                    a->setHasBracket(true);
+                                    a->setBracket(AccidentalBracket::PARENTHESIS);
                               case 2:
                               case 12:
                                     at = AccidentalType::FLAT;
                                     break;
                               case 8:
-                                    a->setHasBracket(true);
+                                    a->setBracket(AccidentalBracket::PARENTHESIS);
                               case 3:
                               case 13:
                                     at = AccidentalType::SHARP2;
                                     break;
                               case 9:
-                                    a->setHasBracket(true);
+                                    a->setBracket(AccidentalBracket::PARENTHESIS);
                               case 4:
                               case 14:
                                     at = AccidentalType::FLAT2;
                                     break;
                               case 10:
-                                    a->setHasBracket(true);
+                                    a->setBracket(AccidentalBracket::PARENTHESIS);
                               case 5:
                               case 15:
                                     at = AccidentalType::NATURAL;
@@ -547,7 +547,9 @@ static void readNote(Note* note, XmlReader& e)
                               case 26: at = AccidentalType::KORON; break;
                               }
                         note->accidental()->setAccidentalType(at);
-                        note->accidental()->setHasBracket(bracket);
+
+                        note->accidental()->setBracket(AccidentalBracket(bracket));
+
                         note->accidental()->setRole(AccidentalRole::USER);
                         e.hasAccidental = true;   // we now have an accidental
                         }

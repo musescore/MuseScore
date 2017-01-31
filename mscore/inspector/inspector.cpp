@@ -59,6 +59,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/breath.h"
 #include "libmscore/lyrics.h"
+#include "libmscore/accidental.h"
 
 namespace Ms {
 
@@ -749,9 +750,14 @@ InspectorAccidental::InspectorAccidental(QWidget* parent)
       a.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::SMALL,               0, 0, a.small,       a.resetSmall       },
-            { P_ID::ACCIDENTAL_BRACKET,  0, 0, a.hasBracket,  a.resetHasBracket  }
+            { P_ID::SMALL,               0, 0, a.small,    a.resetSmall    },
+            { P_ID::ACCIDENTAL_BRACKET,  0, 0, a.bracket,  a.resetBracket  }
             };
+      a.bracket->clear();
+      a.bracket->addItem(tr("None"), int(AccidentalBracket::NONE));
+      a.bracket->addItem(tr("Parenthesis"), int(AccidentalBracket::PARENTHESIS));
+      a.bracket->addItem(tr("Bracket"), int(AccidentalBracket::BRACKET));
+
       const std::vector<InspectorPanel> ppList = { { a.title, a.panel } };
       mapSignals(iiList, ppList);
       }

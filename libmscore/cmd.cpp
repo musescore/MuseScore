@@ -2272,7 +2272,7 @@ void Score::cmdAddBracket()
                   }
             else if (el->type() == ElementType::ACCIDENTAL) {
                   Accidental* acc = toAccidental(el);
-                  acc->undoSetHasBracket(true);
+                  acc->undoChangeProperty(P_ID::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS));
                   }
             else if (el->type() == ElementType::HARMONY) {
                   Harmony* h = toHarmony(el);
