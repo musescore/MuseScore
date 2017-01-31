@@ -2268,7 +2268,7 @@ void Score::cmdAddBracket()
       for(Element* el : selection().elements()) {
             if (el->type() == ElementType::NOTE) {
                   Note* n = toNote(el);
-                  n->addBracket();
+                  n->addParenthesis();
                   }
             else if (el->type() == ElementType::ACCIDENTAL) {
                   Accidental* acc = toAccidental(el);
