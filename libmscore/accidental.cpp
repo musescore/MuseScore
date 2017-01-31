@@ -335,7 +335,7 @@ void Accidental::draw(QPainter* painter) const
 bool Accidental::acceptDrop(const DropData& data) const
       {
       Element* e = data.element;
-      return e->isIcon() && (toIcon(e)->iconType() == IconType::BRACKETS || toIcon(e)->iconType() == IconType::PARENTHESIS);
+      return e->isIcon() && (toIcon(e)->iconType() == IconType::BRACKETS || toIcon(e)->iconType() == IconType::PARENTHESES);
       }
 
 //---------------------------------------------------------
@@ -351,7 +351,7 @@ Element* Accidental::drop(const DropData& data)
                         case IconType::BRACKETS:
                               undoChangeProperty(P_ID::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACKET), PropertyFlags::NOSTYLE);
                               break;
-                        case IconType::PARENTHESIS:
+                        case IconType::PARENTHESES:
                               undoChangeProperty(P_ID::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS), PropertyFlags::NOSTYLE);
                               break;
                         default:

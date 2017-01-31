@@ -351,10 +351,10 @@ Palette* MuseScore::newAccidentalsPalette(PaletteType t)
       sp->append(ik, s->help());
 
       ik = new Icon(gscore);
-      ik->setIconType(IconType::PARENTHESIS);
-      s = Shortcut::getShortcut("add-parenthesis");
+      ik->setIconType(IconType::PARENTHESES);
+      s = Shortcut::getShortcut("add-parentheses");
       action = s->action();
-      ik->setAction(QByteArray("add-parenthesis"), action->icon());
+      ik->setAction(QByteArray("add-parentheses"), action->icon());
       sp->append(ik, s->help());
 
       return sp;
@@ -608,11 +608,11 @@ Palette* MuseScore::newNoteHeadsPalette()
             sp->append(nh, NoteHead::group2userName(NoteHead::Group(i)));
             }
       Icon* ik = new Icon(gscore);
-      ik->setIconType(IconType::PARENTHESIS);
-      const Shortcut* s = Shortcut::getShortcut("add-parenthesis");
+      ik->setIconType(IconType::PARENTHESES);
+      const Shortcut* s = Shortcut::getShortcut("add-parentheses");
       QAction* action = s->action();
       QIcon icon(action->icon());
-      ik->setAction("add-parenthesis", icon);
+      ik->setAction("add-parentheses", icon);
       sp->append(ik, s->help());
       return sp;
       }
