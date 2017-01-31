@@ -502,7 +502,7 @@ class Note : public Element {
       virtual void setScore(Score* s) override;
       void setDotY(Direction);
 
-      void addBracket();
+      void addParenthesis();
 
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type, int tpc, Key key, NoteHeadScheme scheme);
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);

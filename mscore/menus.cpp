@@ -608,11 +608,11 @@ Palette* MuseScore::newNoteHeadsPalette()
             sp->append(nh, NoteHead::group2userName(NoteHead::Group(i)));
             }
       Icon* ik = new Icon(gscore);
-      ik->setIconType(IconType::BRACKETS);
-      const Shortcut* s = Shortcut::getShortcut("add-brackets");
+      ik->setIconType(IconType::PARENTHESIS);
+      const Shortcut* s = Shortcut::getShortcut("add-parenthesis");
       QAction* action = s->action();
       QIcon icon(action->icon());
-      ik->setAction("add-brackets", icon);
+      ik->setAction("add-parenthesis", icon);
       sp->append(ik, s->help());
       return sp;
       }
