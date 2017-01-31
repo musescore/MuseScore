@@ -356,10 +356,10 @@ class Text : public Element {
       QFont font() const;
       QFontMetricsF fontMetrics() const;
 
-
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(P_ID id) const override;
+
       virtual void setPropertyFlags(P_ID, PropertyFlags) override;
       virtual PropertyFlags propertyFlags(P_ID) const override;
       virtual void resetProperty(P_ID id) override;

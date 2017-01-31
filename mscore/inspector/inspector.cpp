@@ -766,7 +766,12 @@ InspectorBend::InspectorBend(QWidget* parent)
       g.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::PLAY,         0, 0, g.playBend,    g.resetPlayBend    }
+            { P_ID::PLAY,           0, 0, g.playBend,    g.resetPlayBend    },
+            { P_ID::FONT_FACE,      0, 0, g.fontFace,    g.resetFontFace    },
+            { P_ID::FONT_SIZE,      0, 0, g.fontSize,    g.resetFontSize    },
+            { P_ID::FONT_BOLD,      0, 0, g.bold,        g.resetBold        },
+            { P_ID::FONT_ITALIC,    0, 0, g.italic,      g.resetItalic      },
+            { P_ID::FONT_UNDERLINE, 0, 0, g.underline,   g.resetUnderline   },
             };
       const std::vector<InspectorPanel> ppList = { {g.title, g.panel} };
       mapSignals(iiList, ppList);
@@ -797,9 +802,9 @@ InspectorTremoloBar::InspectorTremoloBar(QWidget* parent)
       g.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::PLAY,         0, 0, g.play,        g.resetPlay       },
-            { P_ID::LINE_WIDTH,   0, 0, g.lineWidth,   g.resetLineWidth  },
-            { P_ID::MAG,          0, 0, g.mag,         g.resetMag        }
+            { P_ID::PLAY,           0, 0, g.play,        g.resetPlay        },
+            { P_ID::LINE_WIDTH,     0, 0, g.lineWidth,   g.resetLineWidth   },
+            { P_ID::MAG,            0, 0, g.mag,         g.resetMag         }
             };
       const std::vector<InspectorPanel> ppList = { { g.title, g.panel } };
 

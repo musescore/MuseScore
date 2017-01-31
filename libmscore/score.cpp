@@ -4260,6 +4260,17 @@ MasterScore::~MasterScore()
       }
 
 //---------------------------------------------------------
+//   setMovements
+//---------------------------------------------------------
+
+void MasterScore::setMovements(Movements* m)
+      {
+      _movements = m;
+      if (_movements)
+            _movements->push_back(this);
+      }
+
+//---------------------------------------------------------
 //   isSavable
 //---------------------------------------------------------
 
@@ -4388,7 +4399,7 @@ bool Score::isTopScore() const
 //---------------------------------------------------------
 
 Movements::Movements()
-   : std::list<MasterScore*>()
+   : std::vector<MasterScore*>()
       {
       _undo = new UndoStack();
       }

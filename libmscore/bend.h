@@ -15,6 +15,7 @@
 
 #include "element.h"
 #include "pitchvalue.h"
+#include "property.h"
 
 namespace Ms {
 
@@ -25,16 +26,32 @@ namespace Ms {
 class Bend : public Element {
       Q_OBJECT
 
+      QString fontFace   { "FreeSerif" };
+      qreal fontSize     { 8.0         };
+      bool fontBold      { false       };
+      bool fontItalic    { false       };
+      bool fontUnderline { false       };
+
+      PropertyFlags propertyFlagsList[5] = {
+            PropertyFlags::STYLED,
+            PropertyFlags::STYLED,
+            PropertyFlags::STYLED,
+            PropertyFlags::STYLED,
+            PropertyFlags::STYLED,
+            };
+
+      bool _playBend     { true };
       QList<PitchValue> _points;
       qreal _lw;
       QPointF notePos;
       qreal noteWidth;
-      bool _playBend;
+
+      QFont font(qreal) const;
 
    public:
       Bend(Score* s);
       virtual Bend* clone() const override        { return new Bend(*this); }
-      virtual ElementType type() const override { return ElementType::BEND; }
+      virtual ElementType type() const override   { return ElementType::BEND; }
       virtual void layout() override;
       virtual void draw(QPainter*) const override;
       virtual void write(XmlWriter&) const override;
@@ -49,6 +66,12 @@ class Bend : public Element {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
+
+      virtual void setPropertyFlags(P_ID, PropertyFlags) override;
+      virtual PropertyFlags propertyFlags(P_ID) const override;
+      virtual void resetProperty(P_ID id) override;
+      virtual StyleIdx getPropertyStyle(P_ID) const override;
+      virtual void reset() override;
       };
 
 

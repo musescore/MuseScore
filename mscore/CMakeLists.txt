@@ -256,7 +256,7 @@ add_executable ( ${ExecutableName}
       selinstrument.cpp editstafftype.cpp texttools.cpp
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
       workspace.cpp chordview.cpp
-      album.cpp albummanager.cpp
+      albummanager.cpp
       lineproperties.cpp stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp
       articulationprop.cpp

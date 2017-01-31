@@ -196,9 +196,9 @@ struct Position {
 //---------------------------------------------------------
 
 enum class LayoutFlag : char {
-      NO_FLAGS = 0,
+      NO_FLAGS       = 0,
       FIX_PITCH_VELO = 1,
-      PLAY_EVENTS = 2
+      PLAY_EVENTS    = 2
       };
 
 typedef QFlags<LayoutFlag> LayoutFlags;
@@ -266,6 +266,10 @@ class CmdState {
       int endTick() const      { return _endTick; }
       };
 
+//---------------------------------------------------------
+//   UpdateState
+//---------------------------------------------------------
+
 class UpdateState {
    public:
       QRectF refresh;               ///< area to update, canvas coordinates
@@ -273,7 +277,6 @@ class UpdateState {
       bool _playChord  { false };   ///< play whole chord for the selected note
       bool _selectionChanged { false };
       };
-
 
 class MasterScore;
 
@@ -286,7 +289,7 @@ class MasterScore;
 //    as Score. MasterScores are connected in a double linked list.
 //-----------------------------------------------------------------------------
 
-class Movements : public std::list<MasterScore*> {
+class Movements : public std::vector<MasterScore*> {
       UndoStack* _undo;
       QList<Page*> _pages;          // pages are build from systems
       MStyle _style;
@@ -325,9 +328,6 @@ class Movements : public std::list<MasterScore*> {
 //   @P ntracks         int               number of tracks (staves * 4) (read only)
 // not to be documented?
 //   @P parts           array[Part]       the list of parts (read only)
-///////   @P poet            string            poet of the score (read only)
-///////   @P subtitle        string            subtitle of the score (read only)
-///////   @P title           string            title of the score (read only)
 //
 //    a Score has always an associated MasterScore
 //---------------------------------------------------------------------------------------
@@ -346,7 +346,6 @@ class Score : public ScoreElement {
       Q_PROPERTY(Ms::Measure*                   lastMeasureMM     READ lastMeasureMM)
       Q_PROPERTY(Ms::Segment*                   lastSegment       READ lastSegment)
       Q_PROPERTY(int                            lyricCount        READ lyricCount)
-//TODO-ws      Q_PROPERTY(QString                        name              READ name           WRITE setName)
       Q_PROPERTY(int                            nmeasures         READ nmeasures)
       Q_PROPERTY(int                            npages            READ npages)
       Q_PROPERTY(int                            nstaves           READ nstaves)
@@ -1161,7 +1160,6 @@ class MasterScore : public Score {
       QFileInfo info;
 
       bool read(XmlReader&);
-      void addMovement(MasterScore* score);
       void setPrev(MasterScore* s) { _prev = s; }
       void setNext(MasterScore* s) { _next = s; }
 
@@ -1185,7 +1183,8 @@ class MasterScore : public Score {
       MasterScore* prev() const                                       { return _prev;      }
       virtual Movements* movements() override                         { return _movements; }
       virtual const Movements* movements() const override             { return _movements; }
-      void setMovements(Movements* m)                                 { _movements = m; _movements->push_back(this); }
+      void setMovements(Movements* m);
+      void addMovement(MasterScore* score);
 
       virtual void setUpdateAll() override;
       virtual void setLayoutAll() override;

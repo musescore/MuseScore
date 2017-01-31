@@ -3209,7 +3209,7 @@ void LayoutContext::collectPage()
             curSystem->setPos(page->lm(), y);
             for (System* s : page->systems()) {
                   if (s == curSystem)
-                        qDebug("=================================bad system %d\n", k);
+                        qDebug("bad system %d\n", k);
                   }
             page->appendSystem(curSystem);
             y += curSystem->height();
@@ -3247,7 +3247,7 @@ void LayoutContext::collectPage()
                               score = ms;
                               QList<System*>& systems = ms->systems();
                               if (systems.empty() || systems.front()->measures().empty()) {
-                                    systemList = systems;
+                                    systemList         = systems;
                                     systems.clear();
                                     measureNo          = 0;
                                     startWithLongNames = true;
