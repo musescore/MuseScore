@@ -419,7 +419,7 @@ void GuitarPro6::readTracks(QDomNode* track)
                               }
                         else
                               qDebug() << "Unknown instrument: " << ref;
-                        if (ref.endsWith("-gs")) { // grand staff
+                        if (ref.endsWith("-gs") || ref.startsWith("2")) { // grand staff
                               Staff* s2 = new Staff(score);
                               s2->setPart(part);
                               part->insertStaff(s2, -1);
