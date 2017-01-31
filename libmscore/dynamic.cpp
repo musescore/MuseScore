@@ -151,14 +151,14 @@ void Dynamic::layout()
       if (autoplace())
             setUserOff(QPointF());
 
-      QPointF p;
+      qreal y;
       if (placeAbove())
-            p.ry() += score()->styleP(StyleIdx::dynamicsPosAbove);
+            y = score()->styleP(StyleIdx::dynamicsPosAbove);
       else {
             qreal sh = staff() ? staff()->height() : 0;
-            p.ry() += score()->styleP(StyleIdx::dynamicsPosBelow) + sh + lineSpacing();
+            y = score()->styleP(StyleIdx::dynamicsPosBelow) + sh + lineSpacing();
             }
-      setPos(p);
+      setPos(QPointF(0.0, y));
       Text::layout1();
 
       Segment* s = segment();
@@ -200,7 +200,7 @@ void Dynamic::doAutoplace()
 
       qreal minDistance = score()->styleP(StyleIdx::dynamicsMinDistance);
       Shape s1          = s->staffShape(staffIdx()).translated(s->pos());
-      Shape s2          = shape().translated(s->pos());
+      Shape s2          = shape().translated(s->pos() + pos());
 
       if (placeAbove()) {
             qreal d = s2.minVerticalDistance(s1);

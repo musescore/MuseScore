@@ -3033,7 +3033,7 @@ System* Score::collectSystem(LayoutContext& lc)
                                           }
                                     if (doAutoplace) {
                                           d->doAutoplace();
-                                          d->segment()->staffShape(d->staffIdx()).add(d->shape());
+                                          d->segment()->staffShape(d->staffIdx()).add(d->shape().translated(e->pos()));
                                           }
                                     }
                               }
