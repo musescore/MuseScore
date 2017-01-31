@@ -10,34 +10,13 @@
     <x>0</x>
     <y>0</y>
     <width>431</width>
-    <height>318</height>
+    <height>343</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MuseScore: Album Manager</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Album name:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="albumName">
-       <property name="toolTip">
-        <string>Album name</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
      <item row="5" column="1">
@@ -47,7 +26,7 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item row="7" column="1">
       <widget class="QPushButton" name="remove">
        <property name="toolTip">
         <string>Remove current score</string>
@@ -57,7 +36,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0" rowspan="6">
+     <item row="1" column="0" rowspan="7">
       <widget class="QListWidget" name="scoreList"/>
      </item>
      <item row="4" column="1">
@@ -126,109 +105,14 @@
        </property>
       </widget>
      </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="createNew">
-       <property name="toolTip">
-        <string>Create new album</string>
-       </property>
+     <item row="6" column="1">
+      <widget class="QPushButton" name="addNew">
        <property name="text">
-        <string>New</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="load">
-       <property name="toolTip">
-        <string>Load an existing album</string>
-       </property>
-       <property name="text">
-        <string>Load...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="print">
-       <property name="text">
-        <string>Print Album</string>
+        <string>Add new Score...</string>
        </property>
       </widget>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBoxJoinScores">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>63</height>
-      </size>
-     </property>
-     <property name="title">
-      <string>Save Joined Score</string>
-     </property>
-     <widget class="QPushButton" name="createScore">
-      <property name="geometry">
-       <rect>
-        <x>300</x>
-        <y>20</y>
-        <width>101</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Join Scores</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="checkBoxAddPageBreak">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>40</y>
-        <width>281</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Add page break between scores</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="checkBoxAddSectionBreak">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>281</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Add section break between scores</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </widget>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -243,18 +127,11 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>albumName</tabstop>
   <tabstop>add</tabstop>
   <tabstop>remove</tabstop>
   <tabstop>scoreList</tabstop>
   <tabstop>up</tabstop>
   <tabstop>down</tabstop>
-  <tabstop>createNew</tabstop>
-  <tabstop>load</tabstop>
-  <tabstop>print</tabstop>
-  <tabstop>checkBoxAddSectionBreak</tabstop>
-  <tabstop>checkBoxAddPageBreak</tabstop>
-  <tabstop>createScore</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>

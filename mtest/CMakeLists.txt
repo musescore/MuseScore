@@ -41,7 +41,6 @@ add_library(
       testutils STATIC
       testutils.cpp
       ${PROJECT_SOURCE_DIR}/libmscore/mcursor.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/album.cpp
       ${PROJECT_SOURCE_DIR}/mscore/bb.cpp
       ${PROJECT_SOURCE_DIR}/mscore/capella.cpp
       ${PROJECT_SOURCE_DIR}/mscore/capxml.cpp

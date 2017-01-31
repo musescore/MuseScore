@@ -821,9 +821,20 @@ MuseScore::MuseScore()
       connect(openRecent, SIGNAL(triggered(QAction*)), SLOT(selectScore(QAction*)));
 
       for (auto i : {
-            "", "file-save", "file-save-as", "file-save-a-copy",
-            "file-save-selection", "file-save-online", "file-export", "file-part-export", "file-import-pdf",
-            "", "file-close", "", "parts", "album" }) {
+            "",
+            "file-save",
+            "file-save-as",
+            "file-save-a-copy",
+            "file-save-selection",
+            "file-save-online",
+            "file-export",
+            "file-part-export",
+            "file-import-pdf",
+            "",
+            "file-close",
+            "",
+            "parts",
+            "album" }) {
             if (!*i)
                   menuFile->addSeparator();
             else if (enableExperimental || strcmp(i,"file-save-online") != 0)

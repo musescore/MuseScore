@@ -324,9 +324,7 @@ MasterScore* MuseScore::readScore(const QString& name)
       if (name.isEmpty())
             return 0;
 
-      MasterScore* score = new MasterScore();
-      score->setMovements(new Movements());
-      score->setStyle(MScore::baseStyle());
+      MasterScore* score = new MasterScore(MScore::baseStyle());
       setMidiReopenInProgress(name);
       Score::FileError rv = Ms::readScore(score, name, false);
       if (rv == Score::FileError::FILE_TOO_OLD || rv == Score::FileError::FILE_TOO_NEW || rv == Score::FileError::FILE_CORRUPTED) {

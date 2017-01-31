@@ -2581,66 +2581,6 @@ void ChangePart::flip()
       instrument = oi;
       }
 
-#if 0
-//---------------------------------------------------------
-//   ChangeTextStyle
-//---------------------------------------------------------
-
-ChangeTextStyle::ChangeTextStyle(Score* s, const TextStyle& st)
-      {
-      score = s;
-      style = st;
-      }
-
-//---------------------------------------------------------
-//   updateTextStyle
-//---------------------------------------------------------
-
-static void updateTextStyle(void* a, Element* e)
-      {
-      QString s = *(QString*)a;
-      if (e->isText()) {
-            Text* text = static_cast<Text*>(e);
-            if (text->textStyle().name() == s) {
-                  text->setTextStyle(text->score()->textStyle(s));
-                  text->styleChanged();
-                  }
-            }
-      }
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeTextStyle::flip()
-      {
-      TextStyle os = score->style().textStyle(style.name());
-      score->style().setTextStyle(style);
-      QString s(style.name());
-      score->scanElements(&s, updateTextStyle);
-      style = os;
-      score->setLayoutAll();
-      }
-
-//---------------------------------------------------------
-//   AddTextStyle::undo
-//---------------------------------------------------------
-
-void AddTextStyle::undo()
-      {
-      score->style().removeTextStyle(style);
-      }
-
-//---------------------------------------------------------
-//   AddTextStyle::redo
-//---------------------------------------------------------
-
-void AddTextStyle::redo()
-      {
-      score->style().addTextStyle(style);
-      }
-#endif
-
 //---------------------------------------------------------
 //   ChangeStyle
 //---------------------------------------------------------

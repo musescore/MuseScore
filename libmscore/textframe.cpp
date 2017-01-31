@@ -116,9 +116,9 @@ Element* TBox::drop(const DropData& data)
       switch (e->type()) {
             case ElementType::TEXT:
                   {
-                  Text* t = static_cast<Text*>(e);
+                  Text* t = toText(e);
                   _text->undoSetText(t->xmlText());
-//TODO                  _text->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(t->textStyle()));
+                  _text->undoChangeProperty(P_ID::SUB_STYLE, int(t->subStyle()));
                   delete e;
                   return _text;
                   }
@@ -136,9 +136,9 @@ void TBox::add(Element* e)
       {
       if (e->type() == ElementType::TEXT) {
             // does not normally happen, since drop() handles this directly
-            Text* t = static_cast<Text*>(e);
+            Text* t = toText(e);
             _text->undoSetText(t->xmlText());
-//TODO            _text->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(t->textStyle()));
+            _text->undoChangeProperty(P_ID::SUB_STYLE, int(t->subStyle()));
             }
       else {
             VBox::add(e);

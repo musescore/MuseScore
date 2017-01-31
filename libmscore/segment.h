@@ -244,7 +244,8 @@ class Segment : public Element {
 
       // some helper function
       ChordRest* cr(int track) const        { return toChordRest(_elist[track]); }
-      bool isType(Segment::Type t) const    { return _segmentType == t; }
+      // bool isType(Segment::Type t) const    { return _segmentType == t; }
+      bool isType(const Segment::Type t) const    { return int(_segmentType) & int(t); }
       bool isBeginBarLineType() const       { return _segmentType == Type::BeginBarLine; }
       bool isClefType() const               { return _segmentType == Type::Clef; }
       bool isHeaderClefType() const         { return _segmentType == Type::HeaderClef; }

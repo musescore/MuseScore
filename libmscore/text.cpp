@@ -3295,7 +3295,7 @@ void Text::styleChanged()
       }
 
 //---------------------------------------------------------
-//   propertyStyle
+//   propertyFlags
 //---------------------------------------------------------
 
 PropertyFlags Text::propertyFlags(P_ID id) const

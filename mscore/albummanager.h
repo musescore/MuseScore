@@ -23,9 +23,10 @@
 
 #include "ui_albummanager.h"
 #include "abstractdialog.h"
-#include "album.h"
 
 namespace Ms {
+
+class Movements;
 
 //---------------------------------------------------------
 //   AlbumManager
@@ -33,21 +34,16 @@ namespace Ms {
 
 class AlbumManager : public AbstractDialog, public Ui::AlbumManager {
       Q_OBJECT
-      Album* album;
+      Movements* album;
 
-      void setAlbum(Album*);
-      virtual void closeEvent(QCloseEvent*);
       virtual void hideEvent(QHideEvent*);
+
    private slots:
       void addClicked();
-      void loadClicked();
-      void printClicked();
-      void createScoreClicked();
+      void addNewClicked();
       void upClicked();
       void downClicked();
       void removeClicked();
-      void createNewClicked();
-      void albumNameChanged(const QString&);
       void currentScoreChanged(int);
       void itemChanged(QListWidgetItem*);   // score name in list is edited
       void buttonBoxClicked(QAbstractButton*);
@@ -55,11 +51,9 @@ class AlbumManager : public AbstractDialog, public Ui::AlbumManager {
    protected:
       virtual void retranslate() { retranslateUi(this); }
 
-   private:
-      void writeAlbum();
-
    public:
       AlbumManager(QWidget* parent = 0);
+      void setAlbum(Movements*);
       };
 }
 
