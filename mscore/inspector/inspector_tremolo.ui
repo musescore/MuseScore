@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>428</width>
-    <height>286</height>
+    <width>151</width>
+    <height>152</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -170,7 +170,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Size in staff space units' value</string>
+         <string>Reset 'Line width' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -210,7 +210,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Size in staff space units' value</string>
+         <string>Reset 'Scale' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
