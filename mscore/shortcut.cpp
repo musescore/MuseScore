@@ -3248,7 +3248,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "add-parenthesis",
          QT_TRANSLATE_NOOP("action","Add Parenthesis to Element"),
-         QT_TRANSLATE_NOOP("action","Add parenthesis to Element"),
+         QT_TRANSLATE_NOOP("action","Add parenthesis to element"),
          0,
          Icons::parenthesis_ICON,
          Qt::WindowShortcut
