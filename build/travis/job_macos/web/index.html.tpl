@@ -10,9 +10,9 @@
 </head>
 <body>
 
-<h2>Nightly builds for Mac OS</h2>
+<h2>Nightly builds for macOS</h2>
 
-<p>The nightly builds allow you to test the very latest developments, including new features and bug fixes. The goal is to catch new bugs, crashes, and regressions before they reach the prerelease or stable versions. For more information, see <a href="http://www.musescore.org/en/handbook/comparison-stable-prerelease-and-nightly-builds">Comparison of stable, prerelease, and nightly builds</a>. You can report any regressions or bugs you find via <code>Help > Report a Bug</code> within the nightly build.</p>
+<p>The nightly builds allow you to test the very latest developments, including new features and bug fixes. The goal is to catch new bugs, crashes, and regressions before they reach the prerelease or stable versions. For more information, see <a href="http://www.musescore.org/en/handbook/comparison-stable-prerelease-and-nightly-builds">Comparison of stable, beta, and nightly versions</a>. You can report any regressions or bugs you find via <code>Help > Report a Bug</code> within the nightly build.</p>
 
 <p>A nightly build can run side-by-side with other versions of MuseScore on the same computer. If you change preferences in the nightly build, it does not affect your preferences in the prerelease or stable versions of MuseScore. The nightly builds use a cymbal icon (a play on the fact that nightly builds are likely to suspend and crash) to visually differentiate them from normal versions of MuseScore. If this sounds scary to you, instead use the latest stable version of MuseScore from <a href="http://www.musescore.org/">musescore.org</a>.</p>
 
