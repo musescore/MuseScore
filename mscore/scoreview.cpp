@@ -3620,6 +3620,7 @@ void ScoreView::select(QMouseEvent* ev)
             }
       else
             curElement = 0;
+      _score->update();
       mscore->endCmd();
       }
 
