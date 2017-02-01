@@ -135,6 +135,7 @@ class Articulation : public Element {
       bool isTenuto() const;
       bool isStaccato() const;
       bool isAccent() const;
+      bool isStaccatissimo() const;
       bool isLuteFingering() const;
       };
 

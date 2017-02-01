@@ -545,6 +545,13 @@ bool Articulation::isStaccato() const
           || _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
           || _symId == SymId::articAccentStaccatoAbove  || _symId == SymId::articAccentStaccatoBelow;
       }
+   
+bool Articulation::isStaccatissimo() const
+      {
+      return _symId == SymId::articStaccatissimoAbove        || _symId == SymId::articStaccatissimoBelow
+          || _symId == SymId::articStaccatissimoStrokeAbove  || _symId == SymId::articStaccatissimoStrokeBelow
+          || _symId == SymId::articStaccatissimoWedgeAbove   || _symId == SymId::articStaccatissimoWedgeBelow;
+     }
 
 bool Articulation::isAccent() const
       {
