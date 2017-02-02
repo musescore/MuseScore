@@ -432,6 +432,16 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                   tracks[idx].staff = part->staff(i);
                   }
 
+            // only importing a single volume per track here, skip when multiple volumes
+            // are defined, or the single volume is not defined on tick 0.
+            if (track.volumes.size() == 1) {
+                  for (auto &i: track.volumes) {
+                        if (i.first == ReducedFraction(0, 1)) {
+                              part->instrument()->channel(0)->volume = i.second;
+                              }
+                        }
+                  }
+
             score->appendPart(part);
             }
       }

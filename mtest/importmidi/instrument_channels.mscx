@@ -85,6 +85,7 @@
           </Articulation>
         <Channel>
           <program value="48"/>
+          <controller ctrl="7" value="50"/>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
@@ -141,6 +142,7 @@
           </Articulation>
         <Channel>
           <program value="56"/>
+          <controller ctrl="7" value="33"/>
           </Channel>
         <Channel name="mute">
           <program value="59"/>
@@ -194,6 +196,7 @@
           </Articulation>
         <Channel>
           <program value="57"/>
+          <controller ctrl="7" value="37"/>
           </Channel>
         </Instrument>
       </Part>

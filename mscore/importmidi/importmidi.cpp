@@ -702,6 +702,9 @@ std::multimap<int, MTrack> createMTrackList(TimeSigMap *sigmap, const MidiFile *
                         }
                   else if (e.type() == ME_PROGRAM)
                         track.program = e.dataB();
+                  else if (e.type() == ME_CONTROLLER && e.controller() == CTRL_VOLUME) {
+                        track.volumes.insert({tick, e.value()});
+                        }
                   }
             if (hasNotes) {
                   ++trackIndex;
