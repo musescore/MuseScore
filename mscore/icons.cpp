@@ -138,7 +138,7 @@ static const char* iconNames[] = {
       "go-previous.svg",
       "go-next.svg",
       "view-refresh.svg",
-      "parenthesis.svg",
+      "parentheses.svg",
       "brackets.svg",
       "timesig_allabreve.svg",
       "timesig_common.svg",

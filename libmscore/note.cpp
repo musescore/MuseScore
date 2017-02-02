@@ -1581,7 +1581,7 @@ bool Note::acceptDrop(const DropData& data) const
          || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::BEAM32)
          || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::BEAM64)
          || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::AUTOBEAM)
-         || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::PARENTHESIS)
+         || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::PARENTHESES)
          || (type == ElementType::SYMBOL)
          || (type == ElementType::CLEF)
          || (type == ElementType::KEYSIG)
@@ -1720,8 +1720,8 @@ Element* Note::drop(const DropData& data)
                         case IconType::AUTOBEAM:
                               return ch->drop(data);
                               break;
-                        case IconType::PARENTHESIS:
-                              addParenthesis();
+                        case IconType::PARENTHESES:
+                              addParentheses();
                               break;
                         default:
                               break;
@@ -1827,10 +1827,10 @@ Element* Note::drop(const DropData& data)
       }
 
 //---------------------------------------------------------
-//   addParenthesis
+//   addParentheses
 //---------------------------------------------------------
 
-void Note::addParenthesis()
+void Note::addParentheses()
       {
       Symbol* s = new Symbol(score());
       s->setSym(SymId::noteheadParenthesisLeft);
