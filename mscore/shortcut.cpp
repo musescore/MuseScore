@@ -3246,11 +3246,11 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
-         "add-parenthesis",
-         QT_TRANSLATE_NOOP("action","Add Parenthesis to Element"),
-         QT_TRANSLATE_NOOP("action","Add parenthesis to element"),
+         "add-parentheses",
+         QT_TRANSLATE_NOOP("action","Add Parentheses to Element"),
+         QT_TRANSLATE_NOOP("action","Add parentheses to element"),
          0,
-         Icons::parenthesis_ICON,
+         Icons::parentheses_ICON,
          Qt::WindowShortcut
          },
       {
