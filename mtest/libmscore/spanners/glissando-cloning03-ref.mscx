@@ -98,7 +98,6 @@
               <subtype>0</subtype>
               <lid>6</lid>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             </Note>
@@ -141,7 +140,6 @@
               <subtype>0</subtype>
               <lid>6</lid>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             </Note>

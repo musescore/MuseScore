@@ -1053,15 +1053,9 @@ void SLine::writeProperties(XmlWriter& xml) const
       Spanner::writeProperties(xml);
       if (_diagonal)
             xml.tag("diagonal", _diagonal);
-      if (propertyFlags(P_ID::LINE_WIDTH) != PropertyFlags::STYLED)
-            xml.tag("lineWidth", lineWidth().val());
-      if (propertyFlags(P_ID::LINE_STYLE) == PropertyFlags::UNSTYLED || (lineStyle() != Qt::SolidLine)) {
-            if (propertyFlags(P_ID::LINE_STYLE) != PropertyFlags::STYLED)
-                  xml.tag("lineStyle", int(lineStyle()));
-            }
-      if (propertyFlags(P_ID::LINE_COLOR) == PropertyFlags::UNSTYLED || (lineColor() != MScore::defaultColor))
-            xml.tag("lineColor", lineColor());
-
+      writeProperty(xml, P_ID::LINE_WIDTH);
+      writeProperty(xml, P_ID::LINE_STYLE);
+      writeProperty(xml, P_ID::LINE_COLOR);
       writeProperty(xml, P_ID::ANCHOR);
       writeProperty(xml, P_ID::DASH_LINE_LEN);
       writeProperty(xml, P_ID::DASH_GAP_LEN);
@@ -1289,6 +1283,15 @@ QVariant SLine::propertyDefault(P_ID id) const
             default:
                   return Spanner::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx SLine::getPropertyStyle(P_ID id) const
+      {
+      return Spanner::getPropertyStyle(id);
       }
 
 }

@@ -117,7 +117,6 @@
               <text>gliss.</text>
               <subtype>1</subtype>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             </Note>

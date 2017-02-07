@@ -3481,7 +3481,6 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
       else {
             QMenu* popup = new QMenu();
             popup->addAction(getAction("edit-style"));
-            popup->addAction(getAction("edit-text-style"));
             popup->addAction(getAction("page-settings"));
             popup->addAction(getAction("load-style"));
             _score->update();
@@ -3621,6 +3620,7 @@ void ScoreView::select(QMouseEvent* ev)
             }
       else
             curElement = 0;
+      _score->setUpdateAll();
       _score->update();
       mscore->endCmd();
       }

@@ -88,7 +88,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <ticks>480</ticks>
+            <ticks>2400</ticks>
             <text>A</text>
             </Lyrics>
           <Note>
@@ -98,6 +98,36 @@
           </Chord>
         </Measure>
       <Measure number="2">
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>71</pitch>
+            <tpc>19</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>74</pitch>
+            <tpc>16</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="3">
         <Chord>
           <durationType>quarter</durationType>
           <Note>

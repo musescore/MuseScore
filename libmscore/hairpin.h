@@ -38,7 +38,7 @@ class HairpinSegment : public TextLineBaseSegment {
       qreal circledTipRadius;
 
    public:
-      HairpinSegment(Score* s) : TextLineBaseSegment(s) {}
+      HairpinSegment(Score* s);
       Hairpin* hairpin() const                       { return (Hairpin*)spanner(); }
       virtual HairpinSegment* clone() const override { return new HairpinSegment(*this); }
       virtual ElementType type() const override    { return ElementType::HAIRPIN_SEGMENT; }

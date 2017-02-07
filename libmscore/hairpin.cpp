@@ -27,6 +27,14 @@ namespace Ms {
 
 Spatium Hairpin::editHairpinHeight;
 
+//---------------------------------------------------------
+//   HairpinSegment
+//---------------------------------------------------------
+
+HairpinSegment::HairpinSegment(Score* s)
+   : TextLineBaseSegment(s)
+      {
+      }
 
 //---------------------------------------------------------
 //   lookupDynamic
@@ -123,10 +131,6 @@ void HairpinSegment::layout()
             }
       else {
             twoLines  = true;
-            delete _text;
-            delete _endText;
-            _text    = 0;
-            _endText = 0;
 
             QTransform t;
             qreal h1 = hairpin()->hairpinHeight().val()     * spatium() * .5;

@@ -256,13 +256,9 @@
         <HairPin id="2">
           <subtype>0</subtype>
           <veloChange>10</veloChange>
+          <beginText>cresc.</beginText>
+          <continueText>(cresc.)</continueText>
           <lid>81</lid>
-          <beginText>
-            <text>cresc.</text>
-            </beginText>
-          <continueText>
-            <text>(cresc.)</text>
-            </continueText>
           </HairPin>
         <Rest>
           <durationType>measure</durationType>
@@ -1083,13 +1079,9 @@
           <HairPin id="7">
             <subtype>0</subtype>
             <veloChange>10</veloChange>
+            <beginText>cresc.</beginText>
+            <continueText>(cresc.)</continueText>
             <lid>81</lid>
-            <beginText>
-              <text>cresc.</text>
-              </beginText>
-            <continueText>
-              <text>(cresc.)</text>
-              </continueText>
             </HairPin>
           <Chord>
             <lid>22</lid>

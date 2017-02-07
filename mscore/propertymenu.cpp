@@ -22,7 +22,6 @@
 
 #include "articulationprop.h"
 #include "bendproperties.h"
-#include "lineproperties.h"
 #include "tremolobarprop.h"
 #include "timesigproperties.h"
 #include "sectionbreakprop.h"
@@ -169,7 +168,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == ElementType::VOLTA_SEGMENT) {
             genPropertyMenu1(e, popup);
-            popup->addAction(tr("Line Properties..."))->setData("l-props");
             }
       else if (e->type() == ElementType::TIMESIG) {
             genPropertyMenu1(e, popup);
@@ -200,17 +198,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                         a->setData("clef-courtesy");
                   }
             }
-      else if (e->type() == ElementType::DYNAMIC) {
-//            popup->addAction(tr("Text Style..."))->setData("text-style");
-//            popup->addAction(tr("Text Properties..."))->setData("text-props");
-            }
-      else if (e->type() == ElementType::TEXTLINE_SEGMENT
-         || e->type() == ElementType::OTTAVA_SEGMENT
-         || e->type() == ElementType::PEDAL_SEGMENT
-         || e->type() == ElementType::HAIRPIN_SEGMENT
-         ) {
-            popup->addAction(tr("Line Properties..."))->setData("l-props");
-            }
       else if (e->type() == ElementType::STAFF_TEXT) {
             genPropertyMenuText(e, popup);
             Text* t = static_cast<Text*>(e);
@@ -229,12 +216,9 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == ElementType::HARMONY) {
             genPropertyMenu1(e, popup);
-//            popup->addAction(tr("Text Style..."))->setData("text-style");
             }
       else if (e->type() == ElementType::TEMPO_TEXT) {
             genPropertyMenu1(e, popup);
-//            popup->addAction(tr("Text Style..."))->setData("text-style");
-//            popup->addAction(tr("Text Properties..."))->setData("text-props");
             }
       else if (e->type() == ElementType::KEYSIG) {
             genPropertyMenu1(e, popup);
@@ -247,13 +231,10 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   }
             }
       else if (e->type() == ElementType::STAFF_STATE && static_cast<StaffState*>(e)->staffStateType() == StaffStateType::INSTRUMENT) {
-//            popup->addAction(tr("Text Style..."))->setData("text-style");
-//            popup->addAction(tr("Text Properties..."))->setData("text-props");
             popup->addAction(tr("Change Instrument Properties..."))->setData("ss-props");
             }
       else if (e->type() == ElementType::SLUR_SEGMENT) {
             genPropertyMenu1(e, popup);
-            //popup->addAction(tr("Edit Mode"))->setData("edit");
             }
       else if (e->type() == ElementType::REST) {
             QAction* b = popup->actions()[0];
@@ -303,15 +284,12 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == ElementType::INSTRUMENT_CHANGE) {
             genPropertyMenu1(e, popup);
-//            popup->addAction(tr("Text Style..."))->setData("text-style");
-//            popup->addAction(tr("Text Properties..."))->setData("text-props");
             popup->addAction(tr("Change Instrument..."))->setData("ch-instr");
             }
       else if (e->type() == ElementType::FRET_DIAGRAM) {
             popup->addAction(tr("Fretboard Diagram Properties..."))->setData("fret-props");
             }
       else if (e->type() == ElementType::INSTRUMENT_NAME) {
-//            popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Staff Properties..."))->setData("staff-props");
             }
       else
@@ -394,11 +372,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             score()->undoAddElement(s);
             score()->select(s, SelectType::SINGLE, 0);
             startEdit(s);
-            }
-      else if (cmd == "l-props") {
-            TextLineBaseSegment* vs = static_cast<TextLineBaseSegment*>(e);
-             LineProperties lp(vs->textLineBase());
-            lp.exec();
             }
       else if (cmd == "tr-props")
             editTremoloBarProperties(static_cast<TremoloBar*>(e));

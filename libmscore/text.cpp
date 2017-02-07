@@ -237,6 +237,8 @@ QFont TextFragment::font(const Text* t) const
             font.setHintingPreference(QFont::PreferVerticalHinting);
             }
 
+      Q_ASSERT(m > 0.0);
+
       font.setPointSizeF(m);
       return font;
       }
@@ -833,6 +835,7 @@ QString TextBlock::text(int col1, int len) const
 Text::Text(Score* s)
    : Element(s)
       {
+      _size = 10.0;
       initSubStyle(SubStyle::DEFAULT);          // we assume all properties are set
       setFlag(ElementFlag::MOVABLE, true);
       }
@@ -1244,6 +1247,7 @@ void Text::createLayout()
 void Text::layout()
       {
       QPointF o(_offset * (_offsetType == OffsetType::SPATIUM ? spatium() : DPI));
+
       setPos(o);
       layout1();
       adjustReadPos();

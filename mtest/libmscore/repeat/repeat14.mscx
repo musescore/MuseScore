@@ -1589,16 +1589,14 @@
         </Measure>
       <Measure number="9">
         <Volta id="2">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
           <Segment>
             <subtype>0</subtype>
             <off2 x="0" y="0"/>
             <offset x="0.244584" y="-2.60023"/>
             </Segment>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -1643,16 +1641,14 @@
       <Measure number="11">
         <endSpanner id="2"/>
         <Volta id="3">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
           <Segment>
             <subtype>0</subtype>
             <off2 x="-1.81159" y="0"/>
             <offset x="0.832017" y="-2.6585"/>
             </Segment>
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <beginText>2.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -1703,9 +1699,7 @@
             <off2 x="0" y="0"/>
             <offset x="0.113878" y="-2.65662"/>
             </Segment>
-          <beginText>
-            <text>3.</text>
-            </beginText>
+          <beginText>3.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>

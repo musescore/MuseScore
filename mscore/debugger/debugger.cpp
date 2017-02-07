@@ -1979,7 +1979,7 @@ void VoltaView::segmentClicked(QTreeWidgetItem* item)
 
 void VoltaView::beginTextClicked()
       {
-      emit elementChanged(static_cast<Volta*>(element())->beginTextElement());
+//TODO      emit elementChanged(static_cast<Volta*>(element())->beginTextElement());
       }
 
 //---------------------------------------------------------
@@ -1988,7 +1988,7 @@ void VoltaView::beginTextClicked()
 
 void VoltaView::continueTextClicked()
       {
-      emit elementChanged(static_cast<Volta*>(element())->continueTextElement());
+//TODO      emit elementChanged(static_cast<Volta*>(element())->continueTextElement());
       }
 
 //---------------------------------------------------------
@@ -1997,7 +1997,7 @@ void VoltaView::continueTextClicked()
 
 void VoltaView::endTextClicked()
       {
-      emit elementChanged(static_cast<Volta*>(element())->endTextElement());
+//TODO      emit elementChanged(static_cast<Volta*>(element())->endTextElement());
       }
 
 //---------------------------------------------------------
@@ -2054,9 +2054,9 @@ void VoltaView::setElement(Element* e)
       sp.endElement->setEnabled(volta->endElement() != 0);
       sp.anchor->setCurrentIndex(int(volta->anchor()));
 
-      tlb.beginText->setEnabled(volta->beginTextElement());
-      tlb.continueText->setEnabled(volta->continueTextElement());
-      tlb.endText->setEnabled(volta->endTextElement());
+//TODO      tlb.beginText->setEnabled(volta->beginTextElement());
+//      tlb.continueText->setEnabled(volta->continueTextElement());
+//      tlb.endText->setEnabled(volta->endTextElement());
       }
 
 //---------------------------------------------------------
@@ -2606,9 +2606,9 @@ void TextLineView::setElement(Element* e)
       tlb.lineWidth->setValue(volta->lineWidth().val());
       lb.diagonal->setChecked(volta->diagonal());
 
-      tlb.beginText->setEnabled(volta->beginTextElement());
-      tlb.continueText->setEnabled(volta->continueTextElement());
-      tlb.endText->setEnabled(volta->endTextElement());
+//      tlb.beginText->setEnabled(volta->beginTextElement());
+//      tlb.continueText->setEnabled(volta->continueTextElement());
+//      tlb.endText->setEnabled(volta->endTextElement());
       }
 
 //---------------------------------------------------------
@@ -2617,8 +2617,8 @@ void TextLineView::setElement(Element* e)
 
 void TextLineView::beginTextClicked()
       {
-      Volta* volta = (Volta*)element();
-      emit elementChanged(volta->beginTextElement());
+//      Volta* volta = (Volta*)element();
+//      emit elementChanged(volta->beginTextElement());
       }
 
 //---------------------------------------------------------
@@ -2627,8 +2627,8 @@ void TextLineView::beginTextClicked()
 
 void TextLineView::continueTextClicked()
       {
-      Volta* volta = (Volta*)element();
-      emit elementChanged(volta->continueTextElement());
+//      Volta* volta = (Volta*)element();
+//      emit elementChanged(volta->continueTextElement());
       }
 
 //---------------------------------------------------------
@@ -2637,10 +2637,9 @@ void TextLineView::continueTextClicked()
 
 void TextLineView::endTextClicked()
       {
-      Volta* volta = (Volta*)element();
-      emit elementChanged(volta->endTextElement());
+//      Volta* volta = (Volta*)element();
+//      emit elementChanged(volta->endTextElement());
       }
-
 
 //---------------------------------------------------------
 //   TextLineSegmentView

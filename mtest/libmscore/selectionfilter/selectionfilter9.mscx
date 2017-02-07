@@ -87,10 +87,7 @@
           <beginHookHeight>-1.2</beginHookHeight>
           <endHook>1</endHook>
           <endHookHeight>-1.2</endHookHeight>
-          <beginText>
-            <style>Text Line</style>
-            <text><sym>keyboardPedalPed</sym></text>
-            </beginText>
+          <beginText>&lt;sym&gt;keyboardPedalPed&lt;sym&gt;</beginText>
           </Pedal>
         <Chord>
           <durationType>quarter</durationType>

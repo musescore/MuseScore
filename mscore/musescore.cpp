@@ -124,7 +124,6 @@ extern Ms::Synthesizer* createZerberus();
 
 namespace Ms {
 
-extern void checkProperties();
 MuseScore* mscore;
 MasterSynthesizer* synti;
 
@@ -1119,7 +1118,6 @@ MuseScore::MuseScore()
       menuFormat->setObjectName("Format");
 
       menuFormat->addAction(getAction("edit-style"));
-//      menuFormat->addAction(getAction("edit-text-style"));
       menuFormat->addAction(getAction("page-settings"));
       menuFormat->addSeparator();
 
@@ -4856,10 +4854,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             EditStyle es(cs, this);
             es.exec();
             }
-//      else if (cmd == "edit-text-style") {
-//            TextStyleDialog es(0, cs);
-//            es.exec();
-//            }
       else if (cmd == "edit-info") {
             MetaEditDialog med(cs, 0);
             med.exec();
@@ -5324,7 +5318,6 @@ int main(int argc, char* av[])
       {
 #ifndef NDEBUG
       qSetMessagePattern("%{file}:%{function}: %{message}");
-      checkProperties();
       Ms::checkStyles();
 #endif
 

@@ -38,7 +38,7 @@ struct PropertyData {
 // always: propertyList[subtype].id == subtype
 //
 //
-static const PropertyData propertyList[] = {
+static constexpr PropertyData propertyList[] = {
       { P_ID::SUBTYPE,                 "subtype",                 false, "subtype",               P_TYPE::INT             },
       { P_ID::SELECTED,                "selected",                false, "selected",              P_TYPE::BOOL            },
       { P_ID::GENERATED,               "generated",               false,  "generated",            P_TYPE::BOOL            },
@@ -76,7 +76,7 @@ static const PropertyData propertyList[] = {
       { P_ID::BARLINE_SPAN,            "barline_span",            false, "span",                  P_TYPE::BOOL            },
       { P_ID::BARLINE_SPAN_FROM,       "barline_span_from",       false, "spanFromOffset",        P_TYPE::INT             },
       { P_ID::BARLINE_SPAN_TO,         "barline_span_to",         false, "spanToOffset",          P_TYPE::INT             },
-      { P_ID::USER_OFF,                "user_off",                false, "userOff",               P_TYPE::POINT           },
+      { P_ID::USER_OFF,                "user_off",                false, "userOff",               P_TYPE::POINT_SP         },
       { P_ID::FRET,                    "fret",                    true,  "fret",                  P_TYPE::INT             },
       { P_ID::STRING,                  "string",                  true,  "string",                P_TYPE::INT             },
       { P_ID::GHOST,                   "ghost",                   true,  "ghost",                 P_TYPE::BOOL            },
@@ -88,8 +88,8 @@ static const PropertyData propertyList[] = {
       { P_ID::BRACKET_TYPE,            "bracket_type",            false, "bracketType",           P_TYPE::INT             },
       { P_ID::NORMAL_NOTES,            "normal_notes",            false, "normalNotes",           P_TYPE::INT             },
       { P_ID::ACTUAL_NOTES,            "actual_notes",            false, "actualNotes",           P_TYPE::INT             },
-      { P_ID::P1,                      "p1",                      false, "p1",                    P_TYPE::POINT           },
-      { P_ID::P2,                      "p2",                      false, "p2",                    P_TYPE::POINT           },
+      { P_ID::P1,                      "p1",                      false, "p1",                    P_TYPE::POINT_SP        },
+      { P_ID::P2,                      "p2",                      false, "p2",                    P_TYPE::POINT_SP        },
       { P_ID::GROW_LEFT,               "grow_left",               false, "growLeft",              P_TYPE::REAL            },
       { P_ID::GROW_RIGHT,              "grow_right",              false, "growRight",             P_TYPE::REAL            },
       { P_ID::BOX_HEIGHT,              "box_height",              false, "height",                P_TYPE::SPATIUM         },
@@ -111,7 +111,7 @@ static const PropertyData propertyList[] = {
       { P_ID::TEXT,                    "text",                    false, 0,                       P_TYPE::STRING          },
       { P_ID::HTML_TEXT,               "html_text",               false, 0,                       P_TYPE::STRING          },
       { P_ID::USER_MODIFIED,           "user_modified",           false, 0,                       P_TYPE::BOOL            },
-      { P_ID::BEAM_POS,                "beam_pos",                false, 0,                       P_TYPE::POINT           },
+      { P_ID::BEAM_POS,                "beam_pos",                false, 0,                       P_TYPE::POINT_SP        },
       { P_ID::BEAM_MODE,               "beam_mode",               true, "BeamMode",               P_TYPE::BEAM_MODE       },
       { P_ID::BEAM_NO_SLOPE,           "beam_no_slope",           true, "noSlope",                P_TYPE::BOOL            },
       { P_ID::USER_LEN,                "user_len",                false, "userLen",               P_TYPE::REAL            },
@@ -132,7 +132,7 @@ static const PropertyData propertyList[] = {
       { P_ID::FBPARENTHESIS3,          "fbparenthesis3",          false, "",                      P_TYPE::INT             },
       { P_ID::FBPARENTHESIS4,          "fbparenthesis4",          false, "",                      P_TYPE::INT             },
       { P_ID::FBPARENTHESIS5,          "fbparenthesis5",          false, "",                      P_TYPE::INT             },
-      { P_ID::VOLTA_TYPE,              "volta_type",              false, "",                      P_TYPE::INT             },
+//      { P_ID::VOLTA_TYPE,              "volta_type",              false, "",                      P_TYPE::INT             },
       { P_ID::OTTAVA_TYPE,             "ottava_type",             false, "",                      P_TYPE::INT             },
       { P_ID::NUMBERS_ONLY,            "numbers_only",            false, "numbersOnly",           P_TYPE::BOOL            },
       { P_ID::TRILL_TYPE,              "trill_type",              false, "",                      P_TYPE::INT             },
@@ -148,8 +148,8 @@ static const PropertyData propertyList[] = {
       { P_ID::JUMP_TO,                 "jump_to",                 false, "jumpTo",                P_TYPE::STRING          },
       { P_ID::PLAY_UNTIL,              "play_until",              false, "playUntil",             P_TYPE::STRING          },
       { P_ID::CONTINUE_AT,             "continue_at",             false, "continueAt",            P_TYPE::STRING          },
-
-/*100*/      { P_ID::LABEL,                   "label",                   false, "label",                 P_TYPE::STRING          },
+//100
+      { P_ID::LABEL,                   "label",                   false, "label",                 P_TYPE::STRING          },
       { P_ID::MARKER_TYPE,             "marker_type",             false, 0,                       P_TYPE::INT             },
       { P_ID::ARP_USER_LEN1,           "arp_user_len1",           false, 0,                       P_TYPE::REAL            },
       { P_ID::ARP_USER_LEN2,           "arp_user_len2",           false, 0,                       P_TYPE::REAL            },
@@ -178,23 +178,10 @@ static const PropertyData propertyList[] = {
       { P_ID::SPANNER_TICK,            "spanner_tick",            true,  "tick",                  P_TYPE::INT             },
       { P_ID::SPANNER_TICKS,           "spanner_ticks",           true,  "ticks",                 P_TYPE::INT             },
       { P_ID::SPANNER_TRACK2,          "spanner_track2",          true,  "track2",                P_TYPE::INT             },
-      { P_ID::USER_OFF2,               "user_off2",               false, "userOff2",              P_TYPE::POINT           },
-      { P_ID::BEGIN_TEXT_PLACE,        "begin_text_place",        false, "beginTextPlace",        P_TYPE::INT             },
-      { P_ID::CONTINUE_TEXT_PLACE,     "continue_text_place",     false, "continueTextPlace",     P_TYPE::INT             },
-
-      { P_ID::END_TEXT_PLACE,          "end_text_place",          false, "endTextPlace",          P_TYPE::INT             },
-      { P_ID::BEGIN_HOOK,              "begin_hook",              false, "beginHook",             P_TYPE::BOOL            },
-      { P_ID::END_HOOK,                "end_hook",                false, "endHook",               P_TYPE::BOOL            },
-      { P_ID::BEGIN_HOOK_HEIGHT,       "begin_hook_height",       false, "beginHookHeight",       P_TYPE::SPATIUM         },
-      { P_ID::END_HOOK_HEIGHT,         "end_hook_height",         false, "endHookHeight",         P_TYPE::SPATIUM         },
-      { P_ID::BEGIN_HOOK_TYPE,         "begin_hook_type",         false, "beginHookType",         P_TYPE::INT             },
-      { P_ID::END_HOOK_TYPE,           "end_hook_type",           false, "endHookType",           P_TYPE::INT             },
-      { P_ID::BEGIN_TEXT,              "begin_text",              true,  "beginText",             P_TYPE::STRING          },
-      { P_ID::CONTINUE_TEXT,           "continue_text",           true,  "continueText",          P_TYPE::STRING          },
-      { P_ID::END_TEXT,                "end_text",                true,  "endText",               P_TYPE::STRING          },
-
+      { P_ID::USER_OFF2,               "user_off2",               false, "userOff2",              P_TYPE::POINT_SP        },
       { P_ID::BEGIN_TEXT_STYLE,        "begin_text_style",        false, "beginTextStyle",        P_TYPE::TEXT_STYLE      },
       { P_ID::CONTINUE_TEXT_STYLE,     "continue_text_style",     false, "continueTextStyle",     P_TYPE::TEXT_STYLE      },
+
       { P_ID::END_TEXT_STYLE,          "end_text_style",          false, "endTextStyle",          P_TYPE::TEXT_STYLE      },
       { P_ID::BREAK_MMR,               "break_mmr",               false, "breakMultiMeasureRest", P_TYPE::BOOL            },
       { P_ID::REPEAT_COUNT,            "repeat_count",            true,  "endRepeat",             P_TYPE::INT             },
@@ -202,11 +189,11 @@ static const PropertyData propertyList[] = {
       { P_ID::NO_OFFSET,               "no_offset",               false, "noOffset",              P_TYPE::INT             },
       { P_ID::IRREGULAR,               "irregular",               true,  "irregular",             P_TYPE::BOOL            },
       { P_ID::ANCHOR,                  "anchor",                  false,  "anchor",               P_TYPE::INT             },
-      { P_ID::SLUR_UOFF1,              "slur_uoff1",              false,  "o1",                   P_TYPE::POINT           },
-//150
-      { P_ID::SLUR_UOFF2,              "slur_uoff2",              false,  "o2",                   P_TYPE::POINT           },
-      { P_ID::SLUR_UOFF3,              "slur_uoff3",              false,  "o3",                   P_TYPE::POINT           },
-      { P_ID::SLUR_UOFF4,              "slur_uoff4",              false,  "o4",                   P_TYPE::POINT           },
+      { P_ID::SLUR_UOFF1,              "slur_uoff1",              false,  "o1",                   P_TYPE::POINT_SP        },
+      { P_ID::SLUR_UOFF2,              "slur_uoff2",              false,  "o2",                   P_TYPE::POINT_SP        },
+      { P_ID::SLUR_UOFF3,              "slur_uoff3",              false,  "o3",                   P_TYPE::POINT_SP        },
+
+      { P_ID::SLUR_UOFF4,              "slur_uoff4",              false,  "o4",                   P_TYPE::POINT_SP        },
       { P_ID::STAFF_MOVE,              "staff_move",              true,  "move",                  P_TYPE::INT             },
       { P_ID::VERSE,                   "verse",                   true,  "no",                    P_TYPE::ZERO_INT        },
       { P_ID::SYLLABIC,                "syllabic",                true,  "syllabic",              P_TYPE::INT             },
@@ -214,9 +201,9 @@ static const PropertyData propertyList[] = {
       { P_ID::VOLTA_ENDING,            "volta_ending",            true,  "endings",               P_TYPE::INT_LIST        },
       { P_ID::LINE_VISIBLE,            "line_visible",            true,  "lineVisible",           P_TYPE::BOOL            },
       { P_ID::MAG,                     "mag",                     false, "mag",                   P_TYPE::REAL            },
-
       { P_ID::USE_DRUMSET,             "use_drumset",             false, "useDrumset",            P_TYPE::BOOL            },
       { P_ID::PART_VOLUME,             "part_volume",             false, "volume",                P_TYPE::INT             },
+
       { P_ID::PART_MUTE,               "part_mute",               false, "mute",                  P_TYPE::BOOL            },
       { P_ID::PART_PAN,                "part_pan",                false, "pan",                   P_TYPE::INT             },
       { P_ID::PART_REVERB,             "part_reverb",             false, "reverb",                P_TYPE::INT             },
@@ -225,9 +212,9 @@ static const PropertyData propertyList[] = {
       { P_ID::DURATION_TYPE,           "duration_type",           false, 0,                       P_TYPE::TDURATION       },
       { P_ID::ROLE,                    "role",                    false, "role",                  P_TYPE::INT             },
       { P_ID::TRACK,                   "track",                   false, 0,                       P_TYPE::INT             },
-
       { P_ID::GLISSANDO_STYLE,         "glissando_style",         false, "glissandoStyle",        P_TYPE::GLISSANDO_STYLE },
       { P_ID::FRET_STRINGS,            "fret_strings",            false, "strings",               P_TYPE::INT             },
+
       { P_ID::FRET_FRETS,              "fret_frets",              false, "frets",                 P_TYPE::INT             },
       { P_ID::FRET_BARRE,              "fret_barre",              false, "barre",                 P_TYPE::INT             },
       { P_ID::FRET_OFFSET,             "fret_offset",             false, "fretOffset",            P_TYPE::INT             },
@@ -236,9 +223,9 @@ static const PropertyData propertyList[] = {
       { P_ID::AUTOPLACE,               "autoplace",               false, 0,                       P_TYPE::BOOL            },
       { P_ID::DASH_LINE_LEN,           "dash_line_len",           false, "dashLineLength",        P_TYPE::REAL            },
       { P_ID::DASH_GAP_LEN,            "dash_gap_len",            false, "dashGapLength",         P_TYPE::REAL            },
-
       { P_ID::TICK,                    "tick",                    false, 0,                       P_TYPE::INT             },
       { P_ID::PLAYBACK_VOICE1,         "playback_voice1",         false, "playbackVoice1",        P_TYPE::BOOL            },
+
       { P_ID::PLAYBACK_VOICE2,         "playback_voice2",         false, "playbackVoice2",        P_TYPE::BOOL            },
       { P_ID::PLAYBACK_VOICE3,         "playback_voice3",         false, "playbackVoice3",        P_TYPE::BOOL            },
       { P_ID::PLAYBACK_VOICE4,         "playback_voice4",         false, "playbackVoice4",        P_TYPE::BOOL            },
@@ -248,8 +235,8 @@ static const PropertyData propertyList[] = {
       { P_ID::STAFF_LINES,             "staff_lines",             true,  "lines",                 P_TYPE::INT             },
       { P_ID::LINE_DISTANCE,           "line_distance",           true,  "lineDistance",          P_TYPE::SPATIUM         },
       { P_ID::STEP_OFFSET,             "step_offset",             true,  "stepOffset",            P_TYPE::INT             },
-
       { P_ID::STAFF_SHOW_BARLINES,     "staff_show_barlines",     false, "",                      P_TYPE::BOOL            },
+
       { P_ID::STAFF_SHOW_LEDGERLINES,  "staff_show_ledgerlines",  false, "",                      P_TYPE::BOOL            },
       { P_ID::STAFF_SLASH_STYLE,       "staff_slash_style",       false, "",                      P_TYPE::BOOL            },
       { P_ID::STAFF_NOTEHEAD_SCHEME,   "staff_notehead_scheme",   false, "",                      P_TYPE::INT             },
@@ -258,14 +245,12 @@ static const PropertyData propertyList[] = {
       { P_ID::STAFF_GEN_KEYSIG,        "staff_gen_keysig",        false, "",                      P_TYPE::BOOL            },
       { P_ID::STAFF_YOFFSET,           "staff_yoffset",           false, "",                      P_TYPE::SPATIUM         },
       { P_ID::STAFF_USERDIST,          "staff_userdist",          false, "distOffset",            P_TYPE::SP_REAL         },
-//200
       { P_ID::STAFF_BARLINE_SPAN,      "staff_barline_span",      false, "barLineSpan",           P_TYPE::BOOL            },
       { P_ID::STAFF_BARLINE_SPAN_FROM, "staff_barline_span_from", false, "barLineSpanFrom",       P_TYPE::INT             },
+//190
       { P_ID::STAFF_BARLINE_SPAN_TO,   "staff_barline_span_to",   false, "barLineSpanTo",         P_TYPE::INT             },
-
       { P_ID::BRACKET_COLUMN,          "bracket_column",          false, "level",                 P_TYPE::INT             },
       { P_ID::INAME_LAYOUT_POSITION,   "iname_layout_position",   false, "layoutPosition",        P_TYPE::INT             },
-
       { P_ID::SUB_STYLE,               "sub_style",               false, "style",                 P_TYPE::SUB_STYLE       },
       { P_ID::FONT_FACE,               "font_face",               false, "family",                P_TYPE::FONT            },
       { P_ID::FONT_SIZE,               "font_size",               false, "size",                  P_TYPE::REAL            },
@@ -273,6 +258,7 @@ static const PropertyData propertyList[] = {
       { P_ID::FONT_ITALIC,             "font_italic",             false, "italic",                P_TYPE::BOOL            },
       { P_ID::FONT_UNDERLINE,          "font_underline",          false, "underline",             P_TYPE::BOOL            },
       { P_ID::FRAME,                   "has_frame",               false, "hasFrame",              P_TYPE::BOOL            },
+//200
       { P_ID::FRAME_SQUARE,            "frame_square",            false, "frameSquare",           P_TYPE::BOOL            },
       { P_ID::FRAME_CIRCLE,            "frame_circle",            false, "frameCircle",           P_TYPE::BOOL            },
       { P_ID::FRAME_WIDTH,             "frame_width",             false, "frameWidth",            P_TYPE::SPATIUM         },
@@ -283,8 +269,44 @@ static const PropertyData propertyList[] = {
       { P_ID::FONT_SPATIUM_DEPENDENT,  "font_spatium_dependent",  false, "sizeIsSpatiumDependent", P_TYPE::BOOL           },
       { P_ID::ALIGN,                   "align",                   false, "align",                 P_TYPE::ALIGN           },
       { P_ID::OFFSET,                  "offset",                  false, "offset",                P_TYPE::POINT           },
+//210
       { P_ID::OFFSET_TYPE,             "offset_type",             false, "offsetType",            P_TYPE::INT             },
       { P_ID::SYSTEM_FLAG,             "system_flag",             false, "systemFlag",            P_TYPE::BOOL            },
+      { P_ID::BEGIN_TEXT,              "begin_text",              false, "beginText",             P_TYPE::STRING          },
+      { P_ID::BEGIN_TEXT_ALIGN,        "begin_text_align",        false, "beginTextAlign",        P_TYPE::ALIGN           },
+      { P_ID::BEGIN_TEXT_PLACE,        "begin_text_place",        false, "beginTextPlace",        P_TYPE::INT             },
+      { P_ID::BEGIN_HOOK_TYPE,         "begin_hook_type",         false, "beginHookType",         P_TYPE::INT             },
+      { P_ID::BEGIN_HOOK_HEIGHT,       "begin_hook_height",       false, "beginHookHeight",       P_TYPE::SPATIUM         },
+      { P_ID::BEGIN_FONT_FACE,         "begin_font_face",         false, "beginFontFace",         P_TYPE::FONT            },
+      { P_ID::BEGIN_FONT_SIZE,         "begin_font_size",         false, "beginFontSize",         P_TYPE::REAL            },
+      { P_ID::BEGIN_FONT_BOLD,         "begin_font_bold",         false, "beginFontBold",         P_TYPE::BOOL            },
+//220
+      { P_ID::BEGIN_FONT_ITALIC,       "begin_font_italic",       false, "beginFontItalic",       P_TYPE::BOOL            },
+      { P_ID::BEGIN_FONT_UNDERLINE,    "begin_font_underline",    false, "beginFontUnderline",    P_TYPE::BOOL            },
+      { P_ID::BEGIN_TEXT_OFFSET,       "begin_text_offset",       false, "beginTextOffset",       P_TYPE::POINT           },
+
+      { P_ID::CONTINUE_TEXT,           "continue_text",           false, "continueText",          P_TYPE::STRING          },
+      { P_ID::CONTINUE_TEXT_ALIGN,     "continue_text_align",     false, "cotinueTextAlign",      P_TYPE::ALIGN           },
+      { P_ID::CONTINUE_TEXT_PLACE,     "continue_text_place",     false, "continueTextPlace",     P_TYPE::INT             },
+      { P_ID::CONTINUE_FONT_FACE,      "continue_font_face",      false, "continueFontFace",      P_TYPE::FONT            },
+      { P_ID::CONTINUE_FONT_SIZE,      "continue_font_size",      false, "continueFontSize",      P_TYPE::REAL            },
+      { P_ID::CONTINUE_FONT_BOLD,      "continue_font_bold",      false, "continueFontBold",      P_TYPE::BOOL            },
+      { P_ID::CONTINUE_FONT_ITALIC,    "continue_font_italic",    false, "continueFontItalic",    P_TYPE::BOOL            },
+      { P_ID::CONTINUE_FONT_UNDERLINE, "continue_font_underline", false, "continueFontUnderline", P_TYPE::BOOL            },
+      { P_ID::CONTINUE_TEXT_OFFSET,    "continue_text_offset",    false, "continueTextOffset",    P_TYPE::POINT           },
+
+      { P_ID::END_TEXT,                "end_text",                false, "endText",               P_TYPE::STRING          },
+      { P_ID::END_TEXT_ALIGN,          "end_text_align",          false, "endTextAlign",          P_TYPE::ALIGN           },
+      { P_ID::END_TEXT_PLACE,          "end_text_place",          false, "endTextPlace",          P_TYPE::INT             },
+      { P_ID::END_HOOK_TYPE,           "end_hook_type",           false, "endHookType",           P_TYPE::INT             },
+      { P_ID::END_HOOK_HEIGHT,         "end_hook_height",         false, "endHookHeight",         P_TYPE::SPATIUM         },
+      { P_ID::END_FONT_FACE,           "end_font_face",           false, "endFontFace",           P_TYPE::FONT            },
+      { P_ID::END_FONT_SIZE,           "end_font_size",           false, "endFontSize",           P_TYPE::REAL            },
+      { P_ID::END_FONT_BOLD,           "end_font_bold",           false, "endFontBold",           P_TYPE::BOOL            },
+      { P_ID::END_FONT_ITALIC,         "end_font_italic",         false, "endFontItalic",         P_TYPE::BOOL            },
+      { P_ID::END_FONT_UNDERLINE,      "end_font_underline",      false, "endFontUnderline",      P_TYPE::BOOL            },
+      { P_ID::END_TEXT_OFFSET,         "end_text_offset",         false, "endTextOffset",         P_TYPE::POINT           },
+
       { P_ID::END, "", false, "", P_TYPE::INT }
       };
 
@@ -484,27 +506,12 @@ QVariant getProperty(P_ID id, XmlReader& e)
                         }
                   return  int(align);
                   }
+            default:
+                  qFatal("unhandled PID type");
+                  break;
             }
       return QVariant();
       }
-
-#ifndef NDEBUG
-//---------------------------------------------------------
-//   checkProperties
-//---------------------------------------------------------
-
-void checkProperties()
-      {
-      int idx = 0;
-      for (const PropertyData& d : propertyList) {
-            if (int(d.id) != idx)
-                  qDebug("====%s %d != %d", d.qml, int(d.id), idx);
-            Q_ASSERT(int(d.id) == idx);
-            ++idx;
-            }
-      }
-#endif
-
 
 }
 
