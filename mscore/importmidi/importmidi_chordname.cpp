@@ -50,41 +50,41 @@ QString readChordRoot(uchar byte)
 QString readChordType(uchar chordTypeIndex)
       {
       static const std::vector<QString> chordTypes = {
-            "Maj"
-          , "Maj6"
+            ""        // Maj
+          , "6"       // Maj6
           , "Maj7"
-          , "Maj7(#11)"
-          , "Maj(9)"
-          , "Maj7(9)"
-          , "Maj6(9)"
+          , "Maj7#11" // Maj7(#11)
+          , "Maj9"    // Maj(9)
+          , "Maj9"    // Maj7(9)
+          , "6(9)"    // Maj6(9)
           , "aug"
-          , "min"
-          , "min6"
-          , "min7"
-          , "min7b5"
-          , "min(9)"
-          , "min7(9)"
-          , "min7(11)"
-          , "minMaj7"
-          , "minMaj7(9)"
+          , "m"       // min
+          , "m6"      // min6
+          , "m7"      // min7
+          , "m7b5"    // min7b5
+          , "m9"      // min(9)
+          , "m9"      // min7(9)
+          , "m7(11)"  // min7(11)
+          , "mMaj7"   // minMaj7
+          , "mMaj9"   // minMaj7(9)
           , "dim"
           , "dim7"
-          , "7th"
+          , "7"       // 7th
           , "7sus4"
           , "7b5"
-          , "7(9)"
-          , "7(#11)"
+          , "9"       // 7(9)
+          , "7#11"    // 7(#11)
           , "7(13)"
-          , "7(b9)"
-          , "7(b13)"
-          , "7(#9)"
-          , "Maj7aug"
-          , "7aug"
-          , "1+8"
-          , "1+5"
+          , "7b9"     // 7(b9)
+          , "7b13"    // 7(b13)
+          , "7#9"     // 7(#9)
+          , "Maj7#5"  // Maj7aug
+          , "7#5"     // 7aug
+          , ""        // 1+8
+          , "5"       // 1+5
           , "sus4"
-          , "1+2+5"
-          , "cc"
+          , "sus2"    // 1+2+5
+          , "N.C."    // cc
             };
 
       if (chordTypeIndex < chordTypes.size())
