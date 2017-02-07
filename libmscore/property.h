@@ -124,7 +124,7 @@ enum class P_ID {
       FBPARENTHESIS3,       //    "           "
       FBPARENTHESIS4,       //    "           "
       FBPARENTHESIS5,       //    "           "
-      VOLTA_TYPE,
+//      VOLTA_TYPE,
       OTTAVA_TYPE,
       NUMBERS_ONLY,
       TRILL_TYPE,
@@ -140,7 +140,7 @@ enum class P_ID {
       JUMP_TO,
       PLAY_UNTIL,
       CONTINUE_AT,
-
+//100
       LABEL,
       MARKER_TYPE,
       ARP_USER_LEN1,
@@ -171,22 +171,9 @@ enum class P_ID {
       SPANNER_TICKS,
       SPANNER_TRACK2,
       USER_OFF2,
-      BEGIN_TEXT_PLACE,
-      CONTINUE_TEXT_PLACE,
-
-      END_TEXT_PLACE,
-      BEGIN_HOOK,
-      END_HOOK,
-      BEGIN_HOOK_HEIGHT,
-      END_HOOK_HEIGHT,
-      BEGIN_HOOK_TYPE,
-      END_HOOK_TYPE,
-      BEGIN_TEXT,
-      CONTINUE_TEXT,
-      END_TEXT,
-
       BEGIN_TEXT_STYLE,
       CONTINUE_TEXT_STYLE,
+
       END_TEXT_STYLE,
       BREAK_MMR,
       REPEAT_COUNT,
@@ -195,9 +182,9 @@ enum class P_ID {
       IRREGULAR,
       ANCHOR,
       SLUR_UOFF1,
-
       SLUR_UOFF2,
       SLUR_UOFF3,
+
       SLUR_UOFF4,
       STAFF_MOVE,
       VERSE,
@@ -206,9 +193,9 @@ enum class P_ID {
       VOLTA_ENDING,
       LINE_VISIBLE,
       MAG,
-
       USE_DRUMSET,
       PART_VOLUME,
+
       PART_MUTE,
       PART_PAN,
       PART_REVERB,
@@ -217,9 +204,9 @@ enum class P_ID {
       DURATION_TYPE,
       ROLE,
       TRACK,
-
       GLISSANDO_STYLE,
       FRET_STRINGS,
+
       FRET_FRETS,
       FRET_BARRE,
       FRET_OFFSET,
@@ -228,9 +215,9 @@ enum class P_ID {
       AUTOPLACE,
       DASH_LINE_LEN,
       DASH_GAP_LEN,
-
       TICK,
       PLAYBACK_VOICE1,
+
       PLAYBACK_VOICE2,
       PLAYBACK_VOICE3,
       PLAYBACK_VOICE4,
@@ -239,9 +226,9 @@ enum class P_ID {
       CREATE_SYSTEM_HEADER,
       STAFF_LINES,
       LINE_DISTANCE,
-
       STEP_OFFSET,
       STAFF_SHOW_BARLINES,
+
       STAFF_SHOW_LEDGERLINES,
       STAFF_SLASH_STYLE,
       STAFF_NOTEHEAD_SCHEME,
@@ -250,9 +237,9 @@ enum class P_ID {
       STAFF_GEN_KEYSIG,
       STAFF_YOFFSET,
       STAFF_USERDIST,
-
       STAFF_BARLINE_SPAN,
       STAFF_BARLINE_SPAN_FROM,
+
       STAFF_BARLINE_SPAN_TO,
       BRACKET_COLUMN,
       INAME_LAYOUT_POSITION,
@@ -261,9 +248,9 @@ enum class P_ID {
       FONT_SIZE,
       FONT_BOLD,
       FONT_ITALIC,
-
       FONT_UNDERLINE,
       FRAME,
+//200
       FRAME_SQUARE,
       FRAME_CIRCLE,
       FRAME_WIDTH,
@@ -272,11 +259,45 @@ enum class P_ID {
       FRAME_FG_COLOR,
       FRAME_BG_COLOR,
       FONT_SPATIUM_DEPENDENT,
-
-/*120*/      ALIGN,
+      ALIGN,
       OFFSET,
+//210
       OFFSET_TYPE,
       SYSTEM_FLAG,
+      BEGIN_TEXT,
+      BEGIN_TEXT_ALIGN,
+      BEGIN_TEXT_PLACE,
+      BEGIN_HOOK_TYPE,
+      BEGIN_HOOK_HEIGHT,
+      BEGIN_FONT_FACE,
+      BEGIN_FONT_SIZE,
+      BEGIN_FONT_BOLD,
+//220
+      BEGIN_FONT_ITALIC,
+      BEGIN_FONT_UNDERLINE,
+      BEGIN_TEXT_OFFSET,
+      CONTINUE_TEXT,
+      CONTINUE_TEXT_ALIGN,
+      CONTINUE_TEXT_PLACE,
+      CONTINUE_FONT_FACE,
+      CONTINUE_FONT_SIZE,
+      CONTINUE_FONT_BOLD,
+
+      CONTINUE_FONT_ITALIC,
+      CONTINUE_FONT_UNDERLINE,
+      CONTINUE_TEXT_OFFSET,
+      END_TEXT,
+      END_TEXT_ALIGN,
+      END_TEXT_PLACE,
+      END_HOOK_TYPE,
+      END_HOOK_HEIGHT,
+      END_FONT_FACE,
+      END_FONT_SIZE,
+
+      END_FONT_BOLD,
+      END_FONT_ITALIC,
+      END_FONT_UNDERLINE,
+      END_TEXT_OFFSET,
 
       END
       };
@@ -287,9 +308,10 @@ enum class P_TYPE : char {
       INT,
       REAL,
       SPATIUM,
-      SP_REAL,          // real value saved in (score) spatium units
+      SP_REAL,          // real (point) value saved in (score) spatium units
       FRACTION,
       POINT,
+      POINT_SP,         // point units values saved in (score) spatium units
       POINT_MM,
       SIZE,
       SIZE_MM,

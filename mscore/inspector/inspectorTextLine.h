@@ -32,8 +32,11 @@ class InspectorTextLine : public InspectorElementBase {
 
    public:
       InspectorTextLine(QWidget* parent);
+      virtual void setElement() override;
       };
 
+extern void populateHookType(QComboBox* b);
+extern void populateTextPlace(QComboBox* b);
 
 } // namespace Ms
 #endif

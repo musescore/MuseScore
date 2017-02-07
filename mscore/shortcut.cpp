@@ -2403,17 +2403,6 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
-         "edit-text-style",
-         QT_TRANSLATE_NOOP("action","Text Styles..."),
-         QT_TRANSLATE_NOOP("action","Edit text styles"),
-         0,
-         Icons::Invalid_ICON,
-         Qt::WindowShortcut,
-         ShortcutFlags::A_CMD
-         },
-      {
-         MsWidget::SCORE_TAB,
-         STATE_NORMAL | STATE_NOTE_ENTRY,
          "edit-harmony",
          QT_TRANSLATE_NOOP("action","Chord Symbols..."),
          QT_TRANSLATE_NOOP("action","Edit chord symbols style")

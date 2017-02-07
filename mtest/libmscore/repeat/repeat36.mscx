@@ -500,11 +500,9 @@
       <Measure number="3">
         <endRepeat>2</endRepeat>
         <Volta id="2">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -518,11 +516,9 @@
       <Measure number="4">
         <endSpanner id="2"/>
         <Volta id="3">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <beginText>2.</beginText>
           <endings>2</endings>
           </Volta>
         <Chord>
@@ -864,11 +860,9 @@
       <Measure number="3">
         <endRepeat>2</endRepeat>
         <Volta id="4">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -883,11 +877,9 @@
         <endRepeat>2</endRepeat>
         <endSpanner id="4"/>
         <Volta id="5">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <beginText>2.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -903,9 +895,7 @@
         <Volta id="6">
           <beginTextPlace>1</beginTextPlace>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>3.</text>
-            </beginText>
+          <beginText>3.</beginText>
           <endings>2</endings>
           </Volta>
         <endSpanner id="6"/>
@@ -1025,11 +1015,9 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
         </Measure>
       <Measure number="3">
         <Volta id="7">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -1095,11 +1083,9 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
       <Measure number="5">
         <endSpanner id="7"/>
         <Volta id="8">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <beginText>2.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -1228,11 +1214,9 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
       <Measure number="9">
         <endSpanner id="8"/>
         <Volta id="9">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>3.</text>
-            </beginText>
+          <beginText>3.</beginText>
           <endings>3</endings>
           </Volta>
         <Chord>
@@ -1489,11 +1473,9 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
       <Measure number="4">
         <endRepeat>2</endRepeat>
         <Volta id="10">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -1528,11 +1510,9 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
       <Measure number="5">
         <endSpanner id="10"/>
         <Volta id="11">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <beginText>2.</beginText>
           <endings>2</endings>
           </Volta>
         <Chord>
@@ -1859,11 +1839,9 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
       <Measure number="4">
         <endRepeat>2</endRepeat>
         <Volta id="12">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -1899,9 +1877,7 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
         <endSpanner id="12"/>
         <Volta id="13">
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <beginText>2.</beginText>
           <endings>2</endings>
           </Volta>
         <Chord>
@@ -2128,11 +2104,9 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
         </Measure>
       <Measure number="9">
         <Volta id="14">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -2177,11 +2151,9 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
       <Measure number="11">
         <endSpanner id="14"/>
         <Volta id="15">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <beginText>2.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -2227,9 +2199,7 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
         <endSpanner id="15"/>
         <Volta id="16">
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>3.</text>
-            </beginText>
+          <beginText>3.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -2705,10 +2675,8 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
       <Measure number="2">
         <endRepeat>2</endRepeat>
         <Volta id="17">
-          <endHook>1</endHook>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <endHookType>1</endHookType>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -2743,9 +2711,7 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
       <Measure number="3">
         <endSpanner id="17"/>
         <Volta id="18">
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <beginText>2.</beginText>
           <endings>2</endings>
           </Volta>
         <Chord>
@@ -2929,10 +2895,8 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
       <Measure number="8">
         <endRepeat>2</endRepeat>
         <Volta id="19">
-          <endHook>1</endHook>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <endHookType>1</endHookType>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -2973,9 +2937,7 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
           </LayoutBreak>
         <endSpanner id="19"/>
         <Volta id="20">
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <beginText>2.</beginText>
           <endings>2</endings>
           </Volta>
         <Chord>
@@ -3055,10 +3017,8 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
       <Measure number="2">
         <endRepeat>2</endRepeat>
         <Volta id="21">
-          <endHook>1</endHook>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <endHookType>1</endHookType>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -3093,9 +3053,7 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
       <Measure number="3">
         <endSpanner id="21"/>
         <Volta id="22">
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <beginText>2.</beginText>
           <endings>2</endings>
           </Volta>
         <Chord>
@@ -3199,10 +3157,8 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
       <Measure number="6">
         <endRepeat>2</endRepeat>
         <Volta id="23">
-          <endHook>1</endHook>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <endHookType>1</endHookType>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -3237,9 +3193,7 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
       <Measure number="7">
         <endSpanner id="23"/>
         <Volta id="24">
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <beginText>2.</beginText>
           <endings>2</endings>
           </Volta>
         <Chord>
@@ -5741,10 +5695,8 @@ then section with end repeat</text>
       <Measure number="3">
         <endRepeat>2</endRepeat>
         <Volta id="25">
-          <endHook>1</endHook>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <endHookType>1</endHookType>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -5758,10 +5710,8 @@ then section with end repeat</text>
       <Measure number="4">
         <endSpanner id="25"/>
         <Volta id="26">
-          <endHook>1</endHook>
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <endHookType>1</endHookType>
+          <beginText>2.</beginText>
           <endings>2</endings>
           </Volta>
         <Chord>

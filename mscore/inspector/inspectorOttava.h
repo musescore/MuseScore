@@ -30,10 +30,17 @@ class InspectorOttava : public InspectorElementBase {
       Q_OBJECT
 
       Ui::InspectorLine     l;
+      Ui::InspectorTextLine tl;
       Ui::InspectorOttava   o;
+
+      void updateLineType();
+      void updateBeginHookType();
+      void updateEndHookType();
+      virtual void valueChanged(int) override;
 
    public:
       InspectorOttava(QWidget* parent);
+      virtual void setElement() override;
       };
 
 

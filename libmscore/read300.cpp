@@ -313,7 +313,6 @@ Score::FileError MasterScore::read300(XmlReader& e)
             else if (tag == "programRevision")
                   setMscoreRevision(e.readInt());
             else if (tag == "Score") {
-printf("===read score -- top %d\n", top);
                   MasterScore* score;
                   if (top) {
                         score = this;

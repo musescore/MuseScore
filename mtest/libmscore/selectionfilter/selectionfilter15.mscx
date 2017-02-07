@@ -93,9 +93,7 @@
         <TextLine id="2">
           <endHook>1</endHook>
           <lineWidth>0.15</lineWidth>
-          <beginText>
-            <text>VII</text>
-            </beginText>
+          <beginText>VII</beginText>
           </TextLine>
         <Chord>
           <durationType>quarter</durationType>

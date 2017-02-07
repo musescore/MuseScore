@@ -100,7 +100,6 @@
               <text>gliss.</text>
               <subtype>0</subtype>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             </Note>
@@ -127,7 +126,6 @@
               <text>gliss.</text>
               <subtype>0</subtype>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             </Note>
@@ -166,7 +164,6 @@ in other voice</text>
               <text>gliss.</text>
               <subtype>0</subtype>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             </Note>
@@ -232,7 +229,6 @@ in other staff</text>
               <text>gliss.</text>
               <subtype>0</subtype>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             </Note>
@@ -293,7 +289,6 @@ in other staff</text>
               <text>gliss.</text>
               <subtype>0</subtype>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             </Note>

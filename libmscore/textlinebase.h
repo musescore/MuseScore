@@ -15,10 +15,12 @@
 
 #include "line.h"
 #include "style.h"
+#include "property.h"
 
 namespace Ms {
 
 enum class SubStyle;
+enum class Align : char;
 class TextLineBase;
 class Element;
 class Text;
@@ -30,19 +32,16 @@ class Text;
 class TextLineBaseSegment : public LineSegment {
       Q_OBJECT
 
-      // set in layout():
-      Text* _text        { 0 };
-      Text* _endText     { 0 };
+      Text* _text;
+      Text* _endText;
 
    protected:
       QPointF points[4];
       int npoints;
       bool twoLines { false };
 
-      void setText(Text*);
-
    public:
-      TextLineBaseSegment(Score* s) : LineSegment(s) {}
+      TextLineBaseSegment(Score* s);
       TextLineBaseSegment(const TextLineBaseSegment&);
       ~TextLineBaseSegment();
 
@@ -58,11 +57,15 @@ class TextLineBaseSegment : public LineSegment {
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID id) const override;
       virtual Shape shape() const override;
-
-      friend class HairpinSegment;
       };
 
-enum class HookType : char { HOOK_90, HOOK_45 };
+//---------------------------------------------------------
+//   HookType
+//---------------------------------------------------------
+
+enum class HookType : char {
+      NONE, HOOK_90, HOOK_45
+      };
 
 //---------------------------------------------------------
 //   @@ TextLineBase
@@ -71,73 +74,65 @@ enum class HookType : char { HOOK_90, HOOK_45 };
 class TextLineBase : public SLine {
       Q_OBJECT
 
-      PlaceText _beginTextPlace, _continueTextPlace, _endTextPlace;
-
       enum class LineType : char { CRESCENDO, DECRESCENDO };
-      bool _lineVisible;
-      bool _beginHook, _endHook;
-      HookType _beginHookType, _endHookType;
-      Spatium _beginHookHeight, _endHookHeight;
+
+#define PROP(a,b,c)                \
+      a _ ## b;                           \
+      PropertyFlags _ ## b ## Style { PropertyFlags::STYLED }; \
+      public:                        \
+      const a& b() const   { return _ ## b;    } \
+      void c(const a& val) { _ ## b = val; }     \
+      private:
+
+      PROP(bool,      lineVisible,           setLineVisible)
+      PROP(HookType,  beginHookType,         setBeginHookType)
+      PROP(HookType,  endHookType,           setEndHookType)
+      PROP(Spatium,   beginHookHeight,       setBeginHookHeight)
+      PROP(Spatium,   endHookHeight,         setEndHookHeight)
+
+      PROP(PlaceText, beginTextPlace,        setBeginTextPlace)
+      PROP(QString,   beginText,             setBeginText)
+      PROP(Align,     beginTextAlign,        setBeginTextAlign)
+      PROP(QString,   beginFontFamily,       setBeginFontFamily)
+      PROP(qreal,     beginFontSize,         setBeginFontSize)
+      PROP(bool,      beginFontBold,         setBeginFontBold)
+      PROP(bool,      beginFontItalic,       setBeginFontItalic)
+      PROP(bool,      beginFontUnderline,    setBeginFontUnderline)
+      PROP(QPointF,   beginTextOffset,       setBeginTextOffset)
+
+      PROP(PlaceText, continueTextPlace,     setContinueTextPlace)
+      PROP(QString,   continueText,          setContinueText)
+      PROP(Align,     continueTextAlign,     setContinueTextAlign)
+      PROP(QString,   continueFontFamily,    setContinueFontFamily)
+      PROP(qreal,     continueFontSize,      setContinueFontSize)
+      PROP(bool,      continueFontBold,      setContinueFontBold)
+      PROP(bool,      continueFontItalic,    setContinueFontItalic)
+      PROP(bool,      continueFontUnderline, setContinueFontUnderline)
+      PROP(QPointF,   continueTextOffset,    setContinueTextOffset)
+
+      PROP(PlaceText, endTextPlace,          setEndTextPlace)
+      PROP(QString,   endText,               setEndText)
+      PROP(Align,     endTextAlign,          setEndTextAlign)
+      PROP(QString,   endFontFamily,         setEndFontFamily)
+      PROP(qreal,     endFontSize,           setEndFontSize)
+      PROP(bool,      endFontBold,           setEndFontBold)
+      PROP(bool,      endFontItalic,         setEndFontItalic)
+      PROP(bool,      endFontUnderline,      setEndFontUnderline)
+      PROP(QPointF,   endTextOffset,         setEndTextOffset)
+#undef PROP
 
    protected:
-      Text *_beginText, *_continueText, *_endText;
-
       friend class TextLineBaseSegment;
 
    public:
       TextLineBase(Score* s);
       TextLineBase(const TextLineBase&);
-      ~TextLineBase();
-
-      virtual void setScore(Score* s) override;
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
 
       virtual void writeProperties(XmlWriter& xml) const override;
       virtual bool readProperties(XmlReader& node) override;
-
-      bool lineVisible() const                { return _lineVisible;          }
-      void setLineVisible(bool v)             { _lineVisible = v;             }
-      bool beginHook() const                  { return _beginHook;            }
-      bool endHook() const                    { return _endHook;              }
-      void setBeginHook(bool v)               { _beginHook = v;               }
-      void setEndHook(bool v)                 { _endHook = v;                 }
-      HookType beginHookType() const          { return _beginHookType;        }
-      HookType endHookType() const            { return _endHookType;          }
-      void setBeginHookType(HookType val)     { _beginHookType = val;         }
-      void setEndHookType(HookType val)       { _endHookType = val;           }
-      void setBeginHookHeight(Spatium v)      { _beginHookHeight = v;         }
-      void setEndHookHeight(Spatium v)        { _endHookHeight = v;           }
-      Spatium beginHookHeight() const         { return _beginHookHeight;      }
-      Spatium endHookHeight() const           { return _endHookHeight;        }
-
-      Text* beginTextElement() const          { return _beginText; }
-      Text* continueTextElement() const       { return _continueText; }
-      Text* endTextElement() const            { return _endText; }
-
-      void createBeginTextElement();
-      void createContinueTextElement();
-      void createEndTextElement();
-
-      void setBeginText(const QString& s, SubStyle style);
-      void setContinueText(const QString& s, SubStyle style);
-      void setEndText(const QString& s, SubStyle style);
-
-      void setBeginText(const QString&);
-      void setContinueText(const QString&);
-      void setEndText(const QString&);
-
-      QString beginText() const;
-      QString continueText() const;
-      QString endText() const;
-
-      PlaceText beginTextPlace() const        { return _beginTextPlace;       }
-      void setBeginTextPlace(PlaceText p)     { _beginTextPlace = p;          }
-      PlaceText continueTextPlace() const     { return _continueTextPlace;    }
-      void setContinueTextPlace(PlaceText p)  { _continueTextPlace = p;       }
-      PlaceText endTextPlace() const          { return _endTextPlace;    }
-      void setEndTextPlace(PlaceText p)       { _endTextPlace = p;       }
 
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
@@ -146,7 +141,8 @@ class TextLineBase : public SLine {
       virtual QVariant propertyDefault(P_ID id) const override;
       };
 
-
 }     // namespace Ms
+Q_DECLARE_METATYPE(Ms::HookType);
+
 #endif
 

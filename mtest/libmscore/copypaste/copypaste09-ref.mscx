@@ -93,8 +93,6 @@
           </Chord>
         <Ottava id="2">
           <subtype>8va</subtype>
-          <lineWidth>0.1</lineWidth>
-          <lineStyle>1</lineStyle>
           </Ottava>
         <Chord>
           <durationType>quarter</durationType>
@@ -165,8 +163,6 @@
           </Chord>
         <Ottava id="3">
           <subtype>8va</subtype>
-          <lineWidth>0.1</lineWidth>
-          <lineStyle>1</lineStyle>
           </Ottava>
         <Chord>
           <durationType>quarter</durationType>

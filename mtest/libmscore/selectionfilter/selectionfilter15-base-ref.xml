@@ -4,12 +4,8 @@
     <voice id="0">0</voice>
     <move>0/1</move>
     <TextLine id="2">
-      <endHook>1</endHook>
+      <beginText>VII</beginText>
       <track>0</track>
-      <lineWidth>0.15</lineWidth>
-      <beginText>
-        <text>VII</text>
-        </beginText>
       </TextLine>
     <Chord>
       <track>0</track>

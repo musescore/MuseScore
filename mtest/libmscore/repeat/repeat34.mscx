@@ -111,10 +111,8 @@
       <Measure number="3">
         <endRepeat>2</endRepeat>
         <Volta id="2">
-          <endHook>1</endHook>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <endHookType>1</endHookType>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -128,10 +126,8 @@
       <Measure number="4">
         <endSpanner id="2"/>
         <Volta id="3">
-          <endHook>1</endHook>
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <endHookType>1</endHookType>
+          <beginText>2.</beginText>
           <endings>2</endings>
           </Volta>
         <Chord>

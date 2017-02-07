@@ -1217,8 +1217,7 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   setSystemFlag(v.toBool());
                   break;
             default:
-                  qFatal("Element::setProperty: unknown <%s>(%d), data <%s>",
-                     propertyName(propertyId), static_cast<int>(propertyId), qPrintable(v.toString()));
+                  qFatal("unknown <%s>(%d), data <%s>", propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
                   return false;
             }
       score()->setLayout(tick());

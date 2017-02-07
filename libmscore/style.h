@@ -156,6 +156,7 @@ enum class StyleIdx {
       pedalPosBelow,
       pedalLineWidth,
       pedalLineStyle,
+      pedalBeginTextOffset,
 
       trillPlacement,
       trillPosAbove,
@@ -571,7 +572,6 @@ enum class StyleIdx {
       repeatRightFontUnderline,
       repeatRightSystemFlag,
 
-      voltaSubStyle,
       voltaFontFace,
       voltaFontSize,
       voltaFontBold,
@@ -709,7 +709,6 @@ enum class SubStyle {
       REHEARSAL_MARK,
       REPEAT_LEFT,       // align to start of measure
       REPEAT_RIGHT,      // align to end of measure
-      VOLTA,
       FRAME,
       TEXTLINE,
       GLISSANDO,

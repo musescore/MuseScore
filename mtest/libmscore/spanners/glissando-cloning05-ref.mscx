@@ -116,7 +116,6 @@
               <subtype>1</subtype>
               <lid>16</lid>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             </Note>
@@ -190,7 +189,6 @@
               <subtype>1</subtype>
               <lid>19</lid>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             </Note>
@@ -327,7 +325,6 @@
                 <subtype>1</subtype>
                 <lid>16</lid>
                 <diagonal>1</diagonal>
-                <lineWidth>0.15</lineWidth>
                 <anchor>3</anchor>
                 </Glissando>
               </Note>
@@ -401,7 +398,6 @@
                 <subtype>1</subtype>
                 <lid>19</lid>
                 <diagonal>1</diagonal>
-                <lineWidth>0.15</lineWidth>
                 <anchor>3</anchor>
                 </Glissando>
               </Note>

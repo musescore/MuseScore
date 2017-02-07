@@ -36,11 +36,10 @@ InspectorBase::InspectorBase(QWidget* parent)
       styleMapper  = new QSignalMapper(this);
 
       inspector = static_cast<Inspector*>(parent);
-      _layout    = new QVBoxLayout;
+      _layout    = new QVBoxLayout(this);
       _layout->setSpacing(0);
       _layout->setContentsMargins(0, 10, 0, 0);
       _layout->addStretch(100);
-      setLayout(_layout);
 
       connect(resetMapper, SIGNAL(mapped(int)), SLOT(resetClicked(int)));
       connect(valueMapper, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
@@ -57,9 +56,7 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
       QWidget* w = ii.w;
 
       QVariant v;
-      if (qobject_cast<QDoubleSpinBox*>(w))
-            v = w->property("value");
-      else if (qobject_cast<QSpinBox*>(w))
+      if (qobject_cast<QDoubleSpinBox*>(w) || qobject_cast<QSpinBox*>(w))
             v = w->property("value");
       else if (qobject_cast<QFontComboBox*>(w))
             v = static_cast<QFontComboBox*>(w)->currentFont().family();
@@ -82,7 +79,7 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
             qFatal("not supported widget %s", w->metaObject()->className());
 
       switch (propertyType(ii.t)) {
-            case P_TYPE::POINT:
+            case P_TYPE::POINT_SP:
             case P_TYPE::SP_REAL:
                   v = v.toDouble() * inspector->element()->score()->spatium();
                   break;
@@ -130,7 +127,7 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
       P_ID id  = ii.t;
 
       switch (propertyType(id)) {
-            case P_TYPE::POINT:
+            case P_TYPE::POINT_SP:
             case P_TYPE::SP_REAL:
                   val = val.toDouble() / inspector->element()->score()->spatium();
                   break;
@@ -217,7 +214,7 @@ bool InspectorBase::isDefault(const InspectorItem& ii)
             qreal v = ii.sv == 0 ? sz.width() : sz.height();
             return val.toDouble() == v;
             }
-      if (t == P_TYPE::POINT || t == P_TYPE::POINT_MM) {
+      if (t == P_TYPE::POINT || t == P_TYPE::POINT_SP || t == P_TYPE::POINT_MM) {
             QPointF sz = def.toPointF();
             qreal v = ii.sv == 0 ? sz.x() : sz.y();
             return val.toDouble() == v;
@@ -268,7 +265,7 @@ void InspectorBase::setElement()
                   else
                         val = QVariant(sz.height());
                   }
-            else if (pt == P_TYPE::POINT || pt == P_TYPE::POINT_MM) {
+            else if (pt == P_TYPE::POINT || pt == P_TYPE::POINT_SP || pt == P_TYPE::POINT_MM) {
                   QPointF sz = val.toPointF();
                   if (ii.sv == 0)
                         val = QVariant(sz.x());
@@ -318,7 +315,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                         else
                               valuesAreDifferent = sz.height() != val.toDouble();
                         }
-                  else if (pt == P_TYPE::POINT || pt == P_TYPE::POINT_MM) {
+                  else if (pt == P_TYPE::POINT || pt == P_TYPE::POINT_SP || pt == P_TYPE::POINT_MM) {
                         QPointF sz = e->getProperty(id).toPointF();
                         if (ii.sv == 0)
                               valuesAreDifferent = sz.x() != val.toDouble();
@@ -403,7 +400,7 @@ void InspectorBase::valueChanged(int idx, bool reset)
                               e->undoChangeProperty(id, QVariant(QSizeF(sz.width(), v)), ps);
                         }
                   }
-            else if (pt == P_TYPE::POINT || pt == P_TYPE::POINT_MM) {
+            else if (pt == P_TYPE::POINT || pt == P_TYPE::POINT_SP || pt == P_TYPE::POINT_MM) {
                   qreal v    = val2.toDouble();
                   QPointF sz = val1.toPointF();
                   if (ii.sv == 0) {

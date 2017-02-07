@@ -1186,7 +1186,7 @@ Palette* MuseScore::newLinesPalette(PaletteType t)
             pedal->setLen(w);
             pedal->setBeginText("<sym>keyboardPedalPed</sym>");
             pedal->setContinueText("(<sym>keyboardPedalPed</sym>)");
-            pedal->setEndHook(true);
+            pedal->setEndHookType(HookType::HOOK_90);
             sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
             pedal = new Pedal(gscore);
@@ -1194,39 +1194,33 @@ Palette* MuseScore::newLinesPalette(PaletteType t)
             pedal->setBeginText("<sym>keyboardPedalPed</sym>");
             pedal->setContinueText("(<sym>keyboardPedalPed</sym>)");
             pedal->setEndText("<sym>keyboardPedalUp</sym>");
-            Align align = pedal->endTextElement()->align();
-            align = Align(int(align) & int(Align::VMASK)) | Align::HCENTER;
-            pedal->endTextElement()->setAlign(align);
+//TODO            pedal->setEndTextAlign(Aling::TOP | Align::HCENTER);
             pedal->setLineVisible(false);
             sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
             }
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setBeginHook(true);
-      pedal->setEndHook(true);
+      pedal->setBeginHookType(HookType::HOOK_90);
+      pedal->setEndHookType(HookType::HOOK_90);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setBeginHook(true);
-      pedal->setEndHook(true);
+      pedal->setBeginHookType(HookType::HOOK_90);
       pedal->setEndHookType(HookType::HOOK_45);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setBeginHook(true);
       pedal->setBeginHookType(HookType::HOOK_45);
-      pedal->setEndHook(true);
       pedal->setEndHookType(HookType::HOOK_45);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setBeginHook(true);
       pedal->setBeginHookType(HookType::HOOK_45);
-      pedal->setEndHook(true);
+      pedal->setEndHookType(HookType::HOOK_90);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       if (t != PaletteType::BASIC) {
@@ -1240,7 +1234,7 @@ Palette* MuseScore::newLinesPalette(PaletteType t)
             TextLine* textLine = new TextLine(gscore);
             textLine->setLen(w);
             textLine->setBeginText("VII");
-            textLine->setEndHook(true);
+            textLine->setEndHookType(HookType::HOOK_90);
             sp->append(textLine, QT_TRANSLATE_NOOP("Palette", "Text line"));
 
             TextLine* line = new TextLine(gscore);

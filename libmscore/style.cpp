@@ -177,6 +177,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::pedalPosBelow,           "pedalPosBelow",           Spatium(4) },
       { StyleIdx::pedalLineWidth,          "pedalLineWidth",          Spatium(.15) },
       { StyleIdx::pedalLineStyle,          "pedalListStyle",          QVariant(int(Qt::SolidLine)) },
+      { StyleIdx::pedalBeginTextOffset,    "pedalBeginTextOffset",    QPointF(0.0, 0.15) },
 
       { StyleIdx::trillPlacement,          "trillPlacement",          int(Element::Placement::ABOVE)  },
       { StyleIdx::trillPosAbove,           "trillPosAbove",           Spatium(-1) },
@@ -590,7 +591,6 @@ static const StyleType styleTypes[] {
       { StyleIdx::repeatRightFontUnderline,      "repeatRightFontUnderline",     false },
       { StyleIdx::repeatRightSystemFlag,         "repeatRightSystemFlag",        true  },
 
-      { StyleIdx::voltaSubStyle,                 "voltaSubStyle",                int(SubStyle::VOLTA) },
       { StyleIdx::voltaFontFace,                 "voltaFontFace",                "FreeSerif" },
       { StyleIdx::voltaFontSize,                 "voltaFontSize",                11.0 },
       { StyleIdx::voltaFontBold,                 "voltaFontBold",                true },
@@ -995,17 +995,6 @@ const std::vector<StyledProperty> repeatRightStyle {
       { StyleIdx::repeatRightSystemFlag,              P_ID::SYSTEM_FLAG            },
       };
 
-const std::vector<StyledProperty> voltaStyle {
-      { StyleIdx::voltaSubStyle,                      P_ID::SUB_STYLE              },
-      { StyleIdx::voltaFontFace,                      P_ID::FONT_FACE              },
-      { StyleIdx::voltaFontSize,                      P_ID::FONT_SIZE              },
-      { StyleIdx::voltaFontBold,                      P_ID::FONT_BOLD              },
-      { StyleIdx::voltaFontItalic,                    P_ID::FONT_ITALIC            },
-      { StyleIdx::voltaFontUnderline,                 P_ID::FONT_UNDERLINE         },
-      { StyleIdx::voltaAlign,                         P_ID::ALIGN                  },
-      { StyleIdx::voltaOffset,                        P_ID::OFFSET                 },
-      };
-
 const std::vector<StyledProperty> frameStyle {
       { StyleIdx::frameFontFace,                      P_ID::FONT_FACE              },
       { StyleIdx::frameFontSize,                      P_ID::FONT_SIZE              },
@@ -1155,7 +1144,6 @@ static const std::array<StyledPropertyListName, int(SubStyle::SUBSTYLES)> namedS
       { QT_TRANSLATE_NOOP("TextStyle", "Rehearsal Mark"),          &rehearsalMarkStyle,             SubStyle::REHEARSAL_MARK },
       { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Left"),        &repeatLeftStyle,                SubStyle::REPEAT_LEFT },
       { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Right"),       &repeatRightStyle,               SubStyle::REPEAT_RIGHT },
-      { QT_TRANSLATE_NOOP("TextStyle", "Volta"),                   &voltaStyle,                     SubStyle::VOLTA },
       { QT_TRANSLATE_NOOP("TextStyle", "Frame"),                   &frameStyle,                     SubStyle::FRAME },
       { QT_TRANSLATE_NOOP("TextStyle", "Text Line"),               &textLineStyle,                  SubStyle::TEXTLINE },
       { QT_TRANSLATE_NOOP("TextStyle", "Glissando"),               &glissandoStyle,                 SubStyle::GLISSANDO },

@@ -164,16 +164,14 @@ p, li { white-space: pre-wrap; }
       <Measure number="3">
         <endRepeat>2</endRepeat>
         <Volta id="2">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
           <Segment>
             <subtype>0</subtype>
             <off2 x="0" y="0"/>
             <offset x="-0.491739" y="-2.95043"/>
             </Segment>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -188,16 +186,14 @@ p, li { white-space: pre-wrap; }
         <endRepeat>2</endRepeat>
         <endSpanner id="2"/>
         <Volta id="3">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
           <Segment>
             <subtype>0</subtype>
             <off2 x="0" y="0"/>
             <offset x="-0.0674338" y="-2.89668"/>
             </Segment>
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <beginText>2.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -218,9 +214,7 @@ p, li { white-space: pre-wrap; }
             <off2 x="0" y="0"/>
             <offset x="0.271718" y="-2.87585"/>
             </Segment>
-          <beginText>
-            <text>3.</text>
-            </beginText>
+          <beginText>3.</beginText>
           <endings>2</endings>
           </Volta>
         <endSpanner id="4"/>

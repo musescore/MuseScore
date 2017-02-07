@@ -32,7 +32,6 @@
     <Trill id="2">
       <subtype>trill</subtype>
       <track>0</track>
-      <lineWidth>0.15</lineWidth>
       </Trill>
     <Chord>
       <track>0</track>

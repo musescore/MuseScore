@@ -450,7 +450,7 @@ static void readTextStyle(MStyle* style, XmlReader& e)
             { "Repeat Text Left",        SubStyle::REPEAT_LEFT },
             { "Repeat Text Right",       SubStyle::REPEAT_RIGHT },
             { "Repeat Text",             SubStyle::REPEAT_LEFT },
-            { "Volta",                   SubStyle::VOLTA },
+//            { "Volta",                   SubStyle::VOLTA },
             { "Frame",                   SubStyle::FRAME },
             { "Text Line",               SubStyle::TEXTLINE },
             { "Glissando",               SubStyle::GLISSANDO },

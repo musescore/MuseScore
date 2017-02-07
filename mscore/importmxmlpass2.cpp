@@ -2725,14 +2725,15 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
             TextLine* b = new TextLine(_score);
             // if (placement == "") placement = "above";  // TODO ? set default
 
-            b->setBeginHook(lineEnd != "none");
+            b->setBeginHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
             if (lineEnd == "up")
                   b->setBeginHookHeight(-1 * b->beginHookHeight());
 
             // hack: combine with a previous words element
             if (!_wordsText.isEmpty()) {
                   // TextLine supports only limited formatting, remove all (compatible with 1.3)
-                  b->setBeginText(MScoreTextToMXML::toPlainText(_wordsText), SubStyle::TEXTLINE);
+//                  b->setBeginText(MScoreTextToMXML::toPlainText(_wordsText), SubStyle::TEXTLINE);
+                  b->setBeginText(MScoreTextToMXML::toPlainText(_wordsText));
                   _wordsText = "";
                   }
 
@@ -2749,7 +2750,7 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
       else if (type == "stop") {
             TextLine* b = static_cast<TextLine*>(_pass2.getSpanner(MusicXmlSpannerDesc(ElementType::TEXTLINE, number)));
             if (b) {
-                  b->setEndHook(lineEnd != "none");
+                  b->setEndHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
                   if (lineEnd == "up")
                         b->setEndHookHeight(-1 * b->endHookHeight());
                   }
@@ -2776,12 +2777,13 @@ void MusicXMLParserDirection::dashes(const QString& type, const int number,
             // hack: combine with a previous words element
             if (!_wordsText.isEmpty()) {
                   // TextLine supports only limited formatting, remove all (compatible with 1.3)
-                  b->setBeginText(MScoreTextToMXML::toPlainText(_wordsText), SubStyle::TEXTLINE);
+//                  b->setBeginText(MScoreTextToMXML::toPlainText(_wordsText), SubStyle::TEXTLINE);
+                  b->setBeginText(MScoreTextToMXML::toPlainText(_wordsText));
                   _wordsText = "";
                   }
 
-            b->setBeginHook(false);
-            b->setEndHook(false);
+            b->setBeginHookType(HookType::NONE);
+            b->setEndHookType(HookType::NONE);
             b->setLineStyle(Qt::DashLine);
             // TODO brackets and dashes now share the same storage
             // because they both use ElementType::TEXTLINE
@@ -2849,8 +2851,8 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
                   if (sign == "yes")
                         p->setBeginText("<sym>keyboardPedalPed</sym>");
                   else
-                        p->setBeginHook(true);
-                  p->setEndHook(true);
+                        p->setBeginHookType(HookType::HOOK_90);
+                  p->setEndHookType(HookType::HOOK_90);
                   // if (placement == "") placement = "below";  // TODO ? set default
                   starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, 0));
                   }
@@ -2869,9 +2871,8 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
                         }
                   // then start a new one
                   pedal = static_cast<Pedal*>(checkSpannerOverlap(pedal, new Pedal(score), "pedal"));
-                  pedal->setBeginHook(true);
                   pedal->setBeginHookType(HookType::HOOK_45);
-                  pedal->setEndHook(true);
+                  pedal->setEndHookType(HookType::HOOK_90);
                   if (placement == "") placement = "below";
                   handleSpannerStart(pedal, "pedal", track, placement, tick, spanners);
 #endif

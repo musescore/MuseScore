@@ -3483,7 +3483,7 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
       QPointF p;
 
       // special case: a dashed line w/o hooks is written as dashes
-      bool dashes = tl->lineStyle() == Qt::DashLine && !tl->beginHook() && !tl->endHook();
+      bool dashes = tl->lineStyle() == Qt::DashLine && (tl->beginHookType() == HookType::NONE) && (tl->endHookType() == HookType::NONE);
 
       QString lineEnd = "none";
       QString type;
@@ -3507,14 +3507,14 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
                         }
                   rest += QString(" line-type=\"%1\"").arg(lineType);
                   }
-            hook = tl->beginHook();
+            hook       = tl->beginHookType() != HookType::NONE;
             hookHeight = tl->beginHookHeight().val();
             p = tl->spannerSegments().first()->userOff();
             // offs = tl->mxmlOff();
             type = "start";
             }
       else {
-            hook = tl->endHook();
+            hook = tl->endHookType() != HookType::NONE;
             hookHeight = tl->endHookHeight().val();
             p = ((LineSegment*)tl->spannerSegments().last())->userOff2();
             // offs = tl->mxmlOff2();

@@ -39,7 +39,7 @@ QT5_WRAP_UI (ui_headers
       textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
       editstaff.ui timesigproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
-      transposedialog.ui lineproperties.ui excerptsdialog.ui  stafftext.ui tupletdialog.ui
+      transposedialog.ui excerptsdialog.ui  stafftext.ui tupletdialog.ui
       articulation.ui metaedit.ui palette.ui selectdialog.ui selectnotedialog.ui
       synthcontrol.ui splitstaff.ui cellproperties.ui keyedit.ui selectinstr.ui
       fretdprops.ui editstafftype.ui sectionbreak.ui  bend.ui tremolobar.ui
@@ -257,7 +257,7 @@ add_executable ( ${ExecutableName}
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
       workspace.cpp chordview.cpp
       albummanager.cpp
-      lineproperties.cpp stafftextproperties.cpp splitstaff.cpp
+      stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp
       articulationprop.cpp
       fretproperties.cpp sectionbreakprop.cpp

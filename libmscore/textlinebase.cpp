@@ -27,15 +27,31 @@ namespace Ms {
 //   TextLineBaseSegment
 //---------------------------------------------------------
 
+TextLineBaseSegment::TextLineBaseSegment(Score* score)
+   : LineSegment(score)
+      {
+      _text    = new Text(score);
+      _endText = new Text(score);
+      _text->setParent(this);
+      _endText->setParent(this);
+      _text->setFlag(ElementFlag::MOVABLE, false);
+      _endText->setFlag(ElementFlag::MOVABLE, false);
+      }
+
 TextLineBaseSegment::TextLineBaseSegment(const TextLineBaseSegment& seg)
    : LineSegment(seg)
       {
+      _text    = new Text(*seg._text);
+      _endText = new Text(*seg._endText);
+      _text->setParent(this);
+      _endText->setParent(this);
       layout();    // set the right _text
       }
 
 TextLineBaseSegment::~TextLineBaseSegment()
       {
       delete _text;
+      delete _endText;
       }
 
 //---------------------------------------------------------
@@ -45,20 +61,8 @@ TextLineBaseSegment::~TextLineBaseSegment()
 void TextLineBaseSegment::setSelected(bool f)
       {
       SpannerSegment::setSelected(f);
-      if (_text) {
-            if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN) {
-                  if (textLineBase()->_beginText)
-                        _text->setSelected(f);
-                  }
-            else if (textLineBase()->_continueText)
-                  _text->setSelected(f);
-            }
-      if (_endText) {
-            if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END) {
-                  if (textLineBase()->_endText)
-                        _endText->setSelected(f);
-                  }
-            }
+      _text->setSelected(f);
+      _endText->setSelected(f);
       }
 
 //---------------------------------------------------------
@@ -79,14 +83,14 @@ void TextLineBaseSegment::draw(QPainter* painter) const
       else
             color = tl->lineColor();
 
-      if (_text) {
+      if (!_text->empty()) {
             painter->translate(_text->pos());
             _text->setVisible(tl->visible());
             _text->draw(painter);
             painter->translate(-_text->pos());
             }
 
-      if (_endText) {
+      if (!_endText->empty()) {
             painter->translate(_endText->pos());
             _endText->setVisible(tl->visible());
             _endText->draw(painter);
@@ -120,9 +124,9 @@ void TextLineBaseSegment::draw(QPainter* painter) const
 Shape TextLineBaseSegment::shape() const
       {
       Shape shape;
-      if (_text)
+      if (!_text->empty())
             shape.add(_text->bbox().translated(_text->pos()));
-      if (_endText)
+      if (!_endText->empty())
             shape.add(_endText->bbox().translated(_endText->pos()));
       qreal lw = textLineBase()->lineWidth().val() * spatium();
       if (twoLines) {   // hairpins
@@ -141,31 +145,6 @@ Shape TextLineBaseSegment::shape() const
       }
 
 //---------------------------------------------------------
-//   setText
-//---------------------------------------------------------
-
-void TextLineBaseSegment::setText(Text* t)
-      {
-      if (t) {
-            if (_text == 0) {
-                  _text = new Text(*t);
-                  _text->setFlag(ElementFlag::MOVABLE, false);
-                  _text->setParent(this);
-                  }
-            else {
-                  _text->initSubStyle(t->subStyle());
-                  _text->setXmlText(t->xmlText());
-                  }
-            _text->setTrack(track());
-            _text->layout();
-            }
-      else {
-            delete _text;
-            _text = 0;
-            }
-      }
-
-//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
@@ -181,36 +160,42 @@ void TextLineBaseSegment::layout()
       switch (spannerSegmentType()) {
             case SpannerSegmentType::SINGLE:
             case SpannerSegmentType::BEGIN:
-                  setText(tl->_beginText);
+                  _text->setXmlText(tl->beginText());
+                  _text->setFamily(tl->beginFontFamily());
+                  _text->setSize(tl->beginFontSize());
+                  _text->setOffset(tl->beginTextOffset());
+                  _text->setAlign(tl->beginTextAlign());
                   break;
             case SpannerSegmentType::MIDDLE:
             case SpannerSegmentType::END:
-                  setText(tl->_continueText);
+                  _text->setXmlText(tl->continueText());
+                  _text->setFamily(tl->continueFontFamily());
+                  _text->setSize(tl->continueFontSize());
+                  _text->setOffset(tl->continueTextOffset());
+                  _text->setAlign(tl->continueTextAlign());
                   break;
             }
-      if ((isSingleType() || isEndType()) && tl->_endText) {
-            if (_endText == 0) {
-                  _endText = new Text(*tl->_endText);
-                  _endText->setFlag(ElementFlag::MOVABLE, false);
-                  _endText->setParent(this);
-                  }
-            else {
-                  _endText->initSubStyle(tl->_endText->subStyle());
-                  _endText->setXmlText(tl->_endText->xmlText());
-                  }
+      _text->setTrack(track());
+      _text->layout();
+
+      if ((isSingleType() || isEndType())) {
+            _endText->setXmlText(tl->endText());
+            _endText->setFamily(tl->endFontFamily());
+            _endText->setSize(tl->endFontSize());
+            _endText->setOffset(tl->endTextOffset());
+            _endText->setAlign(tl->endTextAlign());
             _endText->setTrack(track());
             _endText->layout();
             }
       else {
-            delete _endText;
-            _endText = 0;
+            _endText->setXmlText("");
             }
 
       QPointF pp1;
       QPointF pp2(pos2());
 
       // diagonal line with no text - just use the basic rectangle for line (ignore hooks)
-      if (!_text && !_endText && pp2.y() != 0) {
+      if (_text->empty() && _endText->empty() && pp2.y() != 0) {
             npoints = 2;
             points[0] = pp1;
             points[1] = pp2;
@@ -227,7 +212,7 @@ void TextLineBaseSegment::layout()
       qreal y2 = qMax(0.0, pp2.y()) - y0;
 
       qreal l = 0.0;
-      if (_text) {
+      if (!_text->empty()) {
             qreal textlineTextDistance = _spatium * .5;
             if (((isSingleType() || isBeginType()) && (tl->beginTextPlace() == PlaceText::LEFT)) || ((isMiddleType() || isEndType()) && (tl->continueTextPlace() == PlaceText::LEFT)))
                   l = _text->pos().x() + _text->bbox().width() + textlineTextDistance;
@@ -243,7 +228,7 @@ void TextLineBaseSegment::layout()
             x2 = qMax(x2, _text->width());
             }
 
-      if (textLineBase()->endHook()) {
+      if (textLineBase()->endHookType() != HookType::NONE) {
             qreal h = pp2.y() + point(textLineBase()->endHookHeight());
             if (h > y2)
                   y2 = h;
@@ -251,7 +236,7 @@ void TextLineBaseSegment::layout()
                   y1 = h;
             }
 
-      if (textLineBase()->beginHook()) {
+      if (textLineBase()->beginHookType() != HookType::NONE) {
             qreal h = point(textLineBase()->beginHookHeight());
             if (h > y2)
                   y2 = h;
@@ -259,10 +244,10 @@ void TextLineBaseSegment::layout()
                   y1 = h;
             }
       bbox().setRect(x1, y1, x2 - x1, y2 - y1);
-      if (_text)
+      if (!_text->empty())
             bbox() |= _text->bbox().translated(_text->pos());  // DEBUG
       // set end text position and extend bbox
-      if (_endText) {
+      if (!_endText->empty()) {
             _endText->setPos(bbox().right(), 0);
             bbox() |= _endText->bbox().translated(_endText->pos());
             }
@@ -276,14 +261,14 @@ void TextLineBaseSegment::layout()
             qreal beginHookWidth;
             qreal endHookWidth;
 
-            if (tl->beginHook() && tl->beginHookType() == HookType::HOOK_45) {
+            if (tl->beginHookType() == HookType::HOOK_45) {
                   beginHookWidth = fabs(tl->beginHookHeight().val() * _spatium * .4);
                   pp1.rx() += beginHookWidth;
                   }
             else
                   beginHookWidth = 0;
 
-            if (tl->endHook() && tl->endHookType() == HookType::HOOK_45) {
+            if (tl->endHookType() == HookType::HOOK_45) {
                   endHookWidth = fabs(tl->endHookHeight().val() * _spatium * .4);
                   pp2.rx() -= endHookWidth;
                   }
@@ -291,9 +276,9 @@ void TextLineBaseSegment::layout()
                   endHookWidth = 0;
 
             // don't draw backwards lines (or hooks) if text is longer than nominal line length
-            bool backwards = _text && pp1.x() > pp2.x() && !tl->diagonal();
+            bool backwards = !_text->empty() && pp1.x() > pp2.x() && !tl->diagonal();
 
-            if (tl->beginHook() && (isSingleType() || isBeginType())) {
+            if ((tl->beginHookType() != HookType::NONE) && (isSingleType() || isBeginType())) {
                   qreal hh = tl->beginHookHeight().val() * _spatium;
                   points[npoints] = QPointF(pp1.x() - beginHookWidth, pp1.y() + hh);
                   ++npoints;
@@ -305,7 +290,7 @@ void TextLineBaseSegment::layout()
                   points[npoints] = pp2;
                   // painter->drawLine(QLineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
 
-                  if (tl->endHook() && (isSingleType() || isEndType())) {
+                  if ((tl->endHookType() != HookType::NONE) && (isSingleType() || isEndType())) {
                         ++npoints;
                         qreal hh = tl->endHookHeight().val() * _spatium;
                         // painter->drawLine(QLineF(pp2.x(), pp2.y(), pp2.x() + endHookWidth, pp2.y() + hh));
@@ -322,9 +307,48 @@ void TextLineBaseSegment::layout()
 void TextLineBaseSegment::spatiumChanged(qreal ov, qreal nv)
       {
       textLineBase()->spatiumChanged(ov, nv);
-      if (_text)
-            _text->spatiumChanged(ov, nv);
+      _text->spatiumChanged(ov, nv);
+      _endText->spatiumChanged(ov, nv);
       }
+
+//---------------------------------------------------------
+//   pids
+//---------------------------------------------------------
+
+static constexpr std::array<P_ID, 32> pids = { {
+      P_ID::LINE_VISIBLE,
+      P_ID::BEGIN_HOOK_TYPE,
+      P_ID::BEGIN_HOOK_HEIGHT,
+      P_ID::END_HOOK_TYPE,
+      P_ID::END_HOOK_HEIGHT,
+      P_ID::BEGIN_TEXT,
+      P_ID::BEGIN_TEXT_ALIGN,
+      P_ID::BEGIN_TEXT_PLACE,
+      P_ID::BEGIN_FONT_FACE,
+      P_ID::BEGIN_FONT_SIZE,
+      P_ID::BEGIN_FONT_BOLD,
+      P_ID::BEGIN_FONT_ITALIC,
+      P_ID::BEGIN_FONT_UNDERLINE,
+      P_ID::BEGIN_TEXT_OFFSET,
+      P_ID::CONTINUE_TEXT,
+      P_ID::CONTINUE_TEXT_ALIGN,
+      P_ID::CONTINUE_TEXT_PLACE,
+      P_ID::CONTINUE_FONT_FACE,
+      P_ID::CONTINUE_FONT_SIZE,
+      P_ID::CONTINUE_FONT_BOLD,
+      P_ID::CONTINUE_FONT_ITALIC,
+      P_ID::CONTINUE_FONT_UNDERLINE,
+      P_ID::CONTINUE_TEXT_OFFSET,
+      P_ID::END_TEXT,
+      P_ID::END_TEXT_ALIGN,
+      P_ID::END_TEXT_PLACE,
+      P_ID::END_FONT_FACE,
+      P_ID::END_FONT_SIZE,
+      P_ID::END_FONT_BOLD,
+      P_ID::END_FONT_ITALIC,
+      P_ID::END_FONT_UNDERLINE,
+      P_ID::END_TEXT_OFFSET,
+      } };
 
 //---------------------------------------------------------
 //   getProperty
@@ -332,26 +356,11 @@ void TextLineBaseSegment::spatiumChanged(qreal ov, qreal nv)
 
 QVariant TextLineBaseSegment::getProperty(P_ID id) const
       {
-      switch (id) {
-            case P_ID::BEGIN_TEXT_PLACE:
-            case P_ID::CONTINUE_TEXT_PLACE:
-            case P_ID::END_TEXT_PLACE:
-            case P_ID::BEGIN_HOOK:
-            case P_ID::END_HOOK:
-            case P_ID::BEGIN_HOOK_HEIGHT:
-            case P_ID::END_HOOK_HEIGHT:
-            case P_ID::BEGIN_HOOK_TYPE:
-            case P_ID::END_HOOK_TYPE:
-            case P_ID::BEGIN_TEXT:
-            case P_ID::CONTINUE_TEXT:
-            case P_ID::END_TEXT:
-            case P_ID::LINE_VISIBLE:
-            case P_ID::LINE_COLOR:
-            case P_ID::LINE_WIDTH:
+      for (P_ID pid : pids) {
+            if (pid == id)
                   return textLineBase()->getProperty(id);
-            default:
-                  return LineSegment::getProperty(id);
             }
+      return LineSegment::getProperty(id);
       }
 
 //---------------------------------------------------------
@@ -360,26 +369,11 @@ QVariant TextLineBaseSegment::getProperty(P_ID id) const
 
 bool TextLineBaseSegment::setProperty(P_ID id, const QVariant& v)
       {
-      switch (id) {
-            case P_ID::BEGIN_TEXT_PLACE:
-            case P_ID::CONTINUE_TEXT_PLACE:
-            case P_ID::END_TEXT_PLACE:
-            case P_ID::BEGIN_HOOK:
-            case P_ID::END_HOOK:
-            case P_ID::BEGIN_HOOK_HEIGHT:
-            case P_ID::END_HOOK_HEIGHT:
-            case P_ID::BEGIN_HOOK_TYPE:
-            case P_ID::END_HOOK_TYPE:
-            case P_ID::BEGIN_TEXT:
-            case P_ID::CONTINUE_TEXT:
-            case P_ID::END_TEXT:
-            case P_ID::LINE_VISIBLE:
-            case P_ID::LINE_COLOR:
-            case P_ID::LINE_WIDTH:
+      for (P_ID pid : pids) {
+            if (pid == id)
                   return textLineBase()->setProperty(id, v);
-            default:
-                  return LineSegment::setProperty(id, v);
             }
+      return LineSegment::setProperty(id, v);
       }
 
 //---------------------------------------------------------
@@ -388,26 +382,11 @@ bool TextLineBaseSegment::setProperty(P_ID id, const QVariant& v)
 
 QVariant TextLineBaseSegment::propertyDefault(P_ID id) const
       {
-      switch (id) {
-            case P_ID::BEGIN_TEXT_PLACE:
-            case P_ID::CONTINUE_TEXT_PLACE:
-            case P_ID::END_TEXT_PLACE:
-            case P_ID::BEGIN_HOOK:
-            case P_ID::END_HOOK:
-            case P_ID::BEGIN_HOOK_HEIGHT:
-            case P_ID::END_HOOK_HEIGHT:
-            case P_ID::BEGIN_HOOK_TYPE:
-            case P_ID::END_HOOK_TYPE:
-            case P_ID::BEGIN_TEXT:
-            case P_ID::CONTINUE_TEXT:
-            case P_ID::END_TEXT:
-            case P_ID::LINE_VISIBLE:
-            case P_ID::LINE_COLOR:
-            case P_ID::LINE_WIDTH:
+      for (P_ID pid : pids) {
+            if (pid == id)
                   return textLineBase()->propertyDefault(id);
-            default:
-                  return LineSegment::propertyDefault(id);
             }
+      return LineSegment::propertyDefault(id);
       }
 
 //---------------------------------------------------------
@@ -417,199 +396,15 @@ QVariant TextLineBaseSegment::propertyDefault(P_ID id) const
 TextLineBase::TextLineBase(Score* s)
    : SLine(s)
       {
-      _beginText         = 0;
-      _continueText      = 0;
-      _endText           = 0;
-
-      _beginHookHeight   = Spatium(1.5);
-      _endHookHeight     = Spatium(1.5);
-      _lineVisible       = true;
-      _beginHook         = false;
-      _endHook           = false;
-      _beginHookType     = HookType::HOOK_90;
-      _endHookType       = HookType::HOOK_90;
-
-      _beginTextPlace    = PlaceText::LEFT;
-      _continueTextPlace = PlaceText::LEFT;
-      _endTextPlace      = PlaceText::LEFT;
+      for (P_ID pid : pids)
+            setProperty(pid, propertyDefault(pid));
       }
 
 TextLineBase::TextLineBase(const TextLineBase& e)
    : SLine(e)
       {
-      _beginTextPlace       = e._beginTextPlace;
-      _continueTextPlace    = e._continueTextPlace;
-      _endTextPlace         = e._endTextPlace;
-
-      _lineVisible          = e._lineVisible;
-      _beginHook            = e._beginHook;
-      _endHook              = e._endHook;
-      _beginHookType        = e._beginHookType;
-      _endHookType          = e._endHookType;
-      _beginHookHeight      = e._beginHookHeight;
-      _endHookHeight        = e._endHookHeight;
-
-      _beginText            = 0;
-      _continueText         = 0;
-      _endText              = 0;
-
-      if (e._beginText) {
-            _beginText = e._beginText->clone(); // deep copy
-            _beginText->setParent(this);
-            }
-      if (e._continueText) {
-            _continueText = e._continueText->clone();
-            _continueText->setParent(this);
-            }
-      if (e._endText) {
-            _endText = e._endText->clone();
-            _endText->setParent(this);
-            }
-      }
-
-//---------------------------------------------------------
-//   TextLineBase
-//---------------------------------------------------------
-
-TextLineBase::~TextLineBase()
-      {
-      delete _beginText;
-      delete _continueText;
-      delete _endText;
-      }
-
-//---------------------------------------------------------
-//   setScore
-//---------------------------------------------------------
-
-void TextLineBase::setScore(Score* s)
-      {
-      Spanner::setScore(s);
-      if (_beginText)
-            _beginText->setScore(s);
-      if (_continueText)
-            _continueText->setScore(s);
-      if (_endText)
-            _endText->setScore(s);
-      }
-
-//---------------------------------------------------------
-//   createBeginTextElement
-//---------------------------------------------------------
-
-void TextLineBase::createBeginTextElement()
-      {
-      if (!_beginText) {
-            _beginText = new Text(SubStyle(propertyDefault(P_ID::SUB_STYLE).toInt()), score());
-            _beginText->setParent(this);
-            }
-      }
-
-//---------------------------------------------------------
-//   createContinueTextElement
-//---------------------------------------------------------
-
-void TextLineBase::createContinueTextElement()
-      {
-      if (!_continueText) {
-            _continueText = new Text(SubStyle(propertyDefault(P_ID::SUB_STYLE).toInt()), score());
-            _continueText->setParent(this);
-            }
-      }
-
-//---------------------------------------------------------
-//   createEndTextElement
-//---------------------------------------------------------
-
-void TextLineBase::createEndTextElement()
-      {
-      if (!_endText) {
-            _endText = new Text(SubStyle(propertyDefault(P_ID::SUB_STYLE).toInt()), score());
-            _endText->setParent(this);
-            }
-      }
-
-//---------------------------------------------------------
-//   setBeginText
-//---------------------------------------------------------
-
-void TextLineBase::setBeginText(const QString& s, SubStyle subStyle)
-      {
-      if (!_beginText) {
-            _beginText = new Text(subStyle, score());
-            _beginText->setParent(this);
-            }
-      else
-            _beginText->initSubStyle(subStyle);
-      _beginText->setXmlText(s);
-      }
-
-void TextLineBase::setBeginText(const QString& s)
-      {
-      if (s.isEmpty()) {
-            delete _beginText;
-            _beginText = 0;
-            return;
-            }
-      createBeginTextElement();
-      _beginText->setXmlText(s);
-      }
-
-//---------------------------------------------------------
-//   setContinueText
-//---------------------------------------------------------
-
-void TextLineBase::setContinueText(const QString& s, SubStyle textStyle)
-      {
-      if (!_continueText) {
-            _continueText = new Text(textStyle, score());
-            _continueText->setParent(this);
-            }
-      else
-            _continueText->initSubStyle(textStyle);
-      _continueText->setXmlText(s);
-      }
-
-void TextLineBase::setContinueText(const QString& s)
-      {
-      if (s.isEmpty()) {
-            delete _continueText;
-            _continueText = 0;
-            return;
-            }
-      createContinueTextElement();
-      _continueText->setXmlText(s);
-      }
-
-//---------------------------------------------------------
-//   setEndText
-//---------------------------------------------------------
-
-void TextLineBase::setEndText(const QString& s, SubStyle textStyle)
-      {
-      if (s.isEmpty()) {
-            delete _endText;
-            _endText = 0;
-            return;
-            }
-      if (!_endText) {
-            _endText = new Text(textStyle, score());
-            _endText->setParent(this);
-            }
-      else
-            _endText->initSubStyle(textStyle);
-      _endText->setXmlText(s);
-      }
-
-void TextLineBase::setEndText(const QString& s)
-      {
-      if (s.isEmpty()) {
-            delete _endText;
-            _endText = 0;
-            return;
-            }
-      createEndTextElement();
-      _endText->setXmlText(s);
+      for (P_ID pid : pids)
+            setProperty(pid, e.getProperty(pid));
       }
 
 //---------------------------------------------------------
@@ -647,37 +442,6 @@ void TextLineBase::read(XmlReader& e)
 
 void TextLineBase::spatiumChanged(qreal ov, qreal nv)
       {
-      if (_beginText)
-            _beginText->spatiumChanged(ov, nv);
-      if (_continueText)
-            _continueText->spatiumChanged(ov, nv);
-      }
-
-//---------------------------------------------------------
-//   beginText
-//---------------------------------------------------------
-
-QString TextLineBase::beginText() const
-      {
-      return _beginText ? _beginText->xmlText() : "";
-      }
-
-//---------------------------------------------------------
-//   continueText
-//---------------------------------------------------------
-
-QString TextLineBase::continueText() const
-      {
-      return _continueText ? _continueText->xmlText() : "";
-      }
-
-//---------------------------------------------------------
-//   endText
-//---------------------------------------------------------
-
-QString TextLineBase::endText() const
-      {
-      return _endText ? _endText->xmlText() : "";
       }
 
 //---------------------------------------------------------
@@ -687,52 +451,9 @@ QString TextLineBase::endText() const
 
 void TextLineBase::writeProperties(XmlWriter& xml) const
       {
-      writeProperty(xml, P_ID::LINE_VISIBLE);
-      writeProperty(xml, P_ID::BEGIN_HOOK);
-      writeProperty(xml, P_ID::BEGIN_HOOK_HEIGHT);
-      writeProperty(xml, P_ID::BEGIN_HOOK_TYPE);
-      writeProperty(xml, P_ID::END_HOOK);
-      writeProperty(xml, P_ID::END_HOOK_HEIGHT);
-      writeProperty(xml, P_ID::END_HOOK_TYPE);
-      writeProperty(xml, P_ID::BEGIN_TEXT_PLACE);
-      writeProperty(xml, P_ID::CONTINUE_TEXT_PLACE);
-      writeProperty(xml, P_ID::END_TEXT_PLACE);
-
+      for (P_ID pid : pids)
+            writeProperty(xml, pid);
       SLine::writeProperties(xml);
-
-      if (_beginText && !_beginText->generated()) {
-            xml.stag("beginText");
-            _beginText->writeProperties(xml);
-            xml.etag();
-            }
-      if (_continueText && !_continueText->generated()) {
-            xml.stag("continueText");
-            _continueText->writeProperties(xml);
-            xml.etag();
-            }
-      if (_endText && !_endText->generated()) {
-            xml.stag("endText");
-            _endText->writeProperties(xml);
-            xml.etag();
-            }
-      }
-
-//---------------------------------------------------------
-//   resolveSymCompatibility
-//---------------------------------------------------------
-
-static QString resolveSymCompatibility(SymId i, QString programVersion)
-      {
-      if (!programVersion.isEmpty() && programVersion < "1.1")
-            i = SymId(int(i) + 5);
-      switch(int(i)) {
-            case 197:   return "keyboardPedalPed";
-            case 191:   return "keyboardPedalUp";
-            case 193:   return "noSym"; //SymId(pedaldotSym);
-            case 192:   return "noSym"; //SymId(pedaldashSym);
-            case 139:   return "ornamentTrill";
-            default:    return "noSym";
-            }
       }
 
 //---------------------------------------------------------
@@ -742,85 +463,13 @@ static QString resolveSymCompatibility(SymId i, QString programVersion)
 bool TextLineBase::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
-
-      if (tag == "lineVisible")
-            _lineVisible = e.readBool();
-      else if (tag == "beginHook")
-            _beginHook = e.readBool();
-      else if (tag == "beginHookHeight") {
-            _beginHookHeight = Spatium(e.readDouble());
-            if (score()->mscVersion() <= 114)
-                  _beginHook = true;
-            }
-      else if (tag == "beginHookType")
-            _beginHookType = HookType(e.readInt());
-      else if (tag == "endHook")
-            _endHook = e.readBool();
-      else if (tag == "endHookHeight" || tag == "hookHeight") { // hookHeight is obsolete
-            _endHookHeight = Spatium(e.readDouble());
-            if (score()->mscVersion() <= 114)
-                  _endHook = true;
-            }
-      else if (tag == "endHookType")
-            _endHookType = HookType(e.readInt());
-      else if (tag == "hookUp")                       // obsolete
-            _endHookHeight *= qreal(-1.0);
-      else if (tag == "beginSymbol" || tag == "symbol") {     // "symbol" is obsolete
-            QString text(e.readElementText());
-            setBeginText(QString("<sym>%1</sym>").arg(text[0].isNumber() ? resolveSymCompatibility(SymId(text.toInt()), score()->mscoreVersion()) : text));
-            }
-      else if (tag == "continueSymbol") {
-            QString text(e.readElementText());
-            setContinueText(QString("<sym>%1</sym>").arg(text[0].isNumber() ? resolveSymCompatibility(SymId(text.toInt()), score()->mscoreVersion()) : text));
-            }
-      else if (tag == "endSymbol") {
-            QString text(e.readElementText());
-            setEndText(QString("<sym>%1</sym>").arg(text[0].isNumber() ? resolveSymCompatibility(SymId(text.toInt()), score()->mscoreVersion()) : text));
-            }
-      else if (tag == "beginSymbolOffset")            // obsolete
-            e.readPoint();
-      else if (tag == "continueSymbolOffset")         // obsolete
-            e.readPoint();
-      else if (tag == "endSymbolOffset")              // obsolete
-            e.readPoint();
-      else if (tag == "beginTextPlace")
-            _beginTextPlace = readPlacement(e);
-      else if (tag == "continueTextPlace")
-            _continueTextPlace = readPlacement(e);
-      else if (tag == "endTextPlace")
-            _endTextPlace = readPlacement(e);
-      else if (tag == "beginText") {
-            if (!_beginText) {
-                  _beginText = new Text(SubStyle(propertyDefault(P_ID::SUB_STYLE).toInt()), score());
-                  _beginText->setParent(this);
+      for (P_ID i :pids) {
+            if (readProperty(tag, e, i)) {
+                  setPropertyFlags(i, PropertyFlags::UNSTYLED);
+                  return true;
                   }
-            else
-                  _beginText->setXmlText("");
-            _beginText->read(e);
             }
-      else if (tag == "continueText") {
-            if (!_continueText) {
-                  _continueText = new Text(SubStyle(propertyDefault(P_ID::SUB_STYLE).toInt()), score());
-                  _continueText->setParent(this);
-                  }
-            else
-                  _continueText->setXmlText("");
-            _continueText->read(e);
-            }
-      else if (tag == "endText") {
-            if (!_endText) {
-                  _endText = new Text(SubStyle(propertyDefault(P_ID::SUB_STYLE).toInt()), score());
-                  _endText->setParent(this);
-                  }
-            else
-                  _endText->setXmlText("");
-            _endText->read(e);
-            }
-      else if (!SLine::readProperties(e)) {
-            qDebug(" ==readSLineProps: failed");
-            return false;
-            }
-      return true;
+      return SLine::readProperties(e);
       }
 
 //---------------------------------------------------------
@@ -830,30 +479,68 @@ bool TextLineBase::readProperties(XmlReader& e)
 QVariant TextLineBase::getProperty(P_ID id) const
       {
       switch (id) {
-            case P_ID::BEGIN_TEXT_PLACE:
-                  return int(_beginTextPlace);
-            case P_ID::CONTINUE_TEXT_PLACE:
-                  return int(_continueTextPlace);
-            case P_ID::END_TEXT_PLACE:
-                  return int(_endTextPlace);
-            case P_ID::BEGIN_HOOK:
-                  return _beginHook;
-            case P_ID::END_HOOK:
-                  return _endHook;
-            case P_ID::BEGIN_HOOK_HEIGHT:
-                  return _beginHookHeight;
-            case P_ID::END_HOOK_HEIGHT:
-                  return _endHookHeight;
-            case P_ID::BEGIN_HOOK_TYPE:
-                  return int(_beginHookType);
-            case P_ID::END_HOOK_TYPE:
-                  return int(_endHookType);
             case P_ID::BEGIN_TEXT:
                   return beginText();
+            case P_ID::BEGIN_TEXT_ALIGN:
+                  return int(beginTextAlign());
+            case P_ID::CONTINUE_TEXT_ALIGN:
+                  return int(continueTextAlign());
+            case P_ID::END_TEXT_ALIGN:
+                  return int(endTextAlign());
+            case P_ID::BEGIN_TEXT_PLACE:
+                  return int(_beginTextPlace);
+            case P_ID::BEGIN_HOOK_TYPE:
+                  return int(_beginHookType);
+            case P_ID::BEGIN_HOOK_HEIGHT:
+                  return _beginHookHeight;
+            case P_ID::BEGIN_FONT_FACE:
+                  return _beginFontFamily;
+            case P_ID::BEGIN_FONT_SIZE:
+                  return _beginFontSize;
+            case P_ID::BEGIN_FONT_BOLD:
+                  return _beginFontBold;
+            case P_ID::BEGIN_FONT_ITALIC:
+                  return _beginFontItalic;
+            case P_ID::BEGIN_FONT_UNDERLINE:
+                  return _beginFontUnderline;
+            case P_ID::BEGIN_TEXT_OFFSET:
+                  return _beginTextOffset;
             case P_ID::CONTINUE_TEXT:
                   return continueText();
+            case P_ID::CONTINUE_TEXT_PLACE:
+                  return int(_continueTextPlace);
+            case P_ID::CONTINUE_FONT_FACE:
+                  return _continueFontFamily;
+            case P_ID::CONTINUE_FONT_SIZE:
+                  return _continueFontSize;
+            case P_ID::CONTINUE_FONT_BOLD:
+                  return _continueFontBold;
+            case P_ID::CONTINUE_FONT_ITALIC:
+                  return _continueFontItalic;
+            case P_ID::CONTINUE_FONT_UNDERLINE:
+                  return _continueFontUnderline;
+            case P_ID::CONTINUE_TEXT_OFFSET:
+                  return _continueTextOffset;
             case P_ID::END_TEXT:
                   return endText();
+            case P_ID::END_TEXT_PLACE:
+                  return int(_endTextPlace);
+            case P_ID::END_HOOK_TYPE:
+                  return int(_endHookType);
+            case P_ID::END_HOOK_HEIGHT:
+                  return _endHookHeight;
+            case P_ID::END_FONT_FACE:
+                  return _endFontFamily;
+            case P_ID::END_FONT_SIZE:
+                  return _endFontSize;
+            case P_ID::END_FONT_BOLD:
+                  return _endFontBold;
+            case P_ID::END_FONT_ITALIC:
+                  return _endFontItalic;
+            case P_ID::END_FONT_UNDERLINE:
+                  return _endFontUnderline;
+            case P_ID::END_TEXT_OFFSET:
+                  return _endTextOffset;
             case P_ID::LINE_VISIBLE:
                   return lineVisible();
             default:
@@ -871,17 +558,20 @@ bool TextLineBase::setProperty(P_ID id, const QVariant& v)
             case P_ID::BEGIN_TEXT_PLACE:
                   _beginTextPlace = PlaceText(v.toInt());
                   break;
+            case P_ID::BEGIN_TEXT_ALIGN:
+                  _beginTextAlign = Align(v.toInt());
+                  break;
+            case P_ID::CONTINUE_TEXT_ALIGN:
+                  _continueTextAlign = Align(v.toInt());
+                  break;
+            case P_ID::END_TEXT_ALIGN:
+                  _endTextAlign = Align(v.toInt());
+                  break;
             case P_ID::CONTINUE_TEXT_PLACE:
                   _continueTextPlace = PlaceText(v.toInt());
                   break;
             case P_ID::END_TEXT_PLACE:
                   _endTextPlace = PlaceText(v.toInt());
-                  break;
-            case P_ID::BEGIN_HOOK:
-                  _beginHook = v.toBool();
-                  break;
-            case P_ID::END_HOOK:
-                  _endHook = v.toBool();
                   break;
             case P_ID::BEGIN_HOOK_HEIGHT:
                   _beginHookHeight = v.value<Spatium>();
@@ -898,6 +588,15 @@ bool TextLineBase::setProperty(P_ID id, const QVariant& v)
             case P_ID::BEGIN_TEXT:
                   setBeginText(v.toString());
                   break;
+            case P_ID::BEGIN_TEXT_OFFSET:
+                  setBeginTextOffset(v.toPointF());
+                  break;
+            case P_ID::CONTINUE_TEXT_OFFSET:
+                  setContinueTextOffset(v.toPointF());
+                  break;
+            case P_ID::END_TEXT_OFFSET:
+                  setEndTextOffset(v.toPointF());
+                  break;
             case P_ID::CONTINUE_TEXT:
                   setContinueText(v.toString());
                   break;
@@ -907,6 +606,54 @@ bool TextLineBase::setProperty(P_ID id, const QVariant& v)
             case P_ID::LINE_VISIBLE:
                   setLineVisible(v.toBool());
                   break;
+            case P_ID::BEGIN_FONT_FACE:
+                  setBeginFontFamily(v.toString());
+                  break;
+            case P_ID::BEGIN_FONT_SIZE:
+                  if (v.toReal() <= 0)
+                        qDebug("font size is %f", v.toReal());
+                  setBeginFontSize(v.toReal());
+                  break;
+            case P_ID::BEGIN_FONT_BOLD:
+                  setBeginFontBold(v.toBool());
+                  break;
+            case P_ID::BEGIN_FONT_ITALIC:
+                  setBeginFontItalic(v.toBool());
+                  break;
+            case P_ID::BEGIN_FONT_UNDERLINE:
+                  setBeginFontUnderline(v.toBool());
+                  break;
+            case P_ID::CONTINUE_FONT_FACE:
+                  setContinueFontFamily(v.toString());
+                  break;
+            case P_ID::CONTINUE_FONT_SIZE:
+                  setContinueFontSize(v.toReal());
+                  break;
+            case P_ID::CONTINUE_FONT_BOLD:
+                  setContinueFontBold(v.toBool());
+                  break;
+            case P_ID::CONTINUE_FONT_ITALIC:
+                  setContinueFontItalic(v.toBool());
+                  break;
+            case P_ID::CONTINUE_FONT_UNDERLINE:
+                  setContinueFontUnderline(v.toBool());
+                  break;
+            case P_ID::END_FONT_FACE:
+                  setEndFontFamily(v.toString());
+                  break;
+            case P_ID::END_FONT_SIZE:
+                  setEndFontSize(v.toReal());
+                  break;
+            case P_ID::END_FONT_BOLD:
+                  setEndFontBold(v.toBool());
+                  break;
+            case P_ID::END_FONT_ITALIC:
+                  setEndFontItalic(v.toBool());
+                  break;
+            case P_ID::END_FONT_UNDERLINE:
+                  setEndFontUnderline(v.toBool());
+                  break;
+
             default:
                   return SLine::setProperty(id, v);
             }
@@ -921,38 +668,51 @@ bool TextLineBase::setProperty(P_ID id, const QVariant& v)
 QVariant TextLineBase::propertyDefault(P_ID id) const
       {
       switch (id) {
+            case P_ID::CONTINUE_TEXT:
+            case P_ID::BEGIN_TEXT:
+            case P_ID::END_TEXT:
+                  return QString("");
             case P_ID::BEGIN_TEXT_PLACE:
             case P_ID::CONTINUE_TEXT_PLACE:
             case P_ID::END_TEXT_PLACE:
                   return int(PlaceText::LEFT);
-            case P_ID::BEGIN_HOOK:
-            case P_ID::END_HOOK:
-                  return false;
+            case P_ID::BEGIN_HOOK_TYPE:
+            case P_ID::END_HOOK_TYPE:
+                  return int(HookType::NONE);
             case P_ID::BEGIN_HOOK_HEIGHT:
             case P_ID::END_HOOK_HEIGHT:
                   return Spatium(1.5);
-            case P_ID::BEGIN_HOOK_TYPE:
-            case P_ID::END_HOOK_TYPE:
-                  return int(HookType::HOOK_90);
-            case P_ID::BEGIN_TEXT:
-            case P_ID::CONTINUE_TEXT:
-            case P_ID::END_TEXT:
-                  return QString("");
+            case P_ID::BEGIN_FONT_FACE:
+            case P_ID::CONTINUE_FONT_FACE:
+            case P_ID::END_FONT_FACE:
+                  return QString("FreeSerif");
+            case P_ID::BEGIN_FONT_SIZE:
+            case P_ID::CONTINUE_FONT_SIZE:
+            case P_ID::END_FONT_SIZE:
+                  return 10.0;
+            case P_ID::BEGIN_FONT_BOLD:
+            case P_ID::BEGIN_FONT_ITALIC:
+            case P_ID::BEGIN_FONT_UNDERLINE:
+            case P_ID::CONTINUE_FONT_BOLD:
+            case P_ID::CONTINUE_FONT_ITALIC:
+            case P_ID::CONTINUE_FONT_UNDERLINE:
+            case P_ID::END_FONT_BOLD:
+            case P_ID::END_FONT_ITALIC:
+            case P_ID::END_FONT_UNDERLINE:
+                  return false;
+            case P_ID::BEGIN_TEXT_OFFSET:
+            case P_ID::CONTINUE_TEXT_OFFSET:
+            case P_ID::END_TEXT_OFFSET:
+                  return QPointF();
+            case P_ID::BEGIN_TEXT_ALIGN:
+            case P_ID::CONTINUE_TEXT_ALIGN:
+            case P_ID::END_TEXT_ALIGN:
+                  return int(Align::LEFT);
             case P_ID::LINE_VISIBLE:
                   return true;
-#if 0
-            case P_ID::BEGIN_SUB_STYLE:
-            case P_ID::CONTINUE_SUB_STYLE:
-            case P_ID::END_SUB_STYLE:
-//                  return QVariant::fromValue(score()->textStyleV(ertyDefault(P_ID::TEXT_STYLE_TYPE).toInt())));
-            case P_ID::TEXT_STYLE_TYPE:
-                  return int(StyledPropertyListIdx::TEXTLINE);
-#endif
-
             default:
                   return SLine::propertyDefault(id);
             }
       }
-
 }
 

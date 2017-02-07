@@ -135,11 +135,9 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
         </Measure>
       <Measure number="3">
         <Volta id="2">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>1.</text>
-            </beginText>
+          <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -205,7 +203,7 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
       <Measure number="5">
         <endSpanner id="2"/>
         <Volta id="3">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
           <Segment>
             <subtype>1</subtype>
@@ -215,9 +213,7 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
             <subtype>3</subtype>
             <off2 x="0" y="0"/>
             </Segment>
-          <beginText>
-            <text>2.</text>
-            </beginText>
+          <beginText>2.</beginText>
           <endings>1</endings>
           </Volta>
         <Chord>
@@ -346,11 +342,9 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
       <Measure number="9">
         <endSpanner id="3"/>
         <Volta id="4">
-          <endHook>1</endHook>
+          <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
-          <beginText>
-            <text>3.</text>
-            </beginText>
+          <beginText>3.</beginText>
           <endings>3</endings>
           </Volta>
         <Chord>

@@ -90,7 +90,6 @@
               <text>gliss.</text>
               <subtype>0</subtype>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             <endSpanner id="3"/>
@@ -112,7 +111,6 @@
               <subtype>0</subtype>
               <track>1</track>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             </Note>
@@ -129,7 +127,6 @@
               <subtype>0</subtype>
               <track>1</track>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             <endSpanner id="4"/>
@@ -160,7 +157,6 @@
               <text>gliss.</text>
               <subtype>0</subtype>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             </Note>
@@ -192,7 +188,6 @@
               <subtype>1</subtype>
               <track>1</track>
               <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
               </Glissando>
             </Note>
