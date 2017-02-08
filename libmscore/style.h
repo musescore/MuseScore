@@ -492,6 +492,10 @@ enum class StyleIdx {
       tempoAlign,
       tempoOffset,
       tempoSystemFlag,
+      tempoPlacement,
+      tempoPosAbove,
+      tempoPosBelow,
+      tempoMinDistance,
 
       metronomeFontFace,
       metronomeFontSize,

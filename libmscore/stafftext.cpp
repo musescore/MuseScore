@@ -15,6 +15,7 @@
 #include "system.h"
 #include "staff.h"
 #include "xml.h"
+#include "measure.h"
 
 namespace Ms {
 
@@ -206,8 +207,8 @@ void StaffText::layout()
 
       if (autoplace() && segment()) {
             qreal minDistance = score()->styleP(StyleIdx::dynamicsMinDistance);  // TODO
-            Shape s1          = segment()->staffShape(staffIdx()).translated(segment()->pos());
-            Shape s2          = shape().translated(segment()->pos());
+            Shape s1          = segment()->measure()->staffShape(staffIdx());
+            Shape s2          = shape().translated(segment()->pos() + pos());
 
             if (placement() == Element::Placement::ABOVE) {
                   qreal d = s2.minVerticalDistance(s1);

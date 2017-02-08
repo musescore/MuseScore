@@ -15,6 +15,7 @@
 #include "tempo.h"
 #include "system.h"
 #include "measure.h"
+#include "staff.h"
 #include "xml.h"
 
 namespace Ms {
@@ -31,7 +32,7 @@ TempoText::TempoText(Score* s)
       {
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
-      _relative = 1.0;
+      _relative   = 1.0;
       _isRelative = false;
       setPlacement(Element::Placement::ABOVE);
       }
@@ -64,16 +65,6 @@ void TempoText::read(XmlReader& e)
                   _followText = e.readInt();
             else if (!Text::readProperties(e))
                   e.unknown();
-            }
-      if (score()->mscVersion() <= 114) {
-            //
-            // Reset text in old version to
-            // style.
-            //
-//TODO            if (textStyle() != StyledPropertyListIdx::INVALID) {
-//                  setStyled(true);
-//                  styleChanged();
-//                  }
             }
       // check sanity
       if (xmlText().isEmpty()) {
@@ -161,6 +152,7 @@ QString TempoText::duration2tempoTextString(const TDuration dur)
 //---------------------------------------------------------
 // updateScore
 //---------------------------------------------------------
+
 void TempoText::updateScore()
       {
       if (segment())
@@ -172,6 +164,7 @@ void TempoText::updateScore()
 //---------------------------------------------------------
 // updateRelative
 //---------------------------------------------------------
+
 void TempoText::updateRelative()
       {
       qreal tempoBefore = score()->tempo(tick() - 1);
@@ -332,7 +325,15 @@ void TempoText::layout()
       {
       if (autoplace())
             setUserOff(QPointF());
-//      setPos(textStyle().offset(spatium()));
+
+      qreal y;
+      if (placeAbove())
+            y = score()->styleP(StyleIdx::tempoPosAbove);
+      else {
+            qreal sh = staff() ? staff()->height() : 0;
+            y = score()->styleP(StyleIdx::tempoPosBelow) + sh + lineSpacing();
+            }
+      setPos(QPointF(0.0, y));
       Text::layout1();
 
       // tempo text on first chordrest of measure should align over time sig if present
@@ -348,15 +349,20 @@ void TempoText::layout()
                   }
             }
 
-      if (placement() == Element::Placement::BELOW)
-            rypos() = -rypos() + 4 * spatium();
-
       if (s && autoplace()) {
-            Shape s1 = s->staffShape(staffIdx()).translated(s->pos());
-            Shape s2 = shape().translated(s->pos());
-            qreal d  = s2.minVerticalDistance(s1);
-            if (d > 0)
-                  setUserOff(QPointF(0.0, -d));
+            qreal minDistance = score()->styleP(StyleIdx::tempoMinDistance);
+            Shape s1 = s->measure()->staffShape(staffIdx());
+            Shape s2 = shape().translated(s->pos() + pos());
+            if (placeAbove()) {
+                  qreal d = s2.minVerticalDistance(s1);
+                  if (d > -minDistance)
+                        rUserYoffset() = -d - minDistance;
+                  }
+            else {
+                  qreal d = s1.minVerticalDistance(s2);
+                  if (d > -minDistance)
+                        rUserYoffset() = d + minDistance;
+                  }
             }
       if (!autoplace())
             adjustReadPos();

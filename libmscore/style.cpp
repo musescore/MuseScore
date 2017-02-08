@@ -511,6 +511,10 @@ static const StyleType styleTypes[] {
       { StyleIdx::tempoAlign,                    "tempoAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
       { StyleIdx::tempoOffset,                   "tempoOffset",                  QPointF(0.0, -4.0) },
       { StyleIdx::tempoSystemFlag,               "tempoSystemFlag",              true },
+      { StyleIdx::tempoPlacement,                "tempoPlacement",               int(Element::Placement::ABOVE)  },
+      { StyleIdx::tempoPosAbove,                 "tempoPosAbove",                Spatium(-2.0) },
+      { StyleIdx::tempoPosBelow,                 "tempoPosBelow",                Spatium(1.0)  },
+      { StyleIdx::tempoMinDistance,              "tempoMinDistance",             Spatium(.5)  },
 
       { StyleIdx::metronomeFontFace,             "metronomeFontFace",            "FreeSerif" },
       { StyleIdx::metronomeFontSize,             "metronomeFontSize",            12.0 },

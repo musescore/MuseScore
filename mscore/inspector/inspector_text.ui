@@ -117,7 +117,11 @@
        </widget>
       </item>
       <item row="1" column="1" colspan="2">
-       <widget class="QSpinBox" name="fontSize"/>
+       <widget class="QSpinBox" name="fontSize">
+        <property name="suffix">
+         <string>pt</string>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_9">
@@ -435,6 +439,12 @@
          </property>
          <item row="2" column="1">
           <widget class="QDoubleSpinBox" name="frameWidth">
+           <property name="prefix">
+            <string/>
+           </property>
+           <property name="suffix">
+            <string>sp</string>
+           </property>
            <property name="singleStep">
             <double>0.100000000000000</double>
            </property>
@@ -457,6 +467,9 @@
           <widget class="QLabel" name="label_6">
            <property name="text">
             <string>Foreground color:</string>
+           </property>
+           <property name="indent">
+            <number>30</number>
            </property>
            <property name="buddy">
             <cstring>frameColor</cstring>
@@ -484,6 +497,9 @@
            <property name="text">
             <string>Border thickness:</string>
            </property>
+           <property name="indent">
+            <number>30</number>
+           </property>
            <property name="buddy">
             <cstring>frameWidth</cstring>
            </property>
@@ -508,6 +524,9 @@
          </item>
          <item row="3" column="1">
           <widget class="QDoubleSpinBox" name="paddingWidth">
+           <property name="suffix">
+            <string>sp</string>
+           </property>
            <property name="singleStep">
             <double>0.200000000000000</double>
            </property>
@@ -517,6 +536,9 @@
           <widget class="QLabel" name="label_7">
            <property name="text">
             <string>Background color:</string>
+           </property>
+           <property name="indent">
+            <number>30</number>
            </property>
            <property name="buddy">
             <cstring>bgColor</cstring>
@@ -528,6 +550,9 @@
            <property name="text">
             <string>Text margin:</string>
            </property>
+           <property name="indent">
+            <number>30</number>
+           </property>
            <property name="buddy">
             <cstring>paddingWidth</cstring>
            </property>
@@ -537,6 +562,9 @@
           <widget class="QLabel" name="label_2">
            <property name="text">
             <string>Border radius:</string>
+           </property>
+           <property name="indent">
+            <number>30</number>
            </property>
            <property name="buddy">
             <cstring>frameRound</cstring>
