@@ -633,6 +633,15 @@ TextPalette::TextPalette(QWidget* parent)
 //   populateCommon
 //---------------------------------------------------------
 
+int unicodeAccidentals[] = { //better size and alignment, so put these first
+      0x266d,    // flat
+      0x266e,    // natural
+      0x266f     // sharp
+      // not supported in most fonts
+      // 0x1d12b,   // double flat
+      // 0x1d12a    // double sharp
+      };
+
 SymId commonScoreSymbols[] = {
       SymId::accidentalFlat,
       SymId::accidentalNatural,
@@ -680,10 +689,6 @@ SymId commonScoreSymbols[] = {
       };
 
 int commonTextSymbols[] = {
-      0x266d,    // flat
-      0x266e,    // natural
-      0x266f,    // sharp
-
       0x00a9,    // &copy;
 
       // upper case ligatures
@@ -801,6 +806,13 @@ int commonTextSymbols[] = {
 void TextPalette::populateCommon()
       {
       pCommon->clear();
+
+      for (auto id : unicodeAccidentals) {
+            FSymbol* fs = new FSymbol(gscore);
+            fs->setCode(id);
+            fs->setFont(_font);
+            pCommon->append(fs, QString(id));
+            }
 
       for (auto id : commonScoreSymbols) {
             Symbol* s = new Symbol(gscore);
