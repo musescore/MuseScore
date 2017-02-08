@@ -93,7 +93,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
                   data.startMove += delta;
 //TODO-ws                  _score->doLayoutSystems();
 //                  _score->layoutSpanner();
-                  _score->setLayoutAll();
+//                  _score->setLayoutAll();
                   _score->update();
 //                  update();
                   loopUpdate(getAction("loop")->isChecked());
@@ -105,16 +105,16 @@ void ScoreView::doDragElement(QMouseEvent* ev)
       //    you usually dont want dragging stems & hooks
       //    which would offset stems
 
-      bool dragNotes = false;
+//      bool dragNotes = false;
+//      for (Element* e : _score->selection().elements()) {
+//            if (e->isNote()) {
+//                  dragNotes = true;
+//                  break;
+//                  }
+//            }
       for (Element* e : _score->selection().elements()) {
-            if (e->isNote()) {
-                  dragNotes = true;
-                  break;
-                  }
-            }
-      for (Element* e : _score->selection().elements()) {
-            if (dragNotes && (e->isStem() || e->isHook()))
-                  continue;
+//            if (dragNotes && (e->isStem() || e->isHook()))
+//                  continue;
             _score->addRefresh(e->drag(&data));
             }
 

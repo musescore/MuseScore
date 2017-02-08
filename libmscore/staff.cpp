@@ -1184,6 +1184,8 @@ bool Staff::isTop() const
 QVariant Staff::getProperty(P_ID id) const
       {
       switch (id) {
+            case P_ID::MAG:
+                  return userMag(0);
             case P_ID::COLOR:
                   return color();
             case P_ID::PLAYBACK_VOICE1:
@@ -1215,6 +1217,12 @@ QVariant Staff::getProperty(P_ID id) const
 bool Staff::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
+            case P_ID::MAG: {
+                  qreal _spatium = spatium(0);
+                  setUserMag(0, v.toReal());
+                  score()->spatiumChanged(_spatium, spatium(0));
+                  }
+                  break;
             case P_ID::COLOR:
                   setColor(v.value<QColor>());
                   break;
@@ -1257,6 +1265,8 @@ bool Staff::setProperty(P_ID id, const QVariant& v)
 QVariant Staff::propertyDefault(P_ID id) const
       {
       switch (id) {
+            case P_ID::MAG:
+                  return 1.0;
             case P_ID::COLOR:
                   return QColor(Qt::black);
             case P_ID::PLAYBACK_VOICE1:

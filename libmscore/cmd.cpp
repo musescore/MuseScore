@@ -160,7 +160,6 @@ void Score::undoRedo(bool undo)
 
 void Score::endCmd(bool rollback)
       {
-      qDebug("++++%p", this);
       if (!undoStack()->active()) {
             qDebug("Score::endCmd(): no cmd active");
             update();
