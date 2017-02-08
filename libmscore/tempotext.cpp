@@ -265,8 +265,10 @@ void TempoText::undoSetFollowText(bool v)
 QVariant TempoText::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_ID::TEMPO:             return _tempo;
-            case P_ID::TEMPO_FOLLOW_TEXT: return _followText;
+            case P_ID::TEMPO:
+                  return _tempo;
+            case P_ID::TEMPO_FOLLOW_TEXT:
+                  return _followText;
             default:
                   return Text::getProperty(propertyId);
             }

@@ -560,7 +560,10 @@ enum class StyleIdx {
       rehearsalMarkFrameRound,
       rehearsalMarkFrameFgColor,
       rehearsalMarkFrameBgColor,
-      rehearsalMarkSystemFlag,
+      rehearsalMarkPlacement,
+      rehearsalMarkPosAbove,
+      rehearsalMarkPosBelow,
+      rehearsalMarkMinDistance,
 
       repeatLeftFontFace,
       repeatLeftFontSize,

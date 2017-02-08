@@ -13,7 +13,7 @@
 #ifndef __REHEARSALMARK_H__
 #define __REHEARSALMARK_H__
 
-#include "text.h"
+#include "systemtext.h"
 
 namespace Ms {
 

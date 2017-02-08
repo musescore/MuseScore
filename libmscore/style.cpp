@@ -571,15 +571,18 @@ static const StyleType styleTypes[] {
       { StyleIdx::rehearsalMarkFontBold,         "rehearsalMarkFontBold",        true },
       { StyleIdx::rehearsalMarkFontItalic,       "rehearsalMarkFontItalic",      false },
       { StyleIdx::rehearsalMarkFontUnderline,    "rehearsalMarkFontUnderline",   false },
-      { StyleIdx::rehearsalMarkFrame,            "rehearsalMarkFrame",           false },
+      { StyleIdx::rehearsalMarkFrame,            "rehearsalMarkFrame",           true  },
       { StyleIdx::rehearsalMarkFrameSquare,      "rehearsalMarkFrameSquare",     false },
       { StyleIdx::rehearsalMarkFrameCircle,      "rehearsalMarkFrameCircle",     false },
-      { StyleIdx::rehearsalMarkFramePadding,     "rehearsalMarkFramePadding",    0.2 },
-      { StyleIdx::rehearsalMarkFrameWidth,       "rehearsalMarkFrameWidth",      0.1 },
-      { StyleIdx::rehearsalMarkFrameRound,       "rehearsalMarkFrameRound",      0 },
+      { StyleIdx::rehearsalMarkFramePadding,     "rehearsalMarkFramePadding",    0.5 },
+      { StyleIdx::rehearsalMarkFrameWidth,       "rehearsalMarkFrameWidth",      0.2 },
+      { StyleIdx::rehearsalMarkFrameRound,       "rehearsalMarkFrameRound",      20 },
       { StyleIdx::rehearsalMarkFrameFgColor,     "rehearsalMarkFrameFgColor",    QColor(0, 0, 0, 255) },
       { StyleIdx::rehearsalMarkFrameBgColor,     "rehearsalMarkFrameBgColor",    QColor(255, 255, 255, 0) },
-      { StyleIdx::rehearsalMarkSystemFlag,       "rehearsalMarkSystemFlag",      true },
+      { StyleIdx::rehearsalMarkPlacement,        "rehearsalMarkPlacement",       int(Element::Placement::ABOVE) },
+      { StyleIdx::rehearsalMarkPosAbove,         "rehearsalMarkPosAbove",        Spatium(-2.0) },
+      { StyleIdx::rehearsalMarkPosBelow,         "rehearsalMarkPosBelow",        Spatium(1.0) },
+      { StyleIdx::rehearsalMarkMinDistance,      "rehearsalMarkMinDistance",     Spatium(0.5) },
 
       { StyleIdx::repeatLeftFontFace,            "repeatLeftFontFace",           "FreeSerif" },
       { StyleIdx::repeatLeftFontSize,            "repeatLeftFontSize",           20.0 },
@@ -978,7 +981,6 @@ const std::vector<StyledProperty> rehearsalMarkStyle {
       { StyleIdx::rehearsalMarkFrameRound,            P_ID::FRAME_ROUND            },
       { StyleIdx::rehearsalMarkFrameFgColor,          P_ID::FRAME_FG_COLOR         },
       { StyleIdx::rehearsalMarkFrameBgColor,          P_ID::FRAME_BG_COLOR         },
-      { StyleIdx::rehearsalMarkSystemFlag,            P_ID::SYSTEM_FLAG            },
       };
 
 const std::vector<StyledProperty> repeatLeftStyle {
