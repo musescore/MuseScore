@@ -21,7 +21,7 @@ namespace Ms {
 //   @@ RehearsalMark
 //---------------------------------------------------------
 
-class RehearsalMark : public Text  {
+class RehearsalMark : public SystemText  {
       Q_OBJECT
 
    public:

@@ -288,6 +288,7 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         case ElementType::STAFF_TEXT:
                         case ElementType::SYSTEM_TEXT:
+                        case ElementType::REHEARSAL_MARK:
                               ie = new InspectorStaffText(this);
                               break;
                         case ElementType::STAFFTYPE_CHANGE:
@@ -862,11 +863,15 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
 
       const std::vector<InspectorItem> il = {
             { P_ID::TEMPO,             0, 0, tt.tempo,       tt.resetTempo       },
-            { P_ID::TEMPO_FOLLOW_TEXT, 0, 0, tt.followText,  tt.resetFollowText  }
+            { P_ID::TEMPO_FOLLOW_TEXT, 0, 0, tt.followText,  tt.resetFollowText  },
+            { P_ID::PLACEMENT,         0, 0, tt.placement,   tt.resetPlacement   }
             };
       const std::vector<InspectorPanel> ppList = {
             { tt.title, tt.panel }
             };
+      tt.placement->clear();
+      tt.placement->addItem(tr("Above"), 0);
+      tt.placement->addItem(tr("Below"), 1);
       mapSignals(il, ppList);
       connect(tt.followText, SIGNAL(toggled(bool)), tt.tempo, SLOT(setDisabled(bool)));
       }
