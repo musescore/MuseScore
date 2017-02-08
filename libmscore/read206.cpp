@@ -961,10 +961,11 @@ static void readChord(Chord* chord, XmlReader& e)
             }
       }
 
+#if 0
 //---------------------------------------------------------
 //   convertOldTextStyleNames
 //---------------------------------------------------------
-#if 0
+
 static QString convertOldTextStyleNames(const QString& s)
       {
       QString rs(s);
