@@ -20,6 +20,8 @@ namespace Ms {
 
 extern QString dataPath;
 
+static const char* MUSESCORE_HOST = "api.musescore.com";
+
 //---------------------------------------------------------
 //   LoginManager
 //---------------------------------------------------------
@@ -43,7 +45,7 @@ LoginManager::LoginManager(QObject* parent)
       ba[24] = 0x52; ba[25] = 0x63; ba[26] = 0x64; ba[27] = 0x6e;
       ba[28] = 0x41; ba[29] = 0x6a; ba[30] = 0x37; ba[31] = 0x51;
       _consumerKey = QString(ba);
-      ba[0] = 0x52; ba[1] = 0x50; ba[2] = 0x75; ba[3] = 0x32; 
+      ba[0] = 0x52; ba[1] = 0x50; ba[2] = 0x75; ba[3] = 0x32;
       ba[4] = 0x79; ba[5] = 0x52; ba[6] = 0x69; ba[7] = 0x52;
       ba[8] = 0x6f; ba[9] = 0x58; ba[10] = 0x53; ba[11] = 0x41;
       ba[12] = 0x48; ba[13] = 0x6d; ba[14] = 0x4a; ba[15] = 0x6f;
@@ -164,7 +166,7 @@ void LoginManager::login(QString login, QString password)
       {
       if(login == "" || password == "")
            return;
-      
+
       connect(_oauthManager, SIGNAL(requestReady(QByteArray)),
                 this, SLOT(onAccessTokenRequestReady(QByteArray)), Qt::UniqueConnection);
 
@@ -197,7 +199,7 @@ void LoginManager::onAccessTokenRequestReady(QByteArray ba)
       {
       //qDebug() << "onAccessTokenRequestReady" << ba;
       if (_oauthManager->lastError() == KQOAuthManager::RequestUnauthorized) { // 401/406
-            
+
             QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
             QJsonArray array = jsonResponse.array();
             QString message = tr("Unsuccessful login. Please try again.");
@@ -257,7 +259,7 @@ void LoginManager::getUser()
       oauthRequest->setConsumerSecretKey(_consumerSecret);
       oauthRequest->setToken(_accessToken);
       oauthRequest->setTokenSecret(_accessTokenSecret);
-      
+
       connect(_oauthManager, SIGNAL(requestReady(QByteArray)),
             this, SLOT(onGetUserRequestReady(QByteArray)));
 

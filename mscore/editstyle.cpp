@@ -286,15 +286,20 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::tempoPosBelow,           false, tempoTextPosBelow,           resetTempoTextPosBelow },
       { StyleIdx::tempoMinDistance,        false, tempoTextMinDistance,        resetTempoTextMinDistance },
 
-      { StyleIdx::autoplaceVerticalAlignRange,      false, autoplaceVerticalAlignRange, resetAutoplaceVerticalAlignRange },
-      { StyleIdx::textLinePlacement,       false, textLinePlacement, resetTextLinePlacement },
-      { StyleIdx::textLinePosAbove,        false, textLinePosAbove,             resetTextLinePosAbove },
-      { StyleIdx::textLinePosBelow,        false, textLinePosBelow,             resetTextLinePosBelow },
+      { StyleIdx::rehearsalMarkPlacement,   false, rehearsalMarkPlacement,     resetRehearsalMarkPlacement },
+      { StyleIdx::rehearsalMarkPosAbove,    false, rehearsalMarkPosAbove,      resetRehearsalMarkPosAbove },
+      { StyleIdx::rehearsalMarkPosBelow,    false, rehearsalMarkPosBelow,      resetRehearsalMarkPosBelow },
+      { StyleIdx::rehearsalMarkMinDistance, false, rehearsalMarkMinDistance,   resetRehearsalMarkMinDistance },
+
+      { StyleIdx::autoplaceVerticalAlignRange, false, autoplaceVerticalAlignRange, resetAutoplaceVerticalAlignRange },
+      { StyleIdx::textLinePlacement,           false, textLinePlacement,           resetTextLinePlacement },
+      { StyleIdx::textLinePosAbove,            false, textLinePosAbove,            resetTextLinePosAbove },
+      { StyleIdx::textLinePosBelow,            false, textLinePosBelow,            resetTextLinePosBelow },
       };
 
       for (QComboBox* cb : std::vector<QComboBox*> {
             lyricsPlacement, textLinePlacement, hairpinPlacement, pedalLinePlacement,
-            trillLinePlacement, dynamicsPlacement
+            trillLinePlacement, dynamicsPlacement, tempoTextPlacement, rehearsalMarkPlacement
             }) {
             cb->clear();
             cb->addItem(tr("Above"), int(Element::Placement::ABOVE));

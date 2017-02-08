@@ -52,7 +52,7 @@ void SystemText::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag("SystemText");
+      xml.stag(name());
       StaffText::writeProperties(xml);
       xml.etag();
       }
