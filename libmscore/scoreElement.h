@@ -389,6 +389,7 @@ class ScoreElement : public QObject {
       CONVERT(FretDiagram,   FRET_DIAGRAM)
       CONVERT(Page,          PAGE)
       CONVERT(SystemText,    SYSTEM_TEXT)
+      CONVERT(Staff,         STAFF)
 #undef CONVERT
 
       bool isChordRest() const       { return isRest() || isChord() || isRepeatMeasure(); }
@@ -531,6 +532,7 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(FretDiagram)
       CONVERT(Page)
       CONVERT(SystemText)
+      CONVERT(Staff)
 #undef CONVERT
 
 }

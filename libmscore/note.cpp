@@ -1441,25 +1441,6 @@ bool Note::readProperties(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   drag
-//---------------------------------------------------------
-
-QRectF Note::drag(EditData* data)
-      {
-      if (staff()->isDrumStaff(tick()))
-            return QRect();
-      dragMode = true;
-      QRectF bb(chord()->bbox());
-
-      qreal _spatium = spatium();
-      bool tab       = staff()->isTabStaff(chord()->tick());
-      qreal step     = _spatium * (tab ? staff()->staffType(tick())->lineDistance().val() : 0.5);
-      _lineOffset    = lrint(data->delta.y() / step);
-      triggerLayout();
-      return bb.translated(chord()->pagePos());
-      }
-
-//---------------------------------------------------------
 //   transposition
 //---------------------------------------------------------
 
@@ -1467,6 +1448,26 @@ int Note::transposition() const
       {
       int tick = chord() ? chord()->tick() : -1;
       return staff() ? part()->instrument(tick)->transpose().chromatic : 0;
+      }
+
+//---------------------------------------------------------
+//   drag
+//---------------------------------------------------------
+
+QRectF Note::drag(EditData* data)
+      {
+      if (staff()->isDrumStaff(tick()))
+            return QRect();
+//      dragMode = true;
+      QRectF bb(chord()->bbox());
+
+      qreal _spatium = spatium();
+      bool tab       = staff()->isTabStaff(chord()->tick());
+      qreal step     = _spatium * (tab ? staff()->staffType(tick())->lineDistance().val() : 0.5);
+      _lineOffset    = lrint(data->delta.y() / step);
+
+      triggerLayout();
+      return bb.translated(chord()->pagePos());
       }
 
 //---------------------------------------------------------
@@ -1479,8 +1480,7 @@ void Note::endDrag()
       if (_lineOffset == 0)
             return;
 
-      int staffIdx = chord()->vStaffIdx();
-      Staff* staff = score()->staff(staffIdx);
+      Staff* staff = score()->staff(chord()->vStaffIdx());
       int tick     = chord()->tick();
 
       if (staff->isTabStaff(tick)) {
@@ -1509,12 +1509,10 @@ void Note::endDrag()
             }
       else {
             // on PITCHED / PERCUSSION staves, dragging a note changes the note pitch
-            int nLine   = _line + _lineOffset;
-            // get note context
-            ClefType clef = staff->clef(tick);
-            Key key       = staff->key(tick);
             // determine new pitch of dragged note
-            int nPitch = line2pitch(nLine, clef, key);
+
+            Key key = staff->key(tick);
+            int nPitch = line2pitch(_line + _lineOffset, staff->clef(tick), key);
             if (!concertPitch()) {
                   Interval interval = staff->part()->instrument(tick)->transpose();
                   nPitch += interval.chromatic;
