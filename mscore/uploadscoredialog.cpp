@@ -57,28 +57,33 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
 
       license->addItem(tr("All Rights reserved"), "all-rights-reserved");
       license->addItem(tr("Creative Commons Attribution"), "cc-by");
-	license->addItem(tr("Creative Commons Attribution Share Alike"), "cc-by-sa");
-      license->addItem(tr("Creative Commons Attribution No Derivative Works"), "cc-by-nd");
+	license->addItem(tr("Creative Commons Attribution No Derivative Works"), "cc-by-nd");
+      license->addItem(tr("Creative Commons Attribution Share Alike"), "cc-by-sa");
       license->addItem(tr("Creative Commons Attribution Noncommercial"), "cc-by-nc");
+      license->addItem(tr("Creative Commons Attribution Noncommercial Non Derivate Works"), "cc-by-nc-nd");
       license->addItem(tr("Creative Commons Attribution Noncommercial Share Alike"), "cc-by-nc-sa");
-	license->addItem(tr("Creative Commons Attribution Noncommercial Non Derivate Works"), "cc-by-nc-nd");
-      license->addItem(tr("Public Domain"), "publicdomain");
-      license->addItem(tr("Creative Commons Zero"), "cc-zero");
+      license->addItem(tr("Creative Commons Copyright Waiver"), "cc-zero");
 
       licenseHelp->setText(tr("%1What does this mean?%2")
-                           .arg("<a href=\"http://musescore.com/help/license\">")
+                           .arg("<a href=\"http://redirect.musescore.com/help/license\">")
                            .arg("</a>"));
       QFont font = licenseHelp->font();
       font.setPointSize(8);
       licenseHelp->setFont(font);
 
       privateHelp->setText(tr("Respect the %1community guidelines%2. Only make your scores accessible to anyone with permission from the right holders.")
-                           .arg("<a href=\"http://musescore.com/community-guidelines\">")
+                           .arg("<a href=\"https://musescore.com/community-guidelines\">")
                            .arg("</a>"));
       privateHelp->setFont(font);
 
       tagsHelp->setText(tr("Use a comma to separate the tags"));
       tagsHelp->setFont(font);
+      lblChanges->setVisible(false);
+      changes->setVisible(false);
+
+      connect(updateExistingCb, SIGNAL(toggled(bool)), lblChanges, SLOT(setVisible(bool)));
+      connect(updateExistingCb, SIGNAL(toggled(bool)), changes, SLOT(setVisible(bool)));
+
 
       connect(buttonBox,   SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
       chkSignoutOnExit->setVisible(false);
@@ -121,7 +126,7 @@ void UploadScoreDialog::upload(int nid)
      if(mscore->saveAs(score, true, path, "mscz")) {
            QString licenseString = license->currentData().toString();
            QString privateString = cbPrivate->isChecked() ? "1" : "0";
-            _loginManager->upload(path, nid, title->text(), description->toPlainText(), privateString, licenseString, tags->text());
+            _loginManager->upload(path, nid, title->text(), description->toPlainText(), privateString, licenseString, tags->text(), changes->toPlainText());
            }
      }
 
@@ -196,10 +201,15 @@ void UploadScoreDialog::onGetScoreSuccess(const QString &t, const QString &desc,
       title->setText(t);
       description->setPlainText(desc);
       cbPrivate->setChecked(priv);
-      int lIndex = license->findData(lic);
+      // publicdomain used to be an option. Not anymore. Remap to CC0
+      QString lice = lic;
+      if (lice == "publicdomain")
+            lice = "cc-zero";
+      int lIndex = license->findData(lice);
       if (lIndex < 0) lIndex = 0;
       license->setCurrentIndex(lIndex);
       tags->setText(tag);
+      changes->clear();
       updateExistingCb->setChecked(true);
       updateExistingCb->setVisible(true);
       linkToScore->setText(tr("[%1link%2]")
@@ -228,6 +238,7 @@ void UploadScoreDialog::clear()
       cbPrivate->setChecked(false);
       license->setCurrentIndex(0);
       tags->clear();
+      changes->clear();
       updateExistingCb->setChecked(false);
       updateExistingCb->setVisible(false);
       linkToScore->setText("");
