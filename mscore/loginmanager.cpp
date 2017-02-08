@@ -104,7 +104,7 @@ void LoginManager::onAuthorizedRequestDone()
       else if (_oauthManager->lastError() == KQOAuthManager::ContentOperationNotPermittedError)
             QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.\n"
                                                               "%1Please upgrade first%2.")
-                                  .arg("<a href=\"http://musescore.org\">")
+                                  .arg("<a href=\"https://musescore.org\">")
                                   .arg("</a>")
                                   .replace("\n", "<br/>"));
       // don't do that, it will logout user if score is private and already known
@@ -169,7 +169,7 @@ void LoginManager::login(QString login, QString password)
                 this, SLOT(onAccessTokenRequestReady(QByteArray)), Qt::UniqueConnection);
 
       KQOAuthRequest_XAuth *oauthRequest = new KQOAuthRequest_XAuth(this);
-      oauthRequest->initRequest(KQOAuthRequest::AccessToken, QUrl("https://api.musescore.com/oauth/access_token"));
+      oauthRequest->initRequest(KQOAuthRequest::AccessToken, QUrl(QString("https://%1/oauth/access_token").arg(MUSESCORE_HOST)));
       oauthRequest->setConsumerKey(_consumerKey);
       oauthRequest->setConsumerSecretKey(_consumerSecret);
       oauthRequest->setXAuthLogin(login, password);
@@ -233,7 +233,7 @@ void LoginManager::onAccessTokenRequestReady(QByteArray ba)
       else if (_oauthManager->lastError() == KQOAuthManager::ContentOperationNotPermittedError) {
             QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.\n"
                                                               "%1Please upgrade first%2.")
-                                  .arg("<a href=\"http://musescore.org\">")
+                                  .arg("<a href=\"https://musescore.org\">")
                                   .arg("</a>")
                                   .replace("\n", "<br/>"));
             }
@@ -251,7 +251,7 @@ void LoginManager::getUser()
             return;
             }
       KQOAuthRequest * oauthRequest = new KQOAuthRequest();
-      oauthRequest->initRequest(KQOAuthRequest::AuthorizedRequest, QUrl("https://api.musescore.com/services/rest/me.json"));
+      oauthRequest->initRequest(KQOAuthRequest::AuthorizedRequest, QUrl(QString("https://%1/services/rest/me.json").arg(MUSESCORE_HOST)));
       oauthRequest->setHttpMethod(KQOAuthRequest::GET);
       oauthRequest->setConsumerKey(_consumerKey);
       oauthRequest->setConsumerSecretKey(_consumerSecret);
@@ -303,7 +303,7 @@ void LoginManager::getScore(int nid)
             return;
             }
       KQOAuthRequest * oauthRequest = new KQOAuthRequest();
-      oauthRequest->initRequest(KQOAuthRequest::AuthorizedRequest, QUrl(QString("https://api.musescore.com/services/rest/score/%1.json").arg(nid)));
+      oauthRequest->initRequest(KQOAuthRequest::AuthorizedRequest, QUrl(QString("https://%1/services/rest/score/%2.json").arg(MUSESCORE_HOST).arg(nid)));
       oauthRequest->setHttpMethod(KQOAuthRequest::GET);
       oauthRequest->setConsumerKey(_consumerKey);
       oauthRequest->setConsumerSecretKey(_consumerSecret);
@@ -362,13 +362,13 @@ void LoginManager::onGetScoreRequestReady(QByteArray ba)
 //   upload
 //---------------------------------------------------------
 
-void LoginManager::upload(const QString &path, int nid, const QString &title, const QString &description, const QString& priv, const QString& license, const QString& tags)
+void LoginManager::upload(const QString &path, int nid, const QString &title, const QString &description, const QString& priv, const QString& license, const QString& tags, const QString& changes)
       {
       //qDebug() << "file upload";
       KQOAuthRequest *oauthRequest = new KQOAuthRequest(this);
-      QUrl url("https://api.musescore.com/services/rest/score.json");
+      QUrl url(QString("https://%1/services/rest/score.json").arg(MUSESCORE_HOST));
       if (nid > 0)
-            url = QUrl(QString("https://api.musescore.com/services/rest/score/%1/update.json").arg(nid));
+            url = QUrl(QString("https://%1/services/rest/score/%2/update.json").arg(MUSESCORE_HOST).arg(nid));
       oauthRequest->initRequest(KQOAuthRequest::AuthorizedRequest, url);
       oauthRequest->setConsumerKey(_consumerKey);
       oauthRequest->setConsumerSecretKey(_consumerSecret);
@@ -413,6 +413,13 @@ void LoginManager::upload(const QString &path, int nid, const QString &title, co
       tagsPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"tags\""));
       tagsPart.setBody(tags.toUtf8());
       multiPart->append(tagsPart);
+
+      if (nid > 0) {
+            QHttpPart changesPart;
+            changesPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"revision_log\""));
+            changesPart.setBody(changes.toUtf8());
+            multiPart->append(changesPart);
+      }
 
       connect(_oauthManager, SIGNAL(requestReady(QByteArray)),
             this, SLOT(onUploadRequestReady(QByteArray)));
