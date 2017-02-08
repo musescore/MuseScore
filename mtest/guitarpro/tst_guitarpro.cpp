@@ -137,6 +137,11 @@ private slots:
       void gp3DottedGliss()  { gpReadTest("dotted-gliss", "gp3"); }
       void highPitch()       { gpReadTest("high-pitch", "gp3"); }
       void gpxMultiVoices()  { gpReadTest("multivoices", "gpx"); }
+      void gpxOttava1()      { gpReadTest("ottava1", "gpx"); }
+      void gpxOttava2()      { gpReadTest("ottava2", "gpx"); }
+      void gpxOttava3()      { gpReadTest("ottava3", "gpx"); }
+      void gpxOttava4()      { gpReadTest("ottava4", "gpx"); }
+      void gpxOttava5()      { gpReadTest("ottava5", "gpx"); }
       };
 
 //---------------------------------------------------------
