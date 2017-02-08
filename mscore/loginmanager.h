@@ -17,6 +17,8 @@
 
 namespace Ms {
 
+static const char* MUSESCORE_HOST = "d8.musescore.com";
+
 //---------------------------------------------------------
 //   LoginDialog
 //---------------------------------------------------------
@@ -61,7 +63,7 @@ class LoginManager : public QObject
    public:
       LoginManager(QObject* parent = 0);
       void login(QString login, QString password);
-      void upload(const QString& path, int nid, const QString& title, const QString& description, const QString& priv, const QString& license, const QString& tags);
+      void upload(const QString& path, int nid, const QString& title, const QString& description, const QString& priv, const QString& license, const QString& tags, const QString& changes);
       bool hasAccessToken();
       void getUser();
       void getScore(int nid);
