@@ -26,7 +26,6 @@ namespace Ms {
 class InspectorFretDiagram : public InspectorElementBase {
       Q_OBJECT
 
-//      UiInspectorElement  e;
       Ui::InspectorFretDiagram   f;
 
    private slots:

@@ -1,9 +1,8 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
-//  Copyright (C) 2012 Werner Schweer and others
+//  Copyright (C) 2017 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -11,34 +10,45 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __INSPECTOR_VOLTA_H__
-#define __INSPECTOR_VOLTA_H__
+#ifndef __INSPECTOR_ELEMENT_BASE_H__
+#define __INSPECTOR_ELEMENT_BASE_H__
 
-#include "inspector.h"
+#include "ui_inspector_element.h"
 #include "inspectorBase.h"
-#include "ui_inspector_line.h"
-#include "ui_inspector_textline.h"
-#include "ui_inspector_volta.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorVolta
+//   UiInspectorElement
 //---------------------------------------------------------
 
-class InspectorVolta : public InspectorElementBase {
+class UiInspectorElement: public Ui::InspectorElement {
+   public:
+      void setupUi(QWidget *InspectorElement);
+      };
+
+//---------------------------------------------------------
+//   InspectorElementBase
+//---------------------------------------------------------
+
+class InspectorElementBase : public InspectorBase {
       Q_OBJECT
 
-      Ui::InspectorLine l;
-      Ui::InspectorTextLine tl;
-      Ui::InspectorVolta v;
+   protected:
+      UiInspectorElement e;
+
+   private slots:
+      void resetAutoplace();
+      void autoplaceChanged(bool);
 
    public:
-      InspectorVolta(QWidget* parent);
+      InspectorElementBase(QWidget* parent);
       virtual void setElement() override;
       };
 
-
 } // namespace Ms
+
+
 #endif
+
 

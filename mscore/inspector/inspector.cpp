@@ -12,6 +12,7 @@
 //=============================================================================
 
 #include "inspector.h"
+#include "inspectorTextBase.h"
 #include "inspectorBeam.h"
 #include "inspectorImage.h"
 #include "inspectorLasso.h"
@@ -31,6 +32,7 @@
 #include "inspectorText.h"
 #include "inspectorBarline.h"
 #include "inspectorFingering.h"
+#include "inspectorDynamic.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "bendproperties.h"
@@ -371,56 +373,6 @@ void UiInspectorElement::setupUi(QWidget* inspectorElement)
       vRaster->setDefaultAction(a);
       vRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
       vRaster->addAction(getAction("config-raster"));
-      }
-
-//---------------------------------------------------------
-//   InspectorElementBase
-//---------------------------------------------------------
-
-InspectorElementBase::InspectorElementBase(QWidget* parent)
-   : InspectorBase(parent)
-      {
-      e.setupUi(addWidget());
-      iList = {
-            { P_ID::VISIBLE,   0, 0, e.visible,    e.resetVisible   },
-            { P_ID::Z,         0, 0, e.z,          e.resetZ         },
-            { P_ID::COLOR,     0, 0, e.color,      e.resetColor     },
-            { P_ID::USER_OFF,  0, 0, e.offsetX,    e.resetX         },
-            { P_ID::USER_OFF,  1, 0, e.offsetY,    e.resetY         },
-            { P_ID::AUTOPLACE, 0, 0, e.autoplace,  e.resetAutoplace },
-            };
-      pList = { { e.title, e.panel } };
-      connect(e.resetAutoplace, SIGNAL(clicked()), SLOT(resetAutoplace()));
-      connect(e.autoplace, SIGNAL(toggled(bool)),  SLOT(autoplaceChanged(bool)));
-      }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorElementBase::setElement()
-      {
-      InspectorBase::setElement();
-      autoplaceChanged(inspector->element()->autoplace());
-      }
-
-//---------------------------------------------------------
-//   autoplaceChanged
-//---------------------------------------------------------
-
-void InspectorElementBase::autoplaceChanged(bool val)
-      {
-      for (auto i : std::vector<QWidget*> { e.offsetX, e.offsetY, e.resetX, e.resetY, e.hRaster, e.vRaster })
-            i->setEnabled(!val);
-      }
-
-//---------------------------------------------------------
-//   resetAutoplace
-//---------------------------------------------------------
-
-void InspectorElementBase::resetAutoplace()
-      {
-      autoplaceChanged(true);
       }
 
 //---------------------------------------------------------
@@ -904,21 +856,18 @@ void InspectorClef::valueChanged(int idx)
 //---------------------------------------------------------
 
 InspectorTempoText::InspectorTempoText(QWidget* parent)
-   : InspectorElementBase(parent)
+   : InspectorTextBase(parent)
       {
-      t.setupUi(addWidget());
       tt.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
-            { P_ID::TEMPO,             0, 0, tt.tempo,      tt.resetTempo      },
-            { P_ID::TEMPO_FOLLOW_TEXT, 0, 0, tt.followText, tt.resetFollowText }
+            { P_ID::TEMPO,             0, 0, tt.tempo,       tt.resetTempo       },
+            { P_ID::TEMPO_FOLLOW_TEXT, 0, 0, tt.followText,  tt.resetFollowText  }
             };
       const std::vector<InspectorPanel> ppList = {
-            { t.title, t.panel },
             { tt.title, tt.panel }
             };
       mapSignals(il, ppList);
-      connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       connect(tt.followText, SIGNAL(toggled(bool)), tt.tempo, SLOT(setDisabled(bool)));
       }
 
@@ -932,46 +881,6 @@ void InspectorTempoText::postInit()
       //tt.resetFollowText->setDisabled(followText);
       tt.tempo->setDisabled(followText);
       tt.resetTempo->setDisabled(followText || tt.tempo->value() == 120.0);  // a default of 120 BPM is assumed all over the place
-      }
-
-//---------------------------------------------------------
-//   InspectorDynamic
-//---------------------------------------------------------
-
-InspectorDynamic::InspectorDynamic(QWidget* parent)
-   : InspectorElementBase(parent)
-      {
-      t.setupUi(addWidget());
-      d.setupUi(addWidget());
-
-      const std::vector<InspectorItem> il = {
-            { P_ID::FONT_FACE,        0, 0, t.fontFace,     t.resetFontFace     },
-            { P_ID::FONT_SIZE,        0, 0, t.fontSize,     t.resetFontSize     },
-            { P_ID::FONT_BOLD,        0, 0, t.bold,         t.resetBold         },
-            { P_ID::FONT_ITALIC,      0, 0, t.italic,       t.resetItalic       },
-            { P_ID::FONT_UNDERLINE,   0, 0, t.underline,    t.resetUnderline    },
-            { P_ID::FRAME,            0, 0, t.hasFrame,     t.resetHasFrame     },
-            { P_ID::FRAME_FG_COLOR,   0, 0, t.frameColor,   t.resetFrameColor   },
-            { P_ID::FRAME_BG_COLOR,   0, 0, t.bgColor,      t.resetBgColor      },
-            { P_ID::FRAME_CIRCLE,     0, 0, t.circle,       t.resetCircle       },
-            { P_ID::FRAME_SQUARE,     0, 0, t.square,       t.resetSquare       },
-            { P_ID::FRAME_WIDTH,      0, 0, t.frameWidth,   t.resetFrameWidth   },
-            { P_ID::FRAME_PADDING,    0, 0, t.paddingWidth, t.resetPaddingWidth },
-            { P_ID::FRAME_ROUND,      0, 0, t.frameRound,   t.resetFrameRound   },
-            { P_ID::ALIGN,            0, 0, t.align,        t.resetAlign        },
-            { P_ID::DYNAMIC_RANGE,    0, 0, d.dynRange,     d.resetDynRange     },
-            { P_ID::VELOCITY,         0, 0, d.velocity,     0                   },
-            { P_ID::PLACEMENT,        0, 0, d.placement,    d.resetPlacement    }
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { t.title, t.panel },
-            { d.title, d.panel }
-            };
-      d.placement->clear();
-      d.placement->addItem(tr("Above"), 0);
-      d.placement->addItem(tr("Below"), 1);
-      mapSignals(il, ppList);
-      connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
 
 //---------------------------------------------------------

@@ -31,7 +31,7 @@ class TempoText : public Text  {
       Q_PROPERTY(qreal tempo         READ tempo      WRITE undoSetTempo)
       Q_PROPERTY(bool  followText    READ followText WRITE undoSetFollowText)
 
-      qreal _tempo;          // beats per second
+      qreal _tempo;           // beats per second
       bool _followText;       // parse text to determine tempo
       qreal _relative;
       bool _isRelative;

@@ -27,7 +27,6 @@ namespace Ms {
 class InspectorJump : public InspectorElementBase {
       Q_OBJECT
 
-      UiInspectorElement b;
       Ui::InspectorText t;
       Ui::InspectorJump j;
 

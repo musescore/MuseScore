@@ -855,8 +855,8 @@ Text::Text(SubStyle st, Score* s)
       _circle                 = false;
       _square                 = false;
       _sizeIsSpatiumDependent = true;
-      _frameWidth             = Spatium(0.0);
-      _paddingWidth           = Spatium(0.0);
+      _frameWidth             = Spatium(0.1);
+      _paddingWidth           = Spatium(0.2);
       _frameRound             = 0;
       _offset                 = QPointF();
       _offsetType             = OffsetType::SPATIUM;

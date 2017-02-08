@@ -27,7 +27,6 @@ namespace Ms {
 class InspectorGlissando : public InspectorElementBase {
       Q_OBJECT
 
-//      UiInspectorElement   e;
       Ui::InspectorGlissando g;
 
    public:
