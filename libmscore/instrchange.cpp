@@ -28,26 +28,22 @@ namespace Ms {
 //---------------------------------------------------------
 
 InstrumentChange::InstrumentChange(Score* s)
-   : Text(s)
+   : Text(SubStyle::INSTRUMENT_CHANGE, s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      initSubStyle(SubStyle::INSTRUMENT_CHANGE);
       _instrument = new Instrument();
       }
 
 InstrumentChange::InstrumentChange(const Instrument& i, Score* s)
-   : Text(s)
+   : Text(SubStyle::INSTRUMENT_CHANGE, s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      initSubStyle(SubStyle::INSTRUMENT_CHANGE);
       _instrument = new Instrument(i);
       }
 
 InstrumentChange::InstrumentChange(const InstrumentChange& is)
    : Text(is)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      initSubStyle(SubStyle::INSTRUMENT_CHANGE);
       _instrument = new Instrument(*is._instrument);
       }
 
@@ -58,7 +54,6 @@ InstrumentChange::~InstrumentChange()
 
 void InstrumentChange::setInstrument(const Instrument& i)
       {
-      //*_instrument = i;
       delete _instrument;
       _instrument = new Instrument(i);
       }
@@ -69,7 +64,7 @@ void InstrumentChange::setInstrument(const Instrument& i)
 
 void InstrumentChange::write(XmlWriter& xml) const
       {
-      xml.stag("InstrumentChange");
+      xml.stag(name());
       _instrument->write(xml, part());
       Text::writeProperties(xml);
       xml.etag();
