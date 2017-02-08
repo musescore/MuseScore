@@ -17,7 +17,7 @@
 
 namespace Ms {
 
-static const char* MUSESCORE_HOST = "d8.musescore.com";
+static const char* MUSESCORE_HOST = "api.musescore.com";
 
 //---------------------------------------------------------
 //   LoginDialog
