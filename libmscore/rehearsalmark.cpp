@@ -21,7 +21,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 RehearsalMark::RehearsalMark(Score* s)
-   : Text(SubStyle::REHEARSAL_MARK, s)
+   : SystemText(SubStyle::REHEARSAL_MARK, s)
       {
       }
 
