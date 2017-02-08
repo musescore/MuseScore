@@ -210,6 +210,7 @@ static const PaperSize paperSizes114[] = {
       PaperSize(0,           MM(1),    MM(1))   // mark end of list
       };
 
+#if 0
 //---------------------------------------------------------
 //   getPaperSize
 //---------------------------------------------------------
@@ -223,6 +224,7 @@ static const PaperSize* getPaperSize114(const QString& name)
       qDebug("unknown paper size");
       return &paperSizes114[0];
       }
+#endif
 
 //---------------------------------------------------------
 //   readAccidental
@@ -1733,6 +1735,7 @@ static QString convertOldTextStyleNames(const QString& s)
       return rs;
       }
 
+#if 0
 //---------------------------------------------------------
 //   readPageFormat
 //---------------------------------------------------------
@@ -1799,6 +1802,7 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
       qreal w2 = pf->size().width() - pf->evenLeftMargin() - _evenRightMargin;
       pf->setPrintableWidth(qMin(w1, w2));     // silently adjust right margins
       }
+#endif
 
 //---------------------------------------------------------
 //   readStyle
