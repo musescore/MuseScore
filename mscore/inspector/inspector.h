@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: inspector.h
 //
 //  Copyright (C) 2011-2016 Werner Schweer and others
 //
@@ -15,7 +14,8 @@
 #define __INSPECTOR_H__
 
 #include "inspectorBase.h"
-#include "ui_inspector_element.h"
+#include "inspectorElementBase.h"
+#include "inspectorTextBase.h"
 #include "ui_inspector_bend.h"
 #include "ui_inspector_break.h"
 #include "ui_inspector_stafftypechange.h"
@@ -35,7 +35,6 @@
 #include "ui_inspector_tuplet.h"
 #include "ui_inspector_accidental.h"
 #include "ui_inspector_tempotext.h"
-#include "ui_inspector_dynamic.h"
 #include "ui_inspector_lyric.h"
 #include "ui_inspector_stafftext.h"
 #include "ui_inspector_slur.h"
@@ -55,34 +54,6 @@ class Inspector;
 class Segment;
 class Chord;
 class Clef;
-
-//---------------------------------------------------------
-//   UiInspectorElement
-//---------------------------------------------------------
-
-class UiInspectorElement: public Ui::InspectorElement {
-   public:
-      void setupUi(QWidget *InspectorElement);
-      };
-
-//---------------------------------------------------------
-//   InspectorElementBase
-//---------------------------------------------------------
-
-class InspectorElementBase : public InspectorBase {
-      Q_OBJECT
-
-   protected:
-      UiInspectorElement e;
-
-   private slots:
-      void resetAutoplace();
-      void autoplaceChanged(bool);
-
-   public:
-      InspectorElementBase(QWidget* parent);
-      virtual void setElement() override;
-      };
 
 //---------------------------------------------------------
 //   InspectorElement
@@ -311,29 +282,14 @@ class InspectorTremoloBar : public InspectorElementBase {
 //   InspectorTempoText
 //---------------------------------------------------------
 
-class InspectorTempoText : public InspectorElementBase {
+class InspectorTempoText : public InspectorTextBase {
       Q_OBJECT
 
-      Ui::InspectorText t;
       Ui::InspectorTempoText tt;
 
    public:
       InspectorTempoText(QWidget* parent);
       virtual void postInit() override;
-      };
-
-//---------------------------------------------------------
-//   InspectorDynamic
-//---------------------------------------------------------
-
-class InspectorDynamic : public InspectorElementBase {
-      Q_OBJECT
-
-      Ui::InspectorText t;
-      Ui::InspectorDynamic d;
-
-   public:
-      InspectorDynamic(QWidget* parent);
       };
 
 //---------------------------------------------------------

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>308</width>
-    <height>282</height>
+    <width>399</width>
+    <height>357</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -99,30 +99,10 @@
         </property>
        </widget>
       </item>
-      <item row="13" column="1" colspan="2">
-       <widget class="QDoubleSpinBox" name="frameWidth">
-        <property name="singleStep">
-         <double>0.100000000000000</double>
-        </property>
-        <property name="buddy" stdset="0">
-         <cstring>style</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="16" column="0" colspan="4">
+      <item row="18" column="0" colspan="4">
        <widget class="QPushButton" name="resetToStyle">
         <property name="text">
          <string>Reset Text to Style</string>
-        </property>
-       </widget>
-      </item>
-      <item row="13" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Border thickness:</string>
-        </property>
-        <property name="buddy">
-         <cstring>frameWidth</cstring>
         </property>
        </widget>
       </item>
@@ -138,155 +118,6 @@
       </item>
       <item row="1" column="1" colspan="2">
        <widget class="QSpinBox" name="fontSize"/>
-      </item>
-      <item row="15" column="1" colspan="2">
-       <widget class="QSpinBox" name="frameRound"/>
-      </item>
-      <item row="8" column="3">
-       <widget class="QToolButton" name="resetHasFrame">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Frame' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="14" column="3">
-       <widget class="QToolButton" name="resetPaddingWidth">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset Text margin' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Background color:</string>
-        </property>
-        <property name="buddy">
-         <cstring>bgColor</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="14" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Text margin:</string>
-        </property>
-        <property name="buddy">
-         <cstring>paddingWidth</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Foreground color:</string>
-        </property>
-        <property name="buddy">
-         <cstring>frameColor</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="1" colspan="2">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QCheckBox" name="circle">
-          <property name="text">
-           <string>Circle</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="resetCircle">
-          <property name="toolTip">
-           <string>Reset to default</string>
-          </property>
-          <property name="accessibleName">
-           <string>Reset 'Circle' value</string>
-          </property>
-          <property name="text">
-           <string notr="true"/>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="square">
-          <property name="text">
-           <string>Box</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="resetSquare">
-          <property name="toolTip">
-           <string>Reset to default</string>
-          </property>
-          <property name="accessibleName">
-           <string>Reset 'Box' value</string>
-          </property>
-          <property name="text">
-           <string notr="true"/>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item row="15" column="3">
-       <widget class="QToolButton" name="resetFrameRound">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Border radius' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_9">
@@ -428,23 +259,6 @@
         </item>
        </layout>
       </item>
-      <item row="13" column="3">
-       <widget class="QToolButton" name="resetFrameWidth">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset Border thickness' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="3">
        <widget class="QToolButton" name="resetFontSize">
         <property name="toolTip">
@@ -452,50 +266,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Font size' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="3">
-       <widget class="QToolButton" name="resetFrameColor">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Foreground color' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="15" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Border radius:</string>
-        </property>
-        <property name="buddy">
-         <cstring>frameRound</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="3">
-       <widget class="QToolButton" name="resetBgColor">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Background color' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -543,13 +313,6 @@
         </property>
        </widget>
       </item>
-      <item row="14" column="1" colspan="2">
-       <widget class="QDoubleSpinBox" name="paddingWidth">
-        <property name="singleStep">
-         <double>0.200000000000000</double>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
@@ -560,34 +323,298 @@
         </property>
        </widget>
       </item>
-      <item row="10" column="1" colspan="2">
-       <widget class="Awl::ColorLabel" name="bgColor">
-        <property name="accessibleName">
-         <string>Color:</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="1" colspan="2">
-       <widget class="Awl::ColorLabel" name="frameColor">
-        <property name="accessibleName">
-         <string>Color:</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-       </widget>
-      </item>
       <item row="6" column="1" colspan="2">
        <widget class="Ms::AlignSelect" name="align" native="true"/>
       </item>
-      <item row="8" column="0">
-       <widget class="QCheckBox" name="hasFrame">
-        <property name="text">
-         <string>Frame:</string>
-        </property>
+      <item row="8" column="0" colspan="3">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QCheckBox" name="hasFrame">
+          <property name="text">
+           <string>Frame:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="resetHasFrame">
+          <property name="toolTip">
+           <string>Reset to default</string>
+          </property>
+          <property name="accessibleName">
+           <string>Reset 'Frame' value</string>
+          </property>
+          <property name="text">
+           <string notr="true"/>
+          </property>
+          <property name="icon">
+           <iconset resource="../musescore.qrc">
+            <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="circle">
+          <property name="text">
+           <string>Circle</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="resetCircle">
+          <property name="toolTip">
+           <string>Reset to default</string>
+          </property>
+          <property name="accessibleName">
+           <string>Reset 'Circle' value</string>
+          </property>
+          <property name="text">
+           <string notr="true"/>
+          </property>
+          <property name="icon">
+           <iconset resource="../musescore.qrc">
+            <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="square">
+          <property name="text">
+           <string>Box</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="resetSquare">
+          <property name="toolTip">
+           <string>Reset to default</string>
+          </property>
+          <property name="accessibleName">
+           <string>Reset 'Box' value</string>
+          </property>
+          <property name="text">
+           <string notr="true"/>
+          </property>
+          <property name="icon">
+           <iconset resource="../musescore.qrc">
+            <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="16" column="0" colspan="4">
+       <widget class="QWidget" name="frameWidget" native="true">
+        <layout class="QGridLayout" name="gridLayout_2">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item row="2" column="1">
+          <widget class="QDoubleSpinBox" name="frameWidth">
+           <property name="singleStep">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="buddy" stdset="0">
+            <cstring>style</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="Awl::ColorLabel" name="bgColor">
+           <property name="accessibleName">
+            <string>Color:</string>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Box</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Foreground color:</string>
+           </property>
+           <property name="buddy">
+            <cstring>frameColor</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="Awl::ColorLabel" name="frameColor">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Color:</string>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Box</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Border thickness:</string>
+           </property>
+           <property name="buddy">
+            <cstring>frameWidth</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QToolButton" name="resetFrameColor">
+           <property name="toolTip">
+            <string>Reset to default</string>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Foreground color' value</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="../musescore.qrc">
+             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QDoubleSpinBox" name="paddingWidth">
+           <property name="singleStep">
+            <double>0.200000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>Background color:</string>
+           </property>
+           <property name="buddy">
+            <cstring>bgColor</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>Text margin:</string>
+           </property>
+           <property name="buddy">
+            <cstring>paddingWidth</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Border radius:</string>
+           </property>
+           <property name="buddy">
+            <cstring>frameRound</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QSpinBox" name="frameRound"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QToolButton" name="resetBgColor">
+           <property name="toolTip">
+            <string>Reset to default</string>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Background color' value</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="../musescore.qrc">
+             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QToolButton" name="resetFrameWidth">
+           <property name="toolTip">
+            <string>Reset to default</string>
+           </property>
+           <property name="accessibleName">
+            <string>Reset Border thickness' value</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="../musescore.qrc">
+             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QToolButton" name="resetPaddingWidth">
+           <property name="toolTip">
+            <string>Reset to default</string>
+           </property>
+           <property name="accessibleName">
+            <string>Reset Text margin' value</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="../musescore.qrc">
+             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="2">
+          <widget class="QToolButton" name="resetFrameRound">
+           <property name="toolTip">
+            <string>Reset to default</string>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Border radius' value</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="../musescore.qrc">
+             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>
@@ -622,20 +649,10 @@
   <tabstop>underline</tabstop>
   <tabstop>resetUnderline</tabstop>
   <tabstop>resetAlign</tabstop>
-  <tabstop>hasFrame</tabstop>
   <tabstop>circle</tabstop>
   <tabstop>resetCircle</tabstop>
   <tabstop>square</tabstop>
   <tabstop>resetSquare</tabstop>
-  <tabstop>resetHasFrame</tabstop>
-  <tabstop>resetFrameColor</tabstop>
-  <tabstop>resetBgColor</tabstop>
-  <tabstop>frameWidth</tabstop>
-  <tabstop>resetFrameWidth</tabstop>
-  <tabstop>paddingWidth</tabstop>
-  <tabstop>resetPaddingWidth</tabstop>
-  <tabstop>frameRound</tabstop>
-  <tabstop>resetFrameRound</tabstop>
   <tabstop>resetToStyle</tabstop>
  </tabstops>
  <resources>

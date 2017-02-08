@@ -13,8 +13,7 @@
 #ifndef __INSPECTOR_FINGERING_H__
 #define __INSPECTOR_FINGERING_H__
 
-#include "inspector.h"
-#include "ui_inspector_text.h"
+#include "inspectorTextBase.h"
 #include "ui_inspector_fingering.h"
 
 namespace Ms {
@@ -23,10 +22,9 @@ namespace Ms {
 //   InspectorFingering
 //---------------------------------------------------------
 
-class InspectorFingering : public InspectorElementBase {
+class InspectorFingering : public InspectorTextBase {
       Q_OBJECT
 
-      Ui::InspectorText t;
       Ui::InspectorFingering f;
 
    public:

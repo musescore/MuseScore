@@ -290,6 +290,9 @@ add_executable ( ${ExecutableName}
       inspector/inspectorFingering.cpp
       inspector/inspectorTextLine.cpp
       inspector/alignSelect.cpp
+      inspector/inspectorTextBase.cpp
+      inspector/inspectorDynamic.cpp
+      inspector/inspectorElementBase.cpp
       enableplayforwidget.cpp
       editelement.cpp
       qmlplugin.cpp

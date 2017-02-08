@@ -1,9 +1,8 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
-//  Copyright (C) 2011 Werner Schweer and others
+//  Copyright (C) 2017 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -11,35 +10,36 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __INSPECTOR_BEAM_H__
-#define __INSPECTOR_BEAM_H__
+#ifndef __INSPECTOR_TEXT_BASE_H__
+#define __INSPECTOR_TEXT_BASE_H__
 
-#include "inspector.h"
-#include "ui_inspector_beam.h"
-#include "libmscore/property.h"
+#include "inspectorElementBase.h"
+#include "ui_inspector_text.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorBeam
+//   InspectorTextBase
 //---------------------------------------------------------
 
-class InspectorBeam : public InspectorElementBase {
+class InspectorTextBase : public InspectorElementBase {
       Q_OBJECT
 
-      Ui::InspectorBeam b;
-
-   protected slots:
-      virtual void valueChanged(int idx) override;
+      virtual void valueChanged(int) override;
+      void updateFrame();
 
    protected:
-      virtual void setValue(const InspectorItem&, QVariant val) override;
+      Ui::InspectorText t;
 
    public:
-      InspectorBeam(QWidget* parent);
+      InspectorTextBase(QWidget* parent);
+      virtual void setElement() override;
       };
 
-
 } // namespace Ms
+
+
 #endif
+
+
 

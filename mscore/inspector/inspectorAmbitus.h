@@ -27,7 +27,6 @@ namespace Ms {
 class InspectorAmbitus : public InspectorElementBase {
       Q_OBJECT
 
-//      UiInspectorElement   b;
       Ui::InspectorAmbitus r;
       Ui::InspectorSegment s;
 

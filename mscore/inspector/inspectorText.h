@@ -14,7 +14,7 @@
 #define __INSPECTOR_TEXT_H__
 
 #include "inspector.h"
-#include "inspectorBase.h"
+#include "inspectorTextBase.h"
 #include "ui_inspector_text.h"
 #include "ui_inspector_frametext.h"
 
@@ -24,10 +24,9 @@ namespace Ms {
 //   InspectorText
 //---------------------------------------------------------
 
-class InspectorText : public InspectorElementBase {
+class InspectorText : public InspectorTextBase {
       Q_OBJECT
 
-      Ui::InspectorText t;
       Ui::InspectorFrameText f;
 
    public:
