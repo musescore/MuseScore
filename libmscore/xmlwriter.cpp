@@ -180,6 +180,7 @@ void XmlWriter::tag(P_ID id, QVariant data, QVariant defaultData)
             case P_TYPE::DIRECTION:
             case P_TYPE::STRING:
             case P_TYPE::FONT:
+            case P_TYPE::ALIGN:
                   tag(name, data);
                   break;
             case P_TYPE::ORNAMENT_STYLE:
@@ -271,27 +272,6 @@ void XmlWriter::tag(P_ID id, QVariant data, QVariant defaultData)
             case P_TYPE::SUB_STYLE:
                   tag(name, subStyleName(SubStyle(data.toInt())));
                   break;
-            case P_TYPE::ALIGN: {
-                  Align a = Align(data.toInt());
-                  const char* h;
-                  if (a & Align::HCENTER)
-                        h = "center";
-                  else if (a & Align::RIGHT)
-                        h = "right";
-                  else
-                        h = "left";
-                  const char* v;
-                  if (a & Align::BOTTOM)
-                        v = "bottom";
-                  else if (a & Align::VCENTER)
-                        v = "center";
-                  else if (a & Align::BASELINE)
-                        v = "baseline";
-                  else
-                        v = "top";
-                  tag(name, QString("%1,%2").arg(h).arg(v));
-                  }
-                  break;
             default:
                   Q_ASSERT(false);
             }
@@ -376,6 +356,26 @@ void XmlWriter::tag(const QString& name, QVariant data)
                         }
                   else if (strcmp(type, "Ms::Direction") == 0)
                         *this << QString("<%1>%2</%1>\n").arg(name).arg(data.value<Direction>().toString());
+                  else if (strcmp(type, "Ms::Align") == 0) {
+                        Align a = Align(data.toInt());
+                        const char* h;
+                        if (a & Align::HCENTER)
+                              h = "center";
+                        else if (a & Align::RIGHT)
+                              h = "right";
+                        else
+                              h = "left";
+                        const char* v;
+                        if (a & Align::BOTTOM)
+                              v = "bottom";
+                        else if (a & Align::VCENTER)
+                              v = "center";
+                        else if (a & Align::BASELINE)
+                              v = "baseline";
+                        else
+                              v = "top";
+                        *this << QString("<%1>%2,%3</%1>\n").arg(name).arg(h).arg(v);
+                        }
                   else {
                         qFatal("XmlWriter::tag: unsupported type %d %s", data.type(), type);
                         }

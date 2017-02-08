@@ -1497,8 +1497,10 @@ void MStyle::save(XmlWriter& xml, bool optimize)
                   xml.tag(st.name(), value(idx).toInt());
             else if (!strcmp("QString", type))
                   xml.tag(st.name(), value(idx).toString());
+            else if (!strcmp("Ms::Align", type))
+                  xml.tag(st.name(), value(idx));
             else
-                  qFatal("bad style type");
+                  qFatal("bad style type <%s>", type);
             }
       if (_customChordList && !_chordList.empty()) {
             xml.stag("ChordList");
