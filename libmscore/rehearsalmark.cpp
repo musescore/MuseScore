@@ -12,6 +12,7 @@
 
 #include "score.h"
 #include "rehearsalmark.h"
+#include "measure.h"
 
 namespace Ms {
 
@@ -52,8 +53,8 @@ void RehearsalMark::layout()
                         }
                   }
             if (autoplace()) {
-                  Shape s1 = s->staffShape(staffIdx()).translated(s->pos());
-                  Shape s2 = shape().translated(s->pos());
+                  Shape s1 = s->measure()->staffShape(staffIdx());
+                  Shape s2 = shape().translated(s->pos() + pos());
                   qreal d  = s2.minVerticalDistance(s1);
                   if (d > 0)
                         setUserOff(QPointF(0.0, -d));

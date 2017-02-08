@@ -199,7 +199,7 @@ void Dynamic::doAutoplace()
             return;
 
       qreal minDistance = score()->styleP(StyleIdx::dynamicsMinDistance);
-      Shape s1          = s->staffShape(staffIdx()).translated(s->pos());
+      Shape s1          = s->measure()->staffShape(staffIdx());
       Shape s2          = shape().translated(s->pos() + pos());
 
       if (placeAbove()) {

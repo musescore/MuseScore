@@ -2968,12 +2968,28 @@ System* Score::collectSystem(LayoutContext& lc)
             system->setWidth(pos.x());
 
       //
+      // compute shape of measures
+      //
+
+      for (int si = 0; si < score()->nstaves(); ++si) {
+            for (MeasureBase* mb : system->measures()) {
+                  if (!mb->isMeasure())
+                        continue;
+                  Measure* m = toMeasure(mb);
+                  m->staffShape(si).clear();
+                  for (Segment& s : m->segments())
+                        m->staffShape(si).add(s.staffShape(si).translated(s.pos()));
+                  m->staffShape(si).add(m->staffLines(si)->bbox());
+                  }
+            }
+
+      //
       // layout
       //    - beams
       //    - TempoText
       //    - RehearsalMark, StaffText
       //    - Dynamic
-      //    - update the segment shape
+      //    - update the segment shape + measure shape
       //
       //
       int stick = -1;
@@ -2985,7 +3001,8 @@ System* Score::collectSystem(LayoutContext& lc)
                   stick = mb->tick();
             etick = mb->endTick();
             Segment::Type st = Segment::Type::ChordRest;
-            for (Segment* s = toMeasure(mb)->first(st); s; s = s->next(st)) {
+            Measure* m = toMeasure(mb);
+            for (Segment* s = m->first(st); s; s = s->next(st)) {
                   for (Element* e : s->elist()) {
                         if (!e)
                               continue;
@@ -3002,12 +3019,17 @@ System* Score::collectSystem(LayoutContext& lc)
                               TempoText* tt = toTempoText(e);
                               setTempo(tt->segment(), tt->tempo());
                               tt->layout();
-                              if (e->visible())
-                                    s->staffShape(tt->staffIdx()).add(tt->shape());
+                              if (e->visible()) {
+                                    int si = tt->staffIdx();
+                                    s->staffShape(si).add(tt->shape().translated(e->pos()));
+                                    m->staffShape(si).add(tt->shape().translated(s->pos() + e->pos()));
+                                    }
                               }
                         else if (e->visible() && (e->isRehearsalMark() || e->isStaffText())) {
                               e->layout();
-                              s->staffShape(e->staffIdx()).add(e->shape());
+                              int si = e->staffIdx();
+                              s->staffShape(si).add(e->shape().translated(e->pos()));
+                              m->staffShape(si).add(e->shape().translated(s->pos() + e->pos()));
                               }
                         else if (e->visible() && e->isDynamic()) {
                               Dynamic* d = toDynamic(e);
@@ -3033,7 +3055,9 @@ System* Score::collectSystem(LayoutContext& lc)
                                           }
                                     if (doAutoplace) {
                                           d->doAutoplace();
-                                          d->segment()->staffShape(d->staffIdx()).add(d->shape().translated(e->pos()));
+                                          int si = d->staffIdx();
+                                          s->staffShape(si).add(d->shape().translated(e->pos()));
+                                          m->staffShape(si).add(d->shape().translated(s->pos() + d->pos()));
                                           }
                                     }
                               }
@@ -3091,22 +3115,6 @@ System* Score::collectSystem(LayoutContext& lc)
                               }
                         }
                   break;
-            }
-
-      //
-      // compute shape of measures
-      //
-
-      for (int si = 0; si < score()->nstaves(); ++si) {
-            for (MeasureBase* mb : system->measures()) {
-                  if (!mb->isMeasure())
-                        continue;
-                  Measure* m = toMeasure(mb);
-                  m->staffShape(si).clear();
-                  for (Segment& s : m->segments())
-                        m->staffShape(si).add(s.staffShape(si).translated(s.pos()));
-                  m->staffShape(si).add(m->staffLines(si)->bbox());
-                  }
             }
 
       //

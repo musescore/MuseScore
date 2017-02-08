@@ -281,6 +281,11 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::dynamicsPosBelow,        false, dynamicsPosBelow,           resetDynamicsPosBelow },
       { StyleIdx::dynamicsMinDistance,     false, dynamicsMinDistance,        resetDynamicsMinDistance },
 
+      { StyleIdx::tempoPlacement,          false, tempoTextPlacement,          resetTempoTextPlacement },
+      { StyleIdx::tempoPosAbove,           false, tempoTextPosAbove,           resetTempoTextPosAbove },
+      { StyleIdx::tempoPosBelow,           false, tempoTextPosBelow,           resetTempoTextPosBelow },
+      { StyleIdx::tempoMinDistance,        false, tempoTextMinDistance,        resetTempoTextMinDistance },
+
       { StyleIdx::autoplaceVerticalAlignRange,      false, autoplaceVerticalAlignRange, resetAutoplaceVerticalAlignRange },
       { StyleIdx::textLinePlacement,       false, textLinePlacement, resetTextLinePlacement },
       { StyleIdx::textLinePosAbove,        false, textLinePosAbove,             resetTextLinePosAbove },

@@ -313,10 +313,9 @@ class InspectorLyric : public InspectorElementBase {
 //   InspectorLyric
 //---------------------------------------------------------
 
-class InspectorStaffText : public InspectorElementBase {
+class InspectorStaffText : public InspectorTextBase {
       Q_OBJECT
 
-      Ui::InspectorText t;
       Ui::InspectorStaffText s;
 
    public:
