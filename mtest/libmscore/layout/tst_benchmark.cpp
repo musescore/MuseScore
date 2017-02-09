@@ -76,7 +76,7 @@ void TestBenchmark::benchmark1()
 
 void TestBenchmark::benchmark2()
       {
-//      score->doLayout();
+      score->doLayout();
       QBENCHMARK {                        // warm run
             score->doLayout();
             }

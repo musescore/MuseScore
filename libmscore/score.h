@@ -264,7 +264,7 @@ class CmdState {
       void setTick(int t);
       int startTick() const    { return _startTick; }
       int endTick() const      { return _endTick; }
-#ifndef DEBUG
+#ifndef NDEBUG
       void dump();
 #endif
       };

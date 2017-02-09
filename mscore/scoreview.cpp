@@ -3558,8 +3558,6 @@ void ScoreView::noteEntryButton(QMouseEvent* ev)
 
 void ScoreView::select(QMouseEvent* ev)
       {
-      score()->cmdState().dump();
-
       Qt::KeyboardModifiers keyState = ev->modifiers();
       if (keyState == (Qt::ShiftModifier | Qt::ControlModifier)) {
             cloneElement(curElement);
