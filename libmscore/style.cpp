@@ -1487,20 +1487,10 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             const char* type = st.valueType();
             if (!strcmp("Ms::Spatium", type))
                   xml.tag(st.name(), value(idx).value<Spatium>().val());
-            else if (!strcmp("double", type))
-                  xml.tag(st.name(), value(idx).toDouble());
-            else if (!strcmp("bool", type))
-                  xml.tag(st.name(), value(idx).toInt());
-            else if (!strcmp("int", type))
-                  xml.tag(st.name(), value(idx).toInt());
             else if (!strcmp("Ms::Direction", type))
                   xml.tag(st.name(), value(idx).toInt());
-            else if (!strcmp("QString", type))
-                  xml.tag(st.name(), value(idx).toString());
-            else if (!strcmp("Ms::Align", type))
-                  xml.tag(st.name(), value(idx));
             else
-                  qFatal("bad style type <%s>", type);
+                  xml.tag(st.name(), value(idx));
             }
       if (_customChordList && !_chordList.empty()) {
             xml.stag("ChordList");

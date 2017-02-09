@@ -326,37 +326,48 @@ void Ottava::read(XmlReader& e)
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
       e.addSpanner(e.intAttribute("id", -1), this);
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "subtype") {
-                  QString s = e.readElementText();
-                  bool ok;
-                  int idx = s.toInt(&ok);
-                  if (!ok) {
-                        idx = int(Type::OTTAVA_8VA);
-                        for (unsigned i = 0; i < sizeof(ottavaDefault)/sizeof(*ottavaDefault); ++i) {
-                              if (s == ottavaDefault[i].name) {
-                                    idx = i;
-                                    break;
-                                    }
+      while (e.readNextStartElement())
+            readProperties(e);
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Ottava::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "subtype") {
+            QString s = e.readElementText();
+            bool ok;
+            int idx = s.toInt(&ok);
+            if (!ok) {
+                  idx = int(Type::OTTAVA_8VA);
+                  for (unsigned i = 0; i < sizeof(ottavaDefault)/sizeof(*ottavaDefault); ++i) {
+                        if (s == ottavaDefault[i].name) {
+                              idx = i;
+                              break;
                               }
                         }
-                  else if (score()->mscVersion() <= 114) {
-                        //subtype are now in a different order...
-                        if (idx == 1)
-                              idx = 2;
-                        else if (idx == 2)
-                              idx = 1;
-                        }
-                  setOttavaType(Type(idx));
                   }
-            else if (tag == "numbersOnly") {
-                  _numbersOnly = e.readInt();
-                  numbersOnlyStyle = PropertyFlags::UNSTYLED;
+            else if (score()->mscVersion() <= 114) {
+                  //subtype are now in a different order...
+                  if (idx == 1)
+                        idx = 2;
+                  else if (idx == 2)
+                        idx = 1;
                   }
-            else if (!TextLineBase::readProperties(e))
-                  e.unknown();
+            setOttavaType(Type(idx));
             }
+      else if (tag == "numbersOnly") {
+            _numbersOnly = e.readInt();
+            numbersOnlyStyle = PropertyFlags::UNSTYLED;
+            }
+      else if (!TextLineBase::readProperties(e)) {
+            e.unknown();
+            return false;
+            }
+      return true;
       }
 
 //---------------------------------------------------------
