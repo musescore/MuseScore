@@ -182,7 +182,7 @@ class GuitarPro {
       int curPos;
       int previousTempo;
       int previousDynamic;
-      int ottavaFound;
+      int* ottavaFound;
       QString ottavaValue;
       int tempo;
       QMap<int,int> slides;
