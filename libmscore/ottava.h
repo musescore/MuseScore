@@ -103,6 +103,7 @@ class Ottava : public TextLineBase {
       virtual void endEdit() override;
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader& de) override;
+      bool readProperties(XmlReader& e);
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;

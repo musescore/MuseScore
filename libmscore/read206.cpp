@@ -41,6 +41,8 @@
 #include "excerpt.h"
 #include "articulation.h"
 #include "elementlayout.h"
+#include "volta.h"
+#include "pedal.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -962,19 +964,125 @@ static void readChord(Chord* chord, XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   convertOldTextStyleNames
+//   readTextLineProperties
 //---------------------------------------------------------
-#if 0
-static QString convertOldTextStyleNames(const QString& s)
-      {
-      QString rs(s);
-      // convert 2.0 text styles
-      if (s == "Repeat Text")
-            rs = "Repeat Text Right";
-      return rs;
-      }
-#endif
 
+static bool readTextLineProperties(XmlReader& e, TextLineBase* tl)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "beginText") {
+            Text* text = new Text(tl->score());
+            text->read(e);
+            tl->setBeginText(text->xmlText());
+            delete text;
+            }
+      else if (tag == "continueText") {
+            Text* text = new Text(tl->score());
+            text->read(e);
+            tl->setContinueText(text->xmlText());
+            delete text;
+            }
+      else if (tag == "endText") {
+            Text* text = new Text(tl->score());
+            text->read(e);
+            tl->setEndText(text->xmlText());
+            delete text;
+            }
+      else if (tag == "beginHook")
+            tl->setBeginHookType(e.readBool() ? HookType::HOOK_90 : HookType::NONE);
+      else if (tag == "endHook")
+            tl->setEndHookType(e.readBool() ? HookType::HOOK_90 : HookType::NONE);
+      else if (tl->readProperties(e))
+            return true;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   readVolta
+//---------------------------------------------------------
+
+static void readVolta(XmlReader& e, Volta* volta)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "endings") {
+                  QString s = e.readElementText();
+                  QStringList sl = s.split(",", QString::SkipEmptyParts);
+                  volta->endings().clear();
+                  for (const QString& l : sl) {
+                        int i = l.simplified().toInt();
+                        volta->endings().append(i);
+                        }
+                  }
+            else if (tag == "lineWidth") {
+                  volta->setLineWidth(Spatium(e.readDouble()));
+                  // TODO lineWidthStyle = PropertyStyle::UNSTYLED;
+                  }
+            else if (!readTextLineProperties(e, volta))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   readPedal
+//---------------------------------------------------------
+
+static void readPedal(XmlReader& e, Pedal* pedal)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (!readTextLineProperties(e, pedal))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   readOttava
+//---------------------------------------------------------
+
+static void readOttava(XmlReader& e, Ottava* ottava)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "subtype") {
+                  QString s = e.readElementText();
+                  bool ok;
+                  int idx = s.toInt(&ok);
+                  if (!ok) {
+                        idx = 0;    // Ottava::Type::OTTAVA_8VA;
+                        int i = 0;
+                        for (auto p :  { "8va","8vb","15ma","15mb","22ma","22mb" } ) {
+                              if (p == s) {
+                                    idx = i;
+                                    break;
+                                    }
+                              ++i;
+                              }
+                        }
+                  ottava->setOttavaType(Ottava::Type(idx));
+                  }
+            else if (tag == "numbersOnly") {
+                  ottava->setNumbersOnly(e.readBool());
+                  //TODO numbersOnlyStyle = PropertyFlags::UNSTYLED;
+                  }
+            else if (!readTextLineProperties(e, ottava))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   readTextLine
+//---------------------------------------------------------
+
+static void readTextLine(XmlReader& e, TextLineBase* tlb)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (!readTextLineProperties(e, tlb))
+                  e.unknown();
+            }
+      }
 
 //---------------------------------------------------------
 //   ArticulationNames
@@ -1311,8 +1419,18 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score));
                   sp->setTrack(e.track());
                   sp->setTick(e.tick());
-                  // ?? sp->setAnchor(Spanner::Anchor::SEGMENT);
-                  sp->read(e);
+                  qDeleteAll(sp->spannerSegments());
+                  sp->spannerSegments().clear();
+                  e.addSpanner(e.intAttribute("id", -1), sp);
+
+                  if (tag == "Volta")
+                        readVolta(e, toVolta(sp));
+                  else if (tag == "Pedal")
+                        readPedal(e, toPedal(sp));
+                  else if (tag == "Ottava")
+                        readOttava(e, toOttava(sp));
+                  else
+                        readTextLine(e, static_cast<TextLineBase*>(sp));
                   score->addSpanner(sp);
                   //
                   // check if we already saw "endSpanner"
