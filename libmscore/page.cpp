@@ -151,11 +151,25 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       QString s = replaceTextMacros(ss);
       if (s.isEmpty())
             return;
-      Text text(score());
-//TODO      text.setStyledPropertyListIdx(area < 3 ? StyledPropertyListIdx::HEADER : StyledPropertyListIdx::FOOTER);
-      text.setParent(const_cast<Page*>(this));
-      text.setLayoutToParentWidth(true);
 
+      Text* text;
+      if (area < 3) {
+            text = score()->headerText();
+            if (!text) {
+                  text = new Text(SubStyle::HEADER, score());
+                  text->setLayoutToParentWidth(true);
+                  score()->setHeaderText(text);
+                  }
+            }
+      else {
+            text = score()->footerText();
+            if (!text) {
+                  text = new Text(SubStyle::FOOTER, score());
+                  text->setLayoutToParentWidth(true);
+                  score()->setFooterText(text);
+                  }
+            }
+      text->setParent((Page*)this);
       Align flags;
       switch (area) {
             case 0: flags = Align::LEFT    | Align::TOP;    break;
@@ -165,12 +179,12 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
             case 4: flags = Align::HCENTER | Align::BOTTOM; break;
             case 5: flags = Align::RIGHT   | Align::BOTTOM; break;
             }
-      text.setAlign(flags);
-      text.setXmlText(s);
-      text.layout();
-      p->translate(text.pos());
-      text.draw(p);
-      p->translate(-text.pos());
+      text->setAlign(flags);
+      text->setXmlText(s);
+      text->layout();
+      p->translate(text->pos());
+      text->draw(p);
+      p->translate(-text->pos());
       }
 
 //---------------------------------------------------------

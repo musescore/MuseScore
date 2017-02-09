@@ -107,10 +107,15 @@ void CmdState::setTick(int t)
 //   setUpdateMode
 //---------------------------------------------------------
 
+void CmdState::_setUpdateMode(UpdateMode m)
+      {
+      _updateMode = m;
+      }
+
 void CmdState::setUpdateMode(UpdateMode m)
       {
       if (int(m) > int(_updateMode))
-            _updateMode = m;
+            _setUpdateMode(m);
       }
 
 //---------------------------------------------------------
@@ -186,6 +191,20 @@ void Score::endCmd(bool rollback)
       cmdState().reset();
       }
 
+#ifndef DEBUG
+//---------------------------------------------------------
+//   CmdState::dump
+//---------------------------------------------------------
+
+void CmdState::dump()
+      {
+      qDebug("CmdState: mode %d %d-%d", int(_updateMode), _startTick, _endTick);
+      // bool _excerptsChanged     { false };
+      // bool _instrumentsChanged  { false };
+
+      }
+#endif
+
 //---------------------------------------------------------
 //   update
 //    layout & update
@@ -202,16 +221,7 @@ void Score::update()
                         for (MuseScoreView* v : s->viewer)
                               v->updateAll();
                         }
-                  cs._setUpdateMode(UpdateMode::DoNothing);
-                  const InputState& is = inputState();
-                  if (is.noteEntryMode() && is.segment()) {
-                        setPlayPos(is.segment()->tick());
-                        }
-                  if (_playlistDirty) {
-                        emit playlistChanged();
-                        _playlistDirty = false;
-                        }
-                  break;
+                  cs._setUpdateMode(UpdateMode::UpdateAll);
                   }
             if (cs.updateAll()) {
                   for (Score* s : scoreList()) {
@@ -236,6 +246,7 @@ void Score::update()
                   emit playlistChanged();
                   _playlistDirty = false;
                   }
+            cs.reset();
             }
       }
 

@@ -411,7 +411,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool searchPage(int i);
       bool searchRehearsalMark(const QString& s);
       void gotoMeasure(Measure*);
-      void selectMeasure(int m);
       void postCmd(const char* cmd)   { sm->postEvent(new CommandEvent(cmd)); }
       void setFocusRect();
       void changeVoice(int voice);

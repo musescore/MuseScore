@@ -495,9 +495,11 @@ class DeSelectTransition : public QMouseEventTransition
             return canvas->getCurElement() != 0;
             }
       virtual void onTransition(QEvent* e) {
-            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
-            QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-            canvas->select(me);
+//TODO?? calls select mouse button release
+//            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
+//            QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
+//printf("deselect transition\n");
+//            canvas->select(me);
             }
    public:
       DeSelectTransition(ScoreView* c)
@@ -3556,6 +3558,8 @@ void ScoreView::noteEntryButton(QMouseEvent* ev)
 
 void ScoreView::select(QMouseEvent* ev)
       {
+      score()->cmdState().dump();
+
       Qt::KeyboardModifiers keyState = ev->modifiers();
       if (keyState == (Qt::ShiftModifier | Qt::ControlModifier)) {
             cloneElement(curElement);
@@ -5673,31 +5677,6 @@ void ScoreView::cmdRepeatSelection()
             }
       else {
             qDebug("cmdRepeatSelection: cannot paste: endSegment: %p dStaff %d", endSegment, dStaff);
-            }
-      }
-
-//---------------------------------------------------------
-//   selectMeasure
-//---------------------------------------------------------
-
-void ScoreView::selectMeasure(int n)
-      {
-      int i = 0;
-      for (Measure* measure = _score->firstMeasure(); measure; measure = measure->nextMeasure()) {
-            if (++i < n)
-                  continue;
-            _score->selection().setState(SelState::RANGE);
-            _score->selection().setStartSegment(measure->first());
-            _score->selection().setEndSegment(measure->last());
-            _score->selection().setStaffStart(0);
-            _score->selection().setStaffEnd(_score->nstaves());
-            _score->selection().updateSelectedElements();
-            _score->selection().setState(SelState::RANGE);
-            _score->addRefresh(measure->canvasBoundingRect());
-            adjustCanvasPosition(measure, true);
-            _score->setUpdateAll();
-            _score->update();
-            break;
             }
       }
 
