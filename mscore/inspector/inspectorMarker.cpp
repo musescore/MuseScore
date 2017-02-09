@@ -22,9 +22,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 InspectorMarker::InspectorMarker(QWidget* parent)
-   : InspectorElementBase(parent)
+   : InspectorTextBase(parent)
       {
-      t.setupUi(addWidget());
       m.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
@@ -32,7 +31,6 @@ InspectorMarker::InspectorMarker(QWidget* parent)
             { P_ID::LABEL,              0, false, m.jumpLabel,  0            }
             };
       const std::vector<InspectorPanel> ppList = {
-            { t.title, t.panel },
             { m.title, m.panel }
             };
       mapSignals(iiList, ppList);

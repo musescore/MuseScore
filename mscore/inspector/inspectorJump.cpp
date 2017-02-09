@@ -22,9 +22,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 InspectorJump::InspectorJump(QWidget* parent)
-   : InspectorElementBase(parent)
+   : InspectorTextBase(parent)
       {
-      t.setupUi(addWidget());
       j.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {

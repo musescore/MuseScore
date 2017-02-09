@@ -14,10 +14,8 @@
 #ifndef __INSPECTOR_MARKER_H__
 #define __INSPECTOR_MARKER_H__
 
-#include "inspector.h"
-#include "inspectorBase.h"
+#include "inspectorTextBase.h"
 #include "ui_inspector_marker.h"
-#include "libmscore/property.h"
 
 namespace Ms {
 
@@ -25,10 +23,9 @@ namespace Ms {
 //   InspectorMarker
 //---------------------------------------------------------
 
-class InspectorMarker : public InspectorElementBase {
+class InspectorMarker : public InspectorTextBase {
       Q_OBJECT
 
-      Ui::InspectorText t;
       Ui::InspectorMarker  m;
 
    public:
