@@ -257,13 +257,16 @@ class CmdState {
       void reset();
       UpdateMode updateMode() const { return _updateMode; }
       void setUpdateMode(UpdateMode m);
-      void _setUpdateMode(UpdateMode m) { _updateMode = m; }
+      void _setUpdateMode(UpdateMode m);
       bool layoutRange() const { return _updateMode == UpdateMode::Layout; }
       bool updateAll() const   { return int(_updateMode) >= int(UpdateMode::UpdateAll); }
       bool updateRange() const { return _updateMode == UpdateMode::Update; }
       void setTick(int t);
       int startTick() const    { return _startTick; }
       int endTick() const      { return _endTick; }
+#ifndef DEBUG
+      void dump();
+#endif
       };
 
 //---------------------------------------------------------
@@ -293,6 +296,8 @@ class Movements : public std::vector<MasterScore*> {
       UndoStack* _undo;
       QList<Page*> _pages;          // pages are build from systems
       MStyle _style;
+      Text* _headerText  { 0 };
+      Text* _footerText  { 0 };
 
    public:
       Movements();
@@ -304,6 +309,10 @@ class Movements : public std::vector<MasterScore*> {
       UndoStack* undo() const                 { return _undo;                }
       MStyle& style()                         { return _style;               }
       const MStyle& style() const             { return _style;               }
+      Text* headerText() const                { return _headerText;          }
+      Text* footerText() const                { return _footerText;          }
+      void setHeaderText(Text* t)             { _headerText = t;             }
+      void setFooterText(Text* t)             { _footerText = t;             }
       };
 
 //---------------------------------------------------------------------------------------
@@ -1118,6 +1127,11 @@ class Score : public ScoreElement {
       void globalTimeDelete();
 
       bool isTopScore() const;
+
+      Text* headerText() const                { return movements()->headerText();          }
+      Text* footerText() const                { return movements()->footerText();          }
+      void setHeaderText(Text* t)             { movements()->setHeaderText(t);             }
+      void setFooterText(Text* t)             { movements()->setFooterText(t);             }
 
       friend class ChangeSynthesizerState;
       friend class Chord;
