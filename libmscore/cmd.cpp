@@ -191,7 +191,7 @@ void Score::endCmd(bool rollback)
       cmdState().reset();
       }
 
-#ifndef DEBUG
+#ifndef NDEBUG
 //---------------------------------------------------------
 //   CmdState::dump
 //---------------------------------------------------------
