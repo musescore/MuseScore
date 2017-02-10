@@ -87,6 +87,17 @@ QString Jump::jumpTypeUserName() const
       }
 
 //---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Jump::layout()
+      {
+      setPos(QPointF(0.0, score()->styleP(StyleIdx::jumpPosAbove)));
+      Text::layout1();
+      adjustReadPos();
+      }
+
+//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
@@ -105,7 +116,6 @@ void Jump::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-//      setSubStyle(SubStyle::REPEAT_RIGHT);    // do not reset text style!
       }
 
 //---------------------------------------------------------

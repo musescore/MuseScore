@@ -174,8 +174,7 @@ Marker::Type Marker::markerType(const QString& s) const
 
 void Marker::layout()
       {
-      // setPos(textStyle().offset(spatium()));
-      setPos(QPointF());
+      setPos(QPointF(0.0, score()->styleP(StyleIdx::markerPosAbove)));
       Text::layout1();
       // although normally laid out to parent (measure) width,
       // force to center over barline if left-aligned

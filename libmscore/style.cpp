@@ -329,6 +329,8 @@ static const StyleType styleTypes[] {
       { StyleIdx::textLinePosBelow,          "textLinePosBelow",          Spatium(3.5) },
 
       { StyleIdx::tremoloBarLineWidth,       "tremoloBarLineWidth",       Spatium(0.1) },
+      { StyleIdx::jumpPosAbove,              "jumpPosAbove",              Spatium(-2.0) },
+      { StyleIdx::markerPosAbove,            "markerPosAbove",            Spatium(-2.0) },
 
 //====
 
@@ -589,14 +591,14 @@ static const StyleType styleTypes[] {
       { StyleIdx::repeatLeftFontBold,            "repeatLeftFontBold",           false },
       { StyleIdx::repeatLeftFontItalic,          "repeatLeftFontItalic",         false },
       { StyleIdx::repeatLeftFontUnderline,       "repeatLeftFontUnderline",      false },
-      { StyleIdx::repeatLeftSystemFlag,          "repeatSystemFlag",             true },
+      { StyleIdx::repeatLeftAlign,               "repeatLeftAlign",              QVariant::fromValue(Align::LEFT | Align::BASELINE) },
 
       { StyleIdx::repeatRightFontFace,           "repeatRightFontFace",          "FreeSerif" },
       { StyleIdx::repeatRightFontSize,           "repeatRightFontSize",          12.0 },
       { StyleIdx::repeatRightFontBold,           "repeatRightFontBold",          false },
       { StyleIdx::repeatRightFontItalic,         "repeatRightFontItalic",        false },
       { StyleIdx::repeatRightFontUnderline,      "repeatRightFontUnderline",     false },
-      { StyleIdx::repeatRightSystemFlag,         "repeatRightSystemFlag",        true  },
+      { StyleIdx::repeatRightAlign,              "repeatRightAlign",             QVariant::fromValue(Align::RIGHT | Align::BASELINE) },
 
       { StyleIdx::voltaFontFace,                 "voltaFontFace",                "FreeSerif" },
       { StyleIdx::voltaFontSize,                 "voltaFontSize",                11.0 },
@@ -989,7 +991,7 @@ const std::vector<StyledProperty> repeatLeftStyle {
       { StyleIdx::repeatLeftFontBold,                 P_ID::FONT_BOLD              },
       { StyleIdx::repeatLeftFontItalic,               P_ID::FONT_ITALIC            },
       { StyleIdx::repeatLeftFontUnderline,            P_ID::FONT_UNDERLINE         },
-      { StyleIdx::repeatLeftSystemFlag,               P_ID::SYSTEM_FLAG            },
+      { StyleIdx::repeatLeftAlign,                    P_ID::ALIGN                  },
       };
 
 const std::vector<StyledProperty> repeatRightStyle {
@@ -998,7 +1000,7 @@ const std::vector<StyledProperty> repeatRightStyle {
       { StyleIdx::repeatRightFontBold,                P_ID::FONT_BOLD              },
       { StyleIdx::repeatRightFontItalic,              P_ID::FONT_ITALIC            },
       { StyleIdx::repeatRightFontUnderline,           P_ID::FONT_UNDERLINE         },
-      { StyleIdx::repeatRightSystemFlag,              P_ID::SYSTEM_FLAG            },
+      { StyleIdx::repeatRightAlign,                   P_ID::ALIGN                  },
       };
 
 const std::vector<StyledProperty> frameStyle {
