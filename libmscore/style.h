@@ -312,6 +312,8 @@ enum class StyleIdx {
       textLinePosBelow,
 
       tremoloBarLineWidth,
+      jumpPosAbove,
+      markerPosAbove,
 
       defaultFontFace,
       defaultFontSize,
@@ -570,14 +572,14 @@ enum class StyleIdx {
       repeatLeftFontBold,
       repeatLeftFontItalic,
       repeatLeftFontUnderline,
-      repeatLeftSystemFlag,
+      repeatLeftAlign,
 
       repeatRightFontFace,
       repeatRightFontSize,
       repeatRightFontBold,
       repeatRightFontItalic,
       repeatRightFontUnderline,
-      repeatRightSystemFlag,
+      repeatRightAlign,
 
       voltaFontFace,
       voltaFontSize,

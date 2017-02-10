@@ -62,27 +62,29 @@ class Jump : public Text {
       Type jumpType() const;
       QString jumpTypeUserName() const;
 
-      virtual Jump* clone()          const override { return new Jump(*this); }
-      virtual ElementType type()   const override { return ElementType::JUMP; }
+      virtual Jump* clone() const override      { return new Jump(*this);   }
+      virtual ElementType type() const override { return ElementType::JUMP; }
 
-      Measure* measure() const         { return (Measure*)parent(); }
+      Measure* measure() const                  { return toMeasure(parent()); }
 
       virtual void read(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
 
-      QString jumpTo()               const { return _jumpTo;     }
-      QString playUntil()            const { return _playUntil;  }
-      QString continueAt()           const { return _continueAt; }
-      void setJumpTo(const QString& s)     { _jumpTo = s;        }
-      void setPlayUntil(const QString& s)  { _playUntil = s;     }
-      void setContinueAt(const QString& s) { _continueAt = s;    }
+      virtual void layout() override;
+
+      QString jumpTo() const                    { return _jumpTo;     }
+      QString playUntil() const                 { return _playUntil;  }
+      QString continueAt() const                { return _continueAt; }
+      void setJumpTo(const QString& s)          { _jumpTo = s;        }
+      void setPlayUntil(const QString& s)       { _playUntil = s;     }
+      void setContinueAt(const QString& s)      { _continueAt = s;    }
       void undoSetJumpTo(const QString& s);
       void undoSetPlayUntil(const QString& s);
       void undoSetContinueAt(const QString& s);
-      bool playRepeats() const             { return _playRepeats; }
-      void setPlayRepeats(bool val)        { _playRepeats = val;  }
+      bool playRepeats() const                  { return _playRepeats; }
+      void setPlayRepeats(bool val)             { _playRepeats = val;  }
 
-      virtual bool systemFlag() const override      { return true;        }
+      virtual bool systemFlag() const override  { return true;        }
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
@@ -93,6 +95,9 @@ class Jump : public Text {
       virtual QString accessibleInfo() const override;
       };
 
+//---------------------------------------------------------
+//   JumpTypeTable
+//---------------------------------------------------------
 
 struct JumpTypeTable {
       Jump::Type type;

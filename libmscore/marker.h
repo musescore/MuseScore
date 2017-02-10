@@ -17,7 +17,6 @@
 
 namespace Ms {
 
-
 //---------------------------------------------------------
 //   @@ Marker
 //
@@ -43,7 +42,6 @@ class Marker : public Text {
             TOCODA,
             USER
             };
-
 
    private:
       Type _markerType;
@@ -85,13 +83,18 @@ class Marker : public Text {
       virtual QString accessibleInfo() const override;
       };
 
-typedef struct {
+//---------------------------------------------------------
+//   MarkerTypeItem
+//---------------------------------------------------------
+
+struct MarkerTypeItem {
       Marker::Type type;
       QString name;
-      } MarkerTypeItem;
+      };
 
 extern const MarkerTypeItem markerTypeTable[];
 int markerTypeTableSize();
+
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Marker::Type);
