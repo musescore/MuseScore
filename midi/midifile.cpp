@@ -218,6 +218,9 @@ bool MidiFile::read(QIODevice* in)
       if (memcmp(tmp, "MThd", 4) || len < 6)
             throw(QString("bad midifile: MThd expected"));
 
+      if (len > 6)
+            throw(QString("unsupported MIDI header data size: %1 instead of 6").arg(len));
+
       _format     = readShort();
       int ntracks = readShort();
 
@@ -253,9 +256,6 @@ bool MidiFile::read(QIODevice* in)
             }
 
       // =====================================================
-
-      if (len > 6)
-            skip(len-6); // skip the excess
 
       switch (_format) {
             case 0:
