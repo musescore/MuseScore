@@ -1,0 +1,942 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="2.00">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <page-layout>
+        <page-height>1683.78</page-height>
+        <page-width>1190.55</page-width>
+        <page-margins type="even">
+          <left-margin>56.6929</left-margin>
+          <right-margin>56.6929</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        <page-margins type="odd">
+          <left-margin>56.6929</left-margin>
+          <right-margin>56.6929</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        </page-layout>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="originalFormat">gpx</metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <PageList>
+      <Page>
+        <System>
+          </System>
+        <System>
+          </System>
+        </Page>
+      </PageList>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          </StaffType>
+        </Staff>
+      <trackName>N-Gt</trackName>
+      <Instrument>
+        <longName>Classical Guitar</longName>
+        <shortName>Guit.</shortName>
+        <trackName>Classical Guitar</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>83</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>83</maxPitchA>
+        <instrumentId>pluck.guitar.nylon-string</instrumentId>
+        <clef>G8vb</clef>
+        <StringData>
+          <frets>21</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          </StringData>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="24"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="2">
+        <StaffType group="pitched">
+          </StaffType>
+        </Staff>
+      <trackName>E-Gt</trackName>
+      <Instrument>
+        <longName>Electric Guitar</longName>
+        <shortName>El. Guit.</shortName>
+        <trackName>Electric Guitar</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>86</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>86</maxPitchA>
+        <instrumentId>pluck.guitar.electric</instrumentId>
+        <clef>G8vb</clef>
+        <StringData>
+          <frets>21</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          </StringData>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="27"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <lid>0</lid>
+        </VBox>
+      <Measure number="1">
+        <Clef>
+          <concertClefType>G8vb</concertClefType>
+          <transposingClefType>G8vb</transposingClefType>
+          <lid>1</lid>
+          </Clef>
+        <KeySig>
+          <lid>2</lid>
+          <accidental>0</accidental>
+          </KeySig>
+        <TimeSig>
+          <lid>3</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Dynamic>
+          <subtype>mf</subtype>
+          <velocity>80</velocity>
+          <lid>4</lid>
+          </Dynamic>
+        <Tempo>
+          <tempo>2</tempo>
+          <lid>5</lid>
+          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+          </Tempo>
+        <Ottava id="2">
+          <subtype>8va</subtype>
+          <lid>15</lid>
+          </Ottava>
+        <Chord>
+          <lid>6</lid>
+          <durationType>whole</durationType>
+          <Note>
+            <lid>7</lid>
+            <Accidental>
+              <subtype>sharp</subtype>
+              </Accidental>
+            <pitch>49</pitch>
+            <tpc>21</tpc>
+            <fret>4</fret>
+            <string>4</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <lid>9</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <lid>11</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <Rest>
+          <lid>13</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          </BarLine>
+        <endSpanner id="2"/>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>G8vb</concertClefType>
+          <transposingClefType>G8vb</transposingClefType>
+          <lid>16</lid>
+          </Clef>
+        <KeySig>
+          <lid>17</lid>
+          <accidental>0</accidental>
+          </KeySig>
+        <TimeSig>
+          <lid>18</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <lid>19</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Dynamic>
+          <subtype>mf</subtype>
+          <velocity>80</velocity>
+          <lid>20</lid>
+          </Dynamic>
+        <Ottava id="3">
+          <subtype>8va</subtype>
+          <lid>30</lid>
+          <lineWidth>0.1</lineWidth>
+          </Ottava>
+        <Chord>
+          <lid>21</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>22</lid>
+            <pitch>45</pitch>
+            <tpc>17</tpc>
+            <fret>0</fret>
+            <string>4</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>23</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>24</lid>
+            <pitch>57</pitch>
+            <tpc>17</tpc>
+            <fret>2</fret>
+            <string>2</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>25</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>26</lid>
+            <pitch>57</pitch>
+            <tpc>17</tpc>
+            <fret>2</fret>
+            <string>2</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <endSpanner id="3"/>
+        <Rest>
+          <lid>27</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <lid>28</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <Rest>
+          <lid>29</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          </BarLine>
+        </Measure>
+      </Staff>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <page-layout>
+          <page-height>1584</page-height>
+          <page-width>1224</page-width>
+          <page-margins type="even">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          <page-margins type="odd">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          </page-layout>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <PageList>
+        <Page>
+          <System>
+            </System>
+          <System>
+            </System>
+          </Page>
+        </PageList>
+      <Part>
+        <Staff id="1">
+          <linkedTo>1</linkedTo>
+          <StaffType group="pitched">
+            </StaffType>
+          <bracket type="0" span="2"/>
+          </Staff>
+        <Staff id="2">
+          <linkedTo>1</linkedTo>
+          <StaffType group="tablature">
+            <name>tab6StrCommon</name>
+            <lines>6</lines>
+            <lineDistance>1.5</lineDistance>
+            <timesig>0</timesig>
+            <durations>0</durations>
+            <durationFontName>MuseScore Tab Modern</durationFontName>
+            <durationFontSize>15</durationFontSize>
+            <durationFontY>0</durationFontY>
+            <fretFontName>MuseScore Tab Serif</fretFontName>
+            <fretFontSize>9</fretFontSize>
+            <fretFontY>0</fretFontY>
+            <linesThrough>0</linesThrough>
+            <minimStyle>1</minimStyle>
+            <onLines>1</onLines>
+            <showRests>0</showRests>
+            <stemsDown>1</stemsDown>
+            <stemsThrough>0</stemsThrough>
+            <upsideDown>0</upsideDown>
+            <useNumbers>1</useNumbers>
+            </StaffType>
+          <bracket type="-1" span="0"/>
+          </Staff>
+        <trackName></trackName>
+        <Instrument>
+          <longName>Classical Guitar</longName>
+          <shortName>Guit.</shortName>
+          <trackName>Classical Guitar</trackName>
+          <minPitchP>40</minPitchP>
+          <maxPitchP>83</maxPitchP>
+          <minPitchA>40</minPitchA>
+          <maxPitchA>83</maxPitchA>
+          <instrumentId>pluck.guitar.nylon-string</instrumentId>
+          <clef>G8vb</clef>
+          <StringData>
+            <frets>21</frets>
+            <string>40</string>
+            <string>45</string>
+            <string>50</string>
+            <string>55</string>
+            <string>59</string>
+            <string>64</string>
+            </StringData>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Channel>
+            <program value="24"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <lid>0</lid>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Classical Guitar</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <Clef>
+            <concertClefType>G8vb</concertClefType>
+            <transposingClefType>G8vb</transposingClefType>
+            <lid>1</lid>
+            </Clef>
+          <KeySig>
+            <lid>2</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <TimeSig>
+            <lid>3</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            <lid>4</lid>
+            </Dynamic>
+          <Tempo>
+            <tempo>2</tempo>
+            <lid>5</lid>
+            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+            </Tempo>
+          <Ottava id="4">
+            <subtype>8va</subtype>
+            <lid>15</lid>
+            </Ottava>
+          <Chord>
+            <lid>6</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>7</lid>
+              <Accidental>
+                <subtype>sharp</subtype>
+                </Accidental>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              <fret>4</fret>
+              <string>4</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="2">
+          <Rest>
+            <lid>9</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="2" len="12/4">
+          <multiMeasureRest>3</multiMeasureRest>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration z="12" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          <endSpanner id="4"/>
+          <endSpanner id="5"/>
+          </Measure>
+        <tick>3840</tick>
+        <Measure number="3">
+          <Rest>
+            <lid>11</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="4">
+          <Rest>
+            <lid>13</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          <endSpanner id="4"/>
+          <endSpanner id="5"/>
+          </Measure>
+        </Staff>
+      <Staff id="2">
+        <Measure number="1">
+          <KeySig>
+            <lid>2</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <Ottava id="5">
+            <subtype>8va</subtype>
+            <lid>15</lid>
+            </Ottava>
+          <Chord>
+            <lid>6</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>7</lid>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              <fret>4</fret>
+              <string>4</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="2">
+          <Rest>
+            <lid>9</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="2" len="12/4">
+          <multiMeasureRest>3</multiMeasureRest>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration z="12" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>3840</tick>
+        <Measure number="3">
+          <Rest>
+            <lid>11</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="4">
+          <Rest>
+            <lid>13</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        </Staff>
+      <name>N-Gt</name>
+      </Score>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <page-layout>
+          <page-height>1584</page-height>
+          <page-width>1224</page-width>
+          <page-margins type="even">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          <page-margins type="odd">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          </page-layout>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <PageList>
+        <Page>
+          <System>
+            </System>
+          <System>
+            </System>
+          </Page>
+        </PageList>
+      <Part>
+        <Staff id="1">
+          <linkedTo>2</linkedTo>
+          <StaffType group="pitched">
+            </StaffType>
+          <bracket type="0" span="2"/>
+          </Staff>
+        <Staff id="2">
+          <linkedTo>2</linkedTo>
+          <StaffType group="tablature">
+            <name>tab6StrCommon</name>
+            <lines>6</lines>
+            <lineDistance>1.5</lineDistance>
+            <timesig>0</timesig>
+            <durations>0</durations>
+            <durationFontName>MuseScore Tab Modern</durationFontName>
+            <durationFontSize>15</durationFontSize>
+            <durationFontY>0</durationFontY>
+            <fretFontName>MuseScore Tab Serif</fretFontName>
+            <fretFontSize>9</fretFontSize>
+            <fretFontY>0</fretFontY>
+            <linesThrough>0</linesThrough>
+            <minimStyle>1</minimStyle>
+            <onLines>1</onLines>
+            <showRests>0</showRests>
+            <stemsDown>1</stemsDown>
+            <stemsThrough>0</stemsThrough>
+            <upsideDown>0</upsideDown>
+            <useNumbers>1</useNumbers>
+            </StaffType>
+          <bracket type="-1" span="0"/>
+          </Staff>
+        <trackName></trackName>
+        <Instrument>
+          <longName>Electric Guitar</longName>
+          <shortName>El. Guit.</shortName>
+          <trackName>Electric Guitar</trackName>
+          <minPitchP>40</minPitchP>
+          <maxPitchP>86</maxPitchP>
+          <minPitchA>40</minPitchA>
+          <maxPitchA>86</maxPitchA>
+          <instrumentId>pluck.guitar.electric</instrumentId>
+          <clef>G8vb</clef>
+          <StringData>
+            <frets>21</frets>
+            <string>40</string>
+            <string>45</string>
+            <string>50</string>
+            <string>55</string>
+            <string>59</string>
+            <string>64</string>
+            </StringData>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Channel>
+            <program value="27"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <lid>0</lid>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Electric Guitar</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <Clef>
+            <concertClefType>G8vb</concertClefType>
+            <transposingClefType>G8vb</transposingClefType>
+            <lid>16</lid>
+            </Clef>
+          <KeySig>
+            <lid>17</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <TimeSig>
+            <lid>18</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Tempo>
+            <tempo>2</tempo>
+            <lid>5</lid>
+            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+            </Tempo>
+          <Rest>
+            <lid>19</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            <lid>20</lid>
+            </Dynamic>
+          <Ottava id="6">
+            <subtype>8va</subtype>
+            <lid>30</lid>
+            </Ottava>
+          <Chord>
+            <lid>21</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>22</lid>
+              <pitch>45</pitch>
+              <tpc>17</tpc>
+              <fret>0</fret>
+              <string>4</string>
+              </Note>
+            </Chord>
+          <endSpanner id="6"/>
+          <Chord>
+            <lid>23</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>24</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>25</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>26</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <tick>960</tick>
+          <endSpanner id="7"/>
+          </Measure>
+        <Measure number="2">
+          <Rest>
+            <lid>27</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="2" len="12/4">
+          <multiMeasureRest>3</multiMeasureRest>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration z="12" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>3840</tick>
+        <Measure number="3">
+          <Rest>
+            <lid>28</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="4">
+          <Rest>
+            <lid>29</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        </Staff>
+      <Staff id="2">
+        <Measure number="1">
+          <KeySig>
+            <lid>17</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <Rest>
+            <lid>19</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Ottava id="7">
+            <subtype>8va</subtype>
+            <lid>30</lid>
+            </Ottava>
+          <Chord>
+            <lid>21</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>22</lid>
+              <pitch>45</pitch>
+              <tpc>17</tpc>
+              <fret>0</fret>
+              <string>4</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>23</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>24</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>25</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>26</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="2">
+          <Rest>
+            <lid>27</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="2" len="12/4">
+          <multiMeasureRest>3</multiMeasureRest>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration z="12" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>3840</tick>
+        <Measure number="3">
+          <Rest>
+            <lid>28</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="4">
+          <Rest>
+            <lid>29</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        </Staff>
+      <name>E-Gt</name>
+      </Score>
+    </Score>
+  </museScore>
