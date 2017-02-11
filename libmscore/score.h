@@ -378,6 +378,8 @@ class Score : public QObject, public ScoreElement {
       bool _printing;   ///< True if we are drawing to a printer
       bool _playlistDirty;
       bool _autosaveDirty;
+      bool _savedCapture          { false };      ///< True if we saved an image capture
+
 //      bool _dirty;      ///< Score data was modified.
       bool _saved;      ///< True if project was already saved; only on first
                         ///< save a backup file will be created, subsequent
@@ -729,8 +731,10 @@ class Score : public QObject, public ScoreElement {
       bool dirty() const;
       void setCreated(bool val)      { _created = val;        }
       bool created() const           { return _created;       }
+      bool savedCapture() const      { return _savedCapture;  }
       bool saved() const             { return _saved;         }
       void setSaved(bool v)          { _saved = v;            }
+      void setSavedCapture(bool v)   { _savedCapture = v;     }
       bool printing() const          { return _printing;      }
       void setPrinting(bool val)     { _printing = val;      }
       void setAutosaveDirty(bool v)  { _autosaveDirty = v;    }

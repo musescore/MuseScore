@@ -1184,18 +1184,39 @@ QString MuseScore::getFotoFilename(QString& filter, QString* selectedFilter)
             myImages.setFile(QDir::home(), preferences.myImagesPath);
       QString defaultPath = myImages.absoluteFilePath();
 
+      // compute the image capture path
+      QString myCapturePath;
+      // if no saves were made for current score, then use the score's name as default
+      if (!cs->rootScore()->savedCapture()) {
+            // set the current score's name as the default name for saved captures
+            QString scoreName = cs->rootScore()->fileInfo()->completeBaseName();
+            QString name = createDefaultFileName(scoreName);
+            QString fname = QString("%1/%2").arg(defaultPath).arg(name);
+            QFileInfo myCapture(fname);
+            if (myCapture.isRelative())
+                myCapture.setFile(QDir::home(), fname);
+            myCapturePath = myCapture.absoluteFilePath();
+            }
+      else
+            myCapturePath = lastSaveCaptureName;
+
       if (preferences.nativeDialogs) {
             QString fn;
             fn = QFileDialog::getSaveFileName(
                this,
                title,
-               defaultPath,
+               myCapturePath,
                filter,
                selectedFilter
                );
+            // if a save was made for this current score
+            if (!fn.isEmpty()) {
+                cs->rootScore()->setSavedCapture(true);
+                // store the last name used for saving an image capture
+                lastSaveCaptureName = fn;
+                }
             return fn;
             }
-
 
       QList<QUrl> urls;
       urls.append(QUrl::fromLocalFile(QDir::homePath()));
@@ -1219,9 +1240,16 @@ QString MuseScore::getFotoFilename(QString& filter, QString* selectedFilter)
       // setup side bar urls
       saveImageDialog->setSidebarUrls(urls);
 
+      // set file's name using the computed path
+      saveImageDialog->selectFile(myCapturePath);
+
       if (saveImageDialog->exec()) {
             QStringList result = saveImageDialog->selectedFiles();
             *selectedFilter = saveImageDialog->selectedNameFilter();
+            // a save was made for this current score
+            cs->rootScore()->setSavedCapture(true);
+            // store the last name used for saving an image capture
+            lastSaveCaptureName = result.front();
             return result.front();
             }
       return QString();

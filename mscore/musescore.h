@@ -519,6 +519,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QString lastSaveCopyDirectory;
       QString lastSaveCopyFormat;
       QString lastSaveDirectory;
+      QString lastSaveCaptureName;
       SynthControl* getSynthControl() const       { return synthControl; }
       void editInPianoroll(Staff* staff);
       void editInDrumroll(Staff* staff);
