@@ -13,14 +13,15 @@ unzip bottles.zip
 rm bottles/freetype*
 
 brew update
-brew install bottles/libogg*
-brew install bottles/libvorbis*
-brew install bottles/flac*
-brew install bottles/libsndfile*
-brew install bottles/portaudio*
+#brew install bottles/libogg*
+#brew install bottles/libvorbis*
+#brew install bottles/flac*
+#brew install bottles/libsndfile*
+#brew install bottles/portaudio*
 
 # additional dependencies
 brew install jack lame
+brew install libogg libvorbis flac libsndfile portaudio
 
 #update ruby
 rvm uninstall 2.0.0-p648
