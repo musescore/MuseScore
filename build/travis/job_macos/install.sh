@@ -13,15 +13,24 @@ unzip bottles.zip
 rm bottles/freetype*
 
 brew update
-#brew install bottles/libogg*
-#brew install bottles/libvorbis*
-#brew install bottles/flac*
-#brew install bottles/libsndfile*
-#brew install bottles/portaudio*
 
 # additional dependencies
 brew install jack lame
-brew install libogg libvorbis flac libsndfile portaudio
+#brew install libogg libvorbis flac libsndfile portaudio
+
+function installBottleManually {
+  brew unlink $1
+  rm -rf /usr/local/Cellar/$1
+  tar xzvf bottles/$1*.tar.gz -C /usr/local/Cellar
+  find /usr/local/Cellar/$1 -type f -name '*.pc' -exec sed -i '' 's:@@HOMEBREW_CELLAR@@:/usr/local/Cellar:g' {} +
+  brew link $1
+}
+
+installBottleManually libogg
+installBottleManually libvorbis
+installBottleManually flac
+installBottleManually libsndfile
+installBottleManually portaudio
 
 #update ruby
 rvm uninstall 2.0.0-p648
