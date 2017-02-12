@@ -296,10 +296,9 @@ class InspectorTempoText : public InspectorTextBase {
 //   InspectorLyric
 //---------------------------------------------------------
 
-class InspectorLyric : public InspectorElementBase {
+class InspectorLyric : public InspectorTextBase {
       Q_OBJECT
 
-      Ui::InspectorText t;
       Ui::InspectorLyric l;
 
    private slots:

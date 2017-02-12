@@ -188,7 +188,7 @@ subdirs (
         libmscore/rhythmicGrouping
         libmscore/selectionfilter
         libmscore/selectionrangedelete
-#        libmscore/spanners
+        libmscore/spanners
         libmscore/split
         libmscore/splitstaff
         libmscore/timesig

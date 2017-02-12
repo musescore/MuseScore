@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>199</width>
-    <height>323</height>
+    <width>266</width>
+    <height>428</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -472,7 +472,7 @@
         <number>1</number>
        </property>
        <property name="minimum">
-        <double>0.000000000000000</double>
+        <double>-20.000000000000000</double>
        </property>
        <property name="maximum">
         <double>20.000000000000000</double>
