@@ -193,14 +193,14 @@ void Lyrics::add(Element* el)
 
 void Lyrics::remove(Element* el)
       {
-      if (el->type() == ElementType::LYRICSLINE) {
+      if (el->isLyricsLine()) {
             // only if separator still exists and is the right one
             if (_separator != nullptr && el == _separator) {
                   // Lyrics::remove() and LyricsLine::removeUnmanaged() call each other;
                   // be sure each finds a clean context
                   LyricsLine* separ = _separator;
-                  _separator = nullptr;
-                  separ->setParent(nullptr);
+                  _separator = 0;
+                  separ->setParent(0);
                   separ->removeUnmanaged();
                   delete separ;
                   }
@@ -223,9 +223,9 @@ bool Lyrics::isMelisma() const
       // if so, it is a melisma only if there is no lyric in same verse on next CR
       if (_syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
             // find next CR on same track and check for existence of lyric in same verse
-            ChordRest* cr = chordRest();
-            Segment* s = cr->segment()->next1();
-            ChordRest* ncr = s ? s->nextChordRest(cr->track()) : nullptr;
+            ChordRest* cr  = chordRest();
+            Segment* s     = cr->segment()->next1();
+            ChordRest* ncr = s ? s->nextChordRest(cr->track()) : 0;
             if (ncr && !ncr->lyrics(_no, placement()))
                   return true;
             }
@@ -475,12 +475,11 @@ Element* Lyrics::drop(const DropData& data)
             Text::drop(data);
             return 0;
             }
-      Text* e = static_cast<Text*>(data.element);
-//      if (!(e->isText() && e->subStyle() == SubStyle::???)) {
-      if (!e->isText()) {
-            delete e;
+      if (!data.element->isText()) {
+            delete data.element;
             return 0;
             }
+      Text* e = toText(data.element);
       e->setParent(this);
       score()->undoAddElement(e);
       return e;
@@ -606,13 +605,13 @@ LyricsLine::LyricsLine(Score* s)
       setDiagonal(false);
       setLineWidth(Spatium(Lyrics::LYRICS_DASH_DEFAULT_LINE_THICKNESS));
       setAnchor(Spanner::Anchor::SEGMENT);
-      _nextLyrics = nullptr;
+      _nextLyrics = 0;
       }
 
 LyricsLine::LyricsLine(const LyricsLine& g)
    : SLine(g)
       {
-      _nextLyrics = nullptr;
+      _nextLyrics = 0;
       }
 
 //---------------------------------------------------------

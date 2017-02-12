@@ -893,9 +893,8 @@ void InspectorTempoText::postInit()
 //---------------------------------------------------------
 
 InspectorLyric::InspectorLyric(QWidget* parent)
-   : InspectorElementBase(parent)
+   : InspectorTextBase(parent)
       {
-      t.setupUi(addWidget());
       l.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
@@ -903,7 +902,6 @@ InspectorLyric::InspectorLyric(QWidget* parent)
             { P_ID::VERSE,              0, 0, l.verse,     l.resetVerse     }
             };
       const std::vector<InspectorPanel> ppList = {
-            { t.title, t.panel },
             { l.title, l.panel }
             };
       l.placement->clear();
@@ -922,10 +920,8 @@ void InspectorLyric::valueChanged(int idx)
       if (iList[idx].t == P_ID::VERSE) {
             int val    = getValue(iList[idx]).toInt();
             Lyrics* l  = toLyrics(inspector->element());
-            printf("value changed %d  old %d\n", val, l->no());
             Lyrics* nl = l->chordRest()->lyrics(val, l->placement());
             if (nl) {
-                  printf("   move away %d -> %d\n", nl->no(), l->no());
                   nl->undoChangeProperty(P_ID::VERSE, l->no());
                   }
             }

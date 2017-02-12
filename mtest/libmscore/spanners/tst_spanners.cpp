@@ -75,7 +75,6 @@ void TestSpanners::spanners01()
 
       MasterScore* score = readScore(DIR + "glissando01.mscx");
       QVERIFY(score);
-      score->doLayout();
 
       // SIMPLE CASE: GLISSANDO FROM A NOTE TO THE FOLLOWING
       // go to top note of first chord
@@ -174,7 +173,6 @@ void TestSpanners::spanners02()
       {
       MasterScore* score = readScore(DIR + "glissando-crossstaff01.mscx");
       QVERIFY(score);
-      score->doLayout();
 
       QVERIFY(saveCompareScore(score, "glissando-crsossstaff01.mscx", DIR + "glissando-crossstaff01-ref.mscx"));
       delete score;
@@ -192,7 +190,6 @@ void TestSpanners::spanners03()
 
       MasterScore* score = readScore(DIR + "glissando-graces01.mscx");
       QVERIFY(score);
-      score->doLayout();
 
       // GLISSANDO FROM MAIN NOTE TO AFTER-GRACE
       // go to top note of first chord
@@ -263,7 +260,6 @@ void TestSpanners::spanners04()
       {
       MasterScore* score = readScore(DIR + "glissando-cloning01.mscx");
       QVERIFY(score);
-      score->doLayout();
 
       // add a linked staff to the existing staff
       // (copied and adapted from void MuseScore::editInstrList() in mscore/instrdialog.cpp)
@@ -293,7 +289,6 @@ void TestSpanners::spanners05()
       {
       MasterScore* score = readScore(DIR + "glissando-cloning02.mscx");
       QVERIFY(score);
-      score->doLayout();
 
       // create parts
       // (copied and adapted from void TestParts::createParts() in mtest/libmscore/parts/tst_parts.cpp)
@@ -329,7 +324,6 @@ void TestSpanners::spanners06()
 
       MasterScore* score = readScore(DIR + "glissando-cloning03.mscx");
       QVERIFY(score);
-      score->doLayout();
 
       // DROP A GLISSANDO ON FIRST NOTE
       Measure*    msr   = score->firstMeasure();
@@ -362,7 +356,6 @@ void TestSpanners::spanners07()
 
       MasterScore* score = readScore(DIR + "glissando-cloning04.mscx");
       QVERIFY(score);
-      score->doLayout();
 
       // DROP A GLISSANDO ON FIRST NOTE
       Measure*    msr   = score->firstMeasure();
@@ -392,7 +385,6 @@ void TestSpanners::spanners08()
       {
       MasterScore* score = readScore(DIR + "lyricsline01.mscx");
       QVERIFY(score);
-      score->doLayout();
 
       // verify initial LyricsLine setup
       System* sys = score->systems().at(0);
@@ -445,10 +437,9 @@ void TestSpanners::spanners09()
       {
       MasterScore* score = readScore(DIR + "lyricsline02.mscx");
       QVERIFY(score);
-      score->doLayout();
 
       // DELETE SECOND MEASURE AND VERIFY
-      Measure*    msr   = score->firstMeasure();
+      Measure* msr   = score->firstMeasure();
       QVERIFY(msr);
       msr = msr->nextMeasure();
       QVERIFY(msr);
@@ -478,7 +469,6 @@ void TestSpanners::spanners10()
       {
       MasterScore* score = readScore(DIR + "lyricsline03.mscx");
       QVERIFY(score);
-      score->doLayout();
 
       // DELETE SECOND MEASURE AND VERIFY
       Measure*    msr   = score->firstMeasure();
@@ -511,7 +501,6 @@ void TestSpanners::spanners11()
       {
       MasterScore* score = readScore(DIR + "lyricsline04.mscx");
       QVERIFY(score);
-      score->doLayout();
 
       // DELETE SECOND MEASURE AND VERIFY
       Measure*    msr   = score->firstMeasure();
@@ -544,7 +533,6 @@ void TestSpanners::spanners12()
       {
       MasterScore* score = readScore(DIR + "lyricsline05.mscx");
       QVERIFY(score);
-      score->doLayout();
 
       // DELETE SECOND MEASURE AND VERIFY
       Measure*    msr   = score->firstMeasure();
@@ -577,7 +565,6 @@ void TestSpanners::spanners13()
 
       MasterScore* score = readScore(DIR + "lyricsline06.mscx");
       QVERIFY(score);
-      score->doLayout();
 
       // DROP A BREAK AT FIRST MEASURE AND VERIFY
       Measure*    msr   = score->firstMeasure();
@@ -611,7 +598,6 @@ void TestSpanners::spanners14()
       {
       MasterScore* score = readScore(DIR + "glissando-cloning05.mscx");
       QVERIFY(score);
-      score->doLayout();
 
       // create parts
       // (copied and adapted from void TestParts::createParts() in mtest/libmscore/parts/tst_parts.cpp)
