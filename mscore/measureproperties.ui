@@ -307,7 +307,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Repeat count:</string>
+             <string>Play count:</string>
             </property>
            </widget>
           </item>
