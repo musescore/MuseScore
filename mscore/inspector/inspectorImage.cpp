@@ -33,6 +33,21 @@ InspectorImage::InspectorImage(QWidget* parent)
       {
       b.setupUi(addWidget());
 
+      Element* e = inspector->element();
+      bool inFrame = e->parent()->isHBox() || e->parent()->isVBox();
+      bool sameTypes = true;
+
+      for (const auto& ee : inspector->el()) {
+            if ((ee->parent()->isHBox() || ee->parent()->isVBox()) != inFrame) {
+                  sameTypes = false;
+                  break;
+                  }
+            }
+      if (sameTypes) {
+            b.autoscale->setDisabled(!inFrame);
+            b.resetAutoscale->setDisabled(!inFrame);
+            }
+
       const std::vector<InspectorItem> iiList = {
             { P_ID::AUTOSCALE,         0, false, b.autoscale,       b.resetAutoscale       },
             { P_ID::SIZE,              0, false, b.sizeWidth,       0                      },
