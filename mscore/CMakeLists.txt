@@ -136,6 +136,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_fingering.ui
       inspector/inspector_frametext.ui
       inspector/align_select.ui
+      inspector/offset_select.ui
       ${SCRIPT_UI}
       )
 
@@ -290,6 +291,7 @@ add_executable ( ${ExecutableName}
       inspector/inspectorFingering.cpp
       inspector/inspectorTextLine.cpp
       inspector/alignSelect.cpp
+      inspector/offsetSelect.cpp
       inspector/inspectorTextBase.cpp
       inspector/inspectorDynamic.cpp
       inspector/inspectorElementBase.cpp

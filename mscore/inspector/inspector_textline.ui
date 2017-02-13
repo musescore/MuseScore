@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>301</width>
-    <height>673</height>
+    <width>422</width>
+    <height>786</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -133,7 +133,7 @@
          <item row="5" column="0">
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Horiz. offset:</string>
+            <string>Offset:</string>
            </property>
            <property name="buddy">
             <cstring>beginTextXoffset</cstring>
@@ -407,7 +407,7 @@
           </widget>
          </item>
          <item row="5" column="2">
-          <widget class="QToolButton" name="resetBeginTextXoffset">
+          <widget class="QToolButton" name="resetBeginTextOffset">
            <property name="toolTip">
             <string>Reset to default</string>
            </property>
@@ -424,45 +424,7 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="QDoubleSpinBox" name="beginTextXoffset">
-           <property name="suffix">
-            <string>sp</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="label_8">
-           <property name="text">
-            <string>Vert. offset:</string>
-           </property>
-           <property name="buddy">
-            <cstring>beginTextYoffset</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QDoubleSpinBox" name="beginTextYoffset">
-           <property name="suffix">
-            <string>sp</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="2">
-          <widget class="QToolButton" name="resetBeginTextYoffset">
-           <property name="toolTip">
-            <string>Reset to default</string>
-           </property>
-           <property name="accessibleName">
-            <string>Reset 'Vert. offset' value</string>
-           </property>
-           <property name="text">
-            <string notr="true"/>
-           </property>
-           <property name="icon">
-            <iconset resource="../musescore.qrc">
-             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-           </property>
-          </widget>
+          <widget class="Ms::OffsetSelect" name="beginTextOffset" native="true"/>
          </item>
         </layout>
        </widget>
@@ -529,10 +491,20 @@
          <property name="verticalSpacing">
           <number>0</number>
          </property>
-         <item row="6" column="1">
-          <widget class="QDoubleSpinBox" name="continueTextXoffset">
-           <property name="suffix">
-            <string>sp</string>
+         <item row="6" column="2">
+          <widget class="QToolButton" name="resetContinueTextOffset">
+           <property name="toolTip">
+            <string>Reset to default</string>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Placement' value</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="../musescore.qrc">
+             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
            </property>
           </widget>
          </item>
@@ -835,63 +807,12 @@
          <item row="6" column="0">
           <widget class="QLabel" name="label_15">
            <property name="text">
-            <string>Horiz. offset:</string>
-           </property>
-           <property name="buddy">
-            <cstring>continueTextXoffset</cstring>
+            <string>Offset:</string>
            </property>
           </widget>
          </item>
-         <item row="6" column="2">
-          <widget class="QToolButton" name="resetContinueTextXoffset">
-           <property name="toolTip">
-            <string>Reset to default</string>
-           </property>
-           <property name="accessibleName">
-            <string>Reset 'Horiz. offset' value</string>
-           </property>
-           <property name="text">
-            <string notr="true"/>
-           </property>
-           <property name="icon">
-            <iconset resource="../musescore.qrc">
-             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="label_25">
-           <property name="text">
-            <string>Vert. offset:</string>
-           </property>
-           <property name="buddy">
-            <cstring>continueTextYoffset</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="1">
-          <widget class="QDoubleSpinBox" name="continueTextYoffset">
-           <property name="suffix">
-            <string>sp</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="2">
-          <widget class="QToolButton" name="resetContinueTextYoffset">
-           <property name="toolTip">
-            <string>Reset to default</string>
-           </property>
-           <property name="accessibleName">
-            <string>Reset 'Vert. offset' value</string>
-           </property>
-           <property name="text">
-            <string notr="true"/>
-           </property>
-           <property name="icon">
-            <iconset resource="../musescore.qrc">
-             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-           </property>
-          </widget>
+         <item row="6" column="1">
+          <widget class="Ms::OffsetSelect" name="continueTextOffset" native="true"/>
          </item>
         </layout>
        </widget>
@@ -1313,28 +1234,18 @@
            </property>
           </widget>
          </item>
-         <item row="8" column="1">
+         <item row="7" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_6"/>
          </item>
          <item row="5" column="0">
           <widget class="QLabel" name="label_16">
            <property name="text">
-            <string>Horiz. offset:</string>
-           </property>
-           <property name="buddy">
-            <cstring>endTextXoffset</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QDoubleSpinBox" name="endTextXoffset">
-           <property name="suffix">
-            <string>sp</string>
+            <string>Offset:</string>
            </property>
           </widget>
          </item>
          <item row="5" column="2">
-          <widget class="QToolButton" name="resetEndTextXoffset">
+          <widget class="QToolButton" name="resetEndTextOffset">
            <property name="toolTip">
             <string>Reset to default</string>
            </property>
@@ -1350,39 +1261,8 @@
            </property>
           </widget>
          </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="label_17">
-           <property name="text">
-            <string>Vert. offset:</string>
-           </property>
-           <property name="buddy">
-            <cstring>endTextYoffset</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QDoubleSpinBox" name="endTextYoffset">
-           <property name="suffix">
-            <string>sp</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="2">
-          <widget class="QToolButton" name="resetEndTextYoffset">
-           <property name="toolTip">
-            <string>Reset to default</string>
-           </property>
-           <property name="accessibleName">
-            <string>Reset 'Vert. offset' value</string>
-           </property>
-           <property name="text">
-            <string notr="true"/>
-           </property>
-           <property name="icon">
-            <iconset resource="../musescore.qrc">
-             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-           </property>
-          </widget>
+         <item row="5" column="1">
+          <widget class="Ms::OffsetSelect" name="endTextOffset" native="true"/>
          </item>
         </layout>
        </widget>
@@ -1440,6 +1320,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::OffsetSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/offsetSelect.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

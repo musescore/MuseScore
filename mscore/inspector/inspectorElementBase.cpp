@@ -24,12 +24,12 @@ InspectorElementBase::InspectorElementBase(QWidget* parent)
    : InspectorBase(parent)
       {
       e.setupUi(addWidget());
+      e.offset->showRaster(true);
       iList = {
             { P_ID::VISIBLE,   0, 0, e.visible,    e.resetVisible   },
             { P_ID::Z,         0, 0, e.z,          e.resetZ         },
             { P_ID::COLOR,     0, 0, e.color,      e.resetColor     },
-            { P_ID::USER_OFF,  0, 0, e.offsetX,    e.resetX         },
-            { P_ID::USER_OFF,  1, 0, e.offsetY,    e.resetY         },
+            { P_ID::USER_OFF,  0, 0, e.offset,     e.resetOffset    },
             { P_ID::AUTOPLACE, 0, 0, e.autoplace,  e.resetAutoplace },
             };
       pList = { { e.title, e.panel } };
@@ -53,9 +53,7 @@ void InspectorElementBase::setElement()
 
 void InspectorElementBase::autoplaceChanged(bool val)
       {
-      for (auto i : std::vector<QWidget*>
-         { e.xLabel, e.yLabel, e.offsetX, e.offsetY, e.resetX, e.resetY, e.hRaster, e.vRaster }
-         ) {
+      for (auto i : std::vector<QWidget*>{ e.offsetLabel, e.offset, e.resetOffset }) {
             i->setVisible(!val);
             }
       }

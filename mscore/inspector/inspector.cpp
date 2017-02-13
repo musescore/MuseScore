@@ -362,18 +362,6 @@ void Inspector::changeEvent(QEvent *event)
 void UiInspectorElement::setupUi(QWidget* inspectorElement)
       {
       Ui::InspectorElement::setupUi(inspectorElement);
-
-      QAction* a = getAction("hraster");
-      a->setCheckable(true);
-      hRaster->setDefaultAction(a);
-      hRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
-      hRaster->addAction(getAction("config-raster"));
-
-      a = getAction("vraster");
-      a->setCheckable(true);
-      vRaster->setDefaultAction(a);
-      vRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
-      vRaster->addAction(getAction("config-raster"));
       }
 
 //---------------------------------------------------------
@@ -578,7 +566,7 @@ InspectorRest::InspectorRest(QWidget* parent)
       hbox->addWidget(tuplet);
       _layout->addLayout(hbox);
 
-      e.offsetY->setSingleStep(1.0);        // step in spatium units
+//TODO      e.offset->setSingleStep(1.0);        // step in spatium units
 
       connect(tuplet,   SIGNAL(clicked()),     SLOT(tupletClicked()));
       }

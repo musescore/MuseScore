@@ -34,7 +34,6 @@ class UiInspectorElement: public Ui::InspectorElement {
 class InspectorElementBase : public InspectorBase {
       Q_OBJECT
 
-
    protected:
       UiInspectorElement e;
 
