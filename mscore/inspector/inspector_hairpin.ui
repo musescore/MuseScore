@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>293</width>
-    <height>270</height>
+    <width>208</width>
+    <height>199</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -45,6 +45,19 @@
      </property>
      <property name="text">
       <string>Hairpin</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
      </property>
     </widget>
    </item>
