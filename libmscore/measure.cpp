@@ -328,7 +328,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
       {
       Chord* chord = note->chord();
       AccidentalState tversatz;  // state of already set accidentals for this measure
-      tversatz.init(chord->staff()->key(tick()));
+      tversatz.init(chord->staff()->keySigEvent(tick()), chord->staff()->clef(tick()));
 
       for (Segment* segment = first(); segment; segment = segment->next()) {
             int startTrack = chord->staffIdx() * VOICES;
@@ -336,7 +336,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
                   KeySig* ks = toKeySig(segment->element(startTrack));
                   if (!ks)
                         continue;
-                  tversatz.init(chord->staff()->key(segment->tick()));
+                  tversatz.init(chord->staff()->keySigEvent(segment->tick()), chord->staff()->clef(segment->tick()));
                   }
             else if (segment->segmentType() == Segment::Type::ChordRest) {
                   int endTrack   = startTrack + VOICES;
@@ -390,7 +390,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line, bool &
       {
       AccidentalState tversatz;  // state of already set accidentals for this measure
       Staff* staff = score()->staff(staffIdx);
-      tversatz.init(staff->key(tick()));
+      tversatz.init(staff->keySigEvent(tick()), staff->clef(tick()));
 
       Segment::Type st = Segment::Type::ChordRest;
       int startTrack = staffIdx * VOICES;

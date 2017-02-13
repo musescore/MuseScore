@@ -131,6 +131,19 @@ static Acc accList[] = {
       };
 
 //---------------------------------------------------------
+//   sym2accidentalVal
+//---------------------------------------------------------
+
+AccidentalVal sym2accidentalVal(SymId id)
+      {
+      for (const Acc& a : accList) {
+            if (a.sym == id)
+                  return a.offset;
+            }
+      return AccidentalVal::NATURAL;
+      }
+
+//---------------------------------------------------------
 //   Accidental
 //---------------------------------------------------------
 

@@ -2312,14 +2312,16 @@ void Score::getNextMeasure(LayoutContext& lc)
             Staff* staff           = Score::staff(staffIdx);
             const Drumset* drumset = staff->part()->instrument()->useDrumset() ? staff->part()->instrument()->drumset() : 0;
             AccidentalState as;      // list of already set accidentals for this measure
-            as.init(staff->key(measure->tick()));
+            int tick = measure->tick();
+            as.init(staff->keySigEvent(tick), staff->clef(tick));
 
             for (Segment& segment : measure->segments()) {
                   if (segment.isKeySigType()) {
                         KeySig* ks = toKeySig(segment.element(staffIdx * VOICES));
                         if (!ks)
                               continue;
-                        as.init(staff->key(segment.tick()));
+                        int tick = segment.tick();
+                        as.init(staff->keySigEvent(tick), staff->clef(tick));
                         ks->layout();
                         }
                   else if (segment.isChordRestType()) {

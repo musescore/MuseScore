@@ -16,6 +16,7 @@
 #include "score.h"
 #include "pitchspelling.h"
 #include "keylist.h"
+#include "accidental.h"
 
 namespace Ms {
 
@@ -104,33 +105,6 @@ bool KeySigEvent::operator==(const KeySigEvent& e) const
       }
 
 //---------------------------------------------------------
-//   initLineList
-//    preset lines list with accidentals for given key
-//---------------------------------------------------------
-
-void AccidentalState::init(Key key)
-      {
-//      memset(state, 2, 74);
-      memset(state, 2, 75);
-      for (int octave = 0; octave < 11; ++octave) {
-            if (key > 0) {
-                  for (int i = 0; i < int(key); ++i) {
-                        int idx = tpc2step(20 + i) + octave * 7;
-                        if (idx < 74)
-                              state[idx] = 1 + 2;
-                        }
-                  }
-            else {
-                  for (int i = 0; i > int(key); --i) {
-                        int idx = tpc2step(12 + i) + octave * 7;
-                        if (idx < 74)
-                              state[idx] = -1 + 2;
-                        }
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   transposeKey
 //---------------------------------------------------------
 
@@ -186,11 +160,71 @@ AccidentalVal AccidentalState::accidentalVal(int line, bool &error) const
       return AccidentalVal((state[line] & 0x0f) - 2);
       }
 
+//---------------------------------------------------------
+//   init
+//    preset lines list with accidentals for given key
+//---------------------------------------------------------
+
+void AccidentalState::init(Key key)
+      {
+      memset(state, 2, MAX_ACC_STATE);
+      if (key > 0) {
+            for (int i = 0; i < int(key); ++i) {
+                  int idx = tpc2step(20 + i);
+                  for (int octave = 0; octave < (11 * 7); octave += 7) {
+                        int i = idx + octave;
+                        if (i >= MAX_ACC_STATE)
+                              break;
+                        state[i] = 1 + 2;
+                        }
+                  }
+            }
+      else {
+            for (int i = 0; i > int(key); --i) {
+                  int idx = tpc2step(12 + i);
+                  for (int octave = 0; octave < (11 * 7); octave += 7) {
+                        int i = idx + octave ;
+                        if (i >= MAX_ACC_STATE)
+                              break;
+                        state[i] = -1 + 2;
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   init
+//---------------------------------------------------------
+
+void AccidentalState::init(const KeySigEvent& keySig, ClefType clef)
+      {
+      if (keySig.custom()) {
+            memset(state, 2, MAX_ACC_STATE);
+            for (const KeySym& s : keySig.keySymbols()) {
+                  AccidentalVal a = sym2accidentalVal(s.sym);
+                  int line = int(s.spos.y() * 2);
+                  int idx       = relStep(line, clef) % 7;
+                  for (int octave = 0; octave < (11 * 7); octave += 7) {
+                        int i = idx + octave ;
+                        if (i >= MAX_ACC_STATE)
+                              break;
+                        state[i] = int(a) + 2;
+                        }
+                  }
+            }
+      else {
+            init(keySig.key());
+            }
+      }
+
+//---------------------------------------------------------
+//   accidentalVal
+//---------------------------------------------------------
+
 AccidentalVal AccidentalState::accidentalVal(int line) const
       {
       Q_ASSERT(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
-      bool error = false;
-      return accidentalVal(line, error);
+      return AccidentalVal((state[line] & 0x0f) - 2);
       }
 
 //---------------------------------------------------------
