@@ -134,6 +134,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QPushButton" name="bold">
+          <property name="accessibleName">
+           <string>Bold</string>
+          </property>
           <property name="icon">
            <iconset resource="../musescore.qrc">
             <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
@@ -175,6 +178,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="italic">
+          <property name="accessibleName">
+           <string>Italic</string>
+          </property>
           <property name="icon">
            <iconset resource="../musescore.qrc">
             <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
@@ -221,6 +227,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="accessibleName">
+           <string>Underline</string>
           </property>
           <property name="icon">
            <iconset resource="../musescore.qrc">

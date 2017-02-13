@@ -131,7 +131,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -4149,7 +4149,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_95">
              <property name="text">
-              <string>Position Above:</string>
+              <string>Position above:</string>
              </property>
              <property name="buddy">
               <cstring>hairpinPosAbove</cstring>
@@ -4367,7 +4367,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="label_129">
              <property name="text">
-              <string>Position Below:</string>
+              <string>Position below:</string>
              </property>
              <property name="buddy">
               <cstring>hairpinPosBelow</cstring>
@@ -4969,7 +4969,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_96">
              <property name="text">
-              <string>Position Above:</string>
+              <string>Position above:</string>
              </property>
              <property name="buddy">
               <cstring>pedalLinePosAbove</cstring>
@@ -5172,7 +5172,7 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_139">
              <property name="text">
-              <string>Position Below:</string>
+              <string>Position below:</string>
              </property>
              <property name="buddy">
               <cstring>pedalLinePosBelow</cstring>
@@ -5237,7 +5237,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_97">
              <property name="text">
-              <string>Position Above:</string>
+              <string>Position above:</string>
              </property>
              <property name="buddy">
               <cstring>trillLinePosAbove</cstring>
@@ -5334,7 +5334,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="label_140">
              <property name="text">
-              <string>Position Below:</string>
+              <string>Position below:</string>
              </property>
              <property name="buddy">
               <cstring>trillLinePosBelow</cstring>
@@ -5587,7 +5587,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="PageTextLine">
+      <widget class="QWidget" name="PageTextLineTempoText">
        <layout class="QVBoxLayout" name="verticalLayout_45">
         <item>
          <widget class="QGroupBox" name="groupBox_32">
@@ -5604,7 +5604,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position Below:</string>
+              <string>Position below:</string>
              </property>
              <property name="buddy">
               <cstring>textLinePosBelow</cstring>
@@ -5683,7 +5683,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Below' value</string>
+              <string>Reset 'Position below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5703,7 +5703,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position Above:</string>
+              <string>Position above:</string>
              </property>
              <property name="buddy">
               <cstring>textLinePosAbove</cstring>
@@ -5716,7 +5716,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Above' value</string>
+              <string>Reset 'Position above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5797,7 +5797,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position Below:</string>
+              <string>Position below:</string>
              </property>
              <property name="buddy">
               <cstring>textLinePosBelow</cstring>
@@ -5876,7 +5876,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Below' value</string>
+              <string>Reset 'Position below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5896,7 +5896,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position Above:</string>
+              <string>Position above:</string>
              </property>
              <property name="buddy">
               <cstring>textLinePosAbove</cstring>
@@ -5909,7 +5909,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Above' value</string>
+              <string>Reset 'Position above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -6016,7 +6016,7 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_149">
              <property name="text">
-              <string>Autoplace min. Distance:</string>
+              <string>Autoplace min. distance:</string>
              </property>
             </widget>
            </item>
@@ -6225,7 +6225,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Below' value</string>
+              <string>Reset 'Autoplace min. distance' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -8344,7 +8344,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Above' value</string>
+              <string>Reset 'Position above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -8364,7 +8364,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position Above:</string>
+              <string>Position above:</string>
              </property>
              <property name="buddy">
               <cstring>lyricsPosAbove</cstring>
@@ -8531,7 +8531,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position Below:</string>
+              <string>Position below:</string>
              </property>
              <property name="buddy">
               <cstring>lyricsPosBelow</cstring>
@@ -8544,7 +8544,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position Below' value</string>
+              <string>Reset 'Position below' value</string>
              </property>
              <property name="text">
               <string notr="true"/>

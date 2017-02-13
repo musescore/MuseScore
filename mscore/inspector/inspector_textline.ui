@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>395</width>
-    <height>897</height>
+    <width>301</width>
+    <height>673</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -108,6 +108,9 @@
            <property name="text">
             <string>Text:</string>
            </property>
+           <property name="buddy">
+            <cstring>beginText</cstring>
+           </property>
           </widget>
          </item>
          <item row="4" column="1">
@@ -132,6 +135,9 @@
            <property name="text">
             <string>Horiz. offset:</string>
            </property>
+           <property name="buddy">
+            <cstring>beginTextXoffset</cstring>
+           </property>
           </widget>
          </item>
          <item row="2" column="2">
@@ -140,7 +146,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Font size' value</string>
+            <string>Reset 'Size' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -154,10 +160,13 @@
          <item row="2" column="0">
           <widget class="QLabel" name="label_7">
            <property name="text">
-            <string>size:</string>
+            <string>Size:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="buddy">
+            <cstring>beginFontSize</cstring>
            </property>
           </widget>
          </item>
@@ -182,6 +191,9 @@
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <widget class="QPushButton" name="beginFontBold">
+             <property name="accessibleName">
+              <string>Bold</string>
+             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
@@ -223,6 +235,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="beginFontItalic">
+             <property name="accessibleName">
+              <string>Italic</string>
+             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
@@ -269,6 +284,9 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="accessibleName">
+              <string>Underline</string>
              </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
@@ -317,7 +335,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Text' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -347,7 +365,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Font face' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -363,6 +381,9 @@
            <property name="text">
             <string>Font face:</string>
            </property>
+           <property name="buddy">
+            <cstring>beginFontFace</cstring>
+           </property>
           </widget>
          </item>
          <item row="4" column="0">
@@ -370,12 +391,15 @@
            <property name="text">
             <string>Placement:</string>
            </property>
+           <property name="buddy">
+            <cstring>beginTextPlacement</cstring>
+           </property>
           </widget>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_9">
            <property name="text">
-            <string>style:</string>
+            <string>Style:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -388,7 +412,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Horiz. offset' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -411,6 +435,9 @@
            <property name="text">
             <string>Vert. offset:</string>
            </property>
+           <property name="buddy">
+            <cstring>beginTextYoffset</cstring>
+           </property>
           </widget>
          </item>
          <item row="6" column="1">
@@ -426,7 +453,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Vert. offset' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -446,7 +473,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
+         <string>Reset 'Begin hook' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -473,7 +500,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
+         <string>Reset 'Height' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -513,6 +540,9 @@
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
             <widget class="QPushButton" name="continueFontBold">
+             <property name="accessibleName">
+              <string>Bold</string>
+             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
@@ -554,6 +584,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="continueFontItalic">
+             <property name="accessibleName">
+              <string>Italic</string>
+             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
@@ -600,6 +633,9 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="accessibleName">
+              <string>Underline</string>
              </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
@@ -677,6 +713,9 @@
            <property name="text">
             <string>Text:</string>
            </property>
+           <property name="buddy">
+            <cstring>continueText</cstring>
+           </property>
           </widget>
          </item>
          <item row="3" column="1">
@@ -685,10 +724,13 @@
          <item row="3" column="0">
           <widget class="QLabel" name="label_12">
            <property name="text">
-            <string>size:</string>
+            <string>Size:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="buddy">
+            <cstring>continueFontSize</cstring>
            </property>
           </widget>
          </item>
@@ -697,12 +739,15 @@
            <property name="text">
             <string>Placement:</string>
            </property>
+           <property name="buddy">
+            <cstring>continueTextPlacement</cstring>
+           </property>
           </widget>
          </item>
          <item row="4" column="0">
           <widget class="QLabel" name="label_13">
            <property name="text">
-            <string>style:</string>
+            <string>Style:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -715,7 +760,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Size' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -732,7 +777,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Text' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -765,6 +810,9 @@
            <property name="text">
             <string>Font face:</string>
            </property>
+           <property name="buddy">
+            <cstring>continueFontFace</cstring>
+           </property>
           </widget>
          </item>
          <item row="2" column="2">
@@ -773,7 +821,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Font face' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -789,6 +837,9 @@
            <property name="text">
             <string>Horiz. offset:</string>
            </property>
+           <property name="buddy">
+            <cstring>continueTextXoffset</cstring>
+           </property>
           </widget>
          </item>
          <item row="6" column="2">
@@ -797,7 +848,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Horiz. offset' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -812,6 +863,9 @@
           <widget class="QLabel" name="label_25">
            <property name="text">
             <string>Vert. offset:</string>
+           </property>
+           <property name="buddy">
+            <cstring>continueTextYoffset</cstring>
            </property>
           </widget>
          </item>
@@ -828,7 +882,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Vert. offset' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -848,7 +902,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
+         <string>Reset 'End hook' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -874,15 +928,21 @@
         <property name="text">
          <string>End hook:</string>
         </property>
+        <property name="buddy">
+         <cstring>endHookType</cstring>
+        </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="beginHookHeightLabel">
         <property name="text">
-         <string>height:</string>
+         <string>Height:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>beginHookHeight</cstring>
         </property>
        </widget>
       </item>
@@ -890,6 +950,9 @@
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>Begin hook:</string>
+        </property>
+        <property name="buddy">
+         <cstring>beginHookType</cstring>
         </property>
        </widget>
       </item>
@@ -899,10 +962,13 @@
       <item row="3" column="0">
        <widget class="QLabel" name="endHookHeightLabel">
         <property name="text">
-         <string>height:</string>
+         <string>Height:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>endHookHeight</cstring>
         </property>
        </widget>
       </item>
@@ -922,7 +988,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
+         <string>Reset 'Height' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -957,7 +1023,7 @@
          <item row="3" column="0">
           <widget class="QLabel" name="label_21">
            <property name="text">
-            <string>style:</string>
+            <string>Style:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -989,15 +1055,21 @@
            <property name="text">
             <string>Placement:</string>
            </property>
+           <property name="buddy">
+            <cstring>endTextPlacement</cstring>
+           </property>
           </widget>
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="label_20">
            <property name="text">
-            <string>size:</string>
+            <string>Size:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="buddy">
+            <cstring>endFontSize</cstring>
            </property>
           </widget>
          </item>
@@ -1005,6 +1077,9 @@
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
             <widget class="QPushButton" name="endFontBold">
+             <property name="accessibleName">
+              <string>Bold</string>
+             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
@@ -1046,6 +1121,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="endFontItalic">
+             <property name="accessibleName">
+              <string>Italic</string>
+             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
@@ -1092,6 +1170,9 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="accessibleName">
+              <string>Underline</string>
              </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
@@ -1167,7 +1248,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Font face' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -1183,12 +1264,18 @@
            <property name="text">
             <string>Text:</string>
            </property>
+           <property name="buddy">
+            <cstring>endText</cstring>
+           </property>
           </widget>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_19">
            <property name="text">
             <string>Font face:</string>
+           </property>
+           <property name="buddy">
+            <cstring>endFontFace</cstring>
            </property>
           </widget>
          </item>
@@ -1198,7 +1285,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Text' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -1215,7 +1302,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Size' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -1234,6 +1321,9 @@
            <property name="text">
             <string>Horiz. offset:</string>
            </property>
+           <property name="buddy">
+            <cstring>endTextXoffset</cstring>
+           </property>
           </widget>
          </item>
          <item row="5" column="1">
@@ -1249,7 +1339,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Horiz. offset' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -1264,6 +1354,9 @@
           <widget class="QLabel" name="label_17">
            <property name="text">
             <string>Vert. offset:</string>
+           </property>
+           <property name="buddy">
+            <cstring>endTextYoffset</cstring>
            </property>
           </widget>
          </item>
@@ -1280,7 +1373,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Vert. offset' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -1302,6 +1395,9 @@
           <bold>true</bold>
          </font>
         </property>
+        <property name="accessibleName">
+         <string>End text</string>
+        </property>
         <property name="text">
          <string>End Text</string>
         </property>
@@ -1315,6 +1411,9 @@
           <bold>true</bold>
          </font>
         </property>
+        <property name="accessibleName">
+         <string>Continue text</string>
+        </property>
         <property name="text">
          <string>Continue Text</string>
         </property>
@@ -1327,6 +1426,9 @@
           <weight>75</weight>
           <bold>true</bold>
          </font>
+        </property>
+        <property name="accessibleName">
+         <string>Begin text</string>
         </property>
         <property name="text">
          <string>Begin Text</string>
