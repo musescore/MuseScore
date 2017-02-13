@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>176</width>
-    <height>377</height>
+    <width>303</width>
+    <height>525</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -598,61 +598,60 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QToolButton" name="dot1">
-       <property name="text">
-        <string>Dot 1</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="dot2">
-       <property name="text">
-        <string>Dot 2</string>
-       </property>
-      </widget>
-     </item>
-     <item>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item row="0" column="2">
       <widget class="QToolButton" name="dot3">
        <property name="text">
         <string>Dot 3</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="0" column="1">
+      <widget class="QToolButton" name="dot2">
+       <property name="text">
+        <string>Dot 2</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QToolButton" name="dot1">
+       <property name="text">
+        <string>Dot 1</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
       <widget class="QToolButton" name="dot4">
        <property name="text">
         <string>Dot 4</string>
        </property>
       </widget>
      </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
+     <item row="1" column="0">
       <widget class="QToolButton" name="hook">
        <property name="text">
         <string>Hook</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="1" column="1">
       <widget class="QToolButton" name="stem">
        <property name="text">
         <string>Stem</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="1" column="2">
       <widget class="QToolButton" name="beam">
        <property name="text">
         <string>Beam</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="1" column="3">
       <widget class="QToolButton" name="tuplet">
        <property name="text">
         <string>Tuplet</string>
@@ -687,14 +686,6 @@
   <tabstop>resetFixed</tabstop>
   <tabstop>fixedLine</tabstop>
   <tabstop>resetFixedLine</tabstop>
-  <tabstop>dot1</tabstop>
-  <tabstop>dot2</tabstop>
-  <tabstop>dot3</tabstop>
-  <tabstop>dot4</tabstop>
-  <tabstop>hook</tabstop>
-  <tabstop>stem</tabstop>
-  <tabstop>beam</tabstop>
-  <tabstop>tuplet</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
