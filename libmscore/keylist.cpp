@@ -52,17 +52,15 @@ void KeyList::setKey(int tick, KeySigEvent k)
 //   nextKeyTick
 //
 //    return the tick at which the key sig after tick is located
-//    return 0, if no such a key sig
+//    return -1, if no such a key sig
 //---------------------------------------------------------
 
 int KeyList::nextKeyTick(int tick) const
       {
       if (empty())
-            return 0;
+            return -1;
       auto i = upper_bound(tick+1);
-      if (i == end())
-            return 0;
-      return i->first;
+      return i == end() ? -1 : i->first;
       }
 
 //---------------------------------------------------------

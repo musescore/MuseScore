@@ -262,9 +262,7 @@ ClefType Staff::clef(int tick) const
 int Staff::nextClefTick(int tick) const
       {
       int t = clefs.nextClefTick(tick);
-      if (t == -1)
-            return score()->lastMeasure()->last()->tick();
-      return t;
+      return t != -1 ? t : score()->endTick();
       }
 
 
@@ -476,7 +474,8 @@ KeySigEvent Staff::prevKey(int tick) const
 
 int Staff::nextKeyTick(int tick) const
       {
-      return _keys.nextKeyTick(tick);
+      int t = _keys.nextKeyTick(tick);
+      return t != -1 ? t : score()->endTick();
       }
 
 //---------------------------------------------------------

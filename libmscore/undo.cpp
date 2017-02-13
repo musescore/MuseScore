@@ -1854,10 +1854,10 @@ void RemoveElement::undo()
                   }
             undoAddTuplet(toChordRest(element));
             }
-      else if (element->isClef()) {
-            element->score()->setLayout(element->tick());
+      else if (element->isClef())
             element->score()->setLayout(element->staff()->nextClefTick(element->tick()));
-            }
+      else if (element->isKeySig())
+            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()));
       }
 
 //---------------------------------------------------------
@@ -1879,10 +1879,10 @@ void RemoveElement::redo()
                         }
                   }
             }
-      else if (element->isClef()) {
-            element->score()->setLayout(element->tick());
+      else if (element->isClef())
             element->score()->setLayout(element->staff()->nextClefTick(element->tick()));
-            }
+      else if (element->isKeySig())
+            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()));
       }
 
 //---------------------------------------------------------
