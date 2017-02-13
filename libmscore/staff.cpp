@@ -527,8 +527,6 @@ void Staff::write(XmlWriter& xml) const
             xml.tag("defaultTransposingClef", ClefInfo::tag(ct._transposingClef));
             }
 
-//      if (small() && !xml.excerptmode())    // switch small staves to normal ones when extracting part
-//            xml.tag("small", small());
       if (invisible())
             xml.tag("invisible", invisible());
       if (hideWhenEmpty() != HideMode::AUTO)
@@ -592,9 +590,8 @@ bool Staff::readProperties(XmlReader& e)
             QString val(e.readElementText());
             setDefaultClefType(ClefTypeList(defaultClefType()._concertClef, Clef::clefType(val)));
             }
-      else if (tag == "small")
-            //setSmall(e.readInt());
-            e.readInt();
+      else if (tag == "small")                  // obsolete
+            setSmall(0, e.readInt());
       else if (tag == "invisible")
             setInvisible(e.readInt());
       else if (tag == "hideWhenEmpty")
@@ -1183,6 +1180,8 @@ bool Staff::isTop() const
 QVariant Staff::getProperty(P_ID id) const
       {
       switch (id) {
+            case P_ID::SMALL:
+                  return small(0);
             case P_ID::MAG:
                   return userMag(0);
             case P_ID::COLOR:
@@ -1216,6 +1215,9 @@ QVariant Staff::getProperty(P_ID id) const
 bool Staff::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
+            case P_ID::SMALL:
+                  setSmall(0, v.toBool());
+                  break;
             case P_ID::MAG: {
                   qreal _spatium = spatium(0);
                   setUserMag(0, v.toReal());
@@ -1264,6 +1266,8 @@ bool Staff::setProperty(P_ID id, const QVariant& v)
 QVariant Staff::propertyDefault(P_ID id) const
       {
       switch (id) {
+            case P_ID::SMALL:
+                  return false;
             case P_ID::MAG:
                   return 1.0;
             case P_ID::COLOR:
