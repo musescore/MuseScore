@@ -1140,7 +1140,7 @@ void GuitarPro::createSlur(bool hasSlur, int staffIdx, ChordRest* cr)
 
 void GuitarPro::createOttava(bool hasOttava, int track, ChordRest* cr, QString value)
       {
-      if (hasOttava && (ottava[track] == 0)) {
+      if (hasOttava && (ottava.at(track) == 0)) {
             Ottava* newOttava = new Ottava(score);
             newOttava->setTrack(track);
             if (!value.compare("8va"))
@@ -1156,15 +1156,15 @@ void GuitarPro::createOttava(bool hasOttava, int track, ChordRest* cr, QString v
                without an ottava. We also allow the ottava to continue
                over rests, as that's what Guitar Pro does. */
             newOttava->setTick2(cr->tick());
-            ottava[track] = newOttava;
+            ottava.at(track) = newOttava;
             score->addElement(newOttava);
             }
-      else if (ottava[track] && !hasOttava) {
-            Ottava* currentOttava = ottava[track];
-            ottava[track] = 0;
+      else if (ottava.at(track) && !hasOttava) {
+            Ottava* currentOttava = ottava.at(track);
+            ottava.at(track) = 0;
             currentOttava->setTick2(cr->tick());
             currentOttava->setProperty(P_ID::LINE_WIDTH,0.1);
-            //ottava[track]->staff()->updateOttava(ottava[track]);
+            //ottava.at(track)->staff()->updateOttava(ottava.at(track));
             }
       }
 

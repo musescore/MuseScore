@@ -1206,20 +1206,17 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
 
                                                 /* if the ottava is a continuation (need to end old one), or we don't
                                                  * see one in the current note when we are tracking one then end the ottava. */
-                                                if (ottavaFound == 2 || (ottavaFound == 1 && currentNode.parentNode().firstChildElement("Ottavia").isNull())) {
-                                                      Segment* prevSeg = segment->prev1(Segment::Type::ChordRest);
-                                                      Element* e = prevSeg->element(track);
-                                                      if (e)
-                                                            if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST) {
-                                                                  ChordRest* crPrev = static_cast<Chord*>(e);
-                                                                  createOttava(false, track, crPrev, ottavaValue);
-                                                                  }
-                                                      ottavaFound = 1;
+                                                if (ottavaFound.at(track) == 2 || (ottavaFound.at(track) == 1 && currentNode.parentNode().firstChildElement("Ottavia").isNull())) {
+                                                      createOttava(false, track, cr, ottavaValue.at(track));
+                                                      if (ottavaFound.at(track) == 2)
+                                                            ottavaFound.at(track) = 1;
+                                                      else
+                                                            ottavaFound.at(track) = 0;
                                                       }
-                                                if (ottavaFound) {
-                                                      createOttava(ottavaFound, track, cr, ottavaValue);
+                                                if (ottavaFound.at(track)) {
+                                                      createOttava(true, track, cr, ottavaValue.at(track));
                                                       int pitch = note->pitch();
-                                                      Ottava::Type type = ottava[track]->ottavaType();
+                                                      Ottava::Type type = ottava.at(track)->ottavaType();
                                                       if (type == Ottava::Type::OTTAVA_8VA)
                                                             note->setPitch(pitch-12);
                                                       else if (type == Ottava::Type::OTTAVA_8VB)
@@ -1315,12 +1312,11 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                         else if (!currentNode.nodeName().compare("Ottavia")) {
                               /* if we saw an ottava and have an updated
                                * information string, set to 2 indicating that. */
-                              if (ottavaFound == 1 && ottavaValue.compare(currentNode.toElement().text())) {
-                                    ottavaFound = 2;
-                              }
+                              if (ottavaFound.at(track) == 1 && ottavaValue.at(track).compare(currentNode.toElement().text()))
+                                    ottavaFound.at(track) = 2;
                               else
-                                    ottavaFound = 1;
-                              ottavaValue = currentNode.toElement().text();
+                                    ottavaFound.at(track) = 1;
+                              ottavaValue.at(track) = currentNode.toElement().text();
                               }
                         currentNode = currentNode.nextSibling();
                   }
@@ -1406,7 +1402,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                         // only add the clef to the bar if it differs from previous measure
                         if (measure->prevMeasure()) {
                               if (clefId != oldClefId[staffIdx]) {
-                                    Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
+                                    Segment* segment = measure->getSegment(Segment::Type::Clef, tick);
                                     segment->add(newClef);
                                     oldClefId[staffIdx] = clefId;
                                     }
@@ -1796,12 +1792,11 @@ void GuitarPro6::readGpif(QByteArray* data)
 
       // now we know how many staves there are from readTracks, we can initialise slurs
       slurs = new Slur*[staves];
-      ottava = new Ottava*[staves];
-      for (int i = 0; i < staves; ++i) {
+      ottava.assign(staves * VOICES, 0);
+      ottavaFound.assign(staves * VOICES, 0);
+      ottavaValue.assign(staves * VOICES, "");
+      for (int i = 0; i < staves; ++i)
             slurs[i] = 0;
-            ottava[i] = 0;
-            }
-
 
       // MasterBars node
       GPPartInfo partInfo;
@@ -1839,8 +1834,6 @@ void GuitarPro6::read(QFile* fp)
       slides = new QMap<int,int>();
 
       previousTempo = -1;
-      ottavaFound = 0;
-      ottavaValue = "";
       this->buffer = new QByteArray();
       *(this->buffer) = fp->readAll();
 
