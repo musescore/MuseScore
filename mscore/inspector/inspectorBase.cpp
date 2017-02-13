@@ -20,6 +20,7 @@
 #include "inspector.h"
 #include "icons.h"
 #include "preferences.h"
+#include "offsetSelect.h"
 
 namespace Ms {
 
@@ -75,11 +76,15 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
             v = static_cast<Awl::ColorLabel*>(w)->color();
       else if (qobject_cast<Ms::AlignSelect*>(w))
             v = int(static_cast<Ms::AlignSelect*>(w)->align());
+      else if (qobject_cast<Ms::OffsetSelect*>(w))
+            v = static_cast<Ms::OffsetSelect*>(w)->offset();
       else
             qFatal("not supported widget %s", w->metaObject()->className());
 
       switch (propertyType(ii.t)) {
             case P_TYPE::POINT_SP:
+                  v = v.toPointF() * inspector->element()->score()->spatium();
+                  break;
             case P_TYPE::SP_REAL:
                   v = v.toDouble() * inspector->element()->score()->spatium();
                   break;
@@ -90,6 +95,8 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
                   v = v.toInt() - 1;
                   break;
             case P_TYPE::POINT_MM:
+                  v = v.toPointF() * DPMM;
+                  break;
             case P_TYPE::SIZE_MM:
                   v = v.toDouble() * DPMM;
                   break;
@@ -128,6 +135,8 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
 
       switch (propertyType(id)) {
             case P_TYPE::POINT_SP:
+                  val = val.toPointF() / inspector->element()->score()->spatium();
+                  break;
             case P_TYPE::SP_REAL:
                   val = val.toDouble() / inspector->element()->score()->spatium();
                   break;
@@ -138,7 +147,8 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
                   val = val.toInt() + 1;
                   break;
             case P_TYPE::POINT_MM:
-                  val = val.toDouble() / DPMM;
+                  val = val.toPointF() / DPMM;
+                  break;
             case P_TYPE::SIZE_MM:
                   val = val.toDouble() / DPMM;
                   break;
@@ -191,6 +201,8 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
             static_cast<Awl::ColorLabel*>(w)->setColor(val.value<QColor>());
       else if (qobject_cast<Ms::AlignSelect*>(w))
             static_cast<Ms::AlignSelect*>(w)->setAlign(Align(val.toInt()));
+      else if (qobject_cast<Ms::OffsetSelect*>(w))
+            static_cast<Ms::OffsetSelect*>(w)->setOffset(val.toPointF());
       else
             qFatal("not supported widget %s", w->metaObject()->className());
       }
@@ -212,11 +224,6 @@ bool InspectorBase::isDefault(const InspectorItem& ii)
       if (t == P_TYPE::SIZE || t == P_TYPE::SCALE || t == P_TYPE::SIZE_MM) {
             QSizeF sz = def.toSizeF();
             qreal v = ii.sv == 0 ? sz.width() : sz.height();
-            return val.toDouble() == v;
-            }
-      if (t == P_TYPE::POINT || t == P_TYPE::POINT_SP || t == P_TYPE::POINT_MM) {
-            QPointF sz = def.toPointF();
-            qreal v = ii.sv == 0 ? sz.x() : sz.y();
             return val.toDouble() == v;
             }
       if (t == P_TYPE::FRACTION) {
@@ -265,13 +272,6 @@ void InspectorBase::setElement()
                   else
                         val = QVariant(sz.height());
                   }
-            else if (pt == P_TYPE::POINT || pt == P_TYPE::POINT_SP || pt == P_TYPE::POINT_MM) {
-                  QPointF sz = val.toPointF();
-                  if (ii.sv == 0)
-                        val = QVariant(sz.x());
-                  else
-                        val = QVariant(sz.y());
-                  }
             else if (pt == P_TYPE::FRACTION) {
                   Fraction f = val.value<Fraction>();
                   if (ii.sv == 0)
@@ -314,13 +314,6 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                               valuesAreDifferent = sz.width() != val.toDouble();
                         else
                               valuesAreDifferent = sz.height() != val.toDouble();
-                        }
-                  else if (pt == P_TYPE::POINT || pt == P_TYPE::POINT_SP || pt == P_TYPE::POINT_MM) {
-                        QPointF sz = e->getProperty(id).toPointF();
-                        if (ii.sv == 0)
-                              valuesAreDifferent = sz.x() != val.toDouble();
-                        else
-                              valuesAreDifferent = sz.y() != val.toDouble();
                         }
                   else if (pt == P_TYPE::FRACTION) {
                         Fraction f = e->getProperty(id).value<Fraction>();
@@ -398,18 +391,6 @@ void InspectorBase::valueChanged(int idx, bool reset)
                   else {
                         if (sz.height() != v)
                               e->undoChangeProperty(id, QVariant(QSizeF(sz.width(), v)), ps);
-                        }
-                  }
-            else if (pt == P_TYPE::POINT || pt == P_TYPE::POINT_SP || pt == P_TYPE::POINT_MM) {
-                  qreal v    = val2.toDouble();
-                  QPointF sz = val1.toPointF();
-                  if (ii.sv == 0) {
-                        if (sz.x() != v)
-                              e->undoChangeProperty(id, QVariant(QPointF(v, sz.y())), ps);
-                        }
-                  else {
-                        if (sz.y() != v)
-                              e->undoChangeProperty(id, QVariant(QPointF(sz.x(), v)), ps);
                         }
                   }
             else if (pt == P_TYPE::FRACTION) {
@@ -568,6 +549,8 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                   connect(w, SIGNAL(colorChanged(QColor)), valueMapper, SLOT(map()));
             else if (qobject_cast<Ms::AlignSelect*>(w))
                   connect(w, SIGNAL(alignChanged(Align)), valueMapper, SLOT(map()));
+            else if (qobject_cast<Ms::OffsetSelect*>(w))
+                  connect(w, SIGNAL(offsetChanged(const QPointF&)), valueMapper, SLOT(map()));
             else
                   qFatal("not supported widget %s", w->metaObject()->className());
             ++i;

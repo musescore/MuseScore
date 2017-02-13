@@ -23,9 +23,9 @@ class MuseScoreView;
 struct SymCode;
 class Text;
 
-enum class CharFormatType : char { TEXT, SYMBOL };
+enum class CharFormatType : char    { TEXT, SYMBOL };
 enum class VerticalAlignment : char { AlignNormal, AlignSuperScript, AlignSubScript };
-enum class FormatId : char { Bold, Italic, Underline, Valign, FontSize, FontFamily };
+enum class FormatId : char          { Bold, Italic, Underline, Valign, FontSize, FontFamily };
 
 //---------------------------------------------------------
 //   CharFormat
@@ -105,7 +105,7 @@ class Text;
 
 //---------------------------------------------------------
 //   TextFragment
-//    contains a styled text of symbol with name "text"
+//    contains a styled text or symbol with name "text"
 //---------------------------------------------------------
 
 class TextFragment {

@@ -47,8 +47,7 @@ InspectorVolta::InspectorVolta(QWidget* parent)
             { P_ID::BEGIN_FONT_BOLD,         0, 0, tl.beginFontBold,         tl.resetBeginFontBold         },
             { P_ID::BEGIN_FONT_ITALIC,       0, 0, tl.beginFontItalic,       tl.resetBeginFontItalic       },
             { P_ID::BEGIN_FONT_UNDERLINE,    0, 0, tl.beginFontUnderline,    tl.resetBeginFontUnderline    },
-            { P_ID::BEGIN_TEXT_OFFSET,       0, 0, tl.beginTextXoffset,      tl.resetBeginTextXoffset      },
-            { P_ID::BEGIN_TEXT_OFFSET,       1, 0, tl.beginTextYoffset,      tl.resetBeginTextYoffset      },
+            { P_ID::BEGIN_TEXT_OFFSET,       0, 0, tl.beginTextOffset,       tl.resetBeginTextOffset       },
 
             { P_ID::BEGIN_HOOK_TYPE,         0, 0, tl.beginHookType,         tl.resetBeginHookType         },
             { P_ID::BEGIN_HOOK_HEIGHT,       0, 0, tl.beginHookHeight,       tl.resetBeginHookHeight       },
@@ -59,8 +58,7 @@ InspectorVolta::InspectorVolta(QWidget* parent)
             { P_ID::CONTINUE_FONT_BOLD,      0, 0, tl.continueFontBold,      tl.resetContinueFontBold      },
             { P_ID::CONTINUE_FONT_ITALIC,    0, 0, tl.continueFontItalic,    tl.resetContinueFontItalic    },
             { P_ID::CONTINUE_FONT_UNDERLINE, 0, 0, tl.continueFontUnderline, tl.resetContinueFontUnderline },
-            { P_ID::CONTINUE_TEXT_OFFSET,    0, 0, tl.continueTextXoffset,   tl.resetContinueTextXoffset   },
-            { P_ID::CONTINUE_TEXT_OFFSET,    1, 0, tl.continueTextYoffset,   tl.resetContinueTextYoffset   },
+            { P_ID::CONTINUE_TEXT_OFFSET,    0, 0, tl.continueTextOffset,    tl.resetContinueTextOffset    },
 
             { P_ID::END_TEXT,                0, 0, tl.endText,               tl.resetEndText               },
             { P_ID::END_TEXT_PLACE,          0, 0, tl.endTextPlacement,      tl.resetEndTextPlacement      },
@@ -69,8 +67,7 @@ InspectorVolta::InspectorVolta(QWidget* parent)
             { P_ID::END_FONT_BOLD,           0, 0, tl.endFontBold,           tl.resetEndFontBold           },
             { P_ID::END_FONT_ITALIC,         0, 0, tl.endFontItalic,         tl.resetEndFontItalic         },
             { P_ID::END_FONT_UNDERLINE,      0, 0, tl.endFontUnderline,      tl.resetEndFontUnderline      },
-            { P_ID::END_TEXT_OFFSET,         0, 0, tl.endTextXoffset,        tl.resetEndTextXoffset        },
-            { P_ID::END_TEXT_OFFSET,         1, 0, tl.endTextYoffset,        tl.resetEndTextYoffset        },
+            { P_ID::END_TEXT_OFFSET,         0, 0, tl.endTextOffset,         tl.resetEndTextOffset         },
             { P_ID::END_HOOK_TYPE,           0, 0, tl.endHookType,           tl.resetEndHookType           },
             { P_ID::END_HOOK_HEIGHT,         0, 0, tl.endHookHeight,         tl.resetEndHookHeight         },
 
