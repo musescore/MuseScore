@@ -25,8 +25,8 @@ void populateHookType(QComboBox* b)
       {
       b->clear();
       b->addItem(b->tr("None"), int(HookType::NONE));
-      b->addItem(b->tr("90′"), int(HookType::HOOK_90));
-      b->addItem(b->tr("45′"), int(HookType::HOOK_45));
+      b->addItem(b->tr("90°"), int(HookType::HOOK_90));
+      b->addItem(b->tr("45°"), int(HookType::HOOK_45));
       }
 
 //---------------------------------------------------------
