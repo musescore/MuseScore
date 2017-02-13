@@ -29,6 +29,95 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   noteValForPosition
+//---------------------------------------------------------
+
+NoteVal Score::noteValForPosition(Position pos, bool &error)
+      {
+      error           = false;
+      Segment* s      = pos.segment;
+      int line        = pos.line;
+      int tick        = s->tick();
+      int staffIdx    = pos.staffIdx;
+      Staff* st       = staff(staffIdx);
+      ClefType clef   = st->clef(tick);
+      const Instrument* instr = st->part()->instrument(s->tick());
+      NoteVal nval;
+      const StringData* stringData = 0;
+
+      switch (st->staffType(tick)->group()) {
+            case StaffGroup::PERCUSSION: {
+                  if (_is.rest()) {
+                        error = true;
+                        break;
+                        }
+                  const Drumset* ds = instr->drumset();
+                  nval.pitch        = _is.drumNote();
+                  if (nval.pitch < 0) {
+                        error = true;
+                        return nval;
+                        }
+                  nval.headGroup = ds->noteHead(nval.pitch);
+                  if (nval.headGroup == NoteHead::Group::HEAD_INVALID) {
+                        error = true;
+                        return nval;
+                        }
+                  break;
+                  }
+            case StaffGroup::TAB: {
+                  if (_is.rest()) {
+                        error = true;
+                        return nval;
+                        }
+                  stringData = instr->stringData();
+                  if (line < 0 || line >= stringData->strings()) {
+                        error = true;
+                        return nval;
+                        }
+                  // build a default NoteVal for that string
+                  nval.string = line;
+                  if (pos.fret != FRET_NONE)          // if a fret is given, use it
+                        nval.fret = pos.fret;
+                  else {                              // if no fret, use 0 as default
+                        _is.setString(line);
+                        nval.fret = 0;
+                        }
+                  // reduce within fret limit
+                  if (nval.fret > stringData->frets())
+                        nval.fret = stringData->frets();
+                  // for open strings, only accepts fret 0 (strings in StringData are from bottom to top)
+                  int   strgDataIdx = stringData->strings() - line - 1;
+                  if (nval.fret > 0 && stringData->stringList().at(strgDataIdx).open == true)
+                        nval.fret = 0;
+                  nval.pitch = stringData->getPitch(line, nval.fret, st, tick);
+                  break;
+                  }
+
+            case StaffGroup::STANDARD: {
+                  AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line, error);
+                  if (error)
+                        return nval;
+                  int step           = absStep(line, clef);
+                  int octave         = step/7;
+                  nval.pitch         = step2pitch(step) + octave * 12 + int(acci);
+                  if (styleB(StyleIdx::concertPitch))
+                        nval.tpc1 = step2tpc(step % 7, acci);
+                  else {
+                        nval.pitch += instr->transpose().chromatic;
+                        nval.tpc2 = step2tpc(step % 7, acci);
+                        Interval v = st->part()->instrument(tick)->transpose();
+                        if (v.isZero())
+                              nval.tpc1 = nval.tpc2;
+                        else
+                              nval.tpc1 = Ms::transposeTpc(nval.tpc2, v, true);
+                        }
+                  }
+                  break;
+            }
+      return nval;
+      }
+
+//---------------------------------------------------------
 //   cmdAddPitch
 //---------------------------------------------------------
 

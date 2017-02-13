@@ -223,6 +223,8 @@ class Accidental : public Element {
       QString accessibleInfo() const override;
       };
 
+extern AccidentalVal sym2accidentalVal(SymId id);
+
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::AccidentalRole);
