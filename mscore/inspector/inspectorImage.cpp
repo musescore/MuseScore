@@ -34,6 +34,21 @@ InspectorImage::InspectorImage(QWidget* parent)
       e.setupUi(addWidget());
       b.setupUi(addWidget());
 
+      Element* el = inspector->element();
+      bool inFrame = el->parent()->type() == Element::Type::HBOX || el->parent()->type() == Element::Type::VBOX;
+      bool sameTypes = true;
+
+      for (const auto& ee : inspector->el()) {
+            if ((ee->parent()->type() == Element::Type::HBOX || ee->parent()->type() == Element::Type::VBOX) != inFrame) {
+                  sameTypes = false;
+                  break;
+                  }
+            }
+      if (sameTypes) {
+            b.autoscale->setDisabled(!inFrame);
+            b.resetAutoscale->setDisabled(!inFrame);
+            }
+
       iList = {
             { P_ID::COLOR,         0, 0, e.color,       e.resetColor       },
             { P_ID::VISIBLE,       0, 0, e.visible,     e.resetVisible     },
