@@ -211,12 +211,38 @@ bool MidiFile::read(QIODevice* in)
       _tracks.clear();
       curPos    = 0;
 
+      // === Read header_chunk = "MThd" + <header_length> + <format> + <n> + <division>
+      //
+      // "MThd" 4 bytes
+      //    the literal string MThd, or in hexadecimal notation: 0x4d546864.
+      //    These four characters at the start of the MIDI file
+      //    indicate that this is a MIDI file.
+      // <header_length> 4 bytes
+      //    length of the header chunk (always =6 bytes long - the size of the next
+      //    three fields which are considered the header chunk).
+      //    Although the header chunk currently always contains 6 bytes of data,
+      //    this should not be assumed, this value should always be read and acted upon,
+      //    to allow for possible future extension to the standard.
+      // <format> 2 bytes
+      //    0 = single track file format
+      //    1 = multiple track file format
+      //    2 = multiple song file format (i.e., a series of type 0 files)
+      // <n> 2 bytes
+      //    number of track chunks that follow the header chunk
+      // <division> 2 bytes
+      //    unit of time for delta timing. If the value is positive, then it represents
+      //    the units per beat. For example, +96 would mean 96 ticks per beat.
+      //    If the value is negative, delta times are in SMPTE compatible units.
+
       char tmp[4];
 
       read(tmp, 4);
       int len = readLong();
       if (memcmp(tmp, "MThd", 4) || len < 6)
             throw(QString("bad midifile: MThd expected"));
+
+      if (len > 6)
+            throw(QString("unsupported MIDI header data size: %1 instead of 6").arg(len));
 
       _format     = readShort();
       int ntracks = readShort();
@@ -253,9 +279,6 @@ bool MidiFile::read(QIODevice* in)
             }
 
       // =====================================================
-
-      if (len > 6)
-            skip(len-6); // skip the excess
 
       switch (_format) {
             case 0:
