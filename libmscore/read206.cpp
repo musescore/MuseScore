@@ -43,6 +43,7 @@
 #include "elementlayout.h"
 #include "volta.h"
 #include "pedal.h"
+#include "hairpin.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -1072,6 +1073,46 @@ static void readOttava(XmlReader& e, Ottava* ottava)
       }
 
 //---------------------------------------------------------
+//   readHairpin
+//---------------------------------------------------------
+
+static void readHairpin(XmlReader& e, Hairpin* h)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "subtype")
+                  h->setHairpinType(HairpinType(e.readInt()));
+            else if (tag == "lineWidth") {
+                  h->setLineWidth(Spatium(e.readDouble()));
+                  // lineWidthStyle = PropertyFlags::UNSTYLED;
+                  }
+            else if (tag == "hairpinHeight") {
+                  h->setHairpinHeight(Spatium(e.readDouble()));
+                  // hairpinHeightStyle = PropertyFlags::UNSTYLED;
+                  }
+            else if (tag == "hairpinContHeight") {
+                  h->setHairpinContHeight(Spatium(e.readDouble()));
+                  // hairpinContHeightStyle = PropertyFlags::UNSTYLED;
+                  }
+            else if (tag == "hairpinCircledTip")
+                  h->setHairpinCircledTip(e.readInt());
+            else if (tag == "veloChange")
+                  h->setVeloChange(e.readInt());
+            else if (tag == "dynType")
+                  h->setDynRange(Dynamic::Range(e.readInt()));
+            else if (tag == "useTextLine") {      // < 206
+                  e.readInt();
+                  if (h->hairpinType() == HairpinType::CRESC_HAIRPIN)
+                        h->setHairpinType(HairpinType::CRESC_LINE);
+                  else if (h->hairpinType() == HairpinType::DECRESC_HAIRPIN)
+                        h->setHairpinType(HairpinType::DECRESC_LINE);
+                  }
+            else if (!readTextLineProperties(e, h))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
 //   readTextLine
 //---------------------------------------------------------
 
@@ -1429,6 +1470,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         readPedal(e, toPedal(sp));
                   else if (tag == "Ottava")
                         readOttava(e, toOttava(sp));
+                  else if (tag == "HairPin")
+                        readHairpin(e, toHairpin(sp));
                   else
                         readTextLine(e, static_cast<TextLineBase*>(sp));
                   score->addSpanner(sp);
