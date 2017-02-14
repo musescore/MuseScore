@@ -5689,10 +5689,10 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                         QColor color(_e.attributes().value("color").toString());
                         QString glissText = _e.readElementText();
                         if (gliss) {
-                              logError(QString("overlapping glissando/slide %1").arg(n+1));
+                              logError(QString("overlapping glissando/slide number %1").arg(n+1));
                               }
                         else if (!note) {
-                              logError(QString("no note for glissando/slide %1 start").arg(n+1));
+                              logError(QString("no note for glissando/slide number %1 start").arg(n+1));
                               }
                         else {
                               gliss = new Glissando(_score);
@@ -5711,10 +5711,10 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                         }
                   else if (spannerType == "stop") {
                         if (!gliss) {
-                              logError(QString("glissando/slide %1 stop without start").arg(n+1));
+                              logError(QString("glissando/slide number %1 stop without start").arg(n+1));
                               }
                         else if (!note) {
-                              logError(QString("no note for glissando/slide %1 stop").arg(n+1));
+                              logError(QString("no note for glissando/slide number %1 stop").arg(n+1));
                               }
                         else {
                               _spanners[gliss].second = tick + ticks;
@@ -5762,9 +5762,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
             Trill*& t = _trills[wavyLineNo];
             if (wavyLineType == "start") {
                   if (t) {
-                        logError(QString("overlapping wavy-line %1 not supported").arg(wavyLineNo));
-                        delete t;
-                        t = 0;
+                        logError(QString("overlapping wavy-line number %1").arg(wavyLineNo+1));
                         }
                   else {
                         t = new Trill(_score);
@@ -5775,7 +5773,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                   }
             else if (wavyLineType == "stop") {
                   if (!t) {
-                        logError(QString("wavy-line %1 stop without start").arg(wavyLineNo));
+                        logError(QString("wavy-line number %1 stop without start").arg(wavyLineNo+1));
                         }
                   else {
                         _spanners[t].second = tick + ticks;
