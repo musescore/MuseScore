@@ -2269,6 +2269,10 @@ void Score::cmd(const QAction* a)
             addArticulation(ArticulationType::Sforzatoaccent);
       else if (cmd == "add-trill")
             addArticulation(ArticulationType::Trill);
+      else if (cmd == "add-up-bow")
+            addArticulation(ArticulationType::Upbow);
+      else if (cmd == "add-down-bow")
+            addArticulation(ArticulationType::Downbow);
       else if (cmd == "add-8va")
             cmdAddOttava(Ottava::Type::OTTAVA_8VA);
       else if (cmd == "add-8vb")
