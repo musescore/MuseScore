@@ -28,24 +28,24 @@
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle"></metaTag>
+    <metaTag name="workTitle">crescendo-2</metaTag>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
-      <trackName>Flute</trackName>
+      <trackName>Piano</trackName>
       <Instrument>
-        <longName>Flute</longName>
-        <shortName>Fl.</shortName>
-        <trackName>Flute</trackName>
-        <minPitchP>59</minPitchP>
-        <maxPitchP>98</maxPitchP>
-        <minPitchA>60</minPitchA>
-        <maxPitchA>93</maxPitchA>
-        <instrumentId>wind.flutes.flute</instrumentId>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>95</gateTime>
@@ -75,174 +75,220 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="73"/>
+          <program value="0"/>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <Text>
+          <style>Title</style>
+          <text>crescendo-2</text>
+          </Text>
+        </VBox>
       <Measure number="1">
-        <Marker>
-          <style>Repeat Text Left</style>
-          <text><sym>segno</sym></text>
-          <label>segno</label>
-          </Marker>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <HairPin id="2">
+          <subtype>0</subtype>
+          <beginText>cresc.</beginText>
+          <continueText>(cresc.)</continueText>
+          </HairPin>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
-        <Marker>
-          <style>Repeat Text Left</style>
-          <text><sym>segnoSerpent1</sym></text>
-          <label>varsegno</label>
-          </Marker>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="3">
-        <Marker>
-          <style>Repeat Text Left</style>
-          <text><sym>coda</sym></text>
-          <label>codab</label>
-          </Marker>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="4">
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <Marker>
-          <style>Repeat Text Left</style>
-          <text><sym>codaSquare</sym></text>
-          <label>varcoda</label>
-          </Marker>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="5">
-        <Marker>
-          <style>Repeat Text Right</style>
-          <text>Fine</text>
-          <label>fine</label>
-          </Marker>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="6">
-        <Marker>
-          <style>Repeat Text Right</style>
-          <text>To Coda</text>
-          <label>coda</label>
-          </Marker>
+        <endSpanner id="2"/>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="7">
-        <Jump>
-          <style>Repeat Text Right</style>
-          <text>D.C.</text>
-          <jumpTo>start</jumpTo>
-          <playUntil>end</playUntil>
-          <continueAt></continueAt>
-          </Jump>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="8">
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <Jump>
-          <style>Repeat Text Right</style>
-          <text>D.C. al Fine</text>
-          <jumpTo>start</jumpTo>
-          <playUntil>fine</playUntil>
-          <continueAt></continueAt>
-          </Jump>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="9">
-        <Jump>
-          <style>Repeat Text Right</style>
-          <text>D.C. al Coda</text>
-          <jumpTo>start</jumpTo>
-          <playUntil>coda</playUntil>
-          <continueAt>codab</continueAt>
-          </Jump>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="10">
-        <Jump>
-          <style>Repeat Text Right</style>
-          <text>D.S. al Coda</text>
-          <jumpTo>segno</jumpTo>
-          <playUntil>coda</playUntil>
-          <continueAt>codab</continueAt>
-          </Jump>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="11">
-        <Jump>
-          <style>Repeat Text Right</style>
-          <text>D.S. al Fine</text>
-          <jumpTo>segno</jumpTo>
-          <playUntil>fine</playUntil>
-          <continueAt></continueAt>
-          </Jump>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="12">
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <Jump>
-          <style>Repeat Text Right</style>
-          <text>D.S.</text>
-          <jumpTo>segno</jumpTo>
-          <playUntil>end</playUntil>
-          <continueAt></continueAt>
-          </Jump>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="13">
-        <RepeatMeasure>
+        <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
-          </RepeatMeasure>
+          </Rest>
+        </Measure>
+      <Measure number="14">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="15">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="16">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="17">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="18">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="19">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="20">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="21">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="22">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="23">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="24">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="25">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="26">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="27">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="28">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="29">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="30">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="31">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
+        </Measure>
+      <Measure number="32">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration>4/4</duration>
+          </Rest>
         <BarLine>
           <span>1</span>
           </BarLine>
