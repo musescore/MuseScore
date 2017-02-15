@@ -1319,6 +1319,7 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       text->addAction(getAction("chord-text"));
       text->addAction(getAction("rehearsalmark-text"));
       text->addAction(getAction("instrument-change-text"));
+      text->addAction(getAction("fingering-text"));
       text->addSeparator();
       text->addAction(getAction("lyrics"));
       text->addAction(getAction("figured-bass"));

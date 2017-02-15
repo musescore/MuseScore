@@ -83,6 +83,7 @@
 #include "libmscore/excerpt.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/repeatlist.h"
+#include "libmscore/fingering.h"
 
 #include "inspector/inspector.h"
 
@@ -2790,6 +2791,8 @@ void ScoreView::cmd(const QAction* a)
             cmdAddText(TEXT::REHEARSAL_MARK);
       else if (cmd == "instrument-change-text")
             cmdAddText(TEXT::INSTRUMENT_CHANGE);
+      else if (cmd == "fingering-text")
+            cmdAddText(TEXT::FINGERING);
 
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
@@ -5409,6 +5412,17 @@ void ScoreView::cmdAddText(TEXT type)
                   s->setTrack(cr->track());
                   s->setTextStyleType(TextStyleType::INSTRUMENT_CHANGE);
                   s->setParent(cr->segment());
+                  }
+                  break;
+            case TEXT::FINGERING:
+                  {
+                  Element* e = _score->getSelectedElement();
+                  if (!e || e->type() != Element::Type::NOTE
+                     || !e->staff()->isPitchedStaff())
+                        break;
+                  s = new Fingering(_score);
+                  s->setTextStyleType(TextStyleType::FINGERING);
+                  s->setParent(e);
                   }
                   break;
             }
