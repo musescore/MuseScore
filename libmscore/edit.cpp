@@ -1312,6 +1312,7 @@ void Score::deleteItem(Element* el)
       {
       if (!el)
             return;
+//      qDebug("%s", el->name());
 
       switch (el->type()) {
             case ElementType::INSTRUMENT_NAME: {
@@ -1667,7 +1668,8 @@ void Score::deleteItem(Element* el)
 
 void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
       {
-      printf("deleteMeasures %p %p\n", is,ie);
+// qDebug("deleteMeasures %p %p", is, ie);
+
 #if 0
       if (!selection().isRange())
             return;
@@ -1685,6 +1687,8 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
       else
             ie = lastMeasure();
 #endif
+
+      select(0, SelectType::SINGLE, 0);
 
       // createEndBar if last measure is deleted
       bool createEndBar = false;
@@ -1729,7 +1733,6 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
             if (mb == is)
                   break;
             }
-
       int startTick = is->tick();
       int endTick   = ie->tick();
 
@@ -1738,7 +1741,6 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
             Measure* is = score->tick2measure(startTick);
             Measure* ie = score->tick2measure(endTick);
 
-printf("undoRemoveMeasures %p %p\n", is, ie);
             score->undoRemoveMeasures(is, ie);
 
             // adjust views
@@ -1796,7 +1798,6 @@ printf("undoRemoveMeasures %p %p\n", is, ie);
                   }
             }
 
-      select(0, SelectType::SINGLE, 0);
       _is.setSegment(0);        // invalidate position
       }
 
@@ -2707,7 +2708,6 @@ void Score::globalTimeDelete()
 
 void Score::localTimeDelete()
       {
-printf("local time delete\n");
       Segment* startSegment;
       Segment* endSegment;
 
@@ -2745,10 +2745,8 @@ printf("local time delete\n");
       else
             ie = lastMeasure();
 
-printf("A\n");
       for (;;) {
             if (is->tick() != startSegment->tick()) {
-printf("B\n");
                   int tick = startSegment->tick();
                   int len;
                   if (ie == is)
@@ -2762,16 +2760,13 @@ printf("B\n");
                   }
             int endTick = endSegment ? endSegment->tick() : ie->endTick();
             if (ie->endTick() != endTick) {
-printf("C\n");
                   int len  = endSegment->tick() - ie->tick();
                   timeDelete(toMeasure(ie), toMeasure(ie)->first(), Fraction::fromTicks(len));
                   if (is == ie)
                         break;
                   ie = ie->prev();
                   }
-printf("D\n");
             deleteMeasures(is, ie);
-printf("E\n");
             break;
             };
 

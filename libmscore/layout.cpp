@@ -3426,7 +3426,6 @@ qDebug("%p %d-%d", this, stick, etick);
             lc.curSystem   = system;
             lc.systemList  = _systems.mid(systemIndex);
 
-//            if (system == _systems.front())
             if (systemIndex == 0)
                   lc.nextMeasure = _measures.first();
             else

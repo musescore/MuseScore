@@ -236,6 +236,8 @@ Ottava::Ottava(Score* s)
    : TextLineBase(s)
       {
       setFlag(ElementFlag::ON_STAFF, true);
+
+      _numbersOnly = score()->styleB(StyleIdx::ottavaNumbersOnly);
       setOttavaType(Type::OTTAVA_8VA);
 
       resetProperty(P_ID::LINE_WIDTH);
@@ -243,7 +245,6 @@ Ottava::Ottava(Score* s)
       resetProperty(P_ID::PLACEMENT);
       resetProperty(P_ID::END_HOOK_TYPE);
       resetProperty(P_ID::END_HOOK_HEIGHT);
-      resetProperty(P_ID::NUMBERS_ONLY);
       resetProperty(P_ID::BEGIN_FONT_FACE);
       resetProperty(P_ID::BEGIN_FONT_SIZE);
       resetProperty(P_ID::BEGIN_FONT_BOLD);
