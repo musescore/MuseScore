@@ -45,6 +45,7 @@
 #include "libmscore/dynamic.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/figuredbass.h"
+#include "libmscore/fingering.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/harmony.h"
 #include "libmscore/icon.h"
@@ -2763,6 +2764,8 @@ void ScoreView::cmd(const QAction* a)
             cmdAddText(TEXT::REHEARSAL_MARK);
       else if (cmd == "instrument-change-text")
             cmdAddText(TEXT::INSTRUMENT_CHANGE);
+      else if (cmd == "fingering-text")
+            cmdAddText(TEXT::FINGERING);
 
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
@@ -5477,6 +5480,17 @@ void ScoreView::cmdAddText(TEXT type)
                   s = new InstrumentChange(_score);
                   s->setTrack(cr->track());
                   s->setParent(cr->segment());
+                  }
+                  break;
+            case TEXT::FINGERING:
+                  {
+                  Element* e = _score->getSelectedElement();
+                  if (!e || !e->isNote()
+                     || !e->staff()->isPitchedStaff(e->tick()))
+                        break;
+                  s = new Fingering(_score);
+                  s->setTrack(e->track());
+                  s->setParent(e);
                   }
                   break;
             }
