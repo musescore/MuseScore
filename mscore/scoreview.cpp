@@ -5422,6 +5422,7 @@ void ScoreView::cmdAddText(TEXT type)
                         break;
                   s = new Fingering(_score);
                   s->setTextStyleType(TextStyleType::FINGERING);
+                  s->setTrack(e->track());
                   s->setParent(e);
                   }
                   break;
