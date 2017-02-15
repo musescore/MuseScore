@@ -440,7 +440,7 @@ NewWizard::NewWizard(QWidget* parent)
       setPage(Page::Keysig,      p5);
       setPage(Page::Timesig,     p3);
 
-
+      resize(QSize(840, 560)); //ensure default size if no geometry in settings
       MuseScore::restoreGeometry(this);
       connect(this, SIGNAL(currentIdChanged(int)), SLOT(idChanged(int)));
       }
