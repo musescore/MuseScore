@@ -427,6 +427,7 @@ NewWizard::NewWizard(QWidget* parent)
       p4->setFinalPage(true);
       p5->setFinalPage(true);
 
+      resize(QSize(840, 560)); //ensure default size if no geometry in settings
       MuseScore::restoreGeometry(this);
       }
 
