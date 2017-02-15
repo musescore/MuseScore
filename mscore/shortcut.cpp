@@ -604,6 +604,26 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
+         "add-stringsUpBow",
+         QT_TRANSLATE_NOOP("action","Up Bow"),
+         QT_TRANSLATE_NOOP("action","Toggle up bow"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "add-stringsDownBow",
+         QT_TRANSLATE_NOOP("action","Down Bow"),
+         QT_TRANSLATE_NOOP("action","Toggle down bow"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "add-tenuto",
          QT_TRANSLATE_NOOP("action","Tenuto"),
          QT_TRANSLATE_NOOP("action","Toggle tenuto"),
