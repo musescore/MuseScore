@@ -29,8 +29,18 @@ class TestCompat206 : public QObject, public MTest
 
    private slots:
       void initTestCase();
-      void compat_data();
-      void compat();
+      void compat(const QString&);
+      void accidentals()      { compat("accidentals");      }
+      void ambitus()          { compat("ambitus");          }
+      void articulations()    { compat("articulations");    }
+      void breath()           { compat("breath");           }
+      void clefs()            { compat("clefs");            }
+      void drumset()          { compat("drumset");          }
+      void markers()          { compat("markers");          }
+      void noteheads()        { compat("noteheads");        }
+      void textstyles()       { compat("textstyles");       }
+      void tuplets()          { compat("tuplets");          }
+      void hairpin()          { compat("hairpin");          }
       };
 
 //---------------------------------------------------------
@@ -43,36 +53,11 @@ void TestCompat206::initTestCase()
       }
 
 //---------------------------------------------------------
-//   compat_data
-//    every "xxx" test requires two *.mscx files:
-//          xxx.mscx     is the mscore 2.x file
-//          xxx-ref.mscx is the corresponding (correct)
-//                       mscore 3.0 file
-//---------------------------------------------------------
-
-void TestCompat206::compat_data()
-      {
-      QTest::addColumn<QString>("file");
-      QTest::newRow("accidentals")   <<  "accidentals";
-      QTest::newRow("ambitus")       <<  "ambitus";
-      QTest::newRow("articulations") <<  "articulations";
-      QTest::newRow("breath")        <<  "breath";
-      QTest::newRow("clefs")         <<  "clefs";
-      QTest::newRow("drumset")       <<  "drumset";
-      QTest::newRow("markers")       <<  "markers";
-      QTest::newRow("noteheads")     <<  "noteheads";
-      QTest::newRow("textstyles")    <<  "textstyles";
-      QTest::newRow("tuplets")       <<  "tuplets";
-      }
-
-//---------------------------------------------------------
 //   compat
 //---------------------------------------------------------
 
-void TestCompat206::compat()
+void TestCompat206::compat(const QString& file)
       {
-      QFETCH(QString, file);
-
       QString readFile(DIR   + file + ".mscx");
       QString writeFile(file + "-test.mscx");
       QString reference(DIR  + file + "-ref.mscx");
