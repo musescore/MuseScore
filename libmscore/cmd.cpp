@@ -3182,6 +3182,8 @@ void Score::cmd(const QAction* a)
             { "add-marcato",                [this]{ addArticulation(SymId::articMarcatoAbove);                  }},
             { "add-sforzato",               [this]{ addArticulation(SymId::articAccentAbove);                   }},
             { "add-trill",                  [this]{ addArticulation(SymId::ornamentTrill);                      }},
+            { "add-stringsUpBow",           [this]{ addArticulation(SymId::stringsUpBow);                       }},
+            { "add-stringsDownBow",         [this]{ addArticulation(SymId::stringsDownBow);                     }},
             { "add-8va",                    [this]{ cmdAddOttava(Ottava::Type::OTTAVA_8VA);                     }},
             { "add-8vb",                    [this]{ cmdAddOttava(Ottava::Type::OTTAVA_8VB);                     }},
             { "note-longa",                 [this]{ padToggle(Pad::NOTE00);                                     }},
