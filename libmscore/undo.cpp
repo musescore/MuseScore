@@ -2833,12 +2833,13 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
       //  handle ties which start before m1 and end in (m1-m2)
       //
       for (Segment* s = m1->first(); s != m2->last(); s = s->next1()) {
-            if (s->segmentType() != Segment::Type::ChordRest)
+            if (!s->isChordRestType())
                   continue;
             for (int track = 0; track < ntracks(); ++track) {
-                  Chord* c = static_cast<Chord*>(s->element(track));
-                  if (c == 0 || !c->isChord())
+                  Element* e = s->element(track);
+                  if (!e || !e->isChord())
                         continue;
+                  Chord* c = toChord(e);
                   for (Note* n : c->notes()) {
                         Tie* t = n->tieBack();
                         if (t && (t->startNote()->chord()->tick() < m1->tick()))
@@ -2937,7 +2938,23 @@ void InsertRemoveMeasures::removeMeasures()
 
       int tick1 = fm->tick();
       int tick2 = lm->endTick();
+
+      QList<System*> systemList;
+      for (MeasureBase* mb = lm;; mb = mb->prev()) {
+            System* system = mb->system();
+            if (system) {
+                  if (!systemList.contains(system)) {
+                        systemList.push_back(system);
+                        }
+                  auto i = std::find(system->measures().begin(), system->measures().end(), mb);
+                  if (i != system->measures().end())
+                        system->measures().erase(i);
+                  }
+            if (mb == fm)
+                  break;
+            }
       score->measures()->remove(fm, lm);
+
       score->fixTicks();
       if (fm->isMeasure()) {
             score->setPlaylistDirty();
@@ -2958,13 +2975,35 @@ void InsertRemoveMeasures::removeMeasures()
                   }
 
             score->insertTime(tick1, -(tick2 - tick1));
-            score->setLayoutAll();
             for (Spanner* sp : score->unmanagedSpanners()) {
                   if ((sp->tick() >= tick1 && sp->tick() < tick2) || (sp->tick2() >= tick1 && sp->tick2() < tick2))
                         sp->removeUnmanaged();
                   }
             score->connectTies(true);   // ??
             }
+
+      // remove empty systems
+
+      for (System* s : systemList) {
+            if (s->measures().empty()) {
+qDebug("remove system");
+                  Page* page = s->page();
+                  if (page) {
+                        // erase system from page
+                        QList<System*>& systemList = page->systems();
+                        auto i = std::find(systemList.begin(), systemList.end(), s);
+                        if (i != systemList.end())
+                              systemList.erase(i);
+                        // erase system from score
+                        auto k = std::find(score->systems().begin(), score->systems().end(), s);
+                        if (k != score->systems().end())
+                              score->systems().erase(k);
+                        // finally delete system
+                        delete s;
+                        }
+                  }
+            }
+
       score->setLayoutAll();
       }
 

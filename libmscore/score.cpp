@@ -1400,7 +1400,15 @@ void Score::removeElement(Element* element)
          || et == ElementType::TBOX
          || et == ElementType::FBOX
             ) {
-            measures()->remove(static_cast<MeasureBase*>(element));
+            MeasureBase* mb = toMeasureBase(element);
+            measures()->remove(mb);
+            System* system = mb->system();
+            Page* page = system->page();
+            if (element->isVBox() && system->measures().size() == 1) {
+                  auto i = std::find(page->systems().begin(), page->systems().end(), system);
+                  page->systems().erase(i);
+                  }
+//            setLayout(mb->tick());
             return;
             }
 
@@ -1430,10 +1438,11 @@ void Score::removeElement(Element* element)
                   if (et == ElementType::TEXTLINE && spanner->anchor() == Spanner::Anchor::NOTE)
                         break;
                   removeSpanner(spanner);
-                  for (SpannerSegment* ss : spanner->spannerSegments()) {
-                        if (ss->system())
-                              ss->system()->remove(ss);
-                        }
+//TODO: system is not valid anymore after removing measure
+//                  for (SpannerSegment* ss : spanner->spannerSegments()) {
+//                        if (ss->system())
+//                              ss->system()->remove(ss);
+//                        }
                   }
                   break;
 
