@@ -1097,6 +1097,7 @@ MuseScore::MuseScore()
       menuAddText->addAction(getAction("chord-text"));
       menuAddText->addAction(getAction("rehearsalmark-text"));
       menuAddText->addAction(getAction("instrument-change-text"));
+      menuAddText->addAction(getAction("fingering-text"));
       menuAddText->addSeparator();
       menuAddText->addAction(getAction("lyrics"));
       menuAddText->addAction(getAction("figured-bass"));
