@@ -1383,6 +1383,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
       for (int track = strack; track < etrack; ++track) {
             if (!xml.canWriteVoice(track))
                   continue;
+            bool firstTickWritten = false;
             for (Segment* segment = fs; segment && segment != ls; segment = segment->next1()) {
                   if (track == 0)
                         segment->setWritten(false);
@@ -1391,7 +1392,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                   // special case: - barline span > 1
                   //               - part (excerpt) staff starts after
                   //                 barline element
-                  bool needTick = (needFirstTick && segment == fs) || (segment->tick() != xml.curTick);
+                  bool needTick = (needFirstTick && segment->tick() == fs->tick() && !firstTickWritten) || (segment->tick() != xml.curTick);
                   if ((segment->segmentType() == Segment::Type::EndBarLine)
                      && (e == 0)
                      && writeSystemElements
@@ -1484,6 +1485,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         xml.tag("tick", segment->tick() - xml.tickDiff);
                         xml.curTick = segment->tick();
                         needTick = false;
+                        firstTickWritten = true;
                         }
                   if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
