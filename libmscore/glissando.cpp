@@ -245,6 +245,8 @@ void Glissando::layout()
             }
 
       SLine::layout();
+      if (spannerSegments().isEmpty())
+            return;
       setPos(0.0, 0.0);
       adjustReadPos();
 
