@@ -144,7 +144,7 @@ PasteStatus Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               int tick = e.readInt();
                               e.initTick(tick);
                               int shift = tick - tickStart;
-                              if (makeGap && !makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen), voiceOffset)) {
+                              if (makeGap && tickLen && !makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen), voiceOffset)) {
                                     qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick + shift);
                                     done = true; // break main loop, cannot make gap
                                     break;
@@ -540,6 +540,8 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                         Fraction mlen = Fraction::fromTicks(measure->tick() + measure->ticks() - tick);
                         Fraction len  = rest > mlen ? mlen : rest;
                         QList<TDuration> dl = toDurationList(len, false);
+                        if (dl.size() <= 0)
+                              break;
                         TDuration d = dl[0];
                         r2->setDuration(d.fraction());
                         r2->setDurationType(d);
