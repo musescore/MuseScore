@@ -1619,6 +1619,9 @@ TextBlock& Text::curLine()
 
 bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, const QString& _s)
       {
+      // do nothing on Shift, it messes up IME on Windows. See #64046
+      if (key == Qt::Key_Shift)
+            return false;
       QString s         = _s;
       bool ctrlPressed  = modifiers & Qt::ControlModifier;
       bool shiftPressed = modifiers & Qt::ShiftModifier;
