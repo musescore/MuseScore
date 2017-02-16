@@ -679,9 +679,9 @@ void Score::dragPosition(const QPointF& p, int* rst, Segment** seg) const
 void Score::setShowInvisible(bool v)
       {
       _showInvisible = v;
-      rebuildBspTree();
+//      rebuildBspTree();
       setUpdateAll();
-      update();
+//      update();
       }
 
 //---------------------------------------------------------
@@ -692,7 +692,7 @@ void Score::setShowUnprintable(bool v)
       {
       _showUnprintable = v;
       setUpdateAll();
-      update();
+//      update();
       }
 
 //---------------------------------------------------------
@@ -703,7 +703,7 @@ void Score::setShowFrames(bool v)
       {
       _showFrames = v;
       setUpdateAll();
-      update();
+//      update();
       }
 
 //---------------------------------------------------------
@@ -714,7 +714,7 @@ void Score::setShowPageborders(bool v)
       {
       _showPageborders = v;
       setUpdateAll();
-      update();
+//      update();
       }
 
 //---------------------------------------------------------
@@ -725,7 +725,7 @@ void Score::setMarkIrregularMeasures(bool v)
       {
       _markIrregularMeasures = v;
       setUpdateAll();
-      update();
+//      update();
       }
 
 //---------------------------------------------------------
