@@ -2624,6 +2624,8 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                                     break;
                               }
                         }
+                        if (!byMeasure && !s->lastMeasure())
+                              byMeasure = true;
                         if (byMeasure) { // Draw visible staff lines by measure
                               for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
                                     if (mb->type() != Element::Type::HBOX
