@@ -52,7 +52,7 @@ class XmlReader : public QXmlStreamReader {
       int _track            { 0       };
       int _trackOffset      { 0       };
       bool _pasteMode       { false   };        // modifies read behaviour on paste operation
-      Measure* _lastMeasure { nullptr };
+      Measure* _lastMeasure { 0       };
       QHash<int, Beam*>    _beams;
       QHash<int, Tuplet*>  _tuplets;
 

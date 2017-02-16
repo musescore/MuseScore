@@ -1500,8 +1500,11 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   clef->read(e);
                   clef->setGenerated(false);
                   if (e.tick() == 0) {
-                        if (score->staff(staffIdx)->clef(0) != clef->clefType()) {
+                        if (score->staff(staffIdx)->clef(0) != clef->clefType())
                               score->staff(staffIdx)->setDefaultClefType(clef->clefType());
+                        if (clef->links() && clef->links()->size() == 1) {
+                              e.linkIds().remove(clef->links()->lid());
+                              qDebug("remove link %d", clef->links()->lid());
                               }
                         delete clef;
                         continue;
@@ -2027,7 +2030,7 @@ static bool readScore(Score* score, XmlReader& e)
                   readPart(part, e);
                   score->parts().push_back(part);
                   }
-            else if ((tag == "HairPin")
+            else if ((tag == "HairPin")   // TODO: do this elements exist here?
                 || (tag == "Ottava")
                 || (tag == "TextLine")
                 || (tag == "Volta")
@@ -2065,7 +2068,8 @@ static bool readScore(Score* score, XmlReader& e)
                         ex->setPartScore(s);
                         ex->setTracks(e.tracks());
                         e.setLastMeasure(nullptr);
-                        s->read(e);
+                        // s->read(e);
+                        readScore(s, e);
                         m->addExcerpt(ex);
                         }
                   }
@@ -2152,14 +2156,15 @@ static bool readScore(Score* score, XmlReader& e)
                   }
             }
 #endif
-      if (!score->masterScore()->omr())
-            score->masterScore()->setShowOmr(false);
-
       score->fixTicks();
-      score->masterScore()->rebuildMidiMapping();
-      score->masterScore()->updateChannel();
-      score->createPlayEvents();
-
+      if (score->isMaster()) {
+            MasterScore* ms = static_cast<MasterScore*>(score);
+            if (!ms->omr())
+                  ms->setShowOmr(false);
+            ms->rebuildMidiMapping();
+            ms->updateChannel();
+            ms->createPlayEvents();
+            }
       return true;
       }
 
