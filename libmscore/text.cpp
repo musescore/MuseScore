@@ -3050,7 +3050,7 @@ void Text::inputTransition(QInputMethodEvent* ie)
                   _cursor->format()->setPreedit(true);
                   editInsertText(preEdit);
                   ie->accept();
-                  _score->update();
+                  score()->update();
                   }
             }
       }
