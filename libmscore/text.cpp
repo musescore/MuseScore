@@ -3160,6 +3160,8 @@ void Text::inputTransition(QInputMethodEvent* ie)
 #endif
                   _cursor->format()->setPreedit(true);
                   editInsertText(preEdit);
+                  ie->accept();
+                  _score->update();
                   }
             }
       }
