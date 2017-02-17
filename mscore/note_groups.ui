@@ -362,6 +362,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QPushButton" name="resetGroups">
+       <property name="toolTip">
+        <string>Reset note grouping</string>
+       </property>
        <property name="text">
         <string>Reset</string>
        </property>
