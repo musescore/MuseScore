@@ -529,7 +529,6 @@ class Note : public Element {
 Q_DECLARE_METATYPE(Ms::NoteHead::Group);
 Q_DECLARE_METATYPE(Ms::NoteHead::Type);
 Q_DECLARE_METATYPE(Ms::Note::ValueType);
-Q_DECLARE_METATYPE(Ms::Note);
 
 #endif
 

@@ -170,7 +170,7 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
                   }
             }
       text->setParent((Page*)this);
-      Align flags;
+      Align flags = Align::LEFT;
       switch (area) {
             case 0: flags = Align::LEFT    | Align::TOP;    break;
             case 1: flags = Align::HCENTER | Align::TOP;    break;
