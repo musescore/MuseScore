@@ -252,7 +252,7 @@ bool MTest::savePdf(MasterScore* cs, const QString& saveName)
       printerDev.setCreator("MuseScore Version: " VERSION);
       printerDev.setFullPage(true);
       printerDev.setColorMode(QPrinter::Color);
-      printerDev.setDocName(cs->name());
+//      printerDev.setDocName(cs->name());
       printerDev.setOutputFormat(QPrinter::PdfFormat);
 
       printerDev.setOutputFileName(saveName);

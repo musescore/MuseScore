@@ -184,13 +184,13 @@ class TextBlock {
 class Text : public Element {
       Q_GADGET
 
-#define PROP(a,b,c)                \
-      a _ ## b;                           \
+#define PROP(a,b,c)                                            \
+      a _ ## b;                                                \
       PropertyFlags _ ## b ## Style { PropertyFlags::STYLED }; \
-      public:                        \
-      const a& b() const   { return _ ## b;    } \
-      void c(const a& val) { _ ## b = val; }     \
-      private:
+   public:                                                     \
+      const a& b() const   { return _ ## b; }                  \
+      void c(const a& val) { _ ## b = val;  }                  \
+   private:
 
       PROP(QString, family,                 setFamily)
       PROP(qreal,   size,                   setSize)
