@@ -24,10 +24,10 @@ install(FILES
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates
       )
 install(FILES
-      01-General/00-Blank.mscz
-      01-General/01-Treble_Clef.mscz
-      01-General/02-Bass_Clef.mscz
-      01-General/03-Grand_Staff.mscz
+      01-General/00-Blank.mscx
+      01-General/01-Treble_Clef.mscx
+      01-General/02-Bass_Clef.mscx
+      01-General/03-Grand_Staff.mscx
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/01-General
       )
 
