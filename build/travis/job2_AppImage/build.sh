@@ -101,7 +101,8 @@ fi
 
 if [ "${upload}" ]; then
   # Upload AppImage to Bintray
-  ./build/travis/job2_AppImage/bintray.sh build.release/MuseScore*.AppImage
+  #./build/travis/job2_AppImage/bintray.sh build.release/MuseScore*.AppImage
+  ./build/travis/job2_AppImage/osuosl.sh build.release/MuseScore*.AppImage
 else
   echo "On branch '$branch' so AppImage will not be uploaded." >&2
 fi

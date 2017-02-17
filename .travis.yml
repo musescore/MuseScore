@@ -65,6 +65,7 @@ matrix:
           - bsdtar
           - curl
           - zsync
+          - expect
       services:
         - docker
       script:
@@ -78,6 +79,7 @@ matrix:
           - bsdtar
           - curl
           - zsync
+          - expect
       services:
         - docker
       script:
@@ -91,13 +93,13 @@ matrix:
           - bsdtar
           - curl
           - zsync
+          - expect
       services:
         - docker
       before_script:
         - "sudo ./build/travis/job2_AppImage/set-binfmt-misc.sh"
       script:
         - "if [[ $APPIMAGE_BUILD_ARCHS == *armhf* ]]; then ./build/travis/job2_AppImage/build.sh --armhf --upload-branches $APPIMAGE_UPLOAD_BRANCHES; fi"
-
     # 5th parallel build job - mac osx build
     - env: "JOB=MacOSX"
       os: osx
