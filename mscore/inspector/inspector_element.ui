@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>302</width>
-    <height>233</height>
+    <width>197</width>
+    <height>157</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -105,7 +105,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Horizontal offset' value</string>
+         <string>Reset 'Offset' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -165,15 +165,15 @@
         <property name="text">
          <string>Offset:</string>
         </property>
+        <property name="buddy">
+         <cstring>offset</cstring>
+        </property>
        </widget>
       </item>
       <item row="1" column="0" colspan="3">
        <widget class="QCheckBox" name="visible">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="accessibleName">
-         <string>Visible</string>
         </property>
         <property name="text">
          <string>Visible</string>
@@ -183,7 +183,7 @@
       <item row="3" column="1" colspan="2">
        <widget class="Awl::ColorLabel" name="color">
         <property name="accessibleName">
-         <string>Color:</string>
+         <string>Color</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::Box</enum>
@@ -226,6 +226,9 @@
       </item>
       <item row="2" column="1" colspan="2">
        <widget class="QSpinBox" name="z">
+        <property name="accessibleName">
+         <string>Stacking order</string>
+        </property>
         <property name="maximum">
          <number>1000000000</number>
         </property>
