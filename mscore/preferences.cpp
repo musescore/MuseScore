@@ -591,7 +591,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 #ifndef USE_ALSA
       alsaDriver->setVisible(false);
 #else
-      exportAudioSampleRate->clear();
+      alsaSampleRate->clear();
       alsaSampleRate->addItem(tr("192000"), 192000);
       alsaSampleRate->addItem( tr("96000"),  96000);
       alsaSampleRate->addItem( tr("88200"),  88200);
@@ -611,21 +611,20 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 #endif
 
       exportAudioSampleRate->clear();
+      exportAudioSampleRate->addItem(tr("32000"), 32000);
       exportAudioSampleRate->addItem(tr("44100"), 44100); // default
       exportAudioSampleRate->addItem(tr("48000"), 48000);
 
 #ifndef USE_LAME
       exportMp3BitRateLabel->setVisible(false);
       exportMp3BitRate->setVisible(false);
-      exporMp3BitRateUnit->setVisible(false)
+      exportMp3BitRateUnit->setVisible(false)
 #else
       exportMp3BitRate->clear();
-      exportMp3BitRate->addItem(  tr("8"),   8);
-      exportMp3BitRate->addItem( tr("16"),  16);
       exportMp3BitRate->addItem( tr("32"),  32);
       exportMp3BitRate->addItem( tr("40"),  40);
       exportMp3BitRate->addItem( tr("48"),  48);
-      //exportMp3BitRate->addItem( tr("56"),  56);
+      exportMp3BitRate->addItem( tr("56"),  56);
       exportMp3BitRate->addItem( tr("64"),  64);
       exportMp3BitRate->addItem( tr("80"),  80);
       exportMp3BitRate->addItem( tr("96"),  96);

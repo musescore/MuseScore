@@ -3685,8 +3685,13 @@
              <string>Choose sample rate</string>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
+            <item>
+             <property name="text">
+              <string notr="true">32000</string>
+             </property>
+            </item>
             <item>
              <property name="text">
               <string notr="true">44100</string>
@@ -3707,7 +3712,7 @@
            </widget>
           </item>
           <item row="1" column="3">
-           <widget class="QLabel" name="exporMp3BitRateUnit">
+           <widget class="QLabel" name="exportMp3BitRateUnit">
             <property name="text">
              <string>kBit/s</string>
             </property>
