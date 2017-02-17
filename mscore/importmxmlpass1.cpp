@@ -1314,7 +1314,7 @@ static bool mustSetSize(const int i)
  */
 
 static void updateStyles(Score* score,
-                         const QString& wordFamily, const QString& wordSize,
+                         const QString& /*wordFamily*/, const QString& /*wordSize*/,
                          const QString& lyricFamily, const QString& lyricSize)
       {
 //TODO:ws       const float fWordSize = wordSize.toFloat();   // note conversion error results in value 0.0

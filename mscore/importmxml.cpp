@@ -32,7 +32,7 @@
 
 namespace Ms {
 
-Score::FileError importMusicXMLfromBuffer(Score* score, const QString& name, QIODevice* dev)
+Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* dev)
       {
       //qDebug("importMusicXMLfromBuffer(score %p, name '%s', dev %p)",
       //       score, qPrintable(name), dev);

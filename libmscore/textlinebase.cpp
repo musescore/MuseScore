@@ -440,7 +440,7 @@ void TextLineBase::read(XmlReader& e)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void TextLineBase::spatiumChanged(qreal ov, qreal nv)
+void TextLineBase::spatiumChanged(qreal /*ov*/, qreal /*nv*/)
       {
       }
 
