@@ -234,6 +234,19 @@
         </widget>
        </item>
        <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
           <spacer name="horizontalSpacer_2">
@@ -257,7 +270,7 @@
             </sizepolicy>
            </property>
            <property name="toolTip">
-            <string>Add time signature to palette</string>
+            <string>Add time signature to master palette</string>
            </property>
            <property name="text">
             <string>Add</string>
