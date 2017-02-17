@@ -495,7 +495,7 @@ class DeSelectTransition : public QMouseEventTransition
                   return false;
             return canvas->getCurElement() != 0;
             }
-      virtual void onTransition(QEvent* e) {
+      virtual void onTransition(QEvent* /*e*/) {
 //TODO?? calls select mouse button release
 //            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
 //            QMouseEvent* me = static_cast<QMouseEvent*>(we->event());

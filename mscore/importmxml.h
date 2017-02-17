@@ -27,7 +27,7 @@
 
 namespace Ms {
 
-Score::FileError importMusicXMLfromBuffer(Score* score, const QString& name, QIODevice* dev);
+Score::FileError importMusicXMLfromBuffer(Score* score, const QString&, QIODevice* dev);
 
 } // namespace Ms
 #endif
