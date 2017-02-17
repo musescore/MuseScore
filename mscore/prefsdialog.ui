@@ -624,18 +624,14 @@
             <property name="accessibleName">
              <string>Select delay (in minutes) between auto saves</string>
             </property>
+            <property name="suffix">
+             <string extracomment="minutes">min</string>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
             <property name="value">
              <number>2</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_27">
-            <property name="text">
-             <string>minutes</string>
             </property>
            </widget>
           </item>
@@ -743,6 +739,9 @@
             <property name="accessibleName">
              <string>Icon Height</string>
             </property>
+            <property name="suffix">
+             <string extracomment="pixel">px</string>
+            </property>
             <property name="minimum">
              <number>5</number>
             </property>
@@ -762,6 +761,9 @@
            <widget class="QSpinBox" name="iconWidth">
             <property name="accessibleName">
              <string>Icon Width</string>
+            </property>
+            <property name="suffix">
+             <string extracomment="pixel">px</string>
             </property>
             <property name="minimum">
              <number>5</number>
@@ -1146,6 +1148,9 @@
             <property name="accessibleName">
              <string>Proximity for selecting elements:</string>
             </property>
+            <property name="suffix">
+             <string extracomment="pixel">px</string>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
@@ -1234,7 +1239,7 @@
                 <string>Default duration</string>
                </property>
                <property name="suffix">
-                <string>ms</string>
+                <string extracomment="milliseconds">ms</string>
                </property>
                <property name="minimum">
                 <number>20</number>
@@ -2662,17 +2667,7 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
-          <item row="1" column="4">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Period Size:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
+          <item row="1" column="5">
            <widget class="QSpinBox" name="alsaFragments">
             <property name="accessibleName">
              <string>Fragments</string>
@@ -2687,7 +2682,37 @@
              <number>8</number>
             </property>
             <property name="value">
-             <number>2</number>
+             <number>3</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="alsaDevice">
+            <property name="accessibleName">
+             <string>Device</string>
+            </property>
+            <property name="text">
+             <string notr="true">default</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Fragments:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Period Size:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -2708,52 +2733,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="5">
-           <widget class="QComboBox" name="alsaPeriodSize">
-            <property name="accessibleName">
-             <string>Period Size</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Choose period size</string>
-            </property>
-            <item>
-             <property name="text">
-              <string>4096</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2048</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>1024</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>512</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>256</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>128</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>64</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="6">
+          <item row="1" column="8">
            <spacer name="horizontalSpacer_9">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -2766,14 +2746,52 @@
             </property>
            </spacer>
           </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string>Fragments:</string>
+          <item row="1" column="7">
+           <widget class="QComboBox" name="alsaPeriodSize">
+            <property name="accessibleName">
+             <string>Period Size</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <property name="accessibleDescription">
+             <string>Choose period size</string>
             </property>
+            <property name="currentIndex">
+             <number>2</number>
+            </property>
+            <item>
+             <property name="text">
+              <string notr="true">4096</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">2048</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">1024</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">512</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">256</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">128</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">64</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="1" column="1">
@@ -2784,52 +2802,65 @@
             <property name="accessibleDescription">
              <string>Choose sample rate</string>
             </property>
+            <property name="currentIndex">
+             <number>3</number>
+            </property>
             <item>
              <property name="text">
-              <string>192000</string>
+              <string notr="true">192000</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>96000</string>
+              <string notr="true">96000</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>88200</string>
+              <string notr="true">88200</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>48000</string>
+              <string notr="true">48000</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>44100</string>
+              <string notr="true">44100</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>32000</string>
+              <string notr="true">32000</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>22050</string>
+              <string notr="true">22050</string>
              </property>
             </item>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="alsaDevice">
-            <property name="accessibleName">
-             <string>Device</string>
-            </property>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_22">
             <property name="text">
-             <string>default</string>
+             <string extracomment="Hertz">Hz</string>
             </property>
            </widget>
+          </item>
+          <item row="1" column="3">
+           <spacer name="horizontalSpacer_7">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -3329,10 +3360,13 @@
           <item row="0" column="1">
            <widget class="QSpinBox" name="pngResolution">
             <property name="accessibleName">
-             <string>Resolution DPI</string>
+             <string>Resolution</string>
             </property>
             <property name="accessibleDescription">
              <string>Choose resolution DPI</string>
+            </property>
+            <property name="suffix">
+             <string extracomment="dots per inch">DPI</string>
             </property>
             <property name="minimum">
              <number>32</number>
@@ -3386,60 +3420,8 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QGroupBox" name="groupBox_16">
-         <property name="accessibleName">
-          <string>Audio</string>
-         </property>
-         <property name="title">
-          <string>Audio</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_12">
-          <item>
-           <widget class="QLabel" name="label_18">
-            <property name="text">
-             <string>Sample rate:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="exportAudioSampleRate">
-            <property name="accessibleName">
-             <string>Sample rate</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Choose sample rate</string>
-            </property>
-            <item>
-             <property name="text">
-              <string>44100</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>48000</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="3" column="0" colspan="2">
-        <widget class="QGroupBox" name="groupBox_22">
+        <widget class="QGroupBox" name="exportMp3VBR">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -3512,21 +3494,24 @@
          <property name="title">
           <string>PDF</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_11">
-          <item row="1" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
            <widget class="QLabel" name="label_6">
             <property name="text">
-             <string>Resolution DPI:</string>
+             <string>Resolution:</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item>
            <widget class="QSpinBox" name="exportPdfDpi">
             <property name="accessibleName">
              <string>Resolution DPI</string>
             </property>
             <property name="accessibleDescription">
              <string>Choose resolution DPI</string>
+            </property>
+            <property name="suffix">
+             <string extracomment="dots per inch">DPI</string>
             </property>
             <property name="minimum">
              <number>75</number>
@@ -3539,7 +3524,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
+          <item>
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -3551,6 +3536,162 @@
              </size>
             </property>
            </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QGroupBox" name="groupBox_16">
+         <property name="accessibleName">
+          <string>Audio</string>
+         </property>
+         <property name="title">
+          <string>Audio</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_15">
+          <item row="1" column="2">
+           <widget class="QComboBox" name="exportMp3BitRate">
+            <property name="currentText">
+             <string>128</string>
+            </property>
+            <property name="currentIndex">
+             <number>8</number>
+            </property>
+            <item>
+             <property name="text">
+              <string notr="true">32</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">40</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">48</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">56</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">64</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">80</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">96</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">112</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">128</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">160</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">192</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">224</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">256</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">320</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>Sample rate:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QComboBox" name="exportAudioSampleRate">
+            <property name="accessibleName">
+             <string>Sample rate</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose sample rate</string>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string notr="true">44100</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">48000</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string extracomment="Hertz">Hz</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLabel" name="exporMp3BitRateUnit">
+            <property name="text">
+             <string>kBit/s</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <spacer name="horizontalSpacer_19">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="exportMp3BitRateLabel">
+            <property name="text">
+             <string>MP3 Bitrate:</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

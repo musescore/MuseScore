@@ -171,6 +171,7 @@ struct Preferences {
       bool nativeDialogs;
 
       int exportAudioSampleRate;
+      int exportMp3BitRate;
 
       QString workspace;
       int exportPdfDpi;

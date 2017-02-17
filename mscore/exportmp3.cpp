@@ -655,6 +655,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       int oldSampleRate = MScore::sampleRate;
       int sampleRate = preferences.exportAudioSampleRate;
+      exporter.setBitrate(preferences.exportMp3BitRate);
 
       int inSamples = exporter.initializeStream(channels, sampleRate);
       if (inSamples < 0) {
