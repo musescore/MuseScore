@@ -136,7 +136,7 @@
             <string>Offset:</string>
            </property>
            <property name="buddy">
-            <cstring>beginTextXoffset</cstring>
+            <cstring>beginTextOffset</cstring>
            </property>
           </widget>
          </item>
