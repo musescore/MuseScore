@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>387</width>
-    <height>221</height>
+    <width>228</width>
+    <height>22</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,6 +34,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="accessibleName">
+      <string>Horizontal offset</string>
+     </property>
      <property name="prefix">
       <string>X:</string>
      </property>
@@ -50,6 +53,9 @@
    </item>
    <item>
     <widget class="QToolButton" name="hRaster">
+     <property name="accessibleName">
+      <string>Snap to grid</string>
+     </property>
      <property name="text">
       <string notr="true"/>
      </property>
@@ -70,6 +76,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="accessibleName">
+      <string>Vertical offset</string>
+     </property>
      <property name="prefix">
       <string>Y:</string>
      </property>
@@ -86,6 +95,9 @@
    </item>
    <item>
     <widget class="QToolButton" name="vRaster">
+     <property name="accessibleName">
+      <string>Snap to grid</string>
+     </property>
      <property name="text">
       <string notr="true"/>
      </property>
