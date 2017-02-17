@@ -5393,6 +5393,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Used with -o <file>.pdf, export score + parts"));
       parser.addOption(QCommandLineOption(      "no-fallback-font", "will not use Bravura as fallback musical font"));
       parser.addOption(QCommandLineOption({"f", "force"}, "Used with -o, ignore warnings reg. score being corrupted or from wrong version"));
+      parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with -o <file>.mp3, sets bitrate", "bitrate"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -5504,6 +5505,15 @@ int main(int argc, char* av[])
       if (exportScoreParts && !converterMode)
             parser.showHelp(EXIT_FAILURE);
       ignoreWarnings = parser.isSet("f");
+      if (parser.isSet("b")) {
+            QString temp = parser.value("b");
+            if (temp.isEmpty())
+                   parser.showHelp(EXIT_FAILURE);
+            bool ok = false;
+            preferences.exportMp3BitRate = temp.toInt(&ok);
+            if (!ok)
+                  preferences.exportMp3BitRate = 128;
+           }
 
       QStringList argv = parser.positionalArguments();
 
