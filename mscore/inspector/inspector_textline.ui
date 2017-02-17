@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>422</width>
-    <height>786</height>
+    <width>290</width>
+    <height>605</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -136,7 +136,7 @@
             <string>Offset:</string>
            </property>
            <property name="buddy">
-            <cstring>beginTextXoffset</cstring>
+            <cstring>beginTextOffset</cstring>
            </property>
           </widget>
          </item>
@@ -412,7 +412,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Horiz. offset' value</string>
+            <string>Reset 'Offset' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -497,7 +497,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Placement' value</string>
+            <string>Reset 'Offset' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -809,6 +809,9 @@
            <property name="text">
             <string>Offset:</string>
            </property>
+           <property name="buddy">
+            <cstring>continueTextOffset</cstring>
+           </property>
           </widget>
          </item>
          <item row="6" column="1">
@@ -980,6 +983,9 @@
             <cstring>endTextPlacement</cstring>
            </property>
           </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="Ms::OffsetSelect" name="endTextOffset" native="true"/>
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="label_20">
@@ -1234,13 +1240,13 @@
            </property>
           </widget>
          </item>
-         <item row="7" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_6"/>
-         </item>
          <item row="5" column="0">
           <widget class="QLabel" name="label_16">
            <property name="text">
             <string>Offset:</string>
+           </property>
+           <property name="buddy">
+            <cstring>endTextOffset</cstring>
            </property>
           </widget>
          </item>
@@ -1250,7 +1256,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset 'Horiz. offset' value</string>
+            <string>Reset 'Offset' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -1260,9 +1266,6 @@
              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
            </property>
           </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="Ms::OffsetSelect" name="endTextOffset" native="true"/>
          </item>
         </layout>
        </widget>
