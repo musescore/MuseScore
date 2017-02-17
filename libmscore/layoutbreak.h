@@ -27,7 +27,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class LayoutBreak : public Element {
-      Q_OBJECT
+      Q_GADGET
 
    public:
       enum Type {

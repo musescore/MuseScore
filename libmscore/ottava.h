@@ -35,7 +35,7 @@ class Ottava;
 //---------------------------------------------------------
 
 class OttavaSegment : public TextLineBaseSegment {
-      Q_OBJECT
+      Q_GADGET
 
    protected:
 
@@ -60,7 +60,7 @@ class OttavaSegment : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class Ottava : public TextLineBase {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(Ms::Ottava::Type ottavaType READ ottavaType WRITE undoSetOttavaType)
       Q_ENUMS(Type)
 

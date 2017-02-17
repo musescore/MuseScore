@@ -929,31 +929,31 @@ QString ChordRest::durationUserName() const
       if (tuplet()) {
               switch (tuplet()->ratio().numerator()) {
                   case 2:
-                        tupletType = tr("Duplet");
+                        tupletType = QObject::tr("Duplet");
                         break;
                   case 3:
-                        tupletType = tr("Triplet");
+                        tupletType = QObject::tr("Triplet");
                         break;
                   case 4:
-                        tupletType = tr("Quadruplet");
+                        tupletType = QObject::tr("Quadruplet");
                         break;
                   case 5:
-                        tupletType = tr("Quintuplet");
+                        tupletType = QObject::tr("Quintuplet");
                         break;
                   case 6:
-                        tupletType = tr("Sextuplet");
+                        tupletType = QObject::tr("Sextuplet");
                         break;
                   case 7:
-                        tupletType = tr("Septuplet");
+                        tupletType = QObject::tr("Septuplet");
                         break;
                   case 8:
-                        tupletType = tr("Octuplet");
+                        tupletType = QObject::tr("Octuplet");
                         break;
                   case 9:
-                        tupletType = tr("Nonuplet");
+                        tupletType = QObject::tr("Nonuplet");
                         break;
                   default:
-                        tupletType = tr("Custom Tuplet");
+                        tupletType = QObject::tr("Custom Tuplet");
                   }
             }
       QString dotString = "";
@@ -962,16 +962,16 @@ QString ChordRest::durationUserName() const
 
       switch (dots()) {
             case 1:
-                  dotString += tr("Dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+                  dotString += QObject::tr("Dotted %1").arg(durationType().durationTypeUserName()).trimmed();
                   break;
             case 2:
-                  dotString += tr("Double dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+                  dotString += QObject::tr("Double dotted %1").arg(durationType().durationTypeUserName()).trimmed();
                   break;
             case 3:
-                  dotString += tr("Triple dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+                  dotString += QObject::tr("Triple dotted %1").arg(durationType().durationTypeUserName()).trimmed();
                   break;
             case 4:
-                  dotString += tr("Quadruple dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+                  dotString += QObject::tr("Quadruple dotted %1").arg(durationType().durationTypeUserName()).trimmed();
                   break;
             default:
                   dotString += durationType().durationTypeUserName();
@@ -1280,18 +1280,18 @@ QString ChordRest::accessibleExtraInfo() const
                   Segment* seg = 0;
                   if (s->type() == ElementType::SLUR) {
                         if (s->tick() == tick() && s->track() == track())
-                              rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
+                              rez = QObject::tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
                         if (s->tick2() == tick() && s->track2() == track())
-                              rez = tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
+                              rez = QObject::tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
                         }
                   else  {
                         if (s->tick() == tick() && s->staffIdx() == staffIdx())
-                              rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
+                              rez = QObject::tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
                         seg = segment()->next1MM(Segment::Type::ChordRest);
                         if (!seg)
                               continue;
                         if (s->tick2() == seg->tick() && s->staffIdx() == staffIdx())
-                              rez = tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
+                              rez = QObject::tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
                         }
                   }
             }

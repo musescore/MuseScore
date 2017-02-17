@@ -32,7 +32,7 @@ enum class SubStyle;
 
 
 class Jump : public Text {
-      Q_OBJECT
+      Q_GADGET
 
       Q_PROPERTY(QString continueAt  READ continueAt  WRITE undoSetContinueAt)
       Q_PROPERTY(QString jumpTo      READ jumpTo      WRITE undoSetJumpTo)

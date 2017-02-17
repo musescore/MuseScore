@@ -29,7 +29,7 @@ class Chord;
 //---------------------------------------------------------
 
 class LedgerLine : public Line {
-      Q_OBJECT
+      Q_GADGET
 
       LedgerLine* _next;
 

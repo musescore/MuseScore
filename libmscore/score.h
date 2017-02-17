@@ -341,10 +341,10 @@ class Movements : public std::vector<MasterScore*> {
 //    a Score has always an associated MasterScore
 //---------------------------------------------------------------------------------------
 
-class Score : public ScoreElement {
+class Score : public QObject, ScoreElement {
       Q_OBJECT
       Q_PROPERTY(int                            duration          READ duration)
-      Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
+//      Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
       Q_PROPERTY(Ms::Measure*                   firstMeasure      READ firstMeasure)
       Q_PROPERTY(Ms::Measure*                   firstMeasureMM    READ firstMeasureMM)
       Q_PROPERTY(int                            harmonyCount      READ harmonyCount)
@@ -359,7 +359,7 @@ class Score : public ScoreElement {
       Q_PROPERTY(int                            npages            READ npages)
       Q_PROPERTY(int                            nstaves           READ nstaves)
       Q_PROPERTY(int                            ntracks           READ ntracks)
-      Q_PROPERTY(QQmlListProperty<Ms::Part>     parts             READ qmlParts)
+//      Q_PROPERTY(QQmlListProperty<Ms::Part>     parts             READ qmlParts)
 
    public:
       enum class FileError : char {
@@ -505,7 +505,7 @@ class Score : public ScoreElement {
       void selectAdd(Element* e);
       void selectRange(Element* e, int staffIdx);
 
-      QQmlListProperty<Ms::Part> qmlParts() { return QmlListAccess<Ms::Part>(this, _parts); }
+//      QQmlListProperty<Ms::Part> qmlParts() { return QmlListAccess<Ms::Part>(this, _parts); }
       void createBeams(Measure*);
 
    protected:
@@ -544,7 +544,7 @@ class Score : public ScoreElement {
       virtual inline QList<Excerpt*>& excerpts();
       virtual inline const QList<Excerpt*>& excerpts() const;
 
-      QQmlListProperty<Ms::Excerpt> qmlExcerpts() { return QmlListAccess<Ms::Excerpt>(this, excerpts()); }
+//      QQmlListProperty<Ms::Excerpt> qmlExcerpts() { return QmlListAccess<Ms::Excerpt>(this, excerpts()); }
 
       virtual ElementType type() const override { return ElementType::SCORE; }
 
@@ -1144,7 +1144,7 @@ class Score : public ScoreElement {
 //---------------------------------------------------------
 
 class MasterScore : public Score {
-      Q_OBJECT
+      Q_GADGET
       TimeSigMap* _sigmap;
       TempoMap* _tempomap;
       RepeatList* _repeatList;

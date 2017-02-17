@@ -30,7 +30,7 @@ class Text;
 //---------------------------------------------------------
 
 class TextLineBaseSegment : public LineSegment {
-      Q_OBJECT
+      Q_GADGET
 
       Text* _text;
       Text* _endText;
@@ -72,7 +72,7 @@ enum class HookType : char {
 //---------------------------------------------------------
 
 class TextLineBase : public SLine {
-      Q_OBJECT
+      Q_GADGET
 
       enum class LineType : char { CRESCENDO, DECRESCENDO };
 

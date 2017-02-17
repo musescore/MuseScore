@@ -23,7 +23,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class SystemDivider : public Symbol {
-      Q_OBJECT
+      Q_GADGET
       Q_ENUMS(Type)
 
    public:

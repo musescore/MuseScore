@@ -26,7 +26,7 @@ enum class BracketType : signed char;
 //---------------------------------------------------------
 
 class Bracket : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       BracketType _bracketType;
 

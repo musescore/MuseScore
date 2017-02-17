@@ -973,8 +973,8 @@ Ms::Element* Segment::elementAt(int track) const
 
 #ifdef SCRIPT_INTERFACE
 // if called from QML/JS, tell QML engine not to garbage collect this object
-      if (e)
-            QQmlEngine::setObjectOwnership(e, QQmlEngine::CppOwnership);
+//      if (e)
+//            QQmlEngine::setObjectOwnership(e, QQmlEngine::CppOwnership);
 #endif
       return e;
       }
@@ -1184,7 +1184,7 @@ QString Segment::accessibleExtraInfo() const
                         }
                   }
             if(!temp.isEmpty())
-                  rez = rez + tr("Annotations:") + temp;
+                  rez = rez + QObject::tr("Annotations:") + temp;
             }
 
       QString startSpanners = "";
@@ -1206,7 +1206,7 @@ QString Segment::accessibleExtraInfo() const
                   }
 
             if (s->tick() == tick())
-                  startSpanners += tr("Start of ") + s->accessibleInfo();
+                  startSpanners += QObject::tr("Start of ") + s->accessibleInfo();
 
             const Segment* seg = 0;
             switch (s->type()) {
@@ -1220,7 +1220,7 @@ QString Segment::accessibleExtraInfo() const
                   }
 
             if (seg && s->tick2() == seg->tick())
-                  endSpanners += tr("End of ") + s->accessibleInfo();
+                  endSpanners += QObject::tr("End of ") + s->accessibleInfo();
             }
       return rez + " " + startSpanners + " " + endSpanners;
       }

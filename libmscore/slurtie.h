@@ -53,7 +53,7 @@ class SlurTie;
 //---------------------------------------------------------
 
 class SlurTieSegment : public SpannerSegment {
-      Q_OBJECT
+      Q_GADGET
 
    protected:
       struct UP _ups[int(Grip::GRIPS)];
@@ -90,7 +90,7 @@ class SlurTieSegment : public SpannerSegment {
 //-------------------------------------------------------------------
 
 class SlurTie : public Spanner {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(int lineType                         READ lineType       WRITE undoSetLineType)
 //TODO-WS      Q_PROPERTY(Ms::Direction slurDirection  READ slurDirection  WRITE undoSetSlurDirection)
 //TODO-WS      Q_ENUMS(Ms::MScore::Direction)

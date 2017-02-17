@@ -574,7 +574,7 @@ QString KeySig::accessibleInfo() const
       if (isAtonal())
             return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("MuseScore", keyNames[15]));
       else if (isCustom())
-            return tr("%1: Custom").arg(Element::accessibleInfo());
+            return QObject::tr("%1: Custom").arg(Element::accessibleInfo());
 
       if (key() == Key::C)
             return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("MuseScore", keyNames[14]));

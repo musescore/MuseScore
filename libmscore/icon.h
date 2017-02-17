@@ -23,7 +23,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Icon : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       IconType _iconType { IconType::NONE };
       QByteArray _action;

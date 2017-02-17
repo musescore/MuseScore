@@ -55,7 +55,7 @@ struct BarLineTableItem {
 //---------------------------------------------------------
 
 class BarLine : public Element {
-      Q_OBJECT
+      Q_GADGET
 
 //      Q_PROPERTY(Ms::MSQE_BarLineType::E barLineType READ qmlBarLineType)
 //      Q_ENUMS(Ms::MSQE_BarLineType::E)

@@ -108,7 +108,7 @@ Ms::Element* QmlPlugin::newElement(int t)
             return 0;
       Element* e = Element::create(ElementType(t), score);
       // tell QML not to garbage collect this score
-      Ms::MScore::qml()->setObjectOwnership(e, QQmlEngine::CppOwnership);
+//TODO      Ms::MScore::qml()->setObjectOwnership(e, QQmlEngine::CppOwnership);
       return e;
       }
 

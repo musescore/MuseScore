@@ -22,7 +22,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class SystemText : public StaffText  {
-      Q_OBJECT
+      Q_GADGET
 
    public:
       SystemText(Score* score);

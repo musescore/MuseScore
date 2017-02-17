@@ -125,7 +125,6 @@ static const ElementName elementNames[] = {
 //---------------------------------------------------------
 
 ScoreElement::ScoreElement(const ScoreElement& se)
-   : QObject(0)
       {
       _score = se._score;
       _links = 0;

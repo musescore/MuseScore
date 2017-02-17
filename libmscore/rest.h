@@ -27,7 +27,7 @@ enum class SymId;
 //---------------------------------------------------------
 
 class Rest : public ChordRest {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(bool  isFullMeasure  READ isFullMeasureRest)
 
       // values calculated by layout:

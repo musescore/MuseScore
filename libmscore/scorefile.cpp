@@ -357,7 +357,7 @@ bool MasterScore::saveFile()
       {
       QString suffix = info.suffix();
       if (info.exists() && !info.isWritable()) {
-            MScore::lastError = tr("The following file is locked: \n%1 \n\nTry saving to a different location.").arg(info.filePath());
+            MScore::lastError = QObject::tr("The following file is locked: \n%1 \n\nTry saving to a different location.").arg(info.filePath());
             return false;
             }
       //
@@ -369,7 +369,7 @@ bool MasterScore::saveFile()
       QString tempName = info.filePath() + QString(".temp");
       QFile temp(tempName);
       if (!temp.open(QIODevice::WriteOnly)) {
-            MScore::lastError = tr("Open Temp File\n%1\nfailed: %2").arg(tempName).arg(QString(strerror(errno)));
+            MScore::lastError = QObject::tr("Open Temp File\n%1\nfailed: %2").arg(tempName).arg(QString(strerror(errno)));
             return false;
             }
       bool rv = suffix == "mscx" ? Score::saveFile(&temp, false) : Score::saveCompressedFile(&temp, info, false);
@@ -378,7 +378,7 @@ bool MasterScore::saveFile()
             }
 
       if (temp.error() != QFile::NoError) {
-            MScore::lastError = tr("MuseScore: Save File failed: %1").arg(temp.errorString());
+            MScore::lastError = QObject::tr("MuseScore: Save File failed: %1").arg(temp.errorString());
             return false;
             }
       temp.close();
@@ -397,8 +397,8 @@ bool MasterScore::saveFile()
             if (dir.exists(backupName)) {
                   if (!dir.remove(backupName)) {
 //                      if (!MScore::noGui)
-//                            QMessageBox::critical(0, tr("MuseScore: Save File"),
-//                               tr("Removing old backup file ") + backupName + tr(" failed"));
+//                            QMessageBox::critical(0, QObject::tr("MuseScore: Save File"),
+//                               QObject::tr("Removing old backup file ") + backupName + tr(" failed"));
                         }
                   }
 
@@ -436,7 +436,7 @@ bool MasterScore::saveFile()
       // rename temp name into file name
       //
       if (!QFile::rename(tempName, name)) {
-            MScore::lastError = tr("Renaming temp. file <%1> to <%2> failed:\n%3").arg(tempName).arg(name).arg(QString(strerror(errno)));
+            MScore::lastError = QObject::tr("Renaming temp. file <%1> to <%2> failed:\n%3").arg(tempName).arg(name).arg(QString(strerror(errno)));
             return false;
             }
       // make file readable by all
@@ -458,7 +458,7 @@ bool Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
       {
       QFile fp(info.filePath());
       if (!fp.open(QIODevice::WriteOnly)) {
-            MScore::lastError = tr("Open File\n%1\nfailed: ")
+            MScore::lastError = QObject::tr("Open File\n%1\nfailed: ")
                + QString(strerror(errno));
             return false;
             }
@@ -570,7 +570,7 @@ bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
                   OmrPage* page = masterScore()->omr()->page(i);
                   const QImage& image = page->image();
                   if (!image.save(&cbuf, "PNG")) {
-                        MScore::lastError = tr("save file: cannot save image (%1x%2)").arg(image.width()).arg(image.height());
+                        MScore::lastError = QObject::tr("save file: cannot save image (%1x%2)").arg(image.width()).arg(image.height());
                         return false;
                         }
                   uz.addFile(path, cbuf.data());
@@ -604,7 +604,7 @@ bool Score::saveFile(QFileInfo& info)
             info.setFile(info.filePath() + ".mscx");
       QFile fp(info.filePath());
       if (!fp.open(QIODevice::WriteOnly)) {
-            MScore::lastError = tr("Open File\n%1\nfailed: %2").arg(info.filePath()).arg(QString(strerror(errno)));
+            MScore::lastError = QObject::tr("Open File\n%1\nfailed: %2").arg(info.filePath()).arg(QString(strerror(errno)));
             return false;
             }
       saveFile(&fp, false);
@@ -626,7 +626,7 @@ bool Score::loadStyle(const QString& fn)
                   return true;
                   }
              else {
-                  MScore::lastError = tr("The style file is not compatible with this version of MuseScore.");
+                  MScore::lastError = QObject::tr("The style file is not compatible with this version of MuseScore.");
                   return false;
                   }
             }
@@ -647,7 +647,7 @@ bool Score::saveStyle(const QString& name)
             info.setFile(info.filePath() + ext);
       QFile f(info.filePath());
       if (!f.open(QIODevice::WriteOnly)) {
-            MScore::lastError = tr("Open Style File\n%1\nfailed: %2").arg(f.fileName().arg(QString(strerror(errno))));
+            MScore::lastError = QObject::tr("Open Style File\n%1\nfailed: %2").arg(f.fileName().arg(QString(strerror(errno))));
             return false;
             }
 
@@ -657,7 +657,7 @@ bool Score::saveStyle(const QString& name)
       style().save(xml, false);     // save complete style
       xml.etag();
       if (f.error() != QFile::NoError) {
-            MScore::lastError = tr("Write Style failed: %1").arg(f.errorString());
+            MScore::lastError = QObject::tr("Write Style failed: %1").arg(f.errorString());
             return false;
             }
       return true;

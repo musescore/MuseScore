@@ -29,7 +29,7 @@ class Segment;
 //---------------------------------------------------------------------------------------
 
 class KeySig : public Element {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(bool showCourtesy READ showCourtesy   WRITE undoSetShowCourtesy)
 
       bool _showCourtesy;

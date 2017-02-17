@@ -23,7 +23,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Ossia : public Element {
-      Q_OBJECT
+      Q_GADGET
 
 
    public:

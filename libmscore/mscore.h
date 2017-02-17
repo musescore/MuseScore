@@ -116,7 +116,7 @@ static const int  FRET_NONE               = -1;       // no ordinal for a fret
 //     Allows using Ms::MSQE_name::E as return type for the READ function
 //      and parameter type for the WRITE function on a Q_PROPERTY of that type
 //      on the condition that you also declare Q_ENUMS(Ms::MSQE_name::E)
-//      for that same Q_OBJECT
+//      for that same Q_GADGET
 //
 //   Q_INVOKABLES can't use the QML-wrapped enum type, nor the enum class type as
 //    parameters. Those should be from the correct storageType and static_casts should
@@ -382,7 +382,7 @@ class MPaintDevice : public QPaintDevice {
 //---------------------------------------------------------
 
 class MScore : public QObject {
-      Q_OBJECT
+      Q_GADGET
 
       static MStyle _defaultStyle;       // buildin modified by preferences
       static MStyle _defaultStyleForParts;

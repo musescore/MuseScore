@@ -29,7 +29,7 @@ class Note;
 //---------------------------------------------------------
 
 class GlissandoSegment : public LineSegment {
-      Q_OBJECT
+      Q_GADGET
 
    protected:
 
@@ -54,7 +54,7 @@ class GlissandoSegment : public LineSegment {
 //---------------------------------------------------------
 
 class Glissando : public SLine {
-      Q_OBJECT
+      Q_GADGET
 
       Q_PROPERTY(Ms::Glissando::Type glissandoType READ glissandoType  WRITE undoSetGlissandoType)
       Q_PROPERTY(QString text                      READ text     WRITE undoSetText)

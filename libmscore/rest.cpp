@@ -743,8 +743,8 @@ void Rest::setAccent(bool flag)
 
 QString Rest::accessibleInfo() const
       {
-      QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-      return tr("%1; Duration: %2; %3").arg(Element::accessibleInfo()).arg(durationUserName()).arg(voice);
+      QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
+      return QObject::tr("%1; Duration: %2; %3").arg(Element::accessibleInfo()).arg(durationUserName()).arg(voice);
       }
 
 //---------------------------------------------------------
@@ -753,7 +753,7 @@ QString Rest::accessibleInfo() const
 
 QString Rest::screenReaderInfo() const
       {
-      QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
+      QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
       return QString("%1 %2 %3").arg(Element::accessibleInfo()).arg(durationUserName()).arg(voice);
       }
 

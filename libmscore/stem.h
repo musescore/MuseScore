@@ -25,7 +25,7 @@ class Chord;
 //---------------------------------------------------------
 
 class Stem : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       QLineF line;                  // p1 is attached to notehead
       qreal _userLen   { 0.0 };

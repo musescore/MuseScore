@@ -1293,9 +1293,9 @@ QString BarLine::accessibleExtraInfo() const
                   continue;
             if (s->type() == ElementType::VOLTA) {
                   if (s->tick() == tick)
-                        rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
+                        rez = QObject::tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
                   if (s->tick2() == tick)
-                        rez = tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
+                        rez = QObject::tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
                   }
             }
       return rez;

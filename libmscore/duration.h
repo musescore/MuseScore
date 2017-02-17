@@ -36,7 +36,7 @@ class DurationElement : public Element {
       Tuplet* _tuplet;
 
 #ifdef SCRIPT_INTERFACE
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(FractionWrapper* duration READ durationW WRITE setDurationW)
       Q_PROPERTY(FractionWrapper* globalDuration READ globalDurW)
 

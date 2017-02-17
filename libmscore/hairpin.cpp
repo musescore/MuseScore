@@ -835,13 +835,13 @@ QString Hairpin::accessibleInfo() const
       QString rez = TextLineBase::accessibleInfo();
       switch (hairpinType()) {
             case HairpinType::CRESC_HAIRPIN:
-                  rez += ": " + tr("Crescendo");
+                  rez += ": " + QObject::tr("Crescendo");
                   break;
             case HairpinType::DECRESC_HAIRPIN:
-                  rez += ": " + tr("Decrescendo");
+                  rez += ": " + QObject::tr("Decrescendo");
                   break;
             default:
-                  rez += ": " + tr("Custom");
+                  rez += ": " + QObject::tr("Custom");
             }
       return rez;
       }

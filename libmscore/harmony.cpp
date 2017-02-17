@@ -1589,12 +1589,12 @@ QString Harmony::screenReaderInfo() const
 
       if (const_cast<Harmony*>(this)->parsedForm() && !hTextName().isEmpty()) {
             QString aux = const_cast<Harmony*>(this)->parsedForm()->handle();
-            aux = aux.replace("#", tr("sharp")).replace("<", "");
+            aux = aux.replace("#", QObject::tr("sharp")).replace("<", "");
             QString extension = "";
 
             foreach (QString s, aux.split(">", QString::SkipEmptyParts)) {
                   if(!s.contains("blues"))
-                        s.replace("b", tr("flat"));
+                        s.replace("b", QObject::tr("flat"));
                   extension += s + " ";
                   }
             rez = QString("%1 %2").arg(rez).arg(extension);

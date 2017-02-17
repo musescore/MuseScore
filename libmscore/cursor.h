@@ -44,7 +44,7 @@ class Measure;
 //---------------------------------------------------------
 
 class Cursor : public QObject {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(int track      READ track     WRITE setTrack)
       Q_PROPERTY(int staffIdx   READ staffIdx  WRITE setStaffIdx)
       Q_PROPERTY(int voice      READ voice     WRITE setVoice)

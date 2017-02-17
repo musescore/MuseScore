@@ -396,6 +396,7 @@ QQmlEngine* MScore::qml()
       if (_qml == 0) {
             //-----------some qt bindings
             _qml = new QQmlEngine;
+#if 0
 #ifdef Q_OS_WIN
             QStringList importPaths;
             QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
@@ -460,6 +461,7 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<ChordRest>();
             qmlRegisterType<SlurTie>();
             qmlRegisterType<Spanner>();
+#endif
             }
       return _qml;
       }

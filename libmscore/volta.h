@@ -30,7 +30,7 @@ extern LineSegment* voltaDebug;
 //---------------------------------------------------------
 
 class VoltaSegment : public TextLineBaseSegment {
-      Q_OBJECT
+      Q_GADGET
 
    public:
       VoltaSegment(Score* s) : TextLineBaseSegment(s) {}
@@ -54,7 +54,7 @@ class VoltaSegment : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class Volta : public TextLineBase {
-      Q_OBJECT
+      Q_GADGET
 
       QList<int> _endings;
 

@@ -33,7 +33,7 @@ class Spanner;
 //------------------------------------------------------------------------
 
 class Tuplet : public DurationElement {
-      Q_OBJECT
+      Q_GADGET
 
       // the tick position of a tuplet is the tick position of its
       // first element:

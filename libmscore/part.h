@@ -45,7 +45,7 @@ class InstrumentTemplate;
 //---------------------------------------------------------
 
 class Part : public ScoreElement {
-      Q_OBJECT
+      Q_GADGET
 
       Q_PROPERTY(int          endTrack          READ endTrack)
       Q_PROPERTY(int          harmonyCount      READ harmonyCount)

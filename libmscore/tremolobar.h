@@ -27,7 +27,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class TremoloBar : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       Q_PROPERTY(qreal   userMag   READ userMag    WRITE undoSetUserMag)
       Q_PROPERTY(Spatium lineWidth READ lineWidth  WRITE undoSetLineWidth)

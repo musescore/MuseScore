@@ -26,7 +26,7 @@ class Segment;
 //---------------------------------------------------------
 
 class RepeatMeasure : public Rest {
-      Q_OBJECT
+      Q_GADGET
 
       QPainterPath path;
 

@@ -2121,19 +2121,19 @@ QString Note::noteTypeUserName() const
       {
       switch (noteType()) {
             case NoteType::ACCIACCATURA:
-                  return tr("Acciaccatura");
+                  return QObject::tr("Acciaccatura");
             case NoteType::APPOGGIATURA:
-                  return tr("Appoggiatura");
+                  return QObject::tr("Appoggiatura");
             case NoteType::GRACE8_AFTER:
             case NoteType::GRACE16_AFTER:
             case NoteType::GRACE32_AFTER:
-                  return tr("Grace note after");
+                  return QObject::tr("Grace note after");
             case NoteType::GRACE4:
             case NoteType::GRACE16:
             case NoteType::GRACE32:
-                  return tr("Grace note before");
+                  return QObject::tr("Grace note before");
             default:
-                  return tr("Note");
+                  return QObject::tr("Note");
             }
       }
 
@@ -2722,16 +2722,16 @@ void Note::setScore(Score* s)
 QString Note::accessibleInfo() const
       {
       QString duration = chord()->durationUserName();
-      QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
+      QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
       QString pitchName;
       const Drumset* drumset = part()->instrument()->drumset();
       if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH)
-            pitchName = chord()->noStem() ? tr("Beat Slash") : tr("Rhythm Slash");
+            pitchName = chord()->noStem() ? QObject::tr("Beat Slash") : QObject::tr("Rhythm Slash");
       else if (staff()->isDrumStaff(tick()) && drumset)
             pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
       else
             pitchName = tpcUserName(false);
-      return tr("%1; Pitch: %2; Duration: %3%4").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
+      return QObject::tr("%1; Pitch: %2; Duration: %3%4").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
       }
 
 //---------------------------------------------------------
@@ -2741,11 +2741,11 @@ QString Note::accessibleInfo() const
 QString Note::screenReaderInfo() const
       {
       QString duration = chord()->durationUserName();
-      QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
+      QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
       QString pitchName;
       const Drumset* drumset = part()->instrument()->drumset();
       if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH)
-            pitchName = chord()->noStem() ? tr("Beat Slash") : tr("Rhythm Slash");
+            pitchName = chord()->noStem() ? QObject::tr("Beat Slash") : QObject::tr("Rhythm Slash");
       else if (staff()->isDrumStaff(tick()) && drumset)
             pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
       else
@@ -2770,23 +2770,23 @@ QString Note::accessibleExtraInfo() const
                   }
             }
       if (tieFor())
-            rez = tr("%1 Start of %2").arg(rez).arg(tieFor()->screenReaderInfo());
+            rez = QObject::tr("%1 Start of %2").arg(rez).arg(tieFor()->screenReaderInfo());
 
       if (tieBack())
-            rez = tr("%1 End of %2").arg(rez).arg(tieBack()->screenReaderInfo());
+            rez = QObject::tr("%1 End of %2").arg(rez).arg(tieBack()->screenReaderInfo());
 
       if (!spannerFor().empty()) {
             for (Spanner* s : spannerFor()) {
                   if (!score()->selectionFilter().canSelect(s))
                         continue;
-                  rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
+                  rez = QObject::tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
                   }
             }
       if (!spannerBack().empty()) {
             for (Spanner* s : spannerBack()) {
                   if (!score()->selectionFilter().canSelect(s))
                         continue;
-                  rez = tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
+                  rez = QObject::tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
                   }
             }
 

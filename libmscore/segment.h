@@ -55,8 +55,8 @@ class System;
 */
 
 class Segment : public Element {
-      Q_OBJECT
-      Q_PROPERTY(QQmlListProperty<Ms::Element> annotations READ qmlAnnotations)
+      Q_GADGET
+//      Q_PROPERTY(QQmlListProperty<Ms::Element> annotations READ qmlAnnotations)
       Q_PROPERTY(Ms::Segment*       next              READ next1)
       Q_PROPERTY(Ms::Segment*       nextInMeasure     READ next)
       Q_PROPERTY(Ms::Segment*       prev              READ prev1)
@@ -207,7 +207,7 @@ class Segment : public Element {
       void removeAnnotation(Element* e);
       bool findAnnotationOrElement(ElementType type, int minTrack, int maxTrack);
 
-      QQmlListProperty<Ms::Element> qmlAnnotations()  { return QmlListAccess<Ms::Element>(this, _annotations); }
+//      QQmlListProperty<Ms::Element> qmlAnnotations()  { return QmlListAccess<Ms::Element>(this, _annotations); }
 
       qreal dotPosX(int staffIdx) const          { return _dotPosX[staffIdx];  }
       void setDotPosX(int staffIdx, qreal val)   { _dotPosX[staffIdx] = val;   }

@@ -24,7 +24,7 @@ class Pedal;
 //---------------------------------------------------------
 
 class PedalSegment : public TextLineBaseSegment {
-      Q_OBJECT
+      Q_GADGET
 
    protected:
 
@@ -43,7 +43,7 @@ class PedalSegment : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class Pedal : public TextLineBase {
-      Q_OBJECT
+      Q_GADGET
 
    protected:
       QPointF linePos(Grip, System**) const override;

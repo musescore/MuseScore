@@ -135,7 +135,7 @@ QString Fingering::accessibleInfo() const
       {
       QString rez = Element::accessibleInfo();
       if (subStyle() == SubStyle::STRING_NUMBER) {
-            rez += " " + tr("String number");
+            rez += " " + QObject::tr("String number");
             }
       return QString("%1: %2").arg(rez).arg(plainText());
       }

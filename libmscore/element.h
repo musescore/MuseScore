@@ -141,22 +141,22 @@ struct EditData {
 //-------------------------------------------------------------------
 
 class Element : public ScoreElement {
-      Q_OBJECT
-      Q_ENUMS(Placement)
+//      Q_GADGET
+//      Q_ENUMS(Placement)
 
-      Q_PROPERTY(QRectF                   bbox        READ scriptBbox )
-      Q_PROPERTY(QColor                   color       READ color        WRITE undoSetColor)
-      Q_PROPERTY(bool                     generated   READ generated    WRITE setGenerated)
-      Q_PROPERTY(QPointF                  pagePos     READ scriptPagePos)
-      Q_PROPERTY(Ms::Element*             parent      READ parent       WRITE setParent)
-      Q_PROPERTY(Ms::Element::Placement   placement   READ placement    WRITE undoSetPlacement)
-      Q_PROPERTY(QPointF                  pos         READ scriptPos    WRITE scriptSetPos)
-      Q_PROPERTY(bool                     selected    READ selected     WRITE setSelected)
-      Q_PROPERTY(qreal                    spatium     READ spatium)
-      Q_PROPERTY(int                      track       READ track        WRITE setTrack)
-//      Q_PROPERTY(Ms::ElementType        type        READ type)
-      Q_PROPERTY(QPointF                  userOff     READ scriptUserOff WRITE scriptSetUserOff)
-      Q_PROPERTY(bool                     visible     READ visible      WRITE undoSetVisible)
+//      Q_PROPERTY(QRectF                   bbox        READ scriptBbox )
+//      Q_PROPERTY(QColor                   color       READ color        WRITE undoSetColor)
+//      Q_PROPERTY(bool                     generated   READ generated    WRITE setGenerated)
+//      Q_PROPERTY(QPointF                  pagePos     READ scriptPagePos)
+//      Q_PROPERTY(Ms::Element*             parent      READ parent       WRITE setParent)
+//      Q_PROPERTY(Ms::Element::Placement   placement   READ placement    WRITE undoSetPlacement)
+//      Q_PROPERTY(QPointF                  pos         READ scriptPos    WRITE scriptSetPos)
+//      Q_PROPERTY(bool                     selected    READ selected     WRITE setSelected)
+//      Q_PROPERTY(qreal                    spatium     READ spatium)
+//      Q_PROPERTY(int                      track       READ track        WRITE setTrack)
+////      Q_PROPERTY(Ms::ElementType        type        READ type)
+//      Q_PROPERTY(QPointF                  userOff     READ scriptUserOff WRITE scriptSetUserOff)
+//      Q_PROPERTY(bool                     visible     READ visible      WRITE undoSetVisible)
 
       Element* _parent { 0 };
       mutable ElementFlags _flags  {
@@ -495,7 +495,7 @@ class ElementList : public std::vector<Element*> {
 //---------------------------------------------------------
 
 class Line : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       qreal _width;
       qreal _len;
@@ -529,7 +529,7 @@ public:
 //---------------------------------------------------------
 
 class Compound : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       QList<Element*> elements;
 

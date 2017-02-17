@@ -29,7 +29,7 @@ class Segment;
 //-----------------------------------------------------------------------------
 
 class Dynamic : public Text {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(Ms::Dynamic::Range range  READ dynRange  WRITE undoSetDynRange)
 
    public:

@@ -44,7 +44,7 @@ enum class TimeSigType : char {
 //---------------------------------------------------------------------------------------
 
 class TimeSig : public Element {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(int denominator           READ denominator)
       Q_PROPERTY(int denominatorStretch    READ denominatorStretch)
       Q_PROPERTY(QString denominatorString READ denominatorString WRITE undoSetDenominatorString)

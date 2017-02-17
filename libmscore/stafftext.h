@@ -33,7 +33,7 @@ struct ChannelActions {
 //---------------------------------------------------------
 
 class StaffText : public Text  {
-      Q_OBJECT
+      Q_GADGET
 
       QString _channelNames[4];
       QList<ChannelActions> _channelActions;

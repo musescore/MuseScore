@@ -25,7 +25,7 @@ class Note;
 //---------------------------------------------------------
 
 class Fingering : public Text {
-      Q_OBJECT
+      Q_GADGET
 
    public:
       Fingering(Score* s);
