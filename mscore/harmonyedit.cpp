@@ -304,7 +304,7 @@ void HarmonyCanvas::paintEvent(QPaintEvent* event)
 //   render
 //---------------------------------------------------------
 
-void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, double& y, int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase)
+void HarmonyCanvas::render(const QList<RenderAction>& /*renderList*/, double& /*x*/, double& /*y*/, int /*tpc*/, NoteSpellingType /*noteSpelling*/, NoteCaseType /*noteCase*/)
       {
 #if 0 // TODO:ws
       QStack<QPointF> stack;
@@ -468,7 +468,7 @@ void HarmonyCanvas::setChordDescription(ChordDescription* sd, ChordList* sl)
 //   dropEvent
 //---------------------------------------------------------
 
-void HarmonyCanvas::dropEvent(QDropEvent* event)
+void HarmonyCanvas::dropEvent(QDropEvent* /*event*/)
       {
 #if 0       // TODO:ws
       if (dragElement && dragElement->type() == ElementType::FSYMBOL) {
