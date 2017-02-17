@@ -24,7 +24,7 @@ class Chord;
 //---------------------------------------------------------
 
 class Hook : public Symbol {
-      Q_OBJECT
+      Q_GADGET
 
       int _hookType;
 

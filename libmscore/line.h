@@ -33,7 +33,7 @@ class MuseScoreView;
 //---------------------------------------------------------
 
 class LineSegment : public SpannerSegment {
-      Q_OBJECT
+      Q_GADGET
 
    protected:
       virtual void editDrag(const EditData&) override;
@@ -68,7 +68,7 @@ class LineSegment : public SpannerSegment {
 //---------------------------------------------------------
 
 class SLine : public Spanner {
-      Q_OBJECT
+      Q_GADGET
 
       Spatium _lineWidth      { 0.15 };
       QColor _lineColor       { MScore::defaultColor };

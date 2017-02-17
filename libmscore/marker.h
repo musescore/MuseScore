@@ -25,7 +25,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Marker : public Text {
-      Q_OBJECT
+      Q_GADGET
 
       Q_PROPERTY(QString label               READ label      WRITE undoSetLabel)
       Q_PROPERTY(Ms::Marker::Type markerType READ markerType WRITE undoSetMarkerType)

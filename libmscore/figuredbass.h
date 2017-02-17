@@ -80,7 +80,7 @@ and it is edited (via the normalized text); so it is derived from Text.
 class FiguredBass;
 
 class FiguredBassItem : public Element {
-      Q_OBJECT
+      Q_GADGET
       Q_ENUMS(Modifier)
       Q_ENUMS(Parenthesis)
       Q_ENUMS(ContLine)
@@ -247,7 +247,7 @@ struct FiguredBassFont {
 //---------------------------------------------------------
 
 class FiguredBass : public Text {
-      Q_OBJECT
+      Q_GADGET
 
 //      Q_PROPERTY(QDeclarativeListProperty<FiguredBassItem> items READ qmlItems)
       Q_PROPERTY(bool   onNote      READ onNote)

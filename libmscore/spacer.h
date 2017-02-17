@@ -31,7 +31,7 @@ enum class SpacerType : char {
 //-------------------------------------------------------------------
 
 class Spacer : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       SpacerType _spacerType;
       qreal _gap;

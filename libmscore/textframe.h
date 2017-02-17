@@ -25,7 +25,7 @@ class Text;
 //---------------------------------------------------------
 
 class TBox : public VBox {
-      Q_OBJECT
+      Q_GADGET
       Text* _text;
 
    public:

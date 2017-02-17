@@ -578,11 +578,11 @@ QString TimeSig::accessibleInfo() const
       QString timeSigString;
       switch (timeSigType()) {
             case TimeSigType::FOUR_FOUR:
-                  timeSigString = tr("Common time");
+                  timeSigString = QObject::tr("Common time");
             case TimeSigType::ALLA_BREVE:
-                  timeSigString = tr("Cut time");
+                  timeSigString = QObject::tr("Cut time");
             default:
-                  timeSigString = tr("%1/%2 time").arg(QString::number(numerator())).arg(QString::number(denominator()));
+                  timeSigString = QObject::tr("%1/%2 time").arg(QString::number(numerator())).arg(QString::number(denominator()));
             }
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(timeSigString);
       }

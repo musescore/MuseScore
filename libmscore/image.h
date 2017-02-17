@@ -31,7 +31,7 @@ class Image : public BSymbol {
             QSvgRenderer* svgDoc;
             };
       ImageType imageType;
-      Q_OBJECT
+      Q_GADGET
 
    protected:
       ImageStoreItem* _storeItem;

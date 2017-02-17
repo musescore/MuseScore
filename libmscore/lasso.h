@@ -22,7 +22,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Lasso : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       QRectF _rect;
       MuseScoreView* view;        // valid in edit mode

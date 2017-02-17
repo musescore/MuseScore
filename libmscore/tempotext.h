@@ -27,7 +27,7 @@ namespace Ms {
 //-------------------------------------------------------------------
 
 class TempoText : public Text  {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(qreal tempo         READ tempo      WRITE undoSetTempo)
       Q_PROPERTY(bool  followText    READ followText WRITE undoSetFollowText)
 

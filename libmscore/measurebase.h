@@ -61,7 +61,7 @@ constexpr bool operator& (Repeat t1, Repeat t2) {
 //---------------------------------------------------------
 
 class MeasureBase : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       Q_PROPERTY(bool         lineBreak         READ lineBreak   WRITE undoSetLineBreak)
       Q_PROPERTY(Ms::Measure* nextMeasure       READ nextMeasure)

@@ -49,7 +49,7 @@ class Spanner;
 //-------------------------------------------------------------------
 
 class ChordRest : public DurationElement {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(Ms::Beam::Mode beamMode      READ beamMode           WRITE undoSetBeamMode)
       Q_PROPERTY(int            durationType  READ durationTypeTicks  WRITE setDurationType)
       Q_PROPERTY(bool           small         READ small              WRITE undoSetSmall)

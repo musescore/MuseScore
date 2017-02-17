@@ -33,7 +33,7 @@ enum class SpannerSegmentType : char {
 //---------------------------------------------------------
 
 class SpannerSegment : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       Spanner* _spanner;
       SpannerSegmentType _spannerSegmentType;
@@ -106,7 +106,7 @@ class SpannerSegment : public Element {
 //----------------------------------------------------------------------------------
 
 class Spanner : public Element {
-      Q_OBJECT
+      Q_GADGET
       Q_ENUMS(Anchor)
 
    public:

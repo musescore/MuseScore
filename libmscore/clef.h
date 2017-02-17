@@ -128,7 +128,7 @@ class ClefInfo {
 //---------------------------------------------------------
 
 class Clef : public Element {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(bool showCourtesy READ showCourtesy WRITE undoSetShowCourtesy)
       Q_PROPERTY(bool small READ small)
 

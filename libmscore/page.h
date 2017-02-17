@@ -32,7 +32,7 @@ class MeasureBase;
 //---------------------------------------------------------
 
 class Page : public Element {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(int pagenumber READ no)
 
       QList<System*> _systems;

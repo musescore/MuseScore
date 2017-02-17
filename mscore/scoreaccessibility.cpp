@@ -16,31 +16,47 @@
 
 namespace Ms{
 
-AccessibleScoreView::AccessibleScoreView(ScoreView* scView) : QAccessibleWidget(scView){
+//---------------------------------------------------------
+//   AccessibleScoreView
+//---------------------------------------------------------
+
+AccessibleScoreView::AccessibleScoreView(ScoreView* scView)
+   : QAccessibleWidget(scView)
+      {
       s = scView;
       }
 
-int AccessibleScoreView::childCount() const{
+int AccessibleScoreView::childCount() const
+      {
       return 0;
       }
 
-QAccessibleInterface* AccessibleScoreView::child(int /*index*/) const{
+QAccessibleInterface* AccessibleScoreView::child(int /*index*/) const
+      {
       return 0;
       }
-QAccessibleInterface* AccessibleScoreView::parent() const{
+
+QAccessibleInterface* AccessibleScoreView::parent() const
+      {
       return QAccessibleWidget::parent();
       }
-QRect AccessibleScoreView::rect() const{
+
+QRect AccessibleScoreView::rect() const
+      {
       return s->rect();
       }
-QAccessible::Role AccessibleScoreView::role() const{
+
+QAccessible::Role AccessibleScoreView::role() const
+      {
       return QAccessible::NoRole;
       }
 
-QString AccessibleScoreView::text(QAccessible::Text t) const {
+QString AccessibleScoreView::text(QAccessible::Text t) const
+      {
       switch (t) {
             case QAccessible::Name:
-                  return tr("Score %1").arg(s->score()->name());
+//TODO                  return tr("Score %1").arg(s->score()->name());
+                  return "Score ???";
             case QAccessible::Value:
                   return s->score()->accessibleInfo();
             default:

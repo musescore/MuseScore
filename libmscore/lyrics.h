@@ -41,7 +41,7 @@ namespace Ms {
 class LyricsLine;
 
 class Lyrics : public Text {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(Ms::Lyrics::Syllabic syllabic READ syllabic WRITE setSyllabic)
       Q_ENUMS(Syllabic)
 
@@ -104,7 +104,7 @@ class Lyrics : public Text {
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual int subtype() const override            { return _no; }
-      virtual QString subtypeName() const override    { return tr("Verse %1").arg(_no + 1); }
+      virtual QString subtypeName() const override    { return QObject::tr("Verse %1").arg(_no + 1); }
       void setNo(int n);
       int no() const                                  { return _no; }
       void setSyllabic(Syllabic s)                    { _syllabic = s; }
@@ -145,7 +145,7 @@ class Lyrics : public Text {
 //---------------------------------------------------------
 
 class LyricsLine : public SLine {
-      Q_OBJECT
+      Q_GADGET
 
    protected:
       Lyrics* _nextLyrics;
@@ -170,7 +170,7 @@ class LyricsLine : public SLine {
 //---------------------------------------------------------
 
 class LyricsLineSegment : public LineSegment {
-      Q_OBJECT
+      Q_GADGET
 
    protected:
       int   _numOfDashes;

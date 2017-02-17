@@ -23,7 +23,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class TieSegment : public SlurTieSegment {
-      Q_OBJECT
+      Q_GADGET
 
       QPointF autoAdjustOffset;
 
@@ -66,7 +66,7 @@ class TieSegment : public SlurTieSegment {
 //---------------------------------------------------------
 
 class Tie : public SlurTie {
-      Q_OBJECT
+      Q_GADGET
 
       static Note* editStartNote;
       static Note* editEndNote;

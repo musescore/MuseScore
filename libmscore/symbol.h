@@ -29,7 +29,7 @@ enum class SymId;
 //---------------------------------------------------------
 
 class Symbol : public BSymbol {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(QString symbol        READ symName)
 
    protected:
@@ -65,7 +65,7 @@ class Symbol : public BSymbol {
 //---------------------------------------------------------
 
 class FSymbol : public BSymbol {
-      Q_OBJECT
+      Q_GADGET
 
       QFont _font;
       int _code;

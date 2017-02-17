@@ -24,7 +24,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class BSymbol : public Element, public ElementLayout {
-      Q_OBJECT
+      Q_GADGET
 
       QList<Element*> _leafs;
       bool _systemFlag;

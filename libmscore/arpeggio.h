@@ -28,7 +28,7 @@ enum class ArpeggioType : char {
 //---------------------------------------------------------
 
 class Arpeggio : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       ArpeggioType _arpeggioType;
       qreal _userLen1;

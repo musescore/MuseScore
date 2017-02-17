@@ -259,7 +259,8 @@ Score::Score()
       _pos[int(POS::RIGHT)]   = 0;
       _fileDivision           = MScore::division;
       _style  = MScore::defaultStyle();
-      accInfo = tr("No selection");
+//      accInfo = tr("No selection");     // ??
+      accInfo = "No selection";
       }
 
 Score::Score(MasterScore* parent)
@@ -1627,8 +1628,8 @@ Segment* Score::firstSegment(Segment::Type segType) const
 
 #ifdef SCRIPT_INTERFACE
       // if called from QML/JS, tell QML engine not to garbage collect this object
-      if (seg)
-            QQmlEngine::setObjectOwnership(seg, QQmlEngine::CppOwnership);
+//      if (seg)
+//            QQmlEngine::setObjectOwnership(seg, QQmlEngine::CppOwnership);
 #endif
       return seg;
       }

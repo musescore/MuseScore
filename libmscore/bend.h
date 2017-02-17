@@ -24,7 +24,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Bend : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       QString fontFace   { "FreeSerif" };
       qreal fontSize     { 8.0         };

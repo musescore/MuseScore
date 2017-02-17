@@ -24,7 +24,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Ambitus : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       NoteHead::Group     _noteHeadGroup;
       NoteHead::Type      _noteHeadType;

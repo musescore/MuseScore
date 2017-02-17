@@ -24,7 +24,7 @@ class Note;
 //---------------------------------------------------------
 
 class TextLineSegment : public TextLineBaseSegment {
-      Q_OBJECT
+      Q_GADGET
 
    protected:
 
@@ -47,7 +47,7 @@ class TextLineSegment : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class TextLine : public TextLineBase {
-      Q_OBJECT
+      Q_GADGET
 
    public:
       TextLine(Score* s);

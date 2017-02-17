@@ -35,7 +35,7 @@ struct BreathType {
 //---------------------------------------------------------
 
 class Breath : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       qreal _pause;
       SymId _symId;

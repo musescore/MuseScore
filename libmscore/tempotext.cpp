@@ -378,13 +378,13 @@ QString TempoText::duration2userName(const TDuration t)
       {
       QString dots;
       switch (t.dots()) {
-            case 1: dots = tr("Dotted %1").arg(t.durationTypeUserName());
+            case 1: dots = QObject::tr("Dotted %1").arg(t.durationTypeUserName());
                   break;
-            case 2: dots = tr("Double dotted %1").arg(t.durationTypeUserName());
+            case 2: dots = QObject::tr("Double dotted %1").arg(t.durationTypeUserName());
                   break;
-            case 3: dots = tr("Triple dotted %1").arg(t.durationTypeUserName());
+            case 3: dots = QObject::tr("Triple dotted %1").arg(t.durationTypeUserName());
                   break;
-            case 4: dots = tr("Quadruple dotted %1").arg(t.durationTypeUserName());
+            case 4: dots = QObject::tr("Quadruple dotted %1").arg(t.durationTypeUserName());
                   break;
             default:
                   dots = t.durationTypeUserName();
@@ -417,10 +417,10 @@ QString TempoText::accessibleInfo() const
             dots1 = duration2userName(t1);
             if (x2 != -1) {
                   dots2 = duration2userName(t2);
-                  return QString("%1: %2 %3 = %4 %5").arg(Element::accessibleInfo()).arg(dots1).arg(tr("note")).arg(dots2).arg(tr("note"));
+                  return QString("%1: %2 %3 = %4 %5").arg(Element::accessibleInfo()).arg(dots1).arg(QObject::tr("note")).arg(dots2).arg(QObject::tr("note"));
                   }
             else
-                  return QString("%1: %2 %3 = %4").arg(Element::accessibleInfo()).arg(dots1).arg(tr("note")).arg(secondPart);
+                  return QString("%1: %2 %3 = %4").arg(Element::accessibleInfo()).arg(dots1).arg(QObject::tr("note")).arg(secondPart);
             }
       else
             return Text::accessibleInfo();

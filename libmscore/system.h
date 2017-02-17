@@ -72,7 +72,7 @@ class SysStaff {
 //---------------------------------------------------------
 
 class System : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       SystemDivider*  _systemDividerLeft    { 0 };
       SystemDivider*  _systemDividerRight   { 0 };

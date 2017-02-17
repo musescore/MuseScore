@@ -64,7 +64,7 @@ struct RenderAction;
 class HDegree;
 
 class Harmony : public Text {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(int baseTpc  READ baseTpc  WRITE setBaseTpc)
       Q_PROPERTY(int id  READ id  WRITE setId)
       Q_PROPERTY(int rootTpc  READ rootTpc  WRITE setRootTpc)

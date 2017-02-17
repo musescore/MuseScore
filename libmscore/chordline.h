@@ -32,7 +32,7 @@ enum class ChordLineType : char {
 //---------------------------------------------------------
 
 class ChordLine : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       ChordLineType _chordLineType;
       bool _straight;

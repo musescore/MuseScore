@@ -23,7 +23,7 @@
         <file>data/splash.png</file>
         <file alias="data/My_First_Score.mscz">../share/templates/My_First_Score.mscz</file>
         <file alias="data/Create_New_Score.mscz">../share/templates/Create_New_Score.mscz</file>
-        <file alias="data/Empty_Score.mscz">../share/templates/01-General/00-Blank.mscz</file>
+        <file alias="data/Empty_Score.mscx">../share/templates/01-General/00-Blank.mscx</file>
         <file>data/tab_sample.mscx</file>
         <file>data/std_sample.mscx</file>
         <file>data/style.qss</file>

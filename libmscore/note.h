@@ -52,7 +52,7 @@ static const int MAX_DOTS = 4;
 //---------------------------------------------------------
 
 class NoteHead : public Symbol {
-      Q_OBJECT
+      Q_GADGET
 
       Q_ENUMS(Group)
       Q_ENUMS(Type)
@@ -205,12 +205,12 @@ static const int INVALID_LINE = -10000;
 //---------------------------------------------------------------------------------------
 
 class Note : public Element {
-      Q_OBJECT
+      Q_GADGET
       Q_PROPERTY(Ms::Accidental*                accidental        READ accidental)
       Q_PROPERTY(int                            accidentalType    READ qmlAccidentalType  WRITE qmlSetAccidentalType)
-      Q_PROPERTY(QQmlListProperty<Ms::NoteDot>  dots              READ qmlDots)
+//      Q_PROPERTY(QQmlListProperty<Ms::NoteDot>  dots              READ qmlDots)
       Q_PROPERTY(int                            dotsCount         READ qmlDotsCount)
-      Q_PROPERTY(QQmlListProperty<Ms::Element>  elements          READ qmlElements)
+//      Q_PROPERTY(QQmlListProperty<Ms::Element>  elements          READ qmlElements)
       Q_PROPERTY(int                            fret              READ fret               WRITE undoSetFret)
       Q_PROPERTY(bool                           ghost             READ ghost              WRITE undoSetGhost)
       Q_PROPERTY(Ms::NoteHead::Group            headGroup         READ headGroup          WRITE undoSetHeadGroup)
@@ -429,7 +429,7 @@ class Note : public Element {
 
       ElementList& el()                           { return _el; }
       const ElementList& el() const               { return _el; }
-      QQmlListProperty<Ms::Element> qmlElements() { return QmlListAccess<Ms::Element>(this, _el); }
+//      QQmlListProperty<Ms::Element> qmlElements() { return QmlListAccess<Ms::Element>(this, _el); }
 
       int subchannel() const                    { return _subchannel; }
       void setSubchannel(int val)               { _subchannel = val;  }
@@ -456,7 +456,7 @@ class Note : public Element {
       const QVector<NoteDot*>& dots() const       { return _dots;             }
       QVector<NoteDot*>& dots()                   { return _dots;             }
 
-      QQmlListProperty<Ms::NoteDot> qmlDots() { return QmlListAccess<Ms::NoteDot>(this, _dots);  }
+//      QQmlListProperty<Ms::NoteDot> qmlDots() { return QmlListAccess<Ms::NoteDot>(this, _dots);  }
 
       int qmlDotsCount();
       void updateAccidental(AccidentalState*);
@@ -529,6 +529,7 @@ class Note : public Element {
 Q_DECLARE_METATYPE(Ms::NoteHead::Group);
 Q_DECLARE_METATYPE(Ms::NoteHead::Type);
 Q_DECLARE_METATYPE(Ms::Note::ValueType);
+Q_DECLARE_METATYPE(Ms::Note);
 
 #endif
 

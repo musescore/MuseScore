@@ -31,7 +31,7 @@ enum class HairpinType : char { CRESC_HAIRPIN, DECRESC_HAIRPIN, CRESC_LINE, DECR
 //---------------------------------------------------------
 
 class HairpinSegment : public TextLineBaseSegment {
-      Q_OBJECT
+      Q_GADGET
 
       bool drawCircledTip;
       QPointF circledTip;
@@ -64,7 +64,7 @@ class HairpinSegment : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class Hairpin : public TextLineBase {
-      Q_OBJECT
+      Q_GADGET
       Q_ENUMS(Type)
       Q_ENUMS(Ms::Dynamic::Range)
 

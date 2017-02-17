@@ -21,7 +21,7 @@ namespace Ms {
 //-------------------------------------------------------------------
 
 class StaffLines : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       qreal lw;
       QVector<QLineF> lines;

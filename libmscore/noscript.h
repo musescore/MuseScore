@@ -1,4 +1,4 @@
-#undef Q_OBJECT
-#define Q_OBJECT
+#undef Q_GADGET
+#define Q_GADGET
 
 

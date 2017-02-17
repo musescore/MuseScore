@@ -31,7 +31,7 @@ enum class StaffStateType : char {
 //---------------------------------------------------------
 
 class StaffState : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       StaffStateType _staffStateType;
       qreal lw;

@@ -24,7 +24,7 @@ class StaffType;
 //---------------------------------------------------------
 
 class StaffTypeChange : public Element {
-      Q_OBJECT
+      Q_GADGET
 
       StaffType* _staffType { 0 };
       qreal lw;

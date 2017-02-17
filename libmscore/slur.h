@@ -23,7 +23,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class SlurSegment : public SlurTieSegment {
-      Q_OBJECT
+      Q_GADGET
 
    protected:
       void changeAnchor(MuseScoreView*, Grip, Element*);
@@ -60,7 +60,7 @@ class SlurSegment : public SlurTieSegment {
 //---------------------------------------------------------
 
 class Slur : public SlurTie {
-      Q_OBJECT
+      Q_GADGET
 
       void slurPosChord(SlurPos*);
 

@@ -22,7 +22,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class RehearsalMark : public SystemText  {
-      Q_OBJECT
+      Q_GADGET
 
    public:
       RehearsalMark(Score* score);
