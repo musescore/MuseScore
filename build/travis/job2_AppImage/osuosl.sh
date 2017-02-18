@@ -33,11 +33,7 @@ EOF
 
 SSH_INDENTITY=$HOME/.ssh/osuosl_nighlies_rsa
 
-# Read app name from file name (get characters before first dash)
-APPNAME="$(basename "$FILE" | sed -r 's|^([^-]*)-.*$|\1|')"
-
-# Read version from the file name (get characters between first and last dash)
-VERSION="$(basename "$FILE" | sed -r 's|^[^-]*-(.*)-[^-]*$|\1|')"
+FILE_UPLOAD_PATH="$(basename "${FILE}")"
 
 # Read architecture from file name (characters between last dash and .AppImage)
 ARCH="$(basename "$FILE" | sed -r 's|^.*-([^-]*)\.AppImage$|\1|')"
@@ -63,10 +59,8 @@ case "${ARCH}" in
     ;;
 esac
 
-PCK_NAME="$APPNAME-$BRANCH-$ARCH"
-
 # transfer file
-scp -C -i $SSH_INDENTITY $FILE musescore-nightlies@ftp-osl.osuosl.org:ftp/linux/$ARCH_NAME/$PCK_NAME
+scp -C -i $SSH_INDENTITY $FILE musescore-nightlies@ftp-osl.osuosl.org:ftp/linux/$ARCH_NAME/$FILE_UPLOAD_PATH
 
 # delete old files
 ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/linux/$ARCH_NAME; ls MuseScoreNightly* -t | tail -n +41 | xargs rm"
