@@ -65,6 +65,7 @@ matrix:
           - bsdtar
           - curl
           - zsync
+          - expect
       services:
         - docker
       script:
@@ -78,6 +79,7 @@ matrix:
     #      - bsdtar
     #      - curl
     #      - zsync
+    #      - expect
     #  services:
     #    - docker
     #  script:
@@ -91,6 +93,7 @@ matrix:
     #      - bsdtar
     #      - curl
     #      - zsync
+    #      - expect
     #  services:
     #    - docker
     #  before_script:
