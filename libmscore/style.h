@@ -524,6 +524,7 @@ enum class StyleIdx {
       tupletFontBold,
       tupletFontItalic,
       tupletFontUnderline,
+      tupletAlign,
 
       systemFontFace,
       systemFontSize,

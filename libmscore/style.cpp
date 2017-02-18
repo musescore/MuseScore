@@ -543,6 +543,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::tupletFontBold,                "tupletFontBold",               false },
       { StyleIdx::tupletFontItalic,              "tupletFontItalic",             true },
       { StyleIdx::tupletFontUnderline,           "tupletFontUnderline",          false },
+      { StyleIdx::tupletAlign,                   "tupletAlign",                  QVariant::fromValue(Align::CENTER) },
 
       { StyleIdx::systemFontFace,                "systemFontFace",               "FreeSerif" },
       { StyleIdx::systemFontSize,                "systemFontSize",               10.0 },
@@ -937,6 +938,7 @@ const std::vector<StyledProperty> tupletStyle {
       { StyleIdx::tupletFontBold,                     P_ID::FONT_BOLD              },
       { StyleIdx::tupletFontItalic,                   P_ID::FONT_ITALIC            },
       { StyleIdx::tupletFontUnderline,                P_ID::FONT_UNDERLINE         },
+      { StyleIdx::tupletAlign,                        P_ID::ALIGN                  },
       };
 
 const std::vector<StyledProperty> systemStyle {
