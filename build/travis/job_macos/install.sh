@@ -18,11 +18,50 @@ brew update
 brew install jack lame
 #brew install libogg libvorbis flac libsndfile portaudio
 
+BREW_CELLAR=$(brew --cellar)
+BREW_PREFIX=$(brew --prefix)
+
+function fixBrewPath {
+  DYLIB_FILE=$1
+  BREW_CELLAR=$(brew --cellar)
+  BREW_PREFIX=$(brew --prefix)
+  chmod 644 $DYLIB_FILE
+  # change ID
+  DYLIB_ID=$(otool -D  $DYLIB_FILE | tail -n 1)
+  if [[ "$DYLIB_ID" == *@@HOMEBREW_CELLAR@@* ]]
+  then
+      PSLASH=$(echo $DYLIB_ID | sed "s,@@HOMEBREW_CELLAR@@,$BREW_CELLAR,g")
+      install_name_tool -id $PSLASH $DYLIB_FILE
+  fi
+  if [[ "$DYLIB_ID" == *@@HOMEBREW_PREFIX@@* ]]
+  then
+      PSLASH=$(echo $DYLIB_ID | sed "s,@@HOMEBREW_PREFIX@@,$BREW_PREFIX,g")
+      install_name_tool -id $PSLASH $DYLIB_FILE
+  fi
+  # Change dependencies
+  for P in `otool -L $DYLIB_FILE | awk '{print $1}'`
+  do
+    if [[ "$P" == *@@HOMEBREW_CELLAR@@* ]]
+    then
+        PSLASH=$(echo $P | sed "s,@@HOMEBREW_CELLAR@@,$BREW_CELLAR,g")
+        install_name_tool -change $P $PSLASH $DYLIB_FILE
+    fi
+    if [[ "$P" == *@@HOMEBREW_PREFIX@@* ]]
+    then
+        PSLASH=$(echo $P | sed "s,@@HOMEBREW_PREFIX@@,$BREW_PREFIX,g")
+        install_name_tool -change $P $PSLASH $DYLIB_FILE
+    fi
+  done
+  chmod 444 $DYLIB_FILE
+}
+export -f fixBrewPath
+
 function installBottleManually {
   brew unlink $1
   rm -rf /usr/local/Cellar/$1
-  tar xzvf bottles/$1*.tar.gz -C /usr/local/Cellar
-  find /usr/local/Cellar/$1 -type f -name '*.pc' -exec sed -i '' 's:@@HOMEBREW_CELLAR@@:/usr/local/Cellar:g' {} +
+  tar xzvf bottles/$1*.tar.gz -C $BREW_CELLAR
+  find $BREW_CELLAR/$1 -type f -name '*.pc' -exec sed -i '' "s:@@HOMEBREW_CELLAR@@:$BREW_CELLAR:g" {} +
+  find $BREW_CELLAR/$1 -type f -name '*.dylib' -exec bash -c 'fixBrewPath "$1"' _ {} \;
   brew link $1
 }
 
