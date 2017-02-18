@@ -31,20 +31,19 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
       {
       MCursor c;
       c.setTimeSig(_sig);
-      c.createScore("score8");
+      c.createScore("");
       c.addPart("voice");
       c.move(0, 0);
       c.addKeySig(Key::C);
-      TimeSig* nts = c.addTimeSig(_sig);
       GroupNode node {0, 0};
       Groups ng;
       ng.push_back(node);
-      nts->setGroups(ng);
 
       for (int i = 0; i < n; ++i) {
-            Chord* chord = c.addChord(67, t);
+            Chord* chord = c.addChord(77, t);
             int tick = chord->rtick();
             chord->setBeamMode(_groups.beamMode(tick, t));
+            chord->setStemDirection(Direction::UP);
             chords->push_back(chord);
             }
       c.score()->style().set(StyleIdx::pageEvenLeftMargin, 0.0);
@@ -54,6 +53,11 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
       c.score()->style().set(StyleIdx::linearStretch, 1.3);
       c.score()->style().set(StyleIdx::MusicalSymbolFont, QString("Bravura"));
       c.score()->style().set(StyleIdx::MusicalTextFont, QString("Bravura Text"));
+      c.score()->style().set(StyleIdx::startBarlineSingle, true);
+
+      c.score()->staff(0)->setLines(0, 1); // single line only
+      c.score()->staff(0)->staffType(0)->setGenClef(false); // no clef
+
       return c.score();
       }
 
