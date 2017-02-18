@@ -36,10 +36,12 @@ class NoteGroups : public QGroupBox, Ui::NoteGroups {
       Fraction _sig;
 
       Score* createScore(int n, TDuration::DurationType t, std::vector<Chord*>* chords);
+      void updateBeams(Chord*, Beam::Mode);
 
    private slots:
       void resetClicked();
       void noteClicked(Note*);
+      void beamPropertyDropped(Chord*, Icon*);
 
    public:
       NoteGroups(QWidget* parent);

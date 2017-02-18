@@ -350,6 +350,7 @@ void ExampleView::dropEvent(QDropEvent* event)
             if (e->type() == ElementType::NOTE) {
                   Icon* icon = static_cast<Icon*>(dragElement);
                   Chord* chord = static_cast<Note*>(e)->chord();
+                  emit beamPropertyDropped(chord, icon);
                   switch (icon->iconType()) {
                         case IconType::SBEAM:
                               chord->setBeamMode(Beam::Mode::BEGIN);
