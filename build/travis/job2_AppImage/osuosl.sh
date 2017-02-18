@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Do not upload artefacts generated as part of a pull request
-if [ $(env | grep TRAVIS_PULL_REQUEST ) ] ; then
+if [ $(env | grep TRAVIS_PULL_REQUEST) ] ; then
   if [ "$TRAVIS_PULL_REQUEST" != "false" ] ; then
     echo "Not uploading AppImage since this is a pull request."
     exit 0
@@ -25,6 +25,7 @@ touch $HOME/.ssh/known_hosts
 # Add osuosl key to known host
 ssh-keyscan ftp-osl.osuosl.org >> $HOME/.ssh/known_hosts
 
+eval "$(ssh-agent -s)"
 ssh-add $HOME/.ssh/osuosl_nighlies_rsa
 
 SSH_INDENTITY=$HOME/.ssh/osuosl_nighlies_rsa
