@@ -15,6 +15,7 @@
 #include "libmscore/score.h"
 #include "libmscore/element.h"
 #include "libmscore/page.h"
+#include "libmscore/system.h"
 #include "libmscore/icon.h"
 #include "libmscore/chord.h"
 #include "libmscore/xml.h"
@@ -31,11 +32,7 @@ ExampleView::ExampleView(QWidget* parent)
       _score = 0;
       setAcceptDrops(true);
       setFocusPolicy(Qt::StrongFocus);
-      double mag = 0.9 * guiScaling * (DPI_DISPLAY / DPI);  // 90% of nominal
-      qreal _spatium = SPATIUM20 * mag;
-      // example would normally be 10sp from top of page; this leaves 3sp margin above
-      _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 7.0);
-      imatrix  = _matrix.inverted();
+      resetMatrix();
       // setup drag canvas state
       sm          = new QStateMachine(this);
       QState* stateActive = new QState;
@@ -58,6 +55,20 @@ ExampleView::ExampleView(QWidget* parent)
       sm->setInitialState(stateActive);
 
       sm->start();
+      }
+
+//---------------------------------------------------------
+//   resetMatrix
+//    used to reset scrolling in case time signature num or denom changed
+//---------------------------------------------------------
+
+void ExampleView::resetMatrix()
+      {
+      double mag = 0.9 * guiScaling * (DPI_DISPLAY / DPI);  // 90% of nominal
+      qreal _spatium = SPATIUM20 * mag;
+      // example would normally be 10sp from top of page; this leaves 3sp margin above
+      _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 7.0);
+      imatrix  = _matrix.inverted();
       }
 
 void ExampleView::layoutChanged()
@@ -369,6 +380,7 @@ QSize ExampleView::sizeHint() const
 
 //---------------------------------------------------------
 //   dragExampleView
+//     constrained scrolling ensuring that this ExampleView won't be moved past the borders of its QFrame
 //---------------------------------------------------------
 
 void ExampleView::dragExampleView(QMouseEvent* ev)
@@ -377,52 +389,38 @@ void ExampleView::dragExampleView(QMouseEvent* ev)
       int dx   = d.x();
       if (dx == 0)
             return;
-      // Constraint scrolling
-      // This part of code is directly taken from mscore/scoreview.cpp
-      QRectF rect = QRectF(0, 0, width(), height());
-      Page* firstPage = _score->pages().front();
-      Page* lastPage = _score->pages().back();
-      if (firstPage && lastPage) {
-            QPointF offsetPt(_matrix.dx(), 0);
-            QRectF firstPageRect(firstPage->pos().x() * _matrix.m11(),
-                                      firstPage->pos().y() * _matrix.m11(),
-                                      firstPage->width() * _matrix.m11(),
-                                      firstPage->height() * _matrix.m11());
-            QRectF lastPageRect(lastPage->pos().x() * _matrix.m11(),
-                                         lastPage->pos().y() * _matrix.m11(),
-                                         lastPage->width() * _matrix.m11(),
-                                         lastPage->height() * _matrix.m11());
-            QRectF pagesRect = firstPageRect.united(lastPageRect).translated(offsetPt);
-            qreal hmargin = width() * 0.25;
-            pagesRect.adjust(0, 0, hmargin, 0);
-            QRectF toPagesRect = pagesRect.translated(dx, 0);
-            // move right
-            if (dx > 0) {
-                  if (toPagesRect.right() > rect.right() && toPagesRect.left() > rect.left()) {
-                        if(pagesRect.width() <= rect.width()) {
-                              dx = rect.right() - pagesRect.right();
-                              }
-                        else {
-                              dx = rect.left() - pagesRect.left();
-                              }
-                        }
-                  }
-            else { // move left, dx < 0
-                  if (toPagesRect.left() < rect.left() && toPagesRect.right() < rect.right()) {
-                        if (pagesRect.width() <= rect.width()) {
-                              dx = rect.left() - pagesRect.left();
-                              }
-                        else {
-                              dx = rect.right() - pagesRect.right();
-                              }
-                        }
-                  }
+
+      Q_ASSERT(_score->pages().front()->systems()->at(0)); // should exist if doLayout ran
+
+      // form rectangle bounding the the system with a spatium margin and translate relative to view space
+      qreal xstart = _score->pages().front()->systems()->at(0)->bbox().left() - SPATIUM20;
+      qreal xend = _score->pages().front()->systems()->at(0)->bbox().right() + 2.0 * SPATIUM20;
+      QRectF systemScaledViewRect(xstart * _matrix.m11(), 0, xend * _matrix.m11(), 0);
+      systemScaledViewRect.translate(_matrix.dx(), 0);
+
+      qreal frameWidth = static_cast<QFrame*>(this)->frameRect().width();
+
+      // constrain the dx of scrolling so that this ExampleView won't be moved past the borders of its QFrame
+      if (dx > 0) {
+            // when moving right, ensure the left edge of systemScaledViewRect won't be right of frame's left edge
+            if (systemScaledViewRect.left() + dx > 0)
+                  dx = -systemScaledViewRect.left();
             }
-      // Performs the actual scrolling
+      else {
+            // never move left if entire system already fits entirely within the frame
+            if (systemScaledViewRect.width() < frameWidth)
+                  dx = 0;
+
+            // when moving left, ensure the right edge of systemScaledViewRect won't be left of frame's right edge
+            else if (systemScaledViewRect.right() + dx < frameWidth)
+                        dx = frameWidth - systemScaledViewRect.right();
+            }
+
+      // Perform the actual scrolling
       _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
          _matrix.m22(), _matrix.m23(), _matrix.dx()+dx, _matrix.dy(), _matrix.m33());
       imatrix = _matrix.inverted();
-      scroll(dx, 0, QRect(0, 0, width(), height()));
+      scroll(dx, 0);
       }
 
 void DragTransitionExampleView::onTransition(QEvent* e)
