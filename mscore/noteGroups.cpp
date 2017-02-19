@@ -108,6 +108,9 @@ void NoteGroups::setSig(Fraction sig, const Groups& g)
       view16->setScore(createScore(n, TDuration::DurationType::V_16TH, &chords16));
       n   = f.numerator() * (32 / f.denominator());
       view32->setScore(createScore(n, TDuration::DurationType::V_32ND, &chords32));
+      view8->resetMatrix();
+      view16->resetMatrix();
+      view32->resetMatrix();
       }
 
 //---------------------------------------------------------
