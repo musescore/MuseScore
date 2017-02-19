@@ -34,7 +34,6 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase {
       PaletteScrollArea* _timePalette;
       Palette* sp;
       bool _dirty;
-      TimeSig* timesig;
 
       int denominator() const;
       int denominator2Idx(int) const;
