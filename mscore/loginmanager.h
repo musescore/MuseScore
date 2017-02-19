@@ -17,8 +17,6 @@
 
 namespace Ms {
 
-static const char* MUSESCORE_HOST = "api.musescore.com";
-
 //---------------------------------------------------------
 //   LoginDialog
 //---------------------------------------------------------
@@ -26,7 +24,7 @@ static const char* MUSESCORE_HOST = "api.musescore.com";
 class LoginManager : public QObject
       {
       Q_OBJECT
-      
+
       KQOAuthManager* _oauthManager;
       QString _consumerKey = 0;
       QString _consumerSecret = 0;
@@ -59,7 +57,7 @@ class LoginManager : public QObject
 
    public slots:
       void tryLogin();
-   
+
    public:
       LoginManager(QObject* parent = 0);
       void login(QString login, QString password);

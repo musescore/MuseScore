@@ -665,7 +665,7 @@ void Chord::addLedgerLines()
       int track = 0;                            // the track lines belong to
       // the line pos corresponding to the bottom line of the staff
       int lineBelow = 8;                        // assuming 5-lined "staff"
-      qreal lineDistance = 1, _mag = 1;
+      qreal _mag = 1;
       bool staffVisible = true;
 
       if (segment()) { //not palette
@@ -673,7 +673,6 @@ void Chord::addLedgerLines()
             track     = staff2track(idx);
             Staff* st = score()->staff(idx);
             lineBelow    = (st->lines() - 1) * 2;
-            lineDistance = st->lineDistance();
             _mag         = staff()->mag();
             staffVisible = !staff()->invisible();
             }
