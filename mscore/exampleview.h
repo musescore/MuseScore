@@ -57,6 +57,7 @@ class ExampleView : public QFrame, public MuseScoreView {
    public:
       ExampleView(QWidget* parent = 0);
       ~ExampleView();
+      void resetMatrix();
       virtual void layoutChanged();
       virtual void dataChanged(const QRectF&);
       virtual void updateAll();
