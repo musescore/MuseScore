@@ -35,9 +35,11 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
       c.addPart("voice");
       c.move(0, 0);
       c.addKeySig(Key::C);
+      TimeSig* nts = c.addTimeSig(_sig);
       GroupNode node {0, 0};
       Groups ng;
       ng.push_back(node);
+      nts->setGroups(ng);
 
       for (int i = 0; i < n; ++i) {
             Chord* chord = c.addChord(77, t);
@@ -57,6 +59,7 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
 
       c.score()->staff(0)->setLines(0, 1); // single line only
       c.score()->staff(0)->staffType(0)->setGenClef(false); // no clef
+      c.score()->staff(0)->staffType(0)->setGenTimesig(false); // don't display time sig since ExampleView is unable to reflect custom time sig text/symbols
 
       return c.score();
       }
