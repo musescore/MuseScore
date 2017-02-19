@@ -24,13 +24,13 @@ namespace Ms {
 //   styledProperties
 //---------------------------------------------------------
 
-static constexpr std::array<StyledProperty,5> styledProperties {
-      StyleIdx::bendFontFace,      P_ID::FONT_FACE,
-      StyleIdx::bendFontSize,      P_ID::FONT_SIZE,
-      StyleIdx::bendFontBold,      P_ID::FONT_BOLD,
-      StyleIdx::bendFontItalic,    P_ID::FONT_ITALIC,
-      StyleIdx::bendFontUnderline, P_ID::FONT_UNDERLINE
-      };
+static constexpr std::array<StyledProperty,5> styledProperties {{
+      { StyleIdx::bendFontFace,      P_ID::FONT_FACE },
+      { StyleIdx::bendFontSize,      P_ID::FONT_SIZE },
+      { StyleIdx::bendFontBold,      P_ID::FONT_BOLD },
+      { StyleIdx::bendFontItalic,    P_ID::FONT_ITALIC },
+      { StyleIdx::bendFontUnderline, P_ID::FONT_UNDERLINE }
+      }};
 
 //---------------------------------------------------------
 //   label
