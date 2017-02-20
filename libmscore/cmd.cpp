@@ -214,6 +214,7 @@ void Score::update()
       {
       for (MasterScore* ms : *movements()) {
             CmdState& cs = ms->cmdState();
+            ms->deletePostponed();
             if (cs.layoutRange()) {
                   for (Score* s : ms->scoreList())
                         s->doLayoutRange(cs.startTick(), cs.endTick());
@@ -248,6 +249,21 @@ void Score::update()
                   }
             cs.reset();
             }
+      }
+
+void Score::deletePostponed()
+      {
+      for (ScoreElement* e : _updateState._deleteList) {
+            if (e->isSystem()) {
+                  System* s = toSystem(e);
+                  for (SpannerSegment* ss : s->spannerSegments()) {
+                        if (ss->system() == s)
+                              ss->setSystem(0);
+                        }
+                  }
+            }
+      qDeleteAll(_updateState._deleteList);
+      _updateState._deleteList.clear();
       }
 
 //---------------------------------------------------------

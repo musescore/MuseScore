@@ -97,11 +97,11 @@ bool TimeSig::acceptDrop(const DropData& data) const
 Element* TimeSig::drop(const DropData& data)
       {
       Element* e = data.element;
-      if (e->type() == ElementType::TIMESIG) {
+      if (e->isTimeSig()) {
             // change timesig applies to all staves, can't simply set subtype
             // for this one only
             // ownership of e is transferred to cmdAddTimeSig
-            score()->cmdAddTimeSig(measure(), staffIdx(), static_cast<TimeSig*>(e), false);
+            score()->cmdAddTimeSig(measure(), staffIdx(), toTimeSig(e), false);
             return 0;
             }
       delete e;
@@ -275,6 +275,7 @@ void TimeSig::layout1()
             // if staff is without time sig, format as if no text at all
             if (!_staff->staffType(tick())->genTimesig() ) {
                   // reset position and box sizes to 0
+                  qDebug("staff: no time sig");
                   pointLargeLeftParen.rx() = 0.0;
                   pn.rx() = 0.0;
                   pz.rx() = 0.0;
@@ -514,7 +515,7 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             }
       _needLayout = true;
-      score()->setLayoutAll();
+      score()->setLayoutAll();      // TODO
       setGenerated(false);
       return true;
       }
