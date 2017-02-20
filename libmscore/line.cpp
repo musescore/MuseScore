@@ -828,6 +828,8 @@ void SLine::layout()
             lineSegm->setSystem(system);
 
             Measure* firstMeas = system->firstMeasure();
+            if (!firstMeas)
+                  continue;
             Segment* firstCRSeg = firstMeas->first(Segment::Type::ChordRest);
 
             if (sysIdx1 == sysIdx2) {
