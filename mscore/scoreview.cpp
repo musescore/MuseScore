@@ -1521,6 +1521,8 @@ void ScoreView::moveCursor()
             }
       _cursor->setRect(QRectF(x, y, w, h));
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
+      if (is.cr())
+            adjustCanvasPosition(is.cr(), false);
       }
 
 //---------------------------------------------------------
