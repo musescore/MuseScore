@@ -1389,12 +1389,15 @@ void MuseScore::addTempo()
             }
 
       TempoText* tt = new TempoText(cs);
+      cs->startCmd();
       tt->setParent(cr->segment());
       tt->setTrack(0);
       tt->setXmlText(text);
       tt->setFollowText(true);
       //tt->setTempo(bps);
       cs->undoAddElement(tt);
+      cs->select(tt, SelectType::SINGLE, 0);
+      cs->endCmd();
       cv->startEdit(tt);
       }
 }
