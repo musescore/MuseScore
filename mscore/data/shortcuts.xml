@@ -675,6 +675,14 @@
     <seq>Q</seq>
     </SC>
   <SC>
+    <key>inc-duration-dotted</key>
+    <seq>Shift+W</seq>
+    </SC>
+  <SC>
+    <key>dec-duration-dotted</key>
+    <seq>Shift+Q</seq>
+    </SC>
+  <SC>
     <key>repeat-sel</key>
     <seq>R</seq>
     </SC>
