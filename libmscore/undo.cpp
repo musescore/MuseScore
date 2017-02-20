@@ -2955,7 +2955,8 @@ void InsertRemoveMeasures::removeMeasures()
             }
       score->measures()->remove(fm, lm);
 
-      score->fixTicks();
+//      if (score->firstMeasure())    // any measures left?
+            score->fixTicks();
       if (fm->isMeasure()) {
             score->setPlaylistDirty();
 
@@ -2974,7 +2975,8 @@ void InsertRemoveMeasures::removeMeasures()
                         }
                   }
 
-            score->insertTime(tick1, -(tick2 - tick1));
+            if (score->firstMeasure())
+                  score->insertTime(tick1, -(tick2 - tick1));
             for (Spanner* sp : score->unmanagedSpanners()) {
                   if ((sp->tick() >= tick1 && sp->tick() < tick2) || (sp->tick2() >= tick1 && sp->tick2() < tick2))
                         sp->removeUnmanaged();
@@ -2999,7 +3001,7 @@ qDebug("remove system");
                         if (k != score->systems().end())
                               score->systems().erase(k);
                         // finally delete system
-                        delete s;
+                        score->deleteLater(s);
                         }
                   }
             }

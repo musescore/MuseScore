@@ -279,6 +279,7 @@ class UpdateState {
       bool _playNote   { false };   ///< play selected note after command
       bool _playChord  { false };   ///< play whole chord for the selected note
       bool _selectionChanged { false };
+      QList<ScoreElement*> _deleteList;
       };
 
 class MasterScore;
@@ -706,6 +707,8 @@ class Score : public QObject, ScoreElement {
       void setPlayChord(bool v)             { _updateState._playChord = v;    }
       bool selectionChanged() const         { return _updateState._selectionChanged; }
       void setSelectionChanged(bool val)    { _updateState._selectionChanged = val;  }
+      void deleteLater(ScoreElement* e)     { _updateState._deleteList.push_back(e); }
+      void deletePostponed();
 
       void changeVoice(int);
 

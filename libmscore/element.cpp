@@ -980,7 +980,7 @@ void Element::remove(Element* e)
 
 Element* Element::create(ElementType type, Score* score)
       {
-      switch(type) {
+      switch (type) {
             case ElementType::VOLTA:             return new Volta(score);
             case ElementType::OTTAVA:            return new Ottava(score);
             case ElementType::TEXTLINE:          return new TextLine(score);
