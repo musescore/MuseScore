@@ -258,6 +258,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
                   }
             // add new note to chord
             undoAddElement(note);
+            setPlayNote(true);
             // recreate tie forward if there is a note to tie to
             // one-sided ties will not be recreated
             if (firstTiedNote) {
