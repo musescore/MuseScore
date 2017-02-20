@@ -2210,10 +2210,12 @@ void Score::cmdMirrorNoteHead()
       }
 
 //---------------------------------------------------------
-//   cmdHalfDuration
+//   cmdIncDecDuration
+//     When stepDotted is false and nSteps is 1 or -1, will halve or double the duration
+//     When stepDotted is true, will step by nearest dotted or undotted note
 //---------------------------------------------------------
 
-void Score::cmdHalfDuration()
+void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
       {
       Element* el = selection().element();
       if (el == 0)
@@ -2224,37 +2226,11 @@ void Score::cmdHalfDuration()
             return;
 
       ChordRest* cr = toChordRest(el);
-      TDuration d = _is.duration().shift(1);
-      if (!d.isValid())
-            return;
-      if (cr->type() == ElementType::CHORD && (toChord(cr)->noteType() != NoteType::NORMAL)) {
-            //
-            // handle appoggiatura and acciaccatura
-            //
-            undoChangeChordRestLen(cr, d);
-            }
-      else
-            changeCRlen(cr, d);
-      _is.setDuration(d);
-      nextInputPos(cr, false);
-      }
 
-//---------------------------------------------------------
-//   cmdDoubleDuration
-//---------------------------------------------------------
+      // if measure rest is selected as input, then the correct initialDuration will be the duration of the measure's time signature, else is just the input state's duration
+      TDuration initialDuration = (cr->durationType() == TDuration::DurationType::V_MEASURE) ? TDuration(cr->measure()->timesig()) : _is.duration();
 
-void Score::cmdDoubleDuration()
-      {
-      Element* el = selection().element();
-      if (el == 0)
-            return;
-      if (el->type() == ElementType::NOTE)
-            el = el->parent();
-      if (!el->isChordRest())
-            return;
-
-      ChordRest* cr = toChordRest(el);
-      TDuration d = _is.duration().shift(-1);
+      TDuration d = initialDuration.shiftRetainDots(nSteps, stepDotted);
       if (!d.isValid())
             return;
       if (cr->type() == ElementType::CHORD && (toChord(cr)->noteType() != NoteType::NORMAL)) {
@@ -3175,8 +3151,10 @@ void Score::cmd(const QAction* a)
       static const std::vector<ScoreCmd> cmdList {
             { "reset-stretch",              [this]{ resetUserStretch();                                         }},
             { "mirror-note",                [this]{ cmdMirrorNoteHead();                                        }},
-            { "double-duration",            [this]{ cmdDoubleDuration();                                        }},
-            { "half-duration",              [this]{ cmdHalfDuration ();                                         }},
+            { "double-duration",            [this]{ cmdIncDecDuration(-1, false);                               }},
+            { "half-duration",              [this]{ cmdIncDecDuration(1, false);                                }},
+            { "inc-duration-dotted",        [this]{ cmdIncDecDuration(-1, true);                                }},
+            { "dec-duration-dotted",        [this]{ cmdIncDecDuration(1, true);                                 }},
             { "add-staccato",               [this]{ addArticulation(SymId::articStaccatoAbove);                 }},
             { "add-tenuto",                 [this]{ addArticulation(SymId::articTenutoAbove);                   }},
             { "add-marcato",                [this]{ addArticulation(SymId::articMarcatoAbove);                  }},

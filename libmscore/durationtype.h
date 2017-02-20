@@ -35,7 +35,7 @@ class TDuration {
    private:
       DurationType _val;
       char _dots;
-      void shiftType(int v);
+      void shiftType(int nSteps, bool stepDotted = false);
       void truncateToFraction(const Fraction& l, int maxDots);
       bool setDotsToFitFraction(const Fraction& l, int maxDots);
 
@@ -70,7 +70,8 @@ class TDuration {
       NoteHead::Type headType() const;
       int hooks() const;
       bool hasStem() const;
-      TDuration shift(int val) const                { TDuration d(type()) ; d.shiftType(val); return d; } // dots are not retained
+      TDuration shift(int nSteps) const                              { TDuration d(type()); d.shiftType(nSteps); return d; } // dots are not retained
+      TDuration shiftRetainDots(int nSteps, bool stepDotted = false) { TDuration d(type()); d.setDots(_dots); d.shiftType(nSteps, stepDotted); return d; }
       int dots() const    { return _dots; }
       void setDots(int v);
       Fraction fraction() const;

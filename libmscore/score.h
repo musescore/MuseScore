@@ -473,8 +473,7 @@ class Score : public QObject, ScoreElement {
       void removeChordRest(ChordRest* cr, bool clearSegment);
       void cmdMoveRest(Rest*, Direction);
       void cmdMoveLyrics(Lyrics*, Direction);
-      void cmdHalfDuration();
-      void cmdDoubleDuration();
+      void cmdIncDecDuration(int nSteps, bool stepDotted = false);
       void cmdAddBracket();
       void resetUserStretch();
 
