@@ -18,6 +18,7 @@ namespace Ms {
 class Element;
 class Score;
 class Note;
+class Segment;
 class Page;
 enum class Grip : int;
 enum class HairpinType : char;
@@ -36,6 +37,7 @@ class MuseScoreView {
       Page* point2page(const QPointF&);
       Element* elementAt(const QPointF& p);
       const QList<Element*> elementsAt(const QPointF&);
+      Segment* horizontallyNearestChordRestSegment(const QPointF&);
       virtual Element* elementNear(QPointF) { return 0; }
 
       virtual void layoutChanged() {}

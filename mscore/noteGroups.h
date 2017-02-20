@@ -40,7 +40,7 @@ class NoteGroups : public QGroupBox, Ui::NoteGroups {
 
    private slots:
       void resetClicked();
-      void noteClicked(Note*);
+      void horizontallyNearestChordRestSegmentClicked(Segment*);
       void beamPropertyDropped(Chord*, Icon*);
 
    public:

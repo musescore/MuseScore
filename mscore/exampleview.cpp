@@ -392,6 +392,20 @@ void ExampleView::mousePressEvent(QMouseEvent* event)
                   break;
                   }
             }
+
+      Segment* s = horizontallyNearestChordRestSegment(pos);
+      if (s)
+            emit horizontallyNearestChordRestSegmentClicked(s);
+      }
+
+//---------------------------------------------------------
+//   mouseMoveEvent
+//---------------------------------------------------------
+
+void ExampleView::mouseMoveEvent(QMouseEvent* event)
+      {
+      QPointF pos(imatrix.map(QPointF(event->pos())));
+      emit horizontallyNearestChordRestSegmentMouseOver(horizontallyNearestChordRestSegment(pos));
       }
 
 //---------------------------------------------------------

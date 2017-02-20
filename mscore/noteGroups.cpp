@@ -45,7 +45,14 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
       for (int i = 0; i < n; ++i) {
             Chord* chord = c.addChord(77, t);
             int tick = chord->rtick();
-            chord->setBeamMode(_groups.beamMode(tick, t));
+
+            // use MID instead of AUTO because the whole point of this NoteGroups class is to determine what AUTO represents
+            Beam::Mode bm = _groups.beamMode(tick, t);
+            if (bm == Beam::Mode::AUTO)
+                  chord->setBeamMode(Beam::Mode::MID);
+            else
+                  chord->setBeamMode(bm);
+
             chord->setStemDirection(Direction::UP);
             chords->push_back(chord);
             }
@@ -87,11 +94,13 @@ NoteGroups::NoteGroups(QWidget* parent)
       iconPalette->setDrawGrid(true);
       populateIconPalette(iconPalette, bpa);
       iconPalette->setReadOnly(true);
+      iconPalette->setSelectable(true);
+      iconPalette->setSelected(-1);
 
       connect(resetGroups, SIGNAL(clicked()), SLOT(resetClicked()));
-      connect(view8,  SIGNAL(noteClicked(Note*)), SLOT(noteClicked(Note*)));
-      connect(view16, SIGNAL(noteClicked(Note*)), SLOT(noteClicked(Note*)));
-      connect(view32, SIGNAL(noteClicked(Note*)), SLOT(noteClicked(Note*)));
+      connect(view8,  SIGNAL(horizontallyNearestChordRestSegmentClicked(Segment*)), SLOT(horizontallyNearestChordRestSegmentClicked(Segment*)));
+      connect(view16, SIGNAL(horizontallyNearestChordRestSegmentClicked(Segment*)), SLOT(horizontallyNearestChordRestSegmentClicked(Segment*)));
+      connect(view32, SIGNAL(horizontallyNearestChordRestSegmentClicked(Segment*)), SLOT(horizontallyNearestChordRestSegmentClicked(Segment*)));
       connect(view8,  SIGNAL(beamPropertyDropped(Chord*,Icon*)), SLOT(beamPropertyDropped(Chord*,Icon*)));
       connect(view16, SIGNAL(beamPropertyDropped(Chord*,Icon*)), SLOT(beamPropertyDropped(Chord*,Icon*)));
       connect(view32, SIGNAL(beamPropertyDropped(Chord*,Icon*)), SLOT(beamPropertyDropped(Chord*,Icon*)));
@@ -143,19 +152,39 @@ Groups NoteGroups::groups()
 void NoteGroups::resetClicked()
       {
       setSig(_sig, _groups);
+      iconPalette->setSelected(-1);
+      iconPalette->update();
       }
 
 //---------------------------------------------------------
-//   noteClicked
+//   horizontallyNearestChordRestSegmentClicked
 //---------------------------------------------------------
 
-void NoteGroups::noteClicked(Note* note)
+void NoteGroups::horizontallyNearestChordRestSegmentClicked(Segment* s)
       {
-      Chord* chord = note->chord();
-      if (chord->beamMode() == Beam::Mode::AUTO)
-            updateBeams(chord, Beam::Mode::BEGIN);
-      else if (chord->beamMode() == Beam::Mode::BEGIN)
-            updateBeams(chord, Beam::Mode::AUTO);
+      ChordRest* cr = static_cast<ChordRest*>(s->element(0));
+      if (cr->isChord()) {
+            Chord* chord = static_cast<Chord*>(cr);
+            switch (iconPalette->getSelectedIdx()) {
+                  case 0:
+                        updateBeams(chord, Beam::Mode::BEGIN);
+                        break;
+                  case 1:
+                        updateBeams(chord, Beam::Mode::MID);
+                        break;
+                  case 2:
+                        updateBeams(chord, Beam::Mode::BEGIN32);
+                        break;
+                  case 3:
+                        updateBeams(chord, Beam::Mode::BEGIN64);
+                        break;
+                  default: // if no beam mode selected, then toggle between MID and BEGIN
+                        if (chord->beamMode() == Beam::Mode::MID)
+                              updateBeams(chord, Beam::Mode::BEGIN);
+                        else if (chord->beamMode() == Beam::Mode::BEGIN)
+                              updateBeams(chord, Beam::Mode::MID);
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -169,7 +198,7 @@ void NoteGroups::beamPropertyDropped(Chord* chord, Icon* icon)
                   updateBeams(chord, Beam::Mode::BEGIN);
                   break;
             case IconType::MBEAM:
-                  updateBeams(chord, Beam::Mode::AUTO);
+                  updateBeams(chord, Beam::Mode::MID);
                   break;
             case IconType::BEAM32:
                   updateBeams(chord, Beam::Mode::BEGIN32);
@@ -180,6 +209,7 @@ void NoteGroups::beamPropertyDropped(Chord* chord, Icon* icon)
             default:
                   break;
             }
+      iconPalette->setSelected(-1);
       }
 
 //---------------------------------------------------------

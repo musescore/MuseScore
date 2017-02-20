@@ -13,6 +13,7 @@
 #include "mscoreview.h"
 #include "score.h"
 #include "page.h"
+#include "measure.h"
 
 namespace Ms {
 
@@ -77,6 +78,41 @@ const QList<Element*> MuseScoreView::elementsAt(const QPointF& p)
       return el;
       }
 
+//---------------------------------------------------------
+//   horizontallyNearestChordRestSegment
+//    p is in canvas coordinates
+//---------------------------------------------------------
+
+Segment* MuseScoreView::horizontallyNearestChordRestSegment(const QPointF& p)
+      {
+      Segment* chordRest = 0;
+      Page* page = point2page(p);
+      if (page) {
+            qreal pointHoizontalPosRelativeToPage = p.x() - page->pos().x();
+
+            Measure* m = page->searchMeasure(p);
+            if (m) {
+                  chordRest = m->segments().firstCRSegment();
+                  if (chordRest) {
+                        qreal chordRestDX = pointHoizontalPosRelativeToPage - (chordRest->x() + chordRest->bbox().center().x());
+                        Segment *nextChordRest = chordRest->nextCR();
+                        while (nextChordRest) {
+                              qreal nextChordRestDX = pointHoizontalPosRelativeToPage - (nextChordRest->x() + nextChordRest->bbox().center().x());
+                              if (nextChordRestDX < 0) {
+                                    // now need to compare distance to the chordrest on the left vs to the chordrest on the right
+                                    if (-nextChordRestDX < chordRestDX)
+                                          chordRest = nextChordRest;
+                                    break;
+                                    }
+                              chordRestDX = nextChordRestDX;
+                              chordRest = nextChordRest;
+                              nextChordRest = chordRest->nextCR();
+                              }
+                        }
+                  }
+            }
+      return chordRest;
+      }
 
 }
 

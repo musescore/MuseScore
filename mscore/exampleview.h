@@ -51,10 +51,13 @@ class ExampleView : public QFrame, public MuseScoreView {
       virtual void dragMoveEvent(QDragMoveEvent*);
       virtual void dropEvent(QDropEvent*);
       virtual void mousePressEvent(QMouseEvent*);
+      virtual void mouseMoveEvent(QMouseEvent*);
       virtual QSize sizeHint() const;
 
    signals:
       void noteClicked(Note*);
+      void horizontallyNearestChordRestSegmentClicked(Segment*);
+      void horizontallyNearestChordRestSegmentMouseOver(Segment*);
       void beamPropertyDropped(Chord*, Icon*);
 
    public:
