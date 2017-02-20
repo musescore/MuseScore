@@ -2873,6 +2873,8 @@ Note* Note::lastTiedNote() const
       while (note->tieFor()) {
             if (std::find(notes.begin(), notes.end(), note->tieFor()->endNote()) != notes.end())
                   break;
+            if (!note->tieFor()->endNote())
+                  break;
             note = note->tieFor()->endNote();
             notes.push_back(note);
             }
