@@ -2661,6 +2661,8 @@ Note* Note::lastTiedNote() const
       while (note->tieFor()) {
             if (notes.contains(note->tieFor()->endNote()))
                   break;
+            if (!note->tieFor()->endNote())
+                  break;
             note = note->tieFor()->endNote();
             notes.append(note);
             }

@@ -975,7 +975,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
 int totalTiedNoteTicks(Note* note)
       {
       int total = note->chord()->actualTicks();
-      while (note->tieFor() && (note->chord()->tick() < note->tieFor()->endNote()->chord()->tick())) {
+      while (note->tieFor() && note->tieFor()->endNote() && (note->chord()->tick() < note->tieFor()->endNote()->chord()->tick())) {
             note = note->tieFor()->endNote();
             total += note->chord()->actualTicks();
             }
