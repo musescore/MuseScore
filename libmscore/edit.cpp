@@ -2269,22 +2269,22 @@ void Score::cmdDeleteSelection()
                               }
                         }
                   if (f.isValid() && !f.isZero()) {
-                        fullMeasure = false;          // HACK
 
                         if (fullMeasure) {
                               // handle this as special case to be able to
                               // fix broken measures:
-
-                              // ws: does not work as TimeSig may be already removed
                               for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
                                     Staff* staff = Score::staff(track / VOICES);
                                     int tick = m->tick();
-                                    Fraction f = staff->timeSig(tick)->sig();
-                                    Rest* r = setRest(tick, track, f, false, 0);
-                                    if (!cr)
-                                          cr = r;
-                                    if (s2 && (m == s2->measure()))
-                                          break;
+                                    TimeSig* ts = staff->timeSig(tick);
+                                    if (ts) {
+                                          Fraction f = ts->sig();
+                                          Rest* r = setRest(tick, track, f, false, 0);
+                                          if (!cr)
+                                                cr = r;
+                                          if (s2 && (m == s2->measure()))
+                                                break;
+                                          }
                                     }
                               }
                         else {
