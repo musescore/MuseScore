@@ -832,11 +832,20 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         SigEvent ne(f);
                         if (!(se == ne))
                               score->sigmap()->add(tick, ne);
+
+                        // do not add timesig again
+                        Measure* m = score->getCreateMeasure(tick);
+                        Segment* s = m->findSegment(Segment::Type::TimeSig, tick);
+                        if (s) {
+                              Element* e = s->element(trackZeroVoice(track));
+                              if (e && static_cast<TimeSig*>(e)->sig() == f)
+                                    break;
+                              }
+
                         TimeSig* ts = new TimeSig(score);
                         ts->setSig(f);
                         ts->setTrack(track);
-                        Measure* m = score->getCreateMeasure(tick);
-                        Segment* s = m->getSegment(Segment::Type::TimeSig, tick);
+                        s = m->getSegment(Segment::Type::TimeSig, tick);
                         s->add(ts);
                         m->setLen(f);
                         }
