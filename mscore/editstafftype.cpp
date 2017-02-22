@@ -146,6 +146,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 
       connect(linesThroughRadio,    SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(onLinesRadio,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(showTabFingering,     SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(upsideDown,           SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(numbersRadio,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(showBackTied,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
@@ -211,6 +212,7 @@ void EditStaffType::setValues()
             case StaffGroup::TAB:
                   {
                   upsideDown->setChecked(staffType.upsideDown());
+                  showTabFingering->setChecked(staffType.showTabFingering());
                   int idx = fretFontName->findText(staffType.fretFontName(), Qt::MatchFixedString);
                   if (idx == -1)
                         idx = 0;          // if name not found, use first name
@@ -402,6 +404,7 @@ void EditStaffType::setFromDlg()
       staffType.setOnLines(onLinesRadio->isChecked());
       staffType.setShowRests(showRests->isChecked());
       staffType.setUpsideDown(upsideDown->isChecked());
+      staffType.setShowTabFingering(showTabFingering->isChecked());
       staffType.setUseNumbers(numbersRadio->isChecked());
       //note values
       staffType.setStemsDown(stemBelowRadio->isChecked());
@@ -444,6 +447,7 @@ void EditStaffType::blockSignals(bool block)
       showBackTied->blockSignals(block);
 
       upsideDown->blockSignals(block);
+      showTabFingering->blockSignals(block);
       valuesRepeatNever->blockSignals(block);
       valuesRepeatSystem->blockSignals(block);
       valuesRepeatMeasure->blockSignals(block);

@@ -590,8 +590,9 @@ Note::Note(const Note& n, bool link)
             add(new Accidental(*(n._accidental)));
 
       // types in _el: SYMBOL, IMAGE, FINGERING, TEXT, BEND
+      bool tabFingering = staff()->staffType(tick())->showTabFingering();
       for (Element* e : n._el) {
-            if (e->isFingering() && staff()->isTabStaff(tick()))    // tablature has no fingering
+            if (e->isFingering() && staff()->isTabStaff(tick()) && !tabFingering)    // tablature has no fingering
                   continue;
             Element* ce = e->clone();
             add(ce);
@@ -1547,11 +1548,12 @@ bool Note::acceptDrop(const DropData& data) const
             return true;
             }
       bool isTablature = staff()->isTabStaff(tick());
+      bool tabFingering = staff()->staffType(tick())->showTabFingering();
       return (type == ElementType::ARTICULATION
          || type == ElementType::CHORDLINE
          || type == ElementType::TEXT
          || type == ElementType::REHEARSAL_MARK
-         || (type == ElementType::FINGERING && !isTablature)
+         || (type == ElementType::FINGERING && (!isTablature || tabFingering))
          || type == ElementType::ACCIDENTAL
          || type == ElementType::BREATH
          || type == ElementType::ARPEGGIO
@@ -1606,6 +1608,7 @@ Element* Note::drop(const DropData& data)
       Element* e = data.element;
 
       bool isTablature = staff()->isTabStaff(tick());
+      bool tabFingering = staff()->staffType(tick())->showTabFingering();
       Chord* ch = chord();
 
       switch(e->type()) {
@@ -1619,7 +1622,7 @@ Element* Note::drop(const DropData& data)
                   return e;
 
             case ElementType::FINGERING:
-                  if (!isTablature) {
+                  if (!isTablature || tabFingering) {
                         e->setParent(this);
                         score()->undoAddElement(e);
                         return e;

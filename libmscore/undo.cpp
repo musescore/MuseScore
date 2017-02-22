@@ -1121,6 +1121,7 @@ void Score::undoAddElement(Element* element)
                   if (e == parent)
                         ne = element;
                   else {
+                        bool tabFingering = e->staff()->staffType(e->tick())->showTabFingering();
                         if (element->isGlissando()) {    // and other spanners with Anchor::NOTE
                               Note* newEnd = Spanner::endElementFromSpanner(static_cast<Glissando*>(element), e);
                               if (newEnd) {
@@ -1130,8 +1131,8 @@ void Score::undoAddElement(Element* element)
                               else              //couldn't find suitable start note
                                     continue;
                               }
-                        else if (element->isFingering() && e->staff()->isTabStaff(e->tick()))
-                              continue;   // tablature has no fingering
+                        else if (element->isFingering() && e->staff()->isTabStaff(e->tick()) && !tabFingering)
+                              continue;
                         else
                               ne = element->linkedClone();
                         }
@@ -2955,8 +2956,8 @@ void InsertRemoveMeasures::removeMeasures()
             }
       score->measures()->remove(fm, lm);
 
-//      if (score->firstMeasure())    // any measures left?
-            score->fixTicks();
+      //      if (score->firstMeasure())    // any measures left?
+      score->fixTicks();
       if (fm->isMeasure()) {
             score->setPlaylistDirty();
 
@@ -2974,7 +2975,6 @@ void InsertRemoveMeasures::removeMeasures()
                               }
                         }
                   }
-
             if (score->firstMeasure())
                   score->insertTime(tick1, -(tick2 - tick1));
             for (Spanner* sp : score->unmanagedSpanners()) {
