@@ -1140,18 +1140,22 @@ void InspectorBarLine::manageSpanData()
       int min     = staffFromLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO;
       int max     = bl->span() < 2 ? bl->spanTo() - MIN_BARLINE_FROMTO_DIST
                         : (staffFromLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffFromLines-1) * 2 + 2);
+      b.spanFrom->blockSignals(true);
       b.spanFrom->setMinimum(min);
       b.spanFrom->setMaximum(max);
       b.spanFrom->setWrapping(false);
+      b.spanFrom->blockSignals(false);
 
       // To:      min = if same as From, at least 1sp (2 units) below From; if not, min possible according to num.of lines
       //          max = max possible according to number of staff lines
       min   = bl->span() < 2 ? bl->spanFrom() + MIN_BARLINE_FROMTO_DIST
                   : (staffToLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO);
       max   = staffToLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffToLines-1) * 2 + 2;
+      b.spanTo->blockSignals(true);
       b.spanTo->setMinimum(min);
       b.spanTo->setMaximum(max);
       b.spanTo->setWrapping(false);
+      b.spanTo->blockSignals(false);
 
       // determin MAX for SPAN
       max = bl->score()->nstaves() - bl->staffIdx();
@@ -1161,6 +1165,7 @@ void InspectorBarLine::manageSpanData()
       // determine SPAN TYPE
       int short1To      = BARLINE_SPAN_SHORT1_TO + (staffFromLines - 5) * 2;
       int short2To      = BARLINE_SPAN_SHORT2_TO + (staffFromLines - 5) * 2;
+      b.spanType->blockSignals(true);
       if (!bl->customSpan())
             b.spanType->setCurrentIndex(0);           // staff default
       else if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_TICK1_FROM  && bl->spanTo() == BARLINE_SPAN_TICK1_TO)
@@ -1173,6 +1178,7 @@ void InspectorBarLine::manageSpanData()
             b.spanType->setCurrentIndex(4);
       else
             b.spanType->setCurrentIndex(5);           // custom
+      b.spanType->blockSignals(false);
       }
 
 //---------------------------------------------------------
