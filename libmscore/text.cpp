@@ -573,15 +573,16 @@ void TextBlock::remove(int column)
             int rcol = 0;
             for (const QChar& c : i->text) {
                   if (col == column) {
-                        if (c.isSurrogate())
-                              i->text.remove(rcol, 2);
                         if (i->format.type() == CharFormatType::SYMBOL) {
                               i->ids.removeAt(idx);
                               if (i->ids.isEmpty())
                                     _text.erase(i);
                               }
-                        else {
-                              i->text.remove(rcol, 1);
+                        else {                              
+                              if (c.isSurrogate())
+                                    i->text.remove(idx, 2);
+                              else
+                                    i->text.remove(idx, 1);
                               if (i->text.isEmpty())
                                     _text.erase(i);
                               }

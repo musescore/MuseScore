@@ -38,6 +38,9 @@ class TestText : public QObject, public MTest
       void testCompatibility();
       void testDelete();
       void testReadWrite();
+      void testBMPDeletePreviousChar();
+      void testSMPDeletePreviousChar();
+      void testMixedTypesDeletePreviousChar();
       };
 
 //---------------------------------------------------------
@@ -186,6 +189,17 @@ void TestText::testSpecialSymbols()
       text->insertText("&gt;");
       text->endEdit();
       QCOMPARE(text->xmlText(), QString("&amp;gt;"));
+
+      text->selectAll();
+      text->deleteSelectedText();
+      text->insertText("&&");
+      text->moveCursorToEnd();
+      text->deletePreviousChar();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("&amp;"));
+      text->deletePreviousChar();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString(""));
       }
 
 //---------------------------------------------------------
@@ -416,6 +430,75 @@ void TestText::testReadWrite() {
       text->setXmlText("<i>Ti  tle</i><b>Tw  o</b>");
       testrw(score, text);
 }
+
+//---------------------------------------------------------
+///   testBMPDeletePreviousChar
+///    text contains Basic Multilingual Plane unicode symobls
+//---------------------------------------------------------
+
+void TestText::testBMPDeletePreviousChar()
+      {
+      Text* text = new Text(score);
+      text->initSubStyle(SubStyle::DYNAMICS);
+
+      text->setPlainText(QString("⟁⟂⟃⟄"));
+
+      text->layout();
+      text->startEdit(0, QPoint());
+      text->moveCursorToEnd();
+      text->deletePreviousChar();
+      text->endEdit();
+
+      QCOMPARE(text->xmlText(), QString("⟁⟂⟃"));
+      }
+
+//---------------------------------------------------------
+///   testSMPDeletePreviousChar
+///    text contains Supplementary Multilingual Plane unicode symbols (https://en.wikipedia.org/wiki/Plane_(Unicode)#Supplementary_Multilingual_Plane) which store chars in pairs
+//---------------------------------------------------------
+
+void TestText::testSMPDeletePreviousChar()
+      {
+      Text* text = new Text(score);
+      text->initSubStyle(SubStyle::DYNAMICS);
+
+      text->setPlainText(QString("𝄆𝄆𝄆𝄏𝄏𝄏"));
+
+      text->layout();
+      text->startEdit(0, QPoint());
+      text->moveCursorToEnd();
+      text->deletePreviousChar();
+      text->endEdit();
+
+      QCOMPARE(text->xmlText(), QString("𝄆𝄆𝄆𝄏𝄏"));
+      }
+
+//---------------------------------------------------------
+///   testMixedTypesDeletePreviousChar
+///    text contains unicode symbols from both Basic and Supplementary Multilingual Plane chars and SMUFL symbols
+//---------------------------------------------------------
+
+void TestText::testMixedTypesDeletePreviousChar()
+      {
+      Text* text = new Text(score);
+      text->initSubStyle(SubStyle::DYNAMICS);
+
+      text->setXmlText("<sym>cClefSquare</sym>𝄆<sym>repeatLeft</sym><sym>textBlackNoteLongStem</sym><sym>textBlackNoteLongStem</sym><sym>noteheadWhole</sym> ⟂<sym>repeatRight</sym> 𝄇");
+      text->layout();
+      text->startEdit(0, QPoint());
+      text->moveCursorToEnd();
+      text->deletePreviousChar();
+      text->deletePreviousChar();
+      text->deletePreviousChar();
+      text->deletePreviousChar();
+      text->deletePreviousChar();
+      text->deletePreviousChar();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("<sym>cClefSquare</sym>𝄆<sym>repeatLeft</sym><sym>textBlackNoteLongStem</sym><sym>textBlackNoteLongStem</sym>"));
+      }
+
+
+
 
 QTEST_MAIN(TestText)
 
