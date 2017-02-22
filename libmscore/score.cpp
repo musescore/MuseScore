@@ -3036,7 +3036,7 @@ void Score::collectMatch(void* data, Element* e)
       if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
          || e->type() == Element::Type::ARTICULATION || e->type() == Element::Type::LYRICS
          || e->type() == Element::Type::BEAM || e->type() == Element::Type::STEM
-         || e->type() == Element::Type::SLUR_SEGMENT) {
+         || e->type() == Element::Type::SLUR_SEGMENT || e->type() == Element::Type::NOTEDOT) {
             if (p->voice != -1 && p->voice != e->voice())
                   return;
             }
