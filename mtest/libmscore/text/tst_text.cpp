@@ -439,7 +439,7 @@ void TestText::testReadWrite() {
 void TestText::testBMPDeletePreviousChar()
       {
       Text* text = new Text(score);
-      text->initSubStyle(SubStyle::DYNAMICS);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
 
       text->setPlainText(QString("⟁⟂⟃⟄"));
 
@@ -460,7 +460,7 @@ void TestText::testBMPDeletePreviousChar()
 void TestText::testSMPDeletePreviousChar()
       {
       Text* text = new Text(score);
-      text->initSubStyle(SubStyle::DYNAMICS);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
 
       text->setPlainText(QString("𝄆𝄆𝄆𝄏𝄏𝄏"));
 
@@ -481,7 +481,7 @@ void TestText::testSMPDeletePreviousChar()
 void TestText::testMixedTypesDeletePreviousChar()
       {
       Text* text = new Text(score);
-      text->initSubStyle(SubStyle::DYNAMICS);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
 
       text->setXmlText("<sym>cClefSquare</sym>𝄆<sym>repeatLeft</sym><sym>textBlackNoteLongStem</sym><sym>textBlackNoteLongStem</sym><sym>noteheadWhole</sym> ⟂<sym>repeatRight</sym> 𝄇");
       text->layout();
