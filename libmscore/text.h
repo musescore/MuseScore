@@ -112,7 +112,7 @@ class TextFragment {
 
    public:
       mutable CharFormat format;
-      QPointF pos;                  // y is relativ to TextBlock->y()
+      QPointF pos;                  // y is relative to TextBlock->y()
 
       mutable QString text;
       QList<SymId> ids;
