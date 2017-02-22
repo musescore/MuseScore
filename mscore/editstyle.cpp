@@ -121,6 +121,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::hideEmptyStaves,         false, hideEmptyStaves,         0 },
       { StyleIdx::dontHideStavesInFirstSystem, false, dontHideStavesInFirstSystem,             0 },
       { StyleIdx::hideInstrumentNameIfOneInstrument, false, hideInstrumentNameIfOneInstrument, 0 },
+      { StyleIdx::TabFingeringYes, false, TabFingeringYes, 0 },
       { StyleIdx::accidentalNoteDistance,  false, accidentalNoteDistance,  0 },
       { StyleIdx::accidentalDistance,      false, accidentalDistance,      0 },
 

@@ -558,6 +558,7 @@ Note::~Note()
 Note::Note(const Note& n, bool link)
    : Element(n)
       {
+    bool TabFingering = (score()->styleB(StyleIdx::TabFingeringYes));
       if (link)
             score()->undo(new Link(const_cast<Note*>(&n), this));
       _subchannel        = n._subchannel;
@@ -591,7 +592,7 @@ Note::Note(const Note& n, bool link)
 
       // types in _el: SYMBOL, IMAGE, FINGERING, TEXT, BEND
       for (Element* e : n._el) {
-            if (e->isFingering() && staff()->isTabStaff(tick()))    // tablature has no fingering
+            if (e->isFingering() && staff()->isTabStaff(tick()) && !TabFingering)    // tablature has no fingering
                   continue;
             Element* ce = e->clone();
             add(ce);
@@ -1537,6 +1538,7 @@ void Note::endDrag()
 
 bool Note::acceptDrop(const DropData& data) const
       {
+      bool TabFingering = (score()->styleB(StyleIdx::TabFingeringYes));
       Element* e = data.element;
       ElementType type = e->type();
       if (type == ElementType::GLISSANDO) {
@@ -1551,7 +1553,7 @@ bool Note::acceptDrop(const DropData& data) const
          || type == ElementType::CHORDLINE
          || type == ElementType::TEXT
          || type == ElementType::REHEARSAL_MARK
-         || (type == ElementType::FINGERING && !isTablature)
+         || (type == ElementType::FINGERING && (!isTablature || TabFingering))
          || type == ElementType::ACCIDENTAL
          || type == ElementType::BREATH
          || type == ElementType::ARPEGGIO
@@ -1606,6 +1608,7 @@ Element* Note::drop(const DropData& data)
       Element* e = data.element;
 
       bool isTablature = staff()->isTabStaff(tick());
+      bool TabFingering = (score()->styleB(StyleIdx::TabFingeringYes));
       Chord* ch = chord();
 
       switch(e->type()) {
@@ -1619,7 +1622,7 @@ Element* Note::drop(const DropData& data)
                   return e;
 
             case ElementType::FINGERING:
-                  if (!isTablature) {
+                  if (!isTablature || TabFingering) {
                         e->setParent(this);
                         score()->undoAddElement(e);
                         return e;
@@ -2872,6 +2875,8 @@ Note* Note::lastTiedNote() const
       notes.push_back(note);
       while (note->tieFor()) {
             if (std::find(notes.begin(), notes.end(), note->tieFor()->endNote()) != notes.end())
+                  break;
+            if (!note->tieFor()->endNote())
                   break;
             note = note->tieFor()->endNote();
             notes.push_back(note);

@@ -1013,6 +1013,7 @@ void Score::undoAddElement(Element* element)
       {
       QList<Staff* > staffList;
       Staff* ostaff = element->staff();
+      bool TabFingering = (score()->styleB(StyleIdx::TabFingeringYes));
       int strack = -1;
       if (ostaff) {
             if (ostaff->score()->excerpt() && strack > -1)
@@ -1130,7 +1131,7 @@ void Score::undoAddElement(Element* element)
                               else              //couldn't find suitable start note
                                     continue;
                               }
-                        else if (element->isFingering() && e->staff()->isTabStaff(e->tick()))
+                        else if (element->isFingering() && e->staff()->isTabStaff(e->tick()) && !TabFingering)
                               continue;   // tablature has no fingering
                         else
                               ne = element->linkedClone();
@@ -2955,7 +2956,8 @@ void InsertRemoveMeasures::removeMeasures()
             }
       score->measures()->remove(fm, lm);
 
-      score->fixTicks();
+//      if (score->firstMeasure())    // any measures left?
+            score->fixTicks();
       if (fm->isMeasure()) {
             score->setPlaylistDirty();
 
@@ -2974,7 +2976,8 @@ void InsertRemoveMeasures::removeMeasures()
                         }
                   }
 
-            score->insertTime(tick1, -(tick2 - tick1));
+            if (score->firstMeasure())
+                  score->insertTime(tick1, -(tick2 - tick1));
             for (Spanner* sp : score->unmanagedSpanners()) {
                   if ((sp->tick() >= tick1 && sp->tick() < tick2) || (sp->tick2() >= tick1 && sp->tick2() < tick2))
                         sp->removeUnmanaged();
@@ -2999,7 +3002,7 @@ qDebug("remove system");
                         if (k != score->systems().end())
                               score->systems().erase(k);
                         // finally delete system
-                        delete s;
+                        score->deleteLater(s);
                         }
                   }
             }

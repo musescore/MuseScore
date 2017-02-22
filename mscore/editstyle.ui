@@ -358,6 +358,13 @@
             </widget>
            </item>
            <item>
+            <widget class="QCheckBox" name="TabFingeringYes">
+             <property name="text">
+              <string>Allow fingerings in tablature staff</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="verticalSpacer_10">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
