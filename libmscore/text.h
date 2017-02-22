@@ -164,7 +164,7 @@ class TextBlock {
       qreal xpos(int col, const Text*) const;
       const CharFormat* formatAt(int) const;
       const TextFragment* fragment(int col) const;
-      QList<TextFragment>::iterator fragment(int col, int* rcol);
+      QList<TextFragment>::iterator fragment(int column, int* rcol, int* ridx);
       qreal y() const      { return _y; }
       void setY(qreal val) { _y = val; }
       qreal lineSpacing() const { return _lineSpacing; }
@@ -208,6 +208,7 @@ class Text : public Element {
       TextBlock& curLine();
       void drawSelection(QPainter*, const QRectF&) const;
 
+      void insert(TextCursor*, QChar, QChar);
       void insert(TextCursor*, QChar);
       void insert(TextCursor*, SymId);
       void updateCursorFormat(TextCursor*);

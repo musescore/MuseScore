@@ -124,6 +124,7 @@ TextFragment::TextFragment(TextCursor* cursor, SymId id)
 TextFragment::TextFragment(TextCursor* cursor, const QString& s)
       {
       format = *cursor->format();
+      format.setType(CharFormatType::TEXT);
       text = s;
       }
 
@@ -460,8 +461,8 @@ int TextBlock::column(qreal x, Text* t) const
 
 void TextBlock::insert(TextCursor* cursor, const QString& s)
       {
-      int rcol;
-      auto i = fragment(cursor->column(), &rcol);
+      int rcol, ridx;
+      auto i = fragment(cursor->column(), &rcol, &ridx);
       if (i != _text.end()) {
             if (i->format.type() == CharFormatType::TEXT) {
                   if (!(i->format == *cursor->format())) {
@@ -474,7 +475,7 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
                               }
                         }
                   else
-                        i->text.insert(rcol, s);
+                        i->text.insert(ridx, s);
                   }
             else {
                   if (rcol == 0) {
@@ -493,7 +494,7 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
                   }
             }
       else {
-            if (!_text.isEmpty() && _text.back().format == *cursor->format())
+            if (!_text.empty() && _text.back().format.type() == CharFormatType::TEXT)
                   _text.back().text.append(s);
             else
                   _text.append(TextFragment(cursor, s));
@@ -502,8 +503,8 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
 
 void TextBlock::insert(TextCursor* cursor, SymId id)
       {
-      int rcol;
-      auto i = fragment(cursor->column(), &rcol);
+      int rcol, ridx;
+      auto i = fragment(cursor->column(), &rcol, &ridx);
       if (i != _text.end()) {
             if (i->format.type() == CharFormatType::SYMBOL) {
                   if (!(i->format == *cursor->format())) {
@@ -542,16 +543,24 @@ void TextBlock::insert(TextCursor* cursor, SymId id)
 
 //---------------------------------------------------------
 //   fragment
+//    inputs:
+//      column is the column relative to the start of the TextBlock.
+//    outputs:
+//      rcol will be the column relative to the start of the TextFragment that the input column is in.
+//      ridx will be the QChar index into TextFragment's text QString relative to the start of that TextFragment.
+//
 //---------------------------------------------------------
 
-QList<TextFragment>::iterator TextBlock::fragment(int column, int* rcol)
+QList<TextFragment>::iterator TextBlock::fragment(int column, int* rcol, int* ridx)
       {
       int col = 0;
       for (auto i = _text.begin(); i != _text.end(); ++i) {
             *rcol = 0;
+            *ridx = 0;
             for (const QChar& c : i->text) {
                   if (col == column)
                         return i;
+                  ++*ridx;
                   if (c.isHighSurrogate())
                         continue;
                   ++col;
@@ -578,7 +587,7 @@ void TextBlock::remove(int column)
                               if (i->ids.isEmpty())
                                     _text.erase(i);
                               }
-                        else {                              
+                        else {
                               if (c.isSurrogate())
                                     i->text.remove(idx, 2);
                               else
@@ -635,17 +644,18 @@ QString TextBlock::remove(int start, int n)
       int col = 0;
       QString s;
       for (auto i = _text.begin(); i != _text.end();) {
-            int idx  = 0;
             int rcol = 0;
             bool inc = true;
-            foreach (const QChar& c, i->text) {       // iterate on copy of i->text
+            for( int idx = 0; idx < i->text.length(); ) {
+                  QChar c = i->text[idx];
                   if (col == start) {
-                        if (c.isSurrogate()) {
+                        if (c.isHighSurrogate()) {
                               s += c;
-                              i->text.remove(rcol, 1);
+                              i->text.remove(idx, 1);
+                              c = i->text[idx];
                               }
                         s += c;
-                        i->text.remove(rcol, 1);
+                        i->text.remove(idx, 1);
                         if (i->format.type() == CharFormatType::SYMBOL)
                               i->ids.removeAt(idx);
                         if (i->text.isEmpty() && (_text.size() > 1)) {
@@ -816,11 +826,10 @@ QString TextBlock::text(int col1, int len) const
                   continue;
             if (f.format.type() == CharFormatType::TEXT) {
                   for (const QChar& c : f.text) {
-                        if (c.isHighSurrogate())
-                              continue;
                         if (col >= col1 && (len < 0 || ((col-col1) < len)))
                               s += Xml::xmlString(c.unicode());
-                        ++col;
+                        if (!c.isHighSurrogate())
+                              ++col;
                         }
                   }
             else {
@@ -1041,6 +1050,24 @@ QColor Text::frameColor() const
 
 //---------------------------------------------------------
 //   insert
+//     version for Supplementary Unicode, which must be inputted together as a pair
+//---------------------------------------------------------
+
+void Text::insert(TextCursor* cursor, QChar highSurrogate, QChar lowSurrogate)
+      {
+      if (cursor->hasSelection())
+            deleteSelectedText();
+      if (cursor->line() >= _layout.size())
+            _layout.append(TextBlock());
+      QString surrogatePair = QString(highSurrogate).append(lowSurrogate);
+      _layout[cursor->line()].insert(cursor, surrogatePair);
+      cursor->setColumn(cursor->column() + 1);
+      cursor->clearSelection();
+      }
+
+//---------------------------------------------------------
+//   insert
+//     version for Basic Unicode
 //---------------------------------------------------------
 
 void Text::insert(TextCursor* cursor, QChar c)
@@ -1064,6 +1091,11 @@ void Text::insert(TextCursor* cursor, QChar c)
             }
       cursor->clearSelection();
       }
+
+//---------------------------------------------------------
+//   insert
+//     version for SMUFL symbols
+//---------------------------------------------------------
 
 void Text::insert(TextCursor* cursor, SymId id)
       {
@@ -1115,7 +1147,8 @@ void Text::createLayout()
       QString token;
       QString sym;
       bool symState = false;
-      for (const QChar& c : _text) {
+      for (int i = 0; i < _text.length(); i++) {
+            const QChar& c = _text[i];
             if (state == 0) {
                   if (c == '<') {
                         state = 1;
@@ -1128,8 +1161,17 @@ void Text::createLayout()
                   else {
                         if (symState)
                               sym += c;
-                        else
-                              insert(&cursor, c);
+                        else {
+                              if (c.isHighSurrogate()) {
+                                    const QChar& highSurrogate = c;
+                                    i++;
+                                    Q_ASSERT(i < _text.length());
+                                    const QChar& lowSurrogate = _text[i];
+                                    insert(&cursor, highSurrogate, lowSurrogate);
+                                    }
+                              else
+                                    insert(&cursor, c);
+                              }
                         }
                   }
             else if (state == 1) {
@@ -2568,7 +2610,8 @@ void Text::paste()
       QString sym;
       bool symState = false;
 
-      for (const QChar& c : txt) {
+      for (int i = 0; i < txt.length(); i++ ) {
+            QChar c = txt[i];
             if (state == 0) {
                   if (c == '<') {
                         state = 1;
@@ -2581,8 +2624,18 @@ void Text::paste()
                   else {
                         if (symState)
                               sym += c;
-                        else
-                              insert(_cursor, c);
+                        else {
+                              if (c.isHighSurrogate()) {
+                                    QChar highSurrogate = c;
+                                    Q_ASSERT(i + 1 < txt.length());
+                                    i++;
+                                    QChar lowSurrogate = txt[i];
+                                    insert(_cursor, highSurrogate, lowSurrogate);
+                                    }
+                              else {
+                                    insert(_cursor, c);
+                                    }
+                              }
                         }
                   }
             else if (state == 1) {
@@ -2715,12 +2768,8 @@ Element* Text::drop(const DropData& data)
                   delete e;
 
                   if (_editMode) {
-                        if (code & 0xffff0000) {
-                              insert(_cursor, QChar::highSurrogate(code));
-                              insert(_cursor, QChar::lowSurrogate(code));
-                              _cursor->setColumn(_cursor->column() - 1);
-                              _cursor->setSelectColumn(_cursor->column());
-                              }
+                        if (code & 0xffff0000)
+                              insert(_cursor, QChar::highSurrogate(code),  QChar::lowSurrogate(code));
                         else
                               insert(_cursor, QChar(code));
                         layout1();

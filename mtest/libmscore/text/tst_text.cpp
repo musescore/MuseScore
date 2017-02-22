@@ -38,9 +38,16 @@ class TestText : public QObject, public MTest
       void testCompatibility();
       void testDelete();
       void testReadWrite();
-      void testBMPDeletePreviousChar();
-      void testSMPDeletePreviousChar();
+      void testBasicUnicodeDeletePreviousChar();
+      void testSupplementaryUnicodeDeletePreviousChar();
       void testMixedTypesDeletePreviousChar();
+      void testSupplementaryUnicodeInsert1();
+      void testSupplementaryUnicodeInsert2();
+      void testSupplementaryUnicodePaste();
+      void testRightToLeftWithSupplementaryUnicode();
+      void testPasteSymbolAndSupplemental();
+      void testMixedSelectionDelete();
+      void testChineseBasicSupplemental();
       };
 
 //---------------------------------------------------------
@@ -405,38 +412,38 @@ void TestText::testReadWrite() {
       Text* text = new Text(score);
       text->setXmlText("test");
       testrw(score, text);
-      
+
       text = new Text(score);
       text->setXmlText("<b>Title</b><i>two</i>");
       testrw(score, text);
-      
+
       text = new Text(score);
       text->setXmlText("<i>Title</i> <b>Two</b>");
       testrw(score, text);
-      
+
       text = new Text(score);
       text->setXmlText("<i>Title</i>    <b>Two</b>");
       testrw(score, text);
-      
+
       text = new Text(score);
       text->setXmlText("<i>Title</i>\t<b>Two</b>");
       testrw(score, text);
-      
+
       text = new Text(score);
       text->setXmlText("<i>Title</i>\n<b>Two</b>");
       testrw(score, text);
-      
+
       text = new Text(score);
       text->setXmlText("<i>Ti  tle</i><b>Tw  o</b>");
       testrw(score, text);
 }
 
 //---------------------------------------------------------
-///   testBMPDeletePreviousChar
-///    text contains Basic Multilingual Plane unicode symobls
+///   testBasicUnicodeDeletePreviousChar
+///    text contains Basic Unicode symobls
 //---------------------------------------------------------
 
-void TestText::testBMPDeletePreviousChar()
+void TestText::testBasicUnicodeDeletePreviousChar()
       {
       Text* text = new Text(score);
       text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
@@ -453,11 +460,11 @@ void TestText::testBMPDeletePreviousChar()
       }
 
 //---------------------------------------------------------
-///   testSMPDeletePreviousChar
-///    text contains Supplementary Multilingual Plane unicode symbols (https://en.wikipedia.org/wiki/Plane_(Unicode)#Supplementary_Multilingual_Plane) which store chars in pairs
+///   testSupplementaryUnicodeDeletePreviousChar
+///    text contains Supplementary Unicode symbols which store chars in pairs
 //---------------------------------------------------------
 
-void TestText::testSMPDeletePreviousChar()
+void TestText::testSupplementaryUnicodeDeletePreviousChar()
       {
       Text* text = new Text(score);
       text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
@@ -497,8 +504,228 @@ void TestText::testMixedTypesDeletePreviousChar()
       QCOMPARE(text->xmlText(), QString("<sym>cClefSquare</sym>𝄆<sym>repeatLeft</sym><sym>textBlackNoteLongStem</sym><sym>textBlackNoteLongStem</sym>"));
       }
 
+//---------------------------------------------------------
+///   testSupplementaryUnicodeInsert1
+///    Insert a Supplementary Multilingual Plane unicode symbol behind another one.
+//---------------------------------------------------------
 
+void TestText::testSupplementaryUnicodeInsert1()
+      {
+      Text* text = new Text(score);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
+      text->setPlainText(QString("𝄏"));
+      text->layout();
+      text->startEdit(0, QPoint());
+      text->moveCursorToStart();
+      text->insertText(QString("𝄆"));
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("𝄆𝄏"));
+      }
 
+//---------------------------------------------------------
+///   testSupplementaryUnicodeInsert2
+///    Insert a Supplementary Multilingual Plane unicode symbol behind another one.
+//---------------------------------------------------------
+
+void TestText::testSupplementaryUnicodeInsert2()
+      {
+      Text* text = new Text(score);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
+      text->layout();
+      text->startEdit(0, QPoint());
+      text->moveCursorToStart();
+      text->insertText(QString("𝄏"));
+      text->moveCursorToStart();
+      text->insertText(QString("𝄆"));
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("𝄆𝄏"));
+      }
+
+//---------------------------------------------------------
+///   testSupplementaryUnicodePaste
+///    Paste a Supplementary Plane unicode symbols.
+//---------------------------------------------------------
+
+void TestText::testSupplementaryUnicodePaste()
+      {
+      Text* text = new Text(score);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
+      text->setPlainText(QString(""));
+      text->layout();
+
+      QApplication::clipboard()->setText(QString("𝄏"));
+
+      text->startEdit(0, QPoint());
+      text->moveCursorToStart();
+      text->paste();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("𝄏"));
+
+      text->startEdit(0, QPoint());
+      text->moveCursorToStart();
+      text->paste();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("𝄏𝄏"));
+
+      text->startEdit(0, QPoint());
+      text->moveCursorToEnd();
+      text->paste();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("𝄏𝄏𝄏"));
+      }
+
+//---------------------------------------------------------
+///   testRightToLeftWithSupplementaryUnicode
+//---------------------------------------------------------
+
+void TestText::testRightToLeftWithSupplementaryUnicode()
+      {
+      Text* text = new Text(score);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
+      text->setPlainText(QString(""));
+      text->layout();
+
+      text->startEdit(0, QPoint());
+      text->moveCursorToStart();
+      text->insertText(QString("𝄆"));
+      text->insertText(QString("م"));
+      text->insertText(QString("و"));
+      text->insertText(QString("س"));
+      text->insertText(QString("ي"));
+      text->insertText(QString("ق"));
+      text->insertText(QString("ى"));
+      text->insertText(QString("𝄇"));
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("𝄆موسيقى𝄇"));
+
+      text->startEdit(0, QPoint());
+      text->cursor()->setColumn(1);
+      text->deletePreviousChar();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("موسيقى𝄇"));
+
+      text->startEdit(0, QPoint());
+      text->cursor()->setColumn(5);
+      text->deleteChar();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("موسيق𝄇"));
+      }
+
+//---------------------------------------------------------
+///   testPasteSymbolAndSupplemental
+//---------------------------------------------------------
+
+void TestText::testPasteSymbolAndSupplemental()
+      {
+      Text* text = new Text(score);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
+      text->setPlainText(QString(""));
+      text->layout();
+
+      QApplication::clipboard()->setText(QString("<sym>gClef</sym>𝄎"));
+
+      text->startEdit(0, QPoint());
+      text->moveCursorToStart();
+      text->paste();
+      text->endEdit();
+      QVERIFY(text->fragmentList()[0].format.type() == CharFormatType::SYMBOL);
+      QVERIFY(text->fragmentList()[1].format.type() == CharFormatType::TEXT);
+      QCOMPARE(text->xmlText(), QString("<sym>gClef</sym>𝄎"));
+
+      text->startEdit(0, QPoint());
+      text->moveCursorToStart();
+      text->insertText(QString("𝄎"));
+      text->endEdit();
+      QVERIFY(text->fragmentList()[0].format.type() == CharFormatType::TEXT);
+      QVERIFY(text->fragmentList()[1].format.type() == CharFormatType::SYMBOL);
+      QVERIFY(text->fragmentList()[2].format.type() == CharFormatType::TEXT);
+      QCOMPARE(text->xmlText(), QString("𝄎<sym>gClef</sym>𝄎"));
+      }
+
+//---------------------------------------------------------
+///   testMixedSelectionDelete
+//---------------------------------------------------------
+
+void TestText::testMixedSelectionDelete()
+      {
+      Text* text = new Text(score);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
+      text->layout();
+      QApplication::clipboard()->setText(QString("[A]𝄎<sym>gClef</sym> 𝄎𝄇"));
+
+      text->startEdit(0, QPoint());
+      text->moveCursorToStart();
+      text->paste();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("[A]𝄎<sym>gClef</sym> 𝄎𝄇"));
+
+      text->startEdit(0, QPoint());
+      text->moveCursorToStart();
+      text->cursor()->setSelectColumn(4);
+      text->cursor()->setColumn(7);
+      text->deleteSelectedText();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("[A]𝄎𝄇"));
+
+      text->startEdit(0, QPoint());
+      text->cursor()->setColumn(4);
+      text->deletePreviousChar();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("[A]𝄇"));
+
+      text->startEdit(0, QPoint());
+      text->moveCursorToEnd();
+      text->insertSym(SymId::segno);
+      text->endEdit();
+      text->insertText(QString("e"));
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("[A]𝄇<sym>segno</sym>e"));
+      }
+
+//---------------------------------------------------------
+///   testChineseBasicSupplemental
+//---------------------------------------------------------
+
+void TestText::testChineseBasicSupplemental()
+      {
+      Text* text = new Text(score);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
+      text->setPlainText(QString(""));
+      text->layout();
+
+      text->startEdit(0, QPoint());
+      text->moveCursorToStart();
+      text->insertText(QString("你"));  // this is supplemental unicode
+      text->insertText(QString("好"));  // this is basic unicode
+      text->insertText(QString("。"));
+      QApplication::clipboard()->setText(QString("我爱Musescore"));
+      text->paste();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("你好。我爱Musescore"));
+
+      text->startEdit(0, QPoint());
+      QApplication::clipboard()->setText(QString("你屠槪真軔")); // some random supplemental unicode
+      text->moveCursorToStart();
+      text->paste();
+      text->moveCursorToEnd();
+      text->paste();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("你屠槪真軔你好。我爱Musescore你屠槪真軔"));
+
+      text->startEdit(0, QPoint());
+      text->cursor()->setSelectColumn(4);
+      text->cursor()->setColumn(20);
+      text->deleteSelectedText();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("你屠槪真屠槪真軔")); // this is only supplemental
+
+      text->startEdit(0, QPoint());
+      text->cursor()->setColumn(4);
+      text->deleteChar();
+      text->deletePreviousChar();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("你屠槪槪真軔")); // deleted the two chars in the middle
+      }
 
 QTEST_MAIN(TestText)
 
