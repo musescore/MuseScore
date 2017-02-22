@@ -209,6 +209,7 @@ class StaffType {
       bool  _stemsDown    = true;         // stems are drawn downward (stem-and-beam durations only)
       bool  _stemsThrough = true;         // stems are drawn through the staff rather than beside it (stem-and-beam durations only)
       bool  _upsideDown   = false;        // whether lines are drawn with highest string at top (false) or at bottom (true)
+      bool  _showTabFingering   = false;        // Allow fingering in tablature staff (true) or not (false)
       bool  _useNumbers   = true;         // true: use numbers ('0' - ...) for frets | false: use letters ('a' - ...)
       bool  _showBackTied = true;         // whether back-tied notes are shown or not
 
@@ -261,7 +262,7 @@ class StaffType {
             const QString& durFontName, qreal durFontSize, qreal durFontUserY, qreal genDur,
             const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY, TablatureSymbolRepeat symRepeat,
             bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
-            bool stemsDown, bool stemThrough, bool upsideDown, bool useNumbers, bool showBackTied);
+            bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
 
       virtual ~StaffType() {}
       bool operator==(const StaffType&) const;
@@ -357,6 +358,7 @@ class StaffType {
       bool  stemsDown() const             { return _stemsDown;          }
       bool  stemThrough() const           { return _stemsThrough;       }
       bool  upsideDown() const            { return _upsideDown;         }
+      bool  showTabFingering() const            { return _showTabFingering;         }
       bool  useNumbers() const            { return _useNumbers;         }
       bool  showBackTied() const          { return _showBackTied;       }
 
@@ -376,6 +378,7 @@ class StaffType {
       void  setStemsDown(bool val)        { _stemsDown = val;           }
       void  setStemsThrough(bool val)     { _stemsThrough = val;        }
       void  setUpsideDown(bool val)       { _upsideDown = val;          }
+      void  setShowTabFingering (bool val) { _showTabFingering = val;         }
       void  setUseNumbers(bool val)       { _useNumbers = val; _fretMetricsValid = false; }
       void  setShowBackTied(bool val)     { _showBackTied = val;        }
 
