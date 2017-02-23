@@ -482,11 +482,11 @@ QVariant TextLineBase::getProperty(P_ID id) const
             case P_ID::BEGIN_TEXT:
                   return beginText();
             case P_ID::BEGIN_TEXT_ALIGN:
-                  return int(beginTextAlign());
+                  return QVariant::fromValue(beginTextAlign());
             case P_ID::CONTINUE_TEXT_ALIGN:
-                  return int(continueTextAlign());
+                  return QVariant::fromValue(continueTextAlign());
             case P_ID::END_TEXT_ALIGN:
-                  return int(endTextAlign());
+                  return QVariant::fromValue(endTextAlign());
             case P_ID::BEGIN_TEXT_PLACE:
                   return int(_beginTextPlace);
             case P_ID::BEGIN_HOOK_TYPE:
@@ -559,13 +559,13 @@ bool TextLineBase::setProperty(P_ID id, const QVariant& v)
                   _beginTextPlace = PlaceText(v.toInt());
                   break;
             case P_ID::BEGIN_TEXT_ALIGN:
-                  _beginTextAlign = Align(v.toInt());
+                  _beginTextAlign = v.value<Align>();
                   break;
             case P_ID::CONTINUE_TEXT_ALIGN:
-                  _continueTextAlign = Align(v.toInt());
+                  _continueTextAlign = v.value<Align>();
                   break;
             case P_ID::END_TEXT_ALIGN:
-                  _endTextAlign = Align(v.toInt());
+                  _endTextAlign = v.value<Align>();
                   break;
             case P_ID::CONTINUE_TEXT_PLACE:
                   _continueTextPlace = PlaceText(v.toInt());
@@ -707,7 +707,7 @@ QVariant TextLineBase::propertyDefault(P_ID id) const
             case P_ID::BEGIN_TEXT_ALIGN:
             case P_ID::CONTINUE_TEXT_ALIGN:
             case P_ID::END_TEXT_ALIGN:
-                  return int(Align::LEFT);
+                  return QVariant::fromValue(Align::LEFT);
             case P_ID::LINE_VISIBLE:
                   return true;
             default:
