@@ -20,6 +20,8 @@ namespace Ms {
 class Element;
 class Score;
 class Note;
+class Chord;
+class Icon;
 enum class Grip : signed char;
 
 //---------------------------------------------------------
@@ -55,6 +57,7 @@ class ExampleView : public QFrame, public MuseScoreView {
 
    signals:
       void noteClicked(Note*);
+      void beamPropertyDropped(Chord*, Icon*);
 
    public:
       ExampleView(QWidget* parent = 0);
