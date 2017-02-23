@@ -3377,11 +3377,13 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
       qreal x    = s->rxpos();
       computeMinWidth(s, x, false);
 
+#if 0
 #ifndef NDEBUG
       qreal w = width();
       computeMinWidth();
       if (!qFuzzyCompare(w, width()))
             qDebug("width mismatch %f != %f at %d", w, width(), tick());
+#endif
 #endif
       return width() - oldWidth;
       }

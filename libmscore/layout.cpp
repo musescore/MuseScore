@@ -3406,6 +3406,8 @@ qDebug("%p %d-%d", this, stick, etick);
             m = m->prevMeasureMM();
       else if (m->prev())
             m = m->prev();
+      while (!m->isMeasure() && m->prev())
+            m = m->prev();
 
       // if the first measure of the score is part of a multi measure rest
       // m->system() will return a nullptr. We need to find the multi measure

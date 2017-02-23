@@ -524,7 +524,7 @@ static void readTextStyle(MStyle* style, XmlReader& e)
                               value = sizeIsSpatiumDependent;
                               break;
                         case P_ID::ALIGN:
-                              value = int(align);
+                              value = QVariant::fromValue(align);
                               break;
                         case P_ID::OFFSET:
                               value = offset;

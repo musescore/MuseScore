@@ -335,7 +335,7 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
                   return QPointF(0.5, 1.9);
 
             case P_ID::BEGIN_TEXT_ALIGN:
-                  return int(Align::BASELINE);
+                  return QVariant::fromValue(Align::BASELINE);
 
             case P_ID::BEGIN_HOOK_HEIGHT:
             case P_ID::END_HOOK_HEIGHT:
