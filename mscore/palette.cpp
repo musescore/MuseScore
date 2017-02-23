@@ -1419,6 +1419,11 @@ void Palette::read(XmlReader& e)
             else
                   e.unknown();
             }
+            // make sure hgrid and vgrid are not 0, we divide by them later
+            if (hgrid <= 0)
+                  hgrid = 28;
+            if (vgrid <= 0)
+                  vgrid = 28;
       }
 
 //---------------------------------------------------------
