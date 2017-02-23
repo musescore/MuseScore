@@ -82,9 +82,9 @@
       <rehearsalMarkFramePadding>0.2</rehearsalMarkFramePadding>
       <repeatLeftFontFace>MuseJazz Text</repeatLeftFontFace>
       <repeatLeftFontSize>12</repeatLeftFontSize>
-      <repeatLeftAlign>17</repeatLeftAlign>
+      <repeatLeftAlign>right,baseline</repeatLeftAlign>
       <repeatRightFontFace>MuseJazz Text</repeatRightFontFace>
-      <repeatRightAlign>1</repeatRightAlign>
+      <repeatRightAlign>right,top</repeatRightAlign>
       <frameFontFace>MuseJazz Text</frameFontFace>
       <textLineFontFace>MuseJazz Text</textLineFontFace>
       <textLineFontSize>10</textLineFontSize>

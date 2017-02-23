@@ -1283,19 +1283,21 @@ void Text::layout1()
       qreal h    = 0;
       if (parent()) {
             if (layoutToParentWidth()) {
-                  if (parent()->type() == ElementType::HBOX || parent()->type() == ElementType::VBOX || parent()->type() == ElementType::TBOX) {
+                  if (parent()->isTBox()) {
+                        }
+                  else if (parent()->isBox()) {
                         // consider inner margins of frame
-                        Box* b = static_cast<Box*>(parent());
+                        Box* b = toBox(parent());
                         yoff = b->topMargin()  * DPMM;
                         h  = b->height() - yoff - b->bottomMargin() * DPMM;
                         }
-                  else if (parent()->type() == ElementType::PAGE) {
-                        Page* p = static_cast<Page*>(parent());
+                  else if (parent()->isPage()) {
+                        Page* p = toPage(parent());
                         h = p->height() - p->tm() - p->bm();
                         yoff = p->tm();
                         }
-                  else if (parent()->type() == ElementType::MEASURE)
-                        h = 0;
+                  else if (parent()->isMeasure())
+                        ;
                   else
                         h  = parent()->height();
                   }
@@ -2271,6 +2273,27 @@ void Text::read(XmlReader& e)
             }
       }
 
+static const std::array<P_ID, 18> pids { {
+      P_ID::SUB_STYLE,
+      P_ID::FONT_FACE,
+      P_ID::FONT_SIZE,
+      P_ID::FONT_BOLD,
+      P_ID::FONT_ITALIC,
+      P_ID::FONT_UNDERLINE,
+      P_ID::FRAME,
+      P_ID::FRAME_SQUARE,
+      P_ID::FRAME_CIRCLE,
+      P_ID::FRAME_WIDTH,
+      P_ID::FRAME_PADDING,
+      P_ID::FRAME_ROUND,
+      P_ID::FRAME_FG_COLOR,
+      P_ID::FRAME_BG_COLOR,
+      P_ID::FONT_SPATIUM_DEPENDENT,
+      P_ID::ALIGN,
+      P_ID::OFFSET,
+      P_ID::OFFSET_TYPE
+      } };
+
 //---------------------------------------------------------
 //   writeProperties
 //---------------------------------------------------------
@@ -2278,25 +2301,8 @@ void Text::read(XmlReader& e)
 void Text::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
       {
       Element::writeProperties(xml);
-      writeProperty(xml, P_ID::SUB_STYLE);
-      writeProperty(xml, P_ID::FONT_FACE);
-      writeProperty(xml, P_ID::FONT_SIZE);
-      writeProperty(xml, P_ID::FONT_BOLD);
-      writeProperty(xml, P_ID::FONT_ITALIC);
-      writeProperty(xml, P_ID::FONT_UNDERLINE);
-      writeProperty(xml, P_ID::FRAME);
-      writeProperty(xml, P_ID::FRAME_SQUARE);
-      writeProperty(xml, P_ID::FRAME_CIRCLE);
-      writeProperty(xml, P_ID::FRAME_WIDTH);
-      writeProperty(xml, P_ID::FRAME_PADDING);
-      writeProperty(xml, P_ID::FRAME_ROUND);
-      writeProperty(xml, P_ID::FRAME_FG_COLOR);
-      writeProperty(xml, P_ID::FRAME_BG_COLOR);
-      writeProperty(xml, P_ID::FONT_SPATIUM_DEPENDENT);
-      writeProperty(xml, P_ID::ALIGN);
-      writeProperty(xml, P_ID::OFFSET);
-      writeProperty(xml, P_ID::OFFSET_TYPE);
-
+      for (P_ID i :pids)
+            writeProperty(xml, i);
       if (writeText)
             xml.writeXml("text", xmlText());
       }
@@ -2309,22 +2315,11 @@ bool Text::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      static const std::array<P_ID, 15> pids { {
-            P_ID::FONT_FACE,
-            P_ID::FONT_SIZE,
-            P_ID::FONT_BOLD,
-            P_ID::FONT_ITALIC,
-            P_ID::FONT_UNDERLINE,
-            P_ID::FRAME,
-            P_ID::FRAME_SQUARE,
-            P_ID::FRAME_CIRCLE,
-            P_ID::FRAME_WIDTH,
-            P_ID::FRAME_PADDING,
-            P_ID::FRAME_ROUND,
-            P_ID::FRAME_FG_COLOR,
-            P_ID::FRAME_BG_COLOR,
-            P_ID::FONT_SPATIUM_DEPENDENT,
-            } };
+      if (tag == "style") {
+            SubStyle s = subStyleFromName(e.readElementText());
+            initSubStyle(s);
+            return true;
+            }
 
       for (P_ID i :pids) {
             if (readProperty(tag, e, i)) {
@@ -2332,11 +2327,7 @@ bool Text::readProperties(XmlReader& e)
                   return true;
                   }
             }
-      if (tag == "style") {
-            SubStyle s = subStyleFromName(e.readElementText());
-            initSubStyle(s);
-            }
-      else if (tag == "text")
+      if (tag == "text")
             _text = e.readXml();
       else if (!Element::readProperties(e))
             return false;
@@ -3132,7 +3123,7 @@ QVariant Text::getProperty(P_ID propertyId) const
             case P_ID::FONT_SPATIUM_DEPENDENT:
                   return sizeIsSpatiumDependent();
             case P_ID::ALIGN:
-                  return int(align());
+                  return QVariant::fromValue(align());
             case P_ID::TEXT:
                   return xmlText();
             case P_ID::SUB_STYLE:
@@ -3201,7 +3192,7 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
                   setXmlText(v.toString());
                   break;
             case P_ID::ALIGN:
-                  setAlign(Align(v.toInt()));
+                  setAlign(v.value<Align>());
                   break;
             case P_ID::SUB_STYLE:
                   setSubStyle(SubStyle(v.toInt()));

@@ -2336,40 +2336,38 @@ void MuseScore::removeTab(int i)
 
 void loadTranslation(QString filename, QString localeName)
       {
-      QTranslator* translator = new QTranslator;
-      QString userPrefix = dataPath + "/locale/"+ filename +"_";
+      QString userPrefix    = dataPath + "/locale/"+ filename +"_";
       QString defaultPrefix = mscoreGlobalShare + "locale/"+ filename +"_";
-      QString userlp = userPrefix + localeName;
-
-      QString defaultlp = defaultPrefix + localeName;
-      QString lp = defaultlp;
+      QString userlp        = userPrefix + localeName;
+      QString defaultlp     = defaultPrefix + localeName;
+      QString lp            = defaultlp;
 
       QFileInfo userFi(userlp + ".qm");
       QFileInfo defaultFi(defaultlp + ".qm");
 
-      if(!defaultFi.exists()) { // try with a shorter locale name
-      QString shortLocaleName = localeName.left(localeName.lastIndexOf("_"));
+      if (!defaultFi.exists()) {     // try with a shorter locale name
+            QString shortLocaleName = localeName.left(localeName.lastIndexOf("_"));
             QString shortDefaultlp = defaultPrefix + shortLocaleName;
             QFileInfo shortDefaultFi(shortDefaultlp + ".qm");
-            if(shortDefaultFi.exists()) {
-                  userlp = userPrefix + shortLocaleName;
-                  userFi = QFileInfo(userlp + ".qm");
+            if (shortDefaultFi.exists()) {
+                  userlp    = userPrefix + shortLocaleName;
+                  userFi    = QFileInfo(userlp + ".qm");
                   defaultFi = shortDefaultFi;
                   defaultlp = shortDefaultlp;
                   }
             }
 
-      //      qDebug() << userFi.exists();
-      //      qDebug() << userFi.lastModified() << defaultFi.lastModified();
       if (userFi.exists()) {
             if (userFi.lastModified() > defaultFi.lastModified())
                   lp = userlp;
-            else
-                  QFile::remove(userlp + ".qm");
-      }
+//            else
+//REVIEW                  QFile::remove(userlp + ".qm");
+            }
 
       if (MScore::debugMode)
             qDebug("load translator <%s>", qPrintable(lp));
+
+      QTranslator* translator = new QTranslator;
       bool success = translator->load(lp);
       if (success) {
             qApp->installTranslator(translator);
@@ -2388,7 +2386,7 @@ void loadTranslation(QString filename, QString localeName)
 
 void setMscoreLocale(QString localeName)
       {
-      for(QTranslator* t : translatorList) {
+      for (QTranslator* t : translatorList) {
             qApp->removeTranslator(t);
             delete t;
             }

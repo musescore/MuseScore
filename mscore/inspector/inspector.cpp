@@ -106,7 +106,8 @@ Inspector::Inspector(QWidget* parent)
       _inspectorEdit = false;
       ie             = 0;
       _element       = 0;
-      retranslate();
+//      retranslate();
+      setWindowTitle(tr("Inspector"));
       }
 
 //---------------------------------------------------------
@@ -311,10 +312,10 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         }
                   }
-            QWidget* ww = sa->takeWidget();
-            if (ww)
-                  ww->deleteLater();
-            sa->setWidget(ie);
+//            QWidget* ww = sa->takeWidget();
+//            if (ww)
+//                  ww->deleteLater();
+            sa->setWidget(ie);      // will destroy previous set widget
 
             //focus policies were set by hand in each inspector_*.ui. this code just helps keeping them like they are
             //also fixes mac problem. on Mac Qt::TabFocus doesn't work, but Qt::StrongFocus works

@@ -398,7 +398,8 @@ class ScoreElement {
       bool isStaffText() const       { return type() == ElementType::STAFF_TEXT || type() == ElementType::SYSTEM_TEXT; }
       bool isSLine() const;
       bool isSLineSegment() const;
-      bool isMeasureBase() const { return isMeasure() || isVBox() || isHBox() || isTBox() || isFBox(); }
+      bool isBox() const { return isVBox() || isHBox() || isTBox() || isFBox(); }
+      bool isMeasureBase() const { return isMeasure() || isBox(); }
       bool isText() const;
       };
 
@@ -430,7 +431,6 @@ static inline const DurationElement* toDurationElement(const ScoreElement* e) {
          || e->type() == ElementType::REPEAT_MEASURE || e->type() == ElementType::TUPLET);
       return (const DurationElement*)e;
       }
-
 static inline SlurTieSegment* toSlurTieSegment(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
       return (SlurTieSegment*)e;
@@ -446,6 +446,10 @@ static inline const MeasureBase* toMeasureBase(const ScoreElement* e) {
 static inline MeasureBase* toMeasureBase(ScoreElement* e) {
      Q_ASSERT(e == 0 || e->isMeasureBase());
       return (MeasureBase*)e;
+      }
+static inline Box* toBox(ScoreElement* e) {
+     Q_ASSERT(e == 0 || e->isBox());
+      return (Box*)e;
       }
 
 #define CONVERT(a)  \

@@ -59,11 +59,23 @@ TBox::~TBox()
 void TBox::layout()
       {
       setPos(QPointF());      // !?
-      bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
+      bbox().setRect(0.0, 0.0, system()->width(), 0);
       _text->layout();
-      _text->setPos(leftMargin() * DPMM, topMargin() * DPMM);
-      qreal h = _text->empty() ? _text->lineSpacing() : _text->height();
+
+      qreal h = _text->height();
+      qreal y = topMargin() * DPMM;
+#if 0
+      if (_text->align() & Align::BOTTOM)
+            y += h;
+      else if (_text->align() & Align::VCENTER)
+            y +=  h * .5;
+      else
+            ; // y = 0;
+#endif
+      _text->setPos(leftMargin() * DPMM, y);
+      h += topMargin() * DPMM + bottomMargin() * DPMM;
       bbox().setRect(0.0, 0.0, system()->width(), h);
+
       MeasureBase::layout();  // layout LayoutBreak's
       }
 
@@ -134,7 +146,7 @@ Element* TBox::drop(const DropData& data)
 
 void TBox::add(Element* e)
       {
-      if (e->type() == ElementType::TEXT) {
+      if (e->isText()) {
             // does not normally happen, since drop() handles this directly
             Text* t = toText(e);
             _text->undoSetText(t->xmlText());
