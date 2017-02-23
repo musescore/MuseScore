@@ -423,7 +423,7 @@ void Selection::appendChord(Chord* chord)
                   if (note->tieFor()->endElement()->type() == Element::Type::NOTE) {
                         Note* endNote = static_cast<Note*>(note->tieFor()->endElement());
                         Segment* s = endNote->chord()->segment();
-                        if (_endSegment && (s->tick() < _endSegment->tick()))
+                        if (s->tick() < tickEnd())
                               _el.append(note->tieFor());
                         }
                   }
