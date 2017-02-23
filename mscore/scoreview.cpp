@@ -2025,13 +2025,15 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                         // if any staff in selection has measure rest or repeat measure in last measure,
                         // extend rectangle to bar line
                         Segment* fs = s->measure()->first(Segment::Type::ChordRest);
-                        for (int i = staffStart; i < staffEnd; ++i) {
-                              if (!score()->staff(i)->show())
-                                    continue;
-                              ChordRest* cr = static_cast<ChordRest*>(fs->element(i * VOICES));
-                              if (cr && (cr->type() == Element::Type::REPEAT_MEASURE || cr->durationType() == TDuration::DurationType::V_MEASURE)) {
-                                    x2 = s->measure()->abbox().right() - _spatium * 0.5;
-                                    break;
+                        if (fs) {
+                              for (int i = staffStart; i < staffEnd; ++i) {
+                                    if (!score()->staff(i)->show())
+                                          continue;
+                                    ChordRest* cr = static_cast<ChordRest*>(fs->element(i * VOICES));
+                                    if (cr && (cr->type() == Element::Type::REPEAT_MEASURE || cr->durationType() == TDuration::            DurationType::V_MEASURE)) {
+                                          x2 = s->measure()->abbox().right() - _spatium * 0.5;
+                                          break;
+                                          }
                                     }
                               }
                         }
