@@ -2314,7 +2314,9 @@ void Score::cmdDeleteSelection()
             // keep track of linked elements that are deleted implicitly
             // so we don't try to delete them twice if they are also in selection
             QList<ScoreElement*> deletedElements;
-
+            // Similarly, deleting one spanner segment, will delete all of them
+            // so we don't try to delete them twice if they are also in selection
+            QList<Spanner*> deletedSpanners;
 
             for (Element* e : el) {
                   // these are the linked elements we are about to delete
@@ -2335,8 +2337,24 @@ void Score::cmdDeleteSelection()
                         }
 
                   // delete element if we have not done so already
-                  if (!deletedElements.contains(e))
+                  if (!deletedElements.contains(e)) {
+                        // do not delete two spanner segments from the same spanner
+                        if (e->isSpannerSegment()) {
+                              Spanner* spanner = static_cast<SpannerSegment*>(e)->spanner();
+                              if (deletedSpanners.contains(spanner))
+                                    continue;
+                              else {
+                                    QList<ScoreElement*> linkedSpanners;
+                                    if (spanner->links())
+                                          linkedSpanners = *spanner->links();
+                                    else
+                                          linkedSpanners.append(spanner);
+                                    for (ScoreElement* se : linkedSpanners)
+                                          deletedSpanners.append(static_cast<Spanner*>(se));
+                                    }
+                              }
                         deleteItem(e);
+                        }
 
                   // find element to select
                   if (!cr && tick >= 0 && track >= 0)
