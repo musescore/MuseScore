@@ -3546,7 +3546,10 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
             xml.tagE(dynTypeName);
             }
       else if (dynTypeName != "") {
-            xml.tag("other-dynamics", dynTypeName);
+            QString dynText = dynTypeName;
+            if (dyn->dynamicType() == Dynamic::Type::OTHER)
+                dynText = dyn->plainText();
+            xml.tag("other-dynamics", dynText);
             }
       xml.etag();
 
