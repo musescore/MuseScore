@@ -51,8 +51,10 @@ class ExampleView : public QFrame, public MuseScoreView {
       virtual void dragEnterEvent(QDragEnterEvent*);
       virtual void dragLeaveEvent(QDragLeaveEvent*);
       virtual void dragMoveEvent(QDragMoveEvent*);
+      virtual void wheelEvent(QWheelEvent*);
       virtual void dropEvent(QDropEvent*);
       virtual void mousePressEvent(QMouseEvent*);
+      void constraintCanvas(int *dxx);
       virtual QSize sizeHint() const;
 
    signals:

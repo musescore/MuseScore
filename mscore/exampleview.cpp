@@ -391,6 +391,63 @@ void ExampleView::dragExampleView(QMouseEvent* ev)
       if (dx == 0)
             return;
 
+      constraintCanvas(&dx);
+
+      // Perform the actual scrolling
+      _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
+         _matrix.m22(), _matrix.m23(), _matrix.dx()+dx, _matrix.dy(), _matrix.m33());
+      imatrix = _matrix.inverted();
+      scroll(dx, 0);
+      }
+
+void DragTransitionExampleView::onTransition(QEvent* e)
+      {
+      QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
+      QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
+      canvas->dragExampleView(me);
+      }
+
+//---------------------------------------------------------
+//   wheelEvent
+//---------------------------------------------------------
+
+void ExampleView::wheelEvent(QWheelEvent* event)
+       {
+      QPoint pixelsScrolled = event->pixelDelta();
+      QPoint stepsScrolled = event->angleDelta();
+      int dx = 0, dy = 0;
+      if (!pixelsScrolled.isNull()) {
+            dx = pixelsScrolled.x();
+            dy = pixelsScrolled.y();
+            }
+      else if (!stepsScrolled.isNull()) {
+            dx = static_cast<qreal>(stepsScrolled.x()) * qMax(2, width() / 10) / 120;
+            dy = static_cast<qreal>(stepsScrolled.y()) * qMax(2, height() / 10) / 120;
+            }
+
+      if (dx == 0) {
+            if (dy == 0)
+                  return;
+            else
+                  dx = dy;
+            }
+
+      constraintCanvas(&dx);
+
+      _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
+         _matrix.m22(), _matrix.m23(), _matrix.dx()+dx, _matrix.dy(), _matrix.m33());
+      imatrix = _matrix.inverted();
+      scroll(dx, 0);
+      }
+
+//-----------------------------------------------------------------------------
+//   constraintCanvas
+//-----------------------------------------------------------------------------
+
+void ExampleView::constraintCanvas (int* dxx)
+      {
+      int dx = *dxx;
+
       Q_ASSERT(_score->pages().front()->systems()->at(0)); // should exist if doLayout ran
 
       // form rectangle bounding the the system with a spatium margin and translate relative to view space
@@ -411,25 +468,12 @@ void ExampleView::dragExampleView(QMouseEvent* ev)
             // never move left if entire system already fits entirely within the frame
             if (systemScaledViewRect.width() < frameWidth)
                   dx = 0;
-
             // when moving left, ensure the right edge of systemScaledViewRect won't be left of frame's right edge
             else if (systemScaledViewRect.right() + dx < frameWidth)
                         dx = frameWidth - systemScaledViewRect.right();
             }
 
-      // Perform the actual scrolling
-      _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
-         _matrix.m22(), _matrix.m23(), _matrix.dx()+dx, _matrix.dy(), _matrix.m33());
-      imatrix = _matrix.inverted();
-      scroll(dx, 0);
+      *dxx = dx;
       }
-
-void DragTransitionExampleView::onTransition(QEvent* e)
-      {
-      QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
-      QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-      canvas->dragExampleView(me);
-      }
-
 }
 
