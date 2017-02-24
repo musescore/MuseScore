@@ -2610,6 +2610,39 @@ static bool doConvert(Score* cs, QString fn)
                   return true;
                   }
             }
+      else if (fn.endsWith(".jpg")) {
+            if (!exportScoreParts)
+                  return mscore->saveJpg(cs, fn);
+            else {
+                  if (cs->excerpts().size() == 0) {
+                        auto excerpts = Excerpt::createAllExcerpt(cs->masterScore());
+
+                        for (Excerpt* e: excerpts) {
+                              Score* nscore = new Score(e->oscore());
+                              e->setPartScore(nscore);
+                              nscore->setExcerpt(e);
+                              // nscore->setName(e->title()); // needed before AddExcerpt
+                              nscore->style().set(StyleIdx::createMultiMeasureRests, true);
+                              Excerpt::createExcerpt(e);
+                              cs->startCmd();
+                              cs->undo(new AddExcerpt(e));
+                              cs->endCmd();
+                              }
+                        }
+                  if (!mscore->saveJpg(cs, fn))
+                        return false;
+                  int idx = 0;
+                  int padding = QString("%1").arg(cs->excerpts().size()).size();
+                  for (Excerpt* e: cs->excerpts()) {
+                        QString suffix = QString("__excerpt__%1.jpg").arg(idx, padding, 10, QLatin1Char('0'));
+                        QString excerptFn = fn.left(fn.size() - 4) + suffix;
+                        if (!mscore->saveJpg(e->partScore(), excerptFn))
+                              return false;
+                        idx++;
+                        }
+                  return true;
+                  }
+            }
       else if (fn.endsWith(".svg")) {
             rv = mscore->saveSvg(cs, fn);
             }

@@ -1583,6 +1583,7 @@ void MuseScore::exportFile()
       QStringList fl;
       fl.append(tr("PDF File") + " (*.pdf)");
       fl.append(tr("PNG Bitmap Graphic") + " (*.png)");
+      fl.append(tr("JPEG Bitmap Graphic") + " (*.jpg)");
       fl.append(tr("Scalable Vector Graphics") + " (*.svg)");
 #ifdef HAS_AUDIOFILE
       fl.append(tr("Wave Audio") + " (*.wav)");
@@ -1659,6 +1660,7 @@ bool MuseScore::exportParts()
       QStringList fl;
       fl.append(tr("PDF File") + " (*.pdf)");
       fl.append(tr("PNG Bitmap Graphic") + " (*.png)");
+      fl.append(tr("JPEG Bitmap Graphic") + " (*.jpg)");
       fl.append(tr("Scalable Vector Graphics") + " (*.svg)");
 #ifdef HAS_AUDIOFILE
       fl.append(tr("Wave Audio") + " (*.wav)");
@@ -1857,6 +1859,10 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
       else if (ext == "png") {
             // save as png file *.png
             rv = savePng(cs, fn);
+            }
+      else if (ext == "jpg") {
+            // save as jpg file *.jpg
+            rv = saveJpg(cs, fn);
             }
       else if (ext == "svg") {
             // save as svg file *.svg
@@ -2451,9 +2457,12 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
                   }
 
             QString fileName(name);
-            if (fileName.endsWith(".png"))
+            QString suffix;
+            if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
+                  suffix = fileName.right(3);
                   fileName = fileName.left(fileName.size() - 4);
-            fileName += QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+                  }
+            fileName += QString("-%1.%2").arg(pageNumber+1, padding, 10, QLatin1Char('0')).arg(suffix);
             if (!converterMode) {
                   QFileInfo fip(fileName);
                   if(fip.exists() && !overwrite) {
@@ -2478,13 +2487,23 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
                               continue;
                         }
                   }
-            rv = printer.save(fileName, "png");
+            rv = printer.save(fileName);
             if (!rv)
                   break;
             }
       score->setPrinting(false);
       MScore::pixelRatio = pr;
       return rv;
+      }
+
+//---------------------------------------------------------
+//   saveJpg
+//    return true on success
+//---------------------------------------------------------
+
+bool MuseScore::saveJpg(Score* score, const QString& name)
+      {
+      return savePng(score, name, false, false, converterDpi, trimMargin, QImage::Format_ARGB32_Premultiplied);
       }
 
 //---------------------------------------------------------
