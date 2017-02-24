@@ -1300,6 +1300,9 @@ MuseScore::MuseScore()
       initOsc();
       startAutoSave();
 
+      QInputMethod* im = QGuiApplication::inputMethod();
+      connect(im, SIGNAL(localeChanged()), SLOT(inputMethodLocaleChanged()));
+
       if (enableExperimental) {
             cornerLabel = new QLabel(this);
             cornerLabel->setScaledContents(true);
@@ -2987,6 +2990,15 @@ void MuseScore::clipboardChanged()
       bool flag = true;
       getAction("paste")->setEnabled(flag);
       getAction("swap")->setEnabled(flag);
+      }
+
+//---------------------------------------------------------
+//   inputMethodLocaleChanged
+//---------------------------------------------------------
+
+void MuseScore::inputMethodLocaleChanged()
+      {
+      qDebug("Input method QLocale::Script enum now #%d.", QGuiApplication::inputMethod()->locale().script());
       }
 
 //---------------------------------------------------------
