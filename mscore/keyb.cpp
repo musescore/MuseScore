@@ -212,6 +212,20 @@ void ScoreView::editKey(QKeyEvent* ev)
                   }
             }
 
+
+#ifdef Q_OS_WIN // Japenese IME on Windows needs to know when Contrl/Alt/Shift/CapsLock is pressed while in predit
+      if (editObject->isText()) {
+            Text* text = static_cast<Text*>(editObject);
+            if (text->cursor()->format()->preedit() && QGuiApplication::inputMethod()->locale().script() == QLocale::JapaneseScript &&
+                ((key == Qt::Key_Control || (modifiers & Qt::ControlModifier)) ||
+                 (key == Qt::Key_Alt || (modifiers & Qt::AltModifier)) ||
+                 (key == Qt::Key_Shift || (modifiers & Qt::ShiftModifier)) ||
+                 (key == Qt::Key_CapsLock))) {
+                  return; // musescore will ignore this key event so that the IME can handle it
+                  }
+            }
+#endif
+
       if (!((modifiers & Qt::ShiftModifier) && (key == Qt::Key_Backtab))) {
             if (editObject->edit(this, curGrip, key, modifiers, s)) {
                   if (editObject->isText())

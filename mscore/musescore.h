@@ -430,6 +430,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void removeTab(int);
       void removeTab();
       void clipboardChanged();
+      void inputMethodLocaleChanged();
       void endSearch();
       void saveScoreDialogFilterSelected(const QString&);
 #ifdef OSC
