@@ -683,6 +683,13 @@
                    </widget>
                   </item>
                   <item>
+                   <widget class="QCheckBox" name="showTabFingering">
+                    <property name="text">
+                     <string>Show fingering in tablature</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
                    <spacer name="horizontalSpacer_6">
                     <property name="orientation">
                      <enum>Qt::Horizontal</enum>

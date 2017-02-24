@@ -1013,7 +1013,6 @@ void Score::undoAddElement(Element* element)
       {
       QList<Staff* > staffList;
       Staff* ostaff = element->staff();
-      bool TabFingering = (score()->styleB(StyleIdx::TabFingeringYes));
       int strack = -1;
       if (ostaff) {
             if (ostaff->score()->excerpt() && strack > -1)
@@ -1122,6 +1121,7 @@ void Score::undoAddElement(Element* element)
                   if (e == parent)
                         ne = element;
                   else {
+                        bool tabFingering = e->staff()->staffType(e->tick())->showTabFingering();
                         if (element->isGlissando()) {    // and other spanners with Anchor::NOTE
                               Note* newEnd = Spanner::endElementFromSpanner(static_cast<Glissando*>(element), e);
                               if (newEnd) {
@@ -1131,8 +1131,8 @@ void Score::undoAddElement(Element* element)
                               else              //couldn't find suitable start note
                                     continue;
                               }
-                        else if (element->isFingering() && e->staff()->isTabStaff(e->tick()) && !TabFingering)
-                              continue;   // tablature has no fingering
+                        else if (element->isFingering() && e->staff()->isTabStaff(e->tick()) && !tabFingering)
+                              continue;
                         else
                               ne = element->linkedClone();
                         }
@@ -2956,8 +2956,7 @@ void InsertRemoveMeasures::removeMeasures()
             }
       score->measures()->remove(fm, lm);
 
-//      if (score->firstMeasure())    // any measures left?
-            score->fixTicks();
+      score->fixTicks();
       if (fm->isMeasure()) {
             score->setPlaylistDirty();
 
@@ -2976,8 +2975,7 @@ void InsertRemoveMeasures::removeMeasures()
                         }
                   }
 
-            if (score->firstMeasure())
-                  score->insertTime(tick1, -(tick2 - tick1));
+            score->insertTime(tick1, -(tick2 - tick1));
             for (Spanner* sp : score->unmanagedSpanners()) {
                   if ((sp->tick() >= tick1 && sp->tick() < tick2) || (sp->tick2() >= tick1 && sp->tick2() < tick2))
                         sp->removeUnmanaged();
@@ -3002,7 +3000,7 @@ qDebug("remove system");
                         if (k != score->systems().end())
                               score->systems().erase(k);
                         // finally delete system
-                        score->deleteLater(s);
+                        delete s;
                         }
                   }
             }

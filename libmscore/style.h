@@ -212,7 +212,6 @@ enum class StyleIdx {
       hideEmptyStaves,
       dontHideStavesInFirstSystem,
       hideInstrumentNameIfOneInstrument,
-      TabFingeringYes,
       gateTime,
       tenutoGateTime,
       staccatoGateTime,
@@ -525,7 +524,6 @@ enum class StyleIdx {
       tupletFontBold,
       tupletFontItalic,
       tupletFontUnderline,
-      tupletAlign,
 
       systemFontFace,
       systemFontSize,
