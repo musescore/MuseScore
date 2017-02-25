@@ -727,21 +727,6 @@ void TestText::testChineseBasicSupplemental()
       QCOMPARE(text->xmlText(), QString("你屠槪槪真軔")); // deleted the two chars in the middle
       }
 
-/*   text->startEdit(0, QPoint());
-   text->moveCursorToEnd();
-   text->insertSym(SymId::segno);
-   text->endEdit();
-   QCOMPARE(text->xmlText(), QString("0123abcde<sym>segno</sym>")); */
-
-//  text->cursor()->setColumn(1); // makes sure recognizes that pasted text was a single symbol occupying only one column
-
-
-/*
-      void setLine(int val)         { _line = val; }
-      void setColumn(int val)       { _column = val; }
-      void setSelectLine(int val)   { _selectLine = val; }
-      void setSelectColumn(int val) { _selectColumn = val; }*/
-
 QTEST_MAIN(TestText)
 
 #include "tst_text.moc"
