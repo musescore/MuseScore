@@ -494,7 +494,7 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
                   }
             }
       else {
-            if (!_text.empty() && _text.back().format.type() == CharFormatType::TEXT)
+            if (!_text.empty() && _text.back().format.type() == CharFormatType::TEXT && _text.back().format == *cursor->format())
                   _text.back().text.append(s);
             else
                   _text.append(TextFragment(cursor, s));
