@@ -49,6 +49,8 @@ class TestText : public QObject, public MTest
       void testMixedSelectionDelete();
       void testChineseBasicSupplemental();
       void testDropUnicodeAfterSMUFLwhenCursorSetToSymbol();
+      void testDropBasicUnicodeWhenNotInEditMode();
+      void testDropSupplementaryUnicodeWhenNotInEditMode();
       };
 
 //---------------------------------------------------------
@@ -761,6 +763,48 @@ void TestText::testDropUnicodeAfterSMUFLwhenCursorSetToSymbol()
 
       text->endEdit();
       QCOMPARE(text->xmlText(), QString("<sym>noteheadWhole</sym>𝄎"));
+      }
+
+//---------------------------------------------------------
+///   testDropBasicUnicodeWhenNotInEditMode
+///     Simple test dropping basic unicode, but excercising the path when edit mode not already engaged
+//---------------------------------------------------------
+
+void TestText::testDropBasicUnicodeWhenNotInEditMode()
+      {
+      Text* text = new Text(score);
+      text->initSubStyle(SubStyle::DYNAMICS);
+      text->setPlainText(QString(""));
+      text->layout();
+
+      DropData dropFSymbol;
+      FSymbol* fsymbol = new FSymbol(score);
+      fsymbol->setCode(0x4D); // Basic Unicode code for 'M'
+      dropFSymbol.element = fsymbol;
+      text->drop(dropFSymbol);
+
+      QCOMPARE(text->xmlText(), QString("M"));
+      }
+
+//---------------------------------------------------------
+///   testDropSupplementaryUnicodeWhenNotInEditMode
+///     Simple test dropping supplementary unicode, but excercising the path when edit mode not already engaged
+//---------------------------------------------------------
+
+void TestText::testDropSupplementaryUnicodeWhenNotInEditMode()
+      {
+      Text* text = new Text(score);
+      text->initSubStyle(SubStyle::DYNAMICS);
+      text->setPlainText(QString(""));
+      text->layout();
+
+      DropData dropFSymbol;
+      FSymbol* fsymbol = new FSymbol(score);
+      fsymbol->setCode(0x0001D10E); // Supplementary Unicode code for '𝄎'
+      dropFSymbol.element = fsymbol;
+      text->drop(dropFSymbol);
+
+      QCOMPARE(text->xmlText(), QString("𝄎"));
       }
 
 QTEST_MAIN(TestText)
