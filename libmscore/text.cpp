@@ -2768,8 +2768,8 @@ Element* Text::drop(const DropData& data)
                   delete e;
 
                   if (_editMode) {
-                        if (code & 0xffff0000)
-                              insert(_cursor, QChar::highSurrogate(code),  QChar::lowSurrogate(code));
+                        if (QChar::requiresSurrogates(code))
+                              insert(_cursor, QChar::highSurrogate(code), QChar::lowSurrogate(code));
                         else
                               insert(_cursor, QChar(code));
                         layout1();
@@ -2778,7 +2778,12 @@ Element* Text::drop(const DropData& data)
                         }
                   else {
                         startEdit(data.view, data.pos);
-                        curLine().insert(_cursor, QChar(code));
+                        if (QChar::requiresSurrogates(code)) {
+                              QString surrogatePair = QString(QChar::highSurrogate(code)).append(QChar::lowSurrogate(code));
+                              curLine().insert(_cursor, surrogatePair);
+                              }
+                        else
+                              curLine().insert(_cursor, QChar(code));
                         endEdit();
                         }
                   }
