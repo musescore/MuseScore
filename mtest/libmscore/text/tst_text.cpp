@@ -48,6 +48,7 @@ class TestText : public QObject, public MTest
       void testPasteSymbolAndSupplemental();
       void testMixedSelectionDelete();
       void testChineseBasicSupplemental();
+      void testDropUnicodeAfterSMUFLwhenCursorSetToSymbol();
       };
 
 //---------------------------------------------------------
@@ -725,6 +726,41 @@ void TestText::testChineseBasicSupplemental()
       text->deletePreviousChar();
       text->endEdit();
       QCOMPARE(text->xmlText(), QString("你屠槪槪真軔")); // deleted the two chars in the middle
+      }
+
+//---------------------------------------------------------
+///   testDropUnicodeAfterSMUFLwhenCursorSetToSymbol
+///     Tests dropping unicode after SMUFL as described in https://github.com/musescore/MuseScore/pull/3020#issuecomment-281932322
+///     When appeding text after a symbol, TextBlock needs to always (regardless of the state of the cursor) append a new TEXT TextFragment after the SYMBOL TextFragment.
+//---------------------------------------------------------
+
+void TestText::testDropUnicodeAfterSMUFLwhenCursorSetToSymbol()
+      {
+      Text* text = new Text(score);
+      text->initSubStyle(SubStyle::DYNAMICS);
+      text->setPlainText(QString(""));
+      text->layout();
+      text->startEdit(0, QPoint());
+
+      Symbol* symbolSMUFL = new Symbol(score); // create a new element, as Measure::drop() will eventually delete it
+      symbolSMUFL->setSym(SymId::noteheadWhole);
+
+      DropData dropSMUFL;
+      dropSMUFL.element = symbolSMUFL;
+      text->drop(dropSMUFL);
+
+      // the bug happened when cursor is in symbol mode
+      CharFormat* cf = text->cursor()->format();
+      cf->setType(CharFormatType::SYMBOL);
+
+      DropData dropFSymbol;
+      FSymbol* fsymbol = new FSymbol(score);
+      fsymbol->setCode(0x0001D10E); // unicode hex code for '𝄎'
+      dropFSymbol.element = fsymbol;
+      text->drop(dropFSymbol);
+
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("<sym>noteheadWhole</sym>𝄎"));
       }
 
 QTEST_MAIN(TestText)
