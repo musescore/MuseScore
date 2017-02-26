@@ -422,7 +422,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   npitch        = line2pitch(line, clef, key);
 
                   int ntpc   = pitch2tpc(npitch, key, Prefer::NEAREST);
-                  Interval v = on->part()->instrument()->transpose();
+                  Interval v = on->part()->instrument(tick)->transpose();
                   if (v.isZero())
                         ntpc1 = ntpc2 = ntpc;
                   else {
@@ -1235,8 +1235,11 @@ void Score::upDown(bool up, UpDownMode mode)
                   case StaffGroup::PERCUSSION:
                         {
                         const Drumset* ds = part->instrument()->drumset();
-                        if (ds)
+                        if (ds) {
                               newPitch = up ? ds->prevPitch(pitch) : ds->nextPitch(pitch);
+                              newTpc1 = pitch2tpc(newPitch, Key::C, Prefer::NEAREST);
+                              newTpc2 = newTpc1;
+                              }
                         }
                         break;
                   case StaffGroup::TAB:

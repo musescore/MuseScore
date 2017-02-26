@@ -490,19 +490,26 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
 //    key -   -7(Cb) - +7(C#)
 //---------------------------------------------------------
 
-void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval& interval)
+void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval& interval, bool useInstrument, bool flip)
       {
+      Interval firstInterval = interval;
+      Interval segmentInterval = interval;
       for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
             Staff* st = staff(staffIdx);
             if (st->staffType()->group() == StaffGroup::PERCUSSION)
                   continue;
 
-            bool createKey = tickStart == 0;
+            bool createKey = tickStart <= 0;    // 0 and -1 are both valid values to indicate start of score
             for (Segment* s = firstSegment(Segment::Type::KeySig); s; s = s->next1(Segment::Type::KeySig)) {
                   if (s->tick() < tickStart)
                         continue;
-                  if (s->tick() >= tickEnd)
+                  if (tickEnd != -1 && s->tick() >= tickEnd)
                         break;
+                  if (useInstrument) {
+                        segmentInterval = st->part()->instrument(s->tick())->transpose();
+                        if (flip)
+                              segmentInterval.flip();
+                        }
                   KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
                   if (!ks)
                         continue;
@@ -512,7 +519,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                         createKey = false;
                   if (!ks->isCustom() && !ks->isAtonal()) {
                         Key key  = st->key(s->tick());
-                        Key nKey = transposeKey(key, interval);
+                        Key nKey = transposeKey(key, segmentInterval);
                         // remove initial C major key signatures
                         if (nKey == Key::C && s->tick() == 0) {
                               undo(new RemoveElement(ks));
@@ -528,7 +535,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   }
             if (createKey && firstMeasure()) {
                   Key key  = Key::C;
-                  Key nKey = transposeKey(key, interval);
+                  Key nKey = transposeKey(key, firstInterval);
                   KeySigEvent ke;
                   ke.setKey(nKey);
                   KeySig* ks = new KeySig(this);
@@ -664,20 +671,32 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
 //   transpositionChanged
 //---------------------------------------------------------
 
-void Score::transpositionChanged(Part* part, Interval oldV)
+void Score::transpositionChanged(Part* part, Interval oldV, int tickStart, int tickEnd)
       {
-      Interval v = part->instrument()->transpose();
+      Interval v = part->instrument(tickStart)->transpose();
       v.flip();
       Interval diffV(oldV.chromatic + v.chromatic);
 
       // transpose keys first
-      if (!styleB(StyleIdx::concertPitch)) {
-            int tickEnd = lastSegment() ? lastSegment()->tick() : 0;
-            transposeKeys(part->startTrack() / VOICES, part->endTrack() / VOICES, 0, tickEnd, diffV);
+      QList<Score*> scores;
+      for (Staff* ls : part->staff(0)->staffList()) {
+            // TODO: special handling for linked staves within a score
+            // could be useful for capo
+            Score* score = ls->score();
+            if (scores.contains(score))
+                  continue;
+            scores.append(score);
+            Part* lp = ls->part();
+            if (!score->styleB(StyleIdx::concertPitch))
+                  score->transposeKeys(lp->startTrack() / VOICES, lp->endTrack() / VOICES, tickStart, tickEnd, diffV);
             }
 
       // now transpose notes and chord symbols
       for (Segment* s = firstSegment(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
+            if (s->tick() < tickStart)
+                  continue;
+            if (tickEnd != -1 && s->tick() >= tickEnd)
+                  break;
             for (Staff* st : *part->staves()) {
                   if (st->staffType()->group() == StaffGroup::PERCUSSION)
                         continue;

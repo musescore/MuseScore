@@ -459,7 +459,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                                           KeySig* okeysig = new KeySig(score);
                                           okeysig->setKeySigEvent(staff->keySigEvent(tick1));
                                           if (!score->styleB(StyleIdx::concertPitch) && !okeysig->isCustom() && !okeysig->isAtonal()) {
-                                                Interval v = staff->part()->instrument()->transpose();
+                                                Interval v = staff->part()->instrument(tick1)->transpose();
                                                 if (!v.isZero()) {
                                                       Key k = okeysig->key();
                                                       okeysig->setKey(transposeKey(k, v));

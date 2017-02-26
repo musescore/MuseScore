@@ -900,7 +900,7 @@ Element* ChordRest::drop(const DropData& data)
                   {
                   // transpose
                   Harmony* harmony = static_cast<Harmony*>(e);
-                  Interval interval = staff()->part()->instrument()->transpose();
+                  Interval interval = staff()->part()->instrument(tick())->transpose();
                   if (!score()->styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                         interval.flip();
                         int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);

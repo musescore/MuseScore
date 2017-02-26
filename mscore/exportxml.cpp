@@ -1272,7 +1272,7 @@ static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       {
 
       const Staff* st = note->staff();
-      const Instrument* instr = st->part()->instrument();
+      const Instrument* instr = st->part()->instrument();   // TODO: tick
       const Interval intval = instr->transpose();
 
       s      = tpc2stepName(note->tpc());
