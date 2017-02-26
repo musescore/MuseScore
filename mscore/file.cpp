@@ -1924,6 +1924,7 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
       QSizeF size(cs->styleD(StyleIdx::pageWidth), cs->styleD(StyleIdx::pageHeight));
       QPageSize ps(QPageSize::id(size, QPageSize::Inch));
       printerDev.setPageSize(ps);
+      printerDev.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
 
       printerDev.setCreator("MuseScore Version: " VERSION);
       if (!printerDev.setPageMargins(QMarginsF()))
@@ -1980,7 +1981,9 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       printerDev.setResolution(preferences.exportPdfDpi);
 
       QSizeF size(firstScore->styleD(StyleIdx::pageWidth), firstScore->styleD(StyleIdx::pageHeight));
-      printerDev.setPaperSize(size, QPrinter::Inch);
+      QPageSize ps(QPageSize::id(size, QPageSize::Inch));
+      printerDev.setPageSize(ps);
+      printerDev.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
 
       printerDev.setCreator("MuseScore Version: " VERSION);
       printerDev.setFullPage(true);
@@ -2022,8 +2025,10 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             s->doLayout();
             s->setPrinting(true);
 
-//            const PageFormat* pf = s->pageFormat();
-//            printerDev.setPaperSize(pf->size(), QPrinter::Inch);
+            //QSizeF size(s->styleD(StyleIdx::pageWidth), s->styleD(StyleIdx::pageHeight));
+            //QPageSize ps(QPageSize::id(size, QPageSize::Inch));
+            //printerDev.setPageSize(ps);
+            //printerDev.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
 
             const QList<Page*> pl = s->pages();
             int pages    = pl.size();
