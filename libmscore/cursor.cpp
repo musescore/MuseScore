@@ -27,6 +27,25 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   ElementW
+//---------------------------------------------------------
+
+QVariant ElementW::get(const QString& s) const
+      {
+      QVariant val;
+      if (e) {
+            P_ID pid = propertyId(s);
+            val = e->getProperty(pid);
+            if (propertyType(pid) == P_TYPE::FRACTION) {
+                  Fraction f(val.value<Fraction>());
+                  FractionWrapper*  fw = new FractionWrapper(f);
+                  return QVariant::fromValue(fw);
+                  }
+            }
+      return val;
+      }
+
+//---------------------------------------------------------
 //   Cursor
 //---------------------------------------------------------
 
@@ -37,6 +56,10 @@ Cursor::Cursor(Score* s)
       _segment = 0;
       setScore(s);
       }
+
+//---------------------------------------------------------
+//   setScore
+//---------------------------------------------------------
 
 void Cursor::setScore(Score* s)
       {
@@ -53,6 +76,9 @@ void Cursor::setScore(Score* s)
 
 void Cursor::rewind(int type)
       {
+      //
+      // rewind to start of score
+      //
       if (type == 0) {
             _segment = 0;
             Measure* m = score()->firstMeasure();
@@ -61,11 +87,17 @@ void Cursor::rewind(int type)
                   nextInTrack();
                   }
             }
+      //
+      // rewind to start of selection
+      //
       else if (type == 1) {
             _segment  = score()->selection().startSegment();
             _track    = score()->selection().staffStart() * VOICES;
             nextInTrack();
             }
+      //
+      // rewind to end of selection
+      //
       else if (type == 2) {
             _segment  = score()->selection().endSegment();
             _track    = (score()->selection().staffEnd() * VOICES) - 1;  // be sure _track exists
@@ -107,8 +139,6 @@ bool Cursor::nextMeasure()
             return false;
             }
       _segment = m->first(_filter);
-//      while (seg && seg->element(_track) == 0)
-//            seg = seg->next1(_filter);
       nextInTrack();
       return _segment != 0;
       }
@@ -201,21 +231,30 @@ qreal Cursor::tempo()
       }
 
 //---------------------------------------------------------
+//   segment
+//---------------------------------------------------------
+
+ElementW* Cursor::segment() const
+      {
+      return _segment ? new ElementW(_segment) : 0;
+      }
+
+//---------------------------------------------------------
 //   element
 //---------------------------------------------------------
 
-Element* Cursor::element() const
+ElementW* Cursor::element() const
       {
-      return _segment ? _segment->element(_track) : 0;
+      return _segment && _segment->element(_track) ? new ElementW(_segment->element(_track)) : 0;
       }
 
 //---------------------------------------------------------
 //   measure
 //---------------------------------------------------------
 
-Measure* Cursor::measure() const
+ElementW* Cursor::measure() const
       {
-      return _segment ? _segment->measure() : 0;
+      return _segment ? new ElementW(_segment->measure()) : 0;
       }
 
 //---------------------------------------------------------

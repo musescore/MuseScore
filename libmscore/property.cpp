@@ -132,7 +132,6 @@ static constexpr PropertyData propertyList[] = {
       { P_ID::FBPARENTHESIS3,          "fbparenthesis3",          false, "",                      P_TYPE::INT             },
       { P_ID::FBPARENTHESIS4,          "fbparenthesis4",          false, "",                      P_TYPE::INT             },
       { P_ID::FBPARENTHESIS5,          "fbparenthesis5",          false, "",                      P_TYPE::INT             },
-//      { P_ID::VOLTA_TYPE,              "volta_type",              false, "",                      P_TYPE::INT             },
       { P_ID::OTTAVA_TYPE,             "ottava_type",             false, "",                      P_TYPE::INT             },
       { P_ID::NUMBERS_ONLY,            "numbers_only",            false, "numbersOnly",           P_TYPE::BOOL            },
       { P_ID::TRILL_TYPE,              "trill_type",              false, "",                      P_TYPE::INT             },
@@ -309,6 +308,19 @@ static constexpr PropertyData propertyList[] = {
 
       { P_ID::END, "", false, "", P_TYPE::INT }
       };
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+P_ID propertyId(const QString& s)
+      {
+      for (const PropertyData& pd : propertyList) {
+            if (pd.qml == s)
+                  return pd.id;
+            }
+      return P_ID::END;
+      }
 
 //---------------------------------------------------------
 //   propertyType

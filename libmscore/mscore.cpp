@@ -396,7 +396,7 @@ QQmlEngine* MScore::qml()
       if (_qml == 0) {
             //-----------some qt bindings
             _qml = new QQmlEngine;
-#if 0
+
 #ifdef Q_OS_WIN
             QStringList importPaths;
             QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
@@ -416,8 +416,12 @@ QQmlEngine* MScore::qml()
 
             qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
             qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
-//            qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
+
             qmlRegisterType<Score>      ("MuseScore", 1, 0, "Score");
+            qmlRegisterType<Cursor>     ("MuseScore", 1, 0, "Cursor");
+            qmlRegisterType<ElementW>   ("MuseScore", 1, 0, "Element");
+            qRegisterMetaType<ElementW*>("ElementWrapper*");
+#if 0
             qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
             qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
             qmlRegisterType<Note>       ("MuseScore", 1, 0, "Note");
@@ -425,7 +429,6 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
             qmlRegisterType<Rest>       ("MuseScore", 1, 0, "Rest");
             qmlRegisterType<Measure>    ("MuseScore", 1, 0, "Measure");
-            qmlRegisterType<Cursor>     ("MuseScore", 1, 0, "Cursor");
             qmlRegisterType<StaffText>  ("MuseScore", 1, 0, "StaffText");
             qmlRegisterType<Part>       ("MuseScore", 1, 0, "Part");
             qmlRegisterType<Staff>      ("MuseScore", 1, 0, "Staff");
@@ -447,21 +450,18 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<Excerpt>    ("MuseScore", 1, 0, "Excerpt");
             qmlRegisterType<BarLine>    ("MuseScore", 1, 0, "BarLine");
 
-            qmlRegisterType<FractionWrapper>   ("MuseScore", 1, 1, "Fraction");
-            qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
-
-            qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
-               "Element", tr("you cannot create an element"));
 
             //classed enumerations
-//            qmlRegisterUncreatableType<MSQE_StyledPropertyListIdx>("MuseScore", 1, 0, "StyledPropertyListIdx", tr("You can't create an enum"));
-//            qmlRegisterUncreatableType<MSQE_BarLineType>("MuseScore", 1, 0, "BarLineType", tr("You can't create an enum"));
+            qmlRegisterUncreatableType<MSQE_StyledPropertyListIdx>("MuseScore", 1, 0, "StyledPropertyListIdx", tr("You can't create an enum"));
+            qmlRegisterUncreatableType<MSQE_BarLineType>("MuseScore", 1, 0, "BarLineType", tr("You can't create an enum"));
 
             //-----------virtual classes
             qmlRegisterType<ChordRest>();
             qmlRegisterType<SlurTie>();
             qmlRegisterType<Spanner>();
 #endif
+            qmlRegisterType<FractionWrapper>   ("MuseScore", 1, 1, "Fraction");
+            qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
             }
       return _qml;
       }

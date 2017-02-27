@@ -85,7 +85,7 @@ class Fraction {
 //---------------------------------------------------------
 
 class FractionWrapper : public QObject {
-      Q_GADGET
+      Q_OBJECT
       Q_PROPERTY(int numerator READ numerator)
       Q_PROPERTY(int denominator READ denominator)
       Q_PROPERTY(int ticks READ ticks)
