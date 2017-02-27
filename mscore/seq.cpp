@@ -986,9 +986,9 @@ void Seq::collectEvents()
       //do not collect even while playing
       if (state ==  Transport::PLAY)
             return;
+      mutex.lock();
       events.clear();
 
-      mutex.lock();
       cs->renderMidi(&events);
       endTick = 0;
 
@@ -1035,6 +1035,7 @@ void Seq::setPos(int utick)
       stopNotes(-1, true);
 
       int ucur;
+      mutex.lock();
       if (playPos != events.end())
             ucur = cs->repeatList()->utick2tick(playPos->first);
       else
@@ -1043,7 +1044,6 @@ void Seq::setPos(int utick)
             updateSynthesizerState(ucur, utick);
 
       playTime  = cs->utick2utime(utick) * MScore::sampleRate;
-      mutex.lock();
       playPos   = events.lower_bound(utick);
       mutex.unlock();
       }
