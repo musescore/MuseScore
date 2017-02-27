@@ -188,6 +188,20 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       }
 
 //---------------------------------------------------------
+//   styleChanged
+//---------------------------------------------------------
+
+void Page::styleChanged()
+      {
+      Text* t = score()->headerText();
+      if (t)
+            t->styleChanged();
+      t = score()->footerText();
+      if (t)
+            t->styleChanged();
+      }
+
+//---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 

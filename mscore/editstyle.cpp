@@ -246,6 +246,18 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::longInstrumentFontItalic,    false, longInstrumentFontItalic,      resetLongInstrumentFontItalic },
       { StyleIdx::longInstrumentFontUnderline, false, longInstrumentFontUnderline,   resetLongInstrumentFontUnderline },
 
+      { StyleIdx::headerFontFace,      false, headerFontFace,        resetHeaderFontFace },
+      { StyleIdx::headerFontSize,      false, headerFontSize,        resetHeaderFontSize },
+      { StyleIdx::headerFontBold,      false, headerFontBold,        resetHeaderFontBold },
+      { StyleIdx::headerFontItalic,    false, headerFontItalic,      resetHeaderFontItalic },
+      { StyleIdx::headerFontUnderline, false, headerFontUnderline,   resetHeaderFontUnderline },
+
+      { StyleIdx::footerFontFace,      false, footerFontFace,        resetFooterFontFace },
+      { StyleIdx::footerFontSize,      false, footerFontSize,        resetFooterFontSize },
+      { StyleIdx::footerFontBold,      false, footerFontBold,        resetFooterFontBold },
+      { StyleIdx::footerFontItalic,    false, footerFontItalic,      resetFooterFontItalic },
+      { StyleIdx::footerFontUnderline, false, footerFontUnderline,   resetFooterFontUnderline },
+
       { StyleIdx::beamDistance,            true,  beamDistance,                 0 },
       { StyleIdx::beamNoSlope,             false, beamNoSlope,                  0 },
       { StyleIdx::graceNoteMag,            true,  graceNoteSize,                0 },
