@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1154</width>
-    <height>1086</height>
+    <width>1210</width>
+    <height>1215</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -171,7 +171,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -1059,6 +1059,381 @@
         <property name="spacing">
          <number>0</number>
         </property>
+        <item row="1" column="0">
+         <widget class="QGroupBox" name="showFooter">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="title">
+           <string>Footer Text</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_22">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QCheckBox" name="showFooterFirstPage">
+               <property name="toolTip">
+                <string>Show footer also on first page</string>
+               </property>
+               <property name="text">
+                <string>Show first</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="footerOddEven">
+               <property name="toolTip">
+                <string>Use odd/even page footer</string>
+               </property>
+               <property name="text">
+                <string>Odd/Even</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QGridLayout" name="gridLayout_6">
+             <property name="spacing">
+              <number>10</number>
+             </property>
+             <item row="1" column="0">
+              <widget class="QLabel" name="labelOddFooter">
+               <property name="text">
+                <string>Odd</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QTextEdit" name="oddFooterL">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="labelMiddleFooter">
+               <property name="text">
+                <string>Middle</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QTextEdit" name="oddFooterC">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QTextEdit" name="evenFooterL">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="labelEvenFooter">
+               <property name="text">
+                <string>Even</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="labelLeftFooter">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Left</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QTextEdit" name="evenFooterC">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="QTextEdit" name="evenFooterR">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QTextEdit" name="oddFooterR">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelPageFooter">
+               <property name="text">
+                <string>Page</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLabel" name="labelRightFooter">
+               <property name="text">
+                <string>Right</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QWidget" name="showMeasureNumber_5" native="true">
+             <layout class="QGridLayout" name="_7">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <item row="0" column="4">
+               <widget class="QDoubleSpinBox" name="footerFontSize">
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="minimum">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="7">
+               <layout class="QHBoxLayout" name="horizontalLayout_21">
+                <item>
+                 <widget class="QPushButton" name="footerFontBold">
+                  <property name="accessibleName">
+                   <string>Bold</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="resetFooterFontBold">
+                  <property name="toolTip">
+                   <string>Reset to default</string>
+                  </property>
+                  <property name="accessibleName">
+                   <string>Reset 'Bold' value</string>
+                  </property>
+                  <property name="text">
+                   <string notr="true"/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="footerFontItalic">
+                  <property name="accessibleName">
+                   <string>Italic</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="resetFooterFontItalic">
+                  <property name="toolTip">
+                   <string>Reset to default</string>
+                  </property>
+                  <property name="accessibleName">
+                   <string>Reset 'Italic' value</string>
+                  </property>
+                  <property name="text">
+                   <string notr="true"/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="footerFontUnderline">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="accessibleName">
+                   <string>Underline</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/format-text-underline.svg</normaloff>:/data/icons/format-text-underline.svg</iconset>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="resetFooterFontUnderline">
+                  <property name="toolTip">
+                   <string>Reset to default</string>
+                  </property>
+                  <property name="accessibleName">
+                   <string>Reset 'Underline' value</string>
+                  </property>
+                  <property name="text">
+                   <string notr="true"/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_165">
+                <property name="text">
+                 <string>Font face:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QFontComboBox" name="footerFontFace">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QLabel" name="label_164">
+                <property name="text">
+                 <string>size:</string>
+                </property>
+                <property name="indent">
+                 <number>10</number>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QToolButton" name="resetFooterFontFace">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Font face' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="6">
+               <widget class="QLabel" name="label_166">
+                <property name="text">
+                 <string>style:</string>
+                </property>
+                <property name="indent">
+                 <number>11</number>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="5">
+               <widget class="QToolButton" name="resetFooterFontSize">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Font size' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
         <item row="0" column="0">
          <widget class="QGroupBox" name="showHeader">
           <property name="sizePolicy">
@@ -1286,187 +1661,198 @@
              </item>
             </layout>
            </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QGroupBox" name="showFooter">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="title">
-           <string>Footer Text</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_22">
-           <property name="spacing">
-            <number>0</number>
-           </property>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
-              <widget class="QCheckBox" name="showFooterFirstPage">
-               <property name="toolTip">
-                <string>Show footer also on first page</string>
-               </property>
-               <property name="text">
-                <string>Show first</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="footerOddEven">
-               <property name="toolTip">
-                <string>Use odd/even page footer</string>
-               </property>
-               <property name="text">
-                <string>Odd/Even</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_3">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QGridLayout" name="gridLayout_6">
-             <property name="spacing">
-              <number>10</number>
-             </property>
-             <item row="1" column="0">
-              <widget class="QLabel" name="labelOddFooter">
-               <property name="text">
-                <string>Odd</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QTextEdit" name="oddFooterL">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>30</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QLabel" name="labelMiddleFooter">
-               <property name="text">
-                <string>Middle</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QTextEdit" name="oddFooterC">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>30</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QTextEdit" name="evenFooterL">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>30</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="labelEvenFooter">
-               <property name="text">
-                <string>Even</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="labelLeftFooter">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Left</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QTextEdit" name="evenFooterC">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>30</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="3">
-              <widget class="QTextEdit" name="evenFooterR">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>30</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="3">
-              <widget class="QTextEdit" name="oddFooterR">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>30</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="labelPageFooter">
-               <property name="text">
-                <string>Page</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="3">
-              <widget class="QLabel" name="labelRightFooter">
-               <property name="text">
-                <string>Right</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <widget class="QWidget" name="showMeasureNumber_4" native="true">
+             <layout class="QGridLayout" name="_6">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <item row="0" column="1">
+               <widget class="QFontComboBox" name="headerFontFace">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_162">
+                <property name="text">
+                 <string>Font face:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QToolButton" name="resetHeaderFontFace">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Font face' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QLabel" name="label_161">
+                <property name="text">
+                 <string>size:</string>
+                </property>
+                <property name="indent">
+                 <number>10</number>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="5">
+               <widget class="QToolButton" name="resetHeaderFontSize">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Font size' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
+               <widget class="QDoubleSpinBox" name="headerFontSize">
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="minimum">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="6">
+               <widget class="QLabel" name="label_163">
+                <property name="text">
+                 <string>style:</string>
+                </property>
+                <property name="indent">
+                 <number>10</number>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="7">
+               <layout class="QHBoxLayout" name="horizontalLayout_20">
+                <item>
+                 <widget class="QPushButton" name="headerFontBold">
+                  <property name="accessibleName">
+                   <string>Bold</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="resetHeaderFontBold">
+                  <property name="toolTip">
+                   <string>Reset to default</string>
+                  </property>
+                  <property name="accessibleName">
+                   <string>Reset 'Bold' value</string>
+                  </property>
+                  <property name="text">
+                   <string notr="true"/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="headerFontItalic">
+                  <property name="accessibleName">
+                   <string>Italic</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="resetHeaderFontItalic">
+                  <property name="toolTip">
+                   <string>Reset to default</string>
+                  </property>
+                  <property name="accessibleName">
+                   <string>Reset 'Italic' value</string>
+                  </property>
+                  <property name="text">
+                   <string notr="true"/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="headerFontUnderline">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="accessibleName">
+                   <string>Underline</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/format-text-underline.svg</normaloff>:/data/icons/format-text-underline.svg</iconset>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="resetHeaderFontUnderline">
+                  <property name="toolTip">
+                   <string>Reset to default</string>
+                  </property>
+                  <property name="accessibleName">
+                   <string>Reset 'Underline' value</string>
+                  </property>
+                  <property name="text">
+                   <string notr="true"/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
            </item>
           </layout>
          </widget>
