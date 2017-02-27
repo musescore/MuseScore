@@ -739,7 +739,7 @@ void TestText::testChineseBasicSupplemental()
 void TestText::testDropUnicodeAfterSMUFLwhenCursorSetToSymbol()
       {
       Text* text = new Text(score);
-      text->initSubStyle(SubStyle::DYNAMICS);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
       text->setPlainText(QString(""));
       text->layout();
       text->startEdit(0, QPoint());
@@ -773,7 +773,7 @@ void TestText::testDropUnicodeAfterSMUFLwhenCursorSetToSymbol()
 void TestText::testDropBasicUnicodeWhenNotInEditMode()
       {
       Text* text = new Text(score);
-      text->initSubStyle(SubStyle::DYNAMICS);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
       text->setPlainText(QString(""));
       text->layout();
 
@@ -794,7 +794,7 @@ void TestText::testDropBasicUnicodeWhenNotInEditMode()
 void TestText::testDropSupplementaryUnicodeWhenNotInEditMode()
       {
       Text* text = new Text(score);
-      text->initSubStyle(SubStyle::DYNAMICS);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
       text->setPlainText(QString(""));
       text->layout();
 
