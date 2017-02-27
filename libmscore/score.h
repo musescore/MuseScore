@@ -346,7 +346,7 @@ class Score : public QObject, ScoreElement {
       Q_OBJECT
       Q_PROPERTY(int                            duration          READ duration)
 //      Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
-      Q_PROPERTY(Ms::Measure*                   firstMeasure      READ firstMeasure)
+//      Q_PROPERTY(Ms::Measure*                   firstMeasure      READ firstMeasure)
       Q_PROPERTY(Ms::Measure*                   firstMeasureMM    READ firstMeasureMM)
       Q_PROPERTY(int                            harmonyCount      READ harmonyCount)
       Q_PROPERTY(bool                           hasHarmonies      READ hasHarmonies)
@@ -922,7 +922,7 @@ class Score : public QObject, ScoreElement {
       MeasureBase* first() const;
       MeasureBase* firstMM() const;
       MeasureBase* last()  const;
-      Ms::Measure* firstMeasure() const;
+      Q_INVOKABLE Ms::Measure* firstMeasure() const;
       Ms::Measure* firstMeasureMM() const;
       Ms::Measure* lastMeasure() const;
       Ms::Measure* lastMeasureMM() const;
