@@ -478,12 +478,14 @@ static const StyleType styleTypes[] {
       { StyleIdx::longInstrumentFontBold,        "longInstrumentFontBold",       false },
       { StyleIdx::longInstrumentFontItalic,      "longInstrumentFontItalic",     false },
       { StyleIdx::longInstrumentFontUnderline,   "longInstrumentFontUnderline",  false },
+      { StyleIdx::longInstrumentAlign,           "longInstrumentAlign",          QVariant::fromValue(Align::RIGHT | Align::VCENTER) },
 
       { StyleIdx::shortInstrumentFontFace,       "shortInstrumentFontFace",      "FreeSerif" },
       { StyleIdx::shortInstrumentFontSize,       "shortInstrumentFontSize",      12.0 },
       { StyleIdx::shortInstrumentFontBold,       "shortInstrumentFontBold",      false },
       { StyleIdx::shortInstrumentFontItalic,     "shortInstrumentFontItalic",    false },
       { StyleIdx::shortInstrumentFontUnderline,  "shortInstrumentFontUnderline", false },
+      { StyleIdx::shortInstrumentAlign,          "shortInstrumentAlign",         QVariant::fromValue(Align::RIGHT | Align::VCENTER) },
 
       { StyleIdx::partInstrumentFontFace,        "partInstrumentFontFace",       "FreeSerif" },
       { StyleIdx::partInstrumentFontSize,        "partInstrumentFontSize",       18.0 },
@@ -862,6 +864,7 @@ const std::vector<StyledProperty> longInstrumentStyle {
       { StyleIdx::longInstrumentFontBold,             P_ID::FONT_BOLD              },
       { StyleIdx::longInstrumentFontItalic,           P_ID::FONT_ITALIC            },
       { StyleIdx::longInstrumentFontUnderline,        P_ID::FONT_UNDERLINE         },
+      { StyleIdx::longInstrumentAlign,                P_ID::ALIGN                  },
       };
 
 const std::vector<StyledProperty> shortInstrumentStyle {
@@ -870,6 +873,7 @@ const std::vector<StyledProperty> shortInstrumentStyle {
       { StyleIdx::shortInstrumentFontBold,            P_ID::FONT_BOLD              },
       { StyleIdx::shortInstrumentFontItalic,          P_ID::FONT_ITALIC            },
       { StyleIdx::shortInstrumentFontUnderline,       P_ID::FONT_UNDERLINE         },
+      { StyleIdx::shortInstrumentAlign,               P_ID::ALIGN                  },
       };
 
 const std::vector<StyledProperty> partInstrumentStyle {
