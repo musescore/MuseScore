@@ -48,6 +48,9 @@ class TestText : public QObject, public MTest
       void testPasteSymbolAndSupplemental();
       void testMixedSelectionDelete();
       void testChineseBasicSupplemental();
+      void testDropUnicodeAfterSMUFLwhenCursorSetToSymbol();
+      void testDropBasicUnicodeWhenNotInEditMode();
+      void testDropSupplementaryUnicodeWhenNotInEditMode();
       };
 
 //---------------------------------------------------------
@@ -725,6 +728,83 @@ void TestText::testChineseBasicSupplemental()
       text->deletePreviousChar();
       text->endEdit();
       QCOMPARE(text->xmlText(), QString("你屠槪槪真軔")); // deleted the two chars in the middle
+      }
+
+//---------------------------------------------------------
+///   testDropUnicodeAfterSMUFLwhenCursorSetToSymbol
+///     Tests dropping unicode after SMUFL as described in https://github.com/musescore/MuseScore/pull/3020#issuecomment-281932322
+///     When appeding text after a symbol, TextBlock needs to always (regardless of the state of the cursor) append a new TEXT TextFragment after the SYMBOL TextFragment.
+//---------------------------------------------------------
+
+void TestText::testDropUnicodeAfterSMUFLwhenCursorSetToSymbol()
+      {
+      Text* text = new Text(score);
+      text->initSubStyle(SubStyle::DYNAMICS);
+      text->setPlainText(QString(""));
+      text->layout();
+      text->startEdit(0, QPoint());
+
+      Symbol* symbolSMUFL = new Symbol(score); // create a new element, as Measure::drop() will eventually delete it
+      symbolSMUFL->setSym(SymId::noteheadWhole);
+
+      DropData dropSMUFL;
+      dropSMUFL.element = symbolSMUFL;
+      text->drop(dropSMUFL);
+
+      // the bug happened when cursor is in symbol mode
+      CharFormat* cf = text->cursor()->format();
+      cf->setType(CharFormatType::SYMBOL);
+
+      DropData dropFSymbol;
+      FSymbol* fsymbol = new FSymbol(score);
+      fsymbol->setCode(0x0001D10E); // unicode hex code for '𝄎'
+      dropFSymbol.element = fsymbol;
+      text->drop(dropFSymbol);
+
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("<sym>noteheadWhole</sym>𝄎"));
+      }
+
+//---------------------------------------------------------
+///   testDropBasicUnicodeWhenNotInEditMode
+///     Simple test dropping basic unicode, but excercising the path when edit mode not already engaged
+//---------------------------------------------------------
+
+void TestText::testDropBasicUnicodeWhenNotInEditMode()
+      {
+      Text* text = new Text(score);
+      text->initSubStyle(SubStyle::DYNAMICS);
+      text->setPlainText(QString(""));
+      text->layout();
+
+      DropData dropFSymbol;
+      FSymbol* fsymbol = new FSymbol(score);
+      fsymbol->setCode(0x4D); // Basic Unicode code for 'M'
+      dropFSymbol.element = fsymbol;
+      text->drop(dropFSymbol);
+
+      QCOMPARE(text->xmlText(), QString("M"));
+      }
+
+//---------------------------------------------------------
+///   testDropSupplementaryUnicodeWhenNotInEditMode
+///     Simple test dropping supplementary unicode, but excercising the path when edit mode not already engaged
+//---------------------------------------------------------
+
+void TestText::testDropSupplementaryUnicodeWhenNotInEditMode()
+      {
+      Text* text = new Text(score);
+      text->initSubStyle(SubStyle::DYNAMICS);
+      text->setPlainText(QString(""));
+      text->layout();
+
+      DropData dropFSymbol;
+      FSymbol* fsymbol = new FSymbol(score);
+      fsymbol->setCode(0x0001D10E); // Supplementary Unicode code for '𝄎'
+      dropFSymbol.element = fsymbol;
+      text->drop(dropFSymbol);
+
+      QCOMPARE(text->xmlText(), QString("𝄎"));
       }
 
 QTEST_MAIN(TestText)
