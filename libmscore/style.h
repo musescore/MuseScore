@@ -459,12 +459,14 @@ enum class StyleIdx {
       longInstrumentFontBold,
       longInstrumentFontItalic,
       longInstrumentFontUnderline,
+      longInstrumentAlign,
 
       shortInstrumentFontFace,
       shortInstrumentFontSize,
       shortInstrumentFontBold,
       shortInstrumentFontItalic,
       shortInstrumentFontUnderline,
+      shortInstrumentAlign,
 
       partInstrumentFontFace,
       partInstrumentFontSize,

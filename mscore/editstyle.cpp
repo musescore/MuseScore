@@ -234,6 +234,18 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::measureNumberFontUnderline, false, measureNumberUnderline,       resetMeasureNumberUnderline },
 //      { StyleIdx::measureNumberOffset,           "measureNumberOffset",          QPointF(0.0, -2.0) },
 
+      { StyleIdx::shortInstrumentFontFace,      false, shortInstrumentFontFace,      resetShortInstrumentFontFace },
+      { StyleIdx::shortInstrumentFontSize,      false, shortInstrumentFontSize,      resetShortInstrumentFontSize },
+      { StyleIdx::shortInstrumentFontBold,      false, shortInstrumentFontBold,      resetShortInstrumentFontBold },
+      { StyleIdx::shortInstrumentFontItalic,    false, shortInstrumentFontItalic,    resetShortInstrumentFontItalic },
+      { StyleIdx::shortInstrumentFontUnderline, false, shortInstrumentFontUnderline, resetShortInstrumentFontUnderline },
+
+      { StyleIdx::longInstrumentFontFace,      false, longInstrumentFontFace,        resetLongInstrumentFontFace },
+      { StyleIdx::longInstrumentFontSize,      false, longInstrumentFontSize,        resetLongInstrumentFontSize },
+      { StyleIdx::longInstrumentFontBold,      false, longInstrumentFontBold,        resetLongInstrumentFontBold },
+      { StyleIdx::longInstrumentFontItalic,    false, longInstrumentFontItalic,      resetLongInstrumentFontItalic },
+      { StyleIdx::longInstrumentFontUnderline, false, longInstrumentFontUnderline,   resetLongInstrumentFontUnderline },
+
       { StyleIdx::beamDistance,            true,  beamDistance,                 0 },
       { StyleIdx::beamNoSlope,             false, beamNoSlope,                  0 },
       { StyleIdx::graceNoteMag,            true,  graceNoteSize,                0 },
