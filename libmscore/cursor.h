@@ -29,6 +29,27 @@ class StaffText;
 class Measure;
 
 //---------------------------------------------------------
+//   ElementW
+//    Element wrapper
+//---------------------------------------------------------
+
+class ElementW : public QObject {
+      Q_OBJECT
+      Q_PROPERTY(QString type READ type)
+
+      ScoreElement* e;
+
+   public slots:
+
+   public:
+      ElementW(ScoreElement* _e) : QObject() { e = _e; }
+      ElementW() {}
+      QString type() const { return QString(e->name()); }
+      Q_INVOKABLE QVariant tick() const { return QVariant(((Element*)e)->tick()); }
+      Q_INVOKABLE QVariant get(const QString& s) const;
+      };
+
+//---------------------------------------------------------
 //   @@ Cursor
 //   @P track     int           current track
 //   @P staffIdx  int           current staff (track / 4)
@@ -44,15 +65,11 @@ class Measure;
 //---------------------------------------------------------
 
 class Cursor : public QObject {
-      Q_GADGET
+      Q_OBJECT
       Q_PROPERTY(int track      READ track     WRITE setTrack)
       Q_PROPERTY(int staffIdx   READ staffIdx  WRITE setStaffIdx)
       Q_PROPERTY(int voice      READ voice     WRITE setVoice)
       Q_PROPERTY(int filter     READ filter    WRITE setFilter)
-
-      Q_PROPERTY(Ms::Element* element READ element)
-      Q_PROPERTY(Ms::Segment* segment READ segment)
-      Q_PROPERTY(Ms::Measure* measure READ measure)
 
       Q_PROPERTY(int tick         READ tick)
       Q_PROPERTY(double time      READ time)
@@ -93,9 +110,9 @@ class Cursor : public QObject {
       int filter() const            { return int(_filter); }
       void setFilter(int f)         { _filter = Segment::Type(f); }
 
-      Element* element() const;
-      Segment* segment() const      { return _segment;  }
-      Measure* measure() const;
+      Q_INVOKABLE Ms::ElementW* element() const;
+      Q_INVOKABLE Ms::ElementW* segment() const;
+      Q_INVOKABLE Ms::ElementW* measure() const;
 
       int tick();
       double time();

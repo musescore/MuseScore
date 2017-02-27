@@ -582,7 +582,7 @@ void TextBlock::remove(int column)
                               if (i->ids.empty())
                                     _text.erase(i);
                               }
-                        else {                              
+                        else {
                               if (c.isSurrogate())
                                     i->text.remove(idx, 2);
                               else
@@ -1326,6 +1326,8 @@ void Text::layout1()
       if (parent()) {
             if (layoutToParentWidth()) {
                   if (parent()->isTBox()) {
+                        // hack: vertical alignment is always TOP
+                        _align = Align(((char)_align) & ((char)Align::HMASK)) | Align::TOP;
                         }
                   else if (parent()->isBox()) {
                         // consider inner margins of frame

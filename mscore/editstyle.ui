@@ -35,7 +35,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Header, Footer, Numbers</string>
+        <string>Header, Footer</string>
        </property>
       </item>
       <item>
@@ -46,6 +46,11 @@
       <item>
        <property name="text">
         <string>Measure</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Measure Numbers</string>
        </property>
       </item>
       <item>
@@ -85,22 +90,57 @@
       </item>
       <item>
        <property name="text">
-        <string>Hairpins, Volta, Ottava</string>
+        <string>Hairpins</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Pedal, Trill, Dynamics</string>
+        <string>Volta</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Text Line, Tempo Text, Rehearsal Mark</string>
+        <string>Ottava</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Chord Symbols, Fretboard Diagrams</string>
+        <string>Pedal</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Trill</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Dynamics</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Text Line</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Tempo Text</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Rehearsal Mark</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Chord Symbols</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Fretboard Diagrams</string>
        </property>
       </item>
       <item>
@@ -110,7 +150,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Articulations, Ornaments</string>
+        <string>Articulations</string>
        </property>
       </item>
       <item>
@@ -131,7 +171,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>0</number>
+       <number>28</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -1423,69 +1463,6 @@
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QGroupBox" name="showMeasureNumber">
-          <property name="title">
-           <string>Measure Numbers</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-          <layout class="QGridLayout">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <item row="0" column="0">
-            <widget class="QCheckBox" name="showFirstMeasureNumber">
-             <property name="text">
-              <string>Show first</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QCheckBox" name="showAllStaffsMeasureNumber">
-             <property name="text">
-              <string>All staves</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QRadioButton" name="showEverySystemMeasureNumber">
-             <property name="text">
-              <string>Every system</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <layout class="QHBoxLayout" name="horizontalLayout_8">
-             <item>
-              <widget class="QRadioButton" name="showIntervalMeasureNumber">
-               <property name="text">
-                <string>Interval:</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="intervalMeasureNumber">
-               <property name="minimum">
-                <number>1</number>
-               </property>
-               <property name="value">
-                <number>5</number>
                </property>
               </widget>
              </item>
@@ -2893,6 +2870,86 @@
            </item>
           </layout>
          </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page">
+       <layout class="QVBoxLayout" name="verticalLayout_44">
+        <item>
+         <widget class="QGroupBox" name="showMeasureNumber">
+          <property name="title">
+           <string>Measure Numbers</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+          <layout class="QGridLayout" name="_2">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="showFirstMeasureNumber">
+             <property name="text">
+              <string>Show first</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QCheckBox" name="showAllStaffsMeasureNumber">
+             <property name="text">
+              <string>All staves</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="showEverySystemMeasureNumber">
+             <property name="text">
+              <string>Every system</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <item>
+              <widget class="QRadioButton" name="showIntervalMeasureNumber">
+               <property name="text">
+                <string>Interval:</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="intervalMeasureNumber">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="value">
+                <number>5</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_27">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>
@@ -4416,6 +4473,10 @@
           </layout>
          </widget>
         </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_2">
+       <layout class="QVBoxLayout" name="verticalLayout_46">
         <item>
          <widget class="QGroupBox" name="groupBox_15">
           <property name="title">
@@ -4645,6 +4706,10 @@
           </layout>
          </widget>
         </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_3">
+       <layout class="QVBoxLayout" name="verticalLayout_47">
         <item>
          <widget class="QGroupBox" name="groupBox_16">
           <property name="minimumSize">
@@ -5215,6 +5280,10 @@
           </layout>
          </widget>
         </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_4">
+       <layout class="QVBoxLayout" name="verticalLayout_48">
         <item>
          <widget class="QGroupBox" name="groupBox_22">
           <property name="title">
@@ -5377,6 +5446,10 @@
           </layout>
          </widget>
         </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_5">
+       <layout class="QVBoxLayout" name="verticalLayout_49">
         <item>
          <widget class="QGroupBox" name="groupBox_31">
           <property name="title">
@@ -5534,18 +5607,12 @@
              <property name="text">
               <string>Position Above:</string>
              </property>
-             <property name="buddy">
-              <cstring>trillLinePosAbove</cstring>
-             </property>
             </widget>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_141">
              <property name="text">
               <string>Position Below:</string>
-             </property>
-             <property name="buddy">
-              <cstring>trillLinePosBelow</cstring>
              </property>
             </widget>
            </item>
@@ -5775,6 +5842,10 @@
           </layout>
          </widget>
         </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_6">
+       <layout class="QVBoxLayout" name="verticalLayout_50">
         <item>
          <widget class="QGroupBox" name="groupBox_34">
           <property name="title">
@@ -6007,6 +6078,10 @@
           </layout>
          </widget>
         </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_7">
+       <layout class="QVBoxLayout" name="verticalLayout_51">
         <item>
          <widget class="QGroupBox" name="groupBox_35">
           <property name="title">
@@ -6671,6 +6746,23 @@
          </widget>
         </item>
         <item>
+         <spacer name="verticalSpacer_61">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>496</width>
+            <height>118</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_8">
+       <layout class="QVBoxLayout" name="verticalLayout_52">
+        <item>
          <widget class="QGroupBox" name="groupBox_51">
           <property name="title">
            <string>Fretboard Diagrams</string>
@@ -6824,14 +6916,14 @@
          </widget>
         </item>
         <item>
-         <spacer name="verticalSpacer_61">
+         <spacer name="verticalSpacer_29">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>496</width>
-            <height>118</height>
+            <width>20</width>
+            <height>40</height>
            </size>
           </property>
          </spacer>
@@ -7016,19 +7108,6 @@
               </item>
              </layout>
             </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_17">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
            </item>
            <item>
             <widget class="QGroupBox" name="groupFBStyle">
@@ -8710,12 +8789,6 @@
   <tabstop>evenFooterL</tabstop>
   <tabstop>evenFooterC</tabstop>
   <tabstop>evenFooterR</tabstop>
-  <tabstop>showMeasureNumber</tabstop>
-  <tabstop>showFirstMeasureNumber</tabstop>
-  <tabstop>showAllStaffsMeasureNumber</tabstop>
-  <tabstop>showEverySystemMeasureNumber</tabstop>
-  <tabstop>showIntervalMeasureNumber</tabstop>
-  <tabstop>intervalMeasureNumber</tabstop>
   <tabstop>bracketWidth</tabstop>
   <tabstop>bracketDistance</tabstop>
   <tabstop>akkoladeWidth</tabstop>
@@ -8822,26 +8895,6 @@
   <tabstop>resetHairpinContinueHeight</tabstop>
   <tabstop>autoplaceHairpinDynamicsDistance</tabstop>
   <tabstop>resetAutoplaceHairpinDynamicsDistance</tabstop>
-  <tabstop>voltaY</tabstop>
-  <tabstop>resetVoltaY</tabstop>
-  <tabstop>voltaHook</tabstop>
-  <tabstop>resetVoltaHook</tabstop>
-  <tabstop>voltaLineWidth</tabstop>
-  <tabstop>resetVoltaLineWidth</tabstop>
-  <tabstop>voltaLineStyle</tabstop>
-  <tabstop>resetVoltaLineStyle</tabstop>
-  <tabstop>ottavaPosAbove</tabstop>
-  <tabstop>resetOttavaPosAbove</tabstop>
-  <tabstop>ottavaPosBelow</tabstop>
-  <tabstop>resetOttavaPosBelow</tabstop>
-  <tabstop>ottavaNumbersOnly</tabstop>
-  <tabstop>resetOttavaNumbersOnly</tabstop>
-  <tabstop>ottavaHook</tabstop>
-  <tabstop>resetOttavaHook</tabstop>
-  <tabstop>ottavaLineWidth</tabstop>
-  <tabstop>resetOttavaLineWidth</tabstop>
-  <tabstop>ottavaLineStyle</tabstop>
-  <tabstop>resetOttavaLineStyle</tabstop>
   <tabstop>pedalLinePlacement</tabstop>
   <tabstop>resetPedalLinePlacement</tabstop>
   <tabstop>pedalLinePosAbove</tabstop>
@@ -8852,20 +8905,6 @@
   <tabstop>resetPedalLineWidth</tabstop>
   <tabstop>pedalLineStyle</tabstop>
   <tabstop>resetPedalLineStyle</tabstop>
-  <tabstop>trillLinePlacement</tabstop>
-  <tabstop>resetTrillLinePlacement</tabstop>
-  <tabstop>trillLinePosAbove</tabstop>
-  <tabstop>resetTrillLinePosAbove</tabstop>
-  <tabstop>trillLinePosBelow</tabstop>
-  <tabstop>resetTrillLinePosBelow</tabstop>
-  <tabstop>dynamicsPlacement</tabstop>
-  <tabstop>resetDynamicsPlacement</tabstop>
-  <tabstop>dynamicsPosAbove</tabstop>
-  <tabstop>resetDynamicsPosAbove</tabstop>
-  <tabstop>dynamicsPosBelow</tabstop>
-  <tabstop>resetDynamicsPosBelow</tabstop>
-  <tabstop>dynamicsMinDistance</tabstop>
-  <tabstop>resetDynamicsMinDistance</tabstop>
   <tabstop>textLinePlacement</tabstop>
   <tabstop>resetTextLinePlacement</tabstop>
   <tabstop>textLinePosAbove</tabstop>
@@ -8892,12 +8931,6 @@
   <tabstop>minHarmonyDistance</tabstop>
   <tabstop>maxHarmonyBarDistance</tabstop>
   <tabstop>capoPosition</tabstop>
-  <tabstop>fretY</tabstop>
-  <tabstop>fretMag</tabstop>
-  <tabstop>fretNumMag</tabstop>
-  <tabstop>radioFretNumLeft</tabstop>
-  <tabstop>radioFretNumRight</tabstop>
-  <tabstop>barreLineWidth</tabstop>
   <tabstop>comboFBFont</tabstop>
   <tabstop>doubleSpinFBSize</tabstop>
   <tabstop>doubleSpinFBVertPos</tabstop>

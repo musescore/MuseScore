@@ -346,6 +346,7 @@ extern P_TYPE propertyType(P_ID);
 extern const char* propertyName(P_ID);
 extern const char* propertyQmlName(P_ID);
 extern bool propertyLink(P_ID id);
+extern P_ID propertyId(const QString&);
 
 }     // namespace Ms
 #endif

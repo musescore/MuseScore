@@ -24,18 +24,24 @@ MuseScore {
             if (typeof curScore === 'undefined')
                   Qt.quit();
 
-            for (var track = 0; track < curScore.ntracks; ++track) {
-                  var segment = curScore.firstSegment();
-                  while (segment) {
-                        console.log("segment: " + segment + "  type " + segment.segmentType);
-                        var element = segment.elementAt(track);
-                        if (element) {
-                              var type    = element.type;
-	                        console.log(type);
-                              }
-                        segment = segment.next;
+            var cursor = curScore.newCursor();
+            cursor.rewind(0);
+            cursor.voice    = 0;
+            cursor.staffIdx = 0;
+
+            while (cursor.segment()) {
+                var element = cursor.element();
+                if (element) {
+                    var type = element.type;
+	              console.log("type: " + element.type + " tick: " + element.tick() + " color " + element.get("color"));
+                    if (type == "Rest") {
+                        var d = element.get("duration");
+                        console.log(d);
+                        console.log("   duration " + d.numerator + "/" + d.denominator);
                         }
-                  }
+                    }
+                cursor.next();
+                }
             Qt.quit();
             }
       }
