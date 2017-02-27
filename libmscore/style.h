@@ -750,7 +750,7 @@ class MStyle {
       MStyle();
 
       void precomputeValues();
-      QVariant value(StyleIdx idx) const  { return _values[int(idx)]; }
+      QVariant value(StyleIdx idx) const;
       qreal pvalue(StyleIdx idx) const    { return _precomputedValues[int(idx)]; }
       void set(StyleIdx idx, const QVariant& v);
 
