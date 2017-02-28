@@ -1092,7 +1092,7 @@ void Note::read(XmlReader& e)
                   // check this is not a lower-to-higher cross-staff spanner we already got
                   int id = e.intAttribute("id");
                   Spanner* placeholder = e.findSpanner(id);
-                  if (placeholder) {
+                  if (placeholder && placeholder->endElement()) {
                         // if it is, fill end data from place-holder
                         sp->setAnchor(Spanner::Anchor::NOTE);           // make sure we can set a Note as end element
                         sp->setEndElement(placeholder->endElement());
