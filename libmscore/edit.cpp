@@ -867,12 +867,17 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
       // in cases where we try deleting the local time sig
       // known bug: this means we do not correctly detect non-empty measures when deleting global timesig change after a local one
       // see http://musescore.org/en/node/51596
-      undoRemoveElement(s);
+      // Delete the time sig segment from the root score, we will rewriteMeasures from it
+      // since it contains all the music while the part doesn't
+      Score* rScore = rootScore();
+      Measure* rm = rScore->tick2measure(m->tick());
+      Segment* rs = rm->findSegment(Segment::Type::TimeSig, s->tick());
+      rScore->undoRemoveElement(rs);
 
       Measure* pm = m->prevMeasure();
       Fraction ns(pm ? pm->timesig() : Fraction(4,4));
 
-      if (!rewriteMeasures(m, ns, -1)) {
+      if (!rScore->rewriteMeasures(rm, ns, -1)) {
             undo()->current()->unwind();
             }
       else {
