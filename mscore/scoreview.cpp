@@ -3852,8 +3852,33 @@ bool ScoreView::fotoMode() const
 
 void ScoreView::editInputTransition(QInputMethodEvent* ie)
       {
-      if (editObject->isText())
+      if (editObject->isText()) {
             static_cast<Text*>(editObject)->inputTransition(ie);
+            QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
+            }
+      }
+
+//---------------------------------------------------------
+//   inputMethodQuery
+//---------------------------------------------------------
+
+QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
+      {
+      // if editing a text object, place the InputMethod popup window just below the text
+      if ((query & Qt::ImCursorRectangle) && editObject && editObject->isText()) {
+            Text* text = static_cast<Text*>(editObject);
+            if (text->cursor()) {
+                  QRectF cursorRect = toPhysical(text->cursorRect().translated(text->canvasPos()));
+                  cursorRect.setWidth(1.0); // InputMethod doesn't display properly if width left at 0
+                  cursorRect.setHeight(cursorRect.height() + 5.0); // add a little margin under the cursor
+                  qDebug("cursorRect: [%3f,%3f,%3f,%3f]", cursorRect.x(), cursorRect.y(), cursorRect.width(), cursorRect.height());
+                  return QVariant(cursorRect);
+                  }
+            else
+                  return QVariant(toPhysical(text->canvasBoundingRect()));
+            }
+
+      return QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
       }
 
 //---------------------------------------------------------

@@ -203,7 +203,6 @@ class Text : public Element {
 
       TextCursor* _cursor;       // used during editing
 
-      QRectF cursorRect() const;
       const TextBlock& curLine() const;
       TextBlock& curLine();
       void drawSelection(QPainter*, const QRectF&) const;
@@ -310,6 +309,7 @@ class Text : public Element {
       virtual void paste();
 
       QRectF pageRectangle() const;
+      QRectF cursorRect() const;
 
       TextCursor* cursor() { return _cursor; }
 

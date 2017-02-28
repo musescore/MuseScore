@@ -268,6 +268,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdGotoElement(Element*);
       bool checkCopyOrCut();
 
+      QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+
    private slots:
       void enterState();
       void exitState();
