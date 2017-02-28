@@ -1052,7 +1052,7 @@ InspectorBracket::InspectorBracket(QWidget* parent) : InspectorBase(parent)
 //   InspectorIname
 //---------------------------------------------------------
 
-InspectorIname::InspectorIname(QWidget* parent) : InspectorBase(parent)
+InspectorIname::InspectorIname(QWidget* parent) : InspectorTextBase(parent)
       {
       i.setupUi(addWidget());
 

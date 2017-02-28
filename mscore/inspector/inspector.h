@@ -394,7 +394,7 @@ class InspectorBracket : public InspectorBase {
 //   InspectorIname
 //---------------------------------------------------------
 
-class InspectorIname : public InspectorBase {
+class InspectorIname : public InspectorTextBase {
       Q_OBJECT
 
       Ui::InspectorIname i;
