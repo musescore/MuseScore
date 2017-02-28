@@ -971,13 +971,30 @@ ScoreView::ScoreView(QWidget* parent)
 void ScoreView::setScore(Score* s)
       {
       if (_score) {
-            _score->removeViewer(this);
-            disconnect(s, SIGNAL(posChanged(POS, int)), this, SLOT(posChanged(POS,int)));
+            if (_score->isMaster()) {
+                  MasterScore* ms = static_cast<MasterScore*>(s);
+                  for (MasterScore* _ms : *ms->movements()) {
+                        _ms->removeViewer(this);
+                        disconnect(s, SIGNAL(posChanged(POS, int)), this, SLOT(posChanged(POS,int)));
+                        }
+                  }
+            else {
+                  _score->removeViewer(this);
+                  disconnect(s, SIGNAL(posChanged(POS, int)), this, SLOT(posChanged(POS,int)));
+                  }
             }
 
       _score = s;
-      if (_score)
-            _score->addViewer(this);
+      if (_score) {
+            if (_score->isMaster()) {
+                  MasterScore* ms = static_cast<MasterScore*>(s);
+                  for (MasterScore* _ms : *ms->movements()) {
+                        _ms->addViewer(this);
+                        }
+                  }
+            else
+                  _score->addViewer(this);
+            }
 
       if (shadowNote == 0) {
             shadowNote = new ShadowNote(_score);
@@ -1856,14 +1873,14 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             }
       else {
             for (Page* page : _score->pages()) {
-                  if (!score()->printing())
-                        paintPageBorder(p, page);
                   QRectF pr(page->abbox().translated(page->pos()));
                   if (pr.right() < fr.left())
                         continue;
                   if (pr.left() > fr.right())
                         break;
 
+                  if (!score()->printing())
+                        paintPageBorder(p, page);
                   QList<Element*> ell = page->items(fr.translated(-page->pos()));
                   qStableSort(ell.begin(), ell.end(), elementLessThan);
                   QPointF pos(page->pos());
@@ -1922,7 +1939,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                                     for (const MeasureBase* mb : system->measures()) {
                                           if (mb->type() == ElementType::MEASURE) {
                                                 const Measure* m = static_cast<const Measure*>(mb);
-                                                for (int staffIdx = 0; staffIdx < _score->nstaves(); staffIdx++) {
+                                                for (int staffIdx = 0; staffIdx < m->score()->nstaves(); staffIdx++) {
                                                       if (m->corrupted(staffIdx)) {
                                                             p.drawRect(m->staffabbox(staffIdx).adjusted(0, -_spatium, 0, _spatium));
                                                             }
@@ -3598,7 +3615,7 @@ void ScoreView::select(QMouseEvent* ev)
                               addSelect = false;
                               }
                         else if (ev->type() == QEvent::MouseButtonRelease) {
-                              score()->deselect(curElement);
+                              curElement->score()->deselect(curElement);
                               mscore->endCmd();
                               }
                         return;
@@ -3613,14 +3630,14 @@ void ScoreView::select(QMouseEvent* ev)
                   for (int staffIdx = 0; staffIdx < _score->nstaves(); ++staffIdx) {
                         Element* e = s->element(staffIdx * VOICES);
                         if (e) {
-                              _score->select(e, first ? SelectType::SINGLE : SelectType::ADD, dragStaffIdx);
+                              e->score()->select(e, first ? SelectType::SINGLE : SelectType::ADD, dragStaffIdx);
                               first = false;
                               }
                         }
 
                   }
             else
-                  _score->select(curElement, st, dragStaffIdx);
+                  curElement->score()->select(curElement, st, dragStaffIdx);
             if (curElement && curElement->isNote() && ev->type() == QEvent::MouseButtonPress) {
                   Note* note = toNote(curElement);
                   int pitch = note->ppitch();
@@ -3631,6 +3648,11 @@ void ScoreView::select(QMouseEvent* ev)
             curElement = 0;
       _score->setUpdateAll();
       _score->update();
+      if (curElement && curElement->score() != _score) {
+            _score = curElement->score();
+            _score->setUpdateAll();
+            _score->update();
+            }
       mscore->endCmd();
       }
 
@@ -5354,7 +5376,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag, bool insert)
             sm->postEvent(new CommandEvent("note-input"));
             qApp->processEvents();
             }
-      _score->cmdAddPitch(octave * 7 + note, addFlag, insert);
+      is.segment()->score()->cmdAddPitch(octave * 7 + note, addFlag, insert);
       adjustCanvasPosition(is.cr(), false);
       }
 

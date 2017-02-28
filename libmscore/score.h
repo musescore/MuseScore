@@ -1150,7 +1150,7 @@ class Score : public QObject, ScoreElement {
 //---------------------------------------------------------
 
 class MasterScore : public Score {
-      Q_GADGET
+      Q_OBJECT
       TimeSigMap* _sigmap;
       TempoMap* _tempomap;
       RepeatList* _repeatList;

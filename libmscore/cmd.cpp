@@ -212,24 +212,25 @@ void CmdState::dump()
 
 void Score::update()
       {
+      bool updateAll = false;
       for (MasterScore* ms : *movements()) {
             CmdState& cs = ms->cmdState();
             ms->deletePostponed();
             if (cs.layoutRange()) {
                   for (Score* s : ms->scoreList())
                         s->doLayoutRange(cs.startTick(), cs.endTick());
-                  for (Score* s : scoreList()) {
-                        for (MuseScoreView* v : s->viewer)
-                              v->updateAll();
-                        }
-                  cs._setUpdateMode(UpdateMode::UpdateAll);
+                  updateAll = true;
                   }
-            if (cs.updateAll()) {
+            }
+
+      for (MasterScore* ms : *movements()) {
+            CmdState& cs = ms->cmdState();
+            if (updateAll || cs.updateAll()) {
                   for (Score* s : scoreList()) {
-                        for (MuseScoreView* v : s->viewer)
+                        for (MuseScoreView* v : s->viewer) {
                               v->updateAll();
+                              }
                         }
-                  cs._setUpdateMode(UpdateMode::DoNothing);
                   }
             else if (cs.updateRange()) {
                   // updateRange updates only current score

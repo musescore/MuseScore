@@ -329,27 +329,26 @@ void Score::putNote(const QPointF& pos, bool replace, bool insert)
             qDebug("cannot put note here, get position failed");
             return;
             }
-      if (inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH))
-            repitchNote(p, replace);
+      Score* score = p.segment->score();
+      if (score->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH))
+            score->repitchNote(p, replace);
       else {
             if (insert)
-                  insertChord(p);
+                  score->insertChord(p);
             else
-                  putNote(p, replace);
+                  score->putNote(p, replace);
             }
       }
 
 void Score::putNote(const Position& p, bool replace)
       {
-      int staffIdx    = p.staffIdx;
-      Staff* st       = staff(staffIdx);
-      Segment* s      = p.segment;
+      Staff* st   = staff(p.staffIdx);
+      Segment* s  = p.segment;
 
-      _is.setTrack(staffIdx * VOICES + _is.voice());
+      _is.setTrack(p.staffIdx * VOICES + _is.voice());
       _is.setSegment(s);
 
-      if (score()->excerpt() && !score()->excerpt()->tracks().isEmpty()
-       && score()->excerpt()->tracks().key(_is.track(), -1) == -1)
+      if (score()->excerpt() && !score()->excerpt()->tracks().isEmpty() && score()->excerpt()->tracks().key(_is.track(), -1) == -1)
             return;
 
       Direction stemDirection = Direction::AUTO;
