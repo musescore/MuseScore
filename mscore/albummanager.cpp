@@ -1,21 +1,13 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: albummanager.cpp 4220 2011-04-22 10:31:26Z wschweer $
 //
-//  Copyright (C) 2011-2016 Werner Schweer and others
+//  Copyright (C) 2011-2017 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
 //=============================================================================
 
 #include "albummanager.h"
@@ -40,6 +32,8 @@ AlbumManager::AlbumManager(QWidget* parent)
       setObjectName("AlbumManager");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      up->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      down->setIcon(*icons[int(Icons::arrowDown_ICON)]);
 
       album = 0;
       connect(add,         SIGNAL(clicked()), SLOT(addClicked()));
@@ -67,6 +61,24 @@ void AlbumManager::buttonBoxClicked(QAbstractButton*)
       }
 
 //---------------------------------------------------------
+//   getScoreTitle
+//---------------------------------------------------------
+
+static QString getScoreTitle(Score* score)
+      {
+      QString name = score->metaTag("movementTitle");
+      if (name.isEmpty()) {
+            Text* t = score->getText(SubStyle::TITLE);
+            if (t)
+                  name = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+            name = name.simplified();
+            }
+      if (name.isEmpty())
+            name = score->title();
+      return name;
+      }
+
+//---------------------------------------------------------
 //   addClicked
 //---------------------------------------------------------
 
@@ -91,7 +103,8 @@ void AlbumManager::addClicked()
       scoreList->blockSignals(true);
       for (MasterScore* score : scores) {
             topScore->addMovement(score);
-            QListWidgetItem* li = new QListWidgetItem(score->metaTag("movementTitle"), scoreList);
+            QString name = getScoreTitle(score);
+            QListWidgetItem* li = new QListWidgetItem(name, scoreList);
             li->setFlags(Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled));
             }
       scoreList->blockSignals(false);
@@ -105,26 +118,19 @@ void AlbumManager::addClicked()
 
 void AlbumManager::addNewClicked()
       {
-#if 0
-      QStringList files = mscore->getOpenScoreNames(
-         tr("MuseScore Files") + " (*.mscz *.mscx)",
-         tr("MuseScore: Add Score")
-         );
-      if (files.isEmpty())
-            return;
-      for (QString fn : files) {
-            if (fn.isEmpty())
-                  continue;
-            if (fn.endsWith (".mscz") || fn.endsWith (".mscx")) {
-                  album->append(new AlbumItem(fn));
-                  QFileInfo fi(fn);
+      MasterScore* score = mscore->getNewFile();
+      delete score->movements();
+      MasterScore* topScore = album->front();
 
-                  QListWidgetItem* li = new QListWidgetItem(fi.completeBaseName(), scoreList);
-                  li->setToolTip(fn);
-                  li->setFlags(Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled));
-                  }
-            }
-#endif
+      scoreList->blockSignals(true);
+      topScore->addMovement(score);
+      QString name = getScoreTitle(score);
+      QListWidgetItem* li = new QListWidgetItem(name, scoreList);
+      li->setFlags(Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled));
+      scoreList->blockSignals(false);
+
+      topScore->setLayoutAll();
+      topScore->update();
       }
 
 //---------------------------------------------------------
@@ -188,7 +194,8 @@ void AlbumManager::setAlbum(Movements* a)
 
       scoreList->blockSignals(true);
       for (MasterScore* score : *album) {
-            QListWidgetItem* li = new QListWidgetItem(score->metaTag("movementTitle"), scoreList);
+            QString name = getScoreTitle(score);
+            QListWidgetItem* li = new QListWidgetItem(name, scoreList);
             li->setFlags(Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled));
             }
       scoreList->blockSignals(false);
@@ -234,7 +241,7 @@ void MuseScore::showAlbumManager()
             albumManager = new AlbumManager(this);
       albumManager->setAlbum(currentScoreView()->score()->masterScore()->movements());
       albumManager->show();
-      
+
       // focus on album name on opening the Album Manager
       //albumManager->albumName->setFocus();
       }

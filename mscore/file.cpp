@@ -472,18 +472,18 @@ QString MuseScore::createDefaultName() const
       }
 
 //---------------------------------------------------------
-//   newFile
+//   getNewFile
 //    create new score
 //---------------------------------------------------------
 
-void MuseScore::newFile()
+MasterScore* MuseScore::getNewFile()
       {
       if (!newWizard)
             newWizard = new NewWizard(this);
       else
             newWizard->restart();
       if (newWizard->exec() != QDialog::Accepted)
-            return;
+            return 0;
       int measures            = newWizard->measures();
       Fraction timesig        = newWizard->timesig();
       TimeSigType timesigType = newWizard->timesigType();
@@ -508,7 +508,7 @@ void MuseScore::newFile()
             if (rv != Score::FileError::FILE_NO_ERROR) {
                   readScoreError(newWizard->templatePath(), rv, false);
                   delete tscore;
-                  return;
+                  return 0;
                   }
             score = new MasterScore();
             score->setMovements(new Movements());
@@ -749,7 +749,6 @@ void MuseScore::newFile()
 
       score->rebuildMidiMapping();
       score->doLayout();
-      setCurrentScoreView(appendScore(score));
 
       for (Excerpt* x : excerpts) {
             Score* xs = new Score(static_cast<MasterScore*>(score));
@@ -760,6 +759,19 @@ void MuseScore::newFile()
             Excerpt::createExcerpt(x);
             }
       score->setExcerptsChanged(true);
+      return score;
+      }
+
+//---------------------------------------------------------
+//   newFile
+//    create new score
+//---------------------------------------------------------
+
+void MuseScore::newFile()
+      {
+      MasterScore* score = getNewFile();
+      if (score)
+            setCurrentScoreView(appendScore(score));
       }
 
 //---------------------------------------------------------
