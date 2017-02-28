@@ -408,12 +408,15 @@ void LineSegment::editDrag(const EditData& ed)
                         qDebug("LineSegment: move end anchor");
                         Note* noteOld = static_cast<Note*>(l->endElement());
                         Note* noteNew = static_cast<Note*>(e);
+                        Note* sNote = static_cast<Note*>(l->startElement());
+                        // do not change anchor if new note is before start note
+                        if (sNote && sNote->chord() && noteNew->chord() && sNote->chord()->tick() < noteNew->chord()->tick()) {
+                              noteOld->removeSpannerBack(l);
+                              noteNew->addSpannerBack(l);
+                              l->setEndElement(noteNew);
 
-                        noteOld->removeSpannerBack(l);
-                        noteNew->addSpannerBack(l);
-                        l->setEndElement(noteNew);
-
-                        _userOff2 += noteOld->canvasPos() - noteNew->canvasPos();
+                              _userOff2 += noteOld->canvasPos() - noteNew->canvasPos();
+                              }
                         }
                   else if (ed.curGrip == Grip::START && e != l->startElement()) {
                         qDebug("LineSegment: move start anchor (not impl.)");
