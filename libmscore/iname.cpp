@@ -100,16 +100,21 @@ QVariant InstrumentName::getProperty(P_ID id) const
 
 bool InstrumentName::setProperty(P_ID id, const QVariant& v)
       {
+      bool rv = true;
       switch (id) {
             case P_ID::INAME_LAYOUT_POSITION:
                   _layoutPos = v.toInt();
-printf("%p set layoutPos %d\n", this, _layoutPos);
                   break;
             default:
-                  return Text::setProperty(id, v);
+                  rv = Text::setProperty(id, v);
+                  break;
+            }
+      StyleIdx sidx = getPropertyStyle(id);
+      if (sidx != StyleIdx::NOSTYLE) {
+            score()->undoChangeStyleVal(sidx, getProperty(id));
             }
       score()->setLayoutAll();
-      return true;
+      return rv;
       }
 
 //---------------------------------------------------------
