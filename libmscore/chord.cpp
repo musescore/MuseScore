@@ -243,11 +243,14 @@ Chord::Chord(const Chord& c, bool link)
             if (link)
                   score()->undo(new Link(const_cast<Arpeggio*>(c._arpeggio), a));
             }
-      if (c._tremolo && !c._tremolo->twoNotes()) {
+      if (c._tremolo) {
             Tremolo* t = new Tremolo(*(c._tremolo));
             add(t);
-            if (link)
+            if (link) {
                   score()->undo(new Link(const_cast<Tremolo*>(c._tremolo), t));
+                  if (c._tremolo->twoNotes())
+                        t->setChords(0, 0);
+                  }
             }
 
       for (Element* e : c.el()) {
@@ -446,7 +449,8 @@ void Chord::add(Element* e)
                               if (tr->chord2())
                                     tr->chord2()->setDurationType(d);
                               }
-                        tr->chord2()->setTremolo(tr);
+                        if (tr->chord2())
+                              tr->chord2()->setTremolo(tr);
                         }
                   _tremolo = tr;
                   }
