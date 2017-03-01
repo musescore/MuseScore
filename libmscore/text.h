@@ -332,6 +332,7 @@ class Text : public Element {
       static QString convertToHtml(const QString&, const TextStyle&);
       static QString tagEscape(QString s);
       static QString unEscape(QString s);
+      static QString escape(QString s);
 
       void undoSetText(const QString& s) { undoChangeProperty(P_ID::TEXT, s); }
       virtual QString accessibleInfo() override;

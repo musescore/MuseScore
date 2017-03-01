@@ -1211,6 +1211,7 @@ void Text::createLayout()
                                     cursor.format()->setFontSize(parseNumProperty(token.mid(6)));
                               else if (token.startsWith("face=\"")) {
                                     QString face = parseStringProperty(token.mid(6));
+                                    face = Text::unEscape(face);
                                     cursor.format()->setFontFamily(face);
                                     }
                               else
@@ -1481,7 +1482,7 @@ void Text::genText()
                   if (format.fontSize() != cursor.format()->fontSize())
                         _text += QString("<font size=\"%1\"/>").arg(format.fontSize());
                   if (format.fontFamily() != cursor.format()->fontFamily())
-                        _text += QString("<font face=\"%1\"/>").arg(format.fontFamily());
+                        _text += QString("<font face=\"%1\"/>").arg(Text::escape(format.fontFamily()));
 
                   VerticalAlignment va = format.valign();
                   VerticalAlignment cva = cursor.format()->valign();
@@ -2995,6 +2996,19 @@ QString Text::unEscape(QString s)
       s.replace("&gt;", ">");
       s.replace("&amp;", "&");
       s.replace("&quot;", "\"");
+      return s;
+      }
+
+//---------------------------------------------------------
+//   escape
+//---------------------------------------------------------
+
+QString Text::escape(QString s)
+      {
+      s.replace("<", "&lt;");
+      s.replace(">", "&gt;");
+      s.replace("&", "&amp;");
+      s.replace("\"", "&quot;");
       return s;
       }
 
