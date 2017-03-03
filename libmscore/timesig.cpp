@@ -59,7 +59,7 @@ TimeSig* TimeSig::clone() const
 
 qreal TimeSig::mag() const
       {
-      return staff() ? staff()->mag() : 1.0;
+      return staff() ? staff()->mag() * staff()->lines() / 5 * staff()->lineDistance() : 1.0;
       }
 
 //---------------------------------------------------------
@@ -319,33 +319,33 @@ void TimeSig::layout1()
             // number of lines is odd: 0.0 (strings are directly above and below the middle line)
             // number of lines even:   0.05 (strings are moved up/down to leave 1/10sp between them)
 
-            qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
+            qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium * lineDist * numOfLines / 5);
 
             //align on the wider
             if (numRect.width() >= denRect.width()) {
                   // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-                  pz = QPointF(0.0, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium)) );
+                  pz = QPointF(0.0, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium * lineDist * numOfLines / 5)) );
                   // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-                  pn = QPointF((numRect.width() - denRect.width())*.5, yoff + displ + _spatium);
+                  pn = QPointF((numRect.width() - denRect.width())*.5, yoff + displ + _spatium * lineDist * numOfLines / 5);
                   }
             else {
                   // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-                  pn = QPointF(0.0, yoff + displ + _spatium);
+                  pn = QPointF(0.0, yoff + displ + _spatium * lineDist * numOfLines / 5);
                   // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-                  pz = QPointF((denRect.width() - numRect.width())*.5, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium)) );
+                  pz = QPointF((denRect.width() - numRect.width())*.5, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium * lineDist * numOfLines / 5)));
                   }
 
             // centering of parenthesis so the middle of the parenthesis is at the divisor marking level
             int centerY = yoff/2 + _spatium;
             int widestPortion = numRect.width() > denRect.width() ? numRect.width() : denRect.width();
-            pointLargeLeftParen = QPointF(-_spatium, centerY);
-            pointLargeRightParen = QPointF(widestPortion + _spatium, centerY);
+            pointLargeLeftParen = QPointF(-_spatium * lineDist, centerY);
+            pointLargeRightParen = QPointF(widestPortion + _spatium * lineDist, centerY);
 
             setbbox(numRect.translated(pz));   // translate bounding boxes to actual string positions
             addbbox(denRect.translated(pn));
             if (_largeParentheses) {
-                  addbbox(QRect(pointLargeLeftParen.x(), pointLargeLeftParen.y() - denRect.height(), _spatium / 2, numRect.height() + denRect.height()));
-                  addbbox(QRect(pointLargeRightParen.x(), pointLargeRightParen.y() - denRect.height(),  _spatium / 2, numRect.height() + denRect.height()));
+                  addbbox(QRect(pointLargeLeftParen.x(), pointLargeLeftParen.y() - denRect.height(), _spatium * lineDist / 2, numRect.height() + denRect.height()));
+                  addbbox(QRect(pointLargeRightParen.x(), pointLargeRightParen.y() - denRect.height(),  _spatium * lineDist / 2, numRect.height() + denRect.height()));
                   }
             }
 
