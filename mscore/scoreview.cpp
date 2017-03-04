@@ -4324,9 +4324,8 @@ bool ScoreView::event(QEvent* event)
       if (event->type() == QEvent::KeyPress && editObject) {
             QKeyEvent* ke = static_cast<QKeyEvent*>(event);
             if (ke->key() == Qt::Key_Tab || ke->key() == Qt::Key_Backtab) {
-                  if (editObject->isText()) {
+                  if (editObject->isText())
                         return true;
-                        }
                   bool rv = true;
                   if (ke->key() == Qt::Key_Tab) {
                         rv = editObject->nextGrip(&curGrip);

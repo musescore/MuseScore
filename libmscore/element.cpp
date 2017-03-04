@@ -644,15 +644,6 @@ void Element::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Element::startEdit(MuseScoreView*, const QPointF&)
-      {
-      undoPushProperty(P_ID::USER_OFF);
-      }
-
-//---------------------------------------------------------
 //   remove
 ///   Remove \a el from the list. Return true on success.
 //---------------------------------------------------------
@@ -938,7 +929,17 @@ void Element::editDrag(const EditData& ed)
       {
       score()->addRefresh(canvasBoundingRect());
       setUserOff(userOff() + ed.delta);
+      undoChangeProperty(P_ID::AUTOPLACE, false);
       score()->addRefresh(canvasBoundingRect());
+      }
+
+//---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void Element::startEdit(MuseScoreView*, const QPointF&)
+      {
+      undoPushProperty(P_ID::USER_OFF);
       }
 
 //---------------------------------------------------------
@@ -1746,6 +1747,55 @@ int Element::rtick() const
 void Element::triggerLayout() const
       {
       score()->setLayout(tick());
+      }
+
+//---------------------------------------------------------
+//   startDrag
+//---------------------------------------------------------
+
+void Element::startDrag(EditData* data)
+      {
+      ElementEditData* elementData = new ElementEditData();
+      elementData->startDragPosition = userOff();
+      elementData->e = this;
+      data->addData(elementData);
+      }
+
+//---------------------------------------------------------
+//   endDrag
+//---------------------------------------------------------
+
+void Element::endDrag(EditData* data)
+      {
+      ElementEditData* ed = data->getData(this);
+      if (ed) {
+            if (userOff() != ed->startDragPosition) {
+                  undoChangeProperty(P_ID::AUTOPLACE, false);
+                  score()->undoPropertyChanged(this, P_ID::USER_OFF, ed->startDragPosition);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   getData
+//---------------------------------------------------------
+
+ElementEditData* EditData::getData(Element* e)
+      {
+      for (ElementEditData* ed : data) {
+            if (ed->e == e)
+                  return ed;
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   addData
+//---------------------------------------------------------
+
+void EditData::addData(ElementEditData* d)
+      {
+      data.push_back(d);
       }
 
 }

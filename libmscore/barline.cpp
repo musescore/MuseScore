@@ -512,14 +512,8 @@ void BarLine::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "subtype")
                   setBarLineType(e.readElementText());
-            else if (tag == "customSubtype")                      // obsolete
-                  e.readInt();
-            else if (tag == "span") {
-                  _spanFrom   = e.intAttribute("from", _spanFrom);      // obsolete
-                  _spanTo     = e.intAttribute("to", _spanTo);          // obsolete
-                  // _spanStaff  = e.readInt() > 1;
+            else if (tag == "span")
                   _spanStaff  = e.readBool();
-                  }
             else if (tag == "spanFromOffset")
                   _spanFrom = e.readInt();
             else if (tag == "spanToOffset")

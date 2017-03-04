@@ -280,7 +280,6 @@ class Note : public Element {
 
       int _veloOffset     { 0 };    ///< velocity user offset in percent, or absolute velocity for this note
       int _fixedLine      { 0 };    // fixed line number if _fixed == true
-      int _lineOffset     { 0 };    ///< Used during mouse dragging.
       qreal _tuning       { 0.0 };  ///< pitch offset in cent, playable only by internal synthesizer
 
       Accidental* _accidental { 0 };
@@ -297,8 +296,9 @@ class Note : public Element {
       SymId _cachedNoteheadSym; // use in draw to avoid recomputing at every update
       SymId _cachedSymNull; // additional symbol for some transparent notehead
 
+      virtual void startDrag(EditData*) override;
       virtual QRectF drag(EditData*) override;
-      void endDrag();
+      virtual void endDrag(EditData*) override;
       void endEdit();
       void addSpanner(Spanner*);
       void removeSpanner(Spanner*);

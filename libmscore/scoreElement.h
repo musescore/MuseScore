@@ -268,7 +268,7 @@ class ScoreElement {
       Score* score() const                 { return _score;      }
       MasterScore* masterScore() const;
       virtual void setScore(Score* s)      { _score = s;         }
-      virtual const char* name() const;
+      const char* name() const;
       virtual QString userName() const;
       virtual ElementType type() const = 0;
 
