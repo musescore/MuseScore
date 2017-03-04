@@ -612,7 +612,6 @@ Note::Note(const Note& n, bool link)
       _tieBack  = 0;
       for (NoteDot* dot : n._dots)
             add(new NoteDot(*dot));
-      _lineOffset = n._lineOffset;
       _mark      = n._mark;
       }
 
@@ -1452,39 +1451,81 @@ int Note::transposition() const
       }
 
 //---------------------------------------------------------
+//   NoteElementEditData
+//---------------------------------------------------------
+
+struct PropertyData {
+      P_ID id;
+      QVariant data;
+      };
+
+class NoteElementEditData : public ElementEditData {
+   public:
+      QList<PropertyData> data;
+      int line;
+      };
+
+//---------------------------------------------------------
+//   startDrag
+//---------------------------------------------------------
+
+void Note::startDrag(EditData* data)
+      {
+      NoteElementEditData* ed = new NoteElementEditData();
+      ed->e    = this;
+      ed->line = _line;
+      ed->data.push_back(PropertyData({P_ID::PITCH, QVariant(_pitch)}));
+      ed->data.push_back(PropertyData({P_ID::TPC1, QVariant(_tpc[0])}));
+      ed->data.push_back(PropertyData({P_ID::TPC2, QVariant(_tpc[1])}));
+
+      data->addData(ed);
+      }
+
+//---------------------------------------------------------
 //   drag
 //---------------------------------------------------------
 
-QRectF Note::drag(EditData* data)
+QRectF Note::drag(EditData* ed)
       {
       if (staff()->isDrumStaff(tick()))
             return QRect();
-//      dragMode = true;
-      QRectF bb(chord()->bbox());
 
+      NoteElementEditData* ned = static_cast<NoteElementEditData*>(ed->getData(this));
+      int _tick      = chord()->tick();
       qreal _spatium = spatium();
-      bool tab       = staff()->isTabStaff(chord()->tick());
-      qreal step     = _spatium * (tab ? staff()->staffType(tick())->lineDistance().val() : 0.5);
-      _lineOffset    = lrint(data->delta.y() / step);
+      bool tab       = staff()->isTabStaff(_tick);
+      qreal step     = _spatium * (tab ? staff()->staffType(_tick)->lineDistance().val() : 0.5);
+      int lineOffset = lrint(ed->delta.y() / step);
 
+
+      if (staff()->isTabStaff(_tick)) {
+            // TODO
+            }
+      else {
+            Key key = staff()->key(_tick);
+            _pitch = line2pitch(ned->line + lineOffset, staff()->clef(_tick), key);
+            if (!concertPitch()) {
+                  Interval interval = staff()->part()->instrument(_tick)->transpose();
+                  _pitch += interval.chromatic;
+                  }
+            _tpc[0] = pitch2tpc(_pitch, key, Prefer::NEAREST);
+            _tpc[1] = pitch2tpc(_pitch - transposition(), key, Prefer::NEAREST);
+            }
       triggerLayout();
-      return bb.translated(chord()->pagePos());
+      return QRectF();
       }
 
 //---------------------------------------------------------
 //   endDrag
 //---------------------------------------------------------
 
-void Note::endDrag()
+void Note::endDrag(EditData* ed)
       {
-      dragMode = false;
-      if (_lineOffset == 0)
-            return;
-
       Staff* staff = score()->staff(chord()->vStaffIdx());
       int tick     = chord()->tick();
 
       if (staff->isTabStaff(tick)) {
+#if 0 // TODO
             // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
             // determine new string of dragged note (if tablature is upside down, invert _lineOffset)
             // and fret for the same pitch on the new string
@@ -1507,28 +1548,18 @@ void Note::endDrag()
                   if (refret)
                         strData->fretChords(nn->chord());
                   }
+#endif
             }
       else {
-            // on PITCHED / PERCUSSION staves, dragging a note changes the note pitch
-            // determine new pitch of dragged note
-
-            Key key = staff->key(tick);
-            int nPitch = line2pitch(_line + _lineOffset, staff->clef(tick), key);
-            if (!concertPitch()) {
-                  Interval interval = staff->part()->instrument(tick)->transpose();
-                  nPitch += interval.chromatic;
-                  }
-            int tpc1 = pitch2tpc(nPitch, key, Prefer::NEAREST);
-            int tpc2 = pitch2tpc(nPitch - transposition(), key, Prefer::NEAREST);
-            // undefined for non-tablature staves
+            NoteElementEditData* ned = static_cast<NoteElementEditData*>(ed->getData(this));
             for (Note* nn : tiedNotes()) {
-                  // score()->undoChangePitch(nn, nPitch, tpc1, tpc2);
-                  nn->undoChangeProperty(P_ID::PITCH, nPitch);
-                  nn->undoChangeProperty(P_ID::TPC1, tpc1);
-                  nn->undoChangeProperty(P_ID::TPC2, tpc2);
+                  for (PropertyData pd : ned->data) {
+                        if (getProperty(pd.id) != pd.data) {
+                              score()->undoPropertyChanged(nn, pd.id, pd.data);
+                              }
+                        }
                   }
             }
-      _lineOffset = 0;
       score()->select(this, SelectType::SINGLE, 0);
       }
 
@@ -2229,10 +2260,7 @@ void Note::setSmall(bool val)
 
 int Note::line() const
       {
-      if (_fixed)
-            return _fixedLine;
-      else
-            return _line + _lineOffset;
+      return _fixed ? _fixedLine : _line;
       }
 
 //---------------------------------------------------------

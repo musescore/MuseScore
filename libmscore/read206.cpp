@@ -1333,10 +1333,31 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   lastTick = e.tick();
                   }
             else if (tag == "BarLine") {
-                  BarLine* barLine = new BarLine(score);
-                  barLine->setTrack(e.track());
-                  barLine->read(e);
-
+                  BarLine* bl = new BarLine(score);
+                  bl->setTrack(e.track());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "subtype")
+                              bl->setBarLineType(e.readElementText());
+                        else if (tag == "customSubtype")                      // obsolete
+                              e.readInt();
+                        else if (tag == "span") {
+                              bl->setSpanFrom(e.intAttribute("from", bl->spanFrom()));      // obsolete
+                              bl->setSpanTo(e.intAttribute("to", bl->spanTo()));          // obsolete
+                              bl->setSpanStaff(e.readInt() > 1);
+                              }
+                        else if (tag == "spanFromOffset")
+                              bl->setSpanFrom(e.readInt());
+                        else if (tag == "spanToOffset")
+                              bl->setSpanTo(e.readInt());
+                        else if (tag == "Articulation") {
+                              Articulation* a = new Articulation(score);
+                              a->read(e);
+                              bl->add(a);
+                              }
+                        else if (!bl->Element::readProperties(e))
+                              e.unknown();
+                        }
                   //
                   //  StartRepeatBarLine: always at the beginning tick of a measure, always BarLineType::START_REPEAT
                   //  BarLine:            in the middle of a measure, has no semantic
@@ -1346,14 +1367,14 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   Segment::Type st;
                   if ((e.tick() != m->tick()) && (e.tick() != m->endTick()))
                         st = Segment::Type::BarLine;
-                  else if (barLine->barLineType() == BarLineType::START_REPEAT && e.tick() == m->tick())
+                  else if (bl->barLineType() == BarLineType::START_REPEAT && e.tick() == m->tick())
                         st = Segment::Type::StartRepeatBarLine;
                   else if (e.tick() == m->tick() && segment == 0)
                         st = Segment::Type::BeginBarLine;
                   else
                         st = Segment::Type::EndBarLine;
                   segment = m->getSegment(st, e.tick());
-                  segment->add(barLine);
+                  segment->add(bl);
                   }
             else if (tag == "Chord") {
                   Chord* chord = new Chord(score);

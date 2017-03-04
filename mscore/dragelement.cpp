@@ -47,7 +47,10 @@ bool ScoreView::testElementDragTransition(QMouseEvent* ev)
 void ScoreView::startDrag()
       {
       dragElement = curElement;
+      qDeleteAll(data.data);
+      data.data.clear();
       data.startMove  -= dragElement->userOff();
+
       _score->startCmd();
 
       if (dragElement->isMeasure()) {
@@ -55,7 +58,7 @@ void ScoreView::startDrag()
             }
       else {
             for (Element* e : _score->selection().elements())
-                  e->setStartDragPosition(e->userOff());
+                  e->startDrag(&data);
             }
       }
 
@@ -78,7 +81,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
       data.delta   = pt;
       data.pos     = toLogical(ev->pos());
 
-      if (dragElement->type() == ElementType::MEASURE) {
+      if (dragElement->isMeasure()) {
             if (qApp->keyboardModifiers() == Qt::ShiftModifier) {
                   qreal dist      = dragStaff->userDist() + delta.y();
                   int partStaves  = dragStaff->part()->nstaves();
@@ -105,16 +108,16 @@ void ScoreView::doDragElement(QMouseEvent* ev)
       //    you usually dont want dragging stems & hooks
       //    which would offset stems
 
-//      bool dragNotes = false;
-//      for (Element* e : _score->selection().elements()) {
-//            if (e->isNote()) {
-//                  dragNotes = true;
-//                  break;
-//                  }
-//            }
+      bool dragNotes = false;
       for (Element* e : _score->selection().elements()) {
-//            if (dragNotes && (e->isStem() || e->isHook()))
-//                  continue;
+            if (e->isNote()) {
+                  dragNotes = true;
+                  break;
+                  }
+            }
+      for (Element* e : _score->selection().elements()) {
+            if (dragNotes && (e->isStem() || e->isHook()))
+                  continue;
             _score->addRefresh(e->drag(&data));
             }
 
@@ -146,13 +149,8 @@ void ScoreView::endDrag()
             score()->undo(new ChangeStaffUserDist(dragStaff, userDist));
             }
       else {
-            for (Element* e : _score->selection().elements()) {
-                  e->endDrag();
-                  if (e->userOff() != e->startDragPosition()) {
-                        e->undoChangeProperty(P_ID::AUTOPLACE, false);
-                        e->score()->undoPropertyChanged(e, P_ID::USER_OFF, e->startDragPosition());
-                        }
-                  }
+            for (Element* e : _score->selection().elements())
+                  e->endDrag(&data);
             }
       dragElement = 0;
       setDropTarget(0); // this also resets dropAnchor

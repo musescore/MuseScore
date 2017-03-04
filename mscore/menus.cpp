@@ -1108,6 +1108,15 @@ Palette* MuseScore::newLinesPalette(PaletteType t)
       gabel3->setLen(w);
       sp->append(gabel3, QT_TRANSLATE_NOOP("Palette", "Diminuendo line"));
 
+      if (t != PaletteType::BASIC) {
+            Hairpin* gabel0 = new Hairpin(gscore);
+            gabel0->setHairpinType(HairpinType::CRESC_HAIRPIN);
+            gabel0->setBeginText("<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
+            gabel0->setBeginTextAlign(Align::VCENTER);
+            gabel0->setLen(w);
+            sp->append(gabel0, qApp->translate("lines", "Dynamics + hairpin"));
+            }
+
       Volta* volta = new Volta(gscore);
       volta->setVoltaType(Volta::Type::CLOSED);
       volta->setLen(w);

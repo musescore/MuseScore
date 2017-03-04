@@ -32,10 +32,9 @@ class Text;
 class TextLineBaseSegment : public LineSegment {
       Q_GADGET
 
+   protected:
       Text* _text;
       Text* _endText;
-
-   protected:
       QPointF points[4];
       int npoints;
       bool twoLines { false };
