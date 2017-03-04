@@ -387,10 +387,10 @@ void Debugger::addMeasure(ElementItem* mi, Measure* measure)
                   if (!e)
                         continue;
                   ElementItem* sei = new ElementItem(segItem, e);
-                  if (e->type() == ElementType::CHORD)
-                        addChord(sei, static_cast<Chord*>(e));
+                  if (e->isChord())
+                        addChord(sei, toChord(e));
                   else if (e->isChordRest()) {
-                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        ChordRest* cr = toChordRest(e);
                         if (cr->beam() && cr->beam()->elements().front() == cr)
                               new ElementItem(sei, cr->beam());
                         for (Lyrics* lyrics : cr->lyrics()) {

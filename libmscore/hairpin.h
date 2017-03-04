@@ -24,7 +24,12 @@ namespace Ms {
 class Score;
 class Hairpin;
 
-enum class HairpinType : char { CRESC_HAIRPIN, DECRESC_HAIRPIN, CRESC_LINE, DECRESC_LINE };
+enum class HairpinType : char {
+      CRESC_HAIRPIN,
+      DECRESC_HAIRPIN,
+      CRESC_LINE,
+      DECRESC_LINE
+      };
 
 //---------------------------------------------------------
 //   @@ HairpinSegment
@@ -90,33 +95,33 @@ class Hairpin : public TextLineBase {
 
    public:
       Hairpin(Score* s);
-      virtual Hairpin* clone() const override     { return new Hairpin(*this); }
+      virtual Hairpin* clone() const override   { return new Hairpin(*this); }
       virtual ElementType type() const override { return ElementType::HAIRPIN;  }
 
-      HairpinType hairpinType() const      { return _hairpinType; }
+      HairpinType hairpinType() const           { return _hairpinType; }
       void setHairpinType(HairpinType val);
       void undoSetHairpinType(HairpinType);
 
-      Segment* segment() const      { return (Segment*)parent(); }
+      Segment* segment() const                  { return (Segment*)parent(); }
       virtual void layout() override;
       virtual LineSegment* createLineSegment() override;
 
-      bool hairpinCircledTip() const           { return _hairpinCircledTip; }
-      void setHairpinCircledTip(bool val)      { _hairpinCircledTip = val; }
+      bool hairpinCircledTip() const            { return _hairpinCircledTip; }
+      void setHairpinCircledTip(bool val)       { _hairpinCircledTip = val; }
 
-      int veloChange() const           { return _veloChange; }
-      void setVeloChange(int v)        { _veloChange = v;    }
+      int veloChange() const                    { return _veloChange; }
+      void setVeloChange(int v)                 { _veloChange = v;    }
       void undoSetVeloChange(int v);
 
-      Dynamic::Range dynRange() const        { return _dynRange; }
-      void setDynRange(Dynamic::Range t)     { _dynRange = t;    }
+      Dynamic::Range dynRange() const           { return _dynRange; }
+      void setDynRange(Dynamic::Range t)        { _dynRange = t;    }
       void undoSetDynRange(Dynamic::Range t);
 
-      Spatium hairpinHeight() const          { return _hairpinHeight; }
-      void setHairpinHeight(Spatium val)     { _hairpinHeight = val; }
+      Spatium hairpinHeight() const             { return _hairpinHeight; }
+      void setHairpinHeight(Spatium val)        { _hairpinHeight = val; }
 
-      Spatium hairpinContHeight() const      { return _hairpinContHeight; }
-      void setHairpinContHeight(Spatium val) { _hairpinContHeight = val; }
+      Spatium hairpinContHeight() const         { return _hairpinContHeight; }
+      void setHairpinContHeight(Spatium val)    { _hairpinContHeight = val; }
 
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;

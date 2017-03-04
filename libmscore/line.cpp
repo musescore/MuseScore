@@ -392,6 +392,7 @@ void LineSegment::editDrag(const EditData& ed)
                   break;
             case Grip::MIDDLE: // Move the element (middle grip)
                   setUserOff(userOff() + deltaMove);
+                  undoChangeProperty(P_ID::AUTOPLACE, false);
                   break;
             default:
                   break;
@@ -423,8 +424,6 @@ void LineSegment::editDrag(const EditData& ed)
                         }
                   }
             }
-//      line()->layout();
-//      layout();
       triggerLayout();
       }
 

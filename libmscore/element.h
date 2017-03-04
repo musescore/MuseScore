@@ -103,6 +103,16 @@ struct DropData {
       };
 
 //---------------------------------------------------------
+//   ElementEditData
+//---------------------------------------------------------
+
+class ElementEditData {
+   public:
+      Element* e;
+      QPointF startDragPosition;
+      };
+
+//---------------------------------------------------------
 //   EditData
 //    used in editDrag
 //---------------------------------------------------------
@@ -118,6 +128,13 @@ struct EditData {
       QPointF delta;
       bool hRaster;
       bool vRaster;
+      //
+      // set by startDrag()
+      //
+      QList<ElementEditData*> data;
+
+      ElementEditData* getData(Element*);
+      void addData(ElementEditData*);
       };
 
 //-------------------------------------------------------------------
@@ -183,9 +200,6 @@ class Element : public ScoreElement {
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
-
-   protected:
-      QPointF _startDragPosition;   ///< used during drag
 
    public:
       Element(Score* s = 0);
@@ -289,8 +303,9 @@ class Element : public ScoreElement {
       virtual void write(XmlWriter&) const;
       virtual void read(XmlReader&);
 
+      virtual void startDrag(EditData*);
       virtual QRectF drag(EditData*);
-      virtual void endDrag()                  {}
+      virtual void endDrag(EditData*);
       virtual QLineF dragAnchor() const       { return QLineF(); }
 
       virtual bool isEditable() const         { return !flag(ElementFlag::GENERATED); }
@@ -396,9 +411,6 @@ class Element : public ScoreElement {
       // is not valid
       //
       virtual bool check() const { return true; }
-
-      QPointF startDragPosition() const           { return _startDragPosition; }
-      void setStartDragPosition(const QPointF& v) { _startDragPosition = v; }
 
       static Ms::Element* create(Ms::ElementType type, Score*);
       static Element* name2Element(const QStringRef&, Score*);

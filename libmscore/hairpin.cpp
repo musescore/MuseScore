@@ -132,6 +132,11 @@ void HairpinSegment::layout()
       else {
             twoLines  = true;
 
+            qreal x1 = 0.0;
+            TextLineBaseSegment::layout();
+            if (!_text->empty())
+                  x1 = _text->width();
+
             QTransform t;
             qreal h1 = hairpin()->hairpinHeight().val()     * spatium() * .5;
             qreal h2 = hairpin()->hairpinContHeight().val() * spatium() * .5;
@@ -154,8 +159,8 @@ void HairpinSegment::layout()
                         switch (spannerSegmentType()) {
                               case SpannerSegmentType::SINGLE:
                               case SpannerSegmentType::BEGIN:
-                                    l1.setLine(circledTipRadius * 2.0, 0.0, len, h1);
-                                    l2.setLine(circledTipRadius * 2.0, 0.0, len, -h1);
+                                    l1.setLine(x1 + circledTipRadius * 2.0, 0.0, len, h1);
+                                    l2.setLine(x1 + circledTipRadius * 2.0, 0.0, len, -h1);
                                     circledTip.setX(circledTipRadius );
                                     circledTip.setY(0.0);
                                     break;
@@ -163,8 +168,8 @@ void HairpinSegment::layout()
                               case SpannerSegmentType::MIDDLE:
                               case SpannerSegmentType::END:
                                     drawCircledTip = false;
-                                    l1.setLine(.0,  h2, len, h1);
-                                    l2.setLine(.0, -h2, len, -h1);
+                                    l1.setLine(x1,  h2, len, h1);
+                                    l2.setLine(x1, -h2, len, -h1);
                                     break;
                               }
                         }
@@ -173,16 +178,16 @@ void HairpinSegment::layout()
                         switch (spannerSegmentType()) {
                               case SpannerSegmentType::SINGLE:
                               case SpannerSegmentType::END:
-                                    l1.setLine(0.0,  h1, len - circledTipRadius * 2, 0.0);
-                                    l2.setLine(0.0, -h1, len - circledTipRadius * 2, 0.0);
+                                    l1.setLine(x1,  h1, len - circledTipRadius * 2, 0.0);
+                                    l2.setLine(x1, -h1, len - circledTipRadius * 2, 0.0);
                                     circledTip.setX(len - circledTipRadius);
                                     circledTip.setY(0.0);
                                     break;
                               case SpannerSegmentType::BEGIN:
                               case SpannerSegmentType::MIDDLE:
                                     drawCircledTip = false;
-                                    l1.setLine(.0,  h1, len, + h2);
-                                    l2.setLine(.0, -h1, len, - h2);
+                                    l1.setLine(x1,  h1, len, + h2);
+                                    l2.setLine(x1, -h1, len, - h2);
                                     break;
                               }
                         }
@@ -204,6 +209,8 @@ void HairpinSegment::layout()
             npoints   = 4;
 
             QRectF r = QRectF(l1.p1(), l1.p2()).normalized() | QRectF(l2.p1(), l2.p2()).normalized();
+            if (!_text->empty())
+                  r |= _text->bbox();
             qreal w  = score()->styleP(StyleIdx::hairpinLineWidth);
             setbbox(r.adjusted(-w*.5, -w*.5, w, w));
             }
@@ -473,11 +480,11 @@ void HairpinSegment::resetProperty(P_ID id)
 Hairpin::Hairpin(Score* s)
    : TextLineBase(s)
       {
-      _hairpinType       = HairpinType::CRESC_HAIRPIN;
-      _hairpinCircledTip = false;
-      _veloChange        = 0;
-      _dynRange          = Dynamic::Range::PART;
       setLineWidth(score()->styleS(StyleIdx::hairpinLineWidth));
+      _hairpinType           = HairpinType::CRESC_HAIRPIN;
+      _hairpinCircledTip     = false;
+      _veloChange            = 0;
+      _dynRange              = Dynamic::Range::PART;
       lineWidthStyle         = PropertyFlags::STYLED;
       _hairpinHeight         = score()->styleS(StyleIdx::hairpinHeight);
       hairpinHeightStyle     = PropertyFlags::STYLED;
