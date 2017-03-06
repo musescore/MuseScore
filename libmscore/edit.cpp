@@ -947,8 +947,8 @@ void Score::addPitch(int step, bool addFlag)
       pos.staffIdx  = inputState().track() / VOICES;
       ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
       pos.line      = relStep(step, clef);
-      
-      if (inputState().repitchMode())
+
+      if (inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH))
             repitchNote(pos, !addFlag);
       else
             putNote(pos, !addFlag);
@@ -1074,7 +1074,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
       if (!_is.cr())
             return 0;
       Fraction duration;
-      if (_is.repitchMode()) {
+      if (_is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
             duration = _is.cr()->duration();
             }
       else {
@@ -1083,7 +1083,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
       Note* note = 0;
       Note* firstTiedNote = 0;
       Note* lastTiedNote = 0;
-      if (_is.repitchMode() && _is.cr()->type() == Element::Type::CHORD) {
+      if (_is.usingNoteEntryMethod(NoteEntryMethod::REPITCH) && _is.cr()->isChord()) {
             // repitch mode for MIDI input (where we are given a pitch) is handled here
             // for keyboard input (where we are given a staff position), there is a separate function Score::repitchNote()
             // the code is similar enough that it could possibly be refactored
@@ -1143,7 +1143,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
                   }
             select(lastTiedNote);
             }
-      else if (!_is.repitchMode()) {
+      else if (!_is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
             Segment* seg = setNoteRest(_is.segment(), track, nval, duration, stemDirection);
             if (seg) {
                   note = static_cast<Chord*>(seg->element(track))->upNote();
@@ -1176,7 +1176,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
                   qDebug("addPitch: cannot find slur note");
             setLayoutAll(true);
             }
-      if (_is.repitchMode()) {
+      if (_is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
             // move cursor to next note, but skip tied notes (they were already repitched above)
             ChordRest* next = lastTiedNote ? nextChordRest(lastTiedNote->chord()) : nextChordRest(_is.cr());
             while (next && next->type() != Element::Type::CHORD)
@@ -1201,7 +1201,7 @@ void Score::putNote(const QPointF& pos, bool replace)
             qDebug("cannot put note here, get position failed");
             return;
             }
-      if (inputState().repitchMode())
+      if (inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH))
             repitchNote(p, replace);
       else
             putNote(p, replace);

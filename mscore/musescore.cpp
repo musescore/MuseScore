@@ -2799,22 +2799,27 @@ void MuseScore::changeState(ScoreState val)
             case STATE_NOTE_ENTRY_STAFF_PITCHED:
                   if (getAction("note-input-repitch")->isChecked()) {
                         showModeText(tr("Repitch input mode"));
+                        cs->setNoteEntryMethod(NoteEntryMethod::REPITCH);
                         val = STATE_NOTE_ENTRY_METHOD_REPITCH;
                         }
                   else if (getAction("note-input-rhythm")->isChecked()) {
                         showModeText(tr("Rhythm input mode"));
+                        cs->setNoteEntryMethod(NoteEntryMethod::RHYTHM);
                         val = STATE_NOTE_ENTRY_METHOD_RHYTHM;
                         }
                   else if (getAction("note-input-realtime-auto")->isChecked()) {
                         showModeText(tr("Realtime (automatic) note input mode"));
+                        cs->setNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO);
                         val = STATE_NOTE_ENTRY_METHOD_REALTIME_AUTO;
                         }
                   else if (getAction("note-input-realtime-manual")->isChecked()) {
                         showModeText(tr("Realtime (manual) note input mode"));
+                        cs->setNoteEntryMethod(NoteEntryMethod::REALTIME_MANUAL);
                         val = STATE_NOTE_ENTRY_METHOD_REALTIME_MANUAL;
                         }
                   else {
                         showModeText(tr("Steptime note input mode"));
+                        cs->setNoteEntryMethod(NoteEntryMethod::STEPTIME);
                         val = STATE_NOTE_ENTRY_METHOD_STEPTIME;
                         }
                   break;
