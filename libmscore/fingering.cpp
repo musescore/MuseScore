@@ -60,8 +60,9 @@ void Fingering::read(XmlReader& e)
 
 void Fingering::layout()
       {
-      if (staff() && staff()->isTabStaff())     // in TAB staves
-            setbbox(QRectF());                  // fingerings have no area
+      if (staff() && staff()->isTabStaff() 
+           && !staff()->staffType()->showTabFingering())     // in TAB staves
+            setbbox(QRectF());                               // fingerings have no area, if they not should be shown
       else
             Text::layout();
       }
@@ -72,7 +73,8 @@ void Fingering::layout()
 
 void Fingering::draw(QPainter* painter) const
       {
-      if (staff() && staff()->isTabStaff())     // hide fingering in TAB staves
+      if (staff() && staff()->isTabStaff() 
+            && !staff()->staffType()->showTabFingering())     // hide fingering in TAB staves, if they not should be shown
             return;
       Text::draw(painter);
       }

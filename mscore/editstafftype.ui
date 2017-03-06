@@ -651,6 +651,13 @@
                    </widget>
                   </item>
                   <item>
+                   <widget class="QCheckBox" name="showTabFingering">
+                    <property name="text">
+                     <string>Show fingerings</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
                    <spacer name="horizontalSpacer_6">
                     <property name="orientation">
                      <enum>Qt::Horizontal</enum>
@@ -1376,6 +1383,7 @@
   <tabstop>linesThroughRadio</tabstop>
   <tabstop>linesBrokenRadio</tabstop>
   <tabstop>showBackTied</tabstop>
+  <tabstop>showTabFingering</tabstop>
   <tabstop>durFontName</tabstop>
   <tabstop>durFontSize</tabstop>
   <tabstop>durY</tabstop>
