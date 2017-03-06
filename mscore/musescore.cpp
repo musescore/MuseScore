@@ -362,7 +362,6 @@ void MuseScore::preferencesChanged()
       }
 
 //---------------------------------------------------------
-//---------------------------------------------------------
 //   MuseScore
 //---------------------------------------------------------
 
@@ -980,7 +979,7 @@ MuseScore::MuseScore()
       menuLayout = mb->addMenu(tr("&Layout"));
       menuLayout->setObjectName("Layout");
 
-      for (auto i : { "page-settings", "reset", "stretch+", "stretch-", "reset-stretch", "reset-beammode" }) {
+      for (auto i : { "page-settings", "reset", "stretch+", "stretch-", "reset-stretch", "reset-beammode", "reset-groupings" }) {
             QAction* action = getAction(i);
             action->setMenuRole(QAction::NoRole);
             menuLayout->addAction(action);

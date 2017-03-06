@@ -527,6 +527,7 @@ class Score : public QObject, public ScoreElement {
       void cmdAddHairpin(bool);
       void cmdAddOttava(Ottava::Type);
       void cmdAddStretch(qreal);
+      void cmdResetNoteAndRestGroupings();
 
       void addRemoveBreaks(int interval, bool lock);
 
@@ -639,6 +640,7 @@ class Score : public QObject, public ScoreElement {
       void putNote(const QPointF& pos, bool replace);
       void putNote(const Position& pos, bool replace);
       void repitchNote(const Position& pos, bool replace);
+      void regroupNotesAndRests(int startTick, int endTick, int track);
       void cmdAddPitch(int pitch, bool addFlag);
 
       //@ to be used at least once by plugins of type "dialog" before score modifications to make them undoable

@@ -1725,6 +1725,37 @@ void Score::cmdResetBeamMode()
       }
 
 //---------------------------------------------------------
+//   cmdResetNoteAndRestGroupings
+//---------------------------------------------------------
+
+void Score::cmdResetNoteAndRestGroupings()
+      {
+      if (selection().isNone())
+            cmdSelectAll();
+      else if (!selection().isRange()) {
+            qDebug("no system or staff selected");
+            return;
+            }
+
+      // save selection values because selection changes during grouping
+      int sTick = selection().tickStart();
+      int eTick = selection().tickEnd();
+      int sStaff = selection().staffStart();
+      int eStaff = selection().staffEnd();
+
+      startCmd();
+      for (int staff = sStaff; staff < eStaff; staff++) {
+            int sTrack = staff * VOICES;
+            int eTrack = sTrack + VOICES;
+            for (int track = sTrack; track < eTrack; track++) {
+                  if (selectionFilter().canSelectVoice(track))
+                        regroupNotesAndRests(sTick, eTick, track);
+                  }
+            }
+      endCmd();
+      }
+
+//---------------------------------------------------------
 //   processMidiInput
 //---------------------------------------------------------
 
@@ -2455,6 +2486,8 @@ void Score::cmd(const QAction* a)
             }
       else if (cmd == "reset-beammode")
             cmdResetBeamMode();
+      else if (cmd == "reset-groupings")
+            cmdResetNoteAndRestGroupings();
       else if (cmd == "clef-violin")
             cmdInsertClef(ClefType::G);
       else if (cmd == "clef-bass")
