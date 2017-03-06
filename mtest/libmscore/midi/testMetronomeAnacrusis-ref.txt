@@ -1,0 +1,8 @@
+Tick  =    240   Type  =     4   Pitch  =     0   Velocity  =   127   Channel  =     0    
+Tick  =    720   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
+Tick  =   1200   Type  =     3   Pitch  =     0   Velocity  =   127   Channel  =     0    
+Tick  =   1680   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
+Tick  =   2160   Type  =     4   Pitch  =     0   Velocity  =   127   Channel  =     0    
+Tick  =   2640   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
+Tick  =   3120   Type  =     3   Pitch  =     0   Velocity  =   127   Channel  =     0    
+Tick  =   3600   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
