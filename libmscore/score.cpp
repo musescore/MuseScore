@@ -2665,6 +2665,7 @@ void Score::addAudioTrack()
 
 void Score::padToggle(Pad n)
       {
+      int oldDots = _is.duration().dots();
       switch (n) {
             case Pad::NOTE00:
                   _is.setDuration(TDuration::DurationType::V_LONG);
@@ -2718,8 +2719,35 @@ void Score::padToggle(Pad n)
             // if in "note enter" mode, reset
             // rest flag
             //
-            if (noteEntryMode())
-                  _is.setRest(false);
+            if (noteEntryMode()) {
+                  if (usingNoteEntryMethod(NoteEntryMethod::RHYTHM)) {
+                        switch (oldDots) {
+                              case 1:
+                                    padToggle(Pad::DOT);
+                                    break;
+                              case 2:
+                                    padToggle(Pad::DOTDOT);
+                                    break;
+                              }
+                        NoteVal nval;
+                        if (_is.rest()) {
+                              // Enter a rest
+                              nval = NoteVal();
+                              }
+                        else {
+                              // Enter a note on the middle staff line
+                              Staff* s = staff(_is.track() / VOICES);
+                              int tick = _is.tick();
+                              ClefType clef = s->clef(tick);
+                              Key key = s->key(tick);
+                              nval = NoteVal(line2pitch(4, clef, key));
+                              }
+                        setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction());
+                        _is.moveToNextInputPos();
+                        }
+                  else
+                        _is.setRest(false);
+                  }
             }
 
       if (noteEntryMode() || !selection().isSingle()) {
