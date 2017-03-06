@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/rhythmicGrouping/group8ths4-4.mscx      group8ths4-4-ref.mscx
+cp ../../../build.debug/mtest/libmscore/rhythmicGrouping/group8thsSimple.mscx   group8thsSimple-ref.mscx
+cp ../../../build.debug/mtest/libmscore/rhythmicGrouping/group8thsCompound.mscx group8thsCompound-ref.mscx
+cp ../../../build.debug/mtest/libmscore/rhythmicGrouping/groupVoices.mscx       groupVoices-ref.mscx
