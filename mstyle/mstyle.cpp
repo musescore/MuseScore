@@ -147,14 +147,15 @@ int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const Q
       switch (metric) {
                   // rely on QCommonStyle here
             case PM_SmallIconSize:
+                  return Icon_SizeSmall;
             case PM_ButtonIconSize:
-                  return 16;
+                  return Icon_SizeButton;
             case PM_ToolBarIconSize:
-                  return 22;
+                  return Icon_SizeToolBar;
             case PM_LargeIconSize:
-                  return 32;              //??
+                  return Icon_SizeLarge;
             case PM_MessageBoxIconSize:
-                  return 48;              //??
+                  return Icon_SizeMessageBox;
 
             case PM_DefaultFrameWidth: {
                   if ( qobject_cast<const QLineEdit*>(widget) )
@@ -488,12 +489,15 @@ QSize MgStyle::menuItemSizeFromContents(const QStyleOption* option, const QSize&
             case QStyleOptionMenuItem::Normal:
             case QStyleOptionMenuItem::DefaultItem:
             case QStyleOptionMenuItem::SubMenu: {
-                  int iconColW = qMax( menuItemOption->maxIconWidth, (int) MenuItem_IconWidth );
-                  int leftColW = iconColW;
-                  if ( menuItemOption->menuHasCheckableItems ) {
-                        leftColW += MenuItem_CheckWidth + MenuItem_CheckSpace;
+                  int h = 0;
+                  int leftColW = MenuItem_MinLeftColWidth;
+                  if (menuItemOption->menuHasCheckableItems)
+                        leftColW = MenuItem_CheckWidth + MenuItem_CheckSpace;
+                  if (!menuItemOption->icon.isNull()) {
+                        const int iconColW = MenuItem_IconWidth;
+                        leftColW += iconColW + MenuItem_IconSpace;
+                        h = iconColW;
                         }
-                  leftColW += MenuItem_IconSpace;
                   int rightColW = MenuItem_ArrowSpace + MenuItem_ArrowWidth;
 
                   QFontMetrics fm(menuItemOption->font);
@@ -508,8 +512,8 @@ QSize MgStyle::menuItemSizeFromContents(const QStyleOption* option, const QSize&
                         // ( see QMenuPrivate::calcActionRects() )
                         textW = contentsSize.width() + MenuItem_AccelSpace;
                         }
-
-                  int h = qMax(contentsSize.height(), (int) MenuItem_MinHeight );
+                  h = qMax(h, contentsSize.height());
+                  h = qMax(h, (int)MenuItem_MinHeight);
                   insideSize = QSize(leftColW + textW + rightColW, h);
                   break;
                   }
@@ -4981,16 +4985,22 @@ bool MgStyle::drawMenuItemControl(const QStyleOption* option, QPainter* painter,
             return true;
 
       //First, figure out the left column width.
-      const int iconColW   = (int)MenuItem_IconWidth; //qMax( menuItemOption->maxIconWidth, (int)MenuItem_IconWidth );
+      const int iconColW   = MenuItem_IconWidth;
       const int checkColW  = MenuItem_CheckWidth;
       const int checkSpace = MenuItem_CheckSpace;
 
-      int leftColW = iconColW;
+      int leftColW = MenuItem_MinLeftColWidth;
 
-      // only use the additional check row if the menu has checkable menuItems.
-      bool hasCheckableItems = menuItemOption->menuHasCheckableItems;
+      // only use the additional check column if the menu has checkable menuItems.
+      const bool hasCheckableItems = menuItemOption->menuHasCheckableItems;
+      //const bool hasCheckableItems = true; // for visual consistency always leave space even if there isn't a checkbox in the menu
       if (hasCheckableItems)
-            leftColW = checkColW + checkSpace; //leftColW += checkColW + checkSpace;
+            leftColW = checkColW + checkSpace;
+
+      // only make space for an icon if this menu item has one.
+      const bool hasIcon = !menuItemOption->icon.isNull();
+      if (hasIcon)
+            leftColW += iconColW + MenuItem_IconSpace;
 
       // right arrow column...
       int rightColW = MenuItem_ArrowSpace + MenuItem_ArrowWidth;
@@ -5099,7 +5109,7 @@ bool MgStyle::drawMenuItemControl(const QStyleOption* option, QPainter* painter,
             }
 
       // Paint the menu icon.
-      if ( !menuItemOption->icon.isNull()) {
+      if (hasIcon) {
             QRect iconColRect;
             if ( hasCheckableItems ) {
                   iconColRect = QRect(
@@ -5120,15 +5130,11 @@ bool MgStyle::drawMenuItemControl(const QStyleOption* option, QPainter* painter,
                   ( (flags & State_On) || (flags & State_Sunken) ) ? QIcon::On : QIcon::Off );
 
             // icon size
-            const QSize size( pixelMetric(PM_SmallIconSize), pixelMetric(PM_SmallIconSize) );
+            const QSize size(iconColW, iconColW);
             const QRect r( handleRTL(option, centerRect(iconColRect, size ) ) );
             const QPixmap icon = menuItemOption->icon.pixmap(size, mode, iconState);
             painter->drawPixmap( centerRect( r, size ), icon );
             }
-
-
-      //Now include the spacing when calculating the next columns
-      leftColW += MenuItem_IconSpace;
 
       //Render the text, including any accel.
       QString text = menuItemOption->text;
