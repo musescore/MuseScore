@@ -507,56 +507,69 @@ void populateRhythmicList(QList<TDuration>* dList, const Fraction& l, bool isRes
       {
       int rtickEnd = rtickStart + l.ticks();
 
-      BeatType startBeat = nominal.rtick2beatType(rtickStart);
-      BeatType endBeat = nominal.rtick2beatType(rtickEnd);
+      bool needToSplit = false; // do we need to split?
+      int rtickSplit = 0; // tick to split on if we need to
 
-      int dUnitsCrossed = 0; // number of timeSig denominator units the note/rest crosses
-      BeatType strongestBeatCrossed = BeatType::SUBBEAT; // split on the strongest beat or subbeat crossed
-      int rtickSplit1 = 0; // tick of the strongest beat
-      int rtickSplit2 = 0; // alternative tick if there is a choice (crossed more than one of strongest type).
+      // CHECK AT SUBBEAT LEVEL
 
-      for (int rtick = rtickStart + nominal.ticksToNextDUnit(rtickStart); rtick < rtickEnd; rtick += nominal.dUnitTicks()) {
-            dUnitsCrossed++;
-            BeatType type = nominal.rtick2beatType(rtick);
-            if (type == strongestBeatCrossed)
-                  rtickSplit2 = rtick;
-            else if (type < strongestBeatCrossed) {
-                  strongestBeatCrossed = type;
-                  rtickSplit1 = rtick;
-                  rtickSplit2 = 0;
-                  }
-            }
+      int startLevel = nominal.rtick2subbeatLevel(rtickStart);
+      int endLevel = nominal.rtick2subbeatLevel(rtickEnd);
+      int strongestLevelCrossed = nominal.strongestSubbeatLevelInRange(rtickStart, rtickEnd, &rtickSplit); // sets rtickSplit
 
-      if (!dUnitsCrossed) {
-            // we didn't cross any beats so just split into largest possible durations.
+      if ((startLevel < 0) || (endLevel < 0) || (strongestLevelCrossed < 0)) {
+            // Beyond maximum subbeat level so just split into largest possible durations.
             QList<TDuration> dList2 = toDurationList(l, maxDots > 0, maxDots, false);
             dList->append(dList2);
             return;
             }
 
-      // we crossed beats, but were they rhythmically important?
-      if (!forceRhythmicSplit(isRest, startBeat, endBeat, dUnitsCrossed, strongestBeatCrossed, nominal)) {
-            // crossed beats were not important so try to avoid splitting.
+      // split if we cross something stronger than where we start and end
+      if ((strongestLevelCrossed < startLevel) && (strongestLevelCrossed < endLevel))
+            needToSplit = true;
+      // but don't split for level 1 syncopation (allow eight-note, quarter, quarter... to cross unstressed beats)
+      if (startLevel == endLevel && strongestLevelCrossed == startLevel - 1)
+            needToSplit = false;
+      // nor for the next simplest case of level 2 syncopation (allow sixteenth-note, eighth, eighth... to cross unstressed beats)
+      if (startLevel == endLevel && strongestLevelCrossed == startLevel - 2) {
+            // but disallow sixteenth-note, quarter, quarter...
+            int ticksToNext = nominal.ticksToNextSubbeat(rtickStart, startLevel - 1);
+            int ticksPastPrev = nominal.ticksPastSubbeat(rtickStart, startLevel - 1);
+            needToSplit = ticksToNext != ticksPastPrev;
+            }
+
+      if (!needToSplit && strongestLevelCrossed == 0) {
+            // NOW CHECK AT DENOMINATOR UNIT LEVEL AND BEAT LEVEL
+            BeatType startBeat = nominal.rtick2beatType(rtickStart);
+            BeatType endBeat = nominal.rtick2beatType(rtickEnd);
+
+            int dUnitsCrossed = 0; // number of timeSig denominator units the note/rest crosses
+            // if there is a choice of which beat to split on, should we use the first or last?
+            bool useLast = startBeat <= BeatType::SIMPLE_UNSTRESSED; // split on the later beat if starting on a beat
+
+            BeatType strongestBeatCrossed = nominal.strongestBeatInRange(rtickStart, rtickEnd, &dUnitsCrossed, &rtickSplit, useLast);
+
+            needToSplit = forceRhythmicSplit(isRest, startBeat, endBeat, dUnitsCrossed, strongestBeatCrossed, nominal);
+            }
+
+      if (!needToSplit) {
+            // CHECK THERE IS A DURATION THAT FITS
+            // crossed beats/subbeats were not important so try to avoid splitting
             TDuration d = TDuration(l, true, maxDots);
             if (d.fraction() == l) {
                   // we can use a single duration - no need to split!
                   dList->append(l);
                   return;
                   }
-            // no single TDuration fits so must split anyway, and best to split on a beat.
+            // no single TDuration fits so must split anyway
             }
 
-      // prepare to split on strongest beat. Do we have a choice of beat to split on?
-      if (rtickSplit2 && startBeat <= BeatType::SIMPLE_UNSTRESSED)
-            rtickSplit1 = rtickSplit2; // use later choice when note starts on a beat, otherwise use early choice.
-
-      // Split on the beat
-      Fraction leftSplit = Fraction::fromTicks(rtickSplit1  - rtickStart);
+      // Split on the strongest beat or subbeat crossed
+      Fraction leftSplit = Fraction::fromTicks(rtickSplit  - rtickStart);
       Fraction rightSplit = l - leftSplit;
 
-      // Recurse to see if we need to split further
+      // Recurse to see if we need to split further before adding to list
       populateRhythmicList(dList, leftSplit, isRest, rtickStart, nominal, maxDots);
-      populateRhythmicList(dList, rightSplit, isRest, rtickSplit1 , nominal, maxDots);
+      populateRhythmicList(dList, rightSplit, isRest, rtickSplit , nominal, maxDots);
       }
 
 //---------------------------------------------------------
