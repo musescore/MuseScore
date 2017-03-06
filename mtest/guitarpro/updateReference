@@ -103,13 +103,18 @@ cp   $MSCORE/ghost-note.gpx.mscx ghost-note.gpx-ref.mscx
 cp   $MSCORE/rasg.gpx.mscx rasg.gpx-ref.mscx
 cp   $MSCORE/all-percussion.gp5.mscx all-percussion.gp5-ref.mscx
 cp   $MSCORE/fermata.gpx.mscx fermata.gpx-ref.mscx
-cp   $MSCORE/directions.gpx.mscx directions.gpx-ref.mscx
+# cp   $MSCORE/directions.gpx.mscx directions.gpx-ref.mscx
 cp   $MSCORE/slur.gpx.mscx slur.gpx-ref.mscx
 cp   $MSCORE/vibrato.gpx.mscx vibrato.gpx-ref.mscx
 cp   $MSCORE/volume-swell.gpx.mscx volume-swell.gpx-ref.mscx
-cp   $MSCORE/tremolo-bar.gpx.mscx tremolo-bar.gpx-ref.mscx
+# cp   $MSCORE/tremolo-bar.gpx.mscx tremolo-bar.gpx-ref.mscx
 cp   $MSCORE/free-time.gpx.mscx free-time.gpx-ref.mscx
 cp   $MSCORE/repeated-bars.gpx.mscx repeated-bars.gpx-ref.mscx
 cp   $MSCORE/dotted-gliss.gp3.mscx dotted-gliss.gp3-ref.mscx
 cp   $MSCORE/high-pitch.gp3.mscx high-pitch.gp3-ref.mscx
 cp   $MSCORE/multivoices.gpx.mscx multivoices.gpx-ref.mscx
+cp   $MSCORE/ottava1.gpx.mscx ottava1.gpx-ref.mscx
+cp   $MSCORE/ottava2.gpx.mscx ottava2.gpx-ref.mscx
+cp   $MSCORE/ottava3.gpx.mscx ottava3.gpx-ref.mscx
+cp   $MSCORE/ottava4.gpx.mscx ottava4.gpx-ref.mscx
+cp   $MSCORE/ottava5.gpx.mscx ottava5.gpx-ref.mscx

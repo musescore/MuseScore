@@ -364,6 +364,7 @@ void GuitarPro::addPop(Note* note)
 
 Text* GuitarPro::addTextToNote(QString string, Align a, Note* note)
       {
+//TODO:ws  substyle?
       Text* text = new Text(score);
       text->setAlign(a);
       text->setPlainText(string);
@@ -2328,16 +2329,12 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
                   }
             }
       if (!gp->title.isEmpty()) {
-            Text* s = new Text(score);
-            // s->setSubtype(TEXT_TITLE);
-//TODO:ws            s->setTextStyleType(TextStyleType::TITLE);
+            Text* s = new Text(SubStyle::TITLE, score);
             s->setPlainText(gp->title);
             m->add(s);
             }
       if (!gp->subtitle.isEmpty() && !gp->artist.isEmpty() && !gp->album.isEmpty()) {
-            Text* s = new Text(score);
-            // s->setSubtype(TEXT_SUBTITLE);
-//TODO:ws            s->setTextStyleType(TextStyleType::SUBTITLE);
+            Text* s = new Text(SubStyle::SUBTITLE, score);
             QString str;
             if (!gp->subtitle.isEmpty())
                   str.append(gp->subtitle);
@@ -2355,9 +2352,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             m->add(s);
             }
       if (!gp->composer.isEmpty()) {
-            Text* s = new Text(score);
-            // s->setSubtype(TEXT_COMPOSER);
-//TODO:ws            s->setTextStyleType(TextStyleType::COMPOSER);
+            Text* s = new Text(SubStyle::COMPOSER, score);
             s->setPlainText(gp->composer);
             m->add(s);
             }
@@ -2435,8 +2430,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
                   pscore->addMeasure(mb, measure);
                   measure = mb;
                   }
-            Text* txt = new Text(pscore);
-//TODO:ws            txt->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT);
+            Text* txt = new Text(SubStyle::INSTRUMENT_EXCERPT, pscore);
             txt->setPlainText(part->longName());
             measure->add(txt);
 

@@ -992,7 +992,6 @@
           <durationType>half</durationType>
           </Rest>
         <BarLine>
-          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>
@@ -1150,7 +1149,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>
@@ -1374,7 +1372,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>
@@ -1502,7 +1499,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>

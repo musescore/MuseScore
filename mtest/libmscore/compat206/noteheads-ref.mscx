@@ -626,7 +626,6 @@
           <durationType>half</durationType>
           </Rest>
         <BarLine>
-          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>
