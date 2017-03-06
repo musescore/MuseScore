@@ -5,22 +5,6 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <page-layout>
-        <page-height>1683.78</page-height>
-        <page-width>1190.55</page-width>
-        <page-margins type="even">
-          <left-margin>56.6929</left-margin>
-          <right-margin>56.6929</right-margin>
-          <top-margin>56.6929</top-margin>
-          <bottom-margin>113.386</bottom-margin>
-          </page-margins>
-        <page-margins type="odd">
-          <left-margin>56.6929</left-margin>
-          <right-margin>56.6929</right-margin>
-          <top-margin>56.6929</top-margin>
-          <bottom-margin>113.386</bottom-margin>
-          </page-margins>
-        </page-layout>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -141,11 +125,7 @@
             <lid>7</lid>
             <Text>
               <lid>8</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
+              <align>center,center</align>
               <text>Fdbk.</text>
               </Text>
             <pitch>62</pitch>
@@ -169,11 +149,7 @@
             <lid>11</lid>
             <Text>
               <lid>12</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
+              <align>center,center</align>
               <text>S.H.</text>
               </Text>
             <pitch>69</pitch>
@@ -197,11 +173,7 @@
             <lid>15</lid>
             <Text>
               <lid>16</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
+              <align>center,center</align>
               <text>P.H.</text>
               </Text>
             <pitch>74</pitch>
@@ -228,11 +200,7 @@
               </Accidental>
             <Text>
               <lid>20</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
+              <align>center,center</align>
               <text>T.H.</text>
               </Text>
             <pitch>92</pitch>
@@ -258,11 +226,7 @@
             <lid>24</lid>
             <Text>
               <lid>25</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
+              <align>center,center</align>
               <text>A.H.</text>
               </Text>
             <pitch>81</pitch>
@@ -286,11 +250,7 @@
             <lid>28</lid>
             <Text>
               <lid>29</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
+              <align>center,center</align>
               <text>Fdbk.</text>
               </Text>
             <pitch>89</pitch>
@@ -314,11 +274,7 @@
             <lid>32</lid>
             <Text>
               <lid>33</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
+              <align>center,center</align>
               <text>Fdbk.</text>
               </Text>
             <pitch>86</pitch>
@@ -342,11 +298,7 @@
             <lid>36</lid>
             <Text>
               <lid>37</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
+              <align>center,center</align>
               <text>Fdbk.</text>
               </Text>
             <pitch>86</pitch>
@@ -364,22 +316,6 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <page-layout>
-          <page-height>1683.78</page-height>
-          <page-width>1190.55</page-width>
-          <page-margins type="even">
-            <left-margin>56.6929</left-margin>
-            <right-margin>56.6929</right-margin>
-            <top-margin>56.6929</top-margin>
-            <bottom-margin>113.386</bottom-margin>
-            </page-margins>
-          <page-margins type="odd">
-            <left-margin>56.6929</left-margin>
-            <right-margin>56.6929</right-margin>
-            <top-margin>56.6929</top-margin>
-            <bottom-margin>113.386</bottom-margin>
-            </page-margins>
-          </page-layout>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -399,6 +335,7 @@
             <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
+            <stepOffset>2</stepOffset>
             <timesig>0</timesig>
             <durations>0</durations>
             <durationFontName>MuseScore Tab Modern</durationFontName>
@@ -520,11 +457,7 @@
               <lid>7</lid>
               <Text>
                 <lid>8</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>Fdbk.</text>
                 </Text>
               <pitch>62</pitch>
@@ -548,11 +481,7 @@
               <lid>11</lid>
               <Text>
                 <lid>12</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>S.H.</text>
                 </Text>
               <pitch>69</pitch>
@@ -576,11 +505,7 @@
               <lid>15</lid>
               <Text>
                 <lid>16</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>P.H.</text>
                 </Text>
               <pitch>74</pitch>
@@ -607,11 +532,7 @@
                 </Accidental>
               <Text>
                 <lid>20</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>T.H.</text>
                 </Text>
               <pitch>92</pitch>
@@ -637,11 +558,7 @@
               <lid>24</lid>
               <Text>
                 <lid>25</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>A.H.</text>
                 </Text>
               <pitch>81</pitch>
@@ -665,11 +582,7 @@
               <lid>28</lid>
               <Text>
                 <lid>29</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>Fdbk.</text>
                 </Text>
               <pitch>89</pitch>
@@ -693,11 +606,7 @@
               <lid>32</lid>
               <Text>
                 <lid>33</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>Fdbk.</text>
                 </Text>
               <pitch>86</pitch>
@@ -721,11 +630,7 @@
               <lid>36</lid>
               <Text>
                 <lid>37</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>Fdbk.</text>
                 </Text>
               <pitch>86</pitch>
@@ -757,11 +662,7 @@
               <lid>7</lid>
               <Text>
                 <lid>8</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>Fdbk.</text>
                 </Text>
               <pitch>62</pitch>
@@ -785,11 +686,7 @@
               <lid>11</lid>
               <Text>
                 <lid>12</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>S.H.</text>
                 </Text>
               <pitch>69</pitch>
@@ -813,11 +710,7 @@
               <lid>15</lid>
               <Text>
                 <lid>16</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>P.H.</text>
                 </Text>
               <pitch>74</pitch>
@@ -841,11 +734,7 @@
               <lid>19</lid>
               <Text>
                 <lid>20</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>T.H.</text>
                 </Text>
               <pitch>92</pitch>
@@ -871,11 +760,7 @@
               <lid>24</lid>
               <Text>
                 <lid>25</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>A.H.</text>
                 </Text>
               <pitch>81</pitch>
@@ -899,11 +784,7 @@
               <lid>28</lid>
               <Text>
                 <lid>29</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>Fdbk.</text>
                 </Text>
               <pitch>89</pitch>
@@ -927,11 +808,7 @@
               <lid>32</lid>
               <Text>
                 <lid>33</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>Fdbk.</text>
                 </Text>
               <pitch>86</pitch>
@@ -955,11 +832,7 @@
               <lid>36</lid>
               <Text>
                 <lid>37</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>Fdbk.</text>
                 </Text>
               <pitch>86</pitch>

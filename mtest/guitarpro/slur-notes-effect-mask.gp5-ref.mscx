@@ -5,22 +5,6 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <page-layout>
-        <page-height>1683.78</page-height>
-        <page-width>1190.55</page-width>
-        <page-margins type="even">
-          <left-margin>56.6929</left-margin>
-          <right-margin>56.6929</right-margin>
-          <top-margin>56.6929</top-margin>
-          <bottom-margin>113.386</bottom-margin>
-          </page-margins>
-        <page-margins type="odd">
-          <left-margin>56.6929</left-margin>
-          <right-margin>56.6929</right-margin>
-          <top-margin>56.6929</top-margin>
-          <bottom-margin>113.386</bottom-margin>
-          </page-margins>
-        </page-layout>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -180,11 +164,7 @@
             <lid>16</lid>
             <Text>
               <lid>17</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
+              <align>center,center</align>
               <text>S</text>
               </Text>
             <pitch>38</pitch>
@@ -203,11 +183,7 @@
             <lid>19</lid>
             <Text>
               <lid>20</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
+              <align>center,center</align>
               <text>P</text>
               </Text>
             <pitch>52</pitch>
@@ -245,11 +221,7 @@
             <lid>25</lid>
             <Text>
               <lid>26</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
+              <align>center,center</align>
               <text>S</text>
               </Text>
             <pitch>33</pitch>
@@ -268,11 +240,7 @@
             <lid>28</lid>
             <Text>
               <lid>29</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
+              <align>center,center</align>
               <text>P</text>
               </Text>
             <pitch>52</pitch>
@@ -289,11 +257,7 @@
             <lid>31</lid>
             <Text>
               <lid>32</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
+              <align>center,center</align>
               <text>S</text>
               </Text>
             <pitch>33</pitch>
@@ -312,11 +276,7 @@
             <lid>34</lid>
             <Text>
               <lid>35</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
+              <align>center,center</align>
               <text>P</text>
               </Text>
             <pitch>52</pitch>
@@ -333,22 +293,6 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <page-layout>
-          <page-height>1683.78</page-height>
-          <page-width>1190.55</page-width>
-          <page-margins type="even">
-            <left-margin>56.6929</left-margin>
-            <right-margin>56.6929</right-margin>
-            <top-margin>56.6929</top-margin>
-            <bottom-margin>113.386</bottom-margin>
-            </page-margins>
-          <page-margins type="odd">
-            <left-margin>56.6929</left-margin>
-            <right-margin>56.6929</right-margin>
-            <top-margin>56.6929</top-margin>
-            <bottom-margin>113.386</bottom-margin>
-            </page-margins>
-          </page-layout>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -528,11 +472,7 @@
               <lid>16</lid>
               <Text>
                 <lid>17</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>S</text>
                 </Text>
               <pitch>38</pitch>
@@ -551,11 +491,7 @@
               <lid>19</lid>
               <Text>
                 <lid>20</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>P</text>
                 </Text>
               <pitch>52</pitch>
@@ -593,11 +529,7 @@
               <lid>25</lid>
               <Text>
                 <lid>26</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>S</text>
                 </Text>
               <pitch>33</pitch>
@@ -616,11 +548,7 @@
               <lid>28</lid>
               <Text>
                 <lid>29</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>P</text>
                 </Text>
               <pitch>52</pitch>
@@ -637,11 +565,7 @@
               <lid>31</lid>
               <Text>
                 <lid>32</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>S</text>
                 </Text>
               <pitch>33</pitch>
@@ -660,11 +584,7 @@
               <lid>34</lid>
               <Text>
                 <lid>35</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>P</text>
                 </Text>
               <pitch>52</pitch>
@@ -773,11 +693,7 @@
               <lid>16</lid>
               <Text>
                 <lid>17</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>S</text>
                 </Text>
               <pitch>38</pitch>
@@ -796,11 +712,7 @@
               <lid>19</lid>
               <Text>
                 <lid>20</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>P</text>
                 </Text>
               <pitch>52</pitch>
@@ -838,11 +750,7 @@
               <lid>25</lid>
               <Text>
                 <lid>26</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>S</text>
                 </Text>
               <pitch>33</pitch>
@@ -861,11 +769,7 @@
               <lid>28</lid>
               <Text>
                 <lid>29</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>P</text>
                 </Text>
               <pitch>52</pitch>
@@ -882,11 +786,7 @@
               <lid>31</lid>
               <Text>
                 <lid>32</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>S</text>
                 </Text>
               <pitch>33</pitch>
@@ -905,11 +805,7 @@
               <lid>34</lid>
               <Text>
                 <lid>35</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
+                <align>center,center</align>
                 <text>P</text>
                 </Text>
               <pitch>52</pitch>

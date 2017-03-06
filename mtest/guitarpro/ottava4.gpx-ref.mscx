@@ -1,26 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.00">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <page-layout>
-        <page-height>1683.78</page-height>
-        <page-width>1190.55</page-width>
-        <page-margins type="even">
-          <left-margin>56.6929</left-margin>
-          <right-margin>56.6929</right-margin>
-          <top-margin>56.6929</top-margin>
-          <bottom-margin>113.386</bottom-margin>
-          </page-margins>
-        <page-margins type="odd">
-          <left-margin>56.6929</left-margin>
-          <right-margin>56.6929</right-margin>
-          <top-margin>56.6929</top-margin>
-          <bottom-margin>113.386</bottom-margin>
-          </page-margins>
-        </page-layout>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -33,20 +17,11 @@
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="originalFormat">gpx</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <PageList>
-      <Page>
-        <System>
-          </System>
-        <System>
-          </System>
-        </Page>
-      </PageList>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
@@ -102,6 +77,8 @@
           </Articulation>
         <Channel>
           <program value="24"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -160,6 +137,8 @@
           </Articulation>
         <Channel>
           <program value="27"/>
+          <midiPort>0</midiPort>
+          <midiChannel>2</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -192,12 +171,10 @@
         <Tempo>
           <tempo>2</tempo>
           <lid>5</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+          <text><sym>metNoteQuarterUp</sym> = 120</text>
           </Tempo>
         <Ottava id="2">
           <subtype>8va</subtype>
-          <lid>31</lid>
-          <lineWidth>0.1</lineWidth>
           </Ottava>
         <Chord>
           <lid>6</lid>
@@ -228,8 +205,6 @@
         <endSpanner id="2"/>
         <Ottava id="3">
           <subtype>8vb</subtype>
-          <lid>32</lid>
-          <lineWidth>0.1</lineWidth>
           </Ottava>
         <Chord>
           <lid>12</lid>
@@ -277,7 +252,7 @@
           <Note>
             <lid>22</lid>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>46</pitch>
             <tpc>12</tpc>
@@ -303,19 +278,15 @@
         <Rest>
           <lid>27</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="9">
         <Rest>
           <lid>29</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Staff id="2">
@@ -323,14 +294,14 @@
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>33</lid>
+          <lid>31</lid>
           </Clef>
         <KeySig>
-          <lid>34</lid>
+          <lid>32</lid>
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <lid>35</lid>
+          <lid>33</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
@@ -338,18 +309,16 @@
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
-          <lid>36</lid>
+          <lid>34</lid>
           </Dynamic>
         <Ottava id="4">
           <subtype>8va</subtype>
-          <lid>53</lid>
-          <lineWidth>0.1</lineWidth>
           </Ottava>
         <Chord>
-          <lid>37</lid>
+          <lid>35</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>38</lid>
+            <lid>36</lid>
             <pitch>35</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
@@ -359,10 +328,10 @@
         </Measure>
       <Measure number="2">
         <Chord>
-          <lid>39</lid>
+          <lid>37</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>40</lid>
+            <lid>38</lid>
             <pitch>36</pitch>
             <tpc>14</tpc>
             <fret>0</fret>
@@ -374,14 +343,12 @@
         <endSpanner id="4"/>
         <Ottava id="5">
           <subtype>8vb</subtype>
-          <lid>54</lid>
-          <lineWidth>0.1</lineWidth>
           </Ottava>
         <Chord>
-          <lid>41</lid>
+          <lid>39</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>42</lid>
+            <lid>40</lid>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <fret>3</fret>
@@ -392,10 +359,10 @@
       <Measure number="4">
         <endSpanner id="5"/>
         <Chord>
-          <lid>43</lid>
+          <lid>41</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>44</lid>
+            <lid>42</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>5</fret>
@@ -405,10 +372,10 @@
         </Measure>
       <Measure number="5">
         <Chord>
-          <lid>45</lid>
+          <lid>43</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>46</lid>
+            <lid>44</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
@@ -418,12 +385,12 @@
         </Measure>
       <Measure number="6">
         <Chord>
-          <lid>47</lid>
+          <lid>45</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>48</lid>
+            <lid>46</lid>
             <Accidental>
-              <subtype>flat</subtype>
+              <subtype>accidentalFlat</subtype>
               </Accidental>
             <pitch>46</pitch>
             <tpc>12</tpc>
@@ -434,10 +401,10 @@
         </Measure>
       <Measure number="7">
         <Chord>
-          <lid>49</lid>
+          <lid>47</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>50</lid>
+            <lid>48</lid>
             <pitch>47</pitch>
             <tpc>19</tpc>
             <fret>2</fret>
@@ -447,21 +414,17 @@
         </Measure>
       <Measure number="8">
         <Rest>
-          <lid>51</lid>
+          <lid>49</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="9">
         <Rest>
-          <lid>52</lid>
+          <lid>50</lid>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -470,36 +433,12 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <page-layout>
-          <page-height>1584</page-height>
-          <page-width>1224</page-width>
-          <page-margins type="even">
-            <left-margin>56.6929</left-margin>
-            <right-margin>56.6929</right-margin>
-            <top-margin>56.6929</top-margin>
-            <bottom-margin>113.386</bottom-margin>
-            </page-margins>
-          <page-margins type="odd">
-            <left-margin>56.6929</left-margin>
-            <right-margin>56.6929</right-margin>
-            <top-margin>56.6929</top-margin>
-            <bottom-margin>113.386</bottom-margin>
-            </page-margins>
-          </page-layout>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
-      <PageList>
-        <Page>
-          <System>
-            </System>
-          <System>
-            </System>
-          </Page>
-        </PageList>
       <Part>
         <Staff id="1">
           <linkedTo>1</linkedTo>
@@ -513,6 +452,7 @@
             <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
+            <stepOffset>2</stepOffset>
             <timesig>0</timesig>
             <durations>0</durations>
             <durationFontName>MuseScore Tab Modern</durationFontName>
@@ -618,12 +558,8 @@
           <Tempo>
             <tempo>2</tempo>
             <lid>5</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Ottava id="6">
-            <subtype>8va</subtype>
-            <lid>31</lid>
-            </Ottava>
           <Chord>
             <lid>6</lid>
             <durationType>whole</durationType>
@@ -650,11 +586,6 @@
             </Chord>
           </Measure>
         <Measure number="3">
-          <endSpanner id="6"/>
-          <Ottava id="7">
-            <subtype>8vb</subtype>
-            <lid>32</lid>
-            </Ottava>
           <Chord>
             <lid>12</lid>
             <durationType>whole</durationType>
@@ -666,11 +597,8 @@
               <string>1</string>
               </Note>
             </Chord>
-          <tick>3840</tick>
-          <endSpanner id="8"/>
           </Measure>
         <Measure number="4">
-          <endSpanner id="7"/>
           <Chord>
             <lid>15</lid>
             <durationType>whole</durationType>
@@ -682,8 +610,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <tick>5760</tick>
-          <endSpanner id="9"/>
           </Measure>
         <Measure number="5">
           <Chord>
@@ -705,7 +631,7 @@
             <Note>
               <lid>22</lid>
               <Accidental>
-                <subtype>flat</subtype>
+                <subtype>accidentalFlat</subtype>
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
@@ -731,31 +657,22 @@
           <Rest>
             <lid>27</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         <Measure number="8" len="8/4">
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
-            <duration z="8" n="4"/>
+            <duration>8/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
-        <tick>15360</tick>
         <Measure number="9">
           <Rest>
             <lid>29</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -764,10 +681,6 @@
             <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
-          <Ottava id="8">
-            <subtype>8va</subtype>
-            <lid>31</lid>
-            </Ottava>
           <Chord>
             <lid>6</lid>
             <durationType>whole</durationType>
@@ -794,10 +707,6 @@
             </Chord>
           </Measure>
         <Measure number="3">
-          <Ottava id="9">
-            <subtype>8vb</subtype>
-            <lid>32</lid>
-            </Ottava>
           <Chord>
             <lid>12</lid>
             <durationType>whole</durationType>
@@ -866,31 +775,22 @@
           <Rest>
             <lid>27</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         <Measure number="8" len="8/4">
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
-            <duration z="8" n="4"/>
+            <duration>8/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
-        <tick>15360</tick>
         <Measure number="9">
           <Rest>
             <lid>29</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>N-Gt</name>
@@ -901,36 +801,12 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <page-layout>
-          <page-height>1584</page-height>
-          <page-width>1224</page-width>
-          <page-margins type="even">
-            <left-margin>56.6929</left-margin>
-            <right-margin>56.6929</right-margin>
-            <top-margin>56.6929</top-margin>
-            <bottom-margin>113.386</bottom-margin>
-            </page-margins>
-          <page-margins type="odd">
-            <left-margin>56.6929</left-margin>
-            <right-margin>56.6929</right-margin>
-            <top-margin>56.6929</top-margin>
-            <bottom-margin>113.386</bottom-margin>
-            </page-margins>
-          </page-layout>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
-      <PageList>
-        <Page>
-          <System>
-            </System>
-          <System>
-            </System>
-          </Page>
-        </PageList>
       <Part>
         <Staff id="1">
           <linkedTo>2</linkedTo>
@@ -944,6 +820,7 @@
             <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
+            <stepOffset>2</stepOffset>
             <timesig>0</timesig>
             <durations>0</durations>
             <durationFontName>MuseScore Tab Modern</durationFontName>
@@ -1029,14 +906,14 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>33</lid>
+            <lid>31</lid>
             </Clef>
           <KeySig>
-            <lid>34</lid>
+            <lid>32</lid>
             <accidental>0</accidental>
             </KeySig>
           <TimeSig>
-            <lid>35</lid>
+            <lid>33</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -1044,22 +921,18 @@
           <Tempo>
             <tempo>2</tempo>
             <lid>5</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <lid>36</lid>
+            <lid>34</lid>
             </Dynamic>
-          <Ottava id="10">
-            <subtype>8va</subtype>
-            <lid>53</lid>
-            </Ottava>
           <Chord>
-            <lid>37</lid>
+            <lid>35</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>38</lid>
+              <lid>36</lid>
               <pitch>35</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -1069,10 +942,10 @@
           </Measure>
         <Measure number="2">
           <Chord>
-            <lid>39</lid>
+            <lid>37</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>40</lid>
+              <lid>38</lid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               <fret>0</fret>
@@ -1081,47 +954,37 @@
             </Chord>
           </Measure>
         <Measure number="3">
-          <endSpanner id="10"/>
-          <Ottava id="11">
-            <subtype>8vb</subtype>
-            <lid>54</lid>
-            </Ottava>
           <Chord>
-            <lid>41</lid>
+            <lid>39</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>42</lid>
+              <lid>40</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
               <string>1</string>
               </Note>
             </Chord>
-          <tick>3840</tick>
-          <endSpanner id="12"/>
           </Measure>
         <Measure number="4">
-          <endSpanner id="11"/>
           <Chord>
-            <lid>43</lid>
+            <lid>41</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>44</lid>
+              <lid>42</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             </Chord>
-          <tick>5760</tick>
-          <endSpanner id="13"/>
           </Measure>
         <Measure number="5">
           <Chord>
-            <lid>45</lid>
+            <lid>43</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>46</lid>
+              <lid>44</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -1131,12 +994,12 @@
           </Measure>
         <Measure number="6">
           <Chord>
-            <lid>47</lid>
+            <lid>45</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>48</lid>
+              <lid>46</lid>
               <Accidental>
-                <subtype>flat</subtype>
+                <subtype>accidentalFlat</subtype>
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
@@ -1147,10 +1010,10 @@
           </Measure>
         <Measure number="7">
           <Chord>
-            <lid>49</lid>
+            <lid>47</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>50</lid>
+              <lid>48</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -1160,50 +1023,37 @@
           </Measure>
         <Measure number="8">
           <Rest>
-            <lid>51</lid>
+            <lid>49</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         <Measure number="8" len="8/4">
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
-            <duration z="8" n="4"/>
+            <duration>8/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
-        <tick>15360</tick>
         <Measure number="9">
           <Rest>
-            <lid>52</lid>
+            <lid>50</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
         <Measure number="1">
           <KeySig>
-            <lid>34</lid>
+            <lid>32</lid>
             <accidental>0</accidental>
             </KeySig>
-          <Ottava id="12">
-            <subtype>8va</subtype>
-            <lid>53</lid>
-            </Ottava>
           <Chord>
-            <lid>37</lid>
+            <lid>35</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>38</lid>
+              <lid>36</lid>
               <pitch>35</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -1213,10 +1063,10 @@
           </Measure>
         <Measure number="2">
           <Chord>
-            <lid>39</lid>
+            <lid>37</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>40</lid>
+              <lid>38</lid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               <fret>0</fret>
@@ -1225,15 +1075,11 @@
             </Chord>
           </Measure>
         <Measure number="3">
-          <Ottava id="13">
-            <subtype>8vb</subtype>
-            <lid>54</lid>
-            </Ottava>
           <Chord>
-            <lid>41</lid>
+            <lid>39</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>42</lid>
+              <lid>40</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -1243,10 +1089,10 @@
           </Measure>
         <Measure number="4">
           <Chord>
-            <lid>43</lid>
+            <lid>41</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>44</lid>
+              <lid>42</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -1256,10 +1102,10 @@
           </Measure>
         <Measure number="5">
           <Chord>
-            <lid>45</lid>
+            <lid>43</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>46</lid>
+              <lid>44</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -1269,10 +1115,10 @@
           </Measure>
         <Measure number="6">
           <Chord>
-            <lid>47</lid>
+            <lid>45</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>48</lid>
+              <lid>46</lid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <fret>1</fret>
@@ -1282,10 +1128,10 @@
           </Measure>
         <Measure number="7">
           <Chord>
-            <lid>49</lid>
+            <lid>47</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>50</lid>
+              <lid>48</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -1295,33 +1141,24 @@
           </Measure>
         <Measure number="8">
           <Rest>
-            <lid>51</lid>
+            <lid>49</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
           </Measure>
         <Measure number="8" len="8/4">
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
-            <duration z="8" n="4"/>
+            <duration>8/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
-        <tick>15360</tick>
         <Measure number="9">
           <Rest>
-            <lid>52</lid>
+            <lid>50</lid>
             <durationType>measure</durationType>
-            <duration z="4" n="4"/>
+            <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>E-Gt</name>

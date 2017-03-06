@@ -521,7 +521,6 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <span>1</span>
           <lid>30</lid>
           </BarLine>
         </Measure>
@@ -868,7 +867,6 @@
             <duration>104/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </Measure>
         <Measure number="8">
@@ -1046,7 +1044,6 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             <lid>30</lid>
             </BarLine>
           </Measure>
