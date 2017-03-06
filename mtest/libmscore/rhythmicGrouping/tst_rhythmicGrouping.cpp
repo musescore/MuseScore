@@ -27,14 +27,16 @@ class TestRhythmicGrouping : public QObject, public MTest
       {
       Q_OBJECT
 
-      void group(const char* p1, const char* p2);
+      void group(const char* p1, const char* p2, int staves = 0);
 
    private slots:
       void initTestCase();
       void group8ths44()            { group("group8ths4-4.mscx",        "group8ths4-4-ref.mscx");      }
       void group8thsSimple()        { group("group8thsSimple.mscx",     "group8thsSimple-ref.mscx");   }
       void group8thsCompound()      { group("group8thsCompound.mscx",   "group8thsCompound-ref.mscx"); }
+      void groupSubbeats()          { group("groupSubbeats.mscx",       "groupSubbeats-ref.mscx");     }
       void groupVoices()            { group("groupVoices.mscx",         "groupVoices-ref.mscx");       }
+      void groupConflicts()         { group("groupConflicts.mscx",      "groupConflicts-ref.mscx", 1); } // only group 1st staff
 
       };
 
@@ -51,12 +53,23 @@ void TestRhythmicGrouping::initTestCase()
 //   group
 //---------------------------------------------------------
 
-void TestRhythmicGrouping::group(const char* p1, const char* p2)
+void TestRhythmicGrouping::group(const char* p1, const char* p2, int staves)
       {
       Score* score = readScore(DIR + p1);
       score->doLayout();
-      score->cmdSelectAll();
-      score->cmdResetNoteAndRestGroupings();
+
+      if (!staves) {
+            score->cmdSelectAll();
+            score->cmdResetNoteAndRestGroupings();
+            }
+      else {
+            Q_ASSERT(staves < score->nstaves());
+            score->startCmd();
+            for (int track = 0; track < staves * VOICES; track++)
+                  score->regroupNotesAndRests(score->firstSegment()->tick(), score->lastSegment()->tick(), track);
+            score->endCmd();
+            }
+
       score->doLayout();
       QVERIFY(saveCompareScore(score, p1, DIR + p2));
       delete score;
