@@ -1832,6 +1832,7 @@ bool MuseScore::processMidiRemote(MidiRemoteType type, int data)
                         case RMIDI_TIE:     a = getAction("tie");  break;
                         case RMIDI_UNDO:    a = getAction("undo"); break;
                         case RMIDI_NOTE_EDIT_MODE: a = getAction("note-input");  break;
+                        case RMIDI_REALTIME_ADVANCE: a = getAction("realtime-advance");  break;
                         }
                   if (a)
                         a->trigger();

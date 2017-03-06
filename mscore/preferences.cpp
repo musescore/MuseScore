@@ -705,6 +705,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       recordButtons->addButton(rcr12,        RMIDI_TIE);
       recordButtons->addButton(recordUndo,   RMIDI_UNDO);
       recordButtons->addButton(recordEditMode, RMIDI_NOTE_EDIT_MODE);
+      recordButtons->addButton(recordRealtimeAdvance, RMIDI_REALTIME_ADVANCE);
 
       restartWarningLanguage->setText("");
       connect(language, SIGNAL(currentIndexChanged(int)), SLOT(languageChanged(int)));
@@ -800,6 +801,7 @@ void PreferenceDialog::updateRemote()
       rca12->setChecked(preferences.midiRemote[RMIDI_TIE].type        != -1);
       recordUndoActive->setChecked(preferences.midiRemote[RMIDI_UNDO].type != -1);
       editModeActive->setChecked(preferences.midiRemote[RMIDI_NOTE_EDIT_MODE].type != -1);
+      realtimeAdvanceActive->setChecked(preferences.midiRemote[RMIDI_REALTIME_ADVANCE].type != -1);
 
       int id = mscore->midiRecordId();
       recordRewind->setChecked(id == RMIDI_REWIND);
@@ -819,6 +821,7 @@ void PreferenceDialog::updateRemote()
       rcr12->setChecked(id      == RMIDI_TIE);
       recordUndo->setChecked(id == RMIDI_UNDO);
       recordEditMode->setChecked(id == RMIDI_NOTE_EDIT_MODE);
+      recordRealtimeAdvance->setChecked(id == RMIDI_REALTIME_ADVANCE);
       }
 
 //---------------------------------------------------------
