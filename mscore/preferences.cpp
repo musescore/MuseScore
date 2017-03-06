@@ -31,7 +31,11 @@
 #include "scoreview.h"
 #include "libmscore/sym.h"
 #include "pa.h"
+
+#ifdef USE_PORTMIDI
 #include "pm.h"
+#endif
+
 #include "libmscore/page.h"
 #include "file.h"
 #include "libmscore/mscore.h"

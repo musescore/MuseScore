@@ -147,7 +147,7 @@ if (MINGW)
       set (resource_file ${PROJECT_BINARY_DIR}/resfile.o)
 else (MINGW)
       if (USE_ALSA)
-            set (AUDIO ${AUDIO} alsa.cpp mididriver.cpp)
+            set (AUDIO ${AUDIO} alsa.cpp)
       endif (USE_ALSA)
 endif (MINGW)
 
@@ -170,6 +170,10 @@ endif (USE_LAME)
 if (USE_JACK)
       set (AUDIO ${AUDIO} jackaudio.cpp jackweakapi.cpp)
 endif (USE_JACK)
+
+if (USE_ALSA OR USE_PORTMIDI)
+      set (AUDIO ${AUDIO} mididriver.cpp)
+endif (USE_ALSA OR USE_PORTMIDI)
 
 if (${CMAKE_SYSTEM} MATCHES "GNU-0.3")
       # include some cmake support file
@@ -498,6 +502,19 @@ else (MINGW)
       else (USE_SYSTEM_FREETYPE)
             target_link_libraries(mscore mscore_freetype)
       endif (USE_SYSTEM_FREETYPE)
+
+    if (USE_PORTMIDI)
+        if (APPLE)
+            set(PORTMIDI_LIB portmidi)
+        else (APPLE)
+            set(PORTMIDI_LIB -lportmidi -lporttime) # Remove -lporttime on RPM-based systems where PortTime is part of PortMidi.
+        endif (APPLE)
+        target_link_libraries(mscore ${PORTMIDI_LIB})
+    endif (USE_PORTMIDI)
+
+    if (USE_PULSEAUDIO)
+      target_link_libraries(mscore ${PULSEAUDIO_LIBRARY})
+    endif (USE_PULSEAUDIO)
 
       if (USE_PORTAUDIO)
             target_link_libraries(mscore ${PORTAUDIO_LIB})
