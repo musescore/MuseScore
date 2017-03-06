@@ -94,7 +94,7 @@ static const char* iconNames[] = {
       "grace16after.svg",
       "grace32after.svg",
       "mode-notes.svg",
-      "mode-notes-steptime.svg",
+      // "mode-notes-steptime.svg", (using normal icon for the time being.)
       "mode-notes-repitch.svg",
       "mode-notes-rhythm.svg",
       "mode-notes-realtime-auto.svg",
