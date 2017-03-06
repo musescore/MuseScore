@@ -39,12 +39,14 @@ static int ticks_measure(const Fraction& f)
 
 //---------------------------------------------------------
 //   rtick2beatType
+//    caller must adjust rtick as appropriate if the measure's
+//    actual timeSig is different from the nominal timeSig.
 //---------------------------------------------------------
 
-BeatType TimeSigFrac::rtick2beatType(int rtick)
+BeatType TimeSigFrac::rtick2beatType(int rtick) const
       {
       if (rtick == 0)
-            return BeatType::DOWNBEAT;
+            return BeatType::DOWNBEAT; // note: only return DOWNBEAT for rtick = 0, not for rtick = measureTicks,
 
       if (rtick % dUnitTicks() != 0)
             return BeatType::SUBBEAT;
@@ -57,15 +59,18 @@ BeatType TimeSigFrac::rtick2beatType(int rtick)
       const int beatNum = rtick / beatTicks();
 
       int stressBeat = 0;
+
       if (isTriple())
             stressBeat = 3;
       else if (isDuple())
             stressBeat = 2;
+      else
+            stressBeat = (numerator() + 1) / 2; // Assumes 5/4 timeSig = (3+2)/4. (The same assumption is used for beaming)
 
       if (stressBeat && beatNum % stressBeat == 0)
-            return isCompound() ? BeatType::SIMPLE_STRESSED : BeatType::COMPOUND_STRESSED;
+            return isCompound() ? BeatType::COMPOUND_STRESSED : BeatType::SIMPLE_STRESSED;
 
-      return isCompound() ? BeatType::SIMPLE_UNSTRESSED : BeatType::COMPOUND_UNSTRESSED;
+      return isCompound() ? BeatType::COMPOUND_UNSTRESSED : BeatType::SIMPLE_UNSTRESSED;
       }
 
 //---------------------------------------------------------
