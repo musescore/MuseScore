@@ -94,6 +94,7 @@ struct PageContext;
 struct TEvent;
 
 enum class ClefType : signed char;
+enum class BeatType : char;
 enum class SymId;
 enum class Key;
 
@@ -798,7 +799,9 @@ class Score : public QObject, public ScoreElement {
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
       void renderSpanners(EventMap* events, int staffIdx);
-      int renderMetronome(EventMap* events, Measure* m, int playPos, int tickOffset, bool countIn);
+      void renderMetronome(EventMap* events, Measure* m, int tickOffset);
+
+      BeatType tick2beatType(int tick);
 
       int mscVersion() const    { return _mscVersion; }
       void setMscVersion(int v) { _mscVersion = v; }

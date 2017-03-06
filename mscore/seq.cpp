@@ -139,8 +139,8 @@ Seq::Seq()
       playlistChanged = false;
       cs              = 0;
       cv              = 0;
-      tackRest        = 0;
-      tickRest        = 0;
+      tackRemain        = 0;
+      tickRemain        = 0;
       maxMidiOutPort  = 0;
 
       endTick  = 0;
@@ -581,32 +581,32 @@ void Seq::processMessages()
 void Seq::metronome(unsigned n, float* p, bool force)
       {
       if (!mscore->metronome() && !force) {
-            tickRest = 0;
-            tackRest = 0;
+            tickRemain = 0;
+            tackRemain = 0;
             return;
             }
-      if (tickRest) {
-            tackRest = 0;
-            int idx = tickLength - tickRest;
-            int nn = n < tickRest ? n : tickRest;
+      if (tickRemain) {
+            tackRemain = 0;
+            int idx = tickLength - tickRemain;
+            int nn = n < tickRemain ? n : tickRemain;
             for (int i = 0; i < nn; ++i) {
-                  qreal v = tick[idx] * metronomeVolume;
+                  qreal v = tick[idx] * tickVolume * metronomeVolume;
                   *p++ += v;
                   *p++ += v;
                   ++idx;
                   }
-            tickRest -= nn;
+            tickRemain -= nn;
             }
-      if (tackRest) {
-            int idx = tackLength - tackRest;
-            int nn = n < tackRest ? n : tackRest;
+      if (tackRemain) {
+            int idx = tackLength - tackRemain;
+            int nn = n < tackRemain ? n : tackRemain;
             for (int i = 0; i < nn; ++i) {
-                  qreal v = tack[idx] * metronomeVolume;
+                  qreal v = tack[idx] * tackVolume * metronomeVolume;
                   *p++ += v;
                   *p++ += v;
                   ++idx;
                   }
-            tackRest -= nn;
+            tackRemain -= nn;
             }
       }
 
@@ -616,13 +616,32 @@ void Seq::metronome(unsigned n, float* p, bool force)
 
 void Seq::addCountInClicks()
       {
-      int         plPos       = cs->playPos();
+      const int   plPos       = cs->playPos();
       Measure*    m           = cs->tick2measure(plPos);
-      int tick = cs->renderMetronome(&countInEvents, m, plPos, 0, true);
+      const int   msrTick     = m->tick();
+      const qreal tempo       = cs->tempomap()->tempo(msrTick);
+      TimeSigFrac timeSig     = cs->sigmap()->timesig(msrTick).nominal();
+
+      const int clickTicks = timeSig.isBeatedCompound(tempo) ? timeSig.beatTicks() : timeSig.dUnitTicks();
+
+      // add at least one full measure of just clicks.
+      int endTick = timeSig.ticksPerMeasure();
+
+      // add extra clicks if...
+      endTick += plPos - msrTick;   // ...not starting playback at beginning of measure
+
+      if (m->isAnacrusis())         // ...measure is incomplete (anacrusis)
+            endTick += timeSig.ticksPerMeasure() - m->ticks();
+
+      for (int tick = 0; tick < endTick; tick += clickTicks) {
+            const int rtick = tick % timeSig.ticksPerMeasure();
+            countInEvents.insert(std::pair<int,NPlayEvent>(tick, NPlayEvent(timeSig.rtick2beatType(rtick))));
+            }
+
       NPlayEvent event;
       event.setType(ME_INVALID);
       event.setPitch(0);
-      countInEvents.insert( std::pair<int,NPlayEvent>(tick, event));
+      countInEvents.insert( std::pair<int,NPlayEvent>(endTick, event));
       // initialize play parameters to count-in events
       countInPlayPos  = countInEvents.cbegin();
       countInPlayTime = 0;
@@ -813,10 +832,14 @@ void Seq::process(unsigned n, float* buffer)
                         }
                   const NPlayEvent& event = (*pPlayPos)->second;
                   playEvent(event, framePos);
-                  if (event.type() == ME_TICK1)
-                        tickRest = tickLength;
-                  else if (event.type() == ME_TICK2)
-                        tackRest = tackLength;
+                  if (event.type() == ME_TICK1) {
+                        tickRemain = tickLength;
+                        tickVolume = event.velo() ? qreal(event.value()) / 127.0 : 1.0;
+                        }
+                  else if (event.type() == ME_TICK2) {
+                        tackRemain = tackLength;
+                        tackVolume = event.velo() ? qreal(event.value()) / 127.0 : 1.0;
+                        }
                   mutex.lock();
                   ++(*pPlayPos);
                   mutex.unlock();
@@ -863,7 +886,22 @@ void Seq::process(unsigned n, float* buffer)
                   }
             }
       else {
-            _synti->process(frames, p);
+            // Outside of playback mode
+            while (!liveEventQueue()->empty()) {
+                  const NPlayEvent& event = liveEventQueue()->dequeue();
+                  if (event.type() == ME_TICK1) {
+                        tickRemain = tickLength;
+                        tickVolume = event.velo() ? qreal(event.value()) / 127.0 : 1.0;
+                        }
+                  else if (event.type() == ME_TICK2) {
+                        tackRemain = tackLength;
+                        tackVolume = event.velo() ? qreal(event.value()) / 127.0 : 1.0;
+                        }
+                  }
+            if (frames) {
+                  metronome(frames, p, true);
+                  _synti->process(frames, p);
+                  }
             }
       //
       // metering / master gain
@@ -1095,6 +1133,17 @@ void Seq::startNote(int channel, int pitch, int velo, int duration, double nt)
       stopNotes();
       startNote(channel, pitch, velo, nt);
       startNoteTimer(duration);
+      }
+
+//---------------------------------------------------------
+//   playMetronomeBeat
+//---------------------------------------------------------
+
+void Seq::playMetronomeBeat(BeatType type)
+      {
+      if (state != Transport::STOP)
+            return;
+      liveEventQueue()->enqueue(NPlayEvent(type));
       }
 
 //---------------------------------------------------------

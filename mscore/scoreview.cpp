@@ -858,10 +858,12 @@ ScoreView::ScoreView(QWidget* parent)
       s->addTransition(new NoteEntryButtonTransition(this));                  // mouse button
       s->addTransition(new CommandTransition("play", states[ENTRY_PLAY]));    // ->entryPlay
       realtimeTimer = new QTimer(this);
+      realtimeTimer->setTimerType(Qt::PreciseTimer);
       connect(realtimeTimer, SIGNAL(timeout()), this, SLOT(triggerCmdRealtimeAdvance()));
       extendNoteTimer = new QTimer(this);
-      connect(extendNoteTimer, SIGNAL(timeout()), this, SLOT(extendCurrentNote()));
+      extendNoteTimer->setTimerType(Qt::PreciseTimer);
       extendNoteTimer->setSingleShot(true);
+      connect(extendNoteTimer, SIGNAL(timeout()), this, SLOT(extendCurrentNote()));
 
       // setup normal drag canvas state
       s = states[DRAG];
@@ -5262,9 +5264,11 @@ void ScoreView::triggerCmdRealtimeAdvance()
             allowRealtimeRests = true;
             return;
             }
+      // give audible feedback immediately to indicate a beat, but dont advance just yet.
+      seq->playMetronomeBeat(_score->tick2beatType(is.tick()));
       // The user will want to press notes "on the beat" and not before the beat, so wait a
       // little in case midi input event is received just after realtime-advance was called.
-      QTimer::singleShot(100, this, SLOT(cmdRealtimeAdvance()));
+      QTimer::singleShot(100, Qt::PreciseTimer, this, SLOT(cmdRealtimeAdvance()));
       }
 
 //---------------------------------------------------------

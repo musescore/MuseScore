@@ -25,6 +25,7 @@
 #include "note.h"
 #include "chord.h"
 #include "key.h"
+#include "sig.h"
 
 namespace Ms {
 
@@ -220,6 +221,24 @@ Segment* Score::tick2rightSegment(int tick) const
                   return s;
             }
       return 0;
+      }
+
+//---------------------------------------------------------
+//   tick2beatType
+//---------------------------------------------------------
+
+BeatType Score::tick2beatType(int tick)
+      {
+      Measure* m = tick2measure(tick);
+      const int msrTick = m->tick();
+      TimeSigFrac timeSig = sigmap()->timesig(msrTick).nominal();
+
+      int rtick = tick - msrTick;
+
+      if (m->isAnacrusis()) // measure is incomplete (anacrusis)
+            rtick += timeSig.ticksPerMeasure() - m->ticks();
+
+      return timeSig.rtick2beatType(rtick);
       }
 
 //---------------------------------------------------------

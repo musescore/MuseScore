@@ -294,6 +294,7 @@ class Measure : public MeasureBase {
       bool visible(int staffIdx) const;
       bool slashStyle(int staffIdx) const;
       bool isFinalMeasureOfSection() const;
+      bool isAnacrusis() const;
 
       bool breakMultiMeasureRest() const        { return _breakMultiMeasureRest | _breakMMRest; }
       bool breakMMRest() const                  { return _breakMMRest; }
