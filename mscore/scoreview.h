@@ -176,6 +176,11 @@ class ScoreView : public QWidget, public MuseScoreView {
       PositionCursor* _cursor;
       ShadowNote* shadowNote;
 
+      // Realtime state:      Note: always set allowRealtimeRests to desired value before starting a timer.
+      QTimer* realtimeTimer;   // multi-shot timer for advancing in automatic realtime mode
+      QTimer* extendNoteTimer; // single-shot timer for initial advancement when a note is held
+      bool allowRealtimeRests; // Allow entering rests in realtime mode? (See note above)
+
       // Loop In/Out marks in the score
       PositionCursor* _curLoopIn;
       PositionCursor* _curLoopOut;
@@ -235,6 +240,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void figuredBassTab(bool meas, bool back);
       void figuredBassTicksTab(int ticks);
       void figuredBassEndEdit();
+      void realtimeAdvance(bool allowRests);
       void cmdInsertNote(int note);
       void cmdAddPitch(int note, bool addFlag);
       void cmdAddFret(int fret);
@@ -283,7 +289,9 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void posChanged(POS pos, unsigned tick);
       void loopToggled(bool);
+      void triggerCmdRealtimeAdvance();
       void cmdRealtimeAdvance();
+      void extendCurrentNote();
 
    public slots:
       void setViewRect(const QRectF&);

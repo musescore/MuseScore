@@ -857,6 +857,11 @@ ScoreView::ScoreView(QWidget* parent)
       s->addTransition(new NoteEntryDragTransition(this));                    // mouse drag
       s->addTransition(new NoteEntryButtonTransition(this));                  // mouse button
       s->addTransition(new CommandTransition("play", states[ENTRY_PLAY]));    // ->entryPlay
+      realtimeTimer = new QTimer(this);
+      connect(realtimeTimer, SIGNAL(timeout()), this, SLOT(triggerCmdRealtimeAdvance()));
+      extendNoteTimer = new QTimer(this);
+      connect(extendNoteTimer, SIGNAL(timeout()), this, SLOT(extendCurrentNote()));
+      extendNoteTimer->setSingleShot(true);
 
       // setup normal drag canvas state
       s = states[DRAG];
@@ -3173,9 +3178,7 @@ void ScoreView::cmd(const QAction* a)
       // STATE_NOTE_ENTRY_REALTIME actions (auto or manual)
 
       else if (cmd == "realtime-advance") {
-            // The user will want to press notes "on the beat" and not before the beat, so wait a
-            // little in case midi input event is received just after realtime-advance was called.
-            QTimer::singleShot(100, this, SLOT(cmdRealtimeAdvance()));
+            realtimeAdvance(true);
             }
 
       // STATE_HARMONY_FIGBASS_EDIT actions
@@ -5182,15 +5185,86 @@ void ScoreView::cmdTuplet(int n)
 
 void ScoreView::midiNoteReceived(int pitch, bool chord, int velocity)
       {
+      qDebug("midiNoteReceived %d chord %d", pitch, chord);
+
       MidiInputEvent ev;
       ev.pitch = pitch;
       ev.chord = chord;
       ev.velocity = velocity;
 
-qDebug("midiNoteReceived %d chord %d", pitch, chord);
       score()->enqueueMidiEvent(ev);
+
       if (!score()->undo()->active())
             cmd(0);
+
+      if (!chord && velocity && !realtimeTimer->isActive() && score()->usingNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO)) {
+            // First note pressed in automatic real-time mode.
+            extendNoteTimer->start(preferences.realtimeDelay); // set timer to trigger repeatedly
+            triggerCmdRealtimeAdvance(); // also trigger once immediately
+            }
+
+      }
+
+//---------------------------------------------------------
+//   extendCurrentNote
+//    Called after user has held down a midi key for a while.
+//    TODO: adapt to allow calling from StepTime mode.
+//---------------------------------------------------------
+
+void ScoreView::extendCurrentNote()
+      {
+      if (!noteEntryMode() || realtimeTimer->isActive())
+            return;
+
+      allowRealtimeRests = false;
+      realtimeTimer->start(preferences.realtimeDelay); // set timer to trigger repeatedly
+      triggerCmdRealtimeAdvance(); // also trigger once immediately
+      }
+
+//---------------------------------------------------------
+//   realtimeAdvance
+//---------------------------------------------------------
+
+void ScoreView::realtimeAdvance(bool allowRests)
+      {
+      if (!noteEntryMode())
+            return;
+      InputState& is = score()->inputState();
+      switch (is.noteEntryMethod()) {
+            case NoteEntryMethod::REALTIME_MANUAL:
+                  allowRealtimeRests = allowRests;
+                  triggerCmdRealtimeAdvance();
+                  break;
+            case NoteEntryMethod::REALTIME_AUTO:
+                  if (realtimeTimer->isActive())
+                        realtimeTimer->stop();
+                  else {
+                        allowRealtimeRests = allowRests;
+                        realtimeTimer->start(preferences.realtimeDelay);
+                        }
+                  break;
+            default:
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
+//   triggerCmdRealtimeAdvance
+//---------------------------------------------------------
+
+void ScoreView::triggerCmdRealtimeAdvance()
+      {
+      InputState& is = score()->inputState();
+      bool realtime = is.usingNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO) || is.usingNoteEntryMethod(NoteEntryMethod::REALTIME_MANUAL);
+      if (!realtime || !noteEntryMode() || (!allowRealtimeRests && score()->activeMidiPitches()->empty())) {
+            if (realtimeTimer->isActive())
+                  realtimeTimer->stop();
+            allowRealtimeRests = true;
+            return;
+            }
+      // The user will want to press notes "on the beat" and not before the beat, so wait a
+      // little in case midi input event is received just after realtime-advance was called.
+      QTimer::singleShot(100, this, SLOT(cmdRealtimeAdvance()));
       }
 
 //---------------------------------------------------------
