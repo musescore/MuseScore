@@ -4292,7 +4292,10 @@ void MuseScore::endCmd()
             if (samePitch && !cs->selection().elements().empty())
                   e = cs->selection().elements()[0];
 
-            if (e && (cs->playNote() || cs->playChord())) {
+            NoteEntryMethod entryMethod = cs->noteEntryMethod();
+            if (e && (cs->playNote() || cs->playChord())
+                        && entryMethod != NoteEntryMethod::REALTIME_AUTO
+                        && entryMethod != NoteEntryMethod::REALTIME_MANUAL) {
                   if (cs->playChord() && preferences.playChordOnAddNote &&  e->type() == Element::Type::NOTE)
                         play(static_cast<Note*>(e)->chord());
                   else

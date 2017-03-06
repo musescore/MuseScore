@@ -1732,15 +1732,24 @@ bool Score::processMidiInput()
       {
       if (MScore::debugMode)
           qDebug("processMidiInput");
-      if (midiInputQueue.isEmpty())
+      if (midiInputQueue()->empty())
             return false;
 
+      NoteEntryMethod entryMethod = _is.noteEntryMethod();
       bool cmdActive = false;
-      while (!midiInputQueue.isEmpty()) {
-            MidiInputEvent ev = midiInputQueue.dequeue();
+      while (!midiInputQueue()->empty()) {
+            MidiInputEvent ev = midiInputQueue()->dequeue();
+            for (auto itr = activeMidiPitches()->begin(); itr != activeMidiPitches()->end();) {
+                  if ((*itr).pitch == ev.pitch)
+                        itr = activeMidiPitches()->erase(itr);
+                  else
+                        ++itr;
+                  }
             if (MScore::debugMode)
                   qDebug("<-- !noteentry dequeue %i", ev.pitch);
-            if (!noteEntryMode()) {
+            if (!noteEntryMode()
+                        || entryMethod == NoteEntryMethod::REALTIME_AUTO
+                        || entryMethod == NoteEntryMethod::REALTIME_MANUAL) {
                   int staffIdx = selection().staffStart();
                   Part* p;
                   if (staffIdx < 0 || staffIdx >= nstaves())
@@ -1758,25 +1767,39 @@ bool Score::processMidiInput()
                                           0.0);
                         }
                   }
-            else  {
-                  if (ev.velocity == 0)
+            if (noteEntryMode()) {
+                  if (ev.velocity == 0) {
+                        // delete note in realtime mode
+                        //Chord* chord = static_cast<Chord*>(_is.cr());
+                        //std::vector<Note*> notes = chord->notes();
+                        if (entryMethod == NoteEntryMethod::REALTIME_AUTO || entryMethod == NoteEntryMethod::REALTIME_MANUAL) {
+                              if (_is.cr()->isChord()) {
+                                    Note* n = static_cast<Chord*>(_is.cr())->findNote(ev.pitch);
+                                    if (n) {
+                                          qDebug("Pitches match! Note %i, Pitch %i", n->pitch(), ev.pitch);
+                                          if (!cmdActive) {
+                                                startCmd();
+                                                cmdActive = true;
+                                                }
+                                          deleteItem(n->tieBack());
+                                          deleteItem(n);
+                                          }
+                                    }
+                              }
                         continue;
+                        }
                   if (!cmdActive) {
                         startCmd();
                         cmdActive = true;
                         }
-                  NoteVal nval(ev.pitch);
-                  Staff* st = staff(inputState().track() / VOICES);
-
-                  // if transposing, interpret MIDI pitch as representing desired written pitch
-                  // set pitch based on corresponding sounding pitch
-                  if (!styleB(StyleIdx::concertPitch))
-                        nval.pitch += st->part()->instrument(inputState().tick())->transpose().chromatic;
-                  // let addPitch calculate tpc values from pitch
-                  //Key key   = st->key(inputState().tick());
-                  //nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
-
-                  addPitch(nval, ev.chord);
+                  if (activeMidiPitches()->empty())
+                        ev.chord = false;
+                  else
+                        ev.chord = true;
+                  // TODO: add shadow note instead of real note in realtime modes
+                  // (note becomes real when realtime-advance triggered).
+                  addMidiPitch(ev.pitch, ev.chord);
+                  activeMidiPitches()->push_back(ev);
                   }
             }
       if (cmdActive) {

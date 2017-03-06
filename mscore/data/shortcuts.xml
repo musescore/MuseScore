@@ -193,6 +193,10 @@
     <seq>0</seq>
     </SC>
   <SC>
+    <key>realtime-advance</key>
+    <seq>Enter</seq>
+    </SC>
+  <SC>
     <key>add-staccato</key>
     <seq>Shift+S</seq>
     </SC>

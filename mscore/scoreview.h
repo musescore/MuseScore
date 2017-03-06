@@ -283,6 +283,7 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void posChanged(POS pos, unsigned tick);
       void loopToggled(bool);
+      void cmdRealtimeAdvance();
 
    public slots:
       void setViewRect(const QRectF&);

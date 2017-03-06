@@ -335,7 +335,8 @@ class Score : public QObject, public ScoreElement {
 
       UndoStack* _undo;
 
-      QQueue<MidiInputEvent> midiInputQueue;
+      QQueue<MidiInputEvent> _midiInputQueue;         // MIDI events that have yet to be processed
+      std::list<MidiInputEvent> _activeMidiPitches;   // MIDI keys currently being held down
       QList<MidiMapping> _midiMapping;
 
       RepeatList* _repeatList;
@@ -623,6 +624,8 @@ class Score : public QObject, public ScoreElement {
 
       Note* addPitch(NoteVal&, bool addFlag);
       void addPitch(int pitch, bool addFlag);
+      Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord);
+      Note* addMidiPitch(int pitch, bool addFlag);
       Note* addNote(Chord*, NoteVal& noteVal);
 
       NoteVal noteValForPosition(Position pos, bool &error);
@@ -807,6 +810,8 @@ class Score : public QObject, public ScoreElement {
 
       int midiPort(int idx) const;
       int midiChannel(int idx) const;
+      inline QQueue<MidiInputEvent>* midiInputQueue()       { return &_midiInputQueue;    }
+      inline std::list<MidiInputEvent>* activeMidiPitches() { return &_activeMidiPitches; }
       QList<MidiMapping>* midiMapping()       { return &_midiMapping;          }
       MidiMapping* midiMapping(int channel)   { return &_midiMapping[channel]; }
       void rebuildMidiMapping();
@@ -919,7 +924,7 @@ class Score : public QObject, public ScoreElement {
       bool showOmr() const                     { return _showOmr; }
       void setShowOmr(bool v)                  { _showOmr = v;    }
       void removeAudio();
-      void enqueueMidiEvent(MidiInputEvent ev) { midiInputQueue.enqueue(ev); }
+      void enqueueMidiEvent(MidiInputEvent ev) { midiInputQueue()->enqueue(ev); }
 
       //@ ??
       Q_INVOKABLE void doLayout();
