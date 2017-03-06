@@ -1,26 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.00">
+<museScore version="3.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <page-layout>
-        <page-height>1683.78</page-height>
-        <page-width>1190.55</page-width>
-        <page-margins type="even">
-          <left-margin>56.6929</left-margin>
-          <right-margin>56.6929</right-margin>
-          <top-margin>56.6929</top-margin>
-          <bottom-margin>113.386</bottom-margin>
-          </page-margins>
-        <page-margins type="odd">
-          <left-margin>56.6929</left-margin>
-          <right-margin>56.6929</right-margin>
-          <top-margin>56.6929</top-margin>
-          <bottom-margin>113.386</bottom-margin>
-          </page-margins>
-        </page-layout>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -33,20 +17,11 @@
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="originalFormat">gpx</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <PageList>
-      <Page>
-        <System>
-          </System>
-        <System>
-          </System>
-        </Page>
-      </PageList>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
@@ -102,6 +77,8 @@
           </Articulation>
         <Channel>
           <program value="24"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -160,6 +137,8 @@
           </Articulation>
         <Channel>
           <program value="27"/>
+          <midiPort>0</midiPort>
+          <midiChannel>2</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -192,11 +171,10 @@
         <Tempo>
           <tempo>2</tempo>
           <lid>5</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+          <text><sym>metNoteQuarterUp</sym> = 120</text>
           </Tempo>
         <Ottava id="2">
           <subtype>8va</subtype>
-          <lid>9</lid>
           </Ottava>
         <Chord>
           <lid>6</lid>
@@ -204,7 +182,7 @@
           <Note>
             <lid>7</lid>
             <Accidental>
-              <subtype>sharp</subtype>
+              <subtype>accidentalSharp</subtype>
               </Accidental>
             <pitch>49</pitch>
             <tpc>21</tpc>
@@ -212,11 +190,6 @@
             <string>4</string>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
-        <endSpanner id="2"/>
         </Measure>
       </Staff>
     <Staff id="2">
@@ -224,14 +197,14 @@
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>10</lid>
+          <lid>9</lid>
           </Clef>
         <KeySig>
-          <lid>11</lid>
+          <lid>10</lid>
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <lid>12</lid>
+          <lid>11</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
@@ -239,23 +212,19 @@
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
-          <lid>13</lid>
+          <lid>12</lid>
           </Dynamic>
         <Chord>
-          <lid>14</lid>
+          <lid>13</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>15</lid>
+            <lid>14</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
             <string>2</string>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -264,36 +233,12 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <page-layout>
-          <page-height>1584</page-height>
-          <page-width>1224</page-width>
-          <page-margins type="even">
-            <left-margin>56.6929</left-margin>
-            <right-margin>56.6929</right-margin>
-            <top-margin>56.6929</top-margin>
-            <bottom-margin>113.386</bottom-margin>
-            </page-margins>
-          <page-margins type="odd">
-            <left-margin>56.6929</left-margin>
-            <right-margin>56.6929</right-margin>
-            <top-margin>56.6929</top-margin>
-            <bottom-margin>113.386</bottom-margin>
-            </page-margins>
-          </page-layout>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
-      <PageList>
-        <Page>
-          <System>
-            </System>
-          <System>
-            </System>
-          </Page>
-        </PageList>
       <Part>
         <Staff id="1">
           <linkedTo>1</linkedTo>
@@ -307,6 +252,7 @@
             <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
+            <stepOffset>2</stepOffset>
             <timesig>0</timesig>
             <durations>0</durations>
             <durationFontName>MuseScore Tab Modern</durationFontName>
@@ -412,19 +358,15 @@
           <Tempo>
             <tempo>2</tempo>
             <lid>5</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Ottava id="3">
-            <subtype>8va</subtype>
-            <lid>9</lid>
-            </Ottava>
           <Chord>
             <lid>6</lid>
             <durationType>whole</durationType>
             <Note>
               <lid>7</lid>
               <Accidental>
-                <subtype>sharp</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>49</pitch>
               <tpc>21</tpc>
@@ -432,12 +374,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
-          <endSpanner id="3"/>
-          <endSpanner id="4"/>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -446,10 +382,6 @@
             <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
-          <Ottava id="4">
-            <subtype>8va</subtype>
-            <lid>9</lid>
-            </Ottava>
           <Chord>
             <lid>6</lid>
             <durationType>whole</durationType>
@@ -461,10 +393,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>N-Gt</name>
@@ -475,36 +403,12 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <page-layout>
-          <page-height>1584</page-height>
-          <page-width>1224</page-width>
-          <page-margins type="even">
-            <left-margin>56.6929</left-margin>
-            <right-margin>56.6929</right-margin>
-            <top-margin>56.6929</top-margin>
-            <bottom-margin>113.386</bottom-margin>
-            </page-margins>
-          <page-margins type="odd">
-            <left-margin>56.6929</left-margin>
-            <right-margin>56.6929</right-margin>
-            <top-margin>56.6929</top-margin>
-            <bottom-margin>113.386</bottom-margin>
-            </page-margins>
-          </page-layout>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
-      <PageList>
-        <Page>
-          <System>
-            </System>
-          <System>
-            </System>
-          </Page>
-        </PageList>
       <Part>
         <Staff id="1">
           <linkedTo>2</linkedTo>
@@ -518,6 +422,7 @@
             <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
+            <stepOffset>2</stepOffset>
             <timesig>0</timesig>
             <durations>0</durations>
             <durationFontName>MuseScore Tab Modern</durationFontName>
@@ -603,14 +508,14 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>10</lid>
+            <lid>9</lid>
             </Clef>
           <KeySig>
-            <lid>11</lid>
+            <lid>10</lid>
             <accidental>0</accidental>
             </KeySig>
           <TimeSig>
-            <lid>12</lid>
+            <lid>11</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -618,51 +523,43 @@
           <Tempo>
             <tempo>2</tempo>
             <lid>5</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <lid>13</lid>
+            <lid>12</lid>
             </Dynamic>
           <Chord>
-            <lid>14</lid>
+            <lid>13</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <Staff id="2">
         <Measure number="1">
           <KeySig>
-            <lid>11</lid>
+            <lid>10</lid>
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>14</lid>
+            <lid>13</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         </Staff>
       <name>E-Gt</name>
