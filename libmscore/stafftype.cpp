@@ -242,7 +242,7 @@ void StaffType::write(XmlWriter& xml) const
             xml.tag("stemsDown",        _stemsDown);
             xml.tag("stemsThrough",     _stemsThrough);
             xml.tag("upsideDown",       _upsideDown);
-            xml.tag("showTabFingering",       _showTabFingering);
+            xml.tag("showTabFingering", _showTabFingering, false);
             xml.tag("useNumbers",       _useNumbers);
             // only output "showBackTied" if different from !"slashStyle"
             // to match the behaviour in 2.0.2 scores (or older)
