@@ -1197,8 +1197,8 @@
          <property name="title">
           <string>Note Input</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
+         <layout class="QGridLayout" name="gridLayout_13">
+          <item row="0" column="0">
            <widget class="QCheckBox" name="enableMidiInput">
             <property name="accessibleName">
              <string>Enable MIDI Input</string>
@@ -1208,80 +1208,7 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QGroupBox" name="playNotes">
-            <property name="mouseTracking">
-             <bool>true</bool>
-            </property>
-            <property name="accessibleName">
-             <string>Play notes when editing</string>
-            </property>
-            <property name="title">
-             <string>Play notes when editing</string>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_4">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_37">
-               <property name="text">
-                <string>Default duration:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QSpinBox" name="defaultPlayDuration">
-               <property name="accessibleName">
-                <string>Default duration</string>
-               </property>
-               <property name="suffix">
-                <string extracomment="milliseconds">ms</string>
-               </property>
-               <property name="minimum">
-                <number>20</number>
-               </property>
-               <property name="maximum">
-                <number>2000</number>
-               </property>
-               <property name="singleStep">
-                <number>100</number>
-               </property>
-               <property name="value">
-                <number>300</number>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QCheckBox" name="playChordOnAddNote">
-               <property name="accessibleName">
-                <string>Play whole chord when adding note</string>
-               </property>
-               <property name="text">
-                <string>Play whole chord when adding note</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <spacer name="horizontalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
+          <item row="1" column="0">
            <widget class="QCheckBox" name="warnPitchRange">
             <property name="accessibleName">
              <string>Color notes outside of usable pitch range</string>
@@ -1291,15 +1218,117 @@
             </property>
            </widget>
           </item>
-          <item>
-           <spacer>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_56">
+            <property name="text">
+             <string>Delay between notes in automatic Real-time mode:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="realtimeDelay">
+            <property name="accessibleName">
+             <string>Delay between notes in automatic Real-time mode</string>
+            </property>
+            <property name="suffix">
+             <string>ms</string>
+            </property>
+            <property name="minimum">
+             <number>300</number>
+            </property>
+            <property name="maximum">
+             <number>3000</number>
+            </property>
+            <property name="singleStep">
+             <number>10</number>
+            </property>
+            <property name="value">
+             <number>750</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <spacer name="horizontalSpacer_4">
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>20</width>
-              <height>40</height>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="playNotes">
+         <property name="mouseTracking">
+          <bool>true</bool>
+         </property>
+         <property name="accessibleName">
+          <string>Play notes when editing</string>
+         </property>
+         <property name="title">
+          <string>Play notes when editing</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_37">
+            <property name="text">
+             <string>Default duration:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="defaultPlayDuration">
+            <property name="accessibleName">
+             <string>Default duration</string>
+            </property>
+            <property name="suffix">
+             <string>ms</string>
+            </property>
+            <property name="minimum">
+             <number>20</number>
+            </property>
+            <property name="maximum">
+             <number>2000</number>
+            </property>
+            <property name="singleStep">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>300</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="playChordOnAddNote">
+            <property name="accessibleName">
+             <string>Play whole chord when adding note</string>
+            </property>
+            <property name="text">
+             <string>Play whole chord when adding note</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
              </size>
             </property>
            </spacer>
@@ -1317,9 +1346,6 @@
          </property>
          <property name="title">
           <string>MIDI Remote Control</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -1683,7 +1709,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="12">
+          <item row="4" column="8">
            <widget class="QLabel" name="label_47">
             <property name="text">
              <string>Tie</string>
@@ -1693,7 +1719,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="12">
+          <item row="2" column="12">
            <widget class="QLabel" name="label_54">
             <property name="text">
              <string>Real-time Advance</string>
@@ -1775,7 +1801,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="13">
+          <item row="4" column="9">
            <widget class="Ms::GreendotButton" name="rca12">
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
@@ -1793,7 +1819,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="14">
+          <item row="4" column="10">
            <widget class="Ms::RecordButton" name="rcr12">
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
@@ -1811,7 +1837,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="13">
+          <item row="2" column="13">
            <widget class="Ms::GreendotButton" name="realtimeAdvanceActive">
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
@@ -1829,7 +1855,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="14">
+          <item row="2" column="14">
            <widget class="Ms::RecordButton" name="recordRealtimeAdvance">
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
@@ -2244,6 +2270,23 @@
             </property>
            </widget>
           </item>
+          <item row="3" column="12">
+           <widget class="QLabel" name="label_55">
+            <property name="text">
+             <string>Advance on release?</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="13" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+           <widget class="QCheckBox" name="advanceOnRelease">
+            <property name="accessibleName">
+             <string>Advance on release?</string>
+            </property>
+           </widget>
+          </item>
           <item row="4" column="12" colspan="3">
            <widget class="QPushButton" name="midiRemoteControlClear">
             <property name="accessibleName">
@@ -2256,6 +2299,19 @@
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -4080,6 +4136,7 @@
   <tabstop>rcr12</tabstop>
   <tabstop>realtimeAdvanceActive</tabstop>
   <tabstop>recordRealtimeAdvance</tabstop>
+  <tabstop>advanceOnRelease</tabstop>
   <tabstop>midiRemoteControlClear</tabstop>
   <tabstop>instrumentList1</tabstop>
   <tabstop>instrumentList1Button</tabstop>

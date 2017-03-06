@@ -1797,10 +1797,18 @@ bool MuseScore::midiinEnabled() const
 //    return if midi remote command detected
 //---------------------------------------------------------
 
-bool MuseScore::processMidiRemote(MidiRemoteType type, int data)
+bool MuseScore::processMidiRemote(MidiRemoteType type, int data, int value)
       {
       if (!preferences.useMidiRemote)
             return false;
+      if (!value) {
+            // This was a "NoteOff" or "CtrlOff" event. Most MidiRemote actions should only
+            // be triggered by an "On" event, so we need to check if this is one of those.
+            if (!preferences.advanceOnRelease
+                    || type != preferences.midiRemote[RMIDI_REALTIME_ADVANCE].type
+                    || data != preferences.midiRemote[RMIDI_REALTIME_ADVANCE].data)
+                  return false;
+            }
       for (int i = 0; i < MIDI_REMOTES; ++i) {
             if (preferences.midiRemote[i].type == type && preferences.midiRemote[i].data == data) {
                   if (cv == 0)
@@ -1867,7 +1875,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
             return;
             }
 
-      if (velo && processMidiRemote(MIDI_REMOTE_TYPE_NOTEON, pitch)) {
+      if (processMidiRemote(MIDI_REMOTE_TYPE_NOTEON, pitch, velo)) {
             active = 0;
             return;
             }
@@ -1898,10 +1906,10 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
             ++active;
             }
       else {
-      		/*
-		* Since a note may be assigned to a midi_remote, don't decrease active below zero
-		* on noteoff.
-		*/
+               /*
+               * Since a note may be assigned to a midi_remote, don't decrease active below zero
+               * on noteoff.
+               */
 
             if ((channel != 0x09) && (active > 0))
                   --active;
@@ -1933,7 +1941,7 @@ void MuseScore::midiCtrlReceived(int controller, int value)
             return;
             }
       // when value is 0 (usually when a key is released ) nothing happens
-      if (value && processMidiRemote(MIDI_REMOTE_TYPE_CTRL, controller))
+      if (processMidiRemote(MIDI_REMOTE_TYPE_CTRL, controller, value))
             return;
       }
 
