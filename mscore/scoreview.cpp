@@ -4275,11 +4275,11 @@ ScoreState ScoreView::mscoreState() const
             Staff* staff = _score->staff(is.track() / VOICES);
             switch( staff->staffType()->group()) {
                   case StaffGroup::STANDARD:
-                        return STATE_NOTE_ENTRY_PITCHED;
+                        return STATE_NOTE_ENTRY_STAFF_PITCHED;
                   case StaffGroup::TAB:
-                        return STATE_NOTE_ENTRY_TAB;
+                        return STATE_NOTE_ENTRY_STAFF_TAB;
                   case StaffGroup::PERCUSSION:
-                        return STATE_NOTE_ENTRY_DRUM;
+                        return STATE_NOTE_ENTRY_STAFF_DRUM;
                   }
             }
       if (sm->configuration().contains(states[EDIT]) || sm->configuration().contains(states[DRAG_EDIT])) {
@@ -5312,7 +5312,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
 
 void ScoreView::cmdAddFret(int fret)
       {
-      if (mscoreState() != STATE_NOTE_ENTRY_TAB) // only acceptable in TAB note entry
+      if (mscoreState() != STATE_NOTE_ENTRY_STAFF_TAB) // only acceptable in TAB note entry
             return;
       InputState& is = _score->inputState();
       if (is.track() == -1)                     // invalid state
