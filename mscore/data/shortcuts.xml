@@ -65,6 +65,10 @@
     <seq>N</seq>
     </SC>
   <SC>
+    <key>note-input-repitch</key>
+    <seq>Ctrl+Shift+I</seq>
+    </SC>
+  <SC>
     <key>interval1</key>
     <seq>Alt+1</seq>
     </SC>
@@ -682,10 +686,6 @@
     <key>fullscreen</key>
     <seq>Ctrl+U</seq>
     <seq>Meta+Ctrl+F</seq>
-    </SC>
-  <SC>
-    <key>repitch</key>
-    <seq>Ctrl+Shift+I</seq>
     </SC>
   <SC>
     <key>toggle-piano</key>
