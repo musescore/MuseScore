@@ -3630,8 +3630,6 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType, bool beginB
                         if (nm)
                               s->undoChangeProperty(nm, P_ID::REPEAT_START, true);
                         break;
-                  case BarLineType::UNKNOWN:
-                        break;
                   }
             }
       }

@@ -57,13 +57,10 @@ struct BarLineTableItem {
 class BarLine : public Element {
       Q_GADGET
 
-//      Q_PROPERTY(Ms::MSQE_BarLineType::E barLineType READ qmlBarLineType)
-//      Q_ENUMS(Ms::MSQE_BarLineType::E)
-
       char _spanStaff         { false };       // span barline to next staff if true
       char _spanFrom          { 0 };           // line number on start and end staves
       char _spanTo            { 0 };
-      BarLineType _barLineType { BarLineType::UNKNOWN };
+      BarLineType _barLineType { BarLineType::NORMAL };
       mutable qreal y1;
       mutable qreal y2;
       ElementList _el;        ///< fermata or other articulations
@@ -102,7 +99,8 @@ class BarLine : public Element {
       virtual Element* drop(const DropData&) override;
       virtual bool isEditable() const override    { return true; }
 
-      Segment* segment() const        { return (Segment*)parent(); }
+      Segment* segment() const        { return toSegment(parent()); }
+      Measure* measure() const        { return toMeasure(parent()->parent()); }
 
       void setSpanStaff(bool val)     { _spanStaff = val;     }
       void setSpanFrom(int val)       { _spanFrom = val;      }
@@ -131,8 +129,6 @@ class BarLine : public Element {
       void setBarLineType(BarLineType i) { _barLineType = i;     }
       BarLineType barLineType() const    { return _barLineType;  }
       static BarLineType barLineType(const QString&);
-
-//      Ms::MSQE_BarLineType::E qmlBarLineType() const { return static_cast<Ms::MSQE_BarLineType::E>(_barLineType); }
 
       virtual int subtype() const override         { return int(_barLineType); }
       virtual QString subtypeName() const override { return qApp->translate("barline", barLineTypeName().toUtf8()); }
