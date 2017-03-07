@@ -3130,10 +3130,10 @@ void Measure::stretchMeasure(qreal targetWidth)
                               c->tremolo()->layout();
                         }
                   else if (t == ElementType::BAR_LINE) {
-                        e->setPos(QPointF());
-                        if (s.isEndBarLineType()) {
-                              e->rxpos() = s.width() - e->width();  // right align
-                              }
+                        if (s.isEndBarLineType())
+                              e->setPos(0.0, s.width() - e->width());  // right align
+                        else
+                              e->setPos(0.0, 0.0);
                         e->adjustReadPos();
                         }
                   else
@@ -3328,8 +3328,8 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                   }
 
             for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-                  int track = staffIdx * VOICES;
-                  BarLine* bl = toBarLine(seg->element(track));
+                  int track    = staffIdx * VOICES;
+                  BarLine* bl  = toBarLine(seg->element(track));
                   Staff* staff = score()->staff(staffIdx);
                   if (!bl) {
                         bl = new BarLine(score());
@@ -3340,7 +3340,6 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                         bl->setSpanFrom(staff->barLineFrom());
                         bl->setSpanTo(staff->barLineTo());
                         bl->setBarLineType(t);
-                        bl->layout();
                         score()->addElement(bl);
                         }
                   else {
@@ -3352,22 +3351,17 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                               bl->setSpanFrom(staff->barLineFrom());
                               bl->setSpanTo(staff->barLineTo());
                               bl->setBarLineType(t);
-                              bl->layout();
                               }
                         else {
                               if (bl->barLineType() != t) {
-                                    if (bl->barLineType() == BarLineType::UNKNOWN)
-                                          bl->setBarLineType(t);
-                                    else {
-                                          if (force) {
-                                                bl->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(t));
-                                                bl->setGenerated(true);
-                                                }
+                                    if (force) {
+                                          bl->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(t));
+                                          bl->setGenerated(true);
                                           }
-                                    bl->layout();
                                     }
                               }
                         }
+                  bl->layout();
                   }
             seg->createShapes();
             }

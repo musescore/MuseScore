@@ -295,18 +295,15 @@ enum class NoteHeadScheme : char {
 //   BarLineType
 //---------------------------------------------------------
 
-// MS_QML_ENUM(BarLineType, int,
-
 enum class BarLineType {
-      UNKNOWN          = 0,
-      NORMAL           = 1,\
-      DOUBLE           = 2,\
-      START_REPEAT     = 4,\
-      END_REPEAT       = 8,\
-      BROKEN           = 0x10,\
-      END              = 0x20,\
-      END_START_REPEAT = 0x40,\
-      DOTTED           = 0x80\
+      NORMAL           = 1,
+      DOUBLE           = 2,
+      START_REPEAT     = 4,
+      END_REPEAT       = 8,
+      BROKEN           = 0x10,
+      END              = 0x20,
+      END_START_REPEAT = 0x40,
+      DOTTED           = 0x80
       };
 
 constexpr BarLineType operator| (BarLineType t1, BarLineType t2) {

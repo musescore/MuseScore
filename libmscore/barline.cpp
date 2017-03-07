@@ -338,7 +338,6 @@ void BarLine::draw(QPainter* painter) const
       painter->setPen(pen);
 
       switch (barLineType()) {
-            case BarLineType::UNKNOWN:
             case BarLineType::NORMAL:
                   painter->drawLine(QLineF(lw, y1, lw, y2));
                   break;
@@ -552,9 +551,8 @@ bool BarLine::acceptDrop(const DropData& data) const
 Element* BarLine::drop(const DropData& data)
       {
       Element* e = data.element;
-      ElementType type = e->type();
 
-      if (type == ElementType::BAR_LINE) {
+      if (e->isBarLine()) {
             BarLine* bl    = toBarLine(e);
             BarLineType st = bl->barLineType();
 
@@ -565,7 +563,7 @@ Element* BarLine::drop(const DropData& data)
                   }
             // check if the new property can apply to this single bar line
             BarLineType bt = BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT;
-            bool oldRepeat = barLineType() & bt;
+            bool oldRepeat = barLineType()     & bt;
             bool newRepeat = bl->barLineType() & bt;
 
             // if ctrl was used and repeats are not involved,
@@ -597,22 +595,17 @@ Element* BarLine::drop(const DropData& data)
             //---------------------------------------------
 
             Measure* m  = segment()->measure();
-            if (segment()->isEndBarLineType()) {
-                  if (st == BarLineType::START_REPEAT) {
-                        if (m->nextMeasureMM())
-                              score()->undoChangeBarLine(m->nextMeasureMM(), st);
-                        }
-                  else
-                        score()->undoChangeBarLine(m, st);
-                  }
+            if (segment()->isEndBarLineType())
+                  score()->undoChangeBarLine(m, st, false);
             else if (segment()->isBeginBarLineType())
-                  score()->undoChangeBarLine(m, st);
-
+                  score()->undoChangeBarLine(m, st, true);
+            else if (segment()->isStartRepeatBarLineType())
+                  m->undoChangeProperty(P_ID::REPEAT_START, false);
             delete e;
             return 0;
             }
 
-      else if (type == ElementType::ARTICULATION) {
+      else if (e->isArticulation()) {
             Articulation* atr = toArticulation(e);
             atr->setParent(this);
             atr->setTrack(track());
@@ -941,7 +934,6 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
             case BarLineType::BROKEN:
             case BarLineType::NORMAL:
             case BarLineType::DOTTED:
-            case BarLineType::UNKNOWN:
                   break;
             }
       return dw;
@@ -960,7 +952,7 @@ void BarLine::layout()
 
       // bar lines not hidden
       qreal dw = layoutWidth(score(), barLineType(), mag());
-      QRectF r(0.0, y1, dw, y2 - y2);
+      QRectF r(0.0, y1, dw, y2 - y1);
 
       if (score()->styleB(StyleIdx::repeatBarTips)) {
             switch (barLineType()) {
@@ -1033,6 +1025,7 @@ Shape BarLine::shape() const
 
 void BarLine::layout2()
       {
+//setPos(QPointF());
       getY();
 
       // bar lines not hidden
@@ -1072,7 +1065,8 @@ void BarLine::layout2()
                         break;
                   }
             }
-      bbox() = QRectF(bbox().x(), r.y(), bbox().width(), r.height());
+      bbox().setY(r.y());
+      bbox().setHeight(r.height());
       }
 
 //---------------------------------------------------------
