@@ -115,6 +115,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(linesThroughRadio,    SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(onLinesRadio,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(upsideDown,           SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(showTabFingering,     SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(numbersRadio,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(showBackTied,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
 
@@ -185,6 +186,7 @@ void EditStaffType::setValues()
                   fretFontSize->setValue(staffType.fretFontSize());
                   fretY->setValue(staffType.fretFontUserY());
 
+                  showTabFingering->setChecked(staffType.showTabFingering());
                   numbersRadio->setChecked(staffType.useNumbers());
                   lettersRadio->setChecked(!staffType.useNumbers());
                   onLinesRadio->setChecked(staffType.onLines());
@@ -368,6 +370,7 @@ void EditStaffType::setFromDlg()
       staffType.setOnLines(onLinesRadio->isChecked());
       staffType.setShowRests(showRests->isChecked());
       staffType.setUpsideDown(upsideDown->isChecked());
+      staffType.setShowTabFingering(showTabFingering->isChecked());
       staffType.setUseNumbers(numbersRadio->isChecked());
       //note values
       staffType.setStemsDown(stemBelowRadio->isChecked());
@@ -404,6 +407,7 @@ void EditStaffType::blockSignals(bool block)
       fretFontSize->blockSignals(block);
       fretY->blockSignals(block);
 
+      showTabFingering->blockSignals(block);
       numbersRadio->blockSignals(block);
       linesThroughRadio->blockSignals(block);
       onLinesRadio->blockSignals(block);
