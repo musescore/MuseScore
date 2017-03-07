@@ -18,6 +18,7 @@
 //=============================================================================
 
 #include "libmscore/box.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/measure.h"
 #include "libmscore/page.h"
 #include "libmscore/part.h"
@@ -1674,6 +1675,46 @@ void MusicXMLParserPass1::partGroup(const int scoreParts,
       }
 
 //---------------------------------------------------------
+//   findInstrument
+//---------------------------------------------------------
+
+/**
+ Find the first InstrumentTemplate with musicXMLid instrSound
+ and a non-empty set of channels.
+ */
+
+static const InstrumentTemplate* findInstrument(const QString& instrSound)
+      {
+      const InstrumentTemplate* instr = nullptr;
+
+      for (const InstrumentGroup* group : instrumentGroups) {
+            for (const InstrumentTemplate* templ : group->instrumentTemplates) {
+                  if (templ->musicXMLid == instrSound && !templ->channel.isEmpty()) {
+                        return templ;
+                        }
+                  }
+            }
+      return instr;
+      }
+
+//---------------------------------------------------------
+//   fixupMidiProgram
+//---------------------------------------------------------
+
+static void fixupMidiProgram(MusicXMLDrumset& drumset)
+      {
+      for (auto& instr : drumset) {
+            if (instr.midiProgram < 0 && instr.sound != "") {
+                  const InstrumentTemplate* templ = findInstrument(instr.sound);
+                  if (templ) {
+                        const int prog = templ->channel.at(0).program;
+                        instr.midiProgram = prog;
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   scorePart
 //---------------------------------------------------------
 
@@ -1737,6 +1778,9 @@ void MusicXMLParserPass1::scorePart()
             else
                   skipLogCurrElem();
             }
+
+      fixupMidiProgram(_drumsets[id]);
+
       Q_ASSERT(_e.isEndElement() && _e.name() == "score-part");
       }
 
@@ -1774,6 +1818,27 @@ void MusicXMLParserPass1::scoreInstrument(const QString& partId)
                   // try to prevent an empty track name
                   if (_partMap[partId]->partName() == "")
                         _partMap[partId]->setPartName(instrName);
+                  }
+            else if (_e.name() == "instrument-sound") {
+                  QString instrSound = _e.readElementText();
+                  if (_drumsets[partId].contains(instrId))
+                        _drumsets[partId][instrId].sound = instrSound;
+                  }
+            else if (_e.name() == "virtual-instrument") {
+                  while (_e.readNextStartElement()) {
+                        if (_e.name() == "virtual-library") {
+                              QString virtualLibrary = _e.readElementText();
+                              if (_drumsets[partId].contains(instrId))
+                                    _drumsets[partId][instrId].virtLib = virtualLibrary;
+                              }
+                        else if (_e.name() == "virtual-name") {
+                              QString virtualName = _e.readElementText();
+                              if (_drumsets[partId].contains(instrId))
+                                    _drumsets[partId][instrId].virtName = virtualName;
+                              }
+                        else
+                              skipLogCurrElem();
+                        }
                   }
             else
                   skipLogCurrElem();
