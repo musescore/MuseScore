@@ -63,9 +63,9 @@ void TestSplit::split(const char* f1, const char* ref)
       MasterScore* score = readScore(DIR + f1);
       QVERIFY(score);
       Measure* m = score->firstMeasure();
-      Segment* s = m->first(Segment::Type::ChordRest);
-      s = s->next(Segment::Type::ChordRest);
-      s = s->next(Segment::Type::ChordRest);
+      Segment* s = m->first(SegmentType::ChordRest);
+      s = s->next(SegmentType::ChordRest);
+      s = s->next(SegmentType::ChordRest);
       ChordRest* cr = toChordRest(s->element(0));
 
       score->cmdSplitMeasure(cr);
@@ -79,9 +79,9 @@ void TestSplit::split(const char* f1, const char* ref, int index)
       MasterScore* score = readScore(DIR + f1);
       QVERIFY(score);
       Measure* m = score->firstMeasure();
-      Segment* s = m->first(Segment::Type::ChordRest);
+      Segment* s = m->first(SegmentType::ChordRest);
       for (int i = 0; i < index; ++i)
-            s = s->next1(Segment::Type::ChordRest);
+            s = s->next1(SegmentType::ChordRest);
       ChordRest* cr = static_cast<ChordRest*>(s->element(0));
 
       score->cmdSplitMeasure(cr);

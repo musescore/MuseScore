@@ -322,7 +322,7 @@ static void fillGap(Measure* measure, int track, int tstart, int tend)
             rest->setDuration(Fraction::fromTicks(len));
             rest->setTrack(track);
             rest->setVisible(false);
-            Segment* s = measure->getSegment(Segment::Type::ChordRest, tstart);
+            Segment* s = measure->getSegment(SegmentType::ChordRest, tstart);
             s->add(rest);
             len = rest->globalDuration().ticks();
             // qDebug(" %d", len);
@@ -554,7 +554,7 @@ static void setPartInstruments(Part* part, const QString& partId,
                         int track = staff * VOICES;
                         //qDebug("instrument change: tick %s (%d) track %d instr '%s'",
                         //       qPrintable(f.print()), f.ticks(), track, qPrintable(instrId));
-                        Segment* segment = score->tick2segment(f.ticks(), true, Segment::Type::ChordRest, true);
+                        Segment* segment = score->tick2segment(f.ticks(), true, SegmentType::ChordRest, true);
                         if (!segment)
                               qDebug("segment for instrument change at tick %d not found", f.ticks());  // TODO
                         else if (!mxmlDrumset.contains(instrId))
@@ -842,7 +842,7 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
             }
 
       el->setTrack(track);
-      Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
+      Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
       s->add(el);
       }
 
@@ -1938,7 +1938,7 @@ static void markUserAccidentals(const int firstStaff,
 
       AccidentalState currAcc;
       currAcc.init(key);
-      Segment::Type st = Segment::Type::ChordRest;
+      SegmentType st = SegmentType::ChordRest;
       for (Ms::Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
             for (int track = 0; track < staves * VOICES; ++track) {
                   Element* e = segment->element(firstStaff * VOICES + track);
@@ -3177,7 +3177,7 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure)
                         b->setSpanStaff(false);
                         b->setSpanFrom(BARLINE_SPAN_TICK1_FROM);
                         b->setSpanTo(BARLINE_SPAN_TICK1_TO);
-                        Segment* segment = measure->getSegment(Segment::Type::EndBarLine, measure->endTick());
+                        Segment* segment = measure->getSegment(SegmentType::EndBarLine, measure->endTick());
                         segment->add(b);
                         }
                   else if (barStyle == "short") {
@@ -3188,7 +3188,7 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure)
                         b->setSpanStaff(0);
                         b->setSpanFrom(BARLINE_SPAN_SHORT1_FROM);
                         b->setSpanTo(BARLINE_SPAN_SHORT1_TO);
-                        Segment* segment = measure->getSegment(Segment::Type::EndBarLine, measure->endTick());
+                        Segment* segment = measure->getSegment(SegmentType::EndBarLine, measure->endTick());
                         segment->add(b);
                         }
                   else if (loc == "right")
@@ -3373,7 +3373,7 @@ static void addKey(const KeySigEvent key, const bool printObj, Score* score, Mea
             keysig->setTrack((staffIdx) * VOICES);
             keysig->setKeySigEvent(key);
             keysig->setVisible(printObj);
-            Segment* s = measure->getSegment(Segment::Type::KeySig, tick);
+            Segment* s = measure->getSegment(SegmentType::KeySig, tick);
             s->add(keysig);
             //currKeySig->setKeySigEvent(key);
             }
@@ -3610,7 +3610,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       clefs->setClefType(clef);
       int track = _pass1.trackForPart(partId) + clefno * VOICES;
       clefs->setTrack(track);
-      Segment* s = measure->getSegment(tick ? Segment::Type::Clef : Segment::Type::HeaderClef, tick);
+      Segment* s = measure->getSegment(tick ? SegmentType::Clef : SegmentType::HeaderClef, tick);
       s->add(clefs);
 
       // set the correct staff type
@@ -3729,7 +3729,7 @@ void MusicXMLParserPass2::time(const QString& partId, Measure* measure, const in
                               timesig->setNumeratorString(beats);
                               timesig->setDenominatorString(beatType);
                               }
-                        Segment* s = measure->getSegment(Segment::Type::TimeSig, tick);
+                        Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
                         s->add(timesig);
                         }
                   }
@@ -3900,7 +3900,7 @@ static Rest* addRest(Score* score, Measure* m,
                      const int tick, const int track, const int move,
                      const TDuration duration, const Fraction dura)
       {
-      Segment* s = m->getSegment(Segment::Type::ChordRest, tick);
+      Segment* s = m->getSegment(SegmentType::ChordRest, tick);
       // Sibelius might export two rests at the same place, ignore the 2nd one
       // <?DoletSibelius Two NoteRests in same voice at same position may be an error?>
       if (s->element(track)) {
@@ -3940,7 +3940,7 @@ static Chord* findOrCreateChord(Score* score, Measure* m,
             c->setTrack(track);
 
             setChordRestDuration(c, duration, dura);
-            Segment* s = m->getSegment(Segment::Type::ChordRest, tick);
+            Segment* s = m->getSegment(SegmentType::ChordRest, tick);
             s->add(c);
             }
       c->setStaffMove(move);
@@ -4579,7 +4579,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   if (fb->ticks() == 0)
                         fb->setTicks(dura.ticks());
                   // TODO: set correct onNote value
-                  Segment* s = measure->getSegment(Segment::Type::ChordRest, sTick);
+                  Segment* s = measure->getSegment(SegmentType::ChordRest, sTick);
                   s->add(fb);
                   sTick += fb->ticks();
                   }
@@ -5033,7 +5033,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
 
       if (fd) {
             fd->setTrack(track);
-            Segment* s = measure->getSegment(Segment::Type::ChordRest, (sTime + offset).ticks());
+            Segment* s = measure->getSegment(SegmentType::ChordRest, (sTime + offset).ticks());
             s->add(fd);
             }
 
@@ -5055,7 +5055,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       // TODO-LV: do this only if ha points to a valid harmony
       // harmony = ha;
       ha->setTrack(track);
-      Segment* s = measure->getSegment(Segment::Type::ChordRest, (sTime + offset).ticks());
+      Segment* s = measure->getSegment(SegmentType::ChordRest, (sTime + offset).ticks());
       s->add(ha);
       }
 
@@ -5816,7 +5816,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
             // b->setTrack(trk + voice); TODO check next line
             b->setTrack(track);
             b->setSymId(breath);
-            Segment* seg = measure->getSegment(Segment::Type::Breath, tick + ticks);
+            Segment* seg = measure->getSegment(SegmentType::Breath, tick + ticks);
             seg->add(b);
             }
 

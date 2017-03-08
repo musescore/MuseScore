@@ -14,6 +14,7 @@
 #include <QtTest/QtTest>
 #include "mtest/testutils.h"
 #include "libmscore/score.h"
+#include "libmscore/segment.h"
 
 #define DIR QString("libmscore/rhythmicGrouping/")
 
@@ -65,7 +66,7 @@ void TestRhythmicGrouping::group(const char* p1, const char* p2, int staves)
             Q_ASSERT(staves < score->nstaves());
             score->startCmd();
             for (int track = 0; track < staves * VOICES; track++)
-                  score->regroupNotesAndRests(score->firstSegment()->tick(), score->lastSegment()->tick(), track);
+                  score->regroupNotesAndRests(score->firstSegment(SegmentType::All)->tick(), score->lastSegment()->tick(), track);
             score->endCmd();
             }
 

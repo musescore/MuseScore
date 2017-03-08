@@ -17,7 +17,6 @@
 #include "symbol.h"
 #include "duration.h"
 #include "beam.h"
-#include "segment.h"
 #include "shape.h"
 
 namespace Ms {
@@ -38,6 +37,7 @@ class Articulation;
 class Lyrics;
 class TabDurationSymbol;
 class Spanner;
+enum class SegmentType;
 
 //-------------------------------------------------------------------
 //   @@ ChordRest
@@ -175,7 +175,7 @@ class ChordRest : public DurationElement {
       bool isGraceBefore() const;
       bool isGraceAfter() const;
       void writeBeam(XmlWriter& xml);
-      Segment* nextSegmentAfterCR(Segment::Type types) const;
+      Segment* nextSegmentAfterCR(SegmentType types) const;
 
       virtual void setScore(Score* s) override;
       virtual Element* nextElement() override;

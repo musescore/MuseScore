@@ -88,7 +88,7 @@ void TestClefCourtesy::clef_courtesy01()
       // check the required courtesy clef is there and it is shown
       Clef*    clefCourt = 0;
       Measure* m = m1->prevMeasure();
-      Segment* seg = m->findSegment(Segment::Type::HeaderClef, m1->tick());
+      Segment* seg = m->findSegment(SegmentType::HeaderClef, m1->tick());
       QVERIFY2(seg, "No SegClef in measure 3.");
       clefCourt = static_cast<Clef*>(seg->element(0));
       QVERIFY2(clefCourt, "No courtesy clef element in measure 3.");
@@ -97,7 +97,7 @@ void TestClefCourtesy::clef_courtesy01()
       // check the not required courtesy clef element is there but it is not shown
       clefCourt = nullptr;
       m   = m2->prevMeasure();
-      seg = m->findSegment(Segment::Type::HeaderClef, m2->tick());
+      seg = m->findSegment(SegmentType::HeaderClef, m2->tick());
       QVERIFY2(seg, "No SegClef in measure 6.");
       clefCourt = toClef(seg->element(0));
       QVERIFY2(clefCourt, "No courtesy clef element in measure 6.");
@@ -144,7 +144,7 @@ void TestClefCourtesy::clef_courtesy02()
       // check both clef elements are there, but none is shown
       Clef*    clefCourt = nullptr;
       Measure* m = m1->prevMeasure();
-      Segment* seg = m->findSegment(Segment::Type::HeaderClef, m1->tick());
+      Segment* seg = m->findSegment(SegmentType::HeaderClef, m1->tick());
       QVERIFY2(seg != nullptr, "No SegClef in measure 3.");
       clefCourt = toClef(seg->element(0));
       QVERIFY2(clefCourt != nullptr, "No courtesy clef element in measure 3.");
@@ -152,7 +152,7 @@ void TestClefCourtesy::clef_courtesy02()
 
       clefCourt = nullptr;
       m = m2->prevMeasure();
-      seg = m->findSegment(Segment::Type::HeaderClef, m2->tick());
+      seg = m->findSegment(SegmentType::HeaderClef, m2->tick());
       QVERIFY2(seg != nullptr, "No SegClef in measure 6.");
       clefCourt = static_cast<Clef*>(seg->element(0));
       QVERIFY2(clefCourt != nullptr, "No courtesy clef element in measure 6.");
@@ -188,7 +188,7 @@ void TestClefCourtesy::clef_courtesy03()
 
       // verify the not required courtesy clef element is on end of m1 but is not shown
       Clef *clefCourt = nullptr;
-      Segment *seg = m1->findSegment(Segment::Type::HeaderClef, m2->tick());
+      Segment *seg = m1->findSegment(SegmentType::HeaderClef, m2->tick());
       QVERIFY2(seg != nullptr, "No SegClef in measure 1.");
       clefCourt = static_cast<Clef*>(seg->element(0));
       QVERIFY2(clefCourt != nullptr, "No courtesy clef element in measure 1.");
@@ -221,21 +221,21 @@ void TestClefCourtesy::clef_courtesy_78196()
       Segment* seg = nullptr;
 
       // verify clef exists in segment of final tick of m2, but that it is not visible
-      seg = m2->findSegment(Segment::Type::Clef, m3->tick());
+      seg = m2->findSegment(SegmentType::Clef, m3->tick());
       QVERIFY2(seg != nullptr, "No SegClef at end of measure 2.");
       clefCourt = static_cast<Clef*>(seg->element(0));
       QVERIFY2(clefCourt != nullptr, "No courtesy clef at end of measure 2.");
       QVERIFY2(clefCourt->bbox().width() == 0, "Courtesy clef at end of measure 2 is NOT hidden.");
 
       // verify clef exists in segment of final tick of m4, but that it is not visible
-      seg = m4->findSegment(Segment::Type::Clef, m5->tick());
+      seg = m4->findSegment(SegmentType::Clef, m5->tick());
       QVERIFY2(seg != nullptr, "No SegClef at end of measure 4.");
       clefCourt = static_cast<Clef*>(seg->element(0));
       QVERIFY2(clefCourt != nullptr, "No courtesy clef at end of measure 4.");
       QVERIFY2(clefCourt->bbox().width() == 0, "Courtesy clef at end of measure 4 is NOT hidden.");
 
       // verify clef exists in segment of final tick of m6, but that it is not visible
-      seg = m6->findSegment(Segment::Type::Clef, m7->tick());
+      seg = m6->findSegment(SegmentType::Clef, m7->tick());
       QVERIFY2(seg != nullptr, "No SegClef at end of measure 6.");
       clefCourt = static_cast<Clef*>(seg->element(0));
       QVERIFY2(clefCourt != nullptr, "No courtesy clef at end of measure 6.");

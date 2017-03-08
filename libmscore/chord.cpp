@@ -1507,7 +1507,7 @@ void Chord::layout2()
 
       const qreal minDist = _spatium * .17;
 
-      Segment* s = segment()->prev(Segment::Type::ChordRest);
+      Segment* s = segment()->prev(SegmentType::ChordRest);
       if (s) {
             int strack = staff2track(staffIdx());
             int etrack = strack + VOICES;
@@ -1558,7 +1558,7 @@ void Chord::layout2()
             qreal minNoteDist = score()->styleP(StyleIdx::minNoteDistance) * _mag * score()->styleD(StyleIdx::graceNoteMag);
             // position grace notes from the rightmost to the leftmost
             // get segment (of whatever type) at the end of this chord; if none, get measure last segment
-            Segment* s = measure()->tick2segment(segment()->tick() + actualTicks(), Segment::Type::All);
+            Segment* s = measure()->tick2segment(segment()->tick() + actualTicks(), SegmentType::All);
             if (s == nullptr)
                   s = measure()->last();
             if (s == segment())           // if our segment is the last, no adjacent segment found
@@ -1568,7 +1568,7 @@ void Chord::layout2()
             qreal xOff =  s ? s->pos().x() - (segment()->pos().x() + pos().x()) : _spaceRw;
             // final distance: if near to another chord, leave minNoteDist at right of last grace
             // else leave note-to-barline distance;
-            xOff -= (s != nullptr && s->segmentType() != Segment::Type::ChordRest)
+            xOff -= (s != nullptr && s->segmentType() != SegmentType::ChordRest)
                   ? score()->styleP(StyleIdx::noteBarDistance) * _mag
                   : minNoteDist;
             // scan grace note list from the end
@@ -1900,7 +1900,7 @@ void Chord::layoutPitched()
                         }
                   else if (rtick()) {
                         // if this is not first chord of measure, get previous chord
-                        Segment* s = segment()->prev(Segment::Type::ChordRest);
+                        Segment* s = segment()->prev(SegmentType::ChordRest);
                         if (s) {
                               // prefer chord in same voice
                               // but if nothing there, look at other voices
@@ -1962,7 +1962,7 @@ void Chord::layoutPitched()
                               }
                         else if (mainChord->rtick()) {
                               // grace note before - use previous normal note of measure
-                              Segment* s = mainChord->segment()->prev(Segment::Type::ChordRest);
+                              Segment* s = mainChord->segment()->prev(SegmentType::ChordRest);
                               if (s && s->element(track()) && s->element(track())->type() == ElementType::CHORD)
                                     pc = static_cast<Chord*>(s->element(track()));
                               }
@@ -3112,7 +3112,7 @@ void Chord::sortNotes()
 
 Chord* Chord::nextTiedChord(bool backwards, bool sameSize)
       {
-      Segment* nextSeg = backwards ? segment()->prev1(Segment::Type::ChordRest) : segment()->next1(Segment::Type::ChordRest);
+      Segment* nextSeg = backwards ? segment()->prev1(SegmentType::ChordRest) : segment()->next1(SegmentType::ChordRest);
       if (!nextSeg)
             return 0;
       ChordRest* nextCR = nextSeg->cr(track());

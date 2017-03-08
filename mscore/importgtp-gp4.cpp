@@ -415,7 +415,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
       if (tieNote) {
             bool found = false;
             Chord* chord     = note->chord();
-            Segment* segment = chord->segment()->prev1(Segment::Type::ChordRest);
+            Segment* segment = chord->segment()->prev1(SegmentType::ChordRest);
             int track        = note->track();
             while (segment) {
                   Element* e = segment->element(track);
@@ -437,7 +437,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                         if (found)
                               break;
                         }
-                  segment = segment->prev1(Segment::Type::ChordRest);
+                  segment = segment->prev1(SegmentType::ChordRest);
                   }
             if (!found)
                   qDebug("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());
@@ -632,11 +632,11 @@ void GuitarPro4::read(QFile* fp)
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
             clef->setTrack(i * VOICES);
-            Segment* segment = measure->getSegment(Segment::Type::HeaderClef, 0);
+            Segment* segment = measure->getSegment(SegmentType::HeaderClef, 0);
             segment->add(clef);
 
             if (capo > 0) {
-                  Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                  Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
                   StaffText* st = new StaffText(score);
                   st->setPlainText(QString("Capo. fret ") + QString::number(capo));
                   st->setParent(s);
@@ -674,7 +674,7 @@ void GuitarPro4::read(QFile* fp)
                   Text* s = new RehearsalMark(score);
                   s->setPlainText(gpbar.marker.trimmed());
                   s->setTrack(0);
-                  Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                  Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
                   segment->add(s);
                   }
 
@@ -701,7 +701,7 @@ void GuitarPro4::read(QFile* fp)
                         int tuple = 0;
                         if (beatBits & BEAT_TUPLET)
                               tuple = readInt();
-                        Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
+                        Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
                         if (beatBits & BEAT_CHORD) {
                               int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
                               int header = readUChar();

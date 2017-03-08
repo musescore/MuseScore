@@ -424,7 +424,7 @@ void MTrack::fillGapWithRests(Score* score,
                         Rest* rest = new Rest(score, duration);
                         rest->setDuration(measure->len());
                         rest->setTrack(track);
-                        Segment* s = measure->getSegment(Segment::Type::ChordRest, startChordTick.ticks());
+                        Segment* s = measure->getSegment(SegmentType::ChordRest, startChordTick.ticks());
                         s->add(rest);
                         }
                   restLen -= len;
@@ -445,7 +445,7 @@ void MTrack::fillGapWithRests(Score* score,
                         Rest* rest = new Rest(score, duration);
                         rest->setDuration(duration.fraction());
                         rest->setTrack(track);
-                        Segment* s = measure->getSegment(Segment::Type::ChordRest,
+                        Segment* s = measure->getSegment(SegmentType::ChordRest,
                                                          startChordTick.ticks());
                         s->add(rest);
                         MidiTuplet::addElementToTuplet(voice, startChordTick, len, rest, tuplets);
@@ -557,7 +557,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
                   chord->add(a);
                   }
 
-            Segment* s = measure->getSegment(Segment::Type::ChordRest, tick.ticks());
+            Segment* s = measure->getSegment(SegmentType::ChordRest, tick.ticks());
             s->add(chord);
             MidiTuplet::addElementToTuplet(voice, tick, len, chord, tuplets);
 
@@ -914,7 +914,7 @@ void createTimeSignatures(Score *score)
                   TimeSig* ts = new TimeSig(score);
                   ts->setSig(newTimeSig);
                   ts->setTrack(staffIdx * VOICES);
-                  Segment* seg = m->getSegment(Segment::Type::TimeSig, tick);
+                  Segment* seg = m->getSegment(SegmentType::TimeSig, tick);
                   seg->add(ts);
                   }
             if (newTimeSig != se.timesig())   // was a pickup measure - skip next timesig

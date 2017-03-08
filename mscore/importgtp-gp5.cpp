@@ -162,7 +162,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
       if (beatBits & BEAT_TUPLET)
             tuple = readInt();
 
-      Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
+      Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
       if (beatBits & BEAT_CHORD) {
             int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
             skip(17);
@@ -438,11 +438,11 @@ void GuitarPro5::readTracks()
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
             clef->setTrack(i * VOICES);
-            Segment* segment = measure->getSegment(Segment::Type::HeaderClef, 0);
+            Segment* segment = measure->getSegment(SegmentType::HeaderClef, 0);
             segment->add(clef);
 
             if (capo > 0) {
-                  Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                  Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
                   StaffText* st = new StaffText(score);
                   st->setPlainText(QString("Capo. fret ") + QString::number(capo));
                   st->setParent(s);
@@ -487,7 +487,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
                   Text* s = new RehearsalMark(score);
                   s->setPlainText(gpbar.marker.trimmed());
                   s->setTrack(0);
-                  Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                  Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
                   segment->add(s);
                   }
 
@@ -897,7 +897,7 @@ bool GuitarPro5::readNote(int string, Note* note)
       if (tieNote) {
             bool found = false;
             Chord* chord     = note->chord();
-            Segment* segment = chord->segment()->prev1(Segment::Type::ChordRest);
+            Segment* segment = chord->segment()->prev1(SegmentType::ChordRest);
             int track        = note->track();
             while (segment) {
                   Element* e = segment->element(track);
@@ -919,7 +919,7 @@ bool GuitarPro5::readNote(int string, Note* note)
                         if (found)
                               break;
                         }
-                  segment = segment->prev1(Segment::Type::ChordRest);
+                  segment = segment->prev1(SegmentType::ChordRest);
                   }
             if (!found)
                   qDebug("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());

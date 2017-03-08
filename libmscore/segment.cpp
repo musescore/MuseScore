@@ -48,23 +48,23 @@ const char* Segment::subTypeName() const
       return subTypeName(_segmentType);
       }
 
-const char* Segment::subTypeName(Type t)
+const char* Segment::subTypeName(SegmentType t)
       {
       switch(t) {
-            case Type::Invalid:              return "Invalid";
-            case Type::BeginBarLine:         return "BeginBarLine";
-            case Type::HeaderClef:           return "HeaderClef";
-            case Type::Clef:                 return "Clef";
-            case Type::KeySig:               return "Key Signature";
-            case Type::Ambitus:              return "Ambitus";
-            case Type::TimeSig:              return "Time Signature";
-            case Type::StartRepeatBarLine:   return "Begin Repeat";
-            case Type::BarLine:              return "BarLine";
-            case Type::Breath:               return "Breath";
-            case Type::ChordRest:            return "ChordRest";
-            case Type::EndBarLine:           return "EndBarLine";
-            case Type::KeySigAnnounce:       return "Key Sig Precaution";
-            case Type::TimeSigAnnounce:      return "Time Sig Precaution";
+            case SegmentType::Invalid:              return "Invalid";
+            case SegmentType::BeginBarLine:         return "BeginBarLine";
+            case SegmentType::HeaderClef:           return "HeaderClef";
+            case SegmentType::Clef:                 return "Clef";
+            case SegmentType::KeySig:               return "Key Signature";
+            case SegmentType::Ambitus:              return "Ambitus";
+            case SegmentType::TimeSig:              return "Time Signature";
+            case SegmentType::StartRepeatBarLine:   return "Begin Repeat";
+            case SegmentType::BarLine:              return "BarLine";
+            case SegmentType::Breath:               return "Breath";
+            case SegmentType::ChordRest:            return "ChordRest";
+            case SegmentType::EndBarLine:           return "EndBarLine";
+            case SegmentType::KeySigAnnounce:       return "Key Sig Precaution";
+            case SegmentType::TimeSigAnnounce:      return "Time Sig Precaution";
             default:
                   return "??";
             }
@@ -116,7 +116,7 @@ Segment::Segment(Measure* m)
       init();
       }
 
-Segment::Segment(Measure* m, Type st, int t)
+Segment::Segment(Measure* m, SegmentType st, int t)
    : Element(m->score())
       {
       setParent(m);
@@ -158,9 +158,9 @@ Segment::Segment(const Segment& s)
 //   setSegmentType
 //---------------------------------------------------------
 
-void Segment::setSegmentType(Type t)
+void Segment::setSegmentType(SegmentType t)
       {
-      Q_ASSERT(_segmentType != Type::Clef || t != Type::ChordRest);
+      Q_ASSERT(_segmentType != SegmentType::Clef || t != SegmentType::ChordRest);
       _segmentType = t;
       }
 
@@ -243,7 +243,7 @@ Segment* Segment::next1MM() const
       return m ? m->first() : 0;
       }
 
-Segment* Segment::next1(Type types) const
+Segment* Segment::next1(SegmentType types) const
       {
       for (Segment* s = next1(); s; s = s->next1()) {
             if (s->segmentType() & types)
@@ -252,7 +252,7 @@ Segment* Segment::next1(Type types) const
       return 0;
       }
 
-Segment* Segment::next1MM(Type types) const
+Segment* Segment::next1MM(SegmentType types) const
       {
       for (Segment* s = next1MM(); s; s = s->next1MM()) {
             if (s->segmentType() & types)
@@ -266,7 +266,7 @@ Segment* Segment::next1MM(Type types) const
 //    got to next segment which has subtype in types
 //---------------------------------------------------------
 
-Segment* Segment::next(Type types) const
+Segment* Segment::next(SegmentType types) const
       {
       for (Segment* s = next(); s; s = s->next()) {
             if (s->segmentType() & types)
@@ -280,7 +280,7 @@ Segment* Segment::next(Type types) const
 //    got to previous segment which has subtype in types
 //---------------------------------------------------------
 
-Segment* Segment::prev(Type types) const
+Segment* Segment::prev(SegmentType types) const
       {
       for (Segment* s = prev(); s; s = s->prev()) {
             if (s->segmentType() & types)
@@ -311,7 +311,7 @@ Segment* Segment::prev1MM() const
       return m ? m->last() : 0;
       }
 
-Segment* Segment::prev1(Type types) const
+Segment* Segment::prev1(SegmentType types) const
       {
       for (Segment* s = prev1(); s; s = s->prev1()) {
             if (s->segmentType() & types)
@@ -320,7 +320,7 @@ Segment* Segment::prev1(Type types) const
       return 0;
       }
 
-Segment* Segment::prev1MM(Type types) const
+Segment* Segment::prev1MM(SegmentType types) const
       {
       for (Segment* s = prev1MM(); s; s = s->prev1MM()) {
             if (s->segmentType() & types)
@@ -483,7 +483,7 @@ void Segment::add(Element* el)
                   }
 
             case ElementType::CLEF:
-                  Q_ASSERT(_segmentType == Type::Clef || _segmentType == Type::HeaderClef);
+                  Q_ASSERT(_segmentType == SegmentType::Clef || _segmentType == SegmentType::HeaderClef);
                   checkElement(el, track);
                   _elist[track] = el;
                   if (!el->generated()) {
@@ -494,7 +494,7 @@ void Segment::add(Element* el)
                   break;
 
             case ElementType::TIMESIG:
-                  Q_ASSERT(segmentType() == Type::TimeSig || segmentType() == Type::TimeSigAnnounce);
+                  Q_ASSERT(segmentType() == SegmentType::TimeSig || segmentType() == SegmentType::TimeSigAnnounce);
                   checkElement(el, track);
                   _elist[track] = el;
                   el->staff()->addTimeSig(toTimeSig(el));
@@ -502,7 +502,7 @@ void Segment::add(Element* el)
                   break;
 
             case ElementType::KEYSIG:
-                  Q_ASSERT(_segmentType == Type::KeySig || _segmentType == Type::KeySigAnnounce);
+                  Q_ASSERT(_segmentType == SegmentType::KeySig || _segmentType == SegmentType::KeySigAnnounce);
                   checkElement(el, track);
                   _elist[track] = el;
                   if (!el->generated())
@@ -512,7 +512,7 @@ void Segment::add(Element* el)
 
             case ElementType::CHORD:
             case ElementType::REST:
-                  Q_ASSERT(_segmentType == Type::ChordRest);
+                  Q_ASSERT(_segmentType == SegmentType::ChordRest);
                   {
                   if (track % VOICES) {
                         bool v;
@@ -551,7 +551,7 @@ void Segment::add(Element* el)
                   break;
 
             case ElementType::AMBITUS:
-                  Q_ASSERT(_segmentType == Type::Ambitus);
+                  Q_ASSERT(_segmentType == SegmentType::Ambitus);
                   checkElement(el, track);
                   _elist[track] = el;
                   setEmpty(false);
@@ -671,7 +671,7 @@ void Segment::remove(Element* el)
 //    returns segment type suitable for storage of Element
 //---------------------------------------------------------
 
-Segment::Type Segment::segmentType(ElementType type)
+SegmentType Segment::segmentType(ElementType type)
       {
       switch (type) {
             case ElementType::CHORD:
@@ -679,20 +679,20 @@ Segment::Type Segment::segmentType(ElementType type)
             case ElementType::REPEAT_MEASURE:
             case ElementType::JUMP:
             case ElementType::MARKER:
-                  return Type::ChordRest;
+                  return SegmentType::ChordRest;
             case ElementType::CLEF:
-                  return Type::Clef;
+                  return SegmentType::Clef;
             case ElementType::KEYSIG:
-                  return Type::KeySig;
+                  return SegmentType::KeySig;
             case ElementType::TIMESIG:
-                  return Type::TimeSig;
+                  return SegmentType::TimeSig;
             case ElementType::BAR_LINE:
-                  return Type::StartRepeatBarLine;
+                  return SegmentType::StartRepeatBarLine;
             case ElementType::BREATH:
-                  return Type::Breath;
+                  return SegmentType::Breath;
             default:
                   qDebug("Segment:segmentType():  bad type: <%s>", Element::name(type));
-                  return Type::Invalid;
+                  return SegmentType::Invalid;
             }
       }
 
@@ -1010,7 +1010,7 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 Element* Segment::firstElement(int staff)
       {
-      if (segmentType() == Segment::Type::ChordRest) {
+      if (segmentType() == SegmentType::ChordRest) {
             for (int v = staff * VOICES; v/VOICES == staff; v++) {
                 Element* el = element(v);
                 if (!el) {      //there is no chord or rest on this voice
@@ -1039,7 +1039,7 @@ Element* Segment::firstElement(int staff)
 
 Element* Segment::lastElement(int staff)
       {
-      if (segmentType() == Segment::Type::ChordRest) {
+      if (segmentType() == SegmentType::ChordRest) {
             for (int voice = staff * VOICES + (VOICES - 1); voice/VOICES == staff; voice--) {
                   Element* el = element(voice);
                   if (!el) {      //there is no chord or rest on this voice
@@ -1071,9 +1071,9 @@ Element* Segment::lastElement(int staff)
 
 Element* Segment::getElement(int staff)
       {
-      if (segmentType() == Segment::Type::ChordRest)
+      if (segmentType() == SegmentType::ChordRest)
             return firstElement(staff);
-      else if (segmentType() & (Type::EndBarLine | Type::BarLine | Type::StartRepeatBarLine)) {
+      else if (segmentType() & (SegmentType::EndBarLine | SegmentType::BarLine | SegmentType::StartRepeatBarLine)) {
             for (int i = staff; i >= 0; i--) {
                   if (!element(i * VOICES))
                         continue;
@@ -1101,7 +1101,7 @@ Element* Segment::firstInNextSegments(int activeStaff)
       Element* re = 0;
       Segment* seg = this;
       while (!re) {
-            seg = seg->next1MM(Segment::Type::All);
+            seg = seg->next1MM(SegmentType::All);
             if (!seg) //end of staff, or score
                   break;
 
@@ -1112,7 +1112,7 @@ Element* Segment::firstInNextSegments(int activeStaff)
             return re;
 
       if (!seg) { //end of staff
-            seg = score()->firstSegment();
+            seg = score()->firstSegment(SegmentType::All);
             return seg->element( (activeStaff + 1) * VOICES );
             }
 
@@ -1134,7 +1134,7 @@ Element* Segment::lastInPrevSegments(int activeStaff)
       Segment* seg = this;
 
       while (!re) {
-            seg = seg->prev1MM(Segment::Type::All);
+            seg = seg->prev1MM(SegmentType::All);
             if (!seg) //end of staff, or score
                   break;
 
@@ -1151,13 +1151,13 @@ Element* Segment::lastInPrevSegments(int activeStaff)
             re = 0;
             seg = score()->lastSegment();
             while (true) {
-                  if (seg->segmentType() == Segment::Type::EndBarLine)
+                  if (seg->segmentType() == SegmentType::EndBarLine)
                         score()->inputState().setTrack( (activeStaff -1) * VOICES ); //correction
 
                   if ((re = seg->lastElement(activeStaff -1)) != 0)
                         return re;
 
-                  seg = seg->prev1(Segment::Type::All);
+                  seg = seg->prev1(SegmentType::All);
                   }
             }
 
@@ -1194,9 +1194,9 @@ QString Segment::accessibleExtraInfo() const
       for (auto interval : spanners) {
             Spanner* s = interval.value;
             if (!score()->selectionFilter().canSelect(s)) continue;
-            if (segmentType() == Segment::Type::EndBarLine       ||
-               segmentType() == Segment::Type::BarLine           ||
-               segmentType() == Segment::Type::StartRepeatBarLine) {
+            if (segmentType() == SegmentType::EndBarLine       ||
+               segmentType() == SegmentType::BarLine           ||
+               segmentType() == SegmentType::StartRepeatBarLine) {
                   if (s->isVolta())
                         continue;
                   }
@@ -1215,7 +1215,7 @@ QString Segment::accessibleExtraInfo() const
                         seg = this;
                         break;
                   default:
-                        seg = next1MM(Segment::Type::ChordRest);
+                        seg = next1MM(SegmentType::ChordRest);
                         break;
                   }
 
@@ -1244,7 +1244,7 @@ void Segment::createShape(int staffIdx)
       Shape& s = _shapes[staffIdx];
       s.clear();
 #if 1
-      if (segmentType() & (Type::BarLine | Type::EndBarLine | Type::StartRepeatBarLine | Type::BeginBarLine)) {
+      if (segmentType() & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
             BarLine* bl = toBarLine(element(0));
             if (bl) {
                   qreal w = BarLine::layoutWidth(score(), bl->barLineType(), 1.0);
@@ -1321,8 +1321,8 @@ qreal Segment::minLeft() const
 
 qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
       {
-      Segment::Type st  = segmentType();
-      Segment::Type nst = ns ? ns->segmentType() : Segment::Type::Invalid;
+      SegmentType st  = segmentType();
+      SegmentType nst = ns ? ns->segmentType() : SegmentType::Invalid;
 
       qreal w = 0.0;
       for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
@@ -1331,9 +1331,9 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
             }
 
       if (isChordRestType()) {
-            if (nst == Segment::Type::EndBarLine)
+            if (nst == SegmentType::EndBarLine)
                   w += score()->styleP(StyleIdx::noteBarDistance);
-            else if (nst == Segment::Type::Clef)
+            else if (nst == SegmentType::Clef)
                   w = qMax(w, score()->styleP(StyleIdx::clefLeftMargin));
             else {
                   bool isGap = false;
@@ -1352,10 +1352,10 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                   w = qMax(w, score()->noteHeadWidth()) + score()->styleP(StyleIdx::minNoteDistance);
                   }
             }
-      else if (nst == Segment::Type::ChordRest) {
+      else if (nst == SegmentType::ChordRest) {
             qreal d;
             if (systemHeaderGap) {
-                  if (st == Segment::Type::TimeSig)
+                  if (st == SegmentType::TimeSig)
                         d = score()->styleP(StyleIdx::systemHeaderTimeSigDistance);
                   else
                         d = score()->styleP(StyleIdx::systemHeaderDistance);
@@ -1369,37 +1369,37 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
             // d = qMax(d, spatium());       // minimum distance is one spatium
             // w = qMax(w, minRight()) + d;
             }
-      else if (st & (Segment::Type::Clef | Segment::Type::HeaderClef)) {
-            if (nst == Segment::Type::KeySig)
+      else if (st & (SegmentType::Clef | SegmentType::HeaderClef)) {
+            if (nst == SegmentType::KeySig)
                   w += score()->styleP(StyleIdx::clefKeyDistance);
-            else if (nst == Segment::Type::TimeSig)
+            else if (nst == SegmentType::TimeSig)
                   w += score()->styleP(StyleIdx::clefTimesigDistance);
-            else if (nst & (Segment::Type::EndBarLine | Segment::Type::StartRepeatBarLine))
+            else if (nst & (SegmentType::EndBarLine | SegmentType::StartRepeatBarLine))
                   w += score()->styleP(StyleIdx::clefBarlineDistance);
-            else if (nst == Segment::Type::Ambitus)
+            else if (nst == SegmentType::Ambitus)
                   w += score()->styleP(StyleIdx::ambitusMargin);
             }
-      else if ((st & (Segment::Type::KeySig | Segment::Type::KeySigAnnounce))
-         && (nst & (Segment::Type::TimeSig | Segment::Type::TimeSigAnnounce))) {
+      else if ((st & (SegmentType::KeySig | SegmentType::KeySigAnnounce))
+         && (nst & (SegmentType::TimeSig | SegmentType::TimeSigAnnounce))) {
             w += score()->styleP(StyleIdx::keyTimesigDistance);
             }
-      else if (st == Segment::Type::KeySig && nst == Segment::Type::StartRepeatBarLine)
+      else if (st == SegmentType::KeySig && nst == SegmentType::StartRepeatBarLine)
             w += score()->styleP(StyleIdx::keyBarlineDistance);
-      else if (st == Segment::Type::StartRepeatBarLine)
+      else if (st == SegmentType::StartRepeatBarLine)
             w += score()->styleP(StyleIdx::noteBarDistance);
-      else if (st == Segment::Type::BeginBarLine && (nst & (Segment::Type::HeaderClef | Segment::Type::Clef)))
+      else if (st == SegmentType::BeginBarLine && (nst & (SegmentType::HeaderClef | SegmentType::Clef)))
             w += score()->styleP(StyleIdx::clefLeftMargin);
-      else if (st == Segment::Type::EndBarLine) {
-            if (nst == Segment::Type::KeySigAnnounce)
+      else if (st == SegmentType::EndBarLine) {
+            if (nst == SegmentType::KeySigAnnounce)
                   w += score()->styleP(StyleIdx::keysigLeftMargin);
-            else if (nst == Segment::Type::TimeSigAnnounce)
+            else if (nst == SegmentType::TimeSigAnnounce)
                   w += score()->styleP(StyleIdx::timesigLeftMargin);
             }
-      else if (st == Segment::Type::TimeSig && nst == Segment::Type::StartRepeatBarLine)
+      else if (st == SegmentType::TimeSig && nst == SegmentType::StartRepeatBarLine)
             w += score()->styleP(StyleIdx::timesigBarlineDistance);
-      else if (st == Segment::Type::Breath)
+      else if (st == SegmentType::Breath)
             w += spatium() * 1.5;
-      else if (st == Segment::Type::Ambitus)
+      else if (st == SegmentType::Ambitus)
             w += score()->styleP(StyleIdx::ambitusMargin);
 
       if (w < 0.0)

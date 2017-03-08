@@ -108,12 +108,12 @@ void TestJoin::join1(const char* p1)
       score->cmdJoinMeasure(m1, m2);
 
       // check if notes are still on line 6
-      Segment* s = score->firstSegment(Segment::Type::ChordRest);
+      Segment* s = score->firstSegment(SegmentType::ChordRest);
 
       for (int i = 0; i < 8; ++i) {
             Note* note = static_cast<Ms::Chord*>(s->element(0))->upNote();
             QVERIFY(note->line() == 6);
-            s = s->next1(Segment::Type::ChordRest);
+            s = s->next1(SegmentType::ChordRest);
             }
 
       delete score;

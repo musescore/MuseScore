@@ -87,8 +87,8 @@ bool haveTupletsEnoughElements(const Staff *staff)
       const int strack = staff->idx() * VOICES;
 
       for (int voice = 0; voice < VOICES; ++voice) {
-            for (Segment *seg = staff->score()->firstSegment(); seg; seg = seg->next1()) {
-                  if (seg->segmentType() == Segment::Type::ChordRest) {
+            for (Segment *seg = staff->score()->firstSegment(SegmentType::All); seg; seg = seg->next1()) {
+                  if (seg->segmentType() == SegmentType::ChordRest) {
                         const ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
                         if (!cr)
                               continue;

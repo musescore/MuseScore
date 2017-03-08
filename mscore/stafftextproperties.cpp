@@ -23,6 +23,7 @@
 #include "libmscore/stafftext.h"
 #include "libmscore/system.h"
 #include "libmscore/staff.h"
+#include "libmscore/segment.h"
 #include "globals.h"
 #include "musescore.h"
 

@@ -125,9 +125,9 @@ void TestKeySig::keysig_78216()
       Measure* m3 = m2->nextMeasure();
 
       // verify no keysig exists in segment of final tick of m1, m2, m3
-      QVERIFY2(m1->findSegment(Segment::Type::KeySig, m1->endTick()) == nullptr, "Should be no keysig at end of measure 1.");
-      QVERIFY2(m2->findSegment(Segment::Type::KeySig, m2->endTick()) == nullptr, "Should be no keysig at end of measure 2.");
-      QVERIFY2(m3->findSegment(Segment::Type::KeySig, m3->endTick()) == nullptr, "Should be no keysig at end of measure 3.");
+      QVERIFY2(m1->findSegment(SegmentType::KeySig, m1->endTick()) == nullptr, "Should be no keysig at end of measure 1.");
+      QVERIFY2(m2->findSegment(SegmentType::KeySig, m2->endTick()) == nullptr, "Should be no keysig at end of measure 2.");
+      QVERIFY2(m3->findSegment(SegmentType::KeySig, m3->endTick()) == nullptr, "Should be no keysig at end of measure 3.");
       }
 
 void TestKeySig::concertPitch()

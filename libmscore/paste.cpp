@@ -77,7 +77,7 @@ static void transposeChord(Chord* c, Interval srcTranspose, int tick)
 
 bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
       {
-      Q_ASSERT(dst->segmentType() == Segment::Type::ChordRest);
+      Q_ASSERT(dst->segmentType() == SegmentType::ChordRest);
       QList<Chord*> graceNotes;
       int dstTick = dst->tick();
       bool pasted = false;
@@ -317,7 +317,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
 
                               int tick = e.tick();
                               Measure* m = tick2measure(tick);
-                              Segment* seg = m->undoGetSegment(Segment::Type::ChordRest, tick);
+                              Segment* seg = m->undoGetSegment(SegmentType::ChordRest, tick);
                               if (seg->findAnnotationOrElement(ElementType::HARMONY, e.track(), e.track())) {
                                     QList<Element*> elements;
                                     foreach (Element* el, seg->annotations()) {
@@ -348,7 +348,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               el->read(e);
 
                               Measure* m = tick2measure(e.tick());
-                              Segment* seg = m->undoGetSegment(Segment::Type::ChordRest, e.tick());
+                              Segment* seg = m->undoGetSegment(SegmentType::ChordRest, e.tick());
                               el->setParent(seg);
 
                               // be sure to paste the element in the destination track;
@@ -366,7 +366,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               Measure* m = tick2measure(tick);
                               if (m->tick() && m->tick() == tick)
                                     m = m->prevMeasure();
-                              Segment* segment = m->undoGetSegment(Segment::Type::Clef, tick);
+                              Segment* segment = m->undoGetSegment(SegmentType::Clef, tick);
                               clef->setParent(segment);
                               undoChangeElement(segment->element(e.track()), clef);
                               }
@@ -376,7 +376,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               breath->setTrack(e.track());
                               int tick = e.tick();
                               Measure* m = tick2measure(tick);
-                              Segment* segment = m->undoGetSegment(Segment::Type::Breath, tick);
+                              Segment* segment = m->undoGetSegment(SegmentType::Breath, tick);
                               breath->setParent(segment);
                               undoChangeElement(segment->element(e.track()), breath);
                               }
@@ -637,7 +637,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                     }
                               else if (!harmSegm || harmSegm->tick() > destTick) {
                                     Measure* meas     = tick2measure(destTick);
-                                    harmSegm          = meas ? meas->undoGetSegment(Segment::Type::ChordRest, destTick) : nullptr;
+                                    harmSegm          = meas ? meas->undoGetSegment(SegmentType::ChordRest, destTick) : nullptr;
                               }
                               if (destTrack >= maxTrack || harmSegm == nullptr) {
                                     qDebug("PasteSymbols: no track or segment for %s", tag.toUtf8().data());
@@ -710,7 +710,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                           while (prevSegm) {
                                                 if (done)
                                                       break;
-                                                prevSegm = prevSegm->prev1(Segment::Type::ChordRest);
+                                                prevSegm = prevSegm->prev1(SegmentType::ChordRest);
                                                 // if there is a ChordRest in the dest. track
                                                 // this segment is a (potential) f.b. location
                                                 if (prevSegm->element(destTrack) != nullptr) {
@@ -740,9 +740,9 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                           // look for a segment at this tick; if none, create one
                                           Segment * nextSegm = prevSegm;
                                           while (nextSegm && nextSegm->tick() < destTick)
-                                                nextSegm = nextSegm->next1(Segment::Type::ChordRest);
+                                                nextSegm = nextSegm->next1(SegmentType::ChordRest);
                                           if (!nextSegm || nextSegm->tick() > destTick) {      // no ChordRest segm at this tick
-                                                nextSegm = new Segment(prevSegm->measure(), Segment::Type::ChordRest, destTick);
+                                                nextSegm = new Segment(prevSegm->measure(), SegmentType::ChordRest, destTick);
                                                 if (!nextSegm) {
                                                       qDebug("PasteSymbols: can't find or create destination segment for FiguredBass");
                                                       delete el;

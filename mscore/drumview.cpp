@@ -283,7 +283,7 @@ void DrumView::setStaff(Staff* s, Pos* l)
       int staffIdx = staff->idx();
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
-      for (Segment* s = staff->score()->firstSegment(); s; s = s->next1()) {
+      for (Segment* s = staff->score()->firstSegment(SegmentType::All); s; s = s->next1()) {
             for (int track = startTrack; track < endTrack; ++track) {
                   Element* e = s->element(track);
                   if (e == 0 || e->type() != ElementType::CHORD)

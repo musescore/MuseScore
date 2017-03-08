@@ -193,7 +193,7 @@ void setChordNames(QList<MTrack> &tracks)
                   usedTimes.insert(onTime);
 
                   Measure* measure = score->tick2measure(onTime.ticks());
-                  Segment* seg = measure->getSegment(Segment::Type::ChordRest,
+                  Segment* seg = measure->getSegment(SegmentType::ChordRest,
                                                      onTime.ticks());
                   const int t = staff->idx() * VOICES;
 

@@ -169,10 +169,10 @@ void TestCopyPaste::copyPastePartial()
 
       Measure* m1 = score->firstMeasure();
 
-      Segment* s = m1->first(Segment::Type::ChordRest);
-      s = s->next(Segment::Type::ChordRest);
+      Segment* s = m1->first(SegmentType::ChordRest);
+      s = s->next(SegmentType::ChordRest);
       score->select(s->element(0));
-      s = s->next(Segment::Type::ChordRest);
+      s = s->next(SegmentType::ChordRest);
       score->select(s->element(4), SelectType::RANGE);
 
       QVERIFY(score->selection().canCopy());
@@ -182,7 +182,7 @@ void TestCopyPaste::copyPastePartial()
       mimeData->setData(mimeType, score->selection().mimeData());
       QApplication::clipboard()->setMimeData(mimeData);
 
-      score->select(m1->first(Segment::Type::ChordRest)->element(0));
+      score->select(m1->first(SegmentType::ChordRest)->element(0));
 
       score->startCmd();
       score->cmdPaste(mimeData,0);
@@ -206,9 +206,9 @@ void TestCopyPaste::copyPaste2Voice()
       QVERIFY(m2 != 0);
 
       // select 2 chord rests at the start of the first measure
-      Segment* s = m1->first(Segment::Type::ChordRest);
+      Segment* s = m1->first(SegmentType::ChordRest);
       score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
-      s = s->next(Segment::Type::ChordRest);
+      s = s->next(SegmentType::ChordRest);
       score->select(s->element(0), SelectType::RANGE);
 
       QVERIFY(score->selection().canCopy());
@@ -219,7 +219,7 @@ void TestCopyPaste::copyPaste2Voice()
       QApplication::clipboard()->setMimeData(mimeData);
 
       // paste into the second CR of second measure
-      Segment* secondCRSeg = m2->first()->next1(Segment::Type::ChordRest);
+      Segment* secondCRSeg = m2->first()->next1(SegmentType::ChordRest);
       score->select(secondCRSeg->element(0));
 
       score->startCmd();
@@ -249,10 +249,10 @@ void TestCopyPaste::copypastevoice(const char* idx, int voice)
       QVERIFY(m2 != 0);
 
       // create a range selection on 2 and 3 beat of first measure
-      Segment::Type segTypeCR = Segment::Type::ChordRest;
+      SegmentType segTypeCR = SegmentType::ChordRest;
       Segment* s = m1->first(segTypeCR)->next1(segTypeCR);
       score->select(static_cast<Ms::Chord*>(s->element(voice))->notes().at(0));
-      s = s->next(Segment::Type::ChordRest);
+      s = s->next(SegmentType::ChordRest);
       score->select(s->element(voice), SelectType::RANGE);
 
       QVERIFY(score->selection().canCopy());
@@ -285,11 +285,11 @@ void TestCopyPaste::copyPaste2Voice5()
       QVERIFY(m1 != 0);
 
       // create a range selection from 2 eighth note to the end of first measure
-      Segment::Type segTypeCR = Segment::Type::ChordRest;
+      SegmentType segTypeCR = SegmentType::ChordRest;
       Segment* s = m1->first(segTypeCR)->next1(segTypeCR);
       score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
 
-      s = m1->last()->prev(Segment::Type::ChordRest);
+      s = m1->last()->prev(SegmentType::ChordRest);
       score->select(s->element(0), SelectType::RANGE);
 
       QVERIFY(score->selection().canCopy());
@@ -365,11 +365,11 @@ void TestCopyPaste::copypaste2Voice6()
       QVERIFY(m1 != 0);
 
       // create a range selection from 2nd eighth note to the end of first measure
-      Segment::Type segTypeCR = Segment::Type::ChordRest;
+      SegmentType segTypeCR = SegmentType::ChordRest;
       Segment* s = m1->first(segTypeCR)->next1(segTypeCR);
       score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
 
-      s = m1->last()->prev(Segment::Type::ChordRest);
+      s = m1->last()->prev(SegmentType::ChordRest);
       score->select(s->element(1), SelectType::RANGE);
 
       QVERIFY(score->selection().canCopy());
@@ -404,9 +404,9 @@ void TestCopyPaste::copypastetuplet(const char* idx)
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();
 
-      Segment* s = m1->first(Segment::Type::ChordRest);
+      Segment* s = m1->first(SegmentType::ChordRest);
       score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
-      s = s->next(Segment::Type::ChordRest);
+      s = s->next(SegmentType::ChordRest);
       score->select(s->element(0), SelectType::RANGE);
       QVERIFY(score->selection().canCopy());
       QString mimeType = score->selection().mimeType();
@@ -415,7 +415,7 @@ void TestCopyPaste::copypastetuplet(const char* idx)
       mimeData->setData(mimeType, score->selection().mimeData());
       QApplication::clipboard()->setMimeData(mimeData);
 
-      Element* dest = m2->first(Segment::Type::ChordRest)->element(0);
+      Element* dest = m2->first(SegmentType::ChordRest)->element(0);
       score->select(dest);
       score->startCmd();
       score->cmdPaste(mimeData,0);

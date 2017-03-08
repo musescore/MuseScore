@@ -245,7 +245,7 @@ void MuseScore::oscColorNote(QVariantList list)
       Measure* measure = cs->tick2measure(tick);
       if(!measure)
             return;
-      Segment* s = measure->findSegment(Segment::Type::ChordRest, tick);
+      Segment* s = measure->findSegment(SegmentType::ChordRest, tick);
       if (!s)
             return;
       //get all chords in segment...

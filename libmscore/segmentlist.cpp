@@ -51,20 +51,20 @@ void SegmentList::check()
             }
       for (Segment* s = _first; s; s = s->next()) {
             switch (s->segmentType()) {
-                  case Segment::Type::Invalid:
-                  case Segment::Type::BeginBarLine:
-                  case Segment::Type::HeaderClef:
-                  case Segment::Type::Clef:
-                  case Segment::Type::KeySig:
-                  case Segment::Type::Ambitus:
-                  case Segment::Type::TimeSig:
-                  case Segment::Type::StartRepeatBarLine:
-                  case Segment::Type::BarLine:
-                  case Segment::Type::ChordRest:
-                  case Segment::Type::Breath:
-                  case Segment::Type::EndBarLine:
-                  case Segment::Type::TimeSigAnnounce:
-                  case Segment::Type::KeySigAnnounce:
+                  case SegmentType::Invalid:
+                  case SegmentType::BeginBarLine:
+                  case SegmentType::HeaderClef:
+                  case SegmentType::Clef:
+                  case SegmentType::KeySig:
+                  case SegmentType::Ambitus:
+                  case SegmentType::TimeSig:
+                  case SegmentType::StartRepeatBarLine:
+                  case SegmentType::BarLine:
+                  case SegmentType::ChordRest:
+                  case SegmentType::Breath:
+                  case SegmentType::EndBarLine:
+                  case SegmentType::TimeSigAnnounce:
+                  case SegmentType::KeySigAnnounce:
                         break;
                   default:
                         qFatal("SegmentList::check: invalid segment type 0x%x", int(s->segmentType()));
@@ -194,14 +194,14 @@ void SegmentList::push_front(Segment* e)
 
 Segment* SegmentList::firstCRSegment() const
       {
-      return first(Segment::Type::ChordRest);
+      return first(SegmentType::ChordRest);
       }
 
 //---------------------------------------------------------
 //   first
 //---------------------------------------------------------
 
-Segment* SegmentList::first(Segment::Type types) const
+Segment* SegmentList::first(SegmentType types) const
       {
       for (Segment* s = _first; s; s = s->next()) {
             if (s->segmentType() & types)

@@ -523,14 +523,14 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                         Element* e2 = nullptr;
                         // use mid-measure clef changes as appropriate
                         if (element->type() == ElementType::CLEF) {
-                              if (sel.startSegment()->segmentType() == Segment::Type::ChordRest && sel.startSegment()->rtick() != 0) {
+                              if (sel.startSegment()->segmentType() == SegmentType::ChordRest && sel.startSegment()->rtick() != 0) {
                                     ChordRest* cr = static_cast<ChordRest*>(sel.startSegment()->nextChordRest(i * VOICES));
                                     if (cr && cr->isChord())
                                           e1 = static_cast<Chord*>(cr)->upNote();
                                     else
                                           e1 = cr;
                                     }
-                              if (sel.endSegment() && sel.endSegment()->segmentType() == Segment::Type::ChordRest) {
+                              if (sel.endSegment() && sel.endSegment()->segmentType() == SegmentType::ChordRest) {
                                     ChordRest* cr = static_cast<ChordRest*>(sel.endSegment()->nextChordRest(i * VOICES));
                                     if (cr && cr->isChord())
                                           e2 = static_cast<Chord*>(cr)->upNote();

@@ -80,7 +80,7 @@ void TestSpanners::spanners01()
       // go to top note of first chord
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(Segment::Type::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -195,7 +195,7 @@ void TestSpanners::spanners03()
       // go to top note of first chord
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(Segment::Type::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -328,7 +328,7 @@ void TestSpanners::spanners06()
       // DROP A GLISSANDO ON FIRST NOTE
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(Segment::Type::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -360,7 +360,7 @@ void TestSpanners::spanners07()
       // DROP A GLISSANDO ON FIRST NOTE
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(Segment::Type::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -394,7 +394,7 @@ void TestSpanners::spanners08()
       // DELETE LYRICS
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(Segment::Type::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);

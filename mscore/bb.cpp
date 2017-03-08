@@ -429,7 +429,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
                   Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
                   rest->setDuration(measure->len());
                   rest->setTrack(0);
-                  Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                  Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
                   s->add(rest);
                   }
             }
@@ -443,12 +443,12 @@ Score::FileError importBB(MasterScore* score, const QString& name)
             if (mb->type() != ElementType::MEASURE)
                   continue;
             Measure* measure = (Measure*)mb;
-            Segment* s = measure->findSegment(Segment::Type::ChordRest, measure->tick());
+            Segment* s = measure->findSegment(SegmentType::ChordRest, measure->tick());
             if (s == 0) {
                   Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
                   rest->setDuration(measure->len());
                   rest->setTrack(0);
-                  Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                  Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
                   s->add(rest);
                   }
             }
@@ -487,7 +487,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
                   qDebug("import BB: measure for tick %d not found", tick);
                   continue;
                   }
-            Segment* s = m->getSegment(Segment::Type::ChordRest, tick);
+            Segment* s = m->getSegment(SegmentType::ChordRest, tick);
             Harmony* h = new Harmony(score);
             h->setTrack(0);
             h->setRootTpc(table[c.root-1]);
@@ -537,7 +537,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
             keysig->setTrack((score->staffIdx(staff->part()) + staff->rstaff()) * VOICES);
             keysig->setKey(Key(bb.key()));
             Measure* mks = score->tick2measure(tick);
-            Segment* sks = mks->getSegment(Segment::Type::KeySig, tick);
+            Segment* sks = mks->getSegment(SegmentType::KeySig, tick);
             sks->add(keysig);
             }
       score->fixTicks();
@@ -582,7 +582,7 @@ int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int
       d.setVal(len);
       chord->setDurationType(d);
       chord->setDuration(d.fraction());
-      Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
+      Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
       s->add(chord);
 
       foreach (MNote* n, *notes) {
@@ -716,7 +716,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
                               Rest* rest = new Rest(score, d);
                               rest->setDuration(d.fraction());
                               rest->setTrack(staffIdx * VOICES);
-                              Segment* s = measure->getSegment(Segment::Type::ChordRest, ctick);
+                              Segment* s = measure->getSegment(SegmentType::ChordRest, ctick);
                               s->add(rest);
 // qDebug("   add rest %d", len);
 
@@ -749,7 +749,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
                         Rest* rest = new Rest(score, d);
                         rest->setDuration(d.fraction());
                         rest->setTrack(staffIdx * VOICES);
-                        Segment* s = measure->getSegment(Segment::Type::ChordRest, ctick);
+                        Segment* s = measure->getSegment(SegmentType::ChordRest, ctick);
                         s->add(rest);
                         }
                   }

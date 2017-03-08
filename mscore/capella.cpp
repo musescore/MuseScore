@@ -223,7 +223,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                                 Breath* b = new Breath(score);
                                                 b->setTrack(track);
                                                 b->setSymId(SymId::caesura);
-                                                Segment* seg = s->measure()->getSegment(Segment::Type::Breath, s->tick() + (cr ? cr->actualTicks() : 0));
+                                                Segment* seg = s->measure()->getSegment(SegmentType::Breath, s->tick() + (cr ? cr->actualTicks() : 0));
                                                 seg->add(b);
                                                 }
                                                 break;
@@ -467,7 +467,7 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
       // Now we have the tick (tick) and the level of grace note (graceNumber1, if "no" is a grace note) for the first ChordRest
       // and the tick (tick2) and the level of grace note (graceNumber, if the target is a grace note) for the 2nd ChordRest
       for (Segment* seg = score->tick2segment(tick); seg; seg = seg->next1()) {
-            if (seg->segmentType() != Segment::Type::ChordRest)
+            if (seg->segmentType() != SegmentType::ChordRest)
                   continue;
             ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
             if (cr) {
@@ -484,7 +484,7 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
                   }
             }
       for (Segment* seg = score->tick2segment(tick2); seg; seg = seg->next1()) {
-            if (seg->segmentType() != Segment::Type::ChordRest)
+            if (seg->segmentType() != SegmentType::ChordRest)
                   continue;
             ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
             if (cr) {
@@ -572,7 +572,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               if (!o->invisible) {
                                     for (unsigned i = 0; i < o->fullMeasures; ++i) {
                                           Measure* m = score->getCreateMeasure(tick + i * ft);
-                                          Segment* s = m->getSegment(Segment::Type::ChordRest, tick + i * ft);
+                                          Segment* s = m->getSegment(SegmentType::ChordRest, tick + i * ft);
                                           Rest* rest = new Rest(score);
                                           rest->setDurationType(TDuration(TDuration::DurationType::V_MEASURE));
                                           rest->setDuration(m->len());
@@ -582,7 +582,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     }
                               }
                         if (!o->invisible || voice == 0) {
-                              Segment* s = m->getSegment(Segment::Type::ChordRest, tick);
+                              Segment* s = m->getSegment(SegmentType::ChordRest, tick);
                               Rest* rest = new Rest(score);
                               if (tuplet) {
                                     rest->setTuplet(tuplet);
@@ -680,7 +680,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               default:
                                     break;
                               }
-                        Segment* s = m->getSegment(Segment::Type::ChordRest, tick);
+                        Segment* s = m->getSegment(SegmentType::ChordRest, tick);
                         if (isgracenote)
                               graceNotes.push_back(chord);
                         else {
@@ -814,9 +814,9 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         Measure* m = score->getCreateMeasure(tick);
                         Segment* s;
                         if (tick == m->tick())
-                              s = m->getSegment(Segment::Type::HeaderClef, tick);
+                              s = m->getSegment(SegmentType::HeaderClef, tick);
                         else
-                              s = m->getSegment(Segment::Type::Clef, tick);
+                              s = m->getSegment(SegmentType::Clef, tick);
                         s->add(clef);
                         }
                         break;
@@ -832,7 +832,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               KeySig* ks = new KeySig(score);
                               ks->setTrack(staffIdx * VOICES);
                               Measure* m = score->getCreateMeasure(tick);
-                              Segment* s = m->getSegment(Segment::Type::KeySig, tick);
+                              Segment* s = m->getSegment(SegmentType::KeySig, tick);
                               ks->setKeySigEvent(okey);
                               s->add(ks);
                               }
@@ -852,7 +852,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
 
                         // do not add timesig again
                         Measure* m = score->getCreateMeasure(tick);
-                        Segment* s = m->findSegment(Segment::Type::TimeSig, tick);
+                        Segment* s = m->findSegment(SegmentType::TimeSig, tick);
                         if (s) {
                               Element* e = s->element(trackZeroVoice(track));
                               if (e && static_cast<TimeSig*>(e)->sig() == f)
@@ -862,7 +862,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         TimeSig* ts = new TimeSig(score);
                         ts->setSig(f);
                         ts->setTrack(track);
-                        s = m->getSegment(Segment::Type::TimeSig, tick);
+                        s = m->getSegment(SegmentType::TimeSig, tick);
                         s->add(ts);
                         m->setLen(f);
                         }
@@ -1319,7 +1319,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       //
       // fill empty measures with rests
       //
-      Segment::Type st = Segment::Type::ChordRest;
+      SegmentType st = SegmentType::ChordRest;
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
             for (int staffIdx = 0; staffIdx < score->staves().size(); ++staffIdx) {
                   bool empty = true;
@@ -1330,7 +1330,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                               }
                         }
                   if (empty) {
-                        Segment* s = m->getSegment(Segment::Type::ChordRest, m->tick());
+                        Segment* s = m->getSegment(SegmentType::ChordRest, m->tick());
                         Rest* rest = new Rest(score);
                         TDuration d(m->len());
                         if ((m->len() == m->timesig()) || !d.isValid())

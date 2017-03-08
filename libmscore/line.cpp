@@ -639,7 +639,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                               if (cr && endElement()->parent() && endElement()->parent()->type() == ElementType::SEGMENT) {
                                     qreal x2 = cr->x() /* TODO + cr->space().rw() */;
                                     Segment* currentSeg = static_cast<Segment*>(endElement()->parent());
-                                    Segment* seg = score()->tick2segmentMM(tick2(), false, Segment::Type::ChordRest);
+                                    Segment* seg = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
                                     if (!seg) {
                                           // no end segment found, use measure width
                                           x2 = endElement()->parent()->parent()->width() - sp;
@@ -652,7 +652,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     else {
                                           // next chordrest is in next measure
                                           // lay out to end (barline) of current measure instead
-                                          seg = currentSeg->next(Segment::Type::EndBarLine);
+                                          seg = currentSeg->next(SegmentType::EndBarLine);
                                           if (!seg)
                                                 seg = currentSeg->measure()->last();
                                           // allow lyrics hyphen to extend to barline
@@ -685,7 +685,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                         m = startMeasure();
                         // start after clef/key
                         qreal offset = 0.0;
-                        Segment* s = m->first(Segment::Type::ChordRest);
+                        Segment* s = m->first(SegmentType::ChordRest);
                         if (s) {
                               s = s->prev();
                               if (s) {
@@ -716,12 +716,12 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                               }
                         // back up to barline (skip courtesy elements)
                         Segment* seg = m->last();
-                        while (seg && seg->segmentType() != Segment::Type::EndBarLine)
+                        while (seg && seg->segmentType() != SegmentType::EndBarLine)
                               seg = seg->prev();
                         qreal mwidth = seg ? seg->x() : m->bbox().right();
                         x = m->pos().x() + mwidth;
                         // align to barline
-                        if (seg && seg->segmentType() == Segment::Type::EndBarLine) {
+                        if (seg && seg->segmentType() == SegmentType::EndBarLine) {
                               Element* e = seg->element(0);
                               if (e && e->type() == ElementType::BAR_LINE) {
                                     BarLineType blt = static_cast<BarLine*>(e)->barLineType();
@@ -842,7 +842,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
                   break;
             case SpannerSegmentType::MIDDLE: {
                   Measure* firstMeasure = system->firstMeasure();
-                  Segment* firstCRSeg   = firstMeasure->first(Segment::Type::ChordRest);
+                  Segment* firstCRSeg   = firstMeasure->first(SegmentType::ChordRest);
                   qreal x1              = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeasure->pos().x();
                   qreal x2              = system->bbox().right();
                   System* s;
@@ -856,7 +856,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
                   System* s;
                   QPointF p2 = linePos(Grip::END,   &s);
                   Measure* firstMeas  = system->firstMeasure();
-                  Segment* firstCRSeg = firstMeas->first(Segment::Type::ChordRest);
+                  Segment* firstCRSeg = firstMeas->first(SegmentType::ChordRest);
                   if (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE) {
                         // start line just after previous element (eg, key signature)
                         firstCRSeg = firstCRSeg->prev();
@@ -987,7 +987,7 @@ void SLine::layout()
             lineSegm->setSystem(system);
 
             Measure* firstMeas = system->firstMeasure();
-            Segment* firstCRSeg = firstMeas->first(Segment::Type::ChordRest);
+            Segment* firstCRSeg = firstMeas->first(SegmentType::ChordRest);
 
             if (sysIdx1 == sysIdx2) {
                   // single segment

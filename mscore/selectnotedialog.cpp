@@ -30,6 +30,7 @@
 #include "libmscore/score.h"
 #include "libmscore/chord.h"
 #include "libmscore/sym.h"
+#include "libmscore/segment.h"
 #include "musescore.h"
 
 namespace Ms {

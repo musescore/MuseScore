@@ -959,7 +959,7 @@ std::vector<Note*> Selection::noteList(int selTrack) const
                   int startTrack = staffIdx * VOICES;
                   int endTrack   = startTrack + VOICES;
                   for (Segment* seg = _startSegment; seg && seg != _endSegment; seg = seg->next1()) {
-                        if (!(seg->segmentType() & (Segment::Type::ChordRest)))
+                        if (!(seg->segmentType() & (SegmentType::ChordRest)))
                               continue;
                         for (int track = startTrack; track < endTrack; ++track) {
                               if (!canSelectVoice(track))
@@ -1180,9 +1180,9 @@ QList<Note*> Selection::uniqueNotes(int track) const
 void Selection::extendRangeSelection(ChordRest* cr)
       {
       extendRangeSelection(cr->segment(),
-         cr->nextSegmentAfterCR(Segment::Type::ChordRest
-            | Segment::Type::EndBarLine
-            | Segment::Type::Clef),
+         cr->nextSegmentAfterCR(SegmentType::ChordRest
+            | SegmentType::EndBarLine
+            | SegmentType::Clef),
             cr->staffIdx(),
             cr->tick(),
             cr->tick());

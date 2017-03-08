@@ -464,13 +464,13 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
       // create missing key signatures
       //
       if (trKeys && (mode != TransposeMode::DIATONICALLY) && (s1->tick() == 0)) {
-//            Segment* seg = firstMeasure()->findSegment(Segment::Type::KeySig, 0);
+//            Segment* seg = firstMeasure()->findSegment(SegmentType::KeySig, 0);
             Key nKey = transposeKey(Key::C, interval);
 //            if (seg == 0) {
                   for (int st : tracks) {
                         if (st % VOICES)
                               continue;
-                        Segment* seg = firstMeasure()->undoGetSegment(Segment::Type::KeySig, 0);
+                        Segment* seg = firstMeasure()->undoGetSegment(SegmentType::KeySig, 0);
                         KeySig* ks = static_cast<KeySig*>(seg->element(st));
                         if (!ks) {
                               ks = new KeySig(this);
@@ -500,7 +500,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   continue;
 
             bool createKey = tickStart <= 0;    // 0 and -1 are both valid values to indicate start of score
-            for (Segment* s = firstSegment(Segment::Type::KeySig); s; s = s->next1(Segment::Type::KeySig)) {
+            for (Segment* s = firstSegment(SegmentType::KeySig); s; s = s->next1(SegmentType::KeySig)) {
                   if (s->tick() < tickStart)
                         continue;
                   if (tickEnd != -1 && s->tick() >= tickEnd)
@@ -541,7 +541,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   KeySig* ks = new KeySig(this);
                   ks->setTrack(staffIdx * VOICES);
                   ks->setKeySigEvent(ke);
-                  Segment* seg = firstMeasure()->undoGetSegmentR(Segment::Type::KeySig, 0);
+                  Segment* seg = firstMeasure()->undoGetSegmentR(SegmentType::KeySig, 0);
                   seg->setHeader(true);
                   ks->setParent(seg);
                   undoAddElement(ks);
@@ -679,7 +679,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, int tickStart, int t
             transposeKeys(part->startTrack() / VOICES, part->endTrack() / VOICES, tickStart, tickEnd, diffV);
 
       // now transpose notes and chord symbols
-      for (Segment* s = firstSegment(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
+      for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             if (s->tick() < tickStart)
                   continue;
             if (tickEnd != -1 && s->tick() >= tickEnd)

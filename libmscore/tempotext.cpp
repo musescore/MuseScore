@@ -342,7 +342,7 @@ void TempoText::layout()
       //
       Segment* s = segment();
       if (s && !s->rtick()) {
-            Segment* p = segment()->prev(Segment::Type::TimeSig);
+            Segment* p = segment()->prev(SegmentType::TimeSig);
             if (p) {
                   rxpos() -= s->x() - p->x();
                   Element* e = p->element(staffIdx() * VOICES);
