@@ -1131,13 +1131,13 @@ void GuitarPro::createOttava(bool hasOttava, int track, ChordRest* cr, QString v
             Ottava* newOttava = new Ottava(score);
             newOttava->setTrack(track);
             if (!value.compare("8va"))
-                  newOttava->setOttavaType(Ottava::Type::OTTAVA_8VA);
+                  newOttava->setOttavaType(OttavaType::OTTAVA_8VA);
             else if (!value.compare("8vb"))
-                  newOttava->setOttavaType(Ottava::Type::OTTAVA_8VB);
+                  newOttava->setOttavaType(OttavaType::OTTAVA_8VB);
             else if (!value.compare("15ma"))
-                  newOttava->setOttavaType(Ottava::Type::OTTAVA_15MA);
+                  newOttava->setOttavaType(OttavaType::OTTAVA_15MA);
             else if (!value.compare("15mb"))
-                  newOttava->setOttavaType(Ottava::Type::OTTAVA_15MB);
+                  newOttava->setOttavaType(OttavaType::OTTAVA_15MB);
             newOttava->setTick(cr->tick());
             /* we set the second tick when we encounter the next note
                without an ottava. We also allow the ottava to continue

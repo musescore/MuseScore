@@ -28,6 +28,19 @@ struct OttavaE {
       unsigned end;
       };
 
+//---------------------------------------------------------
+//   OttavaType
+//---------------------------------------------------------
+
+enum class OttavaType : char {
+      OTTAVA_8VA,
+      OTTAVA_8VB,
+      OTTAVA_15MA,
+      OTTAVA_15MB,
+      OTTAVA_22MA,
+      OTTAVA_22MB
+      };
+
 class Ottava;
 
 //---------------------------------------------------------
@@ -61,21 +74,8 @@ class OttavaSegment : public TextLineBaseSegment {
 
 class Ottava : public TextLineBase {
       Q_GADGET
-      Q_PROPERTY(Ms::Ottava::Type ottavaType READ ottavaType WRITE undoSetOttavaType)
-      Q_ENUMS(Type)
 
-   public:
-      enum Type : char {
-            OTTAVA_8VA,
-            OTTAVA_8VB,
-            OTTAVA_15MA,
-            OTTAVA_15MB,
-            OTTAVA_22MA,
-            OTTAVA_22MB
-            };
-
-   private:
-      Type _ottavaType;
+      OttavaType _ottavaType;
       bool _numbersOnly;
       PropertyFlags numbersOnlyStyle  { PropertyFlags::STYLED };
 
@@ -87,18 +87,18 @@ class Ottava : public TextLineBase {
    public:
       Ottava(Score* s);
       Ottava(const Ottava&);
-      virtual Ottava* clone() const override      { return new Ottava(*this); }
+      virtual Ottava* clone() const override    { return new Ottava(*this); }
       virtual ElementType type() const override { return ElementType::OTTAVA; }
 
-      void setOttavaType(Type val);
-      Type ottavaType() const       { return _ottavaType; }
-      void undoSetOttavaType(Type val);
+      void setOttavaType(OttavaType val);
+      OttavaType ottavaType() const             { return _ottavaType; }
+      void undoSetOttavaType(OttavaType val);
 
-      bool numbersOnly() const      { return _numbersOnly; }
-      void setNumbersOnly(bool val) { _numbersOnly = val; }
+      bool numbersOnly() const                  { return _numbersOnly; }
+      void setNumbersOnly(bool val)             { _numbersOnly = val; }
 
       virtual LineSegment* createLineSegment() override;
-      int pitchShift() const { return _pitchShift; }
+      int pitchShift() const                    { return _pitchShift; }
 
       virtual void endEdit() override;
       virtual void write(XmlWriter& xml) const override;
@@ -119,8 +119,6 @@ class Ottava : public TextLineBase {
       };
 
 }     // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::Ottava::Type);
 
 #endif
 

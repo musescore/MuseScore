@@ -6,6 +6,7 @@
 #include "libmscore/timesig.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
+#include "libmscore/spanner.h"
 #include "inspector/inspector.h"
 #include "selectionwindow.h"
 #include "playpanel.h"

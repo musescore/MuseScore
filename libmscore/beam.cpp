@@ -31,6 +31,7 @@
 #include "stemslash.h"
 #include "groups.h"
 #include "xml.h"
+#include "spanner.h"
 
 namespace Ms {
 

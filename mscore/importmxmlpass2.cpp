@@ -58,6 +58,8 @@
 #include "libmscore/textline.h"
 #include "libmscore/barline.h"
 #include "libmscore/articulation.h"
+#include "libmscore/ottava.h"
+#include "libmscore/rehearsalmark.h"
 
 #include "importmxmlpass2.h"
 #include "musicxmlfonthandler.h"
@@ -2825,10 +2827,10 @@ void MusicXMLParserDirection::octaveShift(const QString& type, const int number,
 
                   // if (placement == "") placement = "above";  // TODO ? set default
 
-                  if (type == "down" && ottavasize ==  8) o->setOttavaType(Ottava::Type::OTTAVA_8VA);
-                  if (type == "down" && ottavasize == 15) o->setOttavaType(Ottava::Type::OTTAVA_15MA);
-                  if (type ==   "up" && ottavasize ==  8) o->setOttavaType(Ottava::Type::OTTAVA_8VB);
-                  if (type ==   "up" && ottavasize == 15) o->setOttavaType(Ottava::Type::OTTAVA_15MB);
+                  if (type == "down" && ottavasize ==  8) o->setOttavaType(OttavaType::OTTAVA_8VA);
+                  if (type == "down" && ottavasize == 15) o->setOttavaType(OttavaType::OTTAVA_15MA);
+                  if (type ==   "up" && ottavasize ==  8) o->setOttavaType(OttavaType::OTTAVA_8VB);
+                  if (type ==   "up" && ottavasize == 15) o->setOttavaType(OttavaType::OTTAVA_15MB);
 
                   starts.append(MusicXmlSpannerDesc(o, ElementType::OTTAVA, number));
                   }

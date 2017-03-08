@@ -23,6 +23,7 @@
 #include "xml.h"
 #include "marker.h"
 #include "stafflines.h"
+#include "spanner.h"
 
 namespace Ms {
 
