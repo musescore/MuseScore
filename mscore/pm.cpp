@@ -143,16 +143,9 @@ void PortMidiDriver::getOutputPollFd(struct pollfd**, int* n)
 
 void PortMidiDriver::read()
       {
-      static const int THRESHOLD = 3; // iterations required before consecutive drum notes are not considered part of a chord
-      static int active = 0;
-      static int iter = 0;
-      //for some reason, some users could have "active" blocked in < 0
-      if (active < 0)
-        active = 0;
       if (!inputStream)
             return;
       PmEvent buffer[1];
-      iter = (iter >= THRESHOLD) ? iter : (iter+1);
       while (Pm_Poll(inputStream)) {
             int n = Pm_Read(inputStream, buffer, 1);
             if (n > 0) {
