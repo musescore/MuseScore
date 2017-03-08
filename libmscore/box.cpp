@@ -667,7 +667,7 @@ Element* Box::drop(const DropData& data)
                   e->setParent(this);
                   score()->undoAddElement(e);
                   return e;
-
+#if 0
             case ElementType::BAR_LINE: {
                   MeasureBase* mb = next();
                   if (!mb || !mb->isMeasure()) {
@@ -677,7 +677,7 @@ Element* Box::drop(const DropData& data)
                   score()->undoChangeBarLine(toMeasure(mb), toBarLine(e)->barLineType(), true);
                   }
                   return 0;
-
+#endif
             default:
                   return 0;
             }

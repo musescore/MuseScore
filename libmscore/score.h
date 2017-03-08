@@ -627,7 +627,7 @@ class Score : public QObject, ScoreElement {
       void undoAddBracket(Staff* staff, int level, BracketType type, int span);
       void undoRemoveBracket(Bracket*);
       void undoInsertTime(int tick, int len);
-      void undoChangeBarLine(Measure*, BarLineType, bool beginBarLine = false);
+      void undoChangeBarLine(Measure*, BarLineType, Segment::Type type = Segment::Type::EndBarLine);
       void undoChangeStyleVal(StyleIdx idx, const QVariant& v);
 
       void setGraceNote(Chord*,  int pitch, NoteType type, int len);

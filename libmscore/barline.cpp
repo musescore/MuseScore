@@ -561,6 +561,7 @@ Element* BarLine::drop(const DropData& data)
                   delete e;
                   return 0;
                   }
+
             // check if the new property can apply to this single bar line
             BarLineType bt = BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT;
             bool oldRepeat = barLineType()     & bt;
@@ -590,17 +591,18 @@ Element* BarLine::drop(const DropData& data)
                   }
 
             //---------------------------------------------
-            //    Update repeat flags for current measure
-            //    and next measure if this is a EndBarLine.
+            //    Update repeat flags
             //---------------------------------------------
 
             Measure* m  = segment()->measure();
-            if (segment()->isEndBarLineType())
-                  score()->undoChangeBarLine(m, st, false);
-            else if (segment()->isBeginBarLineType())
-                  score()->undoChangeBarLine(m, st, true);
-            else if (segment()->isStartRepeatBarLineType())
-                  m->undoChangeProperty(P_ID::REPEAT_START, false);
+            // drop on a end-start-repeat barline remove also the start repeat on next measure
+            if (segment()->isEndBarLineType()
+               && barLineType() == BarLineType::END_START_REPEAT
+               && (st & (BarLineType::END|BarLineType::NORMAL|BarLineType::DOUBLE|BarLineType::BROKEN|BarLineType::DOTTED))
+               && m->nextMeasure()) {
+                  m->nextMeasure()->undoChangeProperty(P_ID::REPEAT_START, false);
+                  }
+            score()->undoChangeBarLine(m, st, segment()->segmentType());
             delete e;
             return 0;
             }
