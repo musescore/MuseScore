@@ -3571,7 +3571,7 @@ void ChangeDrumset::flip()
 //   undoChangeBarLine
 //---------------------------------------------------------
 
-void Score::undoChangeBarLine(Measure* measure, BarLineType barType, bool beginBarLine)
+void Score::undoChangeBarLine(Measure* measure, BarLineType barType, Segment::Type segmentType)
       {
       int tick = measure->tick();
 
@@ -3586,10 +3586,10 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType, bool beginB
                   case BarLineType::BROKEN:
                   case BarLineType::DOTTED: {
                         Segment* segment;
-                        if (!beginBarLine) {
+                        if (segmentType == Segment::Type::EndBarLine) {
                               s->undoChangeProperty(m, P_ID::REPEAT_END, false);
-                              if (nm)
-                                    s->undoChangeProperty(nm, P_ID::REPEAT_START, false);
+                              // if (nm)
+                              //      s->undoChangeProperty(nm, P_ID::REPEAT_START, false);
                               segment = m->findSegment(Segment::Type::EndBarLine, m->endTick());
                               if (segment) {
                                     for (Element* e : segment->elist()) {
@@ -3600,7 +3600,7 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType, bool beginB
                                           }
                                     }
                               }
-                        else {
+                        else if (segmentType == Segment::Type::BeginBarLine) {
                               segment = m->undoGetSegment(Segment::Type::BeginBarLine, tick);
                               for (Element* e : segment->elist()) {
                                     if (e) {
@@ -3616,6 +3616,9 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType, bool beginB
                                           undo(new AddElement(bl));
                                           }
                                     }
+                              }
+                        else if (segmentType == Segment::Type::StartRepeatBarLine) {
+                              s->undoChangeProperty(m, P_ID::REPEAT_START, false);
                               }
                         }
                         break;
