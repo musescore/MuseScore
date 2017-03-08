@@ -1855,10 +1855,11 @@ bool MuseScore::processMidiRemote(MidiRemoteType type, int data, int value)
 
 void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
       {
-      static const int THRESHOLD = 3; // iterations required before consecutive drum notes
+      static const int THRESHOLD_DRUMS = 5; // iterations required before consecutive drum notes
                                      // are not considered part of a chord
       static int active = 0;
-      static int iter = 0;
+      static int iterDrums = 0;
+      static int activeDrums = 0;
 
       if (!midiinEnabled())
             return;
@@ -1896,22 +1897,26 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
              * part of a cord.
              */
             if (channel == 0x09) {
-                  if (iter >= THRESHOLD)
-                        active = 0;
-                  iter = 0;
+                  if (iterDrums >= THRESHOLD_DRUMS)
+                        activeDrums = 0;
+                  iterDrums = 0;
+                  cv->midiNoteReceived(pitch, activeDrums > 0, velo);
                   }
-// qDebug("    midiNoteReceived %d active %d", pitch, active);
-            cv->midiNoteReceived(pitch, active > 0, velo);
-            ++active;
+            else {
+                  //qDebug("    midiNoteReceived %d active %d", pitch, active);
+                  cv->midiNoteReceived(pitch, active > 0, velo);
+                  ++active;
+                  }
             }
       else {
-               /*
-               * Since a note may be assigned to a midi_remote, don't decrease active below zero
-               * on noteoff.
-               */
-
+            /*
+            * Since a note may be assigned to a midi_remote,
+            * don't decrease active below zero on noteoff.
+            */
             if ((channel != 0x09) && (active > 0))
                   --active;
+            if ((channel == 0x09) && (activeDrums > 0))
+                  --activeDrums;
             cv->midiNoteReceived(pitch, false, velo);
             }
 
