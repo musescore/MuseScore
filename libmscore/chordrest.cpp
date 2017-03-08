@@ -704,7 +704,7 @@ Element* ChordRest::drop(const DropData& data)
 
                   // TODO: insert automatically in all staves?
 
-                  Segment* seg = m->undoGetSegment(Segment::Type::Breath, bt);
+                  Segment* seg = m->undoGetSegment(SegmentType::Breath, bt);
                   b->setParent(seg);
                   score()->undoAddElement(b);
                   }
@@ -726,7 +726,7 @@ Element* ChordRest::drop(const DropData& data)
                         for (Staff* st  : staff()->staffList()) {
                               Score* score = st->score();
                               Measure* measure = score->tick2measure(m->tick());
-                              Segment* seg = measure->undoGetSegmentR(Segment::Type::BarLine, rtick());
+                              Segment* seg = measure->undoGetSegmentR(SegmentType::BarLine, rtick());
                               BarLine* l;
                               if (obl == 0)
                                     obl = l = bl->clone();
@@ -1177,7 +1177,7 @@ void ChordRest::writeBeam(XmlWriter& xml)
 //    of given types
 //---------------------------------------------------------
 
-Segment* ChordRest::nextSegmentAfterCR(Segment::Type types) const
+Segment* ChordRest::nextSegmentAfterCR(SegmentType types) const
       {
       for (Segment* s = segment()->next1MM(types); s; s = s->next1MM(types)) {
             // chordrest ends at tick+actualTicks
@@ -1287,7 +1287,7 @@ QString ChordRest::accessibleExtraInfo() const
                   else  {
                         if (s->tick() == tick() && s->staffIdx() == staffIdx())
                               rez = QObject::tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
-                        seg = segment()->next1MM(Segment::Type::ChordRest);
+                        seg = segment()->next1MM(SegmentType::ChordRest);
                         if (!seg)
                               continue;
                         if (s->tick2() == seg->tick() && s->staffIdx() == staffIdx())

@@ -443,7 +443,7 @@ void Glissando::computeStartElement()
             segm = segm->prev1();
       while (segm) {
             // if previous segment is a ChordRest segment
-            if (segm->segmentType() == Segment::Type::ChordRest) {
+            if (segm->segmentType() == SegmentType::ChordRest) {
                   // look for a Chord in the same track and get its top note, if found
                   if (segm->element(trk) && segm->element(trk)->type() == ElementType::CHORD) {
                         _startElement = static_cast<Chord*>(segm->element(trk))->upNote();
@@ -556,7 +556,7 @@ Note* Glissando::guessInitialNote(Chord* chord)
             segm = segm->prev1();
       while (segm) {
             // if previous segment is a ChordRest segment
-            if (segm->segmentType() == Segment::Type::ChordRest) {
+            if (segm->segmentType() == SegmentType::ChordRest) {
                   Chord* target = nullptr;
                   // look for a Chord in the same track
                   if (segm->element(chordTrack) && segm->element(chordTrack)->type() == ElementType::CHORD)
@@ -648,7 +648,7 @@ Note* Glissando::guessFinalNote(Chord* chord)
       Part*       part        = chord->part();
       while (segm) {
             // if next segment is a ChordRest segment
-            if (segm->segmentType() == Segment::Type::ChordRest) {
+            if (segm->segmentType() == SegmentType::ChordRest) {
                   Chord* target = nullptr;
 
                   // look for a Chord in the same track

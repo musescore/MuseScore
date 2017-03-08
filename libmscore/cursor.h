@@ -13,8 +13,6 @@
 #ifndef __CURSOR_H__
 #define __CURSOR_H__
 
-#include "segment.h"
-
 namespace Ms {
 
 class Element;
@@ -22,7 +20,7 @@ class Score;
 class Chord;
 class Rest;
 class Note;
-// class Segment;
+class Segment;
 class RepeatSegment;
 class ChordRest;
 class StaffText;
@@ -86,7 +84,7 @@ class Cursor : public QObject {
 
       //state
       Segment* _segment;
-      Segment::Type _filter { Segment::Type::ChordRest };
+      SegmentType _filter;
 
       // utility methods
       void nextInTrack();
@@ -108,7 +106,7 @@ class Cursor : public QObject {
       void setVoice(int v);
 
       int filter() const            { return int(_filter); }
-      void setFilter(int f)         { _filter = Segment::Type(f); }
+      void setFilter(int f)         { _filter = SegmentType(f); }
 
       Q_INVOKABLE Ms::ElementW* element() const;
       Q_INVOKABLE Ms::ElementW* segment() const;

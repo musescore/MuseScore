@@ -660,7 +660,7 @@ void GuitarPro6::makeTie(Note* note) {
       bool found = false;
       Chord* chord     = note->chord();
       Segment* segment = chord->segment();
-      segment = segment->prev1(Segment::Type::ChordRest);
+      segment = segment->prev1(SegmentType::ChordRest);
       int track        = note->track();
       while (segment) {
             Element* e = segment->element(track);
@@ -682,7 +682,7 @@ void GuitarPro6::makeTie(Note* note) {
                   if (found)
                         break;
             }
-            segment = segment->prev1(Segment::Type::ChordRest);
+            segment = segment->prev1(SegmentType::ChordRest);
       }
 }
 
@@ -702,7 +702,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                   int dotted = 0;
                   QDomNode beat = getNode(*currentBeat, partInfo->beats);
                   int currentTick = startTick + beatsTick;
-                  Segment* segment = measure->getSegment(Segment::Type::ChordRest, currentTick);
+                  Segment* segment = measure->getSegment(SegmentType::ChordRest, currentTick);
                   QDomNode currentNode = beat.firstChild();
                   bool noteSpecified = false;
                   ChordRest* cr = segment->cr(track);
@@ -1278,7 +1278,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               fermataIndex += l;
                         }
                         else if (currentNode.nodeName() == "Hairpin") {
-                              Segment* seg = segment->prev1(Segment::Type::ChordRest);
+                              Segment* seg = segment->prev1(SegmentType::ChordRest);
                               bool isCrec = !currentNode.toElement().text().compare("Crescendo");
                               if (seg && hairpins[staffIdx]) {
                                     if (hairpins[staffIdx]->tick2() == seg->tick())
@@ -1396,7 +1396,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                         // only add the clef to the bar if it differs from previous measure
                         if (measure->prevMeasure()) {
                               if (clefId != oldClefId[staffIdx]) {
-                                    Segment* segment = measure->getSegment(Segment::Type::Clef, tick);
+                                    Segment* segment = measure->getSegment(SegmentType::Clef, tick);
                                     segment->add(newClef);
                                     oldClefId[staffIdx] = clefId;
                                     }
@@ -1404,7 +1404,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                                     delete newClef;
                               }
                         else  {
-                              Segment* segment = measure->getSegment(Segment::Type::HeaderClef, 0);
+                              Segment* segment = measure->getSegment(SegmentType::HeaderClef, 0);
                               segment->add(newClef);
                               oldClefId[staffIdx] = clefId;
                               }
@@ -1418,7 +1418,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                               rm->setTrack(staffIdx * VOICES);
                               rm->setDuration(measure->len());
                               rm->setDurationType(TDuration::DurationType::V_MEASURE);
-                              Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
+                              Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
                               segment->add(rm);
                               }
                         else
@@ -1444,7 +1444,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                                     TDuration d(l);
                                     cr->setDuration(l);
                                     cr->setDurationType(TDuration::DurationType::V_MEASURE);
-                                    Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
+                                    Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
                                     if(!segment->cr(staffIdx * VOICES + voiceNum)) {
                                           segment->add(cr);
                                           }
@@ -1484,7 +1484,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
 bool checkForHold(Segment* segment, QList<PitchValue> points)
       {
       bool same = false;
-      Segment* prevSeg = segment->prev1(Segment::Type::ChordRest);
+      Segment* prevSeg = segment->prev1(SegmentType::ChordRest);
       if (!prevSeg)
             return false;
       foreach (Element* e, prevSeg->annotations()) {
@@ -1551,7 +1551,7 @@ void GuitarPro6::addTremoloBar(Segment* segment, int track, int whammyOrigin, in
             }
       else if (whammyMiddle != -1) {
             // dive starting from pre-existing point
-            Segment* prevSeg = segment->prev1(Segment::Type::ChordRest);
+            Segment* prevSeg = segment->prev1(SegmentType::ChordRest);
             if (!prevSeg)
                   return;
             foreach (Element* e, prevSeg->annotations()) {
@@ -1610,7 +1610,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                   Text* s = new RehearsalMark(score);
                   s->setPlainText(gpbar.marker.trimmed());
                   s->setTrack(0);
-                  Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                  Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
                   segment->add(s);
                   }
 
@@ -1623,7 +1623,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         ts->setSig(bars[measureCounter].timesig);
                         ts->setTrack(stave);
                         Measure* m = score->getCreateMeasure(measure->tick());
-                        Segment* s = m->getSegment(Segment::Type::TimeSig, measure->tick());
+                        Segment* s = m->getSegment(SegmentType::TimeSig, measure->tick());
                         ts->setLargeParentheses(true);
                         s->add(ts);
                         StaffText* st = new StaffText(score);
@@ -1637,7 +1637,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         ts->setSig(bars[measureCounter].timesig);
                         ts->setTrack(stave);
                         Measure* m = score->getCreateMeasure(measure->tick());
-                        Segment* s = m->getSegment(Segment::Type::TimeSig, measure->tick());
+                        Segment* s = m->getSegment(SegmentType::TimeSig, measure->tick());
                         ts->setLargeParentheses(false);
                         s->add(ts);
                         }
@@ -1646,7 +1646,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                   measure->setLen(bars[measureCounter].timesig);
 
                   if (!bars[measureCounter].direction.compare("Fine") || (bars[measureCounter].direction.compare("") && !bars[measureCounter].directionStyle.compare("Jump"))) {
-                        Segment* s = measure->getSegment(Segment::Type::KeySig, measure->tick());
+                        Segment* s = measure->getSegment(SegmentType::KeySig, measure->tick());
                         StaffText* st = new StaffText(score);
                         if (!bars[measureCounter].direction.compare("Fine"))
                               st->setXmlText("fine");
@@ -1682,13 +1682,13 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         bars[measureCounter].direction = "";
                   }
                   else if (bars[measureCounter].direction.compare("") && !bars[measureCounter].directionStyle.compare("Target")) {
-                        Segment* s = measure->getSegment(Segment::Type::BarLine, measure->tick());
+                        Segment* s = measure->getSegment(SegmentType::BarLine, measure->tick());
                         Symbol* sym = new Symbol(score);
                         if (!bars[measureCounter].direction.compare("Segno"))
                               sym->setSym(SymId::segno);
                         else if (!bars[measureCounter].direction.compare("SegnoSegno")) {
                               sym->setSym(SymId::segno);
-                              Segment* s2 = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                              Segment* s2 = measure->getSegment(SegmentType::ChordRest, measure->tick());
                               Symbol* sym2 = new Symbol(score);
                               sym2->setSym(SymId::segno);
                               sym2->setParent(measure);
@@ -1699,7 +1699,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                               sym->setSym(SymId::coda);
                         else if (!bars[measureCounter].direction.compare("DoubleCoda")) {
                               sym->setSym(SymId::coda);
-                              Segment* s2 = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                              Segment* s2 = measure->getSegment(SegmentType::ChordRest, measure->tick());
                               Symbol* sym2 = new Symbol(score);
                               sym2->setSym(SymId::coda);
                               sym2->setParent(measure);

@@ -130,12 +130,12 @@ void ScoreAccessibility::currentInfoChanged()
                   barsAndBeats += tr("Start Measure: %1; Start Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
                   Segment* seg = s->endSegment();
                   if(!seg)
-                        seg = score->lastSegment()->prev1MM(Segment::Type::ChordRest);
+                        seg = score->lastSegment()->prev1MM(SegmentType::ChordRest);
 
-                  if (seg->tick() != score->lastSegment()->prev1MM(Segment::Type::ChordRest)->tick() &&
+                  if (seg->tick() != score->lastSegment()->prev1MM(SegmentType::ChordRest)->tick() &&
                       s->type() != ElementType::SLUR                                               &&
                       s->type() != ElementType::TIE                                                )
-                        seg = seg->prev1MM(Segment::Type::ChordRest);
+                        seg = seg->prev1MM(SegmentType::ChordRest);
 
                   bar_beat = barbeat(seg);
                   barsAndBeats += "; " + tr("End Measure: %1; End Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));

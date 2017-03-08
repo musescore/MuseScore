@@ -74,7 +74,7 @@ void OmrState::importPdfMeasure(OmrMeasure* m, const OmrSystem* omrSystem)
       measure->setLen(timesig);
       TDuration d(TDuration::DurationType::V_MEASURE);
       Rest* rest;
-      Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
+      Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
       for (int staffIdx = 0; staffIdx < omrSystem->staves().size(); ++staffIdx) {
             rest = new Rest(score, d);
             rest->setDuration(timesig);
@@ -89,14 +89,14 @@ void OmrState::importPdfMeasure(OmrMeasure* m, const OmrSystem* omrSystem)
                   KeySig* ks     = new KeySig(score);
                   //ks->setSig(keySigType, keySigType);
                   ks->setTrack(staffIdx * VOICES);
-                Segment* s = measure->getSegment(Segment::Type::KeySig, 0);
+                Segment* s = measure->getSegment(SegmentType::KeySig, 0);
                   s->add(ks);
                   //score->staff(staffIdx)->setKey(0, keySigType);
                   }
 
             if (m->timesig()) {
                   TimeSig* ts = new TimeSig(score);
-                Segment* s = measure->getSegment(Segment::Type::TimeSig, tick);
+                Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
                   ts->setSig(timesig);
                   ts->setTrack(staffIdx * VOICES);
                   s->add(ts);
@@ -132,7 +132,7 @@ void OmrState::importPdfMeasure(OmrMeasure* m, const OmrSystem* omrSystem)
                         chord->setDurationType(omrChord.duration);
                         chord->setDuration(omrChord.duration.fraction());
                         chord->setTrack(staffIdx * VOICES);
-                      Segment* s = measure->getSegment(Segment::Type::ChordRest, tick + ltick);
+                      Segment* s = measure->getSegment(SegmentType::ChordRest, tick + ltick);
                         s->add(chord);
                         //int keyType = score->staff(staffIdx)->key(tick + ltick).accidentalType();
 
@@ -149,7 +149,7 @@ void OmrState::importPdfMeasure(OmrMeasure* m, const OmrSystem* omrSystem)
                   }
             else {
                 TDuration d(TDuration::DurationType::V_MEASURE);
-                Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
                   Rest* rest = new Rest(score, d);
                   rest->setDuration(timesig);
                   rest->setTrack(staffIdx * VOICES);

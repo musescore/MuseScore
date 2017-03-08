@@ -470,7 +470,7 @@ MasterScore* TestParts::doRemoveBreath()
       MasterScore* score = readScore(DIR + "part-breath-add.mscx");
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->first()->next(Segment::Type::Breath);
+      Segment* s   = m->first()->next(SegmentType::Breath);
       Breath*  b   = static_cast<Breath*>(s->element(0));
 
       score->select(b);
@@ -587,7 +587,7 @@ MasterScore* TestParts::doRemoveFingering()
       MasterScore* score = readScore(DIR + "part-fingering-parts.mscx");
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->first()->next(Segment::Type::ChordRest);
+      Segment* s   = m->first()->next(SegmentType::ChordRest);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       Element* fingering = 0;
@@ -711,7 +711,7 @@ MasterScore* TestParts::doRemoveSymbol()
       MasterScore* score = readScore(DIR + "part-symbol-parts.mscx");
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->first()->next(Segment::Type::ChordRest);
+      Segment* s   = m->first()->next(SegmentType::ChordRest);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       Element* se = 0;
@@ -835,7 +835,7 @@ MasterScore* TestParts::doRemoveChordline()
       MasterScore* score = readScore(DIR + "part-chordline-parts.mscx");
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->first()->next(Segment::Type::ChordRest);
+      Segment* s   = m->first()->next(SegmentType::ChordRest);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
 
       Element* se = 0;

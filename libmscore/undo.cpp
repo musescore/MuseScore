@@ -94,7 +94,7 @@ void updateNoteLines(Segment* segment, int track)
       if (staff->isDrumStaff(segment->tick()) || staff->isTabStaff(segment->tick()))
             return;
       for (Segment* s = segment->next1(); s; s = s->next1()) {
-            if ((s->segmentType() & (Segment::Type::Clef | Segment::Type::HeaderClef)) && s->element(track) && !s->element(track)->generated())
+            if ((s->segmentType() & (SegmentType::Clef | SegmentType::HeaderClef)) && s->element(track) && !s->element(track)->generated())
                   break;
             if (!s->isChordRestType())
                   continue;
@@ -475,7 +475,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
                   qWarning("measure for tick %d not found!", tick);
                   continue;
                   }
-            Segment* s   = measure->undoGetSegment(Segment::Type::KeySig, tick);
+            Segment* s   = measure->undoGetSegment(SegmentType::KeySig, tick);
             int staffIdx = staff->idx();
             int track    = staffIdx * VOICES;
             KeySig* ks   = toKeySig(s->element(track));
@@ -517,17 +517,17 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
 
 void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType ct)
       {
-      Segment::Type st;
+      SegmentType st;
       if (seg->isHeaderClefType())
-            st = Segment::Type::HeaderClef;
+            st = SegmentType::HeaderClef;
       else if (seg->isClefType())
-            st = Segment::Type::Clef;
+            st = SegmentType::Clef;
       else if (seg->rtick() == 0)
-            st = Segment::Type::HeaderClef;
+            st = SegmentType::HeaderClef;
       else
-            st = Segment::Type::Clef;
+            st = SegmentType::Clef;
 
-      bool moveClef = (st == Segment::Type::HeaderClef) && seg->measure()->prevMeasure();
+      bool moveClef = (st == SegmentType::HeaderClef) && seg->measure()->prevMeasure();
       bool small = !seg->header() || moveClef;
 
       Clef* gclef = 0;
@@ -586,7 +586,7 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType ct)
                   // change the clef in the mmRest if any
                   if (measure->hasMMRest()) {
                         Measure* mmMeasure = measure->mmRest();
-                        Segment* mmDestSeg = mmMeasure->findSegment(Segment::Type::Clef, tick);
+                        Segment* mmDestSeg = mmMeasure->findSegment(SegmentType::Clef, tick);
                         if (mmDestSeg) {
                               Clef* mmClef = toClef(mmDestSeg->element(clef->track()));
                               if (mmClef)
@@ -801,7 +801,7 @@ void Score::undoExchangeVoice(Measure* measure, int v1, int v2, int staff1, int 
                   // check for complete timeline of voice 0
                   int ctick  = measure->tick();
                   int track = staffIdx * VOICES;
-                  for (Segment* s = measure->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
+                  for (Segment* s = measure->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                         ChordRest* cr = toChordRest(s->element(track));
                         if (cr == 0)
                               continue;
@@ -1076,7 +1076,7 @@ void Score::undoAddElement(Element* element)
                         Segment* segment  = toSegment(element->parent());
                         int tick          = segment->tick();
                         Measure* m        = score->tick2measure(tick);
-                        Segment* seg      = m->undoGetSegment(Segment::Type::ChordRest, tick);
+                        Segment* seg      = m->undoGetSegment(SegmentType::ChordRest, tick);
                         ne->setTrack(ntrack);
                         ne->setParent(seg);
                         undo(new AddElement(ne));
@@ -1261,19 +1261,19 @@ void Score::undoAddElement(Element* element)
                   if (element->isArticulation()) {
                         Articulation* a  = toArticulation(element);
                         Segment* segment;
-                        Segment::Type st;
+                        SegmentType st;
                         Measure* m;
                         int tick;
                         if (a->parent()->isChordRest()) {
                               ChordRest* cr = a->chordRest();
                               segment       = cr->segment();
-                              st            = Segment::Type::ChordRest;
+                              st            = SegmentType::ChordRest;
                               tick          = segment->tick();
                               m             = score->tick2measure(tick);
                               }
                         else {
                               segment  = toSegment(a->parent()->parent());
-                              st       = Segment::Type::EndBarLine;
+                              st       = SegmentType::EndBarLine;
                               tick     = segment->tick();
                               m        = score->tick2measure(tick);
                               if (m->tick() == tick)
@@ -1306,7 +1306,7 @@ void Score::undoAddElement(Element* element)
                         Segment* segment = cr->segment();
                         int tick         = segment->tick();
                         Measure* m       = score->tick2measure(tick);
-                        Segment* seg     = m->findSegment(Segment::Type::ChordRest, tick);
+                        Segment* seg     = m->findSegment(SegmentType::ChordRest, tick);
                         if (seg == 0) {
                               qWarning("undoAddSegment: segment not found");
                               break;
@@ -1329,7 +1329,7 @@ void Score::undoAddElement(Element* element)
                         Segment* segment = toSegment(element->parent());
                         int tick         = segment->tick();
                         Measure* m       = score->tick2measure(tick);
-                        Segment* seg     = m->undoGetSegment(Segment::Type::ChordRest, tick);
+                        Segment* seg     = m->undoGetSegment(SegmentType::ChordRest, tick);
                         ne->setTrack(ntrack);
                         ne->setParent(seg);
                         undo(new AddElement(ne));
@@ -1492,7 +1492,7 @@ void Score::undoAddElement(Element* element)
                         // breath appears before barline
                         if (m->tick() == tick)
                               m = m->prevMeasure();
-                        Segment* seg     = m->undoGetSegment(Segment::Type::Breath, tick);
+                        Segment* seg     = m->undoGetSegment(SegmentType::Breath, tick);
                         Breath* nbreath  = static_cast<Breath*>(ne);
                         nbreath->setScore(score);
                         nbreath->setTrack(ntrack);
@@ -1521,7 +1521,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
       if (ostaff->score()->excerpt() && !ostaff->score()->excerpt()->tracks().isEmpty())
             strack = ostaff->score()->excerpt()->tracks().key(strack, -1);
 
-      Segment::Type segmentType = Segment::Type::ChordRest;
+      SegmentType segmentType = SegmentType::ChordRest;
 
       Tuplet* t = cr->tuplet();
 
@@ -2261,8 +2261,8 @@ void ChangeMeasureLen::flip()
       //
       int endTick = measure->tick() + len.ticks();
       for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-            if (segment->segmentType() != Segment::Type::EndBarLine
-               && segment->segmentType() != Segment::Type::TimeSigAnnounce)
+            if (segment->segmentType() != SegmentType::EndBarLine
+               && segment->segmentType() != SegmentType::TimeSigAnnounce)
                   continue;
             segment->setTick(endTick);
             }
@@ -2866,7 +2866,7 @@ void InsertRemoveMeasures::insertMeasures()
       if (fm->isMeasure()) {
             score->setPlaylistDirty();
             for (Segment* s = toMeasure(fm)->first(); s != toMeasure(lm)->last(); s = s->next1()) {
-                  if (!(s->segmentType() & (Segment::Type::Clef | Segment::Type::KeySig)))
+                  if (!(s->segmentType() & (SegmentType::Clef | SegmentType::KeySig)))
                         continue;
                   for (int track = 0; track < score->ntracks(); track += VOICES) {
                         Element* e = s->element(track);
@@ -2966,7 +2966,7 @@ void InsertRemoveMeasures::removeMeasures()
 
             if (lm->isMeasure()) {
                   Measure* m = toMeasure(lm);
-                  Segment* s = m->findSegment(Segment::Type::Clef, tick2);
+                  Segment* s = m->findSegment(SegmentType::Clef, tick2);
                   if (s) {
                         for (Element* e : s->elist()) {
                               Clef* clef = toClef(e);
@@ -3571,7 +3571,7 @@ void ChangeDrumset::flip()
 //   undoChangeBarLine
 //---------------------------------------------------------
 
-void Score::undoChangeBarLine(Measure* measure, BarLineType barType, Segment::Type segmentType)
+void Score::undoChangeBarLine(Measure* measure, BarLineType barType, SegmentType segmentType)
       {
       int tick = measure->tick();
 
@@ -3586,11 +3586,11 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType, Segment::Ty
                   case BarLineType::BROKEN:
                   case BarLineType::DOTTED: {
                         Segment* segment;
-                        if (segmentType == Segment::Type::EndBarLine) {
+                        if (segmentType == SegmentType::EndBarLine) {
                               s->undoChangeProperty(m, P_ID::REPEAT_END, false);
                               // if (nm)
                               //      s->undoChangeProperty(nm, P_ID::REPEAT_START, false);
-                              segment = m->findSegment(Segment::Type::EndBarLine, m->endTick());
+                              segment = m->findSegment(SegmentType::EndBarLine, m->endTick());
                               if (segment) {
                                     for (Element* e : segment->elist()) {
                                           if (e) {
@@ -3600,8 +3600,8 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType, Segment::Ty
                                           }
                                     }
                               }
-                        else if (segmentType == Segment::Type::BeginBarLine) {
-                              segment = m->undoGetSegment(Segment::Type::BeginBarLine, tick);
+                        else if (segmentType == SegmentType::BeginBarLine) {
+                              segment = m->undoGetSegment(SegmentType::BeginBarLine, tick);
                               for (Element* e : segment->elist()) {
                                     if (e) {
                                           e->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(barType));
@@ -3617,7 +3617,7 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType, Segment::Ty
                                           }
                                     }
                               }
-                        else if (segmentType == Segment::Type::StartRepeatBarLine) {
+                        else if (segmentType == SegmentType::StartRepeatBarLine) {
                               s->undoChangeProperty(m, P_ID::REPEAT_START, false);
                               }
                         }

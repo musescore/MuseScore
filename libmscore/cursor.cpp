@@ -54,6 +54,7 @@ Cursor::Cursor(Score* s)
       {
       _track   = 0;
       _segment = 0;
+      _filter  = SegmentType::ChordRest;
       setScore(s);
       }
 
@@ -158,7 +159,7 @@ void Cursor::add(Element* s)
       if (s->isChordRest())
             s->score()->undoAddCR(static_cast<ChordRest*>(s), _segment->measure(), _segment->tick());
       else if (s->type() == ElementType::KEYSIG) {
-            Segment* ns = _segment->measure()->undoGetSegment(Segment::Type::KeySig, _segment->tick());
+            Segment* ns = _segment->measure()->undoGetSegment(SegmentType::KeySig, _segment->tick());
             s->setParent(ns);
             score()->undoAddElement(s);
             }

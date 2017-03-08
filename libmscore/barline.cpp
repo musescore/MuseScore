@@ -683,7 +683,7 @@ void BarLine::endEdit()
                                     int spannedStaves = qMax(currIdx + newSpanStaff - idx, 0);
                                     int lNewSpan = qMin(spannedStaves, lscore->nstaves());
                                     Measure* lm = lscore->tick2measure(m->tick());
-                                    Segment* lseg = lm->undoGetSegmentR(Segment::Type::BarLine, rtick());
+                                    Segment* lseg = lm->undoGetSegmentR(SegmentType::BarLine, rtick());
                                     BarLine* lbl = toBarLine(lseg->element(0));
                                     if (lbl) {
                                           // already a barline here

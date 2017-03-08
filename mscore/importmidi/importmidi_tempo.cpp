@@ -63,7 +63,7 @@ void setTempoToScore(Score *score, int tick, double beatsPerSecond)
                   qDebug("MidiTempo::setTempoToScore: no measure for tick %d", tick);
                   return;
                   }
-            Segment *segment = measure->getSegment(Segment::Type::ChordRest, tick);
+            Segment *segment = measure->getSegment(SegmentType::ChordRest, tick);
             if (!segment) {
                   qDebug("MidiTempo::setTempoToScore: no chord/rest segment for tempo at %d", tick);
                   return;

@@ -599,7 +599,7 @@ int Part::lyricCount()
       if (!score())
             return 0;
       int count = 0;
-      Segment::Type st = Segment::Type::ChordRest;
+      SegmentType st = SegmentType::ChordRest;
       for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             for (int i = startTrack(); i < endTrack() ; ++i) {
                   ChordRest* cr = toChordRest(seg->element(i));
@@ -619,7 +619,7 @@ int Part::harmonyCount()
       if (!score())
             return 0;
       int count = 0;
-      Segment::Type st = Segment::Type::ChordRest;
+      SegmentType st = SegmentType::ChordRest;
       for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             for (Element* e : seg->annotations()) {
                   if (e->type() == ElementType::HARMONY && e->track() >= startTrack() && e->track() < endTrack())

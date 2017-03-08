@@ -400,7 +400,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                         Fraction dd = d * ratio;
                         std::vector<TDuration> dl = toDurationList(dd, false);
                         for (const TDuration& k : dl) {
-                              Segment* segment = measure->undoGetSegment(Segment::Type::ChordRest, measure->len() - rest);
+                              Segment* segment = measure->undoGetSegment(SegmentType::ChordRest, measure->len() - rest);
                               Fraction gd      = k.fraction() / ratio;
                               ChordRest* cr    = toChordRest(e->clone());
                               if (!firstpart)
@@ -487,7 +487,7 @@ bool TrackList::write(Score* score, int tick) const
                               //
                               // handle full measure rest
                               //
-                              Segment* segment = m->getSegment(Segment::Type::ChordRest, m->len() - rest);
+                              Segment* segment = m->getSegment(SegmentType::ChordRest, m->len() - rest);
                               if ((_track % VOICES) == 0) {
                                     // write only for voice 1
                                     Rest* r = new Rest(score, TDuration::DurationType::V_MEASURE);
@@ -511,7 +511,7 @@ bool TrackList::write(Score* score, int tick) const
                                     qDebug("duration d %d/%d", d.numerator(), d.denominator());
                               Q_ASSERT(!dl.empty());
                               for (const TDuration& k : dl) {
-                                    segment       = m->undoGetSegment(Segment::Type::ChordRest, m->len() - rest);
+                                    segment       = m->undoGetSegment(SegmentType::ChordRest, m->len() - rest);
                                     ChordRest* cr = toChordRest(e->clone());
                                     if (!firstpart)
                                           cr->removeMarkings(true);
@@ -557,12 +557,12 @@ bool TrackList::write(Score* score, int tick) const
                   Segment* segment;
                   if (rest == m->len() && m->tick() > 0) {
                         Measure* pm = m->prevMeasure();
-                        segment = pm->undoGetSegment(Segment::Type::Clef, pm->len());
+                        segment = pm->undoGetSegment(SegmentType::Clef, pm->len());
                         }
                   else if (rest != m->len())
-                        segment = m->undoGetSegment(Segment::Type::Clef, m->len() - rest);
+                        segment = m->undoGetSegment(SegmentType::Clef, m->len() - rest);
                   else
-                        segment = m->undoGetSegmentR(Segment::Type::HeaderClef, 0);
+                        segment = m->undoGetSegmentR(SegmentType::HeaderClef, 0);
                   Element* ne = e->clone();
                   ne->setScore(score);
                   ne->setTrack(_track);

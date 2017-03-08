@@ -315,7 +315,7 @@ void Staff::setClef(Clef* clef)
             return;
       int tick = clef->segment()->tick();
       for (Segment* s = clef->segment()->next(); s && s->tick() == tick; s = s->next()) {
-            if (s->segmentType() == Segment::Type::Clef && s->element(clef->track())) {
+            if (s->segmentType() == SegmentType::Clef && s->element(clef->track())) {
                   // adding this clef has no effect on the clefs list
                   return;
                   }
@@ -335,14 +335,14 @@ void Staff::removeClef(Clef* clef)
             return;
       int tick = clef->segment()->tick();
       for (Segment* s = clef->segment()->next(); s && s->tick() == tick; s = s->next()) {
-            if (s->segmentType() == Segment::Type::Clef && s->element(clef->track())) {
+            if (s->segmentType() == SegmentType::Clef && s->element(clef->track())) {
                   // removal of this clef has no effect on the clefs list
                   return;
                   }
             }
       clefs.erase(clef->segment()->tick());
       for (Segment* s = clef->segment()->prev(); s && s->tick() == tick; s = s->prev()) {
-            if (s->segmentType() == Segment::Type::Clef
+            if (s->segmentType() == SegmentType::Clef
                && s->element(clef->track())
                && !s->element(clef->track())->generated()) {
                   // a previous clef at the same tick position gets valid
@@ -400,7 +400,7 @@ const Groups& Staff::group(int tick) const
 
 void Staff::addTimeSig(TimeSig* timesig)
       {
-      if (timesig->segment()->segmentType() == Segment::Type::TimeSig)
+      if (timesig->segment()->segmentType() == SegmentType::TimeSig)
             timesigs[timesig->segment()->tick()] = timesig;
 //      dumpTimeSigs("after addTimeSig");
       }
@@ -411,7 +411,7 @@ void Staff::addTimeSig(TimeSig* timesig)
 
 void Staff::removeTimeSig(TimeSig* timesig)
       {
-      if (timesig->segment()->segmentType() == Segment::Type::TimeSig)
+      if (timesig->segment()->segmentType() == SegmentType::TimeSig)
             timesigs.erase(timesig->segment()->tick());
 //      dumpTimeSigs("after removeTimeSig");
       }
@@ -1110,7 +1110,7 @@ void Staff::insertTime(int tick, int len)
       Measure* m = score()->tick2measure(tick);
       if (m && (m->tick() == tick) && (m->prevMeasure())) {
             m = m->prevMeasure();
-            Segment* s = m->findSegment(Segment::Type::Clef, tick);
+            Segment* s = m->findSegment(SegmentType::Clef, tick);
             if (s) {
                   int track = idx() * VOICES;
                   clef = static_cast<Clef*>(s->element(track));
@@ -1299,7 +1299,7 @@ void Staff::scaleChanged(double oldVal, double newVal)
       int staffIdx = idx();
       int startTrack = staffIdx * VOICES;
       int endTrack = startTrack + VOICES;
-      for (Segment* s = score()->firstSegment(); s; s = s->next1()) {
+      for (Segment* s = score()->firstSegment(SegmentType::All); s; s = s->next1()) {
             for (Element* e : s->annotations())
                   e->localSpatiumChanged(oldVal, newVal);
             for (int track = startTrack; track < endTrack; ++track) {

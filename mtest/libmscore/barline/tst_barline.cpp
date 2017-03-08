@@ -106,7 +106,7 @@ void TestBarline::barline01()
             for (int msrNo=0; msrNo < 2; ++msrNo) {
                   BarLine* bar = nullptr;
                   Measure* msr = toMeasure(sys->measure(msrNo));
-                  Segment* seg = msr->findSegment(Segment::Type::EndBarLine, msr->tick()+msr->ticks());
+                  Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick()+msr->ticks());
                   sprintf(msg, "No SegEndBarLine in measure %d of system %d.", msrNo+1, sysNo+1);
                   QVERIFY2(seg != nullptr, msg);
 
@@ -151,7 +151,7 @@ void TestBarline::barline02()
       int msrNo = 1;
       while ((msr = msr->nextMeasure())) {
             ++msrNo;
-            Segment* seg = msr->findSegment(Segment::Type::EndBarLine, msr->tick()+msr->ticks());
+            Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick()+msr->ticks());
             sprintf(msg, "No SegEndBarLine in measure %d.", msrNo);
             QVERIFY2(seg != nullptr, msg);
 
@@ -193,7 +193,7 @@ void TestBarline::barline03()
       for (int i=0; i < 4; i++)
             msr = msr->nextMeasure();
       // check span data of measure-initial start-repeat bar line
-      Segment* seg = msr->findSegment(Segment::Type::StartRepeatBarLine, msr->tick());
+      Segment* seg = msr->findSegment(SegmentType::StartRepeatBarLine, msr->tick());
       QVERIFY2(seg != nullptr, "No SegStartRepeatBarLine segment in measure 5.");
 
       BarLine* bar = toBarLine(seg->element(0));
@@ -230,7 +230,7 @@ void TestBarline::barline04()
       for (int i=0; i < 4; i++)
             msr = msr->nextMeasure();
       // check span data of measure-initial start-repeat bar line
-      Segment* seg = msr->findSegment(Segment::Type::StartRepeatBarLine, msr->tick());
+      Segment* seg = msr->findSegment(SegmentType::StartRepeatBarLine, msr->tick());
       QVERIFY2(seg != nullptr, "No SegStartRepeatBarLine segment in measure 5.");
 
       BarLine* bar = static_cast<BarLine*>(seg->element(0));
@@ -278,7 +278,7 @@ void TestBarline::barline05()
       score->doLayout();
 
       // check an end-repeat bar line has been created at the end of this measure and it is generated
-      Segment* seg = msr->findSegment(Segment::Type::EndBarLine, msr->tick()+msr->ticks());
+      Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick()+msr->ticks());
       QVERIFY2(seg != nullptr, "No SegEndBarLine segment in measure 4.");
       BarLine* bar = static_cast<BarLine*>(seg->element(0));
       QVERIFY2(bar != nullptr, "No end-repeat barline in measure 4.");
@@ -288,7 +288,7 @@ void TestBarline::barline05()
       // // check an end-repeat bar line has been created at the beginning of the next measure and it is not generated
       // check an end-repeat bar line has been created at the beginning of the next measure and it is generated
       msr = msr->nextMeasure();
-      seg = msr->findSegment(Segment::Type::StartRepeatBarLine, msr->tick());
+      seg = msr->findSegment(SegmentType::StartRepeatBarLine, msr->tick());
       QVERIFY2(seg != nullptr, "No SegStartRepeatBarLine segment in measure 5.");
       bar = static_cast<BarLine*>(seg->element(0));
       QVERIFY2(bar != nullptr, "No start-repeat barline in measure 5.");
@@ -322,7 +322,7 @@ void TestBarline::barline06()
             sprintf(msg, "EndBarLineType not NORMAL in measure %d.", msrNo);
 //TODO            QVERIFY2(msr->endBarLineType() == BarLineType::NORMAL, msg);
             // locate end-measure bar line segment
-            Segment* seg = msr->findSegment(Segment::Type::EndBarLine, msr->tick()+msr->ticks());
+            Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick()+msr->ticks());
             sprintf(msg, "No SegEndBarLine in measure %d.", msr->no());
             QVERIFY2(seg != nullptr, msg);
 
@@ -387,50 +387,50 @@ void TestBarline::barline179726()
       Measure* m = score->firstMeasure();
 
       // drop NORMAL onto initial START_REPEAT barline will remove that START_REPEAT
-      dropNormalBarline(m->findSegment(Segment::Type::StartRepeatBarLine, m->tick())->elementAt(0));
-      QVERIFY(m->findSegment(Segment::Type::StartRepeatBarLine, 0) == NULL);
+      dropNormalBarline(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0));
+      QVERIFY(m->findSegment(SegmentType::StartRepeatBarLine, 0) == NULL);
 
       // drop NORMAL onto END_START_REPEAT will turn into NORMAL
-      dropNormalBarline(m->findSegment(Segment::Type::EndBarLine, m->endTick())->elementAt(0));
-      QVERIFY(static_cast<BarLine*>(m->findSegment(Segment::Type::EndBarLine, m->endTick())->elementAt(0))->barLineType() == BarLineType::NORMAL);
+      dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
+      QVERIFY(static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0))->barLineType() == BarLineType::NORMAL);
 
       m = m->nextMeasure();
 
       // drop NORMAL onto the END_REPEAT part of an END_START_REPEAT straddling a newline will turn into NORMAL at the end of this meas
       // but note I'm not verifying what happens to the START_REPEAT at the beginning of the newline...I'm not sure that behavior is well-defined yet
-      dropNormalBarline(m->findSegment(Segment::Type::EndBarLine, m->endTick())->elementAt(0));
-      QVERIFY(static_cast<BarLine*>(m->findSegment(Segment::Type::EndBarLine, m->endTick())->elementAt(0))->barLineType() == BarLineType::NORMAL);
+      dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
+      QVERIFY(static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0))->barLineType() == BarLineType::NORMAL);
 
       m = m->nextMeasure();
 
       // drop NORMAL onto the meas ending with an END_START_REPEAT straddling a newline will turn into NORMAL at the end of this meas
       // but note I'm not verifying what happens to the START_REPEAT at the beginning of the newline...I'm not sure that behavior is well-defined yet
       dropNormalBarline(m);
-      QVERIFY(static_cast<BarLine*>(m->findSegment(Segment::Type::EndBarLine, m->endTick())->elementAt(0))->barLineType() == BarLineType::NORMAL);
+      QVERIFY(static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0))->barLineType() == BarLineType::NORMAL);
 
       m = m->nextMeasure();
       m = m->nextMeasure();
 
       // drop NORMAL onto the START_REPEAT part of an END_START_REPEAT straddling a newline will remove the START_REPEAT at the beginning of this measure
       // but note I'm not verifying what happens to the END_REPEAT at the end of previous line...I'm not sure that behavior is well-defined yet
-      dropNormalBarline(m->findSegment(Segment::Type::StartRepeatBarLine, m->tick())->elementAt(0));
-      QVERIFY(m->findSegment(Segment::Type::StartRepeatBarLine, m->tick()) == NULL);
+      dropNormalBarline(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0));
+      QVERIFY(m->findSegment(SegmentType::StartRepeatBarLine, m->tick()) == NULL);
 
       for (int i = 0; i < 4; i++, m = m->nextMeasure()) {
             // drop NORMAL onto END_REPEAT, BROKEN, DOTTED, DOUBLE at the end of this meas will turn into NORMAL
-            dropNormalBarline(m->findSegment(Segment::Type::EndBarLine, m->endTick())->elementAt(0));
-            QVERIFY(static_cast<BarLine*>(m->findSegment(Segment::Type::EndBarLine, m->endTick())->elementAt(0))->barLineType() == BarLineType::NORMAL);
+            dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
+            QVERIFY(static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0))->barLineType() == BarLineType::NORMAL);
             }
 
       m = m->nextMeasure();
 
       // drop NORMAL onto a START_REPEAT in middle of a line will remove the START_REPEAT at the beginning of this measure
-      dropNormalBarline(m->findSegment(Segment::Type::StartRepeatBarLine, m->tick())->elementAt(0));
-      QVERIFY(m->findSegment(Segment::Type::StartRepeatBarLine, m->tick()) == NULL);
+      dropNormalBarline(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0));
+      QVERIFY(m->findSegment(SegmentType::StartRepeatBarLine, m->tick()) == NULL);
 
       // drop NORMAL onto final END_REPEAT at end of score will turn into NORMAL
-      dropNormalBarline(m->findSegment(Segment::Type::EndBarLine, m->endTick())->elementAt(0));
-      QVERIFY(static_cast<BarLine*>(m->findSegment(Segment::Type::EndBarLine, m->endTick())->elementAt(0))->barLineType() == BarLineType::NORMAL);
+      dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
+      QVERIFY(static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0))->barLineType() == BarLineType::NORMAL);
 
       delete score;
       }

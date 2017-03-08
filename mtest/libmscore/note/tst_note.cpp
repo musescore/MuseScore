@@ -375,7 +375,7 @@ void TestNote::tpc()
       MasterScore* score = readScore(DIR + "tpc.mscx");
 
       score->inputState().setTrack(0);
-      score->inputState().setSegment(score->tick2segment(0, false, Segment::Type::ChordRest));
+      score->inputState().setSegment(score->tick2segment(0, false, SegmentType::ChordRest));
       score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
       score->inputState().setNoteEntryMode(true);
       int octave = 5 * 7;
@@ -432,7 +432,7 @@ void TestNote::tpcTranspose2()
       MasterScore* score = readScore(DIR + "tpc-transpose2.mscx");
 
       score->inputState().setTrack(0);
-      score->inputState().setSegment(score->tick2segment(0, false, Segment::Type::ChordRest));
+      score->inputState().setSegment(score->tick2segment(0, false, SegmentType::ChordRest));
       score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
       score->inputState().setNoteEntryMode(true);
       int octave = 5 * 7;
@@ -456,7 +456,7 @@ void TestNote::noteLimits()
       MasterScore* score = readScore(DIR + "empty.mscx");
 
       score->inputState().setTrack(0);
-      score->inputState().setSegment(score->tick2segment(0, false, Segment::Type::ChordRest));
+      score->inputState().setSegment(score->tick2segment(0, false, SegmentType::ChordRest));
       score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
       score->inputState().setNoteEntryMode(true);
 

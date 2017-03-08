@@ -13,9 +13,11 @@
 #ifndef __SEGMENTLIST_H__
 #define __SEGMENTLIST_H__
 
-#include <libmscore/segment.h>
+#include "segment.h"
 
 namespace Ms {
+
+class Segment;
 
 //---------------------------------------------------------
 //   SegmentList
@@ -38,7 +40,7 @@ class SegmentList {
       int size() const                     { return _size;        }
 
       Segment* first() const               { return _first;       }
-      Segment* first(Segment::Type) const;
+      Segment* first(SegmentType) const;
 
       Segment* last() const                { return _last;        }
       Segment* firstCRSegment() const;
