@@ -88,7 +88,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       Segment* nextSegment = segment;
       if (back) {
             // search prev chord
-            while ((nextSegment = nextSegment->prev1(Segment::Type::ChordRest))) {
+            while ((nextSegment = nextSegment->prev1(SegmentType::ChordRest))) {
                   Element* el = nextSegment->element(track);
                   if (el &&  el->type() == ElementType::CHORD)
                         break;
@@ -96,7 +96,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             }
       else {
             // search next chord
-            while ((nextSegment = nextSegment->next1(Segment::Type::ChordRest))) {
+            while ((nextSegment = nextSegment->next1(SegmentType::ChordRest))) {
                   Element* el = nextSegment->element(track);
                   if (el &&  el->type() == ElementType::CHORD)
                         break;
@@ -118,7 +118,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
                         if (fromLyrics)
                               break;
                         }
-                  segment = segment->prev1(Segment::Type::ChordRest);
+                  segment = segment->prev1(SegmentType::ChordRest);
                   }
             }
 
@@ -210,7 +210,7 @@ void ScoreView::lyricsMinus()
 
       // search next chord
       Segment* nextSegment = segment;
-      while ((nextSegment = nextSegment->next1(Segment::Type::ChordRest))) {
+      while ((nextSegment = nextSegment->next1(SegmentType::ChordRest))) {
             Element* el = nextSegment->element(track);
             if (el &&  el->type() == ElementType::CHORD)
                   break;
@@ -224,13 +224,13 @@ void ScoreView::lyricsMinus()
       while (segment) {
             ChordRest* cr = toChordRest(segment->element(track));
             if (!cr) {
-                  segment = segment->prev1(Segment::Type::ChordRest);
+                  segment = segment->prev1(SegmentType::ChordRest);
                   continue;
                   }
             fromLyrics = cr->lyrics(verse, placement);
             if (fromLyrics)
                   break;
-            segment = segment->prev1(Segment::Type::ChordRest);
+            segment = segment->prev1(SegmentType::ChordRest);
             }
 
       _score->startCmd();
@@ -303,7 +303,7 @@ void ScoreView::lyricsUnderscore()
 
       // search next chord
       Segment* nextSegment = segment;
-      while ((nextSegment = nextSegment->next1(Segment::Type::ChordRest))) {
+      while ((nextSegment = nextSegment->next1(SegmentType::ChordRest))) {
             Element* el = nextSegment->element(track);
             if (el &&  el->type() == ElementType::CHORD)
                   break;
@@ -319,7 +319,7 @@ void ScoreView::lyricsUnderscore()
                   if (fromLyrics)
                         break;
                   }
-            segment = segment->prev1(Segment::Type::ChordRest);
+            segment = segment->prev1(SegmentType::ChordRest);
             // if the segment has a rest in this track, stop going back
             Element* e = segment ? segment->element(track) : 0;
             if (e && e->type() != ElementType::CHORD)
@@ -427,7 +427,7 @@ void ScoreView::lyricsReturn()
             if (newVerse == -1) {
                   // raise all lyrics above
                   newVerse = 0;
-                  for (Segment* s = _score->firstSegment(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
+                  for (Segment* s = _score->firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
                         ChordRest* cr = s->cr(lyrics->track());
                         if (cr) {
                               for (Lyrics* l : cr->lyrics()) {
@@ -477,7 +477,7 @@ void ScoreView::lyricsEndEdit()
 
             // search previous lyric
             Lyrics*     prevLyrics  = 0;
-            Segment*    prevSegment = lyrics->segment()->prev1(Segment::Type::ChordRest);
+            Segment*    prevSegment = lyrics->segment()->prev1(SegmentType::ChordRest);
             Segment*    segment     = prevSegment;
             while (segment) {
                   ChordRest* cr = toChordRest(segment->element(track));
@@ -486,7 +486,7 @@ void ScoreView::lyricsEndEdit()
                         if (prevLyrics)
                               break;
                         }
-                  segment = segment->prev1(Segment::Type::ChordRest);
+                  segment = segment->prev1(SegmentType::ChordRest);
                   }
             if (prevLyrics && prevLyrics->syllabic() == Lyrics::Syllabic::END) {
                   int endTick = prevSegment->tick();      // a prev. melisma should not go beyond this segment

@@ -13,12 +13,11 @@
 #ifndef __FIGUREDBASS_H__
 #define __FIGUREDBASS_H__
 
-#include "segment.h"
 #include "text.h"
-//#include "libmscore/figuredbass.h"
-#include <vector>
 
 namespace Ms {
+
+class Segment;
 
 /*---------------------------------------------------------
 NOTE ON ARCHITECTURE
@@ -312,7 +311,7 @@ class FiguredBass : public Text {
       bool              onNote() const          { return _onNote; }
       int               numOfItems() const      { return items.size(); }
       void              setOnNote(bool val)     { _onNote = val;  }
-      Segment *         segment() const         { return static_cast<Segment*>(parent()); }
+      Segment *         segment() const         { return (Segment*)(parent()); }
       int               ticks() const           { return _ticks;  }
       void              setTicks(int val)       { _ticks = val;   }
 

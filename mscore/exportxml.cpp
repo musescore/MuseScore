@@ -1785,7 +1785,7 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
 static Breath* hasBreathMark(Chord* ch)
       {
       int tick = ch->tick() + ch->actualTicks();
-      Segment* s = ch->measure()->findSegment(Segment::Type::Breath, tick);
+      Segment* s = ch->measure()->findSegment(SegmentType::Breath, tick);
       return s ? static_cast<Breath*>(s->element(ch->track())) : 0;
       }
 
@@ -2257,7 +2257,7 @@ static Chord* nextChord(Chord* ch)
       Segment* s = ch->segment();
       s = s->next1();
       while (s) {
-            if (s->segmentType() == Segment::Type::ChordRest && s->element(ch->track()))
+            if (s->segmentType() == SegmentType::ChordRest && s->element(ch->track()))
                   break;
             s = s->next1();
             }
@@ -3813,7 +3813,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m)
 
 static int findTrackForAnnotations(int track, Segment* seg)
       {
-      if (seg->segmentType() != Segment::Type::ChordRest)
+      if (seg->segmentType() != SegmentType::ChordRest)
             return -1;
 
       int staff = track / VOICES;
@@ -3837,7 +3837,7 @@ static void repeatAtMeasureStart(XmlWriter& xml, Attributes& attr, Measure* m, i
       for (Element* e : m->el()) {
             int wtrack = -1; // track to write jump
             if (strack <= e->track() && e->track() < etrack)
-                  wtrack = findTrackForAnnotations(e->track(), m->first(Segment::Type::ChordRest));
+                  wtrack = findTrackForAnnotations(e->track(), m->first(SegmentType::ChordRest));
             if (track != wtrack)
                   continue;
             switch (e->type()) {
@@ -3880,7 +3880,7 @@ static void repeatAtMeasureStop(XmlWriter& xml, Measure* m, int strack, int etra
       for (Element* e : m->el()) {
             int wtrack = -1; // track to write jump
             if (strack <= e->track() && e->track() < etrack)
-                  wtrack = findTrackForAnnotations(e->track(), m->first(Segment::Type::ChordRest));
+                  wtrack = findTrackForAnnotations(e->track(), m->first(SegmentType::ChordRest));
             if (track != wtrack)
                   continue;
             switch (e->type()) {
@@ -3972,7 +3972,7 @@ static void measureStyle(XmlWriter& xml, Attributes& attr, Measure* m)
 
 static const FretDiagram* findFretDiagram(int strack, int etrack, int track, Segment* seg)
       {
-      if (seg->segmentType() == Segment::Type::ChordRest) {
+      if (seg->segmentType() == SegmentType::ChordRest) {
             for (const Element* e : seg->annotations()) {
 
                   int wtrack = -1; // track to write annotation
@@ -3997,7 +3997,7 @@ static const FretDiagram* findFretDiagram(int strack, int etrack, int track, Seg
 
 static void annotations(ExportMusicXml* exp, XmlWriter&, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
-      if (seg->segmentType() == Segment::Type::ChordRest) {
+      if (seg->segmentType() == SegmentType::ChordRest) {
 
             const FretDiagram* fd = findFretDiagram(strack, etrack, track, seg);
             // if (fd) qDebug("annotations seg %p found fretboard diagram %p", seg, fd);
@@ -4058,7 +4058,7 @@ static void annotations(ExportMusicXml* exp, XmlWriter&, int strack, int etrack,
 static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const ChordRest* cr, FigBassMap& fbMap, int divisions)
       {
       Segment* seg = cr->segment();
-      if (seg->segmentType() == Segment::Type::ChordRest) {
+      if (seg->segmentType() == SegmentType::ChordRest) {
             for (const Element* e : seg->annotations()) {
 
                   int wtrack = -1; // track to write annotation
@@ -4131,7 +4131,7 @@ static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const
 
 static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
-      if (seg->segmentType() == Segment::Type::ChordRest) {
+      if (seg->segmentType() == SegmentType::ChordRest) {
             int stick = seg->tick();
             for (auto it = exp->score()->spanner().lower_bound(stick); it != exp->score()->spanner().upper_bound(stick); ++it) {
                   Spanner* e = it->second;
@@ -4594,19 +4594,19 @@ void ExportMusicXml::findAndExportClef(Measure* m, const int staves, const int s
       Measure* mmR         = m->mmRest();       // the replacing measure in a multi-measure rest
       int tick             = m->tick();
       Segment* cs1;
-      Segment* cs2         = m->findSegment(Segment::Type::Clef, tick);
+      Segment* cs2         = m->findSegment(SegmentType::Clef, tick);
       Segment* cs3;
       Segment* seg         = 0;
 
       if (prevMeasure)
-            cs1 = prevMeasure->findSegment(Segment::Type::Clef, tick);
+            cs1 = prevMeasure->findSegment(SegmentType::Clef, tick);
       else
-            cs1 = m->findSegment(Segment::Type::HeaderClef, tick);
+            cs1 = m->findSegment(SegmentType::HeaderClef, tick);
 
       if (mmR) {
-            cs3 = mmR->findSegment(Segment::Type::HeaderClef, tick);
+            cs3 = mmR->findSegment(SegmentType::HeaderClef, tick);
             if (!cs3)
-                  cs3 = mmR->findSegment(Segment::Type::Clef, tick);
+                  cs3 = mmR->findSegment(SegmentType::Clef, tick);
             }
       else
             cs3 = 0;

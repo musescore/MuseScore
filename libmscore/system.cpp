@@ -973,7 +973,7 @@ Element* System::prevElement()
             if (!seg)
                   return score()->lastElement();
 
-            if (seg->segmentType() == Segment::Type::EndBarLine)
+            if (seg->segmentType() == SegmentType::EndBarLine)
                   score()->inputState().setTrack((score()->staves().size() - 1) * VOICES); //corection
 
             re = seg->lastElement(score()->staves().size() - 1);

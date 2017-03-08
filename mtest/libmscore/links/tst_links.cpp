@@ -72,7 +72,7 @@ void TestLinks::test3LinkedSameScore_99796()
       MasterScore* score = c.score();
       score->doLayout();
       Measure* m = score->firstMeasure();
-      Segment* s = m->first(Segment::Type::ChordRest);
+      Segment* s = m->first(SegmentType::ChordRest);
       Element* e = s->element(0);
       QVERIFY(e->type() == ElementType::CHORD);
 
@@ -177,7 +177,7 @@ void TestLinks::test3LinkedParts_99796()
       score->doLayout();
       // delete chord
       Measure* m = score->firstMeasure();
-      Segment* s = m->first(Segment::Type::ChordRest);
+      Segment* s = m->first(SegmentType::ChordRest);
       Element* e = s->element(0);
       QVERIFY(e->type() == ElementType::CHORD);
       score->select(e);
@@ -258,7 +258,7 @@ void TestLinks::test4LinkedParts_94911()
       score->doLayout();
       // delete chord
       Measure* m = score->firstMeasure();
-      Segment* s = m->first(Segment::Type::ChordRest);
+      Segment* s = m->first(SegmentType::ChordRest);
       Element* e = s->element(0);
       QVERIFY(e->type() == ElementType::CHORD);
       score->select(e);
@@ -380,7 +380,7 @@ void TestLinks::test5LinkedParts_94911()
       score->doLayout();
       // delete chord
       Measure* m = score->firstMeasure();
-      Segment* s = m->first(Segment::Type::ChordRest);
+      Segment* s = m->first(SegmentType::ChordRest);
       Element* e = s->element(0);
       QVERIFY(e->type() == ElementType::CHORD);
       score->select(e);

@@ -226,7 +226,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                         endTick = score->lastSegment()->tick();
                   score->transposeKeys(staffIdx, staffIdx+1, 0, endTick, interval, true, flip);
 
-                  for (auto segment = score->firstSegment(Segment::Type::ChordRest); segment; segment = segment->next1(Segment::Type::ChordRest)) {
+                  for (auto segment = score->firstSegment(SegmentType::ChordRest); segment; segment = segment->next1(SegmentType::ChordRest)) {
                         Interval interval = staff->part()->instrument(segment->tick())->transpose();
                         if (interval.isZero())
                               continue;
@@ -291,7 +291,7 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
                   int sTrack = staffIdx * VOICES;
                   int eTrack = sTrack + VOICES;
                   // unlink elements and annotation
-                  for (Segment* s = partScore->firstSegmentMM(); s; s = s->next1MM()) {
+                  for (Segment* s = partScore->firstSegmentMM(SegmentType::All); s; s = s->next1MM()) {
                         for (int track = eTrack - 1; track >= sTrack; --track) {
                               Element* el = s->element(track);
                               if (el)
@@ -496,7 +496,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
 
                                     Element* oe = oseg->element(srcTrack);
                                     int adjustedBarlineSpan = 0;
-                                    if (srcTrack % VOICES == 0 && oseg->segmentType() == Segment::Type::BarLine) {
+                                    if (srcTrack % VOICES == 0 && oseg->segmentType() == SegmentType::BarLine) {
                                           // mid-measure barline segment
                                           // may need to clone barline from a previous staff and/or adjust span
                                           int oIdx = srcTrack / VOICES;
@@ -651,7 +651,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                           rest->setDuration(nm->len());
                                           rest->setDurationType(nm->len().ticks());
                                           rest->setTrack(track);
-                                          Segment* segment = nm->getSegment(Segment::Type::ChordRest, nm->tick());
+                                          Segment* segment = nm->getSegment(SegmentType::ChordRest, nm->tick());
                                           segment->add(rest);
                                           }
 

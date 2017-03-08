@@ -152,7 +152,7 @@ void SwingDetector::applySwing()
       const int startTick = first->segment()->tick();
       ChordRest *last = elements.back();
       last->segment()->remove(last);
-      Segment *s = last->measure()->getSegment(Segment::Type::ChordRest, startTick + MScore::division / 2);
+      Segment *s = last->measure()->getSegment(SegmentType::ChordRest, startTick + MScore::division / 2);
       s->add(last);
 
       if (elements.size() == 3) {
@@ -213,8 +213,8 @@ void detectSwing(Staff *staff, MidiOperations::Swing swingType)
       const int strack = staff->idx() * VOICES;
       SwingDetector swingDetector(swingType);
 
-      for (Segment *seg = score->firstSegment(Segment::Type::ChordRest); seg;
-                                      seg = seg->next1(Segment::Type::ChordRest)) {
+      for (Segment *seg = score->firstSegment(SegmentType::ChordRest); seg;
+                                      seg = seg->next1(SegmentType::ChordRest)) {
             for (int voice = 0; voice < VOICES; ++voice) {
                   ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
                   if (!cr)
@@ -227,7 +227,7 @@ void detectSwing(Staff *staff, MidiOperations::Swing swingType)
             StaffText* st = new StaffText(score);
             st->setSubStyle(SubStyle::STAFF);
             st->setPlainText(swingCaption(swingType));
-            Segment* seg = score->firstSegment(Segment::Type::ChordRest);
+            Segment* seg = score->firstSegment(SegmentType::ChordRest);
             st->setParent(seg);
             st->setTrack(strack);   // voice == 0
             score->addElement(st);

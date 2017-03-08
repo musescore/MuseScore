@@ -594,7 +594,7 @@ void Score::localInsertChord(const Position& pos)
             s->undoChangeProperty(P_ID::TICK, s->rtick() + len);
       undo(new ChangeMeasureLen(m, m->len() + fraction));
 
-      Segment* s = m->undoGetSegment(Segment::Type::ChordRest, tick);
+      Segment* s = m->undoGetSegment(SegmentType::ChordRest, tick);
       Position p(pos);
       p.segment = s;
 
@@ -603,13 +603,13 @@ void Score::localInsertChord(const Position& pos)
             if (track == trackI)
                   putNote(p, true);
             else {
-                  Segment* fs = m->first(Segment::Type::ChordRest);
+                  Segment* fs = m->first(SegmentType::ChordRest);
                   if (fs->tick() == tick && m->hasVoice(track)) {
                         setRest(fs->tick(),  track, fraction, false, nullptr, false);
                         continue;
                         }
                   Segment* seg1 = 0;
-                  for (Segment* s = fs; s; s = s->next(Segment::Type::ChordRest)) {
+                  for (Segment* s = fs; s; s = s->next(SegmentType::ChordRest)) {
                         if (s->element(track)) {
                               ChordRest* cr = toChordRest(s->element(track));
                               if (s->tick() > tick)
@@ -682,7 +682,7 @@ void Score::globalInsertChord(const Position& pos)
 
       if (track != -1) {
             Measure* m = tick2measure(dtick);
-            Segment* s = m->findSegment(Segment::Type::ChordRest, dtick);
+            Segment* s = m->findSegment(SegmentType::ChordRest, dtick);
             Element* e = s->element(track);
             if (e)
                   select(e->isChord() ? toChord(e)->notes().front() : e);

@@ -77,8 +77,8 @@ void SlurSegment::updateGrips(Grip* defaultGrip, QVector<QRectF>& r) const
 
 static ChordRest* searchCR(Segment* segment, int startTrack, int endTrack)
       {
-      // for (Segment* s = segment; s; s = s->next1MM(Segment::Type::ChordRest)) {
-      for (Segment* s = segment; s; s = s->next(Segment::Type::ChordRest)) {     // restrict search to measure
+      // for (Segment* s = segment; s; s = s->next1MM(SegmentType::ChordRest)) {
+      for (Segment* s = segment; s; s = s->next(SegmentType::ChordRest)) {     // restrict search to measure
             if (startTrack > endTrack) {
                   for (int t = startTrack-1; t >= endTrack; --t) {
                         if (s->element(t))
@@ -1124,7 +1124,7 @@ static bool chordsHaveTie(Chord* c1, Chord* c2)
 static bool isDirectionMixture(Chord* c1, Chord* c2)
       {
       bool up = c1->up();
-      for (Segment* seg = c1->segment(); seg; seg = seg->next(Segment::Type::ChordRest)) {
+      for (Segment* seg = c1->segment(); seg; seg = seg->next(SegmentType::ChordRest)) {
             Element* e = seg->element(c1->track());
             if (!e || !e->isChord())
                   continue;

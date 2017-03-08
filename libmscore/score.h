@@ -23,7 +23,6 @@
 #include "select.h"
 #include "synthesizerstate.h"
 #include "mscoreview.h"
-#include "segment.h"
 #include "ottava.h"
 #include "spannermap.h"
 #include "rehearsalmark.h"
@@ -97,6 +96,7 @@ enum class BeatType : char;
 enum class SymId;
 enum class Key;
 enum class HairpinType : char;
+enum class SegmentType;
 
 extern bool showRubberBand;
 
@@ -627,7 +627,7 @@ class Score : public QObject, ScoreElement {
       void undoAddBracket(Staff* staff, int level, BracketType type, int span);
       void undoRemoveBracket(Bracket*);
       void undoInsertTime(int tick, int len);
-      void undoChangeBarLine(Measure*, BarLineType, Segment::Type type = Segment::Type::EndBarLine);
+      void undoChangeBarLine(Measure*, BarLineType, SegmentType type);
       void undoChangeStyleVal(StyleIdx idx, const QVariant& v);
 
       void setGraceNote(Chord*,  int pitch, NoteType type, int len);
@@ -764,8 +764,12 @@ class Score : public QObject, ScoreElement {
       Measure* tick2measure(int tick) const;
       Measure* tick2measureMM(int tick) const;
       MeasureBase* tick2measureBase(int tick) const;
-      Segment* tick2segment(int tick, bool first = false, Segment::Type st = Segment::Type::All,bool useMMrest = false ) const;
-      Segment* tick2segmentMM(int tick, bool first = false, Segment::Type st = Segment::Type::All) const;
+      Segment* tick2segment(int tick, bool first, SegmentType st, bool useMMrest = false) const;
+      Segment* tick2segment(int tick) const;
+      Segment* tick2segment(int tick, bool first) const;
+      Segment* tick2segmentMM(int tick, bool first, SegmentType st) const;
+      Segment* tick2segmentMM(int tick) const;
+      Segment* tick2segmentMM(int tick, bool first) const;
       Segment* tick2segmentEnd(int track, int tick) const;
       Segment* tick2leftSegment(int tick) const;
       Segment* tick2rightSegment(int tick) const;
@@ -930,11 +934,9 @@ class Score : public QObject, ScoreElement {
 
       int endTick() const;
 
-      Ms::Segment* firstSegment(Segment::Type s) const;
-      //@ returns the first segment of the score of the given type (use Segment.Clef, ... enum)
-      Q_INVOKABLE Ms::Segment* firstSegment(int segType = static_cast<int>(Segment::Type::All)) const;
-      Ms::Segment* firstSegmentMM(Segment::Type s = Segment::Type::All) const;
-      Ms::Segment* lastSegment() const;
+      Segment* firstSegment(SegmentType s) const;
+      Segment* firstSegmentMM(SegmentType s) const;
+      Segment* lastSegment() const;
 
       void connectTies(bool silent=false);
 

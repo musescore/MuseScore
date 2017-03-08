@@ -899,15 +899,15 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   //  EndBarLine:         at the end tick of a measure
                   //  BeginBarLine:       first segment of a measure
 
-                  Segment::Type st;
+                  SegmentType st;
                   if ((e.tick() != m->tick()) && (e.tick() != m->endTick()))
-                        st = Segment::Type::BarLine;
+                        st = SegmentType::BarLine;
                   else if (barLine->barLineType() == BarLineType::START_REPEAT && e.tick() == m->tick())
-                        st = Segment::Type::StartRepeatBarLine;
+                        st = SegmentType::StartRepeatBarLine;
                   else if (e.tick() == m->tick() && segment == 0)
-                        st = Segment::Type::BeginBarLine;
+                        st = SegmentType::BeginBarLine;
                   else
-                        st = Segment::Type::EndBarLine;
+                        st = SegmentType::EndBarLine;
                   segment = m->getSegment(st, e.tick());
                   segment->add(barLine);
                   }
@@ -915,7 +915,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   Chord* chord = new Chord(m->score());
                   chord->setTrack(e.track());
                   readChord(chord, e);
-                  segment = m->getSegment(Segment::Type::ChordRest, e.tick());
+                  segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   if (chord->noteType() != NoteType::NORMAL) {
                         graceNotes.push_back(chord);
                         if (chord->tremolo() && chord->tremolo()->tremoloType() < TremoloType::R8) {
@@ -936,7 +936,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         }
                   else {
                         segment->add(chord);
-                        Q_ASSERT(segment->segmentType() == Segment::Type::ChordRest);
+                        Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
 
                         for (int i = 0; i < graceNotes.size(); ++i) {
                               Chord* gc = graceNotes[i];
@@ -964,7 +964,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               if (tremolo->twoNotes()) {
                                     int track = chord->track();
                                     Segment* ss = 0;
-                                    for (Segment* ps = m->first(Segment::Type::ChordRest); ps; ps = ps->next(Segment::Type::ChordRest)) {
+                                    for (Segment* ps = m->first(SegmentType::ChordRest); ps; ps = ps->next(SegmentType::ChordRest)) {
                                           if (ps->tick() >= e.tick())
                                                 break;
                                           if (ps->element(track))
@@ -1005,7 +1005,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   rest->setDuration(m->timesig()/timeStretch);
                   rest->setTrack(e.track());
                   readRest(rest, e);
-                  segment = m->getSegment(Segment::Type::ChordRest, e.tick());
+                  segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(rest);
 
                   if (!rest->duration().isValid())     // hack
@@ -1029,14 +1029,14 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   else
                         prevTick = lastTick;    // otherwise use tick of previous tick/chord/rest tag
                   // find segment
-                  Segment* prev = m->findSegment(Segment::Type::ChordRest, prevTick);
+                  Segment* prev = m->findSegment(SegmentType::ChordRest, prevTick);
                   if (prev) {
                         // find chordrest
                         ChordRest* lastCR = static_cast<ChordRest*>(prev->element(e.track()));
                         if (lastCR)
                               tick = prevTick + lastCR->actualTicks();
                         }
-                  segment = m->getSegment(Segment::Type::Breath, tick);
+                  segment = m->getSegment(SegmentType::Breath, tick);
                   segment->add(breath);
                   }
             else if (tag == "endSpanner") {
@@ -1101,7 +1101,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   RepeatMeasure* rm = new RepeatMeasure(m->score());
                   rm->setTrack(e.track());
                   rm->read(e);
-                  segment = m->getSegment(Segment::Type::ChordRest, e.tick());
+                  segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(rm);
                   if (rm->actualDuration().isZero()) { // might happen with 1.3 scores
                         rm->setDuration(m->len());
@@ -1145,7 +1145,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                                     }
                               }
                         }
-                  segment = m->getSegment(header ? Segment::Type::HeaderClef : Segment::Type::Clef, e.tick());
+                  segment = m->getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, e.tick());
                   segment->add(clef);
                   }
             else if (tag == "TimeSig") {
@@ -1157,12 +1157,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   bool courtesySig = (currTick > m->tick());
                   if (courtesySig) {
                         // if courtesy sig., just add it without map processing
-                        segment = m->getSegment(Segment::Type::TimeSigAnnounce, currTick);
+                        segment = m->getSegment(SegmentType::TimeSigAnnounce, currTick);
                         segment->add(ts);
                         }
                   else {
                         // if 'real' time sig., do full process
-                        segment = m->getSegment(Segment::Type::TimeSig, currTick);
+                        segment = m->getSegment(SegmentType::TimeSig, currTick);
                         segment->add(ts);
 
                         timeStretch = ts->stretch().reduced();
@@ -1185,7 +1185,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   else {
                         // if key sig not at beginning of measure => courtesy key sig
                         bool courtesySig = (curTick == m->endTick());
-                        segment = m->getSegment(courtesySig ? Segment::Type::KeySigAnnounce : Segment::Type::KeySig, curTick);
+                        segment = m->getSegment(courtesySig ? SegmentType::KeySigAnnounce : SegmentType::KeySig, curTick);
                         segment->add(ks);
                         if (!courtesySig)
                               staff->setKey(curTick, ks->keySigEvent());
@@ -1195,7 +1195,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   Element* element = Element::name2Element(tag, m->score());
                   element->setTrack(e.track());
                   element->read(e);
-                  segment       = m->getSegment(Segment::Type::ChordRest, e.tick());
+                  segment       = m->getSegment(SegmentType::ChordRest, e.tick());
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(element->track()));
                   if (!cr)
                         cr = static_cast<ChordRest*>(segment->element(e.track())); // in case lyric itself has bad track info
@@ -1213,7 +1213,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         delete t;
                         }
                   else {
-                        segment = m->getSegment(Segment::Type::ChordRest, e.tick());
+                        segment = m->getSegment(SegmentType::ChordRest, e.tick());
                         segment->add(t);
                         }
                   }
@@ -1222,7 +1222,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   dyn->setTrack(e.track());
                   dyn->read(e);
                   dyn->setDynamicType(dyn->xmlText());
-                  segment = m->getSegment(Segment::Type::ChordRest, e.tick());
+                  segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(dyn);
                   }
             else if (tag == "Harmony"
@@ -1243,7 +1243,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         el->setParent(m);    // this will get reset when adding to segment
                   el->setTrack(e.track());
                   el->read(e);
-                  segment = m->getSegment(Segment::Type::ChordRest, e.tick());
+                  segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
                   }
             else if (tag == "Marker" || tag == "Jump") {
@@ -1270,7 +1270,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         Element* el = Element::name2Element(tag, m->score());
                         el->setTrack(e.track());
                         el->read(e);
-                        segment = m->getSegment(Segment::Type::ChordRest, e.tick());
+                        segment = m->getSegment(SegmentType::ChordRest, e.tick());
                         segment->add(el);
                         }
                   }
@@ -1293,7 +1293,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   BarLine* barLine = new BarLine(m->score());
                   barLine->setTrack(e.track());
                   barLine->setBarLineType(val);
-                  segment = m->getSegment(Segment::Type::BeginBarLine, m->tick());
+                  segment = m->getSegment(SegmentType::BeginBarLine, m->tick());
                   segment->add(barLine);
                   }
             else if (tag == "Tuplet") {
@@ -2165,12 +2165,12 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   Measure* m = tick2measure(tick);
                   if (!m)
                         continue;
-                  Segment::Type st = Segment::Type::Clef;
+                  SegmentType st = SegmentType::Clef;
                   if (tick == m->tick()) {
                        if (m->prevMeasure())
                               m = m->prevMeasure();
                         else
-                              st = Segment::Type::HeaderClef;
+                              st = SegmentType::HeaderClef;
                         }
                   Segment* seg = m->getSegment(st, tick);
                   if (seg->element(track))
@@ -2198,7 +2198,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   Measure* m = tick2measure(tick);
                   if (!m)           //empty score
                         break;
-                  Segment* seg = m->getSegment(Segment::Type::KeySig, tick);
+                  Segment* seg = m->getSegment(SegmentType::KeySig, tick);
                   if (seg->element(track))
                         toKeySig(seg->element(track))->setGenerated(false);
                   else {
@@ -2262,7 +2262,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
             bool first = true;
             for (int track = 0; track < tracks; ++track) {
                   for (Segment* s = m->first(); s; s = s->next()) {
-                        if (s->segmentType() != Segment::Type::ChordRest)
+                        if (s->segmentType() != SegmentType::ChordRest)
                               continue;
                         ChordRest* cr = toChordRest(s->element(track));
                         if (cr) {
@@ -2357,7 +2357,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   tt->setVisible(false);
                   Measure* m = tick2measure(tick);
                   if (m) {
-                        Segment* seg = m->getSegment(Segment::Type::ChordRest, tick);
+                        Segment* seg = m->getSegment(SegmentType::ChordRest, tick);
                         seg->add(tt);
                         setTempo(tick, tempo);
                         }

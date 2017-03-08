@@ -147,7 +147,7 @@ class Measure : public MeasureBase {
 
       int size() const                          { return _segments.size();        }
       Ms::Segment* first() const                { return _segments.first();       }
-      Segment* first(Segment::Type t) const     { return _segments.first(t);      }
+      Segment* first(SegmentType t) const     { return _segments.first(t);      }
 
       Ms::Segment* last() const                 { return _segments.last(); }
       SegmentList& segments()                   { return _segments; }
@@ -176,7 +176,7 @@ class Measure : public MeasureBase {
       void insertStaves(int s, int e);
 
       qreal tick2pos(int) const;
-      Segment* tick2segment(int tick, Segment::Type st = Segment::Type::ChordRest);
+      Segment* tick2segment(int tick, SegmentType st = SegmentType::ChordRest);
 
       void sortStaves(QList<int>& dst);
 
@@ -186,19 +186,19 @@ class Measure : public MeasureBase {
       int repeatCount() const         { return _repeatCount; }
       void setRepeatCount(int val)    { _repeatCount = val; }
 
-      Segment* undoGetSegment(Segment::Type st, int tick);  // deprecated
-      Segment* getSegment(Segment::Type st, int tick);      // deprecated
-      Segment* findSegment(Segment::Type st, int tick) const;     // deprecated
+      Segment* undoGetSegment(SegmentType st, int tick);  // deprecated
+      Segment* getSegment(SegmentType st, int tick);      // deprecated
+      Segment* findSegment(SegmentType st, int tick) const;     // deprecated
 
-      Segment* undoGetSegmentR(Segment::Type st, int rtick);
-      Segment* getSegmentR(Segment::Type st, int rtick);
-      Segment* findSegmentR(Segment::Type st, int rtick) const;
+      Segment* undoGetSegmentR(SegmentType st, int rtick);
+      Segment* getSegmentR(SegmentType st, int rtick);
+      Segment* findSegmentR(SegmentType st, int rtick) const;
 
       // preferred:
-      Segment* undoGetSegment(Segment::Type st, const Fraction& f) { return undoGetSegmentR(st, f.ticks()); }
-      Segment* getSegment(Segment::Type st, const Fraction& f)     { return getSegmentR(st, f.ticks()); }
+      Segment* undoGetSegment(SegmentType st, const Fraction& f) { return undoGetSegmentR(st, f.ticks()); }
+      Segment* getSegment(SegmentType st, const Fraction& f)     { return getSegmentR(st, f.ticks()); }
 
-      Segment* findFirst(Segment::Type st, int rtick) const;
+      Segment* findFirst(SegmentType st, int rtick) const;
 
       qreal createEndBarLines(bool);
       void barLinesSetSpan(Segment*);

@@ -18,6 +18,7 @@
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 #include "libmscore/chord.h"
+#include "libmscore/segment.h"
 
 #define DIR QString("libmscore/exchangevoices/")
 
@@ -116,7 +117,7 @@ void TestExchangevoices::undoChangeVoice()
       // do
       score->deselectAll();
       // select bottom note of all voice 1 chords
-      for (Segment* s = score->firstSegment(Segment::Type::ChordRest); s; s = s->next1()) {
+      for (Segment* s = score->firstSegment(SegmentType::ChordRest); s; s = s->next1()) {
             ChordRest* cr = static_cast<ChordRest*>(s->element(0));
             if (cr && cr->type() == ElementType::CHORD) {
                   Ms::Chord* c = static_cast<Ms::Chord*>(cr);

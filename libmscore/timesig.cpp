@@ -18,6 +18,7 @@
 #include "symbol.h"
 #include "staff.h"
 #include "stafftype.h"
+#include "segment.h"
 
 namespace Ms {
 

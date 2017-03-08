@@ -377,7 +377,7 @@ void TestMeasure::gap()
       //Select and delete third quarter rest in first Measure (voice 2)
       score->startCmd();
       Measure* m  = score->firstMeasure();
-      Segment* s  = m->undoGetSegment(Segment::Type::ChordRest, 960);
+      Segment* s  = m->undoGetSegment(SegmentType::ChordRest, 960);
       Element* el = s->element(1);
       score->select(el);
       score->cmdDeleteSelection();
@@ -391,7 +391,7 @@ void TestMeasure::gap()
       //Select and delete second quarter rest in third Measure (voice 4)
       score->startCmd();
       m  = m->nextMeasure()->nextMeasure();
-      s  = m->undoGetSegment(Segment::Type::ChordRest, 4320);
+      s  = m->undoGetSegment(SegmentType::ChordRest, 4320);
       el = s->element(3);
       score->select(el);
       score->cmdDeleteSelection();
@@ -404,7 +404,7 @@ void TestMeasure::gap()
 
       //Select and delete first quarter rest in third Measure (voice 4)
       score->startCmd();
-      s  = m->undoGetSegment(Segment::Type::ChordRest, 3840);
+      s  = m->undoGetSegment(SegmentType::ChordRest, 3840);
       el = s->element(3);
       score->select(el);
       score->cmdDeleteSelection();
@@ -432,27 +432,27 @@ void TestMeasure::checkMeasure()
       Element* tst       = 0;
       Measure* m         = score->firstMeasure()->nextMeasure();
 
-      Segment* s = m->undoGetSegment(Segment::Type::ChordRest, 2880);
+      Segment* s = m->undoGetSegment(SegmentType::ChordRest, 2880);
       tst = s->element(1);
       Q_ASSERT(tst);
 
       QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 480/*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/);
 
       m = m->nextMeasure();
-//      s = m->undoGetSegment(Segment::Type::ChordRest, 3840);
+//      s = m->undoGetSegment(SegmentType::ChordRest, 3840);
 //      tst = s->element(2);
 //      Q_ASSERT(tst);
 
 //      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 480/*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/);
 
       m = m->nextMeasure();
-      s = m->undoGetSegment(Segment::Type::ChordRest, 6240);
+      s = m->undoGetSegment(SegmentType::ChordRest, 6240);
       tst = s->element(1);
       Q_ASSERT(tst);
 
       QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 120/*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/);
 
-      s = m->undoGetSegment(Segment::Type::ChordRest, 6480);
+      s = m->undoGetSegment(SegmentType::ChordRest, 6480);
       tst = s->element(1);
       Q_ASSERT(tst);
 

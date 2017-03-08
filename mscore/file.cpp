@@ -605,7 +605,7 @@ MasterScore* MuseScore::getNewFile()
                               ts->setTrack(staffIdx * VOICES);
                               ts->setSig(timesig, timesigType);
                               Measure* m = _score->firstMeasure();
-                              Segment* s = m->getSegment(Segment::Type::TimeSig, 0);
+                              Segment* s = m->getSegment(SegmentType::TimeSig, 0);
                               s->add(ts);
                               Part* part = staff->part();
                               if (!part->instrument()->useDrumset()) {
@@ -623,7 +623,7 @@ MasterScore* MuseScore::getNewFile()
                                           KeySig* keysig = new KeySig(score);
                                           keysig->setTrack(staffIdx * VOICES);
                                           keysig->setKeySigEvent(nKey);
-                                          Segment* s = measure->getSegment(Segment::Type::KeySig, 0);
+                                          Segment* s = measure->getSegment(SegmentType::KeySig, 0);
                                           s->add(keysig);
                                           }
                                     }
@@ -648,7 +648,7 @@ MasterScore* MuseScore::getNewFile()
                                           rest->setScore(_score);
                                           rest->setDuration(d.fraction());
                                           rest->setTrack(staffIdx * VOICES);
-                                          Segment* seg = measure->getSegment(Segment::Type::ChordRest, ltick);
+                                          Segment* seg = measure->getSegment(SegmentType::ChordRest, ltick);
                                           seg->add(rest);
                                           ltick += rest->actualTicks();
                                           k++;
@@ -663,7 +663,7 @@ MasterScore* MuseScore::getNewFile()
                               rest->setScore(_score);
                               rest->setDuration(measure->len());
                               rest->setTrack(staffIdx * VOICES);
-                              Segment* seg = measure->getSegment(Segment::Type::ChordRest, tick);
+                              Segment* seg = measure->getSegment(SegmentType::ChordRest, tick);
                               seg->add(rest);
                               }
                         }
@@ -676,7 +676,7 @@ MasterScore* MuseScore::getNewFile()
       //
       Measure* m = score->firstMeasure();
       for (Segment* s = m->first(); s; s = s->next()) {
-            if (s->segmentType() == Segment::Type::ChordRest) {
+            if (s->segmentType() == SegmentType::ChordRest) {
                   if (s->element(0)) {
                         score->select(s->element(0), SelectType::SINGLE, 0);
                         break;
@@ -740,7 +740,7 @@ MasterScore* MuseScore::getNewFile()
             tt->setTempo(tempo);
             tt->setFollowText(true);
             tt->setTrack(0);
-            Segment* seg = score->firstMeasure()->first(Segment::Type::ChordRest);
+            Segment* seg = score->firstMeasure()->first(SegmentType::ChordRest);
             seg->add(tt);
             score->setTempo(0, tempo);
             }

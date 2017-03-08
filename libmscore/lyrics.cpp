@@ -18,6 +18,7 @@
 #include "system.h"
 #include "xml.h"
 #include "staff.h"
+#include "segment.h"
 
 namespace Ms {
 
@@ -32,7 +33,7 @@ static const qreal TWICE = 2.0;
 static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Element::Placement p)
       {
       Lyrics* l = 0;
-      while ((s = s->next1(Segment::Type::ChordRest))) {
+      while ((s = s->next1(SegmentType::ChordRest))) {
             int strack = staffIdx * VOICES;
             int etrack = strack + VOICES;
             // search through all tracks of current staff looking for a lyric in specified verse
@@ -658,14 +659,14 @@ void LyricsLine::layout()
                   // s is already pointing to segment past endTick (or to last segment)
                   // we should shorten the lyrics tick count to make this work
                   Segment* ns = s;
-                  Segment* ps = s->prev1(Segment::Type::ChordRest);
+                  Segment* ps = s->prev1(SegmentType::ChordRest);
                   while (ps && ps != lyricsSegment) {
                         Element* pe = ps->element(lyricsTrack);
                         // we're looking for an actual chord on this track
                         if (pe && pe->type() == ElementType::CHORD)
                               break;
                         s = ps;
-                        ps = ps->prev1(Segment::Type::ChordRest);
+                        ps = ps->prev1(SegmentType::ChordRest);
                         }
                   if (!ps || ps == lyricsSegment) {
                         // no valid previous CR, so try to lengthen melisma instead

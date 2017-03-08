@@ -17,6 +17,7 @@
 #include "style.h"
 
 namespace Ms {
+//      Q_NAMESPACE
 
 #define MSC_VERSION     "3.00"
 static constexpr int MSCVERSION = 300;
@@ -230,6 +231,7 @@ enum class NoteType : unsigned char {
       GRACE32_AFTER = 0x80,
       INVALID       = 0xFF
       };
+// Q_ENUM_NS(NoteType);
 
 constexpr NoteType operator| (NoteType t1, NoteType t2) {
       return static_cast<NoteType>(static_cast<int>(t1) | static_cast<int>(t2));

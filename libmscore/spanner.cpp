@@ -531,7 +531,7 @@ void Spanner::computeStartElement()
       {
       switch (_anchor) {
             case Anchor::SEGMENT: {
-                  Segment* seg = score()->tick2segmentMM(tick(), false, Segment::Type::ChordRest);
+                  Segment* seg = score()->tick2segmentMM(tick(), false, SegmentType::ChordRest);
                   int strack = (track() / VOICES) * VOICES;
                   int etrack = strack + VOICES;
                   _startElement = 0;
@@ -718,7 +718,7 @@ Chord* Spanner::endChord()
       Q_ASSERT(_anchor == Anchor::CHORD);
 
       if (!_endElement && type() == ElementType::SLUR) {
-            Segment* s = score()->tick2segmentMM(tick2(), false, Segment::Type::ChordRest);
+            Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
             _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
             if (_endElement->type() != ElementType::CHORD)
                   _endElement = nullptr;
@@ -746,7 +746,7 @@ ChordRest* Spanner::endCR()
       {
       Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
       if (!_endElement && type() == ElementType::SLUR) {
-            Segment* s = score()->tick2segmentMM(tick2(), false, Segment::Type::ChordRest);
+            Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
             _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
             }
       return static_cast<ChordRest*>(_endElement);

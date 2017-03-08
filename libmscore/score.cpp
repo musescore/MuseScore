@@ -406,7 +406,7 @@ void Score::fixTicks()
             //
 
             for (Segment* s = m->first(); s; s = s->next()) {
-                  if (isMaster() && s->segmentType() == Segment::Type::Breath) {
+                  if (isMaster() && s->segmentType() == SegmentType::Breath) {
                         qreal length = 0.0;
                         int tick = s->tick();
                         // find longest pause
@@ -420,7 +420,7 @@ void Score::fixTicks()
                         if (length != 0.0)
                               setPause(tick, length);
                         }
-                  else if (s->segmentType() == Segment::Type::TimeSig) {
+                  else if (s->segmentType() == SegmentType::TimeSig) {
                         for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                               TimeSig* ts = toTimeSig(s->element(staffIdx * VOICES));
                               if (ts)
@@ -428,7 +428,7 @@ void Score::fixTicks()
                               }
                         }
                   // TODO: all done in doLayout, getNextMeasure, collectSystem... Do we keep?
-                  else if (isMaster() && (s->segmentType() == Segment::Type::ChordRest)) {
+                  else if (isMaster() && (s->segmentType() == SegmentType::ChordRest)) {
                         for (Element* e : s->annotations()) {
                               if (e->type() == ElementType::TEMPO_TEXT) {
                                     TempoText* tt = toTempoText(e);
@@ -546,7 +546,7 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
       int etrack = staff(i)->part()->nstaves() * VOICES + strack;
 
       SysStaff* sstaff = m->system()->staff(i);
-      Segment::Type st = Segment::Type::ChordRest;
+      SegmentType st = SegmentType::ChordRest;
       for (Segment* segment = m->first(st); segment; segment = segment->next(st)) {
             if (!validSegment(segment, strack, etrack))
                   continue;
@@ -634,7 +634,7 @@ void Score::dragPosition(const QPointF& p, int* rst, Segment** seg) const
             return;
       int etrack = staff(i)->part()->nstaves() * VOICES + strack;
 
-      Segment::Type st = Segment::Type::ChordRest;
+      SegmentType st = SegmentType::ChordRest;
       for (Segment* segment = m->first(st); segment; segment = segment->next(st)) {
             if (!validSegment(segment, strack, etrack))
                   continue;
@@ -746,7 +746,7 @@ void Score::spell()
       {
       for (int i = 0; i < nstaves(); ++i) {
             std::vector<Note*> notes;
-            for (Segment* s = firstSegment(); s; s = s->next1()) {
+            for (Segment* s = firstSegment(SegmentType::All); s; s = s->next1()) {
                   int strack = i * VOICES;
                   int etrack = strack + VOICES;
                   for (int track = strack; track < etrack; ++track) {
@@ -796,7 +796,7 @@ Note* prevNote(Note* n)
       int startTrack = staff * VOICES + n->voice() - 1;
       int endTrack   = 0;
       while (seg) {
-            if (seg->segmentType() == Segment::Type::ChordRest) {
+            if (seg->segmentType() == SegmentType::ChordRest) {
                   for (int track = startTrack; track >= endTrack; --track) {
                         Element* e = seg->element(track);
                         if (e && e->type() == ElementType::CHORD)
@@ -828,7 +828,7 @@ static Note* nextNote(Note* n)
       int startTrack = staff * VOICES + n->voice() + 1;
       int endTrack   = staff * VOICES + VOICES;
       while (seg) {
-            if (seg->segmentType() == Segment::Type::ChordRest) {
+            if (seg->segmentType() == SegmentType::ChordRest) {
                   for (int track = startTrack; track < endTrack; ++track) {
                         Element* e = seg->element(track);
                         if (e && e->type() == ElementType::CHORD) {
@@ -962,24 +962,24 @@ Measure* Score::searchMeasure(const QPointF& p) const
 
 //---------------------------------------------------------
 //    getNextValidInputSegment
-//    - s is of type Segment::Type::ChordRest
+//    - s is of type SegmentType::ChordRest
 //---------------------------------------------------------
 
 static Segment* getNextValidInputSegment(Segment* s, int track, int voice)
       {
       if (s == 0)
             return 0;
-      Q_ASSERT(s->segmentType() == Segment::Type::ChordRest);
+      Q_ASSERT(s->segmentType() == SegmentType::ChordRest);
       // Segment* s1 = s;
       ChordRest* cr1;
-      for (Segment* s1 = s; s1; s1 = s1->prev(Segment::Type::ChordRest)) {
+      for (Segment* s1 = s; s1; s1 = s1->prev(SegmentType::ChordRest)) {
             cr1 = toChordRest(s1->element(track + voice));
             if (cr1)
                   break;
             }
       int nextTick = (cr1 == 0) ? s->measure()->tick() : cr1->tick() + cr1->actualTicks();
 
-      static const Segment::Type st { Segment::Type::ChordRest };
+      static const SegmentType st { SegmentType::ChordRest };
       while (s) {
             if (s->element(track + voice))
                   break;
@@ -1082,11 +1082,11 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       // int track = pos->staffIdx * VOICES + voice;
       int track = pos->staffIdx * VOICES;
 
-      for (segment = measure->first(Segment::Type::ChordRest); segment;) {
+      for (segment = measure->first(SegmentType::ChordRest); segment;) {
             segment = getNextValidInputSegment(segment, track, voice);
             if (segment == 0)
                   break;
-            Segment* ns = getNextValidInputSegment(segment->next(Segment::Type::ChordRest), track, voice);
+            Segment* ns = getNextValidInputSegment(segment->next(SegmentType::ChordRest), track, voice);
 
             qreal x1 = segment->x();
             qreal x2;
@@ -1614,7 +1614,7 @@ int Score::endTick() const
 //   firstSegment
 //---------------------------------------------------------
 
-Segment* Score::firstSegment(Segment::Type segType) const
+Segment* Score::firstSegment(SegmentType segType) const
       {
       Segment* seg;
       Measure* m = firstMeasure();
@@ -1635,19 +1635,10 @@ Segment* Score::firstSegment(Segment::Type segType) const
       }
 
 //---------------------------------------------------------
-//   firstSegment Q_INVOKABLE wrapper
-//---------------------------------------------------------
-
-Segment* Score::firstSegment(int segType) const
-      {
-      return firstSegment(static_cast<Segment::Type>(segType));
-      }
-
-//---------------------------------------------------------
 //   firstSegmentMM
 //---------------------------------------------------------
 
-Segment* Score::firstSegmentMM(Segment::Type segType) const
+Segment* Score::firstSegmentMM(SegmentType segType) const
       {
       Measure* m = firstMeasureMM();
       return m ? m->first(segType) : 0;
@@ -1926,7 +1917,7 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
       // convert any "generated" initial clefs into real "non-generated" clefs if clef type changes
       Measure* fm = score->firstMeasure();
       if (fm) {
-            Segment* seg = fm->findSegmentR(Segment::Type::HeaderClef, 0);
+            Segment* seg = fm->findSegmentR(SegmentType::HeaderClef, 0);
             if (seg) {
                   for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                         int track    = staffIdx * VOICES;
@@ -1965,7 +1956,7 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
       for (Measure* m = firstAppendedMeasure; m; m = m->nextMeasure()) {
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                   Fraction f;
-                  for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
+                  for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                         for (int v = 0; v < VOICES; ++v) {
                               ChordRest* cr = toChordRest(s->element(staffIdx * VOICES + v));
                               if (cr == 0)
@@ -1980,7 +1971,7 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
 
       // adjust key signatures
       if (firstAppendedMeasure) {
-            Segment* seg = firstAppendedMeasure->getSegment(Segment::Type::KeySig, tickOfAppend);
+            Segment* seg = firstAppendedMeasure->getSegment(SegmentType::KeySig, tickOfAppend);
             for (Staff* st : score->staves()) {
                   int staffIdx = st->idx();
                   Staff* joinedStaff = staff(staffIdx);
@@ -2057,7 +2048,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       Clef* clef = new Clef(this);
       clef->setClefType(ClefType::F);
       clef->setTrack((staffIdx+1) * VOICES);
-      Segment* seg = firstMeasure()->getSegment(Segment::Type::HeaderClef, 0);
+      Segment* seg = firstMeasure()->getSegment(SegmentType::HeaderClef, 0);
       clef->setParent(seg);
       undoAddElement(clef);
       clef->layout();
@@ -2075,7 +2066,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       int strack = staffIdx * VOICES;
       int dtrack = (staffIdx + 1) * VOICES;
 
-      for (Segment* s = firstSegment(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
+      for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             for (int voice = 0; voice < VOICES; ++voice) {
                   Element* e = s->element(strack + voice);
                   if (!(e && e->isChord()))
@@ -2135,7 +2126,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       //
       int ctick  = 0;
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
+            for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
                   ChordRest* cr = toChordRest(s->element(dtrack));
                   if (cr == 0)
                         continue;
@@ -2162,7 +2153,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       //
       ctick  = 0;
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
+            for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
                   ChordRest* cr = toChordRest(s->element(strack));
                   if (cr == 0)
                         continue;
@@ -2353,7 +2344,7 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
                   KeySig* keysig = new KeySig(this);
                   keysig->setTrack(staffIdx * VOICES);
                   keysig->setKeySigEvent(nKey);
-                  Segment* s = measure->getSegment(Segment::Type::KeySig, tick);
+                  Segment* s = measure->getSegment(SegmentType::KeySig, tick);
                   s->add(keysig);
                   }
             }
@@ -2472,7 +2463,7 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
 
             transposeKeys(staffIdx, staffIdx + 1, 0, lastSegment()->tick(), interval, true, !flag);
 
-            for (Segment* segment = firstSegment(Segment::Type::ChordRest); segment; segment = segment->next1(Segment::Type::ChordRest)) {
+            for (Segment* segment = firstSegment(SegmentType::ChordRest); segment; segment = segment->next1(SegmentType::ChordRest)) {
                   interval = staff->part()->instrument(segment->tick())->transpose();
                   if (!flag)
                         interval.flip();
@@ -2814,9 +2805,9 @@ void Score::selectRange(Element* e, int staffIdx)
                         if (tick < oetick) {
                               startSegment = m->tick2segment(tick);
                               if (etick <= oetick)
-                                    endSegment = cr->nextSegmentAfterCR(Segment::Type::ChordRest
-                                                                                    | Segment::Type::EndBarLine
-                                                                                    | Segment::Type::Clef);
+                                    endSegment = cr->nextSegmentAfterCR(SegmentType::ChordRest
+                                                                                    | SegmentType::EndBarLine
+                                                                                    | SegmentType::Clef);
 
                               }
                         int staffStart = staffIdx;
@@ -2850,9 +2841,9 @@ void Score::selectRange(Element* e, int staffIdx)
                   if (_selection.isList())
                         deselectAll();
                   _selection.setRange(cr->segment(),
-                                      cr->nextSegmentAfterCR(Segment::Type::ChordRest
-                                                             | Segment::Type::EndBarLine
-                                                             | Segment::Type::Clef),
+                                      cr->nextSegmentAfterCR(SegmentType::ChordRest
+                                                             | SegmentType::EndBarLine
+                                                             | SegmentType::Clef),
                                       e->staffIdx(),
                                       e->staffIdx() + 1);
                   activeTrack = cr->track();
@@ -3109,9 +3100,9 @@ void Score::lassoSelectEnd()
                   endStaff = idx;
             }
       if (noteRestCount > 0) {
-            endSegment = endCR->nextSegmentAfterCR(Segment::Type::ChordRest
-               | Segment::Type::EndBarLine
-               | Segment::Type::Clef);
+            endSegment = endCR->nextSegmentAfterCR(SegmentType::ChordRest
+               | SegmentType::EndBarLine
+               | SegmentType::Clef);
             _selection.setRange(startSegment, endSegment, startStaff, endStaff+1);
             if (!_selection.isRange())
                   _selection.setState(SelState::RANGE);
@@ -3129,7 +3120,7 @@ void Score::addLyrics(int tick, int staffIdx, const QString& txt)
       if (txt.trimmed().isEmpty())
             return;
       Measure* measure = tick2measure(tick);
-      Segment* seg     = measure->findSegment(Segment::Type::ChordRest, tick);
+      Segment* seg     = measure->findSegment(SegmentType::ChordRest, tick);
       if (seg == 0) {
             qDebug("no segment found for lyrics<%s> at tick %d",
                qPrintable(txt), tick);
@@ -3535,8 +3526,8 @@ ChordRest* Score::findCR(int tick, int track) const
       // attach to first rest all spanner when mmRest
       if (m->isMMRest())
             tick = m->tick();
-      Segment* s = m->first(Segment::Type::ChordRest);
-      for (Segment* ns = s; ; ns = ns->next(Segment::Type::ChordRest)) {
+      Segment* s = m->first(SegmentType::ChordRest);
+      for (Segment* ns = s; ; ns = ns->next(SegmentType::ChordRest)) {
             if (ns == 0 || ns->tick() > tick)
                   break;
             Element* el = ns->element(track);
@@ -3569,13 +3560,13 @@ ChordRest* Score::findCRinStaff(int tick, int staffIdx) const
       // attach to first rest all spanner when mmRest
       if (m->isMMRest())
             ptick = m->tick();
-      Segment* s = m->first(Segment::Type::ChordRest);
+      Segment* s = m->first(SegmentType::ChordRest);
       int strack = staffIdx * VOICES;
       int etrack = strack + VOICES;
       int actualTrack = strack;
 
       int lastTick = -1;
-      for (Segment* ns = s; ; ns = ns->next(Segment::Type::ChordRest)) {
+      for (Segment* ns = s; ; ns = ns->next(SegmentType::ChordRest)) {
             if (ns == 0 || ns->tick() > ptick)
                   break;
             // found a segment; now find longest cr on this staff that does not overlap tick
@@ -3723,7 +3714,7 @@ int Score::nmeasures()
 
 bool Score::hasLyrics()
       {
-      Segment::Type st = Segment::Type::ChordRest;
+      SegmentType st = SegmentType::ChordRest;
       for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             for (int i = 0; i < ntracks(); ++i) {
                   ChordRest* cr = toChordRest(seg->element(i));
@@ -3740,7 +3731,7 @@ bool Score::hasLyrics()
 
 bool Score::hasHarmonies()
       {
-      Segment::Type st = Segment::Type::ChordRest;
+      SegmentType st = SegmentType::ChordRest;
       for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             for (Element* e : seg->annotations()) {
                   if (e->type() == ElementType::HARMONY)
@@ -3757,7 +3748,7 @@ bool Score::hasHarmonies()
 int Score::lyricCount()
       {
       int count = 0;
-      Segment::Type st = Segment::Type::ChordRest;
+      SegmentType st = SegmentType::ChordRest;
       for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             for (int i = 0; i < ntracks(); ++i) {
                   ChordRest* cr = toChordRest(seg->element(i));
@@ -3775,7 +3766,7 @@ int Score::lyricCount()
 int Score::harmonyCount()
       {
       int count = 0;
-      Segment::Type st = Segment::Type::ChordRest;
+      SegmentType st = SegmentType::ChordRest;
       for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             for (Element* e : seg->annotations()) {
                   if (e->type() == ElementType::HARMONY)
@@ -3794,7 +3785,7 @@ QString Score::extractLyrics()
       QString result;
       updateRepeatList(true);
       setPlaylistDirty();
-      Segment::Type st = Segment::Type::ChordRest;
+      SegmentType st = SegmentType::ChordRest;
       for (int track = 0; track < ntracks(); track += VOICES) {
             bool found = false;
             unsigned maxLyrics = 1;
@@ -3905,7 +3896,7 @@ QString Score::createRehearsalMarkText(RehearsalMark* current) const
       int tick = current->segment()->tick();
       RehearsalMark* before = 0;
       RehearsalMark* after = 0;
-      for (Segment* s = firstSegment(); s; s = s->next1()) {
+      for (Segment* s = firstSegment(SegmentType::All); s; s = s->next1()) {
             for (Element* e : s->annotations()) {
                   if (e && e->type() == ElementType::REHEARSAL_MARK) {
                         if (s->tick() < tick)
@@ -4066,8 +4057,8 @@ void Score::changeVoice(int voice)
                               //   then move note in
                               ChordRest* pcr = nullptr;
                               ChordRest* ncr = nullptr;
-                              for (Segment* s2 = m->first(Segment::Type::ChordRest); s2; s2 = s2->next()) {
-                                    if (s2->segmentType() != Segment::Type::ChordRest)
+                              for (Segment* s2 = m->first(SegmentType::ChordRest); s2; s2 = s2->next()) {
+                                    if (s2->segmentType() != SegmentType::ChordRest)
                                           continue;
                                     ChordRest* cr2 = toChordRest(s2->element(dstTrack));
                                     if (!cr2 || cr2->type() == ElementType::REST)
@@ -4092,7 +4083,7 @@ void Score::changeVoice(int voice)
                                     dstChord->setParent(s);
                                     // makeGapVoice will not back-fill an empty voice
                                     if (voice && !dstCR)
-                                          expandVoice(s, /*m->first(Segment::Type::ChordRest,*/ dstTrack);
+                                          expandVoice(s, /*m->first(SegmentType::ChordRest,*/ dstTrack);
                                     makeGapVoice(s, dstTrack, chord->actualFraction(), s->tick());
                                     }
                               }

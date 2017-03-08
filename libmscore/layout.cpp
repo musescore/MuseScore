@@ -1179,7 +1179,7 @@ void Score::layoutSpanner()
       {
       int tracks = ntracks();
       for (int track = 0; track < tracks; ++track) {
-            for (Segment* segment = firstSegment(); segment; segment = segment->next1()) {
+            for (Segment* segment = firstSegment(SegmentType::All); segment; segment = segment->next1()) {
                   if (track == tracks-1) {
                         int n = segment->annotations().size();
                         for (int i = 0; i < n; ++i)
@@ -1245,7 +1245,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                                     if (!mb->isMeasure())
                                           continue;
                                     Measure* m = toMeasure(mb);
-                                    for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
+                                    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                                           for (int voice = 0; voice < VOICES; ++voice) {
                                                 ChordRest* cr = s->cr(st * VOICES + voice);
                                                 if (cr == 0 || cr->isRest())
@@ -1303,7 +1303,7 @@ void Score::connectTies(bool silent)
       Measure* m = firstMeasure();
       if (!m)
             return;
-      Segment::Type st = Segment::Type::ChordRest;
+      SegmentType st = SegmentType::ChordRest;
       for (Segment* s = m->first(st); s; s = s->next1(st)) {
             for (int i = 0; i < tracks; ++i) {
                   Element* e = s->element(i);
@@ -1668,7 +1668,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       Measure* mmr = m->mmRest();
       if (mmr) {
             if (mmr->len() != len) {
-                  Segment* s = mmr->findSegmentR(Segment::Type::EndBarLine, mmr->ticks());
+                  Segment* s = mmr->findSegmentR(SegmentType::EndBarLine, mmr->ticks());
                   mmr->setLen(len);
                   if (s)
                         s->setTick(mmr->endTick());
@@ -1685,9 +1685,9 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       mmr->setMMRestCount(n);
       mmr->setNo(m->no());
 
-      Segment* ss = lm->findSegmentR(Segment::Type::EndBarLine, lm->ticks());
+      Segment* ss = lm->findSegmentR(SegmentType::EndBarLine, lm->ticks());
       if (ss) {
-            Segment* ds = mmr->undoGetSegment(Segment::Type::EndBarLine, lm->endTick());
+            Segment* ds = mmr->undoGetSegment(SegmentType::EndBarLine, lm->endTick());
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                   Element* e = ss->element(staffIdx * VOICES);
                   if (e) {
@@ -1735,7 +1735,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
             }
       for (Element* e : oldList)
             delete e;
-      Segment* s = mmr->undoGetSegmentR(Segment::Type::ChordRest, 0);
+      Segment* s = mmr->undoGetSegmentR(SegmentType::ChordRest, 0);
       for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
             int track = staffIdx * VOICES;
             if (s->element(track) == 0) {
@@ -1751,11 +1751,11 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       //
       // check for clefs
       //
-      Segment* cs = lm->findSegmentR(Segment::Type::Clef, lm->ticks());
-      Segment* ns = mmr->findSegment(Segment::Type::Clef, lm->endTick());
+      Segment* cs = lm->findSegmentR(SegmentType::Clef, lm->ticks());
+      Segment* ns = mmr->findSegment(SegmentType::Clef, lm->endTick());
       if (cs) {
             if (ns == 0)
-                  ns = mmr->undoGetSegmentR(Segment::Type::Clef, lm->ticks());
+                  ns = mmr->undoGetSegmentR(SegmentType::Clef, lm->ticks());
             for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                   int track = staffIdx * VOICES;
                   Clef* clef = toClef(cs->element(track));
@@ -1774,11 +1774,11 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       //
       // check for time signature
       //
-      cs = m->findSegmentR(Segment::Type::TimeSig, 0);
-      ns = mmr->findSegment(Segment::Type::TimeSig, m->tick());
+      cs = m->findSegmentR(SegmentType::TimeSig, 0);
+      ns = mmr->findSegment(SegmentType::TimeSig, m->tick());
       if (cs) {
             if (ns == 0)
-                  ns = mmr->undoGetSegmentR(Segment::Type::TimeSig, 0);
+                  ns = mmr->undoGetSegmentR(SegmentType::TimeSig, 0);
             for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                   int track = staffIdx * VOICES;
                   TimeSig* ts = toTimeSig(cs->element(track));
@@ -1802,11 +1802,11 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       //
       // check for ambitus
       //
-      cs = m->findSegmentR(Segment::Type::Ambitus, 0);
-      ns = mmr->findSegment(Segment::Type::Ambitus, m->tick());
+      cs = m->findSegmentR(SegmentType::Ambitus, 0);
+      ns = mmr->findSegment(SegmentType::Ambitus, m->tick());
       if (cs) {
             if (ns == 0)
-                  ns = mmr->undoGetSegmentR(Segment::Type::Ambitus, 0);
+                  ns = mmr->undoGetSegmentR(SegmentType::Ambitus, 0);
             for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                   int track = staffIdx * VOICES;
                   Ambitus* a = toAmbitus(cs->element(track));
@@ -1830,11 +1830,11 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       //
       // check for key signature
       //
-      cs = m->findSegmentR(Segment::Type::KeySig, 0);
-      ns = mmr->findSegmentR(Segment::Type::KeySig, 0);
+      cs = m->findSegmentR(SegmentType::KeySig, 0);
+      ns = mmr->findSegmentR(SegmentType::KeySig, 0);
       if (cs) {
             if (ns == 0)
-                  ns = mmr->undoGetSegmentR(Segment::Type::KeySig, 0);
+                  ns = mmr->undoGetSegmentR(SegmentType::KeySig, 0);
             for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                   int track = staffIdx * VOICES;
                   KeySig* ts  = toKeySig(cs->element(track));
@@ -1859,7 +1859,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       //
       // check for rehearsal mark etc.
       //
-      cs = m->findSegmentR(Segment::Type::ChordRest, 0);
+      cs = m->findSegmentR(SegmentType::ChordRest, 0);
       if (cs) {
             for (Element* e : cs->annotations()) {
                   if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText()))
@@ -2012,7 +2012,7 @@ static bool breakMultiMeasureRest(Measure* m)
                         continue;
                   if (s->isStartRepeatBarLineType())
                         return true;
-                  if (s->isType(Segment::Type::KeySig | Segment::Type::TimeSig) && m->tick())
+                  if (s->isType(SegmentType::KeySig | SegmentType::TimeSig) && m->tick())
                         return true;
                   if (s->isClefType()) {
                         if (s->tick() != m->endTick() && m->tick())
@@ -2021,7 +2021,7 @@ static bool breakMultiMeasureRest(Measure* m)
                   }
             }
       if (pm) {
-            Segment* s = pm->findSegmentR(Segment::Type::EndBarLine, pm->ticks());
+            Segment* s = pm->findSegmentR(SegmentType::EndBarLine, pm->ticks());
             if (s) {
                   for (int staffIdx = 0; staffIdx < s->score()->nstaves(); ++staffIdx) {
                         BarLine* bl = toBarLine(s->element(staffIdx * VOICES));
@@ -2034,7 +2034,7 @@ static bool breakMultiMeasureRest(Measure* m)
                               }
                         }
                   }
-            if (pm->findSegment(Segment::Type::Clef, m->tick()))
+            if (pm->findSegment(SegmentType::Clef, m->tick()))
                   return true;
             }
       return false;
@@ -2087,7 +2087,7 @@ void Score::createBeams(Measure* measure)
             checkBeats  = false;
             stretch     = ts ? ts->stretch() : 1;
 
-            const Segment::Type st = Segment::Type::ChordRest;
+            const SegmentType st = SegmentType::ChordRest;
             if (ts && ts->denominator() == 4) {
                   checkBeats = true;
                   for (Segment* s = measure->first(st); s; s = s->next(st)) {
@@ -2376,7 +2376,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                               e->layout();
                               }
                         }
-                  else if (segment.isType(Segment::Type::TimeSig | Segment::Type::Ambitus)) {
+                  else if (segment.isType(SegmentType::TimeSig | SegmentType::Ambitus)) {
                         Element* e = segment.element(staffIdx * VOICES);
                         if (e)
                               e->layout();
@@ -2471,10 +2471,10 @@ void Score::getNextMeasure(LayoutContext& lc)
             sigmap()->add(lc.tick, SigEvent(lc.sig, measure->timesig(), measure->no()));
             }
 
-      Segment* seg = measure->findSegmentR(Segment::Type::StartRepeatBarLine, 0);
+      Segment* seg = measure->findSegmentR(SegmentType::StartRepeatBarLine, 0);
       if (measure->repeatStart()) {
             if (!seg)
-                  seg = measure->getSegmentR(Segment::Type::StartRepeatBarLine, 0);
+                  seg = measure->getSegmentR(SegmentType::StartRepeatBarLine, 0);
             measure->barLinesSetSpan(seg);      // this also creates necessary barlines
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                   BarLine* b = toBarLine(seg->element(staffIdx * VOICES));
@@ -2697,7 +2697,7 @@ static void applyLyricsMin(Measure* m, int staffIdx, qreal yMin)
 
 static void restoreBeams(Measure* m)
       {
-      for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
+      for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
             for (Element* e : s->elist()) {
                   if (e && e->isChordRest()) {
                         ChordRest* cr = toChordRest(e);
@@ -2740,7 +2740,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         system->layoutSystem(minWidth);
                         minWidth += system->leftMargin();
                         if (m->repeatStart()) {
-                              Segment* s = m->findSegmentR(Segment::Type::StartRepeatBarLine, 0);
+                              Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, 0);
                               if (!s->enabled())
                                     s->setEnabled(true);
                               }
@@ -2818,7 +2818,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   if (lc.curMeasure->isMeasure()) {
                         Measure* m = toMeasure(lc.curMeasure);
                         if (m->repeatStart()) {
-                              Segment* s = m->findSegmentR(Segment::Type::StartRepeatBarLine, 0);
+                              Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, 0);
                               bool changed = false;
                               if (lc.prevMeasure->repeatEnd()) {
                                     if (s && s->enabled()) {
@@ -3002,7 +3002,7 @@ System* Score::collectSystem(LayoutContext& lc)
             if (stick == -1)
                   stick = mb->tick();
             etick = mb->endTick();
-            Segment::Type st = Segment::Type::ChordRest;
+            SegmentType st = SegmentType::ChordRest;
             Measure* m = toMeasure(mb);
             for (Segment* s = m->first(st); s; s = s->next(st)) {
                   for (Element* e : s->elist()) {
