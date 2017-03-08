@@ -1490,7 +1490,7 @@ Element* Measure::drop(const DropData& data)
                         }
                   else {
                         // if dropped bar line refers to line subtype
-                        score()->undoChangeBarLine(this, bl->barLineType(), false);
+                        score()->undoChangeBarLine(this, bl->barLineType(), Segment::Type::EndBarLine);
                         delete e;
                         }
                   break;
