@@ -343,7 +343,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                   if (element->type() == Element::Type::SLUR || cr1->staffIdx() == cr2->staffIdx())
                         addSingle = true;
                   }
-            if (viewer->mscoreState() == STATE_NOTE_ENTRY_DRUM && element->type() == Element::Type::CHORD) {
+            if (viewer->mscoreState() == STATE_NOTE_ENTRY_STAFF_DRUM && element->isChord()) {
                   // use input position rather than selection if possible
                   Element* e = score->inputState().cr();
                   if (!e)
@@ -547,7 +547,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
          && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT
          && viewer->mscoreState() != STATE_TEXT_EDIT) { //Already in startCmd mode in this case
             score->endCmd();
-            if (viewer->mscoreState() == STATE_NOTE_ENTRY_DRUM)
+            if (viewer->mscoreState() == STATE_NOTE_ENTRY_STAFF_DRUM)
                   viewer->moveCursor();
             }
       mscore->endCmd();

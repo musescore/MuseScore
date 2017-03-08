@@ -362,8 +362,11 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       _playNote = true;
       _playChord = true;
       select(note, SelectType::SINGLE, 0);
-      if (!chord->staff()->isTabStaff())
-            _is.moveToNextInputPos();
+      if (!chord->staff()->isTabStaff()) {
+            NoteEntryMethod entryMethod = _is.noteEntryMethod();
+            if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL)
+                  _is.moveToNextInputPos();
+            }
       return note;
       }
 
@@ -947,8 +950,8 @@ void Score::addPitch(int step, bool addFlag)
       pos.staffIdx  = inputState().track() / VOICES;
       ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
       pos.line      = relStep(step, clef);
-      
-      if (inputState().repitchMode())
+
+      if (inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH))
             repitchNote(pos, !addFlag);
       else
             putNote(pos, !addFlag);
@@ -1040,6 +1043,47 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
       }
 
 //---------------------------------------------------------
+//  addTiedMidiPitch
+//---------------------------------------------------------
+
+Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord)
+      {
+      Note* n = addMidiPitch(pitch, addFlag);
+      if (prevChord) {
+            Note* nn = prevChord->findNote(n->pitch());
+            if (nn) {
+                  Tie* tie = new Tie(this);
+                  tie->setStartNote(nn);
+                  tie->setEndNote(n);
+                  tie->setTrack(n->track());
+                  n->setTieBack(tie);
+                  nn->setTieFor(tie);
+                  undoAddElement(tie);
+                  }
+            }
+      return n;
+      }
+
+//---------------------------------------------------------
+//  addMidiPitch
+//---------------------------------------------------------
+
+Note* Score::addMidiPitch(int pitch, bool addFlag)
+      {
+      NoteVal nval(pitch);
+      Staff* st = staff(inputState().track() / VOICES);
+
+      // if transposing, interpret MIDI pitch as representing desired written pitch
+      // set pitch based on corresponding sounding pitch
+      if (!styleB(StyleIdx::concertPitch))
+            nval.pitch += st->part()->instrument(inputState().tick())->transpose().chromatic;
+      // let addPitch calculate tpc values from pitch
+      //Key key   = st->key(inputState().tick());
+      //nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+      return addPitch(nval, addFlag);
+      }
+
+//---------------------------------------------------------
 //   addPitch
 //---------------------------------------------------------
 
@@ -1053,8 +1097,11 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
                   return 0;
                   }
             Note* note = addNote(c, nval);
-            if (_is.lastSegment() == _is.segment())
-                  _is.moveToNextInputPos();
+            if (_is.lastSegment() == _is.segment()) {
+                  NoteEntryMethod entryMethod = _is.noteEntryMethod();
+                  if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL)
+                        _is.moveToNextInputPos();
+                  }
             return note;
             }
       expandVoice();
@@ -1074,8 +1121,12 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
       if (!_is.cr())
             return 0;
       Fraction duration;
-      if (_is.repitchMode()) {
+      if (_is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
             duration = _is.cr()->duration();
+            }
+      else if (_is.usingNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO) || _is.usingNoteEntryMethod(NoteEntryMethod::REALTIME_MANUAL)) {
+            int ticks2measureEnd = _is.segment()->measure()->ticks() - _is.segment()->rtick();
+            duration = _is.duration().ticks() > ticks2measureEnd ? Fraction::fromTicks(ticks2measureEnd) : _is.duration().fraction();
             }
       else {
             duration = _is.duration().fraction();
@@ -1083,7 +1134,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
       Note* note = 0;
       Note* firstTiedNote = 0;
       Note* lastTiedNote = 0;
-      if (_is.repitchMode() && _is.cr()->type() == Element::Type::CHORD) {
+      if (_is.usingNoteEntryMethod(NoteEntryMethod::REPITCH) && _is.cr()->isChord()) {
             // repitch mode for MIDI input (where we are given a pitch) is handled here
             // for keyboard input (where we are given a staff position), there is a separate function Score::repitchNote()
             // the code is similar enough that it could possibly be refactored
@@ -1143,7 +1194,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
                   }
             select(lastTiedNote);
             }
-      else if (!_is.repitchMode()) {
+      else if (!_is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
             Segment* seg = setNoteRest(_is.segment(), track, nval, duration, stemDirection);
             if (seg) {
                   note = static_cast<Chord*>(seg->element(track))->upNote();
@@ -1176,7 +1227,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
                   qDebug("addPitch: cannot find slur note");
             setLayoutAll(true);
             }
-      if (_is.repitchMode()) {
+      if (_is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
             // move cursor to next note, but skip tied notes (they were already repitched above)
             ChordRest* next = lastTiedNote ? nextChordRest(lastTiedNote->chord()) : nextChordRest(_is.cr());
             while (next && next->type() != Element::Type::CHORD)
@@ -1184,8 +1235,11 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
             if (next)
                   _is.moveInputPos(next->segment());
             }
-      else
-            _is.moveToNextInputPos();
+      else {
+            NoteEntryMethod entryMethod = _is.noteEntryMethod();
+            if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL)
+                  _is.moveToNextInputPos();
+            }
       return note;
       }
 
@@ -1201,7 +1255,7 @@ void Score::putNote(const QPointF& pos, bool replace)
             qDebug("cannot put note here, get position failed");
             return;
             }
-      if (inputState().repitchMode())
+      if (inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH))
             repitchNote(p, replace);
       else
             putNote(p, replace);
@@ -1415,6 +1469,103 @@ void Score::repitchNote(const Position& p, bool replace)
             next = nextChordRest(next);
       if (next)
             _is.moveInputPos(next->segment());
+      }
+
+//---------------------------------------------------------
+//   regroupNotesAndRests
+//    * combine consecutive rests into fewer rests of longer duration.
+//    * combine tied notes/chords into fewer notes of longer duration.
+//    Only operates on one voice - protects manual layout adjustment, etc.
+//---------------------------------------------------------
+
+void Score::regroupNotesAndRests(int startTick, int endTick, int track)
+      {
+      Segment* inputSegment = _is.segment(); // store this so we can get back to it later.
+      Segment* seg = tick2segment(startTick, true, Segment::Type::ChordRest);
+      for (Measure* msr = seg->measure(); msr && msr->tick() < endTick; msr = msr->nextMeasure()) {
+            int maxTick = endTick > msr->endTick() ? msr->endTick() : endTick;
+            if (!seg || seg->measure() != msr)
+                  seg = msr->first(Segment::Type::ChordRest);
+            for (; seg; seg = seg->next(Segment::Type::ChordRest)) {
+                  ChordRest* curr = seg->cr(track);
+                  if (!curr)
+                        continue; // this voice is empty here (CR overlaps with CR in other track)
+                  if (seg->tick() + curr->actualTicks() > maxTick)
+                        break; // outside range
+                  if (curr->isRest()) {
+                        // combine consecutive rests
+                        ChordRest* lastRest = curr;
+                        for (Segment* s = seg->next(Segment::Type::ChordRest); s ; s = s->next(Segment::Type::ChordRest)) {
+                              ChordRest* cr = s->cr(track);
+                              if (!cr)
+                                    continue;  // this voice is empty here
+                              if (!cr->isRest() || s->tick() + cr->actualTicks() > maxTick)
+                                    break;
+                              lastRest = cr;
+                              }
+                        int restTicks = lastRest->tick() + lastRest->duration().ticks() - curr->tick();
+                        seg = setNoteRest(seg, curr->track(), NoteVal(), Fraction::fromTicks(restTicks), MScore::Direction::AUTO, true);
+                        }
+                  else {
+                        // combine tied chords
+                        Chord* chord = static_cast<Chord*>(curr);
+                        Chord* lastTiedChord = chord;
+                        for (Chord* next = chord->nextTiedChord(); next && next->tick() + next->duration().ticks() <= maxTick; next = next->nextTiedChord()) {
+                              lastTiedChord = next;
+                              }
+                        if (!lastTiedChord)
+                              lastTiedChord = chord;
+                        int numNotes = chord->notes().size();
+                        int pitches[numNotes];
+                        Tie* tieBack[numNotes];
+                        Tie* tieFor[numNotes];
+                        for (int i = 0; i < numNotes; i++) {
+                              Note* n = chord->notes()[i];
+                              Note* nn = lastTiedChord->notes()[i];
+                              pitches[i] = n->pitch();
+                              tieBack[i] = n->tieBack();
+                              tieFor[i] = nn->tieFor();
+                              n->setTieBack(0);
+                              nn->setTieFor(0);
+                              }
+                        int noteTicks = lastTiedChord->tick() + lastTiedChord->duration().ticks() - chord->tick();
+                        Segment* newSeg = setNoteRest(seg, curr->track(), NoteVal(pitches[0]), Fraction::fromTicks(noteTicks), MScore::Direction::AUTO, true);
+                        for (seg = seg->prev1()->next1(Segment::Type::ChordRest);;seg = seg->next1(Segment::Type::ChordRest)) {
+                              ChordRest* cr = seg->cr(track);
+                              if (!cr)
+                                    continue; // voice is empty here
+                              Chord* newChord = static_cast<Chord*>(cr);
+                              Note* n = newChord->notes().front();
+                              undoRemoveElement(n);
+                              for (int i = 0; i < numNotes; i++) {
+                                    NoteVal nval = NoteVal(pitches[i]);
+                                    n = addNote(newChord, nval);
+                                    if (tieBack[i]) {
+                                          n->setTieBack(tieBack[i]);
+                                          tieBack[i]->setEndNote(n);
+                                          tieBack[i] = 0;
+                                          }
+                                    if (seg != newSeg) {
+                                          Tie* tie = new Tie(this);
+                                          n->setTieFor(tie);
+                                          tie->setStartNote(n);
+                                          tie->setEndNote(n);
+                                          tie->setTrack(n->track());
+                                          tieBack[i] = tie;
+                                          }
+                                    else if (tieFor[i]) {
+                                          n->setTieFor(tieFor[i]);
+                                          tieFor[i]->setStartNote(n);
+                                          }
+                                    }
+                              if (seg == newSeg)
+                                    break;
+                              }
+                        }
+                  }
+            }
+      // now put the input state back where it was before
+      _is.setSegment(inputSegment);
       }
 
 //---------------------------------------------------------
@@ -2704,7 +2855,8 @@ void Score::cmdEnterRest(const TDuration& d)
       NoteVal nval;
       setNoteRest(_is.segment(), track, nval, d.fraction(), MScore::Direction::AUTO);
       _is.moveToNextInputPos();
-      _is.setRest(false);  // continue with normal note entry
+      if (!noteEntryMode() || usingNoteEntryMethod(NoteEntryMethod::STEPTIME))
+            _is.setRest(false);  // continue with normal note entry
       endCmd();
       }
 

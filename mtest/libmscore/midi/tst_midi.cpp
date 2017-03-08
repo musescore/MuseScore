@@ -71,6 +71,10 @@ void TestMidi::initTestCase()
 void TestMidi::events_data()
       {
       QTest::addColumn<QString>("file");
+      // Test Metronome
+      QTest::newRow("testMetronomeSimple") <<  "testMetronomeSimple";
+      QTest::newRow("testMetronomeCompound") <<  "testMetronomeCompound";
+      QTest::newRow("testMetronomeAnacrusis") <<  "testMetronomeAnacrusis";
       // Test Eighth Swing
       QTest::newRow("testSwing8thSimple") <<  "testSwing8thSimple";
       QTest::newRow("testSwing8thTies") <<  "testSwing8thTies";

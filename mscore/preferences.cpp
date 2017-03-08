@@ -31,7 +31,11 @@
 #include "scoreview.h"
 #include "libmscore/sym.h"
 #include "pa.h"
+
+#ifdef USE_PORTMIDI
 #include "pm.h"
+#endif
+
 #include "libmscore/page.h"
 #include "file.h"
 #include "libmscore/mscore.h"
@@ -77,6 +81,7 @@ void Preferences::init()
       iconWidth          = 28;
 
       enableMidiInput    = true;
+      realtimeDelay      = 750; // ms
       playNotes          = true;
       playChordOnAddNote = true;
 
@@ -124,6 +129,7 @@ void Preferences::init()
       useMidiRemote      = false;
       for (int i = 0; i < MIDI_REMOTES; ++i)
             midiRemote[i].type = MIDI_REMOTE_TYPE_INACTIVE;
+      advanceOnRelease   = true;
 
       midiExpandRepeats        = true;
       midiExportRPNs           = false;
@@ -226,6 +232,7 @@ void Preferences::write()
       s.setValue("defaultColor",       MScore::defaultColor.name(QColor::NameFormat::HexArgb));
       s.setValue("pianoHlColor",       pianoHlColor.name(QColor::NameFormat::HexArgb));
       s.setValue("enableMidiInput",    enableMidiInput);
+      s.setValue("realtimeDelay",      realtimeDelay);
       s.setValue("playNotes",          playNotes);
       s.setValue("playChordOnAddNote", playChordOnAddNote);
 
@@ -343,6 +350,7 @@ void Preferences::write()
                      QString("%1%2").arg(t).arg(midiRemote[i].data));
                   }
             }
+      s.setValue("advanceOnRelease", advanceOnRelease);
 
       writePluginList();
       if (Shortcut::dirty)
@@ -392,6 +400,7 @@ void Preferences::read()
       pianoHlColor            = readColor("pianoHlColor", pianoHlColor);
 
       enableMidiInput         = s.value("enableMidiInput", enableMidiInput).toBool();
+      realtimeDelay           = s.value("realtimeDelay", realtimeDelay).toInt();
       playNotes               = s.value("playNotes", playNotes).toBool();
       playChordOnAddNote      = s.value("playChordOnAddNote", playChordOnAddNote).toBool();
 
@@ -530,6 +539,7 @@ void Preferences::read()
                         }
                   }
             }
+      advanceOnRelease  = s.value("advanceOnRelease", advanceOnRelease).toBool();
 
 //      s.beginGroup("PlayPanel");
 //      playPanelPos = s.value("pos", playPanelPos).toPoint();
@@ -705,6 +715,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       recordButtons->addButton(rcr12,        RMIDI_TIE);
       recordButtons->addButton(recordUndo,   RMIDI_UNDO);
       recordButtons->addButton(recordEditMode, RMIDI_NOTE_EDIT_MODE);
+      recordButtons->addButton(recordRealtimeAdvance, RMIDI_REALTIME_ADVANCE);
 
       restartWarningLanguage->setText("");
       connect(language, SIGNAL(currentIndexChanged(int)), SLOT(languageChanged(int)));
@@ -800,6 +811,7 @@ void PreferenceDialog::updateRemote()
       rca12->setChecked(preferences.midiRemote[RMIDI_TIE].type        != -1);
       recordUndoActive->setChecked(preferences.midiRemote[RMIDI_UNDO].type != -1);
       editModeActive->setChecked(preferences.midiRemote[RMIDI_NOTE_EDIT_MODE].type != -1);
+      realtimeAdvanceActive->setChecked(preferences.midiRemote[RMIDI_REALTIME_ADVANCE].type != -1);
 
       int id = mscore->midiRecordId();
       recordRewind->setChecked(id == RMIDI_REWIND);
@@ -819,6 +831,7 @@ void PreferenceDialog::updateRemote()
       rcr12->setChecked(id      == RMIDI_TIE);
       recordUndo->setChecked(id == RMIDI_UNDO);
       recordEditMode->setChecked(id == RMIDI_NOTE_EDIT_MODE);
+      recordRealtimeAdvance->setChecked(id == RMIDI_REALTIME_ADVANCE);
       }
 
 //---------------------------------------------------------
@@ -828,6 +841,8 @@ void PreferenceDialog::updateRemote()
 void PreferenceDialog::updateValues()
       {
       rcGroup->setChecked(prefs.useMidiRemote);
+      advanceOnRelease->setChecked(prefs.advanceOnRelease);
+
       fgWallpaper->setText(prefs.fgWallpaper);
       bgWallpaper->setText(prefs.bgWallpaper);
 
@@ -856,6 +871,7 @@ void PreferenceDialog::updateValues()
       iconHeight->setValue(prefs.iconHeight);
 
       enableMidiInput->setChecked(prefs.enableMidiInput);
+      realtimeDelay->setValue(prefs.realtimeDelay);
       playNotes->setChecked(prefs.playNotes);
       playChordOnAddNote->setChecked(prefs.playChordOnAddNote);
 
@@ -1333,6 +1349,7 @@ void PreferenceDialog::apply()
       prefs.useMidiRemote  = rcGroup->isChecked();
       for (int i = 0; i < MIDI_REMOTES; ++i)
             prefs.midiRemote[i] = preferences.midiRemote[i];
+      prefs.advanceOnRelease = advanceOnRelease->isChecked();
       prefs.fgWallpaper    = fgWallpaper->text();
       prefs.bgWallpaper    = bgWallpaper->text();
       prefs.fgColor        = fgColorLabel->color();
@@ -1344,6 +1361,7 @@ void PreferenceDialog::apply()
       prefs.bgUseColor     = bgColorButton->isChecked();
       prefs.fgUseColor     = fgColorButton->isChecked();
       prefs.enableMidiInput = enableMidiInput->isChecked();
+      prefs.realtimeDelay   = realtimeDelay->value();
       prefs.playNotes      = playNotes->isChecked();
       prefs.playChordOnAddNote = playChordOnAddNote->isChecked();
 

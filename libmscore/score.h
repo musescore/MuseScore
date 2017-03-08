@@ -94,6 +94,7 @@ struct PageContext;
 struct TEvent;
 
 enum class ClefType : signed char;
+enum class BeatType : char;
 enum class SymId;
 enum class Key;
 
@@ -335,7 +336,8 @@ class Score : public QObject, public ScoreElement {
 
       UndoStack* _undo;
 
-      QQueue<MidiInputEvent> midiInputQueue;
+      QQueue<MidiInputEvent> _midiInputQueue;         // MIDI events that have yet to be processed
+      std::list<MidiInputEvent> _activeMidiPitches;   // MIDI keys currently being held down
       QList<MidiMapping> _midiMapping;
 
       RepeatList* _repeatList;
@@ -525,6 +527,7 @@ class Score : public QObject, public ScoreElement {
       void cmdAddHairpin(bool);
       void cmdAddOttava(Ottava::Type);
       void cmdAddStretch(qreal);
+      void cmdResetNoteAndRestGroupings();
 
       void addRemoveBreaks(int interval, bool lock);
 
@@ -596,7 +599,7 @@ class Score : public QObject, public ScoreElement {
 
       void setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
-      Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, MScore::Direction stemDirection = MScore::Direction::AUTO);
+      Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, MScore::Direction stemDirection = MScore::Direction::AUTO, bool rhythmic = false);
       void changeCRlen(ChordRest* cr, const TDuration&);
 
       Fraction makeGap(Segment*, int track, const Fraction&, Tuplet*, bool keepChord = false);
@@ -623,6 +626,8 @@ class Score : public QObject, public ScoreElement {
 
       Note* addPitch(NoteVal&, bool addFlag);
       void addPitch(int pitch, bool addFlag);
+      Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord);
+      Note* addMidiPitch(int pitch, bool addFlag);
       Note* addNote(Chord*, NoteVal& noteVal);
 
       NoteVal noteValForPosition(Position pos, bool &error);
@@ -635,6 +640,7 @@ class Score : public QObject, public ScoreElement {
       void putNote(const QPointF& pos, bool replace);
       void putNote(const Position& pos, bool replace);
       void repitchNote(const Position& pos, bool replace);
+      void regroupNotesAndRests(int startTick, int endTick, int track);
       void cmdAddPitch(int pitch, bool addFlag);
 
       //@ to be used at least once by plugins of type "dialog" before score modifications to make them undoable
@@ -777,6 +783,9 @@ class Score : public QObject, public ScoreElement {
 
       bool noteEntryMode() const               { return inputState().noteEntryMode(); }
       void setNoteEntryMode(bool val)          { inputState().setNoteEntryMode(val); }
+      NoteEntryMethod noteEntryMethod() const         { return inputState().noteEntryMethod();        }
+      void setNoteEntryMethod(NoteEntryMethod m)      { inputState().setNoteEntryMethod(m);           }
+      bool usingNoteEntryMethod(NoteEntryMethod m)    { return inputState().usingNoteEntryMethod(m);  }
       int inputPos() const;
       int inputTrack() const                   { return inputState().track(); }
       const InputState& inputState() const     { return _is;                  }
@@ -792,7 +801,9 @@ class Score : public QObject, public ScoreElement {
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
       void renderSpanners(EventMap* events, int staffIdx);
-      int renderMetronome(EventMap* events, Measure* m, int playPos, int tickOffset, bool countIn);
+      void renderMetronome(EventMap* events, Measure* m, int tickOffset);
+
+      BeatType tick2beatType(int tick);
 
       int mscVersion() const    { return _mscVersion; }
       void setMscVersion(int v) { _mscVersion = v; }
@@ -804,6 +815,8 @@ class Score : public QObject, public ScoreElement {
 
       int midiPort(int idx) const;
       int midiChannel(int idx) const;
+      inline QQueue<MidiInputEvent>* midiInputQueue()       { return &_midiInputQueue;    }
+      inline std::list<MidiInputEvent>* activeMidiPitches() { return &_activeMidiPitches; }
       QList<MidiMapping>* midiMapping()       { return &_midiMapping;          }
       MidiMapping* midiMapping(int channel)   { return &_midiMapping[channel]; }
       void rebuildMidiMapping();
@@ -916,7 +929,7 @@ class Score : public QObject, public ScoreElement {
       bool showOmr() const                     { return _showOmr; }
       void setShowOmr(bool v)                  { _showOmr = v;    }
       void removeAudio();
-      void enqueueMidiEvent(MidiInputEvent ev) { midiInputQueue.enqueue(ev); }
+      void enqueueMidiEvent(MidiInputEvent ev) { midiInputQueue()->enqueue(ev); }
 
       //@ ??
       Q_INVOKABLE void doLayout();

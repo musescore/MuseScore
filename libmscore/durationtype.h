@@ -18,6 +18,9 @@
 
 namespace Ms {
 
+class TimeSigFrac;
+enum class BeatType : char;
+
 //---------------------------------------------------------
 //   TDuration
 //---------------------------------------------------------
@@ -32,10 +35,13 @@ class TDuration {
    private:
       DurationType _val;
       char _dots;
+      void shiftType(int v);
+      void truncateToFraction(const Fraction& l, int maxDots);
+      bool setDotsToFitFraction(const Fraction& l, int maxDots);
 
    public:
       TDuration() : _val(DurationType::V_INVALID), _dots(0) {}
-      TDuration(const Fraction&);
+      TDuration(const Fraction& l, bool truncate = false, int maxDots = 4, DurationType maxType = DurationType::V_LONG);
       TDuration(const QString&);
       TDuration(DurationType t) : _val(t), _dots(0) {}
 
@@ -63,17 +69,22 @@ class TDuration {
       NoteHead::Type headType() const;
       int hooks() const;
       bool hasStem() const;
-      TDuration shift(int val) const;
+      TDuration shift(int val) const                { TDuration d(type()) ; d.shiftType(val); return d; } // dots are not retained
       int dots() const    { return _dots; }
       void setDots(int v);
       Fraction fraction() const;
       QString durationTypeUserName() const;
       };
 
-extern QList<TDuration> toDurationList(
-            Fraction, bool useDots, int maxDots = 2, bool printRestRemains = true);
+QList<TDuration> toDurationList(Fraction l, bool useDots, int maxDots = 4, bool printRestRemains = true);
+QList<TDuration> toRhythmicDurationList(const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, Measure* msr, int maxDots);
 
+bool forceRhythmicSplit(bool isRest, BeatType startBeat, BeatType endBeat, int beatsCrossed, BeatType strongestBeatCrossed, const TimeSigFrac& nominal);
+bool forceRhythmicSplitSimple(bool isRest, BeatType startBeat, BeatType endBeat, int beatsCrossed, BeatType strongestBeatCrossed);
+bool forceRhythmicSplitCompound(bool isRest, BeatType startBeat, BeatType endBeat, int beatsCrossed, BeatType strongestBeatCrossed);
 
+void populateRhythmicList(QList<TDuration>* dList, const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, int maxDots);
+void splitCompoundBeatsForList(QList<TDuration> *dList, const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, int maxDots);
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::TDuration)

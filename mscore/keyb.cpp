@@ -319,13 +319,13 @@ void MuseScore::updateInputState(Score* score)
             Staff* staff = score->staff(is.track() / VOICES);
             switch (staff->staffType()->group()) {
                   case StaffGroup::STANDARD:
-                        changeState(STATE_NOTE_ENTRY_PITCHED);
+                        changeState(STATE_NOTE_ENTRY_STAFF_PITCHED);
                         break;
                   case StaffGroup::TAB:
-                        changeState(STATE_NOTE_ENTRY_TAB);
+                        changeState(STATE_NOTE_ENTRY_STAFF_TAB);
                         break;
                   case StaffGroup::PERCUSSION:
-                        changeState(STATE_NOTE_ENTRY_DRUM);
+                        changeState(STATE_NOTE_ENTRY_STAFF_DRUM);
                         break;
                   }
             }
@@ -380,7 +380,6 @@ void MuseScore::updateInputState(Score* score)
       getAction("no-beam")->setChecked(is.beamMode()    == Beam::Mode::NONE);
       getAction("beam32")->setChecked(is.beamMode()     == Beam::Mode::BEGIN32);
       getAction("auto-beam")->setChecked(is.beamMode()  == Beam::Mode::AUTO);
-      getAction("repitch")->setChecked(is.repitchMode());
       }
 }
 
