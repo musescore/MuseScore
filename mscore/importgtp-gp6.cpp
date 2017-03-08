@@ -1211,14 +1211,14 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 if (ottavaFound.at(track)) {
                                                       createOttava(true, track, cr, ottavaValue.at(track));
                                                       int pitch = note->pitch();
-                                                      Ottava::Type type = ottava.at(track)->ottavaType();
-                                                      if (type == Ottava::Type::OTTAVA_8VA)
+                                                      OttavaType type = ottava.at(track)->ottavaType();
+                                                      if (type == OttavaType::OTTAVA_8VA)
                                                             note->setPitch(pitch-12);
-                                                      else if (type == Ottava::Type::OTTAVA_8VB)
+                                                      else if (type == OttavaType::OTTAVA_8VB)
                                                             note->setPitch(pitch+12);
-                                                      else if (type == Ottava::Type::OTTAVA_15MA)
+                                                      else if (type == OttavaType::OTTAVA_15MA)
                                                             note->setPitch(pitch-24);
-                                                      else if (type == Ottava::Type::OTTAVA_15MB)
+                                                      else if (type == OttavaType::OTTAVA_15MB)
                                                             note->setPitch(pitch+24);
                                                       }
 

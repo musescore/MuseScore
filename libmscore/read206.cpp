@@ -44,6 +44,7 @@
 #include "volta.h"
 #include "pedal.h"
 #include "hairpin.h"
+#include "ottava.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -1051,7 +1052,7 @@ static void readOttava(XmlReader& e, Ottava* ottava)
                   bool ok;
                   int idx = s.toInt(&ok);
                   if (!ok) {
-                        idx = 0;    // Ottava::Type::OTTAVA_8VA;
+                        idx = 0;    // OttavaType::OTTAVA_8VA;
                         int i = 0;
                         for (auto p :  { "8va","8vb","15ma","15mb","22ma","22mb" } ) {
                               if (p == s) {
@@ -1061,7 +1062,7 @@ static void readOttava(XmlReader& e, Ottava* ottava)
                               ++i;
                               }
                         }
-                  ottava->setOttavaType(Ottava::Type(idx));
+                  ottava->setOttavaType(OttavaType(idx));
                   }
             else if (tag == "numbersOnly") {
                   ottava->setNumbersOnly(e.readBool());

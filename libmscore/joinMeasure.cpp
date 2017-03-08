@@ -14,6 +14,7 @@
 #include "measure.h"
 #include "undo.h"
 #include "range.h"
+#include "spanner.h"
 
 namespace Ms {
 

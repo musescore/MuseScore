@@ -18,6 +18,7 @@
 #include "libmscore/part.h"
 #include "libmscore/key.h"
 #include "libmscore/icon.h"
+#include "libmscore/staff.h"
 #include "musescore.h"
 
 namespace Ms {

@@ -23,11 +23,9 @@
 #include "select.h"
 #include "synthesizerstate.h"
 #include "mscoreview.h"
-#include "ottava.h"
 #include "spannermap.h"
-#include "rehearsalmark.h"
-#include "tremolo.h"
 #include "layoutbreak.h"
+#include "property.h"
 
 namespace Ms {
 
@@ -97,6 +95,7 @@ enum class SymId;
 enum class Key;
 enum class HairpinType : char;
 enum class SegmentType;
+enum class OttavaType : char;
 
 extern bool showRubberBand;
 
@@ -569,7 +568,7 @@ class Score : public QObject, ScoreElement {
 
       void cmdRemovePart(Part*);
       void cmdAddTie();
-      void cmdAddOttava(Ottava::Type);
+      void cmdAddOttava(OttavaType);
       void cmdAddStretch(qreal);
       void cmdResetNoteAndRestGroupings();
 
