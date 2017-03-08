@@ -397,11 +397,13 @@ void TestBarline::barline179726()
       m = m->nextMeasure();
 
       // drop NORMAL onto the END_REPEAT part of an END_START_REPEAT straddling a newline will turn into NORMAL at the end of this meas
-      // but note I'm not verifying what happens to the START_REPEAT at the beginning of the newline...I'm not sure that behavior is well-defined yet
       dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
       QVERIFY(static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0))->barLineType() == BarLineType::NORMAL);
 
       m = m->nextMeasure();
+
+      // but leave START_REPEAT at the beginning of the newline
+      QVERIFY(static_cast<BarLine*>(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0)));
 
       // drop NORMAL onto the meas ending with an END_START_REPEAT straddling a newline will turn into NORMAL at the end of this meas
       // but note I'm not verifying what happens to the START_REPEAT at the beginning of the newline...I'm not sure that behavior is well-defined yet
@@ -412,9 +414,11 @@ void TestBarline::barline179726()
       m = m->nextMeasure();
 
       // drop NORMAL onto the START_REPEAT part of an END_START_REPEAT straddling a newline will remove the START_REPEAT at the beginning of this measure
-      // but note I'm not verifying what happens to the END_REPEAT at the end of previous line...I'm not sure that behavior is well-defined yet
       dropNormalBarline(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0));
       QVERIFY(m->findSegment(SegmentType::StartRepeatBarLine, m->tick()) == NULL);
+
+      // but leave END_REPEAT at the end of previous line
+      QVERIFY(static_cast<BarLine*>(m->prevMeasure()->findSegment(SegmentType::EndBarLine, m->tick())->elementAt(0))->barLineType() == BarLineType::END_REPEAT);
 
       for (int i = 0; i < 4; i++, m = m->nextMeasure()) {
             // drop NORMAL onto END_REPEAT, BROKEN, DOTTED, DOUBLE at the end of this meas will turn into NORMAL
