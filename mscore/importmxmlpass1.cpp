@@ -28,6 +28,7 @@
 #include "libmscore/symbol.h"
 #include "libmscore/timesig.h"
 #include "libmscore/style.h"
+#include "libmscore/spanner.h"
 
 #include "importmxmlpass1.h"
 #include "importmxmlpass2.h"

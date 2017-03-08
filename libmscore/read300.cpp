@@ -22,6 +22,7 @@
 #include "sig.h"
 #include "barline.h"
 #include "excerpt.h"
+#include "spanner.h"
 
 #ifdef OMR
 #include "omr/omr.h"

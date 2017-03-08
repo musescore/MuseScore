@@ -3391,24 +3391,24 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
       directionTag(xml, attr, ot);
       xml.stag("direction-type");
 
-      Ottava::Type st = ot->ottavaType();
+      OttavaType st = ot->ottavaType();
       if (ot->tick() == tick) {
             const char* sz = 0;
             const char* tp = 0;
             switch (st) {
-                  case Ottava::Type::OTTAVA_8VA:
+                  case OttavaType::OTTAVA_8VA:
                         sz = "8";
                         tp = "down";
                         break;
-                  case Ottava::Type::OTTAVA_15MA:
+                  case OttavaType::OTTAVA_15MA:
                         sz = "15";
                         tp = "down";
                         break;
-                  case Ottava::Type::OTTAVA_8VB:
+                  case OttavaType::OTTAVA_8VB:
                         sz = "8";
                         tp = "up";
                         break;
-                  case Ottava::Type::OTTAVA_15MB:
+                  case OttavaType::OTTAVA_15MB:
                         sz = "15";
                         tp = "up";
                         break;
@@ -3419,9 +3419,9 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
                   xml.tagE(QString("octave-shift type=\"%1\" size=\"%2\" number=\"%3\"").arg(tp).arg(sz).arg(n + 1));
             }
       else {
-            if (st == Ottava::Type::OTTAVA_8VA || st == Ottava::Type::OTTAVA_8VB)
+            if (st == OttavaType::OTTAVA_8VA || st == OttavaType::OTTAVA_8VB)
                   xml.tagE(QString("octave-shift type=\"stop\" size=\"8\" number=\"%1\"").arg(n + 1));
-            else if (st == Ottava::Type::OTTAVA_15MA || st == Ottava::Type::OTTAVA_15MB)
+            else if (st == OttavaType::OTTAVA_15MA || st == OttavaType::OTTAVA_15MB)
                   xml.tagE(QString("octave-shift type=\"stop\" size=\"15\" number=\"%1\"").arg(n + 1));
             else
                   qDebug("ottava subtype %hhd not understood", st);

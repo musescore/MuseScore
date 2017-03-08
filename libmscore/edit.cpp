@@ -48,6 +48,7 @@
 #include "repeat.h"
 #include "textframe.h"
 #include "accidental.h"
+#include "ottava.h"
 
 namespace Ms {
 
@@ -1151,7 +1152,7 @@ void Score::cmdAddTie()
 //   cmdAddOttava
 //---------------------------------------------------------
 
-void Score::cmdAddOttava(Ottava::Type type)
+void Score::cmdAddOttava(OttavaType type)
       {
       Selection sel = selection();
       ChordRest* cr1;
