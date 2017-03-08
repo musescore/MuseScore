@@ -402,6 +402,7 @@ class Score : public QObject, public ScoreElement {
 
       int _fileDivision; ///< division of current loading *.msc file
       int _mscVersion;   ///< version of current loading *.msc file
+      int _mscRealVersion;   ///< version of current loading *.msc file
 
       QMap<int, LinkedElements*> _elinks;
       QMap<QString, QString> _metaTags;
@@ -805,8 +806,9 @@ class Score : public QObject, public ScoreElement {
 
       BeatType tick2beatType(int tick);
 
-      int mscVersion() const    { return _mscVersion; }
-      void setMscVersion(int v) { _mscVersion = v; }
+      int mscVersion() const     { return _mscVersion;     }
+      int mscRealVersion() const { return _mscRealVersion; }
+      void setMscVersion(int v)  { _mscVersion = v;        }
 
       void addLyrics(int tick, int staffIdx, const QString&);
 
