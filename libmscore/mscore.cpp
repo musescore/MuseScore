@@ -76,8 +76,6 @@ bool MScore::useFallbackFont       = true;
 bool  MScore::saveTemplateMode = false;
 bool  MScore::noGui = false;
 
-MStyle  MScore::_baseStyle;
-MStyle  MScore::_defaultStyle;
 MStyle* MScore::_defaultStyleForParts;
 
 QString MScore::_globalShare;
