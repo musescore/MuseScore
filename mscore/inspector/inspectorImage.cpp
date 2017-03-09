@@ -52,8 +52,7 @@ InspectorImage::InspectorImage(QWidget* parent)
             { P_ID::AUTOSCALE,         0, false, b.autoscale,       b.resetAutoscale       },
             { P_ID::SIZE,              0, false, b.sizeWidth,       0                      },
             { P_ID::SIZE,              1, false, b.sizeHeight,      0                      },
-            { P_ID::SCALE,             0, false, b.scaleWidth,      0                      },
-            { P_ID::SCALE,             1, false, b.scaleHeight,     0                      },
+            { P_ID::SCALE,             0, false, b.scale,           b.resetScale           },
             { P_ID::LOCK_ASPECT_RATIO, 0, false, b.lockAspectRatio, b.resetLockAspectRatio },
             { P_ID::SIZE_IS_SPATIUM,   0, false, b.sizeIsSpatium,   b.resetSizeIsSpatium   }
             };
@@ -69,18 +68,13 @@ InspectorImage::InspectorImage(QWidget* parent)
 void InspectorImage::updateScaleFromSize(const QSizeF& sz)
       {
       Image* image = static_cast<Image*>(inspector->element());
-      QSizeF scale;
+      QSizeF val;
       if (image->isValid())
-            scale = image->scaleForSize(sz);
+            val = image->scaleForSize(sz);
 
-      QDoubleSpinBox* b1 = b.scaleWidth;
-      QDoubleSpinBox* b2 = b.scaleHeight;
-      b1->blockSignals(true);
-      b2->blockSignals(true);
-      b1->setValue(scale.width());
-      b2->setValue(scale.height());
-      b1->blockSignals(false);
-      b2->blockSignals(false);
+      b.scale->blockSignals(true);
+      b.scale->setScale(val);
+      b.scale->blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -110,10 +104,9 @@ void InspectorImage::updateSizeFromScale(const QSizeF& scale)
 
 void InspectorImage::valueChanged(int idx)
       {
+#if 0 // TODO
       QDoubleSpinBox* b1 = b.sizeWidth;
       QDoubleSpinBox* b2 = b.sizeHeight;
-      QDoubleSpinBox* b3 = b.scaleWidth;
-      QDoubleSpinBox* b4 = b.scaleHeight;
       Image* image = static_cast<Image*>(inspector->element());
       if (idx == ImageControl::AUTOSCALE) {
             bool v = !b.autoscale->isChecked();
@@ -203,6 +196,7 @@ void InspectorImage::valueChanged(int idx)
             b2->blockSignals(false);
             }
       InspectorElementBase::valueChanged(idx);
+#endif
       }
 
 //---------------------------------------------------------
@@ -225,8 +219,8 @@ void InspectorImage::setElement(Element* e)
       bool v = !image->autoScale();
       b1->setEnabled(v);
       b2->setEnabled(v);
-      iList[SCALE_H].w->setEnabled(v);
-      iList[SCALE_W].w->setEnabled(v);
+//      iList[SCALE_H].w->setEnabled(v);
+//      iList[SCALE_W].w->setEnabled(v);
 
       InspectorElementBase::setElement();
       }

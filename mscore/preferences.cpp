@@ -1951,7 +1951,7 @@ void Preferences::updatePluginList()
 void PreferenceDialog::printShortcutsClicked()
       {
       QPrinter printer(QPrinter::HighResolution);
-      MStyle& s = MScore::defaultStyle();
+      const MStyle& s = MScore::defaultStyle();
       qreal pageW = s.value(StyleIdx::pageWidth).toReal();
       qreal pageH = s.value(StyleIdx::pageHeight).toReal();
       printer.setPaperSize(QSizeF(pageW, pageH), QPrinter::Inch);

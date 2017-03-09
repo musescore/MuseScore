@@ -21,6 +21,7 @@
 #include "icons.h"
 #include "preferences.h"
 #include "offsetSelect.h"
+#include "scaleSelect.h"
 
 namespace Ms {
 
@@ -78,6 +79,8 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
             v = int(static_cast<Ms::AlignSelect*>(w)->align());
       else if (qobject_cast<Ms::OffsetSelect*>(w))
             v = static_cast<Ms::OffsetSelect*>(w)->offset();
+      else if (qobject_cast<Ms::ScaleSelect*>(w))
+            v = static_cast<Ms::ScaleSelect*>(w)->scale();
       else
             qFatal("not supported widget %s", w->metaObject()->className());
 
@@ -203,6 +206,8 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
             static_cast<Ms::AlignSelect*>(w)->setAlign(Align(val.toInt()));
       else if (qobject_cast<Ms::OffsetSelect*>(w))
             static_cast<Ms::OffsetSelect*>(w)->setOffset(val.toPointF());
+      else if (qobject_cast<Ms::ScaleSelect*>(w))
+            static_cast<Ms::ScaleSelect*>(w)->setScale(val.toSizeF());
       else
             qFatal("not supported widget %s", w->metaObject()->className());
       }
@@ -221,7 +226,7 @@ bool InspectorBase::isDefault(const InspectorItem& ii)
       P_TYPE t     = propertyType(id);
       QVariant val = getValue(ii);
       QVariant def = e->propertyDefault(id);
-      if (t == P_TYPE::SIZE || t == P_TYPE::SCALE || t == P_TYPE::SIZE_MM) {
+      if (t == P_TYPE::SIZE || t == P_TYPE::SIZE_MM) {
             QSizeF sz = def.toSizeF();
             qreal v = ii.sv == 0 ? sz.width() : sz.height();
             return val.toDouble() == v;
@@ -265,7 +270,7 @@ void InspectorBase::setElement()
             for (int k = 0; k < ii.parent; ++k)
                   e = e->parent();
             QVariant val = e->getProperty(id);
-            if (pt == P_TYPE::SIZE || pt == P_TYPE::SCALE || pt == P_TYPE::SIZE_MM) {
+            if (pt == P_TYPE::SIZE || pt == P_TYPE::SIZE_MM) {
                   QSizeF sz = val.toSizeF();
                   if (ii.sv == 0)
                         val = QVariant(sz.width());
@@ -308,7 +313,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
             for (Element* e : inspector->el()) {
                   for (int k = 0; k < ii.parent; ++k)
                         e = e->parent();
-                  if (pt == P_TYPE::SIZE || pt == P_TYPE::SCALE || pt == P_TYPE::SIZE_MM) {
+                  if (pt == P_TYPE::SIZE || pt == P_TYPE::SIZE_MM) {
                         QSizeF sz = e->getProperty(id).toSizeF();
                         if (ii.sv == 0)
                               valuesAreDifferent = sz.width() != val.toDouble();
@@ -381,7 +386,7 @@ void InspectorBase::valueChanged(int idx, bool reset)
 
             QVariant val1 = e->getProperty(id);
 
-            if (pt == P_TYPE::SIZE || pt == P_TYPE::SCALE || pt == P_TYPE::SIZE_MM) {
+            if (pt == P_TYPE::SIZE || pt == P_TYPE::SIZE_MM) {
                   qreal v   = val2.toDouble();
                   QSizeF sz = val1.toSizeF();
                   if (ii.sv == 0) {
@@ -551,6 +556,8 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                   connect(w, SIGNAL(alignChanged(Align)), valueMapper, SLOT(map()));
             else if (qobject_cast<Ms::OffsetSelect*>(w))
                   connect(w, SIGNAL(offsetChanged(const QPointF&)), valueMapper, SLOT(map()));
+            else if (qobject_cast<Ms::ScaleSelect*>(w))
+                  connect(w, SIGNAL(scaleChanged(const QSizeF&)), valueMapper, SLOT(map()));
             else
                   qFatal("not supported widget %s", w->metaObject()->className());
             ++i;

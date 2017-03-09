@@ -122,6 +122,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::ambitusMargin,           "ambitusMargin",           Spatium(0.5) },
 
       { StyleIdx::timesigLeftMargin,       "timesigLeftMargin",       Spatium(0.5) },
+      { StyleIdx::timesigScale,            "timesigScale",            QVariant(QSizeF(1.0, 1.0)) },
       { StyleIdx::clefKeyRightMargin,      "clefKeyRightMargin",      Spatium(0.8) },
       { StyleIdx::clefKeyDistance,         "clefKeyDistance",         Spatium(1.0) },   // gould: 1 - 1.25
       { StyleIdx::clefTimesigDistance,     "clefTimesigDistance",     Spatium(1.0) },
@@ -1273,7 +1274,6 @@ MStyle::MStyle()
       _customChordList = false;
       for (const StyleType& t : styleTypes)
             _values[t.idx()] = t.defaultValue();
-      //precomputeValues();
       };
 
 //---------------------------------------------------------
@@ -1537,11 +1537,5 @@ void checkStyles()
             }
       }
 #endif
-
-//---------------------------------------------------------
-//   _defaultStyle
-//---------------------------------------------------------
-
-MStyle  MScore::_defaultStyle;
 
 }
