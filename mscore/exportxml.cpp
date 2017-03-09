@@ -3413,7 +3413,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
                         tp = "up";
                         break;
                   default:
-                        qDebug("ottava subtype %hhd not understood", st);
+                        qDebug("ottava subtype %d not understood", int(st));
                   }
             if (sz && tp)
                   xml.tagE(QString("octave-shift type=\"%1\" size=\"%2\" number=\"%3\"").arg(tp).arg(sz).arg(n + 1));
@@ -3424,7 +3424,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
             else if (st == OttavaType::OTTAVA_15MA || st == OttavaType::OTTAVA_15MB)
                   xml.tagE(QString("octave-shift type=\"stop\" size=\"15\" number=\"%1\"").arg(n + 1));
             else
-                  qDebug("ottava subtype %hhd not understood", st);
+                  qDebug("ottava subtype %d not understood", int(st));
             }
       xml.etag();
       directionETag(xml, staff);
