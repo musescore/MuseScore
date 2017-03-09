@@ -67,7 +67,7 @@ void TestClef::clef2()
       m = m->nextMeasure();
       m = m->nextMeasure();
       TimeSig* ts = new TimeSig(score);
-      ts->setSig(2, 4);
+      ts->setSig(Fraction(2, 4));
       score->cmdAddTimeSig(m, 0, ts, false);
 
       score->doLayout();
