@@ -61,12 +61,13 @@ class TimeSig : public Element {
       Fraction _stretch;      // localSig / globalSig
       Groups _groups;
 
-      QSizeF _scale   { 1.0, 1.0 };
+      QSizeF _scale;
       TimeSigType _timeSigType;
       bool _showCourtesySig;
       bool customText;        // if false, sz and sn are calculated from _sig
       bool _needLayout;
       bool _largeParentheses;
+      PropertyFlags scaleStyle;
 
       void layout1();
 
@@ -91,8 +92,6 @@ class TimeSig : public Element {
 
       Fraction sig() const               { return _sig; }
       void setSig(const Fraction& f, TimeSigType st = TimeSigType::NORMAL);
-      //@ sets the time signature
-      Q_INVOKABLE void setSig(int z, int n, int st = static_cast<int>(TimeSigType::NORMAL)) { setSig(Fraction(z, n), static_cast<TimeSigType>(st)); }
       int numerator() const              { return _sig.numerator(); }
       int denominator() const            { return _sig.denominator(); }
 
@@ -118,12 +117,17 @@ class TimeSig : public Element {
 
       void setLargeParentheses(bool v)    { _largeParentheses = v;    }
 
+      void setScale(const QSizeF& s)      { _scale = s; }
+
+
       void setFrom(const TimeSig*);
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID id) const override;
       virtual StyleIdx getPropertyStyle(P_ID id) const override;
+      virtual void styleChanged() override;
+      virtual PropertyFlags propertyFlags(P_ID id) const override;
 
       bool hasCustomText() const { return customText; }
 
