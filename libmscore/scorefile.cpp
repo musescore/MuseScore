@@ -59,16 +59,16 @@ namespace Ms {
 //   writeMeasure
 //---------------------------------------------------------
 
-static void writeMeasure(XmlWriter& xml, MeasureBase* m, int staffIdx, bool writeSystemElements)
+static void writeMeasure(XmlWriter& xml, MeasureBase* m, int staffIdx, bool writeSystemElements, bool forceTimeSig)
       {
       //
       // special case multi measure rest
       //
       if (m->isMeasure() || staffIdx == 0)
-            m->write(xml, staffIdx, writeSystemElements);
+            m->write(xml, staffIdx, writeSystemElements, forceTimeSig);
 
       if (m->score()->styleB(StyleIdx::createMultiMeasureRests) && m->isMeasure() && toMeasure(m)->mmRest())
-            toMeasure(m)->mmRest()->write(xml, staffIdx, writeSystemElements);
+            toMeasure(m)->mmRest()->write(xml, staffIdx, writeSystemElements, forceTimeSig);
 
       xml.setCurTick(m->endTick());
       }
@@ -212,8 +212,20 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
                   xml.setTickDiff(xml.curTick());
                   xml.setCurTrack(staffIdx * VOICES);
                   bool writeSystemElements = (staffIdx == staffStart);
-                  for (MeasureBase* m = measureStart; m != measureEnd; m = m->next())
-                        writeMeasure(xml, m, staffIdx, writeSystemElements);
+                  bool firstMeasureWritten = false;
+                  bool forceTimeSig = false;
+                  for (MeasureBase* m = measureStart; m != measureEnd; m = m->next()) {
+                        // force timesig if first measure and selectionOnly
+                        if (selectionOnly && m->isMeasure()) {
+                              if (!firstMeasureWritten) {
+                                    forceTimeSig = true;
+                                    firstMeasureWritten = true;
+                                    }
+                              else
+                                    forceTimeSig = false;
+                              }
+                        writeMeasure(xml, m, staffIdx, writeSystemElements, forceTimeSig);
+                        }
                   xml.etag();
                   }
             }
@@ -1040,7 +1052,7 @@ qDebug("createRevision");
 //---------------------------------------------------------
 
 void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
-   Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick)
+   Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick, bool forceTimeSig)
       {
       int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
       // in clipboard mode, ls might be in an mmrest
@@ -1065,6 +1077,11 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
       for (int track = strack; track < etrack; ++track) {
             if (!xml.canWriteVoice(track))
                   continue;
+
+            bool timeSigWritten = false; // for forceTimeSig
+            bool crWritten = false;      // for forceTimeSig
+            bool keySigWritten = false;  // for forceTimeSig
+
             for (Segment* segment = fs; segment && segment != ls; segment = segment->next1()) {
                   if (!segment->enabled())
                         continue;
@@ -1151,6 +1168,24 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                         continue;
                   if (e->generated())
                         continue;
+                  if (forceTimeSig && track2voice(track) == 0 && segment->segmentType() == SegmentType::ChordRest && !timeSigWritten && !crWritten) {
+                        // we will miss a key sig!
+                        if (!keySigWritten) {
+                              Key k = score()->staff(track2staff(track))->key(segment->tick());
+                              KeySig* ks = new KeySig(this);
+                              ks->setKey(k);
+                              ks->write(xml);
+                              delete ks;
+                              keySigWritten = true;
+                              }
+                        // we will miss a time sig!
+                        Fraction tsf = sigmap()->timesig(segment->tick()).timesig();
+                        TimeSig* ts = new TimeSig(this);
+                        ts->setSig(tsf);
+                        ts->write(xml);
+                        delete ts;
+                        timeSigWritten = true;
+                        }
                   if (needTick) {
                         // xml.tag("tick", segment->tick() - xml.tickDiff);
                         int tick = xml.clipboardmode() ? segment->tick() : segment->rtick();
@@ -1170,6 +1205,14 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
 //                        }
                   e->write(xml);
                   segment->write(xml);    // write only once
+                  if (forceTimeSig) {
+                        if (segment->segmentType() == SegmentType::KeySig)
+                              keySigWritten = true;
+                        if (segment->segmentType() == SegmentType::TimeSig)
+                              timeSigWritten = true;
+                        if (segment->segmentType() == SegmentType::ChordRest)
+                              crWritten = true;
+                        }
                   }
             //write spanner ending after the last segment, on the last tick
             if (clip || ls == 0) {
