@@ -915,7 +915,7 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                         error = read114(e);
                   else
                         */
-                        if (mscVersion() <= 206)
+                  if (mscVersion() <= 206)
                         error = read206(e);
                   else
                         error = read300(e);

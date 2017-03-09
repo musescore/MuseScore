@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>227</width>
-    <height>153</height>
+    <width>294</width>
+    <height>205</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -143,59 +143,6 @@
         <property name="text">
          <string>Scale:</string>
         </property>
-        <property name="buddy">
-         <cstring>scaleWidth</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QDoubleSpinBox" name="scaleWidth">
-        <property name="accessibleName">
-         <string>Scale Width</string>
-        </property>
-        <property name="suffix">
-         <string notr="true">%</string>
-        </property>
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="minimum">
-         <double>0.100000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>10000.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>10.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>100.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="QDoubleSpinBox" name="scaleHeight">
-        <property name="accessibleName">
-         <string>Scale Height</string>
-        </property>
-        <property name="suffix">
-         <string notr="true">%</string>
-        </property>
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="minimum">
-         <double>0.100000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>10000.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>10.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>100.000000000000000</double>
-        </property>
        </widget>
       </item>
       <item row="4" column="3">
@@ -277,19 +224,45 @@
         </property>
        </widget>
       </item>
+      <item row="3" column="1" colspan="2">
+       <widget class="Ms::ScaleSelect" name="scale" native="true"/>
+      </item>
+      <item row="3" column="3">
+       <widget class="QToolButton" name="resetScale">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Lock aspect ratio' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ScaleSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/scaleSelect.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>autoscale</tabstop>
   <tabstop>resetAutoscale</tabstop>
   <tabstop>sizeWidth</tabstop>
   <tabstop>sizeHeight</tabstop>
-  <tabstop>scaleWidth</tabstop>
-  <tabstop>scaleHeight</tabstop>
   <tabstop>lockAspectRatio</tabstop>
   <tabstop>resetLockAspectRatio</tabstop>
   <tabstop>sizeIsSpatium</tabstop>

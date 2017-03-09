@@ -1405,9 +1405,9 @@ void Element::scriptSetUserOff(const QPointF& o)
 //   drawSymbol
 //---------------------------------------------------------
 
-void Element::drawSymbol(SymId id, QPainter* p, const QPointF& o) const
+void Element::drawSymbol(SymId id, QPainter* p, const QPointF& o, qreal scale) const
       {
-      score()->scoreFont()->draw(id, p, magS(), o);
+      score()->scoreFont()->draw(id, p, magS() * scale, o);
       }
 
 void Element::drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const
@@ -1415,9 +1415,14 @@ void Element::drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const
       score()->scoreFont()->draw(id, p, magS(), o, n);
       }
 
-void Element::drawSymbols(const std::vector<SymId>& s, QPainter* p, const QPointF& o) const
+void Element::drawSymbols(const std::vector<SymId>& s, QPainter* p, const QPointF& o, qreal scale) const
       {
-      score()->scoreFont()->draw(s, p, magS(), o);
+      score()->scoreFont()->draw(s, p, magS() * scale, o);
+      }
+
+void Element::drawSymbols(const std::vector<SymId>& s, QPainter* p, const QPointF& o, const QSizeF& scale) const
+      {
+      score()->scoreFont()->draw(s, p, magS() * scale, o);
       }
 
 //---------------------------------------------------------

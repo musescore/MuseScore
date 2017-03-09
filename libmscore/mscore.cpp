@@ -76,8 +76,10 @@ bool MScore::useFallbackFont       = true;
 bool  MScore::saveTemplateMode = false;
 bool  MScore::noGui = false;
 
-MStyle  MScore::_defaultStyleForParts;
 MStyle  MScore::_baseStyle;
+MStyle  MScore::_defaultStyle;
+MStyle* MScore::_defaultStyleForParts;
+
 QString MScore::_globalShare;
 int     MScore::_vRaster;
 int     MScore::_hRaster;
@@ -197,7 +199,6 @@ void Direction::fillComboBox(QComboBox* cb)
       }
 
 static Spatium doubleToSpatium(double d) { return Spatium(d); }
-// static SubStyle intToSubStyle(int i)     { return SubStyle(i); }
 
 //---------------------------------------------------------
 //   init
@@ -209,8 +210,6 @@ void MScore::init()
             qFatal("registerConverter Spatium::toDouble failed");
       if (!QMetaType::registerConverter<double, Spatium>(&doubleToSpatium))
             qFatal("registerConverter doubleToSpatium failed");
-//      if (!QMetaType::registerConverter<int, SubStyle>(&intToSubStyle))
-//            qFatal("registerConverter intToSubStyle failed");
 
 #ifdef SCRIPT_INTERFACE
       qRegisterMetaType<ElementType>     ("ElementType");
@@ -287,6 +286,7 @@ void MScore::init()
       //
       //  initialize styles
       //
+      _baseStyle.precomputeValues();
       QSettings s;
       QString defStyle = s.value("defaultStyle").toString();
       if (!defStyle.isEmpty()) {
@@ -297,15 +297,15 @@ void MScore::init()
                   }
             }
       _defaultStyle.precomputeValues();
-      _baseStyle            = _defaultStyle;
-      _defaultStyleForParts = _defaultStyle;
       QString partStyle = s.value("partStyle").toString();
       if (!partStyle.isEmpty()) {
             QFile f(partStyle);
-            if (f.open(QIODevice::ReadOnly))
-                  _defaultStyleForParts.load(&f);
+            if (f.open(QIODevice::ReadOnly)) {
+                  _defaultStyleForParts = new MStyle(_defaultStyle);
+                  _defaultStyleForParts->load(&f);
+                  _defaultStyleForParts->precomputeValues();
+                  }
             }
-
 
       //
       //  load internal fonts

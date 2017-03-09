@@ -5604,7 +5604,7 @@ SymId Sym::userName2id(const QString& s)
 bool GlyphKey::operator==(const GlyphKey& k) const
       {
       return (face == k.face) && (id == k.id)
-         && (mag == k.mag) && (worldScale == k.worldScale) && (color == k.color);
+         && (magX == k.magX) && (magY == k.magY) && (worldScale == k.worldScale) && (color == k.color);
       }
 
 //---------------------------------------------------------
@@ -5617,7 +5617,18 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos)
       draw(id, painter, mag, pos, worldScale);
       }
 
+void ScoreFont::draw(SymId id, QPainter* painter, const QSizeF& mag, const QPointF& pos) const
+      {
+      qreal worldScale = painter->worldTransform().m11();
+      draw(id, painter, mag, pos, worldScale);
+      }
+
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, qreal worldScale) const
+      {
+      draw(id, painter, QSizeF(mag, mag), pos, worldScale);
+      }
+
+void ScoreFont::draw(SymId id, QPainter* painter, const QSizeF& mag, const QPointF& pos, qreal worldScale) const
       {
       if (!sym(id).symList().empty()) {  // is this a compound symbol?
             draw(sym(id).symList(), painter, mag, pos);
@@ -5652,11 +5663,11 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
                   qreal size = 20.0 * MScore::pixelRatio;
                   font->setPointSize(size);
                   }
-            qreal imag = 1.0 / mag;
-            painter->scale(mag, mag);
+            QSizeF imag = QSizeF(1.0 / mag.width(), 1.0 / mag.height());
+            painter->scale(mag.width(), mag.height());
             painter->setFont(*font);
-            painter->drawText(pos * imag, toString(id));
-            painter->scale(imag, imag);
+            painter->drawText(QPointF(pos.x() * imag.width(), pos.y() * imag.height()), toString(id));
+            painter->scale(imag.width(), imag.height());
             return;
             }
 
@@ -5667,14 +5678,15 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
       worldScale      *= pixelRatio;
 //      if (worldScale < 1.0)
 //            worldScale = 1.0;
-      int scale16      = lrint(worldScale * 6553.6 * mag * DPI_F);
+      int scale16X      = lrint(worldScale * 6553.6 * mag.width() * DPI_F);
+      int scale16Y      = lrint(worldScale * 6553.6 * mag.height() * DPI_F);
 
-      GlyphKey gk(face, id, mag, worldScale, color);
+      GlyphKey gk(face, id, mag.width(), mag.height(), worldScale, color);
       GlyphPixmap* pm = cache->object(gk);
       if (!pm) {
             FT_Matrix matrix {
-                  scale16, 0,
-                  0,       scale16
+                  scale16X, 0,
+                  0,       scale16Y
                   };
 
             FT_Glyph glyph;
@@ -5733,11 +5745,27 @@ void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, cons
             }
       }
 
+void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, const QSizeF& mag, const QPointF& _pos) const
+      {
+      qreal scale = p->worldTransform().m11();
+      draw(ids, p, mag, _pos, scale);
+      }
+
+void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, const QSizeF& mag, const QPointF& _pos, qreal scale) const
+      {
+      QPointF pos(_pos);
+      for (SymId id : ids) {
+            draw(id, p, mag, pos, scale);
+            pos.rx() += (sym(id).advance() * mag.width());
+            }
+      }
+
 void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos) const
       {
       qreal scale = p->worldTransform().m11();
       draw(ids, p, mag, _pos, scale);
       }
+
 
 //---------------------------------------------------------
 //   id2name
@@ -6216,22 +6244,36 @@ bool ScoreFont::useFallbackFont(SymId id) const
 
 const QRectF ScoreFont::bbox(SymId id, qreal mag) const
       {
+      return bbox(id, QSizeF(mag, mag));
+      }
+
+const QRectF ScoreFont::bbox(SymId id, const QSizeF& mag) const
+      {
       if (useFallbackFont(id))
-            return fallbackFont()->bbox(id, mag);
+            return fallbackFont()->bbox(id, mag.width());
       QRectF r = sym(id).bbox();
-      return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
+      return QRectF(r.x() * mag.width(), r.y() * mag.height(), r.width() * mag.width(), r.height() * mag.height());
       }
 
 const QRectF ScoreFont::bbox(const std::vector<SymId>& s, qreal mag) const
+      {
+      return bbox(s, QSizeF(mag, mag));
+      }
+
+const QRectF ScoreFont::bbox(const std::vector<SymId>& s, const QSizeF& mag) const
       {
       QRectF r;
       QPointF pos;
       for (SymId id : s) {
             r |= bbox(id, mag).translated(pos);
-            pos.rx() += advance(id, mag);
+            pos.rx() += advance(id, mag.width());
             }
       return r;
       }
+
+//---------------------------------------------------------
+//   advance
+//---------------------------------------------------------
 
 qreal ScoreFont::advance(SymId id, qreal mag) const
       {

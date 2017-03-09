@@ -2979,8 +2979,11 @@ System* Score::collectSystem(LayoutContext& lc)
                         continue;
                   Measure* m = toMeasure(mb);
                   m->staffShape(si).clear();
-                  for (Segment& s : m->segments())
+                  for (Segment& s : m->segments()) {
+                        if (s.isTimeSigType())       // hack: ignore time signatures
+                              continue;
                         m->staffShape(si).add(s.staffShape(si).translated(s.pos()));
+                        }
                   m->staffShape(si).add(m->staffLines(si)->bbox());
                   }
             }
