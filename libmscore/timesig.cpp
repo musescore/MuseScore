@@ -36,11 +36,12 @@ TimeSig::TimeSig(Score* s)
       setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
       _showCourtesySig = true;
       customText       = false;
+      scaleStyle       = PropertyFlags::STYLED;
+      setProperty(P_ID::SCALE, propertyDefault(P_ID::SCALE));
       _stretch.set(1, 1);
       _sig.set(0, 1);               // initialize to invalid
       _timeSigType      = TimeSigType::NORMAL;
       _largeParentheses = false;
-      _needLayout       = true;
       }
 
 //---------------------------------------------------------
@@ -233,8 +234,10 @@ void TimeSig::read(XmlReader& e)
                   setDenominatorString(e.readElementText());
             else if (tag == "Groups")
                   _groups.read(e);
-            else if (tag == "scale")
+            else if (tag == "scale") {
                   _scale = e.readSize();
+                  scaleStyle = PropertyFlags::UNSTYLED;
+                  }
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -546,9 +549,34 @@ StyleIdx TimeSig::getPropertyStyle(P_ID id) const
             default:
                   break;
             }
-      return StyleIdx::NOSTYLE;
+      return Element::getPropertyStyle(id);
       }
 
+//---------------------------------------------------------
+//   propertyStyle
+//---------------------------------------------------------
+
+PropertyFlags TimeSig::propertyFlags(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::SCALE:
+                  return scaleStyle;
+            default:
+                  return Element::propertyFlags(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//    reset all styled values to actual style
+//---------------------------------------------------------
+
+void TimeSig::styleChanged()
+      {
+      if (scaleStyle == PropertyFlags::STYLED)
+            setScale(score()->styleV(StyleIdx::timesigScale).toSizeF());
+      Element::styleChanged();
+      }
 
 //---------------------------------------------------------
 //   spatiumChanged
