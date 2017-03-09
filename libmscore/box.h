@@ -60,7 +60,7 @@ class Box : public MeasureBase {
       virtual int grips() const override { return 1; }
       virtual void layout() override;
       virtual void write(XmlWriter&) const override;
-      virtual void write(XmlWriter& xml, int, bool) const override { write(xml); }
+      virtual void write(XmlWriter& xml, int, bool, bool) const override { write(xml); }
       virtual void writeProperties(XmlWriter&) const override;
       virtual bool readProperties(XmlReader&) override;
       virtual void read(XmlReader&) override;

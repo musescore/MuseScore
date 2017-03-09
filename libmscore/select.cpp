@@ -706,7 +706,7 @@ QByteArray Selection::staffMimeData() const
                         xml.tag(QString("voice id=\"%1\"").arg(voice), offset);
                         }
                   }
-            _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true);
+            _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true, false);
             xml.etag();
             }
 

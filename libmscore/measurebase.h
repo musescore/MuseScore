@@ -104,7 +104,7 @@ class MeasureBase : public Element {
       Ms::Measure* prevMeasureMM() const;
 
       virtual void write(XmlWriter&) const override = 0;
-      virtual void write(XmlWriter&, int, bool) const = 0;
+      virtual void write(XmlWriter&, int, bool, bool) const = 0;
 
       virtual void layout();
 
