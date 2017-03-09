@@ -1698,7 +1698,7 @@ void Measure::adjustToLen(Fraction nf)
 //   write
 //---------------------------------------------------------
 
-void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
+void Measure::write(Xml& xml, int staff, bool writeSystemElements, bool forceTimeSig) const
       {
       int mno = _no + 1;
       if (_len != _timesig) {
@@ -1752,7 +1752,7 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
             }
       Q_ASSERT(first());
       Q_ASSERT(last());
-      score()->writeSegments(xml, strack, etrack, first(), last()->next1(), writeSystemElements, false, false);
+      score()->writeSegments(xml, strack, etrack, first(), last()->next1(), writeSystemElements, false, false, forceTimeSig);
       xml.etag();
       }
 
