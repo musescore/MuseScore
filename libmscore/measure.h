@@ -169,7 +169,7 @@ class Measure : public MeasureBase {
       void read(XmlReader&, int idx);
       void read(XmlReader& d) { read(d, 0); }
       virtual void write(Xml& xml) const override { Element::write(xml); }
-      void write(Xml&, int, bool writeSystemElements) const;
+      void write(Xml&, int, bool writeSystemElements, bool forceTimeSig) const;
       void writeBox(Xml&) const;
       void readBox(XmlReader&);
       virtual bool isEditable() const override { return false; }

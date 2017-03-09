@@ -85,7 +85,7 @@ class MeasureBase : public Element {
 
       virtual int ticks() const              { return 0;       }
       virtual void write(Xml&) const override = 0;
-      virtual void write(Xml&, int, bool) const = 0;
+      virtual void write(Xml&, int, bool, bool) const = 0;
 
       virtual void layout();
 
