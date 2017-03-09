@@ -624,7 +624,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 #ifndef USE_LAME
       exportMp3BitRateLabel->setVisible(false);
       exportMp3BitRate->setVisible(false);
-      exportMp3BitRateUnit->setVisible(false)
+      exportMp3BitRateUnit->setVisible(false);
 #else
       exportMp3BitRate->clear();
       exportMp3BitRate->addItem( tr("32"),  32);
