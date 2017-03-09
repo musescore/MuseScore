@@ -86,8 +86,8 @@ class PianoTools : public QDockWidget {
       HPiano* _piano;
 
    signals:
-      void keyPressed(int pitch, bool ctrl, int vel);
-      void keyReleased(int pitch, bool ctrl, int vel);
+      void keyPressed(int pitch, bool chord, int vel);
+      void keyReleased(int pitch, bool chord, int vel);
 
    public:
       PianoTools(QWidget* parent = 0);
