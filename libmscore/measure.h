@@ -106,7 +106,7 @@ class Measure : public MeasureBase {
       void read(XmlReader&, int idx);
       void read(XmlReader& d) { read(d, 0); }
       virtual void write(XmlWriter& xml) const override { Element::write(xml); }
-      void write(XmlWriter&, int, bool writeSystemElements) const;
+      void write(XmlWriter&, int, bool writeSystemElements, bool forceTimeSig) const;
       void writeBox(XmlWriter&) const;
       void readBox(XmlReader&);
       virtual bool isEditable() const override { return false; }
