@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2017 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -33,7 +33,7 @@ namespace Ms {
 TimeSig::TimeSig(Score* s)
   : Element(s)
       {
-      setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
+      setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
       _showCourtesySig = true;
       customText       = false;
       _stretch.set(1, 1);
@@ -165,6 +165,8 @@ void TimeSig::write(XmlWriter& xml) const
       if (!_groups.empty())
             _groups.write(xml);
       xml.tag("showCourtesySig", _showCourtesySig);
+      writeProperty(xml, P_ID::SCALE);
+
       xml.etag();
       }
 
@@ -231,6 +233,8 @@ void TimeSig::read(XmlReader& e)
                   setDenominatorString(e.readElementText());
             else if (tag == "Groups")
                   _groups.read(e);
+            else if (tag == "scale")
+                  _scale = e.readSize();
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -323,7 +327,7 @@ void TimeSig::layout1()
             std::vector<SymId> ds = toTimeSigString(_denominatorString);
 
             ScoreFont* font = score()->scoreFont();
-            qreal mag = magS();
+            QSizeF mag(magS() * _scale);
             QRectF numRect = font->bbox(ns, mag);
             QRectF denRect = font->bbox(ds, mag);
 
@@ -334,17 +338,22 @@ void TimeSig::layout1()
             qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
 
             //align on the wider
+//            qreal pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + _spatium));
+//            pnY = yoff + displ + _spatium;
+            qreal pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + numRect.height() * .5));
+            qreal pnY = yoff + displ + denRect.height() * .5;
+
             if (numRect.width() >= denRect.width()) {
                   // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-                  pz = QPointF(0.0, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium)) );
+                  pz = QPointF(0.0, pzY);
                   // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-                  pn = QPointF((numRect.width() - denRect.width())*.5, yoff + displ + _spatium);
+                  pn = QPointF((numRect.width() - denRect.width())*.5, pnY);
                   }
             else {
-                  // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-                  pn = QPointF(0.0, yoff + displ + _spatium);
                   // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-                  pz = QPointF((denRect.width() - numRect.width())*.5, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium)) );
+                  pz = QPointF((denRect.width() - numRect.width())*.5, pzY);
+                  // denominator: horiz: centred around centre of numerator | vert: one space below centre line
+                  pn = QPointF(0.0, pnY);
                   }
 
             // centering of parenthesis so the middle of the parenthesis is at the divisor marking level
@@ -376,11 +385,12 @@ void TimeSig::draw(QPainter* painter) const
       std::vector<SymId> ns = toTimeSigString(_numeratorString);
       std::vector<SymId> ds = toTimeSigString(_denominatorString);
 
-      drawSymbols(ns, painter, pz);
-      drawSymbols(ds, painter, pn);
+      drawSymbols(ns, painter, pz, _scale);
+      drawSymbols(ds, painter, pn, _scale);
+
       if (_largeParentheses) {
-            drawSymbol(SymId::timeSigParensLeft, painter, pointLargeLeftParen);
-            drawSymbol(SymId::timeSigParensRight, painter, pointLargeRightParen);
+            drawSymbol(SymId::timeSigParensLeft,  painter, pointLargeLeftParen,  _scale.width());
+            drawSymbol(SymId::timeSigParensRight, painter, pointLargeRightParen, _scale.width());
             }
       }
 
@@ -422,56 +432,30 @@ void TimeSig::setSSig(const QString& s)
       }
 
 //---------------------------------------------------------
-//   undoSetShowCourtesySig
-//---------------------------------------------------------
-
-void TimeSig::undoSetShowCourtesySig(bool v)
-      {
-      undoChangeProperty(P_ID::SHOW_COURTESY, v);
-      }
-
-//---------------------------------------------------------
-//   undoSetNumeratorString
-//---------------------------------------------------------
-
-void TimeSig::undoSetNumeratorString(const QString& s)
-      {
-      undoChangeProperty(P_ID::NUMERATOR_STRING, s);
-      }
-
-//---------------------------------------------------------
-//   undoSetDenominatorString
-//---------------------------------------------------------
-
-void TimeSig::undoSetDenominatorString(const QString& s)
-      {
-      undoChangeProperty(P_ID::DENOMINATOR_STRING, s);
-      }
-
-//---------------------------------------------------------
-//   undoSetGroups
-//---------------------------------------------------------
-
-void TimeSig::undoSetGroups(const Groups& g)
-      {
-      undoChangeProperty(P_ID::GROUPS, QVariant::fromValue(g));
-      }
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
 QVariant TimeSig::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_ID::SHOW_COURTESY:      return int(showCourtesySig());
-            case P_ID::NUMERATOR_STRING:   return numeratorString();
-            case P_ID::DENOMINATOR_STRING: return denominatorString();
-            case P_ID::GROUPS:             return QVariant::fromValue(groups());
-            case P_ID::TIMESIG:            return QVariant::fromValue(_sig);
-            case P_ID::TIMESIG_GLOBAL:     return QVariant::fromValue(globalSig());
-            case P_ID::TIMESIG_STRETCH:    return QVariant::fromValue(stretch());
-            case P_ID::TIMESIG_TYPE: return QVariant::fromValue(int(_timeSigType));
+            case P_ID::SHOW_COURTESY:
+                  return int(showCourtesySig());
+            case P_ID::NUMERATOR_STRING:
+                  return numeratorString();
+            case P_ID::DENOMINATOR_STRING:
+                  return denominatorString();
+            case P_ID::GROUPS:
+                  return QVariant::fromValue(groups());
+            case P_ID::TIMESIG:
+                  return QVariant::fromValue(_sig);
+            case P_ID::TIMESIG_GLOBAL:
+                  return QVariant::fromValue(globalSig());
+            case P_ID::TIMESIG_STRETCH:
+                  return QVariant::fromValue(stretch());
+            case P_ID::TIMESIG_TYPE:
+                  return QVariant::fromValue(int(_timeSigType));
+            case P_ID::SCALE:
+                  return _scale;
             default:
                   return Element::getProperty(propertyId);
             }
@@ -510,6 +494,9 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::TIMESIG_TYPE:
                   _timeSigType = (TimeSigType)(v.toInt());
                   break;
+            case P_ID::SCALE:
+                  _scale = v.toSizeF();
+                  break;
             default:
                   if (!Element::setProperty(propertyId, v))
                         return false;
@@ -528,16 +515,40 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
 QVariant TimeSig::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_ID::SHOW_COURTESY:      return true;
-            case P_ID::NUMERATOR_STRING:   return QString();
-            case P_ID::DENOMINATOR_STRING: return QString();
-            case P_ID::TIMESIG:            return QVariant::fromValue(Fraction(4,4));
-            case P_ID::TIMESIG_GLOBAL:     return QVariant::fromValue(Fraction(1,1));
-            case P_ID::TIMESIG_TYPE:       return int(TimeSigType::NORMAL);
+            case P_ID::SHOW_COURTESY:
+                  return true;
+            case P_ID::NUMERATOR_STRING:
+                  return QString();
+            case P_ID::DENOMINATOR_STRING:
+                  return QString();
+            case P_ID::TIMESIG:
+                  return QVariant::fromValue(Fraction(4,4));
+            case P_ID::TIMESIG_GLOBAL:
+                  return QVariant::fromValue(Fraction(1,1));
+            case P_ID::TIMESIG_TYPE:
+                  return int(TimeSigType::NORMAL);
+            case P_ID::SCALE:
+                  return score()->styleV(StyleIdx::timesigScale);
             default:
                   return Element::propertyDefault(id);
             }
       }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx TimeSig::getPropertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::SCALE:
+                  return StyleIdx::timesigScale;
+            default:
+                  break;
+            }
+      return StyleIdx::NOSTYLE;
+      }
+
 
 //---------------------------------------------------------
 //   spatiumChanged

@@ -5588,12 +5588,17 @@ int main(int argc, char* av[])
 
       QNetworkProxyFactory::setUseSystemConfiguration(true);
 
-      MScore::init();                                      // initialize libmscore
+      MScore::init();         // initialize libmscore
+
+      // initialize current page size from default printer
       if (!MScore::testMode) {
-            QSizeF psf = QPrinter().paperSize(QPrinter::Inch);
-            MScore::defaultStyle().set(StyleIdx::pageWidth, psf.width());
-            MScore::defaultStyle().set(StyleIdx::pageHeight, psf.height());
-            MScore::defaultStyle().set(StyleIdx::pagePrintableWidth, psf.width()-20.0/INCH);
+            QPrinter p;
+            if (p.isValid()) {
+                  QRectF psf = p.paperRect(QPrinter::Inch);
+                  MScore::defaultStyle().set(StyleIdx::pageWidth,  psf.width());
+                  MScore::defaultStyle().set(StyleIdx::pageHeight, psf.height());
+                  MScore::defaultStyle().set(StyleIdx::pagePrintableWidth, psf.width()-20.0/INCH);
+                  }
             }
 
 #ifdef SCRIPT_INTERFACE

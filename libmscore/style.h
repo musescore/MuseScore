@@ -100,6 +100,7 @@ enum class StyleIdx {
       keysigLeftMargin,
       ambitusMargin,
       timesigLeftMargin,
+      timesigScale,
 
       clefKeyRightMargin,
       clefKeyDistance,

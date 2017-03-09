@@ -267,31 +267,28 @@ Score::Score(MasterScore* parent)
    : Score{}
       {
       _masterScore = parent;
-      QString partStyle = QSettings().value("partStyle").toString();
-      if (!partStyle.isEmpty())
-            style() = MScore::defaultStyleForParts();
+      if (MScore::defaultStyleForParts())
+            _style = *MScore::defaultStyleForParts();
       else {
             // inherit most style settings from parent
-            style() = parent->style();
+            _style = parent->style();
 
+            static const StyleIdx styles[] = {
+                  StyleIdx::pageWidth,
+                  StyleIdx::pageHeight,
+                  StyleIdx::pagePrintableWidth,
+                  StyleIdx::pageEvenLeftMargin,
+                  StyleIdx::pageOddLeftMargin,
+                  StyleIdx::pageEvenTopMargin,
+                  StyleIdx::pageEvenBottomMargin,
+                  StyleIdx::pageOddTopMargin,
+                  StyleIdx::pageOddBottomMargin,
+                  StyleIdx::pageTwosided,
+                  StyleIdx::spatium
+                  };
             // but borrow defaultStyle page layout settings
-            for (auto i :
-               {
-               StyleIdx::pageWidth,
-               StyleIdx::pageHeight,
-               StyleIdx::pagePrintableWidth,
-               StyleIdx::pageEvenLeftMargin,
-               StyleIdx::pageOddLeftMargin,
-               StyleIdx::pageEvenTopMargin,
-               StyleIdx::pageEvenBottomMargin,
-               StyleIdx::pageOddTopMargin,
-               StyleIdx::pageOddBottomMargin,
-               StyleIdx::pageTwosided,
-               StyleIdx::spatium
-               } ) {
-                  style().set(i, MScore::defaultStyle().value(i));
-                  }
-
+            for (auto i : styles)
+                  _style.set(i, MScore::defaultStyle().value(i));
             // and force some style settings that just make sense for parts
             style().set(StyleIdx::concertPitch, false);
             style().set(StyleIdx::createMultiMeasureRests, true);

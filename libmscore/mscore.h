@@ -383,9 +383,9 @@ class MPaintDevice : public QPaintDevice {
 class MScore : public QObject {
       Q_GADGET
 
-      static MStyle _defaultStyle;       // buildin modified by preferences
-      static MStyle _defaultStyleForParts;
       static MStyle _baseStyle;          // buildin initial style
+      static MStyle _defaultStyle;       // buildin modified by preferences
+      static MStyle* _defaultStyleForParts;
 
       static QString _globalShare;
       static int _hRaster, _vRaster;
@@ -409,11 +409,12 @@ class MScore : public QObject {
 
       static void init();
 
-      static void defaultStyleForPartsHasChanged();
-      static void setDefaultStyle(const MStyle& s) { _defaultStyle = s; }
-      static MStyle& defaultStyle()                { return _defaultStyle;         }
-      static const MStyle& defaultStyleForParts()  { return _defaultStyleForParts; }
       static const MStyle& baseStyle()             { return _baseStyle;            }
+      static MStyle& defaultStyle()                { return _defaultStyle;         }
+      static const MStyle* defaultStyleForParts()  { return _defaultStyleForParts; }
+
+      static void setDefaultStyle(const MStyle& s) { _defaultStyle = s; }
+      static void defaultStyleForPartsHasChanged();
 
       static const QString& globalShare()   { return _globalShare; }
       static qreal hRaster()                { return _hRaster;     }

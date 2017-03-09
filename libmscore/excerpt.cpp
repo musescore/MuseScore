@@ -1138,7 +1138,7 @@ QList<Excerpt*> Excerpt::createAllExcerpt(MasterScore *score)
       QList<Excerpt*> all;
       for (Part* part : score->parts()) {
             if (part->show()) {
-                  Excerpt* e   = new Excerpt(score);
+                  Excerpt* e = new Excerpt(score);
                   e->parts().append(part);
                   for (int i = part->startTrack(), j = 0; i < part->endTrack(); i++, j++) {
                         e->tracks().insert(i, j);

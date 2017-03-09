@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2017 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -22,6 +22,10 @@ namespace Ms {
 
 class MuseScoreView;
 class Segment;
+
+//---------------------------------------------------------
+//   TimeSigType
+//---------------------------------------------------------
 
 enum class TimeSigType : char {
       NORMAL,            // use sz/sn text
@@ -45,26 +49,24 @@ enum class TimeSigType : char {
 
 class TimeSig : public Element {
       Q_GADGET
-      Q_PROPERTY(int denominator           READ denominator)
-      Q_PROPERTY(int denominatorStretch    READ denominatorStretch)
-      Q_PROPERTY(QString denominatorString READ denominatorString WRITE undoSetDenominatorString)
-      Q_PROPERTY(Ms::Groups groups         READ groups            WRITE undoSetGroups)
-      Q_PROPERTY(int numerator             READ numerator)
-      Q_PROPERTY(int numeratorStretch      READ numeratorStretch)
-      Q_PROPERTY(QString numeratorString   READ numeratorString   WRITE undoSetNumeratorString)
-      Q_PROPERTY(bool showCourtesySig      READ showCourtesySig   WRITE undoSetShowCourtesySig)
 
-      TimeSigType _timeSigType;
       QString _numeratorString;     // calculated from actualSig() if !customText
       QString _denominatorString;
-      QPointF pz, pn, pointLargeLeftParen, pointLargeRightParen;
+
+      QPointF pz;
+      QPointF pn;
+      QPointF pointLargeLeftParen;
+      QPointF pointLargeRightParen;
       Fraction _sig;
       Fraction _stretch;      // localSig / globalSig
+      Groups _groups;
+
+      QSizeF _scale   { 1.0, 1.0 };
+      TimeSigType _timeSigType;
       bool _showCourtesySig;
       bool customText;        // if false, sz and sn are calculated from _sig
       bool _needLayout;
       bool _largeParentheses;
-      Groups _groups;
 
       void layout1();
 
@@ -107,15 +109,12 @@ class TimeSig : public Element {
 
       bool showCourtesySig() const       { return _showCourtesySig; }
       void setShowCourtesySig(bool v)    { _showCourtesySig = v;    }
-      void undoSetShowCourtesySig(bool v);
 
       QString numeratorString() const    { return _numeratorString;   }
       void setNumeratorString(const QString&);
-      void undoSetNumeratorString(const QString&);
 
       QString denominatorString() const  { return _denominatorString; }
       void setDenominatorString(const QString&);
-      void undoSetDenominatorString(const QString&);
 
       void setLargeParentheses(bool v)    { _largeParentheses = v;    }
 
@@ -124,6 +123,7 @@ class TimeSig : public Element {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID id) const override;
+      virtual StyleIdx getPropertyStyle(P_ID id) const override;
 
       bool hasCustomText() const { return customText; }
 
@@ -134,7 +134,6 @@ class TimeSig : public Element {
 
       const Groups& groups() const    { return _groups; }
       void setGroups(const Groups& e) { _groups = e; }
-      void undoSetGroups(const Groups& e);
 
       Fraction globalSig() const           { return (_sig * _stretch).reduced();  }
       void setGlobalSig(const Fraction& f) { _stretch = (_sig / f).reduced(); }

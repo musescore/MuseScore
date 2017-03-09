@@ -105,7 +105,7 @@ static constexpr PropertyData propertyList[] = {
       { P_ID::AUTOSCALE,               "autoscale",               false, "autoScale",             P_TYPE::BOOL            },
       { P_ID::SIZE,                    "size",                    false, "size",                  P_TYPE::SIZE            },
 
-      { P_ID::SCALE,                   "scale",                   false, 0,                       P_TYPE::SCALE           },
+      { P_ID::SCALE,                   "scale",                   false, "scale",                 P_TYPE::SCALE           },
       { P_ID::LOCK_ASPECT_RATIO,       "lock_aspect_ratio",       false, "lockAspectRatio",       P_TYPE::BOOL            },
       { P_ID::SIZE_IS_SPATIUM,         "size_is_spatium",         false, "sizeIsSpatium",         P_TYPE::BOOL            },
       { P_ID::TEXT,                    "text",                    false, 0,                       P_TYPE::STRING          },

@@ -10,7 +10,7 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#include "offsetSelect.h"
+#include "scaleSelect.h"
 #include "libmscore/elementlayout.h"
 #include "icons.h"
 #include "musescore.h"
@@ -18,80 +18,56 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   OffsetSelect
+//   ScaleSelect
 //---------------------------------------------------------
 
-OffsetSelect::OffsetSelect(QWidget* parent)
+ScaleSelect::ScaleSelect(QWidget* parent)
    : QWidget(parent)
       {
       setupUi(this);
 
-      showRaster(false);
-
-      QAction* a = getAction("hraster");
-      a->setCheckable(true);
-      hRaster->setDefaultAction(a);
-      hRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
-      hRaster->addAction(getAction("config-raster"));
-
-      a = getAction("vraster");
-      a->setCheckable(true);
-      vRaster->setDefaultAction(a);
-      vRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
-      vRaster->addAction(getAction("config-raster"));
-
-      connect(xVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
-      connect(yVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
+      connect(xVal, SIGNAL(valueChanged(double)), SLOT(_scaleChanged()));
+      connect(yVal, SIGNAL(valueChanged(double)), SLOT(_scaleChanged()));
       }
 
 //---------------------------------------------------------
-//   showRaster
+//   _scaleChanged
 //---------------------------------------------------------
 
-void OffsetSelect::showRaster(bool v)
+void ScaleSelect::_scaleChanged()
       {
-      hRaster->setVisible(v);
-      vRaster->setVisible(v);
+      emit scaleChanged(QSizeF(xVal->value(), yVal->value()));
       }
 
 //---------------------------------------------------------
-//   _offsetChanged
+//   scale
 //---------------------------------------------------------
 
-void OffsetSelect::_offsetChanged()
+QSizeF ScaleSelect::scale() const
       {
-      emit offsetChanged(QPointF(xVal->value(), yVal->value()));
-      }
-
-//---------------------------------------------------------
-//   offset
-//---------------------------------------------------------
-
-QPointF OffsetSelect::offset() const
-      {
-      return QPointF(xVal->value(), yVal->value());
+      return QSizeF(xVal->value(), yVal->value());
       }
 
 //---------------------------------------------------------
 //   blockOffset
 //---------------------------------------------------------
 
-void OffsetSelect::blockOffset(bool val)
+void ScaleSelect::blockScale(bool val)
       {
       xVal->blockSignals(val);
       yVal->blockSignals(val);
       }
 
 //---------------------------------------------------------
-//   setOffset
+//   setScale
 //---------------------------------------------------------
 
-void OffsetSelect::setOffset(const QPointF& o)
+void ScaleSelect::setScale(const QSizeF& o)
       {
-      blockOffset(true);
-      xVal->setValue(o.x());
-      yVal->setValue(o.y());
-      blockOffset(false);
+      blockScale(true);
+      xVal->setValue(o.width());
+      yVal->setValue(o.height());
+      blockScale(false);
       }
 
 }
