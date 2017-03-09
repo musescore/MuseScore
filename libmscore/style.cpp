@@ -695,6 +695,9 @@ static const StyleType styleTypes[] {
       };
 #undef MM
 
+MStyle  MScore::_baseStyle;
+MStyle  MScore::_defaultStyle;
+
 //---------------------------------------------------------
 //   sets of styled properties
 //---------------------------------------------------------
