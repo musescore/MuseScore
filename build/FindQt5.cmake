@@ -1,7 +1,7 @@
 set(_components
     Core
     Gui
-    Designer
+    #Designer
     Network
     Test
     Qml
