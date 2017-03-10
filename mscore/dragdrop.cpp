@@ -238,7 +238,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
             for (const QUrl& u : ul) {
                   if (MScore::debugMode)
                         qDebug("drag Url: %s", qPrintable(u.toString()));
-                  if (u.scheme() == "file" || u.scheme() == "http") {
+                  if (u.scheme() == "file" || u.scheme() == "http" || u.scheme() == "https") {
                         QFileInfo fi(u.path());
                         QString suffix = fi.suffix().toLower();
                         if (suffix == "svg"
@@ -246,6 +246,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
                            || suffix == "jpeg"
                            || suffix == "png"
                            ) {
+                              qDebug("accept <%s>\n", qPrintable(u.toString()));
                               event->accept();
                               break;
                               }
@@ -391,6 +392,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 
       const QMimeData* md = event->mimeData();
       if (md->hasUrls()) {
+printf("===drag move urls\n");
             QList<QUrl>ul = md->urls();
             QUrl u = ul.front();
             if (u.scheme() == "file" || u.scheme() == "http") {
@@ -450,6 +452,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 
 void ScoreView::dropEvent(QDropEvent* event)
       {
+printf("drop\n");
       QPointF pos(imatrix.map(QPointF(event->pos())));
 
       DropData dropData;
@@ -608,6 +611,7 @@ void ScoreView::dropEvent(QDropEvent* event)
             }
 
       if (event->mimeData()->hasUrls()) {
+printf("drop url\n");
             QList<QUrl>ul = event->mimeData()->urls();
             QUrl u = ul.front();
             if (u.scheme() == "file") {
@@ -631,7 +635,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   setDropTarget(0); // this also resets dropRectangle and dropAnchor
                   return;
                   }
-            else if (u.scheme() == "http") {
+            else if (u.scheme() == "http" || u.scheme() == "https") {
                   QNetworkAccessManager manager;
                   QNetworkReply* reply = manager.get(QNetworkRequest(u));
 

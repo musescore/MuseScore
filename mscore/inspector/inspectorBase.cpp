@@ -22,6 +22,7 @@
 #include "preferences.h"
 #include "offsetSelect.h"
 #include "scaleSelect.h"
+#include "sizeSelect.h"
 
 namespace Ms {
 
@@ -81,6 +82,8 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
             v = static_cast<Ms::OffsetSelect*>(w)->offset();
       else if (qobject_cast<Ms::ScaleSelect*>(w))
             v = static_cast<Ms::ScaleSelect*>(w)->scale();
+      else if (qobject_cast<Ms::SizeSelect*>(w))
+            v = static_cast<Ms::SizeSelect*>(w)->value();
       else
             qFatal("not supported widget %s", w->metaObject()->className());
 
@@ -208,6 +211,8 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
             static_cast<Ms::OffsetSelect*>(w)->setOffset(val.toPointF());
       else if (qobject_cast<Ms::ScaleSelect*>(w))
             static_cast<Ms::ScaleSelect*>(w)->setScale(val.toSizeF());
+      else if (qobject_cast<Ms::SizeSelect*>(w))
+            static_cast<Ms::SizeSelect*>(w)->setValue(val);
       else
             qFatal("not supported widget %s", w->metaObject()->className());
       }
@@ -223,20 +228,37 @@ bool InspectorBase::isDefault(const InspectorItem& ii)
             e = e->parent();
 
       P_ID id      = ii.t;
-      P_TYPE t     = propertyType(id);
-      QVariant val = getValue(ii);
+      QVariant val = e->getProperty(id);
       QVariant def = e->propertyDefault(id);
-      if (t == P_TYPE::SIZE || t == P_TYPE::SIZE_MM) {
-            QSizeF sz = def.toSizeF();
+      return val == def;
+      }
+
+//---------------------------------------------------------
+//   compareValues
+//---------------------------------------------------------
+
+bool InspectorBase::compareValues(const InspectorItem& ii, QVariant a, QVariant b)
+      {
+      P_ID id  = ii.t;
+      P_TYPE t = propertyType(id);
+      if (t == P_TYPE::SIZE_MM) {
+            QSizeF sz = a.toSizeF();
             qreal v = ii.sv == 0 ? sz.width() : sz.height();
-            return val.toDouble() == v;
+            return b.toDouble() == v;
             }
       if (t == P_TYPE::FRACTION) {
-            Fraction f = def.value<Fraction>();
+            Fraction f = a.value<Fraction>();
             int v = ii.sv == 0 ? f.numerator() : f.denominator();
-            return val.toInt() == v;
+            return b.toInt() == v;
             }
-      return val == def;
+      if (t == P_TYPE::SIZE) {
+            QSizeF s1 = a.toSizeF();
+            QSizeF s2 = b.toSizeF();
+            bool a = qFuzzyCompare(s1.width(), s2.width()) && qFuzzyCompare(s1.height(), s2.height());
+            printf("%d %f %f -- %f %f\n", a, s1.width(), s2.width(), s1.height(), s2.height());
+            return a;
+            }
+      return b == a;
       }
 
 //---------------------------------------------------------
@@ -270,7 +292,7 @@ void InspectorBase::setElement()
             for (int k = 0; k < ii.parent; ++k)
                   e = e->parent();
             QVariant val = e->getProperty(id);
-            if (pt == P_TYPE::SIZE || pt == P_TYPE::SIZE_MM) {
+            if (pt == P_TYPE::SIZE_MM) {
                   QSizeF sz = val.toSizeF();
                   if (ii.sv == 0)
                         val = QVariant(sz.width());
@@ -307,28 +329,14 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
 
       if (inspector->el().size() > 1) {
             P_ID id      = ii.t;
-            P_TYPE pt    = propertyType(id);
+//            P_TYPE pt    = propertyType(id);
             QVariant val = getValue(ii);
 
             for (Element* e : inspector->el()) {
                   for (int k = 0; k < ii.parent; ++k)
                         e = e->parent();
-                  if (pt == P_TYPE::SIZE || pt == P_TYPE::SIZE_MM) {
-                        QSizeF sz = e->getProperty(id).toSizeF();
-                        if (ii.sv == 0)
-                              valuesAreDifferent = sz.width() != val.toDouble();
-                        else
-                              valuesAreDifferent = sz.height() != val.toDouble();
-                        }
-                  else if (pt == P_TYPE::FRACTION) {
-                        Fraction f = e->getProperty(id).value<Fraction>();
-                        if (ii.sv == 0)
-                              valuesAreDifferent = f.numerator() != val.toInt();
-                        else
-                              valuesAreDifferent = f.denominator() != val.toInt();
-                        }
-                  else
-                        valuesAreDifferent = e->getProperty(id) != val;
+
+                  valuesAreDifferent = !compareValues(ii, e->getProperty(id), val);
                   if (valuesAreDifferent)
                         break;
                   }
@@ -386,7 +394,7 @@ void InspectorBase::valueChanged(int idx, bool reset)
 
             QVariant val1 = e->getProperty(id);
 
-            if (pt == P_TYPE::SIZE || pt == P_TYPE::SIZE_MM) {
+            if (pt == P_TYPE::SIZE_MM) {
                   qreal v   = val2.toDouble();
                   QSizeF sz = val1.toSizeF();
                   if (ii.sv == 0) {
@@ -446,12 +454,16 @@ void InspectorBase::resetClicked(int i)
       QVariant def = e->propertyDefault(id);
       if (!def.isValid())
             return;
-      QWidget* w   = ii.w;
+
+      e->score()->startCmd();
+      e->undoChangeProperty(id, def);
+      e->score()->endCmd();
+
+      QWidget* w  = ii.w;
       w->blockSignals(true);
       setValue(ii, def);
       w->blockSignals(false);
-
-      valueChanged(i, true);
+//      valueChanged(i, true);
       }
 
 //---------------------------------------------------------
@@ -558,6 +570,8 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                   connect(w, SIGNAL(offsetChanged(const QPointF&)), valueMapper, SLOT(map()));
             else if (qobject_cast<Ms::ScaleSelect*>(w))
                   connect(w, SIGNAL(scaleChanged(const QSizeF&)), valueMapper, SLOT(map()));
+            else if (qobject_cast<Ms::SizeSelect*>(w))
+                  connect(w, SIGNAL(valueChanged(const QVariant&)), valueMapper, SLOT(map()));
             else
                   qFatal("not supported widget %s", w->metaObject()->className());
             ++i;

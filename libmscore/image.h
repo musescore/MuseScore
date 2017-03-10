@@ -33,6 +33,9 @@ class Image : public BSymbol {
       ImageType imageType;
       Q_GADGET
 
+      QSizeF pixel2size(const QSizeF& s) const;
+      QSizeF size2pixel(const QSizeF& s) const;
+
    protected:
       ImageStoreItem* _storeItem;
       QString _storePath;           // the path of the img in the ImageStore
@@ -46,7 +49,9 @@ class Image : public BSymbol {
       mutable bool _dirty;
 
       virtual bool isEditable() const override { return true; }
+      virtual void startEditDrag(EditData&) override;
       virtual void editDrag(const EditData&) override;
+      virtual void endEditDrag(const EditData&) override;
       virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
       virtual int grips() const override { return 2; }
       virtual QPointF gripAnchor(Grip) const override { return QPointF(); }
@@ -74,17 +79,11 @@ class Image : public BSymbol {
       bool sizeIsSpatium() const         { return _sizeIsSpatium; }
       void setSizeIsSpatium(bool val)    { _sizeIsSpatium = val;  }
 
-      QSizeF scale() const;
-      void setScale(const QSizeF&);
-      QSizeF scaleForSize(const QSizeF&) const;
-      QSizeF sizeForScale(const QSizeF&) const;
-
       QVariant getProperty(P_ID ) const;
       bool setProperty(P_ID propertyId, const QVariant&);
       QVariant propertyDefault(P_ID id) const;
 
       QSizeF imageSize() const;
-      qreal scaleFactor() const;
 
       void setImageType(ImageType);
       bool isValid() const           { return rasterDoc || svgDoc; }

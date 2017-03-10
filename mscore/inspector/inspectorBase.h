@@ -56,6 +56,10 @@ class InspectorBase : public QWidget {
 
       bool dirty() const;
       void checkDifferentValues(const InspectorItem&);
+      bool compareValues(const InspectorItem& ii, QVariant a, QVariant b);
+
+   private slots:
+      void resetToStyle();
 
    protected slots:
       virtual void valueChanged(int idx, bool reset);
@@ -74,9 +78,6 @@ class InspectorBase : public QWidget {
       bool isDefault(const InspectorItem&);
       void mapSignals(const std::vector<InspectorItem>& il = std::vector<InspectorItem>(), const std::vector<InspectorPanel>& pl = std::vector<InspectorPanel>());
       void setupLineStyle(QComboBox*);
-
-   private slots:
-      void resetToStyle();
 
    public:
       InspectorBase(QWidget* parent);

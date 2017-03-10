@@ -93,55 +93,10 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QDoubleSpinBox" name="sizeHeight">
-        <property name="accessibleName">
-         <string>Height</string>
-        </property>
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="minimum">
-         <double>0.100000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>99999.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QDoubleSpinBox" name="sizeWidth">
-        <property name="accessibleName">
-         <string>Width</string>
-        </property>
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="minimum">
-         <double>0.100000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>99999.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>0.100000000000000</double>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Size:</string>
-        </property>
-        <property name="buddy">
-         <cstring>sizeWidth</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Scale:</string>
         </property>
        </widget>
       </item>
@@ -152,23 +107,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Lock aspect ratio' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="3">
-       <widget class="QToolButton" name="resetSizeIsSpatium">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Size in staff space units' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -192,7 +130,57 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="0" colspan="3">
+      <item row="1" column="0" colspan="3">
+       <widget class="QCheckBox" name="autoscale">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="accessibleName">
+         <string>Scale to frame size</string>
+        </property>
+        <property name="text">
+         <string>Scale to frame size</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" colspan="2">
+       <widget class="Ms::SizeSelect" name="size" native="true"/>
+      </item>
+      <item row="2" column="3">
+       <widget class="QToolButton" name="resetSize">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Lock aspect ratio' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QToolButton" name="resetSizeIsSpatium">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Size in staff space units' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="3">
        <widget class="QCheckBox" name="sizeIsSpatium">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
@@ -211,39 +199,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0" colspan="3">
-       <widget class="QCheckBox" name="autoscale">
-        <property name="focusPolicy">
-         <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="accessibleName">
-         <string>Scale to frame size</string>
-        </property>
-        <property name="text">
-         <string>Scale to frame size</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1" colspan="2">
-       <widget class="Ms::ScaleSelect" name="scale" native="true"/>
-      </item>
-      <item row="3" column="3">
-       <widget class="QToolButton" name="resetScale">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Scale' values</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -251,9 +206,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Ms::ScaleSelect</class>
+   <class>Ms::SizeSelect</class>
    <extends>QWidget</extends>
-   <header>inspector/scaleSelect.h</header>
+   <header>inspector/sizeSelect.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -261,12 +216,8 @@
   <tabstop>title</tabstop>
   <tabstop>autoscale</tabstop>
   <tabstop>resetAutoscale</tabstop>
-  <tabstop>sizeWidth</tabstop>
-  <tabstop>sizeHeight</tabstop>
   <tabstop>lockAspectRatio</tabstop>
   <tabstop>resetLockAspectRatio</tabstop>
-  <tabstop>sizeIsSpatium</tabstop>
-  <tabstop>resetSizeIsSpatium</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

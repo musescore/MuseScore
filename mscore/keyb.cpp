@@ -138,8 +138,7 @@ void ScoreView::editKey(QKeyEvent* ev)
       {
       if (ev->type() == QEvent::KeyRelease) {
             auto modifiers = Qt::ControlModifier | Qt::ShiftModifier;
-            if (editObject && editObject->isText()
-               && ((ev->modifiers() & modifiers) == 0)) {
+            if (editObject && editObject->isText() && ((ev->modifiers() & modifiers) == 0)) {
                   Text* text = static_cast<Text*>(editObject);
                   text->endHexState();
                   ev->accept();
@@ -158,13 +157,13 @@ void ScoreView::editKey(QKeyEvent* ev)
       if (!editObject)
             return;
 
-      if (editObject->type() == ElementType::LYRICS) {
+      if (editObject->isLyrics()) {
             if (editKeyLyrics(ev)) {
                   ev->accept();
                   return;
                   }
             }
-      else if (editObject->type() == ElementType::HARMONY) {
+      else if (editObject->isHarmony()) {
 /*
             if (key == Qt::Key_Tab || key == Qt::Key_Backtab) {
                   harmonyTab(key == Qt::Key_Backtab ? true : (modifiers & Qt::ShiftModifier));
@@ -300,9 +299,15 @@ void ScoreView::editKey(QKeyEvent* ev)
       ed.view    = this;
       ed.hRaster = mscore->hRaster();
       ed.vRaster = mscore->vRaster();
+      qDeleteAll(ed.data);
+      ed.data.clear();
       if (curGrip != Grip::NO_GRIP && int(curGrip) < grips)
             ed.pos = grip[int(curGrip)].center() + delta;
+      editObject->score()->startCmd();
+      editObject->startEditDrag(ed);
       editObject->editDrag(ed);
+      editObject->endEditDrag(ed);
+      editObject->score()->endCmd();
       updateGrips();
       _score->update();
       mscore->endCmd();
