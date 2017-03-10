@@ -34,6 +34,7 @@ class OffsetSelect : public QWidget, public Ui::OffsetSelect {
 
    public:
       OffsetSelect(QWidget* parent);
+      void setSuffix(const QString&);
       QPointF offset() const;
       void setOffset(const QPointF&);
       void showRaster(bool);

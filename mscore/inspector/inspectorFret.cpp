@@ -29,10 +29,10 @@ InspectorFretDiagram::InspectorFretDiagram(QWidget* parent)
       f.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::COLOR,        0, 0, e.color,       e.resetColor      },
-            { P_ID::VISIBLE,      0, 0, e.visible,     e.resetVisible    },
-            { P_ID::USER_OFF,     0, 0, e.offset,      e.resetOffset     },
-            { P_ID::MAG,          0, 0, f.mag,         f.resetMag        }
+            { P_ID::COLOR,    0, e.color,       e.resetColor      },
+            { P_ID::VISIBLE,  0, e.visible,     e.resetVisible    },
+            { P_ID::USER_OFF, 0, e.offset,      e.resetOffset     },
+            { P_ID::MAG,      0, f.mag,         f.resetMag        }
             };
       const std::vector<InspectorPanel> ppList = {
             { f.title, f.panel }

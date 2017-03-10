@@ -26,11 +26,11 @@ InspectorElementBase::InspectorElementBase(QWidget* parent)
       e.setupUi(addWidget());
       e.offset->showRaster(true);
       iList = {
-            { P_ID::VISIBLE,   0, 0, e.visible,    e.resetVisible   },
-            { P_ID::Z,         0, 0, e.z,          e.resetZ         },
-            { P_ID::COLOR,     0, 0, e.color,      e.resetColor     },
-            { P_ID::USER_OFF,  0, 0, e.offset,     e.resetOffset    },
-            { P_ID::AUTOPLACE, 0, 0, e.autoplace,  e.resetAutoplace },
+            { P_ID::VISIBLE,   0, e.visible,    e.resetVisible   },
+            { P_ID::Z,         0, e.z,          e.resetZ         },
+            { P_ID::COLOR,     0, e.color,      e.resetColor     },
+            { P_ID::USER_OFF,  0, e.offset,     e.resetOffset    },
+            { P_ID::AUTOPLACE, 0, e.autoplace,  e.resetAutoplace },
             };
       pList = { { e.title, e.panel } };
       connect(e.resetAutoplace, SIGNAL(clicked()), SLOT(resetAutoplace()));

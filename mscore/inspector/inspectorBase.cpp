@@ -104,7 +104,7 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
                   v = v.toPointF() * DPMM;
                   break;
             case P_TYPE::SIZE_MM:
-                  v = v.toDouble() * DPMM;
+                  v = v.toSizeF() * DPMM;
                   break;
             case P_TYPE::BARLINE_TYPE:
                   v = QVariant::fromValue(BarLineType(v.toInt()));
@@ -156,7 +156,7 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
                   val = val.toPointF() / DPMM;
                   break;
             case P_TYPE::SIZE_MM:
-                  val = val.toDouble() / DPMM;
+                  val = val.toSizeF() / DPMM;
                   break;
             case P_TYPE::DIRECTION:
                   val = int(val.value<Direction>());
@@ -241,16 +241,6 @@ bool InspectorBase::compareValues(const InspectorItem& ii, QVariant a, QVariant 
       {
       P_ID id  = ii.t;
       P_TYPE t = propertyType(id);
-      if (t == P_TYPE::SIZE_MM) {
-            QSizeF sz = a.toSizeF();
-            qreal v = ii.sv == 0 ? sz.width() : sz.height();
-            return b.toDouble() == v;
-            }
-      if (t == P_TYPE::FRACTION) {
-            Fraction f = a.value<Fraction>();
-            int v = ii.sv == 0 ? f.numerator() : f.denominator();
-            return b.toInt() == v;
-            }
       if (t == P_TYPE::SIZE) {
             QSizeF s1 = a.toSizeF();
             QSizeF s2 = b.toSizeF();
@@ -286,26 +276,10 @@ void InspectorBase::setElement()
       {
       for (const InspectorItem& ii : iList) {
             P_ID id    = ii.t;
-            P_TYPE pt  = propertyType(id);
-
             Element* e = inspector->element();
             for (int k = 0; k < ii.parent; ++k)
                   e = e->parent();
             QVariant val = e->getProperty(id);
-            if (pt == P_TYPE::SIZE_MM) {
-                  QSizeF sz = val.toSizeF();
-                  if (ii.sv == 0)
-                        val = QVariant(sz.width());
-                  else
-                        val = QVariant(sz.height());
-                  }
-            else if (pt == P_TYPE::FRACTION) {
-                  Fraction f = val.value<Fraction>();
-                  if (ii.sv == 0)
-                        val = QVariant(f.numerator());
-                  else
-                        val = QVariant(f.denominator());
-                  }
             if (ii.w) {
                   ii.w->blockSignals(true);
                   setValue(ii, val);
@@ -374,7 +348,6 @@ void InspectorBase::valueChanged(int idx, bool reset)
       {
       const InspectorItem& ii = iList[idx];
       P_ID id       = ii.t;
-      P_TYPE pt     = propertyType(id);
       QVariant val2 = getValue(ii);
 
       Score* score  = inspector->element()->score();
@@ -391,43 +364,9 @@ void InspectorBase::valueChanged(int idx, bool reset)
                   ps = PropertyFlags::STYLED;
             else if (ps == PropertyFlags::STYLED)
                   ps = PropertyFlags::UNSTYLED;
-
             QVariant val1 = e->getProperty(id);
-
-            if (pt == P_TYPE::SIZE_MM) {
-                  qreal v   = val2.toDouble();
-                  QSizeF sz = val1.toSizeF();
-                  if (ii.sv == 0) {
-                        if (sz.width() != v)
-                              e->undoChangeProperty(id, QVariant(QSizeF(v, sz.height())), ps);
-                        }
-                  else {
-                        if (sz.height() != v)
-                              e->undoChangeProperty(id, QVariant(QSizeF(sz.width(), v)), ps);
-                        }
-                  }
-            else if (pt == P_TYPE::FRACTION) {
-                  int v      = val2.toInt();
-                  Fraction f = val1.value<Fraction>();
-                  if (ii.sv == 0) {
-                        if (f.numerator() != v) {
-                              QVariant va;
-                              va.setValue(Fraction(v, f.denominator()));
-                              e->undoChangeProperty(id, va, ps);
-                              }
-                        }
-                  else {
-                        if (f.denominator() != v) {
-                              QVariant va;
-                              va.setValue(Fraction(f.numerator(), v));
-                              e->undoChangeProperty(id, va, ps);
-                              }
-                        }
-                  }
-            else {
-                  if (val1 != val2 || (reset && ps != PropertyFlags::NOSTYLE))
-                        e->undoChangeProperty(id, val2, ps);
-                  }
+            if (val1 != val2 || (reset && ps != PropertyFlags::NOSTYLE))
+                  e->undoChangeProperty(id, val2, ps);
             }
       inspector->setInspectorEdit(true);
       checkDifferentValues(ii);
