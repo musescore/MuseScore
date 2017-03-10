@@ -104,7 +104,7 @@ option(BUILD_PULSEAUDIO "Build with support for PulseAudio audio backend." ON)
 option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
 option(BUILD_PORTAUDIO "Build with support for PortAudio audio backend." ON)
 option(BUILD_PORTMIDI "Build with support for PortAudio's MIDI features." ${BUILD_PORTAUDIO}) # PortAudio required
-option(BUILD_PCH "Build using precompiled headers." OFF)
+option(BUILD_PCH "Build using precompiled headers." ON)
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
@@ -539,9 +539,6 @@ add_custom_command(
     DEPENDS ${PROJECT_SOURCE_DIR}/all.h
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
     )
-if (NOT MINGW)
-  set(BUILD_PCH true)
-endif(NOT MINGW)
 
 precompiled_header(QT_INCLUDES all ${BUILD_PCH})
 
