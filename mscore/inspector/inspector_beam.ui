@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>236</width>
-    <height>199</height>
+    <width>300</width>
+    <height>266</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -128,44 +128,10 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="1">
-       <widget class="QDoubleSpinBox" name="y1">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Left</string>
-        </property>
-        <property name="accessibleName">
-         <string>Vertical position offset left</string>
-        </property>
-        <property name="suffix">
-         <string>sp</string>
-        </property>
-        <property name="decimals">
-         <number>2</number>
-        </property>
-        <property name="minimum">
-         <double>-99.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>99.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.100000000000000</double>
-        </property>
-       </widget>
-      </item>
       <item row="8" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>Position:</string>
-        </property>
-        <property name="buddy">
-         <cstring>y1</cstring>
         </property>
        </widget>
       </item>
@@ -183,28 +149,6 @@
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="2">
-       <widget class="QDoubleSpinBox" name="y2">
-        <property name="toolTip">
-         <string>Right</string>
-        </property>
-        <property name="accessibleName">
-         <string>Vertical position offset right</string>
-        </property>
-        <property name="suffix">
-         <string>sp</string>
-        </property>
-        <property name="minimum">
-         <double>-99.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>99.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.100000000000000</double>
         </property>
        </widget>
       </item>
@@ -358,11 +302,22 @@
         </property>
        </widget>
       </item>
+      <item row="8" column="1" colspan="2">
+       <widget class="Ms::OffsetSelect" name="pos" native="true"/>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::OffsetSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/offsetSelect.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>distribute</tabstop>
@@ -377,8 +332,6 @@
   <tabstop>resetNoSlope</tabstop>
   <tabstop>userPosition</tabstop>
   <tabstop>resetUserPosition</tabstop>
-  <tabstop>y1</tabstop>
-  <tabstop>y2</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

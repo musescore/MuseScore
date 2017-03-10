@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>235</width>
-    <height>87</height>
+    <width>337</width>
+    <height>121</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -68,85 +68,12 @@
         <property name="text">
          <string>Position:</string>
         </property>
-        <property name="buddy">
-         <cstring>posX</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QDoubleSpinBox" name="posY">
-        <property name="accessibleName">
-         <string>Vertical position</string>
-        </property>
-        <property name="suffix">
-         <string>mm</string>
-        </property>
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <double>999999.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="QDoubleSpinBox" name="sizeHeight">
-        <property name="accessibleName">
-         <string>Height</string>
-        </property>
-        <property name="suffix">
-         <string>mm</string>
-        </property>
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <double>99999.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QDoubleSpinBox" name="sizeWidth">
-        <property name="accessibleName">
-         <string>Width</string>
-        </property>
-        <property name="suffix">
-         <string>mm</string>
-        </property>
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <double>99999.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>0.000000000000000</double>
-        </property>
        </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Size:</string>
-        </property>
-        <property name="buddy">
-         <cstring>sizeWidth</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QDoubleSpinBox" name="posX">
-        <property name="accessibleName">
-         <string>Horizontal Position</string>
-        </property>
-        <property name="suffix">
-         <string>mm</string>
-        </property>
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <double>999999.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -163,17 +90,33 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="1" colspan="2">
+       <widget class="Ms::OffsetSelect" name="pos" native="true"/>
+      </item>
+      <item row="3" column="1" colspan="2">
+       <widget class="Ms::SizeSelect" name="size" native="true"/>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::OffsetSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/offsetSelect.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Ms::SizeSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/sizeSelect.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
-  <tabstop>posX</tabstop>
-  <tabstop>posY</tabstop>
-  <tabstop>sizeWidth</tabstop>
-  <tabstop>sizeHeight</tabstop>
  </tabstops>
  <resources/>
  <connections/>

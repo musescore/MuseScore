@@ -27,8 +27,8 @@ InspectorMarker::InspectorMarker(QWidget* parent)
       m.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::MARKER_TYPE,        0, false, m.markerType, 0            },
-            { P_ID::LABEL,              0, false, m.jumpLabel,  0            }
+            { P_ID::MARKER_TYPE,        0, m.markerType, 0            },
+            { P_ID::LABEL,              0, m.jumpLabel,  0            }
             };
       const std::vector<InspectorPanel> ppList = {
             { m.title, m.panel }

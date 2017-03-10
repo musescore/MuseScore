@@ -24,9 +24,9 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
       d.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
-            { P_ID::DYNAMIC_RANGE,    0, 0, d.dynRange,     d.resetDynRange     },
-            { P_ID::VELOCITY,         0, 0, d.velocity,     0                   },
-            { P_ID::PLACEMENT,        0, 0, d.placement,    d.resetPlacement    }
+            { P_ID::DYNAMIC_RANGE,    0, d.dynRange,     d.resetDynRange     },
+            { P_ID::VELOCITY,         0, d.velocity,     0                   },
+            { P_ID::PLACEMENT,        0, d.placement,    d.resetPlacement    }
             };
       const std::vector<InspectorPanel> ppList = {
             { d.title, d.panel }

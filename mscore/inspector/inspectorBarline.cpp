@@ -31,11 +31,11 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
             b.type->addItem(qApp->translate("Palette", i.userName), int(i.type));
 
       const std::vector<InspectorItem> il = {
-            { P_ID::LEADING_SPACE,     0, 1, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_ID::BARLINE_TYPE,      0, 0, b.type,     b.resetType     },
-            { P_ID::BARLINE_SPAN,      0, 0, b.span,     b.resetSpan     },
-            { P_ID::BARLINE_SPAN_FROM, 0, 0, b.spanFrom, b.resetSpanFrom },
-            { P_ID::BARLINE_SPAN_TO,   0, 0, b.spanTo,   b.resetSpanTo   },
+            { P_ID::LEADING_SPACE,     1, s.leadingSpace,  s.resetLeadingSpace  },
+            { P_ID::BARLINE_TYPE,      0, b.type,     b.resetType     },
+            { P_ID::BARLINE_SPAN,      0, b.span,     b.resetSpan     },
+            { P_ID::BARLINE_SPAN_FROM, 0, b.spanFrom, b.resetSpanFrom },
+            { P_ID::BARLINE_SPAN_TO,   0, b.spanTo,   b.resetSpanTo   },
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel },

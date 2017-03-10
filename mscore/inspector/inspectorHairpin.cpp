@@ -36,20 +36,20 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
       h.hairpinType->addItem(tr("Decrescendo Line"),    int(HairpinType::DECRESC_LINE));
 
       const std::vector<InspectorItem> il = {
-            { P_ID::LINE_VISIBLE,        0, 0, l.lineVisible,       l.resetLineVisible       },
-            { P_ID::DIAGONAL,            0, 0, l.diagonal,          l.resetDiagonal          },
-            { P_ID::LINE_COLOR,          0, 0, l.lineColor,         l.resetLineColor         },
-            { P_ID::LINE_WIDTH,          0, 0, l.lineWidth,         l.resetLineWidth         },
-            { P_ID::LINE_STYLE,          0, 0, l.lineStyle,         l.resetLineStyle         },
-            { P_ID::DASH_LINE_LEN,       0, 0, l.dashLineLength,    l.resetDashLineLength    },
-            { P_ID::DASH_GAP_LEN,        0, 0, l.dashGapLength,     l.resetDashGapLength     },
-            { P_ID::HAIRPIN_CIRCLEDTIP,  0, 0, h.hairpinCircledTip, h.resetHairpinCircledTip },
-            { P_ID::HAIRPIN_TYPE,        0, 0, h.hairpinType,       0                        },
-            { P_ID::PLACEMENT,           0, 0, h.placement,         h.resetPlacement         },
-            { P_ID::DYNAMIC_RANGE,       0, 0, h.dynRange,          h.resetDynRange          },
-            { P_ID::VELO_CHANGE,         0, 0, h.veloChange,        h.resetVeloChange        },
-            { P_ID::HAIRPIN_HEIGHT,      0, 0, h.hairpinHeight,     h.resetHairpinHeight     },
-            { P_ID::HAIRPIN_CONT_HEIGHT, 0, 0, h.hairpinContHeight, h.resetHairpinContHeight }
+            { P_ID::LINE_VISIBLE,        0, l.lineVisible,       l.resetLineVisible       },
+            { P_ID::DIAGONAL,            0, l.diagonal,          l.resetDiagonal          },
+            { P_ID::LINE_COLOR,          0, l.lineColor,         l.resetLineColor         },
+            { P_ID::LINE_WIDTH,          0, l.lineWidth,         l.resetLineWidth         },
+            { P_ID::LINE_STYLE,          0, l.lineStyle,         l.resetLineStyle         },
+            { P_ID::DASH_LINE_LEN,       0, l.dashLineLength,    l.resetDashLineLength    },
+            { P_ID::DASH_GAP_LEN,        0, l.dashGapLength,     l.resetDashGapLength     },
+            { P_ID::HAIRPIN_CIRCLEDTIP,  0, h.hairpinCircledTip, h.resetHairpinCircledTip },
+            { P_ID::HAIRPIN_TYPE,        0, h.hairpinType,       0                        },
+            { P_ID::PLACEMENT,           0, h.placement,         h.resetPlacement         },
+            { P_ID::DYNAMIC_RANGE,       0, h.dynRange,          h.resetDynRange          },
+            { P_ID::VELO_CHANGE,         0, h.veloChange,        h.resetVeloChange        },
+            { P_ID::HAIRPIN_HEIGHT,      0, h.hairpinHeight,     h.resetHairpinHeight     },
+            { P_ID::HAIRPIN_CONT_HEIGHT, 0, h.hairpinContHeight, h.resetHairpinContHeight }
             };
       const std::vector<InspectorPanel> ppList = {
             { l.title, l.panel },

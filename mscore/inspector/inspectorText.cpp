@@ -26,7 +26,7 @@ InspectorText::InspectorText(QWidget* parent)
       f.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::SUB_STYLE,      0, 0, f.subStyle,     f.resetSubStyle     },
+            { P_ID::SUB_STYLE, 0, f.subStyle,     f.resetSubStyle     },
             };
 
       const std::vector<InspectorPanel> ppList = {
