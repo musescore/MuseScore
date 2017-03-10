@@ -484,7 +484,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
             int track    = staffIdx * VOICES;
             KeySig* ks   = static_cast<KeySig*>(s->element(track));
 
-            Interval interval = staff->part()->instrument()->transpose();
+            Interval interval = staff->part()->instrument(tick)->transpose();
             KeySigEvent nkey = key;
             bool concertPitch = score->styleB(StyleIdx::concertPitch);
             if (interval.chromatic && !concertPitch && !nkey.custom() && !nkey.isAtonal()) {
@@ -1150,7 +1150,7 @@ void Score::undoAddElement(Element* element)
                         Harmony* h = static_cast<Harmony*>(ne);
                         if (score->styleB(StyleIdx::concertPitch) != element->score()->styleB(StyleIdx::concertPitch)) {
                               Part* partDest = h->part();
-                              Interval interval = partDest->instrument()->transpose();
+                              Interval interval = partDest->instrument(tick)->transpose();
                               if (!interval.isZero()) {
                                     if (!score->styleB(StyleIdx::concertPitch))
                                           interval.flip();
@@ -1276,12 +1276,25 @@ void Score::undoAddElement(Element* element)
                   Segment* ns1   = nm1->findSegment(s1->segmentType(), s1->tick());
                   InstrumentChange* nis = static_cast<InstrumentChange*>(ne);
                   nis->setParent(ns1);
+                  int tickStart = nis->segment()->tick();
+                  Part* part = nis->part();
+                  Interval oldV = nis->part()->instrument(tickStart)->transpose();
                   // ws: instrument should not be changed here
                   if (is->instrument()->channel().isEmpty() || is->instrument()->channel(0)->program == -1)
                         nis->setInstrument(*staff->part()->instrument(s1->tick()));
                   else if (nis != is)
                         nis->setInstrument(*is->instrument());
                   undo(new AddElement(nis));
+                  // transpose root score; parts will follow
+                  if (score == rootScore() && part->instrument(tickStart)->transpose() != oldV) {
+                        auto i = part->instruments()->upper_bound(tickStart);
+                        int tickEnd;
+                        if (i == part->instruments()->end())
+                              tickEnd = -1;
+                        else
+                              tickEnd = i->first;
+                        transpositionChanged(part, oldV, tickStart, tickEnd);
+                        }
                   }
             else if (element->type() == Element::Type::BREATH) {
                   Breath* breath   = static_cast<Breath*>(element);
@@ -3238,12 +3251,21 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
 
 void ChangeInstrument::flip()
       {
+      Part* part = is->staff()->part();
+      int tickStart = is->segment()->tick();
       Instrument* oi = is->instrument();
-      is->setInstrument(instrument);
 
+      // set instrument in both part and instrument change element
+      is->setInstrument(instrument);
+      part->setInstrument(instrument, tickStart);
+
+      // update score
       is->score()->rebuildMidiMapping();
+      is->score()->updateChannel();
       is->score()->setInstrumentsChanged(true);
       is->score()->setLayoutAll(true);
+
+      // remember original instrument
       instrument = oi;
       }
 

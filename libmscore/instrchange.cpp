@@ -58,8 +58,9 @@ InstrumentChange::~InstrumentChange()
 
 void InstrumentChange::setInstrument(const Instrument& i)
       {
-      delete _instrument;
-      _instrument = new Instrument(i);
+      *_instrument = i;
+      //delete _instrument;
+      //_instrument = new Instrument(i);
       }
 
 //---------------------------------------------------------
@@ -86,6 +87,19 @@ void InstrumentChange::read(XmlReader& e)
                   _instrument->read(e);
             else if (!Text::readProperties(e))
                   e.unknown();
+            }
+      QString sv = score()->mscoreVersion();
+      sv.truncate(3);
+      if (sv == "2.0") {
+            // 2.0.x versions did not honor transposition of instrument change
+            // except in ways that it should not have
+            // notes entered before the instrument change was added would not be altered,
+            // so original transposition remained in effect
+            // notes added afterwards would be transposed by both intervals, resulting in tpc corruption
+            // here we set the instrument change to inherit the staff transposition to emulate previous versions
+            // in Note::read(), we attempt to fix the tpc corruption
+            Interval v = staff() ? staff()->part()->instrument()->transpose() : 0;
+            _instrument->setTranspose(v);
             }
       }
 

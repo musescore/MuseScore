@@ -56,6 +56,7 @@
 #include "ottava.h"
 #include "textframe.h"
 #include "accidental.h"
+#include "instrchange.h"
 
 namespace Ms {
 
@@ -1030,7 +1031,7 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
                   else {
                         nval.pitch += instr->transpose().chromatic;
                         nval.tpc2 = step2tpc(step % 7, acci);
-                        Interval v = st->part()->instrument()->transpose();
+                        Interval v = st->part()->instrument(tick)->transpose();
                         if (v.isZero())
                               nval.tpc1 = nval.tpc2;
                         else
@@ -2158,6 +2159,25 @@ void Score::deleteItem(Element* el)
                         undoChangeProperty(el, P_ID::TEXT, QString());
                   else
                         undoRemoveElement(el);
+                  break;
+
+            case Element::Type::INSTRUMENT_CHANGE:
+                  {
+                  InstrumentChange* ic = static_cast<InstrumentChange*>(el);
+                  int tickStart = ic->segment()->tick();
+                  Part* part = ic->part();
+                  Interval oldV = part->instrument(tickStart)->transpose();
+                  undoRemoveElement(el);
+                  if (part->instrument(tickStart)->transpose() != oldV) {
+                        auto i = part->instruments()->upper_bound(tickStart);
+                        int tickEnd;
+                        if (i == part->instruments()->end())
+                              tickEnd = -1;
+                        else
+                              tickEnd = i->first;
+                        transpositionChanged(part, oldV, tickStart, tickEnd);
+                        }
+                  }
                   break;
 
             default:
