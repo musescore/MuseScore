@@ -1,9 +1,8 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
-//  Copyright (C) 2011 Werner Schweer and others
+//  Copyright (C) 2017 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -11,34 +10,39 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __INSPECTOR_IMAGE_H__
-#define __INSPECTOR_IMAGE_H__
+#ifndef __SIZE_SELECT_H__
+#define __SIZE_SELECT_H__
 
-#include "inspector.h"
-#include "ui_inspector_image.h"
-#include "libmscore/property.h"
+#include "ui_size_select.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorImage
+//   SizeSelect
 //---------------------------------------------------------
 
-class InspectorImage : public InspectorElementBase {
+class SizeSelect : public QWidget, public Ui::SizeSelect {
       Q_OBJECT
 
-      Ui::InspectorImage b;
+      void blockSize(bool val);
 
-      virtual void postInit();
+   private slots:
+      void _sizeChanged();
 
-   protected slots:
-      virtual void valueChanged(int idx) override;
+   signals:
+      void valueChanged(const QVariant&);
 
    public:
-      InspectorImage(QWidget* parent);
+      SizeSelect(QWidget* parent);
+      void setSuffix(const QString&);
+      QVariant value() const;
+      void setValue(const QVariant&);
+      void setLock(bool val);
       };
 
+}
 
-} // namespace Ms
+
 #endif
+
 

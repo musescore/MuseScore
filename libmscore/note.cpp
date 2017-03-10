@@ -2549,7 +2549,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      score()->setLayout(tick());
+      triggerLayout();
       return true;
       }
 

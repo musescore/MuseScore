@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ScaleSelect</class>
- <widget class="QWidget" name="ScaleSelect">
+ <class>SizeSelect</class>
+ <widget class="QWidget" name="SizeSelect">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -9,6 +9,9 @@
     <width>253</width>
     <height>31</height>
    </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="leftMargin">
@@ -31,23 +34,29 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="statusTip">
+      <string>width</string>
+     </property>
      <property name="accessibleName">
-      <string>Horizontal scale</string>
+      <string>Horizontal offset</string>
      </property>
      <property name="prefix">
-      <string>X:</string>
+      <string>W:</string>
+     </property>
+     <property name="suffix">
+      <string extracomment="width"/>
+     </property>
+     <property name="decimals">
+      <number>2</number>
      </property>
      <property name="minimum">
       <double>0.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>1000.000000000000000</double>
+      <double>10000.000000000000000</double>
      </property>
      <property name="singleStep">
-      <double>0.100000000000000</double>
-     </property>
-     <property name="value">
-      <double>1.000000000000000</double>
+      <double>0.200000000000000</double>
      </property>
     </widget>
    </item>
@@ -59,28 +68,33 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="statusTip">
+      <string>height</string>
+     </property>
      <property name="accessibleName">
-      <string>Vertical scale</string>
+      <string>Vertical offset</string>
      </property>
      <property name="prefix">
-      <string>Y:</string>
+      <string>H:</string>
+     </property>
+     <property name="suffix">
+      <string extracomment="height"/>
      </property>
      <property name="minimum">
       <double>0.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>1000.000000000000000</double>
+      <double>10000.000000000000000</double>
      </property>
      <property name="singleStep">
-      <double>0.100000000000000</double>
-     </property>
-     <property name="value">
-      <double>1.000000000000000</double>
+      <double>0.200000000000000</double>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

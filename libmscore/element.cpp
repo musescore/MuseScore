@@ -1221,7 +1221,7 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   qFatal("unknown <%s>(%d), data <%s>", propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
                   return false;
             }
-      score()->setLayout(tick());
+      triggerLayout();
       setGenerated(false);
       return true;
       }
@@ -1785,7 +1785,7 @@ void Element::endDrag(EditData* data)
 //   getData
 //---------------------------------------------------------
 
-ElementEditData* EditData::getData(Element* e)
+ElementEditData* EditData::getData(Element* e) const
       {
       for (ElementEditData* ed : data) {
             if (ed->e == e)

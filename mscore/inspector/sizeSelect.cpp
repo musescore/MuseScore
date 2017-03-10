@@ -10,91 +10,74 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#include "scaleSelect.h"
-#include "libmscore/elementlayout.h"
+#include "sizeSelect.h"
 #include "icons.h"
 #include "musescore.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   ScaleSelect
+//   SizeSelect
 //---------------------------------------------------------
 
-ScaleSelect::ScaleSelect(QWidget* parent)
+SizeSelect::SizeSelect(QWidget* parent)
    : QWidget(parent)
       {
       setupUi(this);
 
-      _lock = false;
-      connect(xVal, SIGNAL(valueChanged(double)), SLOT(xScaleChanged()));
-      connect(yVal, SIGNAL(valueChanged(double)), SLOT(yScaleChanged()));
+      connect(xVal, SIGNAL(valueChanged(double)), SLOT(_sizeChanged()));
+      connect(yVal, SIGNAL(valueChanged(double)), SLOT(_sizeChanged()));
       }
 
 //---------------------------------------------------------
-//   setLock
+//   setSuffix
 //---------------------------------------------------------
 
-void ScaleSelect::setLock(bool val)
+void SizeSelect::setSuffix(const QString& s)
       {
-      if (_lock != val) {
-            _lock = val;
-            }
+      xVal->setSuffix(s);
+      yVal->setSuffix(s);
       }
 
 //---------------------------------------------------------
-//   _scaleChanged
+//   _sizeChanged
 //---------------------------------------------------------
 
-void ScaleSelect::xScaleChanged()
+void SizeSelect::_sizeChanged()
       {
-      if (_lock) {
-            blockScale(true);
-            yVal->setValue(xVal->value());
-            blockScale(false);
-            }
-      emit scaleChanged(QSizeF(xVal->value(), yVal->value()));
-      }
-
-void ScaleSelect::yScaleChanged()
-      {
-      if (_lock) {
-            blockScale(true);
-            xVal->setValue(yVal->value());
-            blockScale(false);
-            }
-      emit scaleChanged(QSizeF(xVal->value(), yVal->value()));
+      emit valueChanged(QSizeF(xVal->value(), yVal->value()));
       }
 
 //---------------------------------------------------------
-//   scale
+//   blockOffset
 //---------------------------------------------------------
 
-QSizeF ScaleSelect::scale() const
-      {
-      return QSizeF(xVal->value(), yVal->value());
-      }
-
-//---------------------------------------------------------
-//   blockScale
-//---------------------------------------------------------
-
-void ScaleSelect::blockScale(bool val)
+void SizeSelect::blockSize(bool val)
       {
       xVal->blockSignals(val);
       yVal->blockSignals(val);
       }
 
 //---------------------------------------------------------
-//   setScale
+//   value
 //---------------------------------------------------------
 
-void ScaleSelect::setScale(const QSizeF& o)
+QVariant SizeSelect::value() const
       {
-      blockScale(true);
-      xVal->setValue(o.width());
-      yVal->setValue(o.height());
-      blockScale(false);
+      return QSizeF(xVal->value(), yVal->value());
+      }
+
+//---------------------------------------------------------
+//   setValue
+//---------------------------------------------------------
+
+void SizeSelect::setValue(const QVariant& v)
+      {
+      QSizeF s = v.toSizeF();
+      blockSize(true);
+      xVal->setValue(s.width());
+      yVal->setValue(s.height());
+      blockSize(false);
       }
 
 }
