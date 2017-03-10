@@ -267,7 +267,7 @@ void TestText::testPaste()
 void TestText::testTextProperties()
       {
       Text* text = new Text(score);
-      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
+      text->setTextStyle(score->textStyle(TextStyleType::STAFF));
 
       text->startEdit(0, QPoint());
       text->layout();
