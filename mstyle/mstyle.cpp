@@ -1291,7 +1291,7 @@ bool MgStyle::drawFrameGroupBoxPrimitive(const QStyleOption* option, QPainter* p
 
       // no frame for flat groupboxes
       QStyleOptionFrame fOpt2(*fOpt);
-      if (fOpt2.features & QStyleOptionFrameV2::Flat)
+      if (fOpt2.features & QStyleOptionFrame::Flat)
             return true;
 
       // normal frame
@@ -2011,7 +2011,7 @@ bool MgStyle::drawPanelItemViewItemPrimitive( const QStyleOption* option, QPaint
       const bool hasCustomBackground = opt->backgroundBrush.style() != Qt::NoBrush && !(option->state & State_Selected);
       const bool hasSolidBackground = !hasCustomBackground || opt->backgroundBrush.style() == Qt::SolidPattern;
 
-      if ( !hover && !(option->state & State_Selected) && !hasCustomBackground && !(opt->features & QStyleOptionViewItemV2::Alternate) ) {
+      if ( !hover && !(option->state & State_Selected) && !hasCustomBackground && !(opt->features & QStyleOptionViewItem::Alternate) ) {
             return true;
             }
 
@@ -2028,7 +2028,7 @@ bool MgStyle::drawPanelItemViewItemPrimitive( const QStyleOption* option, QPaint
             else color = color.lighter(110);
             }
 
-      if ( opt && (opt->features & QStyleOptionViewItemV2::Alternate)) {
+      if ( opt && (opt->features & QStyleOptionViewItem::Alternate)) {
             painter->fillRect(option->rect, option->palette.brush(cg, QPalette::AlternateBase));
             }
 
@@ -2056,10 +2056,10 @@ bool MgStyle::drawPanelItemViewItemPrimitive( const QStyleOption* option, QPaint
             bool roundedRight = false;
             if ( opt ) {
 
-                  roundedLeft  = (opt->viewItemPosition == QStyleOptionViewItemV4::Beginning);
-                  roundedRight = (opt->viewItemPosition == QStyleOptionViewItemV4::End);
-                  if ( opt->viewItemPosition == QStyleOptionViewItemV4::OnlyOne ||
-                              opt->viewItemPosition == QStyleOptionViewItemV4::Invalid ||
+                  roundedLeft  = (opt->viewItemPosition == QStyleOptionViewItem::Beginning);
+                  roundedRight = (opt->viewItemPosition == QStyleOptionViewItem::End);
+                  if ( opt->viewItemPosition == QStyleOptionViewItem::OnlyOne ||
+                              opt->viewItemPosition == QStyleOptionViewItem::Invalid ||
                               (view && view->selectionBehavior() != QAbstractItemView::SelectRows)) {
                         roundedLeft  = true;
                         roundedRight = true;
@@ -7161,7 +7161,7 @@ bool MgStyle::drawToolBoxTabShapeControl( const QStyleOption* option, QPainter* 
 
       // cast to v2 and disable paint is tab is first
       const QStyleOptionToolBox* v2 = qstyleoption_cast<const QStyleOptionToolBox*>(option);
-      if ( v2 && v2->position == QStyleOptionToolBoxV2::Beginning && selected ) return true;
+      if ( v2 && v2->position == QStyleOptionToolBox::Beginning && selected ) return true;
 
       /*
       the proper widget (the toolbox tab) is not passed as argument by Qt.
@@ -7307,7 +7307,7 @@ QRect MgStyle::groupBoxSubControlRect( const QStyleOptionComplex* option, SubCon
                   const QStyleOptionGroupBox* gbOpt = qstyleoption_cast<const QStyleOptionGroupBox*>(option);
                   if ( !gbOpt) break;
 
-                  const bool isFlat( gbOpt->features & QStyleOptionFrameV2::Flat );
+                  const bool isFlat( gbOpt->features & QStyleOptionFrame::Flat );
                   const int th( gbOpt->fontMetrics.height() + 8 );
                   const QRect cr( subElementRect(SE_CheckBoxIndicator, option, widget) );
                   const int fw( pixelMetric(PM_DefaultFrameWidth, option, widget) );
@@ -7334,7 +7334,7 @@ QRect MgStyle::groupBoxSubControlRect( const QStyleOptionComplex* option, SubCon
                   const QStyleOptionGroupBox* gbOpt = qstyleoption_cast<const QStyleOptionGroupBox*>(option);
                   if ( !gbOpt) break;
 
-                  const bool isFlat( gbOpt->features & QStyleOptionFrameV2::Flat );
+                  const bool isFlat( gbOpt->features & QStyleOptionFrame::Flat );
                   QFontMetrics fontMetrics = gbOpt->QStyleOption::fontMetrics;
                   if(widget) {
                         QFont font = widget->font();
