@@ -137,7 +137,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Show courtesy' value</string>
+         <string>Reset 'Scale' values</string>
         </property>
         <property name="text">
          <string notr="true"/>
