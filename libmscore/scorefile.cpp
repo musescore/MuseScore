@@ -908,7 +908,7 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
                   const QString& version = e.attribute("version");
                   QStringList sl = version.split('.');
                   _mscVersion = sl[0].toInt() * 100 + sl[1].toInt();
-
+                  _mscRealVersion = _mscVersion;
                   if (!ignoreVersionError) {
                         QString message;
                         if (_mscVersion > MSCVERSION)

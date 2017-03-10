@@ -400,9 +400,9 @@ class Score : public QObject, public ScoreElement {
                                       ///< indicating if playPos after expanded repeats
                                       ///< has been calculated.
 
-      int _fileDivision; ///< division of current loading *.msc file
-      int _mscVersion;   ///< version of current loading *.msc file
-      int _mscRealVersion;   ///< version of current loading *.msc file
+      int _fileDivision; ///< division of current loading *.mscx file
+      int _mscVersion; ///< version of .mscx file during file read, then changed to MSCVERSION for drag and drop
+      int _mscRealVersion;  ///< keep the actual and initial version of current loaded *.mscx file
 
       QMap<int, LinkedElements*> _elinks;
       QMap<QString, QString> _metaTags;
