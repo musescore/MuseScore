@@ -27,10 +27,10 @@ InspectorJump::InspectorJump(QWidget* parent)
       j.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::JUMP_TO,            0, false, j.jumpTo,      0                  },
-            { P_ID::PLAY_UNTIL,         0, false, j.playUntil,   0                  },
-            { P_ID::CONTINUE_AT,        0, false, j.continueAt,  0                  },
-            { P_ID::PLAY_REPEATS,       0, false, j.playRepeats, j.resetPlayRepeats }
+            { P_ID::JUMP_TO,            0, j.jumpTo,      0                  },
+            { P_ID::PLAY_UNTIL,         0, j.playUntil,   0                  },
+            { P_ID::CONTINUE_AT,        0, j.continueAt,  0                  },
+            { P_ID::PLAY_REPEATS,       0, j.playRepeats, j.resetPlayRepeats }
             };
       const std::vector<InspectorPanel> ppList = {
             { t.title, t.panel },

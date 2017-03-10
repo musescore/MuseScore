@@ -28,11 +28,11 @@ InspectorGlissando::InspectorGlissando(QWidget* parent)
       g.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::GLISS_TYPE,      0, false, g.type,           g.resetType           },
-            { P_ID::GLISS_TEXT,      0, false, g.text,           g.resetText           },
-            { P_ID::GLISS_SHOW_TEXT, 0, false, g.showText,       g.resetShowText       },
-            { P_ID::GLISSANDO_STYLE, 0, false, g.glissandoStyle, g.resetGlissandoStyle },
-            { P_ID::PLAY,            0, 0,     g.playGlissando,  g.resetPlayGlissando  }
+            { P_ID::GLISS_TYPE,      0, g.type,           g.resetType           },
+            { P_ID::GLISS_TEXT,      0, g.text,           g.resetText           },
+            { P_ID::GLISS_SHOW_TEXT, 0, g.showText,       g.resetShowText       },
+            { P_ID::GLISSANDO_STYLE, 0, g.glissandoStyle, g.resetGlissandoStyle },
+            { P_ID::PLAY,            0, g.playGlissando,  g.resetPlayGlissando  }
             };
       const std::vector<InspectorPanel> ppList = {
             { g.title, g.panel }

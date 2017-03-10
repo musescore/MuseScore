@@ -27,20 +27,20 @@ InspectorTextBase::InspectorTextBase(QWidget* parent)
       t.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::FONT_FACE,         0, 0, t.fontFace,     t.resetFontFace     },
-            { P_ID::FONT_SIZE,         0, 0, t.fontSize,     t.resetFontSize     },
-            { P_ID::FONT_BOLD,         0, 0, t.bold,         t.resetBold         },
-            { P_ID::FONT_ITALIC,       0, 0, t.italic,       t.resetItalic       },
-            { P_ID::FONT_UNDERLINE,    0, 0, t.underline,    t.resetUnderline    },
-            { P_ID::FRAME,             0, 0, t.hasFrame,     t.resetHasFrame     },
-            { P_ID::FRAME_FG_COLOR,    0, 0, t.frameColor,   t.resetFrameColor   },
-            { P_ID::FRAME_BG_COLOR,    0, 0, t.bgColor,      t.resetBgColor      },
-            { P_ID::FRAME_CIRCLE,      0, 0, t.circle,       t.resetCircle       },
-            { P_ID::FRAME_SQUARE,      0, 0, t.square,       t.resetSquare       },
-            { P_ID::FRAME_WIDTH,       0, 0, t.frameWidth,   t.resetFrameWidth   },
-            { P_ID::FRAME_PADDING,     0, 0, t.paddingWidth, t.resetPaddingWidth },
-            { P_ID::FRAME_ROUND,       0, 0, t.frameRound,   t.resetFrameRound   },
-            { P_ID::ALIGN,             0, 0, t.align,        t.resetAlign        },
+            { P_ID::FONT_FACE,         0, t.fontFace,     t.resetFontFace     },
+            { P_ID::FONT_SIZE,         0, t.fontSize,     t.resetFontSize     },
+            { P_ID::FONT_BOLD,         0, t.bold,         t.resetBold         },
+            { P_ID::FONT_ITALIC,       0, t.italic,       t.resetItalic       },
+            { P_ID::FONT_UNDERLINE,    0, t.underline,    t.resetUnderline    },
+            { P_ID::FRAME,             0, t.hasFrame,     t.resetHasFrame     },
+            { P_ID::FRAME_FG_COLOR,    0, t.frameColor,   t.resetFrameColor   },
+            { P_ID::FRAME_BG_COLOR,    0, t.bgColor,      t.resetBgColor      },
+            { P_ID::FRAME_CIRCLE,      0, t.circle,       t.resetCircle       },
+            { P_ID::FRAME_SQUARE,      0, t.square,       t.resetSquare       },
+            { P_ID::FRAME_WIDTH,       0, t.frameWidth,   t.resetFrameWidth   },
+            { P_ID::FRAME_PADDING,     0, t.paddingWidth, t.resetPaddingWidth },
+            { P_ID::FRAME_ROUND,       0, t.frameRound,   t.resetFrameRound   },
+            { P_ID::ALIGN,             0, t.align,        t.resetAlign        },
             };
       for (auto& i : iiList)
             iList.push_back(i);
