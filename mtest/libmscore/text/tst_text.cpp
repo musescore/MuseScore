@@ -335,7 +335,7 @@ void TestText::testTextProperties()
 
       text->setFormat(FormatId::Italic , true);
       text->endEdit();
-      QCOMPARE(text->xmlText(), QString("I<b>Lo<i>ve</i></b><i>Muse</i>Score"));
+      QCOMPARE(text->xmlText(), QString("I<b>Love</b>MuseScore"));
 
       }
 
