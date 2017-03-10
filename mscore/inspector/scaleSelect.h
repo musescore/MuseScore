@@ -24,10 +24,12 @@ namespace Ms {
 class ScaleSelect : public QWidget, public Ui::ScaleSelect {
       Q_OBJECT
 
+      bool _lock;
       void blockScale(bool val);
 
    private slots:
-      void _scaleChanged();
+      void xScaleChanged();
+      void yScaleChanged();
 
    signals:
       void scaleChanged(const QSizeF&);
@@ -36,6 +38,7 @@ class ScaleSelect : public QWidget, public Ui::ScaleSelect {
       ScaleSelect(QWidget* parent);
       QSizeF scale() const;
       void setScale(const QSizeF&);
+      void setLock(bool);
       };
 
 }

@@ -75,8 +75,8 @@ void ScoreView::startEdit()
             editObject = toTBox(editObject)->text();
       curElement  = 0;
       setFocus();
-      if (!_score->undoStack()->active())
-            _score->startCmd();
+//      if (!_score->undoStack()->active())
+//            _score->startCmd();
       editObject->startEdit(this, data.startMove);
       curGrip = Grip::NO_GRIP;
       updateGrips();
@@ -92,7 +92,7 @@ void ScoreView::endEdit()
       setDropTarget(0);
       if (!editObject)
             return;
-      editObject->endEditDrag(data);
+//      editObject->endEditDrag(data);
       _score->addRefresh(editObject->canvasBoundingRect());
       for (int i = 0; i < grips; ++i)
             score()->addRefresh(grip[i]);
@@ -118,7 +118,7 @@ void ScoreView::endEdit()
                   _score->undoRemoveElement(text);
             }
 
-      _score->endCmd();
+//      _score->endCmd();
 
       if (dragElement && (dragElement != editObject)) {
             curElement = dragElement;
@@ -127,7 +127,7 @@ void ScoreView::endEdit()
             }
       mscore->updateInspector();
 
-      editObject = nullptr;
+      editObject = 0;
       grips      = 0;
       curGrip    = Grip::NO_GRIP;
       }
@@ -139,6 +139,8 @@ void ScoreView::endEdit()
 
 bool ScoreView::editElementDragTransition(QMouseEvent* ev)
       {
+      qDeleteAll(data.data);
+      data.data.clear();
       data.startMove = toLogical(ev->pos());
       data.lastPos   = data.startMove;
       data.pos       = data.startMove;
@@ -154,6 +156,8 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
             return true;
             }
       int i = 0;
+      score()->startCmd();
+      editObject->startEditDrag(data);
       if (grips) {
             qreal a = grip[0].width() * 1.0;
             for (; i < grips; ++i) {
@@ -212,6 +216,7 @@ void ScoreView::endDragEdit()
       {
       _score->addRefresh(editObject->canvasBoundingRect());
       editObject->endEditDrag(data);
+      score()->endCmd();
       setDropTarget(0);
       updateGrips();
       _score->rebuildBspTree();

@@ -133,7 +133,7 @@ struct EditData {
       //
       QList<ElementEditData*> data;
 
-      ElementEditData* getData(Element*);
+      ElementEditData* getData(Element*) const;
       void addData(ElementEditData*);
       };
 
@@ -311,6 +311,7 @@ class Element : public ScoreElement {
       virtual bool isEditable() const         { return !flag(ElementFlag::GENERATED); }
       virtual void startEdit(MuseScoreView*, const QPointF&);
       virtual bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString& s);
+      virtual void startEditDrag(EditData&)                    {}
       virtual void editDrag(const EditData&);
       virtual void endEditDrag(const EditData&)                {}
       virtual void endEdit()                                   {}
