@@ -778,9 +778,11 @@ Score::FileError Score::read114(XmlReader& e)
       rebuildMidiMapping();
       updateChannel();
 
-      // treat reading a 1.2 file as import
+      // treat reading a 1.14 file as import
       // on save warn if old file will be overwritten
       setCreated(true);
+      // don't autosave (as long as there's no change to the score)
+      setAutosaveDirty(false);
 
       return FileError::FILE_NO_ERROR;
       }

@@ -926,7 +926,7 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
                               parseVersion(_mscoreVersion);
                               }
                         else if (tag == "programRevision")
-                              _mscoreRevision = e.readInt();
+                              _mscoreRevision = e.readIntHex();
                         else if (tag == "Score") {
                               if (!read(e))
                                     return FileError::FILE_BAD_FORMAT;
@@ -1020,8 +1020,12 @@ bool Score::read(XmlReader& e)
                   _mscoreVersion = e.readElementText();
                   parseVersion(_mscoreVersion);
                   }
-            else if (tag == "programRevision")
-                  _mscoreRevision = e.readInt();
+            else if (tag == "programRevision") {
+                  if (_mscVersion <= 114)
+                        _mscoreRevision = e.readInt();
+                  else
+                        _mscoreRevision = e.readIntHex();
+            }
             else if (tag == "Omr") {
 #ifdef OMR
                   _omr = new Omr(this);
