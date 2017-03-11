@@ -2496,6 +2496,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
                               case LayoutMode::PAGE:
                               case LayoutMode::SYSTEM:
                                     continueFlag = !(curMeasure->lineBreak()
+                                                    || curMeasure->breakHint()
                                                     || curMeasure->sectionBreak()
                                                     || curMeasure->pageBreak());
                                     break;
