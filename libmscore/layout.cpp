@@ -2269,7 +2269,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                                     nt = BarLineType::START_REPEAT;
                               }
                         if (ot != nt) {
-                              qreal mag = bl->magS();
+                              qreal mag = bl->mag();
                               ww += BarLine::layoutWidth(this, nt, mag)
                                     - BarLine::layoutWidth(this, ot, mag);
                               }
@@ -2289,11 +2289,13 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                   if (ww < minMeasureWidth)
                         ww = minMeasureWidth;
                   isFirstMeasure = false;
+                  //qDebug("measure %d: ww %f + minWidth %f = %f", m->no(), ww, minWidth, ww + minWidth);
                   }
 
             // collect at least one measure
             bool empty = system->measures().isEmpty();
             if (!empty && (minWidth + ww > systemWidth)) {
+                  //qDebug("=== does not fit: systemWidth = %f", systemWidth);
                   curMeasure->setSystem(oldSystem);
                   continueFlag = false;
                   break;
