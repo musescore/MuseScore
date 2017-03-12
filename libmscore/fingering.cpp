@@ -124,6 +124,8 @@ void Fingering::layout()
 
 void Fingering::draw(QPainter* painter) const
       {
+      if (staff() && staff()->isTabStaff(tick()) && !staff()->staffType(tick())->showTabFingering())
+            return;
       Text::draw(painter);
       }
 

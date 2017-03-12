@@ -1121,7 +1121,6 @@ void Score::undoAddElement(Element* element)
                   if (e == parent)
                         ne = element;
                   else {
-                        bool tabFingering = e->staff()->staffType(e->tick())->showTabFingering();
                         if (element->isGlissando()) {    // and other spanners with Anchor::NOTE
                               Note* newEnd = Spanner::endElementFromSpanner(static_cast<Glissando*>(element), e);
                               if (newEnd) {
@@ -1131,8 +1130,6 @@ void Score::undoAddElement(Element* element)
                               else              //couldn't find suitable start note
                                     continue;
                               }
-                        else if (element->isFingering() && e->staff()->isTabStaff(e->tick()) && !tabFingering)
-                              continue;
                         else
                               ne = element->linkedClone();
                         }

@@ -685,7 +685,7 @@
                   <item>
                    <widget class="QCheckBox" name="showTabFingering">
                     <property name="text">
-                     <string>Show fingering in tablature</string>
+                     <string>Show fingerings</string>
                     </property>
                    </widget>
                   </item>
@@ -1425,6 +1425,7 @@
   <tabstop>linesThroughRadio</tabstop>
   <tabstop>linesBrokenRadio</tabstop>
   <tabstop>showBackTied</tabstop>
+  <tabstop>showTabFingering</tabstop>
   <tabstop>durFontName</tabstop>
   <tabstop>durFontSize</tabstop>
   <tabstop>durY</tabstop>
