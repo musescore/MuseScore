@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="leftMargin">
@@ -38,13 +38,13 @@
       <string>width</string>
      </property>
      <property name="accessibleName">
-      <string>Horizontal offset</string>
+      <string>Width</string>
      </property>
      <property name="prefix">
-      <string>W:</string>
+      <string extracomment="width">W:</string>
      </property>
      <property name="suffix">
-      <string extracomment="width"/>
+      <string/>
      </property>
      <property name="decimals">
       <number>2</number>
@@ -72,13 +72,13 @@
       <string>height</string>
      </property>
      <property name="accessibleName">
-      <string>Vertical offset</string>
+      <string>Height</string>
      </property>
      <property name="prefix">
-      <string>H:</string>
+      <string extracomment="height">H:</string>
      </property>
      <property name="suffix">
-      <string extracomment="height"/>
+      <string/>
      </property>
      <property name="minimum">
       <double>0.000000000000000</double>
@@ -93,8 +93,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
