@@ -1622,6 +1622,16 @@ Element* Element::findMeasure()
             return 0;
       }
 
+const Element* Element::findMeasure() const
+      {
+      if (type() == Element::Type::MEASURE)
+            return this;
+      else if (_parent)
+            return _parent->findMeasure();
+      else
+            return 0;
+      }
+
 //---------------------------------------------------------
 //   undoSetColor
 //---------------------------------------------------------
