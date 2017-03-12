@@ -41,11 +41,10 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
       level->setValue(score->mscVersion());
       version->setText(score->mscoreVersion());
       int rev = score->mscoreRevision();
-      if (rev > 99999) { // MuseScore 1.3 is 5702, 2.0 uses a 7-digit hex SHA
-            revision->setDisplayIntegerBase(16);
-            revision->setMaximum(0xfffffff);
-            }
-      revision->setValue(rev);
+      if (rev > 99999)  // MuseScore 1.3 is decimal 5702, 2.0 and later uses a 7-digit hex SHA
+            revision->setText(QString::number(rev, 16));
+      else
+            revision->setText(QString::number(rev, 10));
       filePath->setText(score->importedFilePath());
 
       int idx = 0;
