@@ -35,7 +35,7 @@
       <string>Horizontal offset</string>
      </property>
      <property name="prefix">
-      <string>X:</string>
+      <string extracomment="horizontal">X:</string>
      </property>
      <property name="suffix">
       <string>sp</string>
@@ -77,7 +77,7 @@
       <string>Vertical offset</string>
      </property>
      <property name="prefix">
-      <string>Y:</string>
+      <string extracomment="vertical">Y:</string>
      </property>
      <property name="suffix">
       <string>sp</string>
