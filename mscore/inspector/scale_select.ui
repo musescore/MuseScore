@@ -35,7 +35,7 @@
       <string>Horizontal scale</string>
      </property>
      <property name="prefix">
-      <string>X:</string>
+      <string extracomment="horizontal">X:</string>
      </property>
      <property name="minimum">
       <double>0.000000000000000</double>
@@ -63,7 +63,7 @@
       <string>Vertical scale</string>
      </property>
      <property name="prefix">
-      <string>Y:</string>
+      <string extracomment="vertical">Y:</string>
      </property>
      <property name="minimum">
       <double>0.000000000000000</double>
