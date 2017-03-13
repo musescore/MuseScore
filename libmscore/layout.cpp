@@ -3381,6 +3381,8 @@ void Score::doLayout()
 
 void Score::doLayoutRange(int stick, int etick)
       {
+      if (!firstMeasure())
+            return;
 qDebug("%p %d-%d", this, stick, etick);
       if (stick < 0)
             stick = 0;
