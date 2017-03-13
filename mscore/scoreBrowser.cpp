@@ -174,7 +174,7 @@ void ScoreBrowser::setScores(QFileInfoList& s)
 
       ScoreListWidget* sl = 0;
 
-      QStringList filter = { "*.mscz" };
+      QStringList filter = { "*.mscz", "*.mscx" };
 
       if (_showCustomCategory)
             std::sort(s.begin(), s.end(), [](QFileInfo a, QFileInfo b)->bool { return a.fileName() < b.fileName(); });
