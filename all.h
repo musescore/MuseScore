@@ -36,6 +36,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <array>
+#include <functional>
 
 #include <QtGui>
 #include <QLoggingCategory>
