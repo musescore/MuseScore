@@ -1055,11 +1055,8 @@ QString Excerpt::createName(const QString& partName, QList<Excerpt*>& excerptLis
 
       for (Excerpt* e : excerptList) {
             // if <partName> already exists, change <partName> to <partName 1>
-            if (e->title().compare(name) == 0) {
+            if (e->title().compare(name) == 0)
                   e->setTitle(e->title() + " 1");
-                  count = 1;
-                  break;
-                  }
 
             QRegExp rx("^(.+)\\s\\d+$");
             if (rx.indexIn(e->title()) > -1 && rx.cap(1) == name)
