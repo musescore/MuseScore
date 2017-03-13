@@ -351,14 +351,16 @@ static QString addPositioningAttributes (QString &xml, Element const* const el, 
                 seg = span->spannerSegments().first();
                 QPointF userOff = seg->userOff();
                 QPointF p = seg->pos();
-                defaultX = userOff.x() * 10 / spatium;
-                defaultY = p.y() * -10 / spatium;
+                defaultX = userOff.x();
+                defaultY = p.y();
             }
             else
             {
                 seg = span->spannerSegments().last();
                 QPointF userOff = seg->userOff(); // This is the offset accessible from the inspector
                 QPointF userOff2 = seg->userOff2(); // Offset of the actual dragged anchor, which doesn't affect the inspector offset
+                QPointF pos = seg->pos();
+                QPointF pos2 = seg->pos2();
 
                 Note* n = dynamic_cast<Note*>(span->endElement());
                 ChordRest* cr = n ? n->chord() : dynamic_cast<ChordRest*>(span->endElement());
@@ -375,11 +377,11 @@ static QString addPositioningAttributes (QString &xml, Element const* const el, 
                 float mX = cr ?  m->pos().x() : m->tick2pos(t); // Distance the start of the measure is from the beginning of the line
                 float crSpace = cr ? cr->x() + cr->space().rw() : 0; // this is the space between the left edge of hte note to the right edge of the note
 
-                defaultX = (m->width() - ((linePos.x() - mX - crSpace) + (userOff2.x() + userOff.x())));
+                defaultX = (((linePos.x() - mX - crSpace) + (userOff2.x() + userOff.x())) - m->width());
                 // add the position of the end anchor to the offset to get the absolute X
                 // the x's go from the right edge for some reason, so you must subtract the measure width and multiply by -10 instead of 10 to get a negative
                 // LinePos includes the measureX, so we must subtract that because defaultX is relative to the current measure
-                defaultX *=  -10 / spatium; // convert into spatium tenths for musicxml
+                defaultY = pos.y() + pos2.y();
 
              /* qDebug("CR SegPos X: %f", cr->segment()->pos().x());
                 qDebug("CR Pos X: %f", cr->pos().x());
@@ -392,6 +394,8 @@ static QString addPositioningAttributes (QString &xml, Element const* const el, 
                 qDebug("defaultX : %f", defaultX); */
             }
         }
+
+        defaultX *=  10 / spatium; defaultY *=  -10 / spatium; // convert into spatium tenths for musicxml
 
         if (preferences.musicxmlExportLayout && fabsf(defaultX) > positionElipson)
               xml += QString(" default-x=\"%1\"").arg(QString::number(defaultX, 'f', 2));
