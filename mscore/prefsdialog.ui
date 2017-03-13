@@ -714,74 +714,101 @@
        <item row="1" column="1" rowspan="2">
         <widget class="QGroupBox" name="groupBox_12">
          <property name="title">
-          <string>Style</string>
+          <string>Theme</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_9">
-          <item row="0" column="0">
-           <widget class="QComboBox" name="styleName">
-            <property name="accessibleName">
-             <string>Select style</string>
-            </property>
+          <item row="1" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <property name="text">
-              <string>Dark</string>
-             </property>
+             <widget class="QComboBox" name="styleName">
+              <property name="accessibleName">
+               <string>Select style</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>Dark</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Light</string>
+               </property>
+              </item>
+             </widget>
             </item>
             <item>
-             <property name="text">
-              <string>Light</string>
-             </property>
+             <widget class="QCheckBox" name="animations">
+              <property name="accessibleName">
+               <string>Animations</string>
+              </property>
+              <property name="text">
+               <string>Animations</string>
+              </property>
+             </widget>
             </item>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QSpinBox" name="iconHeight">
-            <property name="accessibleName">
-             <string>Icon Height</string>
-            </property>
-            <property name="suffix">
-             <string extracomment="pixel">px</string>
-            </property>
-            <property name="minimum">
-             <number>5</number>
-            </property>
-            <property name="value">
-             <number>20</number>
-            </property>
-           </widget>
+           </layout>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="label_26">
-            <property name="text">
-             <string>Icon size:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QSpinBox" name="iconWidth">
-            <property name="accessibleName">
-             <string>Icon Width</string>
-            </property>
-            <property name="suffix">
-             <string extracomment="pixel">px</string>
-            </property>
-            <property name="minimum">
-             <number>5</number>
-            </property>
-            <property name="value">
-             <number>20</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="animations">
-            <property name="accessibleName">
-             <string>Animations</string>
-            </property>
-            <property name="text">
-             <string>Animations</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QLabel" name="label_26">
+              <property name="text">
+               <string>Icon width:</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignLeft">
+             <widget class="QSpinBox" name="iconWidth">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="accessibleName">
+               <string>Icon Width</string>
+              </property>
+              <property name="suffix">
+               <string extracomment="pixel">px</string>
+              </property>
+              <property name="minimum">
+               <number>5</number>
+              </property>
+              <property name="value">
+               <number>20</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Icon height:</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignLeft">
+             <widget class="QSpinBox" name="iconHeight">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="accessibleName">
+               <string>Icon Height</string>
+              </property>
+              <property name="suffix">
+               <string extracomment="pixel">px</string>
+              </property>
+              <property name="minimum">
+               <number>5</number>
+              </property>
+              <property name="value">
+               <number>20</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
@@ -3432,7 +3459,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Resolution DPI:</string>
+             <string>Resolution:</string>
             </property>
            </widget>
           </item>
@@ -3468,7 +3495,7 @@
              <string>Choose resolution DPI</string>
             </property>
             <property name="suffix">
-             <string extracomment="dots per inch">DPI</string>
+             <string extracomment="dots per inch">dpi</string>
             </property>
             <property name="minimum">
              <number>32</number>
@@ -3613,7 +3640,7 @@
              <string>Choose resolution DPI</string>
             </property>
             <property name="suffix">
-             <string extracomment="dots per inch">DPI</string>
+             <string extracomment="dots per inch">dpi</string>
             </property>
             <property name="minimum">
              <number>75</number>
@@ -3776,7 +3803,7 @@
           <item row="1" column="3">
            <widget class="QLabel" name="exportMp3BitRateUnit">
             <property name="text">
-             <string>kBit/s</string>
+             <string>kbps</string>
             </property>
            </widget>
           </item>
@@ -3796,7 +3823,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="exportMp3BitRateLabel">
             <property name="text">
-             <string>MP3 Bitrate:</string>
+             <string>MP3 bitrate:</string>
             </property>
            </widget>
           </item>
@@ -4076,10 +4103,6 @@
   <tabstop>myImagesButton</tabstop>
   <tabstop>language</tabstop>
   <tabstop>updateTranslation</tabstop>
-  <tabstop>styleName</tabstop>
-  <tabstop>animations</tabstop>
-  <tabstop>iconWidth</tabstop>
-  <tabstop>iconHeight</tabstop>
   <tabstop>autoSave</tabstop>
   <tabstop>autoSaveTime</tabstop>
   <tabstop>oscServer</tabstop>
