@@ -28,6 +28,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <math.h>
+#include <functional>
 
 #include <QtGui>
 #include <QModelIndex>
