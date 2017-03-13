@@ -178,6 +178,17 @@ void ExcerptsDialog::newClicked()
       excerptList->addItem(ei);
       excerptList->selectionModel()->clearSelection();
       excerptList->setCurrentItem(ei, QItemSelectionModel::SelectCurrent);
+      for (int i = 0; i < excerptList->count(); ++i) {
+            ExcerptItem* e = (ExcerptItem*)excerptList->item(i);
+            if (e->excerpt()->title() != e->text()) {
+                  // if except score not created yet, change the UI title
+                  // if already created, change back(see createName) the excerpt title
+                  if (!e->excerpt()->partScore())
+                        e->setText(e->excerpt()->title());
+                  else
+                        e->excerpt()->setTitle(e->text());
+                  }
+            }
       }
 
 //---------------------------------------------------------
