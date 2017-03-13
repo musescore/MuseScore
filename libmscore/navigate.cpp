@@ -271,7 +271,8 @@ Note* Score::downAltCtrl(Note* note) const
 
 Element* Score::firstElement()
       {
-      return this->firstSegment()->element(0);
+      Segment *s = firstSegment();
+      return s ? s->element(0) : nullptr;
       }
 
 //---------------------------------------------------------
@@ -280,18 +281,18 @@ Element* Score::firstElement()
 
 Element* Score::lastElement()
       {
-      Element* re =0;
-      Segment* seg = this->lastSegment();
+      Element* re = 0;
+      Segment* seg = lastSegment();
+      if (!seg)
+            return nullptr;
       while (true) {
-            for(int i = (this->staves().size() -1) * VOICES; i < this->staves().size() * VOICES; i++){
-                  if(seg->element(i) != 0){
+            for (int i = (staves().size() - 1) * VOICES; i < staves().size() * VOICES; i++) {
+                  if (seg->element(i) != 0)
                         re = seg->element(i);
-                        }
                   }
-            if(re){
-                  if(re->type() == Element::Type::CHORD){
+            if (re) {
+                  if (re->type() == Element::Type::CHORD)
                         return static_cast<Chord*>(re)->notes().first();
-                        }
                   return re;
                   }
             seg = seg->prev1MM(Segment::Type::All);
