@@ -175,10 +175,10 @@ bool Score::sanityCheck(const QString& name)
       QString error;
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             Fraction mLen = m->len();
-            int endStaff = staves().size();
+            int endStaff  = staves().size();
             for (int staffIdx = 0; staffIdx < endStaff; ++staffIdx) {
                   Rest* fmrest0 = 0;      // full measure rest in voice 0
-                  Fraction voices[VOICES] = {};
+                  Fraction voices[VOICES];
 #ifndef NDEBUG
                   m->setCorrupted(staffIdx, false);
 #endif
