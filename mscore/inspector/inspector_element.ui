@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>197</width>
-    <height>157</height>
+    <width>227</width>
+    <height>216</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -86,16 +86,6 @@
        <widget class="QCheckBox" name="autoplace">
         <property name="text">
          <string>Automatic placement</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Stacking order:</string>
-        </property>
-        <property name="buddy">
-         <cstring>z</cstring>
         </property>
        </widget>
       </item>
@@ -224,21 +214,59 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1" colspan="2">
-       <widget class="QSpinBox" name="z">
-        <property name="accessibleName">
-         <string>Stacking order</string>
-        </property>
-        <property name="maximum">
-         <number>1000000000</number>
-        </property>
-        <property name="singleStep">
-         <number>100</number>
+      <item row="5" column="1" colspan="2">
+       <widget class="Ms::OffsetSelect" name="offset" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
        </widget>
       </item>
-      <item row="5" column="1" colspan="2">
-       <widget class="Ms::OffsetSelect" name="offset" native="true"/>
+      <item row="2" column="0" colspan="3">
+       <widget class="QWidget" name="widget" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Stacking order:</string>
+           </property>
+           <property name="buddy">
+            <cstring>z</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="z">
+           <property name="accessibleName">
+            <string>Stacking order</string>
+           </property>
+           <property name="maximum">
+            <number>10000</number>
+           </property>
+           <property name="singleStep">
+            <number>100</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </item>
      </layout>
     </widget>

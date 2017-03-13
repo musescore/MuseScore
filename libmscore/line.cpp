@@ -1144,9 +1144,7 @@ bool SLine::readProperties(XmlReader& e)
             _dashGapLen = e.readDouble();
       else if (tag == "lineColor")
             _lineColor = e.readColor();
-      else if (Element::readProperties(e))
-            ;
-      else
+      else if (!Element::readProperties(e))
             return false;
       return true;
       }

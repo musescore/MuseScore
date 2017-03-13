@@ -45,6 +45,7 @@
 #include "pedal.h"
 #include "hairpin.h"
 #include "ottava.h"
+#include "trill.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -1114,6 +1115,21 @@ static void readHairpin(XmlReader& e, Hairpin* h)
       }
 
 //---------------------------------------------------------
+//   readTrill
+//---------------------------------------------------------
+
+static void readTrill(XmlReader& e, Trill* t)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "subtype")
+                  t->setTrillType(e.readElementText());
+            else if (!t->SLine::readProperties(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
 //   readTextLine
 //---------------------------------------------------------
 
@@ -1494,6 +1510,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         readOttava(e, toOttava(sp));
                   else if (tag == "HairPin")
                         readHairpin(e, toHairpin(sp));
+                  else if (tag == "Trill")
+                        readTrill(e, toTrill(sp));
                   else
                         readTextLine(e, static_cast<TextLineBase*>(sp));
                   score->addSpanner(sp);
