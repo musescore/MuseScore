@@ -114,6 +114,7 @@
       <Measure number="2">
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="2"/>
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>
