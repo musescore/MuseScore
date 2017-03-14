@@ -745,11 +745,11 @@ ChordRest* Spanner::startCR()
 ChordRest* Spanner::endCR()
       {
       Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
-      if (!_endElement && type() == ElementType::SLUR) {
+      if (!_endElement && isSlur()) {
             Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
-            _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
+            _endElement = s ? toChordRest(s->element(track2())) : 0;
             }
-      return static_cast<ChordRest*>(_endElement);
+      return toChordRest(_endElement);
       }
 
 //---------------------------------------------------------

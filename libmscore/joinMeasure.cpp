@@ -36,9 +36,19 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
 
       int tick1 = m1->tick();
       int tick2 = m2->endTick();
+
       auto spanners = _spanner.findContained(tick1, tick2);
       for (auto i : spanners)
             undo(new RemoveElement(i.value));
+
+      for (auto i : spanner()) {
+            Spanner* s = i.second;
+            if (s->tick() >= tick1 && s->tick() < tick2)
+                  s->setStartElement(0);
+            if (s->tick2() >= tick1 && s->tick2() < tick2)
+                  s->setEndElement(0);
+            }
+
       undoRemoveMeasures(m1, m2);
       Measure* m = new Measure(this);
 //TODO      m->setEndBarLineType(m2->endBarLineType(), m2->endBarLineGenerated(),
