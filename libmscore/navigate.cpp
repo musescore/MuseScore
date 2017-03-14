@@ -273,7 +273,8 @@ Note* Score::downAltCtrl(Note* note) const
 
 Element* Score::firstElement()
       {
-      return firstSegment(SegmentType::All)->element(0);
+      Segment *s = firstSegment(SegmentType::All);
+      return s ? s->element(0) : nullptr;
       }
 
 //---------------------------------------------------------
@@ -282,8 +283,10 @@ Element* Score::firstElement()
 
 Element* Score::lastElement()
       {
-      Element* re =0;
-      Segment* seg = this->lastSegment();
+      Element* re = 0;
+      Segment* seg = lastSegment();
+      if (!seg)
+            return nullptr;
       while (true) {
             for (int i = (staves().size() -1) * VOICES; i < staves().size() * VOICES; i++) {
                   if (seg->element(i))
