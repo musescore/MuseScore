@@ -253,6 +253,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QMenu* menuNotes;
       QMenu* menuLayout;
       QMenu* menuStyle;
+      QMenu* menuTools;
       AlbumManager* albumManager           { 0 };
 
       QWidget* _searchDialog               { 0 };
