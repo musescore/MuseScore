@@ -596,6 +596,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 #endif
 #ifndef USE_ALSA
       alsaDriver->setVisible(false);
+      alsaDriver->setChecked(false);
 #else
       alsaSampleRate->clear();
       alsaSampleRate->addItem(tr("192000"), 192000);
@@ -1396,14 +1397,15 @@ void PreferenceDialog::apply()
                   }
             }
       else if (
-         (prefs.useAlsaAudio != alsaDriver->isChecked())
-         || (wasJack != nowJack)
+         (wasJack != nowJack)
          || (prefs.usePortaudioAudio != portaudioDriver->isChecked())
          || (prefs.usePulseAudio != pulseaudioDriver->isChecked())
+#ifdef USE_ALSA
          || (prefs.alsaDevice != alsaDevice->text())
          || (prefs.alsaSampleRate != alsaSampleRate->currentData().toInt())
          || (prefs.alsaPeriodSize != alsaPeriodSize->currentData().toInt())
          || (prefs.alsaFragments != alsaFragments->value())
+#endif
             ) {
             if (seq)
                   seq->exit();
