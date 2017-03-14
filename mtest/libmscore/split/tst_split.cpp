@@ -82,7 +82,7 @@ void TestSplit::split(const char* f1, const char* ref, int index)
       Segment* s = m->first(SegmentType::ChordRest);
       for (int i = 0; i < index; ++i)
             s = s->next1(SegmentType::ChordRest);
-      ChordRest* cr = static_cast<ChordRest*>(s->element(0));
+      ChordRest* cr = toChordRest(s->element(0));
 
       score->cmdSplitMeasure(cr);
 

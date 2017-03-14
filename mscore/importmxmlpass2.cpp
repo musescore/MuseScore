@@ -2279,7 +2279,8 @@ void MusicXMLParserPass2::print(Measure* measure)
             if (blankPage == 1) {       // blank title page, insert a VBOX if needed
                   pm = measure->prev();
                   if (pm == 0) {
-                        pm = _score->insertMeasure(ElementType::VBOX, measure);
+                        _score->insertMeasure(ElementType::VBOX, measure);
+                        pm = measure->prev();
                         }
                   }
             }

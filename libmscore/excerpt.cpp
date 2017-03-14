@@ -179,14 +179,17 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
       // create excerpt title and title frame for all scores if not already there
       MeasureBase* measure = oscore->first();
 
-      if (!measure || (measure->type() != ElementType::VBOX))
-            measure = oscore->insertMeasure(ElementType::VBOX, measure);
-      VBox* titleFrameScore = static_cast<VBox*>(measure);
+      if (!measure || !measure->isVBox()) {
+            qDebug("original score has no header frame");
+            oscore->insertMeasure(ElementType::VBOX, measure);
+            measure = oscore->first();
+            }
+      VBox* titleFrameScore = toVBox(measure);
 
       measure = score->first();
-      Q_ASSERT(measure->type() == ElementType::VBOX);
+      Q_ASSERT(measure->isVBox());
 
-      VBox* titleFramePart = static_cast<VBox*>(measure);
+      VBox* titleFramePart = toVBox(measure);
       titleFramePart->copyValues(titleFrameScore);
       QString partLabel = excerpt->title();     // parts.front()->longName();
       if (!partLabel.isEmpty()) {

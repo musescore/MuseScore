@@ -119,10 +119,6 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
         <Rest>
           <lid>179</lid>
           <durationType>measure</durationType>
@@ -130,6 +126,10 @@
           </Rest>
         </Measure>
       <Measure number="2">
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
         <Tempo>
           <tempo>1.66667</tempo>
           <text>𝅘𝅥 = 100</text>
@@ -208,10 +208,6 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Clef>
-          <concertClefType>F</concertClefType>
-          <transposingClefType>F</transposingClefType>
-          </Clef>
         <Rest>
           <lid>180</lid>
           <durationType>measure</durationType>
@@ -219,6 +215,10 @@
           </Rest>
         </Measure>
       <Measure number="2">
+        <Clef>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
+          </Clef>
         <Rest>
           <lid>3</lid>
           <durationType>measure</durationType>
@@ -254,10 +254,6 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
         <Rest>
           <lid>181</lid>
           <durationType>measure</durationType>
@@ -265,6 +261,10 @@
           </Rest>
         </Measure>
       <Measure number="2">
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
         <Rest>
           <lid>9</lid>
           <durationType>measure</durationType>
@@ -378,10 +378,6 @@
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <Rest>
             <lid>179</lid>
             <durationType>measure</durationType>
@@ -390,6 +386,10 @@
           </Measure>
         <Measure number="2">
           <breakMultiMeasureRest>1</breakMultiMeasureRest>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
           <Tempo>
             <tempo>1.66667</tempo>
             <text>𝅘𝅥 = 100</text>
@@ -468,10 +468,6 @@
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <Rest>
             <lid>180</lid>
             <durationType>measure</durationType>
@@ -479,6 +475,10 @@
             </Rest>
           </Measure>
         <Measure number="2">
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
           <Rest>
             <lid>3</lid>
             <durationType>measure</durationType>
@@ -586,10 +586,6 @@
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <Rest>
             <lid>181</lid>
             <durationType>measure</durationType>
@@ -598,6 +594,10 @@
           </Measure>
         <Measure number="2">
           <breakMultiMeasureRest>1</breakMultiMeasureRest>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
           <Tempo>
             <tempo>1.66667</tempo>
             <lid>25</lid>

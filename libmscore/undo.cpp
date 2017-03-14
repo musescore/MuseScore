@@ -1035,10 +1035,10 @@ void Score::undoAddElement(Element* element)
          || (et == ElementType::TEMPO_TEXT)
          || (et == ElementType::VOLTA)
          ) {
-            foreach(Score* s, scoreList())
+            for (Score* s : scoreList())
                   staffList.append(s->staff(0));
 
-            foreach (Staff* staff, staffList) {
+            for (Staff* staff : staffList) {
                   Score* score  = staff->score();
                   int staffIdx  = staff->idx();
                   int ntrack    = staffIdx * VOICES;
@@ -1121,9 +1121,8 @@ void Score::undoAddElement(Element* element)
                   if (e == parent)
                         ne = element;
                   else {
-                        bool tabFingering = e->staff()->staffType(e->tick())->showTabFingering();
                         if (element->isGlissando()) {    // and other spanners with Anchor::NOTE
-                              Note* newEnd = Spanner::endElementFromSpanner(static_cast<Glissando*>(element), e);
+                              Note* newEnd = Spanner::endElementFromSpanner(toGlissando(element), e);
                               if (newEnd) {
                                     ne = element->linkedClone();
                                     static_cast<Spanner*>(ne)->setNoteSpan(toNote(e), newEnd);
@@ -1131,8 +1130,12 @@ void Score::undoAddElement(Element* element)
                               else              //couldn't find suitable start note
                                     continue;
                               }
-                        else if (element->isFingering() && e->staff()->isTabStaff(e->tick()) && !tabFingering)
-                              continue;
+                        else if (element->isFingering()) {
+                              bool tabFingering = e->staff()->staffType(e->tick())->showTabFingering();
+                              if (e->staff()->isTabStaff(e->tick()) && !tabFingering)
+                                    continue;
+                              ne = element->linkedClone();
+                              }
                         else
                               ne = element->linkedClone();
                         }

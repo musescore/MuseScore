@@ -99,6 +99,8 @@ class System : public Element {
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
+      void appendMeasure(MeasureBase*);
+
       Page* page() const                    { return (Page*)parent(); }
 
       void layoutSystem(qreal);
