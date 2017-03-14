@@ -118,6 +118,7 @@
           </Tempo>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="2"/>
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -166,6 +167,7 @@
           <durationType>half</durationType>
           </Rest>
         <BarLine>
+          <subtype>normal</subtype>
           <span>1</span>
           </BarLine>
         </Measure>

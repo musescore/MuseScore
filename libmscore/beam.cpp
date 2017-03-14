@@ -2474,5 +2474,22 @@ StyleIdx Beam::getPropertyStyle(P_ID id) const
       return StyleIdx::NOSTYLE;
       }
 
+//---------------------------------------------------------
+//   tick
+//---------------------------------------------------------
+
+int Beam::tick() const
+      {
+      return _elements.empty() ? 0 : _elements.front()->tick();
+      }
+
+//---------------------------------------------------------
+//   rtick
+//---------------------------------------------------------
+
+int Beam::rtick() const
+      {
+      return _elements.empty() ? 0 : _elements.front()->rtick();
+      }
 }
 

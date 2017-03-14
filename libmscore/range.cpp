@@ -196,8 +196,11 @@ void TrackList::append(Element* e)
                         }
                   }
             }
-      else
-            QList<Element*>::append(e->clone());
+      else {
+            Element* c = e->clone();
+            c->setParent(0);
+            QList<Element*>::append(c);
+            }
       }
 
 //---------------------------------------------------------
@@ -638,6 +641,9 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
                   Spanner* s = i.second;
                   if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
                         Spanner* ns = static_cast<Spanner*>(s->clone());
+                        ns->setParent(0);
+                        ns->setStartElement(0);
+                        ns->setEndElement(0);
                         ns->setTick(ns->tick() - stick);
                         spanner.push_back(ns);
                         }

@@ -27,7 +27,6 @@ class Score;
 class System;
 class Measure;
 
-#if 1
 //---------------------------------------------------------
 //   Repeat
 //---------------------------------------------------------
@@ -46,7 +45,6 @@ constexpr Repeat operator| (Repeat t1, Repeat t2) {
 constexpr bool operator& (Repeat t1, Repeat t2) {
       return static_cast<int>(t1) & static_cast<int>(t2);
       }
-#endif
 
 //---------------------------------------------------------
 //   @@ MeasureBase
