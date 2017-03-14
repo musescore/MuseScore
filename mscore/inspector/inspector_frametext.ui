@@ -91,6 +91,12 @@
         <property name="accessibleName">
          <string>substyle</string>
         </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
+        </property>
+        <property name="minimumContentsLength">
+         <number>10</number>
+        </property>
        </widget>
       </item>
       <item row="0" column="2">

@@ -63,16 +63,16 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="2">
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
         <Chord>
           <durationType>quarter</durationType>
           <Note>

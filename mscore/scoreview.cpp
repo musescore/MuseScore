@@ -5461,8 +5461,10 @@ void ScoreView::cmdAddText(TEXT type)
             case TEXT::PART:
                   {
                   MeasureBase* measure = _score->first();
-                  if (measure->type() != ElementType::VBOX)
-                        measure = _score->insertMeasure(ElementType::VBOX, measure);
+                  if (!measure->isVBox()) {
+                        _score->insertMeasure(ElementType::VBOX, measure);
+                        measure = measure->prev();
+                        }
                   s = new Text(_score);
                   switch(type) {
                         case TEXT::TITLE:    s->initSubStyle(SubStyle::TITLE);    break;
@@ -5578,7 +5580,8 @@ void ScoreView::cmdAppendMeasures(int n, ElementType type)
 MeasureBase* ScoreView::appendMeasure(ElementType type)
       {
       _score->startCmd();
-      MeasureBase* mb = _score->insertMeasure(type, 0);
+      _score->insertMeasure(type, 0);
+      MeasureBase* mb = _score->last();
       _score->endCmd();
       return mb;
       }
@@ -5636,7 +5639,8 @@ void ScoreView::cmdInsertMeasure(ElementType type)
       if (!mb)
             return;
       _score->startCmd();
-      mb = _score->insertMeasure(type, mb);
+      _score->insertMeasure(type, mb);
+      mb = mb->prev();
       if (mb->type() == ElementType::TBOX) {
             TBox* tbox = static_cast<TBox*>(mb);
             Text* s = tbox->text();

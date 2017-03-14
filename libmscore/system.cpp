@@ -93,6 +93,16 @@ void System::clear()
       }
 
 //---------------------------------------------------------
+//   appendMeasure
+//---------------------------------------------------------
+
+void System::appendMeasure(MeasureBase* mb)
+      {
+      mb->setSystem(this);
+      ml.push_back(mb);
+      }
+
+//---------------------------------------------------------
 //   vbox
 //    a system can only contain one vertical frame
 //---------------------------------------------------------

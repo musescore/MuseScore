@@ -1410,8 +1410,10 @@ void Score::removeElement(Element* element)
             return;
             }
 
-      if (et == ElementType::BEAM)          // beam parent does not survive layout
+      if (et == ElementType::BEAM) {          // beam parent does not survive layout
             element->setParent(0);
+            parent = 0;
+            }
 
       if (parent)
             parent->remove(element);

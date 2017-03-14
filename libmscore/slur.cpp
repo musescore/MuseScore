@@ -783,7 +783,12 @@ void Slur::slurPos(SlurPos* sp)
             return;
 
       sp->p1 = scr->pagePos() - sp->system1->pagePos();
-      sp->p2 = ecr->pagePos() - sp->system2->pagePos();
+      QPointF ppp = ecr->pagePos();
+      System* sss = sp->system2;
+      QPointF pppp = sss->pagePos();
+      sp->p2 = ppp - pppp;
+
+//      sp->p2 = ecr->pagePos() - sp->system2->pagePos();
       // account for centering or other adjustments (other than mirroring)
       if (note1 && !note1->mirror())
             sp->p1.rx() += note1->x();

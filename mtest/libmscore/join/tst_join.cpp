@@ -63,7 +63,6 @@ void TestJoin::initTestCase()
 void TestJoin::join(const char* p1, const char* p2)
       {
       MasterScore* score = readScore(DIR + p1);
-      score->doLayout();
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();
 

@@ -16,6 +16,7 @@
 #include "chordrest.h"
 #include "range.h"
 #include "tuplet.h"
+#include "spanner.h"
 
 namespace Ms {
 
@@ -50,12 +51,26 @@ void Score::splitMeasure(Segment* segment)
       ScoreRange range;
       range.read(measure->first(), measure->last());
 
+      int stick = measure->tick();
+      int etick = measure->endTick();
+
+      for (auto i : spanner()) {
+            Spanner* s = i.second;
+            if (s->tick() >= stick && s->tick() < etick)
+                  s->setStartElement(0);
+            if (s->tick2() >= stick && s->tick2() < etick)
+                  s->setEndElement(0);
+            }
+
+      MeasureBase* nm = measure->next();
       undoRemoveMeasures(measure, measure);
       undoInsertTime(measure->tick(), -measure->ticks());
 
       // create empty measures:
-      Measure* m2 = toMeasure(insertMeasure(ElementType::MEASURE, measure->next(), true));
-      Measure* m1 = toMeasure(insertMeasure(ElementType::MEASURE, m2, true));
+      insertMeasure(ElementType::MEASURE, nm, true);
+      Measure* m2 = toMeasure(nm ? nm->prev() : lastMeasure());
+      insertMeasure(ElementType::MEASURE, m2, true);
+      Measure* m1 = toMeasure(m2->prev());
 
       int tick = segment->tick();
       m1->setTick(measure->tick());

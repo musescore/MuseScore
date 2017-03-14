@@ -2729,8 +2729,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       while (lc.curMeasure) {    // collect measure for system
             System* oldSystem = lc.curMeasure->system();
-            lc.curMeasure->setSystem(system);
-            system->measures().push_back(lc.curMeasure);
+            system->appendMeasure(lc.curMeasure);
 
             qreal ww  = 0;      // width of current measure
 
@@ -3220,10 +3219,12 @@ void LayoutContext::collectPage()
 
             y += distance;
             curSystem->setPos(page->lm(), y);
+#ifndef NDEBUG
             for (System* s : page->systems()) {
                   if (s == curSystem)
-                        qDebug("bad system %d\n", k);
+                        qDebug("bad system %d", k);
                   }
+#endif
             page->appendSystem(curSystem);
             y += curSystem->height();
 
@@ -3383,7 +3384,9 @@ void Score::doLayoutRange(int stick, int etick)
       {
       if (!firstMeasure())
             return;
-qDebug("%p %d-%d", this, stick, etick);
+qDebug("%p %d-%d %s systems %d", this, stick, etick, isMaster() ? "Master" : "Part", int(_systems.size()));
+
+      bool layoutAll = stick <= 0 && (etick < 0 || etick >= lastMeasure()->endTick());
       if (stick < 0)
             stick = 0;
       if (etick < 0)
@@ -3418,13 +3421,16 @@ qDebug("%p %d-%d", this, stick, etick);
       // m->system() will return a nullptr. We need to find the multi measure
       // rest which replaces the measure range
 
-      if (!m->system() && m->isMeasure() && toMeasure(m)->hasMMRest())
+      if (!m->system() && m->isMeasure() && toMeasure(m)->hasMMRest()) {
+            qDebug("  dont start with mmrest");
             m = toMeasure(m)->mmRest();
+            }
 
+      qDebug("start <%s> tick %d, system %p", m->name(), m->tick(), m->system());
       lc.score        = m->score();
-      System* system  = m->system();
 
-      if (system) {
+      if (!layoutAll && m->system()) {
+            System* system  = m->system();
             int systemIndex = _systems.indexOf(system);
             lc.page         = system->page();
             lc.curPage      = pageIdx(lc.page);
@@ -3435,8 +3441,10 @@ qDebug("%p %d-%d", this, stick, etick);
 
             if (systemIndex == 0)
                   lc.nextMeasure = _measures.first();
-            else
-                  lc.nextMeasure = _systems[systemIndex-1]->measures().back()->next();
+            else {
+                  System* prevSystem = _systems[systemIndex-1];
+                  lc.nextMeasure = prevSystem->measures().back()->next();
+                  }
 
             _systems.erase(_systems.begin() + systemIndex, _systems.end());
             if (!lc.nextMeasure->prevMeasure()) {
@@ -3449,6 +3457,29 @@ qDebug("%p %d-%d", this, stick, etick);
                   }
             }
       else {
+            qDebug("layoutAll, systems %d", int(_systems.size()));
+            //lc.measureNo   = 0;
+            //lc.tick        = 0;
+            // qDeleteAll(_systems);
+            // _systems.clear();
+                  // lc.systemList  = _systems;
+                  // _systems.clear();
+
+            for (System* s : _systems) {
+                  for (SpannerSegment* ss : s->spannerSegments())
+                        ss->setSystem(0);
+                  }
+            for (MeasureBase* mb = first(); mb; mb = mb->next()) {
+                  mb->setSystem(0);
+                  if (mb->isMeasure() && toMeasure(mb)->mmRest())
+                        toMeasure(mb)->mmRest()->setSystem(0);
+                  }
+            qDeleteAll(_systems);
+            _systems.clear();
+
+            qDeleteAll(pages());
+            pages().clear();
+
             lc.nextMeasure = _measures.first();
             }
 
@@ -3465,7 +3496,8 @@ qDebug("%p %d-%d", this, stick, etick);
       else {
             QList<System*>& systems = lc.page->systems();
             int i = systems.indexOf(lc.curSystem);
-            if (i == -1)
+            qDebug("clear page systems from %d", i);
+            if (i <= -1)
                   systems.clear();
             else {
                   systems.erase(systems.begin() + i, systems.end());

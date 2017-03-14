@@ -2442,49 +2442,15 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
       }
 
 //---------------------------------------------------------
-//   searchMeasureBase
-//    search corresponding measure in linked score
-//---------------------------------------------------------
-
-static MeasureBase* searchMeasureBase(Score* score, MeasureBase* mb)
-      {
-      if (mb == 0)
-            return 0;
-      if (mb->isMeasure()) {
-            for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-                  if (m->tick() == mb->tick())
-                        return m;
-                  }
-            }
-      else {
-            if (!mb->links()) {
-                  if (mb->score() == score)
-                        return mb;
-                  else
-                        qDebug("searchMeasureBase: no links");
-                  }
-            else {
-                  for (ScoreElement* m : *mb->links()) {
-                        if (m->score() == score)
-                              return static_cast<MeasureBase*>(m);
-                        }
-                  }
-            }
-      qDebug("searchMeasureBase: measure not found");
-      return nullptr;
-      }
-
-//---------------------------------------------------------
 //   insertMeasure
 //    Create a new MeasureBase of type type and insert
 //    before measure.
 //    If measure is zero, append new MeasureBase.
 //---------------------------------------------------------
 
-MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmptyMeasures)
+void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmptyMeasures)
       {
       int tick;
-      int ticks = 0;
       if (measure) {
             if (measure->isMeasure() && toMeasure(measure)->isMMRest()) {
                   measure = toMeasure(measure)->prev();
@@ -2496,35 +2462,52 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* measure, bool c
       else
             tick = last() ? last()->endTick() : 0;
 
-      // use nominal time signature of current measure
-      Fraction f = sigmap()->timesig(tick).nominal();
+      Fraction f       = sigmap()->timesig(tick).nominal();       // use nominal time signature of current measure
+      Measure* om      = 0;                                       // measure base in "this" score
+      MeasureBase* rmb = 0;                                       // measure base in root score (for linking)
+      int ticks        = 0;
 
-      QList<pair<Score*, MeasureBase*>> ml;
-      for (Score* score : scoreList())
-            ml.append(pair<Score*, MeasureBase*>(score, searchMeasureBase(score, measure)));
-
-      MeasureBase* omb = 0;   // measure base in "this" score
-      MeasureBase* rmb = 0;   // measure base in root score (for linking)
-
-      for (pair<Score*, MeasureBase*> p : ml) {
-            Score* score    = p.first;
-            MeasureBase* im = p.second;
-            MeasureBase* mb = static_cast<MeasureBase*>(Element::create(type, score));
+      for (Score* score : scoreList()) {
+            MeasureBase* im = 0;
+            if (measure) {
+                  if (measure->isMeasure())
+                        im = score->tick2measure(tick);
+                  else {
+                        if (!measure->links()) {
+                              if (measure->score() == score)
+                                    im = measure;
+                              else
+                                    qDebug("no links");
+                              }
+                        else {
+                              for (ScoreElement* m : *measure->links()) {
+                                    if (measure->score() == score) {
+                                          im = toMeasureBase(m);
+                                          break;
+                                          }
+                                    }
+                              }
+                        }
+                  if (!im)
+                        qDebug("measure not found");
+                  }
+            MeasureBase* mb = toMeasureBase(Element::create(type, score));
             mb->setTick(tick);
 
-            if (score == this)
-                  omb = mb;
+            mb->setNext(im);
+            mb->setPrev(im ? im->prev() : score->last());
+            undo(new InsertMeasures(mb, mb));
 
             if (type == ElementType::MEASURE) {
-                  if (isMaster())
-                        omb = toMeasure(mb);
+                  Measure* m  = toMeasure(mb);  // new measure
+                  ticks       = m->ticks();
+                  Measure* mi = toMeasure(im);  // insert before
 
-                  Measure* m = toMeasure(mb);
-                  Measure* mi = im ? score->tick2measure(im->tick()) : 0;
+                  if (score->isMaster())
+                        om = m;
 
                   m->setTimesig(f);
                   m->setLen(f);
-                  ticks = m->ticks();
 
                   QList<TimeSig*> tsl;
                   QList<KeySig*>  ksl;
@@ -2549,7 +2532,9 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* measure, bool c
                                                 }
                                           }
                                     }
-                              for (Segment* s = mi->first(); s && s->tick() == tick; s = s->next()) {
+                              for (Segment* s = mi->first(); s && s->rtick() == 0; s = s->next()) {
+                                    if (s->isHeaderClefType())
+                                          continue;
                                     Element* e = s->element(staffIdx * VOICES);
                                     if (!e)
                                           continue;
@@ -2578,28 +2563,25 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* measure, bool c
                               }
                         }
 
-                  m->setNext(im);
-                  m->setPrev(im ? im->prev() : score->last());
-                  undo(new InsertMeasures(m, m));
 
                   //
                   // move clef, time, key signatrues
                   //
                   for (TimeSig* ts : tsl) {
                         TimeSig* nts = new TimeSig(*ts);
-                        Segment* s   = m->undoGetSegment(SegmentType::TimeSig, tick);
+                        Segment* s   = m->undoGetSegmentR(SegmentType::TimeSig, 0);
                         nts->setParent(s);
                         undoAddElement(nts);
                         }
                   for (KeySig* ks : ksl) {
                         KeySig* nks = new KeySig(*ks);
-                        Segment* s  = m->undoGetSegment(SegmentType::KeySig, tick);
+                        Segment* s  = m->undoGetSegmentR(SegmentType::KeySig, 0);
                         nks->setParent(s);
                         undoAddElement(nks);
                         }
                   for (Clef* clef : cl) {
                         Clef* nClef = new Clef(*clef);
-                        Segment* s  = m->undoGetSegment(SegmentType::Clef, tick);
+                        Segment* s  = m->undoGetSegmentR(SegmentType::Clef, 0);
                         nClef->setParent(s);
                         undoAddElement(nClef);
                         }
@@ -2610,8 +2592,6 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* measure, bool c
                         nClef->setParent(s);
                         undoAddElement(nClef);
                         }
-//                  if (createEndBar)
-//                        m->setEndBarLineType(BarLineType::END, false);
                   }
             else {
                   // a frame, not a measure
@@ -2622,38 +2602,28 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* measure, bool c
                         if (rmb->isTBox())
                               toTBox(mb)->text()->linkTo(toTBox(rmb)->text());
                         }
-                  mb->setNext(im);
-                  mb->setPrev(im ? im->prev() : score->last());
-                  undo(new InsertMeasures(mb, mb));
                   }
             }
+
       undoInsertTime(tick, ticks);
 
-      if (omb && type == ElementType::MEASURE && !createEmptyMeasures) {
+      if (om && !createEmptyMeasures) {
             //
             // fill measure with rest
             //
-            Score* _root = masterScore();
-            MeasureBase* rootMeasure = searchMeasureBase(_root, omb);
+            Score* score = om->score();
 
-            Q_ASSERT(_root == rootMeasure->score());
-
-            for (int staffIdx = 0; staffIdx < _root->nstaves(); ++staffIdx) {
+            // add rest to all staves and to all the staves linked to it
+            for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                   int track = staffIdx * VOICES;
-                  int tick = omb->tick();
-                  Segment* s = toMeasure(rootMeasure)->findSegment(SegmentType::ChordRest, tick);
-                  if (s == 0 || s->element(track) == 0) {
-                        // add rest to this staff and to all the staves linked to it
-                        Rest* rest = new Rest(_root, TDuration(TDuration::DurationType::V_MEASURE));
-                        Fraction timeStretch(_root->staff(staffIdx)->timeStretch(tick));
-                        rest->setDuration(toMeasure(omb)->len() * timeStretch);
-                        rest->setTrack(track);
-                        _root->undoAddCR(rest, toMeasure(rootMeasure), tick);
-                        }
+                  Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
+                  Fraction timeStretch(score->staff(staffIdx)->timeStretch(om->tick()));
+                  rest->setDuration(om->len() * timeStretch);
+                  rest->setTrack(track);
+                  score->undoAddCR(rest, om, tick);
                   }
             }
       deselectAll();
-      return omb;
       }
 
 //---------------------------------------------------------
