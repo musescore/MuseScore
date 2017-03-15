@@ -1398,6 +1398,11 @@ bool MStyle::readProperties(XmlReader& e)
                               }
                         set(idx, QVariant::fromValue(align));
                         }
+                  else if (!strcmp("QPointF", type)) {
+                        qreal x = e.doubleAttribute("x", 0.0);
+                        qreal y = e.doubleAttribute("y", 0.0);
+                        set(idx, QPointF(x, y));
+                        }
                   else {
                         qFatal("unhandled type %s", type);
                         }
