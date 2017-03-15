@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2017 Werner Schweer & others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -1458,7 +1458,7 @@ void ScoreView::moveCursor()
             }
       double x        = segment->canvasPos().x();
       double y        = system->staffYpage(staffIdx) + system->page()->pos().y();
-      Staff* staff    = _score->staff(staffIdx);
+      Staff* staff            = _score->staff(staffIdx);
       double _spatium = staff->spatium();
       x              -= qMin(segment->pos().x() - score()->styleD(StyleIdx::barNoteDistance) * _spatium, 0.0);
 
@@ -1470,16 +1470,20 @@ void ScoreView::moveCursor()
       StaffType* staffType    = staff->staffType();
       double lineDist         = staffType->lineDistance().val() * _spatium;
       int lines               = staff->lines();
-      int strg                = is.string();
+      int strg                = is.string();          // strg refers to an instrument physical string
       x                       -= _spatium;
+      int instrStrgs          = staff->part()->instrument()->stringData()->strings();
       // if on a TAB staff and InputState::_string makes sense,
       // draw cursor around single string
-      if (staff->isTabStaff() && strg > VISUAL_STRING_NONE && strg < lines) {
+      if (staff->isTabStaff() && strg >= 0 && strg <= instrStrgs) {
             h = lineDist;                 // cursor height is one full line distance
-            y += lineDist * strg;
+            y += staffType->physStringToYOffset(strg) * _spatium;
             // if frets are on lines, centre on string; if frets are above lines, 'sit' above string
             y -= (staffType->onLines() ? lineDist * 0.5 : lineDist);
             // look for a note on this string in this staff
+            // if found, it will be selected, to synchronize the 'new note input cursor' and the 'current note cursor'
+            // i.e. the point where a new note would be added and the existing note which receives any editing
+            // (like pitch change or articulation addition)
             bool        done  = false;
             Segment*    seg   = is.segment();
             int         minTrack = (is.track() / VOICES) * VOICES;
@@ -1489,7 +1493,6 @@ void ScoreView::moveCursor()
             if (scr && (scr->type() != Element::Type::CHORD || scr->segment() != seg))
                   scr = nullptr;
             // get the physical string corresponding to current visual string
-            strg = staff->staffType()->visualStringToPhys(strg);
             for (int t = minTrack; t < maxTrack; t++) {
                   Element* e = seg->element(t);
                   if (e != nullptr && e->type() == Element::Type::CHORD) {
@@ -3265,19 +3268,22 @@ void ScoreView::cmd(const QAction* a)
 
       // STATE_NOTE_ENTRY_TAB actions
 
-      else if(cmd == "string-above") {
-            int   strg = _score->inputState().string();
-            if(strg > 0) {
-                  _score->inputState().setString(strg-1);
-                  moveCursor();
-                  }
-            }
-      else if(cmd == "string-below") {
+      // move input state string up or down, within the number of strings of the instrument;
+      // this may move the input state cursor outside of the tab line range to accommodate
+      // instrument strings not represented in the tab (e.g.: lute bass strings):
+      // the appropriate visual rendition of the input cursor in those cases will be managed by moveCursor()
+      else if(cmd == "string-above" || cmd == "string-below") {
             InputState& is          = _score->inputState();
-            int         maxStrg     = _score->staff(is.track() / VOICES)->lines() - 1;
-            int         strg        = is.string();
-            if(strg < maxStrg) {
-                  is.setString(strg+1);
+            Staff*      staff       = _score->staff(is.track() / VOICES);
+            int         instrStrgs  = staff->part()->instrument()->stringData()->strings();
+            // assume "string-below": if tab is upside-down, 'below' means toward instrument top (-1)
+            // if not, 'below' means toward instrument bottom (+1)
+            int         delta       = (staff->staffType()->upsideDown() ? -1 : +1);
+            if (cmd == "string-above")                      // if "above", reverse delta
+                  delta = -delta;
+            int         strg        = is.string() + delta;  // dest. physical string
+            if(strg >= 0 && strg < instrStrgs) {            // if dest. string within instrument limits
+                  is.setString(strg);                       // update status
                   moveCursor();
                   }
             }
@@ -3311,6 +3317,7 @@ void ScoreView::cmd(const QAction* a)
             cmdAddFret(13);
       else if(cmd == "fret-14")
             cmdAddFret(14);
+
       else if (cmd == "text-word-left")
             static_cast<Text*>(editObject)->movePosition(QTextCursor::WordLeft);
       else if (cmd == "text-word-right")
@@ -3471,10 +3478,9 @@ void ScoreView::startNoteEntry()
             case StaffGroup::TAB: {
                   int strg = 0;                 // assume topmost string as current string
                   // if entering note entry with a note selected and the note has a string
-                  // set InputState::_string to note visual string
+                  // set InputState::_string to note physical string
                   if (el->type() == Element::Type::NOTE) {
                         strg = (static_cast<Note*>(el))->string();
-                        strg = staff->staffType()->physStringToVisual(strg);
                         }
                   is.setString(strg);
                   break;

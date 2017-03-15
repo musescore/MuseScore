@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2012 Werner Schweer
+//  Copyright (C) 2002-2017 Werner Schweer & others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -487,7 +487,7 @@ qreal Note::tabHeadWidth(StaffType* tab) const
             if (fixed())
                 s = "/";
             else
-                s = tab->fretString(_fret, _ghost);
+                s = tab->fretString(_fret, _string, _ghost);
             val  = fm.width(s) * mags;
             }
       else
@@ -706,17 +706,15 @@ void Note::draw(QPainter* painter) const
 
       if (tablature) {
             StaffType* tab = staff()->staffType();
-            if (_string >= tab->lines())              // skip notes on strings without a tab line
-                  return;
             if (tieBack() && !tab->showBackTied())    // skip back-tied notes if not shown
                   return;
             QString s;
             if (fixed())
                   s = "/";
             else
-                  s = tab->fretString(_fret, _ghost);
+                  s = tab->fretString(_fret, _string, _ghost);
 
-            // draw background, if required
+            // draw background, if required (to hide a segment of string line or to show a fretting conflict)
             if (!tab->linesThrough() || fretConflict()) {
                   qreal d  = spatium() * .1;
                   QRectF bb = QRectF(bbox().x()-d, tab->fretMaskY()*magS(), bbox().width() + 2*d, tab->fretMaskH()*magS());
