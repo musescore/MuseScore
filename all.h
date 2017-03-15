@@ -27,6 +27,8 @@
 #define ABORTN(a)
 #endif
 
+#if defined __cplusplus
+
 #include <stdio.h>
 #include <limits.h>
 #include <map>
@@ -186,6 +188,8 @@
 #undef Q_ASSERT
 #define Q_ASSERT(a)
 #endif
+
+#endif  // __cplusplus
 
 #endif
 
