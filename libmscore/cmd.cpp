@@ -3192,7 +3192,8 @@ void Score::cmd(const QAction* a)
             const char* name;
             std::function<void()> cmd;
             };
-      static const std::vector<ScoreCmd> cmdList {
+      //static const std::vector<ScoreCmd> cmdList {
+      const std::vector<ScoreCmd> cmdList {
             { "reset-stretch",              [this]{ resetUserStretch();                                         }},
             { "mirror-note",                [this]{ cmdMirrorNoteHead();                                        }},
             { "double-duration",            [this]{ cmdDoubleDuration();                                        }},
