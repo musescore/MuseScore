@@ -30,15 +30,9 @@
       </widget>
      </item>
      <item row="1" column="3">
-      <widget class="QSpinBox" name="revision">
+      <widget class="QLineEdit" name="revision">
        <property name="readOnly">
         <bool>true</bool>
-       </property>
-       <property name="buttonSymbols">
-        <enum>QAbstractSpinBox::NoButtons</enum>
-       </property>
-       <property name="maximum">
-        <number>99999</number>
        </property>
       </widget>
      </item>
