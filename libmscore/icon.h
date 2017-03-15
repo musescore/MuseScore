@@ -14,6 +14,7 @@
 #define __ICON_H__
 
 #include "element.h"
+#include "mscore.h"
 
 namespace Ms {
 
