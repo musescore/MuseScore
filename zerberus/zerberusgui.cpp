@@ -117,7 +117,7 @@ static void collectFiles(QFileInfoList* l, const QString& path)
             if (path == s.absoluteFilePath())
                   return;
 
-            if (s.isDir())
+            if (s.isDir() && !s.isHidden())
                   collectFiles(l, s.absoluteFilePath());
             else {
                   if (s.suffix().toLower() == "sfz")
