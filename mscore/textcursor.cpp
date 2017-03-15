@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2013 Werner Schweer
+//  Copyright (C) 2013-17 Werner Schweer & others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -10,16 +10,19 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "libmscore/score.h"
+#include "textcursor.h"
+
+#include "libmscore/input.h"
 #include "libmscore/measure.h"
-#include "libmscore/segment.h"
-#include "libmscore/system.h"
-#include "libmscore/staff.h"
 #include "libmscore/page.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
+#include "libmscore/staff.h"
+#include "libmscore/stafftype.h"
 #include "libmscore/sym.h"
+#include "libmscore/system.h"
 
 #include "scoreview.h"
-#include "textcursor.h"
 
 namespace Ms {
 
@@ -80,8 +83,14 @@ void PositionCursor::paint(QPainter* p)
                   p->setBrush(_color);
                   p->drawConvexPolygon(points, 3);
                   break;
-            default:
+            default:                            // fill the rectangle and add TAB string marks, if required                  
                   p->fillRect(_rect, color());
+                  int         track       = _sv->score()->inputTrack();
+                  Staff*      staff       = _sv->score()->staff(track2staff(track));
+                  StaffType*  staffType   = staff->staffType();
+                  if (staffType && staffType->group() == StaffGroup::TAB)
+                        staffType->drawInputStringMarks(p, _sv->score()->inputState().string(),
+                                    track2voice(track), _rect);
                   break;
             }
       }
