@@ -65,7 +65,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             }
 
       styleWidgets = {
-      //   idx --- showPercent --- widget --- resetButton
+      //   idx                --- showPercent      --- widget          --- resetButton
       { StyleIdx::voltaLineStyle,          false, voltaLineStyle,          resetVoltaLineStyle },
       { StyleIdx::ottavaLineStyle,         false, ottavaLineStyle,         resetOttavaLineStyle },
       { StyleIdx::pedalLineStyle,          false, pedalLineStyle,          resetPedalLineStyle },
@@ -597,28 +597,12 @@ QVariant EditStyle::getValue(StyleIdx idx)
             if (sw.showPercent)
                   v = v.toDouble() * 0.01;
             return v;
-#if 0
-            if (sw.showPercent)
-                  return qobject_cast<QSpinBox*>(sw.widget)->value() * 0.01;
-            else
-                  return qobject_cast<QDoubleSpinBox*>(sw.widget)->value();
-#endif
             }
       else if (!strcmp("bool", type)) {
             QVariant v = sw.widget->property("checked");
             if (!v.isValid())
                   unhandledType(&sw);
             return v;
-#if 0
-            if (qobject_cast<QCheckBox*>(sw.widget))
-                  return qobject_cast<QCheckBox*>(sw.widget)->isChecked();
-            else if (qobject_cast<QGroupBox*>(sw.widget))
-                  return qobject_cast<QGroupBox*>(sw.widget)->isChecked();
-            else if (qobject_cast<QRadioButton*>(sw.widget))
-                  return qobject_cast<QRadioButton*>(sw.widget)->isChecked();
-            else
-                  qFatal("unhandled bool");
-#endif
             }
       else if (!strcmp("int", type)) {
             if (qobject_cast<QComboBox*>(sw.widget)) {
@@ -669,52 +653,34 @@ void EditStyle::setValues()
       for (const StyleWidget& sw : styleWidgets) {
             if (sw.widget)
                   sw.widget->blockSignals(true);
+            QVariant val = lstyle.value(sw.idx);
             const char* type = MStyle::valueType(sw.idx);
             if (sw.reset)
                   sw.reset->setEnabled(!lstyle.isDefault(sw.idx));
 
             if (!strcmp("Ms::Spatium", type)) {
                   if (sw.showPercent)
-                        qobject_cast<QSpinBox*>(sw.widget)->setValue(int(lstyle.value(sw.idx).value<Spatium>().val() * 100.0));
+                        qobject_cast<QSpinBox*>(sw.widget)->setValue(int(val.value<Spatium>().val() * 100.0));
                   else
-                        qobject_cast<QDoubleSpinBox*>(sw.widget)->setValue(lstyle.value(sw.idx).value<Spatium>().val());
+                        qobject_cast<QDoubleSpinBox*>(sw.widget)->setValue(val.value<Spatium>().val());
                   }
             else if (!strcmp("double", type)) {
-                  if (!sw.widget->setProperty("value", lstyle.value(sw.idx)))
-                        unhandledType(&sw);
-#if 0
-                  QDoubleSpinBox* sb = qobject_cast<QDoubleSpinBox*>(sw.widget);
-                  if (!sb)
-                        unhandledType(&sw);
                   if (sw.showPercent)
-                        sb->setValue(int(lstyle.value(sw.idx).toDouble() * 100.0));
-                  else
-                        sb->setValue(lstyle.value(sw.idx).toDouble());
-#endif
+                        val = QVariant(val.toDouble() * 100);
+                  if (!sw.widget->setProperty("value", val))
+                        unhandledType(&sw);
                   }
             else if (!strcmp("bool", type)) {
-                  if (!sw.widget->setProperty("checked", lstyle.value(sw.idx)))
+                  if (!sw.widget->setProperty("checked", val))
                         unhandledType(&sw);
-#if 0
-                  if (qobject_cast<QCheckBox*>(sw.widget))
-                        qobject_cast<QCheckBox*>(sw.widget)->setChecked(lstyle.value(sw.idx).toBool());
-                  else if (qobject_cast<QGroupBox*>(sw.widget))
-                        qobject_cast<QGroupBox*>(sw.widget)->setChecked(lstyle.value(sw.idx).toBool());
-                  else if (qobject_cast<QRadioButton*>(sw.widget))
-                        qobject_cast<QRadioButton*>(sw.widget)->setChecked(lstyle.value(sw.idx).toBool());
-                  else if (qobject_cast<QPushButton*>(sw.widget))
-                        qobject_cast<QPushButton*>(sw.widget)->setChecked(lstyle.value(sw.idx).toBool());
-                  else
-                        unhandledType(&sw);
-#endif
                   }
             else if (!strcmp("int", type)) {
                   if (qobject_cast<QComboBox*>(sw.widget)) {
                         QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
-                        cb->setCurrentIndex(cb->findData(lstyle.value(sw.idx)));
+                        cb->setCurrentIndex(cb->findData(val));
                         }
                   else if (qobject_cast<QSpinBox*>(sw.widget)) {
-                        qobject_cast<QSpinBox*>(sw.widget)->setValue(lstyle.value(sw.idx).toInt()
+                        qobject_cast<QSpinBox*>(sw.widget)->setValue(val.toInt()
                            * (sw.showPercent ? 100 : 1));
                         }
                   else
@@ -722,25 +688,25 @@ void EditStyle::setValues()
                   }
             else if (!strcmp("QString", type)) {
                   if (qobject_cast<QFontComboBox*>(sw.widget))
-                        static_cast<QFontComboBox*>(sw.widget)->setCurrentFont(QFont(lstyle.value(sw.idx).toString()));
+                        static_cast<QFontComboBox*>(sw.widget)->setCurrentFont(QFont(val.toString()));
                   else if (qobject_cast<QComboBox*>(sw.widget)) {
                         QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
                         for (int i = 0; i < cb->count(); ++i) {
-                              if (cb->itemData(i) == lstyle.value(sw.idx).toString()) {
+                              if (cb->itemData(i) == val.toString()) {
                                     cb->setCurrentIndex(i);
                                     break;
                                     }
                               }
                         }
                   else if (qobject_cast<QTextEdit*>(sw.widget))
-                        static_cast<QTextEdit*>(sw.widget)->setPlainText(lstyle.value(sw.idx).toString());
+                        static_cast<QTextEdit*>(sw.widget)->setPlainText(val.toString());
                   else
                         unhandledType(&sw);
                   }
             else if (!strcmp("Ms::Direction", type)) {
                   QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
                   if (cb)
-                        cb->setCurrentIndex(int(lstyle.value(sw.idx).value<Direction>()));
+                        cb->setCurrentIndex(int(val.value<Direction>()));
                   else
                         unhandledType(&sw);
                   }
