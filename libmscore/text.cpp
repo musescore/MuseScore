@@ -1419,7 +1419,7 @@ void Text::layoutFrame()
 
 qreal Text::lineSpacing() const
       {
-      return fontMetrics().lineSpacing();
+      return fontMetrics().lineSpacing() * MScore::pixelRatio;
       }
 
 //---------------------------------------------------------
@@ -3127,14 +3127,11 @@ void Text::inputTransition(QInputMethodEvent* ie)
 QFont Text::font() const
       {
       qreal m = _size;
-      QFont f(_family);
-      f.setBold(_bold);
-      f.setItalic(_italic);
-      f.setUnderline(_underline);
-
       if (_sizeIsSpatiumDependent)
             m *= spatium() / SPATIUM20;
-      f.setPointSizeF(m);
+      QFont f(_family, m, _bold ? QFont::Bold : QFont::Normal, _italic);
+      if (_underline)
+            f.setUnderline(_underline);
       return f;
       }
 

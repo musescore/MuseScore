@@ -171,7 +171,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>2</number>
+       <number>28</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -9744,7 +9744,7 @@
               <string>%</string>
              </property>
              <property name="minimum">
-              <double>100.000000000000000</double>
+              <double>50.000000000000000</double>
              </property>
              <property name="maximum">
               <double>1000.000000000000000</double>
