@@ -229,13 +229,6 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="2">
-         <widget class="QToolButton" name="changeStaffType">
-          <property name="text">
-           <string>Advanced Style Properties...</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="2">
          <widget class="QCheckBox" name="showIfEmpty">
           <property name="text">
@@ -257,6 +250,9 @@
           </item>
           <item>
            <widget class="QLineEdit" name="staffGroupName">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -315,6 +311,13 @@
           </item>
          </layout>
         </item>
+        <item row="5" column="2">
+         <widget class="QPushButton" name="changeStaffType">
+          <property name="text">
+           <string>Advanced Style Properties...</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
@@ -337,30 +340,6 @@
         <property name="leftMargin">
          <number>0</number>
         </property>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="instrumentName">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QToolButton" name="changeInstrument">
-          <property name="text">
-           <string>Change Instrument...</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_PartName">
-          <property name="text">
-           <string>Part name:</string>
-          </property>
-          <property name="buddy">
-           <cstring>partName</cstring>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="0">
          <widget class="QLabel" name="labelInstrName">
           <property name="text">
@@ -371,7 +350,34 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="instrumentName">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QPushButton" name="changeInstrument">
+          <property name="text">
+           <string>Change Instrument...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_PartName">
+          <property name="text">
+           <string>Part name:</string>
+          </property>
+          <property name="buddy">
+           <cstring>partName</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1" colspan="2">
          <widget class="QLineEdit" name="partName"/>
         </item>
        </layout>
@@ -501,7 +507,7 @@
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>40</width>
+            <width>100</width>
             <height>20</height>
            </size>
           </property>
@@ -574,10 +580,27 @@
         <item>
          <widget class="QLabel" name="labelTransp">
           <property name="text">
-           <string>Play transposition:</string>
+           <string>Transpose written pitches to sound:</string>
           </property>
           <property name="buddy">
            <cstring>iList</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="octave">
+          <property name="maximum">
+           <number>10</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>octaves +</string>
+          </property>
+          <property name="buddy">
+           <cstring>octave</cstring>
           </property>
          </widget>
         </item>
@@ -722,23 +745,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_11">
-          <property name="text">
-           <string>+ Octave:</string>
-          </property>
-          <property name="buddy">
-           <cstring>octave</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="octave">
-          <property name="maximum">
-           <number>10</number>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QRadioButton" name="up">
           <property name="text">
            <string>Up</string>
@@ -782,6 +788,9 @@
          </item>
          <item>
           <widget class="QLineEdit" name="numOfStrings">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -913,7 +922,6 @@
   <tabstop>cutaway</tabstop>
   <tabstop>staffGroupName</tabstop>
   <tabstop>changeStaffType</tabstop>
-  <tabstop>partName</tabstop>
   <tabstop>instrumentName</tabstop>
   <tabstop>changeInstrument</tabstop>
   <tabstop>longName</tabstop>
@@ -927,7 +935,6 @@
   <tabstop>maxPitchP</tabstop>
   <tabstop>maxPitchPSelect</tabstop>
   <tabstop>iList</tabstop>
-  <tabstop>octave</tabstop>
   <tabstop>up</tabstop>
   <tabstop>down</tabstop>
   <tabstop>numOfStrings</tabstop>
