@@ -151,7 +151,7 @@ void Lyrics::read(XmlReader& e)
             else if (tag == "ticks")
                   _ticks = e.readInt();
             else if (tag == "Number") {                           // obsolete
-                  Text* _verseNumber = new Text(score());
+                  _verseNumber = new Text(score());
                   _verseNumber->read(e);
                   _verseNumber->setParent(this);
                   }
