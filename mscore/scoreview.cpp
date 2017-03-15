@@ -2954,13 +2954,13 @@ void ScoreView::cmd(const QAction* a)
                   cmdGotoElement(el->prevElement());
             else
                   cmdGotoElement(score()->lastElement());
-      }
+            }
       else if (cmd == "first-element"){
             cmdGotoElement(score()->firstElement());
-      }
+            }
       else if (cmd == "last-element"){
             cmdGotoElement(score()->lastElement());
-      }
+            }
       else if (cmd == "rest" || cmd == "rest-TAB")
             cmdEnterRest();
       else if (cmd == "rest-1")
@@ -3283,8 +3283,9 @@ void ScoreView::cmd(const QAction* a)
                   _score->endCmd();
                   }
             }
-      else
+      else {
             _score->cmd(a);
+            }
       if (_score->processMidiInput())
             mscore->endCmd();
       }
