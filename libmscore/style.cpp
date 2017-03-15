@@ -1403,6 +1403,19 @@ bool MStyle::readProperties(XmlReader& e)
                         qreal y = e.doubleAttribute("y", 0.0);
                         set(idx, QPointF(x, y));
                         }
+                  else if (!strcmp("QSizeF", type)) {
+                        qreal x = e.doubleAttribute("w", 0.0);
+                        qreal y = e.doubleAttribute("h", 0.0);
+                        set(idx, QPointF(x, y));
+                        }
+                  else if (!strcmp("QColor", type)) {
+                        QColor c;
+                        c.setRed(e.intAttribute("r"));
+                        c.setGreen(e.intAttribute("g"));
+                        c.setBlue(e.intAttribute("b"));
+                        c.setAlpha(e.intAttribute("a", 255));
+                        set(idx, c);
+                        }
                   else {
                         qFatal("unhandled type %s", type);
                         }

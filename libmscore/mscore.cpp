@@ -290,6 +290,7 @@ void MScore::init()
       if (!defStyle.isEmpty()) {
             QFile f(defStyle);
             if (f.open(QIODevice::ReadOnly)) {
+                  qDebug("load default style <%s>", qPrintable(defStyle));
                   _defaultStyle.load(&f);
                   f.close();
                   }
@@ -299,6 +300,7 @@ void MScore::init()
       if (!partStyle.isEmpty()) {
             QFile f(partStyle);
             if (f.open(QIODevice::ReadOnly)) {
+                  qDebug("load default style for parts <%s>", qPrintable(partStyle));
                   _defaultStyleForParts = new MStyle(_defaultStyle);
                   _defaultStyleForParts->load(&f);
                   _defaultStyleForParts->precomputeValues();
