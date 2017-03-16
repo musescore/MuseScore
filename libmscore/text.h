@@ -59,7 +59,7 @@ class CharFormat {
       void setUnderline(bool val)            { _underline   = val;  }
       void setPreedit(bool val)              { _preedit     = val;  }
       void setValign(VerticalAlignment val)  { _valign      = val;  }
-      void setFontSize(qreal val)            { _fontSize    = val;  }
+      void setFontSize(qreal val)            { Q_ASSERT(val > 0.0); _fontSize = val; }
       void setFontFamily(const QString& val) { _fontFamily  = val;  }
 
       void setFormat(FormatId, QVariant);
