@@ -142,6 +142,7 @@ Palette* MuseScore::newBeamPalette(PaletteType t)
             case PaletteType::BASIC:
                   a = bpa1;
                   sp->setMoreElements(true);
+                  connect(sp, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
                   break;
             }
       populateIconPalette(sp, a);
@@ -220,11 +221,13 @@ Palette* MuseScore::newDynamicsPalette(PaletteType t)
                   array = &array3;
                   sp->setGrid(42, 28);
                   sp->setMoreElements(true);
+                  connect(sp, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
                   break;
             case PaletteType::BASIC:
                   array = &array2;
                   sp->setGrid(42, 28);
                   sp->setMoreElements(true);
+                  connect(sp, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
                   break;
             }
       for (const char* c :  *array) {
@@ -264,6 +267,7 @@ Palette* MuseScore::newKeySigPalette(PaletteType t)
       switch (t) {
             case PaletteType::BASIC:
                   sp->setMoreElements(true);
+                  connect(sp, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
                   break;
 
             case PaletteType::MASTER:
@@ -324,6 +328,7 @@ Palette* MuseScore::newAccidentalsPalette(PaletteType t)
                         }
                   }
                   sp->setMoreElements(true);
+                  connect(sp, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
                   break;
 
             case PaletteType::BASIC: {
@@ -340,6 +345,7 @@ Palette* MuseScore::newAccidentalsPalette(PaletteType t)
                         }
                   }
                   sp->setMoreElements(true);
+                  connect(sp, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
                   break;
             }
 
@@ -400,8 +406,10 @@ Palette* MuseScore::newBarLinePalette(PaletteType t)
                   sp->append(b, qApp->translate("Palette", span.userName));
                   }
             }
-      else
+      else {
             sp->setMoreElements(true);
+            connect(sp, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
+            }
       return sp;
       }
 
@@ -645,6 +653,7 @@ Palette* MuseScore::newArticulationsPalette(PaletteType t)
                         }
                   }
                   sp->setMoreElements(true);
+                  connect(sp, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
                   break;
 
             case PaletteType::MASTER:
@@ -1045,6 +1054,7 @@ Palette* MuseScore::newGraceNotePalette(PaletteType t)
             case PaletteType::BASIC:
                   a = gna1;
                   sp->setMoreElements(true);
+                  connect(sp, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
                   break;
             }
       populateIconPalette(sp, a);
@@ -1254,8 +1264,10 @@ Palette* MuseScore::newLinesPalette(PaletteType t)
             Ambitus* a = new Ambitus(gscore);
             sp->append(a, QT_TRANSLATE_NOOP("Palette", "Ambitus"));
             }
-      else
+      else {
             sp->setMoreElements(true);
+            connect(sp, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
+            }
 
       return sp;
       }
@@ -1357,6 +1369,7 @@ Palette* MuseScore::newTempoPalette(PaletteType t)
                   }
             }
       sp->setMoreElements(t == PaletteType::BASIC);
+      connect(sp, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
 
       return sp;
       }
