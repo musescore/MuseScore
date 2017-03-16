@@ -93,6 +93,7 @@ TextTools::TextTools(QWidget* parent)
 
       typefaceSize = new QDoubleSpinBox(this);
       typefaceSize->setFocusPolicy(Qt::ClickFocus);
+      typefaceSize->setMinimum(1);
       tb->addWidget(typefaceSize);
 
       setWidget(tb);
