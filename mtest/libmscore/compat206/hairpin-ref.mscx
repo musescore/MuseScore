@@ -107,8 +107,6 @@
           </TimeSig>
         <HairPin id="2">
           <subtype>0</subtype>
-          <beginText>cresc.</beginText>
-          <continueText>(cresc.)</continueText>
           <lid>31</lid>
           </HairPin>
         <Chord>
@@ -621,8 +619,6 @@
             </TimeSig>
           <HairPin id="3">
             <subtype>0</subtype>
-            <beginText>cresc.</beginText>
-            <continueText>(cresc.)</continueText>
             <lid>31</lid>
             </HairPin>
           <Chord>

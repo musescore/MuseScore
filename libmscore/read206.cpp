@@ -1080,6 +1080,7 @@ static void readOttava(XmlReader& e, Ottava* ottava)
 
 static void readHairpin(XmlReader& e, Hairpin* h)
       {
+      bool useText = false;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
@@ -1108,9 +1109,15 @@ static void readHairpin(XmlReader& e, Hairpin* h)
                         h->setHairpinType(HairpinType::CRESC_LINE);
                   else if (h->hairpinType() == HairpinType::DECRESC_HAIRPIN)
                         h->setHairpinType(HairpinType::DECRESC_LINE);
+                  useText = true;
                   }
             else if (!readTextLineProperties(e, h))
                   e.unknown();
+            }
+      if (!useText) {
+            h->setBeginText("");
+            h->setContinueText("");
+            h->setEndText("");
             }
       }
 

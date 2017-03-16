@@ -490,6 +490,7 @@ Hairpin::Hairpin(Score* s)
       hairpinHeightStyle     = PropertyFlags::STYLED;
       _hairpinContHeight     = score()->styleS(StyleIdx::hairpinContHeight);
       hairpinContHeightStyle = PropertyFlags::STYLED;
+      initSubStyle(SubStyle::HAIRPIN);
       }
 
 //---------------------------------------------------------
@@ -724,6 +725,27 @@ QVariant Hairpin::propertyDefault(P_ID id) const
                   return int(Qt::CustomDashLine);
             case P_ID::PLACEMENT:
                   return int(Element::Placement::BELOW);
+
+            case P_ID::BEGIN_FONT_FACE:
+            case P_ID::BEGIN_FONT_SIZE:
+            case P_ID::BEGIN_FONT_BOLD:
+            case P_ID::BEGIN_FONT_ITALIC:
+            case P_ID::BEGIN_FONT_UNDERLINE:
+            case P_ID::BEGIN_TEXT_ALIGN:
+            case P_ID::CONTINUE_FONT_FACE:
+            case P_ID::CONTINUE_FONT_SIZE:
+            case P_ID::CONTINUE_FONT_BOLD:
+            case P_ID::CONTINUE_FONT_ITALIC:
+            case P_ID::CONTINUE_FONT_UNDERLINE:
+            case P_ID::CONTINUE_TEXT_ALIGN:
+            case P_ID::END_FONT_FACE:
+            case P_ID::END_FONT_SIZE:
+            case P_ID::END_FONT_BOLD:
+            case P_ID::END_FONT_ITALIC:
+            case P_ID::END_FONT_UNDERLINE:
+            case P_ID::END_TEXT_ALIGN:
+                  return score()->styleV(getPropertyStyle(id));
+
             default:
                   return TextLineBase::propertyDefault(id);
             }
@@ -788,6 +810,42 @@ StyleIdx Hairpin::getPropertyStyle(P_ID id) const
                   return StyleIdx::hairpinHeight;
             case P_ID::HAIRPIN_CONT_HEIGHT:
                   return StyleIdx::hairpinContHeight;
+            case P_ID::BEGIN_FONT_FACE:
+                  return StyleIdx::hairpinFontFace;
+            case P_ID::BEGIN_FONT_SIZE:
+                  return StyleIdx::hairpinFontSize;
+            case P_ID::BEGIN_FONT_BOLD:
+                  return StyleIdx::hairpinFontBold;
+            case P_ID::BEGIN_FONT_ITALIC:
+                  return StyleIdx::hairpinFontItalic;
+            case P_ID::BEGIN_FONT_UNDERLINE:
+                  return StyleIdx::hairpinFontUnderline;
+            case P_ID::BEGIN_TEXT_ALIGN:
+                  return StyleIdx::hairpinTextAlign;
+            case P_ID::CONTINUE_FONT_FACE:
+                  return StyleIdx::hairpinFontFace;
+            case P_ID::CONTINUE_FONT_SIZE:
+                  return StyleIdx::hairpinFontSize;
+            case P_ID::CONTINUE_FONT_BOLD:
+                  return StyleIdx::hairpinFontBold;
+            case P_ID::CONTINUE_FONT_ITALIC:
+                  return StyleIdx::hairpinFontItalic;
+            case P_ID::CONTINUE_FONT_UNDERLINE:
+                  return StyleIdx::hairpinFontUnderline;
+            case P_ID::CONTINUE_TEXT_ALIGN:
+                  return StyleIdx::hairpinTextAlign;
+            case P_ID::END_FONT_FACE:
+                  return StyleIdx::hairpinFontFace;
+            case P_ID::END_FONT_SIZE:
+                  return StyleIdx::hairpinFontSize;
+            case P_ID::END_FONT_BOLD:
+                  return StyleIdx::hairpinFontBold;
+            case P_ID::END_FONT_ITALIC:
+                  return StyleIdx::hairpinFontItalic;
+            case P_ID::END_FONT_UNDERLINE:
+                  return StyleIdx::hairpinFontUnderline;
+            case P_ID::END_TEXT_ALIGN:
+                  return StyleIdx::hairpinTextAlign;
             default:
                   break;
             }
