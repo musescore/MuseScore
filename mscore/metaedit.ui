@@ -106,10 +106,14 @@
         <x>0</x>
         <y>0</y>
         <width>646</width>
-        <height>264</height>
+        <height>238</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gridLayout"/>
+      <layout class="QGridLayout" name="gridLayout">
+       <property name="verticalSpacing">
+        <number>1</number>
+       </property>
+      </layout>
      </widget>
     </widget>
    </item>
