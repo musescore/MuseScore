@@ -46,7 +46,7 @@
 - evaluate the possibility of implementing "Continuous View" as a real "view" change
   without changing the score (no undo/redo change)
 
-- remove pre 2.0 compatibility
+- move compatibility code into separate modules.
 
 
 ====================================================================
@@ -181,7 +181,7 @@ Palette handling
       some rules
 ====================================================================
 
-      Layout
+Layout
 
       - After loading a score, the score data can only be modified in a "undo" function during editing.
         The score is "dirty" if there is an undo stack entry.
@@ -189,13 +189,18 @@ Palette handling
       - Flags/data which describe what kind of relayout/update the score needs are collected in
         Score->CmdState. They can only be set in an "undo" function.
 
-      Score File
+Score File
 
       - "created" elements are not written out into the score file. For example bar lines are usually created
         by layout. They are marked as created and therefore do not appear in the score file.
 
       - Element properties are only written if they differ from their default value which usually is the
         style value if they are styled.
+
+paint() method in Element
+      paint() should never paint something or not conditionally. If you watn something not to be
+      painted, then set the bounding box of the element to zero in layout() and paint will not
+      be called. This works better with smart layout and collision detection.
 
 ====================================================================
       Implementation Details

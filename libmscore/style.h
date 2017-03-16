@@ -629,6 +629,7 @@ enum class StyleIdx {
       hairpinFontBold,
       hairpinFontItalic,
       hairpinFontUnderline,
+      hairpinTextAlign,
 
       bendFontFace,
       bendFontSize,

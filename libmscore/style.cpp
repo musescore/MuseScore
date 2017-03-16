@@ -648,6 +648,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::hairpinFontBold,               "hairpinFontBold",              false },
       { StyleIdx::hairpinFontItalic,             "hairpinFontItalic",            true },
       { StyleIdx::hairpinFontUnderline,          "hairpinFontUnderline",         false },
+      { StyleIdx::hairpinTextAlign,              "hairpinTextAlign",             QVariant::fromValue(Align::LEFT | Align::BASELINE) },
 
       { StyleIdx::bendFontFace,                  "bendFontFace",                 "FreeSerif" },
       { StyleIdx::bendFontSize,                  "bendFontSize",                 8.0 },
@@ -1055,11 +1056,24 @@ const std::vector<StyledProperty> pedalStyle {
       };
 
 const std::vector<StyledProperty> hairpinStyle {
-      { StyleIdx::hairpinFontFace,                    P_ID::FONT_FACE              },
-      { StyleIdx::hairpinFontSize,                    P_ID::FONT_SIZE              },
-      { StyleIdx::hairpinFontBold,                    P_ID::FONT_BOLD              },
-      { StyleIdx::hairpinFontItalic,                  P_ID::FONT_ITALIC            },
-      { StyleIdx::hairpinFontUnderline,               P_ID::FONT_UNDERLINE         },
+      { StyleIdx::hairpinFontFace,                    P_ID::BEGIN_FONT_FACE            },
+      { StyleIdx::hairpinFontSize,                    P_ID::BEGIN_FONT_SIZE            },
+      { StyleIdx::hairpinFontBold,                    P_ID::BEGIN_FONT_BOLD            },
+      { StyleIdx::hairpinFontItalic,                  P_ID::BEGIN_FONT_ITALIC          },
+      { StyleIdx::hairpinFontUnderline,               P_ID::BEGIN_FONT_UNDERLINE       },
+      { StyleIdx::hairpinTextAlign,                   P_ID::BEGIN_TEXT_ALIGN           },
+      { StyleIdx::hairpinFontFace,                    P_ID::CONTINUE_FONT_FACE         },
+      { StyleIdx::hairpinFontSize,                    P_ID::CONTINUE_FONT_SIZE         },
+      { StyleIdx::hairpinFontBold,                    P_ID::CONTINUE_FONT_BOLD         },
+      { StyleIdx::hairpinFontItalic,                  P_ID::CONTINUE_FONT_ITALIC       },
+      { StyleIdx::hairpinFontUnderline,               P_ID::CONTINUE_FONT_UNDERLINE    },
+      { StyleIdx::hairpinTextAlign,                   P_ID::CONTINUE_TEXT_ALIGN        },
+      { StyleIdx::hairpinFontFace,                    P_ID::END_FONT_FACE              },
+      { StyleIdx::hairpinFontSize,                    P_ID::END_FONT_SIZE              },
+      { StyleIdx::hairpinFontBold,                    P_ID::END_FONT_BOLD              },
+      { StyleIdx::hairpinFontItalic,                  P_ID::END_FONT_ITALIC            },
+      { StyleIdx::hairpinFontUnderline,               P_ID::END_FONT_UNDERLINE         },
+      { StyleIdx::hairpinTextAlign,                   P_ID::END_TEXT_ALIGN             },
       };
 
 const std::vector<StyledProperty> bendStyle {
