@@ -733,6 +733,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
       {
       QStringList fl;
       fl.append(tr("PNG Bitmap Graphic") + " (*.png)");
+      fl.append(tr("JPEG Bitmap Graphic") + " (*.jpg)");
       fl.append(tr("PDF File") + " (*.pdf)");
       fl.append(tr("Scalable Vector Graphics") + " (*.svg)");
 
@@ -754,7 +755,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             int idx = fl.indexOf(selectedFilter);
             if (idx != -1) {
                   static const char* extensions[] = {
-                        "png", "pdf", "svg"
+                        "png", "jpg", "pdf", "svg"
                         };
                   ext = extensions[idx];
                   }
@@ -769,7 +770,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
       if (fi.suffix().toLower() != ext)
             fn += "." + ext;
 
-      bool transparent = preferences.pngTransparent;
+      bool transparent = (ext == "jpg") ? false : preferences.pngTransparent;
       double convDpi   = preferences.pngResolution;
       double mag       = convDpi / DPI;
 
@@ -809,7 +810,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             paintRect(printMode, p, r, mag);
             MScore::pdfPrinting = false;
             }
-      else if (ext == "png") {
+      else if (ext == "png" || (ext == "jpg")) {
             QImage::Format f = QImage::Format_ARGB32_Premultiplied;
             QImage printer(w, h, f);
             printer.setDotsPerMeterX(lrint((convDpi * 1000) / INCH));
@@ -818,7 +819,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             MScore::pixelRatio = 1.0 / mag;
             QPainter p(&printer);
             paintRect(printMode, p, r, mag);
-            printer.save(fn, "png");
+            printer.save(fn);
             }
       else
             qDebug("unknown extension <%s>", qPrintable(ext));
