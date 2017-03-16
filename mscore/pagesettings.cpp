@@ -296,6 +296,7 @@ void PageSettings::applyToScore(Score* s)
       s->undoChangeStyleVal(StyleIdx::pageEvenLeftMargin, evenPageLeftMargin->value() * f);
       s->undoChangeStyleVal(StyleIdx::pageOddTopMargin, oddPageTopMargin->value() * f);
       s->undoChangeStyleVal(StyleIdx::pageOddBottomMargin, oddPageBottomMargin->value() * f);
+      s->undoChangeStyleVal(StyleIdx::pageOddLeftMargin, oddPageLeftMargin->value() * f);
       s->undoChangeStyleVal(StyleIdx::pageTwosided, twosided->isChecked());
       s->undoChangeStyleVal(StyleIdx::spatium, spatiumEntry->value() * f1);
 
@@ -379,7 +380,7 @@ void PageSettings::olmChanged(double val)
             evenPageRightMargin->setValue(val * (mmUnit ? INCH : 1.0));
             evenPageRightMargin->blockSignals(false);
             }
-      else{
+      else {
             evenPageLeftMargin->blockSignals(true);
             evenPageLeftMargin->setValue(val * (mmUnit ? INCH : 1.0));
             evenPageLeftMargin->blockSignals(false);
