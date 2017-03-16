@@ -311,15 +311,15 @@ IF(BUILD_JACK)
      IF(MINGW)
            set (USE_JACK 1)
            IF("$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "")
-              IF($ENV{PROCESSOR_ARCHITECTURE} STREQUAL "x86")
+              IF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
                  # "pure" 32-bit environment
                  set (JACK_INCDIR "$ENV{PROGRAMFILES}/Jack/includes")
                  set (JACK_LIB "$ENV{PROGRAMFILES}/Jack/lib/libjack.a")
-              ELSE($ENV{PROCESSOR_ARCHITECTURE} STREQUAL "x86")
+              ELSE("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
                  # "pure" 64-bit environment
                  set (JACK_INCDIR "$ENV{PROGRAMFILES(x86)}/Jack/includes")
                  set (JACK_LIB "$ENV{PROGRAMFILES(x86)}/Jack/lib/libjack.a")
-              ENDIF($ENV{PROCESSOR_ARCHITECTURE} STREQUAL "x86")
+              ENDIF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
            ELSE("$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "")
               IF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
                  # 32-bit program running with an underlying 64-bit environment
