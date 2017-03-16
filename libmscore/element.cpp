@@ -458,7 +458,7 @@ QRectF Element::drag(EditData* data)
       setUserOff(QPointF(x, y));
       setGenerated(false);
 
-      if (type() == Type::TEXT) {         // TODO: check for other types
+      if (isText()) {         // TODO: check for other types
             //
             // restrict move to page boundaries
             //
