@@ -60,9 +60,16 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
     synti->init();
     int sampleRate = preferences.exportAudioSampleRate;
     synti->setSampleRate(sampleRate);
-    bool r = synti->setState(score->synthesizerState());
-    if (!r)
-        synti->init();
+    if (MScore::noGui) { // use score settings if possible
+          bool r = synti->setState(score->synthesizerState());
+          if (!r)
+                synti->init();
+          }
+    else { // use current synth settings
+          bool r = synti->setState(mscore->synthesizerState());
+          if (!r)
+          synti->init();
+          }
 
     int oldSampleRate  = MScore::sampleRate;
     MScore::sampleRate = sampleRate;
