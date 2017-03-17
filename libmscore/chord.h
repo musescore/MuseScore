@@ -118,7 +118,6 @@ class Chord : public ChordRest {
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual bool readProperties(XmlReader&) override;
-//      virtual void setSelected(bool f) override;
       virtual Element* drop(const DropData&) override;
 
       void setStemDirection(Direction d) { _stemDirection = d; }
@@ -131,10 +130,6 @@ class Chord : public ChordRest {
       virtual void layoutStem1() override;
       void layoutStem();
       void layoutArpeggio2();
-
-//      QQmlListProperty<Ms::Note> qmlNotes()           { return QmlListAccess<Ms::Note>(this, _notes); }
-//      QQmlListProperty<Ms::Lyrics> qmlLyrics()        { return QmlListAccess<Ms::Lyrics>(this, _lyrics); }
-//      QQmlListProperty<Ms::Chord> qmlGraceNotes()     { return QmlListAccess<Ms::Chord>(this, _graceNotes); }
 
       std::vector<Note*>& notes()                 { return _notes; }
       const std::vector<Note*>& notes() const     { return _notes; }

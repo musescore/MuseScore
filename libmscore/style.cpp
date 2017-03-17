@@ -74,7 +74,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::lyricsPosAbove,          "lyricsPosAbove",          Spatium(-2.0) },
       { StyleIdx::lyricsPosBelow,          "lyricsPosBelow",          Spatium(2.0) },
       { StyleIdx::lyricsMinTopDistance,    "lyricsMinTopDistance",    Spatium(1.0)  },
-      { StyleIdx::lyricsMinBottomDistance, "lyricsMinBottomDistance", Spatium(3.0)  },
+      { StyleIdx::lyricsMinBottomDistance, "lyricsMinBottomDistance", Spatium(2.0)  },
       { StyleIdx::lyricsLineHeight,        "lyricsLineHeight",        1.0 },
       { StyleIdx::lyricsDashMinLength,     "lyricsDashMinLength",     Spatium(0.4) },
       { StyleIdx::lyricsDashMaxLength,     "lyricsDashMaxLegth",      Spatium(0.8) },
