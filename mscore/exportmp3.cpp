@@ -686,9 +686,16 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       MasterSynthesizer* synti = synthesizerFactory();
       synti->init();
       synti->setSampleRate(sampleRate);
-      bool r = synti->setState(score->synthesizerState());
-      if (!r)
-          synti->init();
+      if (MScore::noGui) { // use score settings if possible
+            bool r = synti->setState(score->synthesizerState());
+            if (!r)
+                  synti->init();
+            }
+      else { // use current synth settings
+            bool r = synti->setState(mscore->synthesizerState());
+            if (!r)
+            synti->init();
+            }
 
       MScore::sampleRate = sampleRate;
 

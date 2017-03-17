@@ -4976,6 +4976,16 @@ QMenu* MuseScore::createPopupMenu()
       return m;
       }
 
+//---------------------------------------------------------
+//   synthesizerState
+//---------------------------------------------------------
+
+SynthesizerState MuseScore::synthesizerState()
+      {
+      SynthesizerState state;
+      return synti ? synti->state() : state;
+      }
+
 }
 
 using namespace Ms;

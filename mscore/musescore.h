@@ -85,6 +85,7 @@ class MasterPalette;
 class PluginCreator;
 class PluginManager;
 class MasterSynthesizer;
+class SynthesizerState;
 class Driver;
 class Seq;
 class ImportMidiPanel;
@@ -616,6 +617,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void addTempo();
       void addMetronome();
+
+      SynthesizerState synthesizerState();
 
       Q_INVOKABLE QString getLocaleISOCode() const;
       Navigator* navigator() const;
