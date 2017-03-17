@@ -2642,17 +2642,17 @@ static void applyLyricsMax(Segment& s, int staffIdx, qreal yMax)
       if (!s.isChordRestType())
             return;
       ChordRest* cr = s.cr(staffIdx * VOICES);
-      if (cr) {
+      if (cr && !cr->lyrics().empty()) {
             Shape sh;
             qreal lyricsMinBottomDistance = s.score()->styleP(StyleIdx::lyricsMinBottomDistance);
             for (Lyrics* l : cr->lyrics()) {
                   if (l->autoplace() && l->placeBelow()) {
                         l->rUserYoffset() = yMax;
-                        sh.add(l->bbox().translated(l->pos())
-                           .adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
+                        sh.add(l->bbox().translated(l->pos()+cr->pos()).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
                         }
                   }
             s.staffShape(staffIdx).add(sh);
+            s.measure()->staffShape(staffIdx).add(sh.translated(s.pos()));
             }
       }
 
@@ -2678,6 +2678,7 @@ static void applyLyricsMin(ChordRest* cr, int staffIdx, qreal yMin)
                   }
             }
       cr->segment()->staffShape(staffIdx).add(sh);
+      cr->measure()->staffShape(staffIdx).add(sh.translated(cr->pos() + cr->segment()->pos()));
       }
 
 static void applyLyricsMin(Measure* m, int staffIdx, qreal yMin)
@@ -3060,7 +3061,7 @@ System* Score::collectSystem(LayoutContext& lc)
                                     if (doAutoplace) {
                                           d->doAutoplace();
                                           int si = d->staffIdx();
-                                          s->staffShape(si).add(d->shape().translated(e->pos()));
+                                          s->staffShape(si).add(d->shape().translated(d->pos()));
                                           m->staffShape(si).add(d->shape().translated(s->pos() + d->pos()));
                                           }
                                     }
