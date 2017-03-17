@@ -92,6 +92,7 @@
 #include "libmscore/volta.h"
 #include "libmscore/lasso.h"
 #include "libmscore/excerpt.h"
+#include "libmscore/synthesizerstate.h"
 
 #include "driver.h"
 
@@ -4267,6 +4268,8 @@ void MuseScore::networkFinished(QNetworkReply* reply)
       f.write(data);
       f.close();
 
+      reply->deleteLater();
+
       MasterScore* score = readScore(tmpName);
       if (!score) {
             qDebug("readScore failed");
@@ -4288,12 +4291,20 @@ void MuseScore::loadFile(const QString& s)
 
 void MuseScore::loadFile(const QUrl& url)
       {
-      if (!networkManager) {
-            networkManager = new QNetworkAccessManager(this);
-            connect(networkManager, SIGNAL(finished(QNetworkReply*)),
+      QNetworkReply* nr = networkManager()->get(QNetworkRequest(url));
+      connect(nr, SIGNAL(finished(QNetworkReply*)),
                SLOT(networkFinished(QNetworkReply*)));
-            }
-      networkManager->get(QNetworkRequest(url));
+      }
+
+//---------------------------------------------------------
+//   networkManager
+//---------------------------------------------------------
+
+QNetworkAccessManager* MuseScore::networkManager()
+      {
+      if (!_networkManager)
+            _networkManager = new QNetworkAccessManager(this);
+      return _networkManager;
       }
 
 //---------------------------------------------------------

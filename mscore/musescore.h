@@ -381,10 +381,10 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       QComboBox* layerSwitch;
       QComboBox* playMode;
-      QNetworkAccessManager* networkManager { 0 };
-      QAction* lastCmd                      { 0 };
-      const Shortcut* lastShortcut          { 0 };
-      QHelpEngine* _helpEngine              { 0 };
+      QNetworkAccessManager* _networkManager { 0 };
+      QAction* lastCmd                       { 0 };
+      const Shortcut* lastShortcut           { 0 };
+      QHelpEngine* _helpEngine               { 0 };
       int globalX, globalY;       // current mouse position
 
       QAction* countInAction;
@@ -593,6 +593,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       MasterScore* getNewFile();
       Q_INVOKABLE void loadFile(const QString& url);
       void loadFile(const QUrl&);
+      QNetworkAccessManager* networkManager();
       virtual Score* openScore(const QString& fn);
       bool hasToCheckForUpdate();
       static bool unstable();
