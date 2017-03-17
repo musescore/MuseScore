@@ -23,29 +23,6 @@ namespace Ms {
 extern QString dataPath;
 
 //---------------------------------------------------------
-//   default buildin SynthesizerState
-//    used if synthesizer.xml does not exist or is not
-//    readable
-//---------------------------------------------------------
-
-static SynthesizerState defaultState = {
-      { "master", {
-            { 0, "Zita1" },
-            { 2, "0.1"   },
-            { 3, "440"   }
-            },
-            },
-      { "Fluid", {
-            { 0, "FluidR3Mono_GM.sf3" },
-            },
-            },
-//      { "Zerberus", {
-//            { 0, "SalamanderGrandPiano.sfz" },
-//            },
-//            },
-      };
-
-//---------------------------------------------------------
 //   MasterSynthesizer
 //---------------------------------------------------------
 

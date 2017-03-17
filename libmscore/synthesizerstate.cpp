@@ -55,6 +55,38 @@ void SynthesizerState::read(XmlReader& e)
             }
       }
 
+//---------------------------------------------------------
+//   group
+///  Get SynthesizerGroup by name
+//---------------------------------------------------------
+
+SynthesizerGroup SynthesizerState::group(const QString& name) const
+      {
+      for (const SynthesizerGroup& g : *this) {
+            if (g.name() == name)
+                  return g;
+            }
+      SynthesizerGroup sg;
+      return sg;
+      }
+
+//---------------------------------------------------------
+//   isDefaultSynthSoundfont
+///  check if synthesizer state uses default synth and
+///  default font only
+//---------------------------------------------------------
+
+bool SynthesizerState::isDefaultSynthSoundfont()
+      {
+      bool result = false;
+      SynthesizerGroup fluid = group("Fluid");
+      SynthesizerGroup zerberus = group("Zerberus");
+      if (zerberus.size() == 0 && fluid.size() == 1) {
+            if (fluid.front().data == "FluidR3Mono_GM.sf3")
+                  return true;
+            }
+      return result;
+      }
 
 }
 
