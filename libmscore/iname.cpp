@@ -69,6 +69,12 @@ void InstrumentName::endEdit()
       Instrument* instrument = new Instrument(*part->instrument());
 
       QString s = plainText();
+
+      if (!validateText(s)) {
+            qWarning("Invalid instrument name: <%s>", s.toUtf8().data());
+            return;
+            }
+
       if (_instrumentNameType == InstrumentNameType::LONG)
             instrument->setLongName(s);
       else
