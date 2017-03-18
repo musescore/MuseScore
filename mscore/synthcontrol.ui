@@ -92,7 +92,7 @@
    <item row="0" column="2" rowspan="3">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="Awl::MeterSlider" name="gain">
+      <widget class="Awl::MeterSlider" name="gain" native="true">
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
@@ -105,7 +105,7 @@
        <property name="accessibleDescription">
         <string>Use up and down arrows to modify</string>
        </property>
-       <property name="channel">
+       <property name="channel" stdset="0">
         <number>2</number>
        </property>
       </widget>
@@ -129,9 +129,9 @@
     </layout>
    </item>
    <item row="0" column="1">
-    <widget class="Awl::VolSlider" name="mgain">
+    <widget class="Awl::VolSlider" name="mgain" native="true">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -145,7 +145,7 @@
      <property name="accessibleDescription">
       <string>Use up and down arrows to modify</string>
      </property>
-     <property name="center">
+     <property name="center" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
