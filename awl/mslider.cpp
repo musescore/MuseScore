@@ -186,24 +186,24 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
       p.setPen(QPen(Qt::white, 2));
 
       for (int i = 0; i < _channel; ++i) {
-            int h = mh - (lrint(fast_log10(meterval[i]) * -20.0f * mh / range));
+            int h = mh - lrint(-fast_log10(meterval[i]) * maxValue() * mh / range);
             if (h < 0)
                   h = 0;
             else if (h > mh)
                   h = mh;
 
-	      p.drawPixmap(x, y1+mh-h, mw, h,    onPm,  0, mh-h, mw, h);
-	      p.drawPixmap(x, y1,      mw, mh-h, offPm, 0, 0,    mw, mh-h);
+            p.drawPixmap(x, y1+mh-h, mw, h,    onPm,  0, mh-h, mw, h);
+            p.drawPixmap(x, y1,      mw, mh-h, offPm, 0, 0,    mw, mh-h);
 
             //---------------------------------------------------
             //    draw peak line
             //---------------------------------------------------
 
-            h = mh - (lrint(fast_log10(meterPeak[i]) * -20.0f * mh / range));
+            h = mh - lrint(-fast_log10(meterPeak[i]) * maxValue() * mh / range);
             if (h > mh)
                   h = mh;
-	      if (h > 0)
-	            p.drawLine(x, y3-h, x+mw, y3-h);
+            if (h > 0)
+                  p.drawLine(x, y3-h, x+mw, y3-h);
 
             x += mw;
             }
@@ -229,9 +229,9 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
       //    draw tick marks
       //---------------------------------------------------
 
-  	QFont f(p.font());
+      QFont f(p.font());
    	f.setPointSize(6);
-   	p.setFont(f);
+      p.setFont(f);
       p.setPen(QPen(Qt::darkGray, 2));
    	QFontMetrics fm(f);
       int xt = 20 - fm.width("00") - 5;
