@@ -16,6 +16,7 @@
 namespace Ms {
 
 class Element;
+class ScoreElement;
 class Score;
 class Chord;
 class Rest;
@@ -25,6 +26,8 @@ class RepeatSegment;
 class ChordRest;
 class StaffText;
 class Measure;
+
+enum class SegmentType;
 
 //---------------------------------------------------------
 //   ElementW
@@ -42,8 +45,8 @@ class ElementW : public QObject {
    public:
       ElementW(ScoreElement* _e) : QObject() { e = _e; }
       ElementW() {}
-      QString type() const { return QString(e->name()); }
-      Q_INVOKABLE QVariant tick() const { return QVariant(((Element*)e)->tick()); }
+      QString type() const;
+      Q_INVOKABLE QVariant tick() const;
       Q_INVOKABLE QVariant get(const QString& s) const;
       };
 
