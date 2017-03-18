@@ -23,6 +23,7 @@
 
 #include "ui_editstyle.h"
 #include "globals.h"
+#include "libmscore/mscore.h"
 #include "libmscore/style.h"
 
 namespace Ms {

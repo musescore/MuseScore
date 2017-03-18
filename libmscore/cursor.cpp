@@ -30,6 +30,16 @@ namespace Ms {
 //   ElementW
 //---------------------------------------------------------
 
+QString ElementW::type() const
+      {
+      return QString(e->name());
+      }
+
+QVariant ElementW::tick() const
+      {
+      return QVariant(((Element*)e)->tick());
+      }
+
 QVariant ElementW::get(const QString& s) const
       {
       QVariant val;
