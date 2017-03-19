@@ -336,25 +336,25 @@ public:
 //   while all other elements are relative to their position or the nearest note.
 //---------------------------------------------------------
 
-static QString addPositioningAttributes (QString &xml, Element const* const el, bool isSpanStart = true)
+static QString addPositioningAttributes(QString& xml, Element const* const el, bool isSpanStart = true)
     {
+        if (!preferences.musicxmlExportLayout)
+            return xml;
+
         const float positionElipson = 0.1f;
-        float defaultX, defaultY, relativeX, relativeY = 0;
+        float defaultX = 0, defaultY = 0, relativeX = 0, relativeY = 0;
         float spatium = el->spatium();
 
-        if (SLine const* const span = dynamic_cast<SLine const* const>(el))
-        {
+        if (SLine const* const span = dynamic_cast<SLine const* const>(el)) {
             SpannerSegment* seg;
-            if(isSpanStart)
-            {
+            if(isSpanStart) {
                 seg = span->spannerSegments().first();
                 QPointF userOff = seg->userOff();
                 QPointF p = seg->pos();
                 defaultX = userOff.x();
                 defaultY = p.y();
             }
-            else
-            {
+            else {
                 seg = span->spannerSegments().last();
                 QPointF userOff = seg->userOff(); // This is the offset accessible from the inspector
                 QPointF userOff2 = seg->userOff2(); // Offset of the actual dragged anchor, which doesn't affect the inspector offset
@@ -394,8 +394,7 @@ static QString addPositioningAttributes (QString &xml, Element const* const el, 
                 qDebug("defaultX : %f", defaultX); */
             }
         }
-        else
-        {
+        else {
             // defaultX = el->ipos().x();
             // finale doesn't play nicely with defaultX's for some reason, espeically dynamics, which causes an incorrect offset, but we can account
             // for this by using pos() instead of userOff() for relativeX
@@ -407,15 +406,14 @@ static QString addPositioningAttributes (QString &xml, Element const* const el, 
         defaultX *=  10 / spatium; defaultY *=  -10 / spatium; // convert into spatium tenths for musicxml
         relativeX *=  10 / spatium; relativeY *=  -10 / spatium;
 
-        if (preferences.musicxmlExportLayout && fabsf(defaultX) > positionElipson)
+        if (fabsf(defaultX) > positionElipson)
               xml += QString(" default-x=\"%1\"").arg(QString::number(defaultX, 'f', 2));
-        if (preferences.musicxmlExportLayout && fabsf(defaultY) > positionElipson)
+        if (fabsf(defaultY) > positionElipson)
               xml += QString(" default-y=\"%1\"").arg(QString::number(defaultY, 'f', 2));
-        if (preferences.musicxmlExportLayout && fabsf(relativeX) > positionElipson)
+        if (fabsf(relativeX) > positionElipson)
               xml += QString(" relative-x=\"%1\"").arg(QString::number(relativeX, 'f', 2));
-        if (preferences.musicxmlExportLayout && fabsf(relativeY) > positionElipson)
+        if (fabsf(relativeY) > positionElipson)
               xml += QString(" relative-y=\"%1\"").arg(QString::number(relativeY, 'f', 2));
-
 
         return xml;
     }
@@ -3831,7 +3829,7 @@ static void directionJump(Xml& xml, const Jump* const jp)
       if (sound != "") {
             xml.stag("direction placement=\"above\"");
             xml.stag("direction-type");
-            QString positioning = " ";
+            QString positioning = "";
             addPositioningAttributes(positioning, jp);
             if (type != "") xml.tagE(type + positioning);
             if (words != "") xml.tag("words" + positioning, words);
@@ -3886,7 +3884,7 @@ static void directionMarker(Xml& xml, const Marker* const m)
       if (sound != "") {
             xml.stag("direction placement=\"above\"");
             xml.stag("direction-type");
-            QString positioning = " ";
+            QString positioning = "";
             addPositioningAttributes(positioning, m);
             if (type != "") xml.tagE(type + positioning);
             if (words != "") xml.tag("words" + positioning, words);
