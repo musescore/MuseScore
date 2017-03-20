@@ -2341,7 +2341,7 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
 //      p.drawRect(e->bbox());
       e->shape().paint(p);
 
-      p.setPen(QPen(Qt::red, 0.0));
+      p.setPen(QPen(Qt::red, 0.0));             // red x at 0,0 of bbox
       qreal w = 5.0 / p.matrix().m11();
       qreal h = w;
       qreal x = 0; // e->bbox().x();
