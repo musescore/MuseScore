@@ -2819,20 +2819,8 @@ System* Score::collectSystem(LayoutContext& lc)
                         Measure* m = toMeasure(lc.curMeasure);
                         if (m->repeatStart()) {
                               Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, 0);
-                              bool changed = false;
-                              if (lc.prevMeasure->repeatEnd()) {
-                                    if (s && s->enabled()) {
-                                          s->setEnabled(false);
-                                          changed = true;
-                                          }
-                                    }
-                              else {
-                                    if (!s->enabled()) {
-                                          s->setEnabled(true);
-                                          changed = true;
-                                          }
-                                    }
-                              if (changed) {
+                              if (!s->enabled()) {
+                                    s->setEnabled(true);
                                     m->computeMinWidth();
                                     ww = m->width();
                                     }

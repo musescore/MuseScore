@@ -3608,11 +3608,6 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType, SegmentType
                   case BarLineType::END_REPEAT:
                         s->undoChangeProperty(m, P_ID::REPEAT_END, true);
                         break;
-                  case BarLineType::END_START_REPEAT:
-                        s->undoChangeProperty(m, P_ID::REPEAT_END, true);
-                        if (nm)
-                              s->undoChangeProperty(nm, P_ID::REPEAT_START, true);
-                        break;
                   }
             }
       }

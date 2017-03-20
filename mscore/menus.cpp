@@ -450,7 +450,6 @@ Palette* MuseScore::newRepeatsPalette()
             switch (bti->type) {
                   case BarLineType::START_REPEAT:
                   case BarLineType::END_REPEAT:
-                  case BarLineType::END_START_REPEAT:
                         break;
                   default:
                         continue;

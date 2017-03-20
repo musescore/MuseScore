@@ -1870,9 +1870,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   int t = e.tick() - tick();
                   if (t && (t != ticks()))
                         st = SegmentType::BarLine;
-                  else if (barLine->barLineType() == BarLineType::START_REPEAT && t == 0) {
+                  else if (barLine->barLineType() == BarLineType::START_REPEAT && t == 0)
                         st = SegmentType::StartRepeatBarLine;
-                        }
                   else if (barLine->barLineType() == BarLineType::START_REPEAT && t == ticks()) {
                         // old version, ignore
                         delete barLine;
@@ -3130,8 +3129,7 @@ void Measure::stretchMeasure(qreal targetWidth)
                         }
                   else if (t == ElementType::BAR_LINE) {
                         if (s.isEndBarLineType()) {
-                              qreal move = s.width() - e->width();
-                              e->rxpos() = move;                        // right align
+                              e->rxpos() = s.width();       // right align
                               }
                         else
                               e->setPos(0.0, 0.0);
@@ -3315,11 +3313,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                   }
 
             bool force = false;
-            if (!isLastMeasureInSystem && repeatEnd() && nextMeasure()->repeatStart()) {
-                  t = BarLineType::END_START_REPEAT;
-                  force = true;
-                  }
-            else if (repeatEnd()) {
+            if (repeatEnd()) {
                   t = BarLineType::END_REPEAT;
                   force = true;
                   }

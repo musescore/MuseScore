@@ -727,7 +727,6 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     BarLineType blt = static_cast<BarLine*>(e)->barLineType();
                                     switch (blt) {
                                           case BarLineType::END_REPEAT:
-                                          case BarLineType::END_START_REPEAT:
                                                 // skip dots
                                                 x += symWidth(SymId::repeatDot);
                                                 x += score()->styleS(StyleIdx::endBarDistance).val() * _spatium;

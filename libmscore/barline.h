@@ -51,7 +51,7 @@ struct BarLineTableItem {
 //---------------------------------------------------------
 //   @@ BarLine
 //
-//   @P barLineType  enum  (BarLineType.NORMAL, .DOUBLE, .START_REPEAT, .END_REPEAT, .BROKEN, .END, .END_START_REPEAT, .DOTTED)
+//   @P barLineType  enum  (BarLineType.NORMAL, .DOUBLE, .START_REPEAT, .END_REPEAT, .BROKEN, .END, .DOTTED)
 //---------------------------------------------------------
 
 class BarLine : public Element {
@@ -137,7 +137,7 @@ class BarLine : public Element {
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID propertyId) const override;
 
-      static qreal layoutWidth(Score*, BarLineType, qreal mag);
+      static void layoutWidth(Score*, BarLineType, qreal mag, qreal* lx, qreal* rx);
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
