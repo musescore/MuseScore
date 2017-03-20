@@ -1247,8 +1247,10 @@ void Segment::createShape(int staffIdx)
       if (segmentType() & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
             BarLine* bl = toBarLine(element(0));
             if (bl) {
-                  qreal w = BarLine::layoutWidth(score(), bl->barLineType(), 1.0);
-                  s.add(QRectF(bl->x(), 0.0, w, spatium() * 4.0));
+                  qreal lw, rw;
+                  BarLine::layoutWidth(score(), bl->barLineType(), 1.0, &lw, &rw);
+                  qreal w = rw - lw;
+                  s.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos()));
                   }
             return;
             }

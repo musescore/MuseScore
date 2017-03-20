@@ -1558,10 +1558,6 @@ void Score::deleteItem(Element* el)
                               m->undoChangeProperty(P_ID::REPEAT_START, false);
                         else if (bl->barLineType() == BarLineType::END_REPEAT)
                               m->undoChangeProperty(P_ID::REPEAT_END, false);
-                        else if (bl->barLineType() == BarLineType::END_START_REPEAT) {
-                              m->undoChangeProperty(P_ID::REPEAT_START, false);
-                              m->undoChangeProperty(P_ID::REPEAT_END, false);
-                              }
                         else
                               undoRemoveElement(el);
                         }
