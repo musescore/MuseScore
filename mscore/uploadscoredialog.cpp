@@ -78,6 +78,14 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
 
       tagsHelp->setText(tr("Use a comma to separate the tags"));
       tagsHelp->setFont(font);
+      uploadAudioHelp->setFont(font);
+      QString urlHelp = QString("https://musescore.org/redirect/handbook?chapter=upload-score-audio&locale=%1&utm_source=desktop&utm_medium=save-online&utm_content=%2&utm_term=upload-score-audio&utm_campaign=MuseScore%3")
+         .arg(mscore->getLocaleISOCode())
+         .arg(mscore->revision().trimmed())
+         .arg(QString(VERSION));
+      uploadAudioHelp->setText(tr("Render the score with the current synth settings. %1More info%2.")
+                          .arg("<a href=\"" + urlHelp + "\">")
+                          .arg("</a>"));
       lblChanges->setVisible(false);
       changes->setVisible(false);
 
@@ -88,11 +96,12 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
       connect(buttonBox,   SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
       chkSignoutOnExit->setVisible(false);
       _loginManager = loginManager;
-      connect(_loginManager, SIGNAL(uploadSuccess(QString)), this, SLOT(uploadSuccess(QString)));
+      connect(_loginManager, SIGNAL(uploadSuccess(QString, QString, QString)), this, SLOT(uploadSuccess(QString, QString, QString)));
       connect(_loginManager, SIGNAL(uploadError(QString)), this, SLOT(uploadError(QString)));
       connect(_loginManager, SIGNAL(getScoreSuccess(QString, QString, bool, QString, QString, QString)), this, SLOT(onGetScoreSuccess(QString, QString, bool, QString, QString, QString)));
       connect(_loginManager, SIGNAL(getScoreError(QString)), this, SLOT(onGetScoreError(QString)));
       connect(_loginManager, SIGNAL(tryLoginSuccess()), this, SLOT(display()));
+      connect(_loginManager, SIGNAL(displaySuccess()), this, SLOT(displaySuccess()));
       connect(btnSignout, SIGNAL(pressed()), this, SLOT(logout()));
 
       MuseScore::restoreGeometry(this);
@@ -122,7 +131,7 @@ void UploadScoreDialog::upload(int nid)
            return;
            }
      Score* score = mscore->currentScore()->rootScore();
-     QString path = QDir::tempPath() + "/temp.mscz";
+     QString path = QDir::tempPath() + QString("/temp_%1.mscz").arg(qrand() % 100000);
      if(mscore->saveAs(score, true, path, "mscz")) {
            QString licenseString = license->currentData().toString();
            QString privateString = cbPrivate->isChecked() ? "1" : "0";
@@ -134,9 +143,10 @@ void UploadScoreDialog::upload(int nid)
 //   uploadSuccess
 //---------------------------------------------------------
 
-void UploadScoreDialog::uploadSuccess(const QString& url)
+void UploadScoreDialog::uploadSuccess(const QString& url, const QString& nid, const QString& vid)
       {
       setVisible(false);
+      _url = url;
       Score* score = mscore->currentScore()->rootScore();
       QMap<QString, QString>  metatags = score->metaTags();
       if (metatags.value("source") != url) {
@@ -145,13 +155,24 @@ void UploadScoreDialog::uploadSuccess(const QString& url)
             score->undo(new ChangeMetaTags(score, metatags));
             score->endCmd();
       }
+      if (uploadAudio->isChecked())
+            _loginManager->getMediaUrl(nid, vid, "mp3");
+      else
+            displaySuccess();
+      }
+
+//---------------------------------------------------------
+//   uploadSuccess
+//---------------------------------------------------------
+
+void UploadScoreDialog::displaySuccess()
+      {
       QMessageBox::information(this,
                tr("Success"),
                tr("Finished! %1Go to my score%2.")
-                               .arg("<a href=\"" + url + "\">")
+                               .arg("<a href=\"" + _url + "\">")
                                .arg("</a>"),
                QMessageBox::Ok, QMessageBox::NoButton);
-
       }
 
 //---------------------------------------------------------
@@ -187,6 +208,10 @@ void UploadScoreDialog::display()
                          }
                   }
             }
+      uploadAudio->setEnabled(mscore->canSaveMp3());
+      bool v = !mscore->synthesizerState().isDefaultSynthSoundfont();
+      uploadAudio->setVisible(v);
+      uploadAudioHelp->setVisible(v);
       clear();
       setVisible(true);
       }
@@ -229,7 +254,7 @@ void UploadScoreDialog::onGetScoreError(const QString& /*error*/)
       }
 
 //---------------------------------------------------------
-//   onGetScoreError
+//   clear
 //---------------------------------------------------------
 
 void UploadScoreDialog::clear()
@@ -242,7 +267,9 @@ void UploadScoreDialog::clear()
       updateExistingCb->setChecked(false);
       updateExistingCb->setVisible(false);
       linkToScore->setText("");
+      uploadAudio->setChecked(false);
       _nid = -1;
+      _url = "";
       }
 
 //---------------------------------------------------------
