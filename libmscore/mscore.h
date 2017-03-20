@@ -74,12 +74,16 @@ static constexpr qreal DPI       = 72.0;
 static constexpr qreal DPMM      = DPI / INCH;
 
 static constexpr int MAX_STAVES  = 4;
+#define MMSP(x)  Spatium((x) * .1)
+
+static const int  SHADOW_NOTE_LIGHT       = 120;
 
 static const char mimeSymbolFormat[]      = "application/musescore/symbol";
 static const char mimeSymbolListFormat[]  = "application/musescore/symbollist";
 static const char mimeStaffListFormat[]   = "application/musescore/stafflist";
 
-static const int  VISUAL_STRING_NONE      = -2;       // no ordinal for the visual repres. of string (0 = topmost in TAB)
+static const int  VISUAL_STRING_NONE      = -100;     // no ordinal for the visual repres. of string (topmost in TAB
+                                                      // varies according to visual order and presence of bass
 static const int  STRING_NONE             = -1;       // no ordinal for a physical string (0 = topmost in instrument)
 static const int  FRET_NONE               = -1;       // no ordinal for a fret
 
