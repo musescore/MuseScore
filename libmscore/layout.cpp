@@ -2560,24 +2560,27 @@ static qreal findLyricsMaxY(Segment& s, int staffIdx)
       qreal yMax = 0.0;
       if (!s.isChordRestType())
             return yMax;
-      ChordRest* cr = s.cr(staffIdx * VOICES);
-      if (cr) {
-            Shape sh;
-            for (Lyrics* l : cr->lyrics()) {
-                  if (l->autoplace() && l->placeBelow()) {
-                        l->rUserYoffset() = 0.0;
-                        sh.add(l->bbox().translated(l->pos()));
-                        }
-                  }
-            // lyrics shapes must be moved, so first remove them from segment
-            s.staffShape(staffIdx).remove(sh);
 
-            qreal lyricsMinTopDistance = s.score()->styleP(StyleIdx::lyricsMinTopDistance);
-            for (Lyrics* l : cr->lyrics()) {
-                  if (l->autoplace() && l->placeBelow()) {
-                        qreal y = s.staffShape(staffIdx).minVerticalDistance(sh);
-                        if (y > -lyricsMinTopDistance)
-                              yMax = qMax(yMax, y + lyricsMinTopDistance);
+      for (int voice = 0; voice < VOICES; ++voice) {
+            ChordRest* cr = s.cr(staffIdx * VOICES + voice);
+            if (cr) {
+                  Shape sh;
+                  for (Lyrics* l : cr->lyrics()) {
+                        if (l->autoplace() && l->placeBelow()) {
+                              l->rUserYoffset() = 0.0;
+                              sh.add(l->bbox().translated(l->pos()));
+                              }
+                        }
+                  // lyrics shapes must be moved, so first remove them from segment
+                  s.staffShape(staffIdx).remove(sh);
+
+                  qreal lyricsMinTopDistance = s.score()->styleP(StyleIdx::lyricsMinTopDistance);
+                  for (Lyrics* l : cr->lyrics()) {
+                        if (l->autoplace() && l->placeBelow()) {
+                              qreal y = s.staffShape(staffIdx).minVerticalDistance(sh);
+                              if (y > -lyricsMinTopDistance)
+                                    yMax = qMax(yMax, y + lyricsMinTopDistance);
+                              }
                         }
                   }
             }
@@ -2601,24 +2604,26 @@ static qreal findLyricsMinY(Segment& s, int staffIdx)
       qreal yMin = 0.0;
       if (!s.isChordRestType())
             return yMin;
-      ChordRest* cr = s.cr(staffIdx * VOICES);
-      if (cr) {
-            Shape sh;
-            for (Lyrics* l : cr->lyrics()) {
-                  if (l->autoplace() && l->placeAbove()) {
-                        l->rUserYoffset() = 0.0;
-                        sh.add(l->bbox().translated(l->pos()));
+      for (int voice = 0; voice < VOICES; ++voice) {
+            ChordRest* cr = s.cr(staffIdx * VOICES + voice);
+            if (cr) {
+                  Shape sh;
+                  for (Lyrics* l : cr->lyrics()) {
+                        if (l->autoplace() && l->placeAbove()) {
+                              l->rUserYoffset() = 0.0;
+                              sh.add(l->bbox().translated(l->pos()));
+                              }
                         }
-                  }
-            // lyrics shapes must be moved, so first remove them from segment
-            s.staffShape(staffIdx).remove(sh);
+                  // lyrics shapes must be moved, so first remove them from segment
+                  s.staffShape(staffIdx).remove(sh);
 
-            qreal lyricsMinTopDistance = s.score()->styleP(StyleIdx::lyricsMinTopDistance);
-            for (Lyrics* l : cr->lyrics()) {
-                  if (l->autoplace() && l->placeAbove()) {
-                        qreal y = sh.minVerticalDistance(s.staffShape(staffIdx));
-                        if (y > -lyricsMinTopDistance)
-                              yMin = qMin(yMin, -y -lyricsMinTopDistance);
+                  qreal lyricsMinTopDistance = s.score()->styleP(StyleIdx::lyricsMinTopDistance);
+                  for (Lyrics* l : cr->lyrics()) {
+                        if (l->autoplace() && l->placeAbove()) {
+                              qreal y = sh.minVerticalDistance(s.staffShape(staffIdx));
+                              if (y > -lyricsMinTopDistance)
+                                    yMin = qMin(yMin, -y -lyricsMinTopDistance);
+                              }
                         }
                   }
             }
@@ -2641,18 +2646,20 @@ static void applyLyricsMax(Segment& s, int staffIdx, qreal yMax)
       {
       if (!s.isChordRestType())
             return;
-      ChordRest* cr = s.cr(staffIdx * VOICES);
-      if (cr && !cr->lyrics().empty()) {
-            Shape sh;
-            qreal lyricsMinBottomDistance = s.score()->styleP(StyleIdx::lyricsMinBottomDistance);
-            for (Lyrics* l : cr->lyrics()) {
-                  if (l->autoplace() && l->placeBelow()) {
-                        l->rUserYoffset() = yMax;
-                        sh.add(l->bbox().translated(l->pos()+cr->pos()).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
+      for (int voice = 0; voice < VOICES; ++voice) {
+            ChordRest* cr = s.cr(staffIdx * VOICES + voice);
+            if (cr && !cr->lyrics().empty()) {
+                  Shape sh;
+                  qreal lyricsMinBottomDistance = s.score()->styleP(StyleIdx::lyricsMinBottomDistance);
+                  for (Lyrics* l : cr->lyrics()) {
+                        if (l->autoplace() && l->placeBelow()) {
+                              l->rUserYoffset() = yMax;
+                              sh.add(l->bbox().translated(l->pos()+cr->pos()).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
+                              }
                         }
+                  s.staffShape(staffIdx).add(sh);
+                  s.measure()->staffShape(staffIdx).add(sh.translated(s.pos()));
                   }
-            s.staffShape(staffIdx).add(sh);
-            s.measure()->staffShape(staffIdx).add(sh.translated(s.pos()));
             }
       }
 
@@ -2685,9 +2692,11 @@ static void applyLyricsMin(Measure* m, int staffIdx, qreal yMin)
       {
       for (Segment& s : m->segments()) {
             if (s.isChordRestType()) {
-                  ChordRest* cr = s.cr(staffIdx * VOICES);
-                  if (cr)
-                        applyLyricsMin(cr, staffIdx, yMin);
+                  for (int voice = 0; voice < VOICES; ++voice) {
+                        ChordRest* cr = s.cr(staffIdx * VOICES + voice);
+                        if (cr)
+                              applyLyricsMin(cr, staffIdx, yMin);
+                        }
                   }
             }
       }
