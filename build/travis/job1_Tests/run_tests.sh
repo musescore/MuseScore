@@ -35,6 +35,8 @@ cd ../../vtest
 xvfb-run ./gen
 cd -
 
+ccache -s
+
 #make reporthtml
 #REVISION=`git rev-parse --short HEAD`
 #mv report/html $REVISION
