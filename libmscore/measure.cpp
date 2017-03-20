@@ -3129,8 +3129,10 @@ void Measure::stretchMeasure(qreal targetWidth)
                               c->tremolo()->layout();
                         }
                   else if (t == ElementType::BAR_LINE) {
-                        if (s.isEndBarLineType())
-                              e->setPos(0.0, s.width() - e->width());  // right align
+                        if (s.isEndBarLineType()) {
+                              qreal move = s.width() - e->width();
+                              e->rxpos() = move;                        // right align
+                              }
                         else
                               e->setPos(0.0, 0.0);
                         e->adjustReadPos();
