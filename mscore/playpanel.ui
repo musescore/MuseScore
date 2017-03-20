@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>380</width>
+    <width>389</width>
     <height>293</height>
    </rect>
   </property>
@@ -153,7 +153,7 @@
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" stretch="0,0,0,0,0">
+      <layout class="QHBoxLayout" stretch="0,0,0,0">
        <property name="spacing">
         <number>1</number>
        </property>
@@ -218,32 +218,6 @@
           <bool>true</bool>
          </property>
         </widget>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <widget class="QToolButton" name="countInButton">
-           <property name="text">
-            <string notr="true"/>
-           </property>
-           <property name="icon">
-            <iconset resource="musescore.qrc">
-             <normaloff>:/data/icons/media-playback-countin.svg</normaloff>:/data/icons/media-playback-countin.svg</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="metronomeButton">
-           <property name="text">
-            <string notr="true"/>
-           </property>
-           <property name="icon">
-            <iconset resource="musescore.qrc">
-             <normaloff>:/data/icons/media-playback-metronome.svg</normaloff>:/data/icons/media-playback-metronome.svg</iconset>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
        <item>
         <spacer>
@@ -351,7 +325,41 @@
      <property name="spacing">
       <number>6</number>
      </property>
-     <item row="2" column="0">
+     <item row="0" column="1">
+      <widget class="QLabel" name="tempoLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font/>
+       </property>
+       <property name="toolTip">
+        <string>Actual tempo in quarter notes per minute</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="lineWidth">
+        <number>2</number>
+       </property>
+       <property name="midLineWidth">
+        <number>2</number>
+       </property>
+       <property name="text">
+        <string notr="true">120 BPM</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::NoTextInteraction</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
       <widget class="Awl::Slider" name="tempoSlider" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -391,29 +399,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="Awl::VolSlider" name="volumeSlider" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="toolTip">
-        <string>Master volume</string>
-       </property>
-       <property name="accessibleName">
-        <string>Master Volume</string>
-       </property>
-       <property name="accessibleDescription">
-        <string>Use up and down arrows to change value</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
+     <item row="3" column="2">
       <widget class="QLabel" name="label">
        <property name="text">
         <string extracomment="short text for volume slider">Volume</string>
@@ -423,51 +409,59 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="tempoLabel">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font/>
-       </property>
-       <property name="toolTip">
-        <string>Actual tempo in quarter notes per minute</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="lineWidth">
-        <number>2</number>
-       </property>
-       <property name="midLineWidth">
-        <number>2</number>
-       </property>
-       <property name="text">
-        <string notr="true">120 BPM</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="textInteractionFlags">
-        <set>Qt::NoTextInteraction</set>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string extracomment="short text for tempo slider">Tempo</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_10">
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QToolButton" name="metronomeButton">
+         <property name="text">
+          <string notr="true"/>
+         </property>
+         <property name="icon">
+          <iconset resource="musescore.qrc">
+           <normaloff>:/data/icons/media-playback-metronome.svg</normaloff>:/data/icons/media-playback-metronome.svg</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="countInButton">
+         <property name="text">
+          <string notr="true"/>
+         </property>
+         <property name="icon">
+          <iconset resource="musescore.qrc">
+           <normaloff>:/data/icons/media-playback-countin.svg</normaloff>:/data/icons/media-playback-countin.svg</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </item>
-     <item row="1" column="0">
+     <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="relTempoBox">
        <property name="accessibleName">
         <string>Relative tempo to 120 beats per minute</string>
@@ -501,6 +495,60 @@
        </property>
       </widget>
      </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string extracomment="short text for tempo slider">Tempo</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="Awl::VolSlider" name="mgainSlider" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="toolTip">
+        <string>Metronome volume</string>
+       </property>
+       <property name="accessibleName">
+        <string>Metronome Volume</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Use up and down arrows to change value</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="Awl::VolSlider" name="volumeSlider" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="toolTip">
+        <string>Master volume</string>
+       </property>
+       <property name="accessibleName">
+        <string>Master Volume</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Use up and down arrows to change value</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
@@ -521,8 +569,6 @@
   <tabstop>posSlider</tabstop>
   <tabstop>rewindButton</tabstop>
   <tabstop>playButton</tabstop>
-  <tabstop>countInButton</tabstop>
-  <tabstop>metronomeButton</tabstop>
   <tabstop>loopInButton</tabstop>
   <tabstop>loopButton</tabstop>
   <tabstop>loopOutButton</tabstop>
