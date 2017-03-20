@@ -117,7 +117,7 @@ QSet<ChordRest*> Score::getSelectedChordRests() const
       {
       QSet<ChordRest*> set;
       for (Element* e : selection().elements()) {
-            if (e->type() == Element::Type::NOTE)
+            if (e->isNote())
                   e = e->parent();
             if (e->isChordRest()) {
                   set.insert(static_cast<ChordRest*>(e));
