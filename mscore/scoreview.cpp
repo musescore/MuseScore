@@ -2100,14 +2100,14 @@ void ScoreView::zoom(qreal _mag, const QPointF& pos)
             _mag = 0.05;
 
       mscore->setMag(_mag);
-      setMag(_mag * (mscore->physicalDotsPerInch() / DPI));
-      _magIdx = MagIdx::MAG_FREE;
 
+      double m = _mag * mscore->physicalDotsPerInch() / DPI;
+
+      setMag(m);
+
+      _magIdx = MagIdx::MAG_FREE;
       QPointF p2 = imatrix.map(pos);
       QPointF p3 = p2 - p1;
-
-      double m = _mag;
-
       int dx    = lrint(p3.x() * m);
       int dy    = lrint(p3.y() * m);
 
@@ -2144,7 +2144,9 @@ bool ScoreView::gestureEvent(QGestureEvent *event)
                   if (value == 1) {
                         value = pinch->scaleFactor();
                         }
-                  zoom(magStart*value, pinch->centerPoint());
+                  // Qt 5.4 doesn't report pinch->centerPoint() correctly
+                  QPoint pinchCenterPoint = mapFromGlobal(QPoint(pinch->hotSpot().x(), pinch->hotSpot().y()));
+                  zoom(magStart*value, pinchCenterPoint);
                   }
             }
       return true;
