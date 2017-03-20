@@ -122,6 +122,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(templateReset,        SIGNAL(clicked()),                  SLOT(resetToTemplateClicked()));
       connect(addToTemplates,       SIGNAL(clicked()),                  SLOT(addToTemplatesClicked()));
 //      connect(groupCombo,           SIGNAL(currentIndexChanged(int)),   SLOT(staffGroupChanged(int)));
+      addToTemplates->setVisible(false);
 
       MuseScore::restoreGeometry(this);
       }
