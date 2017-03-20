@@ -13,6 +13,8 @@
 
 #include "loginmanager.h"
 #include "musescore.h"
+#include "libmscore/score.h"
+#include "preferences.h"
 #include "kQOAuth/kqoauthrequest.h"
 #include "kQOAuth/kqoauthrequest_xauth.h"
 
@@ -55,6 +57,9 @@ LoginManager::LoginManager(QObject* parent)
       ba[28] = 0x77; ba[29] = 0x35; ba[30] = 0x69; ba[31] = 0x77;
       _consumerSecret  = QString(ba);
       load();
+      _progressDialog = new QProgressDialog(mscore);
+      _progressDialog->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
+      _progressDialog->setWindowModality(Qt::ApplicationModal);
       }
 
 //---------------------------------------------------------
@@ -319,6 +324,27 @@ void LoginManager::getScore(int nid)
       }
 
 //---------------------------------------------------------
+//   getScore
+//---------------------------------------------------------
+
+void LoginManager::getMediaUrl(const QString& nid, const QString& vid, const QString& encoding)
+      {
+      KQOAuthRequest * oauthRequest = new KQOAuthRequest();
+      QString url = QString("https://%1/services/rest/signedurl/%2/%3/%4.json").arg(MUSESCORE_HOST).arg(nid).arg(vid).arg(encoding);
+      oauthRequest->initRequest(KQOAuthRequest::AuthorizedRequest, QUrl(url));
+      oauthRequest->setHttpMethod(KQOAuthRequest::GET);
+      oauthRequest->setConsumerKey(_consumerKey);
+      oauthRequest->setConsumerSecretKey(_consumerSecret);
+      oauthRequest->setToken(_accessToken);
+      oauthRequest->setTokenSecret(_accessTokenSecret);
+
+      connect(_oauthManager, SIGNAL(requestReady(QByteArray)),
+            this, SLOT(onGetMediaUrlRequestReady(QByteArray)));
+
+      _oauthManager->executeRequest(oauthRequest);
+      }
+
+//---------------------------------------------------------
 //   onGetUserRequestReady
 //---------------------------------------------------------
 
@@ -357,7 +383,79 @@ void LoginManager::onGetScoreRequestReady(QByteArray ba)
       else {
             emit getScoreError("");
             }
+      }
 
+//---------------------------------------------------------
+//   onGetMediaUrlRequestReady
+//---------------------------------------------------------
+
+void LoginManager::onGetMediaUrlRequestReady(QByteArray ba)
+      {
+      disconnect(_oauthManager, SIGNAL(requestReady(QByteArray)),
+            this, SLOT(onGetMediaUrlRequestReady(QByteArray)));
+      QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
+      QJsonObject response = jsonResponse.object();
+      QJsonValue urlValue = response.value("url");
+      if (urlValue.isString()) {
+            QString url = response.value("url").toString();
+            QString path = QDir::tempPath() + QString("/temp_%1.mp3").arg(qrand() % 100000);
+            Score* score = mscore->currentScore()->rootScore();
+            int br = preferences.exportMp3BitRate;
+            preferences.exportMp3BitRate = 128;
+            if (mscore->saveMp3(score, path)) { // no else, error handling is done in saveMp3
+                  QFile* mp3File = new QFile(path);
+                  if (mp3File->open(QIODevice::ReadOnly)) { // probably cancelled, no error handling
+                        QNetworkRequest request;
+                        request.setUrl(QUrl(url));
+                        _progressDialog->setLabelText(tr("Uploading..."));
+                        _progressDialog->setCancelButton(0);
+                        _progressDialog->show();
+                        QNetworkReply *reply = mscore->networkManager()->put(request, mp3File);
+                        connect(reply, SIGNAL(finished()), this, SLOT(mediaUploadFinished()));
+                        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(mediaUploadError(QNetworkReply::NetworkError)));
+                        connect(reply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(mediaUploadProgress(qint64, qint64)));
+                        }
+                  }
+            preferences.exportMp3BitRate = br;
+            }
+      }
+
+//---------------------------------------------------------
+//   mediaUploadFinished
+//---------------------------------------------------------
+
+void LoginManager::mediaUploadFinished()
+      {
+      QNetworkReply* reply = static_cast<QNetworkReply*>(QObject::sender());
+      int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+      reply->deleteLater();
+      _progressDialog->hide();
+      if (statusCode == 200)
+            emit displaySuccess();
+      }
+
+//---------------------------------------------------------
+//   mediaDownloadError
+//---------------------------------------------------------
+
+void LoginManager::mediaUploadError(QNetworkReply::NetworkError e)
+      {
+      qDebug() << "error uploading media" << e;
+      QMessageBox::warning(0,
+                     tr("Upload Error"),
+                     tr("Sorry, MuseScore couldn't upload the audio file"),
+                     QString::null, QString::null);
+      }
+
+//---------------------------------------------------------
+//   mediaUploadProgress
+//---------------------------------------------------------
+
+void LoginManager::mediaUploadProgress(qint64 progress, qint64 total)
+      {
+      _progressDialog->setMinimum(0);
+      _progressDialog->setMaximum(total);
+      _progressDialog->setValue(progress);
       }
 
 //---------------------------------------------------------
@@ -442,7 +540,7 @@ void LoginManager::onUploadRequestReady(QByteArray ba)
             QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
             QJsonObject score = jsonResponse.object();
             if (score.value("permalink") != QJsonValue::Undefined) {
-                  emit uploadSuccess(score.value("permalink").toString());
+                  emit uploadSuccess(score.value("permalink").toString(), score.value("id").toString(), score.value("vid").toString());
                   }
             else {
                   emit uploadError(tr("An error occurred during the file transfer. Please try again"));
