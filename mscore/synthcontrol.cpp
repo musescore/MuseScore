@@ -76,8 +76,6 @@ SynthControl::SynthControl(QWidget* parent)
                   }
             }
       readSettings();
-      metronome->setDefaultAction(getAction("metronome"));
-      mgain->setValue(seq->metronomeGain());
 
       updateGui();
 
@@ -89,7 +87,6 @@ SynthControl::SynthControl(QWidget* parent)
       connect(effectA,      SIGNAL(currentIndexChanged(int)), SLOT(effectAChanged(int)));
       connect(effectB,      SIGNAL(currentIndexChanged(int)), SLOT(effectBChanged(int)));
       connect(gain,         SIGNAL(valueChanged(double,int)), SLOT(gainChanged(double,int)));
-      connect(mgain,        SIGNAL(valueChanged(double,int)), SLOT(metronomeGainChanged(double,int)));
       connect(masterTuning, SIGNAL(valueChanged(double)),     SLOT(masterTuningChanged(double)));
       connect(changeTuningButton, SIGNAL(clicked()),          SLOT(changeMasterTuning()));
       connect(loadButton,   SIGNAL(clicked()),                SLOT(loadButtonClicked()));
@@ -165,7 +162,6 @@ void MuseScore::showSynthControl(bool val)
             connect(synthControl, SIGNAL(closed(bool)), a,     SLOT(setChecked(bool)));
             if (mixer)
                   connect(synthControl, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
-            connect(synthControl, SIGNAL(metronomeGainChanged(float)), seq, SLOT(setMetronomeGain(float)));
             }
       synthControl->setVisible(val);
       }
@@ -177,15 +173,6 @@ void MuseScore::showSynthControl(bool val)
 void SynthControl::gainChanged(double val, int)
       {
       emit gainChanged(val);
-      }
-
-//---------------------------------------------------------
-//   metronomeGainChanged
-//---------------------------------------------------------
-
-void SynthControl::metronomeGainChanged(double val, int)
-      {
-      emit metronomeGainChanged(val);
       }
 
 //---------------------------------------------------------
