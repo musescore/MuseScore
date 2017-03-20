@@ -1042,7 +1042,7 @@ void ChordRest::remove(Element* e)
 //          delete beam if empty
 //---------------------------------------------------------
 
-void ChordRest::removeDeleteBeam(bool beamed)
+void ChordRest::removeDeleteBeam(bool /*beamed*/)
       {
       if (_beam) {
             Beam* b = _beam;

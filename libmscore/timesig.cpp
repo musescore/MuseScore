@@ -45,17 +45,6 @@ TimeSig::TimeSig(Score* s)
       }
 
 //---------------------------------------------------------
-//   clone
-//---------------------------------------------------------
-
-TimeSig* TimeSig::clone() const
-      {
-      TimeSig* ts = new TimeSig(*this);
-      ts->setNeedLayout(true); // relayout of the ts is needed in parts #24571
-      return ts;
-      }
-
-//---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
@@ -73,11 +62,9 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
       {
       if (!_sig.identical(f)) {
             _sig = f;
-            _needLayout = true;
             }
       if (_timeSigType != st) {
             _timeSigType = st;
-            _needLayout = true;
             }
       customText = false;
       _largeParentheses = false;
@@ -121,7 +108,6 @@ void TimeSig::setNumeratorString(const QString& a)
             _numeratorString = a;
             customText = (_denominatorString != QString::number(_sig.denominator()))
                || (_numeratorString != QString::number(_sig.numerator()));
-            _needLayout = true;
             }
       }
 
@@ -136,7 +122,6 @@ void TimeSig::setDenominatorString(const QString& a)
             _denominatorString = a;
             customText = (_denominatorString != QString::number(_sig.denominator()))
                || (_numeratorString != QString::number(_sig.numerator()));
-            _needLayout = true;
             }
       }
 
@@ -246,7 +231,6 @@ void TimeSig::read(XmlReader& e)
             customText = false;
             }
       _stretch.reduce();
-      _needLayout = true;
       }
 
 //---------------------------------------------------------
@@ -254,16 +238,6 @@ void TimeSig::read(XmlReader& e)
 //---------------------------------------------------------
 
 void TimeSig::layout()
-      {
-      if (_needLayout)
-            layout1();
-      }
-
-//---------------------------------------------------------
-//   layout1
-//---------------------------------------------------------
-
-void TimeSig::layout1()
       {
       setPos(0.0, 0.0);
       qreal _spatium = spatium();
@@ -372,8 +346,6 @@ void TimeSig::layout1()
                   addbbox(QRect(pointLargeRightParen.x(), pointLargeRightParen.y() - denRect.height(),  _spatium / 2, numRect.height() + denRect.height()));
                   }
             }
-
-      _needLayout = false;
       }
 
 //---------------------------------------------------------
@@ -409,7 +381,6 @@ void TimeSig::setFrom(const TimeSig* ts)
       _sig               = ts->_sig;
       _stretch           = ts->_stretch;
       customText         = ts->customText;
-      _needLayout        = true;
       }
 
 //---------------------------------------------------------
@@ -505,7 +476,6 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      _needLayout = true;
       score()->setLayoutAll();      // TODO
       setGenerated(false);
       return true;
@@ -576,20 +546,6 @@ void TimeSig::styleChanged()
       if (scaleStyle == PropertyFlags::STYLED)
             setScale(score()->styleV(StyleIdx::timesigScale).toSizeF());
       Element::styleChanged();
-      }
-
-//---------------------------------------------------------
-//   spatiumChanged
-//---------------------------------------------------------
-
-void TimeSig::spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)
-      {
-      _needLayout = true;
-      }
-
-void TimeSig::localSpatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)
-      {
-      _needLayout = true;
       }
 
 //---------------------------------------------------------
