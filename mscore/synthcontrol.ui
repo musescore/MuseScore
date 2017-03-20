@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>602</width>
-    <height>281</height>
+    <height>407</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -19,7 +19,7 @@
   <property name="windowTitle">
    <string>Synthesizer</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0">
+  <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0">
    <property name="leftMargin">
     <number>10</number>
    </property>
@@ -89,10 +89,10 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="2" rowspan="3">
+   <item row="0" column="1" rowspan="3">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="Awl::MeterSlider" name="gain">
+      <widget class="Awl::MeterSlider" name="gain" native="true">
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
@@ -105,7 +105,7 @@
        <property name="accessibleDescription">
         <string>Use up and down arrows to modify</string>
        </property>
-       <property name="channel">
+       <property name="channel" stdset="0">
         <number>2</number>
        </property>
       </widget>
@@ -127,28 +127,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="0" column="1">
-    <widget class="Awl::VolSlider" name="mgain">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::TabFocus</enum>
-     </property>
-     <property name="accessibleName">
-      <string>Metronome gain</string>
-     </property>
-     <property name="accessibleDescription">
-      <string>Use up and down arrows to modify</string>
-     </property>
-     <property name="center">
-      <bool>true</bool>
-     </property>
-    </widget>
    </item>
    <item row="0" column="0" rowspan="2">
     <widget class="QTabWidget" name="tabWidget">
@@ -324,13 +302,6 @@
      </widget>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QToolButton" name="metronome">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -356,8 +327,6 @@
   <tabstop>effectB</tabstop>
   <tabstop>masterTuning</tabstop>
   <tabstop>changeTuningButton</tabstop>
-  <tabstop>metronome</tabstop>
-  <tabstop>mgain</tabstop>
   <tabstop>gain</tabstop>
   <tabstop>saveButton</tabstop>
   <tabstop>loadButton</tabstop>
