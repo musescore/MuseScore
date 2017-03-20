@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2010-2011 Werner Schweer
+//  Copyright (C) 2010-2015 Werner Schweer & others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -11,10 +11,13 @@
 //=============================================================================
 
 #include "stafftype.h"
+
 #include "staff.h"
 #include "xml.h"
 #include "mscore.h"
 #include "chord.h"
+
+#include "navigate.h"
 
 #define TAB_DEFAULT_LINE_SP   (1.5)
 #define TAB_RESTSYMBDISPL     2.0
@@ -228,7 +231,7 @@ void StaffType::write(Xml& xml) const
             }
       else {
             xml.tag("durations",        _genDurations);
-            xml.tag("durationFontName", _durationFonts[_durationFontIdx].displayName);
+            xml.tag("durationFontName", _durationFonts[_durationFontIdx].displayName); // write font names anyway for backward compatibility
             xml.tag("durationFontSize", _durationFontSize);
             xml.tag("durationFontY",    _durationFontUserY);
             xml.tag("fretFontName",     _fretFonts[_fretFontIdx].displayName);
@@ -409,18 +412,26 @@ void StaffType::setDurationMetrics()
       if (_durationMetricsValid && _refDPI == DPI)           // metrics are still valid
             return;
 
-      QFontMetricsF fm(durationFont());
+// QFontMetrics[F]() returns results unreliably rounded to integral pixels;
+// use a scaled up font and then scale computed values down
+//      QFontMetricsF fm(durationFont());
+      QFont font(durationFont());
+      qreal pixelSize = _durationFontSize * DPI / PPI;
+      font.setPixelSize(lrint(pixelSize) * 100.0);
+      QFontMetricsF fm(font);
       QString txt(_durationFonts[_durationFontIdx].displayValue, int(TabVal::NUM_OF));
       QRectF bb( fm.tightBoundingRect(txt) );
+      // raise symbols by a default margin and, if marks are above lines, by half the line distance
+      // (converted from spatium units to raster units)
+      _durationGridYOffset    = ( TAB_DEFAULT_DUR_YOFFS - (_onLines ? 0.0 : lineDistance().val()* 0.5) ) * SPATIUM20;
+      // this is the bottomest point of any duration sign
+      _durationYOffset        = _durationGridYOffset;
       // move symbols so that the lowest margin 'sits' on the base line:
       // move down by the whole part above (negative) the base line
-      // ( -bb.y() ) then up by the whole height ( -bb.height()/2 )
-      _durationYOffset = -bb.y() - bb.height()
-      // then move up by a default margin and, if marks are above lines, by half the line distance
-      // (converted from spatium units to raster units)
-            + ( TAB_DEFAULT_DUR_YOFFS - (_onLines ? 0.0 : lineDistance().val()/2.0) ) * SPATIUM20;
-      _durationBoxH = bb.height();
-      _durationBoxY = bb.y()  + _durationYOffset;
+      // ( -bb.y() ) then up by the whole height ( -bb.height() )
+      _durationYOffset        -= (bb.height() + bb.y()) / 100.0;
+      _durationBoxH           = bb.height() / 100.0;
+      _durationBoxY           = _durationGridYOffset - bb.height() / 100.0;
       // keep track of the conditions under which metrics have been computed
       _refDPI = DPI;
       _durationMetricsValid = true;
@@ -487,8 +498,12 @@ void StaffType::setDurationFontName(const QString& name)
 void StaffType::setFretFontName(const QString& name)
       {
       int idx;
+      QString locName = name;
+      // convert old names for two built-in fonts which have changed of name
+      if (name == "MuseScore Tab Late Renaiss")
+            locName = "MuseScore Phalèse";
       for (idx = 0; idx < _fretFonts.size(); idx++)
-            if (_fretFonts[idx].displayName == name)
+            if (_fretFonts[idx].displayName == locName)
                   break;
       if (idx >= _fretFonts.size())
             idx = 0;          // if name not found, use first font
@@ -627,25 +642,23 @@ qreal StaffType::chordStemLength(const Chord* chord) const
 
 static const QString unknownFret = QString("?");
 
-QString StaffType::fretString(int fret, bool ghost) const
+QString StaffType::fretString(int fret, int string, bool ghost) const
       {
       if (fret == FRET_NONE)
             return unknownFret;
       if (ghost)
             return _fretFonts[_fretFontIdx].ghostChar;
       else {
-            if (_useNumbers) {
-                  if(fret >= NUM_OF_DIGITFRETS)
-                        return unknownFret;
-                  else
-                        return _fretFonts[_fretFontIdx].displayDigit[fret];
-                  }
-           else {
-                  if(fret >= NUM_OF_LETTERFRETS)
-                        return unknownFret;
-                  else
-                        return _fretFonts[_fretFontIdx].displayLetter[fret];
-                  }
+            bool        hasFret;
+            QString     text  = tabBassStringPrefix(string, &hasFret);
+            if (!hasFret)           // if the notation does not allow to fret this string,
+                  return text;      // return the prefix only
+            // otherwise, add to prefix the relevant digit/letter string
+            return text +
+                  (_useNumbers ?
+                        (fret >= NUM_OF_DIGITFRETS  ? unknownFret : _fretFonts[_fretFontIdx].displayDigit[fret]) :
+                        (fret >= NUM_OF_LETTERFRETS ? unknownFret : _fretFonts[_fretFontIdx].displayLetter[fret]) );
+
            }
       }
 
@@ -658,44 +671,181 @@ QString StaffType::durationString(TDuration::DurationType type, int dots) const
       }
 
 //---------------------------------------------------------
-//   physStringToVisual / VisualStringToPhys
+//    tabBassStringPrefix
+//
+//    returns a QString (possibly empty) with the prefix identifying a bass string in TAB's;
+//    can deal with non-bass strings (i.e. regular TAB lines).
+//
+//    Implements the specifics of historic notations for bass lines (i.e. strings outside
+//    the lines of the tab), both Italian and French.
+//
+//    strg   the instrument physical string ordinal (0 = topmost string, may exceed the number
+//                of lines actually present in the TAB to reference a bass string)
+//    bool   pntr to a bool receiving the info if notation allows to express a fret number or not
+//                (this is potentially different from the fact that the instrument string itself can be fretted or not)
+//---------------------------------------------------------
+
+QString StaffType::tabBassStringPrefix(int strg, bool* hasFret) const
+      {
+      *hasFret    = true;           // assume notation allows to fret this string
+      int bassStrgIdx  = (strg >= _lines ? strg - _lines + 1 : 0);
+      if (_useNumbers) {
+            // if above the max bass string which can be fretted with number notation
+            // return a number with the string index
+            if (bassStrgIdx > NUM_OF_BASSSTRINGS_WITH_NUMBER) {
+                  *hasFret    = false;
+                  return _fretFonts[_fretFontIdx].displayDigit[strg+1];
+                  }
+            // if a frettable bass string, return an empty string
+            return QString();
+            }
+     else {
+            // bass string notation
+            // if above the max bass string which can be fretted with letter notation
+            // return a number with the bass string index itself
+            if (bassStrgIdx > NUM_OF_BASSSTRINGS_WITH_LETTER) {
+                  *hasFret    = false;
+                  return _fretFonts[_fretFontIdx].displayDigit[bassStrgIdx-1];
+                  }
+            // if a frettable bass string, return a character with the relevant num. of slashes;
+            // note that the number of slashes is bassStrgIdx-1 (1st bass has no slash)
+            // and slashChar[] is 0-based (slashChar[0] => 1 slash, ...), whence the -2
+            QString prefix    = bassStrgIdx > 1 ?
+                        QString(_fretFonts[_fretFontIdx].slashChar[bassStrgIdx - 2]) : QString();
+            return prefix;
+            }
+      }
+
+//---------------------------------------------------------
+//   drawInputStringMarks
+//
+//    in TAB's, draws the marks within the input 'blue cursor' required to identify the current target input string.
+//
+//    Implements the specific of historic TAB styles for instruments with more strings than TAB lines.
+//    For strings normally represented by TAB lines, no mark is required.
+//    For strings not represented by TAB lines (e.g. bass strings in lutes and similar),
+//    either a sequence of slashes OR some ledger line-like lines OR the ordinal of the string
+//    are used, according to the TAB style (French or Italian) and the string position.
+//
+//    Note: assumes the string parameter is within legal bounds, i.e.:
+//    0 <= string <= [instrument strings] - 1
+//
+//    p       the QPainter to draw into
+//    string  the instrument physical string for which to draw the mark (0 = top string)
+//    voice   the current input voice (affects mark colour)
+//    rect    the rect of the 'blue rectangle' showing the input position
+//---------------------------------------------------------
+
+static const qreal      LEDGER_LINE_THICKNESS   = 0.15;     // in sp
+static const qreal      LEDGER_LINE_LEFTX       = 0.25;     // in % of cursor rectangle width
+static const qreal      LEDGER_LINE_RIGHTX      = 0.75;     // in % of cursor rectangle width
+
+void StaffType::drawInputStringMarks(QPainter *p, int string, int voice, QRectF rect) const
+      {
+      if (_group != StaffGroup::TAB)
+            return;
+      qreal       spatium     =  SPATIUM20;
+      qreal       lineDist    = _lineDistance.val() * spatium;
+      bool        hasFret;
+      QString     text        = tabBassStringPrefix(string, &hasFret);
+//    qreal       lw          = point(score()->styleS(StyleIdx::ledgerLineWidth));  // no access to score form here
+      qreal       lw          = LEDGER_LINE_THICKNESS * spatium;                    // use a fixed width
+      QPen        pen(MScore::selectColor[voice].lighter(SHADOW_NOTE_LIGHT), lw);
+      p->setPen(pen);
+      // draw conventional 'ledger lines', if required
+      int         numOfLedgerLines  = numOfTabLedgerLines(string);
+      qreal       x1                = rect.x() + rect.width() * LEDGER_LINE_LEFTX;
+      qreal       x2                = rect.x() + rect.width() * LEDGER_LINE_RIGHTX;
+      // cursor rect is 1 line dist. high, and it is:
+      // centred on the line for "frets on strings"    => lower top ledger line 1/2 line dist.
+      // sitting on the line for "frets above strings" => lower top ledger line 1 full line dist
+      qreal y     = rect.top() + lineDist * (_onLines ? 0.5 : 1.0);
+      for (int i = 0; i < numOfLedgerLines; i++) {
+            p->drawLine(QLineF(x1, y, x2, y));
+            y += lineDist / numOfLedgerLines; // insert other lines between top line and tab body
+            }
+      // draw the text, if any
+      if (!text.isEmpty()) {
+            p->setFont(fretFont());
+            p->drawText(QPointF(rect.left(), rect.top() + lineDist), text);
+            }
+      }
+
+//---------------------------------------------------------
+//   numOfLedgerLines
+//
+//    in TAB's, returns the number of ledgerlines needed by bass lines in some TAB styles.
+//
+//    Returns 0 if staff is not a TAB, if a TAB but style does not use ledger lines
+//    or ledger lines do not apply to the given string.
+//---------------------------------------------------------
+
+int StaffType::numOfTabLedgerLines(int string) const
+      {
+      if (_group != StaffGroup::TAB || !_useNumbers)
+            return 0;
+
+      int   numOfLedgers= string < 0 ? -string : string - _lines + 1;
+      return (numOfLedgers >= 1 && numOfLedgers <= NUM_OF_BASSSTRINGS_WITH_NUMBER ? numOfLedgers : 0);
+      }
+
+//---------------------------------------------------------
+//   physStringToVisual / visualStringToPhys
 //
 //    returns the string ordinal in visual order (top to down) from a string ordinal in physical order
-//    or viceversa: manage upsideDown
-//
-//    (The 2 functions are at the moment almost identical; support for unfrettted strings will
-//    introduce more differences)
+//    or viceversa: manages upsideDown
 //---------------------------------------------------------
 
 int StaffType::physStringToVisual(int strg) const
       {
-#if 0
-      // in preparation for support of historic tab indications of bass strings
       if (strg < 0)                       // if above top string, return top string
             strg = 0;
-      if (strg >= _lines) {               // if below bottom string...
-            if (_slashStyle && _genDurations)   // if no stem and duration symbols (= historic)
-                  strg = _lines;                //    return bottom+1 string
-            else                                // otherwise
-                  strg = _lines - 1;            //    return bottom string
-            }
-#endif
-      if (strg < 0)           // if physical string does not exist, reduce to nearest existing
-            strg = 0;
-      if (strg >= _lines)     // if physical string has no visual representation, reduce to nearest visual line
-            strg = _lines - 1;
+//      // NO: bass strings may exist, which are in addition to tab string lines
+//      if (strg >= _lines)                 // if physical string has no visual representation,
+//            strg = _lines - 1;            // reduce to nearest visual line
+
       // if TAB upside down, reverse string number
       return (_upsideDown ? _lines - 1 - strg : strg);
       }
 
 int StaffType::visualStringToPhys(int line) const
       {
-      if (line < 0)           // if visual line does not exist, reduce to nearest existing
-            line = 0;
-      if (line >= _lines)
-            line = _lines - 1;
       // if TAB upside down, reverse string number
-      return (_upsideDown ? _lines - 1 - line : line);
+      line = (_upsideDown ? _lines - 1 - line : line);
+
+      if (line < 0)           // if above top string, reduce to top string
+            line = 0;
+// NO: bass strings may exist, which are in addition to tab string lines
+//      if (line >= _lines)
+//            line = _lines - 1;
+      return line;
+      }
+
+//---------------------------------------------------------
+//   physStringToYOffset
+//
+//    returns the string Y offset from a string ordinal in physical order:
+//    manages upsideDown and extra bass strings.
+//
+//    The returned values is in sp. and is relative to the staff top line.
+//
+//    Note: the difference with physStringToVisual() is that this function takes into account
+//          peculiarities of bass string notations.
+//---------------------------------------------------------
+
+qreal StaffType::physStringToYOffset(int strg) const
+      {
+      qreal yOffset = strg;                     // the y offset of the visual string, as a multiple of line distance
+      if (yOffset < 0)                          // if above top physical string, limit to top string
+            yOffset = 0;
+      if (yOffset >= _lines) {                  // if physical string 'below' tab lines,
+            yOffset = _lines;                   // reduce to first string 'below' tab body
+            if (!_useNumbers)                   // with letters, add some space for the slashes ascender
+                  yOffset = _lines + STAFFTYPE_TAB_BASSSLASH_YOFFSET;
+            }
+      // if TAB upside down, flip around top line
+      yOffset = _upsideDown ? (qreal)(_lines - 1) - yOffset : yOffset;
+      return yOffset * _lineDistance.val();
       }
 
 //---------------------------------------------------------
@@ -707,8 +857,10 @@ TabDurationSymbol::TabDurationSymbol(Score* s)
       {
       setFlags(flags() & ~(ElementFlag::MOVABLE | ElementFlag::SELECTABLE) );
       setGenerated(true);
-      _tab  = 0;
-      _text = QString();
+      _beamGrid   = TabBeamGrid::NONE;
+      _beamLength = 0.0;
+      _tab        = 0;
+      _text       = QString();
       }
 
 TabDurationSymbol::TabDurationSymbol(Score* s, StaffType* tab, TDuration::DurationType type, int dots)
@@ -716,6 +868,8 @@ TabDurationSymbol::TabDurationSymbol(Score* s, StaffType* tab, TDuration::Durati
       {
       setFlags(flags() & ~(ElementFlag::MOVABLE | ElementFlag::SELECTABLE) );
       setGenerated(true);
+      _beamGrid   = TabBeamGrid::NONE;
+      _beamLength = 0.0;
       setDuration(type, dots, tab);
       }
 
@@ -736,14 +890,85 @@ void TabDurationSymbol::layout()
             setbbox(QRectF());
             return;
             }
-      QFontMetricsF fm(_tab->durationFont());
-      qreal mags = magS();
-      qreal w = fm.width(_text);
-      qreal y = _tab->durationBoxY();
-      // with rests, move symbol down by half its displacement from staff
-      if(parent() && parent()->type() == Element::Type::REST)
-            y += TAB_RESTSYMBDISPL * spatium();
-      bbox().setRect(0.0, y * mags, w * mags, _tab->durationBoxH() * mags);
+      qreal _spatium    = spatium();
+      qreal hbb, wbb, xbb, ybb;     // bbox sizes
+      qreal xpos, ypos;             // position coords
+
+      _beamGrid = TabBeamGrid::NONE;
+      Chord* chord = static_cast<Chord*>(parent());
+      // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
+      if (!chord || chord->type() != Element::Type::CHORD ||
+            (chord->beamMode() != Beam::Mode::BEGIN && chord->beamMode() != Beam::Mode::MID &&
+                  chord->beamMode() != Beam::Mode::END) ) {
+            QFontMetricsF fm(_tab->durationFont());
+            hbb   = _tab->durationBoxH();
+            wbb   = fm.width(_text);
+            xbb   = 0.0;
+            xpos  = 0.0;
+            ypos  = _tab->durationFontYOffset();
+            ybb   = _tab->durationBoxY() - ypos;
+            // with rests, move symbol down by half its displacement from staff
+            if(parent() && parent()->type() == Element::Type::REST) {
+                  ybb  += TAB_RESTSYMBDISPL * _spatium;
+                  ypos += TAB_RESTSYMBDISPL * _spatium;
+                  }
+            }
+      // if on a chord with special beam mode, layout an 'English'-style duration grid
+      else {
+            TablatureDurationFont font = _tab->_durationFonts[_tab->_durationFontIdx];
+            hbb   = font.gridStemHeight * _spatium;         // bbox height is stem height
+            wbb   = font.gridStemWidth  * _spatium;         // bbox width is stem width
+            xbb   = -wbb * 0.5;                             // bbox is half at left and half at right of stem centre
+            ybb   = -hbb;                                   // bbox top is at top of stem height
+            xpos  = 0.75 * _spatium;                        // conventional centring of stem on fret marks
+            ypos  = _tab->durationGridYOffset();            // stem start is at bottom
+            if (chord->beamMode() == Beam::Mode::BEGIN) {
+                  _beamGrid   = TabBeamGrid::INITIAL;
+                  _beamLength = 0.0;
+                  }
+            else if (chord->beamMode() == Beam::Mode::MID || chord->beamMode() == Beam::Mode::END) {
+                  _beamLevel  = (int)(chord->durationType().type()) - (int)(font.zeroBeamLevel);
+                  _beamGrid   = (_beamLevel < 1 ? TabBeamGrid::INITIAL : TabBeamGrid::MEDIALFINAL);
+                  // _beamLength and bbox x and width will be set in layout2(),
+                  // once horiz. positions of chords are known
+                  }
+            }
+      // set this' mag from parent chord mag (include staff mag)
+      qreal mag = chord != nullptr ? chord->mag() : 1.0;
+      setMag(mag);
+      mag = magS();           // local mag * score mag
+      // set magnified bbox and position
+      bbox().setRect(xbb * mag, ybb * mag, wbb * mag, hbb * mag);
+      setPos(xpos*mag, ypos*mag);
+      }
+
+//---------------------------------------------------------
+//   layout2
+//
+//    Second step: after horizontal positions of elements involved are defined,
+//    compute width of 'grid beams'
+//---------------------------------------------------------
+
+void TabDurationSymbol::layout2()
+      {
+      // if not within a TAB or not a MEDIALFINAL grid element, do nothing
+      if(!_tab || _beamGrid != TabBeamGrid::MEDIALFINAL)
+            return;
+
+      // get 'grid' beam length from page positions of this' chord and previous chord
+      Chord*      chord       = static_cast<Chord*>(parent());
+      ChordRest*  prevChord   = prevChordRest(chord, true);
+      if (chord == nullptr || prevChord == nullptr)
+            return;
+      qreal       mags        = magS();
+      qreal       beamLen     = prevChord->pagePos().x() - chord->pagePos().x();    // negative
+      // page pos. difference already includes any magnification in effect:
+      // scale it down, as it will be magnified again during drawing
+      _beamLength = beamLen / mags;
+      // update bbox x and w, but keep current y and h
+      bbox().setX(beamLen);
+      // set bbox width to half a stem width (magnified) plus beam length (already magnified)
+      bbox().setWidth(_tab->_durationFonts[_tab->_durationFontIdx].gridStemWidth * spatium() * 0.5 * mags - beamLen);
       }
 
 //---------------------------------------------------------
@@ -757,13 +982,41 @@ void TabDurationSymbol::draw(QPainter* painter) const
       qreal mag = magS();
       qreal imag = 1.0 / mag;
 
-      painter->setPen(curColor());
+      QPen  pen(curColor());
+      painter->setPen(pen);
       painter->scale(mag, mag);
-      painter->setFont(_tab->durationFont());
-      qreal y = _tab->durationFontYOffset();
-      if(parent() && parent()->type() == Element::Type::REST)
-            y += TAB_RESTSYMBDISPL * spatium();
-      painter->drawText(QPointF(0.0, y), _text);
+
+      if (_beamGrid == TabBeamGrid::NONE) {
+            // if no beam grid, draw symbol
+            painter->setFont(_tab->durationFont());
+            painter->drawText(QPointF(0.0, 0.0), _text);
+            }
+      else {
+            // if beam grid, draw stem line
+            TablatureDurationFont& font = _tab->_durationFonts[_tab->_durationFontIdx];
+            qreal _spatium = spatium();
+            pen.setCapStyle(Qt::FlatCap);
+            pen.setWidthF(font.gridStemWidth * _spatium);
+            painter->setPen(pen);
+            // take stem height from bbox, but de-magnify it, as drawing is already magnified
+            qreal h     = bbox().y() / mag;
+            painter->drawLine(QPointF(0.0, h), QPointF(0.0, 0.0) );
+            // if beam grid is medial/final, draw beam lines too: lines go from mid of
+            // previous stem (delta x stored in _beamLength) to mid of this' stem (0.0)
+            if (_beamGrid == TabBeamGrid::MEDIALFINAL) {
+                  pen.setWidthF(font.gridBeamWidth * _spatium);
+                  painter->setPen(pen);
+                  // lower heigth available to beams by half a beam width,
+                  // so that top beam upper border aligns with stem top
+                  h += (font.gridBeamWidth * _spatium) * 0.5;
+                  // draw beams equally spaced within the stem height (this is
+                  // different from modern engraving, but common in historic prints)
+                  qreal step  = -h / _beamLevel;
+                  qreal y     = h;
+                  for (int i = 0; i < _beamLevel; i++, y += step)
+                        painter->drawLine(QPointF(_beamLength, y), QPointF(0.0, y) );
+                  }
+            }
       painter->scale(imag, imag);
       }
 
@@ -773,8 +1026,8 @@ void TabDurationSymbol::draw(QPainter* painter) const
 
 bool TablatureFretFont::read(XmlReader& e)
       {
-      defPitch = 9.0;
-      defYOffset = 0.0;
+      defPitch    = 9.0;
+      defYOffset  = 0.0;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
@@ -789,14 +1042,23 @@ bool TablatureFretFont::read(XmlReader& e)
             else if (tag == "defaultYOffset")
                   defYOffset = e.readDouble();
             else if (tag == "mark") {
-                  QString val = e.attribute("value");
-                  QString txt(e.readElementText());
+                  QString     val = e.attribute("value");
+                  int         num = e.intAttribute("number", 1);
+                  QString     txt(e.readElementText());
                   if (val.size() < 1)
                         return false;
                   if (val == "x")
                         xChar = txt[0];
                   else if (val == "ghost")
                         ghostChar = txt[0];
+                  else if (val == "slash") {
+                        // limit within legal range
+                        if (num < 1)
+                              num = 1;
+                        if (num > NUM_OF_BASSSTRING_SLASHES)
+                              num = NUM_OF_BASSSTRING_SLASHES;
+                        slashChar[num-1] = txt;
+                        }
                   }
             else if (tag == "fret") {
                   bool bLetter = e.intAttribute("letter");
@@ -831,6 +1093,39 @@ bool TablatureDurationFont::read(XmlReader& e)
                   defPitch = e.readDouble();
             else if (tag == "defaultYOffset")
                   defYOffset = e.readDouble();
+            else if (tag == "beamWidth")
+                  gridBeamWidth = e.readDouble();
+            else if (tag == "stemHeight")
+                  gridStemHeight = e.readDouble();
+            else if (tag == "stemWidth")
+                  gridStemWidth = e.readDouble();
+            else if (tag == "zeroBeamValue") {
+                  QString val(e.readElementText());
+                  if (val == "longa")
+                        zeroBeamLevel = TDuration::DurationType::V_LONG;
+                  else if (val == "brevis")
+                        zeroBeamLevel = TDuration::DurationType::V_BREVE;
+                  else if (val == "semibrevis")
+                        zeroBeamLevel = TDuration::DurationType::V_WHOLE;
+                  else if (val == "minima")
+                        zeroBeamLevel = TDuration::DurationType::V_HALF;
+                  else if (val == "semiminima")
+                        zeroBeamLevel = TDuration::DurationType::V_QUARTER;
+                  else if (val == "fusa")
+                        zeroBeamLevel = TDuration::DurationType::V_EIGHTH;
+                  else if (val == "semifusa")
+                        zeroBeamLevel = TDuration::DurationType::V_16TH;
+                  else if (val == "32")
+                        zeroBeamLevel = TDuration::DurationType::V_32ND;
+                  else if (val == "64")
+                        zeroBeamLevel = TDuration::DurationType::V_64TH;
+                  else if (val == "128")
+                        zeroBeamLevel = TDuration::DurationType::V_128TH;
+                  else if (val == "256")
+                        zeroBeamLevel = TDuration::DurationType::V_256TH;
+                  else
+                        e.unknown();
+                  }
             else if (tag == "duration") {
                   QString val = e.attribute("value");
                   QString txt(e.readElementText());

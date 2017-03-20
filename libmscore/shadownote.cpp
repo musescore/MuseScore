@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2010-2011 Werner Schweer
+//  Copyright (C) 2010-2017 Werner Schweer & others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -52,7 +52,7 @@ void ShadowNote::draw(QPainter* painter) const
       else
             voice = ps.voice();
 
-      QPen pen(MScore::selectColor[voice].lighter(120), lw);
+      QPen pen(MScore::selectColor[voice].lighter(SHADOW_NOTE_LIGHT), lw);
       painter->setPen(pen);
 
       drawSymbol(sym, painter);

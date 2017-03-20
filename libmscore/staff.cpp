@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2017 Werner Schweer & others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -979,10 +979,7 @@ bool Staff::genKeySig()
 
 bool Staff::showLedgerLines()
       {
-      if (_staffType.group() == StaffGroup::TAB)
-            return false;
-      else
-            return _staffType.showLedgerLines();
+      return _staffType.showLedgerLines();
       }
 
 //---------------------------------------------------------

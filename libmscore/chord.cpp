@@ -1449,10 +1449,17 @@ void Chord::layoutStem()
       StaffType* tab = 0;
       if (staff() && staff()->isTabStaff()) {
             tab = staff()->staffType();
-            // require stems only if TAB is not stemless and this chord has a stem
-            if (!tab->slashStyle() && _stem) { // (duplicate code with defaultStemLength())
-                  // if stems are beside staff, apply special formatting
-                  if (!tab->stemThrough()) {
+            // if stemless TAB
+            if (tab->slashStyle()) {
+                  // if 'grid' duration symbol of MEDIALFINAL type, it is time to compute its width
+                  if (_tabDur != nullptr && _tabDur->beamGrid() == TabBeamGrid::MEDIALFINAL)
+                        _tabDur->layout2();
+                  // in all other stemless cases, do nothing
+                  return;
+                  }
+            // not a stemless TAB; if stems are beside staff, apply special formatting
+            if (!tab->stemThrough()) {
+                  if (_stem) { // (duplicate code with defaultStemLength())
                         // process stem:
                         _stem->setLen(tab->chordStemLength(this) * _spatium);
                         // process hook
@@ -1474,10 +1481,10 @@ void Chord::layoutStem()
                               _hook->setPos(x, y);
                               _hook->adjustReadPos();
                               }
-                        return;
-                        }
-                  // if stems are through staff, use standard formatting
+                         }
+                  return;
                   }
+            // if stems are through staff, use standard formatting
             }
 
       //
@@ -2145,8 +2152,11 @@ void Chord::layoutTablature()
       StaffType* tab    = staff()->staffType();
       qreal lineDist    = tab->lineDistance().val() *_spatium;
       qreal stemX       = tab->chordStemPosX(this) *_spatium;
+      int   ledgerLines = 0;
+      qreal llY;
 
-      int numOfNotes = _notes.size();
+      int   numOfNotes  = _notes.size();
+      qreal minY        = 1000.0;               // just a very large value
       for (int i = 0; i < numOfNotes; ++i) {
             Note* note = _notes.at(i);
             note->layout();
@@ -2156,13 +2166,17 @@ void Chord::layoutTablature()
                   headWidth = fretWidth;
             // centre fret string on stem
             qreal x = stemX - fretWidth*0.5;
-            if (note->fixed())
-                  note->setPos(x, note->line() * lineDist / 2);
-            else
-                  note->setPos(x, tab->physStringToVisual(note->string()) * lineDist);
+            qreal y = note->fixed() ? note->line() * lineDist / 2 : tab->physStringToYOffset(note->string()) * _spatium;
+            note->setPos(x, y);
+            if (y < minY)
+                  minY  = y;
+            int   currLedgerLines   = tab->numOfTabLedgerLines(note->string());
+            if (currLedgerLines > ledgerLines) {
+                  ledgerLines = currLedgerLines;
+                  llY         = y;
+                  }
 
-            // allow extra space for shortened ties
-            // this code must be kept synchronized
+            // allow extra space for shortened ties; this code must be kept synchronized
             // with the tie positioning code in Tie::slurPos()
             // but the allocation of space needs to be performed here
             Tie* tie;
@@ -2208,6 +2222,29 @@ void Chord::layoutTablature()
                   }
 
             }
+
+      // create ledger lines, if required (in some historic styles)
+      if (ledgerLines > 0) {
+// there seems to be no need for widening 'ledger lines' beyond fret mark widths; more 'on the field'
+// tests and usage will show if this depends on the metrics of the specific fonts used or not.
+//            qreal extraLen    = score()->styleS(StyleIdx::ledgerLineLength).val() * _spatium;
+            qreal extraLen    = 0;
+            qreal llX         = stemX - (headWidth + extraLen) * 0.5;
+            for (int i = 0; i < ledgerLines; i++) {
+                  LedgerLine* ldgLin = new LedgerLine(score());
+                  ldgLin->setParent(this);
+                  ldgLin->setTrack(track());
+                  ldgLin->setVisible(_visible);
+                  ldgLin->setLen(Spatium( (headWidth + extraLen) / _spatium) );
+                  ldgLin->setPos(llX, llY);
+                  ldgLin->setNext(_ledgerLines);
+                  _ledgerLines = ldgLin;
+                  ldgLin->layout();
+                  llY += lineDist / ledgerLines;
+                  }
+            headWidth += extraLen;        // include ledger lines extra width in chord width
+            }
+
       // horiz. spacing: leave half width at each side of the (potential) stem
       qreal halfHeadWidth = headWidth * 0.5;
       if (lll < stemX - halfHeadWidth)
@@ -2223,10 +2260,6 @@ void Chord::layoutTablature()
       // remove stems
       if (tab->slashStyle() || _noStem || measure()->slashStyle(staffIdx()) || durationType().type() <
          (tab->minimStyle() != TablatureMinimStyle::NONE ? TDuration::DurationType::V_HALF : TDuration::DurationType::V_QUARTER) ) {
-            // delete _stem;
-            // delete _hook;
-            // _stem = 0;
-            // _hook = 0;
             if (_stem)
                   score()->undo(new RemoveElement(_stem));
             if (_hook)
@@ -2267,18 +2300,24 @@ void Chord::layoutTablature()
             // check duration of prev. CR segm
             ChordRest * prevCR = prevChordRest(this);
             // if no previous CR
+            // OR symbol repeat set to ALWAYS
+            // OR symbol repeat condition is triggered
             // OR duration type and/or number of dots is different from current CR
+            // OR chord beam mode not AUTO
             // OR previous CR is a rest
+            // AND no not-stem
             // set a duration symbol (trying to re-use existing symbols where existing to minimize
             // symbol creation and deletion)
             TablatureSymbolRepeat symRepeat = tab->symRepeat();
-            if (prevCR == 0
+            if (  (prevCR == 0
                   || symRepeat == TablatureSymbolRepeat::ALWAYS
                   || (symRepeat == TablatureSymbolRepeat::MEASURE && measure() != prevCR->measure())
                   || (symRepeat == TablatureSymbolRepeat::SYSTEM && measure()->system() != prevCR->measure()->system())
+                  || beamMode() != Beam::Mode::AUTO
                   || prevCR->durationType().type() != durationType().type()
                   || prevCR->dots() != dots()
-                  || prevCR->type() == Element::Type::REST) {
+                  || prevCR->type() == Element::Type::REST)
+                        && !noStem() ) {
                   // symbol needed; if not exist, create; if exists, update duration
                   if (!_tabDur)
                         _tabDur = new TabDurationSymbol(score(), tab, durationType().type(), dots());
@@ -2287,12 +2326,16 @@ void Chord::layoutTablature()
                   _tabDur->setParent(this);
 //                  _tabDur->setMag(mag());     // useless to set grace mag: graces have no dur. symbol
                   _tabDur->layout();
+                  if (minY < 0) {                     // if some fret extends above tab body (like bass strings)
+                        _tabDur->rypos() += minY;     // raise duration symbol
+                        _tabDur->bbox().translate(0, minY);
+                        }
                   }
-            else {                    // symbol not needed: if exists, delete
+            else {                              // symbol not needed: if exists, delete
                   delete _tabDur;
                   _tabDur = 0;
                   }
-            }                 // end of if(duration_symbols)
+            }                                   // end of if(duration_symbols)
 
       if (_arpeggio) {
             qreal headHeight = upnote->headHeight();
@@ -2405,7 +2448,6 @@ void Chord::layoutTablature()
                         _space.setRw(rx);
                   }
             }
-      // bbox();
 
       for (int i = 0; i < numOfNotes; ++i)
             _notes.at(i)->layout2();
