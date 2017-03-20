@@ -795,7 +795,6 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               nsig->setScore(score);
                               nsig->setTrack(staffIdx * VOICES);
                               nsig->setParent(seg);
-                              nsig->setNeedLayout(true);
                               undoAddElement(nsig);
                               }
                         else {

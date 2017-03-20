@@ -2480,17 +2480,6 @@ ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible,
       }
 
 //---------------------------------------------------------
-//   notifyTimeSigs
-//    mark timesigs for layout
-//---------------------------------------------------------
-
-static void notifyTimeSigs(void*, Element* e)
-      {
-      if (e->isTimeSig())
-            toTimeSig(e)->setNeedLayout(true);
-      }
-
-//---------------------------------------------------------
 //   flip
 //---------------------------------------------------------
 
@@ -2528,8 +2517,6 @@ void ChangeStaff::flip()
       staff->score()->setLayoutAll();
       staff->masterScore()->rebuildMidiMapping();
       staff->score()->setPlaylistDirty();
-
-      score->scanElements(0, notifyTimeSigs);
       }
 
 //---------------------------------------------------------
@@ -2546,7 +2533,6 @@ void ChangeStaffType::flip()
 
       Score* score = staff->score();
       score->setLayoutAll();
-      score->scanElements(0, notifyTimeSigs);
       }
 
 //---------------------------------------------------------
@@ -2594,14 +2580,6 @@ ChangeStyle::ChangeStyle(Score* s, const MStyle& st)
       {
       }
 
-static void updateTimeSigs(void*, Element* e)
-      {
-      if (e->isTimeSig()) {
-            TimeSig* ts = toTimeSig(e);
-            ts->setNeedLayout(true);
-            }
-      }
-
 //---------------------------------------------------------
 //   flip
 //---------------------------------------------------------
@@ -2614,7 +2592,6 @@ void ChangeStyle::flip()
             score->cmdConcertPitchChanged(style.value(StyleIdx::concertPitch).toBool(), true);
       if (score->styleV(StyleIdx::MusicalSymbolFont) != style.value(StyleIdx::MusicalSymbolFont)) {
             score->setScoreFont(ScoreFont::fontFactory(style.value(StyleIdx::MusicalSymbolFont).toString()));
-            score->scanElements(0, updateTimeSigs);
             }
       score->setStyle(style);
       score->styleChanged();

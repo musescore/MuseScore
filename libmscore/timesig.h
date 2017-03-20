@@ -65,7 +65,6 @@ class TimeSig : public Element {
       TimeSigType _timeSigType;
       bool _showCourtesySig;
       bool customText;        // if false, sz and sn are calculated from _sig
-      bool _needLayout;
       bool _largeParentheses;
       PropertyFlags scaleStyle;
 
@@ -77,7 +76,7 @@ class TimeSig : public Element {
       QString ssig() const;
       void setSSig(const QString&);
 
-      virtual TimeSig* clone() const override;
+      virtual TimeSig* clone() const override          { return new TimeSig(*this);   }
       virtual ElementType type() const override        { return ElementType::TIMESIG; }
 
       TimeSigType timeSigType() const    { return _timeSigType; }
@@ -130,11 +129,6 @@ class TimeSig : public Element {
       virtual PropertyFlags propertyFlags(P_ID id) const override;
 
       bool hasCustomText() const { return customText; }
-
-      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
-      virtual void localSpatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
-
-      void setNeedLayout(bool nl) { _needLayout = nl; }
 
       const Groups& groups() const    { return _groups; }
       void setGroups(const Groups& e) { _groups = e; }
