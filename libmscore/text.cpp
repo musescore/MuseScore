@@ -3155,7 +3155,7 @@ bool Text::validateText(QString& s)
                         d.append("&amp;");
                   }
             else if (c == '<') {
-                  const char* ok[] { "b>", "/b>", "i>", "/i>", "u>", "/u", "font ", "/font>" };
+                  const char* ok[] { "b>", "/b>", "i>", "/i>", "u>", "/u", "font ", "/font>", "sym>", "/sym>" };
                   QString t = s.mid(i+1);
                   bool found = false;
                   for (auto k : ok) {
