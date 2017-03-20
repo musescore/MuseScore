@@ -128,7 +128,7 @@ bool MP3Exporter::loadLibrary(AskUser askuser)
             }
 
       // If not successful, must ask the user
-      if (!validLibraryLoaded()) {
+      if (!validLibraryLoaded() && askuser != MP3Exporter::AskUser::NO) {
             qDebug("(Maybe) ask user for library");
             int ret = QMessageBox::question(0, qApp->translate("MP3Exporter", "Save as MP3"),
                   qApp->translate("MP3Exporter", "MuseScore does not export MP3 files directly, but instead uses "
@@ -137,7 +137,7 @@ bool MP3Exporter::loadLibrary(AskUser askuser)
                    "You only need to do this once.\n\n"
                    "Would you like to locate %2 now?").arg(getLibraryName()).arg(getLibraryName()),
                    QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
-            if (ret == QMessageBox::Yes && askuser == MP3Exporter::AskUser::MAYBE && findLibrary()) {
+            if (ret == QMessageBox::Yes && findLibrary()) {
                   mLibraryLoaded = initLibrary(mLibPath);
                   }
             }
@@ -605,6 +605,24 @@ QString MP3Exporter::getLibraryTypeString()
       }
 #endif //mac
 
+//---------------------------------------------------------
+//   canSaveMp3
+//---------------------------------------------------------
+
+bool MuseScore::canSaveMp3()
+      {
+      MP3Exporter exporter;
+      if (!exporter.loadLibrary(MP3Exporter::AskUser::NO)) {
+            qDebug("Could not open MP3 encoding library!");
+            return false;
+            }
+
+      if (!exporter.validLibraryLoaded()) {
+            qDebug("Not a valid or supported MP3 encoding library!");
+            return false;
+            }
+      return true;
+      }
 
 //---------------------------------------------------------
 //   saveMp3
@@ -694,7 +712,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       else { // use current synth settings
             bool r = synti->setState(mscore->synthesizerState());
             if (!r)
-            synti->init();
+                  synti->init();
             }
 
       MScore::sampleRate = sampleRate;
