@@ -229,20 +229,25 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
       //    draw tick marks
       //---------------------------------------------------
 
-  	QFont f(p.font());
-   	f.setPointSize(6);
-   	p.setFont(f);
+      QFont f(p.font());
+      f.setPointSize(6);
+      p.setFont(f);
       p.setPen(QPen(Qt::darkGray, 2));
-   	QFontMetrics fm(f);
-      int xt = 20 - fm.width("00") - 5;
 
       QString s;
-   	for (int i = 10; i < 70; i += 10) {
-      	h  = y1 + lrint(i * mh / range);
-         	s.setNum(i - 10);
-  		p.drawText(xt,  h - 3, s);
-		p.drawLine(15, h, 20, h);
-         	}
+      for (int i = 0; i <= (maxValue() - minValue()); i += 10) {
+            h  = y1 + lrint(i * mh / range);
+            s.setNum(i);
+            if (i == 0) {
+                  p.drawText(QRect(0, h - 3, 15, 9), Qt::AlignRight, QString::fromStdString("dB"));
+                  p.drawLine(18, h + 1, 23, h + 1);
+                  continue;
+                  }
+            else if (i == (maxValue() - minValue()))
+                  h -= 2;
+            p.drawText(QRect(0, h - 3, 15, 9), Qt::AlignRight, QString::fromStdString("-") + s);
+            p.drawLine(18, h + 1, 23, h + 1);
+            }
 
       //---------------------------------------------------
       //    draw slider
