@@ -303,6 +303,7 @@ void ScoreView::editKey(QKeyEvent* ev)
       ed.data.clear();
       if (curGrip != Grip::NO_GRIP && int(curGrip) < grips)
             ed.pos = grip[int(curGrip)].center() + delta;
+
       editObject->score()->startCmd();
       editObject->startEditDrag(ed);
       editObject->editDrag(ed);
