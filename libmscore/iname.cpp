@@ -77,7 +77,7 @@ void InstrumentName::endEdit()
             instrument->setLongName(s);
       else
             instrument->setShortName(s);
-      score()->undo(new ChangePart(part, instrument, part->name()));
+      score()->undo(new ChangePart(part, instrument, part->partName()));
       }
 
 //---------------------------------------------------------
