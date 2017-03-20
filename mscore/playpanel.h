@@ -49,6 +49,7 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
 
    private slots:
       void volumeChanged(double,int);
+      void metronomeGainChanged(double val, int);
       void relTempoChanged(double,int);
       void relTempoChanged();
       void tempoSliderReleased(int);
@@ -60,6 +61,7 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
 
    signals:
       void relTempoChanged(double);
+      void metronomeGainChanged(float);
       void posChange(int);
       void gainChange(float);
       void closed(bool);

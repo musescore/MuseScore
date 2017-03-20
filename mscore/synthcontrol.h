@@ -47,7 +47,6 @@ class SynthControl : public QWidget, Ui::SynthControl {
 
    private slots:
       void gainChanged(double, int);
-      void metronomeGainChanged(double val, int);
       void masterTuningChanged(double);
       void changeMasterTuning();
       void effectAChanged(int);
@@ -60,7 +59,6 @@ class SynthControl : public QWidget, Ui::SynthControl {
 
    signals:
       void gainChanged(float);
-      void metronomeGainChanged(float);
       void soundFontChanged();
       void closed(bool);
 
