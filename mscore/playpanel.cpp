@@ -61,7 +61,10 @@ PlayPanel::PlayPanel(QWidget* parent)
       tempoSlider->setDclickValue2(100.0);
       tempoSlider->setUseActualValue(true);
 
+      mgainSlider->setValue(seq->metronomeGain());
+
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
+      connect(mgainSlider,  SIGNAL(valueChanged(double,int)), SLOT(metronomeGainChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
       connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
       connect(tempoSlider,  SIGNAL(sliderPressed(int)),       SLOT(tempoSliderPressed(int)));
@@ -242,6 +245,15 @@ void PlayPanel::setGain(float val)
 void PlayPanel::volumeChanged(double val, int)
       {
       emit gainChange(val);
+      }
+
+//---------------------------------------------------------
+//   metronomeGainChanged
+//---------------------------------------------------------
+
+void PlayPanel::metronomeGainChanged(double val, int)
+      {
+      emit metronomeGainChanged(val);
       }
 
 //---------------------------------------------------------
