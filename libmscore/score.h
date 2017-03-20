@@ -695,6 +695,7 @@ class Score : public QObject, public ScoreElement {
 
       void print(QPainter* printer, int page);
       ChordRest* getSelectedChordRest() const;
+      QSet<ChordRest*> getSelectedChordRests() const;
       void getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const;
 
       void select(Element* obj, SelectType = SelectType::SINGLE, int staff = 0);

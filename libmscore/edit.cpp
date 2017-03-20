@@ -120,6 +120,23 @@ void Score::getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const
       }
 
 //---------------------------------------------------------
+//   getSelectedChordRests
+//---------------------------------------------------------
+
+QSet<ChordRest*> Score::getSelectedChordRests() const
+      {
+      QSet<ChordRest*> set;
+      for (Element* e : selection().elements()) {
+            if (e->type() == Element::Type::NOTE)
+                  e = e->parent();
+            if (e->isChordRest()) {
+                  set.insert(static_cast<ChordRest*>(e));
+                  }
+            }
+      return set;
+      }
+
+//---------------------------------------------------------
 //   pos
 //---------------------------------------------------------
 
@@ -1762,11 +1779,12 @@ void Score::cmdAddOttava(Ottava::Type type)
 
 void Score::cmdSetBeamMode(Beam::Mode mode)
       {
-      ChordRest* cr = getSelectedChordRest();
-      if (cr == 0)
-            return;
-      cr->setBeamMode(mode);
-      _layoutAll = true;
+      for (ChordRest* cr : getSelectedChordRests()) {
+            if (cr) {
+                  undoChangeProperty(cr, P_ID::BEAM_MODE, int(mode));
+                  _layoutAll = true;
+                  }
+            }
       }
 
 //---------------------------------------------------------
