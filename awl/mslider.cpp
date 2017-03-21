@@ -44,9 +44,9 @@ MeterSlider::MeterSlider(QWidget* parent)
 //---------------------------------------------------------
 
 QSize MeterSlider::sizeHint() const
-  	{
+    {
       int w = _meterWidth + _scaleWidth + _scaleWidth + 30;
- 	return orientation() == Qt::Vertical ? QSize(w, 200) : QSize(200, w);
+    return orientation() == Qt::Vertical ? QSize(w, 200) : QSize(200, w);
       }
 
 //---------------------------------------------------------
@@ -94,7 +94,7 @@ void MeterSlider::setMeterVal(int channel, double v, double peak)
 void MeterSlider::resetPeaks()
       {
       for (int i = 0; i < _channel; ++i)
-            meterPeak[i]  = meterval[i];
+            meterPeak[i] = meterval[i];
       update();
       }
 
@@ -106,7 +106,7 @@ void MeterSlider::resizeEvent(QResizeEvent* /*ev*/)
       {
       int h  = height();
       int kh = sliderSize().height();
-      int mh  = h - kh;
+      int mh = h - kh;
       int mw = _meterWidth / _channel;
 
       onPm  = QPixmap(mw, mh);
@@ -117,42 +117,42 @@ void MeterSlider::resizeEvent(QResizeEvent* /*ev*/)
       int h2 = mh - lrint((maxValue() - yellowScale) * mh / range);
 
       QColor yellowRed;
-	yellowRed.setHsv(QColor(Qt::yellow).hue()-8,
-		     QColor(Qt::yellow).saturation(),
-		     QColor(Qt::yellow).value());
-	QColor yellRedRed;
-	yellRedRed.setHsv(QColor(Qt::yellow).hue()-16,
-		      QColor(Qt::yellow).saturation(),
-		      QColor(Qt::yellow).value());
+      yellowRed.setHsv(QColor(Qt::yellow).hue() - 8,
+            QColor(Qt::yellow).saturation(),
+            QColor(Qt::yellow).value());
+      QColor yellRedRed;
+      yellRedRed.setHsv(QColor(Qt::yellow).hue() - 16,
+            QColor(Qt::yellow).saturation(),
+            QColor(Qt::yellow).value());
 
-	QLinearGradient linearGrad(QPointF(0, 0), QPointF(0, mh));
-	linearGrad.setColorAt(0, Qt::red);
-	linearGrad.setColorAt(1-(double)(h1-5)/(double)mh, yellRedRed);
-	linearGrad.setColorAt(1-(double)(h1-6)/(double)mh, yellowRed);
-	linearGrad.setColorAt(1-(double)h2/(double)mh, Qt::yellow);
-	linearGrad.setColorAt(1, Qt::green);
+      QLinearGradient linearGrad(QPointF(0, 0), QPointF(0, mh));
+      linearGrad.setColorAt(0, Qt::red);
+      linearGrad.setColorAt(1 - (double)(h1 - 5) / (double)mh, yellRedRed);
+      linearGrad.setColorAt(1 - (double)(h1 - 6) / (double)mh, yellowRed);
+      linearGrad.setColorAt(1 - (double)h2 / (double)mh, Qt::yellow);
+      linearGrad.setColorAt(1, Qt::green);
 
-	QColor darkYellowRed;
-	darkYellowRed.setHsv(QColor(Qt::darkYellow).hue()-8,
-			 QColor(Qt::darkYellow).saturation(),
-			 QColor(Qt::darkYellow).value());
-	QColor darkYellRedRed;
-	darkYellRedRed.setHsv(QColor(Qt::darkYellow).hue()-16,
-			  QColor(Qt::darkYellow).saturation(),
-			  QColor(Qt::darkYellow).value());
-	QLinearGradient linearDarkGrad(QPointF(0, 0), QPointF(0, mh));
-	linearDarkGrad.setColorAt(0, Qt::darkRed);
-	linearDarkGrad.setColorAt(1-(double)(h1-5)/(double)mh, darkYellRedRed);
-	linearDarkGrad.setColorAt(1-(double)(h1-6)/(double)mh, darkYellowRed);
-	linearDarkGrad.setColorAt(1-(double)h2/(double)mh, Qt::darkYellow);
-	linearDarkGrad.setColorAt(1, Qt::darkGreen);
+      QColor darkYellowRed;
+      darkYellowRed.setHsv(QColor(Qt::darkYellow).hue()-8,
+            QColor(Qt::darkYellow).saturation(),
+            QColor(Qt::darkYellow).value());
+      QColor darkYellRedRed;
+      darkYellRedRed.setHsv(QColor(Qt::darkYellow).hue()-16,
+            QColor(Qt::darkYellow).saturation(),
+            QColor(Qt::darkYellow).value());
+      QLinearGradient linearDarkGrad(QPointF(0, 0), QPointF(0, mh));
+      linearDarkGrad.setColorAt(0, Qt::darkRed);
+      linearDarkGrad.setColorAt(1 - (double)(h1 - 5) / (double)mh, darkYellRedRed);
+      linearDarkGrad.setColorAt(1 - (double)(h1 - 6) / (double)mh, darkYellowRed);
+      linearDarkGrad.setColorAt(1 - (double)h2 / (double)mh, Qt::darkYellow);
+      linearDarkGrad.setColorAt(1, Qt::darkGreen);
 
       QPainter p;
       p.begin(&onPm);
       p.fillRect(0, 0, mw, mh, linearGrad);
       p.end();
       p.begin(&offPm);
-	p.fillRect(0, 0, mw, mh, linearDarkGrad);
+      p.fillRect(0, 0, mw, mh, linearDarkGrad);
       p.end();
       }
 
@@ -192,8 +192,8 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
             else if (h > mh)
                   h = mh;
 
-	      p.drawPixmap(x, y1+mh-h, mw, h,    onPm,  0, mh-h, mw, h);
-	      p.drawPixmap(x, y1,      mw, mh-h, offPm, 0, 0,    mw, mh-h);
+            p.drawPixmap(x, y1 + mh - h, mw, h,      onPm,  0, mh - h, mw, h);
+            p.drawPixmap(x, y1,          mw, mh - h, offPm, 0, 0,      mw, mh - h);
 
             //---------------------------------------------------
             //    draw peak line
@@ -202,15 +202,15 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
             h = mh - (lrint(fast_log10(meterPeak[i]) * -20.0f * mh / range));
             if (h > mh)
                   h = mh;
-	      if (h > 0)
-	            p.drawLine(x, y3-h, x+mw, y3-h);
+            if (h > 0)
+                p.drawLine(x, y3 - h, x + mw, y3 - h);
 
             x += mw;
             }
       x += 4;
 
       // optimize common case:
-      if (ev->rect() == QRect(20, kh/2, _meterWidth-1, mh))
+      if (ev->rect() == QRect(20, kh / 2, _meterWidth - 1, mh))
             return;
 
       QColor sc(isEnabled() ? _scaleColor : Qt::gray);
@@ -222,8 +222,8 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
       //---------------------------------------------------
 
       int y2 = h - (ppos + y1);
-      p.fillRect(x, y1, _scaleWidth, y2-y1, sc);
-      p.fillRect(x, y2, _scaleWidth, y3-y2, svc);
+      p.fillRect(x, y1, _scaleWidth, y2 - y1, sc);
+      p.fillRect(x, y2, _scaleWidth, y3 - y2, svc);
 
       //---------------------------------------------------
       //    draw tick marks
@@ -235,7 +235,7 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
       p.setPen(QPen(Qt::darkGray, 2));
 
       QString s;
-      for (int i = 0; i <= (maxValue() - minValue()); i += 10) {
+      for (int i = 0; i <= range; i += 10) {
             h  = y1 + lrint(i * mh / range);
             s.setNum(i);
             if (i == 0) {
@@ -243,7 +243,7 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
                   p.drawLine(18, h + 1, 23, h + 1);
                   continue;
                   }
-            else if (i == (maxValue() - minValue()))
+            else if (i == range)
                   h -= 2;
             p.drawText(QRect(0, h - 3, 15, 9), Qt::AlignRight, QString::fromStdString("-") + s);
             p.drawLine(18, h + 1, 23, h + 1);
@@ -253,7 +253,7 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
       //    draw slider
       //---------------------------------------------------
 
-      x  += _scaleWidth/2;
+      x += _scaleWidth / 2;
       p.setPen(QPen(svc, 0));
       p.translate(QPointF(x, y2));
       p.setRenderHint(QPainter::Antialiasing, true);
@@ -273,4 +273,3 @@ void MeterSlider::mousePressEvent(QMouseEvent* ev)
       VolSlider::mousePressEvent(ev);
       }
 }
-
