@@ -257,7 +257,7 @@ void TimeSig::layout()
             // if staff is without time sig, format as if no text at all
             if (!_staff->staffType(tick())->genTimesig() ) {
                   // reset position and box sizes to 0
-                  qDebug("staff: no time sig");
+                  // qDebug("staff: no time sig");
                   pointLargeLeftParen.rx() = 0.0;
                   pn.rx() = 0.0;
                   pz.rx() = 0.0;

@@ -291,6 +291,18 @@ void initPageFormat(MStyle* style, PageFormat* pf)
       }
 
 //---------------------------------------------------------
+//   readPageFormat
+//---------------------------------------------------------
+
+void readPageFormat(MStyle* style, XmlReader& e)
+      {
+      PageFormat pf;
+      initPageFormat(style, &pf);
+      pf.read(e);
+      setPageFormat(style, pf);
+      }
+
+//---------------------------------------------------------
 //   readTextStyle
 //---------------------------------------------------------
 
@@ -1929,12 +1941,8 @@ static void readStyle(MStyle* style, XmlReader& e)
                   readTextStyle(style, e);
             else if (tag == "Spatium")
                   style->set(StyleIdx::spatium, e.readDouble() * DPMM);
-            else if (tag == "page-layout") {
-                  PageFormat pf;
-                  initPageFormat(style, &pf);
-                  pf.read(e);
-                  setPageFormat(style, pf);
-                  }
+            else if (tag == "page-layout")
+                  readPageFormat(style, e);
             else if (tag == "displayInConcertPitch")
                   style->set(StyleIdx::concertPitch, QVariant(bool(e.readInt())));
             else if (tag == "ChordList") {
