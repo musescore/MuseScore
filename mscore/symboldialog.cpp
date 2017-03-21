@@ -63,6 +63,7 @@ void SymbolDialog::createSymbols()
                         sp->append(s, Sym::id2userName(SymId(i)));
                   }
             }
+      sp->update();
       }
 
 //---------------------------------------------------------
