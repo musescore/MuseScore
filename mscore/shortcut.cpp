@@ -2513,6 +2513,28 @@ Shortcut Shortcut::_sc[] = {
          ShortcutFlags::A_CMD
          },
       {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM /*| STATE_NOTE_ENTRY_TAB*/,
+         "inc-duration-dotted",
+         QT_TRANSLATE_NOOP("action","Increase Duration to Next Larger Dotted or Non-Dotted Duration"),
+         QT_TRANSLATE_NOOP("action","Increase duration to next larger dotted or non-dotted duration"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM /*| STATE_NOTE_ENTRY_TAB*/,
+         "dec-duration-dotted",
+         QT_TRANSLATE_NOOP("action","Decrease Duration to Next Smaller Dotted or Non-Dotted Duration"),
+         QT_TRANSLATE_NOOP("action","Decrease duration to next smaller dotted or non-dotted duration"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "repeat-sel",

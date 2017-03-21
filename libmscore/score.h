@@ -445,8 +445,7 @@ class Score : public QObject, public ScoreElement {
       void cmdMoveRest(Rest*, MScore::Direction);
       void cmdMoveLyrics(Lyrics*, MScore::Direction);
 
-      void cmdHalfDuration();
-      void cmdDoubleDuration();
+      void cmdIncDecDuration(int nSteps, bool stepDotted = false);
 
       void cmdAddBracket();
 

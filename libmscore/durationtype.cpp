@@ -275,19 +275,37 @@ void TDuration::setType(const QString& s)
 
 //---------------------------------------------------------
 //   shiftType
-//    this keeps any dots
+//    if stepDotted = false, duration type will inc/dec by nSteps with _dots remaining same
+//    if stepDotted = true, duration will round toward zero to next single-dotted or undotted duration and then will included dotted durations when stepping
 //---------------------------------------------------------
 
-void TDuration::shiftType(int v)
+void TDuration::shiftType(int nSteps, bool stepDotted)
       {
       if (_val == DurationType::V_MEASURE || _val == DurationType::V_INVALID || _val == DurationType::V_ZERO)
             setType(DurationType::V_INVALID);
       else {
-            int newValue = int(_val) + v;
-            if ((newValue < int(DurationType::V_LONG)) || (newValue > int(DurationType::V_128TH)))
+            int newValue;
+            int newDots;
+            if (stepDotted) {
+                  // figure out the new duration in terms of the number of single dotted or undotted steps from DurationType::V_LONG
+                  int roundDownSingleDots = (_dots > 0) ? -1 : 0;
+                  int newValAsNumSingleDotSteps = int(_val) * 2 + roundDownSingleDots + nSteps;
+
+                  // convert that new duration back into terms of DurationType integer value and number of dots
+                  newDots = newValAsNumSingleDotSteps % 2; // odd means there is a dot
+                  newValue = newValAsNumSingleDotSteps / 2 + newDots; // if new duration has a dot, then that
+                  }
+            else {
+                  newDots = _dots;
+                  newValue = int(_val) + nSteps;
+                  }
+
+            if ((newValue < int(DurationType::V_LONG)) || (newValue > int(DurationType::V_1024TH)))
                   setType(DurationType::V_INVALID);
-            else
+            else {
                   setType(DurationType(newValue));
+                  setDots(newDots);
+                  }
             }
       }
 

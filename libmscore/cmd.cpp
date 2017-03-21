@@ -2162,10 +2162,12 @@ void Score::cmdMirrorNoteHead()
       }
 
 //---------------------------------------------------------
-//   cmdHalfDuration
+//   cmdIncDecDuration
+//     When stepDotted is false and nSteps is 1 or -1, will halve or double the duration
+//     When stepDotted is true, will step by nearest dotted or undotted note
 //---------------------------------------------------------
 
-void Score::cmdHalfDuration()
+void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
       {
       Element* el = selection().element();
       if (el == 0)
@@ -2176,37 +2178,11 @@ void Score::cmdHalfDuration()
             return;
 
       ChordRest* cr = static_cast<ChordRest*>(el);
-      TDuration d = _is.duration().shift(1);
-      if (!d.isValid())
-            return;
-      if (cr->type() == Element::Type::CHORD && (static_cast<Chord*>(cr)->noteType() != NoteType::NORMAL)) {
-            //
-            // handle appoggiatura and acciaccatura
-            //
-            undoChangeChordRestLen(cr, d);
-            }
-      else
-            changeCRlen(cr, d);
-      _is.setDuration(d);
-      nextInputPos(cr, false);
-      }
 
-//---------------------------------------------------------
-//   cmdDoubleDuration
-//---------------------------------------------------------
+      // if measure rest is selected as input, then the correct initialDuration will be the duration of the measure's time signature, else is just the input state's duration
+      TDuration initialDuration = (cr->durationType() == TDuration::DurationType::V_MEASURE) ? TDuration(cr->measure()->timesig()) : _is.duration();
 
-void Score::cmdDoubleDuration()
-      {
-      Element* el = selection().element();
-      if (el == 0)
-            return;
-      if (el->type() == Element::Type::NOTE)
-            el = el->parent();
-      if (!el->isChordRest() || el->type() == Element::Type::REPEAT_MEASURE)
-            return;
-
-      ChordRest* cr = static_cast<ChordRest*>(el);
-      TDuration d = _is.duration().shift(-1);
+      TDuration d = initialDuration.shiftRetainDots(nSteps, stepDotted);
       if (!d.isValid())
             return;
       if (cr->type() == Element::Type::CHORD && (static_cast<Chord*>(cr)->noteType() != NoteType::NORMAL)) {
@@ -2539,9 +2515,13 @@ void Score::cmd(const QAction* a)
       else if (cmd == "mirror-note")
             cmdMirrorNoteHead();
       else if (cmd == "double-duration")
-            cmdDoubleDuration();
+            cmdIncDecDuration(-1, false);
       else if (cmd == "half-duration")
-            cmdHalfDuration();
+            cmdIncDecDuration(1, false);
+      else if (cmd == "inc-duration-dotted")
+            cmdIncDecDuration(-1, true);
+      else if (cmd == "dec-duration-dotted")
+            cmdIncDecDuration(1,  true);
       else if (cmd == "") {               //Midi note received only?
             if (!noteEntryMode())
                   setLayoutAll(false);
@@ -3130,5 +3110,4 @@ void Score::addRemoveBreaks(int interval, bool lock)
             }
 
       }
-
 }
