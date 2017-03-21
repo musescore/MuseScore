@@ -19,7 +19,9 @@
 //=============================================================================
 
 #include "config.h"
+#ifdef HAS_AUDIOFILE
 #include <sndfile.h>
+#endif
 #include "libmscore/score.h"
 #include "libmscore/note.h"
 #include "libmscore/part.h"
