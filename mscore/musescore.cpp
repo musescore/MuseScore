@@ -5614,6 +5614,7 @@ int main(int argc, char* av[])
 
       // initialize current page size from default printer
       if (!MScore::testMode) {
+#ifndef QT_NO_PRINTER
             QPrinter p;
             if (p.isValid()) {
                   QRectF psf = p.paperRect(QPrinter::Inch);
@@ -5621,6 +5622,7 @@ int main(int argc, char* av[])
                   MScore::defaultStyle().set(StyleIdx::pageHeight, psf.height());
                   MScore::defaultStyle().set(StyleIdx::pagePrintableWidth, psf.width()-20.0/INCH);
                   }
+#endif
             }
 
 #ifdef SCRIPT_INTERFACE
