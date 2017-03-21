@@ -45,6 +45,7 @@ install(FILES
       mscore_fo.qm
       mscore_fr.qm
       mscore_ga.qm
+      mscore_gd.qm
       mscore_gl.qm
       mscore_he.qm
       mscore_hi_IN.qm
@@ -140,6 +141,7 @@ install(FILES
       instruments_fo.qm
       instruments_fr.qm
       instruments_ga.qm
+      instruments_gd.qm
       instruments_gl.qm
       instruments_he.qm
       instruments_hi_IN.qm
