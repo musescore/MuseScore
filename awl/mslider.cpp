@@ -82,7 +82,7 @@ void MeterSlider::setMeterVal(int channel, double v, double peak)
       if (mustRedraw) {
             int kh = sliderSize().height();
             int mh = height() - kh;
-            update(20, kh / 2, _meterWidth-1, mh);
+            update(_meterLeftEdge, kh / 2, _meterWidth-1, mh);
             }
       }
 
@@ -179,7 +179,7 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
       //---------------------------------------------------
 
       int mw = _meterWidth / _channel;
-      int x  = 18;
+      int x  = _meterLeftEdge;
       int y1 = kh / 2;
       int y3 = h - y1;
 
@@ -210,7 +210,7 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
       x += 4;
 
       // optimize common case:
-      if (ev->rect() == QRect(20, kh/2, _meterWidth-1, mh))
+      if (ev->rect() == QRect(_meterLeftEdge, kh/2, _meterWidth-1, mh))
             return;
 
       QColor sc(isEnabled() ? _scaleColor : Qt::gray);
@@ -234,14 +234,14 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
    	p.setFont(f);
       p.setPen(QPen(Qt::darkGray, 2));
    	QFontMetrics fm(f);
-      int xt = 20 - fm.width("00") - 5;
+      int xt = _meterLeftEdge - fm.width("00") - 3;
 
       QString s;
    	for (int i = 10; i < 70; i += 10) {
       	h  = y1 + lrint(i * mh / range);
          	s.setNum(i - 10);
   		p.drawText(xt,  h - 3, s);
-		p.drawLine(15, h, 20, h);
+            p.drawLine(_meterLeftEdge - 3, h, _meterLeftEdge - 1, h);
          	}
 
       //---------------------------------------------------
