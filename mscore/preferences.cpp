@@ -1952,6 +1952,7 @@ void Preferences::updatePluginList()
 
 void PreferenceDialog::printShortcutsClicked()
       {
+#ifndef QT_NO_PRINTER
       QPrinter printer(QPrinter::HighResolution);
       const MStyle& s = MScore::defaultStyle();
       qreal pageW = s.value(StyleIdx::pageWidth).toReal();
@@ -2014,5 +2015,6 @@ void PreferenceDialog::printShortcutsClicked()
             item = shortcutList->itemBelow(item);
             }
       p.end();
+#endif
       }
 }
