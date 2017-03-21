@@ -1556,7 +1556,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   //
                   bool relayoutGrace = false;
                   for (int i = 0; i < n; ++i) {
-                        Chord* c = static_cast<Chord*>(crl.at(i));
+                        Chord* c = toChord(crl.at(i));
                         if (c->isRest())
                               continue;
                         QPointF p = c->upNote()->pagePos();
