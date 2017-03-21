@@ -3122,6 +3122,8 @@ void ScoreView::cmd(const QAction* a)
             _score->startCmd();
             QSet<Element*> spanners;
             for (Element* e : _score->selection().elements()) {
+                  if (e->isBracket())     // ignore
+                        continue;
                   bool spannerSegment = e->isSpannerSegment();
                   if (!spannerSegment || !spanners.contains(static_cast<SpannerSegment*>(e)->spanner()))
                         _score->undo(new ChangeProperty(e, P_ID::VISIBLE, !e->getProperty(P_ID::VISIBLE).toBool()));
