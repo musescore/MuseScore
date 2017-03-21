@@ -754,7 +754,11 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             int idx = fl.indexOf(selectedFilter);
             if (idx != -1) {
                   static const char* extensions[] = {
-                        "png", "pdf", "svg"
+                        "png",
+#ifndef QT_NO_PRINTER
+                        "pdf",
+#endif
+                        "svg"
                         };
                   ext = extensions[idx];
                   }
@@ -781,6 +785,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
 
       double pr = MScore::pixelRatio;
       if (ext == "pdf") {
+#ifndef QT_NO_PRINTER
             QPrinter printer(QPrinter::HighResolution);
             mag = printer.logicalDpiX() / DPI;
             printer.setPaperSize(QSizeF(r.width() * mag, r.height() * mag) , QPrinter::DevicePixel);
@@ -794,6 +799,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             MScore::pixelRatio = DPI / printer.logicalDpiX();
             QPainter p(&printer);
             paintRect(printMode, p, r, mag);
+#endif
             }
       else if (ext == "svg") {
             // note that clipping is not implemented
