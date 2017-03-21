@@ -23,6 +23,8 @@
 
 namespace Awl {
 
+#define METER_LEFT_EDGE 18
+
 //---------------------------------------------------------
 //   MeterSlider
 //---------------------------------------------------------
@@ -82,7 +84,7 @@ void MeterSlider::setMeterVal(int channel, double v, double peak)
       if (mustRedraw) {
             int kh = sliderSize().height();
             int mh = height() - kh;
-            update(20, kh / 2, _meterWidth-1, mh);
+            update(METER_LEFT_EDGE, kh / 2, _meterWidth-1, mh);
             }
       }
 
@@ -179,7 +181,7 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
       //---------------------------------------------------
 
       int mw = _meterWidth / _channel;
-      int x  = 18;
+      int x  = METER_LEFT_EDGE;
       int y1 = kh / 2;
       int y3 = h - y1;
 
@@ -210,7 +212,7 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
       x += 4;
 
       // optimize common case:
-      if (ev->rect() == QRect(20, kh / 2, _meterWidth - 1, mh))
+      if (ev->rect() == QRect(METER_LEFT_EDGE, kh / 2, _meterWidth - 1, mh))
             return;
 
       QColor sc(isEnabled() ? _scaleColor : Qt::gray);
@@ -239,14 +241,14 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
             h  = y1 + lrint(i * mh / range);
             s.setNum(i);
             if (i == 0) {
-                  p.drawText(QRect(0, h - 3, 15, 9), Qt::AlignRight, QString::fromStdString("dB"));
-                  p.drawLine(18, h + 1, 23, h + 1);
+                  p.drawText(QRect(0, h - 3, METER_LEFT_EDGE - 3, 9), Qt::AlignRight, QString::fromStdString("dB"));
+                  p.drawLine(METER_LEFT_EDGE - 1, h + 1, METER_LEFT_EDGE - 1, h + 1);
                   continue;
                   }
             else if (i == range)
                   h -= 2;
-            p.drawText(QRect(0, h - 3, 15, 9), Qt::AlignRight, QString::fromStdString("-") + s);
-            p.drawLine(18, h + 1, 23, h + 1);
+            p.drawText(QRect(0, h - 3, METER_LEFT_EDGE - 3, 9), Qt::AlignRight, QString::fromStdString("-") + s);
+            p.drawLine(METER_LEFT_EDGE - 1, h + 1, METER_LEFT_EDGE - 1, h + 1);
             }
 
       //---------------------------------------------------
