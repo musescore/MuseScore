@@ -3382,6 +3382,7 @@ void Score::doLayoutRange(int stick, int etick)
       {
       if (!firstMeasure())
             return;
+
 qDebug("%p %d-%d %s systems %d", this, stick, etick, isMaster() ? "Master" : "Part", int(_systems.size()));
 
       bool layoutAll = stick <= 0 && (etick < 0 || etick >= lastMeasure()->endTick());
@@ -3455,7 +3456,7 @@ qDebug("%p %d-%d %s systems %d", this, stick, etick, isMaster() ? "Master" : "Pa
                   }
             }
       else {
-            qDebug("layoutAll, systems %d", int(_systems.size()));
+            qDebug("layoutAll, systems %p %d", &_systems, int(_systems.size()));
             //lc.measureNo   = 0;
             //lc.tick        = 0;
             // qDeleteAll(_systems);
@@ -3464,8 +3465,12 @@ qDebug("%p %d-%d %s systems %d", this, stick, etick, isMaster() ? "Master" : "Pa
                   // _systems.clear();
 
             for (System* s : _systems) {
+                  for (Bracket* b : s->brackets()) {
+                        if (b->selected())
+                              _selection.remove(b);
+                        }
                   for (SpannerSegment* ss : s->spannerSegments())
-                        ss->setSystem(0);
+                        ss->setParent(0);
                   }
             for (MeasureBase* mb = first(); mb; mb = mb->next()) {
                   mb->setSystem(0);
