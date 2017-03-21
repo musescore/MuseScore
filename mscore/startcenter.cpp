@@ -184,7 +184,7 @@ MyWebView::MyWebView(QWidget *parent):
 
       page()->setNetworkAccessManager(networkManager);
 
-      setZoomFactor(guiScaling);
+      //setZoomFactor(guiScaling);
 
       if (!enableExperimental)
             setContextMenuPolicy(Qt::NoContextMenu);
@@ -274,7 +274,7 @@ void MyWebView::addToJavascript()
 
 QSize MyWebView::sizeHint() const
       {
-      return QSize(200 * guiScaling, 600 * guiScaling);
+      return QSize(200 , 600);
       }
 
 //---------------------------------------------------------
