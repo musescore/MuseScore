@@ -1464,6 +1464,8 @@ bool MStyle::load(QFile* qf)
       return true;
       }
 
+extern void readPageFormat(MStyle* style, XmlReader& e);
+
 void MStyle::load(XmlReader& e)
       {
       QString oldChordDescriptionFile = value(StyleIdx::chordDescriptionFile).toString();
@@ -1479,9 +1481,9 @@ void MStyle::load(XmlReader& e)
                   }
             else if (tag == "Spatium")
                   set(StyleIdx::spatium, e.readDouble() * DPMM);
-            else if (tag == "page-layout")
-                  // _pageFormat.read(e);
-                  e.skipCurrentElement();
+            else if (tag == "page-layout") {    // obsolete
+                  readPageFormat(this, e);      // from read206.cpp
+                  }
             else if (tag == "displayInConcertPitch")
                   set(StyleIdx::concertPitch, QVariant(bool(e.readInt())));
             else if (tag == "ChordList") {
