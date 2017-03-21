@@ -1650,7 +1650,7 @@ void Text::endEdit()
 
       genText();
 
-      if (_text != oldText || type() == ElementType::HARMONY) {
+      if (_text != oldText || isHarmony()) {
             // avoid creating unnecessary state on undo stack if edit did not change anything
             // but go ahead and do this anyhow for chord symbols no matter what
             // the code to special case transposition relies on the fact
