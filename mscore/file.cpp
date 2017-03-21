@@ -1931,15 +1931,15 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
       cs->setPrinting(true);
       MScore::pdfPrinting = true;
 
-      QPdfWriter printerDev(saveName);
-      printerDev.setResolution(preferences.exportPdfDpi);
+      QPdfWriter pdfWriter(saveName);
+      pdfWriter.setResolution(preferences.exportPdfDpi);
       QSizeF size(cs->styleD(StyleIdx::pageWidth), cs->styleD(StyleIdx::pageHeight));
       QPageSize ps(QPageSize::id(size, QPageSize::Inch));
-      printerDev.setPageSize(ps);
-      printerDev.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
+      pdfWriter.setPageSize(ps);
+      pdfWriter.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
 
-      printerDev.setCreator("MuseScore Version: " VERSION);
-      if (!printerDev.setPageMargins(QMarginsF()))
+      pdfWriter.setCreator("MuseScore Version: " VERSION);
+      if (!pdfWriter.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
 
       QString title = cs->metaTag("workTitle");
@@ -1951,27 +1951,27 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
                   partname = cs->title(); // fall back to excerpt's tab title
             title += " - " + partname;
             }
-      printerDev.setTitle(title); // set PDF's meta data for Title
+      pdfWriter.setTitle(title); // set PDF's meta data for Title
 
       QPainter p;
-      if (!p.begin(&printerDev))
+      if (!p.begin(&pdfWriter))
             return false;
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
 
-      p.setViewport(QRect(0.0, 0.0, size.width() * printerDev.logicalDpiX(),
-         size.height()*printerDev.logicalDpiY()));
+      p.setViewport(QRect(0.0, 0.0, size.width() * pdfWriter.logicalDpiX(),
+         size.height() * pdfWriter.logicalDpiY()));
       p.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
 
       double pr = MScore::pixelRatio;
-      MScore::pixelRatio = DPI / printerDev.logicalDpiX();
+      MScore::pixelRatio = DPI / pdfWriter.logicalDpiX();
 
       const QList<Page*> pl = cs->pages();
       int pages = pl.size();
       bool firstPage = true;
       for (int n = 0; n < pages; ++n) {
             if (!firstPage)
-                  printerDev.newPage();
+                  pdfWriter.newPage();
             firstPage = false;
             cs->print(&p, n);
             }
@@ -1989,42 +1989,37 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             return false;
       Score* firstScore = cs[0];
 
-      QPrinter printerDev(QPrinter::HighResolution);
-      printerDev.setResolution(preferences.exportPdfDpi);
+      QPdfWriter pdfWriter(saveName);
+      pdfWriter.setResolution(preferences.exportPdfDpi);
 
       QSizeF size(firstScore->styleD(StyleIdx::pageWidth), firstScore->styleD(StyleIdx::pageHeight));
       QPageSize ps(QPageSize::id(size, QPageSize::Inch));
-      printerDev.setPageSize(ps);
-      printerDev.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
+      pdfWriter.setPageSize(ps);
+      pdfWriter.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
 
-      printerDev.setCreator("MuseScore Version: " VERSION);
-      printerDev.setFullPage(true);
-      if (!printerDev.setPageMargins(QMarginsF()))
+      pdfWriter.setCreator("MuseScore Version: " VERSION);
+      if (!pdfWriter.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
-      printerDev.setColorMode(QPrinter::Color);
 
       QString title = firstScore->metaTag("workTitle");
       if (title.isEmpty()) // workTitle unset?
             title = firstScore->title(); // fall back to (master)score's tab title
       title += " - " + tr("Score and Parts");
-      printerDev.setDocName(title);
-      printerDev.setOutputFormat(QPrinter::PdfFormat);
-
-      printerDev.setOutputFileName(saveName);
+      pdfWriter.setTitle(title); // set PDF's meta data for Title
 
       QPainter p;
-      if (!p.begin(&printerDev))
+      if (!p.begin(&pdfWriter))
             return false;
 
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
 
-      p.setViewport(QRect(0.0, 0.0, size.width() * printerDev.logicalDpiX(),
-         size.height() * printerDev.logicalDpiY()));
+      p.setViewport(QRect(0.0, 0.0, size.width() * pdfWriter.logicalDpiX(),
+         size.height() * pdfWriter.logicalDpiY()));
       p.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
 
       double pr = MScore::pixelRatio;
-      MScore::pixelRatio = DPI / printerDev.logicalDpiX();
+      MScore::pixelRatio = DPI / pdfWriter.logicalDpiX();
       MScore::pdfPrinting = true;
 
       bool firstPage = true;
@@ -2037,16 +2032,11 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             s->doLayout();
             s->setPrinting(true);
 
-            //QSizeF size(s->styleD(StyleIdx::pageWidth), s->styleD(StyleIdx::pageHeight));
-            //QPageSize ps(QPageSize::id(size, QPageSize::Inch));
-            //printerDev.setPageSize(ps);
-            //printerDev.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
-
             const QList<Page*> pl = s->pages();
             int pages    = pl.size();
             for (int n = 0; n < pages; ++n) {
                   if (!firstPage)
-                        printerDev.newPage();
+                        pdfWriter.newPage();
                   firstPage = false;
                   s->print(&p, n);
                   }
