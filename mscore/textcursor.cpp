@@ -87,10 +87,12 @@ void PositionCursor::paint(QPainter* p)
                   p->fillRect(_rect, color());
                   int         track       = _sv->score()->inputTrack();
                   Staff*      staff       = _sv->score()->staff(track2staff(track));
-                  StaffType*  staffType   = staff->staffType();
-                  if (staffType && staffType->group() == StaffGroup::TAB)
-                        staffType->drawInputStringMarks(p, _sv->score()->inputState().string(),
-                                    track2voice(track), _rect);
+                  if (staff) {
+                        StaffType*  staffType   = staff->staffType();
+                        if (staffType && staffType->group() == StaffGroup::TAB)
+                              staffType->drawInputStringMarks(p, _sv->score()->inputState().string(),
+                                          track2voice(track), _rect);
+                        }
                   break;
             }
       }
