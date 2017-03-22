@@ -104,6 +104,7 @@ class PaletteScrollArea : public QScrollArea {
 class Palette : public QWidget {
       Q_OBJECT
 
+
       QString _name;
       QList<PaletteCell*> cells;
       QList<PaletteCell*> dragCells;  // used for filter & backup
@@ -118,6 +119,8 @@ class Palette : public QWidget {
       qreal extraMag;
       bool _drawGrid;
       bool _selectable;
+      bool _disableDragAndDrop { false };
+      bool _disableSingleClick { true };
       bool _disableDoubleClick { false };
       bool _readOnly;
       bool _systemPalette;
@@ -130,6 +133,7 @@ class Palette : public QWidget {
       virtual void paintEvent(QPaintEvent*) override;
       virtual void mousePressEvent(QMouseEvent*) override;
       virtual void mouseDoubleClickEvent(QMouseEvent*) override;
+      void handleMouseClickInsert(QMouseEvent*);
       virtual void mouseMoveEvent(QMouseEvent*) override;
       virtual void leaveEvent(QEvent*) override;
       virtual bool event(QEvent*) override;
@@ -182,6 +186,8 @@ class Palette : public QWidget {
       void setSelected(int idx)      { selectedIdx = idx;  }
       bool readOnly() const          { return _readOnly;   }
       void setReadOnly(bool val);
+      void setDisableDragAndDrop(bool val) { _disableDragAndDrop = val; }
+      void setDisableSingleClick(bool val) { _disableSingleClick = val; }
       void setDisableDoubleClick(bool val) { _disableDoubleClick = val; }
 
       bool systemPalette() const     { return _systemPalette; }

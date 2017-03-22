@@ -295,6 +295,10 @@ Element* Palette::element(int idx)
 
 void Palette::mousePressEvent(QMouseEvent* ev)
       {
+      if (!_disableSingleClick) {
+          handleMouseClickInsert(ev);
+          }
+
       dragStartPosition = ev->pos();
       dragIdx           = idx(dragStartPosition);
 
@@ -318,8 +322,8 @@ void Palette::mousePressEvent(QMouseEvent* ev)
 
 void Palette::mouseMoveEvent(QMouseEvent* ev)
       {
-      if ((currentIdx != -1) && (dragIdx == currentIdx) && (ev->buttons() & Qt::LeftButton)
-         && (ev->pos() - dragStartPosition).manhattanLength() > QApplication::startDragDistance())
+      if (!_disableDragAndDrop && ((currentIdx != -1) && (dragIdx == currentIdx) && (ev->buttons() & Qt::LeftButton)
+         && (ev->pos() - dragStartPosition).manhattanLength() > QApplication::startDragDistance()))
             {
             PaletteCell* cell = cellAt(currentIdx);
             if (cell && cell->element) {
@@ -358,6 +362,18 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
       }
 
 //---------------------------------------------------------
+//   mouseDoubleClickEvent
+//---------------------------------------------------------
+
+void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
+      {
+      if (_disableDoubleClick)
+            return;
+
+      handleMouseClickInsert(ev);
+      }
+
+//---------------------------------------------------------
 //   applyDrop
 //---------------------------------------------------------
 
@@ -392,13 +408,11 @@ printf("<<<%s>>>\n", a.data());
       }
 
 //---------------------------------------------------------
-//   mouseDoubleClickEvent
+//   handleMouseClickInsert
 //---------------------------------------------------------
 
-void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
+void Palette::handleMouseClickInsert(QMouseEvent* ev)
       {
-      if (_disableDoubleClick)
-            return;
       int i = idx(ev->pos());
       if (i == -1)
             return;
