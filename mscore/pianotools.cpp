@@ -44,7 +44,9 @@ HPiano::HPiano(QWidget* parent)
       setMouseTracking(true);
       setRubberBandSelectionMode(Qt::IntersectsItemBoundingRect);
       setDragMode(QGraphicsView::RubberBandDrag);
-      setScale(1.5);
+      setScale(2.5);
+
+      grabGesture(Qt::PinchGesture);      // laptop pad (Mac) and touchscreen
 
       scene()->setSceneRect(0.0, 0.0, KEY_WIDTH * 52, KEY_HEIGHT);
 
@@ -111,12 +113,18 @@ HPiano::HPiano(QWidget* parent)
 
 void HPiano::setScale(qreal s)
       {
-       scaleVal = s;
-      setMaximumSize(QSize((KEY_WIDTH * 52) * scaleVal + 8, KEY_HEIGHT * scaleVal + 8 + 80));
-      setMinimumSize(QSize(100, KEY_HEIGHT * scaleVal + 8));
-      QTransform t;
-      t.scale(scaleVal, scaleVal);
-      setTransform(t, false);
+      if (s > 16.0)
+            s = 16.0;
+      else if (s < .5)
+            s = .5;
+      if (s != scaleVal) {
+            scaleVal = s;
+            setMaximumSize(QSize((KEY_WIDTH * 52) * scaleVal + 8, KEY_HEIGHT * scaleVal + 8 + 80));
+            setMinimumSize(QSize(100, KEY_HEIGHT * scaleVal + 8 + 80));
+            QTransform t;
+            t.scale(scaleVal, scaleVal);
+            setTransform(t, false);
+            }
       }
 
 //---------------------------------------------------------
@@ -191,14 +199,15 @@ void PianoKeyItem::setType(int val)
       {
       type = val;
       QPainterPath path;
-
+      qreal triangle = 1.0;
+      qreal htriangle = triangle/2;
       switch(type) {
             case 0:
                   path.moveTo(0,0);
-                  path.lineTo(0,   KEY_HEIGHT-2);
-                  path.lineTo(2.0, KEY_HEIGHT);
-                  path.lineTo(KEY_WIDTH-2, KEY_HEIGHT);
-                  path.lineTo(KEY_WIDTH, KEY_HEIGHT-2);
+                  path.lineTo(0,   KEY_HEIGHT-triangle);
+                  path.lineTo(triangle, KEY_HEIGHT);
+                  path.lineTo(KEY_WIDTH-triangle, KEY_HEIGHT);
+                  path.lineTo(KEY_WIDTH, KEY_HEIGHT-triangle);
                   path.lineTo(KEY_WIDTH, BKEY_HEIGHT);
                   path.lineTo(KEY_WIDTH - BKEY_WIDTH * 5/9, BKEY_HEIGHT);
                   path.lineTo(KEY_WIDTH - BKEY_WIDTH * 5/9, 0);
@@ -207,10 +216,10 @@ void PianoKeyItem::setType(int val)
                   path.moveTo(BKEY_WIDTH * 4/9, 0);
                   path.lineTo(BKEY_WIDTH * 4/9, BKEY_HEIGHT);
                   path.lineTo(0, BKEY_HEIGHT);
-                  path.lineTo(0,   KEY_HEIGHT-2);
-                  path.lineTo(2.0, KEY_HEIGHT);
-                  path.lineTo(KEY_WIDTH-2, KEY_HEIGHT);
-                  path.lineTo(KEY_WIDTH, KEY_HEIGHT-2);
+                  path.lineTo(0,   KEY_HEIGHT-triangle);
+                  path.lineTo(triangle, KEY_HEIGHT);
+                  path.lineTo(KEY_WIDTH-triangle, KEY_HEIGHT);
+                  path.lineTo(KEY_WIDTH, KEY_HEIGHT-triangle);
                   path.lineTo(KEY_WIDTH, BKEY_HEIGHT);
                   path.lineTo(KEY_WIDTH - BKEY_WIDTH * 4/9, BKEY_HEIGHT);
                   path.lineTo(KEY_WIDTH - BKEY_WIDTH * 4/9, 0);
@@ -219,10 +228,10 @@ void PianoKeyItem::setType(int val)
                   path.moveTo(BKEY_WIDTH * 5/9, 0);
                   path.lineTo(BKEY_WIDTH * 5/9, BKEY_HEIGHT);
                   path.lineTo(0,   BKEY_HEIGHT);
-                  path.lineTo(0,   KEY_HEIGHT-2);
-                  path.lineTo(2.0, KEY_HEIGHT);
-                  path.lineTo(KEY_WIDTH-2, KEY_HEIGHT);
-                  path.lineTo(KEY_WIDTH,  KEY_HEIGHT-2);
+                  path.lineTo(0,   KEY_HEIGHT-triangle);
+                  path.lineTo(triangle, KEY_HEIGHT);
+                  path.lineTo(KEY_WIDTH-triangle, KEY_HEIGHT);
+                  path.lineTo(KEY_WIDTH,  KEY_HEIGHT-triangle);
                   path.lineTo(KEY_WIDTH,  BKEY_HEIGHT);
                   path.lineTo(KEY_WIDTH, 0);
                   break;
@@ -230,10 +239,10 @@ void PianoKeyItem::setType(int val)
                   path.moveTo(BKEY_WIDTH * 4/9, 0);
                   path.lineTo(BKEY_WIDTH * 4/9, BKEY_HEIGHT);
                   path.lineTo(0, BKEY_HEIGHT);
-                  path.lineTo(0,   KEY_HEIGHT-2);
-                  path.lineTo(2.0, KEY_HEIGHT);
-                  path.lineTo(KEY_WIDTH-2, KEY_HEIGHT);
-                  path.lineTo(KEY_WIDTH, KEY_HEIGHT-2);
+                  path.lineTo(0,   KEY_HEIGHT-triangle);
+                  path.lineTo(triangle, KEY_HEIGHT);
+                  path.lineTo(KEY_WIDTH-triangle, KEY_HEIGHT);
+                  path.lineTo(KEY_WIDTH, KEY_HEIGHT-triangle);
                   path.lineTo(KEY_WIDTH, BKEY_HEIGHT);
                   path.lineTo(KEY_WIDTH - BKEY_WIDTH * 5/9, BKEY_HEIGHT);
                   path.lineTo(KEY_WIDTH - BKEY_WIDTH * 5/9, 0);
@@ -242,38 +251,38 @@ void PianoKeyItem::setType(int val)
                   path.moveTo(BKEY_WIDTH * 5/9, 0);
                   path.lineTo(BKEY_WIDTH * 5/9, BKEY_HEIGHT);
                   path.lineTo(0, BKEY_HEIGHT);
-                  path.lineTo(0,   KEY_HEIGHT-2);
-                  path.lineTo(2.0, KEY_HEIGHT);
-                  path.lineTo(KEY_WIDTH-2, KEY_HEIGHT);
-                  path.lineTo(KEY_WIDTH, KEY_HEIGHT-2);
+                  path.lineTo(0,   KEY_HEIGHT-triangle);
+                  path.lineTo(triangle, KEY_HEIGHT);
+                  path.lineTo(KEY_WIDTH-triangle, KEY_HEIGHT);
+                  path.lineTo(KEY_WIDTH, KEY_HEIGHT-triangle);
                   path.lineTo(KEY_WIDTH, BKEY_HEIGHT);
                   path.lineTo(KEY_WIDTH - BKEY_WIDTH * 4/9, BKEY_HEIGHT);
                   path.lineTo(KEY_WIDTH - BKEY_WIDTH * 4/9, 0);
                   break;
             case 5:
                   path.moveTo(0,0);
-                  path.lineTo(0,   KEY_HEIGHT-2);
-                  path.lineTo(2.0, KEY_HEIGHT);
-                  path.lineTo(KEY_WIDTH-2, KEY_HEIGHT);
-                  path.lineTo(KEY_WIDTH, KEY_HEIGHT-2);
+                  path.lineTo(0,   KEY_HEIGHT-triangle);
+                  path.lineTo(triangle, KEY_HEIGHT);
+                  path.lineTo(KEY_WIDTH-triangle, KEY_HEIGHT);
+                  path.lineTo(KEY_WIDTH, KEY_HEIGHT-triangle);
                   path.lineTo(KEY_WIDTH, BKEY_HEIGHT);
                   path.lineTo(KEY_WIDTH - BKEY_WIDTH * 4/9, BKEY_HEIGHT);
                   path.lineTo(KEY_WIDTH - BKEY_WIDTH * 4/9, 0);
                   break;
             case 6:
                   path.moveTo(0,0);
-                  path.lineTo(0,   KEY_HEIGHT-2);
-                  path.lineTo(2.0, KEY_HEIGHT);
-                  path.lineTo(KEY_WIDTH-2, KEY_HEIGHT);
-                  path.lineTo(KEY_WIDTH, KEY_HEIGHT-2);
+                  path.lineTo(0,   KEY_HEIGHT-triangle);
+                  path.lineTo(triangle, KEY_HEIGHT);
+                  path.lineTo(KEY_WIDTH-triangle, KEY_HEIGHT);
+                  path.lineTo(KEY_WIDTH, KEY_HEIGHT-triangle);
                   path.lineTo(KEY_WIDTH, 0);
                   break;
             case 7:
                   path.moveTo(0,0);
-                  path.lineTo(0,            BKEY_HEIGHT-1);
-                  path.lineTo(1.0,          BKEY_HEIGHT);
-                  path.lineTo(BKEY_WIDTH-1, BKEY_HEIGHT);
-                  path.lineTo(BKEY_WIDTH,   BKEY_HEIGHT-1);
+                  path.lineTo(0,           BKEY_HEIGHT-htriangle);
+                  path.lineTo(htriangle,   BKEY_HEIGHT);
+                  path.lineTo(BKEY_WIDTH-htriangle, BKEY_HEIGHT);
+                  path.lineTo(BKEY_WIDTH,  BKEY_HEIGHT-htriangle);
                   path.lineTo(BKEY_WIDTH, 0);
                   break;
             default:
@@ -375,21 +384,57 @@ void HPiano::wheelEvent(QWheelEvent* event)
 
       if (event->modifiers() & Qt::ControlModifier) {
             if (step > 0) {
-                  for (int i = 0; i < step; ++i) {
+                  for (int i = 0; i < step; ++i)
                         scaleVal *= 1.1;
-                        }
                   }
             else {
-                  for (int i = 0; i < -step; ++i) {
+                  for (int i = 0; i < -step; ++i)
                         scaleVal /= 1.1;
-                        }
                   }
-            if (scaleVal > 4.0)
-                  scaleVal = 4.0;
-            else if (scaleVal < .5)
-                  scaleVal = .5;
             setScale(scaleVal);
             }
+      }
+
+//---------------------------------------------------------
+//   gestureEvent
+//    fired on touchscreen gestures as well as Mac touchpad gestures
+//---------------------------------------------------------
+
+bool HPiano::event(QEvent* event)
+      {
+      if (event->type() == QEvent::Gesture) {
+            return gestureEvent(static_cast<QGestureEvent*>(event));
+            }
+      return QGraphicsView::event(event);
+      }
+
+//---------------------------------------------------------
+//   gestureEvent
+//    fired on touchscreen gestures as well as Mac touchpad gestures
+//---------------------------------------------------------
+
+bool HPiano::gestureEvent(QGestureEvent *event)
+      {
+      if (QGesture *gesture = event->gesture(Qt::PinchGesture)) {
+            // Zoom in/out when receiving a pinch gesture
+            QPinchGesture *pinch = static_cast<QPinchGesture *>(gesture);
+
+            static qreal magStart = 1.0;
+            if (pinch->state() == Qt::GestureStarted) {
+                  magStart = scaleVal;
+                  }
+            if (pinch->changeFlags() & QPinchGesture::ScaleFactorChanged) {
+                  // On Windows, totalScaleFactor() contains the net magnification.
+                  // On OS X, totalScaleFactor() is 1, and scaleFactor() contains the net magnification.
+                  qreal value = pinch->totalScaleFactor();
+                  if (value == 1) {
+                        value = pinch->scaleFactor();
+                        }
+                  // Qt 5.4 doesn't report pinch->centerPoint() correctly
+                  setScale(magStart*value);
+                  }
+            }
+      return true;
       }
 }
 

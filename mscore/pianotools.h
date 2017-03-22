@@ -60,6 +60,8 @@ class HPiano : public QGraphicsView {
       QList<PianoKeyItem*> keys;
       qreal scaleVal;
       virtual void wheelEvent(QWheelEvent*);
+      virtual bool event(QEvent* event);
+      bool gestureEvent(QGestureEvent *event);
       void setScale(qreal);
 
    signals:
