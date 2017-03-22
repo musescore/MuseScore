@@ -401,17 +401,17 @@ void HPiano::wheelEvent(QWheelEvent* event)
       deltaSum += event->delta();
       int step = deltaSum / 120;
       deltaSum %= 120;
-
+      qreal mag = scaleVal;
       if (event->modifiers() & Qt::ControlModifier) {
             if (step > 0) {
                   for (int i = 0; i < step; ++i)
-                        scaleVal *= 1.1;
+                        mag *= 1.1;
                   }
             else {
                   for (int i = 0; i < -step; ++i)
-                        scaleVal /= 1.1;
+                        mag /= 1.1;
                   }
-            setScale(scaleVal);
+            setScale(mag);
             }
       }
 
