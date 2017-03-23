@@ -41,7 +41,7 @@ class TDuration {
 
    public:
       TDuration() : _val(DurationType::V_INVALID), _dots(0) {}
-      TDuration(const Fraction& l, bool truncate = false, int maxDots = 3, DurationType maxType = DurationType::V_LONG);
+      TDuration(const Fraction& l, bool truncate = false, int maxDots = MAX_DOTS, DurationType maxType = DurationType::V_LONG);
       TDuration(const QString&);
       TDuration(DurationType t) : _val(t), _dots(0) {}
 
@@ -77,7 +77,7 @@ class TDuration {
       QString durationTypeUserName() const;
       };
 
-QList<TDuration> toDurationList(Fraction l, bool useDots, int maxDots = 3, bool printRestRemains = true);
+QList<TDuration> toDurationList(Fraction l, bool useDots, int maxDots = MAX_DOTS, bool printRestRemains = true);
 QList<TDuration> toRhythmicDurationList(const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, Measure* msr, int maxDots);
 
 bool forceRhythmicSplit(bool isRest, BeatType startBeat, BeatType endBeat, int beatsCrossed, BeatType strongestBeatCrossed, const TimeSigFrac& nominal);
