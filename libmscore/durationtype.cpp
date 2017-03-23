@@ -33,6 +33,10 @@ static int getDots(int base, int rest, char* dots)
             *dots = *dots + 1;
             rest -= base / 4;
             }
+      if (rest >= base / 8) {
+            *dots = *dots + 1;
+            rest -= base / 8;
+            }
       if (*dots > MAX_DOTS)
             *dots = MAX_DOTS;
       return rest;
@@ -64,7 +68,7 @@ void TDuration::setVal(int ticks)
                   int t = dt.ticks();
                   if (ticks / t) {
                         int remain = ticks % t;
-                        if ((t - remain) < (t/4)) {
+                        if ((t - remain) < (t/POW_MAX_DOTS)) {
                               _val = DurationType(i - 1);
                               return;
                               }

@@ -2715,6 +2715,15 @@ void Score::padToggle(Pad n)
                   else
                         _is.setDots(2);
                   break;
+            case Pad::DOT3:
+                  if ((_is.duration().dots() == 3)
+                     || (_is.duration() == TDuration::DurationType::V_32ND)
+                     || (_is.duration() == TDuration::DurationType::V_64TH)
+                     || (_is.duration() == TDuration::DurationType::V_128TH))
+                        _is.setDots(0);
+                  else
+                        _is.setDots(3);
+                  break;
             }
       if (n >= Pad::NOTE00 && n <= Pad::NOTE128) {
             _is.setDots(0);

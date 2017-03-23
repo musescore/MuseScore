@@ -2439,6 +2439,8 @@ void Score::cmd(const QAction* a)
             padToggle(Pad::DOT);
       else if (cmd == "pad-dotdot")
             padToggle(Pad::DOTDOT);
+      else if (cmd == "pad-dot3")
+            padToggle(Pad::DOT3);
       else if (cmd == "beam-start")
             cmdSetBeamMode(Beam::Mode::BEGIN);
       else if (cmd == "beam-mid")
