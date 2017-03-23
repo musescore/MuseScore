@@ -16,6 +16,7 @@
 #include "libmscore/mscore.h"
 #include "libmscore/score.h"
 #include "libmscore/note.h"
+#include "libmscore/chordrest.h"
 #include "libmscore/accidental.h"
 #include "libmscore/chord.h"
 #include "libmscore/measure.h"
@@ -44,6 +45,7 @@ class TestNote : public QObject, public MTest
       void tpcTranspose();
       void tpcTranspose2();
       void noteLimits();
+      void LongNoteAfterShort_183746();
       };
 
 //---------------------------------------------------------
@@ -482,6 +484,44 @@ void TestNote::noteLimits() {
             score->cmdAddInterval(8, nl);
             }
       QVERIFY(saveCompareScore(score, "notelimits-test.mscx", DIR + "notelimits-ref.mscx"));
+      }
+
+//---------------------------------------------------------
+///   LongNoteAfterShort_183746
+///    Put a small 128th rest
+///    Then put a long Breve note
+///    This breve will get spread out across multiple measures
+///    Verifies that the resulting notes are tied over at least 3 measures and have total duration the same as a breve,
+///    regardless of how the breve was divided up.
+//---------------------------------------------------------
+
+void TestNote::LongNoteAfterShort_183746() {
+
+      Score* score = readScore(DIR + "empty.mscx");
+      score->doLayout();
+
+      score->inputState().setTrack(0);
+      score->inputState().setSegment(score->tick2segment(0, false, Segment::Type::ChordRest));
+      score->inputState().setDuration(TDuration::DurationType::V_128TH);
+      score->inputState().setNoteEntryMode(true);
+
+      score->cmdEnterRest(TDuration::DurationType::V_128TH);
+
+      score->inputState().setDuration(TDuration::DurationType::V_BREVE);
+      score->cmdAddPitch(47, 0);
+
+      Segment* s = score->tick2segment(TDuration(TDuration::DurationType::V_128TH).ticks());
+      QVERIFY(s && s->isChordRest());
+
+      Element* e = s->firstElement(0);
+      QVERIFY(e && e->type() == Element::Type::NOTE);
+
+      int totalTicks = 0;
+      QList<Note*> nl = static_cast<Note*>(e)->tiedNotes();
+      QVERIFY(nl.size() >= 3); // the breve must be divided across at least 3 measures
+      for (Note* n : nl)
+            totalTicks += static_cast<Chord*>(n->parent())->durationTypeTicks();
+      QVERIFY(totalTicks == TDuration(TDuration::DurationType::V_BREVE).ticks()); // total duration same as a breve
       }
 
 QTEST_MAIN(TestNote)
