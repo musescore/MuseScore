@@ -208,7 +208,7 @@ class Measure : public MeasureBase {
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       void createVoice(int track);
-      void adjustToLen(Fraction);
+      void adjustToLen(Fraction, bool appendRestsIfNecessary = true);
 
       AccidentalVal findAccidental(Note*) const;
       AccidentalVal findAccidental(Segment* s, int staffIdx, int line, bool &error) const;

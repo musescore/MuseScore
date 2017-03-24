@@ -43,6 +43,15 @@ class TestSplit : public QObject, public MTest
       void split06() { split("split06.mscx", "split06-ref.mscx", 6); }
       void split07() { split("split07.mscx", "split07-ref.mscx"); }
       void split08() { split("split08.mscx", "split08-ref.mscx"); }
+      void split183846()
+            {
+            split("split183846-irregular-qn-qn-wn.mscx",          "split183846-irregular-qn-qn-wn-ref.mscx", 1);
+            split("split183846-irregular-wn-wn.mscx",             "split183846-irregular-wn-wn-ref.mscx", 1);
+            split("split183846-irregular-wn-wr-wn-hr-qr.mscx",    "split183846-irregular-wn-wr-wn-hr-qr-ref.mscx", 2);
+            split("split183846-irregular-wr-wn-wr-hn-qn.mscx",    "split183846-irregular-wr-wn-wr-hn-qn-ref.mscx", 3);
+            split("split183846-irregular-hn-hn-qn-qn-hn-hn.mscx", "split183846-irregular-hn-hn-qn-qn-hn-hn-ref.mscx", 5);
+            split("split183846-irregular-verylong.mscx",          "split183846-irregular-verylong-ref.mscx", 7);
+            }
       };
 
 //---------------------------------------------------------
