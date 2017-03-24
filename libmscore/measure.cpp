@@ -1558,7 +1558,7 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
 //    new len
 //---------------------------------------------------------
 
-void Measure::adjustToLen(Fraction nf)
+void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
       {
       int ol   = len().ticks();
       int nl   = nf.ticks();
@@ -1675,7 +1675,7 @@ void Measure::adjustToLen(Fraction nf)
                         rFlag = true;
                         }
                   int voice = trk % VOICES;
-                  if ((n > 0) && (rFlag || voice == 0)) {
+                  if (appendRestsIfNecessary && (n > 0) && (rFlag || voice == 0)) {
                         // add rest to measure
                         int rtick = tick() + nl - n;
                         int track = staffIdx * VOICES + voice;

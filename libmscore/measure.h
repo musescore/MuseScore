@@ -276,7 +276,7 @@ class Measure : public MeasureBase {
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       void createVoice(int track);
-      void adjustToLen(Fraction);
+      void adjustToLen(Fraction, bool appendRestsIfNecessary = true);
 
       Repeat repeatFlags() const                   { return _repeatFlags; }
       void setRepeatFlags(Repeat val)              { _repeatFlags = val;  }
