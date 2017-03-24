@@ -29,6 +29,7 @@ const char* tests[] = {
       "libmscore/repeat/tst_repeat",
       "libmscore/rhythmicGrouping/tst_rhythmicGrouping",
       "libmscore/dynamic/tst_dynamic",
+      "libmscore/durationtype/tst_durationtype",
       "libmscore/breath/tst_breath",
       "libmscore/tuplet/tst_tuplet",
       "libmscore/hairpin/tst_hairpin",
