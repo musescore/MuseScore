@@ -304,7 +304,10 @@ void TDuration::shiftType(int nSteps, bool stepDotted)
                   newValue = int(_val) + nSteps;
                   }
 
-            if ((newValue < int(DurationType::V_LONG)) || (newValue > int(DurationType::V_128TH)))
+            if ((newValue < int(DurationType::V_LONG)) || (newValue > int(DurationType::V_128TH)) ||
+                ((newValue >= int(DurationType::V_128TH)) && (newDots >= 1)) ||
+                ((newValue >= int(DurationType::V_64TH))  && (newDots >= 2)) ||
+                ((newValue >= int(DurationType::V_32ND))  && (newDots >= 3)))
                   setType(DurationType::V_INVALID);
             else {
                   setType(DurationType(newValue));
