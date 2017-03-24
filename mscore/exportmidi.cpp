@@ -176,7 +176,7 @@ void ExportMidi::writeHeader()
       //--------------------------------------------
 
       TempoMap* tempomap = cs->tempomap();
-      int relTempo = tempomap->relTempo();
+      qreal relTempo = tempomap->relTempo();
       foreach(const RepeatSegment* rs, *cs->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len;
