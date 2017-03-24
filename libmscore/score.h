@@ -529,6 +529,10 @@ class Score : public QObject, public ScoreElement {
       void cmdAddOttava(Ottava::Type);
       void cmdAddStretch(qreal);
       void cmdResetNoteAndRestGroupings();
+      void cmdDoubleDuration()      { cmdIncDecDuration(-1, 0); }
+      void cmdHalfDuration()        { cmdIncDecDuration( 1, 0); }
+      void cmdIncDurationDotted()   { cmdIncDecDuration(-1, 1); }
+      void cmdDecDurationDotted()   { cmdIncDecDuration( 1, 1); }
 
       void addRemoveBreaks(int interval, bool lock);
 

@@ -2517,13 +2517,13 @@ void Score::cmd(const QAction* a)
       else if (cmd == "mirror-note")
             cmdMirrorNoteHead();
       else if (cmd == "double-duration")
-            cmdIncDecDuration(-1, false);
+            cmdDoubleDuration();
       else if (cmd == "half-duration")
-            cmdIncDecDuration(1, false);
+            cmdHalfDuration();
       else if (cmd == "inc-duration-dotted")
-            cmdIncDecDuration(-1, true);
+            cmdIncDurationDotted();
       else if (cmd == "dec-duration-dotted")
-            cmdIncDecDuration(1,  true);
+            cmdDecDurationDotted();
       else if (cmd == "") {               //Midi note received only?
             if (!noteEntryMode())
                   setLayoutAll(false);
