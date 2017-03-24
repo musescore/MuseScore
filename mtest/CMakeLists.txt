@@ -169,6 +169,7 @@ subdirs (
         libmscore/copypaste
         libmscore/copypastesymbollist
         libmscore/dynamic
+        libmscore/durationtype
         libmscore/earlymusic
         libmscore/element
         libmscore/exchangevoices
