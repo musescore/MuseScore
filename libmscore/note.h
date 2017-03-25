@@ -44,8 +44,6 @@ enum class SymId;
 enum class AccidentalType : char;
 
 static const int MAX_DOTS = 3;
-static const int POW_MAX_DOTS = qPow(2,MAX_DOTS);
-
 
 //---------------------------------------------------------
 //   @@ NoteHead
