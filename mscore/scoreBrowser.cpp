@@ -135,7 +135,7 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignBottom);
 
       QFont f = item->font();
-      f.setPixelSize(11 * guiScaling);
+      f.setPixelSize(11);
       f.setBold(_boldTitle);
       if (fi.completeBaseName() == "00-Blank") {
             item->setText(tr("Choose Instruments"));

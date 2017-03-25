@@ -3023,7 +3023,21 @@ void MuseScore::writeSettings()
 
 void MuseScore::readSettings()
       {
-      resize(QSize(1024, 768)); //ensure default size if no geometry in settings
+      int margin = 100;
+      int offset = margin / 2;
+      int w = 1024;
+      int h = 768;
+      QScreen* screen      = QGuiApplication::primaryScreen();
+      const QSize screenSize = screen->availableVirtualSize();
+      if (screenSize.width() - margin > w)
+            w = screenSize.width() - margin;
+      else
+            offset = 0;
+      if (screenSize.height() - margin > h)
+            h = screenSize.height() - margin;
+
+      resize(QSize(w, h)); //ensure default size if no geometry in settings
+      move(offset, 0);
       if (useFactorySettings) {
             QList<int> sizes;
             sizes << 500 << 100;
