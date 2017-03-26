@@ -350,19 +350,19 @@ void MuseScore::updateInputState(Score* score)
             getAction("pad-dot4")->setEnabled(true);
             }
       switch (is.duration().type()) {
-            case TDuration::DurationType::V_128TH:
+            case TDuration::DurationType::V_1024TH:
                   getAction("pad-dot")->setChecked(false);
                   getAction("pad-dot")->setEnabled(false);
                   // fall through
-            case TDuration::DurationType::V_64TH:
+            case TDuration::DurationType::V_512TH:
                   getAction("pad-dotdot")->setChecked(false);
                   getAction("pad-dotdot")->setEnabled(false);
                   // fall through
-            case TDuration::DurationType::V_32ND:
+            case TDuration::DurationType::V_256TH:
                   getAction("pad-dot3")->setChecked(false);
                   getAction("pad-dot3")->setEnabled(false);
                   // fall through
-            case TDuration::DurationType::V_16TH:
+            case TDuration::DurationType::V_128TH:
                   getAction("pad-dot4")->setChecked(false);
                   getAction("pad-dot4")->setEnabled(false);
             default:
