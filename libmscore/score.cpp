@@ -2535,34 +2535,34 @@ void Score::padToggle(Pad n)
                   _is.setRest(!_is.rest());
                   break;
             case Pad::DOT:
-                  if ((_is.duration().dots() == 1) || (_is.duration() == TDuration::DurationType::V_128TH))
+                  if ((_is.duration().dots() == 1) || (_is.duration() == TDuration::DurationType::V_1024TH))
                         _is.setDots(0);
                   else
                         _is.setDots(1);
                   break;
             case Pad::DOTDOT:
                   if ((_is.duration().dots() == 2)
-                     || (_is.duration() == TDuration::DurationType::V_64TH)
-                     || (_is.duration() == TDuration::DurationType::V_128TH))
+                     || (_is.duration() == TDuration::DurationType::V_512TH)
+                     || (_is.duration() == TDuration::DurationType::V_1024TH))
                         _is.setDots(0);
                   else
                         _is.setDots(2);
                   break;
             case Pad::DOT3:
                   if ((_is.duration().dots() == 3)
-                     || (_is.duration() == TDuration::DurationType::V_32ND)
-                     || (_is.duration() == TDuration::DurationType::V_64TH)
-                     || (_is.duration() == TDuration::DurationType::V_128TH))
+                     || (_is.duration() == TDuration::DurationType::V_256TH)
+                     || (_is.duration() == TDuration::DurationType::V_512TH)
+                     || (_is.duration() == TDuration::DurationType::V_1024TH))
                         _is.setDots(0);
                   else
                         _is.setDots(3);
                   break;
             case Pad::DOT4:
                   if ((_is.duration().dots() == 4)
-                     || (_is.duration() == TDuration::DurationType::V_16TH)
-                     || (_is.duration() == TDuration::DurationType::V_32ND)
-                     || (_is.duration() == TDuration::DurationType::V_64TH)
-                     || (_is.duration() == TDuration::DurationType::V_128TH))
+                     || (_is.duration() == TDuration::DurationType::V_128TH)
+                     || (_is.duration() == TDuration::DurationType::V_256TH)
+                     || (_is.duration() == TDuration::DurationType::V_512TH)
+                     || (_is.duration() == TDuration::DurationType::V_1024TH))
                         _is.setDots(0);
                   else
                         _is.setDots(4);
