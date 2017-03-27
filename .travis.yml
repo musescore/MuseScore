@@ -111,7 +111,7 @@ matrix:
       before_install:
         - source build/travis/job_macos/before_install.sh
       install:
-        - "./build/travis/job_macos/install.sh"
+        - source ./build/travis/job_macos/install.sh
       script:
         - "./build/travis/job_macos/script.sh"
 
