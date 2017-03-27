@@ -133,7 +133,8 @@ void ExportMidi::writeHeader()
             Staff* staff  = cs->staff(staffIdx);
             KeyList* keys = staff->keyList();
 
-            foreach(const RepeatSegment* rs, *cs->repeatList()) {
+            bool initialKeySigFound = false;
+            for (const RepeatSegment* rs : *cs->repeatList()) {
                   int startTick  = rs->tick;
                   int endTick    = startTick + rs->len;
                   int tickOffset = rs->utick - rs->tick;
@@ -141,9 +142,7 @@ void ExportMidi::writeHeader()
                   auto sk = keys->lower_bound(startTick);
                   auto ek = keys->lower_bound(endTick);
 
-                  bool keysigFound = false;
                   for (auto ik = sk; ik != ek; ++ik) {
-                        keysigFound = true;
                         MidiEvent ev;
                         ev.setType(ME_META);
                         Key key       = ik->second.key();   // -7 -- +7
@@ -153,21 +152,27 @@ void ExportMidi::writeHeader()
                         data[0]   = int(key);
                         data[1]   = 0;  // major
                         ev.setEData(data);
-                        track.insert(ik->first + tickOffset, ev);
-                        }
-                  if (!keysigFound) {
-                        MidiEvent ev;
-                        ev.setType(ME_META);
-                        int key = 0;
-                        ev.setMetaType(META_KEY_SIGNATURE);
-                        ev.setLen(2);
-                        unsigned char* data = new unsigned char[2];
-                        data[0]   = key;
-                        data[1]   = 0;  // major
-                        ev.setEData(data);
-                        track.insert(0, ev);
+                        int tick = ik->first + tickOffset;
+                        track.insert(tick, ev);
+                        if (tick == 0)
+                              initialKeySigFound = true;
                         }
                   }
+
+            // fall back write a default C keysig if no initial keysig found
+            if (!initialKeySigFound) {
+                  MidiEvent ev;
+                  ev.setType(ME_META);
+                  int key = 0;
+                  ev.setMetaType(META_KEY_SIGNATURE);
+                  ev.setLen(2);
+                  unsigned char* data = new unsigned char[2];
+                  data[0]   = key;
+                  data[1]   = 0;  // major
+                  ev.setEData(data);
+                  track.insert(0, ev);
+                  }
+
             ++staffIdx;
             }
 
