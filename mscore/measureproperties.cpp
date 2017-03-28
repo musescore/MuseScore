@@ -116,7 +116,7 @@ void MeasureProperties::gotoPreviousMeasure()
 void MeasureProperties::setMeasure(Measure* _m)
       {
       m = _m;
-      setWindowTitle(tr("MuseScore: Measure Properties for Measure %1").arg(m->no()+1));
+      setWindowTitle(tr("Measure Properties for Measure %1").arg(m->no()+1));
       m->score()->deselectAll();
       m->score()->select(m, SelectType::ADD, 0);
 

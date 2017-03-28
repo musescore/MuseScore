@@ -75,7 +75,7 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
 void MetaEditDialog::newClicked()
       {
       QString s = QInputDialog::getText(this,
-         tr("MuseScore: Input Tag Name"),
+         tr("Input Tag Name"),
          tr("New tag name:")
          );
       QGridLayout* grid = static_cast<QGridLayout*>(scrollWidget->layout());

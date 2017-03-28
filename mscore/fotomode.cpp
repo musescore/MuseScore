@@ -638,7 +638,7 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       else if (cmd == "set-res") {
             bool ok;
             double resolution = QInputDialog::getDouble(this,
-               tr("MuseScore: Set Output Resolution"),
+               tr("Set Output Resolution"),
                tr("Set output resolution for PNG/SVG"),
                preferences.pngResolution,
                16.0, 2400.0, 1,
@@ -763,7 +763,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             }
 
       if (ext.isEmpty()) {
-            QMessageBox::critical(mscore, tr("MuseScore: Save As"), tr("Cannot determine file type"));
+            QMessageBox::critical(mscore, tr("Save As"), tr("Cannot determine file type"));
             return false;
             }
 

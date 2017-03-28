@@ -370,7 +370,7 @@ void EditDrumset::save()
       if (!f.open(QIODevice::WriteOnly)) {
             QString s = tr("Open File\n%1\nfailed: ")
                + QString(strerror(errno));
-            QMessageBox::critical(mscore, tr("MuseScore: Open File"), s.arg(f.fileName()));
+            QMessageBox::critical(mscore, tr("Open File"), s.arg(f.fileName()));
             return;
             }
       valueChanged();  //save last changes in name
@@ -381,7 +381,7 @@ void EditDrumset::save()
       xml.etag();
       if (f.error() != QFile::NoError) {
             QString s = tr("Write File failed: ") + f.errorString();
-            QMessageBox::critical(this, tr("MuseScore: Write Drumset"), s);
+            QMessageBox::critical(this, tr("Write Drumset"), s);
             }
       }
 

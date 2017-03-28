@@ -270,7 +270,7 @@ KeyEditor::KeyEditor(QWidget* parent)
    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
       {
       setupUi(this);
-      setWindowTitle(tr("MuseScore: Key Signatures"));
+      setWindowTitle(tr("Key Signatures"));
 
       // create key signature palette
 

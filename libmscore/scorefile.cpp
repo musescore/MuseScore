@@ -384,7 +384,7 @@ bool Score::saveFile()
             }
 
       if (temp.error() != QFile::NoError) {
-            MScore::lastError = tr("MuseScore: Save File failed: %1").arg(temp.errorString());
+            MScore::lastError = tr("Save File failed: %1").arg(temp.errorString());
             return false;
             }
       temp.close();
@@ -403,7 +403,7 @@ bool Score::saveFile()
             if (dir.exists(backupName)) {
                   if (!dir.remove(backupName)) {
 //                      if (!MScore::noGui)
-//                            QMessageBox::critical(0, tr("MuseScore: Save File"),
+//                            QMessageBox::critical(0, tr("Save File"),
 //                               tr("Removing old backup file ") + backupName + tr(" failed"));
                         }
                   }
@@ -415,7 +415,7 @@ bool Score::saveFile()
             if (dir.exists(name)) {
                   if (!dir.rename(name, backupName)) {
 //                      if (!MScore::noGui)
-//                            QMessageBox::critical(0, tr("MuseScore: Save File"),
+//                            QMessageBox::critical(0, tr("Save File"),
 //                               tr("Renaming old file <")
 //                               + name + tr("> to backup <") + backupName + tr("> failed"));
                         }
@@ -431,7 +431,7 @@ bool Score::saveFile()
             if (dir.exists(name)) {
                   if (!dir.remove(name)) {
 //                      if (!MScore::noGui)
-//                            QMessageBox::critical(0, tr("MuseScore: Save File"),
+//                            QMessageBox::critical(0, tr("Save File"),
 //                               tr("Removing old file") + name + tr(" failed"));
                         }
                   }

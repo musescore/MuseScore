@@ -98,7 +98,7 @@ Mixer::Mixer(QWidget* parent)
    : QScrollArea(parent)
       {
       setObjectName("Mixer");
-      setWindowTitle(tr("MuseScore: Mixer"));
+      setWindowTitle(tr("Mixer"));
       setWidgetResizable(true);
       setWindowFlags(Qt::Tool);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);

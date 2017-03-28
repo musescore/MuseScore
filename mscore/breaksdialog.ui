@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Add/Remove Line Breaks</string>
+   <string>Add/Remove Line Breaks</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>

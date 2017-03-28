@@ -39,7 +39,7 @@ MediaDialog::MediaDialog(QWidget* /*parent*/)
       setObjectName("MediaDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      setWindowTitle(tr("MuseScore: Additional Media"));
+      setWindowTitle(tr("Additional Media"));
       scanFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       audioFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 

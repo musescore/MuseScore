@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Section Break Properties</string>
+   <string>Section Break Properties</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="0">

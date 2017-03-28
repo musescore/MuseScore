@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Album Manager</string>
+   <string>Album Manager</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
