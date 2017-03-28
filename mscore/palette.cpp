@@ -1275,7 +1275,7 @@ bool Palette::read(const QString& p)
 static void writeFailed(const QString& path)
       {
       QString s = qApp->translate("Palette", "Writing Palette File\n%1\nfailed: ");
-      QMessageBox::critical(mscore, qApp->translate("Palette", "MuseScore: Writing Palette File"), s.arg(path));
+      QMessageBox::critical(mscore, qApp->translate("Palette", "Writing Palette File"), s.arg(path));
       }
 
 //---------------------------------------------------------

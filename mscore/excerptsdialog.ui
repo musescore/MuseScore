@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Parts</string>
+   <string>Parts</string>
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0">

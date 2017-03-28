@@ -667,7 +667,7 @@ void AlsaAudio::alsaLoop()
       rt_param.sched_priority = 50;
       int rv = pthread_setschedparam(pthread_self(), SCHED_FIFO, &rt_param);
       if (rv == -1)
-            perror("MuseScore: set realtime scheduler failed");
+            perror("Set realtime scheduler failed");
 
       if (!alsa->pcmStart()) {
             alsa->pcmStop();

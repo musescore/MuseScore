@@ -403,7 +403,7 @@ NewWizard::NewWizard(QWidget* parent)
       setWizardStyle(QWizard::ClassicStyle);
       setPixmap(QWizard::LogoPixmap, QPixmap(":/data/mscore.png"));
       setPixmap(QWizard::WatermarkPixmap, QPixmap());
-      setWindowTitle(tr("MuseScore: New Score Wizard"));
+      setWindowTitle(tr("New Score Wizard"));
 
       setOption(QWizard::NoCancelButton, false);
       setOption(QWizard::CancelButtonOnLeft, true);

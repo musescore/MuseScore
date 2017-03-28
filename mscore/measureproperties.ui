@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Measure Properties</string>
+   <string>Measure Properties</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>

@@ -71,7 +71,7 @@ void InstrumentsDialog::on_saveButton_clicked()
       {
       QString name = QFileDialog::getSaveFileName(
          this,
-         tr("MuseScore: Save Instrument List"),
+         tr("Save Instrument List"),
          ".",
          tr("MuseScore Instruments") + " (*.xml)"
          );
@@ -86,7 +86,7 @@ void InstrumentsDialog::on_saveButton_clicked()
       if (!f.open(QIODevice::WriteOnly)) {
             QString s = tr("Open Instruments File\n%1\nfailed: ")
                + QString(strerror(errno));
-            QMessageBox::critical(mscore, tr("MuseScore: Open Instruments File"), s.arg(f.fileName()));
+            QMessageBox::critical(mscore, tr("Open Instruments File"), s.arg(f.fileName()));
             return;
             }
 
@@ -102,7 +102,7 @@ void InstrumentsDialog::on_saveButton_clicked()
       xml.etag();
       if (f.error() != QFile::NoError) {
             QString s = tr("Write Style failed: ") + f.errorString();
-            QMessageBox::critical(this, tr("MuseScore: Write Style"), s);
+            QMessageBox::critical(this, tr("Write Style"), s);
             }
       }
 
@@ -113,7 +113,7 @@ void InstrumentsDialog::on_saveButton_clicked()
 void InstrumentsDialog::on_loadButton_clicked()
       {
       QString fn = QFileDialog::getOpenFileName(
-         this, tr("MuseScore: Load Instrument List"),
+         this, tr("Load Instrument List"),
           mscoreGlobalShare + "/templates",
          tr("MuseScore Instruments") + " (*.xml)"
          );
@@ -122,7 +122,7 @@ void InstrumentsDialog::on_loadButton_clicked()
       QFile f(fn);
       if (!loadInstrumentTemplates(fn)) {
             QMessageBox::warning(0,
-               QWidget::tr("MuseScore: Load Style Failed"),
+               QWidget::tr("Load Style Failed"),
                QString(strerror(errno)),
                QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
             return;

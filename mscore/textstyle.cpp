@@ -198,7 +198,7 @@ void TextStyleDialog::applyToAllParts()
 
 void TextStyleDialog::newClicked()
       {
-      QString s = QInputDialog::getText(this, tr("MuseScore: Read Style Name"),
+      QString s = QInputDialog::getText(this, tr("Read Style Name"),
          tr("Text style name:"));
       if (s.isEmpty())
             return;
@@ -213,7 +213,7 @@ void TextStyleDialog::newClicked()
                   }
             if (!notFound) {
                   s = QInputDialog::getText(this,
-                     tr("MuseScore: Read Style Name"),
+                     tr("Read Style Name"),
                      tr("'%1' does already exist,\nplease choose a different name:").arg(s)
                      );
                   if (s.isEmpty())

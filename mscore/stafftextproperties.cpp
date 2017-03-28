@@ -55,13 +55,13 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
       setObjectName("StaffTextProperties");
       setupUi(this);
       if (st->systemFlag()) {
-            setWindowTitle(tr("MuseScore: System Text Properties"));
+            setWindowTitle(tr("System Text Properties"));
             tabWidget->removeTab(tabWidget->indexOf(tabAeolusStops)); // Aeolus settings  for staff text only
             //if (!enableExperimental) tabWidget->removeTab(tabWidget->indexOf(tabMIDIAction));
             tabWidget->removeTab(tabWidget->indexOf(tabChangeChannel)); // Channel switching  for staff text only
             }
       else {
-            setWindowTitle(tr("MuseScore: Staff Text Properties"));
+            setWindowTitle(tr("Staff Text Properties"));
             //tabWidget->removeTab(tabWidget->indexOf(tabSwingSettings)); // Swing settings for system text only, could be disabled here, if desired
 #ifndef AEOLUS
             tabWidget->removeTab(tabWidget->indexOf(tabAeolusStops));

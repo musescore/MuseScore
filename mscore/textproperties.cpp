@@ -51,7 +51,7 @@ TextProperties::TextProperties(Text* t, QWidget* parent)
       {
       setObjectName("TextProperties");
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      setWindowTitle(tr("MuseScore: Text Properties"));
+      setWindowTitle(tr("Text Properties"));
       QGridLayout* layout = new QGridLayout;
 
       tp = new TextProp;

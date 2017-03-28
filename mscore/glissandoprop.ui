@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Glissando Properties</string>
+   <string>Glissando Properties</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

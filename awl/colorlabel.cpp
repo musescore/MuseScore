@@ -95,7 +95,7 @@ void ColorLabel::mousePressEvent(QMouseEvent*)
       if (_pixmap)
             return;
       QColor c = QColorDialog::getColor(_color, this,
-         tr("MuseScore: Select Color"),
+         tr("Select Color"),
          QColorDialog::ShowAlphaChannel
          );
       if (c.isValid()) {
