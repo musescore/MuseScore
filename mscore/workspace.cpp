@@ -104,7 +104,7 @@ void MuseScore::showWorkspaceMenu()
 
 void MuseScore::createNewWorkspace()
       {
-      QString s = QInputDialog::getText(this, tr("MuseScore: Read Workspace Name"),
+      QString s = QInputDialog::getText(this, tr("Read Workspace Name"),
          tr("Workspace name:"));
       if (s.isEmpty())
             return;
@@ -120,7 +120,7 @@ void MuseScore::createNewWorkspace()
                   }
             if (!notFound) {
                   s = QInputDialog::getText(this,
-                     tr("MuseScore: Read Workspace Name"),
+                     tr("Read Workspace Name"),
                      tr("'%1' does already exist,\nplease choose a different name:").arg(s)
                      );
                   if (s.isEmpty())
@@ -237,7 +237,7 @@ void Workspace::initWorkspace()
 static void writeFailed(const QString& _path)
       {
       QString s = qApp->translate("Workspace", "Writing Workspace File\n%1\nfailed: ");
-      QMessageBox::critical(mscore, qApp->translate("Workspace", "MuseScore: Writing Workspace File"), s.arg(_path));
+      QMessageBox::critical(mscore, qApp->translate("Workspace", "Writing Workspace File"), s.arg(_path));
       }
 
 //---------------------------------------------------------

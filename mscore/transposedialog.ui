@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Transpose</string>
+   <string>Transpose</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>

@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Edit Staff Type</string>
+   <string>Edit Staff Type</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Palette Properties</string>
+   <string>Palette Properties</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
