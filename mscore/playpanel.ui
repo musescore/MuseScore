@@ -20,7 +20,7 @@
    <enum>Qt::ClickFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Play Panel</string>
+   <string>Play Panel</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>

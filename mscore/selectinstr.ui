@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Select Instrument</string>
+   <string>Select Instrument</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

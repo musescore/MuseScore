@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Parts</string>
+   <string>Parts</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
