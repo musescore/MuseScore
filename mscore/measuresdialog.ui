@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Append Measures</string>
+   <string>Append Measures</string>
   </property>
   <layout class="QVBoxLayout">
    <property name="margin">

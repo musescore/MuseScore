@@ -213,7 +213,7 @@ Mixer::Mixer(QWidget* parent)
 
 void Mixer::retranslate(bool firstTime)
       {
-      setWindowTitle(tr("MuseScore: Mixer"));
+      setWindowTitle(tr("Mixer"));
       if (!firstTime) {
             for (int i = 0; i < vb->count(); i++) {
                   PartEdit* p = partEdit(i);

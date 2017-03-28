@@ -39,7 +39,7 @@ TimeDialog::TimeDialog(QWidget* parent)
    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
       {
       setupUi(this);
-      setWindowTitle(tr("MuseScore: Time Signatures"));
+      setWindowTitle(tr("Time Signatures"));
 
       QLayout* l = new QVBoxLayout();
       l->setContentsMargins(0, 0, 0, 0);
