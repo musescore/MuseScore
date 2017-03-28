@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Preferences</string>
+   <string>MuseScore Preferences</string>
   </property>
   <property name="accessibleName">
    <string>MuseScore Preferences</string>

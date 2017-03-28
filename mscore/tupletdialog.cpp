@@ -120,7 +120,7 @@ Tuplet* MuseScore::tupletDialog()
 
       if (tuplet->baseLen() == TDuration::DurationType::V_INVALID) {
             QMessageBox::warning(0,
-               tr("MuseScore: Tuplet Error"),
+               tr("Tuplet Error"),
                tr("Cannot create tuplet with ratio %1 for duration %2").arg(tuplet->ratio().print()).arg(f1.print()));
             delete tuplet;
             return 0;

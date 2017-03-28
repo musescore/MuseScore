@@ -85,7 +85,7 @@ static QString getScoreTitle(Score* score)
 void AlbumManager::addClicked()
       {
       QStringList files = mscore->getOpenScoreNames(
-         tr("MuseScore Files") + " (*.mscz *.mscx);;", tr("MuseScore: Load Score")
+         tr("MuseScore Files") + " (*.mscz *.mscx);;", tr("Load Score")
          );
       QList<MasterScore*> scores;
       for (const QString& fn : files) {
