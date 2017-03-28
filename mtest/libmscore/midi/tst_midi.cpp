@@ -62,6 +62,7 @@ class TestMidi : public QObject, public MTest
             midiExportTestRef("testRepeatsWithKeySigs");                // 5 measures, with a key sig on every measure. Meas 3-4 are repeated.
             midiExportTestRef("testRepeatsWithKeySigsExceptFirstMeas"); // 5 measures, with a key sig on every measure except meas 0.  Meas 3-4 are repeated.
             }
+      void midi184476DifferentKeySigsEachStaff() { midiExportTestRef("testDifferentKeySigsEachStaff"); } // midi output should only have keysig meta events on first track, so ignore other staves
       };
 
 //---------------------------------------------------------
