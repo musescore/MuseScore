@@ -21,3 +21,10 @@ cp $S/split183846-irregular-verylong.mscx split183846-irregular-verylong-ref.msc
 cp $S/split183846-irregular-wn-wn.mscx split183846-irregular-wn-wn-ref.mscx
 cp $S/split183846-irregular-wn-wr-wn-hr-qr.mscx split183846-irregular-wn-wr-wn-hr-qr-ref.mscx
 cp $S/split183846-irregular-wr-wn-wr-hn-qn.mscx split183846-irregular-wr-wn-wr-hn-qn-ref.mscx
+
+cp $S/split184061-keep-tie-before-break-voice-4.mscx split184061-keep-tie-before-break-voice-4-ref.mscx
+cp $S/split184061-keep-tie.mscx split184061-keep-tie-ref.mscx
+cp $S/split184061-no-tie.mscx split184061-no-tie-ref.mscx
+cp $S/split184061-other-inst-only-one-tie.mscx split184061-other-inst-only-one-tie-ref.mscx
+
+
