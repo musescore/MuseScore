@@ -667,7 +667,7 @@ Shortcut Shortcut::_sc[] = {
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut,
-         ShortcutFlags::A_CMDc
+         ShortcutFlags::A_CMD
          },
       {
          MsWidget::SCORE_TAB,
