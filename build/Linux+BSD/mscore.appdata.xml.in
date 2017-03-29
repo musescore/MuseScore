@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+​<component type="desktop-application">
+​  <id>org.musescore.musescore</id>
+​  <metadata_license>CC0</metadata_license>
+​  <project_license>GPL-2.0</project_license>
+​  <name>MuseScore</name>
+​  <summary>Free music composition and notation software</summary>
+​
+​  <description>
+	<p>
+	MuseScore is an open source and free music notation software. For support, contribution, bug reports, visit MuseScore.org.
+	</p>
+	<p>Features</p>
+	<ul>
+	<li>WYSIWYG design, notes are entered on a "virtual notepaper"</li>
+	<li>TrueType font(s) for printing & display allows for high quality scaling to all sizes</li>
+	<li>easy & fast note entry</li>
+	<li>many editing functions</li>
+	<li>MusicXML import/export</li>
+	<li>Midi (SMF) import/export</li>
+	<li>MuseData import</li>
+	<li>Midi input for note entry</li>
+	<li>integrated sequencer and software synthesizer to play the score</li>
+	<li>print or create pdf files</li>
+	</ul>
+​  </description>
+​
+​  <screenshots>
+​    <screenshot type="default">
+​      <caption>The main UI</caption>
+​      <image>https://c1.staticflickr.com/9/8621/16655673190_b658d1e051.jpg</image>
+​    </screenshot>
+​  </screenshots>
+​
+​  <url type="homepage">https://musescore.org/</url>
+​​
+​</component>
