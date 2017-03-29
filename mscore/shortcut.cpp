@@ -655,7 +655,8 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Toggle up bow"),
          0,
          Icons::Invalid_ICON,
-         Qt::WindowShortcut
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
          },
       {
          MsWidget::SCORE_TAB,
@@ -665,7 +666,8 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Toggle down bow"),
          0,
          Icons::Invalid_ICON,
-         Qt::WindowShortcut
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMDc
          },
       {
          MsWidget::SCORE_TAB,
