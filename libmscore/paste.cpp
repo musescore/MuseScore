@@ -423,9 +423,8 @@ PasteStatus Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
             //      }
             // sanity check on selection
             if (s1 && s2 && s1->tick() >= s2->tick()) {
-                  // just select the start measure
-                  s1 = s1->measure()->first();
-                  s2 = s1->measure()->last();
+                  _selection.clear();
+                  return PasteStatus::PS_NO_ERROR;
                   }
             int endStaff = dstStaff + staves;
             if (endStaff > nstaves())
