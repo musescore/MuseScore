@@ -5785,7 +5785,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                   logError(QString("unknown wavy-line type %1").arg(wavyLineType));
             }
 
-      if (breath >= 0) {
+      if (breath >= 0 && !cr->isGrace()) {
             Breath* b = new Breath(_score);
             // b->setTrack(trk + voice); TODO check next line
             b->setTrack(track);
