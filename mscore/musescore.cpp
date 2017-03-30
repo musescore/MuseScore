@@ -2159,6 +2159,7 @@ static void loadScores(const QStringList& argv)
                               {
                               Score* score = mscore->readScore(preferences.startScore);
                               if (preferences.startScore.startsWith(":/") && score) {
+                                    score->setName(mscore->createDefaultName());
                                     score->setPageFormat(*MScore::defaultStyle()->pageFormat());
                                     score->doLayout();
                                     score->setCreated(true);
@@ -2166,6 +2167,7 @@ static void loadScores(const QStringList& argv)
                               if (score == 0) {
                                     score = mscore->readScore(":/data/My_First_Score.mscz");
                                     if (score) {
+                                          score->setName(mscore->createDefaultName());
                                           score->setPageFormat(*MScore::defaultStyle()->pageFormat());
                                           score->doLayout();
                                           score->setCreated(true);
