@@ -781,10 +781,20 @@ bool Tuplet::isEditable() const
       }
 
 //---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void Tuplet::startEdit(EditData& ed)
+      {
+      ed.grips   = 2;
+      ed.curGrip = Grip::END;
+      }
+
+//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
-void Tuplet::editDrag(const EditData& ed)
+void Tuplet::editDrag(EditData& ed)
       {
       if (ed.curGrip == Grip::START)
             _p1 += ed.delta;
@@ -799,11 +809,10 @@ void Tuplet::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Tuplet::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
+void Tuplet::updateGrips(EditData& ed) const
       {
-      *defaultGrip = Grip::END;
-      grip[0].translate(pagePos() + p1);
-      grip[1].translate(pagePos() + p2);
+      ed.grip[0].translate(pagePos() + p1);
+      ed.grip[1].translate(pagePos() + p2);
       }
 
 //---------------------------------------------------------

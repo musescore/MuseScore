@@ -75,6 +75,7 @@
 #include "utils.h"
 #include "glissando.h"
 #include "stafflines.h"
+#include "bracket.h"
 
 //      Q_LOGGING_CATEGORY(undoRedo, "undoRedo")
 
@@ -332,23 +333,23 @@ SaveState::SaveState(Score* s)
    : undoInputState(s), redoInputState(s->inputState())
       {
       score          = s;
-      redoSelection  = score->selection();
+//      redoSelection  = score->selection();
       }
 
 void SaveState::undo()
       {
       redoInputState = score->inputState();
-      redoSelection  = score->selection();
+//      redoSelection  = score->selection();
       score->setInputState(undoInputState);
-      score->setSelection(undoSelection);
+//      score->setSelection(undoSelection);
       }
 
 void SaveState::redo()
       {
       undoInputState = score->inputState();
-      undoSelection  = score->selection();
+//      undoSelection  = score->selection();
       score->setInputState(redoInputState);
-      score->setSelection(redoSelection);
+//      score->setSelection(redoSelection);
       }
 
 //---------------------------------------------------------
@@ -984,15 +985,6 @@ void Score::undoInsertStaff(Staff* staff, int ridx, bool createRests)
       // and it dooesn't work to adjust bracket & barlines until all staves are added
       // TODO: adjust brackets only when appropriate
       //adjustBracketsIns(idx, idx+1);
-      }
-
-//---------------------------------------------------------
-//   undoChangeBracketSpan
-//---------------------------------------------------------
-
-void Score::undoChangeBracketSpan(Staff* staff, int column, int span)
-      {
-      undo(new ChangeBracketSpan(staff, column, span));
       }
 
 //---------------------------------------------------------
@@ -2358,25 +2350,6 @@ void ChangeInstrumentLong::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeBracketSpan
-//---------------------------------------------------------
-
-ChangeBracketSpan::ChangeBracketSpan(Staff* s, int c, int sp)
-      {
-      staff  = s;
-      column = c;
-      span   = sp;
-      }
-
-void ChangeBracketSpan::flip()
-      {
-      int oSpan  = staff->bracketSpan(column);
-      staff->setBracketSpan(column, span);
-      span = oSpan;
-      staff->score()->setLayoutAll();
-      }
-
-//---------------------------------------------------------
 //   EditText::undo
 //---------------------------------------------------------
 
@@ -3298,31 +3271,31 @@ void Score::undoAddBracket(Staff* staff, int level, BracketType type, int span)
 
 void Score::undoRemoveBracket(Bracket* b)
       {
-      undo(new RemoveBracket(b->staff(), b->level(), b->bracketType(), b->span()));
+      undo(new RemoveBracket(b->staff(), b->column(), b->bracketType(), b->span()));
       }
 
 void AddBracket::redo()
       {
-      staff->setBracket(level, type);
+      staff->setBracketType(level, type);
       staff->setBracketSpan(level, span);
       staff->score()->setLayoutAll();
       }
 
 void AddBracket::undo()
       {
-      staff->setBracket(level, BracketType::NO_BRACKET);
+      staff->setBracketType(level, BracketType::NO_BRACKET);
       staff->score()->setLayoutAll();
       }
 
 void RemoveBracket::redo()
       {
-      staff->setBracket(level, BracketType::NO_BRACKET);
+      staff->setBracketType(level, BracketType::NO_BRACKET);
       staff->score()->setLayoutAll();
       }
 
 void RemoveBracket::undo()
       {
-      staff->setBracket(level, type);
+      staff->setBracketType(level, type);
       staff->setBracketSpan(level, span);
       staff->score()->setLayoutAll();
       }
@@ -3557,7 +3530,7 @@ void Score::undoChangeBarLine(Measure* measure, BarLineType barType, SegmentType
 
       for (Score* s : scoreList()) {
             Measure* m  = s->tick2measure(tick);
-            Measure* nm = m->nextMeasure();
+//            Measure* nm = m->nextMeasure();
 
             switch (barType) {
                   case BarLineType::END:

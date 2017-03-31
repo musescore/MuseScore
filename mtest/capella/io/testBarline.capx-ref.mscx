@@ -31,7 +31,7 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
-        <bracket type="0" span="2"/>
+        <bracket type="0" span="2" col="0"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>unbenannt</trackName>

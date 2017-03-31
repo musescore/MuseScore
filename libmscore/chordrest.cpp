@@ -681,7 +681,7 @@ void ChordRest::layoutArticulations()
 //   drop
 //---------------------------------------------------------
 
-Element* ChordRest::drop(const DropData& data)
+Element* ChordRest::drop(EditData& data)
       {
       Element* e       = data.element;
       Measure* m       = measure();
@@ -747,7 +747,7 @@ Element* ChordRest::drop(const DropData& data)
 
             case ElementType::TIMESIG:
                   if (measure()->system()) {
-                        DropData ndd = data;
+                        EditData ndd = data;
                         // adding from palette sets pos, but normal paste does not
                         if (!fromPalette)
                               ndd.pos = pagePos();

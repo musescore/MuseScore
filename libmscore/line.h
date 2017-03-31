@@ -36,13 +36,15 @@ class LineSegment : public SpannerSegment {
       Q_GADGET
 
    protected:
-      virtual void editDrag(const EditData&) override;
-      virtual bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString& s) override;
-      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
-      virtual int grips() const override              { return 3; }
+      virtual void startEdit(EditData&) override;
+      virtual void editDrag(EditData&) override;
+      virtual bool edit(EditData&) override;
+      virtual void updateGrips(EditData&) const override;
       virtual void setGrip(Grip, const QPointF& p) override;
       virtual QPointF getGrip(Grip) const override;
       virtual QPointF gripAnchor(Grip) const override;
+      virtual void startEditDrag(EditData&) override;
+      virtual void endEditDrag(EditData&) override;
 
    public:
       LineSegment(Score* s) : SpannerSegment(s) {}

@@ -95,8 +95,8 @@ class BarLine : public Element {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
-      virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&) override;
+      virtual bool acceptDrop(EditData&) const override;
+      virtual Element* drop(EditData&) override;
       virtual bool isEditable() const override    { return true; }
 
       Segment* segment() const        { return toSegment(parent()); }
@@ -109,12 +109,11 @@ class BarLine : public Element {
       int spanFrom() const            { return _spanFrom;     }
       int spanTo() const              { return _spanTo;       }
 
-      virtual void startEdit(MuseScoreView*, const QPointF&) override;
-      virtual void endEdit() override;
-      virtual void editDrag(const EditData&) override;
-      virtual void endEditDrag(const EditData&) override;
-      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
-      virtual int grips() const override { return 2; }
+      virtual void startEdit(EditData& ed) override;
+      virtual void endEdit(EditData&) override;
+      virtual void editDrag(EditData&) override;
+      virtual void endEditDrag(EditData&) override;
+      virtual void updateGrips(EditData&) const override;
       virtual Shape shape() const override;
 
       ElementList* el()                  { return &_el; }

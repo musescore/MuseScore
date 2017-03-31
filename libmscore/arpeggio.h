@@ -44,7 +44,7 @@ class Arpeggio : public Element {
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
       virtual QLineF dragAnchor() const override;
       virtual QPointF gripAnchor(Grip) const override;
-      virtual void startEdit(MuseScoreView*, const QPointF&) override;
+      virtual void startEdit(EditData&) override;
 
    public:
       Arpeggio(Score* s);
@@ -56,15 +56,14 @@ class Arpeggio : public Element {
 
       Chord* chord() const                 { return (Chord*)parent(); }
 
-      virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&) override;
+      virtual bool acceptDrop(EditData&) const override;
+      virtual Element* drop(EditData&) override;
       virtual void layout() override;
       virtual void draw(QPainter*) const override;
       virtual bool isEditable() const override { return true; }
-      virtual void editDrag(const EditData&) override;
-      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
-      virtual int grips() const override { return 2; }
-      virtual bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString&) override;
+      virtual void editDrag(EditData&) override;
+      virtual void updateGrips(EditData&) const override;
+      virtual bool edit(EditData&) override;
 
       virtual void read(XmlReader& e) override;
       virtual void write(XmlWriter& xml) const override;

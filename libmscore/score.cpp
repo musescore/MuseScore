@@ -1158,6 +1158,7 @@ bool Score::checkHasMeasures() const
       return true;
       }
 
+#if 0
 //---------------------------------------------------------
 //   moveBracket
 //    columns are counted from right to left
@@ -1168,6 +1169,7 @@ void Score::moveBracket(int staffIdx, int srcCol, int dstCol)
       for (System* system : systems())
             system->moveBracket(staffIdx, srcCol, dstCol);
       }
+#endif
 
 //---------------------------------------------------------
 //   spatiumHasChanged
@@ -2273,19 +2275,20 @@ void Score::adjustBracketsDel(int sidx, int eidx)
       {
       for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
             Staff* staff = _staves[staffIdx];
-            for (int i = 0; i < staff->bracketLevels(); ++i) {
-                  int span = staff->bracketSpan(i);
+            for (BracketItem* bi : staff->brackets()) {
+                  int span = bi->bracketSpan();
                   if ((span == 0) || ((staffIdx + span) < sidx) || (staffIdx > eidx))
                         continue;
                   if ((sidx >= staffIdx) && (eidx <= (staffIdx + span)))
-                        undoChangeBracketSpan(staff, i, span - (eidx-sidx));
+                        bi->undoChangeProperty(P_ID::BRACKET_SPAN, span - (eidx-sidx));
                   }
 #if 0 // TODO
             int span = staff->barLineSpan();
             if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
                   int newSpan = span - (eidx-sidx) + 1;
                   int lastSpannedStaffIdx = staffIdx + newSpan - 1;
-                  undoChangeBarLineSpan(staff, newSpan, 0, (_staves[lastSpannedStaffIdx]->lines()-1)*2);
+                  int tick = 0;
+                  undoChangeBarLineSpan(staff, newSpan, 0, (_staves[lastSpannedStaffIdx]->lines(0)-1)*2);
                   }
 #endif
             }
@@ -2299,13 +2302,12 @@ void Score::adjustBracketsIns(int sidx, int eidx)
       {
       for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
             Staff* staff = _staves[staffIdx];
-            int bl = staff->bracketLevels();
-            for (int i = 0; i < bl; ++i) {
-                  int span = staff->bracketSpan(i);
+            for (BracketItem* bi : staff->brackets()) {
+                  int span = bi->bracketSpan();
                   if ((span == 0) || ((staffIdx + span) < sidx) || (staffIdx > eidx))
                         continue;
                   if ((sidx >= staffIdx) && (eidx < (staffIdx + span)))
-                        undoChangeBracketSpan(staff, i, span + (eidx-sidx));
+                        bi->undoChangeProperty(P_ID::BRACKET_SPAN, span + (eidx-sidx));
                   }
 #if 0 // TODO
             int span = staff->barLineSpan();
@@ -2679,7 +2681,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   selectRange(e, staffIdx);
                   break;
             }
-//      update();
+      setSelectionChanged(true);
       }
 
 //---------------------------------------------------------
@@ -2696,7 +2698,7 @@ void Score::selectSingle(Element* e, int staffIdx)
             setUpdateAll();
             }
       else {
-            if (e->type() == ElementType::MEASURE) {
+            if (e->isMeasure()) {
                   select(e, SelectType::RANGE, staffIdx);
                   return;
                   }
@@ -2707,7 +2709,7 @@ void Score::selectSingle(Element* e, int staffIdx)
             if (e->type() == ElementType::NOTE) {
                   e = e->parent();
                   }
-            if (e->type() == ElementType::REST || e->type() == ElementType::CHORD) {
+            if (e->isChordRest()) {
                   _is.setLastSegment(_is.segment());
                   _is.setSegment(toChordRest(e)->segment());
                   }
@@ -3353,7 +3355,7 @@ void Score::appendPart(const QString& name)
             staff->setLines(0, t->staffLines[i]);
             staff->setSmall(0, t->smallStaff[i]);
             if (i == 0) {
-                  staff->setBracket(0, t->bracket[0]);
+                  staff->setBracketType(0, t->bracket[0]);
                   staff->setBracketSpan(0, t->nstaves());
                   }
             undoInsertStaff(staff, i);

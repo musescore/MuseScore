@@ -70,6 +70,7 @@ add_library (
       read114.cpp
       read206.cpp
       read300.cpp stafftypelist.cpp stafftypechange.cpp
+      bracketItem.cpp
       )
 
 set_target_properties (

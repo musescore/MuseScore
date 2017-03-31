@@ -287,7 +287,7 @@ void MScore::init()
       _baseStyle.precomputeValues();
       QSettings s;
       QString defStyle = s.value("defaultStyle").toString();
-      if (!defStyle.isEmpty()) {
+      if (!(MScore::testMode || defStyle.isEmpty())) {
             QFile f(defStyle);
             if (f.open(QIODevice::ReadOnly)) {
                   qDebug("load default style <%s>", qPrintable(defStyle));
@@ -297,7 +297,7 @@ void MScore::init()
             }
       _defaultStyle.precomputeValues();
       QString partStyle = s.value("partStyle").toString();
-      if (!partStyle.isEmpty()) {
+      if (!(MScore::testMode || partStyle.isEmpty())) {
             QFile f(partStyle);
             if (f.open(QIODevice::ReadOnly)) {
                   qDebug("load default style for parts <%s>", qPrintable(partStyle));

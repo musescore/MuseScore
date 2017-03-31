@@ -35,7 +35,6 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Trombone</trackName>
       <Instrument>
@@ -87,7 +86,6 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Trombone</trackName>
       <Instrument>
@@ -139,7 +137,6 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Trombone</trackName>
       <Instrument>
@@ -191,7 +188,6 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Trombone</trackName>
       <Instrument>
@@ -717,7 +713,6 @@
             <name>stdNormal</name>
             </StaffType>
           <defaultClef>F</defaultClef>
-          <bracket type="-1" span="0"/>
           </Staff>
         <trackName>Trombone</trackName>
         <Instrument>
@@ -937,7 +932,6 @@
             <name>stdNormal</name>
             </StaffType>
           <defaultClef>F</defaultClef>
-          <bracket type="-1" span="0"/>
           </Staff>
         <trackName>Trombone</trackName>
         <Instrument>
@@ -1162,7 +1156,6 @@
             <name>stdNormal</name>
             </StaffType>
           <defaultClef>F</defaultClef>
-          <bracket type="-1" span="0"/>
           </Staff>
         <trackName>Trombone</trackName>
         <Instrument>
@@ -1358,7 +1351,6 @@
             <name>stdNormal</name>
             </StaffType>
           <defaultClef>F</defaultClef>
-          <bracket type="-1" span="0"/>
           </Staff>
         <trackName>Trombone</trackName>
         <Instrument>

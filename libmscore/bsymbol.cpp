@@ -127,7 +127,7 @@ void BSymbol::scanElements(void* data, void (*func)(void*, Element*), bool all)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool BSymbol::acceptDrop(const DropData& data) const
+bool BSymbol::acceptDrop(EditData& data) const
       {
       ElementType type = data.element->type();
       return type == ElementType::SYMBOL || type == ElementType::IMAGE;
@@ -137,10 +137,10 @@ bool BSymbol::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* BSymbol::drop(const DropData& data)
+Element* BSymbol::drop(EditData& data)
       {
       Element* el = data.element;
-      if (el->type() == ElementType::SYMBOL || el->type() == ElementType::IMAGE) {
+      if (el->isSymbol() || el->isImage()) {
             el->setParent(this);
             QPointF p = data.pos - pagePos() - data.dragOffset;
             el->setUserOff(p);
@@ -169,22 +169,22 @@ void BSymbol::layout()
 //   drag
 //---------------------------------------------------------
 
-QRectF BSymbol::drag(EditData* data)
+QRectF BSymbol::drag(EditData& ed)
       {
       QRectF r(canvasBoundingRect());
       foreach(const Element* e, _leafs)
             r |= e->canvasBoundingRect();
 
-      qreal x = data->delta.x();
-      qreal y = data->delta.y();
+      qreal x = ed.delta.x();
+      qreal y = ed.delta.y();
 
       qreal _spatium = spatium();
-      if (data->hRaster) {
+      if (ed.hRaster) {
             qreal hRaster = _spatium / MScore::hRaster();
             int n = lrint(x / hRaster);
             x = hRaster * n;
             }
-      if (data->vRaster) {
+      if (ed.vRaster) {
             qreal vRaster = _spatium / MScore::vRaster();
             int n = lrint(y / vRaster);
             y = vRaster * n;

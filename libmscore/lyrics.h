@@ -91,8 +91,8 @@ class Lyrics : public Text {
       virtual Lyrics* clone() const override          { return new Lyrics(*this); }
       virtual ElementType type() const override     { return ElementType::LYRICS; }
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
-      virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&) override;
+      virtual bool acceptDrop(EditData&) const override;
+      virtual Element* drop(EditData&) override;
 
       Segment* segment() const                        { return (Segment*)parent()->parent(); }
       Measure* measure() const                        { return (Measure*)parent()->parent()->parent(); }
@@ -111,7 +111,7 @@ class Lyrics : public Text {
       Syllabic syllabic() const                       { return _syllabic; }
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
-      virtual void endEdit() override;
+      virtual void endEdit(EditData&) override;
 
       int ticks() const                               { return _ticks;    }
       void setTicks(int tick)                         { _ticks = tick;    }
@@ -128,7 +128,7 @@ class Lyrics : public Text {
 #endif
 
       using Text::paste;
-      void paste(MuseScoreView * scoreview);
+      virtual void paste(MuseScoreView*) override;
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;

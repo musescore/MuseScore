@@ -251,20 +251,19 @@ void Arpeggio::draw(QPainter* p) const
 //   updateGrips
 //---------------------------------------------------------
 
-void Arpeggio::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
+void Arpeggio::updateGrips(EditData& ed) const
       {
-      *defaultGrip = Grip::END;
       QPointF p1(0.0, -_userLen1);
       QPointF p2(0.0, _height + _userLen2);
-      grip[0].translate(pagePos() + p1);
-      grip[1].translate(pagePos() + p2);
+      ed.grip[0].translate(pagePos() + p1);
+      ed.grip[1].translate(pagePos() + p2);
       }
 
 //---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
-void Arpeggio::editDrag(const EditData& ed)
+void Arpeggio::editDrag(EditData& ed)
       {
       qreal d = ed.delta.y();
       if (ed.curGrip == Grip::START)
@@ -312,8 +311,10 @@ QPointF Arpeggio::gripAnchor(Grip n) const
 //   startEdit
 //---------------------------------------------------------
 
-void Arpeggio::startEdit(MuseScoreView*, const QPointF&)
+void Arpeggio::startEdit(EditData& ed)
       {
+      ed.grips   = 2;
+      ed.curGrip = Grip::END;
       undoPushProperty(P_ID::ARP_USER_LEN1);
       undoPushProperty(P_ID::ARP_USER_LEN2);
       }
@@ -322,12 +323,12 @@ void Arpeggio::startEdit(MuseScoreView*, const QPointF&)
 //   edit
 //---------------------------------------------------------
 
-bool Arpeggio::edit(MuseScoreView*, Grip curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&)
+bool Arpeggio::edit(EditData& ed)
       {
-      if (curGrip != Grip::END || !(modifiers & Qt::ShiftModifier))
+      if (ed.curGrip != Grip::END || !(ed.modifiers & Qt::ShiftModifier))
             return false;
 
-      if (key == Qt::Key_Down) {
+      if (ed.key == Qt::Key_Down) {
             Staff* s = staff();
             Part* part = s->part();
             int n = part->nstaves();
@@ -337,7 +338,7 @@ bool Arpeggio::edit(MuseScoreView*, Grip curGrip, int key, Qt::KeyboardModifiers
                         ++_span;
                   }
             }
-      else if (key == Qt::Key_Up) {
+      else if (ed.key == Qt::Key_Up) {
             if (_span > 1)
                   --_span;
             }
@@ -364,7 +365,7 @@ void Arpeggio::spatiumChanged(qreal oldValue, qreal newValue)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Arpeggio::acceptDrop(const DropData& data) const
+bool Arpeggio::acceptDrop(EditData& data) const
       {
       return data.element->type() == ElementType::ARPEGGIO;
       }
@@ -373,7 +374,7 @@ bool Arpeggio::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Arpeggio::drop(const DropData& data)
+Element* Arpeggio::drop(EditData& data)
       {
       Element* e = data.element;
       switch(e->type()) {

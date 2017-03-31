@@ -137,7 +137,7 @@ void TestTuplet::split(const char* p1, const char* p2)
       TimeSig* ts = new TimeSig(score);
       ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
-      DropData dd;
+      EditData dd;
       dd.element = ts;
       dd.modifiers = 0;
       dd.dragOffset = QPointF();

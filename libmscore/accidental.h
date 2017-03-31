@@ -187,12 +187,12 @@ class Accidental : public Element {
       virtual int subtype() const override         { return (int)_accidentalType; }
       virtual QString subtypeName() const override { return QString(subtype2name(_accidentalType)); }
 
-      virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&) override;
+      virtual bool acceptDrop(EditData&) const override;
+      virtual Element* drop(EditData&) override;
       virtual void layout() override;
       virtual void draw(QPainter*) const override;
       virtual bool isEditable() const override               { return true; }
-      virtual void startEdit(MuseScoreView*, const QPointF&) override { setGenerated(false); }
+      virtual void startEdit(EditData&) override { setGenerated(false); }
 
       SymId symbol() const;
       Note* note() const                        { return (parent() && parent()->isNote()) ? toNote(parent()) : 0; }

@@ -32,7 +32,6 @@
 #include "timesig.h"
 #include "noteevent.h"
 #include "synthesizerstate.h"
-#include "bracket.h"
 #include "dynamic.h"
 #include "staff.h"
 #include "stafftype.h"
@@ -136,7 +135,7 @@ class UndoStack {
       bool canUndo() const          { return curIdx > 0;           }
       bool canRedo() const          { return curIdx < list.size(); }
       bool isClean() const          { return cleanIdx == curIdx;   }
-      bool empty() const          { return !canUndo() && !canRedo();  }
+      bool empty() const            { return !canUndo() && !canRedo();  }
       UndoCommand* current() const  { return curCmd;               }
       void undo();
       void redo();
@@ -471,21 +470,6 @@ class MoveElement : public UndoCommand {
    public:
       MoveElement(Element*, const QPointF&);
       UNDO_NAME("MoveElement")
-      };
-
-//---------------------------------------------------------
-//   ChangeBracketSpan
-//---------------------------------------------------------
-
-class ChangeBracketSpan : public UndoCommand {
-      Staff* staff;
-      int column;
-      int span;
-      void flip();
-
-   public:
-      ChangeBracketSpan(Staff*, int column, int span);
-      UNDO_NAME("ChangeBracketSpan")
       };
 
 //---------------------------------------------------------

@@ -25,7 +25,7 @@
 
 namespace Ms {
 
-Spatium Hairpin::editHairpinHeight;
+// Spatium Hairpin::editHairpinHeight;
 
 //---------------------------------------------------------
 //   HairpinSegment
@@ -278,10 +278,8 @@ Shape HairpinSegment::shape() const
 //   updateGrips
 //---------------------------------------------------------
 
-void HairpinSegment::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
+void HairpinSegment::updateGrips(EditData& ed) const
       {
-      *defaultGrip = Grip::END;
-
       QPointF pp(pagePos());
       qreal _spatium = spatium();
       qreal x = pos2().x();
@@ -311,26 +309,58 @@ void HairpinSegment::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       gripLineAperturePoint = doRotation.map( gripLineAperturePoint );
 // End calc position grip aperture
 
-      grip[int(Grip::START)].translate( pp );
-      grip[int(Grip::END)].translate( p + pp );
-      grip[int(Grip::MIDDLE)].translate( p * .5 + pp );
-      grip[int(Grip::APERTURE)].translate( gripLineAperturePoint + pp );
+      ed.grip[int(Grip::START)].translate( pp );
+      ed.grip[int(Grip::END)].translate( p + pp );
+      ed.grip[int(Grip::MIDDLE)].translate( p * .5 + pp );
+      ed.grip[int(Grip::APERTURE)].translate( gripLineAperturePoint + pp );
+      }
+
+//---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void HairpinSegment::startEdit(EditData& ed)
+      {
+      ed.grips   = 4;
+      ed.curGrip = Grip::END;
+      }
+
+//---------------------------------------------------------
+//   startEditDrag
+//---------------------------------------------------------
+
+void HairpinSegment::startEditDrag(EditData& ed)
+      {
+      TextLineBaseSegment::startEditDrag(ed);
+      ElementEditData* eed = static_cast<ElementEditData*>(ed.getData(this));
+
+      eed->pushProperty(P_ID::HAIRPIN_HEIGHT);
+      eed->pushProperty(P_ID::HAIRPIN_CONT_HEIGHT);
       }
 
 //---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
-void HairpinSegment::editDrag(const EditData& ed)
+void HairpinSegment::editDrag(EditData& ed)
       {
       if (ed.curGrip == Grip::APERTURE) {
             qreal newHeight = hairpin()->hairpinHeight().val() + ed.delta.y()/spatium()/.5;
             if (newHeight < 0.5)
                   newHeight = 0.5;
             hairpin()->setHairpinHeight(Spatium(newHeight));
+            undoChangeProperty(P_ID::AUTOPLACE, false);
             triggerLayout();
             }
       LineSegment::editDrag(ed);
+      }
+
+//---------------------------------------------------------
+//   endEdit
+//---------------------------------------------------------
+
+void HairpinSegment::endEdit(EditData&)
+      {
       }
 
 //---------------------------------------------------------
@@ -909,27 +939,6 @@ QString Hairpin::accessibleInfo() const
                   rez += ": " + QObject::tr("Custom");
             }
       return rez;
-      }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Hairpin::startEdit(MuseScoreView* view, const QPointF& p)
-      {
-      editHairpinHeight = _hairpinHeight;
-      TextLineBase::startEdit(view, p);
-      }
-
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
-
-void Hairpin::endEdit()
-      {
-      if (editHairpinHeight != _hairpinHeight)
-            score()->undoPropertyChanged(this, P_ID::HAIRPIN_HEIGHT, editHairpinHeight);
-      TextLineBase::endEdit();
       }
 
 }

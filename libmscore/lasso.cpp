@@ -45,7 +45,7 @@ void Lasso::draw(QPainter* painter) const
 //   editDrag
 //---------------------------------------------------------
 
-void Lasso::editDrag(const EditData& ed)
+void Lasso::editDrag(EditData& ed)
       {
       Qt::CursorShape cursorShape = ed.view->cursor().shape();
       switch (int(ed.curGrip)) {
@@ -89,17 +89,16 @@ void Lasso::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Lasso::updateGrips(Grip* defaultGrip, QVector<QRectF>& r) const
+void Lasso::updateGrips(EditData& ed) const
       {
-      *defaultGrip = Grip(7);
-      r[0].translate(_rect.topLeft());
-      r[1].translate(_rect.topRight());
-      r[2].translate(_rect.bottomRight());
-      r[3].translate(_rect.bottomLeft());
-      r[4].translate(_rect.x() + _rect.width() * .5, _rect.top());
-      r[5].translate(_rect.right(), _rect.y() + _rect.height() * .5);
-      r[6].translate(_rect.x() + _rect.width()*.5, _rect.bottom());
-      r[7].translate(_rect.left(), _rect.y() + _rect.height() * .5);
+      ed.grip[0].translate(_rect.topLeft());
+      ed.grip[1].translate(_rect.topRight());
+      ed.grip[2].translate(_rect.bottomRight());
+      ed.grip[3].translate(_rect.bottomLeft());
+      ed.grip[4].translate(_rect.x() + _rect.width() * .5, _rect.top());
+      ed.grip[5].translate(_rect.right(), _rect.y() + _rect.height() * .5);
+      ed.grip[6].translate(_rect.x() + _rect.width()*.5, _rect.bottom());
+      ed.grip[7].translate(_rect.left(), _rect.y() + _rect.height() * .5);
       }
 
 //---------------------------------------------------------
@@ -115,16 +114,18 @@ void Lasso::layout()
 //   startEdit
 //---------------------------------------------------------
 
-void Lasso::startEdit(MuseScoreView* sv, const QPointF&)
+void Lasso::startEdit(EditData& ed)
       {
-      view = sv;
+      ed.grips   = 8;
+      ed.curGrip = Grip(7);
+      view = ed.view;
       }
 
 //---------------------------------------------------------
 //   endEdit
 //---------------------------------------------------------
 
-void Lasso::endEdit()
+void Lasso::endEdit(EditData&)
       {
       view = 0;
       }

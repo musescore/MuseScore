@@ -55,8 +55,8 @@ class StaffState : public Element {
       StaffStateType staffStateType() const     { return _staffStateType; }
       QString staffStateTypeName() const;
 
-      virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&);
+      virtual bool acceptDrop(EditData&) const override;
+      virtual Element* drop(EditData&);
       virtual void write(XmlWriter&) const;
       virtual void read(XmlReader&);
       Instrument* instrument() const           { return _instrument; }

@@ -158,7 +158,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       Staff* dragStaff;
       qreal staffUserDist;    // valid while dragging a staff
 
-      EditData data;
       Element* curElement;    // current item at mouse press
       QPoint  startMoveI;
 
@@ -167,11 +166,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool scoreViewDragging; // decide if dragging or clearing selection
 
       // editing mode
-      QVector<QRectF> grip;         // edit "grips"
-      Grip curGrip;
-      int grips;                    // number of used grips
-      Grip defaultGrip;              // grip to start editing
-      Element* editObject;          ///< Valid in edit mode
+      Element* editElement;          ///< Valid in edit mode
+      EditData editData;
 
       //--input state:
       PositionCursor* _cursor;
@@ -426,8 +422,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void paintRect(bool printMode, QPainter& p, const QRectF& r, double mag);
       bool saveFotoAs(bool printMode, const QRectF&);
       void fotoDragDrop(QMouseEvent*);
-      const QRectF& getGrip(Grip n) const { return grip[int(n)]; }
-      int gripCount() const { return grips; }              // number of used grips
+//      const QRectF& getGrip(Grip n) const { return grip[int(n)]; }
+//      int gripCount() const { return grips; }              // number of used grips
       void changeEditElement(Element*);
 
       void cmdAppendMeasures(int, ElementType);
@@ -455,11 +451,11 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void updateShadowNotes();
 
-      OmrView* omrView() const    { return _omrView; }
-      void setOmrView(OmrView* v) { _omrView = v;    }
-      Lasso* fotoLasso() const    { return _foto;    }
-      Element* getEditObject()    { return editObject; }
-      void setEditObject(Element* e) { editObject = e; }
+      OmrView* omrView() const        { return _omrView; }
+      void setOmrView(OmrView* v)     { _omrView = v;    }
+      Lasso* fotoLasso() const        { return _foto;    }
+      Element* getEditElement()       { return editElement; }
+      void setEditElement(Element* e) { editElement = e; }
       virtual Element* elementNear(QPointF);
       void editFretDiagram(FretDiagram*);
       void editBendProperties(Bend*);

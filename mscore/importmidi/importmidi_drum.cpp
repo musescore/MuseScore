@@ -163,7 +163,7 @@ void splitDrumTracks(std::multimap<int, MTrack> &tracks)
 void setBracket(Staff *&staff, int &counter)
       {
       if (staff && counter > 1) {
-            staff->setBracket(0, BracketType::NORMAL);
+            staff->setBracketType(0, BracketType::NORMAL);
             staff->setBracketSpan(0, counter);
             }
       if (counter)

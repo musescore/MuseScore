@@ -29,6 +29,8 @@ class TestText : public QObject, public MTest
       {
       Q_OBJECT
 
+      EditData editData;
+
    private slots:
       void initTestCase();
       void testText();
@@ -60,6 +62,7 @@ class TestText : public QObject, public MTest
 void TestText::initTestCase()
       {
       initMTest();
+
       }
 
 //---------------------------------------------------------
@@ -75,11 +78,11 @@ void TestText::testDelete()
       text->layout();
       QCOMPARE(text->xmlText(), QString("aaa bbb ccc\nddd eee fff\nggg hhh iii"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       QVERIFY(text->movePosition(QTextCursor::Down, QTextCursor::KeepAnchor, 2));
       text->deleteSelectedText();
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("ggg hhh iii"));
       }
 
@@ -93,48 +96,48 @@ void TestText::testText()
       Text* text = new Text(score);
       text->initSubStyle(SubStyle::DYNAMICS);
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->layout();
 
       text->moveCursorToEnd();
       text->insertText("a");
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("a"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToEnd();
       text->insertText("bc");
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("abc"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToEnd();
       text->insertText("d");
       text->insertText("e");
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("abcde"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       text->insertText("1");
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("1abcde"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       text->insertText("0");
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("01abcde"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       text->movePosition(QTextCursor::Right);
       text->movePosition(QTextCursor::Right);
       text->insertText("2");
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("012abcde"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToEnd();
       text->movePosition(QTextCursor::Left);
       text->movePosition(QTextCursor::Left);
@@ -142,20 +145,20 @@ void TestText::testText()
       text->movePosition(QTextCursor::Left);
       text->movePosition(QTextCursor::Left);
       text->insertText("3");
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("0123abcde"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToEnd();
       text->insertSym(SymId::segno);
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("0123abcde<sym>segno</sym>"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToEnd();
       text->movePosition(QTextCursor::Left);
       text->insertText("#");
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("0123abcde#<sym>segno</sym>"));
       }
 
@@ -168,36 +171,36 @@ void TestText::testSpecialSymbols()
       Text* text = new Text(score);
       text->initSubStyle(SubStyle::DYNAMICS);
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->layout();
 
       text->moveCursorToEnd();
       text->insertText("<");
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("&lt;"));
 
       text->selectAll();
       text->deleteSelectedText();
       text->insertText("&");
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("&amp;"));
 
       text->selectAll();
       text->deleteSelectedText();
       text->insertText(">");
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("&gt;"));
 
       text->selectAll();
       text->deleteSelectedText();
       text->insertText("\"");
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("&quot;"));
 
       text->selectAll();
       text->deleteSelectedText();
       text->insertText("&gt;");
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("&amp;gt;"));
 
       text->selectAll();
@@ -205,10 +208,10 @@ void TestText::testSpecialSymbols()
       text->insertText("&&");
       text->moveCursorToEnd();
       text->deletePreviousChar();
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("&amp;"));
       text->deletePreviousChar();
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString(""));
       }
 
@@ -221,43 +224,43 @@ void TestText::testPaste()
       Text* text = new Text(score);
       text->initSubStyle(SubStyle::DYNAMICS);
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->layout();
       text->moveCursorToEnd();
 
       QApplication::clipboard()->setText("copy & paste");
-      text->paste();
-      text->endEdit();
+      text->paste(0);
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("copy &amp; paste"));
 
       text->selectAll();
       text->deleteSelectedText();
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->layout();
       text->moveCursorToEnd();
       QApplication::clipboard()->setText("copy &aa paste");
-      text->paste();
-      text->endEdit();
+      text->paste(0);
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("copy &amp;aa paste"));
 
       text->selectAll();
       text->deleteSelectedText();
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->layout();
       text->moveCursorToEnd();
       QApplication::clipboard()->setText("&");
-      text->paste();
-      text->endEdit();
+      text->paste(0);
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("&amp;"));
 
       text->selectAll();
       text->deleteSelectedText();
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->layout();
       text->moveCursorToEnd();
       QApplication::clipboard()->setText("&sometext");
-      text->paste();
-      text->endEdit();
+      text->paste(0);
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("&amp;sometext"));
       }
 //---------------------------------------------------------
@@ -269,72 +272,72 @@ void TestText::testTextProperties()
       Text* text = new Text(score);
       text->initSubStyle(SubStyle::STAFF);
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->layout();
 
       text->moveCursorToEnd();
       text->insertText("ILoveMuseScore");
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("ILoveMuseScore"));
 
       //select Love and make it bold
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       text->movePosition(QTextCursor::Right);
       text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 4);
 
       text->setFormat(FormatId::Bold , true);
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("I<b>Love</b>MuseScore"));
 
       //select Love and unbold it
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       text->movePosition(QTextCursor::Right);
       text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 4);
 
       text->setFormat(FormatId::Bold , false);
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("ILoveMuseScore"));
 
       //select Love and make it bold again
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       text->movePosition(QTextCursor::Right);
       text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 4);
 
       text->setFormat(FormatId::Bold , true);
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("I<b>Love</b>MuseScore"));
 
       //select veMu and make it bold
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       text->movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 3);
       text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 4);
 
       text->setFormat(FormatId::Bold , true);
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("I<b>LoveMu</b>seScore"));
 
       //select Mu and make it nonbold
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       text->movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 5);
       text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 2);
 
       text->setFormat(FormatId::Bold , false);
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("I<b>Love</b>MuseScore"));
 
       //make veMuse italic
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       QVERIFY(text->movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 3));
       QVERIFY(text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 6));
 
       text->setFormat(FormatId::Italic , true);
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("I<b>Lo<i>ve</i></b><i>Muse</i>Score"));
 
       }
@@ -454,10 +457,10 @@ void TestText::testBasicUnicodeDeletePreviousChar()
       text->setPlainText(QString("⟁⟂⟃⟄"));
 
       text->layout();
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToEnd();
       text->deletePreviousChar();
-      text->endEdit();
+      text->endEdit(editData);
 
       QCOMPARE(text->xmlText(), QString("⟁⟂⟃"));
       }
@@ -475,10 +478,10 @@ void TestText::testSupplementaryUnicodeDeletePreviousChar()
       text->setPlainText(QString("𝄆𝄆𝄆𝄏𝄏𝄏"));
 
       text->layout();
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToEnd();
       text->deletePreviousChar();
-      text->endEdit();
+      text->endEdit(editData);
 
       QCOMPARE(text->xmlText(), QString("𝄆𝄆𝄆𝄏𝄏"));
       }
@@ -495,7 +498,7 @@ void TestText::testMixedTypesDeletePreviousChar()
 
       text->setXmlText("<sym>cClefSquare</sym>𝄆<sym>repeatLeft</sym><sym>textBlackNoteLongStem</sym><sym>textBlackNoteLongStem</sym><sym>noteheadWhole</sym> ⟂<sym>repeatRight</sym> 𝄇");
       text->layout();
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToEnd();
       text->deletePreviousChar();
       text->deletePreviousChar();
@@ -503,7 +506,7 @@ void TestText::testMixedTypesDeletePreviousChar()
       text->deletePreviousChar();
       text->deletePreviousChar();
       text->deletePreviousChar();
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("<sym>cClefSquare</sym>𝄆<sym>repeatLeft</sym><sym>textBlackNoteLongStem</sym><sym>textBlackNoteLongStem</sym>"));
       }
 
@@ -518,10 +521,10 @@ void TestText::testSupplementaryUnicodeInsert1()
       text->initSubStyle(SubStyle::DYNAMICS);
       text->setPlainText(QString("𝄏"));
       text->layout();
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       text->insertText(QString("𝄆"));
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("𝄆𝄏"));
       }
 
@@ -535,12 +538,12 @@ void TestText::testSupplementaryUnicodeInsert2()
       Text* text = new Text(score);
       text->initSubStyle(SubStyle::DYNAMICS);
       text->layout();
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       text->insertText(QString("𝄏"));
       text->moveCursorToStart();
       text->insertText(QString("𝄆"));
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("𝄆𝄏"));
       }
 
@@ -558,22 +561,22 @@ void TestText::testSupplementaryUnicodePaste()
 
       QApplication::clipboard()->setText(QString("𝄏"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
-      text->paste();
-      text->endEdit();
+      text->paste(0);
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("𝄏"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
-      text->paste();
-      text->endEdit();
+      text->paste(0);
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("𝄏𝄏"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToEnd();
-      text->paste();
-      text->endEdit();
+      text->paste(0);
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("𝄏𝄏𝄏"));
       }
 
@@ -588,7 +591,7 @@ void TestText::testRightToLeftWithSupplementaryUnicode()
       text->setPlainText(QString(""));
       text->layout();
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       text->insertText(QString("𝄆"));
       text->insertText(QString("م"));
@@ -598,19 +601,19 @@ void TestText::testRightToLeftWithSupplementaryUnicode()
       text->insertText(QString("ق"));
       text->insertText(QString("ى"));
       text->insertText(QString("𝄇"));
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("𝄆موسيقى𝄇"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->cursor()->setColumn(1);
       text->deletePreviousChar();
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("موسيقى𝄇"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->cursor()->setColumn(5);
       text->deleteChar();
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("موسيق𝄇"));
       }
 
@@ -627,18 +630,18 @@ void TestText::testPasteSymbolAndSupplemental()
 
       QApplication::clipboard()->setText(QString("<sym>gClef</sym>𝄎"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
-      text->paste();
-      text->endEdit();
+      text->paste(0);
+      text->endEdit(editData);
       QVERIFY(text->fragmentList()[0].format.type() == CharFormatType::SYMBOL);
       QVERIFY(text->fragmentList()[1].format.type() == CharFormatType::TEXT);
       QCOMPARE(text->xmlText(), QString("<sym>gClef</sym>𝄎"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       text->insertText(QString("𝄎"));
-      text->endEdit();
+      text->endEdit(editData);
       QVERIFY(text->fragmentList()[0].format.type() == CharFormatType::TEXT);
       QVERIFY(text->fragmentList()[1].format.type() == CharFormatType::SYMBOL);
       QVERIFY(text->fragmentList()[2].format.type() == CharFormatType::TEXT);
@@ -656,32 +659,32 @@ void TestText::testMixedSelectionDelete()
       text->layout();
       QApplication::clipboard()->setText(QString("[A]𝄎<sym>gClef</sym> 𝄎𝄇"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
-      text->paste();
-      text->endEdit();
+      text->paste(0);
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("[A]𝄎<sym>gClef</sym> 𝄎𝄇"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       text->cursor()->setSelectColumn(4);
       text->cursor()->setColumn(7);
       text->deleteSelectedText();
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("[A]𝄎𝄇"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->cursor()->setColumn(4);
       text->deletePreviousChar();
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("[A]𝄇"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToEnd();
       text->insertSym(SymId::segno);
-      text->endEdit();
+      text->endEdit(editData);
       text->insertText(QString("e"));
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("[A]𝄇<sym>segno</sym>e"));
       }
 
@@ -696,37 +699,37 @@ void TestText::testChineseBasicSupplemental()
       text->setPlainText(QString(""));
       text->layout();
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->moveCursorToStart();
       text->insertText(QString("你"));  // this is supplemental unicode
       text->insertText(QString("好"));  // this is basic unicode
       text->insertText(QString("。"));
       QApplication::clipboard()->setText(QString("我爱Musescore"));
-      text->paste();
-      text->endEdit();
+      text->paste(0);
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("你好。我爱Musescore"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       QApplication::clipboard()->setText(QString("你屠槪真軔")); // some random supplemental unicode
       text->moveCursorToStart();
-      text->paste();
+      text->paste(0);
       text->moveCursorToEnd();
-      text->paste();
-      text->endEdit();
+      text->paste(0);
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("你屠槪真軔你好。我爱Musescore你屠槪真軔"));
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->cursor()->setSelectColumn(4);
       text->cursor()->setColumn(20);
       text->deleteSelectedText();
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("你屠槪真屠槪真軔")); // this is only supplemental
 
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
       text->cursor()->setColumn(4);
       text->deleteChar();
       text->deletePreviousChar();
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("你屠槪槪真軔")); // deleted the two chars in the middle
       }
 
@@ -742,12 +745,12 @@ void TestText::testDropUnicodeAfterSMUFLwhenCursorSetToSymbol()
       text->initSubStyle(SubStyle::DYNAMICS);
       text->setPlainText(QString(""));
       text->layout();
-      text->startEdit(0, QPoint());
+      text->startEdit(editData);
 
       Symbol* symbolSMUFL = new Symbol(score); // create a new element, as Measure::drop() will eventually delete it
       symbolSMUFL->setSym(SymId::noteheadWhole);
 
-      DropData dropSMUFL;
+      EditData dropSMUFL;
       dropSMUFL.element = symbolSMUFL;
       text->drop(dropSMUFL);
 
@@ -755,13 +758,13 @@ void TestText::testDropUnicodeAfterSMUFLwhenCursorSetToSymbol()
       CharFormat* cf = text->cursor()->format();
       cf->setType(CharFormatType::SYMBOL);
 
-      DropData dropFSymbol;
+      EditData dropFSymbol;
       FSymbol* fsymbol = new FSymbol(score);
       fsymbol->setCode(0x0001D10E); // unicode hex code for '𝄎'
       dropFSymbol.element = fsymbol;
       text->drop(dropFSymbol);
 
-      text->endEdit();
+      text->endEdit(editData);
       QCOMPARE(text->xmlText(), QString("<sym>noteheadWhole</sym>𝄎"));
       }
 
@@ -777,7 +780,7 @@ void TestText::testDropBasicUnicodeWhenNotInEditMode()
       text->setPlainText(QString(""));
       text->layout();
 
-      DropData dropFSymbol;
+      EditData dropFSymbol;
       FSymbol* fsymbol = new FSymbol(score);
       fsymbol->setCode(0x4D); // Basic Unicode code for 'M'
       dropFSymbol.element = fsymbol;
@@ -798,7 +801,7 @@ void TestText::testDropSupplementaryUnicodeWhenNotInEditMode()
       text->setPlainText(QString(""));
       text->layout();
 
-      DropData dropFSymbol;
+      EditData dropFSymbol;
       FSymbol* fsymbol = new FSymbol(score);
       fsymbol->setCode(0x0001D10E); // Supplementary Unicode code for '𝄎'
       dropFSymbol.element = fsymbol;

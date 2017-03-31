@@ -74,7 +74,7 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool TimeSig::acceptDrop(const DropData& data) const
+bool TimeSig::acceptDrop(EditData& data) const
       {
       return data.element->type() == ElementType::TIMESIG;
       }
@@ -83,7 +83,7 @@ bool TimeSig::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* TimeSig::drop(const DropData& data)
+Element* TimeSig::drop(EditData& data)
       {
       Element* e = data.element;
       if (e->isTimeSig()) {

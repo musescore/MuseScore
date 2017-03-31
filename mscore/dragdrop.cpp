@@ -277,7 +277,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
       // convert window to canvas position
       QPointF pos(imatrix.map(QPointF(event->pos())));
 
-      DropData dropData;
+      EditData dropData;
       dropData.view       = this;
       dropData.pos        = pos;
       dropData.dragOffset = dragOffset;
@@ -293,7 +293,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                         const QList<Element*> el = elementsAt(pos);
                         const Element* e = el.isEmpty() ? 0 : el[0];
                         if (e && (e->isNote() || e->isSymbol() || e->isImage() || e->isText())) {
-                              DropData dropData;
+                              EditData dropData;
                               dropData.view       = this;
                               dropData.pos        = pos;
                               dropData.element    = dragElement;
@@ -452,10 +452,9 @@ printf("===drag move urls\n");
 
 void ScoreView::dropEvent(QDropEvent* event)
       {
-printf("drop\n");
       QPointF pos(imatrix.map(QPointF(event->pos())));
 
-      DropData dropData;
+      EditData dropData;
       dropData.view       = this;
       dropData.pos        = pos;
       dropData.dragOffset = dragOffset;
@@ -611,7 +610,6 @@ printf("drop\n");
             }
 
       if (event->mimeData()->hasUrls()) {
-printf("drop url\n");
             QList<QUrl>ul = event->mimeData()->urls();
             QUrl u = ul.front();
             if (u.scheme() == "file") {

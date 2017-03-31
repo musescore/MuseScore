@@ -31,7 +31,7 @@ bool ScoreView::testElementDragTransition(QMouseEvent* ev)
             return false;
       if (curElement->type() == ElementType::MEASURE) {
             System* dragSystem = (System*)(curElement->parent());
-            int staffIdx  = getStaff(dragSystem, data.startMove);
+            int staffIdx  = getStaff(dragSystem, editData.startMove);
             dragStaff = score()->staff(staffIdx);
             if (staffIdx == 0)
                   return false;
@@ -47,9 +47,9 @@ bool ScoreView::testElementDragTransition(QMouseEvent* ev)
 void ScoreView::startDrag()
       {
       dragElement = curElement;
-      qDeleteAll(data.data);
-      data.data.clear();
-      data.startMove  -= dragElement->userOff();
+      qDeleteAll(editData.data);
+      editData.data.clear();
+      editData.startMove  -= dragElement->userOff();
 
       _score->startCmd();
 
@@ -58,7 +58,7 @@ void ScoreView::startDrag()
             }
       else {
             for (Element* e : _score->selection().elements())
-                  e->startDrag(&data);
+                  e->startDrag(editData);
             }
       }
 
@@ -68,7 +68,7 @@ void ScoreView::startDrag()
 
 void ScoreView::doDragElement(QMouseEvent* ev)
       {
-      QPointF delta = toLogical(ev->pos()) - data.startMove;
+      QPointF delta = toLogical(ev->pos()) - editData.startMove;
 
       QPointF pt(delta);
       if (qApp->keyboardModifiers() == Qt::ShiftModifier)
@@ -76,10 +76,10 @@ void ScoreView::doDragElement(QMouseEvent* ev)
       else if (qApp->keyboardModifiers() == Qt::ControlModifier)
             pt.setY(dragElement->userOff().y());
 
-      data.hRaster = mscore->hRaster();
-      data.vRaster = mscore->vRaster();
-      data.delta   = pt;
-      data.pos     = toLogical(ev->pos());
+      editData.hRaster = mscore->hRaster();
+      editData.vRaster = mscore->vRaster();
+      editData.delta   = pt;
+      editData.pos     = toLogical(ev->pos());
 
       if (dragElement->isMeasure()) {
             if (qApp->keyboardModifiers() == Qt::ShiftModifier) {
@@ -93,7 +93,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
                         dist = -styleDist + _spatium;
 
                   dragStaff->setUserDist(dist);
-                  data.startMove += delta;
+                  editData.startMove += delta;
 //TODO-ws                  _score->doLayoutSystems();
 //                  _score->layoutSpanner();
 //                  _score->setLayoutAll();
@@ -118,7 +118,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
       for (Element* e : _score->selection().elements()) {
             if (dragNotes && (e->isStem() || e->isHook()))
                   continue;
-            _score->addRefresh(e->drag(&data));
+            _score->addRefresh(e->drag(editData));
             }
 
       Element* e = _score->getSelectedElement();
@@ -150,7 +150,7 @@ void ScoreView::endDrag()
             }
       else {
             for (Element* e : _score->selection().elements())
-                  e->endDrag(&data);
+                  e->endDrag(editData);
             }
       dragElement = 0;
       setDropTarget(0); // this also resets dropAnchor

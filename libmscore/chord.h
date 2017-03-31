@@ -118,7 +118,7 @@ class Chord : public ChordRest {
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual bool readProperties(XmlReader&) override;
-      virtual Element* drop(const DropData&) override;
+      virtual Element* drop(EditData&) override;
 
       void setStemDirection(Direction d) { _stemDirection = d; }
       Direction stemDirection() const    { return _stemDirection; }

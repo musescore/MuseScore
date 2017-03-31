@@ -151,10 +151,10 @@ ChordRest* Selection::cr() const
       Element* e = element();
       if (!e)
             return 0;
-      if (e->type() == ElementType::NOTE)
+      if (e->isNote())
             e = e->parent();
       if (e->isChordRest())
-            return static_cast<ChordRest*>(e);
+            return toChordRest(e);
       return 0;
       }
 
@@ -200,7 +200,7 @@ ChordRest* Selection::firstChordRest(int track) const
             return 0;
             }
       ChordRest* cr = 0;
-      foreach (Element* el, _el) {
+      for (Element* el : _el) {
             if (el->isNote())
                   el = el->parent();
             if (el->isChordRest()) {
@@ -227,7 +227,7 @@ ChordRest* Selection::lastChordRest(int track) const
             Element* el = _el[0];
             if (el && el->isNote())
                   return toChordRest(el->parent());
-            else if (el->isChord() || el->isRest() || el->type() == ElementType::REPEAT_MEASURE)
+            else if (el->isChord() || el->isRest() || el->isRepeatMeasure())
                   return toChordRest(el);
             return 0;
             }
@@ -258,7 +258,7 @@ Measure* Selection::findMeasure() const
       Measure *m = 0;
       if (_el.size() > 0) {
             Element* el = _el[0];
-            m = static_cast<Measure*>(el->findMeasure());
+            m = toMeasure(el->findMeasure());
             }
       return m;
       }
@@ -295,7 +295,7 @@ void Selection::clear()
       {
       for (Element* e : _el) {
             if (e->isSpanner()) {   // TODO: only visible elements should be selectable?
-                  Spanner* sp = static_cast<Spanner*>(e);
+                  Spanner* sp = toSpanner(e);
                   for (auto s : sp->spannerSegments())
                         e->score()->addRefresh(changeSelection(s, false));
                   }
@@ -339,9 +339,9 @@ void Selection::add(Element* el)
 
 bool SelectionFilter::canSelect(const Element* e) const
       {
-      if (e->type() == ElementType::DYNAMIC || e->type() == ElementType::HAIRPIN)
+      if (e->isDynamic() || e->isHairpin())
           return isFiltered(SelectionFilterType::DYNAMIC);
-      if (e->type() == ElementType::ARTICULATION || e->type() == ElementType::TRILL)
+      if (e->isArticulation() || e->isTrill())
           return isFiltered(SelectionFilterType::ARTICULATION);
       if (e->type() == ElementType::LYRICS)
           return isFiltered(SelectionFilterType::LYRICS);
@@ -369,9 +369,9 @@ bool SelectionFilter::canSelect(const Element* e) const
           return isFiltered(SelectionFilterType::OTHER_TEXT);
       if (e->isSLine()) // NoteLine, Volta
           return isFiltered(SelectionFilterType::OTHER_LINE);
-      if (e->type() == ElementType::TREMOLO && !static_cast<const Tremolo*>(e)->twoNotes())
+      if (e->isTremolo() && !toTremolo(e)->twoNotes())
           return isFiltered(SelectionFilterType::TREMOLO);
-      if (e->type() == ElementType::CHORD && static_cast<const Chord*>(e)->isGrace())
+      if (e->isChord() && toChord(e)->isGrace())
           return isFiltered(SelectionFilterType::GRACE_NOTE);
       return true;
       }
@@ -384,10 +384,14 @@ bool SelectionFilter::canSelectVoice(int track) const
       {
       int voice = track % VOICES;
       switch (voice) {
-            case 0: return isFiltered(SelectionFilterType::FIRST_VOICE);
-            case 1: return isFiltered(SelectionFilterType::SECOND_VOICE);
-            case 2: return isFiltered(SelectionFilterType::THIRD_VOICE);
-            case 3: return isFiltered(SelectionFilterType::FOURTH_VOICE);
+            case 0:
+                  return isFiltered(SelectionFilterType::FIRST_VOICE);
+            case 1:
+                  return isFiltered(SelectionFilterType::SECOND_VOICE);
+            case 2:
+                  return isFiltered(SelectionFilterType::THIRD_VOICE);
+            case 3:
+                  return isFiltered(SelectionFilterType::FOURTH_VOICE);
             }
       return true;
       }

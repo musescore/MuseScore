@@ -2092,7 +2092,7 @@ void Beam::read(XmlReader& e)
 //   editDrag
 //---------------------------------------------------------
 
-void Beam::editDrag(const EditData& ed)
+void Beam::editDrag(EditData& ed)
       {
       int idx  = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       qreal dy = ed.delta.y();
@@ -2123,9 +2123,8 @@ void Beam::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Beam::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
+void Beam::updateGrips(EditData& ed) const
       {
-      *defaultGrip = Grip::END;
       int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       BeamFragment* f = fragments[editFragment];
 
@@ -2146,8 +2145,8 @@ void Beam::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
             }
 
       int y = pagePos().y();
-      grip[0].translate(QPointF(c1->stemPosX() + c1->pageX(), f->py1[idx] + y));
-      grip[1].translate(QPointF(c2->stemPosX() + c2->pageX(), f->py2[idx] + y));
+      ed.grip[0].translate(QPointF(c1->stemPosX() + c1->pageX(), f->py1[idx] + y));
+      ed.grip[1].translate(QPointF(c2->stemPosX() + c2->pageX(), f->py2[idx] + y));
       }
 
 //---------------------------------------------------------
@@ -2189,13 +2188,16 @@ void Beam::reset()
 //   startEdit
 //---------------------------------------------------------
 
-void Beam::startEdit(MuseScoreView*, const QPointF& p)
+void Beam::startEdit(EditData& ed)
       {
+      ed.grips   = 2;
+      ed.curGrip = Grip::END;
+
       undoPushProperty(P_ID::BEAM_POS);
       undoPushProperty(P_ID::USER_MODIFIED);
       undoPushProperty(P_ID::GENERATED);
 
-      QPointF pt(p - pagePos());
+      QPointF pt(ed.startMove - pagePos());
       qreal ydiff = 100000000.0;
       int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       int i = 0;
@@ -2214,9 +2216,9 @@ void Beam::startEdit(MuseScoreView*, const QPointF& p)
 //   endEdit
 //---------------------------------------------------------
 
-void Beam::endEdit()
+void Beam::endEdit(EditData& ed)
       {
-      Element::endEdit();
+      Element::endEdit(ed);
       editFragment = -1;
       triggerLayout();
       }
@@ -2237,7 +2239,7 @@ void Beam::triggerLayout() const
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Beam::acceptDrop(const DropData& data) const
+bool Beam::acceptDrop(EditData& data) const
       {
       return (data.element->type() == ElementType::ICON)
          && ((static_cast<Icon*>(data.element)->iconType() == IconType::FBEAM1)
@@ -2248,7 +2250,7 @@ bool Beam::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Beam::drop(const DropData& data)
+Element* Beam::drop(EditData& data)
       {
       Icon* e = static_cast<Icon*>(data.element);
       if (e->type() != ElementType::ICON)

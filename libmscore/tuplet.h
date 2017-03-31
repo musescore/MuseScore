@@ -80,9 +80,9 @@ class Tuplet : public DurationElement {
       virtual void remove(Element*) override;
 
       virtual bool isEditable() const override;
-      virtual void editDrag(const EditData&) override;
-      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
-      virtual int grips() const override { return 2; }
+      virtual void startEdit(EditData&) override;
+      virtual void editDrag(EditData&) override;
+      virtual void updateGrips(EditData&) const override;
 
       virtual void setSelected(bool f) override;
 

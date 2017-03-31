@@ -240,12 +240,6 @@ void MsScoreView::prevPage()
       setCurrentPage(_currentPage - 1);
       }
 
-const QRectF& MsScoreView::getGrip(Grip) const
-      {
-      static const QRectF a;
-      return a;
-      }
-
 const QTransform& MsScoreView::matrix() const
       {
       static const QTransform t;

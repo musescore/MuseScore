@@ -56,10 +56,10 @@ namespace Ms {
 
 void ScoreView::editCmd(const QString& cmd)
       {
-      if (!editObject)
+      if (!editElement)
             return;
 
-      if (editObject->type() == ElementType::LYRICS) {
+      if (editElement->isLyrics()) {
             if (cmd == "next-lyric")
                   lyricsTab(false, true, false);
             else if (cmd == "prev-lyric")
@@ -73,25 +73,25 @@ void ScoreView::editCmd(const QString& cmd)
 
 bool ScoreView::editKeyLyrics(QKeyEvent* ev)
       {
-      int key                         = ev->key();
-      Qt::KeyboardModifiers modifiers = ev->modifiers();
-      QString s                       = ev->text();
-      bool ctrl                       = modifiers == Qt::ControlModifier;
+      editData.key       = ev->key();
+      editData.modifiers = ev->modifiers();
+      editData.s         = ev->text();
+      bool ctrl          = editData.modifiers == Qt::ControlModifier;
 
-      switch(key) {
+      switch (editData.key) {
             case Qt::Key_Space:
-                  if (!(modifiers & CONTROL_MODIFIER)) {
-                        if (s == "_")
+                  if (!(editData.modifiers & CONTROL_MODIFIER)) {
+                        if (editData.s == "_")
                               lyricsUnderscore();
                         else // TODO: shift+tab events are filtered by qt
-                              lyricsTab(modifiers & Qt::ShiftModifier, true, false);
+                              lyricsTab(editData.modifiers & Qt::ShiftModifier, true, false);
                         }
                   else
                         return false;
                   break;
 
             case Qt::Key_Left:
-                  if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
+                  if (!ctrl && editElement->edit(editData)) {
                         mscore->textTools()->updateTools();
                         _score->update();
                         mscore->endCmd();
@@ -100,7 +100,7 @@ bool ScoreView::editKeyLyrics(QKeyEvent* ev)
                         lyricsTab(true, true, true);      // go to previous lyrics
                   break;
             case Qt::Key_Right:
-                  if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
+                  if (!ctrl && editElement->edit(editData)) {
                         mscore->textTools()->updateTools();
                         _score->update();
                         mscore->endCmd();
@@ -119,9 +119,9 @@ bool ScoreView::editKeyLyrics(QKeyEvent* ev)
                   break;
             default:
                   {
-                  if(s == "-" && !(modifiers & CONTROL_MODIFIER))
+                  if (editData.s == "-" && !(editData.modifiers & CONTROL_MODIFIER))
                         lyricsMinus();
-                  else if (s == "_" && !(modifiers & CONTROL_MODIFIER))
+                  else if (editData.s == "_" && !(editData.modifiers & CONTROL_MODIFIER))
                         lyricsUnderscore();
                   else
                         return false;
@@ -136,73 +136,74 @@ bool ScoreView::editKeyLyrics(QKeyEvent* ev)
 
 void ScoreView::editKey(QKeyEvent* ev)
       {
+      if (!editElement)
+            return;
       if (ev->type() == QEvent::KeyRelease) {
             auto modifiers = Qt::ControlModifier | Qt::ShiftModifier;
-            if (editObject && editObject->isText() && ((ev->modifiers() & modifiers) == 0)) {
-                  Text* text = static_cast<Text*>(editObject);
+            if (editElement->isText() && ((ev->modifiers() & modifiers) == 0)) {
+                  Text* text = toText(editElement);
                   text->endHexState();
                   ev->accept();
                   update();
                   }
             return;
             }
-      int key                         = ev->key();
-      Qt::KeyboardModifiers modifiers = ev->modifiers();
-      QString s                       = ev->text();
+      editData.view      = this;
+      editData.key       = ev->key();
+      editData.modifiers = ev->modifiers();
+      editData.s         = ev->text();
 
       if (MScore::debugMode)
             qDebug("keyPressEvent key 0x%02x(%c) mod 0x%04x <%s> nativeKey 0x%02x scancode %d",
-               key, key, int(modifiers), qPrintable(s), ev->nativeVirtualKey(), ev->nativeScanCode());
+               editData.key, editData.key, int(editData.modifiers), qPrintable(editData.s), ev->nativeVirtualKey(), ev->nativeScanCode());
 
-      if (!editObject)
-            return;
 
-      if (editObject->isLyrics()) {
+      if (editElement->isLyrics()) {
             if (editKeyLyrics(ev)) {
                   ev->accept();
                   return;
                   }
             }
-      else if (editObject->isHarmony()) {
+      else if (editElement->isHarmony()) {
 /*
-            if (key == Qt::Key_Tab || key == Qt::Key_Backtab) {
-                  harmonyTab(key == Qt::Key_Backtab ? true : (modifiers & Qt::ShiftModifier));
+            if (editData.key == Qt::Key_Tab || editData.key == Qt::Key_Backtab) {
+                  harmonyTab(editData.key == Qt::Key_Backtab ? true : (editData.modifiers & Qt::ShiftModifier));
                   ev->accept();
                   return;
                   }
 */
-            if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
-                  harmonyBeatsTab(true, modifiers & Qt::ShiftModifier);
+            if (editData.key == Qt::Key_Space && !(editData.modifiers & CONTROL_MODIFIER)) {
+                  harmonyBeatsTab(true, editData.modifiers & Qt::ShiftModifier);
                   ev->accept();
                   return;
                   }
 /*
-            if (key == Qt::Key_Semicolon || key == Qt::Key_Colon) {
-                  harmonyBeatsTab(false, key == Qt::Key_Colon);
+            if (editData.key == Qt::Key_Semicolon || editData.key == Qt::Key_Colon) {
+                  harmonyBeatsTab(false, editData.key == Qt::Key_Colon);
                   ev->accept();
                   return;
                   }
-            if (key >= Qt::Key_1 && key <= Qt::Key_9 && (modifiers & CONTROL_MODIFIER)) {
-                  int ticks = (MScore::division >> 4) << (key - Qt::Key_1);
+            if (editData.key >= Qt::Key_1 && editData.key <= Qt::Key_9 && (modifiers & CONTROL_MODIFIER)) {
+                  int ticks = (MScore::division >> 4) << (editData.key - Qt::Key_1);
                   harmonyTicksTab(ticks);
                   ev->accept();
                   return;
                   }
 */
             }
-      else if (editObject->type() == ElementType::FIGURED_BASS) {
+      else if (editElement->type() == ElementType::FIGURED_BASS) {
             int found = false;
-            if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
-                  figuredBassTab(false, modifiers & Qt::ShiftModifier);
+            if (editData.key == Qt::Key_Space && !(editData.modifiers & CONTROL_MODIFIER)) {
+                  figuredBassTab(false, editData.modifiers & Qt::ShiftModifier);
                   found = true;
                   }
-            /*
-            if (key == Qt::Key_Tab || key == Qt::Key_Backtab) {
-                  figuredBassTab(true, key == Qt::Key_Backtab ? true : (modifiers & Qt::ShiftModifier) );
+/*
+            if (editData.key == Qt::Key_Tab || editData.key == Qt::Key_Backtab) {
+                  figuredBassTab(true, editData.key == Qt::Key_Backtab ? true : (editData.modifiers & Qt::ShiftModifier) );
                   found = true;
                   }
-            if (key >= Qt::Key_1 && key <= Qt::Key_9 && (modifiers & CONTROL_MODIFIER)) {
-                  int ticks = (MScore::division >> 4) << (key - Qt::Key_1);
+            if (editData.key >= Qt::Key_1 && editData.key <= Qt::Key_9 && (editData.modifiers & CONTROL_MODIFIER)) {
+                  int ticks = (MScore::division >> 4) << (editData.key - Qt::Key_1);
                   figuredBassTicksTab(ticks);
                   found = true;
                   }
@@ -215,51 +216,52 @@ void ScoreView::editKey(QKeyEvent* ev)
 
 
 #ifdef Q_OS_WIN // Japenese IME on Windows needs to know when Contrl/Alt/Shift/CapsLock is pressed while in predit
-      if (editObject->isText()) {
-            Text* text = static_cast<Text*>(editObject);
+      if (editElement->isText()) {
+            Text* text = toText(editElement);
             if (text->cursor()->format()->preedit() && QGuiApplication::inputMethod()->locale().script() == QLocale::JapaneseScript &&
-                ((key == Qt::Key_Control || (modifiers & Qt::ControlModifier)) ||
-                 (key == Qt::Key_Alt || (modifiers & Qt::AltModifier)) ||
-                 (key == Qt::Key_Shift || (modifiers & Qt::ShiftModifier)) ||
-                 (key == Qt::Key_CapsLock))) {
+                ((editData.key == Qt::Key_Control || (editData.modifiers & Qt::ControlModifier)) ||
+                 (editData.key == Qt::Key_Alt     || (editData.modifiers & Qt::AltModifier)) ||
+                 (editData.key == Qt::Key_Shift   || (editData.modifiers & Qt::ShiftModifier)) ||
+                 (editData.key == Qt::Key_CapsLock))) {
                   return; // musescore will ignore this key event so that the IME can handle it
                   }
             }
 #endif
 
-      if (!((modifiers & Qt::ShiftModifier) && (key == Qt::Key_Backtab))) {
-            if (editObject->edit(this, curGrip, key, modifiers, s)) {
-                  if (editObject->isText())
+      if (!((editData.modifiers & Qt::ShiftModifier) && (editData.key == Qt::Key_Backtab))) {
+            _score->startCmd();
+            if (editElement->edit(editData)) {
+                  if (editElement->isText())
                         mscore->textTools()->updateTools();
                   updateGrips();
                   ev->accept();
-                  _score->update();
+                  _score->endCmd();
                   mscore->endCmd();
                   return;
                   }
-            if (editObject->isText() && (key == Qt::Key_Left || key == Qt::Key_Right)) {
+            if (editElement->isText() && (editData.key == Qt::Key_Left || editData.key == Qt::Key_Right)) {
                   ev->accept();
-                  _score->update();
-                  mscore->endCmd();
                   //return;
                   }
+            _score->endCmd();
+            mscore->endCmd();
             }
       QPointF delta;
-      qreal _spatium = editObject->spatium();
+      qreal _spatium = editElement->spatium();
 
       qreal xval, yval;
-      if (editObject->type() == ElementType::BEAM) {
+      if (editElement->isBeam()) {
             xval = 0.25 * _spatium;
-            if (modifiers & Qt::ControlModifier)
+            if (editData.modifiers & Qt::ControlModifier)
                   xval = _spatium;
-            else if (modifiers & Qt::AltModifier)
+            else if (editData.modifiers & Qt::AltModifier)
                   xval = 4 * _spatium;
             }
       else {
             xval = MScore::nudgeStep * _spatium;
-            if (modifiers & Qt::ControlModifier)
+            if (editData.modifiers & Qt::ControlModifier)
                   xval = MScore::nudgeStep10 * _spatium;
-            else if (modifiers & Qt::AltModifier)
+            else if (editData.modifiers & Qt::AltModifier)
                   xval = MScore::nudgeStep50 * _spatium;
             }
       yval = xval;
@@ -276,7 +278,7 @@ void ScoreView::editKey(QKeyEvent* ev)
             }
       // TODO: if raster, then xval/yval should be multiple of raster
 
-      switch (key) {
+      switch (editData.key) {
             case Qt::Key_Left:
                   delta = QPointF(-xval, 0);
                   break;
@@ -293,26 +295,21 @@ void ScoreView::editKey(QKeyEvent* ev)
                   ev->ignore();
                   return;
             }
-      EditData ed;
-      ed.curGrip = curGrip;
-      ed.delta   = delta;
-      ed.view    = this;
-      ed.hRaster = mscore->hRaster();
-      ed.vRaster = mscore->vRaster();
-      qDeleteAll(ed.data);
-      ed.data.clear();
-      if (curGrip != Grip::NO_GRIP && int(curGrip) < grips)
-            ed.pos = grip[int(curGrip)].center() + delta;
-
-      editObject->score()->startCmd();
-      editObject->startEditDrag(ed);
-      editObject->editDrag(ed);
-      editObject->endEditDrag(ed);
-      editObject->score()->endCmd();
+      editData.delta   = delta;
+      editData.view    = this;
+      editData.hRaster = mscore->hRaster();
+      editData.vRaster = mscore->vRaster();
+      qDeleteAll(editData.data);
+      editData.data.clear();
+      if (editData.curGrip != Grip::NO_GRIP && int(editData.curGrip) < editData.grips)
+            editData.pos = editData.grip[int(editData.curGrip)].center() + delta;
+      editElement->score()->startCmd();
+      editElement->startEditDrag(editData);
+      editElement->editDrag(editData);
+      editElement->endEditDrag(editData);
+      editElement->score()->endCmd();
       updateGrips();
-      _score->update();
       mscore->endCmd();
-      mscore->updateInspector();
       ev->accept();
       }
 

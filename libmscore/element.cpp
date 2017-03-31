@@ -93,18 +93,6 @@ namespace Ms {
 // extern bool showInvisible;
 
 //---------------------------------------------------------
-//   DropData
-//---------------------------------------------------------
-
-DropData::DropData()
-      {
-      view = 0;
-      element = 0;
-      duration = Fraction(1,4);
-      modifiers = 0;
-      }
-
-//---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
 
@@ -184,6 +172,22 @@ Element::Element(const Element& e)
       _bbox       = e._bbox;
       _tag        = e._tag;
       itemDiscovered = false;
+      }
+
+//---------------------------------------------------------
+//   ~Element
+//---------------------------------------------------------
+
+Element::~Element()
+      {
+#if 0
+      if (score() &&  flag(ElementFlag::SELECTED)) {
+            if (score()->selection().elements().removeOne(this))
+                  printf("remove element from selection\n");
+            else
+                  printf("element not in selection\n");
+            }
+#endif
       }
 
 //---------------------------------------------------------
@@ -315,20 +319,20 @@ QColor Element::curColor(const Element* proxy) const
 ///   Return update Rect relative to canvas.
 //---------------------------------------------------------
 
-QRectF Element::drag(EditData* data)
+QRectF Element::drag(EditData& ed)
       {
       QRectF r(canvasBoundingRect());
 
-      qreal x = data->delta.x();
-      qreal y = data->delta.y();
+      qreal x = ed.delta.x();
+      qreal y = ed.delta.y();
 
       qreal _spatium = spatium();
-      if (data->hRaster) {
+      if (ed.hRaster) {
             qreal hRaster = _spatium / MScore::hRaster();
             int n = lrint(x / hRaster);
             x = hRaster * n;
             }
-      if (data->vRaster) {
+      if (ed.vRaster) {
             qreal vRaster = _spatium / MScore::vRaster();
             int n = lrint(y / vRaster);
             y = vRaster * n;
@@ -925,7 +929,7 @@ ElementType Element::readType(XmlReader& e, QPointF* dragOffset,
 //   editDrag
 //---------------------------------------------------------
 
-void Element::editDrag(const EditData& ed)
+void Element::editDrag(EditData& ed)
       {
       score()->addRefresh(canvasBoundingRect());
       setUserOff(userOff() + ed.delta);
@@ -937,7 +941,7 @@ void Element::editDrag(const EditData& ed)
 //   startEdit
 //---------------------------------------------------------
 
-void Element::startEdit(MuseScoreView*, const QPointF&)
+void Element::startEdit(EditData&)
       {
       undoPushProperty(P_ID::USER_OFF);
       }
@@ -947,9 +951,9 @@ void Element::startEdit(MuseScoreView*, const QPointF&)
 //    return true if event is accepted
 //---------------------------------------------------------
 
-bool Element::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString&)
+bool Element::edit(EditData& ed)
       {
-      if (key ==  Qt::Key_Home) {
+      if (ed.key ==  Qt::Key_Home) {
             setUserOff(QPoint());
             return true;
             }
@@ -1081,6 +1085,7 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::PART:
             case ElementType::STAFF:
             case ElementType::SCORE:
+            case ElementType::BRACKET_ITEM:
                   break;
             }
       qDebug("cannot create type %d <%s>", int(type), Element::name(type));
@@ -1094,8 +1099,10 @@ Element* Element::create(ElementType type, Score* score)
 Element* Element::name2Element(const QStringRef& s, Score* sc)
       {
       ElementType type = Element::name2type(s);
-      if (type == ElementType::INVALID)
+      if (type == ElementType::INVALID) {
+            qDebug("invalid <%s>\n", qPrintable(s.toString()));
             return 0;
+            }
       return Element::create(type, sc);
       }
 
@@ -1674,14 +1681,14 @@ QString Element::accessibleInfo() const
 //   nextGrip
 //---------------------------------------------------------
 
-bool Element::nextGrip(Grip* grip) const
+bool Element::nextGrip(EditData& ed) const
       {
-      int i = int(*grip) + 1;
-      if (i >= grips()) {
-            *grip = Grip(0);
+      int i = int(ed.curGrip) + 1;
+      if (i >= ed.grips) {
+            ed.curGrip = Grip(0);
             return false;
             }
-      *grip = Grip(i);
+      ed.curGrip = Grip(i);
       return true;
       }
 
@@ -1689,14 +1696,14 @@ bool Element::nextGrip(Grip* grip) const
 //   prevGrip
 //---------------------------------------------------------
 
-bool Element::prevGrip(Grip* grip) const
+bool Element::prevGrip(EditData& ed) const
       {
-      int i = int(*grip) - 1;
+      int i = int(ed.curGrip) - 1;
       if (i < 0) {
-            *grip = Grip(grips() - 1);
+            ed.curGrip = Grip(ed.grips - 1);
             return false;
             }
-      *grip = Grip(i);
+      ed.curGrip = Grip(i);
       return true;
       }
 
@@ -1758,21 +1765,21 @@ void Element::triggerLayout() const
 //   startDrag
 //---------------------------------------------------------
 
-void Element::startDrag(EditData* data)
+void Element::startDrag(EditData& data)
       {
       ElementEditData* elementData = new ElementEditData();
       elementData->startDragPosition = userOff();
       elementData->e = this;
-      data->addData(elementData);
+      data.addData(elementData);
       }
 
 //---------------------------------------------------------
 //   endDrag
 //---------------------------------------------------------
 
-void Element::endDrag(EditData* data)
+void Element::endDrag(EditData& data)
       {
-      ElementEditData* ed = data->getData(this);
+      ElementEditData* ed = data.getData(this);
       if (ed) {
             if (userOff() != ed->startDragPosition) {
                   undoChangeProperty(P_ID::AUTOPLACE, false);
@@ -1801,6 +1808,39 @@ ElementEditData* EditData::getData(Element* e) const
 void EditData::addData(ElementEditData* d)
       {
       data.push_back(d);
+      }
+
+//---------------------------------------------------------
+//   drawEditMode
+//---------------------------------------------------------
+
+void Element::drawEditMode(QPainter* p, EditData& ed)
+      {
+      printf("==drawEditMode %s\n", name());
+//      if (ed.grips)
+//            draw(p);
+      if (ed.grips == 6) {       // HACK: this are grips of a slur
+            QPolygonF polygon(7);
+            polygon[0] = QPointF(ed.grip[int(Grip::START)].center());
+            polygon[1] = QPointF(ed.grip[int(Grip::BEZIER1)].center());
+            polygon[2] = QPointF(ed.grip[int(Grip::SHOULDER)].center());
+            polygon[3] = QPointF(ed.grip[int(Grip::BEZIER2)].center());
+            polygon[4] = QPointF(ed.grip[int(Grip::END)].center());
+            polygon[5] = QPointF(ed.grip[int(Grip::DRAG)].center());
+            polygon[6] = QPointF(ed.grip[int(Grip::START)].center());
+            QPen pen(MScore::frameMarginColor, 0.0);
+            p->setPen(pen);
+            p->drawPolyline(polygon);
+            }
+      QPen pen(MScore::defaultColor, 0.0);
+      p->setPen(pen);
+      for (int i = 0; i < ed.grips; ++i) {
+            if (Grip(i) == ed.curGrip)
+                  p->setBrush(MScore::frameMarginColor);
+            else
+                  p->setBrush(Qt::NoBrush);
+            p->drawRect(ed.grip[i]);
+            }
       }
 
 }

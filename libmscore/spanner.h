@@ -74,8 +74,8 @@ class SpannerSegment : public Element {
       qreal& rxpos2()                       { return _p2.rx();        }
       qreal& rypos2()                       { return _p2.ry();        }
 
-      virtual void startEdit(MuseScoreView*, const QPointF&) override;
-      virtual void endEdit() override;
+      virtual void startEdit(EditData&) override;
+      virtual void endEdit(EditData&) override;
       virtual bool isEditable() const override { return true; }
 
       virtual QVariant getProperty(P_ID id) const override;
@@ -173,8 +173,8 @@ class Spanner : public Element {
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
-      virtual void startEdit(MuseScoreView*, const QPointF&) override;
-      virtual void endEdit() override;
+      virtual void startEdit(EditData&) override;
+      virtual void endEdit(EditData&) override;
       bool removeSpannerBack();
       virtual void removeUnmanaged();
       virtual void undoInsertTimeUnmanaged(int tick, int len);

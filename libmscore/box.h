@@ -52,20 +52,19 @@ class Box : public MeasureBase {
       Box(Score*);
       virtual void draw(QPainter*) const override;
       virtual bool isEditable() const override { return true; }
-      virtual void startEdit(MuseScoreView*, const QPointF&) override;
-      virtual bool edit(MuseScoreView*, Grip grip, int key, Qt::KeyboardModifiers, const QString& s) override;
-      virtual void editDrag(const EditData&) override;
-      virtual void endEdit() override;
-      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
-      virtual int grips() const override { return 1; }
+      virtual void startEdit(EditData&) override;
+      virtual bool edit(EditData&) override;
+      virtual void editDrag(EditData&) override;
+      virtual void endEdit(EditData&) override;
+      virtual void updateGrips(EditData&) const override;
       virtual void layout() override;
       virtual void write(XmlWriter&) const override;
       virtual void write(XmlWriter& xml, int, bool, bool) const override { write(xml); }
       virtual void writeProperties(XmlWriter&) const override;
       virtual bool readProperties(XmlReader&) override;
       virtual void read(XmlReader&) override;
-      virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&) override;
+      virtual bool acceptDrop(EditData&) const override;
+      virtual Element* drop(EditData&) override;
       virtual void add(Element* e) override;
 
       Spatium boxWidth() const        { return _boxWidth;     }
@@ -113,8 +112,8 @@ class HBox : public Box {
 
       virtual void layout() override;
 
-      virtual QRectF drag(EditData*) override;
-      virtual void endEditDrag(const EditData&) override;
+      virtual QRectF drag(EditData&) override;
+      virtual void endEditDrag(EditData&) override;
       void layout2();
       virtual bool isMovable() const override;
       virtual void computeMinWidth();

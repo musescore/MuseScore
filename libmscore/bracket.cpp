@@ -19,6 +19,7 @@
 #include "system.h"
 #include "sym.h"
 #include "mscore.h"
+#include "bracketItem.h"
 
 namespace Ms {
 
@@ -29,15 +30,17 @@ namespace Ms {
 Bracket::Bracket(Score* s)
    : Element(s)
       {
-      _bracketType = BracketType::BRACE;
       h2           = 3.5 * spatium();
-      _column      = 0;
-      _span        = 0;
       _firstStaff  = 0;
       _lastStaff   = 0;
       setGenerated(true);     // brackets are not saved
       }
 
+Bracket::~Bracket()
+      {
+      }
+
+#if 0
 //---------------------------------------------------------
 //   setSpan
 //---------------------------------------------------------
@@ -60,6 +63,7 @@ void Bracket::setSpan(int v)
                   _braceSymbol = SymId::brace;
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   setHeight
@@ -265,87 +269,38 @@ void Bracket::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   Bracket::write
+//   startEdit
 //---------------------------------------------------------
 
-void Bracket::write(XmlWriter& xml) const
+void Bracket::startEdit(EditData& ed)
       {
-      switch (bracketType()) {
-            case BracketType::BRACE:
-                  xml.stag("Bracket type=\"Brace\"");
-                  break;
-            case BracketType::NORMAL:
-                  xml.stag("Bracket");
-                  break;
-            case BracketType::SQUARE:
-                  xml.stag("Bracket type=\"Square\"");
-                  break;
-            case BracketType::LINE:
-                  xml.stag("Bracket type=\"Line\"");
-                  break;
-            case BracketType::NO_BRACKET:
-                  break;
-            }
-      if (_column)
-            xml.tag("level", _column);
-      Element::writeProperties(xml);
-      xml.etag();
-      }
-
-//---------------------------------------------------------
-//   Bracket::read
-//---------------------------------------------------------
-
-void Bracket::read(XmlReader& e)
-      {
-      QString t(e.attribute("type", "Normal"));
-
-      if (t == "Normal")
-            setBracketType(BracketType::NORMAL);
-      else if (t == "Akkolade")  //compatibility, not used anymore
-            setBracketType(BracketType::BRACE);
-      else if (t == "Brace")
-            setBracketType(BracketType::BRACE);
-      else if (t == "Square")
-            setBracketType(BracketType::SQUARE);
-      else if (t == "Line")
-            setBracketType(BracketType::LINE);
-      else
-            qDebug("unknown brace type <%s>", qPrintable(t));
-
-      while (e.readNextStartElement()) {
-            if (e.name() == "level")
-                  _column = e.readInt();
-            else if (!Element::readProperties(e))
-                  e.unknown();
-            }
+      ed.grips   = 1;
+      ed.curGrip = Grip::START;
       }
 
 //---------------------------------------------------------
 //   updateGrips
 //---------------------------------------------------------
 
-void Bracket::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
+void Bracket::updateGrips(EditData& ed) const
       {
-      *defaultGrip = Grip::START;
-      grip[0].translate(QPointF(0.0, h2 * 2) + pagePos());
+      ed.grip[0].translate(QPointF(0.0, h2 * 2) + pagePos());
       }
 
 //---------------------------------------------------------
 //   endEdit
 //---------------------------------------------------------
 
-void Bracket::endEdit()
+void Bracket::endEdit(EditData& ed)
       {
-      EditData d;
-      endEditDrag(d);
+      endEditDrag(ed);
       }
 
 //---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
-void Bracket::editDrag(const EditData& ed)
+void Bracket::editDrag(EditData& ed)
       {
       h2 += ed.delta.y() * .5;
       layout();
@@ -356,7 +311,7 @@ void Bracket::editDrag(const EditData& ed)
 //    snap to nearest staff
 //---------------------------------------------------------
 
-void Bracket::endEditDrag(const EditData&)
+void Bracket::endEditDrag(EditData&)
       {
       qreal ay1 = pagePos().y();
       qreal ay2 = ay1 + h2 * 2;
@@ -384,14 +339,14 @@ void Bracket::endEditDrag(const EditData&)
       qreal sy = system()->staff(staffIdx1)->y();
       qreal ey = system()->staff(staffIdx2)->y() + score()->staff(staffIdx2)->height();
       h2 = (ey - sy) * .5;
-      score()->undoChangeBracketSpan(staff(), _column, staffIdx2 - staffIdx1 + 1);
+      bracketItem()->undoChangeProperty(P_ID::BRACKET_SPAN, staffIdx2 - staffIdx1 + 1);
       }
 
 //---------------------------------------------------------
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Bracket::acceptDrop(const DropData& data) const
+bool Bracket::acceptDrop(EditData& data) const
       {
       return data.element->type() == ElementType::BRACKET;
       }
@@ -400,17 +355,16 @@ bool Bracket::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Bracket::drop(const DropData& data)
+Element* Bracket::drop(EditData& data)
       {
       Element* e = data.element;
+      Bracket* b = 0;
       if (e->isBracket()) {
-            Bracket* b = toBracket(e);
+            b = toBracket(e);
             undoChangeProperty(P_ID::SYSTEM_BRACKET, int(b->bracketType()));
-            delete e;
-            return this;
             }
       delete e;
-      return 0;
+      return b;
       }
 
 //---------------------------------------------------------
@@ -418,42 +372,19 @@ Element* Bracket::drop(const DropData& data)
 //    return true if event is accepted
 //---------------------------------------------------------
 
-bool Bracket::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, const QString&)
+bool Bracket::edit(EditData& ed)
       {
-      if (!(modifiers & Qt::ShiftModifier))
+      if (!(ed.modifiers & Qt::ShiftModifier))
             return false;
 
-      if (key == Qt::Key_Left) {
-            BracketType bt = staff()->bracket(_column);
-            // search empty level
-            int oldColumn = _column;
-            staff()->setBracket(_column, BracketType::NO_BRACKET);
-            for (;;) {
-                  ++_column;
-                  if (staff()->bracket(_column) == BracketType::NO_BRACKET)
-                        break;
-                  }
-            staff()->setBracket(_column, bt);
-            staff()->setBracketSpan(_column, _lastStaff - _firstStaff + 1);
-            score()->moveBracket(staffIdx(), oldColumn, _column);
-            score()->setLayoutAll();
+      if (ed.key == Qt::Key_Left) {
+            bracketItem()->undoChangeProperty(P_ID::BRACKET_COLUMN, bracketItem()->column()+1);
             return true;
             }
-      if (key == Qt::Key_Right) {
-            if (_column == 0)
+      if (ed.key == Qt::Key_Right) {
+            if (bracketItem()->column() == 0)
                   return true;
-            int l = _column - 1;
-            for (; l >= 0; --l) {
-                  if (staff()->bracket(l) != BracketType::NO_BRACKET)
-                        continue;
-                  BracketType bt = staff()->bracket(_column);
-                  staff()->setBracket(_column, BracketType::NO_BRACKET);
-                  staff()->setBracket(l, bt);
-                  staff()->setBracketSpan(l, _lastStaff - _firstStaff + 1);
-                  score()->moveBracket(staffIdx(), _column, l);
-                  score()->setLayoutAll();
-                  break;
-                  }
+            bracketItem()->undoChangeProperty(P_ID::BRACKET_COLUMN, bracketItem()->column()-1);
             return true;
             }
       return false;
@@ -465,14 +396,7 @@ bool Bracket::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifier
 
 QVariant Bracket::getProperty(P_ID id) const
       {
-      switch (id) {
-            case P_ID::SYSTEM_BRACKET:
-                  return int(bracketType());
-            case P_ID::BRACKET_COLUMN:
-                  return _column;
-            default:
-                  return Element::getProperty(id);
-            }
+      return _bi->getProperty(id);
       }
 
 //---------------------------------------------------------
@@ -481,24 +405,7 @@ QVariant Bracket::getProperty(P_ID id) const
 
 bool Bracket::setProperty(P_ID id, const QVariant& v)
       {
-      switch (id) {
-            case P_ID::SYSTEM_BRACKET:
-                  staff()->setBracket(level(), BracketType(v.toInt()));   // change bracket type global
-                  // setBracketType(BracketType(v.toInt()));
-                  break;
-            case P_ID::BRACKET_COLUMN: {
-                  int oldColumn = _column;
-                  _column = v.toInt();          // TODO
-                  staff()->swapBracket(oldColumn, _column);
-                  staff()->setBracketSpan(_column, _lastStaff - _firstStaff + 1);
-                  score()->moveBracket(staffIdx(), oldColumn, _column);
-                  }
-                  break;
-            default:
-                  return Element::setProperty(id, v);
-            }
-      score()->setLayoutAll();
-      return true;
+      return _bi->setProperty(id, v);
       }
 
 //---------------------------------------------------------
@@ -507,14 +414,17 @@ bool Bracket::setProperty(P_ID id, const QVariant& v)
 
 QVariant Bracket::propertyDefault(P_ID id) const
       {
-      switch (id) {
-            case P_ID::SYSTEM_BRACKET:
-                  return int(BracketType::NORMAL);
-            case P_ID::BRACKET_COLUMN:
-                  return 0;
-            default:
-                  return Element::propertyDefault(id);
-            }
+      return _bi->propertyDefault(id);
+      }
+
+//---------------------------------------------------------
+//   setSelected
+//---------------------------------------------------------
+
+void Bracket::setSelected(bool f)
+      {
+      _bi->setSelected(f);
+      Element::setSelected(f);
       }
 
 }

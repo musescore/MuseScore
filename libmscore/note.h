@@ -295,10 +295,10 @@ class Note : public Element {
       SymId _cachedNoteheadSym; // use in draw to avoid recomputing at every update
       SymId _cachedSymNull; // additional symbol for some transparent notehead
 
-      virtual void startDrag(EditData*) override;
-      virtual QRectF drag(EditData*) override;
-      virtual void endDrag(EditData*) override;
-      void endEdit();
+      virtual void startDrag(EditData&) override;
+      virtual QRectF drag(EditData&) override;
+      virtual void endDrag(EditData&) override;
+      void endEdit(EditData&);
       void addSpanner(Spanner*);
       void removeSpanner(Spanner*);
       int concertPitchIdx() const;
@@ -415,8 +415,8 @@ class Note : public Element {
       virtual bool readProperties(XmlReader&) override;
       virtual void write(XmlWriter&) const override;
 
-      bool acceptDrop(const DropData&) const override;
-      Element* drop(const DropData&);
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&);
 
       bool hidden() const                       { return _hidden; }
       void setHidden(bool val)                  { _hidden = val;  }

@@ -301,12 +301,12 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
       bool valuesAreDifferent = false;
       QColor c(preferences.isThemeDark() ? Qt::yellow : Qt::darkCyan);
 
-      if (inspector->el().size() > 1) {
+      if (inspector->el()->size() > 1) {
             P_ID id      = ii.t;
 //            P_TYPE pt    = propertyType(id);
             QVariant val = getValue(ii);
 
-            for (Element* e : inspector->el()) {
+            for (Element* e : *inspector->el()) {
                   for (int k = 0; k < ii.parent; ++k)
                         e = e->parent();
 
@@ -320,7 +320,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
       //deal with reset if only one element, or if values are the same
       bool reset = true;
       if (!valuesAreDifferent) {
-            PropertyFlags styledValue = inspector->el().front()->propertyFlags(ii.t);
+            PropertyFlags styledValue = inspector->el()->front()->propertyFlags(ii.t);
             switch (styledValue) {
                   case PropertyFlags::STYLED:
                         ii.w->setStyleSheet(QString("* { color: %1 }").arg(c.name()));
@@ -353,7 +353,7 @@ void InspectorBase::valueChanged(int idx, bool reset)
       Score* score  = inspector->element()->score();
 
       score->startCmd();
-      for (Element* e : inspector->el()) {
+      for (Element* e : *inspector->el()) {
             for (int i = 0; i < ii.parent; ++i)
                   e = e->parent();
 
@@ -394,15 +394,13 @@ void InspectorBase::resetClicked(int i)
       if (!def.isValid())
             return;
 
-      e->score()->startCmd();
+      Score* s = e->score();
+      s->startCmd();
       e->undoChangeProperty(id, def);
-      e->score()->endCmd();
-
-      QWidget* w  = ii.w;
-      w->blockSignals(true);
-      setValue(ii, def);
-      w->blockSignals(false);
-//      valueChanged(i, true);
+      inspector->setInspectorEdit(true);
+      s->endCmd();      // this may remove element
+      inspector->setInspectorEdit(false);
+      inspector->update(s);
       }
 
 //---------------------------------------------------------
@@ -560,8 +558,8 @@ void InspectorBase::resetToStyle()
       {
       Score* score = inspector->element()->score();
       score->startCmd();
-      for (Element* e : inspector->el()) {
-            Text* text = static_cast<Text*>(e);
+      for (Element* e : *inspector->el()) {     // TODO: ??
+            Text* text = toText(e);
             // Preserve <sym> tags
             text->undoChangeProperty(P_ID::TEXT, text->plainText().toHtmlEscaped().replace("&lt;sym&gt;","<sym>").replace("&lt;/sym&gt;","</sym>"));
             }
