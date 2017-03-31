@@ -56,6 +56,7 @@
 #include "libmscore/marker.h"
 #include "libmscore/notedot.h"
 #include "libmscore/sym.h"
+#include "libmscore/bracketItem.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -427,7 +428,7 @@ void GuitarPro6::readTracks(QDomNode* track)
                               s2->setPart(part);
                               part->insertStaff(s2, -1);
                               score->staves().push_back(s2);
-                              s->addBracket(BracketItem(BracketType::BRACE, 2));
+                              s->addBracket(new BracketItem(s->score(), BracketType::BRACE, 2));
                               s->setBarLineSpan(2);
                               }
                         }

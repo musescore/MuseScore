@@ -209,13 +209,13 @@ class EditTransition : public QMouseEventTransition
 
    protected:
       virtual bool eventTest(QEvent* event) {
-            if (!QMouseEventTransition::eventTest(event) || canvas->getEditObject())
+            if (!QMouseEventTransition::eventTest(event) || canvas->getEditElement())
                   return false;
             QMouseEvent* me = static_cast<QMouseEvent*>(static_cast<QStateMachine::WrappedEvent*>(event)->event());
             QPointF p = canvas->toLogical(me->pos());
             Element* e = canvas->elementNear(p);
             if (e && e->isEditable())
-                  canvas->setEditObject(e);
+                  canvas->setEditElement(e);
             return e && e->isEditable();
             }
    public:
@@ -682,8 +682,10 @@ ScoreView::ScoreView(QWidget* parent)
       _fgColor    = Qt::white;
       _fgPixmap    = 0;
       _bgPixmap    = 0;
-      curGrip     = Grip::NO_GRIP;
-      defaultGrip = Grip::NO_GRIP;
+
+      editData.curGrip = Grip::NO_GRIP;
+      editData.grips   = 0;
+
       lasso       = new Lasso(_score);
       _foto       = new Lasso(_score);
 
@@ -693,8 +695,7 @@ ScoreView::ScoreView(QWidget* parent)
       _continuousPanel->setActive(true);
 
       shadowNote  = 0;
-      grips       = 0;
-      editObject  = 0;
+      editElement  = 0;
       addSelect   = false;
 
       _curLoopIn  = new PositionCursor(this);
@@ -1139,7 +1140,7 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       int pitch;
       Segment* seg;
 
-      if (!_score->pos2measure(data.startMove, &staffIdx, &pitch, &seg, 0))
+      if (!_score->pos2measure(editData.startMove, &staffIdx, &pitch, &seg, 0))
             return;
       if (staffIdx == -1) {
             qDebug("ScoreView::measurePopup: staffIdx == -1!");
@@ -1256,64 +1257,12 @@ void ScoreView::resizeEvent(QResizeEvent* /*ev*/)
       }
 
 //---------------------------------------------------------
-//   updateGrips
-//    if (curGrip == -1) then initialize to element
-//    default grip
-//---------------------------------------------------------
-
-void ScoreView::updateGrips()
-      {
-      if (editObject == 0)
-            return;
-
-      double dx = 1.5 / _matrix.m11();
-      double dy = 1.5 / _matrix.m22();
-
-      for (int i = 0; i < grips; ++i)
-            score()->addRefresh(grip[i].adjusted(-dx, -dy, dx, dy));
-
-      qreal w   = 8.0 / _matrix.m11();
-      qreal h   = 8.0 / _matrix.m22();
-      QRectF r(-w*.5, -h*.5, w, h);
-
-      grips = editObject->grips();
-      grip.resize(grips);
-      for (QRectF& gr : grip)
-            gr = r;
-
-      defaultGrip = Grip::NO_GRIP;  // will be set by updateGrips for elements with grips
-      editObject->updateGrips(&defaultGrip, grip);
-
-      // updateGrips returns grips in page coordinates,
-      // transform to view coordinates:
-
-      Element* page = editObject;
-      while (page->parent())
-            page = page->parent();
-      QPointF pageOffset(page->pos());
-      for (int i = 0; i < grips; ++i) {
-            grip[i].translate(pageOffset);
-            score()->addRefresh(grip[i].adjusted(-dx, -dy, dx, dy));
-            }
-
-      if (curGrip == Grip::NO_GRIP)
-            curGrip = defaultGrip;
-
-      QPointF anchor = editObject->gripAnchor(curGrip);
-      if (!anchor.isNull())
-            setDropAnchor(QLineF(anchor + pageOffset, grip[int(curGrip)].center()));
-      else
-            setDropTarget(0); // this also resets dropAnchor
-      score()->addRefresh(editObject->canvasBoundingRect());
-      }
-
-//---------------------------------------------------------
 //   setEditPos
 //---------------------------------------------------------
 
 void ScoreView::setEditPos(const QPointF& pt)
       {
-      editObject->setGrip(curGrip, pt);
+      editElement->setGrip(editData.curGrip, pt);
       updateGrips();
       _score->update();
       }
@@ -1717,15 +1666,6 @@ void ScoreView::setShadowNote(const QPointF& p)
       }
 
 //---------------------------------------------------------
-//   paintElement
-//---------------------------------------------------------
-
-static void paintElement(void* data, Element* e)
-      {
-      e->drawAt(static_cast<QPainter*>(data), e->canvasPos());
-      }
-
-//---------------------------------------------------------
 //   paintEvent
 //    Note: desktop background and paper background are not
 //    scaled
@@ -1771,34 +1711,8 @@ void ScoreView::paintEvent(QPaintEvent* ev)
             r.moveCenter(dropAnchor.p2());
             vp.drawEllipse(r);
             }
-
-      if (grips) {
-            if (editObject) {      // if object is moved, it may not be covered by bsp
-                  paintElement(&vp, editObject);
-                  }
-            if (grips == 6) {       // HACK: this are grips of a slur
-                  QPolygonF polygon(grips+1);
-                  polygon[0] = QPointF(grip[int(Grip::START)].center());
-                  polygon[1] = QPointF(grip[int(Grip::BEZIER1)].center());
-                  polygon[2] = QPointF(grip[int(Grip::SHOULDER)].center());
-                  polygon[3] = QPointF(grip[int(Grip::BEZIER2)].center());
-                  polygon[4] = QPointF(grip[int(Grip::END)].center());
-                  polygon[5] = QPointF(grip[int(Grip::DRAG)].center());
-                  polygon[6] = QPointF(grip[int(Grip::START)].center());
-                  QPen pen(MScore::frameMarginColor, 0.0);
-                  vp.setPen(pen);
-                  vp.drawPolyline(polygon);
-                  }
-            QPen pen(MScore::defaultColor, 0.0);
-            vp.setPen(pen);
-            for (int i = 0; i < grips; ++i) {
-                  if (Grip(i) == curGrip && hasFocus())
-                        vp.setBrush(MScore::frameMarginColor);
-                  else
-                        vp.setBrush(Qt::NoBrush);
-                  vp.drawRect(grip[i]);
-                  }
-            }
+      if (editElement)
+            editElement->drawEditMode(&vp, editData);
       }
 
 //---------------------------------------------------------
@@ -1961,12 +1875,12 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       //
       // frame text in edit mode, except for text in a text frame
       //
-      if (editObject && editObject->isText()
-         && !(editObject->parent() && editObject->parent()->type() == ElementType::TBOX)) {
-            Element* e = editObject;
+      if (editElement && editElement->isText()
+         && !(editElement->parent() && editElement->parent()->type() == ElementType::TBOX)) {
+            Element* e = editElement;
             while (e->parent())
                   e = e->parent();
-            Text* text = static_cast<Text*>(editObject);
+            Text* text = static_cast<Text*>(editElement);
             QRectF r = text->pageRectangle().translated(e->pos()); // abbox();
             qreal w = 2.0 / matrix().m11(); // give the frame some padding, like in 1.3
             r.adjust(-w,-w,w,w);
@@ -2411,13 +2325,13 @@ void ScoreView::setMag(qreal nmag)
          nmag, _matrix.m23(), _matrix.dx()*deltamag, _matrix.dy()*deltamag, _matrix.m33());
       imatrix = _matrix.inverted();
       emit scaleChanged(nmag * score()->spatium());
-      if (grips) {
+      if (editData.grips) {
             qreal w = 8.0 / nmag;
             qreal h = 8.0 / nmag;
             QRectF r(-w*.5, -h*.5, w, h);
-            for (int i = 0; i < grips; ++i) {
-                  QPointF p(grip[i].center());
-                  grip[i] = r.translated(p);
+            for (int i = 0; i < editData.grips; ++i) {
+                  QPointF p(editData.grip[i].center());
+                  editData.grip[i] = r.translated(p);
                   }
             }
       update();
@@ -2496,11 +2410,11 @@ void ScoreView::setFocusRect()
 
 void ScoreView::editCopy()
       {
-      if (editObject && editObject->isText()) {
+      if (editElement && editElement->isText()) {
             //
             // store selection as plain text
             //
-            Text* text = static_cast<Text*>(editObject);
+            Text* text = toText(editElement);
             QString s = text->selectedText();
             if (!s.isEmpty())
                   QApplication::clipboard()->setText(s, QClipboard::Clipboard);
@@ -2513,12 +2427,15 @@ void ScoreView::editCopy()
 
 void ScoreView::editCut()
       {
-      if (editObject && editObject->isText()) {
-            Text* text = static_cast<Text*>(editObject);
+      if (editElement && editElement->isText()) {
+            Text* text = toText(editElement);
             QString s = text->selectedText();
             if (!s.isEmpty()) {
                   QApplication::clipboard()->setText(s, QClipboard::Clipboard);
-                  text->edit(this, Grip::START, Qt::Key_Delete, 0, QString());
+                  editData.curGrip = Grip::START;
+                  editData.key     = Qt::Key_Delete;
+                  editData.s       = QString();
+                  text->edit(editData);
                   text->score()->update();
                   }
             }
@@ -2577,10 +2494,10 @@ void ScoreView::normalCut()
 
 void ScoreView::editSwap()
       {
-      if (editObject && editObject->isText() && !(editObject->type() == ElementType::LYRICS)) {
-          Text* text = static_cast<Text*>(editObject);
+      if (editElement && editElement->isText() && !editElement->isLyrics()) {
+          Text* text = toText(editElement);
           QString s = text->selectedText();
-            text->paste();
+            text->paste(this);
             if (!s.isEmpty())
                   QApplication::clipboard()->setText(s, QClipboard::Clipboard);
             }
@@ -2592,12 +2509,8 @@ void ScoreView::editSwap()
 
 void ScoreView::editPaste()
       {
-      if (editObject && editObject->isText()) {
-            if (editObject->type() == ElementType::LYRICS)
-                  static_cast<Lyrics*>(editObject)->paste(this);
-            else
-                  static_cast<Text*>(editObject)->paste();
-            }
+      if (editElement && editElement->isText())
+            toText(editElement)->paste(this);
       }
 
 //---------------------------------------------------------
@@ -3069,7 +2982,7 @@ void ScoreView::cmd(const QAction* a)
             cmdMoveCR(false);
       else if (cmd == "reset") {
             if (editMode()) {
-                  editObject->reset();
+                  editElement->reset();
                   updateGrips();
                   _score->update();
                   }
@@ -3149,77 +3062,77 @@ void ScoreView::cmd(const QAction* a)
       // STATE_HARMONY_FIGBASS_EDIT actions
 
       else if (cmd == "advance-longa") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editElement->type() == ElementType::HARMONY)
                   harmonyTicksTab(MScore::division << 4);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editElement->type() == ElementType::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division << 4);
             }
       else if (cmd == "advance-breve") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editElement->type() == ElementType::HARMONY)
                   harmonyTicksTab(MScore::division << 3);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editElement->type() == ElementType::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division << 3);
             }
       else if (cmd == "advance-1") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editElement->type() == ElementType::HARMONY)
                   harmonyTicksTab(MScore::division << 2);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editElement->type() == ElementType::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division << 2);
             }
       else if (cmd == "advance-2") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editElement->type() == ElementType::HARMONY)
                   harmonyTicksTab(MScore::division << 1);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editElement->type() == ElementType::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division << 1);
             }
       else if (cmd == "advance-4") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editElement->type() == ElementType::HARMONY)
                   harmonyTicksTab(MScore::division);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editElement->type() == ElementType::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division);
             }
       else if (cmd == "advance-8") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editElement->type() == ElementType::HARMONY)
                   harmonyTicksTab(MScore::division >> 1);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editElement->type() == ElementType::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division >> 1);
             }
       else if (cmd == "advance-16") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editElement->type() == ElementType::HARMONY)
                   harmonyTicksTab(MScore::division >> 2);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editElement->type() == ElementType::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division >> 2);
             }
       else if (cmd == "advance-32") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editElement->type() == ElementType::HARMONY)
                   harmonyTicksTab(MScore::division >> 3);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editElement->type() == ElementType::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division >> 3);
             }
       else if (cmd == "advance-64") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editElement->type() == ElementType::HARMONY)
                   harmonyTicksTab(MScore::division >> 4);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editElement->type() == ElementType::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division >> 4);
             }
       else if (cmd == "prev-measure-TEXT") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editElement->type() == ElementType::HARMONY)
                   harmonyTab(true);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editElement->type() == ElementType::FIGURED_BASS)
                   figuredBassTab(true, true);
             }
       else if (cmd == "next-measure-TEXT") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editElement->type() == ElementType::HARMONY)
                   harmonyTab(false);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editElement->type() == ElementType::FIGURED_BASS)
                   figuredBassTab(true,false);
             }
       else if (cmd == "prev-beat-TEXT") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editElement->type() == ElementType::HARMONY)
                   harmonyBeatsTab(false, true);
             }
       else if (cmd == "next-beat-TEXT") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editElement->type() == ElementType::HARMONY)
                   harmonyBeatsTab(false,false);
             }
 
@@ -3275,9 +3188,9 @@ void ScoreView::cmd(const QAction* a)
       else if(cmd == "fret-14")
             cmdAddFret(14);
       else if (cmd == "text-word-left")
-            static_cast<Text*>(editObject)->movePosition(QTextCursor::WordLeft);
+            static_cast<Text*>(editElement)->movePosition(QTextCursor::WordLeft);
       else if (cmd == "text-word-right")
-            static_cast<Text*>(editObject)->movePosition(QTextCursor::NextWord);
+            static_cast<Text*>(editElement)->movePosition(QTextCursor::NextWord);
       else if (cmd == "concert-pitch") {
             if (_score->styleB(StyleIdx::concertPitch) != a->isChecked()) {
                   _score->startCmd();
@@ -3489,8 +3402,8 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
       {
       QPoint gp = ev->globalPos();
 
-      data.startMove = toLogical(ev->pos());
-      Element* e = elementNear(data.startMove);
+      editData.startMove = toLogical(ev->pos());
+      Element* e = elementNear(editData.startMove);
       if (e) {
             if (!e->selected()) {
                   // bool control = (ev->modifiers() & Qt::ControlModifier) ? true : false;
@@ -3523,7 +3436,7 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
 
 void ScoreView::dragScoreView(QMouseEvent* ev)
       {
-      QPoint d = ev->pos() - _matrix.map(data.startMove).toPoint();
+      QPoint d = ev->pos() - _matrix.map(editData.startMove).toPoint();
       int dx   = d.x();
       int dy   = d.y();
 
@@ -3593,7 +3506,7 @@ void ScoreView::select(QMouseEvent* ev)
       int dragStaffIdx = 0;
       if (curElement->isMeasure()) {
             System* dragSystem = (System*)(curElement->parent());
-            dragStaffIdx       = getStaff(dragSystem, data.startMove);
+            dragStaffIdx       = getStaff(dragSystem, editData.startMove);
             }
       if ((ev->type() == QEvent::MouseButtonRelease) && ((!curElement->selected() || addSelect)))
             return;
@@ -3667,12 +3580,12 @@ void ScoreView::select(QMouseEvent* ev)
 bool ScoreView::mousePress(QMouseEvent* ev)
       {
       startMoveI     = ev->pos();
-      data.startMove = imatrix.map(QPointF(startMoveI));
-      curElement     = elementNear(data.startMove);
+      editData.startMove = imatrix.map(QPointF(startMoveI));
+      curElement     = elementNear(editData.startMove);
 
       if (curElement && curElement->isMeasure()) {
             System* dragSystem = (System*)(curElement->parent());
-            int dragStaffIdx  = getStaff(dragSystem, data.startMove);
+            int dragStaffIdx  = getStaff(dragSystem, editData.startMove);
             if (dragStaffIdx < 0)
                   curElement = 0;
             }
@@ -3696,11 +3609,11 @@ void ScoreView::mouseReleaseEvent(QMouseEvent* event)
 
 void ScoreView::onEditPasteTransition(QMouseEvent* ev)
       {
-      data.startMove = imatrix.map(QPointF(ev->pos()));
-      Element* e = elementNear(data.startMove);
-      if (e == editObject) {
-            if (editObject->mousePress(data.startMove, ev)) {
-                  _score->addRefresh(editObject->canvasBoundingRect());
+      editData.startMove = imatrix.map(QPointF(ev->pos()));
+      Element* e = elementNear(editData.startMove);
+      if (e == editElement) {
+            if (editElement->mousePress(editData.startMove, ev)) {
+                  _score->addRefresh(editElement->canvasBoundingRect());
                   _score->update();
                   }
             }
@@ -3708,7 +3621,7 @@ void ScoreView::onEditPasteTransition(QMouseEvent* ev)
 
 //---------------------------------------------------------
 //   editScoreViewDragTransition
-//    Check for mouse click outside of editObject.
+//    Check for mouse click outside of editElement.
 //---------------------------------------------------------
 
 bool ScoreView::editScoreViewDragTransition(QMouseEvent* ev)
@@ -3717,7 +3630,7 @@ bool ScoreView::editScoreViewDragTransition(QMouseEvent* ev)
       Element* e = elementNear(p);
 
       if (e == 0 || e->type() == ElementType::MEASURE) {
-            data.startMove   = p;
+            editData.startMove   = p;
 //TODOxxx            dragElement = e;
             return true;
             }
@@ -3726,7 +3639,7 @@ bool ScoreView::editScoreViewDragTransition(QMouseEvent* ev)
 
 //---------------------------------------------------------
 //   editSelectTransition
-//    Check for mouse click outside of editObject.
+//    Check for mouse click outside of editElement.
 //---------------------------------------------------------
 
 bool ScoreView::editSelectTransition(QMouseEvent* ev)
@@ -3734,8 +3647,8 @@ bool ScoreView::editSelectTransition(QMouseEvent* ev)
       QPointF p = toLogical(ev->pos());
       Element* e = elementNear(p);
 
-      if (e != editObject) {
-            data.startMove   = p;
+      if (e != editElement) {
+            editData.startMove   = p;
 //TODOxxx            dragElement = e;
             return true;
             }
@@ -3751,7 +3664,7 @@ void ScoreView::doDragLasso(QMouseEvent* ev)
       QPointF p = toLogical(ev->pos());
       _score->addRefresh(lasso->canvasBoundingRect());
       QRectF r;
-      r.setCoords(data.startMove.x(), data.startMove.y(), p.x(), p.y());
+      r.setCoords(editData.startMove.x(), editData.startMove.y(), p.x(), p.y());
       lasso->setRect(r.normalized());
       QRectF _lassoRect(lasso->rect());
       r = _matrix.mapRect(_lassoRect);
@@ -3842,8 +3755,8 @@ bool ScoreView::fotoMode() const
 
 void ScoreView::editInputTransition(QInputMethodEvent* ie)
       {
-      if (editObject->isText()) {
-            static_cast<Text*>(editObject)->inputTransition(ie);
+      if (editElement->isText()) {
+            toText(editElement)->inputTransition(ie);
             QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
             }
       }
@@ -3855,8 +3768,8 @@ void ScoreView::editInputTransition(QInputMethodEvent* ie)
 QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
       {
       // if editing a text object, place the InputMethod popup window just below the text
-      if ((query & Qt::ImCursorRectangle) && editObject && editObject->isText()) {
-            Text* text = static_cast<Text*>(editObject);
+      if ((query & Qt::ImCursorRectangle) && editElement && editElement->isText()) {
+            Text* text = static_cast<Text*>(editElement);
             if (text->cursor()) {
                   QRectF cursorRect = toPhysical(text->cursorRect().translated(text->canvasPos()));
                   cursorRect.setWidth(1.0); // InputMethod doesn't display properly if width left at 0
@@ -4279,12 +4192,12 @@ ScoreState ScoreView::mscoreState() const
                   }
             }
       if (sm->configuration().contains(states[EDIT]) || sm->configuration().contains(states[DRAG_EDIT])) {
-            if (editObject && (editObject->type() == ElementType::LYRICS))
+            if (editElement && (editElement->type() == ElementType::LYRICS))
                   return STATE_LYRICS_EDIT;
-            else if (editObject &&
-                  ( (editObject->type() == ElementType::HARMONY) || editObject->type() == ElementType::FIGURED_BASS) )
+            else if (editElement &&
+                  ( (editElement->type() == ElementType::HARMONY) || editElement->type() == ElementType::FIGURED_BASS) )
                   return STATE_HARMONY_FIGBASS_EDIT;
-            else if (editObject && editObject->isText())
+            else if (editElement && editElement->isText())
                   return STATE_TEXT_EDIT;
             return STATE_EDIT;
             }
@@ -4324,21 +4237,21 @@ void ScoreView::exitState()
 
 bool ScoreView::event(QEvent* event)
       {
-      if (event->type() == QEvent::KeyPress && editObject) {
+      if (event->type() == QEvent::KeyPress && editElement) {
             QKeyEvent* ke = static_cast<QKeyEvent*>(event);
             if (ke->key() == Qt::Key_Tab || ke->key() == Qt::Key_Backtab) {
-                  if (editObject->isText())
+                  if (editElement->isText())
                         return true;
                   bool rv = true;
                   if (ke->key() == Qt::Key_Tab) {
-                        rv = editObject->nextGrip(&curGrip);
+                        rv = editElement->nextGrip(editData);
                         updateGrips();
                         _score->update();
                         if (rv)
                               return true;
                         }
                   else if (ke->key() == Qt::Key_Backtab)
-                        rv = editObject->prevGrip(&curGrip);
+                        rv = editElement->prevGrip(editData);
                   updateGrips();
                   _score->update();
                   if (rv)
@@ -4536,12 +4449,12 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
             //
             // start slur in edit mode if lastNote is not given
             //
-            if (editObject && editObject->isText()) {
+            if (editElement && editElement->isText()) {
                   _score->endCmd();
                   return;
                   }
             if ((lastNote == 0) && !el.isEmpty()) {
-                  editObject = el.front();
+                  editElement = el.front();
                   sm->postEvent(new CommandEvent("edit"));  // calls startCmd()
                   }
             else
@@ -4604,7 +4517,7 @@ void ScoreView::cmdAddHairpin(HairpinType type)
                   }
             else {
                   if (!el.isEmpty()) {
-                        editObject = el.front();
+                        editElement = el.front();
                         sm->postEvent(new CommandEvent("edit"));  // calls startCmd()
                         }
                   else
@@ -4717,7 +4630,7 @@ void ScoreView::cloneElement(Element* e)
 
 void ScoreView::changeEditElement(Element* e)
       {
-      Grip grip = curGrip;
+      Grip grip = editData.curGrip;
       endEdit();
       startEdit(e, grip);
       }
@@ -4829,7 +4742,7 @@ void ScoreView::changeVoice(int voice)
 
 void ScoreView::harmonyEndEdit()
       {
-      Harmony* harmony = static_cast<Harmony*>(editObject);
+      Harmony* harmony = static_cast<Harmony*>(editElement);
 
       if (harmony->empty())
             _score->undoRemoveElement(harmony);
@@ -4880,7 +4793,7 @@ void ScoreView::modifyElement(Element* el)
 
 void ScoreView::harmonyTab(bool back)
       {
-      Harmony* harmony = static_cast<Harmony*>(editObject);
+      Harmony* harmony = static_cast<Harmony*>(editElement);
       if (!harmony->parent() || harmony->parent()->type() != ElementType::SEGMENT){
             qDebug("harmonyTab: no segment parent");
             return;
@@ -4938,7 +4851,7 @@ void ScoreView::harmonyTab(bool back)
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(harmony, false);
-      ((Harmony*)editObject)->moveCursorToEnd();
+      ((Harmony*)editElement)->moveCursorToEnd();
       _score->update();
       }
 
@@ -4950,7 +4863,7 @@ void ScoreView::harmonyTab(bool back)
 
 void ScoreView::harmonyBeatsTab(bool noterest, bool back)
       {
-      Harmony* harmony = static_cast<Harmony*>(editObject);
+      Harmony* harmony = static_cast<Harmony*>(editElement);
       int track         = harmony->track();
       Segment* segment = static_cast<Segment*>(harmony->parent());
       if (!segment) {
@@ -5034,7 +4947,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(harmony, false);
-      ((Harmony*)editObject)->moveCursorToEnd();
+      ((Harmony*)editElement)->moveCursorToEnd();
       _score->update();
       }
 
@@ -5045,7 +4958,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
 
 void ScoreView::harmonyTicksTab(int ticks)
       {
-      Harmony* harmony = static_cast<Harmony*>(editObject);
+      Harmony* harmony = static_cast<Harmony*>(editElement);
       int track         = harmony->track();
       Segment* segment = static_cast<Segment*>(harmony->parent());
       if (!segment) {
@@ -5103,7 +5016,7 @@ void ScoreView::harmonyTicksTab(int ticks)
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(harmony, false);
-      ((Harmony*)editObject)->moveCursorToEnd();
+      ((Harmony*)editElement)->moveCursorToEnd();
       _score->update();
       }
 
@@ -5885,7 +5798,7 @@ void ScoreView::layoutChanged()
 
 void ScoreView::figuredBassEndEdit()
       {
-      FiguredBass* fb = static_cast<FiguredBass*>(editObject);
+      FiguredBass* fb = static_cast<FiguredBass*>(editElement);
 
       if (fb->empty())
             _score->undoRemoveElement(fb);
@@ -5900,7 +5813,7 @@ void ScoreView::figuredBassEndEdit()
 
 void ScoreView::figuredBassTab(bool bMeas, bool bBack)
       {
-      FiguredBass* fb   = (FiguredBass*)editObject;
+      FiguredBass* fb   = (FiguredBass*)editElement;
       Segment* nextSegm;
       Segment* segm     = fb->segment();
       int track         = fb->track();
@@ -5964,7 +5877,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
       startEdit(fbNew, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
-      ((FiguredBass*)editObject)->moveCursorToEnd();
+      ((FiguredBass*)editElement)->moveCursorToEnd();
 //      _score->update();                         // used by lyricsTab() but not by harmonyTab(): needed or not?
       }
 
@@ -5975,7 +5888,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
 
 void ScoreView::figuredBassTicksTab(int ticks)
       {
-      FiguredBass* fb   = (FiguredBass*)editObject;
+      FiguredBass* fb   = toFiguredBass(editElement);
       int track         = fb->track();
       Segment* segm     = fb->segment();
       if (!segm) {
@@ -6019,7 +5932,7 @@ void ScoreView::figuredBassTicksTab(int ticks)
       startEdit(fbNew, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
-      ((FiguredBass*)editObject)->moveCursorToEnd();
+      fb->moveCursorToEnd();
       }
 
 //---------------------------------------------------------
@@ -6236,6 +6149,9 @@ void ScoreView::updateContinuousPanel()
             update();
       }
 
+//---------------------------------------------------------
+//   updateShadowNotes
+//---------------------------------------------------------
 
 void ScoreView::updateShadowNotes()
       {

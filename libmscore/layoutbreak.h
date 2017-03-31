@@ -61,8 +61,8 @@ class LayoutBreak : public Element {
       Type layoutBreakType() const  { return _layoutBreakType; }
       void undoSetLayoutBreakType(Type);
 
-      virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&) override;
+      virtual bool acceptDrop(EditData&) const override;
+      virtual Element* drop(EditData&) override;
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
 

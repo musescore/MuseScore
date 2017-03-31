@@ -837,7 +837,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                               for (Element* target : els) {
                                     Element* nel = el->clone();
                                     addRefresh(target->abbox());   // layout() ?!
-                                    DropData ddata;
+                                    EditData ddata;
                                     ddata.view       = view;
                                     ddata.element    = nel;
                                     ddata.duration   = duration;
@@ -938,7 +938,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
             for (Element* target : els) {
                   Element* nel = image->clone();
                   addRefresh(target->abbox());   // layout() ?!
-                  DropData ddata;
+                  EditData ddata;
                   ddata.view       = view;
                   ddata.element    = nel;
                   // ddata.duration   = duration;

@@ -122,8 +122,8 @@ class FretDiagram : public Element {
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
 
-      virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&) override;
+      virtual bool acceptDrop(EditData&) const override;
+      virtual Element* drop(EditData&) override;
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 

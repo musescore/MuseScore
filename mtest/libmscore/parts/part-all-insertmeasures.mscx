@@ -27,7 +27,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Alto</trackName>
       <Instrument>
@@ -71,7 +70,6 @@ p, li { white-space: pre-wrap; }
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Tenor</trackName>
       <Instrument>
@@ -926,7 +924,6 @@ p, li { white-space: pre-wrap; }
           <StaffType group="pitched">
             <name>stdNormal</name>
             </StaffType>
-          <bracket type="-1" span="0"/>
           </Staff>
         <trackName>Alto</trackName>
         <Instrument>
@@ -1454,7 +1451,6 @@ p, li { white-space: pre-wrap; }
           <StaffType group="pitched">
             <name>stdNormal</name>
             </StaffType>
-          <bracket type="-1" span="0"/>
           </Staff>
         <trackName>Tenor</trackName>
         <Instrument>

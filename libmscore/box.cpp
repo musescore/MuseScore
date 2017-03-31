@@ -94,9 +94,11 @@ void Box::draw(QPainter* painter) const
 //   startEdit
 //---------------------------------------------------------
 
-void Box::startEdit(MuseScoreView*, const QPointF&)
+void Box::startEdit(EditData& ed)
       {
-      editMode = true;
+      ed.grips   = 1;
+      ed.curGrip = Grip::START;
+      editMode   = true;
       if (isHBox())
             undoPushProperty(P_ID::BOX_WIDTH);
       else
@@ -107,7 +109,7 @@ void Box::startEdit(MuseScoreView*, const QPointF&)
 //   edit
 //---------------------------------------------------------
 
-bool Box::edit(MuseScoreView*, Grip, int /*key*/, Qt::KeyboardModifiers, const QString&)
+bool Box::edit(EditData&)
       {
       return false;
       }
@@ -116,7 +118,7 @@ bool Box::edit(MuseScoreView*, Grip, int /*key*/, Qt::KeyboardModifiers, const Q
 //   editDrag
 //---------------------------------------------------------
 
-void Box::editDrag(const EditData& ed)
+void Box::editDrag(EditData& ed)
       {
       if (isVBox()) {
             _boxHeight = Spatium((ed.pos.y() - abbox().y()) / spatium());
@@ -145,7 +147,7 @@ void Box::editDrag(const EditData& ed)
 //   endEdit
 //---------------------------------------------------------
 
-void Box::endEdit()
+void Box::endEdit(EditData&)
       {
       editMode = false;
       layout();
@@ -155,14 +157,13 @@ void Box::endEdit()
 //   updateGrips
 //---------------------------------------------------------
 
-void Box::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
+void Box::updateGrips(EditData& ed) const
       {
-      *defaultGrip = Grip::START;
       QRectF r(abbox());
       if (isHBox())
-            grip[0].translate(QPointF(r.right(), r.top() + r.height() * .5));
+            ed.grip[0].translate(QPointF(r.right(), r.top() + r.height() * .5));
       else if (type() == ElementType::VBOX)
-            grip[0].translate(QPointF(r.x() + r.width() * .5, r.bottom()));
+            ed.grip[0].translate(QPointF(r.x() + r.width() * .5, r.bottom()));
       }
 
 //---------------------------------------------------------
@@ -562,7 +563,7 @@ void HBox::layout2()
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Box::acceptDrop(const DropData& data) const
+bool Box::acceptDrop(EditData& data) const
       {
       ElementType t = data.element->type();
       if (data.element->flag(ElementFlag::ON_STAFF))
@@ -597,7 +598,7 @@ bool Box::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Box::drop(const DropData& data)
+Element* Box::drop(EditData& data)
       {
       Element* e = data.element;
       if (e->flag(ElementFlag::ON_STAFF))
@@ -688,10 +689,10 @@ Element* Box::drop(const DropData& data)
 //   drag
 //---------------------------------------------------------
 
-QRectF HBox::drag(EditData* data)
+QRectF HBox::drag(EditData& data)
       {
       QRectF r(canvasBoundingRect());
-      qreal diff = data->delta.x();
+      qreal diff = data.delta.x();
       qreal x1   = userOff().x() + diff;
       if (parent()->type() == ElementType::VBOX) {
             VBox* vb = static_cast<VBox*>(parent());
@@ -702,7 +703,7 @@ QRectF HBox::drag(EditData* data)
                   x1 = x2;
             }
       setUserOff(QPointF(x1, 0.0));
-//      setStartDragPosition(data->delta);
+//      setStartDragPosition(data.delta);
       return canvasBoundingRect() | r;
       }
 
@@ -710,7 +711,7 @@ QRectF HBox::drag(EditData* data)
 //   endEditDrag
 //---------------------------------------------------------
 
-void HBox::endEditDrag(const EditData&)
+void HBox::endEditDrag(EditData&)
       {
       score()->setLayout(tick());
       score()->update();

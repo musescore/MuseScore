@@ -42,7 +42,7 @@ class SystemDivider : public Symbol {
       Type dividerType() const                        { return _dividerType; }
       void setDividerType(Type v);
 
-      virtual QRectF drag(EditData*) override;
+      virtual QRectF drag(EditData&) override;
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
       virtual void layout() override;

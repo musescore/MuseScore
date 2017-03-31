@@ -148,6 +148,7 @@ void Score::startCmd()
 
 void Score::undoRedo(bool undo)
       {
+      deselectAll();
       cmdState().reset();
       if (undo)
             undoStack()->undo();

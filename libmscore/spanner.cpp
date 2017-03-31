@@ -53,18 +53,18 @@ SpannerSegment::SpannerSegment(const SpannerSegment& s)
 //   startEdit
 //---------------------------------------------------------
 
-void SpannerSegment::startEdit(MuseScoreView*s , const QPointF& p)
+void SpannerSegment::startEdit(EditData& ed)
       {
-      spanner()->startEdit(s, p);
+      spanner()->startEdit(ed);
       }
 
 //---------------------------------------------------------
 //   endEdit
 //---------------------------------------------------------
 
-void SpannerSegment::endEdit()
+void SpannerSegment::endEdit(EditData& ed)
       {
-      spanner()->endEdit();
+      spanner()->endEdit(ed);
       }
 
 //---------------------------------------------------------
@@ -95,7 +95,6 @@ QVariant SpannerSegment::getProperty(P_ID id) const
                   return spanner()->getProperty(id);
             case P_ID::USER_OFF2:
                   return _userOff2;
-
             default:
                   return Element::getProperty(id);
             }
@@ -384,7 +383,7 @@ void Spanner::setScore(Score* s)
 //   startEdit
 //---------------------------------------------------------
 
-void Spanner::startEdit(MuseScoreView*, const QPointF&)
+void Spanner::startEdit(EditData&)
       {
       editTick   = _tick;
       editTick2  = tick2();
@@ -406,7 +405,7 @@ void Spanner::startEdit(MuseScoreView*, const QPointF&)
 //   endEdit
 //---------------------------------------------------------
 
-void Spanner::endEdit()
+void Spanner::endEdit(EditData&)
       {
       bool rebuild = false;
       if (_anchor == Spanner::Anchor::NOTE) {

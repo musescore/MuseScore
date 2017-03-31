@@ -27,7 +27,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
@@ -78,7 +77,6 @@
           <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Drumset</trackName>
       <Instrument>

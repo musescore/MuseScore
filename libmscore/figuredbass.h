@@ -279,12 +279,12 @@ class FiguredBass : public Text {
       virtual FiguredBass*    clone() const override     { return new FiguredBass(*this); }
       virtual ElementType   type() const override      { return ElementType::FIGURED_BASS; }
       virtual void      draw(QPainter* painter) const override;
-      virtual void      endEdit() override;
+      virtual void      endEdit(EditData&) override;
       virtual void      layout() override;
       virtual void      read(XmlReader&) override;
       virtual void      setSelected(bool f) override;
       virtual void      setVisible(bool f) override;
-      virtual void      startEdit(MuseScoreView *msv, const QPointF &pt) override;
+      virtual void      startEdit(EditData&) override;
       virtual void      write(XmlWriter& xml) const override;
 
       // read / write MusicXML

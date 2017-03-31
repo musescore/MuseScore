@@ -499,7 +499,7 @@ void BarLine::read(XmlReader& e)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool BarLine::acceptDrop(const DropData& data) const
+bool BarLine::acceptDrop(EditData& data) const
       {
       ElementType type = data.element->type();
       if (type == ElementType::BAR_LINE)
@@ -516,7 +516,7 @@ bool BarLine::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* BarLine::drop(const DropData& data)
+Element* BarLine::drop(EditData& data)
       {
       Element* e = data.element;
 
@@ -582,21 +582,22 @@ Element* BarLine::drop(const DropData& data)
 //   updateGrips
 //---------------------------------------------------------
 
-void BarLine::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
+void BarLine::updateGrips(EditData& ed) const
       {
-      *defaultGrip = Grip::END;
       qreal lw = score()->styleP(StyleIdx::barWidth) * staff()->mag(tick());
       getY();
-      grip[0].translate(QPointF(lw * .5, y1) + pagePos());
-      grip[1].translate(QPointF(lw * .5, y2) + pagePos());
+      ed.grip[0].translate(QPointF(lw * .5, y1) + pagePos());
+      ed.grip[1].translate(QPointF(lw * .5, y2) + pagePos());
       }
 
 //---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------
 
-void BarLine::startEdit(MuseScoreView*, const QPointF&)
+void BarLine::startEdit(EditData& ed)
       {
+      ed.grips   = 2;
+      ed.curGrip = Grip::END;
       // keep a copy of original span values
       _origSpanStaff = _spanStaff;
       _origSpanFrom  = _spanFrom;
@@ -607,7 +608,7 @@ void BarLine::startEdit(MuseScoreView*, const QPointF&)
 //   endEdit
 //---------------------------------------------------------
 
-void BarLine::endEdit()
+void BarLine::endEdit(EditData&)
       {
       // for mid-measure barlines, edit is local
 //      bool midMeasure = false;
@@ -731,7 +732,7 @@ void BarLine::endEdit()
 //   editDrag
 //---------------------------------------------------------
 
-void BarLine::editDrag(const EditData& ed)
+void BarLine::editDrag(EditData& ed)
       {
       qreal lineDist = staff()->lineDistance(tick()) * spatium();
       qreal min, max, lastmax;
@@ -770,7 +771,7 @@ void BarLine::editDrag(const EditData& ed)
 //    snap to nearest staff / staff line
 //---------------------------------------------------------
 
-void BarLine::endEditDrag(const EditData&)
+void BarLine::endEditDrag(EditData&)
       {
       if (yoff1 == 0.0 && yoff2 == 0.0)         // if no drag, do nothing
             return;

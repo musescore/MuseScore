@@ -85,7 +85,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
@@ -137,7 +136,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>B♭ Trumpet</trackName>
       <Instrument>
@@ -197,7 +195,6 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Tenor Trombone</trackName>
       <Instrument>

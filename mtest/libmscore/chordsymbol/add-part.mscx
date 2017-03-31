@@ -27,7 +27,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Classical Guitar</trackName>
       <Instrument>
@@ -117,7 +116,6 @@
           <StaffType group="pitched">
             <name>stdNormal</name>
             </StaffType>
-          <bracket type="-1" span="0"/>
           </Staff>
         <trackName>Classical Guitar</trackName>
         <Instrument>

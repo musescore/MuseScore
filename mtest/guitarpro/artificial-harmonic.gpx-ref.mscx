@@ -327,7 +327,7 @@
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
             </StaffType>
-          <bracket type="0" span="2"/>
+          <bracket type="0" span="2" col="0"/>
           </Staff>
         <Staff id="2">
           <linkedTo>1</linkedTo>
@@ -353,7 +353,6 @@
             <upsideDown>0</upsideDown>
             <useNumbers>1</useNumbers>
             </StaffType>
-          <bracket type="-1" span="0"/>
           </Staff>
         <trackName></trackName>
         <Instrument>

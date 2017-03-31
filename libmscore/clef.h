@@ -149,8 +149,8 @@ class Clef : public Element {
       Segment* segment() const           { return (Segment*)parent(); }
       Measure* measure() const           { return (Measure*)parent()->parent(); }
 
-      virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&);
+      virtual bool acceptDrop(EditData&) const override;
+      virtual Element* drop(EditData&);
       virtual void layout();
       virtual void draw(QPainter*) const;
       virtual void read(XmlReader&);

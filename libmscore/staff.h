@@ -41,6 +41,7 @@ class Segment;
 class Clef;
 class TimeSig;
 class Ottava;
+class BracketItem;
 
 enum class Key;
 
@@ -58,24 +59,6 @@ class LinkedStaves {
       void add(Staff*);
       void remove(Staff*);
       bool empty() const { return _staves.empty(); }
-      };
-
-//---------------------------------------------------------
-//   BracketItem
-//---------------------------------------------------------
-
-struct BracketItem {
-      BracketType _bracket;
-      int _bracketSpan;
-
-      BracketItem() {
-            _bracket = BracketType::NO_BRACKET;
-            _bracketSpan = 0;
-            }
-      BracketItem(BracketType a, int b) {
-            _bracket = a;
-            _bracketSpan = b;
-            }
       };
 
 //---------------------------------------------------------
@@ -107,7 +90,7 @@ class Staff : public ScoreElement {
       KeyList _keys;
       std::map<int,TimeSig*> timesigs;
 
-      QList <BracketItem> _brackets;
+      QList <BracketItem*> _brackets;
       bool _barLineSpan        { false };    ///< true - span barline to next staff
       int _barLineFrom         { 0     };    ///< line of start staff to draw the barline from (0 = staff top line, ...)
       int _barLineTo           { 0     };    ///< line of end staff to draw the bar line to (0= staff bottom line, ...)
@@ -132,6 +115,8 @@ class Staff : public ScoreElement {
       PitchList _pitchOffsets;      ///< cached value
 
       void scaleChanged(double oldValue, double newValue);
+      void fillBrackets(int);
+      void cleanBrackets();
 
    public:
       Staff(Score* score = 0) : ScoreElement(score) {}
@@ -152,15 +137,16 @@ class Staff : public ScoreElement {
       Part* part() const             { return _part;        }
       void setPart(Part* p)          { _part = p;           }
 
-      BracketType bracket(int idx) const;
+      BracketType bracketType(int idx) const;
       int bracketSpan(int idx) const;
-      void setBracket(int idx, BracketType val);
-      void swapBracket(int oldIdx, int newIdx);
+      void setBracketType(int idx, BracketType val);
       void setBracketSpan(int idx, int val);
-      int bracketLevels() const      { return _brackets.size(); }
-      void addBracket(BracketItem);
-      QList <BracketItem> brackets() const { return _brackets; }
+      void swapBracket(int oldIdx, int newIdx);
+      void addBracket(BracketItem*);
+      const QList<BracketItem*>& brackets() const { return _brackets; }
+      QList<BracketItem*>& brackets()             { return _brackets; }
       void cleanupBrackets();
+      int bracketLevels() const;
 
       ClefList& clefList()                           { return clefs;  }
       ClefTypeList clefType(int tick) const;

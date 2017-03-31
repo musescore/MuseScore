@@ -358,10 +358,10 @@ class ImageEditData : public ElementEditData {
       };
 
 //---------------------------------------------------------
-//   startEditDrag
+//   startDrag
 //---------------------------------------------------------
 
-void Image::startEditDrag(EditData& data)
+void Image::startDrag(EditData& data)
       {
       ImageEditData* ed = new ImageEditData();
       ed->e    = this;
@@ -373,7 +373,7 @@ void Image::startEditDrag(EditData& data)
 //   editDrag
 //---------------------------------------------------------
 
-void Image::editDrag(const EditData& ed)
+void Image::editDrag(EditData& ed)
       {
       qreal ratio = _size.width() / _size.height();
       qreal dx = ed.delta.x();
@@ -404,7 +404,7 @@ void Image::editDrag(const EditData& ed)
 //   endEditDrag
 //---------------------------------------------------------
 
-void Image::endEditDrag(const EditData& ed)
+void Image::endEditDrag(EditData& ed)
       {
       ImageEditData* ied = static_cast<ImageEditData*>(ed.getData(this));
       if (_size != ied->size)
@@ -415,12 +415,11 @@ void Image::endEditDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Image::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
+void Image::updateGrips(EditData& ed) const
       {
-      *defaultGrip = Grip(1);
       QRectF r(pageBoundingRect());
-      grip[0].translate(QPointF(r.x() + r.width(), r.y() + r.height() * .5));
-      grip[1].translate(QPointF(r.x() + r.width() * .5, r.y() + r.height()));
+      ed.grip[0].translate(QPointF(r.x() + r.width(), r.y() + r.height() * .5));
+      ed.grip[1].translate(QPointF(r.x() + r.width() * .5, r.y() + r.height()));
       }
 
 //---------------------------------------------------------
@@ -563,6 +562,16 @@ QVariant Image::propertyDefault(P_ID id) const
                   return Element::propertyDefault(id);
             }
       return QVariant();
+      }
+
+//---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void Image::startEdit(EditData& ed)
+      {
+      ed.grips   = 2;
+      ed.curGrip = Grip(1);
       }
 
 }

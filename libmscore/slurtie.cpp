@@ -399,9 +399,9 @@ void SlurTie::fixupSegments(unsigned nsegs)
 //   startEdit
 //---------------------------------------------------------
 
-void SlurTie::startEdit(MuseScoreView* view, const QPointF& pt)
+void SlurTie::startEdit(EditData& ed)
       {
-      Spanner::startEdit(view, pt);
+      Spanner::startEdit(ed);
 
       editStartElement = startElement();
       editEndElement   = endElement();
@@ -422,9 +422,9 @@ void SlurTie::startEdit(MuseScoreView* view, const QPointF& pt)
 //   endEdit
 //---------------------------------------------------------
 
-void SlurTie::endEdit()
+void SlurTie::endEdit(EditData& ed)
       {
-      Spanner::endEdit();
+      Spanner::endEdit(ed);
       if (isSlur()) {
             if ((editStartElement != startElement()) || (editEndElement != endElement())) {
                   //

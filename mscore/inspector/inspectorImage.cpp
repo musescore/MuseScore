@@ -31,7 +31,7 @@ InspectorImage::InspectorImage(QWidget* parent)
       bool inFrame = e->parent()->isHBox() || e->parent()->isVBox();
       bool sameTypes = true;
 
-      for (const auto& ee : inspector->el()) {
+      for (const auto& ee : *inspector->el()) {
             if ((ee->parent()->isHBox() || ee->parent()->isVBox()) != inFrame) {
                   sameTypes = false;
                   break;

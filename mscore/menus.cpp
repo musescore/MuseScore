@@ -20,6 +20,7 @@
 
 // For menus in the menu bar, like File, Edit, and View, see mscore/musescore.cpp
 
+#include <tuple>
 #include "libmscore/score.h"
 #include "palette.h"
 #include "palettebox.h"
@@ -859,20 +860,18 @@ Palette* MuseScore::newBracketsPalette()
       sp->setGrid(40, 60);
       sp->setDrawGrid(true);
 
-      Bracket* b1 = new Bracket(gscore);
-      b1->setBracketType(BracketType::NORMAL);
-      Bracket* b2 = new Bracket(gscore);
-      b2->setBracketType(BracketType::BRACE);
-      Bracket* b3 = new Bracket(gscore);
-      b3->setBracketType(BracketType::SQUARE);
-      Bracket* b4 = new Bracket(gscore);
-      b4->setBracketType(BracketType::LINE);
-
-      sp->append(b1, tr("Bracket"));
-      sp->append(b2, tr("Brace"));
-      sp->append(b3, tr("Square"));
-      sp->append(b4, tr("Line"));
-
+      for (auto t : std::array<std::pair<BracketType,const char*>, 4> {
+         {{ BracketType::NORMAL, "Bracket" },
+         { BracketType::BRACE,  "Brace"   },
+         { BracketType::SQUARE, "Square"  },
+         { BracketType::LINE,   "Line"    }}
+         } ) {
+            Bracket* b1 = new Bracket(gscore);
+            BracketItem* bi1 = new BracketItem(gscore);
+            bi1->setBracketType(t.first);
+            b1->setBracketItem(bi1);
+            sp->append(b1, tr(t.second));      // Brace, Square, Line
+            }
       return sp;
       }
 

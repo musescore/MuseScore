@@ -41,6 +41,16 @@ LineSegment::LineSegment(const LineSegment& s)
       }
 
 //---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void LineSegment::startEdit(EditData& ed)
+      {
+      ed.grips   = 3;
+      ed.curGrip = Grip::END;
+      }
+
+//---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------
 
@@ -83,13 +93,12 @@ void LineSegment::read(XmlReader& e)
 //   updateGrips
 //---------------------------------------------------------
 
-void LineSegment::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
+void LineSegment::updateGrips(EditData& ed) const
       {
-      *defaultGrip = Grip::END;
       QPointF pp(pagePos());
-      grip[int(Grip::START)].translate(pp);
-      grip[int(Grip::END)].translate(pos2() + pp);
-      grip[int(Grip::MIDDLE)].translate(pos2() * .5 + pp);
+      ed.grip[int(Grip::START)].translate(pp);
+      ed.grip[int(Grip::END)].translate(pos2() + pp);
+      ed.grip[int(Grip::MIDDLE)].translate(pos2() * .5 + pp);
       }
 
 //---------------------------------------------------------
@@ -191,16 +200,40 @@ QPointF LineSegment::gripAnchor(Grip grip) const
       }
 
 //---------------------------------------------------------
+//   startEditDrag
+//---------------------------------------------------------
+
+void LineSegment::startEditDrag(EditData& ed)
+      {
+      ElementEditData* hed = new ElementEditData();
+      hed->e    = this;
+      hed->pushProperty(P_ID::USER_OFF);
+      hed->pushProperty(P_ID::USER_OFF2);
+      ed.addData(hed);
+      }
+
+//---------------------------------------------------------
+//   endEditDrag
+//---------------------------------------------------------
+
+void LineSegment::endEditDrag(EditData& ed)
+      {
+      ElementEditData* eed = static_cast<ElementEditData*>(ed.getData(this));
+      for (PropertyData pd : eed->propertyData)
+            score()->undoPropertyChanged(this, pd.id, pd.data);
+      }
+
+//---------------------------------------------------------
 //   edit
 //    return true if event is accepted
 //---------------------------------------------------------
 
-bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&)
+bool LineSegment::edit(EditData& ed)
       {
-      if (!((modifiers & Qt::ShiftModifier)
+      if (!((ed.modifiers & Qt::ShiftModifier)
          && ((spannerSegmentType() == SpannerSegmentType::SINGLE)
-              || (spannerSegmentType() == SpannerSegmentType::BEGIN && curGrip == Grip::START)
-              || (spannerSegmentType() == SpannerSegmentType::END && curGrip == Grip::END))))
+              || (spannerSegmentType() == SpannerSegmentType::BEGIN && ed.curGrip == Grip::START)
+              || (spannerSegmentType() == SpannerSegmentType::END && ed.curGrip == Grip::END))))
             return false;
 
       LineSegment* ls       = 0;
@@ -225,16 +258,16 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
                         qDebug("LineSegment::edit: no start/end segment");
                         return true;
                         }
-                  if (key == Qt::Key_Left) {
-                        if (curGrip == Grip::START)
+                  if (ed.key == Qt::Key_Left) {
+                        if (ed.curGrip == Grip::START)
                               s1 = prevSeg1(s1, track);
-                        else if (curGrip == Grip::END || curGrip == Grip::MIDDLE)
+                        else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE)
                               s2 = prevSeg1(s2, track2);
                         }
-                  else if (key == Qt::Key_Right) {
-                        if (curGrip == Grip::START)
+                  else if (ed.key == Qt::Key_Right) {
+                        if (ed.curGrip == Grip::START)
                               s1 = nextSeg1(s1, track);
-                        else if (curGrip == Grip::END || curGrip == Grip::MIDDLE) {
+                        else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE) {
                               Segment* ns2 = nextSeg1(s2, track2);
                               if (ns2)
                                     s2 = ns2;
@@ -245,9 +278,9 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
                   if (s1 == 0 || s2 == 0 || s1->tick() >= s2->tick())
                         return true;
                   if (s1->tick() != spanner()->tick())
-                        spanner()->setTick(s1->tick());
+                        spanner()->undoChangeProperty(P_ID::SPANNER_TICK, s1->tick());
                   if (s2->tick() != spanner()->tick2())
-                        spanner()->setTick2(s2->tick());
+                        spanner()->undoChangeProperty(P_ID::SPANNER_TICKS, s2->tick()-s1->tick());
                   }
                   break;
             case Spanner::Anchor::NOTE:
@@ -261,30 +294,30 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
                         return true;            // accept the event without doing anything
                         }
 
-                  switch (key) {
+                  switch (ed.key) {
                         case Qt::Key_Left:
-                              if (curGrip == Grip::START)
+                              if (ed.curGrip == Grip::START)
                                     note1 = prevChordNote(note1);
-                              else if (curGrip == Grip::END || curGrip == Grip::MIDDLE)
+                              else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE)
                                     note2 = prevChordNote(note2);
                               break;
                         case Qt::Key_Right:
-                              if (curGrip == Grip::START)
+                              if (ed.curGrip == Grip::START)
                                     note1 = nextChordNote(note1);
-                              else if (curGrip == Grip::END || curGrip == Grip::MIDDLE)
+                              else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE)
                                     note2 = nextChordNote(note2);
                               break;
                         case Qt::Key_Up:
-                              if (curGrip == Grip::START)
-                                    note1 = static_cast<Note*>(score()->upAlt(note1));
-                              else if (curGrip == Grip::END || curGrip == Grip::MIDDLE)
-                                    note2 = static_cast<Note*>(score()->upAlt(note2));
+                              if (ed.curGrip == Grip::START)
+                                    note1 = toNote(score()->upAlt(note1));
+                              else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE)
+                                    note2 = toNote(score()->upAlt(note2));
                               break;
                         case Qt::Key_Down:
-                              if (curGrip == Grip::START)
-                                    note1 = static_cast<Note*>(score()->downAlt(note1));
-                              else if (curGrip == Grip::END || curGrip == Grip::MIDDLE)
-                                    note2 = static_cast<Note*>(score()->downAlt(note2));
+                              if (ed.curGrip == Grip::START)
+                                    note1 = toNote(score()->downAlt(note1));
+                              else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE)
+                                    note2 = toNote(score()->downAlt(note2));
                               break;
                         default:
                               return true;
@@ -310,23 +343,23 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
                   Measure* m1 = l->startMeasure();
                   Measure* m2 = l->endMeasure();
 
-                  if (key == Qt::Key_Left) {
-                        if (curGrip == Grip::START) {
+                  if (ed.key == Qt::Key_Left) {
+                        if (ed.curGrip == Grip::START) {
                               if (m1->prevMeasure())
                                     m1 = m1->prevMeasure();
                               }
-                        else if (curGrip == Grip::END || curGrip == Grip::MIDDLE) {
+                        else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE) {
                               Measure* m = m2->prevMeasure();
                               if (m)
                                     m2 = m;
                               }
                         }
-                  else if (key == Qt::Key_Right) {
-                        if (curGrip == Grip::START) {
+                  else if (ed.key == Qt::Key_Right) {
+                        if (ed.curGrip == Grip::START) {
                               if (m1->nextMeasure())
                                     m1 = m1->nextMeasure();
                               }
-                        else if (curGrip == Grip::END || curGrip == Grip::MIDDLE) {
+                        else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE) {
                               if (m2->nextMeasure())
                                     m2 = m2->nextMeasure();
                               }
@@ -343,15 +376,13 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
                   }
             }
       triggerLayout();
-      score()->update();
-
       l->layout();            // recompute segment list, segment type may change
 
       LineSegment* nls = 0;
       if (st == SpannerSegmentType::SINGLE) {
-            if (curGrip == Grip::START)
+            if (ed.curGrip == Grip::START)
                   nls = l->frontSegment();
-            else if (curGrip == Grip::END)
+            else if (ed.curGrip == Grip::END)
                   nls = l->backSegment();
             }
       else if (st == SpannerSegmentType::BEGIN)
@@ -362,7 +393,7 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
             qDebug("spannerSegmentType %d", int(spannerSegmentType()));
 
       if (nls && (nls != this))
-            sv->changeEditElement(nls);
+            ed.view->changeEditElement(nls);
       if (ls)
             score()->undoRemoveElement(ls);
 
@@ -374,7 +405,7 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
 //   editDrag
 //---------------------------------------------------------
 
-void LineSegment::editDrag(const EditData& ed)
+void LineSegment::editDrag(EditData& ed)
       {
       // Only for resizing according to the diagonal properties
       QPointF deltaResize(ed.delta.x(), line()->diagonal() ? ed.delta.y() : 0.0);
@@ -386,9 +417,11 @@ void LineSegment::editDrag(const EditData& ed)
             case Grip::START: // Resize the begin of element (left grip)
                   setUserOff(userOff() + deltaResize);
                   _userOff2 -= deltaResize;
+                  undoChangeProperty(P_ID::AUTOPLACE, false);
                   break;
             case Grip::END: // Resize the end of element (rigth grip)
                   _userOff2 += deltaResize;
+                  undoChangeProperty(P_ID::AUTOPLACE, false);
                   break;
             case Grip::MIDDLE: // Move the element (middle grip)
                   setUserOff(userOff() + deltaMove);

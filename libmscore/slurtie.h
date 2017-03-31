@@ -134,8 +134,8 @@ class SlurTie : public Spanner {
       virtual void slurPos(SlurPos*) = 0;
       virtual SlurTieSegment* newSlurTieSegment() = 0;
 
-      virtual void startEdit(MuseScoreView*, const QPointF&) override;
-      virtual void endEdit() override;
+      virtual void startEdit(EditData&) override;
+      virtual void endEdit(EditData&) override;
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);

@@ -345,7 +345,7 @@ void Accidental::draw(QPainter* painter) const
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Accidental::acceptDrop(const DropData& data) const
+bool Accidental::acceptDrop(EditData& data) const
       {
       Element* e = data.element;
       return e->isIcon() && (toIcon(e)->iconType() == IconType::BRACKETS || toIcon(e)->iconType() == IconType::PARENTHESES);
@@ -355,7 +355,7 @@ bool Accidental::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Accidental::drop(const DropData& data)
+Element* Accidental::drop(EditData& data)
       {
       Element* e = data.element;
       switch(e->type()) {

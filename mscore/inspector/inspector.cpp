@@ -105,7 +105,8 @@ Inspector::Inspector(QWidget* parent)
 
       _inspectorEdit = false;
       ie             = 0;
-      _element       = 0;
+      oe             = 0;
+      _score         = 0;
 //      retranslate();
       setWindowTitle(tr("Inspector"));
       }
@@ -118,66 +119,72 @@ void Inspector::retranslate()
       {
       setWindowTitle(tr("Inspector"));
       sa->setAccessibleName(tr("Inspector Subwindow"));
-      QList<Element*> el = _el;
-      setElements(QList<Element*>());
-      setElements(el);
+      Score* s = _score;
+      update(0);
+      update(s);
+      }
+
+//---------------------------------------------------------
+//   element
+//---------------------------------------------------------
+
+Element* Inspector::element() const
+      {
+      return el() && !el()->empty() ? (*el())[0] : 0;
       }
 
 //---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
 
-void Inspector::reset()
+void Inspector::update()
       {
-      if (ie)
-            ie->setElement();
+      update(_score);
       }
 
 //---------------------------------------------------------
-//   setElement
+//   el
 //---------------------------------------------------------
 
-void Inspector::setElement(Element* e)
+const QList<Element*>* Inspector::el() const
       {
-      QList<Element*> el;
-      if (e)
-            el.append(e);
-      setElements(el);
+      return _score ? &_score->selection().elements() : 0;
       }
 
 //---------------------------------------------------------
-//   setElements
+//   update
 //---------------------------------------------------------
 
-void Inspector::setElements(const QList<Element*>& l)
+void Inspector::update(Score* s)
       {
       if (_inspectorEdit)     // if within an inspector-originated edit
             return;
-
-      Element* e = l.isEmpty() ? 0 : l[0];
-      if (e == 0 || _element == 0 || (_el != l)) {
-            _el = l;
-            ie = 0;
-            _element = e;
-
-            if (_element == 0)
-                  ie = new InspectorEmpty(this);
-
+      _score = s;
+      if (oe != element()) {
+            ie  = 0;
+            oe  = element();
             bool sameTypes = true;
-            for (Element* ee : _el) {
-                  if (((_element->type() != ee->type()) && // different and
-                      (!_element->isSystemText()     || !ee->isStaffText())  && // neither system text nor
-                      (!_element->isStaffText()      || !ee->isSystemText()) && // staff text either side and
-                      (!_element->isPedalSegment()   || !ee->isTextLineSegment()) && // neither pedal nor
-                      (!_element->isTextLineSegment()|| !ee->isPedalSegment())    && // text line either side and
-                      (!_element->isSlurTieSegment() || !ee->isSlurTieSegment())) || // neither Slur nor Tie either side, or
-                      (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(_element)->chord()->isGrace())) // HACK
-                        sameTypes = false;
+            if (!element())
+                  ie = new InspectorEmpty(this);
+            else {
+                  for (Element* ee : *el()) {
+                        if (((element()->type() != ee->type()) && // different and
+                            (!element()->isSystemText()     || !ee->isStaffText())  && // neither system text nor
+                            (!element()->isStaffText()      || !ee->isSystemText()) && // staff text either side and
+                            (!element()->isPedalSegment()   || !ee->isTextLineSegment()) && // neither pedal nor
+                            (!element()->isTextLineSegment()|| !ee->isPedalSegment())    && // text line either side and
+                            (!element()->isSlurTieSegment() || !ee->isSlurTieSegment())) || // neither Slur nor Tie either side, or
+                            (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(element())->chord()->isGrace())) // HACK
+                              {
+                              sameTypes = false;
+                              break;
+                              }
+                        }
                   }
             if (!sameTypes)
                   ie = new InspectorGroupElement(this);
-            else if (_element) {
-                  switch(_element->type()) {
+            else if (element()) {
+                  switch(element()->type()) {
                         case ElementType::FBOX:
                         case ElementType::VBOX:
                               ie = new InspectorVBox(this);
@@ -305,16 +312,13 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorFingering(this);
                               break;
                         default:
-                              if (_element->isText())
+                              if (element()->isText())
                                     ie = new InspectorText(this);
                               else
                                     ie = new InspectorElement(this);
                               break;
                         }
                   }
-//            QWidget* ww = sa->takeWidget();
-//            if (ww)
-//                  ww->deleteLater();
             sa->setWidget(ie);      // will destroy previous set widget
 
             //focus policies were set by hand in each inspector_*.ui. this code just helps keeping them like they are
@@ -341,8 +345,8 @@ void Inspector::setElements(const QList<Element*>& l)
                         }
                   }
             }
-      _element = e;
-      ie->setElement();
+      if (ie)
+            ie->setElement();
       }
 
 //---------------------------------------------------------
@@ -595,8 +599,8 @@ void InspectorRest::tupletClicked()
       Tuplet* tuplet = rest->tuplet();
       if (tuplet) {
             rest->score()->select(tuplet);
-            inspector->setElement(tuplet);
             rest->score()->update();
+            inspector->update();
             }
       }
 
@@ -928,7 +932,7 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       Element* e = inspector->element();
       bool sameTypes = true;
 
-      for (const auto& ee : inspector->el()) {
+      for (const auto& ee : *inspector->el()) {
             if (e->isSystemText() != ee->isSystemText()) {
                   sameTypes = false;
                   break;
@@ -971,7 +975,7 @@ InspectorSlurTie::InspectorSlurTie(QWidget* parent)
       Element* e = inspector->element();
       bool sameTypes = true;
 
-      for (const auto& ee : inspector->el()) {
+      for (const auto& ee : *inspector->el()) {
             if (ee->accessibleInfo() != e->accessibleInfo()) {
                   sameTypes = false;
                   break;
@@ -1017,7 +1021,7 @@ InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorElementBase(paren
 
       Breath* b = toBreath(inspector->element());
       bool sameTypes = true;
-      for (const auto& ee : inspector->el()) {
+      for (const auto& ee : *inspector->el()) {
             if (ee->accessibleInfo() != b->accessibleInfo()) {
                   sameTypes = false;
                   break;

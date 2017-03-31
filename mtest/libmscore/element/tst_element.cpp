@@ -52,7 +52,7 @@ void TestElement::testIds()
             ElementType::ARPEGGIO,
             ElementType::BREATH,
             ElementType::GLISSANDO,
-            ElementType::BRACKET,
+//            ElementType::BRACKET,
             ElementType::ARTICULATION,
             ElementType::CHORDLINE,
             ElementType::ACCIDENTAL,
@@ -93,12 +93,10 @@ void TestElement::testIds()
             ElementType::FBOX,
             ElementType::MEASURE,
             ElementType::TAB_DURATION_SYMBOL,
-            ElementType::OSSIA,
-            ElementType::INVALID
+            ElementType::OSSIA
             };
 
-      for (int i = 0; ids[i] != ElementType::INVALID; ++i) {
-            ElementType t = ids[i];
+      for (ElementType t : ids) {
             Element* e = Element::create(t, score);
             Element* ee = writeReadElement(e);
             QCOMPARE(e->type(), ee->type());

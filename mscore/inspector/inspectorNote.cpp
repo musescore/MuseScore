@@ -148,8 +148,8 @@ void InspectorNote::dot1Clicked()
       if (note->dots().size() > 0) {
             NoteDot* dot = note->dot(0);
             dot->score()->select(dot);
-            inspector->setElement(dot);
             dot->score()->update();
+            inspector->update();
             }
       }
 
@@ -165,8 +165,8 @@ void InspectorNote::dot2Clicked()
       if (note->dots().size() > 1) {
             NoteDot* dot = note->dot(1);
             dot->score()->select(dot);
-            inspector->setElement(dot);
             dot->score()->update();
+            inspector->update();
             }
       }
 
@@ -182,8 +182,8 @@ void InspectorNote::dot3Clicked()
       if (note->dots().size() > 2) {
             NoteDot* dot = note->dot(2);
             dot->score()->select(dot);
-            inspector->setElement(dot);
             dot->score()->update();
+            inspector->update();
             }
       }
 
@@ -199,8 +199,8 @@ void InspectorNote::dot4Clicked()
       if (note->dots().size() > 3) {
             NoteDot* dot = note->dot(3);
             dot->score()->select(dot);
-            inspector->setElement(dot);
             dot->score()->update();
+            inspector->update();
             }
       }
 
@@ -216,8 +216,8 @@ void InspectorNote::hookClicked()
       Hook* hook = note->chord()->hook();
       if (hook) {
             note->score()->select(hook);
-            inspector->setElement(hook);
             note->score()->update();
+            inspector->update();
             }
       }
 
@@ -233,8 +233,8 @@ void InspectorNote::stemClicked()
       Stem* stem = note->chord()->stem();
       if (stem) {
             note->score()->select(stem);
-            inspector->setElement(stem);
             note->score()->update();
+            inspector->update();
             }
       }
 
@@ -250,8 +250,8 @@ void InspectorNote::beamClicked()
       Beam* beam = note->chord()->beam();
       if (beam) {
             note->score()->select(beam);
-            inspector->setElement(beam);
             note->score()->update();
+            inspector->update();
             }
       }
 
@@ -267,8 +267,8 @@ void InspectorNote::tupletClicked()
       Tuplet* tuplet = note->chord()->tuplet();
       if (tuplet) {
             note->score()->select(tuplet);
-            inspector->setElement(tuplet);
             note->score()->update();
+            inspector->update();
             }
       }
 

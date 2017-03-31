@@ -48,6 +48,7 @@
 
 namespace Ms {
 
+class Score;
 class Element;
 class Note;
 class Inspector;
@@ -330,13 +331,13 @@ class Inspector : public QDockWidget {
 
       QScrollArea* sa;
       InspectorBase* ie;
-      QList<Element*> _el;
-      Element* _element;      // currently displayed element
+      Score* _score;
       bool _inspectorEdit;    // set to true when an edit originates from
                               // within the inspector itself
+      Element* oe;
 
    public slots:
-      void reset();
+      void update();
 
    protected:
       virtual void changeEvent(QEvent *event);
@@ -344,10 +345,10 @@ class Inspector : public QDockWidget {
 
    public:
       Inspector(QWidget* parent = 0);
-      void setElement(Element*);
-      void setElements(const QList<Element*>&);
-      Element* element() const            { return _element;       }
-      const QList<Element*>& el() const   { return _el;            }
+      void update(Score* s);
+
+      Element* element() const;
+      const QList<Element*>* el() const;
       void setInspectorEdit(bool val)     { _inspectorEdit = val;  }
       };
 

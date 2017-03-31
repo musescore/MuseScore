@@ -82,7 +82,7 @@ class ChordRest : public DurationElement {
 
       virtual ElementType type() const = 0;
 
-      virtual Element* drop(const DropData&) override;
+      virtual Element* drop(EditData&) override;
       virtual void undoUnlink() override;
 
       virtual Segment* segment() const  { return (Segment*)parent(); }

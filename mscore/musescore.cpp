@@ -131,7 +131,6 @@ MuseScore* mscore;
 MasterSynthesizer* synti;
 
 bool enableExperimental = false;
-bool enableTestMode = false;
 
 QString dataPath;
 QString iconPath;
@@ -1549,8 +1548,7 @@ void MuseScore::selectionChanged(SelState selectionState)
             pianorollEditor->changeSelection(selectionState);
       if (drumrollEditor)
             drumrollEditor->changeSelection(selectionState);
-      if (_inspector)
-            updateInspector();
+      updateInspector();
       }
 
 //---------------------------------------------------------
@@ -1559,18 +1557,8 @@ void MuseScore::selectionChanged(SelState selectionState)
 
 void MuseScore::updateInspector()
       {
-      if (!_inspector)
-            return;
-      if (_inspector->isVisible() && cs) {
-            if (state() == STATE_EDIT)
-                  _inspector->setElement(cv->getEditObject());
-            else if (state() == STATE_FOTO)
-                  _inspector->setElement(cv->fotoLasso());
-            else
-                  _inspector->setElements(cs->selection().elements());
-            }
-      else
-            _inspector->setElement(0);
+      if (_inspector)
+            _inspector->update(cs);
       }
 
 //---------------------------------------------------------
@@ -1780,7 +1768,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                   navigator()->setScore(0);
                   }
             if (_inspector)
-                  _inspector->setElement(0);
+                  _inspector->update(0);
             viewModeCombo->setEnabled(false);
             if (_textTools) {
                   _textTools->hide();
@@ -3217,7 +3205,7 @@ void MuseScore::changeState(ScoreState val)
       Element* e = 0;
       if (_sstate & STATE_ALLTEXTUAL_EDIT || _sstate == STATE_EDIT) {
             if (cv)
-                  e = cv->getEditObject();
+                  e = cv->getEditElement();
             }
       if (!e) {
             textTools()->hide();
@@ -3232,7 +3220,7 @@ void MuseScore::changeState(ScoreState val)
                         textTools()->show();
                   }
             if (_inspector)
-                  _inspector->setElement(e);
+                  _inspector->update(e->score());
             }
       }
 
@@ -3685,7 +3673,7 @@ void MuseScore::undoRedo(bool undo)
             }
       endCmd();
       if (_inspector)
-            _inspector->reset();
+            _inspector->update();
       }
 
 //---------------------------------------------------------
@@ -4675,10 +4663,9 @@ void MuseScore::endCmd()
             ScoreAccessibility::instance()->updateAccessibilityInfo();
             }
       else {
-            if (_inspector)
-                  _inspector->setElement(0);
             selectionChanged(SelState::NONE);
             }
+      updateInspector();
       }
 
 //---------------------------------------------------------
@@ -5546,7 +5533,7 @@ int main(int argc, char* av[])
                   dataPath = path;
                   }
             }
-      enableTestMode = parser.isSet("t");
+      MScore::testMode = parser.isSet("t");
       if (parser.isSet("M")) {
             QString temp = parser.value("M");
             if (temp.isEmpty())
@@ -5633,6 +5620,7 @@ int main(int argc, char* av[])
 #ifndef QT_NO_PRINTER
             QPrinter p;
             if (p.isValid()) {
+                  qDebug("set paper size from default printer");
                   QRectF psf = p.paperRect(QPrinter::Inch);
                   MScore::defaultStyle().set(StyleIdx::pageWidth,  psf.width());
                   MScore::defaultStyle().set(StyleIdx::pageHeight, psf.height());
@@ -5668,10 +5656,11 @@ int main(int argc, char* av[])
             qDebug() << "  Virtual size:" << screen->virtualSize().width() << "x" << screen->virtualSize().height();
             }
 
-      if (!useFactorySettings)
+      if (!(useFactorySettings || MScore::testMode))
             preferences.read();
 
-      preferences.readDefaultStyle();
+      if (!MScore::testMode)
+            preferences.readDefaultStyle();
 
       if (converterDpi == 0)
             converterDpi = preferences.pngResolution;

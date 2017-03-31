@@ -66,6 +66,7 @@
 #include "libmscore/marker.h"
 #include "libmscore/jump.h"
 #include "libmscore/sym.h"
+#include "libmscore/bracketItem.h"
 
 using namespace Ms;
 
@@ -395,7 +396,7 @@ void OveToMScore::convertGroups() {
 
                   // brace
                   if( j == 0 && partStaffCount == 2 ) {
-                        staff->setBracket(0, BracketType::BRACE);
+                        staff->setBracketType(0, BracketType::BRACE);
                         staff->setBracketSpan(0, 2);
                         staff->setBarLineSpan(2);
                         }
@@ -406,7 +407,7 @@ void OveToMScore::convertGroups() {
                         int span = staffPtr->getGroupStaffCount() + 1;
                         int endStaff = staffIndex + span;
                         if(span > 0 && endStaff >= staffIndex && endStaff <= ove_->getTrackCount()) {
-                              staff->addBracket(BracketItem(BracketType::NORMAL, span));
+                              staff->addBracket(new BracketItem(staff->score(), BracketType::NORMAL, span));
                               staff->setBarLineSpan(span);
                               }
                         }

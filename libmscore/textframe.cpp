@@ -122,7 +122,7 @@ void TBox::scanElements(void* data, void (*func)(void*, Element*), bool all)
 //   drop
 //---------------------------------------------------------
 
-Element* TBox::drop(const DropData& data)
+Element* TBox::drop(EditData& data)
       {
       Element* e = data.element;
       switch (e->type()) {

@@ -267,7 +267,7 @@ void KeySig::draw(QPainter* p) const
 //   acceptDrop
 //---------------------------------------------------------
 
-bool KeySig::acceptDrop(const DropData& data) const
+bool KeySig::acceptDrop(EditData& data) const
       {
       return data.element->type() == ElementType::KEYSIG;
       }
@@ -276,7 +276,7 @@ bool KeySig::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* KeySig::drop(const DropData& data)
+Element* KeySig::drop(EditData& data)
       {
       KeySig* ks = static_cast<KeySig*>(data.element);
       if (ks->type() != ElementType::KEYSIG) {

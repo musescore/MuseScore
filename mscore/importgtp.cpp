@@ -55,6 +55,7 @@
 #include "libmscore/notedot.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/sym.h"
+#include "libmscore/bracketItem.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -2417,7 +2418,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
                   s1->setStaffType(0, &st);
                   s1->setLines(0, lines);
                   Excerpt::cloneStaff(s, s1);
-                  p->staves()->front()->addBracket(BracketItem(BracketType::NORMAL, 2));
+                  p->staves()->front()->addBracket(new BracketItem(pscore, BracketType::NORMAL, 2));
                   }
             pscore->appendPart(p);
 

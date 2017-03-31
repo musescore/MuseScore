@@ -35,7 +35,6 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
-        <bracket type="-1" span="0"/>
         <barLineSpan>0</barLineSpan>
         </Staff>
       <trackName>Piano</trackName>

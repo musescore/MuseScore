@@ -35,7 +35,6 @@
           <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Drumset</trackName>
       <Instrument>
@@ -270,7 +269,6 @@
           <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Snare Drum</trackName>
       <Instrument>
@@ -403,7 +401,6 @@
           <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Tenor Drums</trackName>
       <Instrument>
@@ -613,7 +610,6 @@
           <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Bass Drums</trackName>
       <Instrument>

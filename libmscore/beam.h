@@ -84,11 +84,10 @@ class Beam : public Element {
       virtual QPointF canvasPos() const override;  ///< position in page coordinates
 
       virtual bool isEditable() const override { return true; }
-      virtual void startEdit(MuseScoreView*, const QPointF&) override;
-      virtual void endEdit() override;
-      virtual void editDrag(const EditData&) override;
-      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
-      virtual int grips() const override { return 2; }
+      virtual void startEdit(EditData&) override;
+      virtual void endEdit(EditData&) override;
+      virtual void editDrag(EditData&) override;
+      virtual void updateGrips(EditData&) const override;
 
       virtual int tick() const override;
       virtual int rtick() const override;
@@ -125,8 +124,8 @@ class Beam : public Element {
       void setBeamDirection(Direction d);
       Direction beamDirection() const     { return _direction; }
 
-      virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&) override;
+      virtual bool acceptDrop(EditData&) const override;
+      virtual Element* drop(EditData&) override;
 
       qreal growLeft() const              { return _grow1; }
       qreal growRight() const             { return _grow2; }

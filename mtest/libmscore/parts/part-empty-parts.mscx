@@ -27,7 +27,6 @@
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Alto</trackName>
       <Instrument>
@@ -63,7 +62,6 @@
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Tenor</trackName>
       <Instrument>
@@ -658,7 +656,6 @@
           <StaffType group="pitched">
             <name>Standard</name>
             </StaffType>
-          <bracket type="-1" span="0"/>
           </Staff>
         <trackName>Alto</trackName>
         <Instrument>
@@ -998,7 +995,6 @@
           <StaffType group="pitched">
             <name>Standard</name>
             </StaffType>
-          <bracket type="-1" span="0"/>
           </Staff>
         <trackName>Tenor</trackName>
         <Instrument>

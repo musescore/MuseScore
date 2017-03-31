@@ -4731,17 +4731,17 @@ static void partList(XmlWriter& xml, Score* score, const QList<Part*>& il, MxmlI
                   Staff* st = part->staff(i);
                   if (st) {
                         for (int j = 0; j < st->bracketLevels(); j++) {
-                              if (st->bracket(j) != BracketType::NO_BRACKET) {
+                              if (st->bracketType(j) != BracketType::NO_BRACKET) {
                                     bracketFound = true;
                                     if (i == 0) {
                                           // OK, found bracket in first staff of part
                                           // filter out implicit brackets
                                           if (!(st->bracketSpan(j) == part->nstaves()
-                                                && st->bracket(j) == BracketType::BRACE)) {
+                                                && st->bracketType(j) == BracketType::BRACE)) {
                                                 // add others
                                                 int number = findPartGroupNumber(partGroupEnd);
                                                 if (number < MAX_PART_GROUPS) {
-                                                      partGroupStart(xml, number + 1, st->bracket(j));
+                                                      partGroupStart(xml, number + 1, st->bracketType(j));
                                                       partGroupEnd[number] = staffCount + st->bracketSpan(j);
                                                       }
                                                 }

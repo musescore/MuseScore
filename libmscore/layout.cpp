@@ -59,6 +59,7 @@
 #include "hairpin.h"
 #include "stafflines.h"
 #include "articulation.h"
+#include "bracket.h"
 
 namespace Ms {
 
@@ -3466,8 +3467,11 @@ qDebug("%p %d-%d %s systems %d", this, stick, etick, isMaster() ? "Master" : "Pa
 
             for (System* s : _systems) {
                   for (Bracket* b : s->brackets()) {
-                        if (b->selected())
-                              _selection.remove(b);
+                        if (b->selected()) {
+                              _selection.elements().removeOne(b);
+                              _selection.updateState();
+                              setSelectionChanged(true);
+                              }
                         }
                   for (SpannerSegment* ss : s->spannerSegments())
                         ss->setParent(0);
