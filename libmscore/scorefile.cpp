@@ -681,12 +681,9 @@ bool Score::saveStyle(const QString& name)
 //---------------------------------------------------------
 
 extern QString revision;
-extern bool enableTestMode;
 
 bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       {
-      if (!MScore::testMode)
-            MScore::testMode = enableTestMode;
       XmlWriter xml(this, f);
       xml.setWriteOmr(msczFormat);
       xml.header();

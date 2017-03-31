@@ -84,7 +84,6 @@ void TestCapellaIO::capReadTest(const char* file)
       {
       MasterScore* score = readScore(DIR + file + ".cap");
       QVERIFY(score);
-      score->doLayout();
       QVERIFY(saveCompareScore(score, QString("%1.cap.mscx").arg(file),
                                DIR + QString("%1.cap-ref.mscx").arg(file)));
       delete score;
@@ -99,7 +98,6 @@ void TestCapellaIO::capxReadTest(const char* file)
       {
       MasterScore* score = readScore(DIR + file + ".capx");
       QVERIFY(score);
-      score->doLayout();
       QVERIFY(saveCompareScore(score, QString("%1.capx.mscx").arg(file),
                                DIR + QString("%1.capx-ref.mscx").arg(file)));
       delete score;

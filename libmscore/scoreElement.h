@@ -110,6 +110,7 @@ class StaffTypeChange;
 class MeasureBase;
 class Page;
 class SystemText;
+class BracketItem;
 
 enum class P_ID : int;
 enum class PropertyFlags : char;
@@ -138,6 +139,7 @@ class LinkedElements : public QList<ScoreElement*> {
 
 enum class ElementType : char {
       INVALID = 0,
+      BRACKET_ITEM,
       PART,
       STAFF,
       SCORE,
@@ -250,7 +252,6 @@ struct ElementName {
 
 //---------------------------------------------------------
 //   ScoreElement
-//    @P type       enum (Element.ACCIDENTAL, .ACCIDENTAL, .AMBITUS, .ARPEGGIO, .BAGPIPE_EMBELLISHMENT, .BAR_LINE, .BEAM, .BEND, .BRACKET, .BREATH, .CHORD, .CHORDLINE, .CLEF, .COMPOUND, .DYNAMIC, .ELEMENT, .ELEMENT_LIST, .FBOX, .FIGURED_BASS, .FINGERING, .FRET_DIAGRAM, .FSYMBOL, .GLISSANDO, .GLISSANDO_SEGMENT, .HAIRPIN, .HAIRPIN_SEGMENT, .HARMONY, .HBOX, .HOOK, .ICON, .IMAGE, .INSTRUMENT_CHANGE, .INSTRUMENT_NAME, .JUMP, .KEYSIG, .LASSO, .LAYOUT_BREAK, .LEDGER_LINE, .LINE, .LYRICS, .LYRICSLINE, .LYRICSLINE_SEGMENT, .MARKER, .MEASURE, .MEASURE_LIST, .NOTE, .NOTEDOT, .NOTEHEAD, .NOTELINE, .OSSIA, .OTTAVA, .OTTAVA_SEGMENT, .PAGE, .PEDAL, .PEDAL_SEGMENT, .REHEARSAL_MARK, .REPEAT_MEASURE, .REST, .SEGMENT, .SELECTION, .SHADOW_NOTE, .SLUR, .SLUR_SEGMENT, .SPACER, .STAFF_LINES, .STAFF_LIST, .STAFF_STATE, .STAFF_TEXT, .STEM, .STEM_SLASH, .SYMBOL, .SYSTEM, .TAB_DURATION_SYMBOL, .TBOX, .TEMPO_TEXT, .TEXT, .TEXTLINE, .TEXTLINE_SEGMENT, .TIE, .TIMESIG, .TREMOLO, .TREMOLOBAR, .TRILL, .TRILL_SEGMENT, .TUPLET, .VBOX, .VOLTA, .VOLTA_SEGMENT) (read only)
 //---------------------------------------------------------
 
 class ScoreElement {
@@ -389,6 +390,7 @@ class ScoreElement {
       CONVERT(FretDiagram,   FRET_DIAGRAM)
       CONVERT(Page,          PAGE)
       CONVERT(SystemText,    SYSTEM_TEXT)
+      CONVERT(BracketItem,   BRACKET_ITEM)
       CONVERT(Staff,         STAFF)
 #undef CONVERT
 
@@ -536,6 +538,7 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(FretDiagram)
       CONVERT(Page)
       CONVERT(SystemText)
+      CONVERT(BracketItem)
       CONVERT(Staff)
 #undef CONVERT
 

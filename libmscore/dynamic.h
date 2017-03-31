@@ -76,7 +76,7 @@ class Dynamic : public Text {
       int _velocity;     // associated midi velocity 0-127
       Range _dynRange;   // STAFF, PART, SYSTEM
 
-      virtual QRectF drag(EditData*) override;
+      virtual QRectF drag(EditData&) override;
 
    public:
       Dynamic(Score*);
@@ -98,8 +98,8 @@ class Dynamic : public Text {
       virtual void read(XmlReader&) override;
 
       virtual bool isEditable() const override { return true; }
-      virtual void startEdit(MuseScoreView*, const QPointF&) override;
-      virtual void endEdit() override;
+      virtual void startEdit(EditData&) override;
+      virtual void endEdit(EditData&) override;
       virtual void reset() override;
 
       void setVelocity(int v)   { _velocity = v;    }

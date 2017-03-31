@@ -1618,7 +1618,7 @@ QString Text::plainText(bool noSym) const
 //   startEdit
 //---------------------------------------------------------
 
-void Text::startEdit(MuseScoreView*, const QPointF& pt)
+void Text::startEdit(EditData& ed)
       {
       setEditMode(true);
       if (!_cursor)
@@ -1629,7 +1629,7 @@ void Text::startEdit(MuseScoreView*, const QPointF& pt)
       _cursor->clearSelection();
       if (_layout.empty())
             layout();
-      if (setCursor(pt))
+      if (setCursor(ed.startMove))
             updateCursorFormat(_cursor);
       else
             _cursor->init();
@@ -1642,7 +1642,7 @@ void Text::startEdit(MuseScoreView*, const QPointF& pt)
 //   endEdit
 //---------------------------------------------------------
 
-void Text::endEdit()
+void Text::endEdit(EditData&)
       {
       setEditMode(false);
       static const qreal w = 2.0;
@@ -1720,21 +1720,21 @@ TextBlock& Text::curLine()
 //   edit
 //---------------------------------------------------------
 
-bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, const QString& _s)
+bool Text::edit(EditData& ed)
       {
       // do nothing on Shift, it messes up IME on Windows. See #64046
-      if (key == Qt::Key_Shift)
+      if (ed.key == Qt::Key_Shift)
             return false;
-      QString s         = _s;
-      bool ctrlPressed  = modifiers & Qt::ControlModifier;
-      bool shiftPressed = modifiers & Qt::ShiftModifier;
+      QString s         = ed.s;
+      bool ctrlPressed  = ed.modifiers & Qt::ControlModifier;
+      bool shiftPressed = ed.modifiers & Qt::ShiftModifier;
 
       QTextCursor::MoveMode mm = shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
       bool wasHex = false;
       if (hexState >= 0) {
-            if (modifiers == (Qt::ControlModifier | Qt::ShiftModifier | Qt::KeypadModifier)) {
-                  switch (key) {
+            if (ed.modifiers == (Qt::ControlModifier | Qt::ShiftModifier | Qt::KeypadModifier)) {
+                  switch (ed.key) {
                         case Qt::Key_0:
                         case Qt::Key_1:
                         case Qt::Key_2:
@@ -1745,7 +1745,7 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                         case Qt::Key_7:
                         case Qt::Key_8:
                         case Qt::Key_9:
-                              s = QChar::fromLatin1(key);
+                              s = QChar::fromLatin1(ed.key);
                               ++hexState;
                               wasHex = true;
                               break;
@@ -1753,15 +1753,15 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                               break;
                         }
                   }
-            else if (modifiers == (Qt::ControlModifier | Qt::ShiftModifier)) {
-                  switch (key) {
+            else if (ed.modifiers == (Qt::ControlModifier | Qt::ShiftModifier)) {
+                  switch (ed.key) {
                         case Qt::Key_A:
                         case Qt::Key_B:
                         case Qt::Key_C:
                         case Qt::Key_D:
                         case Qt::Key_E:
                         case Qt::Key_F:
-                              s = QChar::fromLatin1(key);
+                              s = QChar::fromLatin1(ed.key);
                               ++hexState;
                               wasHex = true;
                               break;
@@ -1772,7 +1772,7 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
             }
 
       if (!wasHex) {
-            switch (key) {
+            switch (ed.key) {
                   case Qt::Key_Enter:
                   case Qt::Key_Return:
                         {
@@ -1845,16 +1845,16 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                   case Qt::Key_Tab:
                   case Qt::Key_Space:
                         s = " ";
-                        modifiers = 0;
+                        ed.modifiers = 0;
                         break;
 
                   case Qt::Key_Minus:
-                        if (modifiers == 0)
+                        if (ed.modifiers == 0)
                               s = "-";
                         break;
 
                   case Qt::Key_Underscore:
-                        if (modifiers == 0)
+                        if (ed.modifiers == 0)
                               s = "_";
                         break;
 
@@ -1868,7 +1868,7 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                         break;
                   }
             if (ctrlPressed && shiftPressed) {
-                  switch (key) {
+                  switch (ed.key) {
                         case Qt::Key_U:
                               if (hexState == -1) {
                                     hexState = 0;
@@ -2483,7 +2483,7 @@ QLineF Text::dragAnchor() const
 //   paste
 //---------------------------------------------------------
 
-void Text::paste()
+void Text::paste(MuseScoreView*)
       {
       QString txt = QApplication::clipboard()->text(QClipboard::Clipboard);
       if (MScore::debugMode)
@@ -2583,7 +2583,7 @@ bool Text::mousePress(const QPointF& p, QMouseEvent* ev)
       if (!setCursor(p, shift ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor))
             return false;
       if (ev->button() == Qt::MidButton)
-            paste();
+            paste(nullptr);
       return true;
       }
 
@@ -2612,7 +2612,7 @@ void Text::layoutEdit()
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Text::acceptDrop(const DropData& data) const
+bool Text::acceptDrop(EditData& data) const
       {
       ElementType type = data.element->type();
       return type == ElementType::SYMBOL || type == ElementType::FSYMBOL;
@@ -2622,7 +2622,7 @@ bool Text::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Text::drop(const DropData& data)
+Element* Text::drop(EditData& data)
       {
       Element* e = data.element;
 
@@ -2639,9 +2639,9 @@ Element* Text::drop(const DropData& data)
                         score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
                         }
                   else {
-                        startEdit(data.view, data.pos);
+                        startEdit(data);
                         curLine().insert(_cursor, id);
-                        endEdit();
+                        endEdit(data);
                         }
                   }
                   return 0;
@@ -2661,14 +2661,14 @@ Element* Text::drop(const DropData& data)
                         score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
                         }
                   else {
-                        startEdit(data.view, data.pos);
+                        startEdit(data);
                         if (QChar::requiresSurrogates(code)) {
                               QString surrogatePair = QString(QChar::highSurrogate(code)).append(QChar::lowSurrogate(code));
                               curLine().insert(_cursor, surrogatePair);
                               }
                         else
                               curLine().insert(_cursor, QChar(code));
-                        endEdit();
+                        endEdit(data);
                         }
                   }
                   return 0;

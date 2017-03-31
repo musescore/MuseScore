@@ -246,18 +246,18 @@ QString Dynamic::dynamicTypeName() const
 //   startEdit
 //---------------------------------------------------------
 
-void Dynamic::startEdit(MuseScoreView* v, const QPointF& p)
+void Dynamic::startEdit(EditData& ed)
       {
-      Text::startEdit(v, p);
+      Text::startEdit(ed);
       }
 
 //---------------------------------------------------------
 //   endEdit
 //---------------------------------------------------------
 
-void Dynamic::endEdit()
+void Dynamic::endEdit(EditData& ed)
       {
-      Text::endEdit();
+      Text::endEdit(ed);
       if (xmlText() != QString::fromUtf8(dynList[int(_dynamicType)].text))
             _dynamicType = Type::OTHER;
       }
@@ -275,7 +275,7 @@ void Dynamic::reset()
 //   drag
 //---------------------------------------------------------
 
-QRectF Dynamic::drag(EditData* ed)
+QRectF Dynamic::drag(EditData& ed)
       {
       QRectF f = Element::drag(ed);
 
@@ -286,7 +286,7 @@ QRectF Dynamic::drag(EditData* ed)
       if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
             int si       = staffIdx();
             Segment* seg = segment();
-            score()->dragPosition(ed->pos, &si, &seg);
+            score()->dragPosition(ed.pos, &si, &seg);
             if (seg != segment() || staffIdx() != si) {
                   QPointF pos1(canvasPos());
                   score()->undo(new ChangeParent(this, seg, si));
@@ -294,7 +294,7 @@ QRectF Dynamic::drag(EditData* ed)
                   layout();
                   QPointF pos2(canvasPos());
                   setUserOff(pos1 - pos2);
-                  ed->startMove = pos2;
+                  ed.startMove = pos2;
                   }
             }
       return f;

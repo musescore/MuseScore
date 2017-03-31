@@ -49,11 +49,11 @@ class Image : public BSymbol {
       mutable bool _dirty;
 
       virtual bool isEditable() const override { return true; }
-      virtual void startEditDrag(EditData&) override;
-      virtual void editDrag(const EditData&) override;
-      virtual void endEditDrag(const EditData&) override;
-      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
-      virtual int grips() const override { return 2; }
+      virtual void startEdit(EditData&) override;
+      virtual void startDrag(EditData&) override;
+      virtual void editDrag(EditData& ed) override;
+      virtual void endEditDrag(EditData&) override;
+      virtual void updateGrips(EditData&) const override;
       virtual QPointF gripAnchor(Grip) const override { return QPointF(); }
 
    public:

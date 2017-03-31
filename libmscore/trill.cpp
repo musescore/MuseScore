@@ -202,9 +202,9 @@ Shape TrillSegment::shape() const
 //   acceptDrop
 //---------------------------------------------------------
 
-bool TrillSegment::acceptDrop(const DropData& data) const
+bool TrillSegment::acceptDrop(EditData& data) const
       {
-      if (data.element->type() == ElementType::ACCIDENTAL)
+      if (data.element->isAccidental())
             return true;
       return false;
       }
@@ -213,10 +213,10 @@ bool TrillSegment::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* TrillSegment::drop(const DropData& data)
+Element* TrillSegment::drop(EditData& data)
       {
       Element* e = data.element;
-      switch(e->type()) {
+      switch (e->type()) {
             case ElementType::ACCIDENTAL:
                   e->setParent(trill());
                   score()->undoAddElement(e);

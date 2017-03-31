@@ -287,9 +287,9 @@ class Text : public Element {
       bool layoutToParentWidth() const    { return _layoutToParentWidth; }
       void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v;   }
 
-      void startEdit(MuseScoreView*, const QPointF&);
-      void endEdit();
-      bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString&);
+      virtual void startEdit(EditData&) override;
+      virtual bool edit(EditData&) override;
+      virtual void endEdit(EditData&) override;
 
       void setFormat(FormatId, QVariant);
 
@@ -319,7 +319,7 @@ class Text : public Element {
       void spellCheckUnderline(bool) {}
       virtual void styleChanged() override;
 
-      virtual void paste();
+      virtual void paste(MuseScoreView*);
 
       QRectF pageRectangle() const;
       QRectF cursorRect() const;
@@ -330,8 +330,8 @@ class Text : public Element {
 
       virtual QLineF dragAnchor() const override;
 
-      virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&) override;
+      virtual bool acceptDrop(EditData&) const override;
+      virtual Element* drop(EditData&) override;
 
       friend class TextBlock;
       friend class TextFragment;

@@ -363,7 +363,7 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
 
 static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element* e, QPointF pt = QPointF())
       {
-      DropData dropData;
+      EditData dropData;
       dropData.view       = viewer;
       dropData.pos        = pt.isNull() ? target->pagePos() : pt;
       dropData.dragOffset = QPointF();
@@ -374,13 +374,11 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
             // use same code path as drag&drop
 
             QByteArray a = e->mimeData(QPointF());
-printf("<<<%s>>>\n", a.data());
             XmlReader e(gscore, a);
             Fraction duration;  // dummy
             QPointF dragOffset;
             ElementType type = Element::readType(e, &dragOffset, &duration);
             dropData.element = Element::create(type, score);
-      printf("create %p %s\n", dropData.element, dropData.element->name());
 
             dropData.element->read(e);
             dropData.element->styleChanged();   // update to local style

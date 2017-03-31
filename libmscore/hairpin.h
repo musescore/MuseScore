@@ -38,26 +38,33 @@ enum class HairpinType : char {
 class HairpinSegment : public TextLineBaseSegment {
       Q_GADGET
 
-      bool drawCircledTip;
+      bool    drawCircledTip;
       QPointF circledTip;
-      qreal circledTipRadius;
+      qreal   circledTipRadius;
+
+      virtual void startEdit(EditData&) override;
+      virtual void startEditDrag(EditData&) override;
+      virtual void editDrag(EditData&) override;
+      virtual void updateGrips(EditData&) const override;
+      virtual void endEdit(EditData&) override;
+
+      virtual void draw(QPainter*) const override;
 
    public:
       HairpinSegment(Score* s);
-      Hairpin* hairpin() const                       { return (Hairpin*)spanner(); }
-      virtual HairpinSegment* clone() const override { return new HairpinSegment(*this); }
-      virtual ElementType type() const override    { return ElementType::HAIRPIN_SEGMENT; }
-      virtual void draw(QPainter*) const override;
-      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
-      virtual int grips() const override { return 4; }
-      virtual void editDrag(const EditData&) override;
-      virtual void layout() override;
+      virtual HairpinSegment* clone() const override { return new HairpinSegment(*this);    }
+      virtual ElementType type() const override      { return ElementType::HAIRPIN_SEGMENT; }
+
+      Hairpin* hairpin() const                       { return (Hairpin*)spanner();          }
+
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
       virtual PropertyFlags propertyFlags(P_ID) const override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
+
+      virtual void layout() override;
       virtual Shape shape() const override;
       };
 
@@ -88,10 +95,6 @@ class Hairpin : public TextLineBase {
       Spatium _hairpinContHeight;
       PropertyFlags hairpinHeightStyle;
       PropertyFlags hairpinContHeightStyle;
-
-      static Spatium editHairpinHeight;
-      virtual void startEdit(MuseScoreView*, const QPointF&) override;
-      virtual void endEdit() override;
 
    public:
       Hairpin(Score* s);

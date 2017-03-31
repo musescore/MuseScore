@@ -65,9 +65,9 @@ void InstrumentName::setInstrumentNameType(InstrumentNameType st)
 //   endEdit
 //---------------------------------------------------------
 
-void InstrumentName::endEdit()
+void InstrumentName::endEdit(EditData& ed)
       {
-      Text::endEdit();
+      Text::endEdit(ed);
       Part* part = staff()->part();
       Instrument* instrument = new Instrument(*part->instrument());
 

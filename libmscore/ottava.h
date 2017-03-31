@@ -100,7 +100,7 @@ class Ottava : public TextLineBase {
       virtual LineSegment* createLineSegment() override;
       int pitchShift() const                    { return _pitchShift; }
 
-      virtual void endEdit() override;
+      virtual void endEdit(EditData&) override;
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader& de) override;
       bool readProperties(XmlReader& e);

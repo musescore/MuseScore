@@ -1451,17 +1451,11 @@ int Note::transposition() const
       }
 
 //---------------------------------------------------------
-//   NoteElementEditData
+//   NoteEditData
 //---------------------------------------------------------
 
-struct PropertyData {
-      P_ID id;
-      QVariant data;
-      };
-
-class NoteElementEditData : public ElementEditData {
+class NoteEditData : public ElementEditData {
    public:
-      QList<PropertyData> data;
       int line;
       };
 
@@ -1469,33 +1463,33 @@ class NoteElementEditData : public ElementEditData {
 //   startDrag
 //---------------------------------------------------------
 
-void Note::startDrag(EditData* data)
+void Note::startDrag(EditData& ed)
       {
-      NoteElementEditData* ed = new NoteElementEditData();
-      ed->e    = this;
-      ed->line = _line;
-      ed->data.push_back(PropertyData({P_ID::PITCH, QVariant(_pitch)}));
-      ed->data.push_back(PropertyData({P_ID::TPC1, QVariant(_tpc[0])}));
-      ed->data.push_back(PropertyData({P_ID::TPC2, QVariant(_tpc[1])}));
+      NoteEditData* ned = new NoteEditData();
+      ned->e    = this;
+      ned->line = _line;
+      ned->pushProperty(P_ID::PITCH);
+      ned->pushProperty(P_ID::TPC1);
+      ned->pushProperty(P_ID::TPC2);
 
-      data->addData(ed);
+      ed.addData(ned);
       }
 
 //---------------------------------------------------------
 //   drag
 //---------------------------------------------------------
 
-QRectF Note::drag(EditData* ed)
+QRectF Note::drag(EditData& ed)
       {
       if (staff()->isDrumStaff(tick()))
             return QRect();
 
-      NoteElementEditData* ned = static_cast<NoteElementEditData*>(ed->getData(this));
+      NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
       int _tick      = chord()->tick();
       qreal _spatium = spatium();
       bool tab       = staff()->isTabStaff(_tick);
       qreal step     = _spatium * (tab ? staff()->staffType(_tick)->lineDistance().val() : 0.5);
-      int lineOffset = lrint(ed->delta.y() / step);
+      int lineOffset = lrint(ed.delta.y() / step);
 
 
       if (staff()->isTabStaff(_tick)) {
@@ -1519,7 +1513,7 @@ QRectF Note::drag(EditData* ed)
 //   endDrag
 //---------------------------------------------------------
 
-void Note::endDrag(EditData* ed)
+void Note::endDrag(EditData& ed)
       {
       Staff* staff = score()->staff(chord()->vStaffIdx());
       int tick     = chord()->tick();
@@ -1551,12 +1545,10 @@ void Note::endDrag(EditData* ed)
 #endif
             }
       else {
-            NoteElementEditData* ned = static_cast<NoteElementEditData*>(ed->getData(this));
+            NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
             for (Note* nn : tiedNotes()) {
-                  for (PropertyData pd : ned->data) {
-                        if (getProperty(pd.id) != pd.data) {
-                              score()->undoPropertyChanged(nn, pd.id, pd.data);
-                              }
+                  for (PropertyData pd : ned->propertyData) {
+                        score()->undoPropertyChanged(nn, pd.id, pd.data);
                         }
                   }
             }
@@ -1567,7 +1559,7 @@ void Note::endDrag(EditData* ed)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Note::acceptDrop(const DropData& data) const
+bool Note::acceptDrop(EditData& data) const
       {
       Element* e = data.element;
       ElementType type = e->type();
@@ -1634,7 +1626,7 @@ bool Note::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Note::drop(const DropData& data)
+Element* Note::drop(EditData& data)
       {
       Element* e = data.element;
 
@@ -2325,7 +2317,7 @@ int Note::customizeVelocity(int velo) const
 //   endEdit
 //---------------------------------------------------------
 
-void Note::endEdit()
+void Note::endEdit(EditData&)
       {
       Chord* ch = chord();
       if (ch->notes().size() == 1) {

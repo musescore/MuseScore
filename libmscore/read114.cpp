@@ -51,6 +51,7 @@
 #include "fingering.h"
 #include "marker.h"
 #include "read206.h"
+#include "bracketItem.h"
 
 namespace Ms {
 
@@ -1509,9 +1510,9 @@ static void readStaff(Staff* staff, XmlReader& e)
             else if (tag == "keylist")
                   staff->keyList()->read(e, _score);
             else if (tag == "bracket") {
-                  BracketItem b;
-                  b._bracket = BracketType(e.intAttribute("type", -1));
-                  b._bracketSpan = e.intAttribute("span", 0);
+                  BracketItem* b = new BracketItem(_score);
+                  b->setBracketType( BracketType(e.intAttribute("type", -1)));
+                  b->setBracketSpan(e.intAttribute("span", 0));
                   staff->brackets().push_back(b);
                   e.readNext();
                   }
@@ -1704,6 +1705,7 @@ static void readPart(Part* part, XmlReader& e)
 //   convertOldTextStyleNames
 //---------------------------------------------------------
 
+#if 0
 static QString convertOldTextStyleNames(const QString& s)
       {
       QString rs(s);
@@ -1734,6 +1736,7 @@ static QString convertOldTextStyleNames(const QString& s)
             rs = "Repeat Text Right";
       return rs;
       }
+#endif
 
 #if 0
 //---------------------------------------------------------

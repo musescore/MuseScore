@@ -210,7 +210,7 @@ void LayoutBreak::spatiumChanged(qreal, qreal)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool LayoutBreak::acceptDrop(const DropData& data) const
+bool LayoutBreak::acceptDrop(EditData& data) const
       {
       return data.element->type() == ElementType::LAYOUT_BREAK
          && static_cast<LayoutBreak*>(data.element)->layoutBreakType() != layoutBreakType();
@@ -220,7 +220,7 @@ bool LayoutBreak::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* LayoutBreak::drop(const DropData& data)
+Element* LayoutBreak::drop(EditData& data)
       {
       Element* e = data.element;
       score()->undoChangeElement(this, e);

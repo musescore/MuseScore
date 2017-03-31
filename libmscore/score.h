@@ -615,7 +615,6 @@ class Score : public QObject, ScoreElement {
       void undoRemoveStaff(Staff* staff);
       void undoInsertStaff(Staff* staff, int idx, bool createRests=true);
       void undoChangeInvisible(Element*, bool);
-      void undoChangeBracketSpan(Staff* staff, int column, int span);
       void undoChangeTuning(Note*, qreal);
       void undoChangeUserMirror(Note*, MScore::DirectionH);
       void undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent);
@@ -895,7 +894,7 @@ class Score : public QObject, ScoreElement {
 
       void cmdDeleteTuplet(Tuplet*, bool replaceWithRest);
 
-      void moveBracket(int staffIdx, int srcCol, int dstCol);
+//      void moveBracket(int staffIdx, int srcCol, int dstCol);
       Measure* getCreateMeasure(int tick);
 
       void adjustBracketsDel(int sidx, int eidx);

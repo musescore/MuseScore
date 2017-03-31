@@ -23,10 +23,10 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   PropertyData
+//   PropertyMetaData
 //---------------------------------------------------------
 
-struct PropertyData {
+struct PropertyMetaData {
       P_ID id;
       const char* qml;        // qml name of property
       bool link;              // link this property for linked elements
@@ -38,7 +38,7 @@ struct PropertyData {
 // always: propertyList[subtype].id == subtype
 //
 //
-static constexpr PropertyData propertyList[] = {
+static constexpr PropertyMetaData propertyList[] = {
       { P_ID::SUBTYPE,                 "subtype",                 false, "subtype",               P_TYPE::INT             },
       { P_ID::SELECTED,                "selected",                false, "selected",              P_TYPE::BOOL            },
       { P_ID::GENERATED,               "generated",               false,  "generated",            P_TYPE::BOOL            },
@@ -249,6 +249,7 @@ static constexpr PropertyData propertyList[] = {
       { P_ID::STAFF_BARLINE_SPAN_FROM, "staff_barline_span_from", false, "barLineSpanFrom",       P_TYPE::INT             },
 //190
       { P_ID::STAFF_BARLINE_SPAN_TO,   "staff_barline_span_to",   false, "barLineSpanTo",         P_TYPE::INT             },
+      { P_ID::BRACKET_SPAN,            "bracket_span",            false, "bracketSpan",           P_TYPE::INT             },
       { P_ID::BRACKET_COLUMN,          "bracket_column",          false, "level",                 P_TYPE::INT             },
       { P_ID::INAME_LAYOUT_POSITION,   "iname_layout_position",   false, "layoutPosition",        P_TYPE::INT             },
       { P_ID::SUB_STYLE,               "sub_style",               false, "style",                 P_TYPE::SUB_STYLE       },
@@ -258,7 +259,7 @@ static constexpr PropertyData propertyList[] = {
       { P_ID::FONT_ITALIC,             "font_italic",             false, "italic",                P_TYPE::BOOL            },
       { P_ID::FONT_UNDERLINE,          "font_underline",          false, "underline",             P_TYPE::BOOL            },
       { P_ID::FRAME,                   "has_frame",               false, "hasFrame",              P_TYPE::BOOL            },
-//200
+
       { P_ID::FRAME_SQUARE,            "frame_square",            false, "frameSquare",           P_TYPE::BOOL            },
       { P_ID::FRAME_CIRCLE,            "frame_circle",            false, "frameCircle",           P_TYPE::BOOL            },
       { P_ID::FRAME_WIDTH,             "frame_width",             false, "frameWidth",            P_TYPE::SPATIUM         },
@@ -269,7 +270,7 @@ static constexpr PropertyData propertyList[] = {
       { P_ID::FONT_SPATIUM_DEPENDENT,  "font_spatium_dependent",  false, "sizeIsSpatiumDependent", P_TYPE::BOOL           },
       { P_ID::ALIGN,                   "align",                   false, "align",                 P_TYPE::ALIGN           },
       { P_ID::OFFSET,                  "offset",                  false, "offset",                P_TYPE::POINT           },
-//210
+
       { P_ID::OFFSET_TYPE,             "offset_type",             false, "offsetType",            P_TYPE::INT             },
       { P_ID::SYSTEM_FLAG,             "system_flag",             false, "systemFlag",            P_TYPE::BOOL            },
       { P_ID::BEGIN_TEXT,              "begin_text",              false, "beginText",             P_TYPE::STRING          },
@@ -280,7 +281,7 @@ static constexpr PropertyData propertyList[] = {
       { P_ID::BEGIN_FONT_FACE,         "begin_font_face",         false, "beginFontFace",         P_TYPE::FONT            },
       { P_ID::BEGIN_FONT_SIZE,         "begin_font_size",         false, "beginFontSize",         P_TYPE::REAL            },
       { P_ID::BEGIN_FONT_BOLD,         "begin_font_bold",         false, "beginFontBold",         P_TYPE::BOOL            },
-//220
+
       { P_ID::BEGIN_FONT_ITALIC,       "begin_font_italic",       false, "beginFontItalic",       P_TYPE::BOOL            },
       { P_ID::BEGIN_FONT_UNDERLINE,    "begin_font_underline",    false, "beginFontUnderline",    P_TYPE::BOOL            },
       { P_ID::BEGIN_TEXT_OFFSET,       "begin_text_offset",       false, "beginTextOffset",       P_TYPE::POINT           },
@@ -316,7 +317,7 @@ static constexpr PropertyData propertyList[] = {
 
 P_ID propertyId(const QString& s)
       {
-      for (const PropertyData& pd : propertyList) {
+      for (const PropertyMetaData& pd : propertyList) {
             if (pd.qml == s)
                   return pd.id;
             }

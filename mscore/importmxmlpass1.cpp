@@ -29,6 +29,7 @@
 #include "libmscore/timesig.h"
 #include "libmscore/style.h"
 #include "libmscore/spanner.h"
+#include "libmscore/bracketItem.h"
 
 #include "importmxmlpass1.h"
 #include "importmxmlpass2.h"
@@ -996,19 +997,21 @@ void MusicXMLParserPass1::scorePartwise()
                   stavesSpan += il.at(pg->start + j)->nstaves();
             // add bracket and set the span
             // TODO: use group-symbol default-x to determine horizontal order of brackets
+            Staff* staff = il.at(pg->start)->staff(0);
             if (pg->type == BracketType::NO_BRACKET)
-                  il.at(pg->start)->staff(0)->setBracket(0, BracketType::NO_BRACKET);
-            else
-                  il.at(pg->start)->staff(0)->addBracket(BracketItem(pg->type, stavesSpan));
+                  staff->setBracketType(0, BracketType::NO_BRACKET);
+            else {
+                  staff->addBracket(new BracketItem(staff->score(), pg->type, stavesSpan));
+                  }
             if (pg->barlineSpan)
-                  il.at(pg->start)->staff(0)->setBarLineSpan(pg->span);
+                  staff->setBarLineSpan(pg->span);
             }
 
       // handle the implicit brackets:
       // multi-staff parts w/o explicit brackets get a brace
       foreach(Part const* const p, il) {
             if (p->nstaves() > 1 && !partSet.contains(p)) {
-                  p->staff(0)->addBracket(BracketItem(BracketType::BRACE, p->nstaves()));
+                  p->staff(0)->addBracket(new BracketItem(p->score(), BracketType::BRACE, p->nstaves()));
                   if (allStaffGroupsIdentical(p)) {
                         // span only if the same types
                         p->staff(0)->setBarLineSpan(p->nstaves());

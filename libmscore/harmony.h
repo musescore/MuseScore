@@ -131,9 +131,9 @@ class Harmony : public Text {
       void setbboxtight(const QRectF& r) const { _tbbox = r;           }
 
       virtual bool isEditable() const override { return true; }
-      virtual void startEdit(MuseScoreView*, const QPointF&) override;
-      virtual bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString& s) override;
-      virtual void endEdit() override;
+      virtual void startEdit(EditData&) override;
+      virtual bool edit(EditData&) override;
+      virtual void endEdit(EditData&) override;
 
       QString hUserName() const                { return _userName;     }
       QString hTextName() const                { return _textName;     }

@@ -34,6 +34,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/undo.h"
+#include "libmscore/bracketItem.h"
 
 namespace Ms {
 
@@ -463,11 +464,9 @@ void MuseScore::editInstrList()
                   --curSpan;
 
                   // update brackets
-                  QList<BracketItem> brackets = staff->brackets();
-                  int nn = brackets.size();
-                  for (int ii = 0; ii < nn; ++ii) {
-                        if ((brackets[ii]._bracket != BracketType::NO_BRACKET) && (brackets[ii]._bracketSpan > (n - i)))
-                              s->undoChangeBracketSpan(staff, ii, n - i);
+                  for (BracketItem* bi : staff->brackets()) {
+                        if ((bi->bracketSpan() > (n - i)))
+                              bi->undoChangeProperty(P_ID::BRACKET_SPAN, n - i);
                         }
                   }
             }

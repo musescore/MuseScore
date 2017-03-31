@@ -77,6 +77,7 @@
 #include "systemdivider.h"
 #include "stafftypechange.h"
 #include "stafflines.h"
+#include "bracketItem.h"
 
 namespace Ms {
 
@@ -1214,7 +1215,7 @@ QRectF Measure::staffabbox(int staffIdx) const
  Return true if an Element of type \a type can be dropped on a Measure
 */
 
-bool Measure::acceptDrop(const DropData& data) const
+bool Measure::acceptDrop(EditData& data) const
       {
       MuseScoreView* viewer = data.view;
       QPointF pos           = data.pos;
@@ -1285,7 +1286,7 @@ bool Measure::acceptDrop(const DropData& data) const
 ///   element \a type and \a subtype.
 //---------------------------------------------------------
 
-Element* Measure::drop(const DropData& data)
+Element* Measure::drop(EditData& data)
       {
       Element* e = data.element;
       int staffIdx = -1;
@@ -1351,8 +1352,8 @@ Element* Measure::drop(const DropData& data)
                   int level = 0;
                   int firstStaff = 0;
                   for (Staff* s : score()->staves()) {
-                        for (const BracketItem& bi : s->brackets()) {
-                              int lastStaff = firstStaff + bi._bracketSpan - 1;
+                        for (const BracketItem* bi : s->brackets()) {
+                              int lastStaff = firstStaff + bi->bracketSpan() - 1;
                               if (staffIdx >= firstStaff && staffIdx <= lastStaff)
                                     ++level;
                               }

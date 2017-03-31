@@ -99,8 +99,8 @@ class TimeSig : public Element {
       int numeratorStretch() const       { return _stretch.numerator(); }
       int denominatorStretch() const     { return _stretch.denominator(); }
 
-      bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&) override;
+      bool acceptDrop(EditData&) const override;
+      virtual Element* drop(EditData&) override;
 
       Segment* segment() const           { return (Segment*)parent(); }
       Measure* measure() const           { return (Measure*)parent()->parent(); }

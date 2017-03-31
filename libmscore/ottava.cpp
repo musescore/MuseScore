@@ -292,7 +292,7 @@ LineSegment* Ottava::createLineSegment()
 //   endEdit
 //---------------------------------------------------------
 
-void Ottava::endEdit()
+void Ottava::endEdit(EditData& ed)
       {
       if (editTick != tick() || editTick2 != tick2()) {
             Staff* s = staff();
@@ -300,7 +300,7 @@ void Ottava::endEdit()
             score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
             score()->setPlaylistDirty();
             }
-      TextLineBase::endEdit();
+      TextLineBase::endEdit(ed);
       }
 
 //---------------------------------------------------------

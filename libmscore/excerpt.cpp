@@ -41,6 +41,7 @@
 #include "tremolo.h"
 #include "barline.h"
 #include "undo.h"
+#include "bracketItem.h"
 
 namespace Ms {
 
@@ -729,9 +730,9 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                         span = n - dstStaffIdx - 1;
                   dstStaff->setBarLineSpan(span);
                   int idx = 0;
-                  foreach(BracketItem bi, srcStaff->brackets()) {
-                        dstStaff->setBracket(idx, bi._bracket);
-                        dstStaff->setBracketSpan(idx, bi._bracketSpan);
+                  for (BracketItem* bi : srcStaff->brackets()) {
+                        dstStaff->setBracketType(idx, bi->bracketType());
+                        dstStaff->setBracketSpan(idx, bi->bracketSpan());
                         }
                   }
             }
@@ -1162,20 +1163,20 @@ QString Excerpt::createName(const QString& partName, QList<Excerpt*>& excerptLis
       {
       QString name = partName.simplified();
       int count = 0;    // no of occurences of partName
-      
+
       for (Excerpt* e : excerptList) {
             // if <partName> already exists, change <partName> to <partName 1>
             if (e->title().compare(name) == 0)
                   e->setTitle(e->title() + " 1");
-          
+
             QRegExp rx("^(.+)\\s\\d+$");
             if (rx.indexIn(e->title()) > -1 && rx.cap(1) == name)
                   count++;
             }
-      
+
       if (count > 0)
             name += QString(" %1").arg(count + 1);
-      
+
       return name;
       }
 

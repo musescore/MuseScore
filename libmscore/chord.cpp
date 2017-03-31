@@ -2492,7 +2492,7 @@ Note* Chord::findNote(int pitch) const
 //   drop
 //---------------------------------------------------------
 
-Element* Chord::drop(const DropData& data)
+Element* Chord::drop(EditData& data)
       {
       Element* e = data.element;
       switch (e->type()) {

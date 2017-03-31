@@ -46,24 +46,25 @@ class ChordLine : public Element {
       ChordLine(Score*);
       ChordLine(const ChordLine&);
 
-      virtual ChordLine* clone() const    { return new ChordLine(*this); }
-      virtual ElementType type() const  { return ElementType::CHORDLINE; }
+      virtual ChordLine* clone() const override { return new ChordLine(*this); }
+      virtual ElementType type() const override { return ElementType::CHORDLINE; }
+
       virtual void setChordLineType(ChordLineType);
-      ChordLineType chordLineType() const { return _chordLineType; }
-      Chord* chord() const                { return (Chord*)(parent()); }
-      virtual bool isStraight() const     { return _straight; }
+      ChordLineType chordLineType() const       { return _chordLineType; }
+      Chord* chord() const                      { return (Chord*)(parent()); }
+      virtual bool isStraight() const           { return _straight; }
       virtual void setStraight(bool straight)   { _straight =  straight; }
       virtual void setLengthX(qreal length)     { _lengthX = length; }
       virtual void setLengthY(qreal length)     { _lengthY = length; }
 
-      virtual void read(XmlReader&);
-      virtual void write(XmlWriter& xml) const;
-      virtual void layout();
-      virtual void draw(QPainter*) const;
+      virtual void read(XmlReader&) override;
+      virtual void write(XmlWriter& xml) const override;
+      virtual void layout() override;
+      virtual void draw(QPainter*) const override;
 
-      virtual void editDrag(const EditData&);
-      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
-      virtual int grips() const override;
+      virtual void startEdit(EditData&) override;
+      virtual void editDrag(EditData&) override;
+      virtual void updateGrips(EditData&) const override;
 
       virtual QString accessibleInfo() const override;
       };

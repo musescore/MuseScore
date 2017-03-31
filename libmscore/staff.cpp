@@ -30,6 +30,7 @@
 #include "barline.h"
 #include "ottava.h"
 #include "harmony.h"
+#include "bracketItem.h"
 
 // #define DEBUG_CLEFS
 
@@ -51,13 +52,38 @@ int Staff::idx() const
       }
 
 //---------------------------------------------------------
+//   fillBrackets
+//    make sure index idx is valid
+//---------------------------------------------------------
+
+void Staff::fillBrackets(int idx)
+      {
+      for (int i = _brackets.size(); i <= idx; ++i) {
+            BracketItem* bi = new BracketItem(score());
+            bi->setStaff(this);
+            _brackets.append(bi);
+            }
+      }
+
+//---------------------------------------------------------
+//   cleanBrackets
+//    remove NO_BRACKET entries from the end of list
+//---------------------------------------------------------
+
+void Staff::cleanBrackets()
+      {
+      while (!_brackets.empty() && (_brackets.last()->bracketType() == BracketType::NO_BRACKET))
+            delete _brackets.takeLast();
+      }
+
+//---------------------------------------------------------
 //   bracket
 //---------------------------------------------------------
 
-BracketType Staff::bracket(int idx) const
+BracketType Staff::bracketType(int idx) const
       {
       if (idx < _brackets.size())
-            return _brackets[idx]._bracket;
+            return _brackets[idx]->bracketType();
       return BracketType::NO_BRACKET;
       }
 
@@ -68,7 +94,7 @@ BracketType Staff::bracket(int idx) const
 int Staff::bracketSpan(int idx) const
       {
       if (idx < _brackets.size())
-            return _brackets[idx]._bracketSpan;
+            return _brackets[idx]->bracketSpan();
       return 0;
       }
 
@@ -76,13 +102,11 @@ int Staff::bracketSpan(int idx) const
 //   setBracket
 //---------------------------------------------------------
 
-void Staff::setBracket(int idx, BracketType val)
+void Staff::setBracketType(int idx, BracketType val)
       {
-      for (int i = _brackets.size(); i <= idx; ++i)
-            _brackets.append(BracketItem());
-      _brackets[idx]._bracket = val;
-      while (!_brackets.empty() && (_brackets.last()._bracket == BracketType::NO_BRACKET))
-            _brackets.removeLast();
+      fillBrackets(idx);
+      _brackets[idx]->setBracketType(val);
+      cleanBrackets();
       }
 
 //---------------------------------------------------------
@@ -91,11 +115,10 @@ void Staff::setBracket(int idx, BracketType val)
 
 void Staff::swapBracket(int oldIdx, int newIdx)
       {
-      for (int i = _brackets.size(); i <= newIdx; ++i)
-            _brackets.append(BracketItem());
+      int idx = qMax(oldIdx, newIdx);
+      fillBrackets(idx);
       _brackets.swap(oldIdx, newIdx);
-      while (!_brackets.empty() && (_brackets.last()._bracket == BracketType::NO_BRACKET))
-            _brackets.removeLast();
+      cleanBrackets();
       }
 
 //---------------------------------------------------------
@@ -106,29 +129,31 @@ void Staff::setBracketSpan(int idx, int val)
       {
       Q_ASSERT(idx >= 0);
       Q_ASSERT(val >= 0);
-      for (int i = _brackets.size(); i <= idx; ++i)
-            _brackets.append(BracketItem());
-      _brackets[idx]._bracketSpan = val;
+      fillBrackets(idx);
+      _brackets[idx]->setBracketSpan(val);
       }
 
 //---------------------------------------------------------
 //   addBracket
 //---------------------------------------------------------
 
-void Staff::addBracket(BracketItem b)
+void Staff::addBracket(BracketItem* b)
       {
-      if (!_brackets.empty() && _brackets[0]._bracket == BracketType::NO_BRACKET) {
+      b->setStaff(this);
+      if (!_brackets.empty() && _brackets[0]->bracketType() == BracketType::NO_BRACKET)
             _brackets[0] = b;
-            }
       else {
             //
             // create new bracket level
             //
-            foreach(Staff* s, score()->staves()) {
+            for (Staff* s : score()->staves()) {
                   if (s == this)
                         s->_brackets.append(b);
-                  else
-                        s->_brackets.append(BracketItem());
+                  else {
+                        BracketItem* bi = new BracketItem(score());
+                        bi->setStaff(this);
+                        s->_brackets.append(bi);
+                        }
                   }
             }
       }
@@ -148,10 +173,10 @@ BracketType Staff::innerBracket() const
       for (int i = 0; i < score()->nstaves(); ++i) {
             Staff* staff = score()->staff(i);
             for (int k = 0; k < staff->brackets().size(); ++k) {
-                  const BracketItem& bi = staff->brackets().at(k);
-                  if (bi._bracket != BracketType::NO_BRACKET) {
-                        if (i < staffIdx && ((i + bi._bracketSpan) > staffIdx) && k < level) {
-                              t = bi._bracket;
+                  const BracketItem* bi = staff->brackets().at(k);
+                  if (bi->bracketType() != BracketType::NO_BRACKET) {
+                        if (i < staffIdx && ((i + bi->bracketSpan()) > staffIdx) && k < level) {
+                              t = bi->bracketType();
                               level = k;
                               break;
                               }
@@ -170,28 +195,44 @@ void Staff::cleanupBrackets()
       int index = idx();
       int n = score()->nstaves();
       for (int i = 0; i < _brackets.size(); ++i) {
-            if (_brackets[i]._bracket == BracketType::NO_BRACKET)
+            if (_brackets[i]->bracketType() == BracketType::NO_BRACKET)
                   continue;
-            int span = _brackets[i]._bracketSpan;
+            int span = _brackets[i]->bracketSpan();
             if (span > (n - index)) {
                   span = n - index;
-                  _brackets[i]._bracketSpan = span;
+                  _brackets[i]->setBracketSpan(span);
                   }
             }
       for (int i = 0; i < _brackets.size(); ++i) {
-            if (_brackets[i]._bracket == BracketType::NO_BRACKET)
+            if (_brackets[i]->bracketType() == BracketType::NO_BRACKET)
                   continue;
-            int span = _brackets[i]._bracketSpan;
-            if (span <= 1)
-                  _brackets[i] = BracketItem();
+            int span = _brackets[i]->bracketSpan();
+            if (span <= 1) {
+                  _brackets[i] = new BracketItem(score());
+                  _brackets[i]->setStaff(this);
+                  }
             else {
                   // delete all other brackets with same span
                   for (int k = i + 1; k < _brackets.size(); ++k) {
-                        if (span == _brackets[k]._bracketSpan)
-                              _brackets[k] = BracketItem();
+                        if (span == _brackets[k]->bracketSpan()) {
+                              _brackets[k] = new BracketItem(score());
+                              _brackets[k]->setStaff(this);
+                              }
                         }
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   bracketLevels
+//---------------------------------------------------------
+
+int Staff::bracketLevels() const
+      {
+      int columns = 0;
+      for (auto bi : _brackets)
+           columns = qMax(columns, bi->column());
+      return columns;
       }
 
 //---------------------------------------------------------
@@ -538,8 +579,13 @@ void Staff::write(XmlWriter& xml) const
       if (_hideSystemBarLine)
             xml.tag("hideSystemBarLine", _hideSystemBarLine);
 
-      for (const BracketItem& i : _brackets)
-            xml.tagE(QString("bracket type=\"%1\" span=\"%2\"").arg((signed char)(i._bracket)).arg(i._bracketSpan));
+      for (const BracketItem* i : _brackets) {
+            BracketType a = i->bracketType();
+            int b = i->bracketSpan();
+            int c = i->column();
+            if (a != BracketType::NO_BRACKET || b > 0)
+                  xml.tagE(QString("bracket type=\"%1\" span=\"%2\" col=\"%3\"").arg((int)(a)).arg(b).arg(c));
+            }
 
       writeProperty(xml, P_ID::STAFF_BARLINE_SPAN);
       writeProperty(xml, P_ID::STAFF_BARLINE_SPAN_FROM);
@@ -605,9 +651,14 @@ bool Staff::readProperties(XmlReader& e)
       else if (tag == "keylist")
             _keys.read(e, score());
       else if (tag == "bracket") {
-            BracketItem b;
-            b._bracket     = BracketType(e.intAttribute("type", -1));
-            b._bracketSpan = e.intAttribute("span", 0);
+            BracketItem* b = new BracketItem(score());
+            b->setStaff(this);
+            b->setBracketType(BracketType(e.intAttribute("type", -1)));
+            b->setBracketSpan(e.intAttribute("span", 0));
+            int col = e.intAttribute("col", -1);
+            if (col == -1)
+                  col = _brackets.size();
+            b->setColumn(col);
             _brackets.append(b);
             e.readNext();
             }
@@ -965,7 +1016,7 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
             }
       else {
             setSmall(0, t->smallStaff[cidx]);
-            setBracket(0, t->bracket[cidx]);
+            setBracketType(0, t->bracket[cidx]);
             setBracketSpan(0, t->bracketSpan[cidx]);
             setBarLineSpan(t->barlineSpan[cidx]);
             }

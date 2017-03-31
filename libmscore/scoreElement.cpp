@@ -14,6 +14,8 @@
 #include "score.h"
 #include "undo.h"
 #include "xml.h"
+#include "bracket.h"
+#include "bracketItem.h"
 
 namespace Ms {
 
@@ -22,6 +24,7 @@ namespace Ms {
 //
 static const ElementName elementNames[] = {
       { ElementType::INVALID,              "invalid",              QT_TRANSLATE_NOOP("elementName", "invalid") },
+      { ElementType::BRACKET_ITEM,         "BracketItem",          QT_TRANSLATE_NOOP("elementName", "BracketItem") },
       { ElementType::PART,                 "Part",                 QT_TRANSLATE_NOOP("elementName", "Part") },
       { ElementType::STAFF,                "Staff",                QT_TRANSLATE_NOOP("elementName", "Staff") },
       { ElementType::SCORE,                "Score",                QT_TRANSLATE_NOOP("elementName", "Score") },
@@ -131,7 +134,7 @@ ScoreElement::ScoreElement(const ScoreElement& se)
       }
 
 //---------------------------------------------------------
-//   ~ScoreElement
+//   ~Element
 //---------------------------------------------------------
 
 ScoreElement::~ScoreElement()
@@ -180,6 +183,14 @@ void ScoreElement::undoChangeProperty(P_ID id, const QVariant& v)
 
 void ScoreElement::undoChangeProperty(P_ID id, const QVariant& v, PropertyFlags ps)
       {
+      if (isBracket()) {
+            // brackets do not survive layout() and therefore cannot be on
+            // the undo stack; delegate to BracketItem:
+
+            BracketItem* bi = toBracket(this)->bracketItem();
+            bi->undoChangeProperty(id, v, ps);
+            return;
+            }
       if (id == P_ID::AUTOPLACE && v.toBool() && !getProperty(id).toBool()) {
             // special case: if we switch to autoplace, we must save
             // user offset values
@@ -387,7 +398,7 @@ ElementType ScoreElement::name2type(const QStringRef& s)
             if (s == elementNames[i].name)
                   return ElementType(i);
             }
-      qDebug("unknown type");
+      qDebug("unknown type <%s>", qPrintable(s.toString()));
       return ElementType::INVALID;
       }
 

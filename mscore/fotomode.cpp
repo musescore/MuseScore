@@ -343,8 +343,8 @@ void ScoreView::setupFotoMode()
 
 void ScoreView::startFotomode()
       {
-      editObject = _foto;
-      _foto->startEdit(this, QPointF());
+      editElement = _foto;
+      _foto->startEdit(editData);
       qreal w = 8.0 / _matrix.m11();
       qreal h = 8.0 / _matrix.m22();
       QRectF r(-w*.5, -h*.5, w, h);
@@ -359,10 +359,10 @@ void ScoreView::startFotomode()
             // convert to absolute position
             _foto->setRect(rect.translated(view.topLeft()));
             }
-      grip.resize(8);
-      for (QRectF& p : grip)
+      editData.grip.resize(8);
+      for (QRectF& p : editData.grip)
             p = r;
-      curGrip = Grip::START;
+      editData.curGrip = Grip::START;
       updateGrips();
       _score->addRefresh(_foto->abbox());
       _score->update();
@@ -378,10 +378,10 @@ void ScoreView::stopFotomode()
       QAction* a = getAction("fotomode");
       a->setChecked(false);
 
-      editObject = 0;
-      grips      = 0;
+      editElement    = 0;
+      editData.grips = 0;
 
-      _foto->endEdit();
+      _foto->endEdit(editData);
       update();
       }
 
@@ -393,7 +393,7 @@ void ScoreView::startFotoDrag()
       {
       _score->addRefresh(_foto->abbox());
       _score->update();
-      grips = 0;
+      editData.grips = 0;
       }
 
 //---------------------------------------------------------
@@ -405,7 +405,7 @@ void ScoreView::doDragFoto(QMouseEvent* ev)
       {
       QPointF p = toLogical(ev->pos());
       QRectF r;
-      r.setCoords(data.startMove.x(), data.startMove.y(), p.x(), p.y());
+      r.setCoords(editData.startMove.x(), editData.startMove.y(), p.x(), p.y());
       _foto->setRect(r.normalized());
 
       QRectF rr(_foto->rect());
@@ -427,8 +427,8 @@ void ScoreView::endFotoDrag()
       qreal h = 8.0 / _matrix.m22();
       QRectF r(-w*.5, -h*.5, w, h);
       for (int i = 0; i < 8; ++i)
-            grip[i] = r;
-      editObject = _foto;
+            editData.grip[i] = r;
+      editElement = _foto;
       updateGrips();
       _score->setUpdateAll();
       _score->update();
@@ -441,18 +441,17 @@ void ScoreView::endFotoDrag()
 void ScoreView::doFotoDragEdit(QMouseEvent* ev)
       {
       QPointF p     = toLogical(ev->pos());
-      QPointF delta = p - data.startMove;
+      QPointF delta = p - editData.startMove;
       score()->addRefresh(_foto->abbox());
-      EditData ed;
-      ed.curGrip = curGrip;
-      ed.delta   = delta;
-      ed.view    = this;
-      _foto->editDrag(ed);
+
+      editData.delta   = delta;
+      editData.view    = this;
+      _foto->editDrag(editData);
       updateGrips();
-      data.startMove = p;
+      editData.startMove = p;
       _score->update();
       if (mscore->inspector())
-            mscore->inspector()->setElement(_foto);
+            mscore->inspector()->update(_foto->score());
       }
 
 //---------------------------------------------------------
@@ -469,12 +468,12 @@ void ScoreView::endFotoDragEdit()
 
 bool ScoreView::fotoEditElementDragTransition(QMouseEvent* ev)
       {
-      data.startMove = imatrix.map(QPointF(ev->pos()));
+      editData.startMove = imatrix.map(QPointF(ev->pos()));
       int i;
-      for (i = 0; i < grips; ++i) {
-            if (grip[i].contains(data.startMove)) {
-                  curGrip = Grip(i);
-                  switch (int(curGrip)) {
+      for (i = 0; i < editData.grips; ++i) {
+            if (editData.grip[i].contains(editData.startMove)) {
+                  editData.curGrip = Grip(i);
+                  switch (int(editData.curGrip)) {
                         case 0:
                         case 2:
                               setCursor(Qt::SizeFDiagCursor);
@@ -497,7 +496,7 @@ bool ScoreView::fotoEditElementDragTransition(QMouseEvent* ev)
                   break;
                   }
             }
-      return i != grips;
+      return i != editData.grips;
       }
 
 //---------------------------------------------------------
@@ -509,11 +508,11 @@ bool ScoreView::fotoScoreViewDragTest(QMouseEvent* me)
       QPointF p(imatrix.map(QPointF(me->pos())));
       if (_foto->rect().contains(p))
             return false;
-      for (int i = 0; i < grips; ++i) {
-            if (grip[i].contains(p))
+      for (int i = 0; i < editData.grips; ++i) {
+            if (editData.grip[i].contains(p))
                   return false;
             }
-      data.startMove = p;
+      editData.startMove = p;
       return true;
       }
 
@@ -526,11 +525,11 @@ bool ScoreView::fotoScoreViewDragRectTest(QMouseEvent* me)
       QPointF p(toLogical(me->pos()));
       if (!_foto->rect().contains(p))
             return false;
-      for (int i = 0; i < grips; ++i) {
-            if (grip[i].contains(p))
+      for (int i = 0; i < editData.grips; ++i) {
+            if (editData.grip[i].contains(p))
                   return false;
             }
-      data.startMove = p;
+      editData.startMove = p;
       return true;
       }
 
@@ -541,15 +540,15 @@ bool ScoreView::fotoScoreViewDragRectTest(QMouseEvent* me)
 void ScoreView::doDragFotoRect(QMouseEvent* ev)
       {
       QPointF p(toLogical(ev->pos()));
-      QPointF delta = p - data.startMove;
+      QPointF delta = p - editData.startMove;
       score()->addRefresh(_foto->abbox());
       _foto->setRect(_foto->rect().translated(delta));
       score()->addRefresh(_foto->abbox());
-      data.startMove = p;
+      editData.startMove = p;
       updateGrips();
       _score->update();
       if (mscore->inspector())
-            mscore->inspector()->setElement(_foto);
+            mscore->inspector()->update(_foto->score());
       }
 
 //---------------------------------------------------------
@@ -716,11 +715,11 @@ void ScoreView::fotoModeCopy()
 bool ScoreView::fotoRectHit(const QPoint& pos)
       {
       QPointF p = toLogical(pos);
-      for (int i = 0; i < grips; ++i) {
-            if (grip[i].contains(p))
+      for (int i = 0; i < editData.grips; ++i) {
+            if (editData.grip[i].contains(p))
                   return false;
             }
-      data.startMove = p;
+      editData.startMove = p;
       return _foto->rect().contains(p);
       }
 

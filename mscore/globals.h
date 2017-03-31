@@ -24,7 +24,6 @@
 namespace Ms {
 
 extern bool enableExperimental;
-extern bool enableTestMode;
 extern bool noSeq;            ///< Dont use sequencer; cmd line option.
 extern bool noMidi;           ///< Dont use midi; cmd line option.
 extern bool midiInputTrace;   ///< debug option: dump midi input

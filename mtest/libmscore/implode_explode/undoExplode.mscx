@@ -28,7 +28,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>B♭ Trumpet</trackName>
       <Instrument>
@@ -82,7 +81,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>B♭ Trumpet</trackName>
       <Instrument>
@@ -136,7 +134,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>B♭ Trumpet</trackName>
       <Instrument>
@@ -190,7 +187,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>B♭ Trumpet</trackName>
       <Instrument>

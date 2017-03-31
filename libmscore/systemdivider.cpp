@@ -78,7 +78,7 @@ void SystemDivider::setDividerType(SystemDivider::Type v)
 //   drag
 //---------------------------------------------------------
 
-QRectF SystemDivider::drag(EditData* ed)
+QRectF SystemDivider::drag(EditData& ed)
       {
       setGenerated(false);
       return Symbol::drag(ed);

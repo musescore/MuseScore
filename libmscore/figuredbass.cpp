@@ -1227,17 +1227,17 @@ void FiguredBass::draw(QPainter* painter) const
 //   startEdit / edit / endEdit
 //---------------------------------------------------------
 
-void FiguredBass::startEdit(MuseScoreView * msv, const QPointF & pt)
+void FiguredBass::startEdit(EditData& ed)
       {
       Text::layout();               // convert layout to standard Text conventions
-      Text::startEdit(msv, pt);
+      Text::startEdit(ed);
       }
 
-void FiguredBass::endEdit()
+void FiguredBass::endEdit(EditData& ed)
       {
-      int         idx;
+      int idx;
 
-      Text::endEdit();
+      Text::endEdit(ed);
       // as the standard text editor keeps inserting spurious HTML formatting and styles
       // retrieve and work only on the plain text
       QString txt = plainText();

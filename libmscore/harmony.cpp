@@ -704,11 +704,11 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
 //   startEdit
 //---------------------------------------------------------
 
-void Harmony::startEdit(MuseScoreView* view, const QPointF& p)
+void Harmony::startEdit(EditData& ed)
       {
       if (!textList.empty())
             setXmlText(harmonyName());
-      Text::startEdit(view, p);
+      Text::startEdit(ed);
       layout();
       }
 
@@ -716,11 +716,11 @@ void Harmony::startEdit(MuseScoreView* view, const QPointF& p)
 //   edit
 //---------------------------------------------------------
 
-bool Harmony::edit(MuseScoreView* view, Grip grip, int key, Qt::KeyboardModifiers mod, const QString& s)
+bool Harmony::edit(EditData& ed)
       {
-      if (key == Qt::Key_Return)
+      if (ed.key == Qt::Key_Return)
             return true; // Harmony only single line
-      bool rv = Text::edit(view, grip, key, mod, s);
+      bool rv = Text::edit(ed);
       QString str = xmlText();
       int root, base;
       bool badSpell = !str.isEmpty() && !parseHarmony(str, &root, &base, true);
@@ -732,9 +732,9 @@ bool Harmony::edit(MuseScoreView* view, Grip grip, int key, Qt::KeyboardModifier
 //   endEdit
 //---------------------------------------------------------
 
-void Harmony::endEdit()
+void Harmony::endEdit(EditData& ed)
       {
-      Text::endEdit();
+      Text::endEdit(ed);
       layout();
       if (links()) {
             foreach(ScoreElement* e, *links()) {

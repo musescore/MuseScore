@@ -26,7 +26,7 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
-        <bracket type="1" span="2"/>
+        <bracket type="1" span="2" col="0"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="2">
@@ -82,7 +82,7 @@
       <Staff id="3">
         <StaffType group="pitched">
           </StaffType>
-        <bracket type="1" span="2"/>
+        <bracket type="1" span="2" col="0"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="4">

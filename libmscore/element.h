@@ -20,11 +20,6 @@
 
 namespace Ms {
 
-/**
- \file
- Definition of classes Element, ElementList.
-*/
-
 #ifndef VOICES
 #define VOICES 4
 #endif
@@ -86,31 +81,7 @@ enum class ElementFlag {
 typedef QFlags<ElementFlag> ElementFlags;
 Q_DECLARE_OPERATORS_FOR_FLAGS(ElementFlags);
 
-//---------------------------------------------------------
-//   DropData
-//---------------------------------------------------------
-
-struct DropData {
-      MuseScoreView* view;
-      QPointF pos;
-      QPointF dragOffset;
-      Element* element;
-      Qt::KeyboardModifiers modifiers;
-      Fraction duration;
-
-      bool control() const { return modifiers & Qt::ControlModifier; }
-      DropData();
-      };
-
-//---------------------------------------------------------
-//   ElementEditData
-//---------------------------------------------------------
-
-class ElementEditData {
-   public:
-      Element* e;
-      QPointF startDragPosition;
-      };
+class ElementEditData;
 
 //---------------------------------------------------------
 //   EditData
@@ -118,23 +89,36 @@ class ElementEditData {
 //---------------------------------------------------------
 
 struct EditData {
-      MuseScoreView* view;
-      Qt::KeyboardModifiers modifiers;
+      MuseScoreView* view { 0 };
 
-      Grip curGrip;
-      QPointF startMove;
+      QVector<QRectF> grip;
+      int grips                        { 0 };                    // number of grips
+      Grip curGrip                     { Grip(0) };
+
       QPointF pos;
+      QPointF startMove;
       QPointF lastPos;
       QPointF delta;
-      bool hRaster;
-      bool vRaster;
+      bool hRaster                     { false };
+      bool vRaster                     { false };
+
+      int key                          { 0 };
+      Qt::KeyboardModifiers modifiers  { 0 };
+      QString s;
+
+      // drop data:
+      QPointF dragOffset;
+      Element* element        { 0 };
+      Fraction duration       { Fraction(1,4) };
+
       //
       // set by startDrag()
       //
       QList<ElementEditData*> data;
-
       ElementEditData* getData(Element*) const;
       void addData(ElementEditData*);
+
+      bool control() const { return modifiers & Qt::ControlModifier; }
       };
 
 //-------------------------------------------------------------------
@@ -204,7 +188,7 @@ class Element : public ScoreElement {
    public:
       Element(Score* s = 0);
       Element(const Element&);
-      virtual ~Element() {}
+      virtual ~Element();
 
       Element &operator=(const Element&) = delete;
       //@ create a copy of the element
@@ -303,23 +287,24 @@ class Element : public ScoreElement {
       virtual void write(XmlWriter&) const;
       virtual void read(XmlReader&);
 
-      virtual void startDrag(EditData*);
-      virtual QRectF drag(EditData*);
-      virtual void endDrag(EditData*);
+      virtual void startDrag(EditData&);
+      virtual QRectF drag(EditData&);
+      virtual void endDrag(EditData&);
       virtual QLineF dragAnchor() const       { return QLineF(); }
 
       virtual bool isEditable() const         { return !flag(ElementFlag::GENERATED); }
-      virtual void startEdit(MuseScoreView*, const QPointF&);
-      virtual bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString& s);
-      virtual void startEditDrag(EditData&)                    {}
-      virtual void editDrag(const EditData&);
-      virtual void endEditDrag(const EditData&)                {}
-      virtual void endEdit()                                   {}
-      virtual void updateGrips(Grip*, QVector<QRectF>&) const  {}
-      virtual bool nextGrip(Grip*) const;
-      virtual int grips() const                { return 0; }
-      virtual bool prevGrip(Grip*) const;
-      virtual QPointF gripAnchor(Grip) const   { return QPointF(); }
+
+      virtual void startEdit(EditData&);
+      virtual bool edit(EditData&);
+      virtual void startEditDrag(EditData&)      {}
+      virtual void editDrag(EditData&);
+      virtual void endEditDrag(EditData&)        {}
+      virtual void endEdit(EditData&)            {}
+
+      virtual void updateGrips(EditData&) const  {}
+      virtual bool nextGrip(EditData&) const;
+      virtual bool prevGrip(EditData&) const;
+      virtual QPointF gripAnchor(Grip) const     { return QPointF(); }
       virtual void setGrip(Grip, const QPointF&);
       virtual QPointF getGrip(Grip) const;
 
@@ -369,7 +354,7 @@ class Element : public ScoreElement {
  Reimplemented by elements that accept drops. Used to change cursor shape while
  dragging to indicate drop targets.
 */
-      virtual bool acceptDrop(const DropData&) const { return false; }
+      virtual bool acceptDrop(EditData&) const { return false; }
 
 /**
  Handle a dropped element at canvas relative \a pos of given element
@@ -380,7 +365,7 @@ class Element : public ScoreElement {
 
  Reimplemented by elements that accept drops.
 */
-      virtual Element* drop(const DropData&) { return 0;}
+      virtual Element* drop(EditData&) { return 0;}
 
 /**
  delivers mouseEvent to element in edit mode
@@ -488,8 +473,42 @@ class Element : public ScoreElement {
             }
 
       virtual void triggerLayout() const;
-
+      void drawEditMode(QPainter*, EditData&);
       };
+
+//-----------------------------------------------------------------------------
+//   ElementEditData
+//    holds element specific data during element editing:
+//
+//    startEditDrag(EditData&)    creates data and attaches it to EditData
+//       editDrag(EditData&)
+//    endEditDrag(EditData&)      use data to create undo records
+//-----------------------------------------------------------------------------
+
+struct PropertyData {
+      P_ID id;
+      QVariant data;
+      };
+
+class ElementEditData {
+   public:
+      Element* e;
+      QList<PropertyData> propertyData;
+      QPointF startDragPosition;
+
+      void pushProperty(P_ID pid) { propertyData.push_back(PropertyData({pid, e->getProperty(pid) })); }
+      };
+
+//---------------------------------------------------------
+//   toSpanner
+//---------------------------------------------------------
+
+class Spanner;
+
+static inline Spanner* toSpanner(Element* e) {
+      Q_ASSERT(e == 0 || e->isSpanner());
+      return (Spanner*)e;
+      }
 
 //---------------------------------------------------------
 //   ElementList

@@ -25,7 +25,7 @@ namespace Ms {
 
 void ScoreView::lyricsUpDown(bool up, bool end)
       {
-      Lyrics* lyrics   = toLyrics(editObject);
+      Lyrics* lyrics   = toLyrics(editElement);
       int track        = lyrics->track();
       ChordRest* cr    = lyrics->chordRest();
       int verse        = lyrics->no();
@@ -61,12 +61,12 @@ void ScoreView::lyricsUpDown(bool up, bool end)
       mscore->changeState(mscoreState());
       adjustCanvasPosition(lyrics, false);
       if (end) {
-            ((Lyrics*)editObject)->movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-            ((Lyrics*)editObject)->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+            ((Lyrics*)editElement)->movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+            ((Lyrics*)editElement)->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
             }
       else {
-            ((Lyrics*)editObject)->movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
-            ((Lyrics*)editObject)->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+            ((Lyrics*)editElement)->movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+            ((Lyrics*)editElement)->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
             }
 
       _score->setLayoutAll();
@@ -79,7 +79,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
 
 void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       {
-      Lyrics* lyrics   = (Lyrics*)editObject;
+      Lyrics* lyrics   = (Lyrics*)editElement;
       int track        = lyrics->track();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
@@ -183,12 +183,12 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
 
       adjustCanvasPosition(toLyrics, false);
       if (end) {
-            ((Lyrics*)editObject)->movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-            ((Lyrics*)editObject)->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+            ((Lyrics*)editElement)->movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+            ((Lyrics*)editElement)->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
             }
       else {
-            ((Lyrics*)editObject)->movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
-            ((Lyrics*)editObject)->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+            ((Lyrics*)editElement)->movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+            ((Lyrics*)editElement)->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
             }
       _score->setLayoutAll();
       _score->update();
@@ -200,7 +200,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
 
 void ScoreView::lyricsMinus()
       {
-      Lyrics* lyrics   = static_cast<Lyrics*>(editObject);
+      Lyrics* lyrics   = toLyrics(editElement);
       int track        = lyrics->track();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
@@ -280,7 +280,7 @@ void ScoreView::lyricsMinus()
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(toLyrics, false);
-      ((Lyrics*)editObject)->selectAll();
+      ((Lyrics*)editElement)->selectAll();
 
       _score->setLayoutAll();
       _score->update();
@@ -292,7 +292,7 @@ void ScoreView::lyricsMinus()
 
 void ScoreView::lyricsUnderscore()
       {
-      Lyrics* lyrics   = static_cast<Lyrics*>(editObject);
+      Lyrics* lyrics   = static_cast<Lyrics*>(editElement);
       int track        = lyrics->track();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
@@ -399,7 +399,7 @@ void ScoreView::lyricsUnderscore()
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(toLyrics, false);
-      ((Lyrics*)editObject)->selectAll();
+      ((Lyrics*)editElement)->selectAll();
 
       _score->setLayoutAll();
       //_score->update();
@@ -412,7 +412,7 @@ void ScoreView::lyricsUnderscore()
 
 void ScoreView::lyricsReturn()
       {
-      Lyrics* lyrics   = (Lyrics*)editObject;
+      Lyrics* lyrics   = toLyrics(editElement);
       Segment* segment = lyrics->segment();
 
       endEdit();
@@ -463,7 +463,7 @@ void ScoreView::lyricsReturn()
 
 void ScoreView::lyricsEndEdit()
       {
-      Lyrics* lyrics = toLyrics(editObject);
+      Lyrics* lyrics = toLyrics(editElement);
 
       // if no text, just remove this lyrics
       if (lyrics->empty())

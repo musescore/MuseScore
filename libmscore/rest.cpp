@@ -159,9 +159,9 @@ void Rest::setUserOff(const QPointF& o)
 //   drag
 //---------------------------------------------------------
 
-QRectF Rest::drag(EditData* data)
+QRectF Rest::drag(EditData& ed)
       {
-      QPointF s(data->delta);
+      QPointF s(ed.delta);
       QRectF r(abbox());
 
       // Limit horizontal drag range
@@ -178,7 +178,7 @@ QRectF Rest::drag(EditData* data)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Rest::acceptDrop(const DropData& data) const
+bool Rest::acceptDrop(EditData& data) const
       {
       Element* e = data.element;
       ElementType type = e->type();
@@ -221,7 +221,7 @@ bool Rest::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Rest::drop(const DropData& data)
+Element* Rest::drop(EditData& data)
       {
       Element* e = data.element;
       switch (e->type()) {

@@ -460,7 +460,7 @@ int Lyrics::endTick() const
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Lyrics::acceptDrop(const DropData& data) const
+bool Lyrics::acceptDrop(EditData& data) const
       {
       return data.element->isText() || Text::acceptDrop(data);
       }
@@ -469,7 +469,7 @@ bool Lyrics::acceptDrop(const DropData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Lyrics::drop(const DropData& data)
+Element* Lyrics::drop(EditData& data)
       {
       ElementType type = data.element->type();
       if (type == ElementType::SYMBOL || type == ElementType::FSYMBOL) {
@@ -507,9 +507,9 @@ void Lyrics::setNo(int n)
 //   endEdit
 //---------------------------------------------------------
 
-void Lyrics::endEdit()
+void Lyrics::endEdit(EditData& ed)
       {
-      Text::endEdit();
+      Text::endEdit(ed);
       score()->setLayoutAll();
       }
 
