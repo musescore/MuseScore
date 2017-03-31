@@ -2060,7 +2060,7 @@ void Score::createMMRests()
 
                               bool found = false;
                               for (Element* ee : s->annotations()) {
-                                    if (ee->type() == e->type() && ee->track() == e->track()) {
+                                    if (e->linkList().contains(ee)) {
                                           found = true;
                                           break;
                                           }
