@@ -25,6 +25,8 @@ PREFIX=../applebuild
 
 XCODEPROJ = mscore.xcodeproj
 
+BUILD_WEBKIT="ON"     # Override with "OFF" to disable.
+
 # Use xcpretty if installed
 ifneq ($(strip $(shell which xcpretty)),)
   FORMATTER_START = set -o pipefail &&
@@ -35,6 +37,7 @@ release:
 	mkdir build.release;                               \
     cd build.release;                                  \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
+          -DBUILD_WEBKIT="${BUILD_WEBKIT}"         \
           .. -G Xcode; 			       \
     xcodebuild -project ${XCODEPROJ} -target lrelease;                            \
 		$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target ALL_BUILD $(FORMATTER_END);    \
@@ -43,6 +46,7 @@ debug:
 	mkdir build.debug;                               \
     cd build.debug;                            \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=DEBUG \
+          -DBUILD_WEBKIT="${BUILD_WEBKIT}"         \
           .. -G Xcode; 			       \
     xcodebuild -project ${XCODEPROJ} -target lrelease;                             \
     $(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Debug -target ALL_BUILD $(FORMATTER_END);       \
@@ -51,6 +55,7 @@ xcode:
 	mkdir build.xcode;              \
     cd build.xcode;                                  \
     cmake -DCMAKE_INSTALL_PREFIX=../build.xcode/mscore/Debug -DCMAKE_BUILD_TYPE=DEBUG \
+          -DBUILD_WEBKIT="${BUILD_WEBKIT}"         \
           .. -G Xcode;                         \
     xcodebuild -project ${XCODEPROJ} -target lrelease;
 

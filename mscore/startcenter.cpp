@@ -15,6 +15,9 @@
 #include "libmscore/mscore.h"
 #include "startcenter.h"
 #include "scoreBrowser.h"
+#ifdef USE_WEBKIT
+#include <QWebFrame>
+#endif
 
 namespace Ms {
 
@@ -51,7 +54,7 @@ Startcenter::Startcenter()
       connect(openScore, SIGNAL(clicked()), this, SLOT(openScoreClicked()));
       connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
       setStyleSheet(QString("QPushButton { background-color: %1 }").arg(openScore->palette().color(QPalette::Base).name()));
-
+#ifdef USE_WEBKIT
       //init webview
       if (!noWebView) {
             _webView = new MyWebView(this);
@@ -62,6 +65,7 @@ Startcenter::Startcenter()
       if (enableExperimental)
             QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
       QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, false);
+#endif
       recentPage->setBoldTitle(false);
       updateRecentScores();
       }
@@ -71,8 +75,10 @@ Startcenter::Startcenter()
 //---------------------------------------------------------
 
 Startcenter::~Startcenter() {
+#ifdef USE_WEBKIT
       if (_webView)
             delete _webView;
+#endif
       }
 
 //---------------------------------------------------------
@@ -149,7 +155,7 @@ void Startcenter::readSettings()
       {
       MuseScore::restoreGeometry(this);
       }
-
+#ifdef USE_WEBKIT
 //---------------------------------------------------------
 //   MyNetworkAccessManager
 //---------------------------------------------------------
@@ -357,6 +363,6 @@ void CookieJar::save()
             }
       file.close();
       }
-
+#endif
 }
 

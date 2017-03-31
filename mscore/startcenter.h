@@ -14,9 +14,14 @@
 #define __STARTCENTER_H__
 
 #include "ui_startcenter.h"
+#include "config.h"
+
+#ifdef USE_WEBKIT
+#include <QWebView>
+#endif
 
 namespace Ms {
-
+#ifdef USE_WEBKIT
 //---------------------------------------------------------
 //   MyNetworkAccessManager
 //---------------------------------------------------------
@@ -77,7 +82,7 @@ class CookieJar : public QNetworkCookieJar
     private:
       QString _file; // where to save cookies
       };
-
+#endif
 //---------------------------------------------------------
 //   Startcenter
 //---------------------------------------------------------
@@ -85,7 +90,9 @@ class CookieJar : public QNetworkCookieJar
 class Startcenter : public QDialog, public Ui::Startcenter
       {
       Q_OBJECT
+#ifdef USE_WEBKIT
       MyWebView* _webView;
+#endif
       virtual void closeEvent(QCloseEvent*);
 
    private slots:
