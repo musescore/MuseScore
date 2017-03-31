@@ -399,7 +399,7 @@ void LoginManager::onGetMediaUrlRequestReady(QByteArray ba)
       if (urlValue.isString()) {
             QString url = response.value("url").toString();
             QString path = QDir::tempPath() + QString("/temp_%1.mp3").arg(qrand() % 100000);
-            Score* score = mscore->currentScore()->rootScore();
+            Score* score = mscore->currentScore()->masterScore();
             int br = preferences.exportMp3BitRate;
             preferences.exportMp3BitRate = 128;
             if (mscore->saveMp3(score, path)) { // no else, error handling is done in saveMp3
