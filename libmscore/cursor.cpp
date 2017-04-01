@@ -304,5 +304,18 @@ int Cursor::qmlKeySignature()
       Staff *staff = _score->staves()[staffIdx()];
       return (int) staff->key(tick());
       }
+
+//---------------------------------------------------------
+//   qmlKeySignature
+//   read access to key signature in current track
+//   at current position
+//---------------------------------------------------------
+
+TimeSig* Cursor::qmlTimeSignature()
+      {
+      Staff *staff = _score->staves()[staffIdx()];
+      TimeSig* t = staff->timeSig(tick());
+      return t;
+      }
 }
 

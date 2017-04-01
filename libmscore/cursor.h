@@ -27,6 +27,7 @@ class RepeatSegment;
 class ChordRest;
 class StaffText;
 class Measure;
+class TimeSig;
 
 //---------------------------------------------------------
 //   @@ Cursor
@@ -39,7 +40,9 @@ class Measure;
 //   @P measure   Ms::Measure*  current measure, read only
 //   @P tick      int           midi tick position, read only
 //   @P time      double        time at tick position, read only
+//   @P tempo     float         tempo at tick position, read only
 //   @P keySignature int        key signature of current staff at tick pos. (read only)
+//   @P timeSignature Ms::TimeSig* time signature of current staff at tick pos. (read only)
 //   @P score     Ms::Score*    associated score
 //---------------------------------------------------------
 
@@ -61,6 +64,7 @@ class Cursor : public QObject {
       Q_PROPERTY(qreal tempo      READ tempo)
 
       Q_PROPERTY(int keySignature READ qmlKeySignature)
+      Q_PROPERTY(Ms::TimeSig* timeSignature READ qmlTimeSignature)
       Q_PROPERTY(Ms::Score* score READ score    WRITE setScore)
 
       Score* _score;
@@ -102,6 +106,7 @@ class Cursor : public QObject {
       qreal tempo();
 
       int qmlKeySignature();
+      TimeSig* qmlTimeSignature();
 
       //@ rewind cursor
       //@   type=0      rewind to start of score
