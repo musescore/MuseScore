@@ -2241,7 +2241,7 @@ static bool doConvert(Score* cs, QString fn)
       else if (fn.endsWith(".pdf")) {
             if (!exportScoreParts) {
                   cs->switchToPageMode();
-                  rv = mscore->savePdf(fn);
+                  rv = mscore->savePdf(cs, fn);
                   }
             else {
                   if (cs->excerpts().size() == 0) {

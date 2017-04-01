@@ -1911,26 +1911,26 @@ bool MuseScore::savePdf(const QString& saveName)
       return savePdf(cs, saveName);
       }
 
-bool MuseScore::savePdf(Score* cs, const QString& saveName)
+bool MuseScore::savePdf(Score* score, const QString& saveName)
       {
-      cs->setPrinting(true);
+      score->setPrinting(true);
       MScore::pdfPrinting = true;
       QPdfWriter printerDev(saveName);
       printerDev.setResolution(preferences.exportPdfDpi);
-      const PageFormat* pf = cs->pageFormat();
+      const PageFormat* pf = score->pageFormat();
       printerDev.setPageSize(QPageSize(pf->size(), QPageSize::Inch));
 
       printerDev.setCreator("MuseScore Version: " VERSION);
       if (!printerDev.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
 
-      QString title = cs->metaTag("workTitle");
+      QString title = score->metaTag("workTitle");
       if (title.isEmpty()) // workTitle unset?
-            title = cs->rootScore()->title(); // fall back to (root)score's tab title
-      if (cs != cs->rootScore()) { // excerpt?
-            QString partname = cs->metaTag("partName");
+            title = score->rootScore()->title(); // fall back to (root)score's tab title
+      if (score != score->rootScore()) { // excerpt?
+            QString partname = score->metaTag("partName");
             if (partname.isEmpty()) // partName unset?
-                  partname = cs->title(); // fall back to excerpt's tab title
+                  partname = score->title(); // fall back to excerpt's tab title
             title += " - " + partname;
             }
       printerDev.setTitle(title); // set PDF's meta data for Title
@@ -1943,17 +1943,17 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
       double mag = printerDev.logicalDpiX() / DPI;
       p.scale(mag, mag);
 
-      const QList<Page*> pl = cs->pages();
+      const QList<Page*> pl = score->pages();
       int pages    = pl.size();
       bool firstPage = true;
       for (int n = 0; n < pages; ++n) {
             if (!firstPage)
                   printerDev.newPage();
             firstPage = false;
-            cs->print(&p, n);
+            score->print(&p, n);
             }
       p.end();
-      cs->setPrinting(false);
+      score->setPrinting(false);
       MScore::pdfPrinting = false;
       return true;
       }
