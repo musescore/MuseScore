@@ -2215,12 +2215,11 @@ void Chord::layoutTablature()
                         }
                   }
             }
-      if (!tab->genDurations()            // if tab is not set for duration symbols
-            || track2voice(track())       // or not in first voice
-            || isGrace()) {               // or chord is a grace (no dur. symbols for graces
-            //                            // wich are not used in hist. tabs anyway)
-            // no tab duration symbols
-            //
+      if (!tab->genDurations()                         // if tab is not set for duration symbols
+            || track2voice(track())                    // or not in first voice
+            || (isGrace()                              // no tab duration symbols if grace notes
+                && beamMode() == Beam::Mode::AUTO)) {  // and beammode == AUTO
+                                                       //
             delete _tabDur;   // delete an existing duration symbol
             _tabDur = 0;
             }
@@ -2247,6 +2246,7 @@ void Chord::layoutTablature()
                   || beamMode() != Beam::Mode::AUTO
                   || prevCR->durationType().type() != durationType().type()
                   || prevCR->dots() != dots()
+                  || prevCR->tuplet() != tuplet()
                   || prevCR->type() == ElementType::REST)
                         && !noStem() ) {
                   // symbol needed; if not exist, create; if exists, update duration
