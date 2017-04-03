@@ -772,12 +772,12 @@ void Voice::voice_start()
       /* Make an estimate on how loud this voice can get at any time (attenuation). */
       min_attenuation_cB = get_lower_boundary_for_attenuation();
 
-      qDebug("DELAY (%d) %d", FLUID_VOICE_ENVDELAY,volenv_data[FLUID_VOICE_ENVDELAY].count);
-      qDebug("ATTACK (%d) %d", FLUID_VOICE_ENVATTACK,volenv_data[FLUID_VOICE_ENVATTACK].count);
-      qDebug("HOLD (%d) %d", FLUID_VOICE_ENVHOLD, volenv_data[FLUID_VOICE_ENVHOLD].count);
-      qDebug("DECAY (%d) %d", FLUID_VOICE_ENVDECAY, volenv_data[FLUID_VOICE_ENVDECAY].count);
-      qDebug("SUSTAIN (%d) %d", FLUID_VOICE_ENVSUSTAIN, volenv_data[FLUID_VOICE_ENVSUSTAIN].count);
-      qDebug("RELEASE (%d) %d", FLUID_VOICE_ENVRELEASE, volenv_data[FLUID_VOICE_ENVRELEASE].count);
+//      qDebug("DELAY (%d) %d", FLUID_VOICE_ENVDELAY,volenv_data[FLUID_VOICE_ENVDELAY].count);
+//      qDebug("ATTACK (%d) %d", FLUID_VOICE_ENVATTACK,volenv_data[FLUID_VOICE_ENVATTACK].count);
+//      qDebug("HOLD (%d) %d", FLUID_VOICE_ENVHOLD, volenv_data[FLUID_VOICE_ENVHOLD].count);
+//      qDebug("DECAY (%d) %d", FLUID_VOICE_ENVDECAY, volenv_data[FLUID_VOICE_ENVDECAY].count);
+//      qDebug("SUSTAIN (%d) %d", FLUID_VOICE_ENVSUSTAIN, volenv_data[FLUID_VOICE_ENVSUSTAIN].count);
+//      qDebug("RELEASE (%d) %d", FLUID_VOICE_ENVRELEASE, volenv_data[FLUID_VOICE_ENVRELEASE].count);
 
       /* Force setting of the phase at the first DSP loop run
        * This cannot be done earlier, because it depends on modulators.
