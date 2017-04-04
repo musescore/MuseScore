@@ -1337,9 +1337,14 @@ const StaffType* StaffType::getDefaultPreset(StaffGroup grp)
 
 std::vector<StaffType> StaffType::_presets;
 
+
 void StaffType::initStaffTypes()
       {
-      readConfigFile(0);          // get TAB font config, before initStaffTypes()
+      QString wd      = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
+      QString fileName = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("fonts_directory", "Fonts"))).absoluteFilePath() + "/fonts_tablature.xml";
+      QFileInfo check_file (fileName);
+      fileName = check_file.exists() ? fileName : "";
+      readConfigFile(fileName);          // get TAB font config, before initStaffTypes()
 
       _presets = {
 //                       group,              xml-name,  human-readable-name,        lin dst clef  bars stmless time  key  ledger
