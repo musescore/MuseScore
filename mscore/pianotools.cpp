@@ -119,8 +119,9 @@ void HPiano::setScale(qreal s)
             s = .5;
       if (s != scaleVal) {
             scaleVal = s;
-            setMaximumSize(QSize((KEY_WIDTH * 52) * scaleVal + 8, KEY_HEIGHT * scaleVal + 8 + 80));
-            setMinimumSize(QSize(100, KEY_HEIGHT * scaleVal + 8 + 80));
+            int margin = 16;
+            setMaximumSize(QSize((KEY_WIDTH * 52 + margin/2) * scaleVal, (KEY_HEIGHT + margin) * scaleVal ));
+            setMinimumSize(QSize(100 * scaleVal, (KEY_HEIGHT + margin) * scaleVal));
             QTransform t;
             t.scale(scaleVal, scaleVal);
             setTransform(t, false);
