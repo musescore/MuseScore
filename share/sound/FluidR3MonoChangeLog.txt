@@ -1,3 +1,10 @@
+Version 2.312  Fix tuning issue in Bassoon
+Version 2.311  Fix bad release envelope in Guitar Harmonics
+Version 2.310  Remap Marching Tenor Samples, loop buzz rolls and add stick click to Marching Tenor instrument.
+Version 2.309  Fix panning errors in some instruments.
+Version 2.308  Add 2nd Spock drum to Marching Tenors and replace buzz roll samples - 2nd spock samples have been mapped to MIDI notes #125 to #127
+Version 2.307  Fix Violin B6 tuning issue by extending samples either side.
+Version 2.306  Work on Marching Tenors including adding 2nd spock drum begun (still in progress)
 Version 2.305  Fix Orchestral Drumset Decay/Release Envelopes
 Version 2.304  Fix Orchestral Drumset keymapping issues
 Version 2.303  Apply pitch shift fix to Marching Cymbals
@@ -17,8 +24,7 @@ Version 2.107  Add Mellow Yamaha Grand at Bank #8 Patch #0
 Version 2.106  Fix Alto Sax range issue
 Version 2.105  Fix Recorder range issue
 Version 2.104  Tweak tuning for Violin preset
-Version 2.103  Remove Burst Noise preset which was overloading 
-                      FluidSynth
+Version 2.103  Remove Burst Noise preset which was overloading FluidSynth
 Version 2.102  Fix name problem for Bass & Lead
 Version 2.101  Fix typo in Accordion def
 Version 2.10   Raise level of drumkits
