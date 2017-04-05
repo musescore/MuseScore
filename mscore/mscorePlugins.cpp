@@ -378,6 +378,8 @@ bool MuseScore::loadPlugin(const QString& filename)
 
       if (filename.endsWith(".qml")){
             QFileInfo fi(pluginDir, filename);
+            if (!fi.exists())
+                  fi = QFileInfo(preferences.myPluginsPath, filename);
             if (fi.exists()) {
                   QString path(fi.filePath());
                   PluginDescription* p = new PluginDescription;
