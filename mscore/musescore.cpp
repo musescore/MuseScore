@@ -2516,10 +2516,9 @@ static void loadScores(const QStringList& argv)
 //   doConvert
 //---------------------------------------------------------
 
-static bool doConvert(Score* cs, QString fn)
+static bool doConvert(Score* cs, QString fn, QString plugin = "")
       {
       bool rv = true;
-
       LayoutMode layoutMode = cs->layoutMode();
       cs->setLayoutMode(LayoutMode::PAGE);
       if (cs->layoutMode() != layoutMode) {
@@ -2531,6 +2530,12 @@ static bool doConvert(Score* cs, QString fn)
             QFile f(styleFile);
             if (f.open(QIODevice::ReadOnly))
                   cs->style().load(&f);
+            }
+      if (!plugin.isEmpty()) {
+            mscore->setCurrentScore(cs);
+            if (mscore->loadPlugin(plugin))
+                  mscore->pluginTriggered(0);
+            mscore->unloadPlugins();
             }
       if (fn.endsWith(".mscx")) {
             QFileInfo fi(fn);
@@ -2629,8 +2634,8 @@ static bool doConvert(Score* cs, QString fn)
             }
       else if (fn.endsWith(".mlog"))
             return cs->sanityCheck(fn);
-      else {
-            qDebug("dont know how to convert to %s", qPrintable(outFileName));
+      else if (plugin.isEmpty()) {
+            qDebug("don't know how to convert to %s", qPrintable(outFileName));
             return false;
             }
       if (layoutMode != cs->layoutMode()) {
@@ -2644,9 +2649,9 @@ static bool doConvert(Score* cs, QString fn)
 //   convert
 //---------------------------------------------------------
 
-static bool convert(const QString& inFile, const QString& outFile)
+static bool convert(const QString& inFile, const QString& outFile, const QString& plugin = "")
       {
-      if (inFile.isEmpty() || outFile.isEmpty()) {
+      if (inFile.isEmpty() || (outFile.isEmpty() && plugin.isEmpty())) {
             fprintf(stderr, "cannot convert <%s> to <%s>\n", qPrintable(inFile), qPrintable(outFile));
             return false;
             }
@@ -2654,7 +2659,7 @@ static bool convert(const QString& inFile, const QString& outFile)
       MasterScore* score = mscore->readScore(inFile);
       if (!score)
             return false;
-      if (!doConvert(score, outFile)) {
+      if (!doConvert(score, outFile, plugin)) {
             delete score;
             return false;
             }
@@ -2688,6 +2693,7 @@ static bool doProcessJob(QString jsonFile)
       for (const auto i : a) {
             QString inFile;
             QString outFile;
+            QString plugin;
             if (!i.isObject()) {
                   fprintf(stderr, "array value is not an object\n");
                   return false;
@@ -2699,12 +2705,14 @@ static bool doProcessJob(QString jsonFile)
                         inFile = val;
                   else if (key == "out")
                         outFile = val;
+                  else if (key == "plugin")
+                        plugin = val;
                   else {
                         fprintf(stderr, "unknown key <%s>\n", qPrintable(key));
                         return false;
                         }
                   }
-            if (!convert(inFile, outFile))
+            if (!convert(inFile, outFile, plugin))
                   return false;
             }
       return true;
