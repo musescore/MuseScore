@@ -11,26 +11,6 @@
         <source>Copy revision number</source>
         <translation>リビジョン番号をクリップボードにコピー</translation>
     </message>
-    <message>
-        <location filename="../../mscore/aboutbox.ui" line="161"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; for new versions and more information.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Support MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;your donation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;新バージョンと詳細については&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; へ。&lt;/span&gt;&lt;/p&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;寄付&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;で、MuseScore をサポート。&lt;/span&gt;&lt;/p&gt; 
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2016 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
 </context>
 <context>
     <name>AboutMusicXMLBox</name>
@@ -38,24 +18,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../../mscore/aboutmusicxmlbox.ui" line="14"/>
         <source>About MusicXML</source>
         <translation>MusicXMLについて</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/aboutmusicxmlbox.ui" line="26"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;MusicXML is an open file format for exchanging digital sheet music,&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;supported by many applications. MusicXML is copyright © MakeMusic, Inc.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All rights reserved. For more information, see: &lt;a href=&quot;http://www.musicxml.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;MusicXML.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;MusicXMLは、多くのアプリケーションでサポートされている、デジタル楽譜を交換するための&lt;br&gt;オープンなファイル形式です。&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;MusicXML is copyright © MakeMusic, Inc. All rights reserved. &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;詳細情報: &lt;a href=&quot;http://www.musicxml.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;MusicXML.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../mscore/aboutmusicxmlbox.ui" line="43"/>
@@ -131,8 +93,8 @@ p, li { white-space: pre-wrap; }
     <name>AlbumManager</name>
     <message>
         <location filename="../../mscore/albummanager.ui" line="17"/>
-        <source>MuseScore: Album Manager</source>
-        <translation>MuseScore:アルバムマネージャ</translation>
+        <source>Album Manager</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="28"/>
@@ -146,8 +108,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="46"/>
-        <source>Add Score</source>
-        <translation>スコアの追加</translation>
+        <source>Add Score...</source>
+        <translation>スコアを追加...</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="53"/>
@@ -165,47 +127,62 @@ p, li { white-space: pre-wrap; }
         <translation>現在のスコアをリストの上に移動</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.ui" line="114"/>
+        <location filename="../../mscore/albummanager.ui" line="118"/>
         <source>Move current score down in list</source>
         <translation>現在のスコアをリストの下に移動</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.ui" line="131"/>
+        <location filename="../../mscore/albummanager.ui" line="139"/>
         <source>Create new album</source>
-        <translation>新しいアルバム</translation>
+        <translation>新規アルバムを作成</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.ui" line="134"/>
+        <location filename="../../mscore/albummanager.ui" line="142"/>
         <source>New</source>
         <translation>新規</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.ui" line="141"/>
+        <location filename="../../mscore/albummanager.ui" line="149"/>
         <source>Load an existing album</source>
-        <translation>既存のアルバムを読み込む</translation>
+        <translation>既存のアルバムの読み込み</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.ui" line="144"/>
-        <source>Load</source>
-        <translation>読み込み</translation>
+        <location filename="../../mscore/albummanager.ui" line="152"/>
+        <source>Load...</source>
+        <translation>読み込み...</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.ui" line="164"/>
+        <location filename="../../mscore/albummanager.ui" line="172"/>
         <source>Print Album</source>
         <translation>印刷</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.ui" line="171"/>
+        <location filename="../../mscore/albummanager.ui" line="187"/>
+        <source>Save Joined Score</source>
+        <translation>結合したスコアを保存</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/albummanager.ui" line="199"/>
         <source>Join Scores</source>
         <translation>スコアの結合</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/albummanager.ui" line="212"/>
+        <source>Add page break between scores</source>
+        <translation>各スコアの間にページ区切りを追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/albummanager.ui" line="225"/>
+        <source>Add section break between scores</source>
+        <translation>各スコアの間にセクション区切りを追加</translation>
     </message>
 </context>
 <context>
     <name>ArticulationProperties</name>
     <message>
         <location filename="../../mscore/articulation.ui" line="14"/>
-        <source>MuseScore: Articulation Properties</source>
-        <translation>MuseScore: アーティキュレーションのプロパティ</translation>
+        <source>Articulation Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/articulation.ui" line="24"/>
@@ -235,7 +212,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../mscore/articulation.ui" line="62"/>
         <source>Anchor:</source>
-        <translation>アンカー:</translation>
+        <translation>場所:</translation>
     </message>
     <message>
         <location filename="../../mscore/articulation.ui" line="76"/>
@@ -277,29 +254,16 @@ p, li { white-space: pre-wrap; }
     <name>Awl::ColorLabel</name>
     <message>
         <location filename="../../awl/colorlabel.cpp" line="98"/>
-        <source>MuseScore: Select Color</source>
-        <translation>MuseScore: 色の選択</translation>
-    </message>
-</context>
-<context>
-    <name>BarLineBase</name>
-    <message>
-        <location filename="../../mscore/debugger/barline.ui" line="179"/>
-        <source>custom subtype</source>
-        <translation>ユーザー定義種類</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/debugger/barline.ui" line="186"/>
-        <source>custom span</source>
-        <translation>ユーザー定義スパン</translation>
+        <source>Select Color</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>BendDialog</name>
     <message>
         <location filename="../../mscore/bend.ui" line="14"/>
-        <source>MuseScore: Bend Properties</source>
-        <translation>MuseScore:チョーキングのプロパティ</translation>
+        <source>Bend Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/bend.ui" line="23"/>
@@ -341,8 +305,8 @@ p, li { white-space: pre-wrap; }
     <name>BreaksDialog</name>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="14"/>
-        <source>MuseScore: Add/Remove Line Breaks</source>
-        <translation>MuseScore: 「譜表の折り返し」の追加/削除</translation>
+        <source>Add/Remove Line Breaks</source>
+        <translation>「譜表の折り返し」の追加/削除</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="24"/>
@@ -368,21 +332,13 @@ p, li { white-space: pre-wrap; }
         <location filename="../../mscore/breaksdialog.ui" line="69"/>
         <location filename="../../mscore/breaksdialog.ui" line="72"/>
         <source>Add line breaks at end of each system</source>
-        <translation>各段の最後に「譜表の折り返し」を追加する</translation>
+        <translation>各段の最後に「譜表の折り返し」を追加</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="79"/>
         <location filename="../../mscore/breaksdialog.ui" line="82"/>
         <source>Remove current line breaks</source>
         <translation>現在の「譜表の折り返し」を削除</translation>
-    </message>
-</context>
-<context>
-    <name>ChordBase</name>
-    <message>
-        <location filename="../../mscore/debugger/chord.ui" line="103"/>
-        <source>Glissando end</source>
-        <translation>グリッサンド 終端</translation>
     </message>
 </context>
 <context>
@@ -398,24 +354,9 @@ p, li { white-space: pre-wrap; }
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../../mscore/harmonyedit.ui" line="79"/>
-        <source>Tab 1</source>
-        <translation>タブ 1</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/harmonyedit.ui" line="84"/>
-        <source>Tab 2</source>
-        <translation>タブ 2</translation>
-    </message>
-    <message>
         <location filename="../../mscore/harmonyedit.ui" line="96"/>
-        <source>Save As</source>
-        <translation>名前を付けて保存</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/harmonyedit.ui" line="103"/>
-        <source>Load</source>
-        <translation>読み込み</translation>
+        <source>Save As...</source>
+        <translation>名前を付けて保存...</translation>
     </message>
 </context>
 <context>
@@ -428,7 +369,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="73"/>
         <source>Ratio</source>
-        <translation>割合</translation>
+        <translation>レシオ</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="88"/>
@@ -484,22 +425,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="315"/>
         <source>The gain reduction ratio used when the signal level exceeds the threshold.</source>
-        <translation type="unfinished"/>
+        <translation>信号レベルが閾値を超える場合に用いられるゲイン低減率</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="356"/>
         <source>Knee radius (dB)</source>
-        <translation type="unfinished"/>
+        <translation>ニーの範囲(dB)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="359"/>
         <source>The distance from the threshold where the knee curve starts.</source>
-        <translation type="unfinished"/>
+        <translation>閾値からニー・カーブ開始地点までの距離</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="406"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and  peak is better for heavier, fast compression and percussion.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <source>The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and  peak is better for heavier, fast compression and percussion.</source>
+        <translation>RMSとピーク信号の追随バランスです。RMSはかすかな音楽的圧縮、ピークはパーカッションなどの高速かつ強力な圧縮に適しています。</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="435"/>
@@ -509,17 +450,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="438"/>
         <source>Controls the gain of the makeup input signal in dB&apos;s.</source>
-        <translation type="unfinished"/>
+        <translation>メイクアップ・ゲインは入力信号をdBで制御します。</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="473"/>
         <source>Threshold level (dB)</source>
-        <translation>トレッショルドレベル</translation>
+        <translation>スレッショルドレベル(dB)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="476"/>
         <source>The point at which the compressor will start to kick in.</source>
-        <translation type="unfinished"/>
+        <translation>コンプレッサーが動作を開始する地点です。</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="533"/>
@@ -602,8 +543,8 @@ p, li { white-space: pre-wrap; }
     <name>EditDrumsetBase</name>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="14"/>
-        <source>MuseScore: Edit Drumset</source>
-        <translation>MuseScore: ドラムセットの編集</translation>
+        <source>Edit Drumset</source>
+        <translation>ドラムセット編集</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="27"/>
@@ -612,91 +553,91 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="44"/>
-        <source>Load</source>
-        <translation>読み込み</translation>
+        <source>Load...</source>
+        <translation>読み込む</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="51"/>
-        <source>Save</source>
-        <translation>保存</translation>
+        <source>Save As...</source>
+        <translation>名前を付けて保存...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="111"/>
+        <location filename="../../mscore/editdrumset.ui" line="114"/>
         <source>No.</source>
         <translation>No.</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="116"/>
+        <location filename="../../mscore/editdrumset.ui" line="119"/>
         <source>Note</source>
         <translation>音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="121"/>
+        <location filename="../../mscore/editdrumset.ui" line="124"/>
         <source>Shortcut</source>
         <translation>ショートカットキー</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="126"/>
+        <location filename="../../mscore/editdrumset.ui" line="129"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="153"/>
+        <location filename="../../mscore/editdrumset.ui" line="156"/>
         <source>Staff line:</source>
         <translation>譜線:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="170"/>
+        <location filename="../../mscore/editdrumset.ui" line="173"/>
         <source>Stem direction:</source>
         <translation>符幹の方向:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="181"/>
+        <location filename="../../mscore/editdrumset.ui" line="184"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="186"/>
+        <location filename="../../mscore/editdrumset.ui" line="189"/>
         <source>Up</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="191"/>
+        <location filename="../../mscore/editdrumset.ui" line="194"/>
         <source>Down</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="199"/>
+        <location filename="../../mscore/editdrumset.ui" line="202"/>
         <source>Default voice:</source>
         <translation>標準の声部:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="210"/>
+        <location filename="../../mscore/editdrumset.ui" line="213"/>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="215"/>
+        <location filename="../../mscore/editdrumset.ui" line="218"/>
         <source>2</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="220"/>
+        <location filename="../../mscore/editdrumset.ui" line="223"/>
         <source>3</source>
         <translation>3</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="225"/>
+        <location filename="../../mscore/editdrumset.ui" line="228"/>
         <source>4</source>
         <translation>4</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="233"/>
+        <location filename="../../mscore/editdrumset.ui" line="236"/>
         <source>Shortcut:</source>
         <translation>ショートカットキー:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.ui" line="287"/>
+        <location filename="../../mscore/editdrumset.ui" line="290"/>
         <source>Note head:</source>
         <translation>符頭:</translation>
     </message>
@@ -705,8 +646,8 @@ p, li { white-space: pre-wrap; }
     <name>EditInstrumentBase</name>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="14"/>
-        <source>MuseScore: Edit Instrument Properties</source>
-        <translation>MuseScore: 楽器プロパティの編集</translation>
+        <source>Edit Instrument Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="20"/>
@@ -1495,10 +1436,6 @@ p, li { white-space: pre-wrap; }
     <name>EditRaster</name>
     <message>
         <location filename="../../mscore/editraster.ui" line="14"/>
-        <source>MuseScore: Edit Grid</source>
-        <translation>MuseScore: グリッドの編集</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editraster.ui" line="24"/>
         <source>Edit Grid</source>
         <translation>グリッドの編集</translation>
@@ -1530,8 +1467,8 @@ p, li { white-space: pre-wrap; }
     <name>EditStaffBase</name>
     <message>
         <location filename="../../mscore/editstaff.ui" line="26"/>
-        <source>MuseScore: Edit Staff/Part Properties</source>
-        <translation>MuseScore: 譜表/パートのプロパティの編集</translation>
+        <source>Edit Staff/Part Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="38"/>
@@ -1539,309 +1476,303 @@ p, li { white-space: pre-wrap; }
         <translation>パートのプロパティ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="59"/>
-        <source>Change Instrument...</source>
-        <translation>楽器を変更...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="66"/>
-        <source>Part name:</source>
-        <translation>パート名:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="79"/>
+        <location filename="../../mscore/editstaff.ui" line="70"/>
         <source>Instrument:</source>
         <translation>楽器:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="105"/>
-        <source>Long instrument name:</source>
-        <translation>楽器名称:</translation>
+        <location filename="../../mscore/editstaff.ui" line="89"/>
+        <source>Part name:</source>
+        <translation>パート名:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="124"/>
+        <location filename="../../mscore/editstaff.ui" line="120"/>
+        <source>Change Instrument...</source>
+        <translation>楽器を変更...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="139"/>
         <source>Short instrument name:</source>
         <translation>楽器略称:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="159"/>
+        <location filename="../../mscore/editstaff.ui" line="168"/>
+        <source>Long instrument name:</source>
+        <translation>楽器名称:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="193"/>
         <source>Usable pitch range:</source>
         <translation>使用可能な音高の範囲:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="171"/>
+        <location filename="../../mscore/editstaff.ui" line="205"/>
         <source>Amateur:</source>
         <translation>アマチュア:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="198"/>
-        <location filename="../../mscore/editstaff.ui" line="259"/>
-        <source>-</source>
-        <translation>-</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="232"/>
+        <location filename="../../mscore/editstaff.ui" line="266"/>
         <source>Professional:</source>
         <translation>プロフェッショナル:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="291"/>
-        <source>Play transposition:</source>
-        <translation>移調して再生:</translation>
+        <location filename="../../mscore/editstaff.ui" line="325"/>
+        <source>Transpose written pitches to sound:</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="311"/>
+        <location filename="../../mscore/editstaff.ui" line="345"/>
+        <source>octaves +</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="365"/>
         <source>0 - Perfect Unison</source>
         <translation>0 - 完全1度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="316"/>
+        <location filename="../../mscore/editstaff.ui" line="370"/>
         <source>1 - Augmented Unison</source>
         <translation>1 - 増1度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="321"/>
+        <location filename="../../mscore/editstaff.ui" line="375"/>
         <source>0 - Diminished Second</source>
         <translation>0 - 減2度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="326"/>
+        <location filename="../../mscore/editstaff.ui" line="380"/>
         <source>1 - Minor Second</source>
         <translation>1 - 短2度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="331"/>
+        <location filename="../../mscore/editstaff.ui" line="385"/>
         <source>2 - Major Second</source>
         <translation>2 - 長2度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="336"/>
+        <location filename="../../mscore/editstaff.ui" line="390"/>
         <source>3 - Augmented Second</source>
         <translation>3 - 増2度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="341"/>
+        <location filename="../../mscore/editstaff.ui" line="395"/>
         <source>2 - Diminished Third</source>
         <translation>2 - 減3度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="346"/>
+        <location filename="../../mscore/editstaff.ui" line="400"/>
         <source>3 - Minor Third</source>
         <translation>3 - 短3度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="351"/>
+        <location filename="../../mscore/editstaff.ui" line="405"/>
         <source>4 - Major Third</source>
         <translation>4 - 長3度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="356"/>
+        <location filename="../../mscore/editstaff.ui" line="410"/>
         <source>5 - Augmented Third</source>
         <translation>5 - 増3度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="361"/>
+        <location filename="../../mscore/editstaff.ui" line="415"/>
         <source>4 - Diminished Fourth</source>
         <translation>4 - 減4度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="366"/>
+        <location filename="../../mscore/editstaff.ui" line="420"/>
         <source>5 - Perfect Fourth</source>
         <translation>5 - 完全4度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="371"/>
+        <location filename="../../mscore/editstaff.ui" line="425"/>
         <source>6 - Augmented Fourth</source>
         <translation>6 - 増4度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="376"/>
+        <location filename="../../mscore/editstaff.ui" line="430"/>
         <source>6 - Diminished Fifth</source>
         <translation>6 - 減5度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="381"/>
+        <location filename="../../mscore/editstaff.ui" line="435"/>
         <source>7 - Perfect Fifth</source>
         <translation>7 - 完全5度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="386"/>
+        <location filename="../../mscore/editstaff.ui" line="440"/>
         <source>8 - Augmented Fifth</source>
         <translation>8 - 増5度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="391"/>
+        <location filename="../../mscore/editstaff.ui" line="445"/>
         <source>7 - Diminished Sixth</source>
         <translation>7 - 減6度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="396"/>
+        <location filename="../../mscore/editstaff.ui" line="450"/>
         <source>8 - Minor Sixth</source>
         <translation>8 - 短6度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="401"/>
+        <location filename="../../mscore/editstaff.ui" line="455"/>
         <source>9 - Major Sixth</source>
         <translation>9 - 長6度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="406"/>
+        <location filename="../../mscore/editstaff.ui" line="460"/>
         <source>10 - Augmented Sixth</source>
         <translation>10 - 増6度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="411"/>
+        <location filename="../../mscore/editstaff.ui" line="465"/>
         <source>9 - Diminished Seventh</source>
         <translation>9 - 減7度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="416"/>
+        <location filename="../../mscore/editstaff.ui" line="470"/>
         <source>10 - Minor Seventh</source>
         <translation>10 - 短7度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="421"/>
+        <location filename="../../mscore/editstaff.ui" line="475"/>
         <source>11 - Major Seventh</source>
         <translation>11 - 長7度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="426"/>
+        <location filename="../../mscore/editstaff.ui" line="480"/>
         <source>12 - Augmented Seventh</source>
         <translation>12 - 増7度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="431"/>
+        <location filename="../../mscore/editstaff.ui" line="485"/>
         <source>11 - Diminished Octave</source>
         <translation>11 - 減8度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="436"/>
+        <location filename="../../mscore/editstaff.ui" line="490"/>
         <source>12 - Perfect Octave</source>
         <translation>12 - 完全8度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="444"/>
-        <source>+ Octave:</source>
-        <translation>+ オクターブ:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="464"/>
+        <location filename="../../mscore/editstaff.ui" line="498"/>
         <source>Up</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="471"/>
+        <location filename="../../mscore/editstaff.ui" line="505"/>
         <source>Down</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="496"/>
+        <location filename="../../mscore/editstaff.ui" line="545"/>
         <source>Number of strings:</source>
         <translation>弦の数:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="522"/>
+        <location filename="../../mscore/editstaff.ui" line="561"/>
         <source>Edit String Data...</source>
         <translation>弦の設定...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="570"/>
+        <location filename="../../mscore/editstaff.ui" line="660"/>
         <source>Staff Properties</source>
         <translation>譜表のプロパティ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="581"/>
-        <source>Do not hide if system is empty</source>
-        <translation>段が空でも非表示にしない</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="588"/>
-        <source>Show time signature</source>
-        <translation>拍子記号の表示</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="597"/>
-        <source>Staff line color:</source>
-        <translation>譜線の色</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="619"/>
+        <location filename="../../mscore/editstaff.ui" line="671"/>
         <source>Advanced Style Properties...</source>
         <translation>高度なスタイルのプロパティ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="628"/>
-        <source>Style group:</source>
-        <translation>スタイルグループ:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="665"/>
-        <source>Invisible staff lines</source>
-        <translation>譜線非表示</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="672"/>
-        <source>Show barlines</source>
-        <translation>縦線の表示</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.ui" line="679"/>
+        <location filename="../../mscore/editstaff.ui" line="678"/>
         <source>Show clef</source>
         <translation>音部記号の表示</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="692"/>
+        <location filename="../../mscore/editstaff.ui" line="685"/>
+        <source>Hide system barline</source>
+        <translation>段の縦線を隠す</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="698"/>
         <source>Small staff</source>
         <translation>小譜表</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="699"/>
+        <location filename="../../mscore/editstaff.ui" line="705"/>
+        <source>Invisible staff lines</source>
+        <translation>譜線非表示</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="712"/>
+        <source>Show barlines</source>
+        <translation>縦線の表示</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="719"/>
+        <source>Do not hide if system is empty</source>
+        <translation>段が空でも非表示にしない</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="728"/>
+        <source>Staff line color:</source>
+        <translation>譜線の色</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="750"/>
+        <source>Show time signature</source>
+        <translation>拍子記号の表示</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="757"/>
         <source>Never hide</source>
         <translation>非表示にしない</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="711"/>
+        <location filename="../../mscore/editstaff.ui" line="775"/>
         <source>Lines:</source>
         <translation>譜線:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="743"/>
+        <location filename="../../mscore/editstaff.ui" line="807"/>
         <source>Line distance:</source>
         <translation>譜線の間隔:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="765"/>
-        <location filename="../../mscore/editstaff.ui" line="791"/>
+        <location filename="../../mscore/editstaff.ui" line="829"/>
+        <location filename="../../mscore/editstaff.ui" line="855"/>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="775"/>
+        <location filename="../../mscore/editstaff.ui" line="839"/>
         <source>Extra distance above staff:</source>
         <translation>譜表の上の余白:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="807"/>
-        <source>Scale</source>
-        <translation>スケール</translation>
+        <location filename="../../mscore/editstaff.ui" line="871"/>
+        <source>Scale:</source>
+        <translation>スケール:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="814"/>
+        <location filename="../../mscore/editstaff.ui" line="878"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="835"/>
-        <source>Hide system barline</source>
-        <translation>段の縦線を隠す</translation>
+        <location filename="../../mscore/editstaff.ui" line="897"/>
+        <source>Style group:</source>
+        <translation>スタイルグループ:</translation>
     </message>
 </context>
 <context>
     <name>EditStaffType</name>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="20"/>
-        <source>MuseScore: Edit Staff Type</source>
-        <translation>MuseScore: 譜表のタイプを編集</translation>
+        <source>Edit Staff Type</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="37"/>
@@ -1861,7 +1792,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../mscore/editstafftype.ui" line="165"/>
         <location filename="../../mscore/editstafftype.ui" line="467"/>
-        <location filename="../../mscore/editstafftype.ui" line="747"/>
+        <location filename="../../mscore/editstafftype.ui" line="754"/>
         <source>sp</source>
         <translation>sp</translation>
     </message>
@@ -1895,7 +1826,7 @@ p, li { white-space: pre-wrap; }
         <location filename="../../mscore/editstafftype.ui" line="265"/>
         <location filename="../../mscore/editstafftype.ui" line="315"/>
         <source>Stemless</source>
-        <translation>符幹なし</translation>
+        <translation>棒なし</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="308"/>
@@ -1914,25 +1845,25 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="395"/>
-        <location filename="../../mscore/editstafftype.ui" line="683"/>
+        <location filename="../../mscore/editstafftype.ui" line="690"/>
         <source>Font:</source>
         <translation>フォント:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="415"/>
-        <location filename="../../mscore/editstafftype.ui" line="699"/>
+        <location filename="../../mscore/editstafftype.ui" line="706"/>
         <source>Size:</source>
         <translation>サイズ:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="431"/>
-        <location filename="../../mscore/editstafftype.ui" line="715"/>
+        <location filename="../../mscore/editstafftype.ui" line="722"/>
         <source>pt</source>
         <translation>pt</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="451"/>
-        <location filename="../../mscore/editstafftype.ui" line="731"/>
+        <location filename="../../mscore/editstafftype.ui" line="738"/>
         <source>Vertical offset:</source>
         <translation>垂直位置:</translation>
     </message>
@@ -1984,131 +1915,136 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../mscore/editstafftype.ui" line="649"/>
         <source>Show back-tied fret marks</source>
+        <translation>タイで繋がれたフレットの数字を表示する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstafftype.ui" line="656"/>
+        <source>Show fingerings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="672"/>
+        <location filename="../../mscore/editstafftype.ui" line="679"/>
         <source>Note Values</source>
         <translation>音価</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="789"/>
+        <location filename="../../mscore/editstafftype.ui" line="796"/>
         <source>Shown as:</source>
         <translation>表記:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="808"/>
-        <location filename="../../mscore/editstafftype.ui" line="1154"/>
+        <location filename="../../mscore/editstafftype.ui" line="815"/>
+        <location filename="../../mscore/editstafftype.ui" line="1161"/>
         <source>None</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="821"/>
+        <location filename="../../mscore/editstafftype.ui" line="828"/>
         <source>Note symbols</source>
         <translation>音符記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="828"/>
+        <location filename="../../mscore/editstafftype.ui" line="835"/>
         <source>Stems and beams</source>
         <translation>符幹と符尾</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="878"/>
+        <location filename="../../mscore/editstafftype.ui" line="885"/>
         <source>Repeat:</source>
         <translation>反復:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="897"/>
+        <location filename="../../mscore/editstafftype.ui" line="904"/>
         <source>Never</source>
         <translation>確認しない</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="910"/>
+        <location filename="../../mscore/editstafftype.ui" line="917"/>
         <source>At new system</source>
         <translation>新しい段</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="923"/>
+        <location filename="../../mscore/editstafftype.ui" line="930"/>
         <source>At new meas.</source>
         <translation>新しい小節</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="930"/>
+        <location filename="../../mscore/editstafftype.ui" line="937"/>
         <source>Always</source>
         <translation>常に</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="980"/>
+        <location filename="../../mscore/editstafftype.ui" line="987"/>
         <source>Stem style:</source>
-        <translation>符幹のスタイル</translation>
+        <translation>符幹のスタイル:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="999"/>
+        <location filename="../../mscore/editstafftype.ui" line="1006"/>
         <source>Beside staff</source>
         <translation>譜線の外</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="1006"/>
+        <location filename="../../mscore/editstafftype.ui" line="1013"/>
         <source>Through staff</source>
         <translation>譜線を貫通</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="1056"/>
+        <location filename="../../mscore/editstafftype.ui" line="1063"/>
         <source>Stem position:</source>
         <translation>符幹の位置:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="1075"/>
+        <location filename="../../mscore/editstafftype.ui" line="1082"/>
         <source>Above</source>
         <translation>上部</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="1082"/>
+        <location filename="../../mscore/editstafftype.ui" line="1089"/>
         <source>Below</source>
         <translation>下部</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="1132"/>
+        <location filename="../../mscore/editstafftype.ui" line="1139"/>
         <source>Half notes:</source>
         <translation>2分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="1170"/>
+        <location filename="../../mscore/editstafftype.ui" line="1177"/>
         <source>As short stem</source>
         <translation>短い符幹</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="1180"/>
+        <location filename="../../mscore/editstafftype.ui" line="1187"/>
         <source>As slashed stem</source>
         <translation>スラッシュ付き符幹</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="1208"/>
+        <location filename="../../mscore/editstafftype.ui" line="1215"/>
         <source>Show rests</source>
         <translation>休符を表示する</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="1249"/>
+        <location filename="../../mscore/editstafftype.ui" line="1256"/>
         <source>Preview</source>
         <translation>プレビュー</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="1267"/>
+        <location filename="../../mscore/editstafftype.ui" line="1274"/>
         <source>Template:</source>
         <translation>テンプレート:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="1283"/>
+        <location filename="../../mscore/editstafftype.ui" line="1290"/>
         <source>&lt; Reset to Template</source>
         <translation>&lt; テンプレートの設定にリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="1306"/>
+        <location filename="../../mscore/editstafftype.ui" line="1313"/>
         <source>Create a new staff type of current group.</source>
-        <translation>このタイプの新しい譜表を作成します</translation>
+        <translation>このタイプの新しい譜表を作成</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstafftype.ui" line="1309"/>
+        <location filename="../../mscore/editstafftype.ui" line="1316"/>
         <source>Add to Templates</source>
         <translation>テンプレートの追加</translation>
     </message>
@@ -2153,19 +2089,19 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../mscore/editstringdata.ui" line="106"/>
         <source>Number of frets:</source>
-        <translation>フレットの番号:</translation>
+        <translation>フレットの数:</translation>
     </message>
 </context>
 <context>
     <name>EditStyleBase</name>
     <message>
         <location filename="../../mscore/editstyle.ui" line="14"/>
-        <source>MuseScore: Edit Style</source>
-        <translation>MuseScore: スタイルの編集</translation>
+        <source>Edit Style</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="30"/>
-        <location filename="../../mscore/editstyle.ui" line="5501"/>
+        <location filename="../../mscore/editstyle.ui" line="5502"/>
         <source>Score</source>
         <translation>スコア</translation>
     </message>
@@ -2182,12 +2118,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../mscore/editstyle.ui" line="94"/>
         <source>Bravura Text</source>
-        <translation>Bravura Text</translation>
+        <translation>Bravuraのテキスト</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="99"/>
         <source>Emmentaler Text</source>
-        <translation>Emmentaler Text</translation>
+        <translation>Emmentalerのテキスト</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="104"/>
@@ -2279,19 +2215,19 @@ p, li { white-space: pre-wrap; }
         <location filename="../../mscore/editstyle.ui" line="3953"/>
         <location filename="../../mscore/editstyle.ui" line="3979"/>
         <location filename="../../mscore/editstyle.ui" line="4093"/>
-        <location filename="../../mscore/editstyle.ui" line="4388"/>
-        <location filename="../../mscore/editstyle.ui" line="4420"/>
-        <location filename="../../mscore/editstyle.ui" line="4449"/>
-        <location filename="../../mscore/editstyle.ui" line="4478"/>
-        <location filename="../../mscore/editstyle.ui" line="4567"/>
-        <location filename="../../mscore/editstyle.ui" line="4779"/>
-        <location filename="../../mscore/editstyle.ui" line="5277"/>
-        <location filename="../../mscore/editstyle.ui" line="5296"/>
-        <location filename="../../mscore/editstyle.ui" line="5315"/>
-        <location filename="../../mscore/editstyle.ui" line="5383"/>
-        <location filename="../../mscore/editstyle.ui" line="5402"/>
-        <location filename="../../mscore/editstyle.ui" line="5418"/>
-        <location filename="../../mscore/editstyle.ui" line="5437"/>
+        <location filename="../../mscore/editstyle.ui" line="4392"/>
+        <location filename="../../mscore/editstyle.ui" line="4424"/>
+        <location filename="../../mscore/editstyle.ui" line="4453"/>
+        <location filename="../../mscore/editstyle.ui" line="4482"/>
+        <location filename="../../mscore/editstyle.ui" line="4571"/>
+        <location filename="../../mscore/editstyle.ui" line="4783"/>
+        <location filename="../../mscore/editstyle.ui" line="5281"/>
+        <location filename="../../mscore/editstyle.ui" line="5300"/>
+        <location filename="../../mscore/editstyle.ui" line="5319"/>
+        <location filename="../../mscore/editstyle.ui" line="5384"/>
+        <location filename="../../mscore/editstyle.ui" line="5403"/>
+        <location filename="../../mscore/editstyle.ui" line="5419"/>
+        <location filename="../../mscore/editstyle.ui" line="5438"/>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -2357,7 +2293,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="376"/>
         <location filename="../../mscore/editstyle.ui" line="1180"/>
         <location filename="../../mscore/editstyle.ui" line="1352"/>
-        <location filename="../../mscore/editstyle.ui" line="5506"/>
+        <location filename="../../mscore/editstyle.ui" line="5507"/>
         <source>Page</source>
         <translation>ページ</translation>
     </message>
@@ -2378,7 +2314,6 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="490"/>
-        <location filename="../../mscore/editstyle.ui" line="4993"/>
         <source>Staff distance:</source>
         <translation>譜表の距離:</translation>
     </message>
@@ -2440,22 +2375,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="906"/>
         <source>Create key signature for all systems</source>
-        <translation>段全体の調号を作成</translation>
+        <translation>全ての段に調号を表示</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="913"/>
         <source>Create courtesy clefs</source>
-        <translation>慣例の音部記号を作る</translation>
+        <translation>慣例の音部記号を表示</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="926"/>
         <source>Create courtesy time signatures</source>
-        <translation>慣例の拍子記号を表示する</translation>
+        <translation>慣例の拍子記号を表示</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="933"/>
         <source>Create courtesy key signatures</source>
-        <translation>慣例の調号を表示する</translation>
+        <translation>慣例の調号を表示</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="968"/>
@@ -2465,7 +2400,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="985"/>
         <source>Show header also on first page</source>
-        <translation>最初のページにもヘッタを表示</translation>
+        <translation>最初のページにもヘッダを表示</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="988"/>
@@ -2477,7 +2412,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="995"/>
         <source>Use odd/even page header</source>
-        <translation>奇数偶数ページのヘッダを使用する</translation>
+        <translation>奇数偶数ページ毎のヘッダを使用</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="998"/>
@@ -2488,7 +2423,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1022"/>
         <location filename="../../mscore/editstyle.ui" line="1312"/>
-        <location filename="../../mscore/editstyle.ui" line="4638"/>
+        <location filename="../../mscore/editstyle.ui" line="4642"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
@@ -2501,7 +2436,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1042"/>
         <location filename="../../mscore/editstyle.ui" line="1359"/>
-        <location filename="../../mscore/editstyle.ui" line="4645"/>
+        <location filename="../../mscore/editstyle.ui" line="4649"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
@@ -2530,7 +2465,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1225"/>
         <source>Use odd/even page footer</source>
-        <translation>奇数偶数ページのフッタを使用する</translation>
+        <translation>奇数偶数ページ毎のフッタを使用</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1374"/>
@@ -2554,7 +2489,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1447"/>
-        <location filename="../../mscore/editstyle.ui" line="5516"/>
+        <location filename="../../mscore/editstyle.ui" line="5517"/>
         <source>System</source>
         <extracomment>a music system, a line of music</extracomment>
         <translation>段</translation>
@@ -2581,14 +2516,14 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1595"/>
-        <location filename="../../mscore/editstyle.ui" line="5521"/>
+        <location filename="../../mscore/editstyle.ui" line="5522"/>
         <source>Measure</source>
         <translation>小節</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1634"/>
         <source>Spacing (1=tight):</source>
-        <translation>スペース(1=狭い)</translation>
+        <translation>スペース (1=狭い)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1662"/>
@@ -2657,7 +2592,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2203"/>
-        <location filename="../../mscore/editstyle.ui" line="5526"/>
+        <location filename="../../mscore/editstyle.ui" line="5527"/>
         <source>Barlines</source>
         <translation>縦線</translation>
     </message>
@@ -2669,12 +2604,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2218"/>
         <source>Barline at start of single staff</source>
-        <translation>単一譜表の始めの縦線を描画する</translation>
+        <translation>単一譜表の始めの縦線を描画</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2225"/>
         <source>Barline at start of multiple staves</source>
-        <translation>複合譜表の始めの縦線を描画する</translation>
+        <translation>複合譜表の始めの縦線を描画</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2235"/>
@@ -2708,7 +2643,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2393"/>
-        <location filename="../../mscore/editstyle.ui" line="5531"/>
+        <location filename="../../mscore/editstyle.ui" line="5532"/>
         <source>Notes</source>
         <translation>音符</translation>
     </message>
@@ -2769,28 +2704,28 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2721"/>
-        <location filename="../../mscore/editstyle.ui" line="5536"/>
+        <location filename="../../mscore/editstyle.ui" line="5537"/>
         <source>Clefs</source>
         <translation>音部記号</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2727"/>
         <source>Default TAB Clef</source>
-        <translation>既定のTAB記号</translation>
+        <translation>既定のタブ記号</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2733"/>
         <source>Standard TAB clef</source>
-        <translation>標準 TAB記号</translation>
+        <translation>標準 タブ記号</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2740"/>
         <source>Serif TAB clef</source>
-        <translation>セリフ体 TAB記号</translation>
+        <translation>セリフ体 タブ記号</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2773"/>
-        <location filename="../../mscore/editstyle.ui" line="5541"/>
+        <location filename="../../mscore/editstyle.ui" line="5542"/>
         <source>Arpeggios</source>
         <translation>アルペジオ</translation>
     </message>
@@ -2815,7 +2750,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2878"/>
-        <location filename="../../mscore/editstyle.ui" line="5546"/>
+        <location filename="../../mscore/editstyle.ui" line="5547"/>
         <source>Beams</source>
         <translation>符尾</translation>
     </message>
@@ -2827,7 +2762,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2907"/>
         <source>Beam distance (in beam thickness units):</source>
-        <translation>連桁の間隔(符尾の線幅単位で)</translation>
+        <translation>連桁の間隔 (符尾の線幅単位で)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2937"/>
@@ -2837,11 +2772,11 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2973"/>
         <source>Flatten all beams</source>
-        <translation>全ての連桁を平らにする:</translation>
+        <translation>全ての連桁を平らにする</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2990"/>
-        <location filename="../../mscore/editstyle.ui" line="5551"/>
+        <location filename="../../mscore/editstyle.ui" line="5552"/>
         <source>Slurs/Ties</source>
         <translation>スラー/タイ</translation>
     </message>
@@ -2867,7 +2802,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3140"/>
-        <location filename="../../mscore/editstyle.ui" line="5556"/>
+        <location filename="../../mscore/editstyle.ui" line="5557"/>
         <source>Sizes</source>
         <translation>サイズ</translation>
     </message>
@@ -2912,8 +2847,8 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="3823"/>
         <location filename="../../mscore/editstyle.ui" line="3969"/>
         <location filename="../../mscore/editstyle.ui" line="4083"/>
-        <location filename="../../mscore/editstyle.ui" line="4378"/>
-        <location filename="../../mscore/editstyle.ui" line="4599"/>
+        <location filename="../../mscore/editstyle.ui" line="4382"/>
+        <location filename="../../mscore/editstyle.ui" line="4603"/>
         <source>Default vertical position:</source>
         <translation>垂直位置の既定値:</translation>
     </message>
@@ -2985,7 +2920,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="3846"/>
         <location filename="../../mscore/editstyle.ui" line="4028"/>
         <source>Line style:</source>
-        <translation>線のスタイル:</translation>
+        <translation>線の種類</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3722"/>
@@ -3019,7 +2954,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4150"/>
-        <location filename="../../mscore/editstyle.ui" line="4258"/>
+        <location filename="../../mscore/editstyle.ui" line="4262"/>
         <source>Standard</source>
         <translation>標準</translation>
     </message>
@@ -3034,354 +2969,359 @@ space unit</extracomment>
         <translation>ユーザー定義</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4227"/>
+        <location filename="../../mscore/editstyle.ui" line="4231"/>
         <source>Chord symbols style file:</source>
         <translation>コード記号スタイルファイル:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4237"/>
+        <location filename="../../mscore/editstyle.ui" line="4241"/>
         <source>Load chords.xml</source>
         <translation>chords.xmlの読み込み</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4247"/>
+        <location filename="../../mscore/editstyle.ui" line="4251"/>
         <source>Note Spelling</source>
         <translation>音符のスペル</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4255"/>
+        <location filename="../../mscore/editstyle.ui" line="4259"/>
         <source>A, B♭, B, C, C♯, ...</source>
         <translation>A, B♭, B, C, C♯, ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4265"/>
+        <location filename="../../mscore/editstyle.ui" line="4269"/>
         <source>A, B♭, H, C, C♯, ...</source>
         <translation>A, B♭, H, C, C♯, ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4268"/>
+        <location filename="../../mscore/editstyle.ui" line="4272"/>
         <source>German</source>
         <translation>ドイツ語</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4275"/>
+        <location filename="../../mscore/editstyle.ui" line="4279"/>
         <source>A, B, H, C, Cis</source>
         <translation>A, B, H, C, Cis</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4278"/>
+        <location filename="../../mscore/editstyle.ui" line="4282"/>
         <source>Full German</source>
         <translation>すべてドイツ語</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4285"/>
+        <location filename="../../mscore/editstyle.ui" line="4289"/>
         <source>Do, Do♯, Re♭, Re, ...</source>
         <translation>Do, Do♯, Re♭, Re, ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4288"/>
+        <location filename="../../mscore/editstyle.ui" line="4292"/>
         <source>Solfeggio</source>
         <translation>ソルフェージュ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4295"/>
+        <location filename="../../mscore/editstyle.ui" line="4299"/>
         <source>Do, Do♯, Ré♭, Ré, ...</source>
         <translation>Do, Do♯, Ré♭, Ré, ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4298"/>
+        <location filename="../../mscore/editstyle.ui" line="4302"/>
         <source>French</source>
         <translation>フランス語</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4320"/>
+        <location filename="../../mscore/editstyle.ui" line="4324"/>
         <source>Automatic Capitalization</source>
         <translation>自動大文字</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4329"/>
+        <location filename="../../mscore/editstyle.ui" line="4333"/>
         <source>Lower case minor chords</source>
         <translation>マイナーコードを小文字に</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4336"/>
+        <location filename="../../mscore/editstyle.ui" line="4340"/>
         <source>Lower case bass notes</source>
         <translation>根音を小文字に</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4343"/>
+        <location filename="../../mscore/editstyle.ui" line="4347"/>
         <source>All caps note names</source>
         <translation>すべて大文字</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4369"/>
+        <location filename="../../mscore/editstyle.ui" line="4373"/>
         <source>Positioning</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4407"/>
+        <location filename="../../mscore/editstyle.ui" line="4411"/>
         <source>Distance to fretboard diagram:</source>
         <translation>フレットボードダイアグラムまでの間隔:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4439"/>
+        <location filename="../../mscore/editstyle.ui" line="4443"/>
         <source>Minimum chord spacing:</source>
         <translation>最小の和音の間隔:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4468"/>
+        <location filename="../../mscore/editstyle.ui" line="4472"/>
         <source>Maximum barline distance:</source>
         <translation>縦線の距離の最大値:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4513"/>
+        <location filename="../../mscore/editstyle.ui" line="4517"/>
         <source>Capo</source>
         <translation>カポ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4519"/>
+        <location filename="../../mscore/editstyle.ui" line="4523"/>
         <source>Capo fret position:</source>
         <translation>カポのフレット位置:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4555"/>
+        <location filename="../../mscore/editstyle.ui" line="4559"/>
         <source>Fretboard Diagrams</source>
         <translation>フレットボードダイアグラム</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4589"/>
+        <location filename="../../mscore/editstyle.ui" line="4593"/>
         <source>Fret offset number font size:</source>
         <translation>フレット基準番号のフォントサイズ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4631"/>
+        <location filename="../../mscore/editstyle.ui" line="4635"/>
         <source>Position:</source>
         <translation>位置:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4665"/>
+        <location filename="../../mscore/editstyle.ui" line="4669"/>
         <source>Barré line thickness:</source>
         <translation>取り消し線の太さ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4688"/>
+        <location filename="../../mscore/editstyle.ui" line="4692"/>
         <source>Scale:</source>
         <translation>スケール:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4728"/>
-        <location filename="../../mscore/editstyle.ui" line="5576"/>
+        <location filename="../../mscore/editstyle.ui" line="4732"/>
+        <location filename="../../mscore/editstyle.ui" line="5577"/>
         <source>Figured Bass</source>
-        <translation>数字付低音</translation>
+        <translation>通奏低音</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4760"/>
+        <location filename="../../mscore/editstyle.ui" line="4764"/>
         <source>Font:</source>
         <translation>フォント:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4798"/>
+        <location filename="../../mscore/editstyle.ui" line="4802"/>
         <source>Size:</source>
         <translation>サイズ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4817"/>
+        <location filename="../../mscore/editstyle.ui" line="4821"/>
         <source>pt</source>
         <translation>pt</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4833"/>
+        <location filename="../../mscore/editstyle.ui" line="4837"/>
         <source>Line height:</source>
         <translation>行の高さ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4849"/>
+        <location filename="../../mscore/editstyle.ui" line="4853"/>
         <source>Vertical position:</source>
         <translation>垂直位置</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4872"/>
+        <location filename="../../mscore/editstyle.ui" line="4876"/>
         <source>from top of staff</source>
         <translation>譜表の上部から</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4879"/>
+        <location filename="../../mscore/editstyle.ui" line="4883"/>
         <source>of font height</source>
         <translation>文字高に対して</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4903"/>
+        <location filename="../../mscore/editstyle.ui" line="4907"/>
         <source>Alignment</source>
         <translation>位置合わせ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4909"/>
+        <location filename="../../mscore/editstyle.ui" line="4913"/>
         <source>Top</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4916"/>
+        <location filename="../../mscore/editstyle.ui" line="4920"/>
         <source>Bottom</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4939"/>
+        <location filename="../../mscore/editstyle.ui" line="4943"/>
         <source>Style</source>
         <translation>スタイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4945"/>
+        <location filename="../../mscore/editstyle.ui" line="4949"/>
         <source>Modern</source>
         <translation>現代</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4952"/>
+        <location filename="../../mscore/editstyle.ui" line="4956"/>
         <source>Historic</source>
         <translation>古典</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4985"/>
-        <location filename="../../mscore/editstyle.ui" line="5581"/>
+        <location filename="../../mscore/editstyle.ui" line="4989"/>
+        <location filename="../../mscore/editstyle.ui" line="5582"/>
         <source>Articulations, Ornaments</source>
         <translation>アーティキュレーション, 装飾記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5003"/>
-        <location filename="../../mscore/editstyle.ui" line="5023"/>
-        <location filename="../../mscore/editstyle.ui" line="5043"/>
+        <location filename="../../mscore/editstyle.ui" line="4997"/>
+        <source>Stem distance:</source>
+        <translation>棒の距離</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="5007"/>
+        <location filename="../../mscore/editstyle.ui" line="5027"/>
+        <location filename="../../mscore/editstyle.ui" line="5047"/>
         <source>sp</source>
         <comment>space unit</comment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5013"/>
+        <location filename="../../mscore/editstyle.ui" line="5017"/>
         <source>Articulation distance:</source>
         <translation>アーティキュレーションの距離:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5033"/>
+        <location filename="../../mscore/editstyle.ui" line="5037"/>
         <source>Note head distance:</source>
         <translation>符頭の距離:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5069"/>
+        <location filename="../../mscore/editstyle.ui" line="5073"/>
         <source>Articulation size:</source>
         <translation>アーティキュレーションのサイズ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5147"/>
-        <location filename="../../mscore/editstyle.ui" line="5586"/>
+        <location filename="../../mscore/editstyle.ui" line="5151"/>
+        <location filename="../../mscore/editstyle.ui" line="5587"/>
         <source>Accidentals</source>
         <translation>臨時記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5157"/>
+        <location filename="../../mscore/editstyle.ui" line="5161"/>
         <source>Accidental</source>
         <translation>臨時記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5162"/>
+        <location filename="../../mscore/editstyle.ui" line="5166"/>
         <source>Semitones offset</source>
         <translation>半音のオフセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5167"/>
+        <location filename="../../mscore/editstyle.ui" line="5171"/>
         <source>Cents offset</source>
         <translation>セントのオフセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5178"/>
+        <location filename="../../mscore/editstyle.ui" line="5182"/>
         <source>Naturals in Key Signatures</source>
         <translation>調号を変更した場合のナチュラルの配置</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5184"/>
+        <location filename="../../mscore/editstyle.ui" line="5188"/>
         <source>Only for a change to C Maj / A min</source>
         <translation>ハ長調(Cメジャー)/イ短調(Aマイナー) に変更された場合のみ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5191"/>
+        <location filename="../../mscore/editstyle.ui" line="5195"/>
         <source>Before key signature if changing to fewer sharps or flats</source>
         <translation>変更後の調号の前に配置</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5198"/>
+        <location filename="../../mscore/editstyle.ui" line="5202"/>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
         <translation>シャープ系とフラット系が切り替わるときは変更後の調号の前に配置。そうでなければ後ろに配置。</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5228"/>
-        <location filename="../../mscore/editstyle.ui" line="5591"/>
+        <location filename="../../mscore/editstyle.ui" line="5232"/>
+        <location filename="../../mscore/editstyle.ui" line="5592"/>
         <source>Tuplets</source>
         <translation>連符</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5234"/>
+        <location filename="../../mscore/editstyle.ui" line="5238"/>
         <source>Vertical Distance from the Notes</source>
         <translation>音符からの垂直距離</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5240"/>
+        <location filename="../../mscore/editstyle.ui" line="5244"/>
         <source>Maximum slope:</source>
         <translation>最大斜度:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5250"/>
+        <location filename="../../mscore/editstyle.ui" line="5254"/>
         <source>Vertical distance from stem:</source>
         <translation>符幹からの垂直距離:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5260"/>
+        <location filename="../../mscore/editstyle.ui" line="5264"/>
         <source>Vertical distance from note head:</source>
         <translation>符頭からの垂直距離:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5270"/>
+        <location filename="../../mscore/editstyle.ui" line="5274"/>
         <source>Avoid the staves</source>
         <translation>譜表を避ける</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5337"/>
+        <location filename="../../mscore/editstyle.ui" line="5338"/>
         <source>Horizontal Distance from the Notes</source>
         <translation>音符からの水平距離</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5343"/>
+        <location filename="../../mscore/editstyle.ui" line="5344"/>
         <source>Distance before the stem of the first note:</source>
         <translation>最初の音符の、符幹の前の間隔:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5353"/>
+        <location filename="../../mscore/editstyle.ui" line="5354"/>
         <source>Distance before the head of the first note:</source>
         <translation>最初の音符の、符頭の前の間隔:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5363"/>
+        <location filename="../../mscore/editstyle.ui" line="5364"/>
         <source>Distance after the stem of the last note:</source>
         <translation>最後の音符の、符幹の後の間隔:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5373"/>
+        <location filename="../../mscore/editstyle.ui" line="5374"/>
         <source>Distance after the head of the last note:</source>
         <translation>最後の音符の、符頭の後の間隔:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5511"/>
+        <location filename="../../mscore/editstyle.ui" line="5512"/>
         <source>Header, Footer, Numbers</source>
-        <translation>ヘッダ,フッタ,番号</translation>
+        <translation>ヘッダ,フッタ,小節番号</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5561"/>
+        <location filename="../../mscore/editstyle.ui" line="5562"/>
         <source>Hairpins, Volta, Ottava</source>
         <translation>＜＞,反復記号,8va</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5566"/>
+        <location filename="../../mscore/editstyle.ui" line="5567"/>
         <source>Pedal, Trill</source>
         <translation>ペダル,トリル</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5571"/>
+        <location filename="../../mscore/editstyle.ui" line="5572"/>
         <source>Chord Symbols, Fretboard Diagrams</source>
         <translation>コード記号,フレットボードダイアグラム</translation>
     </message>
@@ -3390,8 +3330,8 @@ space unit</extracomment>
     <name>ExcerptsDialog</name>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="14"/>
-        <source>MuseScore: Parts</source>
-        <translation>MuseScore: パート</translation>
+        <source>Parts</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="20"/>
@@ -3417,26 +3357,31 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="107"/>
+        <source>Generate new part for each instrument</source>
+        <translation>それぞれの楽器に新しいパートを生成する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/excerptsdialog.ui" line="110"/>
         <source>New All</source>
         <translation>全て新規</translation>
     </message>
     <message>
-        <location filename="../../mscore/excerptsdialog.ui" line="114"/>
+        <location filename="../../mscore/excerptsdialog.ui" line="117"/>
         <source>New</source>
         <translation>新規</translation>
     </message>
     <message>
-        <location filename="../../mscore/excerptsdialog.ui" line="126"/>
+        <location filename="../../mscore/excerptsdialog.ui" line="129"/>
         <source>Edit Part</source>
         <translation>パートの編集</translation>
     </message>
     <message>
-        <location filename="../../mscore/excerptsdialog.ui" line="135"/>
+        <location filename="../../mscore/excerptsdialog.ui" line="138"/>
         <source>Part title:</source>
         <translation>パートのタイトル:</translation>
     </message>
     <message>
-        <location filename="../../mscore/excerptsdialog.ui" line="145"/>
+        <location filename="../../mscore/excerptsdialog.ui" line="148"/>
         <source>Instrument:</source>
         <translation>楽器:</translation>
     </message>
@@ -3446,17 +3391,17 @@ space unit</extracomment>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="26"/>
         <source>Sound Fonts</source>
-        <translation>Sound Fonts</translation>
+        <translation>サウンドフォント</translation>
     </message>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="47"/>
         <source>Move Soundfont up</source>
-        <translation>SoundFontを上に移動</translation>
+        <translation>サウンドフォントを上に移動</translation>
     </message>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="69"/>
         <source>Move Soundfont down</source>
-        <translation>SoundFontを下に移動</translation>
+        <translation>サウンドフォントを下に移動</translation>
     </message>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="101"/>
@@ -3489,8 +3434,8 @@ space unit</extracomment>
     <name>FretDiagramProperties</name>
     <message>
         <location filename="../../mscore/fretdprops.ui" line="14"/>
-        <source>MuseScore: Fretboard Diagram Properties</source>
-        <translation>MuseScore: フレットボードダイアグラムのプロパティ</translation>
+        <source>Fretboard Diagram Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/fretdprops.ui" line="31"/>
@@ -3507,8 +3452,8 @@ space unit</extracomment>
     <name>GlissandoProperties</name>
     <message>
         <location filename="../../mscore/glissandoprop.ui" line="14"/>
-        <source>MuseScore: Glissando Properties</source>
-        <translation>MuseScore: グリッサンドのプロパティ</translation>
+        <source>Glissando Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/glissandoprop.ui" line="34"/>
@@ -3524,7 +3469,7 @@ space unit</extracomment>
 <context>
     <name>GreendotButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3845"/>
+        <location filename="../../mscore/musescore.cpp" line="4173"/>
         <source>Record</source>
         <translation>録音</translation>
     </message>
@@ -3539,12 +3484,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/importmidi/importmidi_panel.ui" line="121"/>
         <source>Move track up</source>
-        <translation>トラック移動↑</translation>
+        <translation>トラックを上に移動</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi_panel.ui" line="144"/>
         <source>Move track down</source>
-        <translation>トラック移動↓</translation>
+        <translation>トラックを下に移動</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi_panel.ui" line="174"/>
@@ -3576,8 +3521,8 @@ space unit</extracomment>
     <name>InsertMeasuresDialogBase</name>
     <message>
         <location filename="../../mscore/insertmeasuresdialog.ui" line="14"/>
-        <source>MuseScore: Insert Measures</source>
-        <translation>MuseScore: 小節の挿入</translation>
+        <source>Insert Measures</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/insertmeasuresdialog.ui" line="39"/>
@@ -3614,19 +3559,31 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="84"/>
+        <location filename="../../mscore/inspector/inspector_accidental.ui" line="136"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="87"/>
-        <source>Reset Small value</source>
-        <translation>小さい値をリセット</translation>
+        <source>Reset &apos;Small&apos; value</source>
+        <translation>”小”の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_accidental.ui" line="106"/>
-        <location filename="../../mscore/inspector/inspector_accidental.ui" line="109"/>
+        <location filename="../../mscore/inspector/inspector_accidental.ui" line="110"/>
+        <location filename="../../mscore/inspector/inspector_accidental.ui" line="113"/>
         <source>Small</source>
         <translation>小</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_accidental.ui" line="139"/>
+        <source>Reset &apos;Has bracket&apos; value</source>
+        <translation>”カッコを付ける”の値をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_accidental.ui" line="162"/>
+        <location filename="../../mscore/inspector/inspector_accidental.ui" line="165"/>
+        <source>Has bracket</source>
+        <translation>カッコを付ける</translation>
     </message>
 </context>
 <context>
@@ -3643,6 +3600,10 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="93"/>
+        <source>Head group:</source>
+        <translation>玉の種類</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="106"/>
         <source>Head group</source>
         <translation>符頭の分類</translation>
@@ -3719,7 +3680,6 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="186"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="492"/>
         <source>Line thickness</source>
         <translation>線の太さ</translation>
     </message>
@@ -3730,343 +3690,364 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="208"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="479"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="785"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="814"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="876"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="483"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="793"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="829"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="895"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="211"/>
-        <source>Reset Line thickness value</source>
-        <translation>線の太さを初期値に戻す</translation>
+        <source>Reset &apos;Line thickness&apos; value</source>
+        <translation>”線の太さ”の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="227"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="242"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="231"/>
+        <source>Bottom note:</source>
+        <translation>最低音</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="246"/>
         <source>Bottom note</source>
         <translation>最低音</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="252"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="530"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="256"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="538"/>
         <source>[Undefined]</source>
         <translation>[未定義]</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="257"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="535"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="261"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="543"/>
         <source>C♭♭</source>
         <translation>C♭♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="262"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="540"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="266"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="548"/>
         <source>C♭</source>
         <translation>C♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="267"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="545"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="271"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="553"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="272"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="550"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="276"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="558"/>
         <source>C♯</source>
         <translation>C♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="277"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="555"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="281"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="563"/>
         <source>C♯♯</source>
         <translation>C♯♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="282"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="560"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="286"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="568"/>
         <source>D♭♭</source>
         <translation>D♭♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="287"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="565"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="291"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="573"/>
         <source>D♭</source>
         <translation>D♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="292"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="570"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="296"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="578"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="297"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="575"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="301"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="583"/>
         <source>D♯</source>
         <translation>D♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="302"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="580"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="306"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="588"/>
         <source>D♯♯</source>
         <translation>D♯♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="307"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="585"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="311"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="593"/>
         <source>E♭♭</source>
         <translation>E♭♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="312"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="590"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="316"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="598"/>
         <source>E♭</source>
         <translation>E♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="317"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="595"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="321"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="603"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="322"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="600"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="326"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="608"/>
         <source>E♯</source>
         <translation>E♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="327"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="605"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="331"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="613"/>
         <source>E♯♯</source>
         <translation>E♯♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="332"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="610"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="336"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="618"/>
         <source>F♭♭</source>
         <translation>F♭♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="337"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="615"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="341"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="623"/>
         <source>F♭</source>
         <translation>F♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="342"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="620"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="346"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="628"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="347"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="625"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="351"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="633"/>
         <source>F♯</source>
         <translation>F♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="352"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="630"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="356"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="638"/>
         <source>F♯♯</source>
         <translation>F♯♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="357"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="635"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="361"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="643"/>
         <source>G♭♭</source>
         <translation>G♭♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="362"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="640"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="366"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="648"/>
         <source>G♭</source>
         <translation>G♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="367"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="645"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="371"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="653"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="372"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="650"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="376"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="658"/>
         <source>G♯</source>
         <translation>G♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="377"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="655"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="381"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="663"/>
         <source>G♯♯</source>
         <translation>G♯♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="382"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="660"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="386"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="668"/>
         <source>A♭♭</source>
         <translation>A♭♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="387"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="665"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="391"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="673"/>
         <source>A♭</source>
         <translation>A♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="392"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="670"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="396"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="678"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="397"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="675"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="401"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="683"/>
         <source>A♯</source>
         <translation>A♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="402"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="680"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="406"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="688"/>
         <source>A♯♯</source>
         <translation>A♯♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="407"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="685"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="411"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="693"/>
         <source>B♭♭</source>
         <translation>B♭♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="412"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="690"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="416"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="698"/>
         <source>B♭</source>
         <translation>B♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="417"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="695"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="421"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="703"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="422"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="700"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="426"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="708"/>
         <source>B♯</source>
         <translation>B♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="427"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="705"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="431"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="713"/>
         <source>B♯♯</source>
         <translation>B♯♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="435"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="713"/>
-        <source>Oct </source>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="439"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="721"/>
+        <source>Oct.:</source>
         <translation>オクターブ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="445"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="723"/>
-        <source>Oct</source>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="449"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="731"/>
+        <source>Octave</source>
         <translation>オクターブ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="463"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="466"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="467"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="470"/>
         <source>Has line</source>
         <translation>線あり</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="482"/>
-        <source>Reset Has line value</source>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="486"/>
+        <source>Reset &apos;Has line&apos; value</source>
         <translation>線の有無をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="505"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="520"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="500"/>
+        <source>Line thickness:</source>
+        <translation>線の太さ:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="513"/>
+        <source>Top note:</source>
+        <translation>最高音</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="528"/>
         <source>Top note</source>
         <translation>最高音</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="744"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="801"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="752"/>
         <source>Head type</source>
         <translation>符頭のタイプ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="751"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="759"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="756"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="764"/>
         <source>Whole</source>
         <translation>全音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="761"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="769"/>
         <source>Half</source>
         <translation>2分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="766"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="774"/>
         <source>Quarter</source>
         <translation>4分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="771"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="779"/>
         <source>Breve</source>
         <translation>倍全音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="788"/>
-        <source>Reset Head group value</source>
-        <translation>符頭の分類をリセット</translation>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="796"/>
+        <source>Reset &apos;Head group&apos; value</source>
+        <translation>玉のグループをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="817"/>
-        <source>Reset Direction value</source>
-        <translation>方向のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="816"/>
+        <source>Head type:</source>
+        <translation>玉の種類</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="845"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="832"/>
+        <source>Reset &apos;Direction&apos; value</source>
+        <translation>棒の向きをリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="864"/>
         <source>Update range</source>
         <translation>範囲を更新</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="848"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="867"/>
         <source>Update Range</source>
         <translation>範囲を更新</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="879"/>
-        <source>Reset Head type value</source>
-        <translation>符頭のタイプをリセット</translation>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="898"/>
+        <source>Reset &apos;Head type&apos; value</source>
+        <translation>玉の種類をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="895"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="908"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="918"/>
+        <source>Direction:</source>
+        <translation>方向:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="931"/>
         <source>Direction</source>
         <translation>方向</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="915"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="938"/>
         <source>Upright</source>
         <translation>直立</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="920"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="943"/>
         <source>Leaning Left</source>
         <translation>左傾斜</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="925"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="948"/>
         <source>Leaning Right</source>
         <translation>右傾斜</translation>
     </message>
@@ -4084,14 +4065,14 @@ space unit</extracomment>
         <translation>アルペジオ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="90"/>
+        <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="84"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="100"/>
-        <source>Reset Play value</source>
-        <translation>再生のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="94"/>
+        <source>Reset &apos;Play&apos; value</source>
+        <translation>再生の値をリセット</translation>
     </message>
 </context>
 <context>
@@ -4108,16 +4089,18 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="87"/>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="151"/>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="251"/>
-        <source>Direction</source>
-        <translation>方向</translation>
+        <source>Direction:</source>
+        <translation>方向:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="100"/>
+        <source>Anchor:</source>
+        <translation>場所:</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="113"/>
         <source>Anchor</source>
-        <translation>アンカー</translation>
+        <translation>場所</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="117"/>
@@ -4145,6 +4128,12 @@ space unit</extracomment>
         <translation>コードの下</translation>
     </message>
     <message>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="151"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="263"/>
+        <source>Direction</source>
+        <translation>方向</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="155"/>
         <source>Auto</source>
         <translation>自動</translation>
@@ -4161,54 +4150,58 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="173"/>
-        <source>Reset Direction value</source>
-        <translation>方向のリセット</translation>
+        <source>Reset &apos;Direction&apos; value</source>
+        <translation>方向をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="189"/>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="202"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="193"/>
+        <source>Time stretch:</source>
+        <translation>タイムストレッチ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="206"/>
         <source>Time stretch</source>
         <translation>タイムストレッチ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="212"/>
-        <source>Reset Anchor value</source>
-        <translation>アンカーのリセット</translation>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="216"/>
+        <source>Reset &apos;Anchor&apos; value</source>
+        <translation>場所をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="222"/>
-        <source>Reset Time stretch value</source>
-        <translation>タイムストレッチのリセット</translation>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="230"/>
+        <source>Reset &apos;Time stretch&apos; value</source>
+        <translation>タイムストレッチの値をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="238"/>
-        <source>Ornament Style</source>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="250"/>
+        <source>Ornament Style:</source>
         <translation>装飾記号のスタイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="255"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="267"/>
         <source>Default</source>
         <translation>既定値</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="260"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="272"/>
         <source>Baroque</source>
         <translation>バロック</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="268"/>
-        <source>Reset Ornament Type value</source>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="280"/>
+        <source>Reset &apos;Ornament style&apos; value</source>
         <translation>装飾記号のスタイルをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="278"/>
-        <source>Play</source>
-        <translation>再生</translation>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="294"/>
+        <source>Reset &apos;Play&apos; value</source>
+        <translation>再生をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="288"/>
-        <source>Reset Play value</source>
-        <translation>再生のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="308"/>
+        <source>Play</source>
+        <translation>再生</translation>
     </message>
 </context>
 <context>
@@ -4235,77 +4228,77 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="107"/>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="189"/>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="202"/>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="215"/>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="248"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="193"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="210"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="227"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="264"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="110"/>
-        <source>Reset Type value</source>
-        <translation>タイプのリセット</translation>
+        <source>Reset &apos;Style&apos; value</source>
+        <translation>スタイルのリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="120"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="124"/>
         <source>Span from:</source>
         <translation>上位置</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="133"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="137"/>
         <source>Spanned staves:</source>
-        <translation>譜表数</translation>
+        <translation>小節またぎ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="146"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="150"/>
         <source>Span from</source>
         <translation>上位置</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="159"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="163"/>
         <source>Span</source>
         <translation>パート</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="169"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="173"/>
         <source>Span to:</source>
         <translation>下位置</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="182"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="186"/>
         <source>Span to</source>
         <translation>下位置</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="192"/>
-        <source>Reset Span value</source>
-        <translation>スパンのリセット</translation>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="196"/>
+        <source>Reset &apos;Spanned staves&apos; value</source>
+        <translation>小節またぎのリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="205"/>
-        <source>Reset Span from value</source>
-        <translation>上位置のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="213"/>
+        <source>Reset &apos;Span from&apos; value</source>
+        <translation>&quot;上位置&quot;の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="218"/>
-        <source>Reset Span to value</source>
-        <translation>下位置のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="230"/>
+        <source>Reset &apos;Span to&apos; value</source>
+        <translation>&quot;下位置&quot;の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="228"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="244"/>
         <source>Span preset:</source>
         <translation>プリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="241"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="257"/>
         <source>Spantype</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="251"/>
-        <source>Reset Span type value</source>
-        <translation>スパンタイプのリセット</translation>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="267"/>
+        <source>Reset &apos;Span preset&apos; value</source>
+        <translation>”プリセット”の値をリセット</translation>
     </message>
 </context>
 <context>
@@ -4323,7 +4316,6 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="84"/>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="138"/>
         <source>Direction</source>
         <translation>方向</translation>
     </message>
@@ -4344,15 +4336,18 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="112"/>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="290"/>
-        <source>Grow right</source>
-        <translation>右増分</translation>
+        <source>Grow right:</source>
+        <translation>右側の旗の位置</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="125"/>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="239"/>
-        <source>Grow left</source>
-        <translation>左増分</translation>
+        <source>Grow left:</source>
+        <translation>左側の旗の位置</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="138"/>
+        <source>Direction:</source>
+        <translation>方向:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="151"/>
@@ -4366,72 +4361,82 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="157"/>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="217"/>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="221"/>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="182"/>
-        <source>Position</source>
-        <translation>位置</translation>
+        <source>Position:</source>
+        <translation>位置:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="195"/>
-        <source>Reset Direction value</source>
-        <translation>方向のリセット</translation>
+        <source>Reset &apos;Direction&apos; value</source>
+        <translation>棒の向きをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="211"/>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="215"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="214"/>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="218"/>
         <source>Vertical position offset right</source>
         <translation>右の垂直位置基準</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="258"/>
-        <source>Reset Grow right value</source>
-        <translation>右増分のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="243"/>
+        <source>Grow left</source>
+        <translation>左増分</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="274"/>
-        <source>Reset Grow left value</source>
-        <translation>左増分のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="262"/>
+        <source>Reset &apos;Grow right&apos; value</source>
+        <translation>右側の旗の位置をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="309"/>
-        <source>Reset User position value</source>
-        <translation>位置指定のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="282"/>
+        <source>Reset &apos;Grow left&apos; value</source>
+        <translation>左側の旗の位置をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="322"/>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="325"/>
-        <source>Local relayout</source>
-        <translation>音符の再配置</translation>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="302"/>
+        <source>Grow right</source>
+        <translation>右増分</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="321"/>
+        <source>Reset &apos;User position&apos; value</source>
+        <translation>ユーザーポジションをリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="338"/>
-        <source>Reset Local Relayout value</source>
-        <translation>音符の配置をリセット</translation>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="341"/>
+        <source>Local relayout</source>
+        <translation>ローカルレイアウト</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="351"/>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="354"/>
+        <source>Reset &apos;Local relayout&apos; value</source>
+        <translation>ローカルレイアウトの値をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="371"/>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="374"/>
         <source>User position</source>
         <translation>位置指定</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="364"/>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="367"/>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="384"/>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="387"/>
         <source>Horizontal</source>
-        <translation>水平</translation>
+        <translation>旗を水平にする</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="380"/>
-        <source>Reset Horizontal value</source>
-        <translation>水平位置のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="400"/>
+        <source>Reset &apos;Horizontal&apos; value</source>
+        <translation>旗を水平にするをリセット</translation>
     </message>
 </context>
 <context>
@@ -4447,17 +4452,17 @@ space unit</extracomment>
         <translation>ベンド</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="102"/>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="96"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="112"/>
-        <source>Reset Play value</source>
-        <translation>再生のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="106"/>
+        <source>Reset &apos;Play&apos; value</source>
+        <translation>再生をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="122"/>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="120"/>
         <source>Properties</source>
         <translation>プロパティ</translation>
     </message>
@@ -4476,6 +4481,45 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorCaesura</name>
+    <message>
+        <location filename="../../mscore/inspector/inspector_caesura.ui" line="17"/>
+        <source>Caesura Inspector</source>
+        <translation>カエスーラ インスペクタ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_caesura.ui" line="44"/>
+        <source>Breath/Caesura</source>
+        <translation>ブレス / カエスーラ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_caesura.ui" line="87"/>
+        <source>Leading space</source>
+        <translation>前の間隔</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_caesura.ui" line="90"/>
+        <source>sec</source>
+        <extracomment>seconds</extracomment>
+        <translation>秒</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_caesura.ui" line="112"/>
+        <source>Pause</source>
+        <translation>一時停止</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_caesura.ui" line="119"/>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_caesura.ui" line="122"/>
+        <source>Reset &apos;Pause&apos; value</source>
+        <translation>”一時停止”の値をリセット</translation>
+    </message>
+</context>
+<context>
     <name>InspectorChord</name>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="17"/>
@@ -4489,91 +4533,99 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="81"/>
-        <source>Reset Vertical offset value</source>
-        <translation>垂直位置のリセット</translation>
+        <source>Reset &apos;Vertical offset&apos; value</source>
+        <translation>垂直位置の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="97"/>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="110"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="101"/>
+        <source>Stem direction:</source>
+        <translation>符幹の方向:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="114"/>
         <source>Stem direction</source>
         <translation>符幹の方向</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="114"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="118"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="119"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="123"/>
         <source>Up</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="124"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="128"/>
         <source>Down</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="132"/>
-        <source>Reset Horizontal offset value</source>
-        <translation>水平位置のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="136"/>
+        <source>Reset &apos;Horizontal offset&apos; value</source>
+        <translation>水平位置の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="148"/>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="161"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="156"/>
+        <source>Vertical offset:</source>
+        <translation>垂直位置:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="169"/>
         <source>Vertical offset</source>
         <translation>垂直位置</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="164"/>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="215"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="172"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="227"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="180"/>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="231"/>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="244"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="188"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="243"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="260"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="183"/>
-        <source>Reset Stem direction value</source>
-        <translation>符幹の方向をリセット</translation>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="191"/>
+        <source>Reset &apos;Stem direction&apos; value</source>
+        <translation>棒の向きをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="199"/>
-        <source>Horizontal offset</source>
-        <translation>水平位置</translation>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="211"/>
+        <source>Horizontal offset:</source>
+        <translation>水平位置のリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="212"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="224"/>
         <source>Horizontal Offset</source>
         <translation>水平位置</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="234"/>
-        <source>Reset Small Value</source>
-        <translation>小さい値をリセット</translation>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="246"/>
+        <source>Reset &apos;Small&apos; value</source>
+        <translation>”小”の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="247"/>
-        <source>Reset Stemless value</source>
-        <translation>符幹なしのリセット</translation>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="263"/>
+        <source>Reset &apos;Stemless&apos; value</source>
+        <translation>棒なしをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="266"/>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="269"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="286"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="289"/>
         <source>Small</source>
         <translation>小</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="285"/>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="288"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="305"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="308"/>
         <source>Stemless</source>
-        <translation>符幹なし</translation>
+        <translation>棒なし</translation>
     </message>
 </context>
 <context>
@@ -4601,8 +4653,8 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_clef.ui" line="106"/>
-        <source>Reset Show courtesy value</source>
-        <translation>拍子のリセット</translation>
+        <source>Reset &apos;Show courtesy&apos; value</source>
+        <translation>慣例の音部記号を表示をリセット</translation>
     </message>
 </context>
 <context>
@@ -4619,49 +4671,53 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="81"/>
-        <source>Dynamic range</source>
+        <source>Dynamic range:</source>
         <translation>強弱の範囲</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="88"/>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="140"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="144"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="91"/>
-        <source>Reset Velocity value</source>
-        <translation>べロシティのリセット</translation>
+        <source>Reset &apos;Velocity&apos; value</source>
+        <translation>べロシティの値をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="101"/>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="108"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="105"/>
+        <source>Velocity:</source>
+        <translation>ベロシティ:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="112"/>
         <source>Velocity</source>
         <translation>ベロシティ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="118"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="122"/>
         <source>Dynamic Range</source>
         <translation>強弱の範囲</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="122"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="126"/>
         <source>Staff</source>
         <translation>譜表</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="127"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="131"/>
         <source>Part</source>
         <translation>パート</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="132"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="136"/>
         <source>System</source>
         <translation>段</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="143"/>
-        <source>Reset Dynamic range value</source>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="147"/>
+        <source>Reset &apos;Dynamic range&apos; value</source>
         <translation>強弱の範囲をリセット</translation>
     </message>
 </context>
@@ -4679,54 +4735,66 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="96"/>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="172"/>
-        <source>Vertical offset</source>
-        <translation>垂直位置</translation>
+        <source>Vertical offset:</source>
+        <translation>垂直位置:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="109"/>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="219"/>
         <source>Horizontal offset</source>
         <translation>水平位置</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="115"/>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="175"/>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="179"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="143"/>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="277"/>
+        <source>Color:</source>
+        <translation>色:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="156"/>
+        <source>Reset &apos;Horizontal offset&apos; value</source>
+        <translation>水平位置の値をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="176"/>
+        <source>Vertical offset</source>
+        <translation>垂直位置</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="201"/>
+        <source>Reset &apos;Vertical offset&apos; value</source>
+        <translation>垂直位置の値をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="227"/>
+        <source>Horizontal offset:</source>
+        <translation>水平位置のリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="240"/>
+        <source>Reset &apos;Color&apos; value</source>
+        <translation>設定された色をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="294"/>
         <source>Color</source>
         <translation>色</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="156"/>
-        <source>Reset Horizontal offset value</source>
-        <translation>水平位置のリセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="197"/>
-        <source>Reset Vertical offset value</source>
-        <translation>垂直位置のリセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="232"/>
-        <source>Reset Color value</source>
-        <translation>色のリセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="302"/>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="305"/>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="319"/>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="322"/>
         <source>Visible</source>
         <translation>表示</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="318"/>
-        <source>Reset Visible value</source>
-        <translation>可視属性のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="335"/>
+        <source>Reset &apos;Visible&apos; value</source>
+        <translation>表示するをリセット</translation>
     </message>
 </context>
 <context>
@@ -4755,17 +4823,17 @@ space unit</extracomment>
         <translation>フレットボードダイアグラム</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="93"/>
-        <source>Scale</source>
-        <translation>スケール</translation>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="106"/>
+        <source>Scale:</source>
+        <translation>大きさ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="100"/>
-        <source>Reset Size in staff space units value</source>
-        <translation>譜表空間単位のサイズをリセット</translation>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="113"/>
+        <source>Reset &apos;Scale&apos; value</source>
+        <translation>大きさをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="110"/>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="127"/>
         <source>Properties</source>
         <translation>プロパティ</translation>
     </message>
@@ -4783,92 +4851,100 @@ space unit</extracomment>
         <translation>グリッサンド</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="90"/>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="185"/>
-        <source>Text</source>
-        <translation>テキスト</translation>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="84"/>
+        <source>Text:</source>
+        <translation>テキスト:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="97"/>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="168"/>
-        <source>Type</source>
-        <translation>タイプ</translation>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="91"/>
+        <source>Type:</source>
+        <translation>種類:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="104"/>
-        <source>Reset Text value</source>
-        <translation>テキストのリセット</translation>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="98"/>
+        <source>Reset &apos;Text&apos; value</source>
+        <translation>テキストをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="114"/>
-        <source>Reset Type value</source>
-        <translation>タイプのリセット</translation>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="112"/>
+        <source>Reset &apos;Type&apos; value</source>
+        <translation>タイプをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="124"/>
-        <source>Style</source>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="126"/>
+        <source>Style:</source>
         <translation>スタイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="131"/>
-        <source>Reset Style value</source>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="133"/>
+        <source>Reset &apos;Style&apos; value</source>
         <translation>スタイルのリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="141"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="147"/>
         <source>Play Style</source>
         <translation>演奏スタイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="145"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="151"/>
         <source>Chromatic</source>
         <translation>クロマチック</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="150"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="156"/>
         <source>White keys</source>
         <translation>白鍵</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="155"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="161"/>
         <source>Black keys</source>
         <translation>黒鍵</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="160"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="166"/>
         <source>Diatonic</source>
         <translation>ダイアトニック</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="172"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="174"/>
+        <source>Type</source>
+        <translation>タイプ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="178"/>
         <source>Straight</source>
         <translation>ストレート</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="177"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="183"/>
         <source>Wavy</source>
         <translation>波状</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="192"/>
-        <source>Reset Show text value</source>
-        <translation>表示テキストのリセット</translation>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="191"/>
+        <source>Text</source>
+        <translation>テキスト</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="205"/>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="208"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="198"/>
+        <source>Reset &apos;Show text&apos; value</source>
+        <translation>テキストを表示をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="215"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="218"/>
         <source>Show text</source>
         <translation>テキストを表示</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="215"/>
-        <source>Play</source>
-        <translation>再生</translation>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="225"/>
+        <source>Reset &apos;Play&apos; value</source>
+        <translation>再生の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="225"/>
-        <source>Reset Play value</source>
-        <translation>再生のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="239"/>
+        <source>Play</source>
+        <translation>再生</translation>
     </message>
 </context>
 <context>
@@ -4920,46 +4996,58 @@ space unit</extracomment>
         <translation>水平フレーム</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="90"/>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="170"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="87"/>
         <source>Right gap</source>
         <translation>右外側余白</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="93"/>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="125"/>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="147"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="90"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="122"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="144"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="109"/>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="122"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="106"/>
+        <source>Width:</source>
+        <translation>幅:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="119"/>
         <source>Width</source>
         <translation>幅</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="144"/>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="163"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="141"/>
         <source>Left gap</source>
         <translation>左外側余白</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="177"/>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="190"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="160"/>
+        <source>Left gap:</source>
+        <translation>左外側余白</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="167"/>
+        <source>Right gap:</source>
+        <translation>右外側余白</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="174"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="191"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="180"/>
-        <source>Reset Left gap value</source>
-        <translation>左の隙間のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="177"/>
+        <source>Reset &apos;Left gap&apos; value</source>
+        <translation>左外側余白のリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="193"/>
-        <source>Reset Right gap value</source>
-        <translation>右の隙間のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="194"/>
+        <source>Reset &apos;Right gap&apos; value</source>
+        <translation>右外側余白のリセット</translation>
     </message>
 </context>
 <context>
@@ -4976,120 +5064,140 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="84"/>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="121"/>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="165"/>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="198"/>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="211"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="125"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="166"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="203"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="220"/>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="244"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="87"/>
-        <source>Reset Type value</source>
-        <translation>タイプのリセット</translation>
+        <source>Reset &apos;Type&apos; value</source>
+        <translation>タイプをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="97"/>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="237"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="101"/>
         <source>Type</source>
         <translation>タイプ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="101"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="105"/>
         <source>Crescendo</source>
         <translation>クレシェンド</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="106"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="110"/>
         <source>Decrescendo</source>
         <translation>デクレシェンド</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="114"/>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="270"/>
-        <source>Dynamic range</source>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="118"/>
+        <source>Dynamic range:</source>
         <translation>強弱の範囲</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="124"/>
-        <source>Reset Height value</source>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="128"/>
+        <source>Reset &apos;Height&apos; value</source>
         <translation>高さのリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="134"/>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="257"/>
-        <source>Continue height</source>
-        <translation>連続部の高さ</translation>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="142"/>
+        <source>Continue height:</source>
+        <translation>連続部の高さ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="141"/>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="148"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="149"/>
+        <source>Velocity change:</source>
+        <translation>ベロシティの変更</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="156"/>
         <source>Velocity change</source>
         <translation>べロシティの変更</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="158"/>
-        <source>Text line</source>
-        <translation>テキストライン</translation>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="169"/>
+        <source>Reset &apos;Velocity change&apos; value</source>
+        <translation>ベロシティの変更をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="168"/>
-        <source>Reset Velocity change value</source>
-        <translation>べロシティの値をリセット</translation>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="183"/>
+        <source>Height:</source>
+        <translation>高さ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="178"/>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="185"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="190"/>
         <source>Height</source>
         <translation>高さ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="188"/>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="260"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="193"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="264"/>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="201"/>
-        <source>Reset Continue height value</source>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="206"/>
+        <source>Reset &apos;Continue height&apos; value</source>
         <translation>連続部の高さをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="214"/>
-        <source>Reset Dynamic range value</source>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="223"/>
+        <source>Reset &apos;Dynamic range&apos; value</source>
         <translation>強弱の範囲をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="227"/>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="230"/>
-        <source>Circled tip</source>
-        <translation>先端を丸で囲む</translation>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="237"/>
+        <source>Type:</source>
+        <translation>種類:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="247"/>
-        <source>Reset Circled tip value</source>
-        <translation>丸つき属性のリセット</translation>
+        <source>Reset &apos;Circled tip&apos; value</source>
+        <translation>先端を丸で囲むをリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="261"/>
+        <source>Continue height</source>
+        <translation>連続部の高さ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="274"/>
+        <source>Dynamic range</source>
+        <translation>強弱の範囲</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="278"/>
         <source>Staff</source>
         <translation>譜表</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="279"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="283"/>
         <source>Part</source>
         <translation>パート</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="284"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="288"/>
         <source>System</source>
         <translation>段</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="292"/>
-        <source>...</source>
-        <translation>...</translation>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="296"/>
+        <source>Reset &apos;Text line&apos; value</source>
+        <translation>テキストラインをリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="310"/>
+        <source>Text line</source>
+        <translation>テキストライン</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="320"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="323"/>
+        <source>Circled tip</source>
+        <translation>先端を丸で囲む</translation>
     </message>
 </context>
 <context>
@@ -5106,72 +5214,72 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="81"/>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="91"/>
-        <source>Scale to frame size</source>
-        <translation>スケールをフレームサイズに合わせる</translation>
+        <source>Reset &apos;Scale to frame size&apos; value</source>
+        <translation>フレームに合わせるをリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="101"/>
-        <source>Reset Scale to frame size value</source>
-        <translation>スケールをフレームサイズに合わせる</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="117"/>
         <source>Height</source>
         <translation>高さ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="139"/>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="123"/>
         <source>Width</source>
         <translation>幅</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="158"/>
-        <source>Size</source>
-        <translation>サイズ</translation>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="142"/>
+        <source>Size:</source>
+        <translation>サイズ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="165"/>
-        <source>Scale</source>
-        <translation>スケール</translation>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="149"/>
+        <source>Scale:</source>
+        <translation>スケール:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="178"/>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="162"/>
         <source>Scale Width</source>
         <translation>幅</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="209"/>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="193"/>
         <source>Scale Height</source>
         <translation>高さ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="234"/>
-        <source>Reset Lock aspect ratio value</source>
-        <translation>ロックされたアスペクト比をリセット</translation>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="218"/>
+        <source>Reset &apos;Lock aspect ratio&apos; value</source>
+        <translation>縦横比を固定をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="244"/>
-        <source>Reset Size in staff space units value</source>
-        <translation>譜表空間単位のサイズをリセット</translation>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="232"/>
+        <source>Reset &apos;Size in staff space units&apos; value</source>
+        <translation>譜表のスペースユニットに合わせるをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="257"/>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="260"/>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="249"/>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="252"/>
         <source>Lock aspect ratio</source>
         <translation>縦横比を固定</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="270"/>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="273"/>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="262"/>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="265"/>
         <source>Distance between two lines on a standard 5-line staff</source>
         <translation>標準5線譜上の2線間の距離</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="276"/>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="279"/>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="268"/>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="271"/>
         <source>Size in staff space units</source>
-        <translation>譜表空間単位のサイズ</translation>
+        <translation>譜表のスペースユニットに合わせる</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="281"/>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="284"/>
+        <source>Scale to frame size</source>
+        <translation>フレームに合わせる</translation>
     </message>
 </context>
 <context>
@@ -5187,37 +5295,49 @@ space unit</extracomment>
         <translation>ジャンプ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_jump.ui" line="87"/>
-        <location filename="../../mscore/inspector/inspector_jump.ui" line="94"/>
+        <location filename="../../mscore/inspector/inspector_jump.ui" line="81"/>
         <source>Jump to</source>
         <translation>ジャンプ先</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_jump.ui" line="101"/>
-        <location filename="../../mscore/inspector/inspector_jump.ui" line="115"/>
+        <location filename="../../mscore/inspector/inspector_jump.ui" line="88"/>
+        <source>Jump to:</source>
+        <translation>ジャンプ先:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_jump.ui" line="95"/>
+        <source>Play until:</source>
+        <translation>ここまで演奏:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_jump.ui" line="102"/>
+        <source>Continue at:</source>
+        <translation>ここから再開:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_jump.ui" line="109"/>
         <source>Play until</source>
         <translation>ここまで演奏</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_jump.ui" line="108"/>
-        <location filename="../../mscore/inspector/inspector_jump.ui" line="122"/>
+        <location filename="../../mscore/inspector/inspector_jump.ui" line="116"/>
         <source>Continue at</source>
         <translation>ここから再開</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_jump.ui" line="129"/>
-        <source>Reset Jump to value</source>
-        <translation>ジャンプの値をリセット</translation>
+        <location filename="../../mscore/inspector/inspector_jump.ui" line="123"/>
+        <source>Reset &apos;Jump to&apos; value</source>
+        <translation>ジャンプ先をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_jump.ui" line="139"/>
-        <source>Reset Play until value</source>
-        <translation>再生単位のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_jump.ui" line="137"/>
+        <source>Reset &apos;Play until&apos; value</source>
+        <translation>ここまで演奏をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_jump.ui" line="149"/>
-        <source>Reset Continue at value</source>
-        <translation>再生位置のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_jump.ui" line="151"/>
+        <source>Reset &apos;Continue at&apos; value</source>
+        <translation>ここから再開をリセット</translation>
     </message>
 </context>
 <context>
@@ -5245,8 +5365,8 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="97"/>
-        <source>Reset Show courtesy value</source>
-        <translation>拍子のリセット</translation>
+        <source>Reset &apos;Show courtesy&apos; value</source>
+        <translation>慣例の音部記号を表示をリセット</translation>
     </message>
 </context>
 <context>
@@ -5263,8 +5383,8 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lasso.ui" line="81"/>
-        <source>Position</source>
-        <translation>位置</translation>
+        <source>Position:</source>
+        <translation>位置:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lasso.ui" line="88"/>
@@ -5291,8 +5411,8 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lasso.ui" line="151"/>
-        <source>Size</source>
-        <translation>サイズ</translation>
+        <source>Size:</source>
+        <translation>サイズ:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lasso.ui" line="158"/>
@@ -5313,102 +5433,114 @@ space unit</extracomment>
         <translation>線</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="74"/>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="140"/>
-        <source>Line color</source>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="87"/>
+        <source>Line color:</source>
         <translation>線の色</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="81"/>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="121"/>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="200"/>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="213"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="94"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="138"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="221"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="238"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="84"/>
-        <source>Reset Line color value</source>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="97"/>
+        <source>Reset &apos;Line color&apos; value</source>
         <translation>線の色をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="94"/>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="150"/>
-        <source>Line thickness</source>
-        <translation>線の太さ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="101"/>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="163"/>
-        <source>Line style</source>
-        <translation>線のスタイル</translation>
-    </message>
-    <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="111"/>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="114"/>
+        <source>Line thickness:</source>
+        <translation>線の太さ:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="118"/>
+        <source>Line style:</source>
+        <translation>線の種類</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="128"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="131"/>
         <source>Allow diagonal</source>
         <translation>斜線の許可</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="124"/>
-        <source>Reset Allow diagonal value</source>
-        <translation>斜線属性のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="141"/>
+        <source>Reset &apos;Allow diagonal&apos; value</source>
+        <translation>斜線の許可をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="153"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="161"/>
+        <source>Line color</source>
+        <translation>線の色</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="171"/>
+        <source>Line thickness</source>
+        <translation>線の太さ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="174"/>
         <source>sp</source>
         <extracomment>Staff space unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="167"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="184"/>
+        <source>Line style</source>
+        <translation>線の種類</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="188"/>
         <source>Continuous</source>
         <translation>接続</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="172"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="193"/>
         <source>Dashed</source>
         <translation>破線</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="177"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="198"/>
         <source>Dotted</source>
         <translation>点線</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="182"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="203"/>
         <source>Dash-dotted</source>
         <translation>破線 点線</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="187"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="208"/>
         <source>Dash-dot-dotted</source>
         <translation>破線 点線 点線</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="192"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="213"/>
         <source>Wide dashed</source>
-        <translation type="unfinished"/>
+        <translation>幅広の破線</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="203"/>
-        <source>Reset Line thickness value</source>
-        <translation>線の太さを初期値に戻す</translation>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="224"/>
+        <source>Reset &apos;Line thickness&apos; value</source>
+        <translation>”線の太さ”の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="216"/>
-        <source>Reset Line style value</source>
-        <translation>線のスタイルをリセット</translation>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="241"/>
+        <source>Reset &apos;Line style&apos; value</source>
+        <translation>線の種類をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="232"/>
-        <source>Reset Line visible value</source>
-        <translation>線の可視属性をリセット</translation>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="261"/>
+        <source>Reset &apos;Line visible&apos; value</source>
+        <translation>線を表示をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="245"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="278"/>
         <source>Line visible</source>
-        <translation>線の表示</translation>
+        <translation>線を表示</translation>
     </message>
 </context>
 <context>
@@ -5425,68 +5557,72 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="81"/>
-        <source>Reset Marker type value</source>
+        <source>Reset &apos;Marker type&apos; value</source>
         <translation>マーカーのタイプをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="91"/>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="98"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="95"/>
+        <source>Label:</source>
+        <translation>ラベル:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="102"/>
         <source>Label</source>
         <translation>ラベル</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="105"/>
-        <source>Reset Label value</source>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="109"/>
+        <source>Reset &apos;Label&apos; value</source>
         <translation>ラベルのリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="115"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="123"/>
         <source>Marker Type</source>
         <translation>マーカーのタイプ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="119"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="127"/>
         <source>Segno</source>
         <translation>セーニョ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="124"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="132"/>
         <source>Segno variation</source>
         <translation>セーニョのバリエーション</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="129"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="137"/>
         <source>Coda</source>
         <translation>コーダ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="134"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="142"/>
         <source>Varied coda</source>
         <translation>変格コーダ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="139"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="147"/>
         <source>Codetta</source>
         <translation>コデッタ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="144"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="152"/>
         <source>Fine</source>
         <translation>フィーネ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="149"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="157"/>
         <source>To Coda</source>
         <translation>To Coda</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="154"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="162"/>
         <source>Custom</source>
         <translation>ユーザー定義</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="162"/>
-        <source>Marker type</source>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="170"/>
+        <source>Marker type:</source>
         <translation>マーカーのタイプ</translation>
     </message>
 </context>
@@ -5504,204 +5640,228 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="90"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="135"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="398"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="433"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="459"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="478"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="542"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="577"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="596"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="609"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="622"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="139"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="393"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="432"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="462"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="485"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="553"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="592"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="615"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="632"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="649"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="93"/>
-        <source>Reset Tuning value</source>
+        <source>Reset &apos;Tuning&apos; value</source>
         <translation>チューニングのリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="109"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="417"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="113"/>
         <source>Head group</source>
         <translation>符頭の分類</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="122"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="446"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="126"/>
         <source>Line</source>
         <translation>線</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="138"/>
-        <source>Reset Velocity value</source>
-        <translation>べロシティのリセット</translation>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="142"/>
+        <source>Reset &apos;Velocity&apos; value</source>
+        <translation>べロシティの値をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="154"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="561"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="162"/>
         <source>Velocity type</source>
         <translation>べロシティのタイプ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="158"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="166"/>
         <source>Offset</source>
         <translation>オフセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="163"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="171"/>
         <source>User</source>
         <translation>ユーザ設定</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="177"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="497"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="185"/>
         <source>Velocity</source>
         <translation>ベロシティ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="193"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="196"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="201"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="204"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="209"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="348"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="217"/>
         <source>Head type</source>
         <translation>符頭のタイプ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="216"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="273"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="374"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="224"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="281"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="369"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="221"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="229"/>
         <source>Whole</source>
         <translation>全音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="226"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="234"/>
         <source>Half</source>
         <translation>2分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="231"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="239"/>
         <source>Quarter</source>
         <translation>4分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="236"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="244"/>
         <source>Breve</source>
         <translation>倍全音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="250"/>
-        <source>Mirror head</source>
-        <translation>符頭の反転</translation>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="258"/>
+        <source>Mirror head:</source>
+        <translation>玉の反転</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="266"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="274"/>
         <source>Mirror Head</source>
-        <translation>反転符頭</translation>
+        <translation>玉の反転</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="278"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="286"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="283"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="291"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="297"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="364"/>
-        <source>Dot position</source>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="305"/>
+        <source>Dot position:</source>
         <translation>付点の位置</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="313"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="513"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="321"/>
         <source>Tuning</source>
         <translation>チューニング</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="332"/>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="335"/>
-        <source>Fix to line</source>
-        <translation>線に整列</translation>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="343"/>
+        <source>Head type:</source>
+        <translation>玉の種類</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="379"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="359"/>
+        <source>Dot position</source>
+        <translation>付点の位置</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="374"/>
         <source>Top</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="384"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="379"/>
         <source>Bottom</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="401"/>
-        <source>Reset Velocity type value</source>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="396"/>
+        <source>Reset &apos;Velocity type&apos; value</source>
         <translation>ベロシティのタイプをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="436"/>
-        <source>Reset Dot position value</source>
-        <translation>付点位置のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="416"/>
+        <source>Head group:</source>
+        <translation>玉の種類</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="462"/>
-        <source>Reset Play value</source>
-        <translation>再生のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="435"/>
+        <source>Reset &apos;Dot position&apos; value</source>
+        <translation>付点の位置をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="481"/>
-        <source>Reset Small value</source>
-        <translation>小さい値をリセット</translation>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="449"/>
+        <source>Line:</source>
+        <translation>線</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="526"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="465"/>
+        <source>Reset &apos;Play&apos; value</source>
+        <translation>再生の値をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="488"/>
+        <source>Reset &apos;Small&apos; value</source>
+        <translation>”小”の値をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="508"/>
+        <source>Velocity:</source>
+        <translation>ベロシティ:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="524"/>
+        <source>Tuning:</source>
+        <translation>チューニング</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="537"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="540"/>
         <source>Small</source>
         <translation>小</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="529"/>
-        <source>Small </source>
-        <translation>小</translation>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="556"/>
+        <source>Reset &apos;Mirror head&apos; value</source>
+        <translation>玉の反転をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="545"/>
-        <source>Reset Mirror head value</source>
-        <translation>反転符頭のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="576"/>
+        <source>Velocity type:</source>
+        <translation>べロシティのタイプ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="580"/>
-        <source>Reset Head group value</source>
-        <translation>符頭の分類をリセット</translation>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="595"/>
+        <source>Reset &apos;Head group&apos; value</source>
+        <translation>玉のグループの値をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="599"/>
-        <source>Reset Head type value</source>
-        <translation>符頭のタイプをリセット</translation>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="618"/>
+        <source>Reset &apos;Head type&apos; value</source>
+        <translation>玉の種類をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="612"/>
-        <source>Reset Fix to line</source>
-        <translation>線への整列をリセット</translation>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="635"/>
+        <source>Reset &apos;Fix to line&apos; value</source>
+        <translation>線に整列をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="625"/>
-        <source>Reset Line</source>
-        <translation>線のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="652"/>
+        <source>Reset &apos;Line&apos; value</source>
+        <translation>線をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="669"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="672"/>
+        <source>Fix to line</source>
+        <translation>線に整列</translation>
     </message>
 </context>
 <context>
@@ -5718,83 +5878,91 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="81"/>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="108"/>
-        <source>Type</source>
-        <translation>タイプ</translation>
+        <source>Type:</source>
+        <translation>種類:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="88"/>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="162"/>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="188"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="166"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="196"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="91"/>
-        <source>Reset Type value</source>
-        <translation>タイプのリセット</translation>
+        <source>Reset &apos;Type&apos; value</source>
+        <translation>タイプをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="101"/>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="145"/>
-        <source>Placement</source>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="105"/>
+        <source>Placement:</source>
         <translation>配置</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="112"/>
+        <source>Type</source>
+        <translation>タイプ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="116"/>
         <source>8va</source>
         <translation>オッターヴァ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="117"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="121"/>
         <source>8vb</source>
         <translation>オッターヴァ・バッサ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="122"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="126"/>
         <source>15ma</source>
         <translation>クィンディチェージマ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="127"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="131"/>
         <source>15mb</source>
         <translation>クィンディチェージマ・バッサ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="132"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="136"/>
         <source>22ma</source>
         <translation>22ma</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="137"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="141"/>
         <source>22mb</source>
         <translation>22mb</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="149"/>
+        <source>Placement</source>
+        <translation>配置</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="153"/>
         <source>Above</source>
         <translation>上部</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="154"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="158"/>
         <source>Below</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="165"/>
-        <source>Reset Placement value</source>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="169"/>
+        <source>Reset &apos;Placement&apos; value</source>
         <translation>配置のリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="178"/>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="181"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="186"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="189"/>
         <source>Numbers only</source>
         <translation>数字のみ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="191"/>
-        <source>Reset Numbers only value</source>
-        <translation>数字のみ属性のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="199"/>
+        <source>Reset &apos;Numbers only&apos; value</source>
+        <translation>数字のみをリセット</translation>
     </message>
 </context>
 <context>
@@ -5816,12 +5984,12 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_rest.ui" line="84"/>
-        <source>Reset Small value</source>
-        <translation>小さい値をリセット</translation>
+        <source>Reset &apos;Small&apos; value</source>
+        <translation>”小”の値をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_rest.ui" line="97"/>
-        <location filename="../../mscore/inspector/inspector_rest.ui" line="100"/>
+        <location filename="../../mscore/inspector/inspector_rest.ui" line="101"/>
+        <location filename="../../mscore/inspector/inspector_rest.ui" line="104"/>
         <source>Small</source>
         <translation>小</translation>
     </message>
@@ -5840,13 +6008,11 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="87"/>
-        <location filename="../../mscore/inspector/inspector_segment.ui" line="125"/>
-        <source>Trailing space</source>
+        <source>Trailing space:</source>
         <translation>後の間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="100"/>
-        <location filename="../../mscore/inspector/inspector_segment.ui" line="150"/>
         <source>Leading space</source>
         <translation>前の間隔</translation>
     </message>
@@ -5858,19 +6024,29 @@ space unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
+        <location filename="../../mscore/inspector/inspector_segment.ui" line="125"/>
+        <source>Trailing space</source>
+        <translation>後の間隔</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_segment.ui" line="150"/>
+        <source>Leading space:</source>
+        <translation>前の間隔</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="157"/>
-        <location filename="../../mscore/inspector/inspector_segment.ui" line="170"/>
+        <location filename="../../mscore/inspector/inspector_segment.ui" line="174"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="160"/>
-        <source>Reset Leading space value</source>
+        <source>Reset &apos;Leading space&apos; value</source>
         <translation>前の間隔をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_segment.ui" line="173"/>
-        <source>Reset Trailing space value</source>
+        <location filename="../../mscore/inspector/inspector_segment.ui" line="177"/>
+        <source>Reset &apos;Trailing space&apos; value</source>
         <translation>後の間隔をリセット</translation>
     </message>
 </context>
@@ -5888,67 +6064,67 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="87"/>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="147"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="151"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="90"/>
-        <source>Reset Line type value</source>
-        <translation>線のタイプをリセット</translation>
+        <source>Reset &apos;Line type&apos; value</source>
+        <translation>線の種類をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="106"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="110"/>
         <source>Line type:</source>
         <translation>線のタイプ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="119"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="123"/>
         <source>Line type</source>
         <translation>線のタイプ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="123"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="127"/>
         <source>Continuous</source>
         <translation>接続</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="128"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="132"/>
         <source>Dotted</source>
         <translation>点線</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="133"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="137"/>
         <source>Dashed</source>
         <translation>破線</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="150"/>
-        <source>Reset Direction value</source>
-        <translation>方向のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="154"/>
+        <source>Reset &apos;Direction&apos; value</source>
+        <translation>棒の向きをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="166"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="174"/>
         <source>Direction:</source>
         <translation>方向:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="179"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="187"/>
         <source>Direction</source>
         <translation>方向</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="183"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="191"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="188"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="196"/>
         <source>Up</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="193"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="201"/>
         <source>Down</source>
         <translation>下</translation>
     </message>
@@ -5967,6 +6143,10 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_spacer.ui" line="84"/>
+        <source>Height:</source>
+        <translation>高さ:</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_spacer.ui" line="97"/>
         <source>Height</source>
         <translation>高さ</translation>
@@ -5976,11 +6156,6 @@ space unit</extracomment>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_spacer.ui" line="116"/>
-        <source>Reset Height value</source>
-        <translation>高さのリセット</translation>
     </message>
 </context>
 <context>
@@ -5997,94 +6172,118 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="84"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="307"/>
-        <source>Bottom gap</source>
-        <translation>下外側余白</translation>
+        <source>Bottom gap:</source>
+        <translation>下側余白</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="91"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="339"/>
-        <source>Top margin</source>
+        <source>Top margin:</source>
         <translation>上余白</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="98"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="114"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="156"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="198"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="240"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="115"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="161"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="207"/>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="253"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="270"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="104"/>
-        <source>Reset Top gap value</source>
-        <translation>上外側余白のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="101"/>
+        <source>Reset &apos;Top gap&apos; value</source>
+        <translation>上側余白をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="117"/>
-        <source>Reset Bottom gap value</source>
-        <translation>下外側余白のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="118"/>
+        <source>Reset &apos;Bottom gap&apos; value</source>
+        <translation>下側余白をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="133"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="326"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="138"/>
         <source>Left margin</source>
-        <translation>左余白</translation>
+        <translation>左マージン</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="136"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="185"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="220"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="342"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="141"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="194"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="233"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="363"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="149"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="217"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="154"/>
+        <source>Bottom margin:</source>
+        <translation>下余白</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="164"/>
+        <source>Reset &apos;Right margin&apos; value</source>
+        <translation>右マージンをリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="178"/>
+        <source>Right margin:</source>
+        <translation>右マージン</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="191"/>
+        <source>Right margin</source>
+        <translation>右マージン</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="210"/>
+        <source>Reset &apos;Bottom margin&apos; value</source>
+        <translation>下マージンをリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="230"/>
         <source>Bottom margin</source>
         <translation>下余白</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="159"/>
-        <source>Reset Right margin value</source>
-        <translation>右余白のリセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="169"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="182"/>
-        <source>Right margin</source>
-        <translation>右余白</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="201"/>
-        <source>Reset Bottom margin value</source>
-        <translation>下余白のリセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="243"/>
-        <source>Reset Top margin value</source>
-        <translation>上余白のリセット</translation>
-    </message>
-    <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="256"/>
-        <source>Reset Left margin value</source>
-        <translation>左余白のリセット</translation>
+        <source>Reset &apos;Top margin&apos; value</source>
+        <translation>上マージンをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="275"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="294"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="273"/>
+        <source>Reset &apos;Left margin&apos; value</source>
+        <translation>左マージンをリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="296"/>
         <source>Top gap</source>
         <translation>上外側余白</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="278"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="310"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="299"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="331"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="315"/>
+        <source>Top gap:</source>
+        <translation>上側余白</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="328"/>
+        <source>Bottom gap</source>
+        <translation>下外側余白</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="347"/>
+        <source>Left margin:</source>
+        <translation>左マージン</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="360"/>
+        <source>Top margin</source>
+        <translation>上余白</translation>
     </message>
 </context>
 <context>
@@ -6101,34 +6300,38 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="84"/>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="104"/>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="108"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="87"/>
-        <source>Reset Follow text value</source>
-        <translation>テキスト準拠のリセット</translation>
+        <source>Reset &apos;Follow text&apos; value</source>
+        <translation>テンポに従うをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="97"/>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="130"/>
-        <source>Tempo</source>
-        <translation>テンポ</translation>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="101"/>
+        <source>Tempo:</source>
+        <translation>テンポ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="107"/>
-        <source>Reset Tempo value</source>
-        <translation>テンポのリセット</translation>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="111"/>
+        <source>Reset &apos;Tempo&apos; value</source>
+        <translation>テンポをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="120"/>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="123"/>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="128"/>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="131"/>
         <source>Follow text</source>
         <translation>テキストに従う</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="133"/>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="138"/>
+        <source>Tempo</source>
+        <translation>テンポ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="141"/>
         <source>BPM</source>
         <translation>BPM</translation>
     </message>
@@ -6147,6 +6350,10 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="87"/>
+        <source>Style:</source>
+        <translation>スタイル</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="94"/>
         <source>Style</source>
         <translation>スタイル</translation>
@@ -6158,11 +6365,11 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="104"/>
-        <source>Reset Style value</source>
+        <source>Reset &apos;Style&apos; value</source>
         <translation>スタイルのリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="114"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="118"/>
         <source>Reset Text to Style</source>
         <translation>テキストをスタイルの設定にリセット</translation>
     </message>
@@ -6199,12 +6406,12 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="93"/>
-        <source>Reset Show courtesy value</source>
-        <translation>拍子のリセット</translation>
+        <source>Reset &apos;Show courtesy&apos; value</source>
+        <translation>慣例の音部記号を表示をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_timesig.ui" line="112"/>
-        <location filename="../../mscore/inspector/inspector_timesig.ui" line="115"/>
+        <location filename="../../mscore/inspector/inspector_timesig.ui" line="116"/>
+        <location filename="../../mscore/inspector/inspector_timesig.ui" line="119"/>
         <source>Show courtesy</source>
         <translation>慣例の拍子記号を表示</translation>
     </message>
@@ -6222,17 +6429,17 @@ space unit</extracomment>
         <translation>トレモロバー</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="93"/>
-        <source>Scale</source>
-        <translation>スケール</translation>
+        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="106"/>
+        <source>Scale:</source>
+        <translation>スケール:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="100"/>
-        <source>Reset Size in staff space units value</source>
-        <translation>譜表空間単位のサイズをリセット</translation>
+        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="113"/>
+        <source>Reset &apos;Scale&apos; value</source>
+        <translation>大きさをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="110"/>
+        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="127"/>
         <source>Properties</source>
         <translation>プロパティ</translation>
     </message>
@@ -6251,6 +6458,10 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="90"/>
+        <source>Type:</source>
+        <translation>種類:</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="97"/>
         <source>Type</source>
         <translation>タイプ</translation>
@@ -6282,43 +6493,43 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="127"/>
-        <source>Reset Trill type</source>
-        <translation>トリルのタイプをリセット</translation>
+        <source>Reset &apos;Type&apos; value</source>
+        <translation>タイプをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="143"/>
-        <source>Ornament Style</source>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="147"/>
+        <source>Ornament Style:</source>
         <translation>装飾記号のスタイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="156"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="160"/>
         <source>Direction</source>
         <translation>方向</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="160"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="164"/>
         <source>Default</source>
         <translation>既定値</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="165"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="169"/>
         <source>Baroque</source>
         <translation>バロック</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="173"/>
-        <source>Reset Ornament Type value</source>
-        <translation>装飾記号のスタイルをリセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="183"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="177"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="193"/>
-        <source>Reset Play value</source>
-        <translation>再生のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="187"/>
+        <source>Reset &apos;Ornament style&apos; value</source>
+        <translation>装飾記号のスタイルをリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="201"/>
+        <source>Reset &apos;Play&apos; value</source>
+        <translation>再生の値をリセット</translation>
     </message>
 </context>
 <context>
@@ -6335,83 +6546,95 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="84"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="97"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="101"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="87"/>
-        <source>Reset Number type value</source>
-        <translation>数字の種類をリセット</translation>
+        <source>Reset &apos;Number type&apos; value</source>
+        <translation>数字のタイプをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="100"/>
-        <source>Reset Bracket type value</source>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="104"/>
+        <source>Reset &apos;Bracket type&apos; value</source>
         <translation>括弧のタイプをリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="110"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="132"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="118"/>
         <source>Number type</source>
         <translation>数字のタイプ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="114"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="122"/>
         <source>Number</source>
         <translation>数</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="119"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="127"/>
         <source>Relation</source>
         <translation>関係性</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="124"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="160"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="132"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="168"/>
         <source>Nothing</source>
         <translation>表示しない</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="139"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="146"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="140"/>
+        <source>Number type:</source>
+        <translation>数字のタイプ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="147"/>
+        <source>Bracket type:</source>
+        <translation>括弧のタイプ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="154"/>
         <source>Bracket type</source>
         <translation>括弧のタイプ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="150"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="158"/>
         <source>Automatic</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="155"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="163"/>
         <source>Bracket</source>
         <translation>括弧</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="168"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="175"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="176"/>
+        <source>Direction:</source>
+        <translation>方向:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="183"/>
         <source>Direction</source>
         <translation>方向</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="179"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="187"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="184"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="192"/>
         <source>Up</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="189"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="197"/>
         <source>Down</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="197"/>
-        <source>Reset Direction value</source>
-        <translation>方向のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
+        <source>Reset &apos;Direction&apos; value</source>
+        <translation>棒の向きをリセット</translation>
     </message>
 </context>
 <context>
@@ -6428,101 +6651,129 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="84"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="287"/>
-        <source>Right margin</source>
-        <translation>右余白</translation>
+        <source>Right margin:</source>
+        <translation>右マージン</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="91"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="107"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="325"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="338"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="351"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="364"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="111"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="333"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="350"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="367"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="384"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="97"/>
-        <source>Reset Top gap value</source>
-        <translation>上の隙間のリセット</translation>
+        <source>Reset &apos;Top gap&apos; value</source>
+        <translation>上側余白をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="110"/>
-        <source>Reset Bottom gap value</source>
-        <translation>下の隙間のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="114"/>
+        <source>Reset &apos;Bottom gap&apos; value</source>
+        <translation>下側余白をリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="120"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="309"/>
-        <source>Bottom margin</source>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="128"/>
+        <source>Bottom margin:</source>
         <translation>下余白</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="133"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="245"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="141"/>
         <source>Left margin</source>
         <translation>左余白</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="136"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="268"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="290"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="312"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="144"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="276"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="298"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="320"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="158"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="177"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="166"/>
         <source>Top gap</source>
         <translation>上外側余白</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="161"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="193"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="222"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="169"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="201"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="230"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="190"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="206"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="185"/>
+        <source>Top gap:</source>
+        <translation>上側余白　</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="198"/>
         <source>Height</source>
         <translation>高さ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="219"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="252"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="214"/>
+        <source>Height:</source>
+        <translation>高さ:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="227"/>
         <source>Bottom gap</source>
         <translation>下外側余白</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="238"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="265"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="246"/>
+        <source>Top margin:</source>
+        <translation>上余白</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="253"/>
+        <source>Left margin:</source>
+        <translation>左余白</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="260"/>
+        <source>Bottom gap:</source>
+        <translation>下側余白</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="273"/>
         <source>Top margin</source>
         <translation>上余白</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="328"/>
-        <source>Reset Left margin value</source>
-        <translation>左余白のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="295"/>
+        <source>Right margin</source>
+        <translation>右マージン</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="341"/>
-        <source>Reset Right margin value</source>
-        <translation>右余白のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="317"/>
+        <source>Bottom margin</source>
+        <translation>下余白</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="354"/>
-        <source>Reset Top margin value</source>
-        <translation>上余白のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="336"/>
+        <source>Reset &apos;Left margin&apos; value</source>
+        <translation>左マージンをリセット　</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="367"/>
-        <source>Reset Bottom margin value</source>
-        <translation>下余白のリセット</translation>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="353"/>
+        <source>Reset &apos;Right margin&apos; value</source>
+        <translation>右マージンをリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="370"/>
+        <source>Reset &apos;Top margin&apos; value</source>
+        <translation>上マージンをリセット　</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="387"/>
+        <source>Reset &apos;Bottom margin&apos; value</source>
+        <translation>下マージンをリセット　</translation>
     </message>
 </context>
 <context>
@@ -6539,7 +6790,6 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="84"/>
-        <location filename="../../mscore/inspector/inspector_volta.ui" line="101"/>
         <source>Type</source>
         <translation>タイプ</translation>
     </message>
@@ -6554,14 +6804,19 @@ space unit</extracomment>
         <translation>閉じる</translation>
     </message>
     <message>
+        <location filename="../../mscore/inspector/inspector_volta.ui" line="101"/>
+        <source>Type:</source>
+        <translation>種類:</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="108"/>
         <source>Reset value</source>
         <translation>値のリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="111"/>
-        <source>Reset Type value</source>
-        <translation>タイプのリセット</translation>
+        <source>Reset &apos;Type&apos; value</source>
+        <translation>タイプをリセット</translation>
     </message>
 </context>
 <context>
@@ -6580,12 +6835,6 @@ space unit</extracomment>
         <location filename="../../mscore/instrwizard.ui" line="32"/>
         <source>Instrument List</source>
         <translation>楽器のリスト</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/instrwizard.ui" line="57"/>
-        <location filename="../../mscore/instrwizard.ui" line="256"/>
-        <source>0</source>
-        <translation>0</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwizard.ui" line="70"/>
@@ -6641,6 +6890,11 @@ space unit</extracomment>
         <translation>追加された楽器</translation>
     </message>
     <message>
+        <location filename="../../mscore/instrwizard.ui" line="256"/>
+        <source>0</source>
+        <translation>0</translation>
+    </message>
+    <message>
         <location filename="../../mscore/instrwizard.ui" line="261"/>
         <source>1</source>
         <translation>1</translation>
@@ -6660,18 +6914,18 @@ space unit</extracomment>
     <name>InstrumentsDialog</name>
     <message>
         <location filename="../../mscore/instrdialog.ui" line="14"/>
-        <source>MuseScore: Instruments</source>
-        <translation>MuseScore: 楽器</translation>
+        <source>Instruments</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.ui" line="47"/>
-        <source>Load</source>
-        <translation>読み込み</translation>
+        <source>Load...</source>
+        <translation>読み込む</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.ui" line="54"/>
-        <source>Save</source>
-        <translation>保存</translation>
+        <source>Save As...</source>
+        <translation>名前を付けて保存...</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.ui" line="80"/>
@@ -6684,7 +6938,7 @@ space unit</extracomment>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrwidget.cpp" line="391"/>
+        <location filename="../../mscore/instrwidget.cpp" line="390"/>
         <source>All instruments</source>
         <translation>すべての楽器</translation>
     </message>
@@ -6693,8 +6947,8 @@ space unit</extracomment>
     <name>InstrumentsWidget</name>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="14"/>
-        <source>MuseScore: Instruments</source>
-        <translation>MuseScore: 楽器</translation>
+        <source>Instruments</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="42"/>
@@ -6812,8 +7066,8 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/keyedit.ui" line="128"/>
-        <source>Add time signature to palette</source>
-        <translation>パレットに拍子記号を加える</translation>
+        <source>Add time signature to master palette</source>
+        <translation>マスターパレットに拍子記号を追加</translation>
     </message>
     <message>
         <location filename="../../mscore/keyedit.ui" line="131"/>
@@ -6822,19 +7076,11 @@ space unit</extracomment>
     </message>
 </context>
 <context>
-    <name>KeySig</name>
-    <message>
-        <location filename="../../mscore/debugger/keysig.ui" line="102"/>
-        <source>atonal</source>
-        <translation>無調性</translation>
-    </message>
-</context>
-<context>
     <name>LayerManager</name>
     <message>
         <location filename="../../mscore/layer.ui" line="14"/>
-        <source>MuseScore: Layers</source>
-        <translation>MuseScore: レイヤー</translation>
+        <source>Layers</source>
+        <translation>レイヤー</translation>
     </message>
     <message>
         <location filename="../../mscore/layer.ui" line="24"/>
@@ -6869,161 +7115,6 @@ space unit</extracomment>
         <translation>タグを削除</translation>
     </message>
     <message>
-        <location filename="../../mscore/layer.ui" line="126"/>
-        <source>1</source>
-        <translation>1</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="131"/>
-        <source>2</source>
-        <translation>2</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="136"/>
-        <source>3</source>
-        <translation>3</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="141"/>
-        <source>4</source>
-        <translation>4</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="146"/>
-        <source>5</source>
-        <translation>5</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="151"/>
-        <source>6</source>
-        <translation>6</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="156"/>
-        <source>7</source>
-        <translation>7</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="161"/>
-        <source>8</source>
-        <translation>8</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="166"/>
-        <source>9</source>
-        <translation>9</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="171"/>
-        <source>10</source>
-        <translation>10</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="176"/>
-        <source>11</source>
-        <translation>11</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="181"/>
-        <source>12</source>
-        <translation>12</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="186"/>
-        <source>13</source>
-        <translation>13</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="191"/>
-        <source>14</source>
-        <translation>14</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="196"/>
-        <source>15</source>
-        <translation>15</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="201"/>
-        <source>16</source>
-        <translation>16</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="206"/>
-        <source>17</source>
-        <translation>17</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="211"/>
-        <source>18</source>
-        <translation>18</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="216"/>
-        <source>19</source>
-        <translation>19</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="221"/>
-        <source>20</source>
-        <translation>20</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="226"/>
-        <source>21</source>
-        <translation>21</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="231"/>
-        <source>22</source>
-        <translation>22</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="236"/>
-        <source>23</source>
-        <translation>23</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="241"/>
-        <source>24</source>
-        <translation>24</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="246"/>
-        <source>25</source>
-        <translation>25</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="251"/>
-        <source>26</source>
-        <translation>26</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="256"/>
-        <source>27</source>
-        <translation>27</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="261"/>
-        <source>28</source>
-        <translation>28</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="266"/>
-        <source>29</source>
-        <translation>29</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="271"/>
-        <source>30</source>
-        <translation>30</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/layer.ui" line="276"/>
-        <source>31</source>
-        <translation>31</translation>
-    </message>
-    <message>
         <location filename="../../mscore/layer.ui" line="281"/>
         <source>Tag</source>
         <translation>タグ</translation>
@@ -7038,8 +7129,8 @@ space unit</extracomment>
     <name>LinePropertiesDialog</name>
     <message>
         <location filename="../../mscore/lineproperties.ui" line="14"/>
-        <source>MuseScore: Line Properties</source>
-        <translation>MuseScore: 線のプロパティ</translation>
+        <source>Line Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/lineproperties.ui" line="34"/>
@@ -7131,12 +7222,20 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/logindialog.ui" line="83"/>
+        <source>Username or email:</source>
+        <translation>ユーザ名またはメールアドレス</translation>
+    </message>
+    <message>
         <location filename="../../mscore/logindialog.ui" line="90"/>
         <source>Username or email</source>
         <translation>ユーザ名またはメールアドレス</translation>
     </message>
     <message>
         <location filename="../../mscore/logindialog.ui" line="110"/>
+        <source>Password:</source>
+        <translation>パスワード</translation>
+    </message>
+    <message>
         <location filename="../../mscore/logindialog.ui" line="123"/>
         <source>Password</source>
         <translation>パスワード</translation>
@@ -7446,8 +7545,8 @@ Would you like to locate %2 now?</source>
     <name>MasterPalette</name>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="14"/>
-        <source>MuseScore: Master Palette</source>
-        <translation>MuseScore: マスターパレット</translation>
+        <source>Master Palette</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="30"/>
@@ -7472,7 +7571,7 @@ Would you like to locate %2 now?</source>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="50"/>
         <source>Barlines</source>
-        <translation>縦線</translation>
+        <translation>小節線</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="55"/>
@@ -7481,7 +7580,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="60"/>
-        <source>Arpeggios &amp; Glissandi</source>
+        <source>Arpeggios &amp; Glissandos</source>
         <translation>アルペジオとグリッサンド</translation>
     </message>
     <message>
@@ -7568,12 +7667,12 @@ Would you like to locate %2 now?</source>
 <context>
     <name>MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="256"/>
+        <location filename="../../mscore/measureproperties.cpp" line="267"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="257"/>
+        <location filename="../../mscore/measureproperties.cpp" line="268"/>
         <source>cannot change measure length:
 tuplet would cross measure</source>
         <translation>小節の長さを変更できません:
@@ -7584,8 +7683,8 @@ tuplet would cross measure</source>
     <name>MeasurePropertiesBase</name>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="17"/>
-        <source>MuseScore: Measure Properties</source>
-        <translation>MuseScore: 小節のプロパティ</translation>
+        <source>Measure Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="27"/>
@@ -7610,7 +7709,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="67"/>
         <source>Stemless</source>
-        <translation>符幹なし</translation>
+        <translation>棒なし</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="72"/>
@@ -7705,8 +7804,8 @@ tuplet would cross measure</source>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="310"/>
-        <source>Repeat count:</source>
-        <translation>反復カウント:</translation>
+        <source>Play count:</source>
+        <translation>再生回数</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="352"/>
@@ -7753,8 +7852,8 @@ tuplet would cross measure</source>
     <name>MeasuresDialogBase</name>
     <message>
         <location filename="../../mscore/measuresdialog.ui" line="14"/>
-        <source>MuseScore: Append Measures</source>
-        <translation>MuseScore: 小節の追加</translation>
+        <source>Append Measures</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/measuresdialog.ui" line="39"/>
@@ -7818,7 +7917,7 @@ tuplet would cross measure</source>
 <context>
     <name>MenuNotes</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="849"/>
+        <location filename="../../mscore/musescore.cpp" line="923"/>
         <source>&amp;Notes</source>
         <translation>音符(&amp;N)</translation>
     </message>
@@ -7828,7 +7927,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/metaedit.ui" line="14"/>
         <source>Score Properties</source>
-        <translation type="unfinished"/>
+        <translation>スコアのプロパティ</translation>
     </message>
     <message>
         <location filename="../../mscore/metaedit.ui" line="28"/>
@@ -7836,24 +7935,19 @@ tuplet would cross measure</source>
         <translation>MuseScore バージョン:</translation>
     </message>
     <message>
-        <location filename="../../mscore/metaedit.ui" line="48"/>
+        <location filename="../../mscore/metaedit.ui" line="42"/>
         <source>Revision:</source>
         <translation>リビジョン:</translation>
     </message>
     <message>
-        <location filename="../../mscore/metaedit.ui" line="55"/>
+        <location filename="../../mscore/metaedit.ui" line="49"/>
         <source>API-Level:</source>
         <translation>API-レベル</translation>
     </message>
     <message>
-        <location filename="../../mscore/metaedit.ui" line="72"/>
+        <location filename="../../mscore/metaedit.ui" line="66"/>
         <source>File Path:</source>
         <translation>ファイルのパス</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/metaedit.ui" line="108"/>
-        <source>New</source>
-        <translation>新規</translation>
     </message>
 </context>
 <context>
@@ -7882,19 +7976,44 @@ tuplet would cross measure</source>
 <context>
     <name>Ms::AboutBoxDialog</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2939"/>
-        <source>Unstable Prerelease for Version: </source>
-        <translation>開発中の不安定なバージョン: </translation>
+        <location filename="../../mscore/musescore.cpp" line="3195"/>
+        <source>Unstable Prerelease for Version: %1</source>
+        <translation>不安定なプレリリースバージョン: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2941"/>
-        <source>Version: </source>
-        <translation>バージョン: </translation>
+        <location filename="../../mscore/musescore.cpp" line="3197"/>
+        <source>Version: %1</source>
+        <translation>バージョン: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2942"/>
+        <location filename="../../mscore/musescore.cpp" line="3198"/>
         <source>Revision: %1</source>
         <translation>リビジョン:%1</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="3204"/>
+        <source>Visit %1www.musescore.org%2 for new versions and more information.
+Support MuseScore with your %3donation%4.
+
+Copyright &amp;copy; 1999-2017 Werner Schweer and Others.
+Published under the GNU General Public License.</source>
+        <translation>%1www.musescore.org%2 を訪れ、新バージョンや他の情報を得てください。
+あなたの %3寄付%4 でMuseScoreをサポート下さい。
+
+Copyright &amp;copy; 1999-2017 Werner Schweer and Others.
+Published under the GNU General Public License.</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::AboutMusicXMLBoxDialog</name>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="3235"/>
+        <source>MusicXML is an open file format for exchanging digital sheet music,
+supported by many applications. MusicXML is copyright &amp;copy; MakeMusic, Inc.
+All rights reserved. For more information, see: %1MusicXML.com%2.</source>
+        <translation>MusicXMLは様々なアプリケーション間でデジタル楽譜を読み込むことができる、オープンファイルフォーマットです。
+MusicXML is copyright &amp;copy; MakeMusic, Inc.
+All rights reserved. For more information, see: %1MusicXML.com%2.</translation>
     </message>
 </context>
 <context>
@@ -7908,22 +8027,22 @@ tuplet would cross measure</source>
 <context>
     <name>Ms::AccessibleSearchBox</name>
     <message>
-        <location filename="../../mscore/searchComboBox.cpp" line="94"/>
+        <location filename="../../mscore/searchComboBox.cpp" line="97"/>
         <source>Measure</source>
         <translation>小節</translation>
     </message>
     <message>
-        <location filename="../../mscore/searchComboBox.cpp" line="97"/>
+        <location filename="../../mscore/searchComboBox.cpp" line="100"/>
         <source>Page</source>
         <translation>ページ</translation>
     </message>
     <message>
-        <location filename="../../mscore/searchComboBox.cpp" line="101"/>
+        <location filename="../../mscore/searchComboBox.cpp" line="104"/>
         <source>Rehearsal Mark</source>
         <translation>リハーサルマーク</translation>
     </message>
     <message>
-        <location filename="../../mscore/searchComboBox.cpp" line="104"/>
+        <location filename="../../mscore/searchComboBox.cpp" line="107"/>
         <source>Not found </source>
         <translation>見つかりません</translation>
     </message>
@@ -7931,27 +8050,27 @@ tuplet would cross measure</source>
 <context>
     <name>Ms::AlbumManager</name>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="71"/>
-        <source>MuseScore Files (*.mscz *.mscx)</source>
-        <translation>MuseScore ファイル (*.mscz *.mscx)</translation>
+        <location filename="../../mscore/albummanager.cpp" line="75"/>
+        <source>MuseScore Files</source>
+        <translation>MuseScoreファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="72"/>
-        <source>MuseScore: Add Score</source>
-        <translation>MuseScore: スコアの追加</translation>
+        <location filename="../../mscore/albummanager.cpp" line="76"/>
+        <source>Add Score</source>
+        <translation>スコアの追加</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="97"/>
-        <source>MuseScore Album Files (*.album)</source>
-        <translation>MuseScore アルバムファイル (*.album)</translation>
+        <location filename="../../mscore/albummanager.cpp" line="101"/>
+        <source>MuseScore Album Files</source>
+        <translation>MuseScoreアルバムファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="98"/>
-        <source>MuseScore: Load Album</source>
-        <translation>MuseScore: アルバムの読み込み</translation>
+        <location filename="../../mscore/albummanager.cpp" line="102"/>
+        <source>Load Album</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="145"/>
+        <location filename="../../mscore/albummanager.cpp" line="149"/>
         <source>Error while creating score from album.</source>
         <translation>アルバムからスコアを作成する過程でエラーが発生しました。</translation>
     </message>
@@ -7960,7 +8079,6 @@ tuplet would cross measure</source>
     <name>Ms::Ambitus</name>
     <message>
         <location filename="../../libmscore/ambitus.cpp" line="729"/>
-        <location filename="../../libmscore/ambitus.cpp" line="742"/>
         <source>%1; Top pitch: %2%3; Bottom pitch: %4%5</source>
         <translation>%1; 最高音: %2%3; 最低音: %4%5</translation>
     </message>
@@ -7968,7 +8086,7 @@ tuplet would cross measure</source>
 <context>
     <name>Ms::ArticulationProperties</name>
     <message>
-        <location filename="../../mscore/articulationprop.cpp" line="60"/>
+        <location filename="../../mscore/articulationprop.cpp" line="62"/>
         <source>normal</source>
         <translation>標準</translation>
     </message>
@@ -8002,74 +8120,74 @@ tuplet would cross measure</source>
 <context>
     <name>Ms::ChordRest</name>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1049"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1046"/>
         <source>Duplet</source>
         <translation>2連符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1052"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1049"/>
         <source>Triplet</source>
         <translation>3連符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1055"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1052"/>
         <source>Quadruplet</source>
         <translation>4連符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1058"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1055"/>
         <source>Quintuplet</source>
         <translation>5連符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1061"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1058"/>
         <source>Sextuplet</source>
         <translation>6連符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1064"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1061"/>
         <source>Septuplet</source>
         <translation>7連符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1067"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1064"/>
         <source>Octuplet</source>
         <translation>8連符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1070"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1067"/>
         <source>Nonuplet</source>
         <translation>9連符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1073"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1070"/>
         <source>Custom Tuplet</source>
         <translation>ユーザー定義連符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1082"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1079"/>
         <source>Dotted %1</source>
         <translation>点線 %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1085"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1082"/>
         <source>Double dotted %1</source>
         <translation>複付点 %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1088"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1085"/>
         <source>Triple dotted %1</source>
         <translation>3重付点 %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1426"/>
-        <location filename="../../libmscore/chordrest.cpp" line="1432"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1416"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1422"/>
         <source>%1 Start of %2</source>
         <translation>%1 %2 の開始</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="1428"/>
-        <location filename="../../libmscore/chordrest.cpp" line="1437"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1418"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1427"/>
         <source>%1 End of %2</source>
         <translation>%1 %2 の終了</translation>
     </message>
@@ -8077,9 +8195,9 @@ tuplet would cross measure</source>
 <context>
     <name>Ms::ChordStyleEditor</name>
     <message>
-        <location filename="../../mscore/harmonyedit.cpp" line="46"/>
-        <source>MuseScore: Chord Symbols Style Editor</source>
-        <translation>MuseScore: コード記号スタイルエディタ</translation>
+        <location filename="../../mscore/harmonyedit.cpp" line="47"/>
+        <source>Chord Symbols Style Editor</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -8103,55 +8221,55 @@ tuplet would cross measure</source>
 <context>
     <name>Ms::DrumrollEditor</name>
     <message>
-        <location filename="../../mscore/drumroll.cpp" line="61"/>
+        <location filename="../../mscore/drumroll.cpp" line="58"/>
         <source>Toolbar 1</source>
         <translation>ツールバー 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/drumroll.cpp" line="80"/>
+        <location filename="../../mscore/drumroll.cpp" line="83"/>
         <source>Toolbar 3</source>
         <translation>ツールバー 3</translation>
     </message>
     <message>
-        <location filename="../../mscore/drumroll.cpp" line="95"/>
+        <location filename="../../mscore/drumroll.cpp" line="98"/>
         <source>Cursor:</source>
         <translation>カーソル:</translation>
     </message>
     <message>
-        <location filename="../../mscore/drumroll.cpp" line="102"/>
+        <location filename="../../mscore/drumroll.cpp" line="105"/>
         <source>Velocity:</source>
         <translation>ベロシティ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/drumroll.cpp" line="104"/>
+        <location filename="../../mscore/drumroll.cpp" line="107"/>
         <source>offset</source>
         <translation>オフセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/drumroll.cpp" line="105"/>
+        <location filename="../../mscore/drumroll.cpp" line="108"/>
         <source>user</source>
         <translation>ユーザ設定</translation>
     </message>
     <message>
-        <location filename="../../mscore/drumroll.cpp" line="114"/>
+        <location filename="../../mscore/drumroll.cpp" line="117"/>
         <source>Pitch:</source>
         <translation>音高:</translation>
     </message>
     <message>
-        <location filename="../../mscore/drumroll.cpp" line="195"/>
-        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
-        <translation>MuseScore: &lt;%1&gt; 譜表: %2</translation>
+        <location filename="../../mscore/drumroll.cpp" line="197"/>
+        <source>&lt;%1&gt; Staff: %2</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Ms::EditDrumset</name>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="72"/>
+        <location filename="../../mscore/editdrumset.cpp" line="74"/>
         <source>invalid</source>
         <translation>無効</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="367"/>
+        <location filename="../../mscore/editdrumset.cpp" line="375"/>
         <source>Open File
 %1
 failed: </source>
@@ -8160,25 +8278,25 @@ failed: </source>
 失敗:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="369"/>
-        <source>MuseScore: Open File</source>
-        <translation>MuseScore: ファイルを開く</translation>
+        <location filename="../../mscore/editdrumset.cpp" line="377"/>
+        <source>Open File</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="379"/>
+        <location filename="../../mscore/editdrumset.cpp" line="387"/>
         <source>Write File failed: </source>
         <translation>ファイルの書き込みに失敗: </translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="380"/>
-        <source>MuseScore: Write Drumset</source>
-        <translation>MuseScore: ドラムセットの書き込み</translation>
+        <location filename="../../mscore/editdrumset.cpp" line="388"/>
+        <source>Write Drumset</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Ms::EditStaff</name>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="256"/>
+        <location filename="../../mscore/editstaff.cpp" line="315"/>
         <source>The instrument name is invalid.</source>
         <translation>この楽器名は不正です。</translation>
     </message>
@@ -8186,13 +8304,13 @@ failed: </source>
 <context>
     <name>Ms::EditStringData</name>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="39"/>
+        <location filename="../../mscore/editstringdata.cpp" line="41"/>
         <source>Open</source>
         <comment>string data</comment>
         <translation>開放</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="39"/>
+        <location filename="../../mscore/editstringdata.cpp" line="41"/>
         <source>Pitch</source>
         <comment>string data</comment>
         <translation>ピッチ</translation>
@@ -8328,7 +8446,7 @@ failed: </source>
         <source>Cannot open figured bass description:
 %1
 %2</source>
-        <translation>数字付低音の定義が開けません:
+        <translation>通奏低音の定義が開けません:
 %1
 %2</translation>
     </message>
@@ -8336,7 +8454,7 @@ failed: </source>
 <context>
     <name>Ms::Fingering</name>
     <message>
-        <location filename="../../libmscore/fingering.cpp" line="104"/>
+        <location filename="../../libmscore/fingering.cpp" line="106"/>
         <source>String number</source>
         <translation>弦番</translation>
     </message>
@@ -8344,17 +8462,17 @@ failed: </source>
 <context>
     <name>Ms::Hairpin</name>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="633"/>
+        <location filename="../../libmscore/hairpin.cpp" line="640"/>
         <source>Crescendo</source>
         <translation>クレシェンド</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="636"/>
+        <location filename="../../libmscore/hairpin.cpp" line="643"/>
         <source>Decrescendo</source>
         <translation>デクレシェンド</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="639"/>
+        <location filename="../../libmscore/hairpin.cpp" line="646"/>
         <source>Custom</source>
         <translation>ユーザ定義</translation>
     </message>
@@ -8362,12 +8480,12 @@ failed: </source>
 <context>
     <name>Ms::Harmony</name>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="1609"/>
+        <location filename="../../libmscore/harmony.cpp" line="1613"/>
         <source>sharp</source>
         <translation>シャープ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/harmony.cpp" line="1614"/>
+        <location filename="../../libmscore/harmony.cpp" line="1618"/>
         <source>flat</source>
         <translation>フラット</translation>
     </message>
@@ -8383,12 +8501,12 @@ failed: </source>
 <context>
     <name>Ms::Inspector</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="83"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="85"/>
         <source>Inspector</source>
         <translation>インスペクタ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="88"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="90"/>
         <source>Inspector Subwindow</source>
         <translation>インスペクタ サブウィンドウ</translation>
     </message>
@@ -8404,17 +8522,22 @@ failed: </source>
 <context>
     <name>Ms::InspectorGroupElement</name>
     <message>
-        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="40"/>
+        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="41"/>
         <source>Select</source>
         <translation>選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="53"/>
+        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="54"/>
         <source>Notes</source>
         <translation>音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="58"/>
+        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="59"/>
+        <source>Grace Notes</source>
+        <translation>装飾音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="64"/>
         <source>Rests</source>
         <translation>休符</translation>
     </message>
@@ -8465,12 +8588,12 @@ failed: </source>
 <context>
     <name>Ms::InspectorRest</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="487"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="492"/>
         <source>Select</source>
         <translation>選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="500"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="505"/>
         <source>Tuplet</source>
         <translation>連符</translation>
     </message>
@@ -8478,18 +8601,18 @@ failed: </source>
 <context>
     <name>Ms::InstrumentsDialog</name>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="82"/>
-        <source>MuseScore: Save Instrument List</source>
-        <translation>MuseScore: 楽器リストの保存</translation>
+        <location filename="../../mscore/instrdialog.cpp" line="74"/>
+        <source>Save Instrument List</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="84"/>
-        <location filename="../../mscore/instrdialog.cpp" line="126"/>
-        <source>MuseScore Instruments (*.xml)</source>
-        <translation>MuseScore 楽器 (*.xml)</translation>
+        <location filename="../../mscore/instrdialog.cpp" line="76"/>
+        <location filename="../../mscore/instrdialog.cpp" line="118"/>
+        <source>MuseScore Instruments</source>
+        <translation>MuseScore楽器</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="95"/>
+        <location filename="../../mscore/instrdialog.cpp" line="87"/>
         <source>Open Instruments File
 %1
 failed: </source>
@@ -8498,65 +8621,73 @@ failed: </source>
 失敗:</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="97"/>
-        <source>MuseScore: Open Instruments File</source>
-        <translation>MuseScore: 楽器ファイルを開く</translation>
+        <location filename="../../mscore/instrdialog.cpp" line="89"/>
+        <source>Open Instruments File</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="112"/>
+        <location filename="../../mscore/instrdialog.cpp" line="104"/>
         <source>Write Style failed: </source>
         <translation>スタイルの書き込みに失敗しました: </translation>
     </message>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="113"/>
-        <source>MuseScore: Write Style</source>
-        <translation>MuseScore: スタイルを保存</translation>
+        <location filename="../../mscore/instrdialog.cpp" line="105"/>
+        <source>Write Style</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="124"/>
-        <source>MuseScore: Load Instrument List</source>
-        <translation>MuseScore: 楽器リストの読み込み</translation>
+        <location filename="../../mscore/instrdialog.cpp" line="116"/>
+        <source>Load Instrument List</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Ms::InstrumentsWidget</name>
     <message>
-        <location filename="../../mscore/instrwidget.cpp" line="144"/>
+        <location filename="../../mscore/instrwidget.cpp" line="143"/>
         <source>Staff %1</source>
         <translation>譜表 %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrwidget.cpp" line="367"/>
+        <location filename="../../mscore/instrwidget.cpp" line="366"/>
         <source>Staves</source>
         <translation>譜表数</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrwidget.cpp" line="367"/>
+        <location filename="../../mscore/instrwidget.cpp" line="366"/>
         <source>Visible</source>
         <translation>表示</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrwidget.cpp" line="367"/>
+        <location filename="../../mscore/instrwidget.cpp" line="366"/>
         <source>Clef</source>
         <translation>音部記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrwidget.cpp" line="367"/>
+        <location filename="../../mscore/instrwidget.cpp" line="366"/>
         <source>Linked</source>
         <translation>連動</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrwidget.cpp" line="367"/>
+        <location filename="../../mscore/instrwidget.cpp" line="366"/>
         <source>Staff type</source>
         <translation>譜表のタイプ</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Jump</name>
+    <message>
+        <location filename="../../libmscore/jump.cpp" line="86"/>
+        <source>Custom</source>
+        <translation>ユーザー定義</translation>
     </message>
 </context>
 <context>
     <name>Ms::KeyEditor</name>
     <message>
         <location filename="../../mscore/keyedit.cpp" line="273"/>
-        <source>MuseScore: Key Signatures</source>
-        <translation>MuseScore: 調号</translation>
+        <source>Key Signatures</source>
+        <translation>調号</translation>
     </message>
 </context>
 <context>
@@ -8570,14 +8701,14 @@ failed: </source>
 <context>
     <name>Ms::LayerManager</name>
     <message>
-        <location filename="../../mscore/layer.cpp" line="130"/>
-        <location filename="../../mscore/layer.cpp" line="163"/>
-        <source>MuseScore: select layer tag</source>
-        <translation>MuseScore: レイヤータグの選択</translation>
+        <location filename="../../mscore/layer.cpp" line="135"/>
+        <location filename="../../mscore/layer.cpp" line="168"/>
+        <source>Select layer tag</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/layer.cpp" line="130"/>
-        <location filename="../../mscore/layer.cpp" line="163"/>
+        <location filename="../../mscore/layer.cpp" line="135"/>
+        <location filename="../../mscore/layer.cpp" line="168"/>
         <source>layer tag</source>
         <translation>レイヤータグ</translation>
     </message>
@@ -8585,23 +8716,23 @@ failed: </source>
 <context>
     <name>Ms::LoginDialog</name>
     <message>
-        <location filename="../../mscore/logindialog.cpp" line="47"/>
-        <source>&lt;a href=&quot;%1&quot;&gt;Create an account&lt;/a&gt;</source>
-        <translation>&lt;a href=&quot;%1&quot;&gt;アカウントの作成&lt;/a&gt;</translation>
-    </message>
-    <message>
         <location filename="../../mscore/logindialog.cpp" line="48"/>
-        <source>&lt;a href=&quot;%1&quot;&gt;Forgot password?&lt;/a&gt;</source>
-        <translation>&lt;a href=&quot;%1&quot;&gt;パスワードをお忘れですか？&lt;/a&gt;</translation>
+        <source>%1Create an account%2</source>
+        <translation>%1アカウントの作成%2</translation>
     </message>
     <message>
-        <location filename="../../mscore/logindialog.cpp" line="62"/>
-        <location filename="../../mscore/logindialog.cpp" line="84"/>
+        <location filename="../../mscore/logindialog.cpp" line="51"/>
+        <source>%1Forgot password?%2</source>
+        <translation>%1パスワードをお忘れですか？%2</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/logindialog.cpp" line="69"/>
+        <location filename="../../mscore/logindialog.cpp" line="91"/>
         <source>Login error</source>
         <translation>ログインエラー</translation>
     </message>
     <message>
-        <location filename="../../mscore/logindialog.cpp" line="62"/>
+        <location filename="../../mscore/logindialog.cpp" line="69"/>
         <source>Please fill in your username and password</source>
         <translation>ユーザ名とパスパードを入力してください</translation>
     </message>
@@ -8609,71 +8740,88 @@ failed: </source>
 <context>
     <name>Ms::LoginManager</name>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="103"/>
-        <location filename="../../mscore/loginmanager.cpp" line="221"/>
+        <location filename="../../mscore/loginmanager.cpp" line="110"/>
+        <location filename="../../mscore/loginmanager.cpp" line="238"/>
         <source>Network error</source>
         <translation>ネットワークエラー</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="103"/>
-        <location filename="../../mscore/loginmanager.cpp" line="221"/>
+        <location filename="../../mscore/loginmanager.cpp" line="110"/>
+        <location filename="../../mscore/loginmanager.cpp" line="238"/>
         <source>Please check your Internet connection</source>
         <translation>インターネット接続を確認して下さい</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="105"/>
-        <location filename="../../mscore/loginmanager.cpp" line="224"/>
+        <location filename="../../mscore/loginmanager.cpp" line="112"/>
+        <location filename="../../mscore/loginmanager.cpp" line="241"/>
         <source>Please upgrade</source>
-        <translation>アップグレードしでください</translation>
+        <translation>アップグレードしてください</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="105"/>
-        <location filename="../../mscore/loginmanager.cpp" line="224"/>
-        <source>Your MuseScore version is too old to use this feature.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Please upgrade first&lt;/a&gt;.</source>
-        <translation>この機能を使用するには新しいバージョンのMuseScoreが必要です。まず、&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;アップグレード&lt;/a&gt;してください。</translation>
+        <location filename="../../mscore/loginmanager.cpp" line="112"/>
+        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <source>Your MuseScore version is too old to use this feature.
+%1Please upgrade first%2.</source>
+        <translation>あなたのMuseScoreのバージョンは、この機能を使うには古すぎます。
+%1最新版にアップデートしてください%2</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="199"/>
+        <location filename="../../mscore/loginmanager.cpp" line="210"/>
         <source>Unsuccessful login. Please try again.</source>
         <translation>ログインに失敗しました。もう一度やり直してください。</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="205"/>
-        <source>Sorry, wrong email address, username or password. Please check again. &lt;a href=&quot;%1&quot;&gt;Have you forgotten your password&lt;/a&gt;?</source>
-        <translation>申し訳ありません。メールアドレスやユーザ名、パスワードをお確かめの上やり直してください。パスワードを忘れてしまった方は&lt;a href=&quot;%1&quot;&gt;こちら&lt;/a&gt;をご覧ください。</translation>
+        <location filename="../../mscore/loginmanager.cpp" line="216"/>
+        <source>Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?</source>
+        <translation>Emailアドレス、ユーザー名、もしくはパスワードが違います。もう一度お確かめください。%1パスワードをお忘れですか？&amp;2</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="208"/>
+        <location filename="../../mscore/loginmanager.cpp" line="221"/>
         <source>This account has been blocked.</source>
         <translation>このアカウントはブロックされています。</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="211"/>
-        <source>Your account has not been activated yet. Please check your mailbox to activate your account or &lt;a href=&quot;%1&quot;&gt;request a new activation email&lt;/a&gt;.</source>
-        <translation>あなたのアカウントはまだアクティベートされていません。メールを再度ご確認いただだきアクティベートを行うか、 &lt;a href=&quot;%1&quot;&gt;こちら&lt;/a&gt;から新しいアクティベーションメールを送信して手続きしてください。</translation>
+        <location filename="../../mscore/loginmanager.cpp" line="224"/>
+        <source>Your account has not been activated yet. Please check your mailbox to activate your account or %1request a new activation email%2.</source>
+        <translation>あなたのアカウントはまだアクティベートされていません。メールボックスを再度ご確認いただだきアクティベートを行うか、%1こちら%2から新しいアクティベーションメールをリクエストしてください。</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="214"/>
-        <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
-        <translation>あなたのデバイスのローカルタイムが正しく設定されていません。ローカルタイムを確認して調整してください。時刻とタイムゾーンの設定を自動にすることをおすすめします。正しく設定されているにもかかわらずログイン出来ない場合は&lt;a href=&quot;%1&quot;&gt;問い合わせ&lt;/a&gt;をご利用ください。</translation>
+        <location filename="../../mscore/loginmanager.cpp" line="229"/>
+        <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, %1contact us%2.</source>
+        <translation>あなたのデバイスのローカルタイムが正しく設定されていません。ローカルタイムを確認して調整してください。時刻とタイムゾーンの設定を自動にすることをおすすめします。正しく設定されているにもかかわらずログイン出来ない場合は%1問い合わせ%2をご利用ください。</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="271"/>
+        <location filename="../../mscore/loginmanager.cpp" line="292"/>
         <source>Error while getting user info. Please try again</source>
         <translation>ユーザ情報取得中にエラーが発生しました。もう一度やり直してください。</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="275"/>
+        <location filename="../../mscore/loginmanager.cpp" line="296"/>
         <source>Error while getting user info: %1</source>
         <translation>ユーザ情報取得中にエラーが発生しました: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="424"/>
+        <location filename="../../mscore/loginmanager.cpp" line="410"/>
+        <source>Uploading...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/loginmanager.cpp" line="445"/>
+        <source>Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/loginmanager.cpp" line="446"/>
+        <source>Sorry, MuseScore couldn&apos;t upload the audio file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/loginmanager.cpp" line="546"/>
         <source>An error occurred during the file transfer. Please try again</source>
         <translation>ファイル転送中にエラーが発生しました。もう一度やり直してください。</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="428"/>
+        <location filename="../../mscore/loginmanager.cpp" line="550"/>
         <source>Cannot upload: %1</source>
         <translation>アップロードできません: %1</translation>
     </message>
@@ -8681,9 +8829,14 @@ failed: </source>
 <context>
     <name>Ms::MScore</name>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="353"/>
+        <location filename="../../libmscore/mscore.cpp" line="356"/>
         <source>you cannot create an element</source>
         <translation>その要素を作成することはできません</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="359"/>
+        <source>You can&apos;t create an enum</source>
+        <translation>その列挙型を作成することはできません</translation>
     </message>
 </context>
 <context>
@@ -8699,38 +8852,38 @@ failed: </source>
 <context>
     <name>Ms::MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="108"/>
-        <source>MuseScore: Measure Properties for Measure %1</source>
-        <translation>MuseScore: %1 小節目のプロパティ</translation>
+        <location filename="../../mscore/measureproperties.cpp" line="119"/>
+        <source>Measure Properties for Measure %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="139"/>
+        <location filename="../../mscore/measureproperties.cpp" line="150"/>
         <source>visible</source>
         <translation>表示</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="146"/>
+        <location filename="../../mscore/measureproperties.cpp" line="157"/>
         <source>stemless</source>
-        <translation>符幹なし</translation>
+        <translation>棒なし</translation>
     </message>
 </context>
 <context>
     <name>Ms::MediaDialog</name>
     <message>
-        <location filename="../../mscore/mediadialog.cpp" line="41"/>
-        <source>MuseScore: Additional Media</source>
-        <translation>MuseScore: 追加のメディア</translation>
+        <location filename="../../mscore/mediadialog.cpp" line="42"/>
+        <source>Additional Media</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Ms::MetaEditDialog</name>
     <message>
-        <location filename="../../mscore/metaedit.cpp" line="71"/>
-        <source>MuseScore: Input Tag Name</source>
-        <translation>MuseScore: タグ名入力</translation>
+        <location filename="../../mscore/metaedit.cpp" line="78"/>
+        <source>Input Tag Name</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/metaedit.cpp" line="72"/>
+        <location filename="../../mscore/metaedit.cpp" line="79"/>
         <source>New tag name:</source>
         <translation>新しいタグ:</translation>
     </message>
@@ -8738,398 +8891,394 @@ failed: </source>
 <context>
     <name>Ms::Mixer</name>
     <message>
-        <location filename="../../mscore/mixer.cpp" line="102"/>
-        <source>MuseScore: Mixer</source>
-        <translation>MuseScore: ミキサー</translation>
+        <location filename="../../mscore/mixer.cpp" line="101"/>
+        <source>Mixer</source>
+        <translation>ミキサー</translation>
     </message>
 </context>
 <context>
     <name>Ms::MuseScore</name>
     <message>
-        <location filename="../../mscore/exportaudio.cpp" line="86"/>
-        <location filename="../../mscore/exportmp3.cpp" line="698"/>
+        <location filename="../../mscore/exportaudio.cpp" line="293"/>
+        <location filename="../../mscore/exportmp3.cpp" line="724"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../../mscore/exportaudio.cpp" line="87"/>
-        <location filename="../../mscore/exportmp3.cpp" line="699"/>
+        <location filename="../../mscore/exportaudio.cpp" line="294"/>
+        <location filename="../../mscore/exportmp3.cpp" line="725"/>
         <source>Exporting...</source>
         <translation>エクスポート中...</translation>
     </message>
     <message>
-        <location filename="../../mscore/exportmp3.cpp" line="626"/>
-        <location filename="../../mscore/exportmp3.cpp" line="638"/>
+        <location filename="../../mscore/exportmp3.cpp" line="644"/>
+        <location filename="../../mscore/exportmp3.cpp" line="656"/>
         <source>Error Opening LAME library</source>
         <translation>LAMEライブラリの開始中にエラーが発生しました</translation>
     </message>
     <message>
-        <location filename="../../mscore/exportmp3.cpp" line="627"/>
+        <location filename="../../mscore/exportmp3.cpp" line="645"/>
         <source>Could not open MP3 encoding library!</source>
         <translation>MP3エンコードライブラリを開くことができませんでした！</translation>
     </message>
     <message>
-        <location filename="../../mscore/exportmp3.cpp" line="639"/>
+        <location filename="../../mscore/exportmp3.cpp" line="657"/>
         <source>Not a valid or supported MP3 encoding library!</source>
         <translation>MP3エンコードライブラリはサポートされていないか無効です</translation>
     </message>
     <message>
-        <location filename="../../mscore/exportmp3.cpp" line="662"/>
-        <location filename="../../mscore/exportmp3.cpp" line="675"/>
-        <location filename="../../mscore/exportmp3.cpp" line="810"/>
+        <location filename="../../mscore/exportmp3.cpp" line="681"/>
+        <location filename="../../mscore/exportmp3.cpp" line="694"/>
+        <location filename="../../mscore/exportmp3.cpp" line="836"/>
         <source>Encoding Error</source>
         <translation>エンコード　エラー</translation>
     </message>
     <message>
-        <location filename="../../mscore/exportmp3.cpp" line="663"/>
+        <location filename="../../mscore/exportmp3.cpp" line="682"/>
         <source>Unable to initialize MP3 stream</source>
         <translation>MP3ストリームを初期化できません</translation>
     </message>
     <message>
-        <location filename="../../mscore/exportmp3.cpp" line="676"/>
+        <location filename="../../mscore/exportmp3.cpp" line="695"/>
         <source>Unable to open target file for writing</source>
         <translation>書き込みを行うファイルが開けません</translation>
     </message>
     <message>
-        <location filename="../../mscore/exportmp3.cpp" line="811"/>
+        <location filename="../../mscore/exportmp3.cpp" line="837"/>
         <source>Error %1 returned from MP3 encoder</source>
         <translation>MP3エンコーダーからエラー %1 が返されました</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="240"/>
-        <location filename="../../mscore/musescore.cpp" line="3367"/>
+        <location filename="../../mscore/file.cpp" line="250"/>
+        <location filename="../../mscore/musescore.cpp" line="3641"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="241"/>
+        <location filename="../../mscore/file.cpp" line="251"/>
         <source>Save changes to the score &quot;%1&quot;
 before closing?</source>
         <translation>閉じる前にスコア &quot;%1&quot;
 を保存しますか?</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="276"/>
-        <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation>サポートされているすべての形式 (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/file.cpp" line="278"/>
-        <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation>サポートされているすべての形式 (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/file.cpp" line="280"/>
-        <source>MuseScore Files (*.mscz *.mscx);;</source>
-        <translation>MuseScore ファイル (*.mscz *.mscx);;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/file.cpp" line="281"/>
-        <source>MusicXML Files (*.xml *.mxl);;</source>
-        <translation>MusicXML ファイル (*.xml *.mxl);;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/file.cpp" line="282"/>
-        <source>MIDI Files (*.mid *.midi *.kar);;</source>
-        <translation>MIDI ファイル (*.mid *.midi *.kar);;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/file.cpp" line="283"/>
-        <source>Muse Data Files (*.md);;</source>
-        <translation>Muse Data ファイル (*.md);;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/file.cpp" line="284"/>
-        <source>Capella Files (*.cap *.capx);;</source>
-        <translation>Capella ファイル (*.cap);;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/file.cpp" line="285"/>
-        <source>BB Files &lt;experimental&gt; (*.mgu *.MGU *.sgu *.SGU);;</source>
-        <translation>Band-in-a-Box ファイル &lt;※実験的&gt; (*.mgu *.MGU *.sgu *.SGU);;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/file.cpp" line="287"/>
-        <source>PDF Files &lt;experimental OMR&gt; (*.pdf);;</source>
-        <translation>PDF ファイル &lt;※実験的なOMR&gt; (*.pdf);;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/file.cpp" line="289"/>
-        <source>Overture / Score Writer Files &lt;experimental&gt; (*.ove *.scw);;</source>
-        <translation>Overture / Score Writer ファイル &lt;※実験的&gt; (*.ove *.scw);;</translation>
+        <location filename="../../mscore/file.cpp" line="286"/>
+        <location filename="../../mscore/file.cpp" line="288"/>
+        <location filename="../../mscore/file.cpp" line="2285"/>
+        <source>All Supported Files</source>
+        <translation>すべてのファイル</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="290"/>
-        <source>Bagpipe Music Writer Files &lt;experimental&gt; (*.bww);;</source>
-        <translation>Bagpipe Music Writer ファイル &lt;※実験的&gt; (*.bww);;</translation>
+        <source>MuseScore Files</source>
+        <translation>MuseScoreファイル</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="291"/>
-        <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</source>
-        <translation>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</translation>
+        <source>MusicXML Files</source>
+        <translation>MusicXML ファイル</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="292"/>
-        <source>MuseScore: Load Score</source>
-        <translation>MuseScore: スコアの読み込み</translation>
+        <source>MIDI Files</source>
+        <translation>MIDIファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="390"/>
-        <location filename="../../mscore/file.cpp" line="1630"/>
-        <location filename="../../mscore/file.cpp" line="2121"/>
-        <location filename="../../mscore/file.cpp" line="2182"/>
-        <source>MuseScore File (*.mscz)</source>
-        <translation>MuseScore ファイル (*.mscz)</translation>
+        <location filename="../../mscore/file.cpp" line="293"/>
+        <source>Muse Data Files</source>
+        <translation>Muse Data ファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="391"/>
-        <location filename="../../mscore/file.cpp" line="1554"/>
-        <location filename="../../mscore/file.cpp" line="1631"/>
-        <location filename="../../mscore/file.cpp" line="2122"/>
-        <source>Uncompressed MuseScore File (*.mscx)</source>
-        <translation>MuseScore 非圧縮ファイル(*.mscx)</translation>
+        <location filename="../../mscore/file.cpp" line="294"/>
+        <source>Capella Files</source>
+        <translation>Capella ファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="406"/>
-        <source>MuseScore: Save Score</source>
-        <translation>MuseScore: スコアを保存</translation>
+        <location filename="../../mscore/file.cpp" line="295"/>
+        <source>BB Files &lt;experimental&gt;</source>
+        <translation>BB Files &lt;experimental&gt;</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="414"/>
-        <location filename="../../mscore/file.cpp" line="421"/>
-        <source>MuseScore: Save File</source>
-        <translation>MuseScore:保存</translation>
+        <location filename="../../mscore/file.cpp" line="297"/>
+        <source>PDF Files &lt;experimental OMR&gt;</source>
+        <translation>PDF ファイル &lt;experimental OMR&gt;</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="447"/>
+        <location filename="../../mscore/file.cpp" line="299"/>
+        <source>Overture / Score Writer Files &lt;experimental&gt;</source>
+        <translation>Overture / Score Writer Files &lt;experimental&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/file.cpp" line="300"/>
+        <source>Bagpipe Music Writer Files &lt;experimental&gt;</source>
+        <translation>Bagpipe Music Writer Files &lt;experimental&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/file.cpp" line="301"/>
+        <source>Guitar Pro</source>
+        <translation>ギタープロ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/file.cpp" line="302"/>
+        <source>Load Score</source>
+        <translation>スコアの読み込み</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/file.cpp" line="400"/>
+        <location filename="../../mscore/file.cpp" line="1672"/>
+        <location filename="../../mscore/file.cpp" line="2178"/>
+        <location filename="../../mscore/file.cpp" line="2239"/>
+        <source>MuseScore File</source>
+        <translation>MuseScoreファイル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/file.cpp" line="401"/>
+        <location filename="../../mscore/file.cpp" line="1596"/>
+        <location filename="../../mscore/file.cpp" line="1673"/>
+        <location filename="../../mscore/file.cpp" line="2179"/>
+        <source>Uncompressed MuseScore File</source>
+        <translation>非圧縮MuseScireファイル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/file.cpp" line="416"/>
+        <source>Save Score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/file.cpp" line="424"/>
+        <location filename="../../mscore/file.cpp" line="431"/>
+        <source>Save File</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/file.cpp" line="457"/>
         <source>Untitled</source>
         <translation>名称未設定</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="927"/>
-        <location filename="../../mscore/file.cpp" line="954"/>
-        <location filename="../../mscore/musescore.cpp" line="4241"/>
-        <source>MuseScore: Load Style</source>
-        <translation>MuseScore: スタイルの読み込み</translation>
+        <location filename="../../mscore/file.cpp" line="937"/>
+        <location filename="../../mscore/file.cpp" line="964"/>
+        <location filename="../../mscore/musescore.cpp" line="4603"/>
+        <source>Load Style</source>
+        <translation>スタイルの読み込み</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="929"/>
-        <source>MuseScore Styles (*.mss)</source>
-        <translation>MuseScore スタイル(*.mss)</translation>
+        <location filename="../../mscore/file.cpp" line="939"/>
+        <source>MuseScore Styles</source>
+        <translation>MuseScoreスタイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="934"/>
-        <location filename="../../mscore/file.cpp" line="971"/>
-        <location filename="../../mscore/file.cpp" line="1054"/>
-        <location filename="../../mscore/musescore.cpp" line="4231"/>
-        <source>MuseScore: Save Style</source>
-        <translation>MuseScore: スタイルを保存</translation>
+        <location filename="../../mscore/file.cpp" line="944"/>
+        <location filename="../../mscore/file.cpp" line="981"/>
+        <location filename="../../mscore/file.cpp" line="1064"/>
+        <location filename="../../mscore/musescore.cpp" line="4593"/>
+        <source>Save Style</source>
+        <translation>スタイルの保存</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="936"/>
-        <location filename="../../mscore/file.cpp" line="955"/>
-        <location filename="../../mscore/file.cpp" line="972"/>
-        <source>MuseScore Style File (*.mss)</source>
-        <translation>MuseScore スタイルファイル(*.mss)</translation>
+        <location filename="../../mscore/file.cpp" line="946"/>
+        <location filename="../../mscore/file.cpp" line="965"/>
+        <location filename="../../mscore/file.cpp" line="982"/>
+        <source>MuseScore Style File</source>
+        <translation>MuseScoreスタイルファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="996"/>
-        <source>Chord Symbols Style File (*.xml)</source>
-        <translation>コード記号スタイルファイル(*.xml)</translation>
+        <location filename="../../mscore/file.cpp" line="1006"/>
+        <source>Chord Symbols Style File</source>
+        <translation>コード記号スタイルファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1007"/>
-        <location filename="../../mscore/file.cpp" line="1035"/>
-        <source>MuseScore: Load Chord Symbols Style</source>
-        <translation>MuseScore: コード記号スタイルの読み込み</translation>
+        <location filename="../../mscore/file.cpp" line="1017"/>
+        <location filename="../../mscore/file.cpp" line="1045"/>
+        <source>Load Chord Symbols Style</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1014"/>
-        <source>MuseScore: Save Chord Symbols Style</source>
-        <translation>MuseScore: コード記号スタイルの保存</translation>
+        <location filename="../../mscore/file.cpp" line="1024"/>
+        <source>Save Chord Symbols Style</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1078"/>
-        <source>PDF Scan File (*.pdf);;All (*)</source>
-        <translation>PDF スキャンファイル (*.pdf);;All (*)</translation>
+        <location filename="../../mscore/file.cpp" line="1088"/>
+        <source>PDF Scan File</source>
+        <translation>PDF スキャンファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1083"/>
+        <location filename="../../mscore/file.cpp" line="1093"/>
+        <location filename="../../mscore/file.cpp" line="1104"/>
         <source>Choose PDF Scan</source>
         <translation>PDFスキャンの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1094"/>
-        <source>MuseScore: Choose PDF Scan</source>
-        <translation>MuseScore: PDFスキャンの選択</translation>
+        <location filename="../../mscore/file.cpp" line="1134"/>
+        <source>Ogg Audio File</source>
+        <translation>Ogg オーディオファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1124"/>
-        <source>Ogg Audio File (*.ogg);;All (*)</source>
-        <translation>Ogg オーディオファイル (*.ogg);;All (*)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/file.cpp" line="1129"/>
+        <location filename="../../mscore/file.cpp" line="1139"/>
         <source>Choose Audio File</source>
         <translation>オーディオファイルの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1140"/>
-        <source>MuseScore: Choose Ogg Audio File</source>
-        <translation>MuseScore: Ogg Audioファイルの選択</translation>
+        <location filename="../../mscore/file.cpp" line="1150"/>
+        <source>Choose Ogg Audio File</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1170"/>
-        <source>MuseScore: Save Image</source>
-        <translation>MuseScore: 画像の保存</translation>
+        <location filename="../../mscore/file.cpp" line="1180"/>
+        <source>Save Image</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1230"/>
-        <source>MuseScore: Load Palette</source>
-        <translation>MuseScore: パレットの読み込み</translation>
+        <location filename="../../mscore/file.cpp" line="1268"/>
+        <source>Load Palette</source>
+        <translation>パレットの読み込み</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1231"/>
-        <location filename="../../mscore/file.cpp" line="1235"/>
-        <source>MuseScore Palette (*.mpal)</source>
-        <translation>MuseScore パレット (*.mpal)</translation>
+        <location filename="../../mscore/file.cpp" line="1269"/>
+        <location filename="../../mscore/file.cpp" line="1273"/>
+        <source>MuseScore Palette</source>
+        <translation>MuseScoreパレット</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1234"/>
-        <source>MuseScore: Save Palette</source>
-        <translation>MuseScore: パレットの保存</translation>
+        <location filename="../../mscore/file.cpp" line="1272"/>
+        <source>Save Palette</source>
+        <translation>パレットの保存</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1312"/>
-        <source>MuseScore: Load Plugin</source>
-        <translation>MuseScore: プラグインの読み込み</translation>
+        <location filename="../../mscore/file.cpp" line="1350"/>
+        <source>Load Plugin</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1313"/>
-        <source>MuseScore Plugin (*.qml)</source>
-        <translation>MuseScore プラグイン(*.qml)</translation>
+        <location filename="../../mscore/file.cpp" line="1351"/>
+        <source>MuseScore Plugin</source>
+        <translation>MuseScoreプラグイン</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1316"/>
-        <location filename="../../mscore/file.cpp" line="1366"/>
-        <source>MuseScore: Save Plugin</source>
-        <translation>MuseScore: プラグインの保存</translation>
+        <location filename="../../mscore/file.cpp" line="1354"/>
+        <location filename="../../mscore/file.cpp" line="1404"/>
+        <source>Save Plugin</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1317"/>
-        <source>MuseScore Plugin File (*.qml)</source>
-        <translation>MuseScore プラグイン ファイル (*.qml)</translation>
+        <location filename="../../mscore/file.cpp" line="1355"/>
+        <source>MuseScore Plugin File</source>
+        <translation>MuseScoreプラグインファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1395"/>
-        <source>MuseScore: Load Drumset</source>
-        <translation>MuseScore: ドラムセット読み込み</translation>
+        <location filename="../../mscore/file.cpp" line="1433"/>
+        <source>Load Drumset</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1396"/>
-        <source>MuseScore Drumset (*.drm)</source>
-        <translation>MuseScore ドラムセット (*.drm)</translation>
+        <location filename="../../mscore/file.cpp" line="1434"/>
+        <source>MuseScore Drumset</source>
+        <translation>MuseScoreドラムセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1399"/>
-        <source>MuseScore: Save Drumset</source>
-        <translation>MuseScore: ドラムセット保存</translation>
+        <location filename="../../mscore/file.cpp" line="1437"/>
+        <source>Save Drumset</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1400"/>
-        <source>MuseScore Drumset File (*.drm)</source>
-        <translation>MuseScore ドラムセットファイル (*.drm)</translation>
+        <location filename="../../mscore/file.cpp" line="1438"/>
+        <source>MuseScore Drumset File</source>
+        <translation>MuseScore ドラムセットファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1540"/>
-        <location filename="../../mscore/file.cpp" line="1616"/>
-        <source>PDF File (*.pdf)</source>
-        <translation>PDF ファイル (*.pdf)</translation>
+        <location filename="../../mscore/file.cpp" line="1582"/>
+        <location filename="../../mscore/file.cpp" line="1658"/>
+        <source>PDF File</source>
+        <translation>PDF ファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1541"/>
-        <location filename="../../mscore/file.cpp" line="1617"/>
-        <source>PNG Bitmap Graphic (*.png)</source>
-        <translation>PNG 形式画像 (*.png)</translation>
+        <location filename="../../mscore/file.cpp" line="1583"/>
+        <location filename="../../mscore/file.cpp" line="1659"/>
+        <source>PNG Bitmap Graphic</source>
+        <translation>PNGビットマップ グラフィック</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1542"/>
-        <location filename="../../mscore/file.cpp" line="1618"/>
-        <source>Scalable Vector Graphic (*.svg)</source>
-        <translation>SVG 形式画像 (*.svg)</translation>
+        <location filename="../../mscore/file.cpp" line="1584"/>
+        <location filename="../../mscore/file.cpp" line="1660"/>
+        <location filename="../../mscore/file.cpp" line="2286"/>
+        <source>Scalable Vector Graphics</source>
+        <translation>SVG形式</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1544"/>
-        <location filename="../../mscore/file.cpp" line="1620"/>
-        <source>Wave Audio (*.wav)</source>
-        <translation>Wave 形式オーディオ (*.wav)</translation>
+        <location filename="../../mscore/file.cpp" line="1586"/>
+        <location filename="../../mscore/file.cpp" line="1662"/>
+        <source>Wave Audio</source>
+        <translation>Wave 形式オーディオ</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1545"/>
-        <location filename="../../mscore/file.cpp" line="1621"/>
-        <source>FLAC Audio (*.flac)</source>
-        <translation>FLAC オーディオ (*.flac)</translation>
+        <location filename="../../mscore/file.cpp" line="1587"/>
+        <location filename="../../mscore/file.cpp" line="1663"/>
+        <source>FLAC Audio</source>
+        <translation>FLAC オーディオ</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1546"/>
-        <location filename="../../mscore/file.cpp" line="1622"/>
-        <source>Ogg Vorbis Audio (*.ogg)</source>
-        <translation>Ogg 形式オーディオ (*.ogg)</translation>
+        <location filename="../../mscore/file.cpp" line="1588"/>
+        <location filename="../../mscore/file.cpp" line="1664"/>
+        <source>Ogg Vorbis Audio</source>
+        <translation>Ogg Vorbis オーディオ</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1549"/>
-        <location filename="../../mscore/file.cpp" line="1625"/>
-        <source>MP3 Audio (*.mp3)</source>
-        <translation>MP3 形式オーディオ (*.mp3)</translation>
+        <location filename="../../mscore/file.cpp" line="1591"/>
+        <location filename="../../mscore/file.cpp" line="1667"/>
+        <source>MP3 Audio</source>
+        <translation>MP3 形式オーディオ</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1551"/>
-        <location filename="../../mscore/file.cpp" line="1627"/>
-        <source>Standard MIDI File (*.mid)</source>
-        <translation>Standard MIDI File (*.mid)</translation>
+        <location filename="../../mscore/file.cpp" line="1593"/>
+        <location filename="../../mscore/file.cpp" line="1669"/>
+        <source>Standard MIDI File</source>
+        <translation>標準 MIDI ファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1552"/>
-        <location filename="../../mscore/file.cpp" line="1628"/>
-        <source>MusicXML File (*.xml)</source>
-        <translation>MusicXML ファイル (*.xml)</translation>
+        <location filename="../../mscore/file.cpp" line="1594"/>
+        <location filename="../../mscore/file.cpp" line="1670"/>
+        <source>MusicXML File</source>
+        <translation>MusicXML ファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1553"/>
-        <location filename="../../mscore/file.cpp" line="1629"/>
-        <source>Compressed MusicXML File (*.mxl)</source>
-        <translation>MusicXML 圧縮ファイル (*.mxl)</translation>
+        <location filename="../../mscore/file.cpp" line="1595"/>
+        <location filename="../../mscore/file.cpp" line="1671"/>
+        <source>Compressed MusicXML File</source>
+        <translation>MusicXML 圧縮ファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1556"/>
-        <location filename="../../mscore/file.cpp" line="1603"/>
-        <source>MuseScore: Export</source>
-        <translation>MuseScore: エクスポート</translation>
+        <location filename="../../mscore/file.cpp" line="1598"/>
+        <location filename="../../mscore/file.cpp" line="1645"/>
+        <source>Export</source>
+        <translation>エクスポート</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1603"/>
-        <location filename="../../mscore/file.cpp" line="1679"/>
-        <location filename="../../mscore/file.cpp" line="2164"/>
-        <location filename="../../mscore/file.cpp" line="2204"/>
+        <location filename="../../mscore/file.cpp" line="1645"/>
+        <location filename="../../mscore/file.cpp" line="1721"/>
+        <location filename="../../mscore/file.cpp" line="2221"/>
+        <location filename="../../mscore/file.cpp" line="2261"/>
         <source>Cannot determine file type</source>
         <translation>未知のファイル形式</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1633"/>
-        <location filename="../../mscore/file.cpp" line="1679"/>
-        <location filename="../../mscore/file.cpp" line="1746"/>
-        <source>MuseScore: Export Parts</source>
-        <translation>MuseScore: パートのエクスポート</translation>
+        <location filename="../../mscore/file.cpp" line="1675"/>
+        <location filename="../../mscore/file.cpp" line="1721"/>
+        <location filename="../../mscore/file.cpp" line="1788"/>
+        <source>Export Parts</source>
+        <translation>パートのエクスポート</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1686"/>
-        <location filename="../../mscore/file.cpp" line="2376"/>
+        <location filename="../../mscore/file.cpp" line="1728"/>
+        <location filename="../../mscore/file.cpp" line="2432"/>
+        <location filename="../../mscore/file.cpp" line="2590"/>
         <source>Confirm Replace</source>
         <translation>上書きの確認</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1687"/>
-        <location filename="../../mscore/file.cpp" line="2377"/>
+        <location filename="../../mscore/file.cpp" line="1729"/>
+        <location filename="../../mscore/file.cpp" line="2433"/>
+        <location filename="../../mscore/file.cpp" line="2591"/>
         <source>&quot;%1&quot; already exists.
 Do you want to replace it?
 </source>
@@ -9138,92 +9287,111 @@ Do you want to replace it?
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1688"/>
-        <location filename="../../mscore/file.cpp" line="2379"/>
+        <location filename="../../mscore/file.cpp" line="1730"/>
+        <location filename="../../mscore/file.cpp" line="2435"/>
+        <location filename="../../mscore/file.cpp" line="2593"/>
         <source>Replace</source>
         <translation>置換</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1689"/>
-        <location filename="../../mscore/file.cpp" line="2380"/>
+        <location filename="../../mscore/file.cpp" line="1731"/>
+        <location filename="../../mscore/file.cpp" line="2436"/>
+        <location filename="../../mscore/file.cpp" line="2594"/>
         <source>Skip</source>
         <translation>スキップ</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1702"/>
-        <location filename="../../mscore/file.cpp" line="2381"/>
+        <location filename="../../mscore/file.cpp" line="1744"/>
+        <location filename="../../mscore/file.cpp" line="2437"/>
+        <location filename="../../mscore/file.cpp" line="2595"/>
         <source>Replace All</source>
         <translation>全て置換</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1703"/>
-        <location filename="../../mscore/file.cpp" line="2382"/>
+        <location filename="../../mscore/file.cpp" line="1745"/>
+        <location filename="../../mscore/file.cpp" line="2438"/>
+        <location filename="../../mscore/file.cpp" line="2596"/>
         <source>Skip All</source>
         <translation>すべてスキップ</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1726"/>
+        <location filename="../../mscore/file.cpp" line="1768"/>
         <source>Score_and_Parts</source>
         <translation>スコアとパート</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1746"/>
+        <location filename="../../mscore/file.cpp" line="1788"/>
         <source>Parts were successfully exported</source>
         <translation>パートのエクスポートに成功しました</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1779"/>
-        <location filename="../../mscore/file.cpp" line="2124"/>
-        <location filename="../../mscore/file.cpp" line="2164"/>
-        <source>MuseScore: Save As</source>
-        <translation>MuseScore: 名前を付けて保存</translation>
+        <location filename="../../mscore/file.cpp" line="1821"/>
+        <location filename="../../mscore/file.cpp" line="2181"/>
+        <location filename="../../mscore/file.cpp" line="2221"/>
+        <source>Save As</source>
+        <translation>名前を付けて保存</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1847"/>
+        <location filename="../../mscore/file.cpp" line="1889"/>
         <source>MuseScore:</source>
         <translation>MuseScore:</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1847"/>
+        <location filename="../../mscore/file.cpp" line="1889"/>
         <source>Cannot write into %1</source>
         <translation>%1 に書き込むことができません</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2123"/>
-        <source>MuseScore: Save a Copy</source>
-        <translation>MuseScore: コピーを保存</translation>
+        <location filename="../../mscore/file.cpp" line="1980"/>
+        <source>Score and Parts</source>
+        <translation>スコアとパート</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2178"/>
-        <location filename="../../mscore/file.cpp" line="2183"/>
-        <location filename="../../mscore/file.cpp" line="2204"/>
-        <source>MuseScore: Save Selection</source>
-        <translation>MuseScore: 選択内容の保存</translation>
+        <location filename="../../mscore/file.cpp" line="2180"/>
+        <source>Save a Copy</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2178"/>
+        <location filename="../../mscore/file.cpp" line="2235"/>
+        <location filename="../../mscore/file.cpp" line="2240"/>
+        <location filename="../../mscore/file.cpp" line="2261"/>
+        <source>Save Selection</source>
+        <translation>選択内容の保存</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/file.cpp" line="2235"/>
         <source>Please select one or more measures</source>
         <translation>ひとつ以上の譜表を選択してください</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2213"/>
-        <source>MuseScore: Save Selected</source>
-        <translation>MuseScore: 選択された部分の保存</translation>
+        <location filename="../../mscore/file.cpp" line="2270"/>
+        <source>Save Selected</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2226"/>
-        <source>MuseScore: Insert Image</source>
-        <translation>MuseScore: 画像の挿入</translation>
+        <location filename="../../mscore/file.cpp" line="2283"/>
+        <source>Insert Image</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2228"/>
-        <source>All Supported Files (*.svg *.jpg *.jpeg *.png);;Scalable Vector Graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</source>
-        <translation>サポートされているすべての形式 (*.svg *.jpg *.jpeg *.png);;SVG (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</translation>
+        <location filename="../../mscore/file.cpp" line="2287"/>
+        <source>JPEG</source>
+        <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2445"/>
-        <source>Images (*.jpg *.jpeg *.png);;All (*)</source>
-        <translation>画像 (*.jpg *.jpeg *.png);;すべてのファイル (*)</translation>
+        <location filename="../../mscore/file.cpp" line="2288"/>
+        <source>PNG</source>
+        <translation>PNG</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/file.cpp" line="2501"/>
+        <source>Images</source>
+        <translation>イメージ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/file.cpp" line="2501"/>
+        <source>All</source>
+        <translation>全て</translation>
     </message>
     <message>
         <location filename="../../mscore/help.cpp" line="163"/>
@@ -9236,395 +9404,405 @@ Do you want to replace it?
         <translation>小節反復記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="401"/>
+        <location filename="../../mscore/menus.cpp" line="418"/>
         <source>Line break</source>
         <translation>譜表の折り返し</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="406"/>
+        <location filename="../../mscore/menus.cpp" line="423"/>
         <source>Page break</source>
         <translation>ページ区切り</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="411"/>
+        <location filename="../../mscore/menus.cpp" line="428"/>
         <source>Section break</source>
         <translation>セクション区切り</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="417"/>
+        <location filename="../../mscore/menus.cpp" line="434"/>
         <source>Staff spacer down</source>
         <translation>譜表スペーサー（下）</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="423"/>
+        <location filename="../../mscore/menus.cpp" line="440"/>
         <source>Staff spacer up</source>
         <translation>譜表スペーサー（上）</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="444"/>
+        <location filename="../../mscore/menus.cpp" line="461"/>
         <source>Fingering %1</source>
         <translation>フィンガリング %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="451"/>
+        <location filename="../../mscore/menus.cpp" line="468"/>
         <source>RH Guitar Fingering %1</source>
         <translation>右手ギターフィンガリング %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="458"/>
+        <location filename="../../mscore/menus.cpp" line="475"/>
         <source>LH Guitar Fingering %1</source>
         <translation>左手ギターフィンガリング %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="465"/>
+        <location filename="../../mscore/menus.cpp" line="482"/>
         <source>String number %1</source>
         <translation>弦番 %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="596"/>
+        <location filename="../../mscore/menus.cpp" line="613"/>
         <source>Bracket</source>
         <translation>括弧</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="597"/>
+        <location filename="../../mscore/menus.cpp" line="614"/>
         <source>Brace</source>
         <translation>括弧（ブレイス）</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="598"/>
+        <location filename="../../mscore/menus.cpp" line="615"/>
         <source>Square</source>
         <translation>角括弧</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="599"/>
+        <location filename="../../mscore/menus.cpp" line="616"/>
         <source>Line</source>
         <translation>線</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="622"/>
+        <location filename="../../mscore/menus.cpp" line="639"/>
         <source>Breath</source>
         <translation>ブレス</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="625"/>
+        <location filename="../../mscore/menus.cpp" line="642"/>
         <source>Caesura</source>
         <translation>カエスーラ</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="646"/>
+        <location filename="../../mscore/menus.cpp" line="663"/>
         <source>Arpeggio</source>
         <translation>アルペジオ</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="651"/>
+        <location filename="../../mscore/menus.cpp" line="668"/>
         <source>Glissando</source>
         <translation>グリッサンド</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1026"/>
+        <location filename="../../mscore/menus.cpp" line="1043"/>
         <source>Tempo text</source>
         <translation>テンポテキスト</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1045"/>
+        <location filename="../../mscore/menus.cpp" line="1062"/>
         <source>Staff Text</source>
         <translation>譜表テキスト</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1046"/>
+        <location filename="../../mscore/menus.cpp" line="1063"/>
         <source>Staff text</source>
         <translation>譜表テキスト</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1050"/>
+        <location filename="../../mscore/menus.cpp" line="1067"/>
         <source>System Text</source>
         <translation>段テキスト</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1051"/>
+        <location filename="../../mscore/menus.cpp" line="1068"/>
         <source>System text</source>
         <translation>譜表テキスト</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1055"/>
-        <location filename="../../mscore/menus.cpp" line="1057"/>
+        <location filename="../../mscore/menus.cpp" line="1072"/>
+        <location filename="../../mscore/menus.cpp" line="1074"/>
         <source>Swing</source>
         <translation>スウィング</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1061"/>
+        <location filename="../../mscore/menus.cpp" line="1078"/>
         <source>Rehearsal mark</source>
         <translation>リハーサルマーク</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1064"/>
+        <location filename="../../mscore/menus.cpp" line="1081"/>
         <source>Instrument</source>
         <translation>楽器</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1065"/>
+        <location filename="../../mscore/menus.cpp" line="1082"/>
         <source>Instrument change</source>
         <translation>楽器変更</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1094"/>
+        <location filename="../../mscore/menus.cpp" line="1111"/>
         <source>4/4 common time</source>
         <translation>4/4 拍子の省略記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1095"/>
+        <location filename="../../mscore/menus.cpp" line="1112"/>
         <source>2/2 alla breve</source>
         <translation>2/2 カットタイム</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1154"/>
+        <location filename="../../mscore/menus.cpp" line="1171"/>
         <source>Set visible</source>
         <translation>表示する</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1158"/>
+        <location filename="../../mscore/menus.cpp" line="1175"/>
         <source>Set invisible</source>
         <translation>非表示にする</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1162"/>
+        <location filename="../../mscore/menus.cpp" line="1179"/>
         <source>Change staff type</source>
         <translation>譜表の種類を変更</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1166"/>
+        <location filename="../../mscore/menus.cpp" line="1183"/>
         <source>Change instrument</source>
         <translation>楽器を変更</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1272"/>
+        <location filename="../../mscore/menus.cpp" line="1289"/>
         <source>&amp;Add</source>
         <translation>追加(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1275"/>
+        <location filename="../../mscore/menus.cpp" line="1292"/>
         <source>&amp;Measures</source>
         <translation>小節(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1282"/>
+        <location filename="../../mscore/menus.cpp" line="1299"/>
         <source>&amp;Frames</source>
         <translation>フレーム(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1293"/>
+        <location filename="../../mscore/menus.cpp" line="1310"/>
         <source>&amp;Text</source>
         <translation>テキスト(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1309"/>
+        <location filename="../../mscore/menus.cpp" line="1328"/>
         <source>&amp;Lines</source>
         <translation>線記号(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="170"/>
+        <location filename="../../mscore/musescore.cpp" line="177"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>小節が選択されていません:
 小節を選択してからもう一度やり直してください。</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="410"/>
+        <location filename="../../mscore/musescore.cpp" line="434"/>
         <source>Measure:Beat:Tick</source>
         <translation>小節:拍:ティック</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="433"/>
+        <location filename="../../mscore/musescore.cpp" line="457"/>
         <source>Switch layer</source>
         <translation>レイヤー切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="436"/>
+        <location filename="../../mscore/musescore.cpp" line="460"/>
         <source>synthesizer</source>
         <translation>シンセサイザー</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="437"/>
+        <location filename="../../mscore/musescore.cpp" line="461"/>
         <source>audio track</source>
         <translation>オーディオトラック</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="438"/>
+        <location filename="../../mscore/musescore.cpp" line="462"/>
         <source>Switch play mode</source>
         <translation>再生モード切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="493"/>
+        <location filename="../../mscore/musescore.cpp" line="517"/>
         <source>Show MIDI import panel</source>
         <translation>MIDIインポートパネルを表示する</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="552"/>
+        <location filename="../../mscore/musescore.cpp" line="577"/>
         <source>File Operations</source>
         <translation>ファイル操作</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="568"/>
+        <location filename="../../mscore/musescore.cpp" line="598"/>
         <source>View Mode</source>
         <translation>表示モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="570"/>
+        <location filename="../../mscore/musescore.cpp" line="600"/>
         <source>Page View</source>
         <translation>ページビュー</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="571"/>
+        <location filename="../../mscore/musescore.cpp" line="601"/>
         <source>Continuous View</source>
         <translation>連続ビュー</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="575"/>
-        <source>Transport Tools</source>
-        <translation>トランスポートツール</translation>
+        <location filename="../../mscore/musescore.cpp" line="605"/>
+        <source>Playback Controls</source>
+        <translation>再生コントロール</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="592"/>
+        <location filename="../../mscore/musescore.cpp" line="622"/>
         <source>Concert Pitch</source>
         <translation>合奏調（実音）</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="596"/>
+        <location filename="../../mscore/musescore.cpp" line="626"/>
         <source>Image Capture</source>
         <translation>イメージ キャプチャ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="606"/>
+        <location filename="../../mscore/musescore.cpp" line="636"/>
         <source>Note Input</source>
         <translation>音符入力モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="654"/>
+        <location filename="../../mscore/musescore.cpp" line="653"/>
+        <source>Note Entry Methods</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="705"/>
         <source>&amp;File</source>
         <translation>ファイル(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="660"/>
+        <location filename="../../mscore/musescore.cpp" line="711"/>
         <source>Open &amp;Recent</source>
         <translation>最近開いたファイル(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="691"/>
+        <location filename="../../mscore/musescore.cpp" line="742"/>
         <source>&amp;Edit</source>
         <translation>編集(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="710"/>
+        <location filename="../../mscore/musescore.cpp" line="762"/>
         <source>&amp;Measure</source>
         <translation>小節(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="715"/>
+        <location filename="../../mscore/musescore.cpp" line="767"/>
         <source>&amp;Tools</source>
         <translation>ツール(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="720"/>
+        <location filename="../../mscore/musescore.cpp" line="772"/>
         <source>&amp;Voices</source>
         <translation>声部(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="735"/>
+        <location filename="../../mscore/musescore.cpp" line="787"/>
         <source>W&amp;orkspaces</source>
         <translation>ワークスペース(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="739"/>
+        <location filename="../../mscore/musescore.cpp" line="791"/>
         <source>&amp;Preferences...</source>
         <translation>環境設定...(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="746"/>
+        <location filename="../../mscore/musescore.cpp" line="798"/>
         <source>&amp;View</source>
         <translation>表示(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="856"/>
+        <location filename="../../mscore/musescore.cpp" line="853"/>
+        <source>&amp;Toolbars</source>
+        <translation>ツールバー</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="930"/>
         <source>Add N&amp;ote</source>
         <translation>音符の追加(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="874"/>
+        <location filename="../../mscore/musescore.cpp" line="948"/>
         <source>Add &amp;Interval</source>
         <translation>音程の追加(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="890"/>
+        <location filename="../../mscore/musescore.cpp" line="964"/>
         <source>T&amp;uplets</source>
         <translation>連符(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="906"/>
+        <location filename="../../mscore/musescore.cpp" line="980"/>
         <source>&amp;Layout</source>
         <translation>レイアウト(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="919"/>
+        <location filename="../../mscore/musescore.cpp" line="993"/>
         <source>&amp;Style</source>
         <translation>スタイル(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="934"/>
+        <location filename="../../mscore/musescore.cpp" line="1008"/>
         <source>&amp;Plugins</source>
         <translation>プラグイン(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="951"/>
+        <location filename="../../mscore/musescore.cpp" line="1025"/>
         <source>&amp;Help</source>
         <translation>ヘルプ(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="962"/>
+        <location filename="../../mscore/musescore.cpp" line="1036"/>
         <source>&amp;Online Handbook</source>
         <translation>オンラインハンドブック(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="966"/>
+        <location filename="../../mscore/musescore.cpp" line="1040"/>
         <source>&amp;About...</source>
         <translation>MuseScore について</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="972"/>
+        <location filename="../../mscore/musescore.cpp" line="1046"/>
         <source>About &amp;Qt...</source>
         <translation>Qt について(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="977"/>
+        <location filename="../../mscore/musescore.cpp" line="1051"/>
         <source>About &amp;MusicXML...</source>
         <translation>MusicXMLについて(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="983"/>
+        <location filename="../../mscore/musescore.cpp" line="1057"/>
         <source>Check for &amp;Update</source>
         <translation>更新の確認(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="987"/>
+        <location filename="../../mscore/musescore.cpp" line="1061"/>
         <source>Ask for Help</source>
         <translation>手助けを求める</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="988"/>
+        <location filename="../../mscore/musescore.cpp" line="1062"/>
         <source>Report a Bug</source>
         <translation>バグの報告</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="993"/>
+        <location filename="../../mscore/musescore.cpp" line="1067"/>
         <source>Revert to Factory Settings</source>
         <translation>初期設定に戻す</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1124"/>
+        <location filename="../../mscore/musescore.cpp" line="1201"/>
         <source>Are you sure?</source>
         <translation>よろしいですか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1125"/>
+        <location filename="../../mscore/musescore.cpp" line="1202"/>
         <source>This will reset all your preferences.
 Custom palettes, custom shortcuts, and the list of recent scores will be deleted. MuseScore will restart with its default settings.
 Reverting will not remove any scores from your computer.
@@ -9635,80 +9813,100 @@ Are you sure you want to proceed?</source>
 続行しますか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1334"/>
+        <location filename="../../mscore/musescore.cpp" line="1411"/>
         <source>Clear Recent Files</source>
         <translation>最近使ったファイルのクリア</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2437"/>
+        <location filename="../../mscore/musescore.cpp" line="2628"/>
         <source>System</source>
         <extracomment>The default language of the operating system. NOT a music system.</extracomment>
         <translation>システム言語</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2445"/>
+        <location filename="../../mscore/musescore.cpp" line="2636"/>
         <source>Error reading language file %s at line %d column %d: %s
 </source>
         <translation>言語ファイル %s の読込みエラー 行%d 列%d : %s
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2611"/>
+        <location filename="../../mscore/musescore.cpp" line="2812"/>
         <source>No score</source>
         <translation>スコア無し</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2620"/>
-        <source>Note input mode</source>
-        <translation>音符入力モード</translation>
+        <location filename="../../mscore/musescore.cpp" line="2825"/>
+        <source>Repitch input mode</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2624"/>
+        <location filename="../../mscore/musescore.cpp" line="2830"/>
+        <source>Rhythm input mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="2835"/>
+        <source>Realtime (automatic) note input mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="2840"/>
+        <source>Realtime (manual) note input mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="2845"/>
+        <source>Steptime note input mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="2852"/>
         <source>Drum input mode</source>
         <translation>ドラム入力モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2632"/>
+        <location filename="../../mscore/musescore.cpp" line="2860"/>
         <source>TAB input mode</source>
         <translation>TAB入力モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2635"/>
+        <location filename="../../mscore/musescore.cpp" line="2863"/>
         <source>Edit mode</source>
         <translation>編集モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2638"/>
+        <location filename="../../mscore/musescore.cpp" line="2866"/>
         <source>Text edit mode</source>
         <translation>テキスト編集モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2641"/>
+        <location filename="../../mscore/musescore.cpp" line="2869"/>
         <source>Lyrics edit mode</source>
         <translation>歌詞編集モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2644"/>
+        <location filename="../../mscore/musescore.cpp" line="2872"/>
         <source>Chord symbol/figured bass edit mode</source>
-        <translation>コード記号/数字付低音 の編集モード</translation>
+        <translation>コード記号/通奏低音の編集モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2647"/>
+        <location filename="../../mscore/musescore.cpp" line="2875"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2650"/>
+        <location filename="../../mscore/musescore.cpp" line="2878"/>
         <source>Image capture mode</source>
         <translation>イメージ キャプチャ モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2654"/>
+        <location filename="../../mscore/musescore.cpp" line="2882"/>
         <source>Score locked</source>
         <translation>スコアのロック</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3368"/>
+        <location filename="../../mscore/musescore.cpp" line="3642"/>
         <source>The previous session quit unexpectedly.
 
 Restore session?</source>
@@ -9717,42 +9915,42 @@ Restore session?</source>
 状態を元に戻しますか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4103"/>
+        <location filename="../../mscore/musescore.cpp" line="4459"/>
         <source>Key Signatures</source>
         <translation>調号</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4105"/>
+        <location filename="../../mscore/musescore.cpp" line="4461"/>
         <source>Time Signatures</source>
         <translation>拍子記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4107"/>
+        <location filename="../../mscore/musescore.cpp" line="4463"/>
         <source>Symbols</source>
         <translation>記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4423"/>
-        <source>MuseScore: Warning</source>
-        <translation>MuseScore: 警告</translation>
+        <location filename="../../mscore/musescore.cpp" line="4785"/>
+        <source>Warning</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4424"/>
+        <location filename="../../mscore/musescore.cpp" line="4786"/>
         <source>Cannot create tuplet: Note value is too short</source>
         <translation>この連符を作成できません:音価が短すぎます</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4561"/>
+        <location filename="../../mscore/musescore.cpp" line="4923"/>
         <source>Go To: </source>
         <translation>移動先の小節番号: </translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="118"/>
-        <source>MuseScore: Tuplet Error</source>
-        <translation>MuseScore: 連符のエラー</translation>
+        <location filename="../../mscore/tupletdialog.cpp" line="120"/>
+        <source>Tuplet Error</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="119"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="121"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
         <translation>音価 %2 には比率 %1 の連符を作成できません</translation>
     </message>
@@ -9779,8 +9977,8 @@ Restore session?</source>
     <message>
         <location filename="../../mscore/workspace.cpp" line="107"/>
         <location filename="../../mscore/workspace.cpp" line="123"/>
-        <source>MuseScore: Read Workspace Name</source>
-        <translation>MuseScore: ワークスペース名の読み取り</translation>
+        <source>Read Workspace Name</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="108"/>
@@ -9799,13 +9997,17 @@ please choose a different name:</source>
     <name>Ms::MyWebView</name>
     <message>
         <location filename="../../mscore/webpage.cpp" line="173"/>
-        <source>Could not&lt;br /&gt; connect</source>
-        <translation>接続できません</translation>
+        <source>Could not
+connect</source>
+        <translation>接続
+できません</translation>
     </message>
     <message>
         <location filename="../../mscore/webpage.cpp" line="174"/>
-        <source>To connect with the community, &lt;br /&gt; you need to have internet &lt;br /&gt; connection enabled</source>
-        <translation>コミュニティに接続するには&lt;/ br&gt;インターネット接続が&lt;/ br&gt;使用可能でなければなりません。</translation>
+        <source>To connect with the community,
+you need to have internet
+connection enabled</source>
+        <translation>コミュニティに接続するには、インターネット接続を有効にする必要があります。</translation>
     </message>
     <message>
         <location filename="../../mscore/webpage.cpp" line="175"/>
@@ -9821,93 +10023,92 @@ please choose a different name:</source>
 <context>
     <name>Ms::NewWizard</name>
     <message>
-        <location filename="../../mscore/newwizard.cpp" line="407"/>
-        <source>MuseScore: Create New Score</source>
-        <translation>MuseScore: 新しいスコアの作成</translation>
+        <location filename="../../mscore/newwizard.cpp" line="406"/>
+        <source>New Score Wizard</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage1</name>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="162"/>
-        <location filename="../../mscore/newwizard.cpp" line="165"/>
         <source>Create New Score</source>
         <translation>新しいスコアの作成</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="163"/>
-        <source>This wizard creates a new score</source>
-        <translation>スコアを作成していくための準備をします。</translation>
+        <source>Enter score information:</source>
+        <translation>スコア情報を入力</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage2</name>
     <message>
-        <location filename="../../mscore/newwizard.cpp" line="192"/>
+        <location filename="../../mscore/newwizard.cpp" line="191"/>
         <source>Create New Score</source>
         <translation>新しいスコアの作成</translation>
     </message>
     <message>
-        <location filename="../../mscore/newwizard.cpp" line="193"/>
-        <source>Define a set of instruments. Each instrument is represented by one or more staves</source>
-        <translation>楽器を指定して下さい。楽器別に用意された五線で、スコアを作っていきます。</translation>
+        <location filename="../../mscore/newwizard.cpp" line="192"/>
+        <source>Choose instruments on the left to add to instrument list on the right:</source>
+        <translation>左の欄で楽器を選び、右の欄の楽器リストに加えます。</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage3</name>
     <message>
-        <location filename="../../mscore/newwizard.cpp" line="242"/>
+        <location filename="../../mscore/newwizard.cpp" line="240"/>
         <source>Create New Score</source>
         <translation>新しいスコアの作成</translation>
     </message>
     <message>
-        <location filename="../../mscore/newwizard.cpp" line="243"/>
-        <source>Create Time Signature</source>
-        <translation>拍子記号を作成します</translation>
+        <location filename="../../mscore/newwizard.cpp" line="241"/>
+        <source>Choose time signature:</source>
+        <translation>拍子記号を選択</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage4</name>
     <message>
-        <location filename="../../mscore/newwizard.cpp" line="260"/>
+        <location filename="../../mscore/newwizard.cpp" line="258"/>
         <source>Create New Score</source>
         <translation>新しいスコアの作成</translation>
     </message>
     <message>
-        <location filename="../../mscore/newwizard.cpp" line="261"/>
-        <source>Select Template File:</source>
+        <location filename="../../mscore/newwizard.cpp" line="259"/>
+        <source>Choose template file:</source>
         <translation>テンプレートファイルを選択:</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage5</name>
     <message>
-        <location filename="../../mscore/newwizard.cpp" line="344"/>
+        <location filename="../../mscore/newwizard.cpp" line="342"/>
         <source>Create New Score</source>
         <translation>新しいスコアの作成</translation>
     </message>
     <message>
-        <location filename="../../mscore/newwizard.cpp" line="345"/>
-        <source>Select Key Signature and Tempo:</source>
-        <translation>調号とテンポを選んでください。</translation>
+        <location filename="../../mscore/newwizard.cpp" line="343"/>
+        <source>Choose key signature and tempo:</source>
+        <translation>調号とテンポを選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/newwizard.cpp" line="350"/>
+        <location filename="../../mscore/newwizard.cpp" line="348"/>
         <source>Key Signature</source>
         <translation>調号</translation>
     </message>
     <message>
-        <location filename="../../mscore/newwizard.cpp" line="364"/>
+        <location filename="../../mscore/newwizard.cpp" line="362"/>
         <source>Tempo</source>
         <translation>テンポ</translation>
     </message>
     <message>
-        <location filename="../../mscore/newwizard.cpp" line="366"/>
+        <location filename="../../mscore/newwizard.cpp" line="364"/>
         <source>BPM:</source>
         <translation>BPM</translation>
     </message>
     <message>
-        <location filename="../../mscore/newwizard.cpp" line="368"/>
+        <location filename="../../mscore/newwizard.cpp" line="366"/>
         <source>Beats per minute</source>
         <translation>BPM</translation>
     </message>
@@ -9923,67 +10124,67 @@ please choose a different name:</source>
 <context>
     <name>Ms::Note</name>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1868"/>
+        <location filename="../../libmscore/note.cpp" line="1903"/>
         <source>Acciaccatura</source>
         <translation>短前打音</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1870"/>
+        <location filename="../../libmscore/note.cpp" line="1905"/>
         <source>Appoggiatura</source>
         <translation>前打音</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1874"/>
+        <location filename="../../libmscore/note.cpp" line="1909"/>
         <source>Grace note after</source>
         <translation>後打音</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1878"/>
+        <location filename="../../libmscore/note.cpp" line="1913"/>
         <source>Grace note before</source>
         <translation>前打音</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1880"/>
+        <location filename="../../libmscore/note.cpp" line="1915"/>
         <source>Invalid note</source>
         <translation>無効な音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="1882"/>
+        <location filename="../../libmscore/note.cpp" line="1917"/>
         <source>Note</source>
         <translation>音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2502"/>
-        <location filename="../../libmscore/note.cpp" line="2521"/>
+        <location filename="../../libmscore/note.cpp" line="2537"/>
+        <location filename="../../libmscore/note.cpp" line="2556"/>
         <source>Voice: %1</source>
         <translation>声部:%1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2506"/>
-        <location filename="../../libmscore/note.cpp" line="2525"/>
+        <location filename="../../libmscore/note.cpp" line="2541"/>
+        <location filename="../../libmscore/note.cpp" line="2560"/>
         <source>Beat Slash</source>
         <translation>拍 スラッシュ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2506"/>
-        <location filename="../../libmscore/note.cpp" line="2525"/>
+        <location filename="../../libmscore/note.cpp" line="2541"/>
+        <location filename="../../libmscore/note.cpp" line="2560"/>
         <source>Rhythm Slash</source>
         <translation>リズム スラッシュ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2511"/>
+        <location filename="../../libmscore/note.cpp" line="2546"/>
         <source>%1; Pitch: %2; Duration: %3%4</source>
         <translation>%1; 音高: %2; 音価: %3%4</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2550"/>
-        <location filename="../../libmscore/note.cpp" line="2558"/>
+        <location filename="../../libmscore/note.cpp" line="2585"/>
+        <location filename="../../libmscore/note.cpp" line="2593"/>
         <source>%1 Start of %2</source>
         <translation>%1 %2 の開始</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2553"/>
-        <location filename="../../libmscore/note.cpp" line="2564"/>
+        <location filename="../../libmscore/note.cpp" line="2588"/>
+        <location filename="../../libmscore/note.cpp" line="2599"/>
         <source>%1 End of %2</source>
         <translation>%1 %2 の終了</translation>
     </message>
@@ -10043,7 +10244,7 @@ please choose a different name:</source>
         <translation>新規ワークスペースの追加</translation>
     </message>
     <message>
-        <location filename="../../mscore/palettebox.cpp" line="227"/>
+        <location filename="../../mscore/palettebox.cpp" line="237"/>
         <source>new Palette</source>
         <translation>新しいパレット</translation>
     </message>
@@ -10077,12 +10278,12 @@ please choose a different name:</source>
     </message>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="63"/>
-        <source>Save Palette</source>
+        <source>Save Palette...</source>
         <translation>パレットの保存</translation>
     </message>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="64"/>
-        <source>Load Palette</source>
+        <source>Load Palette...</source>
         <translation>パレットの読み込み</translation>
     </message>
     <message>
@@ -10094,7 +10295,7 @@ please choose a different name:</source>
 <context>
     <name>Ms::PathListDialog</name>
     <message>
-        <location filename="../../mscore/pathlistdialog.cpp" line="47"/>
+        <location filename="../../mscore/pathlistdialog.cpp" line="52"/>
         <source>Choose a directory</source>
         <translation>ディレクトリの選択</translation>
     </message>
@@ -10102,61 +10303,124 @@ please choose a different name:</source>
 <context>
     <name>Ms::PianoTools</name>
     <message>
-        <location filename="../../mscore/pianotools.cpp" line="311"/>
+        <location filename="../../mscore/pianotools.cpp" line="351"/>
         <source>Piano Keyboard</source>
         <translation>ピアノ キーボード</translation>
     </message>
 </context>
 <context>
+    <name>Ms::PianorollEditor</name>
+    <message>
+        <location filename="../../mscore/pianoroll.cpp" line="51"/>
+        <source>Toolbar 1</source>
+        <translation>ツールバー 1</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pianoroll.cpp" line="79"/>
+        <source>Wave</source>
+        <translation>波形</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pianoroll.cpp" line="80"/>
+        <source>Show wave display</source>
+        <translation>波形画面を表示</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pianoroll.cpp" line="87"/>
+        <source>Toolbar 2</source>
+        <translation>ツールバー 2</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pianoroll.cpp" line="100"/>
+        <source>Cursor:</source>
+        <translation>カーソル:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pianoroll.cpp" line="110"/>
+        <source>Velocity:</source>
+        <translation>ベロシティ:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pianoroll.cpp" line="112"/>
+        <source>Offset</source>
+        <translation>オフセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pianoroll.cpp" line="113"/>
+        <source>User</source>
+        <translation>ユーザ設定</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pianoroll.cpp" line="122"/>
+        <source>Pitch:</source>
+        <translation>音高:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pianoroll.cpp" line="127"/>
+        <source>OnTime:</source>
+        <translation>オンタイム:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pianoroll.cpp" line="131"/>
+        <source>Len:</source>
+        <translation>音価:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pianoroll.cpp" line="255"/>
+        <source>&lt;%1&gt; Staff: %2</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Ms::PluginCreator</name>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="49"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="50"/>
         <source>File Operations</source>
         <translation>ファイル操作</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="73"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="74"/>
         <source>Edit Operations</source>
         <translation>編集操作</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="186"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="193"/>
         <source>MuseScore Plugin Creator</source>
         <translation>MuseScore プラグイン クリエータ</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="230"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="377"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="452"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="239"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="386"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="461"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="231"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="378"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="453"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="240"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="387"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="462"/>
         <source>Plugin &quot;%1&quot; has changes.
 Save before closing?</source>
         <translation>プラグイン &quot;%1&quot; は変更されています。
 閉じる前に保存しますか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="426"/>
-        <source>MuseScore: Save Plugin</source>
-        <translation>MuseScore: プラグインの保存</translation>
+        <location filename="../../mscore/pluginCreator.cpp" line="435"/>
+        <source>Save Plugin</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="426"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="435"/>
         <source>Cannot determine file type</source>
         <translation>未知のファイル形式</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="462"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="471"/>
         <source>untitled</source>
         <translation>名称未設定</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="520"/>
+        <location filename="../../mscore/pluginCreator.cpp" line="529"/>
         <source>Manual</source>
         <translation>マニュアル</translation>
     </message>
@@ -10164,105 +10428,241 @@ Save before closing?</source>
 <context>
     <name>Ms::PreferenceDialog</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="689"/>
+        <location filename="../../mscore/preferences.cpp" line="602"/>
+        <source>192000</source>
+        <translation>192000</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="603"/>
+        <source>96000</source>
+        <translation>96000</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="604"/>
+        <source>88200</source>
+        <translation>88200</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="605"/>
+        <location filename="../../mscore/preferences.cpp" line="623"/>
+        <source>48000</source>
+        <translation>48000</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="606"/>
+        <location filename="../../mscore/preferences.cpp" line="622"/>
+        <source>44100</source>
+        <translation>44100</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="607"/>
+        <location filename="../../mscore/preferences.cpp" line="621"/>
+        <source>32000</source>
+        <translation>32000</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="608"/>
+        <source>22050</source>
+        <translation>22050</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="611"/>
+        <source>4096</source>
+        <translation>4096</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="612"/>
+        <source>2048</source>
+        <translation>2048</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="613"/>
+        <source>1024</source>
+        <translation>1024</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="614"/>
+        <source>512</source>
+        <translation>512</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="615"/>
+        <location filename="../../mscore/preferences.cpp" line="643"/>
+        <source>256</source>
+        <translation>256</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="616"/>
+        <location filename="../../mscore/preferences.cpp" line="639"/>
+        <source>128</source>
+        <translation>128</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="617"/>
+        <location filename="../../mscore/preferences.cpp" line="635"/>
+        <source>64</source>
+        <translation>64</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="631"/>
+        <source>32</source>
+        <translation>32</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="632"/>
+        <source>40</source>
+        <translation>40</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="633"/>
+        <source>48</source>
+        <translation>48</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="634"/>
+        <source>56</source>
+        <translation>56</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="636"/>
+        <source>80</source>
+        <translation>80</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="637"/>
+        <source>96</source>
+        <translation>96</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="638"/>
+        <source>112</source>
+        <translation>112</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="640"/>
+        <source>160</source>
+        <translation>160</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="641"/>
+        <source>192</source>
+        <translation>192</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="642"/>
+        <source>224</source>
+        <translation>224</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="644"/>
+        <source>320</source>
+        <translation>320</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="777"/>
         <source>The language will be changed once you restart MuseScore.</source>
         <translation>MuseScoreを再起動すると、言語が変更されます。</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1024"/>
+        <location filename="../../mscore/preferences.cpp" line="1114"/>
         <source>Action: %1; Shortcut: %2</source>
         <translation>アクション: %1; ショートカットキー: %2</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1026"/>
+        <location filename="../../mscore/preferences.cpp" line="1116"/>
         <source>No shortcut defined</source>
         <translation>ショートカットキーが未定義</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1101"/>
+        <location filename="../../mscore/preferences.cpp" line="1191"/>
         <source>Choose Notepaper</source>
         <translation>譜面を選択してください</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1112"/>
+        <location filename="../../mscore/preferences.cpp" line="1202"/>
         <source>Choose Background Wallpaper</source>
         <translation>背景を選択してください</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1123"/>
+        <location filename="../../mscore/preferences.cpp" line="1213"/>
         <source>Choose Default Style</source>
         <translation>標準のスタイルを選択してください</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1134"/>
+        <location filename="../../mscore/preferences.cpp" line="1224"/>
         <source>Choose Default Style for Parts</source>
         <translation>パートの標準スタイルを選択してください</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1147"/>
-        <location filename="../../mscore/preferences.cpp" line="1165"/>
+        <location filename="../../mscore/preferences.cpp" line="1237"/>
+        <location filename="../../mscore/preferences.cpp" line="1255"/>
         <source>Choose Instrument List</source>
         <translation>楽器リストを選択してください</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1149"/>
-        <location filename="../../mscore/preferences.cpp" line="1167"/>
-        <source>Instrument List (*.xml)</source>
-        <translation>楽器リスト(*.xml)</translation>
+        <location filename="../../mscore/preferences.cpp" line="1239"/>
+        <location filename="../../mscore/preferences.cpp" line="1257"/>
+        <source>Instrument List</source>
+        <translation>楽器のリスト</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1183"/>
+        <location filename="../../mscore/preferences.cpp" line="1273"/>
         <source>Choose Starting Score</source>
         <translation>開始するスコアの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1185"/>
-        <source>MuseScore Files (*.mscz *.mscx);;All (*)</source>
-        <translation>MuseScore ファイル(*.mscz *.mscx);;すべてのファイル(*)</translation>
+        <location filename="../../mscore/preferences.cpp" line="1275"/>
+        <source>MuseScore Files</source>
+        <translation>MuseScoreファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1527"/>
+        <location filename="../../mscore/preferences.cpp" line="1275"/>
+        <source>All</source>
+        <translation>全て</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferences.cpp" line="1620"/>
         <source>Choose Default Style for Imports</source>
         <translation>インポート用の標準スタイルを選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1613"/>
+        <location filename="../../mscore/preferences.cpp" line="1706"/>
         <source>Choose Score Folder</source>
         <translation>スコア フォルダの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1629"/>
+        <location filename="../../mscore/preferences.cpp" line="1722"/>
         <source>Choose Style Folder</source>
         <translation>スタイル フォルダの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1645"/>
+        <location filename="../../mscore/preferences.cpp" line="1738"/>
         <source>Choose Template Folder</source>
         <translation>テンプレート フォルダの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1661"/>
+        <location filename="../../mscore/preferences.cpp" line="1754"/>
         <source>Choose Plugin Folder</source>
         <translation>プラグイン フォルダの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1677"/>
+        <location filename="../../mscore/preferences.cpp" line="1770"/>
         <source>Choose Image Folder</source>
         <translation>画像フォルダの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1692"/>
+        <location filename="../../mscore/preferences.cpp" line="1785"/>
         <source>SoundFont Folders</source>
         <translation>SoundFont フォルダ</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1891"/>
-        <location filename="../../mscore/preferences.cpp" line="1931"/>
+        <location filename="../../mscore/preferences.cpp" line="1984"/>
+        <location filename="../../mscore/preferences.cpp" line="2024"/>
         <source>MuseScore Shortcuts</source>
         <translation>MuseScore ショートカットキー</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="1895"/>
+        <location filename="../../mscore/preferences.cpp" line="1988"/>
         <source>Print Shortcuts</source>
         <translation>ショートカットキーの印刷</translation>
     </message>
@@ -10270,38 +10670,33 @@ Save before closing?</source>
 <context>
     <name>Ms::ResourceManager</name>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="47"/>
-        <source>Languages</source>
-        <translation>言語</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/resourceManager.cpp" line="101"/>
+        <location filename="../../mscore/resourceManager.cpp" line="100"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="102"/>
+        <location filename="../../mscore/resourceManager.cpp" line="101"/>
         <source>Update</source>
         <translation>アップデート</translation>
     </message>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="124"/>
+        <location filename="../../mscore/resourceManager.cpp" line="123"/>
         <source>No update</source>
         <translation>アップデートなし</translation>
     </message>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="151"/>
+        <location filename="../../mscore/resourceManager.cpp" line="150"/>
         <source>Updating</source>
         <translation>アップデート中</translation>
     </message>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="161"/>
-        <location filename="../../mscore/resourceManager.cpp" line="190"/>
+        <location filename="../../mscore/resourceManager.cpp" line="160"/>
+        <location filename="../../mscore/resourceManager.cpp" line="189"/>
         <source>Failed, try again</source>
         <translation>失敗、再試行</translation>
     </message>
     <message>
-        <location filename="../../mscore/resourceManager.cpp" line="187"/>
+        <location filename="../../mscore/resourceManager.cpp" line="186"/>
         <source>Updated</source>
         <translation>アップデート済</translation>
     </message>
@@ -10341,7 +10736,7 @@ Save before closing?</source>
         <translation>選択なし</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="353"/>
+        <location filename="../../libmscore/scorefile.cpp" line="366"/>
         <source>The following file is locked: 
 %1 
 
@@ -10352,7 +10747,7 @@ Try saving to a different location.</source>
 別の場所への保存を試みてください。</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="365"/>
+        <location filename="../../libmscore/scorefile.cpp" line="378"/>
         <source>Open Temp File
 %1
 failed: %2</source>
@@ -10361,19 +10756,19 @@ failed: %2</source>
 失敗: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="379"/>
-        <source>MuseScore: Save File failed: %1</source>
-        <translation>MuseScore: 保存に失敗: %1</translation>
+        <location filename="../../libmscore/scorefile.cpp" line="387"/>
+        <source>Save File failed: %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="438"/>
+        <location filename="../../libmscore/scorefile.cpp" line="445"/>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
         <translation>tempの名前を変更。ファイル &lt;%1&gt; から &lt;%2&gt; へ 失敗:
 %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="460"/>
+        <location filename="../../libmscore/scorefile.cpp" line="467"/>
         <source>Open File
 %1
 failed: </source>
@@ -10382,7 +10777,7 @@ failed: </source>
 失敗:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="591"/>
+        <location filename="../../libmscore/scorefile.cpp" line="600"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -10391,12 +10786,12 @@ failed: %2</source>
 失敗: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="613"/>
+        <location filename="../../libmscore/scorefile.cpp" line="622"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>このスタイルファイルは現在のMuseScoreのバージョンと互換性がありません。</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="634"/>
+        <location filename="../../libmscore/scorefile.cpp" line="643"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -10405,12 +10800,12 @@ failed: %2</source>
 失敗: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="644"/>
+        <location filename="../../libmscore/scorefile.cpp" line="653"/>
         <source>Write Style failed: %1</source>
         <translation>スタイルの書き込みに失敗: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1179"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1195"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>XMLリーダー　エラー箇所　%1 行目  カラム %2:%3</translation>
     </message>
@@ -10471,7 +10866,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../mscore/scoreBrowser.cpp" line="145"/>
-        <source>Create New Score</source>
+        <source>Create New Score...</source>
         <translation>新しいスコアの作成</translation>
     </message>
     <message>
@@ -10519,8 +10914,8 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="641"/>
-        <source>MuseScore: Set Output Resolution</source>
-        <translation>Musescore: 出力分解能の設定</translation>
+        <source>Set Output Resolution</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="642"/>
@@ -10529,23 +10924,23 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="737"/>
-        <source>PNG Bitmap Graphic (*.png)</source>
-        <translation>PNG形式(*.png)</translation>
+        <source>PNG Bitmap Graphic</source>
+        <translation>PNGビットマップ グラフィック</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="738"/>
-        <source>PDF File (*.pdf)</source>
-        <translation>PDF ファイル (*.pdf)</translation>
+        <source>PDF File</source>
+        <translation>PDF ファイル</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="739"/>
-        <source>Scalable Vector Graphic (*.svg)</source>
-        <translation>SVG形式(*.svg)</translation>
+        <source>Scalable Vector Graphics</source>
+        <translation>SVG形式　</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="766"/>
-        <source>MuseScore: Save As</source>
-        <translation>MuseScore: 名前を付けて保存</translation>
+        <source>Save As</source>
+        <translation>名前を付けて保存</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="766"/>
@@ -10663,7 +11058,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="267"/>
         <location filename="../../mscore/propertymenu.cpp" line="286"/>
-        <location filename="../../mscore/scoreview.cpp" line="1101"/>
+        <location filename="../../mscore/scoreview.cpp" line="1132"/>
         <source>Staff</source>
         <translation>譜表</translation>
     </message>
@@ -10671,21 +11066,21 @@ failed: %2</source>
         <location filename="../../mscore/propertymenu.cpp" line="268"/>
         <location filename="../../mscore/propertymenu.cpp" line="287"/>
         <location filename="../../mscore/propertymenu.cpp" line="325"/>
-        <location filename="../../mscore/scoreview.cpp" line="1115"/>
+        <location filename="../../mscore/scoreview.cpp" line="1146"/>
         <source>Staff Properties...</source>
         <translation>譜表のプロパティ...</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="273"/>
         <location filename="../../mscore/propertymenu.cpp" line="292"/>
-        <location filename="../../mscore/scoreview.cpp" line="1121"/>
+        <location filename="../../mscore/scoreview.cpp" line="1152"/>
         <source>Measure</source>
         <translation>小節</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="274"/>
         <location filename="../../mscore/propertymenu.cpp" line="293"/>
-        <location filename="../../mscore/scoreview.cpp" line="1129"/>
+        <location filename="../../mscore/scoreview.cpp" line="1162"/>
         <source>Measure Properties...</source>
         <translation>小節のプロパティ...</translation>
     </message>
@@ -10720,110 +11115,125 @@ failed: %2</source>
         <translation>グリッサンドのプロパティ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1022"/>
+        <location filename="../../mscore/scoreview.cpp" line="1037"/>
+        <source>System Text</source>
+        <translation>段テキスト</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/scoreview.cpp" line="1042"/>
+        <source>Slur</source>
+        <translation>スラー</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/scoreview.cpp" line="1044"/>
+        <source>Tie</source>
+        <translation>タイ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/scoreview.cpp" line="1051"/>
         <source>Select</source>
         <translation>選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1026"/>
+        <location filename="../../mscore/scoreview.cpp" line="1055"/>
         <source>More...</source>
         <translation>詳細...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1037"/>
+        <location filename="../../mscore/scoreview.cpp" line="1066"/>
         <source>Help</source>
         <translation>ヘルプ</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1042"/>
+        <location filename="../../mscore/scoreview.cpp" line="1071"/>
         <source>Debugger</source>
         <translation>デバッガ</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1102"/>
+        <location filename="../../mscore/scoreview.cpp" line="1133"/>
         <source>Edit Drumset...</source>
         <translation>ドラムセット編集...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1107"/>
+        <location filename="../../mscore/scoreview.cpp" line="1138"/>
         <source>Drumroll Editor...</source>
         <translation>ドラムロールエディタ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1111"/>
+        <location filename="../../mscore/scoreview.cpp" line="1142"/>
         <source>Pianoroll Editor...</source>
         <translation>ピアノロールエディタ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1117"/>
+        <location filename="../../mscore/scoreview.cpp" line="1148"/>
         <source>Split Staff...</source>
         <translation>譜表の分離...</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1135"/>
+        <location filename="../../mscore/scoreview.cpp" line="1168"/>
         <source>Object Debugger</source>
         <translation>オブジェクトデバッガ</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2481"/>
+        <location filename="../../mscore/scoreview.cpp" line="2526"/>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
         <translation>連符またはトレモロのすべての要素を選択した上で再試行してください</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2546"/>
+        <location filename="../../mscore/scoreview.cpp" line="2653"/>
         <source>No destination to paste</source>
         <translation>貼り付け先がありません</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2549"/>
+        <location filename="../../mscore/scoreview.cpp" line="2656"/>
         <source>Cannot paste into tuplet</source>
         <translation>連符の間には貼り付けられません</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2552"/>
+        <location filename="../../mscore/scoreview.cpp" line="2659"/>
         <source>Tuplet cannot cross barlines</source>
-        <translation>連符は縦線をまたぐことができません</translation>
+        <translation>連符は小節線をまたぐことができません</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2556"/>
+        <location filename="../../mscore/scoreview.cpp" line="2663"/>
         <source>Cannot paste in local time signature</source>
         <translation>拍子記号には貼り付けられません</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2560"/>
+        <location filename="../../mscore/scoreview.cpp" line="2667"/>
         <source>Cannot paste in tremolo</source>
         <translation>トレモロには貼り付けられません</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2996"/>
+        <location filename="../../mscore/scoreview.cpp" line="3112"/>
         <source>No chord/rest selected:
 Please select a chord/rest and try again</source>
         <translation>音符/休符が選択されていません:
 音符/休符を選択してからもう一度やり直してください。</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3005"/>
+        <location filename="../../mscore/scoreview.cpp" line="3121"/>
         <source>Cannot split measure here:
 First beat of measure</source>
         <translation>ここでは小節を分割できません:
 小節の１拍目</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3010"/>
+        <location filename="../../mscore/scoreview.cpp" line="3126"/>
         <source>Cannot split measure here:
 Cannot split tuplet</source>
         <translation>ここで小節を分割できません:
 連符を分割できません</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3022"/>
+        <location filename="../../mscore/scoreview.cpp" line="3138"/>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
         <translation>小節が選択されていません:
 結合する小節の範囲を選択してからもう一度やり直してください。</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="5333"/>
+        <location filename="../../mscore/scoreview.cpp" line="5637"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -10831,7 +11241,7 @@ first create some staves</source>
 楽器ダイアログを使い、先にいくつかの譜表を作成してください</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="5414"/>
+        <location filename="../../mscore/scoreview.cpp" line="5718"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>小節が選択されていません:
@@ -10854,17 +11264,17 @@ Please select a measure and try again</source>
 <context>
     <name>Ms::Segment</name>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="1233"/>
+        <location filename="../../libmscore/segment.cpp" line="1234"/>
         <source>Annotations:</source>
         <translation>アノテーション:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="1256"/>
+        <location filename="../../libmscore/segment.cpp" line="1257"/>
         <source>Start of </source>
         <translation>開始</translation>
     </message>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="1270"/>
+        <location filename="../../libmscore/segment.cpp" line="1271"/>
         <source>End of </source>
         <translation>終了</translation>
     </message>
@@ -10872,12 +11282,12 @@ Please select a measure and try again</source>
 <context>
     <name>Ms::SelectionListWidget</name>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="37"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="39"/>
         <source>Selection filter</source>
         <translation>選択フィルタ</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="38"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="40"/>
         <source>Use Tab and Backtab to move through the check boxes</source>
         <translation>チェックボックスの移動にタブとバックタブを使用する</translation>
     </message>
@@ -10885,28 +11295,28 @@ Please select a measure and try again</source>
 <context>
     <name>Ms::SelectionWindow</name>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="58"/>
-        <source>Selection</source>
-        <translation>選択</translation>
+        <location filename="../../mscore/selectionwindow.cpp" line="60"/>
+        <source>Selection Filter</source>
+        <translation>選択フィルタ</translation>
     </message>
 </context>
 <context>
     <name>Ms::ShortcutCaptureDialog</name>
     <message>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="147"/>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="155"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="149"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="157"/>
         <source>Shortcut conflicts with </source>
         <translation>ショートカットキーが重複しています： </translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="167"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="169"/>
         <source>Shortcut conflicts with</source>
         <translation>ショートカットキーが重複</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="172"/>
-        <location filename="../../mscore/shortcutcapturedialog.cpp" line="200"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="174"/>
         <location filename="../../mscore/shortcutcapturedialog.cpp" line="202"/>
+        <location filename="../../mscore/shortcutcapturedialog.cpp" line="204"/>
         <source>New shortcut</source>
         <translation>新しいショートカットキー</translation>
     </message>
@@ -10914,121 +11324,78 @@ Please select a measure and try again</source>
 <context>
     <name>Ms::StaffTextProperties</name>
     <message>
-        <location filename="../../mscore/stafftextproperties.cpp" line="56"/>
-        <source>MuseScore: System Text Properties</source>
-        <translation> MuseScore: 段テキストのプロパティ</translation>
+        <location filename="../../mscore/stafftextproperties.cpp" line="58"/>
+        <source>System Text Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/stafftextproperties.cpp" line="62"/>
-        <source>MuseScore: Staff Text Properties</source>
-        <translation>MuseScore: 譜表テキストのプロパティ</translation>
+        <location filename="../../mscore/stafftextproperties.cpp" line="64"/>
+        <source>Staff Text Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/stafftextproperties.cpp" line="194"/>
-        <location filename="../../mscore/stafftextproperties.cpp" line="396"/>
-        <location filename="../../mscore/stafftextproperties.cpp" line="408"/>
+        <location filename="../../mscore/stafftextproperties.cpp" line="196"/>
+        <location filename="../../mscore/stafftextproperties.cpp" line="400"/>
+        <location filename="../../mscore/stafftextproperties.cpp" line="412"/>
         <source>normal</source>
         <translation>標準</translation>
     </message>
 </context>
 <context>
-    <name>Ms::StartDialog</name>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="2239"/>
-        <source>MuseScore Startup Dialog</source>
-        <translation>MuseScore スタートアップダイアログ</translation>
-    </message>
-</context>
-<context>
     <name>Ms::SymbolDialog</name>
     <message>
-        <location filename="../../mscore/symboldialog.cpp" line="86"/>
-        <source>MuseScore: Symbols</source>
-        <translation>MuseScore: 記号</translation>
+        <location filename="../../mscore/symboldialog.cpp" line="87"/>
+        <source>Symbols</source>
+        <translation>記号</translation>
     </message>
 </context>
 <context>
     <name>Ms::TempoText</name>
     <message>
-        <location filename="../../libmscore/tempotext.cpp" line="334"/>
+        <location filename="../../libmscore/tempotext.cpp" line="336"/>
         <source>Dotted %1</source>
         <translation>点線 %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/tempotext.cpp" line="336"/>
+        <location filename="../../libmscore/tempotext.cpp" line="338"/>
         <source>Double dotted %1</source>
         <translation>複付点 %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/tempotext.cpp" line="338"/>
+        <location filename="../../libmscore/tempotext.cpp" line="340"/>
         <source>Triple dotted %1</source>
         <translation>3重付点 %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/tempotext.cpp" line="347"/>
+        <location filename="../../libmscore/tempotext.cpp" line="349"/>
         <source>note = %1</source>
         <translation>音符=%1</translation>
     </message>
 </context>
 <context>
-    <name>Ms::TextEditor</name>
+    <name>Ms::Text</name>
     <message>
-        <location filename="../../mscore/texteditor.cpp" line="43"/>
-        <source>Bold</source>
-        <translation>太字</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/texteditor.cpp" line="48"/>
-        <source>Italic</source>
-        <translation>斜体</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/texteditor.cpp" line="53"/>
-        <source>Underline</source>
-        <translation>下線</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/texteditor.cpp" line="58"/>
-        <source>Align left</source>
-        <translation>左寄せ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/texteditor.cpp" line="63"/>
-        <source>Align center</source>
-        <translation>中央揃え</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/texteditor.cpp" line="68"/>
-        <source>Align right</source>
-        <translation>右揃え</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/texteditor.cpp" line="73"/>
-        <source>Subscript</source>
-        <translation>下付き文字</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/texteditor.cpp" line="78"/>
-        <source>Superscript</source>
-        <translation>上付き文字</translation>
+        <location filename="../../libmscore/text.cpp" line="3034"/>
+        <source>System Text</source>
+        <translation>段テキスト</translation>
     </message>
 </context>
 <context>
     <name>Ms::TextPalette</name>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="563"/>
+        <location filename="../../mscore/textpalette.cpp" line="564"/>
         <source>Common Symbols</source>
         <translation>一般的な記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="600"/>
+        <location filename="../../mscore/textpalette.cpp" line="601"/>
         <source>Musical Symbols</source>
         <translation>音楽記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/textpalette.cpp" line="619"/>
+        <location filename="../../mscore/textpalette.cpp" line="620"/>
         <source>Unicode Symbols</source>
-        <translation>ユニコード記号</translation>
+        <translation>Unicode 記号</translation>
     </message>
 </context>
 <context>
@@ -11049,31 +11416,31 @@ Please select a measure and try again</source>
 <context>
     <name>Ms::TextProperties</name>
     <message>
-        <location filename="../../mscore/textproperties.cpp" line="53"/>
-        <source>MuseScore: Text Properties</source>
-        <translation>MuseScore: テキストのプロパティ</translation>
+        <location filename="../../mscore/textproperties.cpp" line="54"/>
+        <source>Text Properties</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Ms::TextStyleDialog</name>
     <message>
-        <location filename="../../mscore/textstyle.cpp" line="44"/>
+        <location filename="../../mscore/textstyle.cpp" line="45"/>
         <source>Apply to all Parts</source>
-        <translation>全パートに適用</translation>
+        <translation>全パート譜に適用</translation>
     </message>
     <message>
-        <location filename="../../mscore/textstyle.cpp" line="199"/>
-        <location filename="../../mscore/textstyle.cpp" line="214"/>
-        <source>MuseScore: Read Style Name</source>
-        <translation>MuseScore: スタイル名の読み取り</translation>
+        <location filename="../../mscore/textstyle.cpp" line="201"/>
+        <location filename="../../mscore/textstyle.cpp" line="216"/>
+        <source>Read Style Name</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/textstyle.cpp" line="200"/>
+        <location filename="../../mscore/textstyle.cpp" line="202"/>
         <source>Text style name:</source>
         <translation>テキストスタイル名:</translation>
     </message>
     <message>
-        <location filename="../../mscore/textstyle.cpp" line="215"/>
+        <location filename="../../mscore/textstyle.cpp" line="217"/>
         <source>'%1' does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; はすでに存在しています。
@@ -11122,8 +11489,8 @@ please choose a different name:</source>
     <name>Ms::TimeDialog</name>
     <message>
         <location filename="../../mscore/timedialog.cpp" line="42"/>
-        <source>MuseScore: Time Signatures</source>
-        <translation>MuseScore: 拍子記号</translation>
+        <source>Time Signatures</source>
+        <translation>拍子記号</translation>
     </message>
 </context>
 <context>
@@ -11148,17 +11515,17 @@ please choose a different name:</source>
     <name>Ms::UpdateChecker</name>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="81"/>
-        <source>An update for MuseScore is available: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</source>
-        <translation>MuseScoreはアップデートが利用可能になりました。: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</translation>
+        <source>An update for MuseScore is available: %1MuseScore %2 r.%3%4</source>
+        <translation>アップデートがあります: %1MuseScore %2 r.%3%4</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="85"/>
+        <location filename="../../mscore/updatechecker.cpp" line="89"/>
         <source>Update Available</source>
         <translation>アップデートの利用ができます</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="92"/>
-        <location filename="../../mscore/updatechecker.cpp" line="93"/>
+        <location filename="../../mscore/updatechecker.cpp" line="96"/>
+        <location filename="../../mscore/updatechecker.cpp" line="97"/>
         <source>No Update Available</source>
         <translation>アップデートの利用はできません</translation>
     </message>
@@ -11166,94 +11533,94 @@ please choose a different name:</source>
 <context>
     <name>Ms::UploadScoreDialog</name>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="56"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="58"/>
         <source>All Rights reserved</source>
         <translation>All Rights reserved</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="57"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="59"/>
         <source>Creative Commons Attribution</source>
         <translation>クリエイティブ・コモンズ　帰属</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="58"/>
-        <source>Creative Commons Attribution Share Alike</source>
-        <translation>クリエイティブ・コモンズ　帰属　継承</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="59"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="60"/>
         <source>Creative Commons Attribution No Derivative Works</source>
         <translation>クリエイティブ・コモンズ　帰属　改変禁止</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="60"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="61"/>
+        <source>Creative Commons Attribution Share Alike</source>
+        <translation>クリエイティブ・コモンズ　帰属　継承</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="62"/>
         <source>Creative Commons Attribution Noncommercial</source>
         <translation>クリエイティブ・コモンズ　帰属　非営利</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="61"/>
-        <source>Creative Commons Attribution Noncommercial Share Alike</source>
-        <translation>クリエイティブ・コモンズ　帰属　非営利　継承</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="62"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="63"/>
         <source>Creative Commons Attribution Noncommercial Non Derivate Works</source>
         <translation>クリエイティブ・コモンズ　帰属　非営利　改変禁止</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="63"/>
-        <source>Public Domain</source>
-        <translation>パブリックドメイン</translation>
-    </message>
-    <message>
         <location filename="../../mscore/uploadscoredialog.cpp" line="64"/>
-        <source>Creative Commons Zero</source>
-        <translation>CC0(クリエイティブ・コモンズ・ゼロ)</translation>
+        <source>Creative Commons Attribution Noncommercial Share Alike</source>
+        <translation>クリエイティブ・コモンズ　帰属　非営利　継承</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="66"/>
-        <source>&lt;a href=&quot;%1&quot;&gt;What does this mean?&lt;/a&gt;</source>
-        <translation>&lt;a href=&quot;%1&quot;&gt;これは何を意味しますか？&lt;/a&gt;</translation>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="65"/>
+        <source>Creative Commons Copyright Waiver</source>
+        <translation>Creative Commons Copyright Waiver</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="71"/>
-        <source>Respect the &lt;a href=&quot;%1&quot;&gt;community guidelines&lt;/a&gt;. Only make your scores accessible to anyone with permission from the right holders.</source>
-        <translation>&lt;a href=&quot;%1&quot;&gt;コミュニティーガイドライン&lt;/a&gt;を遵守してください。スコアに誰でもアクセス出来るようにするには、権利者から許可を得てください。</translation>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="67"/>
+        <source>%1What does this mean?%2</source>
+        <translation>%1これは何を意味しますか？%2</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.cpp" line="74"/>
+        <source>Respect the %1community guidelines%2. Only make your scores accessible to anyone with permission from the right holders.</source>
+        <translation>%1コミュニティガイドライン%2を尊重すること。著作権者から許可を得ている場合に限り、あなたのスコアに誰でもアクセスできます。</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="79"/>
         <source>Use a comma to separate the tags</source>
         <translation>タグの区切りにコンマを使用する</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="108"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="86"/>
+        <source>Render the score with the current synth settings. %1More info%2.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="130"/>
         <source>Missing title</source>
         <translation>タイトルがありません</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="108"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="130"/>
         <source>Please provide a title</source>
         <translation>タイトルを入力してください</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="134"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="171"/>
         <source>Success</source>
         <translation>成功</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="135"/>
-        <source>Finished! &lt;a href=&quot;%1&quot;&gt;Go to my score&lt;/a&gt;.</source>
-        <translation>完了しました！&lt;a href=&quot;%1&quot;&gt;スコアを見る&lt;/a&gt;.</translation>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="172"/>
+        <source>Finished! %1Go to my score%2.</source>
+        <translation>完了しました！%1スコアを見る%2</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="147"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="185"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="193"/>
-        <source>[&lt;a href=&quot;%1&quot;&gt;link&lt;/a&gt;]</source>
-        <translation>[&lt;a href=&quot;%1&quot;&gt;リンク&lt;/a&gt;]</translation>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="240"/>
+        <source>[%1link%2]</source>
+        <translation>[%1リンク%2]</translation>
     </message>
 </context>
 <context>
@@ -11452,22 +11819,32 @@ please choose a different name:</source>
         <translation>音符グループ</translation>
     </message>
     <message>
-        <location filename="../../mscore/note_groups.ui" line="34"/>
+        <location filename="../../mscore/note_groups.ui" line="23"/>
+        <source>Also change shorter notes</source>
+        <translation>且つ小さい音符に変更</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/note_groups.ui" line="44"/>
         <source>1/16</source>
         <translation>16分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/note_groups.ui" line="142"/>
+        <location filename="../../mscore/note_groups.ui" line="152"/>
         <source>1/32</source>
         <translation>32分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/note_groups.ui" line="333"/>
+        <location filename="../../mscore/note_groups.ui" line="343"/>
         <source>1/8</source>
         <translation>8分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/note_groups.ui" line="366"/>
+        <location filename="../../mscore/note_groups.ui" line="376"/>
+        <source>Reset note grouping</source>
+        <translation>音のグループをリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/note_groups.ui" line="379"/>
         <source>Reset</source>
         <translation>リセット</translation>
     </message>
@@ -11520,8 +11897,8 @@ please choose a different name:</source>
     <name>PageSettingsBase</name>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="20"/>
-        <source>MuseScore: Page Settings</source>
-        <translation>MuseScore: ページの設定</translation>
+        <source>Page Settings</source>
+        <translation>ページの設定</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="47"/>
@@ -11534,88 +11911,93 @@ please choose a different name:</source>
         <translation>ページサイズ</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="117"/>
+        <location filename="../../mscore/pagesettings.ui" line="91"/>
+        <source>Portrait</source>
+        <translation>ポートレイト</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pagesettings.ui" line="101"/>
         <source>Two sided</source>
         <translation>両面印刷</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="124"/>
+        <location filename="../../mscore/pagesettings.ui" line="108"/>
         <source>Landscape</source>
         <translation>横方向</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="131"/>
+        <location filename="../../mscore/pagesettings.ui" line="141"/>
         <source>Height:</source>
         <translation>高さ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="144"/>
+        <location filename="../../mscore/pagesettings.ui" line="154"/>
         <source>Width:</source>
         <translation>幅:</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="163"/>
+        <location filename="../../mscore/pagesettings.ui" line="170"/>
         <source>Scaling</source>
         <translation>スケール</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="169"/>
-        <location filename="../../mscore/pagesettings.ui" line="172"/>
+        <location filename="../../mscore/pagesettings.ui" line="176"/>
+        <location filename="../../mscore/pagesettings.ui" line="179"/>
         <source>Distance between two lines on a standard 5-line staff</source>
         <translation>標準5線譜上の2線間の距離</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="175"/>
+        <location filename="../../mscore/pagesettings.ui" line="182"/>
         <source>Staff space (sp):</source>
         <translation>譜表のスペース(sp)</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="216"/>
+        <location filename="../../mscore/pagesettings.ui" line="223"/>
         <source>Unit</source>
         <translation>単位</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="222"/>
+        <location filename="../../mscore/pagesettings.ui" line="229"/>
         <source>inch</source>
         <translation>inch</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="229"/>
+        <location filename="../../mscore/pagesettings.ui" line="236"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="268"/>
+        <location filename="../../mscore/pagesettings.ui" line="275"/>
         <source>Apply to all Parts</source>
-        <translation>全要素に適用</translation>
+        <translation>全パート譜に適用</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="275"/>
+        <location filename="../../mscore/pagesettings.ui" line="282"/>
         <source>Apply</source>
         <translation>適用</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="282"/>
+        <location filename="../../mscore/pagesettings.ui" line="289"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="292"/>
+        <location filename="../../mscore/pagesettings.ui" line="299"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="318"/>
+        <location filename="../../mscore/pagesettings.ui" line="325"/>
         <source>Odd Page Margins</source>
         <translation>奇数ページの余白</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="395"/>
+        <location filename="../../mscore/pagesettings.ui" line="402"/>
         <source>Even Page Margins</source>
         <translation>偶数ページの余白</translation>
     </message>
     <message>
-        <location filename="../../mscore/pagesettings.ui" line="474"/>
+        <location filename="../../mscore/pagesettings.ui" line="481"/>
         <source>First page number:</source>
         <translation>最初のページ番号:</translation>
     </message>
@@ -11664,7 +12046,7 @@ please choose a different name:</source>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="108"/>
-        <location filename="../../mscore/noteGroups.cpp" line="74"/>
+        <location filename="../../mscore/noteGroups.cpp" line="75"/>
         <source>Beam Properties</source>
         <translation>連桁のプロパティ</translation>
     </message>
@@ -11719,172 +12101,172 @@ please choose a different name:</source>
         <translation>反復記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="394"/>
+        <location filename="../../mscore/menus.cpp" line="411"/>
         <source>Breaks &amp;&amp; Spacers</source>
         <translation>区切りとスペーサー</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="435"/>
+        <location filename="../../mscore/menus.cpp" line="452"/>
         <source>Fingering</source>
         <translation>フィンガリング</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="483"/>
+        <location filename="../../mscore/menus.cpp" line="500"/>
         <source>Tremolo</source>
         <translation>トレモロ</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="502"/>
-        <source>Note Heads</source>
+        <location filename="../../mscore/menus.cpp" line="519"/>
+        <source>Noteheads</source>
         <translation>符頭</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="533"/>
+        <location filename="../../mscore/menus.cpp" line="550"/>
         <source>Articulations &amp;&amp; Ornaments</source>
         <translation>アーティキュレーションと装飾</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="582"/>
+        <location filename="../../mscore/menus.cpp" line="599"/>
         <source>Brackets</source>
         <translation>括弧</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="611"/>
+        <location filename="../../mscore/menus.cpp" line="628"/>
         <source>Breaths &amp;&amp; Pauses</source>
         <translation>ブレスと休止</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="639"/>
-        <source>Arpeggios &amp;&amp; Glissandi</source>
+        <location filename="../../mscore/menus.cpp" line="656"/>
+        <source>Arpeggios &amp;&amp; Glissandos</source>
         <translation>アルペジオとグリッサンド</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="702"/>
+        <location filename="../../mscore/menus.cpp" line="719"/>
         <source>Clefs</source>
         <translation>音部記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="731"/>
+        <location filename="../../mscore/menus.cpp" line="748"/>
         <source>Grace Notes</source>
         <translation>装飾音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="763"/>
+        <location filename="../../mscore/menus.cpp" line="780"/>
         <source>Bagpipe Embellishments</source>
         <translation>バグパイプ装飾音</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="783"/>
+        <location filename="../../mscore/menus.cpp" line="800"/>
         <source>Lines</source>
         <translation>線</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="805"/>
+        <location filename="../../mscore/menus.cpp" line="822"/>
         <source>Diminuendo hairpin</source>
         <translation>ディミヌエンドのヘアピン</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="823"/>
+        <location filename="../../mscore/menus.cpp" line="840"/>
         <source>Diminuendo line</source>
         <translation>ディミヌエンドライン</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="832"/>
+        <location filename="../../mscore/menus.cpp" line="849"/>
         <source>Prima volta</source>
         <translation>1番括弧</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="841"/>
+        <location filename="../../mscore/menus.cpp" line="858"/>
         <source>Seconda volta</source>
         <translation>2番括弧</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="851"/>
+        <location filename="../../mscore/menus.cpp" line="868"/>
         <source>Terza volta</source>
         <translation>3番括弧</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="861"/>
+        <location filename="../../mscore/menus.cpp" line="878"/>
         <source>Seconda volta 2</source>
         <translation>2番括弧 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="866"/>
+        <location filename="../../mscore/menus.cpp" line="883"/>
         <source>8va</source>
         <translation>オッターヴァ</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="872"/>
+        <location filename="../../mscore/menus.cpp" line="889"/>
         <source>8vb</source>
         <translation>オッターヴァ・バッサ</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="878"/>
+        <location filename="../../mscore/menus.cpp" line="895"/>
         <source>15ma</source>
         <translation>クィンディチェージマ</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="884"/>
+        <location filename="../../mscore/menus.cpp" line="901"/>
         <source>15mb</source>
         <translation>クィンディチェージマ・バッサ</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="889"/>
+        <location filename="../../mscore/menus.cpp" line="906"/>
         <source>22ma</source>
         <translation>22ma</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="894"/>
+        <location filename="../../mscore/menus.cpp" line="911"/>
         <source>22mb</source>
         <translation>22mb</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="904"/>
-        <location filename="../../mscore/menus.cpp" line="915"/>
-        <location filename="../../mscore/menus.cpp" line="922"/>
-        <location filename="../../mscore/menus.cpp" line="929"/>
-        <location filename="../../mscore/menus.cpp" line="937"/>
-        <location filename="../../mscore/menus.cpp" line="944"/>
+        <location filename="../../mscore/menus.cpp" line="921"/>
+        <location filename="../../mscore/menus.cpp" line="932"/>
+        <location filename="../../mscore/menus.cpp" line="939"/>
+        <location filename="../../mscore/menus.cpp" line="946"/>
+        <location filename="../../mscore/menus.cpp" line="954"/>
+        <location filename="../../mscore/menus.cpp" line="961"/>
         <source>Pedal</source>
         <translation>ペダル</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="958"/>
+        <location filename="../../mscore/menus.cpp" line="975"/>
         <source>Text line</source>
         <translation>テキストライン</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="963"/>
+        <location filename="../../mscore/menus.cpp" line="980"/>
         <source>Line</source>
         <translation>線</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="966"/>
+        <location filename="../../mscore/menus.cpp" line="983"/>
         <source>Ambitus</source>
         <translation>音域</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1004"/>
+        <location filename="../../mscore/menus.cpp" line="1021"/>
         <source>Tempo</source>
         <translation>テンポ</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1038"/>
+        <location filename="../../mscore/menus.cpp" line="1055"/>
         <source>Text</source>
         <translation>テキスト</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1099"/>
+        <location filename="../../mscore/menus.cpp" line="1116"/>
         <source>Time Signatures</source>
         <translation>拍子記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1147"/>
+        <location filename="../../mscore/menus.cpp" line="1164"/>
         <source>Staff Changes</source>
         <translation>譜表の変更</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1179"/>
+        <location filename="../../mscore/menus.cpp" line="1196"/>
         <source>Fretboard Diagrams</source>
         <translation>フレットボードダイアグラム</translation>
     </message>
@@ -11899,8 +12281,8 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/palette.cpp" line="1278"/>
-        <source>MuseScore: Writing Palette File</source>
-        <translation>MuseScore: パレットファイルを書き込み中</translation>
+        <source>Writing Palette File</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -11956,8 +12338,8 @@ failed: </source>
     <name>PaletteProperties</name>
     <message>
         <location filename="../../mscore/palette.ui" line="14"/>
-        <source>MuseScore: Palette Properties</source>
-        <translation>MuseScore: パレットのプロパティ</translation>
+        <source>Palette Properties</source>
+        <translation>パレットのプロパティ</translation>
     </message>
     <message>
         <location filename="../../mscore/palette.ui" line="22"/>
@@ -12139,74 +12521,11 @@ failed: </source>
     </message>
 </context>
 <context>
-    <name>PianorollEditor</name>
-    <message>
-        <location filename="../../mscore/pianoroll.cpp" line="52"/>
-        <source>Toolbar 1</source>
-        <translation>ツールバー 1</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/pianoroll.cpp" line="74"/>
-        <source>Wave</source>
-        <translation>波形</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/pianoroll.cpp" line="75"/>
-        <source>Show wave display</source>
-        <translation>波形画面を表示</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/pianoroll.cpp" line="82"/>
-        <source>Toolbar 2</source>
-        <translation>ツールバー 2</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/pianoroll.cpp" line="95"/>
-        <source>Cursor:</source>
-        <translation>カーソル:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/pianoroll.cpp" line="105"/>
-        <source>Velocity:</source>
-        <translation>ベロシティ:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/pianoroll.cpp" line="107"/>
-        <source>Offset</source>
-        <translation>オフセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/pianoroll.cpp" line="108"/>
-        <source>User</source>
-        <translation>ユーザ設定</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/pianoroll.cpp" line="117"/>
-        <source>Pitch:</source>
-        <translation>音高:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/pianoroll.cpp" line="122"/>
-        <source>OnTime:</source>
-        <translation>オンタイム:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/pianoroll.cpp" line="126"/>
-        <source>Len:</source>
-        <translation>音価:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/pianoroll.cpp" line="252"/>
-        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
-        <translation>MuseScore: &lt;%1&gt; 譜表: %2</translation>
-    </message>
-</context>
-<context>
     <name>PlayPanelBase</name>
     <message>
         <location filename="../../mscore/playpanel.ui" line="23"/>
-        <source>MuseScore: Play Panel</source>
-        <translation>MuseScore: 再生パネル</translation>
+        <source>Play Panel</source>
+        <translation>再生パネル</translation>
     </message>
     <message>
         <location filename="../../mscore/playpanel.ui" line="79"/>
@@ -12214,19 +12533,9 @@ failed: </source>
         <translation>小節.拍</translation>
     </message>
     <message>
-        <location filename="../../mscore/playpanel.ui" line="85"/>
-        <source>001.01</source>
-        <translation>001.01</translation>
-    </message>
-    <message>
         <location filename="../../mscore/playpanel.ui" line="119"/>
         <source>h:mm:s</source>
         <translation>時間:分:秒</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/playpanel.ui" line="125"/>
-        <source>0:00:00</source>
-        <translation>0:00:00</translation>
     </message>
     <message>
         <location filename="../../mscore/playpanel.ui" line="155"/>
@@ -12267,13 +12576,8 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/playpanel.ui" line="892"/>
-        <source>Actual tempo</source>
-        <translation>現在のテンポ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/playpanel.ui" line="907"/>
-        <source>120BPM</source>
-        <translation>120BPM</translation>
+        <source>Actual tempo in quarter notes per minute</source>
+        <translation>一分間における四分音符の実際のテンポ</translation>
     </message>
     <message>
         <location filename="../../mscore/playpanel.ui" line="929"/>
@@ -12321,13 +12625,13 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.ui" line="127"/>
-        <source>Open</source>
-        <translation>開く</translation>
+        <source>Open...</source>
+        <translation>開く...</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.ui" line="135"/>
-        <source>Save</source>
-        <translation>保存</translation>
+        <source>Save As...</source>
+        <translation>名前を付けて保存...</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.ui" line="143"/>
@@ -12402,10 +12706,6 @@ failed: </source>
     <name>PrefsDialogBase</name>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="20"/>
-        <source>MuseScore: Preferences</source>
-        <translation>MuseScore: 環境設定</translation>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="23"/>
         <source>MuseScore Preferences</source>
         <translation>MuseScore環境設定</translation>
@@ -12453,7 +12753,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="158"/>
-        <source>Update translations</source>
+        <source>Update Translations</source>
         <translation>翻訳の更新</translation>
     </message>
     <message>
@@ -12494,1472 +12794,1469 @@ failed: </source>
         <translation>開始スコアを選択するためのファイルダイアログを開きます</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="233"/>
-        <location filename="../../mscore/prefsdialog.ui" line="236"/>
+        <location filename="../../mscore/prefsdialog.ui" line="237"/>
+        <location filename="../../mscore/prefsdialog.ui" line="240"/>
         <source>Show splash screen</source>
         <translation>スプラッシュを表示する</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="243"/>
+        <location filename="../../mscore/prefsdialog.ui" line="247"/>
         <source>Show start center</source>
         <translation>スタートセンターを表示する</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="250"/>
-        <location filename="../../mscore/prefsdialog.ui" line="253"/>
+        <location filename="../../mscore/prefsdialog.ui" line="254"/>
+        <location filename="../../mscore/prefsdialog.ui" line="257"/>
         <source>Continue last session</source>
         <translation>最後のセッションを継続</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="263"/>
-        <location filename="../../mscore/prefsdialog.ui" line="266"/>
+        <location filename="../../mscore/prefsdialog.ui" line="267"/>
+        <location filename="../../mscore/prefsdialog.ui" line="270"/>
         <source>Start with new score</source>
         <translation>新しいスコアで開始</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="273"/>
-        <location filename="../../mscore/prefsdialog.ui" line="276"/>
+        <location filename="../../mscore/prefsdialog.ui" line="277"/>
+        <location filename="../../mscore/prefsdialog.ui" line="280"/>
         <source>Show play panel</source>
         <translation>再生パネルを表示する</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="283"/>
-        <location filename="../../mscore/prefsdialog.ui" line="286"/>
+        <location filename="../../mscore/prefsdialog.ui" line="287"/>
+        <location filename="../../mscore/prefsdialog.ui" line="290"/>
         <source>Show navigator</source>
         <translation>ナビゲータを表示する</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="296"/>
+        <location filename="../../mscore/prefsdialog.ui" line="300"/>
         <source>Folders</source>
         <translation>フォルダ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="323"/>
+        <location filename="../../mscore/prefsdialog.ui" line="327"/>
         <source>Score folder</source>
         <translation>スコア フォルダ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="326"/>
+        <location filename="../../mscore/prefsdialog.ui" line="330"/>
         <source>Insert path to score folder.</source>
         <translation>スコア フォルダのパスを挿入。</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="333"/>
+        <location filename="../../mscore/prefsdialog.ui" line="337"/>
         <source>Images:</source>
         <translation>イメージ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="346"/>
+        <location filename="../../mscore/prefsdialog.ui" line="350"/>
         <source>Scores:</source>
         <translation>スコア:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="359"/>
+        <location filename="../../mscore/prefsdialog.ui" line="363"/>
         <source>Styles:</source>
         <translation>スタイル:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="372"/>
+        <location filename="../../mscore/prefsdialog.ui" line="376"/>
         <source>Style folder</source>
         <translation>スタイルのフォルダ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="375"/>
+        <location filename="../../mscore/prefsdialog.ui" line="379"/>
         <source>Insert path for style folder</source>
         <translation>スタイルフォルダのパスを挿入</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="382"/>
+        <location filename="../../mscore/prefsdialog.ui" line="386"/>
         <source>Templates:</source>
         <translation>テンプレート:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="398"/>
+        <location filename="../../mscore/prefsdialog.ui" line="402"/>
         <source>Choose score folder</source>
         <translation>スコア フォルダを選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="401"/>
+        <location filename="../../mscore/prefsdialog.ui" line="405"/>
         <source>Opens a folder dialog for selecting the score folder</source>
         <translation>スコアフォルダを選択するためのダイアログを開く</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="414"/>
+        <location filename="../../mscore/prefsdialog.ui" line="422"/>
         <source>Choose style folder</source>
         <translation>スタイル フォルダの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="417"/>
+        <location filename="../../mscore/prefsdialog.ui" line="425"/>
         <source>Opens a folder dialog for selecting the style folder</source>
         <translation>スタイル フォルダを選択するためのダイアログを開く</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="427"/>
+        <location filename="../../mscore/prefsdialog.ui" line="439"/>
         <source>Plugins:</source>
         <translation>プラグイン:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="440"/>
+        <location filename="../../mscore/prefsdialog.ui" line="452"/>
         <source>Template folder</source>
         <translation>テンプレート フォルダ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="443"/>
+        <location filename="../../mscore/prefsdialog.ui" line="455"/>
         <source>Insert path to Template folder</source>
         <translation>テンプレート フォルダのパスを挿入</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="450"/>
+        <location filename="../../mscore/prefsdialog.ui" line="462"/>
         <source>Plugin folder</source>
         <translation>プラグイン フォルダ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="453"/>
+        <location filename="../../mscore/prefsdialog.ui" line="465"/>
         <source>Insert path to plugin folder</source>
         <translation>プラグインフォルダのパスを挿入</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="460"/>
-        <location filename="../../mscore/prefsdialog.ui" line="544"/>
+        <location filename="../../mscore/prefsdialog.ui" line="472"/>
+        <location filename="../../mscore/prefsdialog.ui" line="568"/>
         <source>SoundFont folders</source>
         <translation>SoundFont フォルダ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="463"/>
+        <location filename="../../mscore/prefsdialog.ui" line="475"/>
         <source>Insert path to SoundFont folders</source>
         <translation>SoundFont フォルダのパスを挿入</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="473"/>
+        <location filename="../../mscore/prefsdialog.ui" line="485"/>
         <source>Choose plugin folder</source>
         <translation>プラグイン フォルダを選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="476"/>
+        <location filename="../../mscore/prefsdialog.ui" line="488"/>
         <source>Opens a folder dialog for selecting the plugin folder</source>
         <translation>プラグイン フォルダを選択するためのダイアログを開く</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="486"/>
+        <location filename="../../mscore/prefsdialog.ui" line="502"/>
         <source>SoundFonts:</source>
         <translation>SoundFonts:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="499"/>
-        <location filename="../../mscore/prefsdialog.ui" line="528"/>
+        <location filename="../../mscore/prefsdialog.ui" line="515"/>
+        <location filename="../../mscore/prefsdialog.ui" line="548"/>
         <source>Image folder</source>
         <translation>画像フォルダ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="502"/>
+        <location filename="../../mscore/prefsdialog.ui" line="518"/>
         <source>Insert path to image folder</source>
         <translation>画像フォルダのパスを挿入</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="512"/>
+        <location filename="../../mscore/prefsdialog.ui" line="528"/>
         <source>Choose template folder</source>
         <translation>テンプレート フォルダを選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="515"/>
+        <location filename="../../mscore/prefsdialog.ui" line="531"/>
         <source>Opens a folder dialog for selecting the template folder</source>
         <translation>テンプレート フォルダを選択するためのダイアログを開く</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="531"/>
+        <location filename="../../mscore/prefsdialog.ui" line="551"/>
         <source>Opens a folder dialog for selecting the image folder</source>
         <translation>画像フォルダを選択するためのダイアログを開く</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="547"/>
+        <location filename="../../mscore/prefsdialog.ui" line="571"/>
         <source>Opens a dialog for configuring the SoundFont folders</source>
         <translation>SoundFont フォルダの選択ダイアログを開く</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="560"/>
-        <location filename="../../mscore/prefsdialog.ui" line="563"/>
+        <location filename="../../mscore/prefsdialog.ui" line="588"/>
+        <location filename="../../mscore/prefsdialog.ui" line="591"/>
         <source>Auto Save</source>
         <translation>自動保存</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="590"/>
+        <location filename="../../mscore/prefsdialog.ui" line="618"/>
         <source>Save every:</source>
         <translation>保存間隔:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="597"/>
+        <location filename="../../mscore/prefsdialog.ui" line="625"/>
         <source>Select delay (in minutes) between auto saves</source>
         <translation>自動保存間隔の選択(分単位)</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="610"/>
-        <source>minutes</source>
-        <translation>分おき</translation>
+        <location filename="../../mscore/prefsdialog.ui" line="628"/>
+        <source>min</source>
+        <extracomment>minutes</extracomment>
+        <translation>分</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="633"/>
+        <location filename="../../mscore/prefsdialog.ui" line="657"/>
         <source>OSC remote control</source>
         <translation>OSCリモートコントロール</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="636"/>
+        <location filename="../../mscore/prefsdialog.ui" line="660"/>
         <source>OSC Remote Control</source>
         <translation>OSCリモートコントロール</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="651"/>
+        <location filename="../../mscore/prefsdialog.ui" line="675"/>
         <source>Port number:</source>
         <extracomment>The UDP port number on which the MuseScore OSC server will listen on</extracomment>
         <translation>ポート番号:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="661"/>
+        <location filename="../../mscore/prefsdialog.ui" line="685"/>
         <source>Port number</source>
         <translation>ポート番号</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="693"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2162"/>
-        <source>Style</source>
-        <translation>スタイル</translation>
+        <location filename="../../mscore/prefsdialog.ui" line="717"/>
+        <source>Theme</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="699"/>
+        <location filename="../../mscore/prefsdialog.ui" line="725"/>
         <source>Select style</source>
         <translation>スタイルの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="703"/>
+        <location filename="../../mscore/prefsdialog.ui" line="729"/>
         <source>Dark</source>
         <translation>ダーク</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="708"/>
+        <location filename="../../mscore/prefsdialog.ui" line="734"/>
         <source>Light</source>
         <translation>ライト</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="716"/>
-        <source>Icon Height</source>
-        <translation>アイコンの高さ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="729"/>
-        <source>Icon size:</source>
-        <translation>アイコンサイズ:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="736"/>
-        <source>Icon Width</source>
-        <translation>アイコンの幅</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="749"/>
-        <location filename="../../mscore/prefsdialog.ui" line="752"/>
+        <location filename="../../mscore/prefsdialog.ui" line="742"/>
+        <location filename="../../mscore/prefsdialog.ui" line="745"/>
         <source>Animations</source>
         <translation>アニメーション</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="763"/>
+        <location filename="../../mscore/prefsdialog.ui" line="756"/>
+        <source>Icon width:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="769"/>
+        <source>Icon Width</source>
+        <translation>アイコンの幅</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="772"/>
+        <location filename="../../mscore/prefsdialog.ui" line="801"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1179"/>
+        <source>px</source>
+        <extracomment>pixel</extracomment>
+        <translation>ピクセル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="785"/>
+        <source>Icon height:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="798"/>
+        <source>Icon Height</source>
+        <translation>アイコンの高さ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="820"/>
         <source>Canvas Tab</source>
         <translation>キャンバスタブ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="766"/>
+        <location filename="../../mscore/prefsdialog.ui" line="823"/>
         <source>Canvas</source>
         <translation>キャンバス</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="787"/>
-        <location filename="../../mscore/prefsdialog.ui" line="790"/>
+        <location filename="../../mscore/prefsdialog.ui" line="844"/>
+        <location filename="../../mscore/prefsdialog.ui" line="847"/>
         <source>Background</source>
         <translation>背景</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="814"/>
+        <location filename="../../mscore/prefsdialog.ui" line="871"/>
         <source>Background Color</source>
         <translation>背景色</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="817"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1005"/>
-        <source>Color</source>
-        <translation>色</translation>
+        <location filename="../../mscore/prefsdialog.ui" line="874"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1070"/>
+        <source>Color:</source>
+        <translation>色:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="841"/>
+        <location filename="../../mscore/prefsdialog.ui" line="898"/>
         <source>Background Wallpaper</source>
         <translation>背景画像</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="844"/>
-        <location filename="../../mscore/prefsdialog.ui" line="961"/>
-        <source>Wallpaper</source>
+        <location filename="../../mscore/prefsdialog.ui" line="901"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1022"/>
+        <source>Wallpaper:</source>
         <translation>壁紙</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="870"/>
+        <location filename="../../mscore/prefsdialog.ui" line="927"/>
         <source>Choose Background wallpaper file</source>
         <translation>背景画像を選択してください</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="873"/>
-        <location filename="../../mscore/prefsdialog.ui" line="990"/>
+        <location filename="../../mscore/prefsdialog.ui" line="930"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1051"/>
         <source>Opens a file dialog for selecting the wallpaper file</source>
         <translation>背景画像フォルダを選択するためのダイアログを開く</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="885"/>
+        <location filename="../../mscore/prefsdialog.ui" line="946"/>
         <source>Background wallpaper path</source>
         <translation>背景画像のパス</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="888"/>
+        <location filename="../../mscore/prefsdialog.ui" line="949"/>
         <source>Insert path to background wallpaper file</source>
         <translation>背景フォルダのパスを挿入</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="898"/>
+        <location filename="../../mscore/prefsdialog.ui" line="959"/>
         <source>Select background color</source>
         <translation>背景色の選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="901"/>
+        <location filename="../../mscore/prefsdialog.ui" line="962"/>
         <source>Opens a dialog for selecting the background color</source>
         <translation>背景色を選択するためのダイアログを開く</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="914"/>
-        <location filename="../../mscore/prefsdialog.ui" line="917"/>
+        <location filename="../../mscore/prefsdialog.ui" line="975"/>
+        <location filename="../../mscore/prefsdialog.ui" line="978"/>
         <source>Paper</source>
         <translation>用紙</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="958"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1019"/>
         <source>Paper Wallpaper</source>
         <translation>壁紙</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="987"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1048"/>
         <source>Choose paper wallpaper file</source>
         <translation>壁紙ファイルの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1002"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1067"/>
         <source>Paper Color</source>
         <translation>紙色</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1015"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1080"/>
         <source>Select paper color</source>
         <translation>紙色の選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1018"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1083"/>
         <source>Opens a dialog for selecting the paper color</source>
         <translation>紙色を選択するためのダイアログを開く</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1028"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1093"/>
         <source>Paper wallpaper path</source>
         <translation>壁紙のパス</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1031"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1096"/>
         <source>Insert path to paper wallpaper file</source>
         <translation>壁紙ファイルのパスを挿入</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1041"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1106"/>
         <source>Scroll pages</source>
         <translation>ページをスクロール</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1047"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1112"/>
         <source>Horizontally</source>
         <translation>水平に</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1057"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1122"/>
         <source>Vertically</source>
         <translation>垂直に</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1080"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1145"/>
         <source>Miscellaneous</source>
         <translation>その他</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1089"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1154"/>
         <source>Disable antialiased drawing</source>
         <translation>アンチエイリアス描画を無効にする</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1092"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1098"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1157"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1163"/>
         <source>Uncheck this to speed up drawing</source>
         <translation>描画速度を上げるにはこのチェックを外してください</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1095"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1101"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1160"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1166"/>
         <source>Draw antialiased</source>
         <translation>アンチエイリアス描画</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1111"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1137"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1176"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1205"/>
         <source>Proximity for selecting elements:</source>
         <translation>要素選択の検出範囲:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1148"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1216"/>
         <source>Note Input Tab</source>
         <translation>音符入力タブ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1151"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1157"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1219"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1225"/>
         <source>Note Input</source>
         <translation>音符入力モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1163"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1231"/>
         <source>Enable MIDI Input</source>
         <translation>MIDI Inputを有効にする</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1166"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1234"/>
         <source>Enable MIDI input</source>
         <translation>MIDI Inputを有効にする</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1176"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1179"/>
-        <source>Play notes when editing</source>
-        <translation>編集時に音を鳴らす</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1191"/>
-        <source>Default duration:</source>
-        <translation>既定の音価:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1198"/>
-        <source>Default duration</source>
-        <translation>既定の音価</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1201"/>
-        <source>ms</source>
-        <translation>ms</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1220"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1223"/>
-        <source>Play whole chord when adding note</source>
-        <translation>音符を追加するときに全体の和音を再生</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1246"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1249"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1241"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1244"/>
         <source>Color notes outside of usable pitch range</source>
         <translation>使用可能な音域外の音符に色をつける</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1272"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1251"/>
+        <source>Delay between notes in automatic Real-time mode:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1258"/>
+        <source>Delay between notes in automatic Real-time mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1261"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1324"/>
+        <source>ms</source>
+        <translation>ms</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1299"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1302"/>
+        <source>Play notes when editing</source>
+        <translation>編集時に音を鳴らす</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1314"/>
+        <source>Default duration:</source>
+        <translation>既定の音価:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1321"/>
+        <source>Default duration</source>
+        <translation>既定の音価</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1343"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1346"/>
+        <source>Play whole chord when adding note</source>
+        <translation>音符を追加するときに全体の和音を再生</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1369"/>
         <source>Enable MIDI remote control</source>
         <translation>MIDIリモートコントロールを有効にする</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1275"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1372"/>
         <source>MIDI remote control</source>
         <translation>MIDI リモートコントロール</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1278"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1375"/>
         <source>MIDI Remote Control</source>
         <translation>MIDI リモートコントロール</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1305"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1399"/>
         <source>Rewind</source>
         <translation>巻き戻し</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1318"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1360"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1746"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1762"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1820"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1412"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1464"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1986"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2007"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2080"/>
         <source>Is active</source>
         <translation>有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1321"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1415"/>
         <source>Rewind is active</source>
         <translation>巻き戻し有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1334"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1373"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1778"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1794"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1836"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1433"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1482"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2028"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2049"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2101"/>
         <source>Record</source>
         <translation>録音</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1337"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1436"/>
         <source>Rewind record</source>
         <translation>巻き戻し記録</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1347"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1451"/>
         <source>Toggle play</source>
         <translation>再生 切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1376"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1485"/>
         <source>Toggle play record</source>
         <translation>再生/録音 切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1399"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1513"/>
         <source>Whole note</source>
         <translation>全音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1409"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1523"/>
         <source>Half note</source>
         <translation>2分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1422"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1536"/>
         <source>Whole note is active</source>
         <translation>全音符有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1435"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1554"/>
         <source>Half note is active</source>
         <translation>2分音符有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1448"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1572"/>
         <source>Whole note record</source>
         <translation>全音符記録</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1461"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1590"/>
         <source>Half note record</source>
         <translation>2分音符記録</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1471"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1605"/>
         <source>Quarter note</source>
         <translation>4分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1481"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1615"/>
         <source>Eighth note</source>
         <translation>8分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1491"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1625"/>
         <source>Rest</source>
         <translation>休符</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1504"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1638"/>
         <source>Rest is active</source>
         <translation>休符有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1517"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1656"/>
         <source>Quarter note is active</source>
         <translation>4分音符有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1530"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1674"/>
         <source>Quarter note record</source>
         <translation>4分音符記録</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1543"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1692"/>
         <source>Eighth note is active</source>
         <translation>8分音符有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1556"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1710"/>
         <source>Eighth note record</source>
         <translation>8分音符記録</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1566"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1725"/>
         <source>Augmentation dot</source>
         <translation>付点</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1576"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1735"/>
         <source>Double augmentation dot</source>
         <translation>複付点</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1583"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1742"/>
         <source>Tie</source>
         <translation>タイ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1596"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1752"/>
+        <source>Real-time Advance</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1765"/>
         <source>Augmentation dot is active</source>
         <translation>付点有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1609"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1783"/>
         <source>Augmentation dot record</source>
         <translation>付点記録</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1622"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1801"/>
         <source>Double augmentation dot is active</source>
         <translation>複付点有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1635"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1819"/>
         <source>Double augmentation dot record</source>
         <translation>複付点記録</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1648"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1837"/>
         <source>Tie is active</source>
         <translation>タイ有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1661"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1855"/>
         <source>Tie record</source>
         <translation>タイ記録</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1674"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1873"/>
+        <source>Real-time Advance is active</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1891"/>
+        <source>Real-time Advance record</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1909"/>
         <source>Rest record</source>
         <translation>休符記録</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1723"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1963"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1733"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1973"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1749"/>
+        <location filename="../../mscore/prefsdialog.ui" line="1989"/>
         <source>Play is active</source>
         <translation>再生有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1765"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2010"/>
         <source>Stop is active</source>
         <translation>停止有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1781"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2031"/>
         <source>Play record</source>
         <translation>録音開始</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1797"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2052"/>
         <source>Stop record</source>
         <translation>録音停止</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1807"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2067"/>
         <source>Note input</source>
         <translation>音符入力</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1823"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2083"/>
         <source>Note input is active</source>
         <translation>音符入力有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1839"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2104"/>
         <source>Note input record</source>
         <translation>音符入力記録</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1849"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2119"/>
         <source>16th note</source>
         <translation>16分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1862"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2132"/>
         <source>16th note is active</source>
         <translation>16分音符有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1875"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2150"/>
         <source>16th note record</source>
         <translation>16分音符記録</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1888"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2168"/>
         <source>32nd note is active</source>
         <translation>32分音符有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1901"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2186"/>
         <source>32nd note record</source>
         <translation>32分音符記録</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1911"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2201"/>
         <source>32nd note</source>
         <translation>32分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1921"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2211"/>
         <source>64th note</source>
         <translation>64分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1934"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2224"/>
         <source>64th note is active</source>
         <translation>64分音符有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1947"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2242"/>
         <source>64th note record</source>
         <translation>64分音符記録</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1960"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2260"/>
         <source>Undo is active</source>
         <translation>取り消し有効</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1973"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2278"/>
         <source>Undo record</source>
         <translation>録音を取り消す</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1983"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2293"/>
         <source>Undo</source>
         <translation>元に戻す</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1993"/>
-        <location filename="../../mscore/prefsdialog.ui" line="1996"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3425"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3431"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2303"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2313"/>
+        <source>Advance on release?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2320"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2323"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3929"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3935"/>
         <source>Clear</source>
         <translation>クリア</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2007"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2347"/>
         <source>Score Tab</source>
         <translation>スコアタブ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2010"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2350"/>
         <source>Score</source>
         <translation>スコア</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2016"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2356"/>
         <source>View</source>
         <translation>表示</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2025"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2365"/>
         <source>Default scale for new score views</source>
         <translation>新しいスコアの標準倍率</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2028"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2368"/>
         <source>Default zoom</source>
         <translation>既定の倍率</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2031"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2371"/>
         <source>default scale for new score views</source>
         <translation>新しいスコアの既定倍率</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2056"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2396"/>
         <source>Default zoom:</source>
         <translation>既定の倍率:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2079"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2419"/>
         <source>Default Files</source>
         <translation>既定のファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2106"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2446"/>
         <source>Instrument list 2:</source>
         <translation>楽器リスト2:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2119"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2459"/>
         <source>Choose Instrument list 1</source>
         <translation>楽器リスト1の選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2122"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2240"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2462"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2592"/>
         <source>Opens a file dialog for selecting a instrument list file</source>
         <translation>楽器リストを選択するためのダイアログを開く</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2132"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2476"/>
         <source>Instrument list 1:</source>
         <translation>楽器リスト1:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2142"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2486"/>
         <source>Instrument list 1</source>
         <translation>楽器リスト1</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2145"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2227"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2579"/>
         <source>Insert path to a instrument list file</source>
         <translation>楽器リストファイルのパスを挿入</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2152"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2496"/>
         <source>Style:</source>
         <translation>スタイル:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2165"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2836"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2506"/>
+        <source>Style</source>
+        <translation>スタイル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2509"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3224"/>
         <source>Insert path to style file</source>
         <translation>スタイルファイルのパスを挿入</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2175"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2843"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2519"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3231"/>
         <source>Choose style</source>
         <translation>スタイルの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2178"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2846"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2522"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3234"/>
         <source>Opens a file dialog for selecting a style file</source>
         <translation>スタイルファイルを選択するためのダイアログを開く</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2188"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2536"/>
         <source>Style for part:</source>
         <translation>パートのスタイル:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2198"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2546"/>
         <source>Style for part</source>
         <translation>パートのスタイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2201"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2549"/>
         <source>Insert path to style file for part</source>
         <translation>パートスタイルファイルのパスを挿入</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2211"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2559"/>
         <source>Choose style for part</source>
         <translation>パートスタイルの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2214"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2562"/>
         <source>Opens a file dialog for selecting a style file for part</source>
         <translation>パートスタイルファイルを選択するためのダイアログを開く</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2224"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2576"/>
         <source>Instrument list 2</source>
         <translation>楽器リスト2</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2237"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2589"/>
         <source>Choose Instrument list 2</source>
         <translation>楽器リスト2の選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2267"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2623"/>
         <source>I/O Tab</source>
         <translation>I/O タブ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2270"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2772"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2626"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3160"/>
         <source>Attention: Any changes on this page require a restart of MuseScore.</source>
         <translation>注意:変更を反映するにはMuseScoreを再起動する必要があります。</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2273"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2629"/>
         <source>I/O</source>
         <translation>I/O</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2285"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2647"/>
         <source>PulseAudio</source>
         <translation>PulseAudio</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2304"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2666"/>
         <source>Port Audio</source>
         <translation>Port Audio</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2307"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2669"/>
         <source>PortAudio</source>
         <translation>PortAudio</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2332"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2694"/>
         <source>API:</source>
         <translation>API:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2348"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2710"/>
         <source>API</source>
         <translation>API</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2351"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2713"/>
         <source>Choose API</source>
         <translation>API選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2358"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2720"/>
         <source>MIDI Input:</source>
         <translation>MIDI Input:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2377"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2739"/>
         <source>MIDI Input</source>
         <translation>MIDI Input</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2380"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2742"/>
         <source>Choose MIDI Input</source>
         <translation>MIDI Inputの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2387"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2469"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2749"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2851"/>
         <source>Device:</source>
         <translation>デバイス:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2403"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2599"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2765"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2821"/>
         <source>Device</source>
         <translation>デバイス</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2406"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2768"/>
         <source>Choose device</source>
         <translation>デバイスの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2422"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2425"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2784"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2787"/>
         <source>ALSA audio</source>
         <translation>ALSA オーディオ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2440"/>
-        <source>Period Size:</source>
-        <translation>ピリオド サイズ:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2450"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2802"/>
         <source>Fragments</source>
         <translation>断片</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2453"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2805"/>
         <source>Choose number of fragments</source>
         <translation>断片の数を選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2476"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3172"/>
-        <source>Sample rate:</source>
-        <translation>サンプル レート:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2486"/>
-        <source>Period Size</source>
-        <translation>ピリオドサイズ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
-        <source>Choose period size</source>
-        <translation>ピリオドサイズの選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2493"/>
-        <source>4096</source>
-        <translation>4096</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2498"/>
-        <source>2048</source>
-        <translation>2048</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2503"/>
-        <source>1024</source>
-        <translation>1024</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2508"/>
-        <source>512</source>
-        <translation>512</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2513"/>
-        <source>256</source>
-        <translation>256</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2518"/>
-        <source>128</source>
-        <translation>128</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2523"/>
-        <source>64</source>
-        <translation>64</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2544"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2831"/>
         <source>Fragments:</source>
         <translation>断片:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2554"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3179"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2841"/>
+        <source>Period Size:</source>
+        <translation>ピリオド サイズ:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2858"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3764"/>
+        <source>Sample rate:</source>
+        <translation>サンプル レート:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2881"/>
+        <source>Period Size</source>
+        <translation>ピリオドサイズ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2884"/>
+        <source>Choose period size</source>
+        <translation>ピリオドサイズの選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2929"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3771"/>
         <source>Sample rate</source>
         <translation>サンプルレート</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2557"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3182"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2932"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3774"/>
         <source>Choose sample rate</source>
         <translation>サンプルレートの選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2561"/>
-        <source>192000</source>
-        <translation>192000</translation>
+        <location filename="../../mscore/prefsdialog.ui" line="2977"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3799"/>
+        <source>Hz</source>
+        <extracomment>Hertz</extracomment>
+        <translation>Hz</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2566"/>
-        <source>96000</source>
-        <translation>96000</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2571"/>
-        <source>88200</source>
-        <translation>88200</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2576"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3191"/>
-        <source>48000</source>
-        <translation>48000</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2581"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3186"/>
-        <source>44100</source>
-        <translation>44100</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2586"/>
-        <source>32000</source>
-        <translation>32000</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2591"/>
-        <source>22050</source>
-        <translation>22050</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2602"/>
-        <source>default</source>
-        <translation>既定値</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2618"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2621"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3006"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3009"/>
         <source>JACK audio server</source>
         <translation>JACK オーディオ サーバー</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2639"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2642"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3027"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3030"/>
         <source>Timebase Master</source>
         <translation>Timebase Master</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2655"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2658"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3043"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3046"/>
         <source>Use JACK Transport</source>
         <translation>JACK Transport を使用</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2665"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2668"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3053"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3056"/>
         <source>Use JACK Audio</source>
         <translation>JACK Audio を使用</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2684"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2687"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3072"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3075"/>
         <source>Remember last connection(s)</source>
         <translation>前回の接続を記憶</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2716"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2719"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3104"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3107"/>
         <source>Use JACK MIDI</source>
         <translation>JACK MIDI を使用</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2793"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3181"/>
         <source>Import Tab</source>
         <translation>インポートタブ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2796"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3184"/>
         <source>Import</source>
         <translation>インポート</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2802"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3190"/>
         <source>Style Used for Import</source>
         <translation>インポートに使用するスタイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2811"/>
-        <source>Build in style</source>
-        <translation>組み込みスタイル</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2814"/>
-        <source>Built in style</source>
+        <location filename="../../mscore/prefsdialog.ui" line="3199"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3202"/>
+        <source>Built-in style</source>
         <translation>組み込まれたスタイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2823"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2833"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3211"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3221"/>
         <source>Use style file</source>
         <translation>スタイルファイルを使う</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2826"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3214"/>
         <source>Use style file:</source>
         <translation>スタイルファイルを使う:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2849"/>
-        <source>Browse...</source>
-        <translation>ブラウズ...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2861"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3250"/>
         <source>Character Set Used When Importing Binary Files</source>
         <translation>バイナリファイルをインポートするときに使用する文字セット</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2872"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3261"/>
         <source>Overture import character set:</source>
         <translation>Overture インポートの文字セット:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2879"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3268"/>
         <source>Overture import character set</source>
         <translation>Overtureで作成されたファイルのインポートに使用する文字セット</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2882"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3271"/>
         <source>Choose Overture import character set</source>
         <translation>Overtureで作成されたファイルのインポートに使用する文字セットを選択します</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2889"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3278"/>
         <source>Guitar Pro import character set:</source>
         <translation>Guitar Pro インポートの文字セット:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2896"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3285"/>
         <source>Guitar Pro import character set</source>
         <translation>Guitar Proで作成されたファイルのインポートに使用する文字セット</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2899"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3288"/>
         <source>Choose Guitar Pro import character set</source>
         <translation>Guitar Proで作成されたファイルのインポートに使用する文字セットを選択します</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2917"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2920"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3221"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3224"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3306"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3309"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3561"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3564"/>
         <source>MusicXML</source>
         <translation>MusicXML</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2929"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2932"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3318"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3321"/>
         <source>Import layout</source>
         <translation>レイアウトのインポート</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2939"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2942"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3328"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3331"/>
         <source>Import system and page breaks</source>
         <translation>折り返しとページ区切りのインポート</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2958"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2961"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3131"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3134"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3347"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3350"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3523"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3526"/>
         <source>MIDI</source>
         <translation>MIDI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2967"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3356"/>
         <source>Shortest note:</source>
         <translation>最短音符:</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2974"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3363"/>
         <source>Shortest note</source>
         <translation>最短音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2977"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3366"/>
         <source>Choose the shortest note value</source>
         <translation>最短音価の選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2984"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3373"/>
         <source>Quarter</source>
         <translation>4分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2989"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3378"/>
         <source>Eighth</source>
         <translation>8分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2994"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3383"/>
         <source>16th</source>
         <translation>16分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2999"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3388"/>
         <source>32nd</source>
         <translation>32分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3004"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3393"/>
         <source>64th</source>
         <translation>64分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3042"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3431"/>
         <source>Export Tab</source>
         <translation>エクスポートタブ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3045"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3434"/>
         <source>Export</source>
         <translation>エクスポート</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3064"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3453"/>
         <source>PNG/SVG</source>
         <translation>PNG/SVG</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3073"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3290"/>
-        <source>Resolution DPI:</source>
-        <translation>解像度 dpi:</translation>
+        <location filename="../../mscore/prefsdialog.ui" line="3462"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3630"/>
+        <source>Resolution:</source>
+        <translation>解像度</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3080"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3083"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3469"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3472"/>
         <source>Transparent background</source>
         <translation>背景の透過</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3103"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3297"/>
-        <source>Resolution DPI</source>
-        <translation>解像度(dpi)</translation>
+        <location filename="../../mscore/prefsdialog.ui" line="3492"/>
+        <source>Resolution</source>
+        <translation>解像度</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3106"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3300"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3495"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3640"/>
         <source>Choose resolution DPI</source>
         <translation>解像度(dpi)の選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3143"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3146"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3498"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3643"/>
+        <source>dpi</source>
+        <extracomment>dots per inch</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="3535"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3538"/>
         <source>Expand repeats</source>
         <translation>反復を展開する</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3153"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3545"/>
         <source>Export RPNs</source>
         <translation>RPNのエクスポート</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3163"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3166"/>
-        <source>Audio</source>
-        <translation>オーディオ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3233"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3236"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3573"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3576"/>
         <source>Export layout</source>
         <translation>レイアウトのエクスポート</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3245"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3248"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3585"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3588"/>
         <source>Export all system and page breaks</source>
         <translation>折り返しとページ区切りをすべてエクスポート</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3255"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3258"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3595"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3598"/>
         <source>Export manually added system and page breaks only</source>
         <translation>手動で追加した折り返しとページ区切りのみエクスポート</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3265"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3268"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3605"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3608"/>
         <source>Do not export system or page breaks</source>
         <translation>折り返しやページ区切りをエクスポートしない</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3284"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3624"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3333"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3637"/>
+        <source>Resolution DPI</source>
+        <translation>解像度(dpi)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="3675"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3678"/>
+        <source>Audio</source>
+        <translation>オーディオ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="3684"/>
+        <source>128</source>
+        <translation>128</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="3806"/>
+        <source>kbps</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="3826"/>
+        <source>MP3 bitrate:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="3837"/>
         <source>Shortcuts Tab</source>
         <translation>ショートカッキータブ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3336"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3840"/>
         <source>Shortcuts</source>
         <translation>ショートカットキー</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3357"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3861"/>
         <source>Shortcuts table</source>
         <translation>ショートカットキーテーブル</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3360"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3864"/>
         <source>Here you can configure shortcuts for actions</source>
         <translation>ここでアクションのためのショートカットキーを設定できます</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3382"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3886"/>
         <source>Action</source>
         <translation>アクション</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3387"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3891"/>
         <source>Shortcut</source>
         <translation>ショートカットキー</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3412"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3916"/>
         <source>Reset Shortcut to default</source>
         <translation>ショートカットキーを標準設定にリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3415"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3919"/>
         <source>Resets the shortcuts to their default assignment</source>
         <translation>ショートカットキーを初期状態にリセットします</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3418"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3922"/>
         <source>Reset Shortcut to Default</source>
         <translation>ショートカットキーを標準にリセット</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3428"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3932"/>
         <source>Clears the shortcut assignment for the selected action</source>
         <translation>選択したアクションのショートカットキーの割当てをクリア</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3438"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3942"/>
         <source>Define</source>
         <translation>定義</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3441"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3945"/>
         <source>Opens a dialog for defining a new shortcut for the selected action</source>
         <translation>選択したアクションの新しいショートカットキーを定義</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3444"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3948"/>
         <source>Define...</source>
         <translation>定義...</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3457"/>
-        <source>Filter</source>
-        <translation>フィルタ</translation>
+        <location filename="../../mscore/prefsdialog.ui" line="3961"/>
+        <source>Search</source>
+        <translation>検索</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3477"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3483"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3981"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3987"/>
         <source>Print</source>
         <translation>印刷</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3480"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3984"/>
         <source>Print the shortcuts list</source>
         <translation>ショートカットキーリストの印刷</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3493"/>
+        <location filename="../../mscore/prefsdialog.ui" line="3997"/>
         <source>Update Tab</source>
         <translation>アップデートタブ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3496"/>
+        <location filename="../../mscore/prefsdialog.ui" line="4000"/>
         <source>Update</source>
         <translation>アップデート</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3502"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3505"/>
+        <location filename="../../mscore/prefsdialog.ui" line="4006"/>
+        <location filename="../../mscore/prefsdialog.ui" line="4009"/>
         <source>Automatic Update Check</source>
         <translation>自動アップデートチェック</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3544"/>
+        <location filename="../../mscore/prefsdialog.ui" line="4048"/>
         <source>Check for new version of MuseScore</source>
         <translation>新バージョンのチェック</translation>
     </message>
@@ -13967,17 +14264,17 @@ failed: </source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2494"/>
+        <location filename="../../libmscore/edit.cpp" line="2714"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
-        <location filename="../../libmscore/utils.cpp" line="433"/>
-        <location filename="../../libmscore/utils.cpp" line="443"/>
-        <location filename="../../libmscore/utils.cpp" line="453"/>
-        <location filename="../../libmscore/utils.cpp" line="462"/>
+        <location filename="../../libmscore/utils.cpp" line="458"/>
+        <location filename="../../libmscore/utils.cpp" line="468"/>
+        <location filename="../../libmscore/utils.cpp" line="478"/>
+        <location filename="../../libmscore/utils.cpp" line="487"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2495"/>
+        <location filename="../../libmscore/edit.cpp" line="2715"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -13990,12 +14287,12 @@ Please select a single note or lyrics and retry operation
         <source>No note or figured bass selected:
 Please select a single note or figured bass and retry.
 </source>
-        <translation>音符または数字付低音が選択されていません: 
+        <translation>音符または通奏低音が選択されていません: 
 ひとつの音符か数字付低音を選択してからもう一度実行してください。 
 </translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="434"/>
+        <location filename="../../libmscore/utils.cpp" line="459"/>
         <source>No note selected:
 Please select a single note and retry operation
 </source>
@@ -14004,7 +14301,7 @@ Please select a single note and retry operation
 </translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="444"/>
+        <location filename="../../libmscore/utils.cpp" line="469"/>
         <source>No note or rest selected:
 Please select a single note or rest and retry operation
 </source>
@@ -14013,7 +14310,7 @@ Please select a single note or rest and retry operation
 </translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="454"/>
+        <location filename="../../libmscore/utils.cpp" line="479"/>
         <source>Please select a single note or slur and retry operation
 </source>
         <translation>ひとつの音符かスラーを選択してからもう一度実行してください。
@@ -14021,7 +14318,7 @@ Please select a single note or rest and retry operation
  </translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="463"/>
+        <location filename="../../libmscore/utils.cpp" line="488"/>
         <source>Please select one or more staves and retry operation
 </source>
         <translation>ひとつ以上の譜表を選択してからもう一度実行してください。
@@ -14054,87 +14351,87 @@ failed: %2</source>
         <translation>コード定義の書き込みに失敗:%1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="521"/>
+        <location filename="../../libmscore/durationtype.cpp" line="773"/>
         <source>Custom</source>
         <translation>ユーザー定義</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="523"/>
+        <location filename="../../libmscore/durationtype.cpp" line="775"/>
         <source>Longa</source>
         <translation>四倍全音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="524"/>
+        <location filename="../../libmscore/durationtype.cpp" line="776"/>
         <source>Breve</source>
         <translation>倍全音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="525"/>
+        <location filename="../../libmscore/durationtype.cpp" line="777"/>
         <source>Whole</source>
         <translation>全音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="526"/>
+        <location filename="../../libmscore/durationtype.cpp" line="778"/>
         <source>Half</source>
         <translation>2分音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="527"/>
+        <location filename="../../libmscore/durationtype.cpp" line="779"/>
         <source>Quarter</source>
         <translation>4分音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="528"/>
+        <location filename="../../libmscore/durationtype.cpp" line="780"/>
         <source>Eighth</source>
         <translation>8分音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="529"/>
+        <location filename="../../libmscore/durationtype.cpp" line="781"/>
         <source>16th</source>
         <translation>16分音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="530"/>
+        <location filename="../../libmscore/durationtype.cpp" line="782"/>
         <source>32nd</source>
         <translation>32分音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="531"/>
+        <location filename="../../libmscore/durationtype.cpp" line="783"/>
         <source>64th</source>
         <translation>64分音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="532"/>
+        <location filename="../../libmscore/durationtype.cpp" line="784"/>
         <source>128th</source>
         <translation>128分音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="533"/>
+        <location filename="../../libmscore/durationtype.cpp" line="785"/>
         <source>256th</source>
         <translation>256分音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="534"/>
+        <location filename="../../libmscore/durationtype.cpp" line="786"/>
         <source>512th</source>
         <translation>512分音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="535"/>
+        <location filename="../../libmscore/durationtype.cpp" line="787"/>
         <source>1024th</source>
         <translation>1024分音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="536"/>
+        <location filename="../../libmscore/durationtype.cpp" line="788"/>
         <source>Zero</source>
         <translation>ゼロ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="537"/>
+        <location filename="../../libmscore/durationtype.cpp" line="789"/>
         <source>Measure</source>
         <translation>小節</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="538"/>
+        <location filename="../../libmscore/durationtype.cpp" line="790"/>
         <source>Invalid</source>
         <translation>無効</translation>
     </message>
@@ -14159,7 +14456,7 @@ failed: %2</source>
         <translation>ダブルシャープ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="899"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1199"/>
         <source>Cannot open tablature font description:
 %1
 %2</source>
@@ -14168,133 +14465,139 @@ failed: %2</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1046"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1346"/>
         <source>Standard</source>
         <translation>標準</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1047"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1347"/>
         <source>Perc. 1 line</source>
         <translation>パーカッション　1線譜</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1048"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1348"/>
         <source>Perc. 3 lines</source>
         <translation>パーカッション　3線譜</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1049"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1349"/>
         <source>Perc. 5 lines</source>
         <translation>パーカッション　5線譜</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1051"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1351"/>
         <source>Tab. 6-str. simple</source>
         <translation>タブ譜 6弦 簡易</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1052"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1352"/>
         <source>Tab. 6-str. common</source>
-        <translation>タブ譜 6弦 一般</translation>
+        <translation>タブ譜 6弦 共通</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1053"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1353"/>
         <source>Tab. 6-str. full</source>
-        <translation>TAB譜 6弦 完全</translation>
+        <translation>タブ譜 6弦 完全</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1054"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1354"/>
         <source>Tab. 4-str. simple</source>
-        <translation>TAB譜 4弦 簡易</translation>
+        <translation>タブ譜 4弦 簡易</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1055"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1355"/>
         <source>Tab. 4-str. common</source>
-        <translation>TAB譜 4弦 一般</translation>
+        <translation>タブ譜 4弦 共通</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1056"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1356"/>
         <source>Tab. 4-str. full</source>
-        <translation>TAB譜 4弦 完全</translation>
+        <translation>タブ譜 4弦 完全</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1057"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1357"/>
         <source>Tab. 5-str. simple</source>
-        <translation>TAB譜 5弦 簡易</translation>
+        <translation>タブ譜 5弦 簡易</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1058"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1358"/>
         <source>Tab. 5-str. common</source>
-        <translation>TAB譜 5弦 一般</translation>
+        <translation>タブ譜 5弦 共通</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1059"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1359"/>
         <source>Tab. 5-str. full</source>
-        <translation>TAB譜 5弦 完全</translation>
+        <translation>タブ譜 5弦 完全</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1060"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1360"/>
         <source>Tab. ukulele</source>
-        <translation>TAB譜 ウクレレ</translation>
+        <translation>タブ譜 ウクレレ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1061"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1361"/>
         <source>Tab. balalaika</source>
-        <translation>TAB譜 バラライカ</translation>
+        <translation>タブ譜 バラライカ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1062"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1362"/>
         <source>Tab. 6-str. Italian</source>
-        <translation>TAB譜 6弦 イタリア語</translation>
+        <translation>タブ譜 6弦 イタリア語</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="1063"/>
+        <location filename="../../libmscore/stafftype.cpp" line="1363"/>
         <source>Tab. 6-str. French</source>
-        <translation>TAB譜 6弦 フランス語</translation>
+        <translation>タブ譜 6弦 フランス語</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="163"/>
+        <location filename="../../mscore/file.cpp" line="166"/>
         <source>Cannot read file %1:
 </source>
         <translation>ファイルを読み込めません %1:
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="170"/>
+        <location filename="../../mscore/file.cpp" line="173"/>
         <source>bad format</source>
         <translation>不正なフォーマット</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="174"/>
+        <location filename="../../mscore/file.cpp" line="177"/>
         <source>unknown type</source>
-        <translation>未知タイプ</translation>
+        <translation>サポートされていないタイプ</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="179"/>
-        <source>It was last saved with version 0.9.5 or older.&lt;br&gt;You can convert this score by opening and then saving with MuseScore version 1.x&lt;/a&gt;</source>
-        <translation>このスコアはMuseScore 0.9.5またはそれ以前のバージョンで保存されています。&lt;br&gt;変換するにはMuseScore 1.xでファイルを開き、保存し直してください。&lt;/a&gt;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/file.cpp" line="185"/>
-        <source>This score was saved using a newer version of MuseScore.&lt;br&gt;
-Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a&gt; to obtain the latest version.</source>
-        <translation>このスコアは新しいバージョンのMuseScoreで保存されました。&lt;br&gt;
-新しいMuseScoreは&lt;a href=&quot;http://musescore.org&quot;&gt;MuseScoreウェブサイト&lt;/a&gt;で入手できます。</translation>
+        <location filename="../../mscore/file.cpp" line="182"/>
+        <source>It was last saved with version 0.9.5 or older.
+You can convert this score by opening and then
+saving with MuseScore version 1.x.
+Visit the %1MuseScore download page%2 to obtain such a 1.x version.</source>
+        <translation>それは0.9.5以前のversionで保存されたものです。
+MuseScore version 1.x で開いてから保存すれば
+変更することが可能です。
+1.x versionは%1MuseScoreダウンロードページ%2で得られます。</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="191"/>
+        <source>This score was saved using a newer version of MuseScore.
+Visit the %1MuseScore website%2 to obtain the latest version.</source>
+        <translation>このスコアは新しいバージョンのMuseScoreで作成されています。
+%1MuseScore website%2 から最新バージョンを入手してください。</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/file.cpp" line="198"/>
         <source>File not found %1</source>
         <translation>ファイルが見つかりません %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="194"/>
+        <location filename="../../mscore/file.cpp" line="201"/>
         <source>File corrupted %1</source>
         <translation>ファイル破損 %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="210"/>
-        <source>MuseScore: Load Error</source>
-        <translation>MuseScore: 読み込みエラー</translation>
+        <location filename="../../mscore/file.cpp" line="220"/>
+        <source>Load Error</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/importxml.cpp" line="67"/>
@@ -14330,84 +14633,84 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
 %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/importxml.cpp" line="204"/>
+        <location filename="../../mscore/importxml.cpp" line="202"/>
         <source>File &apos;%1&apos; is not a valid MusicXML file</source>
         <translation>ファイル &apos;%1&apos; は有効なMusicXMLファイルではありません</translation>
     </message>
     <message>
-        <location filename="../../mscore/importxml.cpp" line="260"/>
+        <location filename="../../mscore/importxml.cpp" line="258"/>
         <source>Could not open MusicXML file
 %1</source>
         <translation>MusicXMLファイルを開けませんでした
 %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/importxml.cpp" line="288"/>
+        <location filename="../../mscore/importxml.cpp" line="286"/>
         <source>Could not open compressed MusicXML file
 %1</source>
         <translation>圧縮されたMusicXMLファイルを開けません
 %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/stafftextproperties.cpp" line="41"/>
+        <location filename="../../mscore/stafftextproperties.cpp" line="42"/>
         <source>normal</source>
         <translation>標準</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.cpp" line="30"/>
-        <source>MuseScore: Upload Error</source>
-        <translation>MuseScore: アップロードエラー</translation>
+        <source>Upload Error</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>QWidget</name>
     <message>
         <location filename="../../mscore/album.cpp" line="243"/>
-        <source>MuseScore: Open Album failed</source>
-        <translation>MuseScore: アルバムを開けませんでした</translation>
+        <source>Open Album failed</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/album.cpp" line="245"/>
-        <location filename="../../mscore/capella.cpp" line="2662"/>
-        <location filename="../../mscore/importgtp.cpp" line="2303"/>
-        <location filename="../../mscore/importmidi/importmidi.cpp" line="1198"/>
-        <location filename="../../mscore/instrdialog.cpp" line="135"/>
-        <location filename="../../mscore/musescore.cpp" line="2450"/>
+        <location filename="../../mscore/capella.cpp" line="2678"/>
+        <location filename="../../mscore/importgtp.cpp" line="2313"/>
+        <location filename="../../mscore/importmidi/importmidi.cpp" line="1201"/>
+        <location filename="../../mscore/instrdialog.cpp" line="127"/>
+        <location filename="../../mscore/musescore.cpp" line="2641"/>
         <source>Quit</source>
         <translation>中止</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="128"/>
-        <source>MuseScore File (*.mscz)</source>
-        <translation>MuseScore ファイル (*.mscz)</translation>
+        <location filename="../../mscore/albummanager.cpp" line="132"/>
+        <source>MuseScore File</source>
+        <translation>MuseScoreファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="138"/>
-        <source>MuseScore: Save Album into Score</source>
-        <translation>MuseScore: スコアにアルバムを保存</translation>
+        <location filename="../../mscore/albummanager.cpp" line="142"/>
+        <source>Save Album into Score</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="145"/>
-        <source>MuseScore: Save File</source>
-        <translation>MuseScore: 保存</translation>
+        <location filename="../../mscore/albummanager.cpp" line="149"/>
+        <source>Save File</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="205"/>
+        <location filename="../../mscore/albummanager.cpp" line="209"/>
         <source>Untitled</source>
         <translation>名称未設定</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="303"/>
-        <source>MuseScore: Save Album</source>
-        <translation>MuseScore: アルバムの保存</translation>
+        <location filename="../../mscore/albummanager.cpp" line="307"/>
+        <source>Save Album</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="305"/>
-        <source>MuseScore Files (*.album)</source>
-        <translation>MuseScore アルバムファイル (*.album)</translation>
+        <location filename="../../mscore/albummanager.cpp" line="309"/>
+        <source>MuseScore Files</source>
+        <translation>MuseScoreファイル</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="317"/>
+        <location filename="../../mscore/albummanager.cpp" line="321"/>
         <source>Open Album File
 %1
 failed: </source>
@@ -14416,94 +14719,110 @@ failed: </source>
 失敗:</translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="319"/>
-        <source>MuseScore: Open Album File</source>
-        <translation>MuseScore: アルバムファイルを開く</translation>
+        <location filename="../../mscore/albummanager.cpp" line="323"/>
+        <source>Open Album File</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="325"/>
+        <location filename="../../mscore/albummanager.cpp" line="329"/>
         <source>Write Album failed: </source>
         <translation>アルバムの書き込みに失敗: </translation>
     </message>
     <message>
-        <location filename="../../mscore/albummanager.cpp" line="326"/>
-        <source>MuseScore: Write Album</source>
-        <translation>MuseScore: アルバムの書き込み</translation>
+        <location filename="../../mscore/albummanager.cpp" line="330"/>
+        <source>Write Album</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/capella.cpp" line="2660"/>
-        <source>MuseScore: Import Capella</source>
-        <translation>MuseScore: Capella のインポート</translation>
+        <location filename="../../mscore/capella.cpp" line="2676"/>
+        <source>Import Capella</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/capella.cpp" line="2661"/>
-        <location filename="../../mscore/importgtp.cpp" line="2302"/>
-        <location filename="../../mscore/importmidi/importmidi.cpp" line="1197"/>
+        <location filename="../../mscore/capella.cpp" line="2677"/>
+        <location filename="../../mscore/importgtp.cpp" line="2312"/>
+        <location filename="../../mscore/importmidi/importmidi.cpp" line="1200"/>
         <source>Load failed: </source>
         <translation>読み込み失敗:</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1974"/>
+        <location filename="../../mscore/file.cpp" line="2031"/>
         <source>Install SoundFont</source>
         <translation>SoundFontのインストール</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1975"/>
+        <location filename="../../mscore/file.cpp" line="2032"/>
         <source>Do you want to install the SoundFont %1?</source>
         <translation>SoundFont %1 をインストールしますか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1990"/>
+        <location filename="../../mscore/file.cpp" line="2047"/>
         <source>Overwrite?</source>
         <translation>上書きしますか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1991"/>
+        <location filename="../../mscore/file.cpp" line="2048"/>
         <source>%1 already exists.
 Do you want to overwrite it?</source>
         <translation>%1 はすでに存在しています。
 上書きしてよろしいですか？</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1999"/>
+        <location filename="../../mscore/file.cpp" line="2056"/>
         <source>SoundFont installed</source>
         <translation>SoundFontはインストールされました</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1999"/>
+        <location filename="../../mscore/file.cpp" line="2056"/>
         <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
         <translation>サウンドフォントがインストールされました。[表示]＞[シンセサイザーの追加]を確認し、[表示]＞[ミキサー]で楽器を選択してください。</translation>
     </message>
     <message>
-        <location filename="../../mscore/importgtp.cpp" line="2301"/>
-        <source>MuseScore: Import Guitar Pro</source>
-        <translation>MuseScore: Guitar Proのインポート</translation>
+        <location filename="../../mscore/importgtp.cpp" line="2311"/>
+        <source>Import Guitar Pro</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/importmidi/importmidi.cpp" line="1196"/>
-        <source>MuseScore: Load MIDI</source>
-        <translation>MuseScore: MIDIの読み込み</translation>
+        <location filename="../../mscore/importmidi/importmidi.cpp" line="1199"/>
+        <source>Load MIDI</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="133"/>
-        <source>MuseScore: Load Style Failed</source>
-        <translation>MuseScore: スタイルの読み込み失敗</translation>
+        <location filename="../../mscore/instrdialog.cpp" line="125"/>
+        <source>Load Style Failed</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2448"/>
-        <source>MuseScore: Load Languages Failed:</source>
-        <translation>MuseScore: 言語設定の読み込み失敗:</translation>
+        <location filename="../../mscore/musescore.cpp" line="2639"/>
+        <source>Load Languages Failed:</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3946"/>
-        <source>MuseScore: Invalid Command</source>
-        <translation>MuseScore: 無効なコマンド</translation>
+        <location filename="../../mscore/musescore.cpp" line="4274"/>
+        <source>Invalid Command</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/palettebox.cpp" line="196"/>
+        <location filename="../../mscore/workspace.cpp" line="166"/>
+        <source>Are you sure?</source>
+        <translation>よろしいですか？</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/palettebox.cpp" line="197"/>
+        <source>Do you really want to delete the &apos;%1&apos; palette?</source>
+        <translation>本当に&apos;%1&apos;このパレットを削除しますか？</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/workspace.cpp" line="167"/>
+        <source>Do you really want to delete the &apos;%1&apos; workspace?</source>
+        <translation>本当に&apos;%1&apos;このワークスペースを削除しますか？</translation>
     </message>
 </context>
 <context>
     <name>RecordButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3834"/>
+        <location filename="../../mscore/musescore.cpp" line="4162"/>
         <source>Record</source>
         <translation>録音</translation>
     </message>
@@ -14517,8 +14836,8 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="36"/>
-        <source>Tab 1</source>
-        <translation>タブ 1</translation>
+        <source>Languages</source>
+        <translation>言語</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="80"/>
@@ -14542,8 +14861,8 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="104"/>
-        <source>Tab 2</source>
-        <translation>タブ 2</translation>
+        <source>Plugins</source>
+        <translation>プラグイン</translation>
     </message>
 </context>
 <context>
@@ -14573,94 +14892,90 @@ Do you want to overwrite it?</source>
     <name>SectionBreakProperties</name>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="14"/>
-        <source>MuseScore: Section Break Properties</source>
-        <translation>MuseScore: セクション区切りのプロパティ</translation>
+        <source>Section Break Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="20"/>
-        <source>Start new section with long instrument names</source>
-        <translation>楽器名を省略せず新しいセクションを開始</translation>
+        <source>Start new section with measure number one</source>
+        <translation>小節番号をリセットして新しいセクションを開始</translation>
     </message>
     <message>
-        <location filename="../../mscore/sectionbreak.ui" line="55"/>
+        <location filename="../../mscore/sectionbreak.ui" line="32"/>
         <source>Pause:</source>
         <translation>一時停止:</translation>
     </message>
     <message>
-        <location filename="../../mscore/sectionbreak.ui" line="68"/>
+        <location filename="../../mscore/sectionbreak.ui" line="45"/>
         <source>sec</source>
         <translation>秒</translation>
     </message>
     <message>
-        <location filename="../../mscore/sectionbreak.ui" line="109"/>
-        <source>Start new section with measure number one</source>
-        <translation>小節番号をリセットして新しいセクションを開始</translation>
+        <location filename="../../mscore/sectionbreak.ui" line="70"/>
+        <source>Start new section with long instrument names</source>
+        <translation>楽器名を省略せず新しいセクションを開始</translation>
     </message>
 </context>
 <context>
     <name>SelectDialog</name>
     <message>
-        <location filename="../../mscore/select.ui" line="14"/>
-        <source>MuseScore: Select</source>
-        <translation>MuseScore: 選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/select.ui" line="34"/>
+        <location filename="../../mscore/selectdialog.ui" line="14"/>
+        <location filename="../../mscore/selectdialog.ui" line="34"/>
         <source>Select</source>
         <translation>選択</translation>
     </message>
     <message>
-        <location filename="../../mscore/select.ui" line="43"/>
+        <location filename="../../mscore/selectdialog.ui" line="43"/>
         <source>Element type:</source>
         <translation>要素の種類:</translation>
     </message>
     <message>
-        <location filename="../../mscore/select.ui" line="50"/>
+        <location filename="../../mscore/selectdialog.ui" line="50"/>
         <source>Same staff</source>
         <translation>同一の譜表</translation>
     </message>
     <message>
-        <location filename="../../mscore/select.ui" line="57"/>
+        <location filename="../../mscore/selectdialog.ui" line="57"/>
         <source>Same voice</source>
         <translation>同一の声部</translation>
     </message>
     <message>
-        <location filename="../../mscore/select.ui" line="64"/>
+        <location filename="../../mscore/selectdialog.ui" line="64"/>
         <source>Same subtype:</source>
         <translation>同じ種類</translation>
     </message>
     <message>
-        <location filename="../../mscore/select.ui" line="85"/>
+        <location filename="../../mscore/selectdialog.ui" line="85"/>
         <source>Same system</source>
         <translation>同一の段</translation>
     </message>
     <message>
-        <location filename="../../mscore/select.ui" line="92"/>
+        <location filename="../../mscore/selectdialog.ui" line="92"/>
         <source>In selection</source>
         <translation>選択範囲内</translation>
     </message>
     <message>
-        <location filename="../../mscore/select.ui" line="102"/>
+        <location filename="../../mscore/selectdialog.ui" line="102"/>
         <source>Action</source>
         <translation>アクション</translation>
     </message>
     <message>
-        <location filename="../../mscore/select.ui" line="111"/>
+        <location filename="../../mscore/selectdialog.ui" line="111"/>
         <source>Replace selection</source>
         <translation>選択を置き換える</translation>
     </message>
     <message>
-        <location filename="../../mscore/select.ui" line="121"/>
+        <location filename="../../mscore/selectdialog.ui" line="121"/>
         <source>Add to selection</source>
         <translation>選択を追加する</translation>
     </message>
     <message>
-        <location filename="../../mscore/select.ui" line="131"/>
+        <location filename="../../mscore/selectdialog.ui" line="131"/>
         <source>Search in selection</source>
         <translation>選択を検索</translation>
     </message>
     <message>
-        <location filename="../../mscore/select.ui" line="138"/>
+        <location filename="../../mscore/selectdialog.ui" line="138"/>
         <source>Subtract from selection</source>
         <translation>選択を解除する</translation>
     </message>
@@ -14669,8 +14984,8 @@ Do you want to overwrite it?</source>
     <name>SelectInstrument</name>
     <message>
         <location filename="../../mscore/selectinstr.ui" line="14"/>
-        <source>MuseScore: Select Instrument</source>
-        <translation>MuseScore: 楽器の選択</translation>
+        <source>Select Instrument</source>
+        <translation>楽器選択</translation>
     </message>
     <message>
         <location filename="../../mscore/selectinstr.ui" line="28"/>
@@ -14694,6 +15009,89 @@ Do you want to overwrite it?</source>
     </message>
 </context>
 <context>
+    <name>SelectNoteDialog</name>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="14"/>
+        <source>Select Notes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="34"/>
+        <source>Select</source>
+        <translation>選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="47"/>
+        <source>Same notehead:</source>
+        <translation>同じ符頭</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="54"/>
+        <source>Same system</source>
+        <translation>同一の段</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="61"/>
+        <source>Same voice</source>
+        <translation>同一の声部</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="75"/>
+        <source>Same duration:</source>
+        <translation>同じ長さ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="82"/>
+        <source>Same pitch:</source>
+        <translation>同じピッチ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="89"/>
+        <source>In selection</source>
+        <translation>選択範囲内</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="103"/>
+        <source>Same staff</source>
+        <translation>同一の譜表</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="110"/>
+        <source>Same type:</source>
+        <translation>同じ種類</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="124"/>
+        <source>Same note name:</source>
+        <translation>同じ音</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="141"/>
+        <source>Action</source>
+        <translation>アクション</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="147"/>
+        <source>Replace selection</source>
+        <translation>選択を置き換える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="157"/>
+        <source>Add to selection</source>
+        <translation>選択を追加する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="167"/>
+        <source>Search in selection</source>
+        <translation>選択を検索</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectnotedialog.ui" line="174"/>
+        <source>Subtract from selection</source>
+        <translation>選択を解除する</translation>
+    </message>
+</context>
+<context>
     <name>SfListDialog</name>
     <message>
         <location filename="../../fluid/fluidgui.cpp" line="22"/>
@@ -14707,6 +15105,16 @@ Do you want to overwrite it?</source>
         <location filename="../../zerberus/zerberusgui.cpp" line="24"/>
         <source>SFZ Files</source>
         <translation>SFZ ファイル</translation>
+    </message>
+    <message>
+        <location filename="../../zerberus/zerberusgui.cpp" line="30"/>
+        <source>Load</source>
+        <translation>読み込み</translation>
+    </message>
+    <message>
+        <location filename="../../zerberus/zerberusgui.cpp" line="31"/>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
     </message>
 </context>
 <context>
@@ -14781,8 +15189,8 @@ Do you want to overwrite it?</source>
     <name>SplitStaff</name>
     <message>
         <location filename="../../mscore/splitstaff.ui" line="20"/>
-        <source>MuseScore: Edit Staff/Part Properties</source>
-        <translation>MuseScore: 譜表とパートのプロパティ編集</translation>
+        <source>Edit Staff/Part Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/splitstaff.ui" line="36"/>
@@ -14798,17 +15206,17 @@ Do you want to overwrite it?</source>
 <context>
     <name>Staff type group name</name>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="34"/>
+        <location filename="../../libmscore/stafftype.cpp" line="37"/>
         <source>Standard</source>
         <translation>標準</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="35"/>
+        <location filename="../../libmscore/stafftype.cpp" line="38"/>
         <source>Percussion</source>
         <translation>パーカッション</translation>
     </message>
     <message>
-        <location filename="../../libmscore/stafftype.cpp" line="36"/>
+        <location filename="../../libmscore/stafftype.cpp" line="39"/>
         <source>Tablature</source>
         <translation>タブ譜</translation>
     </message>
@@ -14896,66 +15304,38 @@ Do you want to overwrite it?</source>
         <translation>Aeolusの音栓</translation>
     </message>
     <message>
-        <location filename="../../mscore/stafftext.ui" line="1991"/>
-        <source>III</source>
-        <translation>III</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/stafftext.ui" line="2009"/>
-        <source>Principal
-8</source>
-        <translation>Principal
-8</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/stafftext.ui" line="2023"/>
-        <source>Gemshorn
-8</source>
-        <translation>Gemshorn
-8</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/stafftext.ui" line="2031"/>
-        <location filename="../../mscore/stafftext.ui" line="2038"/>
-        <location filename="../../mscore/stafftext.ui" line="2045"/>
-        <location filename="../../mscore/stafftext.ui" line="2052"/>
-        <location filename="../../mscore/stafftext.ui" line="2059"/>
-        <source>PushButton</source>
-        <translation>プッシュボタン</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/stafftext.ui" line="4098"/>
-        <location filename="../../mscore/stafftext.ui" line="4104"/>
+        <location filename="../../mscore/stafftext.ui" line="4003"/>
+        <location filename="../../mscore/stafftext.ui" line="4009"/>
         <source>Swing Settings</source>
         <translation>スウィングの設定</translation>
     </message>
     <message>
-        <location filename="../../mscore/stafftext.ui" line="4125"/>
+        <location filename="../../mscore/stafftext.ui" line="4030"/>
         <source>Swing:</source>
         <translation>スウィング:</translation>
     </message>
     <message>
-        <location filename="../../mscore/stafftext.ui" line="4135"/>
+        <location filename="../../mscore/stafftext.ui" line="4040"/>
         <source>Off</source>
         <translation>オフ</translation>
     </message>
     <message>
-        <location filename="../../mscore/stafftext.ui" line="4148"/>
+        <location filename="../../mscore/stafftext.ui" line="4053"/>
         <source>Eighth note</source>
         <translation>8分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/stafftext.ui" line="4161"/>
+        <location filename="../../mscore/stafftext.ui" line="4066"/>
         <source>Sixteenth note</source>
         <translation>16分音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/stafftext.ui" line="4180"/>
+        <location filename="../../mscore/stafftext.ui" line="4085"/>
         <source>Select swing ratio:</source>
         <translation>スウィングの比率:</translation>
     </message>
     <message>
-        <location filename="../../mscore/stafftext.ui" line="4190"/>
+        <location filename="../../mscore/stafftext.ui" line="4095"/>
         <source>%</source>
         <translation>%</translation>
     </message>
@@ -14976,29 +15356,6 @@ Do you want to overwrite it?</source>
         <location filename="../../mscore/stafftypetemplates.ui" line="48"/>
         <source>Load Templates</source>
         <translation>テンプレートの読み込み</translation>
-    </message>
-</context>
-<context>
-    <name>StartDialog</name>
-    <message>
-        <location filename="../../mscore/startdialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation>ダイアログ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/startdialog.ui" line="33"/>
-        <source>Create New Score</source>
-        <translation>新しいスコアの作成</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/startdialog.ui" line="47"/>
-        <source>Startup Dialog</source>
-        <translation>スタートアップダイアログ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/startdialog.ui" line="113"/>
-        <source>Load Score</source>
-        <translation>スコアの読み込み</translation>
     </message>
 </context>
 <context>
@@ -15023,8 +15380,8 @@ Do you want to overwrite it?</source>
     <name>SymbolDialogBase</name>
     <message>
         <location filename="../../mscore/symboldialog.ui" line="25"/>
-        <source>Search...</source>
-        <translation>検索...</translation>
+        <source>Search</source>
+        <translation>検索</translation>
     </message>
     <message>
         <location filename="../../mscore/symboldialog.ui" line="32"/>
@@ -15162,8 +15519,8 @@ Do you want to overwrite it?</source>
     <name>TextPaletteBase</name>
     <message>
         <location filename="../../mscore/textpalette.ui" line="14"/>
-        <source>MuseScore: Special Characters</source>
-        <translation>MuseScore: 特殊文字</translation>
+        <source>Special Characters</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -15622,15 +15979,15 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../libmscore/style.cpp" line="376"/>
         <source>Figured Bass</source>
-        <translation>数字付低音</translation>
+        <translation>通奏低音</translation>
     </message>
 </context>
 <context>
     <name>TextStyleDialog</name>
     <message>
         <location filename="../../mscore/textstyle.ui" line="14"/>
-        <source>MuseScore: Edit Text Styles</source>
-        <translation>MuseScore: テキストスタイルの編集</translation>
+        <source>Edit Text Styles</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/textstyle.ui" line="45"/>
@@ -15707,12 +16064,12 @@ Do you want to overwrite it?</source>
         <translation>テキスト:</translation>
     </message>
     <message>
-        <location filename="../../mscore/timedialog.ui" line="260"/>
-        <source>Add time signature to palette</source>
-        <translation>パレットに拍子記号を加える</translation>
+        <location filename="../../mscore/timedialog.ui" line="273"/>
+        <source>Add time signature to master palette</source>
+        <translation>マスターパレットに拍子記号を追加　</translation>
     </message>
     <message>
-        <location filename="../../mscore/timedialog.ui" line="263"/>
+        <location filename="../../mscore/timedialog.ui" line="276"/>
         <source>Add</source>
         <translation>追加</translation>
     </message>
@@ -15902,8 +16259,8 @@ Do you want to overwrite it?</source>
     <name>TransposeDialogBase</name>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="14"/>
-        <source>MuseScore: Transpose</source>
-        <translation>MuseScore: 移調</translation>
+        <source>Transpose</source>
+        <translation>移調</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="23"/>
@@ -16257,8 +16614,8 @@ Do you want to overwrite it?</source>
     <name>TremoloBarDialog</name>
     <message>
         <location filename="../../mscore/tremolobar.ui" line="14"/>
-        <source>MuseScore: Tremolo Bar Properties</source>
-        <translation>MuseScore: トレモロ・バーのプロパティ</translation>
+        <source>Tremolo Bar Properties</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/tremolobar.ui" line="23"/>
@@ -16302,19 +16659,11 @@ Do you want to overwrite it?</source>
     </message>
 </context>
 <context>
-    <name>TupletBase</name>
-    <message>
-        <location filename="../../mscore/debugger/tuplet.ui" line="205"/>
-        <source>Tuplet</source>
-        <translation>連符</translation>
-    </message>
-</context>
-<context>
     <name>TupletDialog</name>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="14"/>
-        <source>MuseScore: Create Tuplet</source>
-        <translation>MuseScore: 連符の作成</translation>
+        <source>Create Tuplet</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="34"/>
@@ -16394,33 +16743,43 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="102"/>
-        <source>Title</source>
-        <translation>タイトル</translation>
+        <source>Title:</source>
+        <translation>タイトル:</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="123"/>
-        <source>Description</source>
-        <translation>ユーザコメント</translation>
+        <source>Description:</source>
+        <translation>説明</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.ui" line="198"/>
-        <source>License</source>
-        <translation>ライセンス</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/uploadscoredialog.ui" line="244"/>
-        <source>Tags</source>
-        <translation>タグ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/uploadscoredialog.ui" line="289"/>
+        <location filename="../../mscore/uploadscoredialog.ui" line="156"/>
         <source>Make this score private</source>
         <translation>このスコアを個人用にする</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.ui" line="333"/>
+        <location filename="../../mscore/uploadscoredialog.ui" line="198"/>
+        <source>License:</source>
+        <translation>ライセンス</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/uploadscoredialog.ui" line="251"/>
+        <source>Tags:</source>
+        <translation>タグ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/uploadscoredialog.ui" line="311"/>
+        <source>Upload score audio</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/uploadscoredialog.ui" line="345"/>
         <source>Update the existing score </source>
         <translation>既存のスコアを更新する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/uploadscoredialog.ui" line="366"/>
+        <source>Changes:</source>
+        <translation>変更</translation>
     </message>
 </context>
 <context>
@@ -16445,7 +16804,7 @@ Do you want to overwrite it?</source>
 <context>
     <name>Workspace</name>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="228"/>
+        <location filename="../../mscore/workspace.cpp" line="239"/>
         <source>Writing Workspace File
 %1
 failed: </source>
@@ -16454,9 +16813,9 @@ failed: </source>
 失敗: </translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="229"/>
-        <source>MuseScore: Writing Workspace File</source>
-        <translation>MuseScore:ワーキングスペースファイル</translation>
+        <location filename="../../mscore/workspace.cpp" line="240"/>
+        <source>Writing Workspace File</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -16586,28 +16945,28 @@ failed: </source>
         <translation>追加</translation>
     </message>
     <message>
-        <location filename="../../zerberus/zerberusgui.cpp" line="99"/>
+        <location filename="../../zerberus/zerberusgui.cpp" line="98"/>
         <source>Loading...</source>
         <translation>読み込み中...</translation>
     </message>
     <message>
-        <location filename="../../zerberus/zerberusgui.cpp" line="99"/>
+        <location filename="../../zerberus/zerberusgui.cpp" line="98"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../../zerberus/zerberusgui.cpp" line="177"/>
-        <location filename="../../zerberus/zerberusgui.cpp" line="238"/>
+        <location filename="../../zerberus/zerberusgui.cpp" line="167"/>
+        <location filename="../../zerberus/zerberusgui.cpp" line="250"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../zerberus/zerberusgui.cpp" line="178"/>
+        <location filename="../../zerberus/zerberusgui.cpp" line="168"/>
         <source>SoundFont %1 already loaded</source>
         <translation>SoundFont %1 は既に読み込まれています</translation>
     </message>
     <message>
-        <location filename="../../zerberus/zerberusgui.cpp" line="239"/>
+        <location filename="../../zerberus/zerberusgui.cpp" line="251"/>
         <source>Cannot load SoundFont %1</source>
         <translation>SoundFont %1 が読み込めません</translation>
     </message>
@@ -16754,18 +17113,18 @@ failed: </source>
     <name>action</name>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="35"/>
-        <source>Local Handbook...</source>
-        <translation>MuseScore のヘルプ(&amp;H)</translation>
+        <source>Online Handbook...</source>
+        <translation>オンラインハンドブック</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="36"/>
-        <source>Local handbook</source>
-        <translation>ハンドブックを開く</translation>
+        <source>Online handbook</source>
+        <translation>オンラインハンドブック</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="37"/>
-        <source>Show local handbook</source>
-        <translation>MuseScoreのヘルプを参照します</translation>
+        <source>Show online handbook</source>
+        <translation>オンラインハンドブックを表示</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="47"/>
@@ -16985,3535 +17344,3728 @@ failed: </source>
         <translation>貼り付け</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="221"/>
+        <location filename="../../mscore/shortcut.cpp" line="222"/>
+        <source>Swap with Clipboard</source>
+        <translation>クリップボードと交換する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="232"/>
         <source>Instruments...</source>
         <translation>楽器...</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="222"/>
+        <location filename="../../mscore/shortcut.cpp" line="233"/>
         <source>Show instruments dialog</source>
         <translation>楽器ダイアログを表示</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="228"/>
+        <location filename="../../mscore/shortcut.cpp" line="239"/>
+        <location filename="../../mscore/shortcut.cpp" line="1853"/>
         <source>Note Input</source>
         <translation>音符入力モード</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="229"/>
+        <location filename="../../mscore/shortcut.cpp" line="240"/>
         <source>Note input</source>
         <translation>音符入力</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="239"/>
-        <source>Respell Pitches</source>
-        <translation>臨時記号の自動補正</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="240"/>
-        <source>Respell pitches</source>
-        <translation>臨時記号の自動補正</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="250"/>
-        <source>Unison Above</source>
-        <translation>1度上</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="251"/>
-        <source>Enter unison above</source>
-        <translation>1度上を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="257"/>
-        <source>Second Above</source>
-        <translation>2度上</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="258"/>
-        <source>Enter second above</source>
-        <translation>2度上を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="264"/>
-        <source>Third Above</source>
-        <translation>3度上</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="265"/>
-        <source>Enter third above</source>
-        <translation>3度上を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="271"/>
-        <source>Fourth Above</source>
-        <translation>4度上</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="272"/>
-        <source>Enter fourth above</source>
-        <translation>4度上を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="278"/>
-        <source>Fifth Above</source>
-        <translation>5度上</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="279"/>
-        <source>Enter fifth above</source>
-        <translation>5度上を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="285"/>
-        <source>Sixth Above</source>
-        <translation>6度上</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="286"/>
-        <source>Enter sixth above</source>
-        <translation>6度上を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="292"/>
-        <source>Seventh Above</source>
-        <translation>7度上</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="293"/>
-        <source>Enter seventh above</source>
-        <translation>7度上を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="299"/>
-        <source>Octave Above</source>
-        <translation>オクターブ上</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="300"/>
-        <source>Enter octave above</source>
-        <translation>オクターブ上を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="306"/>
-        <source>Ninth Above</source>
-        <translation>9度上</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="307"/>
-        <source>Enter ninth above</source>
-        <translation>9度上を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="313"/>
-        <source>Second Below</source>
-        <translation>2度下</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="314"/>
-        <source>Enter second below</source>
-        <translation>2度下を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="320"/>
-        <source>Third Below</source>
-        <translation>3度下</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="321"/>
-        <source>Enter third below</source>
-        <translation>3度下を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="327"/>
-        <source>Fourth Below</source>
-        <translation>4度下</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="328"/>
-        <source>Enter fourth below</source>
-        <translation>4度下を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="334"/>
-        <source>Fifth Below</source>
-        <translation>5度下</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="335"/>
-        <source>Enter fifth below</source>
-        <translation>5度下を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="341"/>
-        <source>Sixth Below</source>
-        <translation>6度下</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="342"/>
-        <source>Enter sixth below</source>
-        <translation>6度下を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="348"/>
-        <source>Seventh Below</source>
-        <translation>7度下</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="349"/>
-        <source>Enter seventh below</source>
-        <translation>7度下を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="355"/>
-        <source>Octave Below</source>
-        <translation>オクターブ下</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="356"/>
-        <source>Enter octave below</source>
-        <translation>オクターブ下を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="362"/>
-        <source>Ninth Below</source>
-        <translation>9度下</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="363"/>
-        <source>Enter ninth below</source>
-        <translation>9度下を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="369"/>
-        <source>A</source>
-        <translation>A</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="370"/>
-        <source>Enter note A</source>
-        <translation>A を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="376"/>
-        <source>B</source>
-        <translation>B</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="377"/>
-        <source>Enter note B</source>
-        <translation>B を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="383"/>
-        <source>C</source>
-        <translation>C</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="384"/>
-        <source>Enter note C</source>
-        <translation>C を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="390"/>
-        <source>D</source>
-        <translation>D</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="391"/>
-        <source>Enter note D</source>
-        <translation>D を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="397"/>
-        <source>E</source>
-        <translation>E</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="398"/>
-        <source>Enter note E</source>
-        <translation>E を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="404"/>
-        <source>F</source>
-        <translation>F</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="405"/>
-        <source>Enter note F</source>
-        <translation>F を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="411"/>
-        <source>G</source>
-        <translation>G</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="412"/>
-        <source>Enter note G</source>
-        <translation>G を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="418"/>
-        <source>Add A</source>
-        <translation>A を加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="419"/>
-        <source>Add note A to chord</source>
-        <translation>A を加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="425"/>
-        <source>Add B</source>
-        <translation>B を加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="426"/>
-        <source>Add note B to chord</source>
-        <translation>B を加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="432"/>
-        <source>Add C</source>
-        <translation>C を加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="433"/>
-        <source>Add note C to chord</source>
-        <translation>C を加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="439"/>
-        <source>Add D</source>
-        <translation>D を加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="440"/>
-        <source>Add note D to chord</source>
-        <translation>D を加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="446"/>
-        <source>Add E</source>
-        <translation>E を加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="447"/>
-        <source>Add note E to chord</source>
-        <translation>E を加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="453"/>
-        <source>Add F</source>
-        <translation>F を加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="454"/>
-        <source>Add note F to chord</source>
-        <translation>F を加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="460"/>
-        <source>Add G</source>
-        <translation>G を加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="461"/>
-        <source>Add note G to chord</source>
-        <translation>G を加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="467"/>
-        <source>Insert A</source>
-        <translation>A の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="468"/>
-        <source>Insert note A</source>
-        <translation>A の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="474"/>
-        <source>Insert B</source>
-        <translation>B の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="475"/>
-        <source>Insert note B</source>
-        <translation>B の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="481"/>
-        <source>Insert C</source>
-        <translation>C の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="482"/>
-        <source>Insert note C</source>
-        <translation>C の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="488"/>
-        <source>Insert D</source>
-        <translation>D の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="489"/>
-        <source>Insert note D</source>
-        <translation>D の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="495"/>
-        <source>Insert E</source>
-        <translation>E の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="496"/>
-        <source>Insert note E</source>
-        <translation>E の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="502"/>
-        <source>Insert F</source>
-        <translation>F の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="503"/>
-        <source>Insert note F</source>
-        <translation>F の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="509"/>
-        <source>Insert G</source>
-        <translation>G の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="510"/>
-        <source>Insert note G</source>
-        <translation>G の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="516"/>
-        <location filename="../../mscore/shortcut.cpp" line="1355"/>
-        <location filename="../../mscore/shortcut.cpp" line="1357"/>
-        <source>Rest</source>
-        <translation>休符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="517"/>
-        <source>Enter rest</source>
-        <translation>休符を入力</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="525"/>
-        <source>Staccato</source>
-        <translation>スタッカート</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="526"/>
-        <source>Toggle staccato</source>
-        <translation>スタッカート 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="536"/>
-        <source>Tenuto</source>
-        <translation>テヌート</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="537"/>
-        <source>Toggle tenuto</source>
-        <translation>テヌート 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="547"/>
-        <source>Trill</source>
-        <translation>トリル</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="548"/>
-        <source>Toggle trill</source>
-        <translation>トリル 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="558"/>
-        <source>Marcato</source>
-        <translation>マルカート</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="559"/>
-        <source>Toggle marcato</source>
-        <translation>マルカート 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="569"/>
-        <source>Sforzato</source>
-        <translation>スフォルツァンド</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="570"/>
-        <source>Toggle sforzato</source>
+        <source>Step-time (default)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="580"/>
-        <source>Increase Stretch</source>
-        <translation>間隔を広くする</translation>
+        <location filename="../../mscore/shortcut.cpp" line="251"/>
+        <source>Enter notes with a mouse or keyboard</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="581"/>
-        <source>Increase stretch</source>
-        <translation>間隔を広くする</translation>
+        <location filename="../../mscore/shortcut.cpp" line="261"/>
+        <source>Re-Pitch</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="582"/>
-        <source>Increase stretch of selected measures</source>
-        <translation>選択された複数小節の間隔を広くする</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="591"/>
-        <source>Decrease Stretch</source>
-        <translation>間隔を狭くする</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="592"/>
-        <source>Decrease stretch</source>
-        <translation>間隔を狭くする</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="593"/>
-        <source>Decrease stretch of selected measures</source>
-        <translation>選択された複数小節の間隔を狭くする</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="602"/>
-        <source>Reset Beam Mode</source>
-        <translation>連桁の様式をリセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="603"/>
-        <source>Reset beam mode</source>
-        <translation>連桁の様式をリセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="604"/>
-        <source>Reset beam mode of selected measures</source>
-        <translation>選択された小節の連桁の様式をリセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="613"/>
-        <source>Flip Direction</source>
-        <translation>方向転換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="614"/>
-        <source>Flip direction</source>
-        <translation>方向転換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="624"/>
-        <source>Up</source>
-        <translation>上</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="625"/>
-        <source>Pitch up or move text or articulation up</source>
-        <translation>音高を上げる、またはテキストやアーティキュレーションを上に</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="635"/>
-        <source>Diatonic Up</source>
-        <translation>全音上へ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="636"/>
-        <source>Diatonic pitch up</source>
-        <translation>ダイアトニックに従って音高を上へ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="646"/>
-        <source>Up Octave</source>
-        <translation>音高をオクターブ上げる</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="647"/>
-        <source>Pitch up octave</source>
-        <translation>音高をオクターブ上へ移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="648"/>
-        <source>Pitch up by an octave or move text or articulation up</source>
-        <translation>音高を１オクターブ上に、またはテキストやアーティキュレーションを上に</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="657"/>
-        <source>Up Note in Chord</source>
-        <translation>上に転回</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="658"/>
-        <source>Go to higher pitched note in chord</source>
-        <translation>和音の中のより高い音へ移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="668"/>
-        <source>Top Note in Chord</source>
-        <translation>和音の中で一番高い音に移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="669"/>
-        <source>Go to top note in chord</source>
-        <translation>和音の中で一番高い音に移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="679"/>
-        <source>Move Up</source>
-        <translation>上に移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="680"/>
-        <source>Move up</source>
-        <translation>上に移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="690"/>
-        <source>Down</source>
-        <translation>下</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="691"/>
-        <source>Pitch down or move text or articulation down</source>
-        <translation>音高を下げる、またはテキストやアーティキュレーションを下に</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="701"/>
-        <source>Diatonic Down</source>
-        <translation>全音下へ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="702"/>
-        <source>Diatonic pitch down</source>
-        <translation>ダイアトニックに従って音高を下へ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="712"/>
-        <source>Down Octave</source>
-        <translation>音高をオクターブ下げる</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="713"/>
-        <source>Pitch down octave</source>
-        <translation>音高をオクターブ下へ移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="714"/>
-        <source>Pitch down by an octave or move text or articulation down</source>
-        <translation>音高を１オクターブ下に、またはテキストやアーティキュレーションを下に</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="723"/>
-        <source>Down Note in Chord</source>
-        <translation>下の音に移動する</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="724"/>
-        <location filename="../../mscore/shortcut.cpp" line="725"/>
-        <source>Go to lower pitched note in chord</source>
-        <translation>下の音に移動する</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="734"/>
-        <source>Next Element</source>
-        <translation>次の要素</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="735"/>
-        <location filename="../../mscore/shortcut.cpp" line="736"/>
-        <source>Accessibility: Next element</source>
-        <translation>アクセシビリティ: 次の要素</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="745"/>
-        <source>Previous Element</source>
-        <translation>前の要素</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="746"/>
-        <location filename="../../mscore/shortcut.cpp" line="747"/>
-        <source>Accessibility: Previous element</source>
-        <translation>アクセシビリティ: 前の要素</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="756"/>
-        <source>First Element</source>
-        <translation>最初の要素</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="757"/>
-        <location filename="../../mscore/shortcut.cpp" line="758"/>
-        <source>Go to the first element</source>
-        <translation>最初の要素に移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="767"/>
-        <source>Last Element</source>
-        <translation>最後の要素</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="768"/>
-        <location filename="../../mscore/shortcut.cpp" line="769"/>
-        <source>Go to the last element</source>
-        <translation>最後の要素に移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="778"/>
-        <source>Bottom Note in Chord</source>
-        <translation>和音の最低音</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="779"/>
-        <source>Go to bottom note in chord</source>
-        <translation>一番低い音に移動する</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="789"/>
-        <source>Move Down</source>
-        <translation>下に移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="790"/>
-        <source>Move down</source>
-        <translation>下に移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="800"/>
-        <source>Previous Chord</source>
-        <translation>直前の音</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="801"/>
-        <source>Go to previous chord or move text left</source>
-        <translation>前の音符へ移る、またはテキストを左へ移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="807"/>
-        <source>Previous Measure</source>
-        <translation>直前の小節</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="808"/>
-        <source>Go to previous measure or move text left</source>
-        <translation>前の小節へ移る、またはテキストを左へ移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="814"/>
-        <source>Previous Staff or Voice</source>
-        <translation>前の譜表または声部</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="815"/>
-        <source>Previous staff or voice</source>
-        <translation>前の譜表または声部</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="821"/>
-        <source>Next Chord</source>
-        <translation>次の音</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="822"/>
-        <source>Go to next chord or move text right</source>
-        <translation>次の音符へ移る、またはテキストを右へ移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="828"/>
-        <source>Next Measure</source>
-        <translation>次の小節</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="829"/>
-        <source>Go to next measure or move text right</source>
-        <translation>次の小節へ移る、またはテキストを右へ移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="835"/>
-        <source>Next Staff or Voice</source>
-        <translation>次の譜表または声部</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="836"/>
-        <source>Next staff or voice</source>
-        <translation>次の譜表または声部</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="842"/>
-        <source>Add Previous Chord to Selection</source>
-        <translation>前の音を選択に加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="843"/>
-        <source>Add previous chord to selection</source>
-        <translation>前の音を選択に加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="849"/>
-        <source>Select to Beginning of Measure</source>
-        <translation>小節の最初まで選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="850"/>
-        <source>Select to beginning of measure</source>
-        <translation>小節の最初まで選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="856"/>
-        <source>Add Next Chord to Selection</source>
-        <translation>次の音を選択に加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="857"/>
-        <source>Add next chord to selection</source>
-        <translation>次の音を選択に加える</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="863"/>
-        <source>Select Section</source>
-        <translation>セクションの選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="864"/>
-        <source>Select section</source>
-        <translation>セクションの選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="870"/>
-        <source>Move Chord/Rest Right</source>
-        <translation>音符/休符を右へ移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="871"/>
-        <source>Move chord/rest right</source>
-        <translation>音符/休符を右へ移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="877"/>
-        <source>Move Chord/Rest left</source>
-        <translation>音符/休符を左へ移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="878"/>
-        <source>Move chord/rest left</source>
-        <translation>音符/休符を左へ移動</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="884"/>
-        <source>Select to end of measure</source>
-        <translation>小節の末尾まで選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="890"/>
-        <source>Select to Beginning of Line</source>
-        <translation>行の最初まで選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="891"/>
-        <source>Select to beginning of line</source>
-        <translation>行の最初まで選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="897"/>
-        <source>Select to End of Line</source>
-        <translation>行の末尾まで選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="898"/>
-        <source>Select to end of line</source>
-        <translation>行の末尾まで選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="904"/>
-        <source>Select to Beginning of Score</source>
-        <translation>スコアの最初まで選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="905"/>
-        <source>Select to beginning of score</source>
-        <translation>スコアの最初まで選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="911"/>
-        <source>Select to End of Score</source>
-        <translation>スコアの末尾まで選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="912"/>
-        <source>Select to end of score</source>
-        <translation>スコアの末尾まで選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="918"/>
-        <source>Add Staff Above to Selection</source>
-        <translation>上に譜表を追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="919"/>
-        <source>Add staff above to selection</source>
-        <translation>上に譜表を追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="925"/>
-        <source>Add Staff Below to Selection</source>
-        <translation>下に譜表を追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="926"/>
-        <source>Add staff below to selection</source>
-        <translation>下に譜表を追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="932"/>
-        <source>Page: Previous</source>
-        <translation>ページ:前</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="938"/>
-        <source>Page: Next</source>
-        <translation>ページ:次</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="944"/>
-        <source>Page: Top</source>
-        <translation>ページ:上</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="950"/>
-        <source>Page: End</source>
-        <translation>ページ:下</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="956"/>
-        <source>Slur</source>
-        <translation>スラー</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="957"/>
-        <source>Add slur</source>
-        <translation>スラーの追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="963"/>
-        <source>Crescendo</source>
-        <translation>クレシェンド</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="964"/>
-        <source>Add crescendo</source>
-        <translation>クレシェンドの追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="974"/>
-        <source>Decrescendo</source>
-        <translation>デクレシェンド</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="975"/>
-        <source>Add decrescendo</source>
-        <translation>デクレシェンドの追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="985"/>
-        <source>Ottava 8va</source>
-        <translation>オッターヴァ8va</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="986"/>
-        <source>Add ottava 8va</source>
-        <translation>オッターヴァ8va の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="996"/>
-        <source>Ottava 8vb</source>
-        <translation>オッターヴァ8vb</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="997"/>
-        <source>Add ottava 8vb</source>
-        <translation>オッターヴァ8vb の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1008"/>
-        <source>Escape</source>
-        <translation>エスケープ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1014"/>
-        <location filename="../../mscore/shortcut.cpp" line="1015"/>
-        <source>Delete</source>
-        <translation>削除</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1016"/>
-        <source>Delete contents of the selected measures</source>
-        <translation>選択された小節の内容を削除</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1025"/>
-        <source>Full Measure Rest</source>
-        <translation>全休符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1026"/>
-        <source>Full measure rest</source>
-        <translation>全休符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1027"/>
-        <source>Converts the measure to a full measure rest</source>
-        <translation>小節を全休符に変換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1036"/>
-        <source>Timewise Delete</source>
-        <translation>繰り返し記号を消去する</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1037"/>
-        <source>Timewise delete</source>
-        <translation>繰り返し記号を消去する</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1038"/>
-        <source>Delete element and duration</source>
-        <translation>要素と持続時間の消去</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1047"/>
-        <source>Delete Selected Measures</source>
-        <translation>選択された小節を消去</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1048"/>
-        <source>Delete selected measures</source>
-        <translation>選択された小節を削除</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1058"/>
-        <source>Append One Measure</source>
-        <translation>１小節追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1059"/>
-        <source>Append one measure</source>
-        <translation>１小節の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1065"/>
-        <source>Append Measures...</source>
-        <translation>小節追加 （２小節以上）...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1066"/>
-        <source>Append measures</source>
-        <translation>複数の小節を追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1072"/>
-        <source>Insert One Measure</source>
-        <translation>１小節挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1073"/>
-        <source>Insert one measure</source>
-        <translation>１小節の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1081"/>
-        <source>Insert Measures...</source>
-        <translation>小節挿入（２小節以上）...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1082"/>
-        <source>Insert measures</source>
-        <translation>複数の小節を挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1088"/>
-        <source>Insert Horizontal Frame</source>
-        <translation>水平フレームの挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1089"/>
-        <source>Insert horizontal frame</source>
-        <translation>水平フレームの挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1097"/>
-        <source>Insert Text Frame</source>
-        <translation>テキストフレームの挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1098"/>
-        <source>Insert text frame</source>
-        <translation>テキストフレームを挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1106"/>
-        <source>Append Text Frame</source>
-        <translation>テキストフレームの追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1107"/>
-        <source>Append text frame</source>
-        <translation>テキストフレームを追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1113"/>
-        <source>Insert Fretboard Diagram Frame</source>
-        <translation>フレットボードダイアグラムの挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1114"/>
-        <source>Insert fretboard diagram frame</source>
-        <translation>フレットボードダイアグラムの挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1122"/>
-        <source>Insert Vertical Frame</source>
-        <translation>垂直フレームの挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1123"/>
-        <source>Insert vertical frame</source>
-        <translation>垂直フレームの挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1131"/>
-        <source>Append Horizontal Frame</source>
-        <translation>水平フレームの追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1132"/>
-        <source>Append horizontal frame</source>
-        <translation>水平枠の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1138"/>
-        <source>Append Vertical Frame</source>
-        <translation>垂直フレームの追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1139"/>
-        <source>Append vertical frame</source>
-        <translation>垂直枠の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1145"/>
-        <source>Duplet</source>
-        <translation>2連符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1151"/>
-        <source>Triplet</source>
-        <translation>3連符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1157"/>
-        <source>Quadruplet</source>
-        <translation>4連符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1163"/>
-        <source>Quintuplet</source>
-        <translation>5連符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1169"/>
-        <source>Sextuplet</source>
-        <translation>6連符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1175"/>
-        <source>Septuplet</source>
-        <translation>7連符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1181"/>
-        <source>Octuplet</source>
-        <translation>8連符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1187"/>
-        <source>Nonuplet</source>
-        <translation>9連符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1193"/>
-        <source>Other...</source>
-        <translation>その他...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1194"/>
-        <source>Other tuplets</source>
-        <translation>その他の連符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1200"/>
-        <location filename="../../mscore/shortcut.cpp" line="1202"/>
-        <source>Longa</source>
-        <translation>四倍全音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1201"/>
-        <source>Note duration: Longa</source>
-        <translation>音価: 四倍全音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1211"/>
-        <source>Double Whole Note</source>
-        <translation>倍全音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1212"/>
-        <source>Note duration: Double whole</source>
-        <translation>音価: 倍全音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1213"/>
-        <location filename="../../mscore/shortcut.cpp" line="2824"/>
-        <source>Double whole note</source>
-        <translation>倍全音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1222"/>
-        <source>Whole Note</source>
-        <translation>全音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1223"/>
-        <source>Note duration: Whole</source>
-        <translation>音価: 全音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1224"/>
-        <location filename="../../mscore/shortcut.cpp" line="2835"/>
-        <source>Whole note</source>
-        <translation>全音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1233"/>
-        <source>Half Note</source>
-        <translation>2分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1234"/>
-        <source>Note duration: Half</source>
-        <translation>音価: 2分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1235"/>
-        <location filename="../../mscore/shortcut.cpp" line="2846"/>
-        <source>Half note</source>
-        <translation>2分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1244"/>
-        <source>Quarter Note</source>
-        <translation>4分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1245"/>
-        <source>Note duration: Quarter</source>
-        <translation>音価: 4分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1246"/>
-        <location filename="../../mscore/shortcut.cpp" line="2857"/>
-        <source>Quarter note</source>
-        <translation>4分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1255"/>
-        <source>Eighth Note</source>
-        <translation>8分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1256"/>
-        <source>Note duration: Eighth</source>
-        <translation>音価: 8分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1257"/>
-        <location filename="../../mscore/shortcut.cpp" line="2868"/>
-        <source>Eighth note</source>
-        <translation>8分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1266"/>
-        <source>16th Note</source>
-        <translation>16分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1267"/>
-        <source>Note duration: 16th</source>
-        <translation>音価: 16分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1268"/>
-        <location filename="../../mscore/shortcut.cpp" line="2879"/>
-        <source>16th note</source>
-        <translation>16分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1277"/>
-        <source>32nd Note</source>
-        <translation>32分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1278"/>
-        <source>Note duration: 32nd</source>
-        <translation>音価: 32分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1279"/>
-        <location filename="../../mscore/shortcut.cpp" line="2890"/>
-        <source>32nd note</source>
-        <translation>32分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1288"/>
-        <source>64th Note</source>
-        <translation>64分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1289"/>
-        <source>Note duration: 64th</source>
-        <translation>音価: 64分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1290"/>
-        <location filename="../../mscore/shortcut.cpp" line="2901"/>
-        <source>64th note</source>
-        <translation>64分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1299"/>
-        <source>128th Note</source>
-        <translation>128分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1300"/>
-        <source>Note duration: 128th</source>
-        <translation>音価: 128分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1301"/>
-        <location filename="../../mscore/shortcut.cpp" line="2912"/>
-        <source>128th note</source>
-        <translation>128分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1310"/>
-        <source>Increase Active Duration</source>
-        <translation>長さを増やす</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1311"/>
-        <source>Increase active duration</source>
-        <translation>長さを増やす</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1317"/>
-        <source>Decrease Active Duration</source>
-        <translation>長さを減らす</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1318"/>
-        <source>Decrease active duration</source>
-        <translation>長さを減らす</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1324"/>
-        <source>Augmentation Dot</source>
-        <translation>付点</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1325"/>
-        <source>Note duration: Augmentation dot</source>
-        <translation>音価: 付点</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1326"/>
-        <source>Augmentation dot</source>
-        <translation>付点</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1335"/>
-        <source>Double Augmentation Dot</source>
-        <translation>複付点</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1336"/>
-        <source>Note duration: Double augmentation dot</source>
-        <translation>音価: 複付点</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1337"/>
-        <source>Double augmentation dot</source>
-        <translation>複付点</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1346"/>
-        <location filename="../../mscore/shortcut.cpp" line="1348"/>
-        <source>Tie</source>
-        <translation>タイ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1347"/>
-        <source>Note duration: Tie</source>
-        <translation>音価: タイ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1356"/>
-        <source>Note input: Rest</source>
-        <translation>音符入力: 休符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1366"/>
-        <source>Double Sharp</source>
-        <translation>ダブルシャープ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1367"/>
-        <source>Note input: Double sharp</source>
-        <translation>音符入力: ダブルシャープ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1368"/>
-        <source>Double sharp</source>
-        <translation>ダブルシャープ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1377"/>
-        <location filename="../../mscore/shortcut.cpp" line="1379"/>
-        <source>Sharp</source>
-        <translation>シャープ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1378"/>
-        <source>Note input: Sharp</source>
-        <translation>音符入力: シャープ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1388"/>
-        <location filename="../../mscore/shortcut.cpp" line="1390"/>
-        <source>Natural</source>
-        <translation>ナチュラル</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1389"/>
-        <source>Note input: Natural</source>
-        <translation>音符入力: ナチュラル</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1399"/>
-        <location filename="../../mscore/shortcut.cpp" line="1401"/>
-        <source>Flat</source>
-        <translation>フラット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1400"/>
-        <source>Note input: Flat</source>
-        <translation>音符入力: フラット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1410"/>
-        <source>Double Flat</source>
-        <translation>ダブルフラット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1411"/>
-        <source>Note input: Double flat</source>
-        <translation>音符入力: ダブルフラット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1412"/>
-        <source>Double flat</source>
-        <translation>ダブルフラット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1421"/>
-        <location filename="../../mscore/shortcut.cpp" line="1423"/>
-        <source>Acciaccatura</source>
-        <translation>短前打音</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1422"/>
-        <source>Add acciaccatura</source>
-        <translation>短前打音の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1432"/>
-        <location filename="../../mscore/shortcut.cpp" line="1434"/>
-        <source>Appoggiatura</source>
-        <translation>前打音</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1433"/>
-        <source>Add appoggiatura</source>
-        <translation>前打音の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1444"/>
-        <source>Grace: Quarter</source>
-        <translation>前打音: 4分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1445"/>
-        <source>Add quarter grace note</source>
-        <translation>4分後打音の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1446"/>
-        <source>Grace: quarter</source>
-        <translation>前打音:4分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1456"/>
-        <location filename="../../mscore/shortcut.cpp" line="1458"/>
-        <source>Grace: 16th</source>
-        <translation>前打音:16分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1457"/>
-        <source>Add 16th grace note</source>
-        <translation>16分装飾音符の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1468"/>
-        <location filename="../../mscore/shortcut.cpp" line="1470"/>
-        <source>Grace: 32nd</source>
-        <translation>前打音:32分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1469"/>
-        <source>Add 32nd grace note</source>
-        <translation>32分装飾音符の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1480"/>
-        <source>Grace: Eighth after</source>
-        <translation>後打音:8分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1481"/>
-        <source>Add Eighth grace note after</source>
-        <translation>8分後打音を追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1482"/>
-        <source>Grace: eighth after</source>
-        <translation>後打音:8分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1492"/>
-        <location filename="../../mscore/shortcut.cpp" line="1494"/>
-        <source>Grace: 16th after</source>
-        <translation>後打音:16分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1493"/>
-        <source>Add 16th grace note after</source>
-        <translation>16分後打音を追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1504"/>
-        <location filename="../../mscore/shortcut.cpp" line="1506"/>
-        <source>Grace: 32nd after</source>
-        <translation>後打音:32分音符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1505"/>
-        <source>Add 32nd grace note after</source>
-        <translation>32分後打音を追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1515"/>
-        <source>1</source>
-        <translation>1</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1516"/>
-        <location filename="../../mscore/shortcut.cpp" line="1517"/>
-        <source>Voice 1</source>
-        <translation>声部 1</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1523"/>
-        <source>2</source>
-        <translation>2</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1524"/>
-        <location filename="../../mscore/shortcut.cpp" line="1525"/>
-        <source>Voice 2</source>
-        <translation>声部 2</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1531"/>
-        <source>3</source>
-        <translation>3</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1532"/>
-        <location filename="../../mscore/shortcut.cpp" line="1533"/>
-        <source>Voice 3</source>
-        <translation>声部 3</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1539"/>
-        <source>4</source>
-        <translation>4</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1540"/>
-        <location filename="../../mscore/shortcut.cpp" line="1541"/>
-        <source>Voice 4</source>
-        <translation>声部 4</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1547"/>
-        <source>MIDI Input</source>
-        <translation>MIDI Input</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1548"/>
-        <location filename="../../mscore/shortcut.cpp" line="1549"/>
-        <source>Enable MIDI input</source>
-        <translation>MIDI Inputを有効にする</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1558"/>
-        <source>Beam Start</source>
-        <translation>連桁開始</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1559"/>
-        <source>Beam start</source>
-        <translation>連桁（開始）</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1569"/>
-        <source>Beam Middle</source>
-        <translation>連桁（中間）</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1570"/>
-        <source>Beam middle</source>
-        <translation>連桁（中間）</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1580"/>
-        <source>No Beam</source>
-        <translation>連桁なし</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1581"/>
-        <source>No beam</source>
-        <translation>連桁なし</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1591"/>
-        <source>Beam 16th Sub</source>
-        <translation>16分連桁</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1592"/>
-        <source>Beam 16th sub</source>
-        <translation>16分連桁</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1602"/>
-        <source>Beam 32nd Sub</source>
-        <translation>32分連桁</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1603"/>
-        <source>Beam 32nd sub</source>
-        <translation>32分連桁</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1613"/>
-        <source>Auto Beam</source>
-        <translation>自動連桁</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1614"/>
-        <source>Auto beam</source>
-        <translation>自動連桁</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1624"/>
-        <source>Feathered Beam, Slower</source>
-        <translation>羽根付連桁, 遅く</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1625"/>
-        <source>Feathered beam, slower</source>
-        <translation>羽根付連桁, 遅く</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1633"/>
-        <source>Feathered Beam, Faster</source>
-        <translation>羽根付連桁, 速く</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1634"/>
-        <source>Feathered beam, faster</source>
-        <translation>羽根付連桁, 速く</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1642"/>
-        <location filename="../../mscore/shortcut.cpp" line="1643"/>
-        <source>Palettes</source>
-        <translation>パレット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1652"/>
-        <source>Play Panel</source>
-        <translation>再生パネル</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1653"/>
-        <source>Play panel</source>
-        <translation>再生パネル</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1662"/>
-        <source>Selection Filter</source>
-        <translation>選択フィルタ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1663"/>
-        <source>Selection filter</source>
-        <translation>選択フィルタ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1672"/>
-        <source>Navigator</source>
-        <translation>ナビゲータ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1682"/>
-        <source>MIDI Import Panel</source>
-        <translation>MIDIインポートパネル</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1683"/>
-        <source>MIDI import panel</source>
-        <translation>MIDIインポートパネル</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1697"/>
-        <source>Mixer</source>
-        <translation>ミキサー</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1721"/>
-        <source>Status Bar</source>
-        <translation>ステータスバー</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1722"/>
-        <source>Status bar</source>
-        <translation>ステータスバー</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1728"/>
-        <source>Quit</source>
-        <translation>終了</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1734"/>
-        <source>Zoom Canvas</source>
-        <translation>ズームキャンバス</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1735"/>
-        <source>Zoom canvas</source>
-        <translation>ズームキャンバス</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1741"/>
-        <source>Lyrics</source>
-        <translation>歌詞</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1742"/>
-        <source>Add lyrics</source>
-        <translation>歌詞の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1752"/>
-        <source>Tempo Marking</source>
-        <translation>速度標語</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1753"/>
-        <source>Add tempo marking</source>
-        <translation>速度標語の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1763"/>
-        <source>System Text</source>
-        <translation>段テキスト</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1764"/>
-        <source>Add system text</source>
-        <translation>段テキストの追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1770"/>
-        <source>Staff Text</source>
-        <translation>譜表テキスト</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1771"/>
-        <source>Add staff text</source>
-        <translation>譜表テキストの追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1777"/>
-        <source>Text</source>
-        <translation>テキスト</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1778"/>
-        <source>Add frame text</source>
-        <translation>テキストフレームの追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1784"/>
-        <source>Title</source>
-        <translation>タイトル</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1785"/>
-        <source>Add title text</source>
-        <translation>タイトルの追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1791"/>
-        <source>Subtitle</source>
-        <translation>サブタイトル</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1792"/>
-        <source>Add subtitle text</source>
-        <translation>サブタイトルの追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1798"/>
-        <source>Composer</source>
-        <translation>作曲者</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1799"/>
-        <source>Add composer text</source>
-        <translation>作曲者の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1805"/>
-        <source>Lyricist</source>
-        <translation>作詞者</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1806"/>
-        <source>Add lyricist text</source>
-        <translation>作詞者の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1812"/>
-        <source>Part Name</source>
-        <translation>パートの名称</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1813"/>
-        <source>Add part name</source>
-        <translation>パート名の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1819"/>
-        <source>Chord Symbol</source>
-        <translation>コード記号</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1820"/>
-        <source>Add chord symbol</source>
-        <translation>コード記号の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1826"/>
-        <source>Rehearsal Mark</source>
-        <translation>リハーサルマーク</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1827"/>
-        <source>Add rehearsal mark</source>
-        <translation>リハーサルマークの追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1833"/>
-        <source>Picture</source>
-        <translation>画像</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1834"/>
-        <source>Add picture</source>
-        <translation>画像の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1840"/>
-        <source>Play</source>
-        <translation>再生</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1841"/>
-        <source>Player play</source>
-        <translation>プレイヤー　再生</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1842"/>
-        <source>Start or stop playback</source>
-        <translation>再生/停止</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1851"/>
-        <source>Play Previous Chord</source>
-        <translation>直前の音</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1852"/>
-        <source>Play previous chord</source>
-        <translation>直前の音を再生</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1861"/>
-        <source>Play Previous Measure</source>
-        <translation>前の小節を再生</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1862"/>
-        <source>Play previous measure</source>
-        <translation>前の小節を再生</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1871"/>
-        <source>Play Next Chord</source>
-        <translation>次の音</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1872"/>
-        <source>Play next chord</source>
-        <translation>次の音を再生</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1881"/>
-        <source>Play Next Measure</source>
-        <translation>次の小節を再生</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1882"/>
-        <source>Play next measure</source>
-        <translation>次の小節を再生</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1891"/>
-        <source>Player Seek to Begin</source>
-        <translation>先頭まで検索</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1892"/>
-        <source>Player seek to begin</source>
-        <translation>先頭まで検索</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1901"/>
-        <source>Rewind</source>
-        <translation>巻き戻し</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1902"/>
-        <source>Player rewind</source>
-        <translation>プレイヤー　巻き戻し</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1903"/>
-        <source>Rewind to start position</source>
-        <translation>開始位置に戻る</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1910"/>
-        <source>Player Seek to End</source>
-        <translation>最後まで検索</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1911"/>
-        <source>Player seek to end</source>
-        <translation>最後まで検索</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1917"/>
-        <source>Play Repeats</source>
-        <translation>反復再生</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1918"/>
-        <source>Toggle repeats playback</source>
-        <translation>反復再生 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1919"/>
-        <source>Play repeats</source>
-        <translation>反復再生</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1928"/>
-        <source>Pan</source>
-        <translation>パン</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1929"/>
-        <source>Toggle pan score</source>
-        <translation>スコアのパン 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1930"/>
-        <source>Pan score during playback</source>
-        <translation>再生中にスクロール</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1939"/>
-        <source>Load Style...</source>
-        <translation>スタイルの読み込み...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1940"/>
-        <source>Load style</source>
-        <translation>スタイルの読み込み</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1950"/>
-        <source>Save Style...</source>
-        <translation>スタイルの保存...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1951"/>
-        <source>Save style</source>
-        <translation>スタイルの保存</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1961"/>
-        <source>Select All</source>
-        <translation>すべて選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1962"/>
-        <source>Select all</source>
-        <translation>すべて選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1972"/>
-        <source>&amp;Transpose...</source>
-        <translation>移調(&amp;T)...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1973"/>
-        <source>Transpose</source>
-        <translation>移調</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1983"/>
-        <source>Treble Clef</source>
-        <translation>ト音記号</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1984"/>
-        <source>Add treble clef</source>
-        <translation>ト音記号の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1994"/>
-        <source>Bass Clef</source>
-        <translation>バス譜表</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1995"/>
-        <source>Add bass clef</source>
-        <translation>バス記号の追加</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2005"/>
-        <source>Exchange Voice 1-2</source>
-        <translation>声部 １ と ２ を交換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2006"/>
-        <source>Exchange voice 1-2</source>
-        <translation>声部 １ と ２ を交換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2016"/>
-        <source>Exchange Voice 1-3</source>
-        <translation>声部 １ と ３ を交換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2017"/>
-        <source>Exchange voice 1-3</source>
-        <translation>声部 １ と ３ を交換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2027"/>
-        <source>Exchange Voice 1-4</source>
-        <translation>声部 １ と ４ を交換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2028"/>
-        <source>Exchange voice 1-4</source>
-        <translation>声部 １ と ４ を交換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2038"/>
-        <source>Exchange Voice 2-3</source>
-        <translation>声部 ２ と ３ を交換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2039"/>
-        <source>Exchange voice 2-3</source>
-        <translation>声部 ２ と ３ を交換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2049"/>
-        <source>Exchange Voice 2-4</source>
-        <translation>声部 ２ と ４ を交換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2050"/>
-        <source>Exchange voice 2-4</source>
-        <translation>声部 ２ と ４ を交換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2060"/>
-        <source>Exchange Voice 3-4</source>
-        <translation>声部 ３ と ４ を交換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2061"/>
-        <source>Exchange voice 3-4</source>
-        <translation>声部 ３ と ４ を交換</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2071"/>
-        <source>Concert Pitch</source>
-        <translation>合奏調 （実音）</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2072"/>
-        <source>Display in concert pitch</source>
-        <translation>合奏調（実音）で表示</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2082"/>
-        <source>Repeat Last Command</source>
-        <translation>直前の操作を繰り返す</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2083"/>
-        <source>Repeat last command</source>
-        <translation>直前の操作を繰り返す</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2091"/>
-        <source>Score Properties...</source>
-        <translation>スコアのプロパティ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2092"/>
-        <source>Edit score properties</source>
-        <translation>スコアのプロパティの編集</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2102"/>
-        <source>Toggle System Break</source>
-        <translation>「折り返し」  切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2103"/>
-        <source>Toggle system break</source>
-        <translation>「譜表の折り返し」  切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2113"/>
-        <source>Toggle Page Break</source>
-        <translation>「ページ区切り」  切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2114"/>
-        <source>Toggle page break</source>
-        <translation>「改ページ」  切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2124"/>
-        <source>Toggle Section Break</source>
-        <translation>「セクション区切り」  切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2125"/>
-        <source>Toggle section break</source>
-        <translation>「セクション区切り」  切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2135"/>
-        <source>Edit Element</source>
-        <translation>要素の編集</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2136"/>
-        <source>Edit element</source>
-        <translation>要素の編集</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2142"/>
-        <source>Reset</source>
-        <translation>リセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2143"/>
-        <source>Reset user settings</source>
-        <translation>ユーザ設定のリセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2149"/>
-        <source>Debugger</source>
-        <translation>デバッガ</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2155"/>
-        <source>Reset Stretch</source>
-        <translation>全ての間隔をリセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2156"/>
-        <source>Reset measure stretch</source>
-        <translation>小節の間隔をリセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2166"/>
-        <source>Show Invisible</source>
-        <translation>非表示属性を見せる</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2167"/>
-        <source>Show invisible</source>
-        <translation>非表示属性を見せる</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2177"/>
-        <source>Show Unprintable</source>
-        <translation>非印刷属性を見せる</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2178"/>
-        <source>Show unprintable</source>
-        <translation>非印刷属性を見せる</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2188"/>
-        <source>Show Frames</source>
-        <translation>フレームの表示</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2189"/>
-        <source>Show frames</source>
-        <translation>枠を表示</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2199"/>
-        <source>Show Page Margins</source>
-        <translation>ページ余白の表示</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2200"/>
-        <source>Show page margins</source>
-        <translation>ページ余白の表示</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2210"/>
-        <source>Insert Special Characters...</source>
-        <translation>特殊文字の挿入...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2211"/>
-        <source>Insert special characters</source>
-        <translation>特殊文字の挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2219"/>
-        <source>Whole Rest</source>
-        <translation>全休符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2220"/>
-        <source>Note input: Whole rest</source>
-        <translation>音符入力: 全休符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2226"/>
-        <source>Half Rest</source>
-        <translation>2分休符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2227"/>
-        <source>Note input: Half rest</source>
-        <translation>音符入力: 休符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2233"/>
-        <source>Quarter Rest</source>
-        <translation>4分休符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2234"/>
-        <source>Note input: Quarter rest</source>
-        <translation>音符入力: 4分休符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2240"/>
-        <source>Eighth Rest</source>
-        <translation>8分休符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2241"/>
-        <source>Note input: Eighth rest</source>
-        <translation>音符入力: 8分休符</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2247"/>
-        <source>Backspace</source>
-        <translation>バックスペース</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2258"/>
-        <source>Find</source>
-        <translation>検索</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2264"/>
-        <source>Zoom In</source>
-        <translation>拡大</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2265"/>
-        <source>Zoom in</source>
-        <translation>拡大</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2272"/>
-        <source>Zoom Out</source>
-        <translation>縮小</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2273"/>
-        <source>Zoom out</source>
-        <translation>縮小</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2279"/>
-        <location filename="../../mscore/shortcut.cpp" line="2280"/>
-        <source>Zoom to 100%</source>
-        <translation>100％にズームする</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2286"/>
-        <source>Mirror Note Head</source>
-        <translation>符頭を反転</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2287"/>
-        <source>Mirror note head</source>
-        <translation>符頭の反転</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2297"/>
-        <source>General...</source>
-        <translation>一般...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2298"/>
-        <source>Edit general style</source>
-        <translation>一般スタイルの編集</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2308"/>
-        <source>Text...</source>
-        <translation>テキスト...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2309"/>
-        <source>Edit text style</source>
-        <translation>テキストスタイルの編集</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2319"/>
-        <source>Chord Symbols...</source>
-        <translation>コード記号...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2320"/>
-        <source>Edit chord symbols style</source>
-        <translation>コード記号スタイルの編集</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2326"/>
-        <source>All Similar Elements</source>
-        <translation>全ての類似した要素</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2327"/>
-        <source>Select all similar elements</source>
-        <translation>全ての類似した要素を選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2333"/>
-        <source>All Similar Elements in Same Staff</source>
-        <translation>現在の譜表の全ての類似した要素</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2334"/>
-        <source>Select all similar elements in same staff</source>
-        <translation>現在の譜表から全ての類似した要素を選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2340"/>
-        <source>All Similar Elements in Range Selection</source>
-        <translation>選択範囲内の全ての類似した要素</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2341"/>
-        <source>Select all similar elements in the range selection</source>
-        <translation>選択範囲内から全ての類似した要素を選択</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2347"/>
-        <source>Synthesizer</source>
-        <translation>シンセサイザー</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2357"/>
-        <source>Double Duration</source>
-        <translation>2倍の音価</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2358"/>
-        <source>Double duration</source>
-        <translation>2倍の音価</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2368"/>
-        <source>Half Duration</source>
-        <translation>半分の音価</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2369"/>
-        <source>Half duration</source>
-        <translation>半分の音価</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2379"/>
-        <source>Repeat Selection</source>
-        <translation>選択範囲を反復</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2380"/>
-        <source>Repeat selection</source>
-        <translation>直前の選択範囲を再現</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2388"/>
-        <source>Pan Piano Roll</source>
-        <translation>ピアノロールのパン</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2389"/>
-        <source>Toggle pan piano roll</source>
-        <translation>ピアノロールのパン 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2390"/>
-        <source>Pan roll during playback</source>
-        <translation>再生中にスクロール</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2399"/>
-        <source>Documents Side by Side</source>
-        <translation>楽譜を左右に表示する</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2400"/>
-        <source>Display documents side by side</source>
-        <translation>楽譜を左右に表示する</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2406"/>
-        <source>Documents Stacked</source>
-        <translation>楽譜を上下に表示する</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2407"/>
-        <source>Display documents stacked</source>
-        <translation>楽譜を上下に表示する</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2413"/>
-        <source>Parts...</source>
-        <translation>パート...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2414"/>
-        <source>Manage parts</source>
-        <translation>パートの管理</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2420"/>
-        <source>Enharmonic Up</source>
-        <translation>異名同音を上げる</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2421"/>
-        <source>Enharmonic up</source>
-        <translation>異名同音を上げる</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2427"/>
-        <source>Enharmonic Down</source>
-        <translation>異名同音を下げる</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2428"/>
-        <source>Enharmonic down</source>
-        <translation>異名同音を下げる</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2434"/>
-        <source>Create New Revision</source>
-        <translation>新しいリビジョンの作成</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2435"/>
-        <source>Create new revision</source>
-        <translation>新しいリビジョンの作成</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2441"/>
-        <source>Toggle Image Capture</source>
-        <translation>イメージ キャプチャ 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2442"/>
-        <source>Toggle image capture</source>
-        <translation>イメージ キャプチャ 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2453"/>
-        <source>Show OMR Image</source>
-        <translation>OMR画像を表示する</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2454"/>
-        <source>Show OMR image</source>
-        <translation>OMR画像を表示する</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2461"/>
-        <source>Full Screen</source>
-        <translation>フルスクリーン</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2462"/>
-        <source>Full screen</source>
-        <translation>フルスクリーン</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2468"/>
-        <source>Enable Snap to Horizontal Grid</source>
-        <translation>水平グリッドにスナップする</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2469"/>
-        <source>Enable snap to horizontal grid</source>
-        <translation>水平グリッドにスナップする</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2479"/>
-        <source>Enable Snap to Vertical Grid</source>
-        <translation>垂直グリッドにスナップする</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2480"/>
-        <source>Enable snap to vertical grid</source>
-        <translation>垂直グリッドにスナップする</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2490"/>
-        <source>Configure Grid</source>
-        <translation>グリッドの設定</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2491"/>
-        <source>Configure grid</source>
-        <translation>グリッドの設定</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2497"/>
-        <source>Re-Pitch Mode</source>
-        <translation>音高変更モード</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2498"/>
+        <location filename="../../mscore/shortcut.cpp" line="262"/>
         <source>Replace pitches without changing rhythms</source>
         <translation>リズムを変えずに音高を変更</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2508"/>
+        <location filename="../../mscore/shortcut.cpp" line="272"/>
+        <source>Rhythm</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="273"/>
+        <source>Enter durations with a single click or keypress</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="283"/>
+        <source>Real-time (automatic)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="284"/>
+        <source>Perform the piece at a fixed tempo indicated by a metronome beat</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="294"/>
+        <source>Real-time (manual)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="295"/>
+        <source>Perform the piece while tapping a key or pedal to set the tempo</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="305"/>
+        <source>Respell Pitches</source>
+        <translation>臨時記号の自動補正</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="306"/>
+        <source>Respell pitches</source>
+        <translation>臨時記号の自動補正</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="316"/>
+        <source>Unison Above</source>
+        <translation>1度上</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="317"/>
+        <source>Enter unison above</source>
+        <translation>1度上を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="323"/>
+        <source>Second Above</source>
+        <translation>2度上</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="324"/>
+        <source>Enter second above</source>
+        <translation>2度上を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="330"/>
+        <source>Third Above</source>
+        <translation>3度上</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="331"/>
+        <source>Enter third above</source>
+        <translation>3度上を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="337"/>
+        <source>Fourth Above</source>
+        <translation>4度上</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="338"/>
+        <source>Enter fourth above</source>
+        <translation>4度上を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="344"/>
+        <source>Fifth Above</source>
+        <translation>5度上</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="345"/>
+        <source>Enter fifth above</source>
+        <translation>5度上を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="351"/>
+        <source>Sixth Above</source>
+        <translation>6度上</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="352"/>
+        <source>Enter sixth above</source>
+        <translation>6度上を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="358"/>
+        <source>Seventh Above</source>
+        <translation>7度上</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="359"/>
+        <source>Enter seventh above</source>
+        <translation>7度上を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="365"/>
+        <source>Octave Above</source>
+        <translation>オクターブ上</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="366"/>
+        <source>Enter octave above</source>
+        <translation>オクターブ上を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="372"/>
+        <source>Ninth Above</source>
+        <translation>9度上</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="373"/>
+        <source>Enter ninth above</source>
+        <translation>9度上を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="379"/>
+        <source>Second Below</source>
+        <translation>2度下</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="380"/>
+        <source>Enter second below</source>
+        <translation>2度下を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="386"/>
+        <source>Third Below</source>
+        <translation>3度下</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="387"/>
+        <source>Enter third below</source>
+        <translation>3度下を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="393"/>
+        <source>Fourth Below</source>
+        <translation>4度下</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="394"/>
+        <source>Enter fourth below</source>
+        <translation>4度下を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="400"/>
+        <source>Fifth Below</source>
+        <translation>5度下</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="401"/>
+        <source>Enter fifth below</source>
+        <translation>5度下を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="407"/>
+        <source>Sixth Below</source>
+        <translation>6度下</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="408"/>
+        <source>Enter sixth below</source>
+        <translation>6度下を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="414"/>
+        <source>Seventh Below</source>
+        <translation>7度下</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="415"/>
+        <source>Enter seventh below</source>
+        <translation>7度下を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="421"/>
+        <source>Octave Below</source>
+        <translation>オクターブ下</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="422"/>
+        <source>Enter octave below</source>
+        <translation>オクターブ下を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="428"/>
+        <source>Ninth Below</source>
+        <translation>9度下</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="429"/>
+        <source>Enter ninth below</source>
+        <translation>9度下を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="435"/>
+        <source>A</source>
+        <translation>A</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="436"/>
+        <source>Enter note A</source>
+        <translation>A を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="442"/>
+        <source>B</source>
+        <translation>B</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="443"/>
+        <source>Enter note B</source>
+        <translation>B を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="449"/>
+        <source>C</source>
+        <translation>C</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="450"/>
+        <source>Enter note C</source>
+        <translation>C を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="456"/>
+        <source>D</source>
+        <translation>D</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="457"/>
+        <source>Enter note D</source>
+        <translation>D を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="463"/>
+        <source>E</source>
+        <translation>E</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="464"/>
+        <source>Enter note E</source>
+        <translation>E を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="470"/>
+        <source>F</source>
+        <translation>F</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="471"/>
+        <source>Enter note F</source>
+        <translation>F を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="477"/>
+        <source>G</source>
+        <translation>G</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="478"/>
+        <source>Enter note G</source>
+        <translation>G を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="484"/>
+        <source>Add A</source>
+        <translation>A を加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="485"/>
+        <source>Add note A to chord</source>
+        <translation>A を加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="491"/>
+        <source>Add B</source>
+        <translation>B を加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="492"/>
+        <source>Add note B to chord</source>
+        <translation>B を加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="498"/>
+        <source>Add C</source>
+        <translation>C を加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="499"/>
+        <source>Add note C to chord</source>
+        <translation>C を加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="505"/>
+        <source>Add D</source>
+        <translation>D を加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="506"/>
+        <source>Add note D to chord</source>
+        <translation>D を加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="512"/>
+        <source>Add E</source>
+        <translation>E を加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="513"/>
+        <source>Add note E to chord</source>
+        <translation>E を加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="519"/>
+        <source>Add F</source>
+        <translation>F を加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="520"/>
+        <source>Add note F to chord</source>
+        <translation>F を加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="526"/>
+        <source>Add G</source>
+        <translation>G を加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="527"/>
+        <source>Add note G to chord</source>
+        <translation>G を加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="533"/>
+        <source>Insert A</source>
+        <translation>A の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="534"/>
+        <source>Insert note A</source>
+        <translation>A の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="540"/>
+        <source>Insert B</source>
+        <translation>B の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="541"/>
+        <source>Insert note B</source>
+        <translation>B の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="547"/>
+        <source>Insert C</source>
+        <translation>C の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="548"/>
+        <source>Insert note C</source>
+        <translation>C の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="554"/>
+        <source>Insert D</source>
+        <translation>D の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="555"/>
+        <source>Insert note D</source>
+        <translation>D の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="561"/>
+        <source>Insert E</source>
+        <translation>E の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="562"/>
+        <source>Insert note E</source>
+        <translation>E の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="568"/>
+        <source>Insert F</source>
+        <translation>F の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="569"/>
+        <source>Insert note F</source>
+        <translation>F の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="575"/>
+        <source>Insert G</source>
+        <translation>G の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="576"/>
+        <source>Insert note G</source>
+        <translation>G の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="582"/>
+        <location filename="../../mscore/shortcut.cpp" line="1473"/>
+        <location filename="../../mscore/shortcut.cpp" line="1475"/>
+        <source>Rest</source>
+        <translation>休符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="583"/>
+        <source>Enter rest</source>
+        <translation>休符を入力</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="591"/>
+        <source>Real-time advance</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="592"/>
+        <source>Move the cursor forward in real-time input mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="599"/>
+        <source>Staccato</source>
+        <translation>スタッカート</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="600"/>
+        <source>Toggle staccato</source>
+        <translation>スタッカート 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="610"/>
+        <source>Tenuto</source>
+        <translation>テヌート</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="611"/>
+        <source>Toggle tenuto</source>
+        <translation>テヌート 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="621"/>
+        <source>Trill</source>
+        <translation>トリル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="622"/>
+        <source>Toggle trill</source>
+        <translation>トリル 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="632"/>
+        <source>Marcato</source>
+        <translation>マルカート</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="633"/>
+        <source>Toggle marcato</source>
+        <translation>マルカート 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="643"/>
+        <source>Sforzato</source>
+        <translation>スフォルツァンド</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="644"/>
+        <source>Toggle sforzato</source>
+        <translation>スフォルツァンド 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="654"/>
+        <source>Up Bow</source>
+        <translation>上げ弓</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="655"/>
+        <source>Toggle up bow</source>
+        <translation>上げ弓のトグル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="665"/>
+        <source>Down Bow</source>
+        <translation>下げ弓</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="666"/>
+        <source>Toggle down bow</source>
+        <translation>下げ弓のトグル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="676"/>
+        <source>Increase Stretch</source>
+        <translation>間隔を広くする</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="677"/>
+        <source>Increase stretch</source>
+        <translation>間隔を広くする</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="678"/>
+        <source>Increase stretch of selected measures</source>
+        <translation>選択された複数小節の間隔を広くする</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="687"/>
+        <source>Decrease Stretch</source>
+        <translation>間隔を狭くする</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="688"/>
+        <source>Decrease stretch</source>
+        <translation>間隔を狭くする</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="689"/>
+        <source>Decrease stretch of selected measures</source>
+        <translation>選択された複数小節の間隔を狭くする</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="698"/>
+        <source>Reset Beam Mode</source>
+        <translation>連桁の様式をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="699"/>
+        <source>Reset beam mode</source>
+        <translation>連桁の様式をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="700"/>
+        <source>Reset beam mode of selected measures</source>
+        <translation>選択された小節の連桁の様式をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="709"/>
+        <source>Regroup Rhythms</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="710"/>
+        <source>Regroup rhythms</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="711"/>
+        <source>Combine rests and tied notes from selection and resplit at rhythmical locations</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="720"/>
+        <source>Flip Direction</source>
+        <translation>方向転換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="721"/>
+        <source>Flip direction</source>
+        <translation>方向転換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="731"/>
+        <source>Up</source>
+        <translation>上</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="732"/>
+        <source>Pitch up or move text or articulation up</source>
+        <translation>音高を上げる、またはテキストやアーティキュレーションを上に</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="742"/>
+        <source>Diatonic Up</source>
+        <translation>全音上へ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="743"/>
+        <source>Diatonic pitch up</source>
+        <translation>ダイアトニックに従って音高を上へ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="753"/>
+        <source>Up Octave</source>
+        <translation>音高をオクターブ上げる</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="754"/>
+        <source>Pitch up octave</source>
+        <translation>音高をオクターブ上へ移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="755"/>
+        <source>Pitch up by an octave or move text or articulation up</source>
+        <translation>音高を１オクターブ上に、またはテキストやアーティキュレーションを上に</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="764"/>
+        <source>Up Note in Chord</source>
+        <translation>上に転回</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="765"/>
+        <source>Go to higher pitched note in chord</source>
+        <translation>和音の中のより高い音へ移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="775"/>
+        <source>Top Note in Chord</source>
+        <translation>和音の中で一番高い音に移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="776"/>
+        <source>Go to top note in chord</source>
+        <translation>和音の中で一番高い音に移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="786"/>
+        <source>Move Up</source>
+        <translation>上に移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="787"/>
+        <source>Move up</source>
+        <translation>上に移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="797"/>
+        <source>Down</source>
+        <translation>下</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="798"/>
+        <source>Pitch down or move text or articulation down</source>
+        <translation>音高を下げる、またはテキストやアーティキュレーションを下に</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="808"/>
+        <source>Diatonic Down</source>
+        <translation>全音下へ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="809"/>
+        <source>Diatonic pitch down</source>
+        <translation>ダイアトニックに従って音高を下へ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="819"/>
+        <source>Down Octave</source>
+        <translation>音高をオクターブ下げる</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="820"/>
+        <source>Pitch down octave</source>
+        <translation>音高をオクターブ下へ移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="821"/>
+        <source>Pitch down by an octave or move text or articulation down</source>
+        <translation>音高を１オクターブ下に、またはテキストやアーティキュレーションを下に</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="830"/>
+        <source>Down Note in Chord</source>
+        <translation>下の音に移動する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="831"/>
+        <location filename="../../mscore/shortcut.cpp" line="832"/>
+        <source>Go to lower pitched note in chord</source>
+        <translation>下の音に移動する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="841"/>
+        <source>Next Element</source>
+        <translation>次の要素</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="842"/>
+        <location filename="../../mscore/shortcut.cpp" line="843"/>
+        <source>Accessibility: Next element</source>
+        <translation>アクセシビリティ: 次の要素</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="852"/>
+        <source>Previous Element</source>
+        <translation>前の要素</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="853"/>
+        <location filename="../../mscore/shortcut.cpp" line="854"/>
+        <source>Accessibility: Previous element</source>
+        <translation>アクセシビリティ: 前の要素</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="863"/>
+        <source>First Element</source>
+        <translation>最初の要素</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="864"/>
+        <location filename="../../mscore/shortcut.cpp" line="865"/>
+        <source>Go to the first element</source>
+        <translation>最初の要素に移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="874"/>
+        <source>Last Element</source>
+        <translation>最後の要素</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="875"/>
+        <location filename="../../mscore/shortcut.cpp" line="876"/>
+        <source>Go to the last element</source>
+        <translation>最後の要素に移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="885"/>
+        <source>Bottom Note in Chord</source>
+        <translation>和音の最低音</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="886"/>
+        <source>Go to bottom note in chord</source>
+        <translation>一番低い音に移動する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="896"/>
+        <source>Move Down</source>
+        <translation>下に移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="897"/>
+        <source>Move down</source>
+        <translation>下に移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="907"/>
+        <source>Previous Chord</source>
+        <translation>直前の音</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="908"/>
+        <source>Go to previous chord or move text left</source>
+        <translation>前の音符へ移る、またはテキストを左へ移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="914"/>
+        <source>Previous Measure</source>
+        <translation>直前の小節</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="915"/>
+        <source>Go to previous measure or move text left</source>
+        <translation>前の小節へ移る、またはテキストを左へ移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="921"/>
+        <source>Previous Staff or Voice</source>
+        <translation>前の譜表または声部</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="922"/>
+        <source>Previous staff or voice</source>
+        <translation>前の譜表または声部</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="928"/>
+        <source>Next Chord</source>
+        <translation>次の音</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="929"/>
+        <source>Go to next chord or move text right</source>
+        <translation>次の音符へ移る、またはテキストを右へ移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="935"/>
+        <source>Next Measure</source>
+        <translation>次の小節</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="936"/>
+        <source>Go to next measure or move text right</source>
+        <translation>次の小節へ移る、またはテキストを右へ移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="942"/>
+        <source>Next Staff or Voice</source>
+        <translation>次の譜表または声部</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="943"/>
+        <source>Next staff or voice</source>
+        <translation>次の譜表または声部</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="949"/>
+        <source>Add Previous Chord to Selection</source>
+        <translation>前の音を選択に加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="950"/>
+        <source>Add previous chord to selection</source>
+        <translation>前の音を選択に加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="956"/>
+        <source>Select to Beginning of Measure</source>
+        <translation>小節の最初まで選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="957"/>
+        <source>Select to beginning of measure</source>
+        <translation>小節の最初まで選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="963"/>
+        <source>Add Next Chord to Selection</source>
+        <translation>次の音を選択に加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="964"/>
+        <source>Add next chord to selection</source>
+        <translation>次の音を選択に加える</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="970"/>
+        <source>Select Section</source>
+        <translation>セクションの選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="971"/>
+        <source>Select section</source>
+        <translation>セクションの選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="977"/>
+        <source>Move Chord/Rest Right</source>
+        <translation>音符/休符を右へ移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="978"/>
+        <source>Move chord/rest right</source>
+        <translation>音符/休符を右へ移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="984"/>
+        <source>Move Chord/Rest left</source>
+        <translation>音符/休符を左へ移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="985"/>
+        <source>Move chord/rest left</source>
+        <translation>音符/休符を左へ移動</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="991"/>
+        <source>Select to end of measure</source>
+        <translation>小節の末尾まで選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="997"/>
+        <source>Select to Beginning of Line</source>
+        <translation>行の最初まで選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="998"/>
+        <source>Select to beginning of line</source>
+        <translation>行の最初まで選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1004"/>
+        <source>Select to End of Line</source>
+        <translation>行の末尾まで選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1005"/>
+        <source>Select to end of line</source>
+        <translation>行の末尾まで選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1011"/>
+        <source>Select to Beginning of Score</source>
+        <translation>スコアの最初まで選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1012"/>
+        <source>Select to beginning of score</source>
+        <translation>スコアの最初まで選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1018"/>
+        <source>Select to End of Score</source>
+        <translation>スコアの末尾まで選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1019"/>
+        <source>Select to end of score</source>
+        <translation>スコアの末尾まで選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1025"/>
+        <source>Add Staff Above to Selection</source>
+        <translation>上に譜表を追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1026"/>
+        <source>Add staff above to selection</source>
+        <translation>上に譜表を追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1032"/>
+        <source>Add Staff Below to Selection</source>
+        <translation>下に譜表を追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1033"/>
+        <source>Add staff below to selection</source>
+        <translation>下に譜表を追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1039"/>
+        <source>Page: Previous</source>
+        <translation>ページ:前</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1045"/>
+        <source>Page: Next</source>
+        <translation>ページ:次</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1051"/>
+        <source>Page: Top</source>
+        <translation>ページ:上</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1057"/>
+        <source>Page: End</source>
+        <translation>ページ:下</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1063"/>
+        <source>Slur</source>
+        <translation>スラー</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1064"/>
+        <source>Add slur</source>
+        <translation>スラーの追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1070"/>
+        <source>Crescendo</source>
+        <translation>クレシェンド</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1071"/>
+        <source>Add crescendo</source>
+        <translation>クレシェンドの追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1081"/>
+        <source>Decrescendo</source>
+        <translation>デクレシェンド</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1082"/>
+        <source>Add decrescendo</source>
+        <translation>デクレシェンドの追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1092"/>
+        <source>Ottava 8va</source>
+        <translation>オッターヴァ8va</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1093"/>
+        <source>Add ottava 8va</source>
+        <translation>オッターヴァ8va の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1103"/>
+        <source>Ottava 8vb</source>
+        <translation>オッターヴァ8vb</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1104"/>
+        <source>Add ottava 8vb</source>
+        <translation>オッターヴァ8vb の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1115"/>
+        <source>Escape</source>
+        <translation>エスケープ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1121"/>
+        <location filename="../../mscore/shortcut.cpp" line="1122"/>
+        <source>Delete</source>
+        <translation>削除</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1123"/>
+        <source>Delete contents of the selected measures</source>
+        <translation>選択された小節の内容を削除</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1132"/>
+        <source>Full Measure Rest</source>
+        <translation>全休符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1133"/>
+        <source>Full measure rest</source>
+        <translation>全休符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1134"/>
+        <source>Converts the measure to a full measure rest</source>
+        <translation>小節を全休符に変換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1143"/>
+        <source>Timewise Delete</source>
+        <translation>繰り返し記号を消去する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1144"/>
+        <source>Timewise delete</source>
+        <translation>繰り返し記号を消去する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1145"/>
+        <source>Delete element and duration</source>
+        <translation>要素と持続時間の消去</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1154"/>
+        <source>Delete Selected Measures</source>
+        <translation>選択された小節を消去</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1155"/>
+        <source>Delete selected measures</source>
+        <translation>選択された小節を削除</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1165"/>
+        <source>Append One Measure</source>
+        <translation>１小節追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1166"/>
+        <source>Append one measure</source>
+        <translation>１小節の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1172"/>
+        <source>Append Measures...</source>
+        <translation>小節追加 （２小節以上）...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1173"/>
+        <source>Append measures</source>
+        <translation>複数の小節を追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1179"/>
+        <source>Insert One Measure</source>
+        <translation>１小節挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1180"/>
+        <source>Insert one measure</source>
+        <translation>１小節の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1188"/>
+        <source>Insert Measures...</source>
+        <translation>小節挿入（２小節以上）...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1189"/>
+        <source>Insert measures</source>
+        <translation>複数の小節を挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1195"/>
+        <source>Insert Horizontal Frame</source>
+        <translation>水平フレームの挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1196"/>
+        <source>Insert horizontal frame</source>
+        <translation>水平フレームの挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1204"/>
+        <source>Insert Text Frame</source>
+        <translation>テキストフレームの挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1205"/>
+        <source>Insert text frame</source>
+        <translation>テキストフレームを挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1213"/>
+        <source>Append Text Frame</source>
+        <translation>テキストフレームの追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1214"/>
+        <source>Append text frame</source>
+        <translation>テキストフレームを追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1220"/>
+        <source>Insert Fretboard Diagram Frame</source>
+        <translation>フレットボードダイアグラムの挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1221"/>
+        <source>Insert fretboard diagram frame</source>
+        <translation>フレットボードダイアグラムの挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1229"/>
+        <source>Insert Vertical Frame</source>
+        <translation>垂直フレームの挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1230"/>
+        <source>Insert vertical frame</source>
+        <translation>垂直フレームの挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1238"/>
+        <source>Append Horizontal Frame</source>
+        <translation>水平フレームの追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1239"/>
+        <source>Append horizontal frame</source>
+        <translation>水平枠の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1245"/>
+        <source>Append Vertical Frame</source>
+        <translation>垂直フレームの追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1246"/>
+        <source>Append vertical frame</source>
+        <translation>垂直枠の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1252"/>
+        <source>Duplet</source>
+        <translation>2連符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1258"/>
+        <source>Triplet</source>
+        <translation>3連符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1264"/>
+        <source>Quadruplet</source>
+        <translation>4連符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1270"/>
+        <source>Quintuplet</source>
+        <translation>5連符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1276"/>
+        <source>Sextuplet</source>
+        <translation>6連符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1282"/>
+        <source>Septuplet</source>
+        <translation>7連符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1288"/>
+        <source>Octuplet</source>
+        <translation>8連符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1294"/>
+        <source>Nonuplet</source>
+        <translation>9連符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1300"/>
+        <source>Other...</source>
+        <translation>その他...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1301"/>
+        <source>Other tuplets</source>
+        <translation>その他の連符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1307"/>
+        <location filename="../../mscore/shortcut.cpp" line="1309"/>
+        <source>Longa</source>
+        <translation>四倍全音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1308"/>
+        <source>Note duration: Longa</source>
+        <translation>音価: 四倍全音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1318"/>
+        <source>Double Whole Note</source>
+        <translation>倍全音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1319"/>
+        <source>Note duration: Double whole</source>
+        <translation>音価: 倍全音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1320"/>
+        <location filename="../../mscore/shortcut.cpp" line="2988"/>
+        <source>Double whole note</source>
+        <translation>倍全音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1329"/>
+        <source>Whole Note</source>
+        <translation>全音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1330"/>
+        <source>Note duration: Whole</source>
+        <translation>音価: 全音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1331"/>
+        <location filename="../../mscore/shortcut.cpp" line="2999"/>
+        <source>Whole note</source>
+        <translation>全音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1340"/>
+        <source>Half Note</source>
+        <translation>2分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1341"/>
+        <source>Note duration: Half</source>
+        <translation>音価: 2分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1342"/>
+        <location filename="../../mscore/shortcut.cpp" line="3010"/>
+        <source>Half note</source>
+        <translation>2分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1351"/>
+        <source>Quarter Note</source>
+        <translation>4分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1352"/>
+        <source>Note duration: Quarter</source>
+        <translation>音価: 4分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1353"/>
+        <location filename="../../mscore/shortcut.cpp" line="3021"/>
+        <source>Quarter note</source>
+        <translation>4分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1362"/>
+        <source>Eighth Note</source>
+        <translation>8分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1363"/>
+        <source>Note duration: Eighth</source>
+        <translation>音価: 8分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1364"/>
+        <location filename="../../mscore/shortcut.cpp" line="3032"/>
+        <source>Eighth note</source>
+        <translation>8分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1373"/>
+        <source>16th Note</source>
+        <translation>16分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1374"/>
+        <source>Note duration: 16th</source>
+        <translation>音価: 16分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1375"/>
+        <location filename="../../mscore/shortcut.cpp" line="3043"/>
+        <source>16th note</source>
+        <translation>16分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1384"/>
+        <source>32nd Note</source>
+        <translation>32分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1385"/>
+        <source>Note duration: 32nd</source>
+        <translation>音価: 32分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1386"/>
+        <location filename="../../mscore/shortcut.cpp" line="3054"/>
+        <source>32nd note</source>
+        <translation>32分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1395"/>
+        <source>64th Note</source>
+        <translation>64分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1396"/>
+        <source>Note duration: 64th</source>
+        <translation>音価: 64分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1397"/>
+        <location filename="../../mscore/shortcut.cpp" line="3065"/>
+        <source>64th note</source>
+        <translation>64分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1406"/>
+        <source>128th Note</source>
+        <translation>128分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1407"/>
+        <source>Note duration: 128th</source>
+        <translation>音価: 128分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1408"/>
+        <location filename="../../mscore/shortcut.cpp" line="3076"/>
+        <source>128th note</source>
+        <translation>128分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1417"/>
+        <source>Increase Active Duration</source>
+        <translation>長さを増やす</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1418"/>
+        <source>Increase active duration</source>
+        <translation>長さを増やす</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1424"/>
+        <source>Decrease Active Duration</source>
+        <translation>長さを減らす</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1425"/>
+        <source>Decrease active duration</source>
+        <translation>長さを減らす</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1431"/>
+        <source>Augmentation Dot</source>
+        <translation>付点</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1432"/>
+        <source>Note duration: Augmentation dot</source>
+        <translation>音価: 付点</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1433"/>
+        <source>Augmentation dot</source>
+        <translation>付点</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1442"/>
+        <source>Double Augmentation Dot</source>
+        <translation>複付点</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1443"/>
+        <source>Note duration: Double augmentation dot</source>
+        <translation>音価: 複付点</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1444"/>
+        <source>Double augmentation dot</source>
+        <translation>複付点</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1453"/>
+        <source>Triple Augmentation Dot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1454"/>
+        <source>Note duration: Triple augmentation dot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1455"/>
+        <source>Triple augmentation dot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1464"/>
+        <location filename="../../mscore/shortcut.cpp" line="1466"/>
+        <source>Tie</source>
+        <translation>タイ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1465"/>
+        <source>Note duration: Tie</source>
+        <translation>音価: タイ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1474"/>
+        <source>Note input: Rest</source>
+        <translation>音符入力: 休符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1484"/>
+        <source>Double Sharp</source>
+        <translation>ダブルシャープ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1485"/>
+        <source>Note input: Double sharp</source>
+        <translation>音符入力: ダブルシャープ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1486"/>
+        <source>Double sharp</source>
+        <translation>ダブルシャープ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1495"/>
+        <location filename="../../mscore/shortcut.cpp" line="1497"/>
+        <source>Sharp</source>
+        <translation>シャープ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1496"/>
+        <source>Note input: Sharp</source>
+        <translation>音符入力: シャープ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1506"/>
+        <location filename="../../mscore/shortcut.cpp" line="1508"/>
+        <source>Natural</source>
+        <translation>ナチュラル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1507"/>
+        <source>Note input: Natural</source>
+        <translation>音符入力: ナチュラル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1517"/>
+        <location filename="../../mscore/shortcut.cpp" line="1519"/>
+        <source>Flat</source>
+        <translation>フラット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1518"/>
+        <source>Note input: Flat</source>
+        <translation>音符入力: フラット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1528"/>
+        <source>Double Flat</source>
+        <translation>ダブルフラット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1529"/>
+        <source>Note input: Double flat</source>
+        <translation>音符入力: ダブルフラット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1530"/>
+        <source>Double flat</source>
+        <translation>ダブルフラット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1539"/>
+        <location filename="../../mscore/shortcut.cpp" line="1541"/>
+        <source>Acciaccatura</source>
+        <translation>短前打音</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1540"/>
+        <source>Add acciaccatura</source>
+        <translation>短前打音の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1550"/>
+        <location filename="../../mscore/shortcut.cpp" line="1552"/>
+        <source>Appoggiatura</source>
+        <translation>前打音</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1551"/>
+        <source>Add appoggiatura</source>
+        <translation>前打音の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1562"/>
+        <source>Grace: Quarter</source>
+        <translation>前打音: 4分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1563"/>
+        <source>Add quarter grace note</source>
+        <translation>4分後打音の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1564"/>
+        <source>Grace: quarter</source>
+        <translation>前打音:4分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1574"/>
+        <location filename="../../mscore/shortcut.cpp" line="1576"/>
+        <source>Grace: 16th</source>
+        <translation>前打音:16分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1575"/>
+        <source>Add 16th grace note</source>
+        <translation>16分装飾音符の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1586"/>
+        <location filename="../../mscore/shortcut.cpp" line="1588"/>
+        <source>Grace: 32nd</source>
+        <translation>前打音:32分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1587"/>
+        <source>Add 32nd grace note</source>
+        <translation>32分装飾音符の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1598"/>
+        <source>Grace: Eighth after</source>
+        <translation>後打音:8分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1599"/>
+        <source>Add Eighth grace note after</source>
+        <translation>8分後打音を追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1600"/>
+        <source>Grace: eighth after</source>
+        <translation>後打音:8分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1610"/>
+        <location filename="../../mscore/shortcut.cpp" line="1612"/>
+        <source>Grace: 16th after</source>
+        <translation>後打音:16分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1611"/>
+        <source>Add 16th grace note after</source>
+        <translation>16分後打音を追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1622"/>
+        <location filename="../../mscore/shortcut.cpp" line="1624"/>
+        <source>Grace: 32nd after</source>
+        <translation>後打音:32分音符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1623"/>
+        <source>Add 32nd grace note after</source>
+        <translation>32分後打音を追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1633"/>
+        <source>1</source>
+        <translation>1</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1634"/>
+        <location filename="../../mscore/shortcut.cpp" line="1635"/>
+        <source>Voice 1</source>
+        <translation>声部 1</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1641"/>
+        <source>2</source>
+        <translation>2</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1642"/>
+        <location filename="../../mscore/shortcut.cpp" line="1643"/>
+        <source>Voice 2</source>
+        <translation>声部 2</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1649"/>
+        <source>3</source>
+        <translation>3</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1650"/>
+        <location filename="../../mscore/shortcut.cpp" line="1651"/>
+        <source>Voice 3</source>
+        <translation>声部 3</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1657"/>
+        <source>4</source>
+        <translation>4</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1658"/>
+        <location filename="../../mscore/shortcut.cpp" line="1659"/>
+        <source>Voice 4</source>
+        <translation>声部 4</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1665"/>
+        <source>MIDI Input</source>
+        <translation>MIDI Input</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1666"/>
+        <location filename="../../mscore/shortcut.cpp" line="1667"/>
+        <source>Enable MIDI input</source>
+        <translation>MIDI Inputを有効にする</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1676"/>
+        <source>Beam Start</source>
+        <translation>連桁開始</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1677"/>
+        <source>Beam start</source>
+        <translation>連桁（開始）</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1687"/>
+        <source>Beam Middle</source>
+        <translation>連桁（中間）</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1688"/>
+        <source>Beam middle</source>
+        <translation>連桁（中間）</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1698"/>
+        <source>No Beam</source>
+        <translation>連桁なし</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1699"/>
+        <source>No beam</source>
+        <translation>連桁なし</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1709"/>
+        <source>Beam 16th Sub</source>
+        <translation>16分連桁</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1710"/>
+        <source>Beam 16th sub</source>
+        <translation>16分連桁</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1720"/>
+        <source>Beam 32nd Sub</source>
+        <translation>32分連桁</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1721"/>
+        <source>Beam 32nd sub</source>
+        <translation>32分連桁</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1731"/>
+        <source>Auto Beam</source>
+        <translation>自動連桁</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1732"/>
+        <source>Auto beam</source>
+        <translation>自動連桁</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1742"/>
+        <source>Feathered Beam, Slower</source>
+        <translation>羽根付連桁, 遅く</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1743"/>
+        <source>Feathered beam, slower</source>
+        <translation>羽根付連桁, 遅く</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1751"/>
+        <source>Feathered Beam, Faster</source>
+        <translation>羽根付連桁, 速く</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1752"/>
+        <source>Feathered beam, faster</source>
+        <translation>羽根付連桁, 速く</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1760"/>
+        <location filename="../../mscore/shortcut.cpp" line="1761"/>
+        <source>Palettes</source>
+        <translation>パレット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1770"/>
+        <source>Play Panel</source>
+        <translation>再生パネル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1771"/>
+        <source>Play panel</source>
+        <translation>再生パネル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1780"/>
+        <source>Selection Filter</source>
+        <translation>選択フィルタ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1781"/>
+        <source>Selection filter</source>
+        <translation>選択フィルタ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1790"/>
+        <source>Navigator</source>
+        <translation>ナビゲータ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1800"/>
+        <source>MIDI Import Panel</source>
+        <translation>MIDIインポートパネル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1801"/>
+        <source>MIDI import panel</source>
+        <translation>MIDIインポートパネル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1815"/>
+        <source>Mixer</source>
+        <translation>ミキサー</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1825"/>
+        <source>File Operations</source>
+        <translation>ファイル操作</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1826"/>
+        <source>File operations toolbar</source>
+        <translation>ファイル操作ツールバー</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1832"/>
+        <source>Playback Controls</source>
+        <translation>再生コントロール</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1833"/>
+        <source>Playback controls toolbar</source>
+        <translation>再生コントロールツールバー</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1839"/>
+        <location filename="../../mscore/shortcut.cpp" line="2224"/>
+        <source>Concert Pitch</source>
+        <translation>合奏調 （実音）</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1840"/>
+        <source>Concert pitch toolbar</source>
+        <translation>合奏調ツールバー</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1846"/>
+        <source>Image Capture</source>
+        <translation>イメージ キャプチャ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1847"/>
+        <source>Image capture toolbar</source>
+        <translation>イメージ キャプチャツールバー</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1854"/>
+        <source>Note input toolbar</source>
+        <translation>音符入力ツールバー</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1860"/>
+        <source>Status Bar</source>
+        <translation>ステータスバー</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1861"/>
+        <source>Status bar</source>
+        <translation>ステータスバー</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1867"/>
+        <source>Quit</source>
+        <translation>終了</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1873"/>
+        <source>Zoom Canvas</source>
+        <translation>ズームキャンバス</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1874"/>
+        <source>Zoom canvas</source>
+        <translation>ズームキャンバス</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1880"/>
+        <source>Lyrics</source>
+        <translation>歌詞</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1881"/>
+        <source>Add lyrics</source>
+        <translation>歌詞の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1891"/>
+        <source>Tempo Marking</source>
+        <translation>速度標語</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1892"/>
+        <source>Add tempo marking</source>
+        <translation>速度標語の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1902"/>
+        <source>System Text</source>
+        <translation>段テキスト</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1903"/>
+        <source>Add system text</source>
+        <translation>段テキストの追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1909"/>
+        <source>Staff Text</source>
+        <translation>譜表テキスト</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1910"/>
+        <source>Add staff text</source>
+        <translation>譜表テキストの追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1916"/>
+        <source>Text</source>
+        <translation>テキスト</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1917"/>
+        <source>Add frame text</source>
+        <translation>テキストフレームの追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1923"/>
+        <source>Title</source>
+        <translation>タイトル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1924"/>
+        <source>Add title text</source>
+        <translation>タイトルの追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1930"/>
+        <source>Subtitle</source>
+        <translation>サブタイトル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1931"/>
+        <source>Add subtitle text</source>
+        <translation>サブタイトルの追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1937"/>
+        <source>Composer</source>
+        <translation>作曲者</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1938"/>
+        <source>Add composer text</source>
+        <translation>作曲者の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1944"/>
+        <source>Lyricist</source>
+        <translation>作詞者</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1945"/>
+        <source>Add lyricist text</source>
+        <translation>作詞者の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1951"/>
+        <source>Part Name</source>
+        <translation>パートの名称</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1952"/>
+        <source>Add part name</source>
+        <translation>パート名の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1958"/>
+        <source>Chord Symbol</source>
+        <translation>コード記号</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1959"/>
+        <source>Add chord symbol</source>
+        <translation>コード記号の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1965"/>
+        <source>Rehearsal Mark</source>
+        <translation>リハーサルマーク</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1966"/>
+        <source>Add rehearsal mark</source>
+        <translation>リハーサルマークの追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1972"/>
+        <source>Instrument Change</source>
+        <translation>楽器の変更</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1973"/>
+        <source>Add instrument change</source>
+        <translation>楽器の変更の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1979"/>
+        <source>Fingering</source>
+        <translation>フィンガリング</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1980"/>
+        <source>Add fingering</source>
+        <translation>フィンガリングの追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1986"/>
+        <source>Picture</source>
+        <translation>画像</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1987"/>
+        <source>Add picture</source>
+        <translation>画像の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1993"/>
+        <source>Play</source>
+        <translation>再生</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1994"/>
+        <source>Player play</source>
+        <translation>プレイヤー　再生</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1995"/>
+        <source>Start or stop playback</source>
+        <translation>再生/停止</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2004"/>
+        <source>Play Previous Chord</source>
+        <translation>直前の音</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2005"/>
+        <source>Play previous chord</source>
+        <translation>直前の音を再生</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2014"/>
+        <source>Play Previous Measure</source>
+        <translation>前の小節を再生</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2015"/>
+        <source>Play previous measure</source>
+        <translation>前の小節を再生</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2024"/>
+        <source>Play Next Chord</source>
+        <translation>次の音</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2025"/>
+        <source>Play next chord</source>
+        <translation>次の音を再生</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2034"/>
+        <source>Play Next Measure</source>
+        <translation>次の小節を再生</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2035"/>
+        <source>Play next measure</source>
+        <translation>次の小節を再生</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2044"/>
+        <source>Player Seek to Begin</source>
+        <translation>先頭まで検索</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2045"/>
+        <source>Player seek to begin</source>
+        <translation>先頭まで検索</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2054"/>
+        <source>Rewind</source>
+        <translation>巻き戻し</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2055"/>
+        <source>Player rewind</source>
+        <translation>プレイヤー　巻き戻し</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2056"/>
+        <source>Rewind to start position</source>
+        <translation>開始位置に戻る</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2063"/>
+        <source>Player Seek to End</source>
+        <translation>最後まで検索</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2064"/>
+        <source>Player seek to end</source>
+        <translation>最後まで検索</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2070"/>
+        <source>Play Repeats</source>
+        <translation>反復再生</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2071"/>
+        <source>Toggle repeats playback</source>
+        <translation>反復再生 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2072"/>
+        <source>Play repeats</source>
+        <translation>反復再生</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2081"/>
+        <source>Pan</source>
+        <translation>パン</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2082"/>
+        <source>Toggle pan score</source>
+        <translation>スコアのパン 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2083"/>
+        <source>Pan score during playback</source>
+        <translation>再生中にスクロール</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2092"/>
+        <source>Load Style...</source>
+        <translation>スタイルの読み込み...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2093"/>
+        <source>Load style</source>
+        <translation>スタイルの読み込み</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2103"/>
+        <source>Save Style...</source>
+        <translation>スタイルの保存...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2104"/>
+        <source>Save style</source>
+        <translation>スタイルの保存</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2114"/>
+        <source>Select All</source>
+        <translation>すべて選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2115"/>
+        <source>Select all</source>
+        <translation>すべて選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2125"/>
+        <source>&amp;Transpose...</source>
+        <translation>移調(&amp;T)...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2126"/>
+        <source>Transpose</source>
+        <translation>移調</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2136"/>
+        <source>Treble Clef</source>
+        <translation>ト音記号</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2137"/>
+        <source>Add treble clef</source>
+        <translation>ト音記号の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2147"/>
+        <source>Bass Clef</source>
+        <translation>バス譜表</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2148"/>
+        <source>Add bass clef</source>
+        <translation>バス記号の追加</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2158"/>
+        <source>Exchange Voice 1-2</source>
+        <translation>声部 １ と ２ を交換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2159"/>
+        <source>Exchange voice 1-2</source>
+        <translation>声部 １ と ２ を交換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2169"/>
+        <source>Exchange Voice 1-3</source>
+        <translation>声部 １ と ３ を交換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2170"/>
+        <source>Exchange voice 1-3</source>
+        <translation>声部 １ と ３ を交換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2180"/>
+        <source>Exchange Voice 1-4</source>
+        <translation>声部 １ と ４ を交換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2181"/>
+        <source>Exchange voice 1-4</source>
+        <translation>声部 １ と ４ を交換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2191"/>
+        <source>Exchange Voice 2-3</source>
+        <translation>声部 ２ と ３ を交換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2192"/>
+        <source>Exchange voice 2-3</source>
+        <translation>声部 ２ と ３ を交換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2202"/>
+        <source>Exchange Voice 2-4</source>
+        <translation>声部 ２ と ４ を交換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2203"/>
+        <source>Exchange voice 2-4</source>
+        <translation>声部 ２ と ４ を交換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2213"/>
+        <source>Exchange Voice 3-4</source>
+        <translation>声部 ３ と ４ を交換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2214"/>
+        <source>Exchange voice 3-4</source>
+        <translation>声部 ３ と ４ を交換</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2225"/>
+        <source>Display in concert pitch</source>
+        <translation>合奏調（実音）で表示</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2235"/>
+        <source>Repeat Last Command</source>
+        <translation>直前の操作を繰り返す</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2236"/>
+        <source>Repeat last command</source>
+        <translation>直前の操作を繰り返す</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2244"/>
+        <source>Score Properties...</source>
+        <translation>スコアのプロパティ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2245"/>
+        <source>Edit score properties</source>
+        <translation>スコアのプロパティの編集</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2255"/>
+        <source>Toggle System Break</source>
+        <translation>「折り返し」  切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2256"/>
+        <source>Toggle system break</source>
+        <translation>「譜表の折り返し」  切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2266"/>
+        <source>Toggle Page Break</source>
+        <translation>「ページ区切り」  切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2267"/>
+        <source>Toggle page break</source>
+        <translation>「改ページ」  切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2277"/>
+        <source>Toggle Section Break</source>
+        <translation>「セクション区切り」  切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2278"/>
+        <source>Toggle section break</source>
+        <translation>「セクション区切り」  切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2288"/>
+        <source>Edit Element</source>
+        <translation>要素の編集</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2289"/>
+        <source>Edit element</source>
+        <translation>要素の編集</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2295"/>
+        <source>Reset</source>
+        <translation>リセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2296"/>
+        <source>Reset user settings</source>
+        <translation>ユーザ設定のリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2302"/>
+        <source>Debugger</source>
+        <translation>デバッガ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2308"/>
+        <source>Reset Stretch</source>
+        <translation>全ての間隔をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2309"/>
+        <source>Reset measure stretch</source>
+        <translation>小節の間隔をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2319"/>
+        <source>Show Invisible</source>
+        <translation>非表示属性を見せる</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2320"/>
+        <source>Show invisible</source>
+        <translation>非表示属性を見せる</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2330"/>
+        <source>Show Unprintable</source>
+        <translation>非印刷属性を見せる</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2331"/>
+        <source>Show unprintable</source>
+        <translation>非印刷属性を見せる</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2341"/>
+        <source>Show Frames</source>
+        <translation>フレームの表示</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2342"/>
+        <source>Show frames</source>
+        <translation>枠を表示</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2352"/>
+        <source>Show Page Margins</source>
+        <translation>ページ余白の表示</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2353"/>
+        <source>Show page margins</source>
+        <translation>ページ余白の表示</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2363"/>
+        <source>Insert Special Characters...</source>
+        <translation>特殊文字の挿入...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2364"/>
+        <source>Insert special characters</source>
+        <translation>特殊文字の挿入</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2372"/>
+        <source>Whole Rest</source>
+        <translation>全休符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2373"/>
+        <source>Note input: Whole rest</source>
+        <translation>音符入力: 全休符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2379"/>
+        <source>Half Rest</source>
+        <translation>2分休符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2380"/>
+        <source>Note input: Half rest</source>
+        <translation>音符入力: 休符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2386"/>
+        <source>Quarter Rest</source>
+        <translation>4分休符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2387"/>
+        <source>Note input: Quarter rest</source>
+        <translation>音符入力: 4分休符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2393"/>
+        <source>Eighth Rest</source>
+        <translation>8分休符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2394"/>
+        <source>Note input: Eighth rest</source>
+        <translation>音符入力: 8分休符</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2400"/>
+        <source>Backspace</source>
+        <translation>バックスペース</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2411"/>
+        <source>Find</source>
+        <translation>検索</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2417"/>
+        <source>Zoom In</source>
+        <translation>拡大</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2418"/>
+        <source>Zoom in</source>
+        <translation>拡大</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2425"/>
+        <source>Zoom Out</source>
+        <translation>縮小</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2426"/>
+        <source>Zoom out</source>
+        <translation>縮小</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2432"/>
+        <location filename="../../mscore/shortcut.cpp" line="2433"/>
+        <source>Zoom to 100%</source>
+        <translation>100％にズームする</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2439"/>
+        <source>Mirror Notehead</source>
+        <translation>符頭反転</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2440"/>
+        <source>Mirror notehead</source>
+        <translation>符頭反転</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2450"/>
+        <source>General...</source>
+        <translation>一般...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2451"/>
+        <source>Edit general style</source>
+        <translation>一般スタイルの編集</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2461"/>
+        <source>Text...</source>
+        <translation>テキスト...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2462"/>
+        <source>Edit text style</source>
+        <translation>テキストスタイルの編集</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2472"/>
+        <source>Chord Symbols...</source>
+        <translation>コード記号...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2473"/>
+        <source>Edit chord symbols style</source>
+        <translation>コード記号スタイルの編集</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2479"/>
+        <source>All Similar Elements</source>
+        <translation>全ての類似した要素</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2480"/>
+        <source>Select all similar elements</source>
+        <translation>全ての類似した要素を選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2486"/>
+        <source>All Similar Elements in Same Staff</source>
+        <translation>現在の譜表の全ての類似した要素</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2487"/>
+        <source>Select all similar elements in same staff</source>
+        <translation>現在の譜表から全ての類似した要素を選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2493"/>
+        <source>All Similar Elements in Range Selection</source>
+        <translation>選択範囲内の全ての類似した要素</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2494"/>
+        <source>Select all similar elements in the range selection</source>
+        <translation>選択範囲内から全ての類似した要素を選択</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2500"/>
+        <source>Synthesizer</source>
+        <translation>シンセサイザー</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2510"/>
+        <source>Double Duration</source>
+        <translation>2倍の音価</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2511"/>
+        <source>Double duration</source>
+        <translation>2倍の音価</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2521"/>
+        <source>Half Duration</source>
+        <translation>半分の音価</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2522"/>
+        <source>Half duration</source>
+        <translation>半分の音価</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2532"/>
+        <source>Increase Duration Dotted</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2533"/>
+        <source>Increase duration dotted</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2543"/>
+        <source>Decrease Duration Dotted</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2544"/>
+        <source>Decrease duration dotted</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2554"/>
+        <source>Repeat Selection</source>
+        <translation>選択範囲を反復</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2555"/>
+        <source>Repeat selection</source>
+        <translation>直前の選択範囲を再現</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2563"/>
+        <source>Pan Piano Roll</source>
+        <translation>ピアノロールのパン</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2564"/>
+        <source>Toggle pan piano roll</source>
+        <translation>ピアノロールのパン 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2565"/>
+        <source>Pan roll during playback</source>
+        <translation>再生中にスクロール</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2574"/>
+        <source>Documents Side by Side</source>
+        <translation>楽譜を左右に表示する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2575"/>
+        <source>Display documents side by side</source>
+        <translation>楽譜を左右に表示する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2581"/>
+        <source>Documents Stacked</source>
+        <translation>楽譜を上下に表示する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2582"/>
+        <source>Display documents stacked</source>
+        <translation>楽譜を上下に表示する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2588"/>
+        <source>Parts...</source>
+        <translation>パート譜</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2589"/>
+        <source>Manage parts</source>
+        <translation>パートの管理</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2595"/>
+        <source>Enharmonic Up</source>
+        <translation>異名同音を上げる</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2596"/>
+        <source>Enharmonic up</source>
+        <translation>異名同音を上げる</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2602"/>
+        <source>Enharmonic Down</source>
+        <translation>異名同音を下げる</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2603"/>
+        <source>Enharmonic down</source>
+        <translation>異名同音を下げる</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2609"/>
+        <source>Create New Revision</source>
+        <translation>新しいリビジョンの作成</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2610"/>
+        <source>Create new revision</source>
+        <translation>新しいリビジョンの作成</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2616"/>
+        <source>Toggle Image Capture</source>
+        <translation>イメージ キャプチャ 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2617"/>
+        <source>Toggle image capture</source>
+        <translation>イメージ キャプチャ 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2628"/>
+        <source>Show OMR Image</source>
+        <translation>OMR画像を表示する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2629"/>
+        <source>Show OMR image</source>
+        <translation>OMR画像を表示する</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2636"/>
+        <source>Full Screen</source>
+        <translation>フルスクリーン</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2637"/>
+        <source>Full screen</source>
+        <translation>フルスクリーン</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2643"/>
+        <source>Enable Snap to Horizontal Grid</source>
+        <translation>水平グリッドにスナップする</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2644"/>
+        <source>Enable snap to horizontal grid</source>
+        <translation>水平グリッドにスナップする</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2654"/>
+        <source>Enable Snap to Vertical Grid</source>
+        <translation>垂直グリッドにスナップする</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2655"/>
+        <source>Enable snap to vertical grid</source>
+        <translation>垂直グリッドにスナップする</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2665"/>
+        <source>Configure Grid</source>
+        <translation>グリッドの設定</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2666"/>
+        <source>Configure grid</source>
+        <translation>グリッドの設定</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2672"/>
         <source>Piano Keyboard</source>
         <translation>ピアノ キーボード</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2509"/>
+        <location filename="../../mscore/shortcut.cpp" line="2673"/>
         <source>Piano keyboard</source>
         <translation>ピアノ キーボード</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2515"/>
+        <location filename="../../mscore/shortcut.cpp" line="2679"/>
         <source>Additional Media...</source>
         <translation>追加のメディア...</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2516"/>
+        <location filename="../../mscore/shortcut.cpp" line="2680"/>
         <source>Show media dialog</source>
         <translation>メディア・ダイアログの表示</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2522"/>
-        <source>Split Measure before Selected Note</source>
+        <location filename="../../mscore/shortcut.cpp" line="2686"/>
+        <source>Split Measure Before Selected Note</source>
         <translation>選択された音符の前で小節を分割する</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2523"/>
+        <location filename="../../mscore/shortcut.cpp" line="2687"/>
         <source>Split measure before selected note</source>
         <translation>選択された音符の前で小節を分割する</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2529"/>
+        <location filename="../../mscore/shortcut.cpp" line="2693"/>
         <source>Join Selected Measures</source>
         <translation>選択された小節を結合する</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2530"/>
+        <location filename="../../mscore/shortcut.cpp" line="2694"/>
         <source>Join selected measures</source>
         <translation>選択された小節を結合する</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2536"/>
+        <location filename="../../mscore/shortcut.cpp" line="2700"/>
         <source>Page Settings...</source>
         <translation>ページの設定...</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2537"/>
+        <location filename="../../mscore/shortcut.cpp" line="2701"/>
         <source>Page settings</source>
         <translation>ページの設定</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2543"/>
+        <location filename="../../mscore/shortcut.cpp" line="2707"/>
         <source>Album...</source>
         <translation>アルバム...</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2544"/>
+        <location filename="../../mscore/shortcut.cpp" line="2708"/>
         <source>Album</source>
         <translation>アルバム</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2553"/>
+        <location filename="../../mscore/shortcut.cpp" line="2717"/>
         <source>Layers...</source>
         <translation>レイヤー...</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2554"/>
+        <location filename="../../mscore/shortcut.cpp" line="2718"/>
         <source>Layers</source>
         <translation>レイヤー</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2563"/>
+        <location filename="../../mscore/shortcut.cpp" line="2727"/>
         <source>Next Score</source>
         <translation>次のスコア</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2564"/>
+        <location filename="../../mscore/shortcut.cpp" line="2728"/>
         <source>Next score</source>
         <translation>次のスコア</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2573"/>
+        <location filename="../../mscore/shortcut.cpp" line="2737"/>
         <source>Previous Score</source>
         <translation>前のスコア</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2574"/>
+        <location filename="../../mscore/shortcut.cpp" line="2738"/>
         <source>Previous score</source>
         <translation>前のスコア</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2583"/>
+        <location filename="../../mscore/shortcut.cpp" line="2747"/>
         <source>Plugin Creator...</source>
         <translation>プラグイン クリエータ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2584"/>
+        <location filename="../../mscore/shortcut.cpp" line="2748"/>
         <source>Plugin creator</source>
         <translation>プラグイン クリエータ</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2593"/>
+        <location filename="../../mscore/shortcut.cpp" line="2757"/>
         <source>Plugin Manager...</source>
         <translation>プラグイン マネージャ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2594"/>
+        <location filename="../../mscore/shortcut.cpp" line="2758"/>
         <source>Plugin manager</source>
         <translation>プラグイン マネージャ</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2603"/>
+        <location filename="../../mscore/shortcut.cpp" line="2767"/>
         <source>Inspector</source>
         <translation>インスペクタ</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2604"/>
+        <location filename="../../mscore/shortcut.cpp" line="2768"/>
         <source>Show inspector</source>
         <translation>インスペクタの表示</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2610"/>
+        <location filename="../../mscore/shortcut.cpp" line="2774"/>
         <source>Resource Manager...</source>
         <translation>リソース マネージャ...</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2611"/>
+        <location filename="../../mscore/shortcut.cpp" line="2775"/>
         <source>Resource manager</source>
         <translation>リソース マネージャ</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2621"/>
+        <location filename="../../mscore/shortcut.cpp" line="2785"/>
         <source>OMR Panel</source>
         <translation>OMRパネル</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2622"/>
+        <location filename="../../mscore/shortcut.cpp" line="2786"/>
         <source>Show OMR panel</source>
         <translation>OMRパネルを表示する</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2629"/>
+        <location filename="../../mscore/shortcut.cpp" line="2793"/>
         <source>Loop</source>
         <translation>ループ</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2630"/>
+        <location filename="../../mscore/shortcut.cpp" line="2794"/>
+        <location filename="../../mscore/shortcut.cpp" line="2795"/>
         <source>Toggle loop playback</source>
         <translation>ループ再生 切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2631"/>
-        <source>Loop playback</source>
-        <translation>ループ再生</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2640"/>
+        <location filename="../../mscore/shortcut.cpp" line="2804"/>
         <source>Loop In</source>
         <translation>ループイン</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2641"/>
+        <location filename="../../mscore/shortcut.cpp" line="2805"/>
         <source>Set loop in position</source>
         <translation>ループ開始位置の設定</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2651"/>
+        <location filename="../../mscore/shortcut.cpp" line="2815"/>
         <source>Loop Out</source>
         <translation>ループアウト</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2652"/>
+        <location filename="../../mscore/shortcut.cpp" line="2816"/>
         <source>Set loop out position</source>
         <translation>ループ終了位置の設定</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2662"/>
+        <location filename="../../mscore/shortcut.cpp" line="2826"/>
         <source>Metronome</source>
         <translation>メトロノーム</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2663"/>
+        <location filename="../../mscore/shortcut.cpp" line="2827"/>
         <source>Toggle metronome playback</source>
         <translation>メトロノーム 切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2664"/>
+        <location filename="../../mscore/shortcut.cpp" line="2828"/>
         <source>Play metronome during playback</source>
         <translation>メトロノーム</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2673"/>
+        <location filename="../../mscore/shortcut.cpp" line="2837"/>
         <source>Count-In</source>
         <translation>カウントイン</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2674"/>
+        <location filename="../../mscore/shortcut.cpp" line="2838"/>
         <source>Toggle count-in playback</source>
         <translation>カウントイン 切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2675"/>
+        <location filename="../../mscore/shortcut.cpp" line="2839"/>
         <source>Play count-in at playback start</source>
         <translation>カウントイン</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2684"/>
+        <location filename="../../mscore/shortcut.cpp" line="2848"/>
         <source>Figured Bass</source>
-        <translation>数字付低音</translation>
+        <translation>通奏低音</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2685"/>
+        <location filename="../../mscore/shortcut.cpp" line="2849"/>
         <source>Add figured bass</source>
-        <translation>数字付低音の追加</translation>
+        <translation>通奏低音の追加</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2695"/>
+        <location filename="../../mscore/shortcut.cpp" line="2859"/>
         <source>Transpose Up</source>
         <translation>移調↑</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2696"/>
+        <location filename="../../mscore/shortcut.cpp" line="2860"/>
         <source>Transpose up</source>
         <translation>移調↑</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2702"/>
+        <location filename="../../mscore/shortcut.cpp" line="2866"/>
         <source>Transpose Down</source>
         <translation>移調↓</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2703"/>
+        <location filename="../../mscore/shortcut.cpp" line="2867"/>
         <source>Transpose down</source>
         <translation>移調↓</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2709"/>
+        <location filename="../../mscore/shortcut.cpp" line="2873"/>
         <source>Master Palette...</source>
         <translation>マスターパレット...</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2710"/>
+        <location filename="../../mscore/shortcut.cpp" line="2874"/>
         <source>Show master palette</source>
         <translation>マスターパレットの表示</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2719"/>
+        <location filename="../../mscore/shortcut.cpp" line="2883"/>
         <source>Key Signatures...</source>
         <translation>調号...</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2720"/>
+        <location filename="../../mscore/shortcut.cpp" line="2884"/>
         <source>Show key signature palette</source>
         <translation>調号パレットを表示</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2729"/>
+        <location filename="../../mscore/shortcut.cpp" line="2893"/>
         <source>Time Signatures...</source>
         <translation>拍子記号...</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2730"/>
+        <location filename="../../mscore/shortcut.cpp" line="2894"/>
         <source>Show time signature palette</source>
         <translation>拍子記号パレットを表示</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2739"/>
+        <location filename="../../mscore/shortcut.cpp" line="2903"/>
         <source>Symbols...</source>
         <translation>記号...</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2740"/>
+        <location filename="../../mscore/shortcut.cpp" line="2904"/>
         <source>Show symbol palette</source>
         <translation>記号パレットを表示</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2749"/>
+        <location filename="../../mscore/shortcut.cpp" line="2913"/>
         <source>Toggle View Mode</source>
         <translation>表示モード 切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2750"/>
+        <location filename="../../mscore/shortcut.cpp" line="2914"/>
         <source>Toggle view mode</source>
         <translation>表示モード 切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2760"/>
+        <location filename="../../mscore/shortcut.cpp" line="2924"/>
         <source>Next Syllable</source>
         <translation>次の音節</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2761"/>
+        <location filename="../../mscore/shortcut.cpp" line="2925"/>
         <source>Next syllable</source>
         <translation>次の音節</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2767"/>
+        <location filename="../../mscore/shortcut.cpp" line="2931"/>
         <source>Previous Syllable</source>
         <translation>前の音節</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2768"/>
+        <location filename="../../mscore/shortcut.cpp" line="2932"/>
         <source>Previous syllable</source>
         <translation>前の音節</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2774"/>
+        <location filename="../../mscore/shortcut.cpp" line="2938"/>
         <source>Toggle Visibility</source>
         <translation>可視/不可視 切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2775"/>
+        <location filename="../../mscore/shortcut.cpp" line="2939"/>
         <source>Toggle visibility</source>
         <translation>可視/不可視 切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2781"/>
+        <location filename="../../mscore/shortcut.cpp" line="2945"/>
         <source>Set Visible</source>
         <translation>表示する</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2782"/>
+        <location filename="../../mscore/shortcut.cpp" line="2946"/>
         <source>Set visible</source>
         <translation>表示する</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2788"/>
+        <location filename="../../mscore/shortcut.cpp" line="2952"/>
         <source>Set Invisible</source>
         <translation>非表示にする</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2789"/>
+        <location filename="../../mscore/shortcut.cpp" line="2953"/>
         <source>Set invisible</source>
         <translation>非表示にする</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2795"/>
+        <location filename="../../mscore/shortcut.cpp" line="2959"/>
         <source>Note Anchored Line</source>
         <translation>音符に根付いた線</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2796"/>
+        <location filename="../../mscore/shortcut.cpp" line="2960"/>
         <source>Note anchored line</source>
         <translation>音符に根付いた線</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2802"/>
+        <location filename="../../mscore/shortcut.cpp" line="2966"/>
         <source>Lock Score</source>
         <translation>スコアのロック</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2803"/>
+        <location filename="../../mscore/shortcut.cpp" line="2967"/>
         <source>Lock score</source>
         <translation>スコアのロック</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2811"/>
+        <location filename="../../mscore/shortcut.cpp" line="2975"/>
         <source>Longa (TAB)</source>
         <translation>四倍全音符(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2812"/>
+        <location filename="../../mscore/shortcut.cpp" line="2976"/>
         <source>Note duration: Longa (TAB)</source>
         <translation>音価: 四倍全音符(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2822"/>
+        <location filename="../../mscore/shortcut.cpp" line="2986"/>
         <source>Double Whole Note (TAB)</source>
         <translation>倍全音符 (TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2823"/>
+        <location filename="../../mscore/shortcut.cpp" line="2987"/>
         <source>Note duration: Double whole (TAB)</source>
         <translation>音価: 倍全音符(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2833"/>
+        <location filename="../../mscore/shortcut.cpp" line="2997"/>
         <source>Whole Note (TAB)</source>
         <translation>全音符(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2834"/>
+        <location filename="../../mscore/shortcut.cpp" line="2998"/>
         <source>Note duration: Whole (TAB)</source>
         <translation>音価: 全音符(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2844"/>
+        <location filename="../../mscore/shortcut.cpp" line="3008"/>
         <source>Half Note (TAB)</source>
         <translation>2分音符(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2845"/>
+        <location filename="../../mscore/shortcut.cpp" line="3009"/>
         <source>Note duration: Half (TAB)</source>
         <translation>音価: 2分音符(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2855"/>
+        <location filename="../../mscore/shortcut.cpp" line="3019"/>
         <source>Quarter Note (TAB)</source>
         <translation>4分音符(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2856"/>
+        <location filename="../../mscore/shortcut.cpp" line="3020"/>
         <source>Note duration: Quarter (TAB)</source>
         <translation>音価: 4分音符(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2866"/>
+        <location filename="../../mscore/shortcut.cpp" line="3030"/>
         <source>Eighth Note (TAB)</source>
         <translation>8分音符(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2867"/>
+        <location filename="../../mscore/shortcut.cpp" line="3031"/>
         <source>Note duration: Eighth (TAB)</source>
         <translation>音価: 8分音符(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2877"/>
+        <location filename="../../mscore/shortcut.cpp" line="3041"/>
         <source>16th Note (TAB)</source>
         <translation>16分音符(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2878"/>
+        <location filename="../../mscore/shortcut.cpp" line="3042"/>
         <source>Note duration: 16th (TAB)</source>
         <translation>音価: 16分音符(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2888"/>
+        <location filename="../../mscore/shortcut.cpp" line="3052"/>
         <source>32nd Note (TAB)</source>
         <translation>32分音符(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2889"/>
+        <location filename="../../mscore/shortcut.cpp" line="3053"/>
         <source>Note duration: 32nd (TAB)</source>
         <translation>音価: 32分音符(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2899"/>
+        <location filename="../../mscore/shortcut.cpp" line="3063"/>
         <source>64th Note (TAB)</source>
         <translation>64分音符(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2900"/>
+        <location filename="../../mscore/shortcut.cpp" line="3064"/>
         <source>Note duration: 64th (TAB)</source>
         <translation>音価: 64分音符(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2910"/>
+        <location filename="../../mscore/shortcut.cpp" line="3074"/>
         <source>128th Note (TAB)</source>
         <translation>128分音符(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2911"/>
+        <location filename="../../mscore/shortcut.cpp" line="3075"/>
         <source>Note duration: 128th (TAB)</source>
         <translation>音価: 128分音符(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2921"/>
+        <location filename="../../mscore/shortcut.cpp" line="3085"/>
         <source>Increase Active Duration (TAB)</source>
         <translation>長さを増やす(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2922"/>
+        <location filename="../../mscore/shortcut.cpp" line="3086"/>
         <source>Increase active duration (TAB)</source>
         <translation>長さを増やす(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2928"/>
+        <location filename="../../mscore/shortcut.cpp" line="3092"/>
         <source>Decrease Active Duration (TAB)</source>
         <translation>長さを減らす(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2929"/>
+        <location filename="../../mscore/shortcut.cpp" line="3093"/>
         <source>Decrease active duration (TAB)</source>
         <translation>長さを減らす(TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2935"/>
-        <location filename="../../mscore/shortcut.cpp" line="2944"/>
+        <location filename="../../mscore/shortcut.cpp" line="3099"/>
+        <location filename="../../mscore/shortcut.cpp" line="3108"/>
         <source>Rest (TAB)</source>
         <translation>休符(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2936"/>
+        <location filename="../../mscore/shortcut.cpp" line="3100"/>
         <source>Enter rest (TAB)</source>
         <translation>休符の入力(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2945"/>
+        <location filename="../../mscore/shortcut.cpp" line="3109"/>
         <source>Note input: Rest (TAB)</source>
         <translation>音符入力: 休符(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2951"/>
+        <location filename="../../mscore/shortcut.cpp" line="3115"/>
         <source>String Above (TAB)</source>
         <translation>弦を上に(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2952"/>
+        <location filename="../../mscore/shortcut.cpp" line="3116"/>
         <source>Select string above (TAB only)</source>
         <translation>選択中の弦を上に(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2958"/>
+        <location filename="../../mscore/shortcut.cpp" line="3122"/>
         <source>String Below (TAB)</source>
         <translation>弦を下に(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2959"/>
+        <location filename="../../mscore/shortcut.cpp" line="3123"/>
         <source>Select string below (TAB only)</source>
         <translation>選択中の弦を下に(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2965"/>
+        <location filename="../../mscore/shortcut.cpp" line="3129"/>
         <source>Fret 0 (TAB)</source>
         <translation>フレット0(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2966"/>
+        <location filename="../../mscore/shortcut.cpp" line="3130"/>
         <source>Add fret 0 on current string (TAB only)</source>
         <translation>現在の弦にフレット0を追加(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2972"/>
+        <location filename="../../mscore/shortcut.cpp" line="3136"/>
         <source>Fret 1 (TAB)</source>
         <translation>フレット1(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2973"/>
+        <location filename="../../mscore/shortcut.cpp" line="3137"/>
         <source>Add fret 1 on current string (TAB only)</source>
         <translation>現在の弦にフレット1を追加(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2979"/>
+        <location filename="../../mscore/shortcut.cpp" line="3143"/>
         <source>Fret 2 (TAB)</source>
         <translation>フレット2(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2980"/>
+        <location filename="../../mscore/shortcut.cpp" line="3144"/>
         <source>Add fret 2 on current string (TAB only)</source>
         <translation>現在の弦にフレット2を追加(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2986"/>
+        <location filename="../../mscore/shortcut.cpp" line="3150"/>
         <source>Fret 3 (TAB)</source>
         <translation>フレット3(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2987"/>
+        <location filename="../../mscore/shortcut.cpp" line="3151"/>
         <source>Add fret 3 on current string (TAB only)</source>
         <translation>現在の弦にフレット3を追加(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2993"/>
+        <location filename="../../mscore/shortcut.cpp" line="3157"/>
         <source>Fret 4 (TAB)</source>
         <translation>フレット4(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2994"/>
+        <location filename="../../mscore/shortcut.cpp" line="3158"/>
         <source>Add fret 4 on current string (TAB only)</source>
         <translation>現在の弦に4フレットを付け加える(TAB only)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3000"/>
+        <location filename="../../mscore/shortcut.cpp" line="3164"/>
         <source>Fret 5 (TAB)</source>
         <translation>フレット5(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3001"/>
+        <location filename="../../mscore/shortcut.cpp" line="3165"/>
         <source>Add fret 5 on current string (TAB only)</source>
         <translation>現在の弦に5フレットを付け加える(TAB only)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3007"/>
+        <location filename="../../mscore/shortcut.cpp" line="3171"/>
         <source>Fret 6 (TAB)</source>
         <translation>フレット6(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3008"/>
+        <location filename="../../mscore/shortcut.cpp" line="3172"/>
         <source>Add fret 6 on current string (TAB only)</source>
         <translation>現在の弦に6フレットを付け加える(TAB only)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3014"/>
+        <location filename="../../mscore/shortcut.cpp" line="3178"/>
         <source>Fret 7 (TAB)</source>
         <translation>フレット7(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3015"/>
+        <location filename="../../mscore/shortcut.cpp" line="3179"/>
         <source>Add fret 7 on current string (TAB only)</source>
         <translation>現在の弦に7フレットを付け加える(TAB only)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3021"/>
+        <location filename="../../mscore/shortcut.cpp" line="3185"/>
         <source>Fret 8 (TAB)</source>
         <translation>フレット8(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3022"/>
+        <location filename="../../mscore/shortcut.cpp" line="3186"/>
         <source>Add fret 8 on current string (TAB only)</source>
         <translation>現在の弦に8フレットを付け加える(TAB only)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3028"/>
+        <location filename="../../mscore/shortcut.cpp" line="3192"/>
         <source>Fret 9 (TAB)</source>
         <translation>フレット9(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3029"/>
+        <location filename="../../mscore/shortcut.cpp" line="3193"/>
         <source>Add fret 9 on current string (TAB only)</source>
         <translation>現在の弦に9フレットを付け加える(TAB only)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3035"/>
+        <location filename="../../mscore/shortcut.cpp" line="3199"/>
         <source>Fret 10 (TAB)</source>
         <translation>フレット10(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3036"/>
+        <location filename="../../mscore/shortcut.cpp" line="3200"/>
         <source>Add fret 10 on current string (TAB only)</source>
         <translation>現在の弦に10フレットを付け加える(TAB only)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3042"/>
+        <location filename="../../mscore/shortcut.cpp" line="3206"/>
         <source>Fret 11 (TAB)</source>
         <translation>フレット11(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3043"/>
+        <location filename="../../mscore/shortcut.cpp" line="3207"/>
         <source>Add fret 11 on current string (TAB only)</source>
         <translation>現在の弦に11フレットを付け加える(TAB only)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3049"/>
+        <location filename="../../mscore/shortcut.cpp" line="3213"/>
         <source>Fret 12 (TAB)</source>
         <translation>フレット12(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3050"/>
+        <location filename="../../mscore/shortcut.cpp" line="3214"/>
         <source>Add fret 12 on current string (TAB only)</source>
         <translation>現在の弦に12フレットを付け加える(TAB only)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3056"/>
+        <location filename="../../mscore/shortcut.cpp" line="3220"/>
         <source>Fret 13 (TAB)</source>
         <translation>フレット13(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3057"/>
+        <location filename="../../mscore/shortcut.cpp" line="3221"/>
         <source>Add fret 13 on current string (TAB only)</source>
         <translation>現在の弦に13フレットを付け加える(TAB only)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3063"/>
+        <location filename="../../mscore/shortcut.cpp" line="3227"/>
         <source>Fret 14 (TAB)</source>
         <translation>フレット14(TAB譜)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3064"/>
+        <location filename="../../mscore/shortcut.cpp" line="3228"/>
         <source>Add fret 14 on current string (TAB only)</source>
         <translation>現在の弦に14フレットを付け加える(TAB only)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3073"/>
+        <location filename="../../mscore/shortcut.cpp" line="3237"/>
         <source>Longa Advance (F.B./Chord Symbol)</source>
         <translation>四倍全音符の進行(数字付低音/コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3074"/>
+        <location filename="../../mscore/shortcut.cpp" line="3238"/>
         <source>Advance of a longa (Figured bass/Chord symbol only)</source>
         <translation>四倍全音符の進行(数字付低音/コード記号のみ)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3080"/>
+        <location filename="../../mscore/shortcut.cpp" line="3244"/>
         <source>Breve Advance (F.B./Chord Symbol)</source>
         <translation>倍全音符の進行(数字付低音/コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3081"/>
+        <location filename="../../mscore/shortcut.cpp" line="3245"/>
         <source>Advance of a double whole note (Figured bass/Chord symbol only)</source>
         <translation>倍全音符の進行(数字付低音/コード記号のみ)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3087"/>
+        <location filename="../../mscore/shortcut.cpp" line="3251"/>
         <source>Whole Note Advance (F.B./Chord Symbol)</source>
         <translation>全音符の進行(数字付低音/コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3088"/>
+        <location filename="../../mscore/shortcut.cpp" line="3252"/>
         <source>Advance of a whole note (Figured bass/Chord symbol only)</source>
         <translation>全音符の進行(数字付低音/コード記号のみ)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3094"/>
+        <location filename="../../mscore/shortcut.cpp" line="3258"/>
         <source>Half Note Advance (F.B./Chord Symbol)</source>
         <translation>２分音符の進行(数字付低音/コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3095"/>
+        <location filename="../../mscore/shortcut.cpp" line="3259"/>
         <source>Advance of a half note (Figured bass/Chord symbol only)</source>
         <translation>２分音符の進行(数字付低音/コード記号のみ)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3101"/>
+        <location filename="../../mscore/shortcut.cpp" line="3265"/>
         <source>Quarter Note Advance (F.B./Chord Symbol)</source>
         <translation>4分音符の進行(数字付低音/コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3102"/>
+        <location filename="../../mscore/shortcut.cpp" line="3266"/>
         <source>Advance of a quarter note (Figured bass/Chord symbol only)</source>
         <translation>4分音符の進行(数字付低音/コード記号のみ)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3108"/>
+        <location filename="../../mscore/shortcut.cpp" line="3272"/>
         <source>Eighth Note Advance (F.B./Chord Symbol)</source>
         <translation>8分音符の進行(数字付低音/コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3109"/>
+        <location filename="../../mscore/shortcut.cpp" line="3273"/>
         <source>Advance of an eighth note (Figured bass/Chord symbol only)</source>
         <translation>8分音符の進行の進行(数字付低音/コード記号のみ)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3115"/>
+        <location filename="../../mscore/shortcut.cpp" line="3279"/>
         <source>16th Note Advance (F.B./Chord Symbol)</source>
         <translation>16分音符の進行(数字付低音/コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3116"/>
+        <location filename="../../mscore/shortcut.cpp" line="3280"/>
         <source>Advance of a 16th note (Figured bass/Chord symbol only)</source>
         <translation>16分音符の進行(数字付低音/コード記号のみ)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3122"/>
+        <location filename="../../mscore/shortcut.cpp" line="3286"/>
         <source>32nd Note Advance (F.B./Chord Symbol)</source>
         <translation>32分音符の進行(数字付低音/コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3123"/>
+        <location filename="../../mscore/shortcut.cpp" line="3287"/>
         <source>Advance of a 32nd note (Figured bass/Chord symbol only)</source>
         <translation>32分音符の進行(数字付低音/コード記号のみ)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3129"/>
+        <location filename="../../mscore/shortcut.cpp" line="3293"/>
         <source>64th Note Advance (F.B./Chord Symbol)</source>
         <translation>64分音符の進行(数字付低音/コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3130"/>
+        <location filename="../../mscore/shortcut.cpp" line="3294"/>
         <source>Advance of a 64th note (Figured bass/Chord symbol only)</source>
         <translation>64分音符の進行(数字付低音/コード記号のみ)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3136"/>
+        <location filename="../../mscore/shortcut.cpp" line="3300"/>
         <source>Previous Measure (F.B./Chord Symbol)</source>
         <translation>前の小節(数字付低音/コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3137"/>
+        <location filename="../../mscore/shortcut.cpp" line="3301"/>
         <source>Previous measure (Figured bass/Chord symbol only)</source>
         <translation>前の小節(数字付低音/コード記号のみ)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3143"/>
+        <location filename="../../mscore/shortcut.cpp" line="3307"/>
         <source>Next Measure (F.B./Chord Symbol)</source>
         <translation>次の小節(数字付低音/コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3144"/>
+        <location filename="../../mscore/shortcut.cpp" line="3308"/>
         <source>Next measure (Figured bass/Chord symbol only)</source>
         <translation>次の小節(数字付低音/コード記号のみ)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3150"/>
+        <location filename="../../mscore/shortcut.cpp" line="3314"/>
         <source>Previous Beat (Chord Symbol)</source>
         <translation>前の音(コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3151"/>
+        <location filename="../../mscore/shortcut.cpp" line="3315"/>
         <source>Previous beat (Chord symbol)</source>
         <translation>前の音(コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3157"/>
+        <location filename="../../mscore/shortcut.cpp" line="3321"/>
         <source>Next Beat (Chord Symbol)</source>
         <translation>次の音(コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3158"/>
+        <location filename="../../mscore/shortcut.cpp" line="3322"/>
         <source>Next beat (Chord symbol)</source>
         <translation>次の音(コード記号)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3164"/>
+        <location filename="../../mscore/shortcut.cpp" line="3328"/>
         <source>Add Brackets to Element</source>
         <translation>括弧の追加</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3165"/>
+        <location filename="../../mscore/shortcut.cpp" line="3329"/>
         <source>Add brackets to element</source>
         <translation>括弧の追加</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3175"/>
+        <location filename="../../mscore/shortcut.cpp" line="3339"/>
         <source>Toggle Create Multimeasure Rest</source>
         <translation>長休符の作成と消去</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3176"/>
+        <location filename="../../mscore/shortcut.cpp" line="3340"/>
         <source>Toggle create multimeasure rest</source>
         <translation>長休符の作成と消去</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3186"/>
+        <location filename="../../mscore/shortcut.cpp" line="3350"/>
+        <source>Toggle Hide Empty Staves</source>
+        <translation>空の譜表を隠すトグル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3351"/>
+        <source>Toggle hide empty staves</source>
+        <translation>空の譜表を隠すトグル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3361"/>
         <source>Bold Face</source>
         <translation>太字</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3187"/>
+        <location filename="../../mscore/shortcut.cpp" line="3362"/>
         <source>Bold face</source>
         <translation>太字</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3193"/>
+        <location filename="../../mscore/shortcut.cpp" line="3368"/>
         <source>Italic</source>
         <translation>斜体</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3199"/>
+        <location filename="../../mscore/shortcut.cpp" line="3374"/>
         <source>Underline</source>
         <translation>下線</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3205"/>
+        <location filename="../../mscore/shortcut.cpp" line="3380"/>
         <source>Move Word Left</source>
         <translation>単語を左へ移動</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3206"/>
+        <location filename="../../mscore/shortcut.cpp" line="3381"/>
         <source>Move word left</source>
         <translation>単語を左へ移動</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3216"/>
+        <location filename="../../mscore/shortcut.cpp" line="3391"/>
         <source>Move Word Right</source>
         <translation>単語を右へ移動</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3217"/>
+        <location filename="../../mscore/shortcut.cpp" line="3392"/>
         <source>Move word right</source>
         <translation>単語を右へ移動</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3227"/>
-        <location filename="../../mscore/shortcut.cpp" line="3228"/>
+        <location filename="../../mscore/shortcut.cpp" line="3402"/>
+        <location filename="../../mscore/shortcut.cpp" line="3403"/>
         <source>Explode</source>
         <translation>パートに分解</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3229"/>
+        <location filename="../../mscore/shortcut.cpp" line="3404"/>
         <source>Explode contents of top selected staff into staves below</source>
         <translation>和音を現在のパートを先頭にして下方向に分解します</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3238"/>
-        <location filename="../../mscore/shortcut.cpp" line="3239"/>
+        <location filename="../../mscore/shortcut.cpp" line="3413"/>
+        <location filename="../../mscore/shortcut.cpp" line="3414"/>
         <source>Implode</source>
         <translation>1つのパートに集結</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3240"/>
+        <location filename="../../mscore/shortcut.cpp" line="3415"/>
         <source>Implode contents of selected staves into top selected staff</source>
         <translation>選択された内容を一番上の1つのパートに集結します</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3249"/>
+        <location filename="../../mscore/shortcut.cpp" line="3424"/>
         <source>Fill With Slashes</source>
         <translation>スラッシュで埋める</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3250"/>
+        <location filename="../../mscore/shortcut.cpp" line="3425"/>
         <source>Fill with slashes</source>
         <translation>スラッシュで埋める</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3260"/>
+        <location filename="../../mscore/shortcut.cpp" line="3435"/>
         <source>Toggle Rhythmic Slash Notation</source>
         <translation>リズミックスラッシュ表記 切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3261"/>
+        <location filename="../../mscore/shortcut.cpp" line="3436"/>
         <source>Toggle rhythmic slash notation</source>
         <translation>リズミックスラッシュ表記 切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3271"/>
+        <location filename="../../mscore/shortcut.cpp" line="3446"/>
         <source>Add/Remove Line Breaks...</source>
         <translation>「譜表の折り返し」の追加/削除...</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3272"/>
+        <location filename="../../mscore/shortcut.cpp" line="3447"/>
         <source>Add/remove line breaks</source>
         <translation>「譜表の折り返し」の追加/削除</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3282"/>
+        <location filename="../../mscore/shortcut.cpp" line="3457"/>
         <source>Resequence Rehearsal Marks</source>
         <translation>リハーサルマークを並べ直す</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3283"/>
+        <location filename="../../mscore/shortcut.cpp" line="3458"/>
         <source>Resequence rehearsal marks</source>
         <translation>リハーサルマークを並べ直す</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3293"/>
+        <location filename="../../mscore/shortcut.cpp" line="3468"/>
         <source>Copy Lyrics to Clipboard</source>
         <translation>歌詞をクリップボードにコピー</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3294"/>
+        <location filename="../../mscore/shortcut.cpp" line="3469"/>
         <source>Copy lyrics to clipboard</source>
         <translation>歌詞をクリップボードにコピー</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3304"/>
+        <location filename="../../mscore/shortcut.cpp" line="3479"/>
         <source>Start Center</source>
         <translation>スタートセンター</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3305"/>
+        <location filename="../../mscore/shortcut.cpp" line="3480"/>
         <source>Start center</source>
         <translation>スタートセンター</translation>
     </message>
@@ -20521,20 +21073,20 @@ failed: </source>
 <context>
     <name>addRemoveTimeSig</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="513"/>
-        <location filename="../../libmscore/edit.cpp" line="529"/>
+        <location filename="../../libmscore/edit.cpp" line="534"/>
+        <location filename="../../libmscore/edit.cpp" line="550"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="514"/>
+        <location filename="../../libmscore/edit.cpp" line="535"/>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
         <translation>小節の書き換えができません:
 連符が小節をまたいでしまいます</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="530"/>
+        <location filename="../../libmscore/edit.cpp" line="551"/>
         <source>Cannot change local time signature:
 Measure is not empty</source>
         <translation>拍子を変更できません:
@@ -20769,32 +21321,32 @@ Measure is not empty</source>
         <translation>リュート薬指</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="564"/>
+        <location filename="../../mscore/menus.cpp" line="581"/>
         <source>Bend</source>
         <translation>ベンド</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="570"/>
+        <location filename="../../mscore/menus.cpp" line="587"/>
         <source>Tremolo bar</source>
         <translation>トレモロバー</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="675"/>
+        <location filename="../../mscore/menus.cpp" line="692"/>
         <source>Slide out down</source>
         <translation>スライド アウト ダウン</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="680"/>
+        <location filename="../../mscore/menus.cpp" line="697"/>
         <source>Slide out up</source>
         <translation>スライド アウト アップ</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="685"/>
+        <location filename="../../mscore/menus.cpp" line="702"/>
         <source>Slide in above</source>
         <translation>スライド イン アバブ</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="690"/>
+        <location filename="../../mscore/menus.cpp" line="707"/>
         <source>Slide in below</source>
         <translation>スライド イン ビロウ</translation>
     </message>
@@ -22147,13 +22699,13 @@ Measure is not empty</source>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="297"/>
-        <source>Short Guiro</source>
-        <translation>ショート ギロ</translation>
+        <source>Short Güiro</source>
+        <translation>ショートギロ</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="298"/>
-        <source>Long Guiro</source>
-        <translation>ロング ギロ</translation>
+        <source>Long Güiro</source>
+        <translation>ロングギロ</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="299"/>
@@ -22224,62 +22776,62 @@ Measure is not empty</source>
 <context>
     <name>editstaff</name>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="470"/>
+        <location filename="../../mscore/editstaff.cpp" line="530"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="471"/>
+        <location filename="../../mscore/editstaff.cpp" line="531"/>
         <source>C#</source>
         <translation>C#</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="472"/>
+        <location filename="../../mscore/editstaff.cpp" line="532"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="473"/>
+        <location filename="../../mscore/editstaff.cpp" line="533"/>
         <source>Eb</source>
         <translation>E♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="474"/>
+        <location filename="../../mscore/editstaff.cpp" line="534"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="475"/>
+        <location filename="../../mscore/editstaff.cpp" line="535"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="476"/>
+        <location filename="../../mscore/editstaff.cpp" line="536"/>
         <source>F#</source>
         <translation>F#</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="477"/>
+        <location filename="../../mscore/editstaff.cpp" line="537"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="478"/>
+        <location filename="../../mscore/editstaff.cpp" line="538"/>
         <source>Ab</source>
         <translation>Ab</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="479"/>
+        <location filename="../../mscore/editstaff.cpp" line="539"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="480"/>
+        <location filename="../../mscore/editstaff.cpp" line="540"/>
         <source>Bb</source>
         <translation>B♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="481"/>
+        <location filename="../../mscore/editstaff.cpp" line="541"/>
         <source>B</source>
         <translation>B</translation>
     </message>
@@ -22287,62 +22839,62 @@ Measure is not empty</source>
 <context>
     <name>editstringdata</name>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="200"/>
+        <location filename="../../mscore/editstringdata.cpp" line="214"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="201"/>
+        <location filename="../../mscore/editstringdata.cpp" line="215"/>
         <source>C#</source>
         <translation>C#</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="202"/>
+        <location filename="../../mscore/editstringdata.cpp" line="216"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="203"/>
+        <location filename="../../mscore/editstringdata.cpp" line="217"/>
         <source>Eb</source>
         <translation>E♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="204"/>
+        <location filename="../../mscore/editstringdata.cpp" line="218"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="205"/>
+        <location filename="../../mscore/editstringdata.cpp" line="219"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="206"/>
+        <location filename="../../mscore/editstringdata.cpp" line="220"/>
         <source>F#</source>
         <translation>F#</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="207"/>
+        <location filename="../../mscore/editstringdata.cpp" line="221"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="208"/>
+        <location filename="../../mscore/editstringdata.cpp" line="222"/>
         <source>Ab</source>
         <translation>Ab</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="209"/>
+        <location filename="../../mscore/editstringdata.cpp" line="223"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="210"/>
+        <location filename="../../mscore/editstringdata.cpp" line="224"/>
         <source>Bb</source>
         <translation>B♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="211"/>
+        <location filename="../../mscore/editstringdata.cpp" line="225"/>
         <source>B</source>
         <translation>B</translation>
     </message>
@@ -22382,7 +22934,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/element.cpp" line="101"/>
         <source>Barline</source>
-        <translation>縦線</translation>
+        <translation>小節線</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="103"/>
@@ -22492,7 +23044,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/element.cpp" line="125"/>
         <source>Figured Bass</source>
-        <translation>数字付低音</translation>
+        <translation>通奏低音</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="126"/>
@@ -22621,7 +23173,7 @@ Measure is not empty</source>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="151"/>
-        <source>Note Head</source>
+        <source>Notehead</source>
         <translation>符頭</translation>
     </message>
     <message>
@@ -22841,7 +23393,7 @@ Measure is not empty</source>
 <context>
     <name>images_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="176"/>
+        <location filename="../../mscore/preferences.cpp" line="184"/>
         <source>Images</source>
         <translation>イメージ</translation>
     </message>
@@ -22849,32 +23401,32 @@ Measure is not empty</source>
 <context>
     <name>inspector</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="940"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="958"/>
         <source>Staff default</source>
         <translation>譜表のデフォルト</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="941"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="959"/>
         <source>Tick 1</source>
         <translation>ティック 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="942"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="960"/>
         <source>Tick 2</source>
         <translation>ティック 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="943"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="961"/>
         <source>Short 1</source>
         <translation>ショート 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="944"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="962"/>
         <source>Short 2</source>
         <translation>ショート 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="945"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="963"/>
         <source>[Custom]</source>
         <translation>[ユーザー定義]</translation>
     </message>
@@ -22915,17 +23467,17 @@ Measure is not empty</source>
 <context>
     <name>lines</name>
     <message>
-        <location filename="../../mscore/menus.cpp" line="791"/>
+        <location filename="../../mscore/menus.cpp" line="808"/>
         <source>Slur</source>
         <translation>スラー</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="798"/>
+        <location filename="../../mscore/menus.cpp" line="815"/>
         <source>Crescendo hairpin</source>
         <translation>クレッシェンドヘアピン</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="814"/>
+        <location filename="../../mscore/menus.cpp" line="831"/>
         <source>Crescendo line</source>
         <translation>クレッシェンドライン</translation>
     </message>
@@ -23067,7 +23619,7 @@ Measure is not empty</source>
 <context>
     <name>plugins_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="178"/>
+        <location filename="../../mscore/preferences.cpp" line="186"/>
         <source>Plugins</source>
         <translation>プラグイン</translation>
     </message>
@@ -23075,7 +23627,7 @@ Measure is not empty</source>
 <context>
     <name>scores_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="174"/>
+        <location filename="../../mscore/preferences.cpp" line="182"/>
         <source>Scores</source>
         <translation>スコア</translation>
     </message>
@@ -23083,107 +23635,112 @@ Measure is not empty</source>
 <context>
     <name>selectionfilter</name>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="10"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="11"/>
+        <source>All</source>
+        <translation>全て</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/selectionwindow.cpp" line="12"/>
         <source>Voice 1</source>
         <translation>声部 １</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="11"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="13"/>
         <source>Voice 2</source>
         <translation>声部 ２</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="12"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="14"/>
         <source>Voice 3</source>
         <translation>声部 ３</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="13"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="15"/>
         <source>Voice 4</source>
         <translation>声部 ４</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="14"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="16"/>
         <source>Dynamics</source>
         <translation>強弱記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="15"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="17"/>
         <source>Fingering</source>
         <translation>フィンガリング</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="16"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="18"/>
         <source>Lyrics</source>
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="17"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="19"/>
         <source>Chord Symbols</source>
         <translation>コード記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="18"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="20"/>
         <source>Other Text</source>
         <translation>その他の文字</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="19"/>
-        <source>Articulations</source>
-        <translation>アーティキュレーション</translation>
+        <location filename="../../mscore/selectionwindow.cpp" line="21"/>
+        <source>Articulations &amp; Ornaments</source>
+        <translation>アーティキュレーションと装飾</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="20"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="22"/>
         <source>Slurs</source>
         <translation>スラー</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="21"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="23"/>
         <source>Figured Bass</source>
         <translation>通奏低音</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="22"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="24"/>
         <source>Ottava</source>
         <translation>オッターヴァ</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="23"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="25"/>
         <source>Pedal Lines</source>
         <translation>ペダル線</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="24"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="26"/>
         <source>Other Lines</source>
         <translation>その他の線</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="25"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="27"/>
         <source>Arpeggios</source>
         <translation>アルペジオ</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="26"/>
-        <source>Glissandi</source>
+        <location filename="../../mscore/selectionwindow.cpp" line="28"/>
+        <source>Glissandos</source>
         <translation>グリッサンド</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="27"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="29"/>
         <source>Fretboard Diagrams</source>
         <translation>フレットボードダイアグラム</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="28"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="30"/>
         <source>Breath Marks</source>
         <translation>ブレス記号</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="29"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="31"/>
         <source>Tremolo</source>
         <translation>トレモロ</translation>
     </message>
     <message>
-        <location filename="../../mscore/selectionwindow.cpp" line="30"/>
+        <location filename="../../mscore/selectionwindow.cpp" line="32"/>
         <source>Grace Notes</source>
         <translation>装飾音符</translation>
     </message>
@@ -23191,9 +23748,9 @@ Measure is not empty</source>
 <context>
     <name>soundfonts_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="179"/>
+        <location filename="../../mscore/preferences.cpp" line="187"/>
         <source>Soundfonts</source>
-        <translation>Soundfonts</translation>
+        <translation>サウンドフォント</translation>
     </message>
 </context>
 <context>
@@ -23217,7 +23774,7 @@ Measure is not empty</source>
 <context>
     <name>styles_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="175"/>
+        <location filename="../../mscore/preferences.cpp" line="183"/>
         <source>Styles</source>
         <translation>スタイル</translation>
     </message>
@@ -23225,7 +23782,7 @@ Measure is not empty</source>
 <context>
     <name>templates_directory</name>
     <message>
-        <location filename="../../mscore/preferences.cpp" line="177"/>
+        <location filename="../../mscore/preferences.cpp" line="185"/>
         <source>Templates</source>
         <translation>テンプレート</translation>
     </message>
@@ -24464,122 +25021,122 @@ Measure is not empty</source>
 <context>
     <name>utils</name>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="468"/>
+        <location filename="../../libmscore/utils.cpp" line="493"/>
         <source>c</source>
         <translation>c</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="469"/>
+        <location filename="../../libmscore/utils.cpp" line="494"/>
         <source>c#</source>
         <translation>c#</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="470"/>
+        <location filename="../../libmscore/utils.cpp" line="495"/>
         <source>d</source>
         <translation>d</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="471"/>
+        <location filename="../../libmscore/utils.cpp" line="496"/>
         <source>d#</source>
         <translation>d#</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="472"/>
+        <location filename="../../libmscore/utils.cpp" line="497"/>
         <source>e</source>
         <translation>e</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="473"/>
+        <location filename="../../libmscore/utils.cpp" line="498"/>
         <source>f</source>
         <translation>f</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="474"/>
+        <location filename="../../libmscore/utils.cpp" line="499"/>
         <source>f#</source>
         <translation>f#</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="475"/>
+        <location filename="../../libmscore/utils.cpp" line="500"/>
         <source>g</source>
         <translation>g</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="476"/>
+        <location filename="../../libmscore/utils.cpp" line="501"/>
         <source>g#</source>
         <translation>g#</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="477"/>
+        <location filename="../../libmscore/utils.cpp" line="502"/>
         <source>a</source>
         <translation>a</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="478"/>
+        <location filename="../../libmscore/utils.cpp" line="503"/>
         <source>a#</source>
         <translation>a#</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="479"/>
+        <location filename="../../libmscore/utils.cpp" line="504"/>
         <source>b</source>
         <translation>b</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="482"/>
+        <location filename="../../libmscore/utils.cpp" line="507"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="483"/>
+        <location filename="../../libmscore/utils.cpp" line="508"/>
         <source>C#</source>
         <translation>C#</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="484"/>
+        <location filename="../../libmscore/utils.cpp" line="509"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="485"/>
+        <location filename="../../libmscore/utils.cpp" line="510"/>
         <source>D#</source>
         <translation>D#</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="486"/>
+        <location filename="../../libmscore/utils.cpp" line="511"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="487"/>
+        <location filename="../../libmscore/utils.cpp" line="512"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="488"/>
+        <location filename="../../libmscore/utils.cpp" line="513"/>
         <source>F#</source>
         <translation>F#</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="489"/>
+        <location filename="../../libmscore/utils.cpp" line="514"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="490"/>
+        <location filename="../../libmscore/utils.cpp" line="515"/>
         <source>G#</source>
         <translation>G#</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="491"/>
+        <location filename="../../libmscore/utils.cpp" line="516"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="492"/>
+        <location filename="../../libmscore/utils.cpp" line="517"/>
         <source>A#</source>
         <translation>A#</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="493"/>
+        <location filename="../../libmscore/utils.cpp" line="518"/>
         <source>B</source>
         <translation>B</translation>
     </message>
