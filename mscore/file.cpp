@@ -49,6 +49,7 @@
 #include "libmscore/pedal.h"
 #include "libmscore/trill.h"
 #include "libmscore/volta.h"
+#include "libmscore/hook.h"
 #include "newwizard.h"
 #include "libmscore/timesig.h"
 #include "libmscore/box.h"
@@ -70,6 +71,9 @@
 #include "libmscore/tempotext.h"
 #include "libmscore/sym.h"
 #include "libmscore/image.h"
+#include "libmscore/chord.h"
+#include "libmscore/accidental.h"
+#include "libmscore/marker.h"
 #include "synthesizer/msynthesizer.h"
 #include "svggenerator.h"
 #include "scorePreview.h"
@@ -90,6 +94,7 @@ extern Ms::Score::FileError importOve(Ms::Score*, const QString& name);
 
 namespace Ms {
 
+extern bool edata;
 extern Score::FileError importMidi(Score*, const QString& name);
 extern Score::FileError importGTP(Score*, const QString& name);
 extern Score::FileError importBww(Score*, const QString& path);
@@ -2416,6 +2421,12 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
       const QList<Page*>& pl = score->pages();
       int pages = pl.size();
 
+      if (edata) {
+            convDpi = DPI * 20.0 / score->spatium();          // spatium is always 20 pixel in image output
+            transparent = false;
+            f = QImage::Format_Grayscale8;
+            }
+
       int padding = QString("%1").arg(pages).size();
       bool overwrite = false;
       bool noToAll = false;
@@ -2456,19 +2467,22 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
                   colorTable.push_back(QColor(0, 0, 0, 0).rgba());
                   if (!transparent) {
                         for (int i = 1; i < 256; i++)
-                              colorTable.push_back(QColor(i, i, i).rgb());
+                            colorTable.push_back(QColor(i, i, i).rgb());
                         }
                   else {
                         for (int i = 1; i < 256; i++)
-                              colorTable.push_back(QColor(0, 0, 0, i).rgba());
+                            colorTable.push_back(QColor(0, 0, 0, i).rgba());
                         }
                   printer = printer.convertToFormat(QImage::Format_Indexed8, colorTable);
                   }
+            else if (format == QImage::Format_Grayscale8) {
+                  printer = printer.convertToFormat(QImage::Format_Grayscale8);
+            }
 
-            QString fileName(name);
-            if (fileName.endsWith(".png"))
-                  fileName = fileName.left(fileName.size() - 4);
-            fileName += QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+            QString fName(name);
+            if (fName.endsWith(".png"))
+                  fName = fName.left(fName.size() - 4);
+            QString fileName = fName + QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
             if (!converterMode) {
                   QFileInfo fip(fileName);
                   if(fip.exists() && !overwrite) {
@@ -2494,6 +2508,10 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
                         }
                   }
             rv = printer.save(fileName, "png");
+            if (edata) {
+                  QString edataName = fName + QString("-%1.xml").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+                  writeEdata(edataName, score, mag, pel);
+                  }
             if (!rv)
                   break;
             }
@@ -2805,6 +2823,351 @@ QPixmap MuseScore::extractThumbnail(const QString& name)
             return createThumbnail(name);
       pm.loadFromData(ba, "PNG");
       return pm;
+      }
+
+//---------------------------------------------------------
+//   writeData
+//---------------------------------------------------------
+
+static void writeData(Xml& xml, qreal mag, const QString& name, const Element* e)
+      {
+      xml.stag(QString("Symbol shape=\"%1\"").arg(name));
+      QRectF r(e->pageBoundingRect());
+      xml.tag("bbox", QVariant(QRect(lrint(r.x() * mag), lrint(r.y() * mag), lrint(r.width() * mag), lrint(r.height() * mag))));
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   writeEdata
+//---------------------------------------------------------
+
+void MuseScore::writeEdata(const QString& edataName, Score* score, qreal mag, const QList<const Element*>& pel)
+      {
+      QFile f(edataName);
+      if (!f.open(QIODevice::WriteOnly)) {
+            MScore::lastError = tr("Open Element metatdata xml file\n%1\nfailed: %2").arg(f.fileName().arg(QString(strerror(errno))));
+            return;
+            }
+      Xml xml(&f);
+      xml.header();
+      xml.stag("museScore version=\"" MSC_VERSION "\"");
+      xml.tag("spatium", 10);
+      for (const Element* e : pel) {
+            if (e->type() == Element::Type::PAGE) {
+                  xml.stag("Page");
+                  QRectF r(e->pageBoundingRect());
+                  xml.tag("size", QVariant(QSize(lrint(r.width() * mag), lrint(r.height() * mag))));
+                  xml.etag();
+                  break;
+                  }
+            }
+      for (const Element* e : pel) {
+            switch (e->type()) {
+                  case Element::Type::NOTEDOT:
+                  case Element::Type::STEM:
+                  case Element::Type::HAIRPIN_SEGMENT:
+                        writeData(xml, mag, e->name(), e);
+                        break;
+                  case Element::Type::ARTICULATION: {
+                        const Articulation* a = static_cast<const Articulation*>(e);
+                        switch (a->articulationType()) {
+                              case ArticulationType::Staccato:
+                                    writeData(xml, mag, "StaccatoDot", a);
+                                    break;
+                              case ArticulationType::Tenuto:
+                                    writeData(xml, mag, "Tenuto", a);
+                                    break;
+                              case ArticulationType::Marcato:
+                                    writeData(xml, mag, "Marcato", a);
+                                    break;
+                              case ArticulationType::Staccatissimo:
+                                    writeData(xml, mag, "Marcato", a);
+                                    break;
+                              case ArticulationType::Sforzatoaccent:
+                                    writeData(xml, mag, "Marcato", a);
+                                    break;
+                              default:
+                                    break;
+                              }
+                        }
+                        break;
+
+                  case Element::Type::CLEF: {
+                        const Clef* c = static_cast<const Clef*>(e);
+                        switch (c->clefType()) {
+                              case ClefType::G:
+                                    writeData(xml, mag, c->small() ? "ClefGSmall" : "ClefG", c);
+                                    break;
+
+                              case ClefType::F:
+                                    writeData(xml, mag, c->small() ? "ClefFSmall" : "ClefF", c);
+                                    break;
+
+                              default:
+                                    break;
+                              }
+                        }
+                        break;
+
+                  case Element::Type::NOTE: {
+                        const Note* n = static_cast<const Note*>(e);
+                        const Chord* c = n->chord();
+                        bool small = c->isGrace() || c->small() || n->small();
+                        switch (n->chord()->durationType().headType()) {
+                              case NoteHead::Type::HEAD_WHOLE:
+                              case NoteHead::Type::HEAD_HALF:
+                                    writeData(xml, mag, small ? "NoteHeadVoidSmall" : "NoteHeadVoid", n);
+                                    break;
+                              case NoteHead::Type::HEAD_QUARTER:
+                                    writeData(xml, mag, small ? "NoteHeadBlackSmall" : "NoteHeadBlack", n);
+                                    break;
+                              case NoteHead::Type::HEAD_BREVIS:
+                              default:
+                                    break;
+                              }
+                        }
+                        break;
+
+                  case Element::Type::ACCIDENTAL: {
+                        const Accidental* a = static_cast<const Accidental*>(e);
+                        switch (a->accidentalType()) {
+                              case AccidentalType::SHARP:
+                                    writeData(xml, mag, "Sharp", a);
+                                    break;
+                              case AccidentalType::FLAT:
+                                    writeData(xml, mag, "Flat", a);
+                                    break;
+                              case AccidentalType::SHARP2:
+                                    writeData(xml, mag, "DoubleSharp", a);
+                                    break;
+                              case AccidentalType::FLAT2:
+                                    writeData(xml, mag, "DoubleFlat", a);
+                                    break;
+                              case AccidentalType::NATURAL:
+                                    writeData(xml, mag, "Natural", a);
+                                    break;
+                              default:
+                                    break;
+                              }
+                        }
+                        break;
+
+                  case Element::Type::KEYSIG: {
+                        const KeySig* k = static_cast<const KeySig*>(e);
+                        switch (k->key()) {
+                              case Key::G_B:
+                                    writeData(xml, mag, "KeyFlat6", k);
+                                    break;
+                              case Key::D_B:
+                                    writeData(xml, mag, "KeyFlat5", k);
+                                    break;
+                              case Key::A_B:
+                                    writeData(xml, mag, "KeyFlat4", k);
+                                    break;
+                              case Key::E_B:
+                                    writeData(xml, mag, "KeyFlat3", k);
+                                    break;
+                              case Key::B_B:
+                                    writeData(xml, mag, "KeyFlat2", k);
+                                    break;
+                              case Key::F:
+                                    writeData(xml, mag, "KeyFlat1", k);
+                                    break;
+                              case Key::G:
+                                    writeData(xml, mag, "KeySharp1", k);
+                                    break;
+                              case Key::D:
+                                    writeData(xml, mag, "KeySharp2", k);
+                                    break;
+                              case Key::A:
+                                    writeData(xml, mag, "KeySharp3", k);
+                                    break;
+                              case Key::E:
+                                    writeData(xml, mag, "KeySharp4", k);
+                                    break;
+                              case Key::B:
+                                    writeData(xml, mag, "KeySharp5", k);
+                                    break;
+                              case Key::F_S:
+                                    writeData(xml, mag, "KeySharp6", k);
+                                    break;
+                              case Key::C_S:
+                                    writeData(xml, mag, "KeySharp7", k);
+                                    break;
+                              default:
+                                    break;
+                              }
+                        };
+                        break;
+
+                  case Element::Type::HOOK: {
+                        const Hook* h = static_cast<const Hook*>(e);
+                        const Chord* c = h->chord();
+
+                        if (c->isGrace()) {
+                              if (h->hookType() == 1) {
+                                    if (c->slash())
+                                          writeData(xml, mag, "Flag1UpSmallSlash", h);
+                                    else
+                                          writeData(xml, mag, "Flag1UpSmall", h);
+                                    }
+                              break;
+                              }
+                        switch (h->hookType()) {
+                              default:
+                              case 0:
+                                    break;
+                              case -1:
+                                    writeData(xml, mag, "Flag1Up", h);
+                                    break;
+                              case -2:
+                                    writeData(xml, mag, "Flag2Up", h);
+                                    break;
+                              case -3:
+                                    writeData(xml, mag, "Flag3Up", h);
+                                    break;
+                              case -4:
+                                    writeData(xml, mag, "Flag4Up", h);
+                                    break;
+                              case -5:
+                                    writeData(xml, mag, "Flag5Up", h);
+                                    break;
+                              case -6:
+                                    writeData(xml, mag, "Flag6Up", h);
+                                    break;
+                              case -7:
+                                    writeData(xml, mag, "Flag7Up", h);
+                                    break;
+                              case 1:
+                                    writeData(xml, mag, "Flag1Down", h);
+                                    break;
+                              case 2:
+                                    writeData(xml, mag, "Flag2Down", h);
+                                    break;
+                              case 3:
+                                    writeData(xml, mag, "Flag3Down", h);
+                                    break;
+                              case 4:
+                                    writeData(xml, mag, "Flag4Down", h);
+                                    break;
+                              case 5:
+                                    writeData(xml, mag, "Flag5Down", h);
+                                    break;
+                              case 6:
+                                    writeData(xml, mag, "Flag6Down", h);
+                                    break;
+                              case 7:
+                                    writeData(xml, mag, "Flag7Down", h);
+                                    break;
+                              }
+                        }
+                        break;
+
+                  case Element::Type::REST: {
+                        const Rest* r = static_cast<const Rest*>(e);
+                        switch (r->durationType().type()) {
+                              case TDuration::DurationType::V_1024TH:
+                                    writeData(xml, mag, "Rest1024", r);
+                                    break;
+                              case TDuration::DurationType::V_512TH:
+                                    writeData(xml, mag, "Rest512", r);
+                                    break;
+                              case TDuration::DurationType::V_256TH:
+                                    writeData(xml, mag, "Rest256", r);
+                                    break;
+                              case TDuration::DurationType::V_128TH:
+                                    writeData(xml, mag, "Rest128", r);
+                                    break;
+                              case TDuration::DurationType::V_64TH:
+                                    writeData(xml, mag, "Rest64", r);
+                                    break;
+                              case TDuration::DurationType::V_32ND:
+                                    writeData(xml, mag, "Rest32", r);
+                                    break;
+                              case TDuration::DurationType::V_16TH:
+                                    writeData(xml, mag, "Rest16", r);
+                                    break;
+                              case TDuration::DurationType::V_EIGHTH:
+                                    writeData(xml, mag, "Rest8", r);
+                                    break;
+                              case TDuration::DurationType::V_QUARTER:
+                                    writeData(xml, mag, "Rest4", r);
+                                    break;
+                              case TDuration::DurationType::V_HALF:
+                                    writeData(xml, mag, "Rest2", r);
+                                    break;
+                              case TDuration::DurationType::V_WHOLE:
+                              case TDuration::DurationType::V_MEASURE:
+                                    writeData(xml, mag, "RestWhole", r);
+                                    break;
+                              case TDuration::DurationType::V_BREVE:
+                                    writeData(xml, mag, "RestBreve", r);
+                                    break;
+                              case TDuration::DurationType::V_LONG:
+                                    writeData(xml, mag, "RestLong", r);
+                                    break;
+                              default:
+                                    break;
+                              }
+
+                        }
+                        break;
+                  case Element::Type::TIMESIG: {
+                        const TimeSig* ts = static_cast<const TimeSig*>(e);
+                        Fraction sig      = ts->sig();
+                        TimeSigType t     = ts->timeSigType();
+                        switch (t) {
+                              case TimeSigType::NORMAL: {
+                                    QString s = QString("Time%1_%2").arg(sig.numerator()).arg(sig.denominator());
+                                    writeData(xml, mag, s, ts);
+                                    }
+                                    break;
+                              case TimeSigType::FOUR_FOUR:
+                                    writeData(xml, mag, "CommonTime", ts);
+                                    break;
+                              case TimeSigType::ALLA_BREVE:
+                                    writeData(xml, mag, "CutTime", ts);
+                                    break;
+                              }
+                        }
+                        break;
+
+                  case Element::Type::MARKER: {
+                        const Marker* m = static_cast<const Marker*>(e);
+                        switch (m->markerType()) {
+                              case Marker::Type::SEGNO:
+                              case Marker::Type::VARSEGNO:
+                                    writeData(xml, mag, "Segno", m);
+                                    break;
+
+                              case Marker::Type::CODA:
+                              case Marker::Type::VARCODA:
+                                    writeData(xml, mag, "Coda", m);
+                                    break;
+
+                              case Marker::Type::FINE:
+                                    writeData(xml, mag, "Fine", m);
+                                    break;
+
+                              case Marker::Type::TOCODA:
+                                    writeData(xml, mag, "ToCoda", m);
+                                    break;
+
+                              case Marker::Type::CODETTA:
+                              default:
+                                    break;
+                              }
+
+                        }
+                        break;
+
+                  default:
+                        break;      // ignore
+                  }
+            }
+      xml.etag();
+      if (f.error() != QFile::NoError)
+            MScore::lastError = tr("Write failed: %1").arg(f.errorString());
       }
 
 }

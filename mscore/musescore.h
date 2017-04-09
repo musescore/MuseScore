@@ -618,6 +618,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool savePng(Score*, const QString& name);
 //      bool saveLilypond(Score*, const QString& name);
       bool saveMidi(Score* score, const QString& name);
+      void writeEdata(const QString&, Score*, qreal, const QList<const Element*>&);
 
       virtual void closeScore(Score* score);
 

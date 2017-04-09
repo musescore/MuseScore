@@ -2947,7 +2947,7 @@ void Chord::reset()
 //   slash
 //---------------------------------------------------------
 
-bool Chord::slash()
+bool Chord::slash() const
       {
       Note* n = upNote();
       return n->fixed();

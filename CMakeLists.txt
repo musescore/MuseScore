@@ -127,7 +127,7 @@ option(BUILD_PULSEAUDIO "Build with support for Pulseaudio audio backend." ON)
 option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
 option(BUILD_PORTAUDIO "Build with support for Portaudio audio backend." ON)
 option(BUILD_PORTMIDI "Build with support for PortAudio's MIDI features." ${BUILD_PORTAUDIO}) # PortAudio required
-option(BUILD_WEBKIT "Built in webkit support" ON)
+option(BUILD_WEBKIT "Built in webkit support" OFF)
 option(BUILD_PCH "Build using precompiled headers." OFF)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 

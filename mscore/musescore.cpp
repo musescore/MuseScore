@@ -140,6 +140,7 @@ QString dataPath;
 QString iconPath;
 
 bool converterMode = false;
+bool edata = false;
 bool processJob = false;
 bool externalIcons = false;
 bool pluginMode = false;
@@ -5823,7 +5824,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Used with '-o <file>.pdf', export score and parts"));
       parser.addOption(QCommandLineOption({"f", "force"}, "Used with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
       parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
-      parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless if -e is passed too", "extension file"));
+      parser.addOption(QCommandLineOption({"A", "emeta"}, "create metatdata xml file for every exported image file"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -5869,9 +5870,9 @@ int main(int argc, char* av[])
             if (pluginName.isEmpty())
                   parser.showHelp(EXIT_FAILURE);
             }
-      if (parser.isSet("E")) {
+      if (parser.isSet("A")) {
             MScore::noGui = true;
-            extensionName = parser.value("E");
+            extensionName = parser.value("A");
             }
       MScore::saveTemplateMode = parser.isSet("template-mode");
       if (parser.isSet("r")) {
@@ -5922,6 +5923,9 @@ int main(int argc, char* av[])
             styleFile = parser.value("S");
             if (styleFile.isEmpty())
                   parser.showHelp(EXIT_FAILURE);
+            }
+      if (parser.isSet("A")) {
+            edata = true;
             }
       useFactorySettings = parser.isSet("F");
       deletePreferences = (useFactorySettings || parser.isSet("R"));
