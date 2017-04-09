@@ -129,6 +129,7 @@ QString dataPath;
 QString iconPath;
 
 bool converterMode = false;
+bool edata = false;
 bool processJob = false;
 bool externalIcons = false;
 bool pluginMode = false;
@@ -5099,6 +5100,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Used with -o <file>.pdf, export score + parts"));
       parser.addOption(QCommandLineOption({"f", "force"}, "Used with -o, ignore warnings reg. score being corrupted or from wrong version"));
       parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with -o <file>.mp3, sets bitrate", "bitrate"));
+      parser.addOption(QCommandLineOption({"E", "emeta"}, "create metatdata xml file for every exported image file"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -5182,6 +5184,9 @@ int main(int argc, char* av[])
             styleFile = parser.value("S");
             if (styleFile.isEmpty())
                   parser.showHelp(EXIT_FAILURE);
+            }
+      if (parser.isSet("E")) {
+            edata = true;
             }
       useFactorySettings = parser.isSet("F");
       deletePreferences = (useFactorySettings || parser.isSet("R"));

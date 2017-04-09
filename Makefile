@@ -33,7 +33,7 @@ BUILD_LAME="ON" # Non-free, required for MP3 support. Override with "OFF" to dis
 BUILD_PULSEAUDIO="ON" # Override with "OFF" to disable.
 BUILD_JACK="ON"       # Override with "OFF" to disable.
 BUILD_PORTAUDIO="ON"  # Override with "OFF" to disable.
-BUILD_WEBKIT="ON"     # Override with "OFF" to disable.
+BUILD_WEBKIT="OFF"    # Override with "OFF" to disable.
 
 
 UPDATE_CACHE="TRUE"# Override if building a DEB or RPM, or when installing to a non-standard location.
