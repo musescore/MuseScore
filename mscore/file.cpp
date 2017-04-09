@@ -2845,7 +2845,7 @@ void MuseScore::writeEdata(const QString& edataName, Score* score, qreal mag, co
       {
       QFile f(edataName);
       if (!f.open(QIODevice::WriteOnly)) {
-            MScore::lastError = tr("Open Element metatdata xml file\n%1\nfailed: %2").arg(f.fileName().arg(QString(strerror(errno))));
+            MScore::lastError = tr("Open Element metadata xml file\n%1\nfailed: %2").arg(f.fileName().arg(QString(strerror(errno))));
             return;
             }
       Xml xml(&f);
@@ -3161,6 +3161,63 @@ void MuseScore::writeEdata(const QString& edataName, Score* score, qreal mag, co
                         }
                         break;
 
+                  case Element::Type::DYNAMIC: {
+                        const Dynamic* d = static_cast<const Dynamic*>(e);
+                        switch (d->dynamicType()) {
+                              case Dynamic::Type::PPPPPP:
+                              case Dynamic::Type::PPPPP:
+                              case Dynamic::Type::PPPP:
+                              case Dynamic::Type::PPP:
+                                    break;
+                              case Dynamic::Type::PP:
+                                    writeData(xml, mag, "Dynamic_PP", d);
+                                    break;
+                              case Dynamic::Type::P:
+                                    writeData(xml, mag, "Dynamic_P", d);
+                                    break;
+                              case Dynamic::Type::MP:
+                                    writeData(xml, mag, "Dynamic_MP", d);
+                                    break;
+                              case Dynamic::Type::MF:
+                                    writeData(xml, mag, "Dynamic_MF", d);
+                                    break;
+                                    break;
+                              case Dynamic::Type::F:
+                                    writeData(xml, mag, "Dynamic_F", d);
+                                    break;
+                              case Dynamic::Type::FF:
+                                    writeData(xml, mag, "Dynamic_FF", d);
+                                    break;
+                              case Dynamic::Type::FFF:
+                              case Dynamic::Type::FFFF:
+                              case Dynamic::Type::FFFFF:
+                              case Dynamic::Type::FFFFFF:
+                                    break;
+                              case Dynamic::Type::FP:
+                                    writeData(xml, mag, "Dynamic_FP", d);
+                                    break;
+                              case Dynamic::Type::SF:
+                                    writeData(xml, mag, "Dynamic_SF", d);
+                                    break;
+                              case Dynamic::Type::SFZ:
+                                    writeData(xml, mag, "Dynamic_SFZ", d);
+                                    break;
+                              case Dynamic::Type::SFF:
+                              case Dynamic::Type::SFFZ:
+                              case Dynamic::Type::SFP:
+                              case Dynamic::Type::SFPP:
+                              case Dynamic::Type::RFZ:
+                              case Dynamic::Type::RF:
+                              case Dynamic::Type::FZ:
+                              case Dynamic::Type::M:
+                              case Dynamic::Type::R:
+                              case Dynamic::Type::S:
+                              case Dynamic::Type::Z:
+                              default:
+                                    break;
+                              }
+                        }
+                        break;
                   default:
                         break;      // ignore
                   }
