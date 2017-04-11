@@ -816,7 +816,8 @@ void Harmony::setHarmony(const QString& s)
 
 qreal Harmony::baseLine() const
       {
-      return (editMode() || textList.empty()) ? Text::baseLine() : 0.0;
+//      return (editMode() || textList.empty()) ? Text::baseLine() : 0.0;
+      return (textList.empty()) ? Text::baseLine() : 0.0;
       }
 
 //---------------------------------------------------------
@@ -1007,7 +1008,7 @@ const ChordDescription* Harmony::generateDescription()
 
 void Harmony::textChanged()
       {
-      Text::createLayout();
+//      Text::createLayout();
       setHarmony(plainText(true));
       }
 
@@ -1049,6 +1050,7 @@ void Harmony::layout()
             yy = score()->styleP(StyleIdx::harmonyFretDist);
             }
 //TODO      yy += textStyle().offset(_spatium).y();
+#if 0
       if (!editMode()) {
             qreal hb = lineHeight() - Text::baseLine();
             if (align() & Align::BOTTOM)
@@ -1064,8 +1066,10 @@ void Harmony::layout()
                   yy += height();
                   }
             }
+#endif
 
       qreal xx = 0.0; // offset(_spatium).x();
+#if 0
       if (!editMode()) {
             qreal cw = symWidth(SymId::noteheadBlack);
             if (align() & Align::RIGHT) {
@@ -1077,7 +1081,7 @@ void Harmony::layout()
                   xx -= (width() * .5);
                   }
             }
-
+#endif
       setPos(xx, yy);
 
       if (!readPos().isNull()) {
@@ -1112,7 +1116,8 @@ void Harmony::layout()
 
 void Harmony::calculateBoundingRect()
       {
-      if (editMode() || textList.empty()) {
+//      if (editMode() || textList.empty()) {
+      if (textList.empty()) {
             Text::layout1();
             setbboxtight(bbox());
             }
@@ -1135,7 +1140,8 @@ void Harmony::calculateBoundingRect()
 void Harmony::draw(QPainter* painter) const
       {
       // painter->setPen(curColor());
-      if (editMode() || textList.empty()) {
+//      if (editMode() || textList.empty()) {
+      if (textList.empty()) {
             Text::draw(painter);
             return;
             }

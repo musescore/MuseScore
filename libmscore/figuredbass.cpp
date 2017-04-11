@@ -1078,7 +1078,8 @@ void FiguredBass::layout()
 #endif
       // if in edit mode or if style has been changed,
       // do nothing else, keeping default laying out and formatting
-      if (editMode() || items.size() < 1 || subStyle() != SubStyle::FIGURED_BASS) {
+//      if (editMode() || items.size() < 1 || subStyle() != SubStyle::FIGURED_BASS) {
+      if (items.size() < 1 || subStyle() != SubStyle::FIGURED_BASS) {
             Text::layout();
             return;
             }
@@ -1204,7 +1205,8 @@ void FiguredBass::draw(QPainter* painter) const
                   }
             }
       // if in edit mode or with custom style, use standard text drawing
-      if (editMode() || subStyle() != SubStyle::FIGURED_BASS)
+//      if (editMode() || subStyle() != SubStyle::FIGURED_BASS)
+      if (subStyle() != SubStyle::FIGURED_BASS)
             Text::draw(painter);
       else {                                                // not edit mode:
             if (items.size() < 1)                           // if not parseable into f.b. items

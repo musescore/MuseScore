@@ -333,8 +333,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       QPixmap* fgPixmap() { return _fgPixmap; }
 
-      virtual void startEdit(Element*, Grip);
-      void startEdit(Element*);
+      virtual void startEdit(Element*, Grip) override;
+      virtual void startEditMode(Element*) override;
 
       void moveCursor(int tick);
       int cursorTick() const;
@@ -353,7 +353,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool navigatorVisible() const;
       void cmd(const QAction* a);
 
-      void startUndoRedo();
+      void startUndoRedo(bool);
       void zoomStep(qreal step, const QPoint& pos);
       void zoom(qreal _mag, const QPointF& pos);
       void contextPopup(QContextMenuEvent* ev);
@@ -460,6 +460,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void editFretDiagram(FretDiagram*);
       void editBendProperties(Bend*);
       void editTremoloBarProperties(TremoloBar*);
+      EditData& getEditData()        { return editData; }
       };
 
 //---------------------------------------------------------

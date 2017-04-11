@@ -47,8 +47,7 @@ bool ScoreView::testElementDragTransition(QMouseEvent* ev)
 void ScoreView::startDrag()
       {
       dragElement = curElement;
-      qDeleteAll(editData.data);
-      editData.data.clear();
+      editData.clearData();
       editData.startMove  -= dragElement->userOff();
 
       _score->startCmd();

@@ -17,6 +17,9 @@
 namespace Ms {
 
 class Text;
+class TextCursor;
+class EditData;
+class ScoreView;
 
 //---------------------------------------------------------
 //   TextTools
@@ -25,7 +28,7 @@ class Text;
 class TextTools : public QDockWidget {
       Q_OBJECT
 
-      Text* _textElement;
+      ScoreView* _view;
 
       QDoubleSpinBox* typefaceSize;
       QFontComboBox* typefaceFamily;
@@ -52,12 +55,14 @@ class TextTools : public QDockWidget {
 
    public:
       TextTools(QWidget* parent = 0);
-      void setText(Text* te);
-      void updateTools();
-      QAction* kbAction() const { return showKeyboard; }
+      void setView(ScoreView* v)       { _view = v; }
+      void updateTools(EditData&);
+      QAction* kbAction() const        { return showKeyboard; }
       void toggleBold();
       void toggleItalic();
       void toggleUnderline();
+      Text* textElement();
+      TextCursor* cursor();
       };
 }
 

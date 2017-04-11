@@ -60,13 +60,16 @@ void ScoreView::lyricsUpDown(bool up, bool end)
       startEdit(lyrics, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
       adjustCanvasPosition(lyrics, false);
+
+      lyrics = toLyrics(editElement);
+      TextCursor* cursor = lyrics->cursor(editData);
       if (end) {
-            ((Lyrics*)editElement)->movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-            ((Lyrics*)editElement)->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+            cursor->movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+            cursor->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
             }
       else {
-            ((Lyrics*)editElement)->movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
-            ((Lyrics*)editElement)->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+            cursor->movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+            cursor->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
             }
 
       _score->setLayoutAll();
@@ -127,34 +130,34 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             qDebug("no next lyrics list: %s", nextSegment->element(track)->name());
             return;
             }
-      Lyrics* toLyrics = cr->lyrics(verse, placement);
+      Lyrics* _toLyrics = cr->lyrics(verse, placement);
 
       bool newLyrics = false;
-      if (!toLyrics) {
-            toLyrics = new Lyrics(_score);
-            toLyrics->setTrack(track);
+      if (!_toLyrics) {
+            _toLyrics = new Lyrics(_score);
+            _toLyrics->setTrack(track);
             ChordRest* cr = static_cast<ChordRest*>(nextSegment->element(track));
-            toLyrics->setParent(cr);
-            toLyrics->setNo(verse);
-            toLyrics->setPlacement(placement);
-            toLyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
+            _toLyrics->setParent(cr);
+            _toLyrics->setNo(verse);
+            _toLyrics->setPlacement(placement);
+            _toLyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
             newLyrics = true;
             }
 
       _score->startCmd();
 
       if (fromLyrics && !moveOnly) {
-            switch(toLyrics->syllabic()) {
+            switch (_toLyrics->syllabic()) {
                   // as we arrived at toLyrics by a [Space], it can be the beginning
                   // of a multi-syllable, but cannot have syllabic dashes before
                   case Lyrics::Syllabic::SINGLE:
                   case Lyrics::Syllabic::BEGIN:
                         break;
                   case Lyrics::Syllabic::END:
-                        toLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::SINGLE));
+                        _toLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::SINGLE));
                         break;
                   case Lyrics::Syllabic::MIDDLE:
-                        toLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
+                        _toLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
                         break;
                   }
             // as we moved away from fromLyrics by a [Space], it can be
@@ -175,20 +178,22 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             }
 
       if (newLyrics)
-          _score->undoAddElement(toLyrics);
+          _score->undoAddElement(_toLyrics);
 
-      _score->select(toLyrics, SelectType::SINGLE, 0);
-      startEdit(toLyrics, Grip::NO_GRIP);
+      _score->select(_toLyrics, SelectType::SINGLE, 0);
+      startEdit(_toLyrics, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
 
-      adjustCanvasPosition(toLyrics, false);
+      adjustCanvasPosition(_toLyrics, false);
+
+      TextCursor* cursor = toLyrics(editElement)->cursor(editData);
       if (end) {
-            ((Lyrics*)editElement)->movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-            ((Lyrics*)editElement)->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+            cursor->movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+            cursor->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
             }
       else {
-            ((Lyrics*)editElement)->movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
-            ((Lyrics*)editElement)->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+            cursor->movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+            cursor->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
             }
       _score->setLayoutAll();
       _score->update();
@@ -280,7 +285,8 @@ void ScoreView::lyricsMinus()
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(toLyrics, false);
-      ((Lyrics*)editElement)->selectAll();
+      TextCursor* cursor = Ms::toLyrics(editElement)->cursor(editData);
+      Ms::toLyrics(editElement)->selectAll(cursor);
 
       _score->setLayoutAll();
       _score->update();
@@ -399,7 +405,8 @@ void ScoreView::lyricsUnderscore()
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(toLyrics, false);
-      ((Lyrics*)editElement)->selectAll();
+      TextCursor* cursor = Ms::toLyrics(editElement)->cursor(editData);
+      Ms::toLyrics(editElement)->selectAll(cursor);
 
       _score->setLayoutAll();
       //_score->update();
