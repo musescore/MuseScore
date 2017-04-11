@@ -2359,7 +2359,7 @@ void Score::cmd(const QAction* a)
             padToggle(Pad::NOTE64);
       else if (cmd == "pad-note-128" || cmd == "pad-note-128-TAB")
             padToggle(Pad::NOTE128);
-      else if (cmd == "pad-note-increase-TAB") {
+      else if (cmd == "pad-note-increase" || cmd == "pad-note-increase-TAB") {
             switch (_is.duration().type() ) {
 // cycle back from longest to shortest?
 //                  case TDuration::V_LONG:
@@ -2396,7 +2396,7 @@ void Score::cmd(const QAction* a)
                         break;
                   }
             }
-      else if (cmd == "pad-note-decrease-TAB") {
+      else if (cmd == "pad-note-decrease" || cmd == "pad-note-decrease-TAB") {
             switch (_is.duration().type() ) {
                   case TDuration::DurationType::V_LONG:
                         padToggle(Pad::NOTE0);
