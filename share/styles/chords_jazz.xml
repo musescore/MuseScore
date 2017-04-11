@@ -375,7 +375,7 @@
 
   <token class="modifier">
     <name>1</name>
-    <render>m:0:-&modn; s1m:0:&modn; </render>
+    <render>m:0:-&modn; s1 m:0:&modn; </render>
     </token>
 
   <token class="modifier">
