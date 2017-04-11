@@ -36,7 +36,7 @@ VolSlider::VolSlider(QWidget* parent)
       setScaleWidth(7);
       setLineStep(.8f);
       setPageStep(3.0f);
-      setDclickValue1(_minValue);
+      setDclickValue1(0.0);
       setDclickValue2(0.0);
       }
 
