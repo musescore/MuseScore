@@ -1524,7 +1524,7 @@ void Text::startEdit(EditData& ed)
 //   endEdit
 //---------------------------------------------------------
 
-void Text::endEdit(EditData& ed)
+void Text::endEdit(EditData&)
       {
       static const qreal w = 2.0;
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
@@ -2259,7 +2259,6 @@ QLineF Text::dragAnchor() const
 
 void Text::paste(EditData& ed)
       {
-      MuseScoreView* view = ed.view;
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
       TextCursor* _cursor = ted->cursor;
 
@@ -2405,8 +2404,8 @@ bool Text::acceptDrop(EditData& data) const
 
 Element* Text::drop(EditData& data)
       {
-      Element* e = data.element;
 #if 0
+      Element* e = data.element;
       switch(e->type()) {
             case ElementType::SYMBOL:
                   {
