@@ -57,6 +57,13 @@ class EditDrumset : public QDialog, private Ui::EditDrumsetBase {
       };
 
 
+class EditDrumsetTreeWidgetItem : public QTreeWidgetItem {
+   public:
+      EditDrumsetTreeWidgetItem(QTreeWidget * parent)
+         : QTreeWidgetItem(parent)  {};
+      virtual bool operator<(const QTreeWidgetItem & other) const;
+};
+
 
 } // namespace Ms
 #endif
