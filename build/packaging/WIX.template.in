@@ -92,6 +92,7 @@
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mxl" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".xml" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".cap" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".capx" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".bww" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mid" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".midi" Value="" Type="string" />
@@ -100,6 +101,7 @@
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".sgu" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mgu" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".md" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".gtp" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".gp3" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".gp4" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".gp5" Value="" Type="string" />
