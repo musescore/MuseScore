@@ -62,6 +62,18 @@ NoteHead::Group noteHeadNames[] = {
       };
 
 //---------------------------------------------------------
+//   operator<
+//---------------------------------------------------------
+
+bool EditDrumsetTreeWidgetItem::operator<(const QTreeWidgetItem & other) const
+      {
+      if (treeWidget()->sortColumn() == Column::PITCH)
+            return data(Column::PITCH, Qt::UserRole) < other.data(Column::PITCH, Qt::UserRole);
+      else
+            return QTreeWidgetItem::operator<(other);
+      }
+
+//---------------------------------------------------------
 //   EditDrumset
 //---------------------------------------------------------
 
@@ -110,7 +122,7 @@ void EditDrumset::updateList()
       {
       pitchList->clear();
       for (int i = 0; i < 128; ++i) {
-            QTreeWidgetItem* item = new QTreeWidgetItem(pitchList);
+            QTreeWidgetItem* item = new EditDrumsetTreeWidgetItem(pitchList);
             item->setText(Column::PITCH, QString("%1").arg(i));
             item->setText(Column::NOTE, pitch2string(i));
             if (nDrumset.shortcut(i) == 0)
@@ -120,7 +132,7 @@ void EditDrumset::updateList()
                   item->setText(Column::SHORTCUT, s);
                   }
             item->setText(Column::NAME, qApp->translate("drumset", nDrumset.name(i).toUtf8().constData()));
-            item->setData(0, Qt::UserRole, i);
+            item->setData(Column::PITCH, Qt::UserRole, i);
             }
       pitchList->sortItems(3, Qt::SortOrder::DescendingOrder);
       }
