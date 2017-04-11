@@ -15,11 +15,12 @@
 #define __TESTUTILS_H__
 
 
+#include "libmscore/element.h"
+
 namespace Ms {
       class MScore;
       class MasterScore;
       class Score;
-      class Element;
 
 //---------------------------------------------------------
 //   MTest
@@ -30,6 +31,7 @@ class MTest {
       Ms::MScore* mscore;
       QString root;     // root path of test source
       Ms::Score* score;
+      EditData ed;
 
       MTest();
       Ms::MasterScore* readScore(const QString& name);

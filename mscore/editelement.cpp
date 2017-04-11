@@ -41,8 +41,6 @@ void ScoreView::updateGrips()
       if (editElement == 0)
             return;
 
-      qDebug("editElement <%s>", editElement->name());
-
       double dx = 1.5 / _matrix.m11();
       double dy = 1.5 / _matrix.m22();
 
@@ -66,9 +64,9 @@ void ScoreView::updateGrips()
       while (page->parent())
             page = page->parent();
       QPointF pageOffset(page->pos());
-      for (int i = 0; i < editData.grips; ++i) {
-            editData.grip[i].translate(pageOffset);
-            score()->addRefresh(editData.grip[i].adjusted(-dx, -dy, dx, dy));
+      for (QRectF& grip : editData.grip) {
+            grip.translate(pageOffset);
+            score()->addRefresh(grip.adjusted(-dx, -dy, dx, dy));
             }
 
       QPointF anchor = editElement->gripAnchor(editData.curGrip);
@@ -83,7 +81,7 @@ void ScoreView::updateGrips()
 //   startEdit
 //---------------------------------------------------------
 
-void ScoreView::startEdit(Element* e)
+void ScoreView::startEditMode(Element* e)
       {
       if (!e || !e->isEditable()) {
             qDebug("The element cannot be edited");
@@ -93,6 +91,8 @@ void ScoreView::startEdit(Element* e)
             e = toTBox(e)->text();
       editElement = e;
       sm->postEvent(new CommandEvent("edit"));
+      qApp->processEvents();  // calls startEdit()
+
       _score->update();
       }
 
@@ -114,6 +114,7 @@ void ScoreView::startEdit(Element* element, Grip startGrip)
 
 //---------------------------------------------------------
 //   startEdit
+//    command transition "edit"
 //---------------------------------------------------------
 
 void ScoreView::startEdit()
@@ -122,7 +123,7 @@ void ScoreView::startEdit()
             editElement = toTBox(editElement)->text();
       curElement  = 0;
       setFocus();
-      editData.grips = 0;
+      editData.grips   = 0;
       editData.curGrip = Grip(0);
       editElement->startEdit(editData);
       updateGrips();
@@ -178,8 +179,6 @@ void ScoreView::endEdit()
 
 bool ScoreView::editElementDragTransition(QMouseEvent* ev)
       {
-      qDeleteAll(editData.data);
-      editData.data.clear();
       editData.startMove = toLogical(ev->pos());
       editData.lastPos   = editData.startMove;
       editData.pos       = editData.startMove;
@@ -188,7 +187,7 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
 
       Element* e = elementNear(editData.startMove);
       if (e && (e == editElement) && (editElement->isText())) {
-            if (editElement->mousePress(editData.startMove, ev)) {
+            if (editElement->mousePress(editData, ev)) {
                   _score->addRefresh(editElement->canvasBoundingRect());
                   _score->update();
                   }
@@ -196,6 +195,7 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
             }
       int i = 0;
       score()->startCmd();
+      editData.clearData();
       editElement->startEditDrag(editData);
       if (editData.grips) {
             qreal a = editData.grip[0].width() * 1.0;

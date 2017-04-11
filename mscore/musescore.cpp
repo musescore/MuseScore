@@ -3213,10 +3213,10 @@ void MuseScore::changeState(ScoreState val)
                   textTools()->kbAction()->setChecked(false);
             }
       else {
-            if (e->isText()) {
-                  textTools()->setText(static_cast<Text*>(e));
-                  textTools()->updateTools();
-                  if (e->type() != ElementType::FIGURED_BASS && e->type() != ElementType::HARMONY)   // do not show text tools for f.b.
+            if (cv && e->isText()) {
+                  textTools()->setView(cv);
+                  textTools()->updateTools(cv->getEditData());
+                  if (!e->isFiguredBass() && !e->isHarmony())   // do not show text tools for f.b.
                         textTools()->show();
                   }
             if (_inspector)
@@ -3655,22 +3655,14 @@ void MuseScore::setPos(int t)
 
 void MuseScore::undoRedo(bool undo)
       {
+      Q_ASSERT(cv);
+      Q_ASSERT(cs);
       if (_sstate & (STATE_EDIT | STATE_TEXT_EDIT | STATE_HARMONY_FIGBASS_EDIT | STATE_LYRICS_EDIT)) {
             cv->postCmd("escape");
             qApp->processEvents();
             }
-      if (cv) {
-            Q_ASSERT(cs);
-            cv->startUndoRedo();
-            cs->undoRedo(undo);
-            if (cs->inputState().segment())
-                  setPos(cs->inputState().tick());
-            if (cs->noteEntryMode() && !cv->noteEntryMode())
-                  cv->postCmd("note-input");    // enter note entry mode
-            else if (!cs->noteEntryMode() && cv->noteEntryMode())
-                  cv->postCmd("escape");        // leave note entry mode
-            updateInputState(cs);
-            }
+      cv->startUndoRedo(undo);
+      updateInputState(cs);
       endCmd();
       if (_inspector)
             _inspector->update();
@@ -4542,6 +4534,7 @@ void MuseScore::cmd(QAction* a)
             return;
             }
       if (cs && (sc->state() & _sstate) == 0) {
+            qDebug("invalid state %04x %04x", sc->state(), _sstate);
             QMessageBox::warning(0,
                QWidget::tr("Invalid Command"),
                QString("Command %1 not valid in current state").arg(cmdn));

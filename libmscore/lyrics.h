@@ -128,7 +128,7 @@ class Lyrics : public Text {
 #endif
 
       using Text::paste;
-      virtual void paste(MuseScoreView*) override;
+      virtual void paste(EditData&) override;
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;

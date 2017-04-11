@@ -92,7 +92,7 @@ bool ScoreView::editKeyLyrics(QKeyEvent* ev)
 
             case Qt::Key_Left:
                   if (!ctrl && editElement->edit(editData)) {
-                        mscore->textTools()->updateTools();
+                        mscore->textTools()->updateTools(editData);
                         _score->update();
                         mscore->endCmd();
                         }
@@ -101,7 +101,7 @@ bool ScoreView::editKeyLyrics(QKeyEvent* ev)
                   break;
             case Qt::Key_Right:
                   if (!ctrl && editElement->edit(editData)) {
-                        mscore->textTools()->updateTools();
+                        mscore->textTools()->updateTools(editData);
                         _score->update();
                         mscore->endCmd();
                         }
@@ -232,7 +232,7 @@ void ScoreView::editKey(QKeyEvent* ev)
             _score->startCmd();
             if (editElement->edit(editData)) {
                   if (editElement->isText())
-                        mscore->textTools()->updateTools();
+                        mscore->textTools()->updateTools(editData);
                   updateGrips();
                   ev->accept();
                   _score->endCmd();
@@ -295,12 +295,11 @@ void ScoreView::editKey(QKeyEvent* ev)
                   ev->ignore();
                   return;
             }
+      editData.init();
       editData.delta   = delta;
       editData.view    = this;
       editData.hRaster = mscore->hRaster();
       editData.vRaster = mscore->vRaster();
-      qDeleteAll(editData.data);
-      editData.data.clear();
       if (editData.curGrip != Grip::NO_GRIP && int(editData.curGrip) < editData.grips)
             editData.pos = editData.grip[int(editData.curGrip)].center() + delta;
       editElement->score()->startCmd();

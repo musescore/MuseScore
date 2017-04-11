@@ -381,8 +381,10 @@ void Lyrics::layout1()
 //   paste
 //---------------------------------------------------------
 
-void Lyrics::paste(MuseScoreView* scoreview)
+void Lyrics::paste(EditData& ed)
       {
+      MuseScoreView* scoreview = ed.view;
+#if 0 // TODO
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       QClipboard::Mode mode = QClipboard::Clipboard;
 #else
@@ -445,6 +447,7 @@ void Lyrics::paste(MuseScoreView* scoreview)
             scoreview->lyricsUnderscore();
       else
             scoreview->lyricsTab(false, false, true);
+#endif
       }
 
 //---------------------------------------------------------

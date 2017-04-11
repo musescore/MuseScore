@@ -338,6 +338,8 @@ void MTest::initMTest()
       mscore = new MScore;
       new MuseScoreCore;
       mscore->init();
+      ed.init();
+
       preferences.shortestNote = MScore::division / 4; // midi quantization: 1/16
 
       root = TESTROOT "/mtest";

@@ -1642,7 +1642,7 @@ void MuseScore::addTempo()
       cs->undoAddElement(tt);
       cs->select(tt, SelectType::SINGLE, 0);
       cs->endCmd();
-      cv->startEdit(tt);
+      cv->startEditMode(tt);
       }
 
 //---------------------------------------------------------

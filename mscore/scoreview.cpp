@@ -1111,7 +1111,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
             if (obj->isEditable()) {
                   if (obj->score())
                         obj->score()->select(obj);
-                  startEdit(obj);
+                  startEditMode(obj);
                   return;
                   }
             }
@@ -1208,7 +1208,7 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
             _score->colorItem(obj);
       else if (cmd == "edit") {
             if (obj->isEditable()) {
-                  startEdit(obj);
+                  startEditMode(obj);
                   return;
                   }
             }
@@ -1711,8 +1711,6 @@ void ScoreView::paintEvent(QPaintEvent* ev)
             r.moveCenter(dropAnchor.p2());
             vp.drawEllipse(r);
             }
-      if (editElement)
-            editElement->drawEditMode(&vp, editData);
       }
 
 //---------------------------------------------------------
@@ -1775,6 +1773,9 @@ void ScoreView::paint(const QRect& r, QPainter& p)
 
       p.setTransform(_matrix);
       QRectF fr = imatrix.mapRect(QRectF(r));
+
+      if (editElement)
+            editElement->drawEditMode(&p, editData);
 
       QRegion r1(r);
       if ((_score->layoutMode() == LayoutMode::LINE) || (_score->layoutMode() == LayoutMode::SYSTEM)) {
@@ -2410,15 +2411,8 @@ void ScoreView::setFocusRect()
 
 void ScoreView::editCopy()
       {
-      if (editElement && editElement->isText()) {
-            //
-            // store selection as plain text
-            //
-            Text* text = toText(editElement);
-            QString s = text->selectedText();
-            if (!s.isEmpty())
-                  QApplication::clipboard()->setText(s, QClipboard::Clipboard);
-            }
+      if (editElement)
+            editElement->editCopy(editData);
       }
 
 //---------------------------------------------------------
@@ -2427,18 +2421,8 @@ void ScoreView::editCopy()
 
 void ScoreView::editCut()
       {
-      if (editElement && editElement->isText()) {
-            Text* text = toText(editElement);
-            QString s = text->selectedText();
-            if (!s.isEmpty()) {
-                  QApplication::clipboard()->setText(s, QClipboard::Clipboard);
-                  editData.curGrip = Grip::START;
-                  editData.key     = Qt::Key_Delete;
-                  editData.s       = QString();
-                  text->edit(editData);
-                  text->score()->update();
-                  }
-            }
+      if (editElement)
+            editElement->editCut(editData);
       }
 
 //---------------------------------------------------------
@@ -2494,13 +2478,15 @@ void ScoreView::normalCut()
 
 void ScoreView::editSwap()
       {
+#if 0 // TODO
       if (editElement && editElement->isText() && !editElement->isLyrics()) {
-          Text* text = toText(editElement);
-          QString s = text->selectedText();
+            Text* text = toText(editElement);
+            QString s = text->selectedText();
             text->paste(this);
             if (!s.isEmpty())
                   QApplication::clipboard()->setText(s, QClipboard::Clipboard);
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -2510,7 +2496,7 @@ void ScoreView::editSwap()
 void ScoreView::editPaste()
       {
       if (editElement && editElement->isText())
-            toText(editElement)->paste(this);
+            toText(editElement)->paste(editData);
       }
 
 //---------------------------------------------------------
@@ -2608,7 +2594,7 @@ void ScoreView::cmd(const QAction* a)
                   sm->postEvent(new CommandEvent("note-input"));
             Lyrics* lyrics = _score->addLyrics();
             if (lyrics) {
-                  startEdit(lyrics);
+                  startEditMode(lyrics);
                   return;     // no endCmd()
                   }
             }
@@ -2617,7 +2603,7 @@ void ScoreView::cmd(const QAction* a)
                   sm->postEvent(new CommandEvent("note-input"));
             FiguredBass* fb = _score->addFiguredBass();
             if (fb) {
-                  startEdit(fb);
+                  startEditMode(fb);
                   return;     // no endCmd()
                   }
             }
@@ -2704,7 +2690,7 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
             if (e && e->isEditable()) {
-                  startEdit(e);
+                  startEditMode(e);
                   }
             }
       else if (cmd == "select-similar") {
@@ -2970,7 +2956,7 @@ void ScoreView::cmd(const QAction* a)
                         }
                   if (text) {
                         _score->select(text, SelectType::SINGLE, 0);
-                        startEdit(text);
+                        startEditMode(text);
                         }
                   }
             }
@@ -3187,10 +3173,12 @@ void ScoreView::cmd(const QAction* a)
             cmdAddFret(13);
       else if(cmd == "fret-14")
             cmdAddFret(14);
+#if 0       // TODO
       else if (cmd == "text-word-left")
             static_cast<Text*>(editElement)->movePosition(QTextCursor::WordLeft);
       else if (cmd == "text-word-right")
             static_cast<Text*>(editElement)->movePosition(QTextCursor::NextWord);
+#endif
       else if (cmd == "concert-pitch") {
             if (_score->styleB(StyleIdx::concertPitch) != a->isChecked()) {
                   _score->startCmd();
@@ -3554,7 +3542,12 @@ void ScoreView::select(QMouseEvent* ev)
                   }
             else
                   curElement->score()->select(curElement, st, dragStaffIdx);
-            if (curElement && curElement->isNote() && ev->type() == QEvent::MouseButtonPress) {
+            if (curElement->isText()) {
+printf("==================================start edit mode\n");
+                  startEditMode(curElement);
+                  return;
+                  }
+            if (curElement->isNote() && ev->type() == QEvent::MouseButtonPress) {
                   Note* note = toNote(curElement);
                   int pitch = note->ppitch();
                   mscore->play(note, pitch);
@@ -3611,11 +3604,9 @@ void ScoreView::onEditPasteTransition(QMouseEvent* ev)
       {
       editData.startMove = imatrix.map(QPointF(ev->pos()));
       Element* e = elementNear(editData.startMove);
-      if (e == editElement) {
-            if (editElement->mousePress(editData.startMove, ev)) {
-                  _score->addRefresh(editElement->canvasBoundingRect());
-                  _score->update();
-                  }
+      if (e == editElement && editElement->mousePress(editData, ev)) {
+            _score->addRefresh(editElement->canvasBoundingRect());
+            _score->update();
             }
       }
 
@@ -3767,9 +3758,10 @@ void ScoreView::editInputTransition(QInputMethodEvent* ie)
 
 QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
       {
+#if 0       // TODO
       // if editing a text object, place the InputMethod popup window just below the text
       if ((query & Qt::ImCursorRectangle) && editElement && editElement->isText()) {
-            Text* text = static_cast<Text*>(editElement);
+            Text* text = toText(editElement);
             if (text->cursor()) {
                   QRectF cursorRect = toPhysical(text->cursorRect().translated(text->canvasPos()));
                   cursorRect.setWidth(1.0); // InputMethod doesn't display properly if width left at 0
@@ -3780,7 +3772,7 @@ QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
             else
                   return QVariant(toPhysical(text->canvasBoundingRect()));
             }
-
+#endif
       return QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
       }
 
@@ -4277,12 +4269,22 @@ bool ScoreView::event(QEvent* event)
 //   startUndoRedo
 //---------------------------------------------------------
 
-void ScoreView::startUndoRedo()
+void ScoreView::startUndoRedo(bool undo)
       {
-//      _score->initCmd();
       // exit edit mode
       if (sm->configuration().contains(states[EDIT]))
             sm->postEvent(new CommandEvent("escape"));
+
+      editData.init();
+      editData.view = this;
+      _score->undoRedo(undo, editData);
+
+      if (_score->inputState().segment())
+            mscore->setPos(_score->inputState().tick());
+      if (_score->noteEntryMode() && !noteEntryMode())
+            postCmd("note-input");    // enter note entry mode
+      else if (!_score->noteEntryMode() && noteEntryMode())
+            postCmd("escape");        // leave note entry mode
       }
 
 //---------------------------------------------------------
@@ -4793,7 +4795,7 @@ void ScoreView::modifyElement(Element* el)
 
 void ScoreView::harmonyTab(bool back)
       {
-      Harmony* harmony = static_cast<Harmony*>(editElement);
+      Harmony* harmony = toHarmony(editElement);
       if (!harmony->parent() || harmony->parent()->type() != ElementType::SEGMENT){
             qDebug("harmonyTab: no segment parent");
             return;
@@ -4832,8 +4834,8 @@ void ScoreView::harmonyTab(bool back)
       // search for next chord name
       harmony = 0;
       foreach(Element* e, segment->annotations()) {
-            if (e->type() == ElementType::HARMONY && e->track() == track) {
-                  Harmony* h = static_cast<Harmony*>(e);
+            if (e->isHarmony() && e->track() == track) {
+                  Harmony* h = toHarmony(e);
                   harmony = h;
                   break;
                   }
@@ -4851,7 +4853,7 @@ void ScoreView::harmonyTab(bool back)
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(harmony, false);
-      ((Harmony*)editElement)->moveCursorToEnd();
+//TODO-edit      toHarmony(editElement)->moveCursorToEnd();
       _score->update();
       }
 
@@ -4863,9 +4865,9 @@ void ScoreView::harmonyTab(bool back)
 
 void ScoreView::harmonyBeatsTab(bool noterest, bool back)
       {
-      Harmony* harmony = static_cast<Harmony*>(editElement);
+      Harmony* harmony = toHarmony(editElement);
       int track         = harmony->track();
-      Segment* segment = static_cast<Segment*>(harmony->parent());
+      Segment* segment = toSegment(harmony->parent());
       if (!segment) {
             qDebug("harmonyBeatsTab: no segment");
             return;
@@ -4927,9 +4929,9 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
 
       // search for next chord name
       harmony = 0;
-      foreach(Element* e, segment->annotations()) {
-            if (e->type() == ElementType::HARMONY && e->track() == track) {
-                  Harmony* h = static_cast<Harmony*>(e);
+      foreach (Element* e, segment->annotations()) {
+            if (e->isHarmony() && e->track() == track) {
+                  Harmony* h = toHarmony(e);
                   harmony = h;
                   break;
                   }
@@ -4947,7 +4949,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(harmony, false);
-      ((Harmony*)editElement)->moveCursorToEnd();
+//TODO-edit      toHarmony(editElement)->moveCursorToEnd();
       _score->update();
       }
 
@@ -5016,7 +5018,7 @@ void ScoreView::harmonyTicksTab(int ticks)
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(harmony, false);
-      ((Harmony*)editElement)->moveCursorToEnd();
+//TODO-edit      ((Harmony*)editElement)->moveCursorToEnd();
       _score->update();
       }
 
@@ -5352,7 +5354,7 @@ void ScoreView::cmdAddChordName()
       _score->undoAddElement(harmony);
 
       _score->select(harmony, SelectType::SINGLE, 0);
-      startEdit(harmony);
+      startEditMode(harmony);
       _score->update();
       }
 
@@ -5467,7 +5469,7 @@ void ScoreView::cmdAddText(TEXT type)
             _score->undoAddElement(s);
             _score->select(s, SelectType::SINGLE, 0);
             _score->endCmd();
-            startEdit(s);
+            startEditMode(s);
             }
       else
             _score->endCmd();
@@ -5562,7 +5564,7 @@ void ScoreView::cmdInsertMeasure(ElementType type)
             Text* s = tbox->text();
             _score->select(s, SelectType::SINGLE, 0);
             _score->endCmd();
-            startEdit(s);
+            startEditMode(s);
             return;
             }
       if (mb)
@@ -5877,7 +5879,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
       startEdit(fbNew, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
-      ((FiguredBass*)editElement)->moveCursorToEnd();
+//TODO-edit      ((FiguredBass*)editElement)->moveCursorToEnd();
 //      _score->update();                         // used by lyricsTab() but not by harmonyTab(): needed or not?
       }
 
@@ -5932,7 +5934,7 @@ void ScoreView::figuredBassTicksTab(int ticks)
       startEdit(fbNew, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
-      fb->moveCursorToEnd();
+//TODO-edit      fb->moveCursorToEnd();
       }
 
 //---------------------------------------------------------

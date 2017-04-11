@@ -88,11 +88,14 @@ class ElementEditData;
 //    used in editDrag
 //---------------------------------------------------------
 
-struct EditData {
-      MuseScoreView* view { 0 };
+class EditData {
+      QList<ElementEditData*> data;
+
+   public:
+      MuseScoreView* view              { 0       };
 
       QVector<QRectF> grip;
-      int grips                        { 0 };                    // number of grips
+      int grips                        { 0       };         // number of grips
       Grip curGrip                     { Grip(0) };
 
       QPointF pos;
@@ -102,22 +105,20 @@ struct EditData {
       bool hRaster                     { false };
       bool vRaster                     { false };
 
-      int key                          { 0 };
-      Qt::KeyboardModifiers modifiers  { 0 };
+      int key                          { 0     };
+      Qt::KeyboardModifiers modifiers  { 0     };
       QString s;
 
       // drop data:
       QPointF dragOffset;
-      Element* element        { 0 };
-      Fraction duration       { Fraction(1,4) };
+      Element* element                 { 0     };
+      Fraction duration                { Fraction(1,4) };
 
-      //
-      // set by startDrag()
-      //
-      QList<ElementEditData*> data;
+      void init();
+      void clearData();
+
       ElementEditData* getData(Element*) const;
       void addData(ElementEditData*);
-
       bool control() const { return modifiers & Qt::ControlModifier; }
       };
 
@@ -300,6 +301,8 @@ class Element : public ScoreElement {
       virtual void editDrag(EditData&);
       virtual void endEditDrag(EditData&)        {}
       virtual void endEdit(EditData&)            {}
+      virtual void editCut(EditData&)            {}
+      virtual void editCopy(EditData&)           {}
 
       virtual void updateGrips(EditData&) const  {}
       virtual bool nextGrip(EditData&) const;
@@ -371,7 +374,7 @@ class Element : public ScoreElement {
  delivers mouseEvent to element in edit mode
  returns true if mouse event is accepted by element
  */
-      virtual bool mousePress(const QPointF&, QMouseEvent*) { return false; }
+      virtual bool mousePress(EditData&, QMouseEvent*) { return false; }
 
       mutable bool itemDiscovered;     ///< helper flag for bsp
 
@@ -473,7 +476,7 @@ class Element : public ScoreElement {
             }
 
       virtual void triggerLayout() const;
-      void drawEditMode(QPainter*, EditData&);
+      virtual void drawEditMode(QPainter*, EditData&);
       };
 
 //-----------------------------------------------------------------------------
