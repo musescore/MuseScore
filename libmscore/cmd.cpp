@@ -3262,6 +3262,8 @@ void Score::cmd(const QAction* a)
             { "time-delete",                [this]{ cmdTimeDelete();                                            }},
             { "pitch-up-octave",            [this]{ cmdPitchUpOctave();                                         }},
             { "pitch-down-octave",          [this]{ cmdPitchDownOctave();                                       }},
+            { "pad-note-increase",          [this]{ cmdPadNoteIncreaseTAB();                                    }},
+            { "pad-note-decrease",          [this]{ cmdPadNoteDecreaseTAB();                                    }},
             { "pad-note-increase-TAB",      [this]{ cmdPadNoteIncreaseTAB();                                    }},
             { "pad-note-decrease-TAB",      [this]{ cmdPadNoteDecreaseTAB();                                    }},
             { "toggle-mmrest",              [this]{ cmdToggleMmrest();                                          }},
