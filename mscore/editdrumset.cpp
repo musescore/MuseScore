@@ -102,7 +102,7 @@ void EditDrumset::updateList()
       pitchList->clear();
       for (int i = 0; i < 128; ++i) {
             QTreeWidgetItem* item = new QTreeWidgetItem(pitchList);
-            item->setText(Column::PITCH, QString("%1").arg(i));
+            item->setText(Column::PITCH, QString("%1").arg(i, 3)); // 3 digits, padded with space, needed to get the sorting and alignment right
             item->setText(Column::NOTE, pitch2string(i));
             if (nDrumset.shortcut(i) == 0)
                   item->setText(Column::SHORTCUT, "");
