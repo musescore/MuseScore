@@ -5644,7 +5644,7 @@ void ScoreFont::load()
                   }},
             { SymId::ornamentDownPrall,
                   {
-                  SymId::ornamentLeftVerticalStroke,
+                  SymId::ornamentTopLeftConvexStroke,
                   SymId::ornamentZigZagLineNoRightEnd,
                   SymId::ornamentZigZagLineNoRightEnd,
                   SymId::ornamentZigZagLineWithRightEnd
