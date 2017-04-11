@@ -327,42 +327,42 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
-            startEdit(t);
+            startEditMode(t);
             }
       else if (cmd == "title-text") {
             Text* t = new Text(SubStyle::TITLE, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
-            startEdit(t);
+            startEditMode(t);
             }
       else if (cmd == "subtitle-text") {
             Text* t = new Text(SubStyle::SUBTITLE, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
-            startEdit(t);
+            startEditMode(t);
             }
       else if (cmd == "composer-text") {
             Text* t = new Text(SubStyle::COMPOSER, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
-            startEdit(t);
+            startEditMode(t);
             }
       else if (cmd == "poet-text") {
             Text* t = new Text(SubStyle::POET, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
-            startEdit(t);
+            startEditMode(t);
             }
       else if (cmd == "part-text") {
             Text* t = new Text(SubStyle::INSTRUMENT_EXCERPT, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
-            startEdit(t);
+            startEditMode(t);
             }
       else if (cmd == "insert-hbox") {
             HBox* s = new HBox(score());
@@ -371,7 +371,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             s->setParent(e);
             score()->undoAddElement(s);
             score()->select(s, SelectType::SINGLE, 0);
-            startEdit(s);
+            startEditMode(s);
             }
       else if (cmd == "tr-props")
             editTremoloBarProperties(static_cast<TremoloBar*>(e));

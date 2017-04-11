@@ -418,6 +418,7 @@ QPointF Element::pagePos() const
       return p;
       }
 
+
 //---------------------------------------------------------
 //   canvasPos
 //---------------------------------------------------------
@@ -1789,6 +1790,41 @@ void Element::endDrag(EditData& data)
       }
 
 //---------------------------------------------------------
+//   init
+//---------------------------------------------------------
+
+void EditData::init()
+      {
+      grip.clear();
+      grips     = 0;
+      curGrip   = Grip(0);
+      pos       = QPointF();
+      startMove = QPointF();
+      lastPos   = QPointF();
+      delta     = QPointF();
+      hRaster   = false;
+      vRaster   = false;
+      key       = 0;
+      modifiers = 0;
+      s.clear();
+
+      dragOffset = QPointF();
+      element    = 0;
+      duration   = Fraction(1,4);
+      clearData();
+      }
+
+//---------------------------------------------------------
+//   clearData
+//---------------------------------------------------------
+
+void EditData::clearData()
+      {
+      qDeleteAll(data);
+      data.clear();
+      }
+
+//---------------------------------------------------------
 //   getData
 //---------------------------------------------------------
 
@@ -1805,9 +1841,9 @@ ElementEditData* EditData::getData(Element* e) const
 //   addData
 //---------------------------------------------------------
 
-void EditData::addData(ElementEditData* d)
+void EditData::addData(ElementEditData* ed)
       {
-      data.push_back(d);
+      data.push_back(ed);
       }
 
 //---------------------------------------------------------

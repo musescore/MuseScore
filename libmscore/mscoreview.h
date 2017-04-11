@@ -59,6 +59,7 @@ class MuseScoreView {
       virtual void cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/) {};
       virtual void cmdAddHairpin(HairpinType) {};
       virtual void startEdit() {};
+      virtual void startEditMode(Element*) {};
       virtual void startEdit(Element*, Grip /*startGrip*/) {};
       virtual void drawBackground(QPainter*, const QRectF&) const = 0;
       virtual void setDropTarget(const Element*) {}

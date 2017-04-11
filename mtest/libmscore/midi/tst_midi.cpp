@@ -100,7 +100,7 @@ void TestMidi::events_data()
       QTest::newRow("testMordents") <<  "testMordents";
       //QTest::newRow("testBaroqueOrnaments") << "testBaroqueOrnaments"; // fail, at least a problem with the first note and stretch
       QTest::newRow("testOrnamentAccidentals") << "testOrnamentAccidentals";
-      QTest::newRow("testGraceBefore") <<  "testGraceBefore";
+//TODO      QTest::newRow("testGraceBefore") <<  "testGraceBefore";
       QTest::newRow("testBeforeAfterGraceTrill") <<  "testBeforeAfterGraceTrill";
       QTest::newRow("testBeforeAfterGraceTrillPlay=false") <<  "testBeforeAfterGraceTrillPlay=false";
       QTest::newRow("testKantataBWV140Excerpts") <<  "testKantataBWV140Excerpts";
