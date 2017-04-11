@@ -5539,7 +5539,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                   QStringList l = h->xmlDegrees();
                   if (!l.isEmpty()) {
                         for (QString tag : l) {
-                              bool emptyDegreeText;
+                              QString degreeText;
                               if (h->xmlKind().startsWith("suspended")
                                   && tag.startsWith("add") && tag[3].isDigit()
                                   && !kindText.isEmpty() && kindText[0].isDigit()) {
@@ -5550,10 +5550,13 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                                     for (int i = 0; i < kindText.length() && kindText[i].isDigit(); ++i)
                                           kindTextExtension[i] = kindText[i];
                                     int kindExtension = kindTextExtension.toInt();
-                                    emptyDegreeText = tagDegree <= kindExtension && (tagDegree & 1) && (kindExtension & 1);
+                                    if (tagDegree <= kindExtension && (tagDegree & 1) && (kindExtension & 1))
+                                          degreeText = "\"\"";
                                     }
-
-                              xml.stag("degree");
+                              if (degreeText.isEmpty())
+                                    xml.stag("degree");
+                              else
+                                    xml.stag("degree text=" + degreeText);
                               int alter = 0;
                               int idx = 3;
                               if (tag[idx] == '#') {
@@ -5564,16 +5567,10 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                                     alter = -1;
                                     ++idx;
                                     }
-                              if (emptyDegreeText)
-                                    xml.tag("degree-value text=\"\"", tag.mid(idx));
-                              else
-                                    xml.tag("degree-value", tag.mid(idx));
+                              xml.tag("degree-value", tag.mid(idx));
                               xml.tag("degree-alter", alter);     // finale insists on this even if 0
                               if (tag.startsWith("add"))
-                                    if (emptyDegreeText)
-                                          xml.tag("degree-type text=\"\"", "add");
-                                    else
-                                          xml.tag("degree-type", "add");
+                                    xml.tag("degree-type", "add");
                               else if (tag.startsWith("sub"))
                                     xml.tag("degree-type", "subtract");
                               else if (tag.startsWith("alt"))
