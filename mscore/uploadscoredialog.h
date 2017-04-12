@@ -44,6 +44,7 @@ class UploadScoreDialog : public QDialog, public Ui::UploadScoreDialog
    private:
       void upload(int nid);
       void clear();
+      void showOrHideUploadAudio();
 
    public:
       UploadScoreDialog(LoginManager*);
