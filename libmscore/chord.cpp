@@ -2979,8 +2979,10 @@ void Chord::setSlash(bool flag, bool stemless)
       undoChangeProperty(P_ID::STEM_DIRECTION, static_cast<int>(MScore::Direction::AUTO));
 
       // make stemless if asked
-      if (stemless)
+      if (stemless) {
             undoChangeProperty(P_ID::NO_STEM, true);
+            undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::NONE));
+            }
 
       // voice-dependent attributes - line, size, offset, head
       if (track() % VOICES < 2) {
