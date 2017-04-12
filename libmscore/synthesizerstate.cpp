@@ -78,14 +78,13 @@ SynthesizerGroup SynthesizerState::group(const QString& name) const
 
 bool SynthesizerState::isDefaultSynthSoundfont()
       {
-      bool result = false;
       SynthesizerGroup fluid = group("Fluid");
       SynthesizerGroup zerberus = group("Zerberus");
       if (zerberus.size() == 0 && fluid.size() == 1) {
             if (fluid.front().data == "FluidR3Mono_GM.sf3")
                   return true;
             }
-      return result;
+      return false;
       }
 
 }
