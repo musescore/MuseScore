@@ -85,7 +85,7 @@ class SlurTieSegment : public SpannerSegment {
 
 //-------------------------------------------------------------------
 //   @@ SlurTie
-//   @P lineType       int    (0 - solid, 1 - dotted, 2 - dashed)
+//   @P lineType       int  (0 - solid, 1 - dotted, 2 - dashed, 3 - wide dashed)
 //   @P slurDirection  enum (Direction.AUTO, Direction.DOWN, Direction.UP)
 //-------------------------------------------------------------------
 
@@ -93,7 +93,7 @@ class SlurTie : public Spanner {
       Q_GADGET
       Q_PROPERTY(int lineType                         READ lineType       WRITE undoSetLineType)
 
-      int _lineType;    // 0 = solid, 1 = dotted, 2 = dashed
+      int _lineType;    // 0 = solid, 1 = dotted, 2 = dashed, 3 = wide dashed
 
       static Element* editStartElement;
       static Element* editEndElement;
