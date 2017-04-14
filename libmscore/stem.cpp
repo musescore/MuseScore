@@ -128,6 +128,7 @@ void Stem::spatiumChanged(qreal oldValue, qreal newValue)
       {
       _userLen = (_userLen / oldValue) * newValue;
       layout();
+      Element::spatiumChanged(oldValue, newValue);
       }
 
 //---------------------------------------------------------
