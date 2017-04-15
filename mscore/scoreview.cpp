@@ -1873,22 +1873,6 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       if (dropRectangle.isValid())
             p.fillRect(dropRectangle, QColor(80, 0, 0, 80));
 
-      //
-      // frame text in edit mode, except for text in a text frame
-      //
-      if (editElement && editElement->isText()
-         && !(editElement->parent() && editElement->parent()->type() == ElementType::TBOX)) {
-            Element* e = editElement;
-            while (e->parent())
-                  e = e->parent();
-            Text* text = static_cast<Text*>(editElement);
-            QRectF r = text->pageRectangle().translated(e->pos()); // abbox();
-            qreal w = 2.0 / matrix().m11(); // give the frame some padding, like in 1.3
-            r.adjust(-w,-w,w,w);
-            p.setPen(QPen(QBrush(Qt::lightGray), 2.0 / matrix().m11()));  // 2 pixel pen size
-            p.setBrush(QBrush(Qt::NoBrush));
-            p.drawRect(r);
-            }
       const Selection& sel = _score->selection();
       if (sel.isRange()) {
             Segment* ss = sel.startSegment();
@@ -3572,6 +3556,7 @@ printf("==================================start edit mode\n");
 
 bool ScoreView::mousePress(QMouseEvent* ev)
       {
+printf("mousePRess\n");
       startMoveI     = ev->pos();
       editData.startMove = imatrix.map(QPointF(startMoveI));
       curElement     = elementNear(editData.startMove);
