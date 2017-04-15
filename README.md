@@ -1,5 +1,8 @@
 # MuseScore: Music notation and composition software
 
+MuseScore is an open source and free music notation software.
+For support, contribution, bug reports, visit [MuseScore.org](https://musescore.org). Fork and make pull requests!
+
 ## Features
 
 * WYSIWYG design, notes are entered on a "virtual notepaper"
@@ -14,9 +17,9 @@
 * print or create pdf files
 
 ## More info
-* [MuseScore Homepage](http://musescore.org)
+* [MuseScore Homepage](https://musescore.org)
 * [MuseScore Git workflow instructions](http://musescore.org/en/developers-handbook/git-workflow).
-* [How to compile MuseScore?](http://musescore.org/en/developers-handbook/compilation)
+* [How to compile MuseScore?](https://musescore.org/en/developers-handbook/compilation)
 * Build status: [![Build Status](https://secure.travis-ci.org/musescore/MuseScore.png)](http://travis-ci.org/musescore/MuseScore)
 
 ## License
@@ -27,7 +30,7 @@ MuseScore is licensed under GPL version 2.0. See LICENSE.GPL in the same directo
 Disabled by default in the stable releases. See http://dev-list.musescore.org/Aeolus-Organ-Synth-td7578364.html
 Kept as an example of how to integrate with a complex synthesizer.
 
-* **assets** Graphical assets, use them if you need a MuseScore icon. For logo, color etc... see http://musescore.org/en/about/logos-and-graphics 
+* **assets** Graphical assets, use them if you need a MuseScore icon. For logo, color etc... see https://musescore.org/en/about/logos-and-graphics
 
 * **awl** Audio Widget Library, from the MusE project
 
@@ -37,7 +40,7 @@ Kept as an example of how to integrate with a complex synthesizer.
 
 * **demos** A few MuseScore files to demonstrate what can be done
 
-* **fluid** Clone of [FluidSynth](http://sourceforge.net/apps/trac/fluidsynth/), ported to C++ and customized
+* **fluid** Clone of [FluidSynth](https://sourceforge.net/projects/fluidsynth/), ported to C++ and customized
 
 * **fonts** Contains fontforge source (sfd) + ttf/otf fonts. MuseScore includes the "Emmentaler" font from the Lilypond project.
 
@@ -65,24 +68,25 @@ Kept as an example of how to integrate with a complex synthesizer.
     Used for capella import
 
     * **thirdparty/diff**
-    Not used currently. [Diff, Match and Patch Library](http://code.google.com/p/google-diff-match-patch/)
+    Not used currently. [Diff, Match and Patch Library](https://code.google.com/p/google-diff-match-patch/)
 
     * **thirdparty/ofqf**
-    OSC server interface. Based on [OSC for Qt4](http://www.arnoldarts.de/ofqf.html)
+    OSC server interface. Based on [OSC for Qt4](http://www.arnoldarts.de/projects/ofqf/)
 
     * **thirdparty/singleapp**
     Clone from [Qt Single Application](http://qt.gitorious.org/qt-solutions/qt-solutions/trees/master/qtsingleapplication)
+    <!--Gitourious is now archived, and this link no longer works.-->
 
     * **thirdparty/portmidi**
-    Clone from [PortMidi](http://portmedia.sourceforge.net/)
-   
+    Clone from [PortMidi](https://sourceforge.net/projects/portmedia/)
+
     * **thirdparty/beatroot**
-    It's a core part of BeatRoot Vamp Plugin by Simon Dixon and Chris Cannam, 
-    used in MIDI import for beat detection. (http://code.soundsoftware.ac.uk/projects/beatroot-vamp/repository)
+    It's a core part of BeatRoot Vamp Plugin by Simon Dixon and Chris Cannam,
+    used in MIDI import for beat detection. (https://code.soundsoftware.ac.uk/projects/beatroot-vamp/repository)
 
 
 ## Building
-**Read the developer handbook for a [complete build walkthrough](http://musescore.org/en/developers-handbook/compilation) and a list of dependencies.**
+**Read the developer handbook for a [complete build walkthrough](https://musescore.org/en/developers-handbook/compilation) and a list of dependencies.**
 
 ### Getting sources
 If using git to download repo of entire code history, type:
@@ -109,7 +113,7 @@ To start MuseScore, type:
 
 The Start Center window will appear on every invocation, until you disable that setting via the "Preferences" dialog.
 
-### Installing 
+### Installing
 To install to default prefix using root user, type:
 
     sudo make install
