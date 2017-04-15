@@ -62,8 +62,8 @@ PageSettings::PageSettings(QWidget* parent)
       connect(buttonApply,          SIGNAL(clicked()),            SLOT(apply()));
       connect(buttonApplyToAllParts,SIGNAL(clicked()),            SLOT(applyToAllParts()));
       connect(buttonOk,             SIGNAL(clicked()),            SLOT(ok()));
-      connect(portraitButton,       SIGNAL(clicked()),            SLOT(portraitClicked()));
-      connect(landscapeButton,      SIGNAL(clicked()),            SLOT(landscapeClicked()));
+      connect(portraitButton,       SIGNAL(clicked()),            SLOT(orientationClicked()));
+      connect(landscapeButton,      SIGNAL(clicked()),            SLOT(orientationClicked()));
       connect(twosided,             SIGNAL(toggled(bool)),        SLOT(twosidedToggled(bool)));
       connect(pageHeight,           SIGNAL(valueChanged(double)), SLOT(pageHeightChanged(double)));
       connect(pageWidth,            SIGNAL(valueChanged(double)), SLOT(pageWidthChanged(double)));
@@ -287,30 +287,20 @@ void PageSettings::mmClicked()
       }
 
 //---------------------------------------------------------
-//   portraitClicked
+//   orientationClicked
+//    swap width/height
 //---------------------------------------------------------
 
-void PageSettings::portraitClicked()
+void PageSettings::orientationClicked()
       {
-      PageFormat pf;
-      double f  = mmUnit ? 1.0/INCH : 1.0;
-      pf.setPrintableWidth(pf.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
-      preview->score()->setPageFormat(pf);
-      updateValues();
-      updatePreview(0);
-      }
+      qreal w = preview->score()->styleD(StyleIdx::pageWidth);
+      qreal h = preview->score()->styleD(StyleIdx::pageHeight);
 
-//---------------------------------------------------------
-//   landscapeClicked
-//---------------------------------------------------------
+      preview->score()->style().set(StyleIdx::pageWidth, h);
+      preview->score()->style().set(StyleIdx::pageHeight, w);
 
-void PageSettings::landscapeClicked()
-      {
-      PageFormat pf;
-      pf.setSize(QSizeF(pf.height(), pf.width()));
-      double f  = mmUnit ? 1.0/INCH : 1.0;
-      pf.setPrintableWidth(pf.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
-      preview->score()->setPageFormat(pf);
+      double f = mmUnit ? 1.0/INCH : 1.0;
+      preview->score()->style().set(StyleIdx::pagePrintableWidth, h - (oddPageLeftMargin->value() + oddPageRightMargin->value()) * f);
       updateValues();
       updatePreview(0);
       }
