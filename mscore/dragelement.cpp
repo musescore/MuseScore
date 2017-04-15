@@ -29,7 +29,7 @@ bool ScoreView::testElementDragTransition(QMouseEvent* ev)
       {
       if (curElement == 0 || !curElement->isMovable() || QApplication::mouseButtons() != Qt::LeftButton)
             return false;
-      if (curElement->type() == ElementType::MEASURE) {
+      if (curElement->isMeasure()) {
             System* dragSystem = (System*)(curElement->parent());
             int staffIdx  = getStaff(dragSystem, editData.startMove);
             dragStaff = score()->staff(staffIdx);

@@ -174,7 +174,7 @@ void ScoreView::endEdit()
 
 //---------------------------------------------------------
 //   editElementDragTransition
-//    (start dragEdit)
+//    start dragEdit
 //---------------------------------------------------------
 
 bool ScoreView::editElementDragTransition(QMouseEvent* ev)
@@ -185,6 +185,38 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
       editData.view      = this;
       editData.modifiers = qApp->keyboardModifiers();
 
+      int i = 0;
+      score()->startCmd();
+      editElement->startEditDrag(editData);
+
+      if (editElement->isText()) {
+            qreal margin = editElement->spatium();
+            QRectF r = editElement->pageBoundingRect().adjusted(-margin, -margin, margin, margin);
+            if (r.contains(editData.pos)) {
+                  if (editElement->shape().translated(editElement->pagePos()).contains(editData.pos)) {
+                        if (editElement->mousePress(editData, ev)) {
+                              _score->addRefresh(editElement->canvasBoundingRect());
+                              _score->update();
+                              }
+                        }
+                  return true;
+                  }
+            return false;
+            }
+
+
+      if (editData.grips) {
+            qreal a = editData.grip[0].width() * 1.0;
+            for (; i < editData.grips; ++i) {
+                  if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
+                        editData.curGrip = Grip(i);
+                        updateGrips();
+                        score()->update();
+                        return true;
+                        }
+                  }
+            }
+#if 0
       Element* e = elementNear(editData.startMove);
       if (e && (e == editElement) && (editElement->isText())) {
             if (editElement->mousePress(editData, ev)) {
@@ -193,22 +225,7 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
                   }
             return true;
             }
-      int i = 0;
-      score()->startCmd();
-      editData.clearData();
-      editElement->startEditDrag(editData);
-      if (editData.grips) {
-            qreal a = editData.grip[0].width() * 1.0;
-            for (; i < editData.grips; ++i) {
-                  if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
-                        editData.curGrip = Grip(i);
-                        editData.curGrip = Grip(i);
-                        updateGrips();
-                        score()->update();
-                        break;
-                        }
-                  }
-            }
+#endif
       return i != editData.grips;
       }
 
@@ -230,11 +247,21 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
                   editData.pos.setY(editData.lastPos.y());
             }
       editData.delta = editData.pos - editData.lastPos;
-
       score()->addRefresh(editElement->canvasBoundingRect());
+
       if (editElement->isText()) {
-            Text* text = toText(editElement);
-            text->dragTo(editData.pos);
+            if (editElement->shape().translated(editElement->pagePos()).contains(editData.pos)) {
+                  printf("===in\n");
+                  toText(editElement)->dragTo(editData);
+                  }
+            else {
+                  printf("===out\n");
+                  editData.hRaster = false;
+                  editData.vRaster = false;
+                  editElement->editDrag(editData);
+                  updateGrips();
+                  return;
+                  }
             }
       else {
             editData.hRaster = false;

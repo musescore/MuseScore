@@ -326,7 +326,7 @@ class Text : public Element {
 
       QRectF pageRectangle() const;
 
-      void dragTo(const QPointF&);
+      void dragTo(EditData&);
 
       virtual QLineF dragAnchor() const override;
 

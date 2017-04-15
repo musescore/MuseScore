@@ -989,12 +989,11 @@ QRectF TextCursor::cursorRect() const
       const TextFragment* fragment = tline.fragment(column());
 
       QFont _font  = fragment ? fragment->font(_text) : _text->font();
-      qreal ascent = QFontMetricsF(_font, MScore::paintDevice()).ascent() * .9;
-      qreal h = ascent;       // lineSpacing();
+      qreal ascent = QFontMetricsF(_font, MScore::paintDevice()).ascent();
+      qreal h = ascent;
       qreal x = tline.xpos(column(), _text);
-      qreal y = tline.y();
-      y      -= ascent;
-      return QRectF(x, y, 9.0, h);
+      qreal y = tline.y() - ascent * .9;
+      return QRectF(x, y, 4.0, h);
       }
 
 //---------------------------------------------------------
@@ -1511,6 +1510,7 @@ void Text::startEdit(EditData& ed)
       ted->cursor->setLine(0);
       ted->cursor->setColumn(0);
       ted->cursor->clearSelection();
+
       if (ted->cursor->set(ed.startMove))
             ted->cursor->updateCursorFormat();
       else
@@ -1526,6 +1526,7 @@ void Text::startEdit(EditData& ed)
 
 void Text::endEdit(EditData&)
       {
+printf("Text::endEdit\n");
       static const qreal w = 2.0;
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
       }
@@ -2221,13 +2222,13 @@ QRectF Text::pageRectangle() const
 //   dragTo
 //---------------------------------------------------------
 
-void Text::dragTo(const QPointF& /*p*/)
+void Text::dragTo(EditData& ed)
       {
-#if 0
-      _cursor->set(p, QTextCursor::KeepAnchor);
+      TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+      TextCursor* _cursor = ted->cursor;
+      _cursor->set(ed.pos, QTextCursor::KeepAnchor);
       score()->setUpdateAll();
       score()->update();
-#endif
       }
 
 //---------------------------------------------------------
@@ -3414,7 +3415,15 @@ void Text::drawEditMode(QPainter* p, EditData& ed)
       p->setPen(pen);
       p->drawRect(_cursor->cursorRect());
 
+      QMatrix matrix = p->matrix();
       p->translate(-pos);
+      p->setPen(QPen(QBrush(Qt::lightGray), 4.0 / matrix.m11()));  // 4 pixel pen size
+      p->setBrush(Qt::NoBrush);
+
+      qreal m = spatium();
+      QRectF r = pageBoundingRect().adjusted(-m, -m, m, m);
+      p->drawRect(r);
+      pen = QPen(MScore::defaultColor, 0.0);
       }
 
 //---------------------------------------------------------
@@ -3481,6 +3490,5 @@ void Text::undoRedoRemoveText(EditData& ed, ChangeText* ct)
       for (int n = 0; n < s.size(); ++n)
             l.remove(column);
       }
-
 }
 
