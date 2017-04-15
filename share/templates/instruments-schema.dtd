@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+      <!ELEMENT museScore (Articulation,InstrumentGroup)>
+            <!ELEMENT Articulation (velocity,gateTime)>
+            <!ATTLIST Articulation
+                      name CDATA #IMPLIED>
+            <!ELEMENT InstrumentGroup (name,Instrument+)>
+            <!ATTLIST InstrumentGroup
+                      id CDATA #REQUIRED>
+                  <!ELEMENT name (#PCDATA)>
+                  <!ELEMENT Instrument (longName,shortName,description,musicXMLid?,extended?,staves?,stafftype?,Tablature?,clef+,bracket?,bracketSpan?,barlineSpan?,aPitchRange,pPitchRange,transposeDiatonic?,transposeChromatic?,drumset?,Drum*,Channel*)>
+                  <!ATTLIST Instrument 
+                            id CDATA #REQUIRED>
+                        <!ELEMENT longName (#PCDATA)>
+                        <!ELEMENT shortName (#PCDATA)>
+                        <!ELEMENT description (#PCDATA)>
+                        <!ELEMENT musicXMLid (#PCDATA)>
+                        <!ELEMENT extended (#PCDATA)>
+                        <!ELEMENT staves (#PCDATA)>
+                        <!ELEMENT stafftype (#PCDATA)>
+                        <!ATTLIST stafftype 
+                                  staffTypePreset CDATA #REQUIRED>
+                        <!ELEMENT Tablature (frets,string+)>
+                              <!ELEMENT frets (#PCDATA)>
+                              <!ELEMENT string (#PCDATA)>
+                        <!ELEMENT clef (#PCDATA)>
+                        <!ATTLIST clef 
+                                  staff CDATA #IMPLIED>
+                        <!ELEMENT bracket (#PCDATA)>
+                        <!ELEMENT bracketspan (#PCDATA)>
+                        <!ELEMENT barlinespan (#PCDATA)>
+                        <!ELEMENT aPitchRange (#PCDATA)>
+                        <!ELEMENT pPitchrange (#PCDATA)>
+                        <!ELEMENT transposeDiatonic (#PCDATA)>
+                        <!ELEMENT transposeChromatic (#PCDATA)>
+                        <!ELEMENT drumset (#PCDATA)>
+                        <!ELEMENT Drum (head,line,voice,name,stem,shortcut)>
+                        <!ATTLIST Drum 
+                                  pitch CDATA #REQUIRED>
+                              <!ELEMENT head (#PCDATA)>
+                              <!ELEMENT line (#PCDATA)>
+                              <!ELEMENT voice (#PCDATA)>
+                              <!ELEMENT name (#PCDATA)>
+                              <!ELEMENT stem (#PCDATA)>
+                              <!ELEMENT shortcut (#PCDATA)>
+                        <!ELEMENT Channel (controller*,program,descr?,synth?,MidiAction*)>
+                        <!ATTLIST Channel 
+                                  name CDATA #IMPLIED>
+                              <!ELEMENT controller EMPTY>
+                              <!ATTLIST controller 
+                                        ctrl CDATA #REQUIRED
+                                        value CDATA #REQUIRED>
+                              <!ELEMENT program EMPTY>
+                              <!ATTLIST program 
+                                        value CDATA #REQUIRED>
+                              <!ELEMENT descr (#PCDATA)>
+                              <!ELEMENT synth (#PCDATA)>
+                              <!ELEMENT MidiAction (descr,controller)>
+                                    <!ELEMENT descr (#PCDATA)>
+                                    <!ELEMENT controller EMPTY>
+                                    <!ATTLIST controller 
+                                              ctrl CDATA #REQUIRED
+                                              value CDATA #REQUIRED>
+                                              
