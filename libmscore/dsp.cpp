@@ -12,6 +12,8 @@
 
 #include "dsp.h"
 
+namespace Ms {
+
 Dsp* dsp;
 
 #ifdef __i386__
