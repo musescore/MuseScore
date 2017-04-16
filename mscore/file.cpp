@@ -2104,7 +2104,6 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
       QFileInfo info(name);
       QString suffix  = info.suffix().toLower();
       score->setName(info.completeBaseName());
-      score->setImportedFilePath(name);
 
       if (suffix == "mscz" || suffix == "mscx") {
             Score::FileError rv = score->loadMsc(name, ignoreVersionError);
