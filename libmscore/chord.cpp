@@ -1860,31 +1860,44 @@ void Chord::layoutPitched()
                   Note* sn = tie->startNote();
                   Chord* sc = sn->chord();
                   if (sc && sc->measure() == measure() && sc == prevChordRest(this)) {
+                        // current note is tied to previous note, in same measure
+                        // allocate enough space to left of current note
+                        // to ensure the tie itself is at least minTieLength
                         if (sc->notes().size() > 1 || (sc->stem() && sc->up() == tie->up())) {
+                              // start note is part of chord, or tie on stem side
+                              // tie begins to right of start note (negative overlap with start note)
                               shortStart = true;
-                              if (sc->width() > sn->width()) {
-                                    // chord with second?
-                                    // account for noteheads further to right
+                              overlap -= sn->headWidth() * 0.12;
+                              if (sc->notes().size() > 1) {
+                                    // some notes may be further to the right than start note
+                                    // allow overlap with those notes to count toward the minimum
                                     qreal snEnd = sn->x() + sn->headWidth();
                                     qreal scEnd = snEnd;
-                                    for (int i = 0; i < sc->notes().size(); ++i)
-                                          scEnd = qMax(scEnd, sc->notes().at(i)->x() + sc->notes().at(i)->headWidth());
+                                    for (Note* n : sc->notes())
+                                          scEnd = qMax(scEnd, n->x() + n->headWidth());
                                     overlap += scEnd - snEnd;
                                     }
-                              else
-                                    overlap -= sn->headWidth() * 0.12;
                               }
-                        else
+                        else {
                               overlap += sn->headWidth() * 0.35;
+                              }
                         if (notes().size() > 1 || (stem() && !up() && !tie->up())) {
-                              // for positive offset:
-                              //    use available space
-                              // for negative x offset:
-                              //    space is allocated elsewhere, so don't re-allocate here
-                              if (note->ipos().x() != 0.0)
-                                    overlap += qAbs(note->ipos().x());
+                              // this (end) note is part of a chord, or it has a down stem and tie is down
+                              // tie ends to left of start note (negative overlap with end note)
+
+                              // if this (end) note is to left of chord origin
+                              // (eg, a note on left side of a down stem chord)
+                              // then its width is already accounted for in space to left of chord
+                              // we actually need that much *more* space
+                              // if this (end) note is to right of chord origin
+                              // (eg, a note on right side of an up stem chord)
+                              // then we can count the overlap to the left towards the minimum
+
+                              // TODO: see https://musescore.org/en/node/188461
+                              if (note->ipos().x() != 0.0)                    // use x() rather than ipos().x()?
+                                    overlap += qAbs(note->ipos().x());        // remove qAbs()?
                               else
-                                    overlap -= note->headWidth() * 0.12;
+                                    overlap -= note->headWidth() * 0.12;      // do this regardless of x()?
                               }
                         else {
                               if (shortStart)
