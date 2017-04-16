@@ -115,7 +115,7 @@ class ClefInfo {
       static SymId symId(ClefType t)           { return clefTable[int(t)]._symId;       }
       static const signed char* lines(ClefType t)     { return clefTable[int(t)]._lines;       }
       static const char* name(ClefType t)      { return clefTable[int(t)]._name;        }
-      static StaffGroup staffGroup(ClefType t) { return clefTable[int(t)]._staffGroup;  }
+      static StaffGroup staffGroup(ClefType t) { return (int(t)>=0) ? clefTable[int(t)]._staffGroup : StaffGroup::STANDARD; }
       static ClefType tag2type(const QString&);
       };
 
