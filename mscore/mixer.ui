@@ -187,6 +187,9 @@
         </item>
         <item row="0" column="2">
          <widget class="Awl::Knob" name="reverb" native="true">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
             <horstretch>0</horstretch>
@@ -233,6 +236,9 @@
         </item>
         <item row="0" column="3">
          <widget class="Awl::Knob" name="chorus" native="true">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
             <horstretch>0</horstretch>
