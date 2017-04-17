@@ -1893,11 +1893,9 @@ void Chord::layoutPitched()
                               // (eg, a note on right side of an up stem chord)
                               // then we can count the overlap to the left towards the minimum
 
-                              // TODO: see https://musescore.org/en/node/188461
-                              if (note->ipos().x() != 0.0)                    // use x() rather than ipos().x()?
-                                    overlap += qAbs(note->ipos().x());        // remove qAbs()?
-                              else
-                                    overlap -= note->headWidth() * 0.12;      // do this regardless of x()?
+                              overlap -= note->headWidth() * 0.12;
+                              if (note->x() != 0.0)
+                                    overlap += note->x();
                               }
                         else {
                               if (shortStart)
