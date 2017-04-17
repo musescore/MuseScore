@@ -48,6 +48,15 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
       filePath->setText(score->importedFilePath());
 
       int idx = 0;
+      // Show current score file path
+      QLabel* label = new QLabel;
+      label->setText(tr("File path"));
+      QLineEdit* text = new QLineEdit(score->importedFilePath(), 0);
+      text->setReadOnly(true);
+      grid->addWidget(label, 0, 0);
+      grid->addWidget(text, 0, 1);
+      ++idx;
+
       QMapIterator<QString, QString> i(s->metaTags());
       QGridLayout* grid = static_cast<QGridLayout*>(scrollWidget->layout());
       while (i.hasNext()) {
