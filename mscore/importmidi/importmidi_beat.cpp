@@ -431,8 +431,10 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks)
 
                   std::swap(chords, newChords);
 
+#ifdef QT_DEBUG
                   Q_ASSERT_X(MChord::areNotesLongEnough(chords),
                              "MidiBeat::adjustChordsToBeats", "There are too short notes");
+#endif
                   }
             }
       }

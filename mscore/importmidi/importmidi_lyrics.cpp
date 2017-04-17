@@ -105,8 +105,10 @@ BestTrack findBestTrack(
       BestTrack bestTrack;
       int maxMatches = 0;
 
+#ifdef QT_DEBUG
       Q_ASSERT_X(areEqualIndexesSuccessive(tracks),
                  "MidiLyrics::findBestTrack", "Equal indexes of operations are not successive");
+#endif
 
       for (int i = 0; i != tracks.size(); ++i) {
             if (tracks[i].mtrack->drumTrack() || usedTracks.find(i) != usedTracks.end())

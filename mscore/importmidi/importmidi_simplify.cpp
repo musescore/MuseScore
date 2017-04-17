@@ -78,10 +78,12 @@ void lengthenNote(
                               note.offTime - barStart, endTime - barStart, barFraction,
                               tupletsForDuration, Meter::DurationType::REST, useDots, false);
 
+#ifdef QT_DEBUG
       Q_ASSERT_X(areDurationsEqual(origNoteDurations, note.offTime - durationStart),
                  "Simplify::lengthenNote", "Too short note durations remaining");
       Q_ASSERT_X(areDurationsEqual(origRestDurations, endTime - note.offTime),
                  "Simplify::lengthenNote", "Too short rest durations remaining");
+#endif
 
                   // double - because can be + 0.5 for dots
       double minNoteDurationCount = MidiDuration::durationCount(origNoteDurations);
@@ -98,8 +100,10 @@ void lengthenNote(
                               durationStart - barStart, offTime - barStart, barFraction,
                               tupletsForDuration, Meter::DurationType::NOTE, useDots, false);
 
+#ifdef QT_DEBUG
             Q_ASSERT_X(areDurationsEqual(noteDurations, offTime - durationStart),
                        "Simplify::lengthenNote", "Too short note durations remaining");
+#endif
 
             noteDurationCount += MidiDuration::durationCount(noteDurations);
 
@@ -108,8 +112,10 @@ void lengthenNote(
                               offTime - barStart, endTime - barStart, barFraction,
                               tupletsForDuration, Meter::DurationType::REST, useDots, false);
 
+#ifdef QT_DEBUG
                   Q_ASSERT_X(areDurationsEqual(restDurations, endTime - offTime),
                              "Simplify::lengthenNote", "Too short rest durations remaining");
+#endif
 
                   restDurationCount += MidiDuration::durationCount(restDurations);
                   }
@@ -291,17 +297,21 @@ void simplifyDurations(
             if (opers.data()->trackOpers.simplifyDurations.value(mtrack.indexOfOperation)) {
                   MidiOperations::CurrentTrackSetter setCurrentTrack{opers, mtrack.indexOfOperation};
 
+#ifdef QT_DEBUG
                   Q_ASSERT_X(MidiTuplet::areTupletRangesOk(chords, mtrack.tuplets),
                              "Simplify::simplifyDurations", "Tuplet chord/note is outside tuplet "
                              "or non-tuplet chord/note is inside tuplet before simplification");
+#endif
 
                   minimizeNumberOfRests(chords, sigmap, mtrack.tuplets, mtrack.mtrack->drumTrack());
                         // empty tuplets may appear after simplification
                   MidiTuplet::removeEmptyTuplets(mtrack);
 
+#ifdef QT_DEBUG
                   Q_ASSERT_X(MidiTuplet::areTupletRangesOk(chords, mtrack.tuplets),
                              "Simplify::simplifyDurations", "Tuplet chord/note is outside tuplet "
                              "or non-tuplet chord/note is inside tuplet after simplification");
+#endif
                   }
             }
       }

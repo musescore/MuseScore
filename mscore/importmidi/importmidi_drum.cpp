@@ -78,6 +78,7 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                   continue;
                               // all chords of drum track should have voice == 0
                               // because allowedVoices == V_1 (see MidiImportOperations)
+#ifdef QT_DEBUG                              // 
                               // also, all chords should have different onTime values
             Q_ASSERT_X(MChord::areOnTimeValuesDifferent(chords),
                        "MidiDrum::splitDrumVoices",
@@ -85,6 +86,7 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
             Q_ASSERT_X(haveNonZeroVoices(chords),
                        "MidiDrum::splitDrumVoices",
                        "All voices of drum track should be zero here");
+#endif
 
             for (auto chordIt = chords.begin(); chordIt != chords.end(); ++chordIt) {
                   auto &notes = chordIt->second.notes;
