@@ -43,6 +43,7 @@ class LyricsLine;
 class Lyrics : public Text {
       Q_GADGET
       Q_PROPERTY(Ms::Lyrics::Syllabic syllabic READ syllabic WRITE setSyllabic)
+      Q_PROPERTY(int ticks READ ticks WRITE setTicks)
       Q_ENUMS(Syllabic)
 
    public:
