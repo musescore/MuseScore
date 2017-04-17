@@ -31,11 +31,9 @@ bool splitChordToVoice(
       const ReducedFraction &maxChordLength,
       bool allowParallelTuplets = false);
 
-#ifdef QT_DEBUG
 
 bool areVoicesSame(const std::multimap<ReducedFraction, MidiChord> &chords);
 
-#endif
 
 } // namespace MidiVoice
 } // namespace Ms

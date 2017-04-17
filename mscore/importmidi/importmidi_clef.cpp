@@ -149,7 +149,6 @@ MinMaxPitch findMinMaxSegPitch(const Segment *seg, int strack)
       }
 
 
-#ifdef QT_DEBUG
 
 bool doesClefBreakTie(const Staff *staff)
       {
@@ -177,7 +176,6 @@ bool doesClefBreakTie(const Staff *staff)
       return false;
       }
 
-#endif
 
 
 // clef index: 0 - treble, 1 - bass

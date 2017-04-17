@@ -182,7 +182,6 @@ void setNonTupletVoices(
       }
 
 
-#ifdef QT_DEBUG
 
 bool areAllElementsUnique(
             const std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets)
@@ -293,7 +292,6 @@ bool voiceDontExceedLimit(
       return false;
       }
 
-#endif
 
 
 void eraseBackTiedTuplet(

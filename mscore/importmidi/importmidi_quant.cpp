@@ -558,8 +558,6 @@ struct QuantData
       };
 
 
-#ifdef QT_DEBUG
-
 bool areAllVoicesSame(
             const std::deque<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords)
       {
@@ -743,8 +741,6 @@ bool areChordsSortedByOnTime(
             }
       return true;
       }
-
-#endif
 
 
 ReducedFraction quantizeToLarge(
@@ -1179,9 +1175,7 @@ void quantizeOffTimes(
                                                             quantizedChords, basicQuant);
                   note.offTime = result.first;
                   note.offTimeQuant = result.second;
-#ifdef QT_DEBUG
                   checkOffTime(note, chordIt, quantizedChords);
-#endif
                   }
             }
       }
@@ -1361,13 +1355,11 @@ findQuantizedChords(
                               fc.isInTuplet = true;
                               fc.tuplet = chord.tuplet;
                               }
-#ifdef QT_DEBUG
                         else {
                               Q_ASSERT_X(fc.tuplet == chord.tuplet,
                                          "Quantize::findQuantizedChords",
                                          "Tuplets of merged chords are different");
                               }
-#endif
                         }
                   }
             else {

@@ -7,8 +7,6 @@
 namespace Ms {
 
 
-#ifdef QT_DEBUG
-
 //---------------------------------------------------------------------------------------
 // https://www.securecoding.cert.org/confluence/display/seccode/
 // INT32-C.+Ensure+that+operations+on+signed+integers+do+not+result+in+overflow?showComments=false
@@ -70,7 +68,6 @@ bool isUnaryNegationOverflow(int a)             // -a
       return (a == std::numeric_limits<int>::min());
       }
 
-#endif
 
 //---------------------------------------------------------------------------------------
 

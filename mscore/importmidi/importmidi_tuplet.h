@@ -112,8 +112,6 @@ ReducedFraction findOnTimeBetweenChords(
             const ReducedFraction &basicQuant,
             const ReducedFraction &barStart);
 
-#ifdef QT_DEBUG
-
 bool areAllTupletsReferenced(
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const std::multimap<ReducedFraction, TupletData> &tupletEvents);
@@ -129,8 +127,6 @@ bool areTupletRangesOk(
             const std::multimap<ReducedFraction, TupletData> &tuplets);
 
 bool areAllTupletsDifferent(const std::multimap<ReducedFraction, TupletData> &tuplets);
-
-#endif
 
 } // namespace MidiTuplet
 } // namespace Ms

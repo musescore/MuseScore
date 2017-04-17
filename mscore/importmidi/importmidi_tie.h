@@ -34,9 +34,7 @@ class TieStateMachine
       };
 
 
-#ifdef QT_DEBUG
 bool areTiesConsistent(const Staff *staff);
-#endif
 
 
 } // namespace MidiTie

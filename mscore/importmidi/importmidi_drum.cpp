@@ -18,7 +18,6 @@ extern Preferences preferences;
 namespace MidiDrum {
 
 
-#ifdef QT_DEBUG
 
 bool haveNonZeroVoices(const std::multimap<ReducedFraction, MidiChord> &chords)
       {
@@ -29,7 +28,6 @@ bool haveNonZeroVoices(const std::multimap<ReducedFraction, MidiChord> &chords)
       return true;
       }
 
-#endif
 
 
 void splitChord(
