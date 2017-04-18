@@ -1,0 +1,401 @@
+<ui version="4.0" >
+ <class>PartEditBase</class>
+ <widget class="QWidget" name="PartEditBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>456</width>
+    <height>106</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle" >
+   <string/>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="spacing" >
+    <number>3</number>
+   </property>
+   <property name="margin" >
+    <number>1</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title" >
+      <string/>
+     </property>
+     <property name="flat" >
+      <bool>true</bool>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>1</number>
+      </property>
+      <property name="spacing" >
+       <number>0</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QLineEdit" name="partName" >
+        <property name="toolTip" >
+         <string>Part name</string>
+        </property>
+        <property name="readOnly" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item rowspan="3" row="0" column="1" >
+       <layout class="QGridLayout" >
+        <property name="sizeConstraint" >
+         <enum>QLayout::SetFixedSize</enum>
+        </property>
+        <property name="spacing" >
+         <number>0</number>
+        </property>
+        <item row="0" column="0" >
+         <widget class="Awl::Knob" name="volume" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Ignored" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip" >
+           <string>Volume</string>
+          </property>
+          <property name="invertedAppearance" >
+           <bool>false</bool>
+          </property>
+          <property name="scaleWidth" >
+           <number>5</number>
+          </property>
+          <property name="scaleValueColor" >
+           <color>
+            <red>255</red>
+            <green>3</green>
+            <blue>7</blue>
+           </color>
+          </property>
+          <property name="maxValue" >
+           <double>127.000000000000000</double>
+          </property>
+          <property name="lineStep" >
+           <double>1.000000000000000</double>
+          </property>
+          <property name="pageStep" >
+           <double>10.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" >
+         <widget class="Awl::MidiPanKnob" name="pan" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Ignored" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip" >
+           <string>Panorama position</string>
+          </property>
+          <property name="scaleWidth" >
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2" >
+         <widget class="Awl::Knob" name="reverb" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Ignored" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip" >
+           <string>Reverb</string>
+          </property>
+          <property name="scaleWidth" >
+           <number>5</number>
+          </property>
+          <property name="maxValue" >
+           <double>127.000000000000000</double>
+          </property>
+          <property name="lineStep" >
+           <double>1.000000000000000</double>
+          </property>
+          <property name="pageStep" >
+           <double>10.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3" >
+         <widget class="Awl::Knob" name="chorus" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Ignored" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip" >
+           <string>Chorus</string>
+          </property>
+          <property name="scaleWidth" >
+           <number>5</number>
+          </property>
+          <property name="maxValue" >
+           <double>127.000000000000000</double>
+          </property>
+          <property name="lineStep" >
+           <double>1.000000000000000</double>
+          </property>
+          <property name="pageStep" >
+           <double>10.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" >
+         <widget class="QLabel" name="label" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>Vol</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" >
+         <widget class="QLabel" name="label_3" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>Pan</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2" >
+         <widget class="QLabel" name="label_4" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>Rev</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3" >
+         <widget class="QLabel" name="label_5" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>Cho</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0" >
+       <layout class="QHBoxLayout" >
+        <item>
+         <widget class="QCheckBox" name="mute" >
+          <property name="text" >
+           <string>Mute</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="solo" >
+          <property name="text" >
+           <string>Solo</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="drumset" >
+          <property name="text" >
+           <string>Drumset</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0" >
+       <layout class="QHBoxLayout" >
+        <item>
+         <widget class="QLabel" name="label_2" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text" >
+           <string>Sound:</string>
+          </property>
+          <property name="textFormat" >
+           <enum>Qt::PlainText</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="patch" >
+          <property name="toolTip" >
+           <string>MIDI sound for part</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Awl::MidiPanKnob</class>
+   <extends>Awl::Knob</extends>
+   <header>awl/midipanknob.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Awl::Knob</class>
+   <extends>QWidget</extends>
+   <header>awl/knob.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

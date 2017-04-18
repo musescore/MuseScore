@@ -1,0 +1,70 @@
+#=============================================================================
+#  Mscore
+#  Linux Music Score Editor
+#  $Id:$
+#
+#  Copyright (C) 2002-2007 by Werner Schweer and others
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License version 2.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#=============================================================================
+
+
+REVISION  = $(shell type mscore\revision.h)
+VERSION   = 2.1b-${REVISION}
+#VERSION = 2.1.0
+CPUS = %NUMBER_OF_PROCESSORS%
+
+release:
+	if not exist build.release\nul mkdir build.release
+	if not exist win32install\nul mkdir win32install
+	cd build.release & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_MAKE_PROGRAM=mingw32-make.exe ..
+	cd build.release & $(MAKE) lrelease
+	cd build.release & $(MAKE) -j ${CPUS}
+
+debug:
+	if not exist build.debug\nul mkdir build.debug
+	if not exist win32install\nul mkdir win32install
+	cd build.debug & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_MAKE_PROGRAM=mingw32-make.exe ..
+	cd build.debug & $(MAKE) lrelease
+	cd build.debug & $(MAKE) -j ${CPUS}
+
+install:
+	cd build.release & $(MAKE) install
+
+installdebug:
+	cd build.debug & $(MAKE) install
+
+package:
+	cd build.release & $(MAKE) package
+
+revision:
+	git rev-parse --short HEAD > mscore/revision.h
+
+version:
+	@echo ${VERSION}
+
+#
+# clean out of source build
+#
+
+clean:
+	-rmdir /S/Q build.debug build.release win32install
+
+
+#
+# generate code documentation
+#
+doxy:
+	doxygen build.debug/Doxyfile
+doxylib:
+	doxygen build.debug/Doxyfile-LibMscore

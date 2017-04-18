@@ -1,0 +1,295 @@
+AEOLUS 0.8.4   RELEASE NOTES   14/03/2010
+============================
+
+* Five new temperaments provided by Hanno Hoffstadt
+  and Adam Sampson.
+* Added -s option to select Jack server.
+* Now using libclalsdrv-2.0.0.
+* Compiles without warnings with gcc-4.4.3.
+
+
+AEOLUS 0.8.0   RELEASE NOTES   29/01/2008
+============================
+
+**** Experimental release. ****
+
+* Requires JACK >= 0.109
+* Receives MIDI over JACK and via ALSA sequencer.
+* -C option has been removed, use AmbDec instead.
+* -B option via ALSA removed.
+
+
+
+AEOLUS 0.6.6   RELEASE NOTES
+============================
+
+
+1. The stops directory
+----------------------
+
+The aeolus binary itself is a generic organ synth and
+does not define any instrument. In order to use Aeolus
+you need a directory containing definitions of stops
+and of an instrument. The one supplied with the current
+release has this structure:
+
+
+ stops-0.3.0 
+     |
+     |___ Aeolus
+     |        |          
+     |        |____ definition
+     |        |____ presets
+     |
+     |___ Aeolus1
+     |        |          
+     |        |____ definition
+     |        |____ presets
+     |
+     |___ Aeolus2
+     |        |          
+     |        |____ definition
+     |        |____ presets
+     |
+     |___ ***.ae0
+     |___ ***.ae0 
+     |___ ***.ae0
+     |___ ...
+     |
+     |___ waves
+              |
+              |___ ***.ae1
+              |___ ***.ae1
+              |___ ***.ae1
+              |___ ...
+
+
+The 'Aeolus' directory is the default instrument
+directory. It contains two files: a 'definition'
+file that specifies the layout of the organ, and
+'presets' that contains registration and midi presets.
+
+There can be more than one instrument definition
+directory (in fact there are two more examples
+in the supplied stops-0.3.0). These can be selected
+with a command line option (see below).
+
+The data in 'presets' only makes sense for one
+particular instrument, and that's why these files
+are kept together with the corresponding instrument
+definition. For binary distributions, there is a
+configuration option that will make Aeolus save the
+presets in the users's home (see below). This will
+allow the user to save presets for one instrument.
+
+The *.ae0 files contain parameters for the additive
+synthesis. There is one such file for each rank of
+pipes in the organ. These are binary files and they
+should not be edited. 'Power users' can use the built-in
+synthesis editor to modify them (see section 5).
+  
+The waves directory will be empty initially. When 
+Aeolus starts up, it will compute wavetables, one for
+each pipe. This is indicated by the flashing stop buttons.
+The same will happen whenever the tuning or temperament is
+changed. These wavetables can be saved (so Aeolus will be
+ready for use much faster next time), but only if the stops
+directory is writeable for the user. This will not be the
+case for a binary installation as the stops dir will be
+system-wide (e.g. /usr/share/Aeolus/stops-0.3.0).
+
+In order to be able to save wavetables or edited stops
+the stops directory must be copied to a location where
+it can be modified by the user, (e.g. ~/stops-0.3.0).
+
+
+2. Run-time configuration
+-------------------------
+
+Aeolus takes run-time options from three sources:
+
+*  the file   /etc/aeolus.conf
+*  the file   ~/.aeolusrc
+*  command line options
+
+Apart from empty lines and comments (lines starting with '#')
+either of the files should just contain the command line options  
+you want to use, on a single line (examples given below).
+
+If the file in the home directory exists (even empty) then the
+one in /etc is not used. Options given on the command line override
+those given in either file.
+
+Command line options are:
+
+(audio interface)
+
+  -J     Use JACK. This is also the default. The option 
+         can be used to override a -A in the files.
+
+  -A     Use ALSA. Aeolus should work with the "default"
+         device, but in recent ALSA releases this has a
+         very large buffer size, and this may result in 
+         excessive latency. Use of a hardware device and
+         the options below is recommended. 
+
+         Sub-options for ALSA and their defaults are:
+
+         -d <device>             (default)
+         -r <sample rate>        (48000)
+         -p <period size>        (1024)
+         -n <number of periods>  (2) 
+
+(output channels)
+
+  -C  <number of channels> 
+
+         The default is 2 (stereo). Other legal values
+         are 4 for four speakers in a square and 8 for
+         eight speaker in cube setup. The built-in 
+         Ambisonics decoder used for the latter two 
+         formats is quite primitive and will be removed
+         in future versions, to be replaced with a much
+         better external application.
+
+         Speaker order for -C 4 is clockwise starting at
+         front-left. For -C 8 the first four outputs are
+         the 'bottom' speakers, and the next four the
+         'top' ones, each of them in the same order as
+         for -C 4.
+
+  -B     This options selects direct Ambisionics first order
+         B-format output, to be used for recording or with
+         an external decoder.
+ 
+(resources)
+
+  -S  <stops directory>
+
+         The default is ./stops.
+
+  -I  <instrument directory>
+
+         This is relative to the stops directory.
+         The default is 'Aeolus'.
+            
+  -W  <waves directory> 
+
+         This is relative to the stops directory.
+         The default is 'waves'. This options mainly exists
+         for use during development and should not be used.
+
+  -u     This option is for use with binary distributions
+         only. When used, the presets file will be stored
+         into the user's home directory instead of within
+         the system wide instrument directory.
+
+(general)
+
+  -t     Selects the text mode user interface. With this
+         option Aeolus does not in any way depend on X11.
+         In the current version the text mode UI is just
+         an empty stub and should not be used.
+
+  -h     Prints version information and a summary of all
+         command line options. 
+
+
+For example if you always use Aeolus with ALSA device hw:0,
+using 3 periods of 512 frames and a sample rate of 44.1 kHz,
+and you have copied the stops directory to your home, then
+your ~/.aeolusrc could look like this:
+
+# Aeolus default options
+-A -d hw:0 -n 2 -p 512 -r 44100 -S /home/login/stops-0.3.0
+
+where 'login' is your login name.
+
+
+3. Binary packages
+------------------
+
+This release permits packagers to install a working Aeolus
+without touching a users's home directory, as follows.
+
+*  Install the aeolus binary in /usr/bin and the two
+   plugins in /usr/lib.
+*  Install the stops directory in /usr/share/Aeolus.
+*  Install this README into /usr/share/doc/packages/Aeolus.
+*  Create the file /etc/aeolus.conf containing:
+
+# Aeolus default options
+-u -A -S /usr/share/Aeolus/stops-0.3.0
+
+This will use the default instrument 'Aeolus', and save the
+presets in .aeolus-presets in the users's home directory.
+
+
+4. A quick tour of the GUI 
+--------------------------
+
+4.1 The main window
+
+TBC
+
+4.2 The instrument window
+
+TBC
+
+4.3 The audio window
+
+TBC
+
+4.4 The midi window
+
+TBC
+
+
+5. Editing the synthesis parameters
+-----------------------------------
+
+TBC
+
+
+6. Midi control of stop buttons
+-------------------------------
+
+The protocol uses one controller number. The default is #98, but you
+can change this in global.h. The message is accepted only on channels
+enabled for control in the midi matrix.
+
+The value is interpreted as follows:
+
+  v = 01mm0ggg 
+
+      This type of messages (bit 6 set) selects a group, and either
+      resets all stops in that group or sets the mode for the second
+      form below.
+      
+      mm = mode. This can be:
+    
+         00  disabled, also resets all elements in the group.
+         01  set off
+         10  set on
+         11  toggle
+
+      ggg = group, one of the button groups as defined in the instrument
+      definition. In the GUI groups start at the top, the first one (for
+      division III) being group #0.
+
+      The values of mm and ggg are stored and need not be repeated unless
+      they change.
+
+  v = 000bbbbb
+
+      According to the current state of mode, this command switches a
+      stop on or off, or toggles its state, or does nothing at all.
+      
+      bbbbb = button index within the group.
+
+      Buttons are numbered left to right, top to bottom within each
+      group. The first one is #0.
+
+
+EOF
+

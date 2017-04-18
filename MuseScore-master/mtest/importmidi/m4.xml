@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SMF>
+  <Track>
+    <NoteOn  tick="0" c="0" a="43" b="50"/>
+    <NoteOn  tick="480" c="0" a="43" b=" 0"/>
+
+    <NoteOn  tick="480" c="0" a="45" b="50"/>
+    <NoteOn  tick="1440" c="0" a="45" b=" 0"/>
+
+    <NoteOn  tick="480"  c="0" a="41" b="50"/>
+    <NoteOn  tick="960"  c="0" a="41" b=" 0"/>
+
+    <NoteOn  tick="1440" c="0" a="48" b="50"/>
+    <NoteOn  tick="1920" c="0" a="48" b=" 0"/>
+
+    <NoteOn  tick="1920" c="0" a="48" b="50"/>
+    <NoteOn  tick="2400" c="0" a="48" b=" 0"/>
+
+    <NoteOn  tick="2400" c="0" a="48" b="50"/>
+    <NoteOn  tick="2860" c="0" a="48" b=" 0"/>
+
+    </Track>
+  <Track>
+    <NoteOn  tick="0"   c="0" a="3b" b="50"/>
+    <NoteOn  tick="480" c="0" a="3b" b=" 0"/>
+    </Track>
+  </SMF>
+

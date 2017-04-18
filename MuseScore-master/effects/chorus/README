@@ -1,0 +1,211 @@
+-----------------------------------------------------------------------------------
+
+    Copyright (C) 2003-2008 Fons Adriaensen <fons@kokkinizita.net>
+    
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+-----------------------------------------------------------------------------------
+
+
+--------------------------------------------
+cs_phaser.so  -- version 0.4.0 - 5/4/2008
+--------------------------------------------
+
+Code cleanup.
+
+--------------------------------------------
+cs_phaser.so  -- version 0.3.0 - 10/4/2004
+--------------------------------------------
+
+Assured central frequency is middle C for zero control voltage
+
+--------------------------------------------
+cs_phaser.so  -- First release - 20/5/2003
+--------------------------------------------
+
+This is similar to the CSound module 'phaser1'. It's a series
+connection of 1 to 30 first order allpass filters with feedback.
+For 'Output mix', the range -1 to 0 crossfades between the inverted
+output and the input, and the range 0 to 1 crossfades between the
+input and the non-inverted output. Without feedback, the maximum
+effect is at +/- 0.5. For both 'Feedback gain' and 'Output mix',
+the best polarity depends on whether the number of sections is
+even or odd.
+
+Phaser1+LFO is the same thing, but the external modulation has
+been replaced by a built-in LFO. The 'LFO waveform' control ranges
+from a falling saw wave (-1), over triangle (0), to a rising saw
+wave (+1). 
+
+Note: CSound's 'phaser2' is in the pipeline.
+
+
+--------------------------------------------
+cs_chorus.so  -- version 0.4.0 - 5/4/2008
+--------------------------------------------
+
+Code cleanup and triple output version added.
+The third one is as the second, but has three
+separate outputs. Pan L,C,R for a nice stereo
+effect.
+
+--------------------------------------------
+cs_chorus.so  -- version 0.3.0 - 10/4/2004
+--------------------------------------------
+--------------------------------------------
+cs_chorus.so  -- First release - 20/5/2003
+--------------------------------------------
+
+These two plugins are based on a CSound orchestra file by Sean Costello.
+There are two low frequency oscillators, each having three outputs
+that are 120 degrees apart in phase. The summed outputs modulate three
+delay lines. Make sure the static delay (first parameter) is at least
+equal to the sum of the two modulation depths.
+The two plugins are functionally identical. The second one upsamples
+the input to the delay lines in an attempt to mitigate the errors
+produced by the linear interpolation at the output. If you hear any
+difference please let me know which one you prefer.
+
+
+
+--------------------------------------------
+mvclpf24.so  -- version 0.4.0 - 5/4/2008
+--------------------------------------------
+
+Code cleanup.
+
+--------------------------------------------
+mvclpf24.so  -- version 0.3.0 - 10/4/2004
+--------------------------------------------
+
+Assured central frequency is middle C for zero control voltage
+
+--------------------------------------------
+mvclpf24.so  -- version 0.1.3 - 22/8/2003
+--------------------------------------------
+
+Renamed parameter "Output" in Mvclpf-4 to "Filter poles".
+
+--------------------------------------------
+mvclpf24.so  -- version 0.1.2 - 28/7/2003
+--------------------------------------------
+
+Added fourth version, offering 0, 6, 12, 18, 24 dB/oct outputs.
+
+Changed filenames, plugin names and labels to avoid any possible
+trademark related problems. I'm happy Bob Moog is back in business,
+and surely do not want any trouble with him.
+
+Added a quick hack solution to stop FP denormalization. This will
+be improved on in future versions.
+
+--------------------------------------------
+mvclpf24.so  -- First release - 25/4/2003
+--------------------------------------------
+
+Description
+-----------
+
+The mvclpf24 plugin contains four versions of a digital implementation of
+the voltage controlled lowpass filter as used in vintage Moog synthesizers.
+Many software versions of this filter already exist. Most use some limiting
+mechanism in order to keep the self-oscillation amplitude under control, but
+as far as I know, none of them attempt to accurately emulate the non-linear
+circuit elements of the original analog filter. To do this has been the 
+main reason for developing this plugin.
+
+
+The Moog VCF
+------------
+
+The basic architecture of the Moog VCF is quite simple: it consists of a
+chain of four first order RC filters and a feedback path. In the clever
+design by Robert Moog, the four filter sections are current driven 
+parallel RC combinations, the current flowing in the resistor of one
+section also being the input signal for the next. The 'resistors' are
+each formed by the series connection (as far as the signal is concerned)
+of two forward-biased base-emitter junctions, the impedance of which is
+controlled by the bias current coming from an exponentially controlled
+current source.
+Whereas for a normal resistor we would have I_R / V_R = constant = 1/R,
+in this scheme we find I_R = w * tanh(V_R), where w is proportional to
+the bias current. Thus the impedance increases with signal level, which
+explains why the resonance frequency rises (by about one semitone) when
+the filter is taken out of self-oscillation by decreasing the feedback.
+
+
+The four versions
+------------------
+
+Mvclpf-1 is a fairly simple design, and it does not even pretend to come
+close the 'real thing'. It uses a very crude approximation of the non-linear
+resistor in the first filter section only. I retained it in this distribution
+because it's a cheap (in terms of CPU usage) general purpose 24 dB/oct lowpass
+filter that could be useful, and for sentimental reasons since this was my
+first ever LADSPA plugin.
+
+Mvclpf-2 uses five non-linear elements, in the input and in all four filter
+sections. It works by using the derivative of the nonlinearity (for which
+1 / (1 + x * x) is reasonable approximation). The main advantage of this is
+that only one evaluation of the non-linear function is required for each
+section. The four variables that contain the filter state (c1...c4) represent
+not the voltage on the capacitors (as in the first filter) but the current
+flowing in the resistive part.
+
+Mvclpf-3 is based on the previous one, with two differences. It uses the
+the technique described by Stilson and Smith to extend the constant-Q
+range, and the internal sample frequency is doubled, giving a better
+approximation to the non-linear behaviour at high freqencies.
+This version has high Q over the entire frequency range and will
+oscillate up to above 10 kHz, while the two others show a decreasing
+Q at high frequencies. Moogvcf3 is reasonably well tuned, and can be
+'played' as a VCO up to at least 5 kHz.
+
+Mvclpf-4 is the same as the previous one, but adds a selection of 0, 6, 12,
+18 or 24 db/oct output.
+
+All four versions subsample the audio rate controls to 1/16, with linear
+interpolation in between. This could be changed at the expense of more
+CPU cycles.
+
+
+--------------------------------------------
+mvclpf24.so  -- version 0.4.0 - 5/4/2008
+--------------------------------------------
+
+Code cleanup.
+
+--------------------------------------------
+mvchpf24.so  -- First release - 10/4/2004
+--------------------------------------------
+
+This is based on the voltage controlled highpass filter by Robert Moog.
+again with some attention to the nonlinear effects. This are quite 
+different from the lowpass filters. When you 'overdrive' the filter,
+the cutoff frequency will rise.
+
+This first version is really very experimental.
+
+
+-------
+Thanks
+-------
+
+Many thanks are due to Dr. Matthias Nagorni of SuSE AG, who first prodded
+me gently to undertake the development of the lowpass plugin, later of the 
+cs_phaser and cs_chorus, and who provided invaluable feedback and comments on
+the early versions. The higpass filter was also developed following a request
+from Matthias, and he has already made some spectacular AMS patches with it.
+

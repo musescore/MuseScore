@@ -1,0 +1,107 @@
+test script p1
+filter:128
+filter:-1
+Clef
+KeySig
+TimeSig
+Chord
+  durationType:480
+  beamMode:0
+  small:false
+  duration:
+    numerator:1
+    denominator:4
+    ticks:480
+  Note
+    subchannel:0
+    line:6
+    fret:-1
+    string:-1
+    tpc:22
+    tpc1:22
+    tpc2:22
+    pitch:68
+    ppitch:68
+    ghost:false
+    hidden:false
+    mirror:false
+    small:false
+    play:true
+    tuning:0
+    veloType:0
+    veloOffset:0
+    userMirror:0
+    userDotPosition:0
+    headGroup:0
+    headType:255
+    accidentalType:1
+    dotsCount:0
+      Accidental
+        hasBracket:false
+        small:false
+        accType:1
+        role:0
+  Note
+    subchannel:0
+    line:2
+    fret:-1
+    string:-1
+    tpc:16
+    tpc1:16
+    tpc2:16
+    pitch:74
+    ppitch:74
+    ghost:false
+    hidden:false
+    mirror:false
+    small:false
+    play:true
+    tuning:0
+    veloType:0
+    veloOffset:0
+    userMirror:0
+    userDotPosition:0
+    headGroup:0
+    headType:255
+    accidentalType:0
+    dotsCount:0
+Rest
+  duration:
+    numerator:1
+    denominator:4
+    ticks:480
+  beamMode:4
+  small:false
+Chord
+  durationType:960
+  beamMode:0
+  small:false
+  duration:
+    numerator:1
+    denominator:2
+    ticks:960
+  Note
+    subchannel:0
+    line:5
+    fret:-1
+    string:-1
+    tpc:17
+    tpc1:17
+    tpc2:17
+    pitch:69
+    ppitch:69
+    ghost:false
+    hidden:false
+    mirror:false
+    small:false
+    play:true
+    tuning:0
+    veloType:0
+    veloOffset:0
+    userMirror:0
+    userDotPosition:0
+    headGroup:0
+    headType:255
+    accidentalType:0
+    dotsCount:0
+BarLine
