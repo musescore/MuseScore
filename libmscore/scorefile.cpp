@@ -687,7 +687,7 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       if (!onlySelection) {
             //update version values for i.e. plugin access
             _mscoreVersion = VERSION;
-            _mscoreRevision = revision.toInt();
+            _mscoreRevision = revision.toInt(0, 16);
             _mscVersion = MSCVERSION;
             }
       return true;
