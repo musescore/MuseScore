@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/earlymusic/mensurstrich01.mscx   mensurstrich01.mscx
+

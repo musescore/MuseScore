@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for a in 1; do
+      cp ../../../build.debug/mtest/libmscore/tuplet/tuplet${a}.mscx tuplet${a}-ref.mscx
+      done
+

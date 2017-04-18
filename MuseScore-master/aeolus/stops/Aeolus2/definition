@@ -1,0 +1,160 @@
+# Aeolus instrument definition file
+# Created by Aeolus-0.6.5 at Sat Apr 15 23:59:11 2006
+
+
+/instr/new
+/tuning 440.0 1
+
+# Keyboards
+#
+/manual/new   III
+/manual/new   II
+/manual/new   I
+/pedal/new    P
+
+# Divisions
+#
+/divis/new    Swell    0  1
+/rank         C  17  III_principal_8.ae0
+/rank         W  20  gemshorn8.ae0
+/rank         R  17  quintadena.ae0
+/rank         L  26  suabile.ae0
+/rank         R  21  rohrflute4.ae0
+/rank         R  30  III_flautodolce4.ae0
+/rank         C  20  quintflute.ae0
+/rank         L  31  superoctave2.ae0
+/rank         R  23  sifflet1.ae0
+/rank         L  13  III_cymbel.ae0
+/rank         R  27  new_oboe_fa.ae0
+/rank         L  18  I_melodia.ae0
+/swell
+/tremul       4.0  0.4
+/divis/end
+
+/divis/new    Choir    0  3
+/rank         L  23  rohrflute8.ae0
+/rank         C  21  harmflute8.ae0
+/rank         R  19  II_flautodolce4.ae0
+/rank         C  25  nasard.ae0
+/rank         L  23  ottavina2.ae0
+/rank         R  24  tertia.ae0
+/rank         L  26  sesqualtera.ae0
+/rank         R  30  septime.ae0
+/rank         R  22  none.ae0
+/rank         W  24  cromhorne.ae0
+/swell
+/tremul       5.0  0.3
+/divis/end
+
+/divis/new    Great    0  2
+/rank         C  10  I_principal_8.ae0
+/rank         R  14  I_principal_4.ae0
+/rank         L  16  I_octave_2.ae0
+/rank         R  19  I_octave_1.ae0
+/rank         C  21  I_quinte_513.ae0
+/rank         R  19  I_quinte_223.ae0
+/rank         L  22  tibia8.ae0
+/rank         C  13  celesta.ae0
+/rank         C   5  flute8.ae0
+/rank         R   8  flute4.ae0
+/rank         R  10  flute2.ae0
+/rank         C   4  I_cymbel.ae0
+/rank         L  18  I_mixtur5fach.ae0
+/rank         W   0  I_trumpet.ae0
+/divis/end
+
+/divis/new    Pedal    4  4
+/rank         C  20  bourdon16.ae0
+/rank         C  28  P_principal_16.ae0
+/rank         R  17  P_principal_8.ae0
+/rank         C  21  P_principal_4.ae0
+/rank         L  10  P_octave_2.ae0
+/rank         R  15  P_octave_1.ae0
+/rank         L  22  P_quinte_513.ae0
+/rank         R  26  P_quinte_223.ae0
+/rank         C  18  P_mixtur5fach.ae0
+/rank         C  30  bassoon.ae0
+/rank         W  10  trombone.ae0
+/rank         W  15  bombarde.ae0
+/rank         L   5  P_trumpet.ae0
+/divis/end
+
+# Interface groups
+#
+/group/new    Swell  
+/coupler      4   1   CP>3     P
+/coupler      3   1   C1>3     I
+/coupler      2   1   C2>3     II
+/coupler      1   1   C3>3     III
+/stop         0   1   1
+/stop         0   1   2
+/stop         0   1   3
+/stop         0   1   4
+/stop         0   1   5
+/stop         0   1   6
+/stop         0   1   7
+/stop         0   1   8
+/stop         0   1   9
+/stop         0   1  10
+/stop         0   1  11
+/stop         0   1  12
+/tremul       1       TR       Tremulant
+/group/end
+
+/group/new    Great  
+/coupler      4   3   CP>2     P
+/coupler      3   3   C1>2     I
+/coupler      2   3   C2>2     II
+/coupler      1   3   C3>2     III
+/stop         0   3   1
+/stop         0   3   2
+/stop         0   3   3
+/stop         0   3   4
+/stop         0   3   5
+/stop         0   3   6
+/stop         0   3   7
+/stop         0   3   8
+/stop         0   3   9
+/stop         0   3  10
+/stop         0   3  11
+/stop         0   3  12
+/stop         0   3  13
+/stop         0   3  14
+/group/end
+
+/group/new    Choir  
+/coupler      4   2   CP>3     P
+/coupler      3   2   C1>3     I
+/coupler      2   2   C2>3     II
+/coupler      1   2   C3>3     III
+/stop         0   2   1
+/stop         0   2   2
+/stop         0   2   3
+/stop         0   2   4
+/stop         0   2   5
+/stop         0   2   6
+/stop         0   2   7
+/stop         0   2   8
+/stop         0   2   9
+/stop         0   2  10
+/tremul       2       TR       Tremulant
+/group/end
+
+/group/new    Pedal  
+/stop         0   4   1
+/stop         0   4   2
+/stop         0   4   3
+/stop         0   4   4
+/stop         0   4   5
+/stop         0   4   6
+/stop         0   4   7
+/stop         0   4   8
+/stop         0   4   9
+/stop         0   4  10
+/stop         0   4  11
+/stop         0   4  12
+/stop         0   4  13
+/group/end
+
+
+/instr/end

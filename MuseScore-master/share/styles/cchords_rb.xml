@@ -1,0 +1,1080 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE museScore [
+
+<!--
+=====================================================================
+    MuseScore
+    Linux Music Score Editor
+    $Id: mscore.cpp 1850 2009-05-25 07:44:35Z wschweer $
+
+    Copyright (C) 2009 Werner Schweer and others
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+=====================================================================
+    This file describes, how chord symbols are parsed and rendered
+    in MuseScore
+=====================================================================
+-->
+
+<!--
+=====================================================================
+
+  If you wish to customize how your chords
+  are typed and displayed, then edit this file.
+
+  The most common customizations can be made just by editing
+  the first few pairs of ENTITY declarations below
+  (for major, minor, diminished, and half_diminished).
+  There is a "display" and a "parse" declaration for each chord type.
+  These control what abbreviation or symbol is used for display
+  and what you have to type to input that chord type.
+  This allows you to easily select between "ma", "maj", the triangle symbol,
+  and other popular ways of indicating the word "major", for example.
+
+  Note that "ma" is a single glyph in the MuseJazz font; the same is true of "mi".
+  If you wish to use other abbreviations for major and minor,
+  you will need to enter the letters individually in the ENTITY statements.
+  That is why those abbreviations are spelled with spaces between each letter
+  in the comments accompanying the declarations below.
+  Similarly for other abbreviations other than the few included as glyphs in MuseJazz.
+  Note that you should not include spaces in the "parse" declarations,
+  since you cannot type spaces within a chord symbol even if you wanted to.
+
+  Normally, aside from the issue of spaces, you would use the same abbreviation
+  for both the "display" and "parse" declarations.
+  But if you wish to use the triangle for major
+  or oslash (circle with a slash through it) for half_diminished,
+  then you will need to decide what you would like to type
+  in order to produce these symbols,
+  and put that in the "parse" declaration.
+
+  Most symbols are taken from the MuseJazz font where possible,
+  but other commonly available fonts are used when necessary.
+  You may have fonts you like better than the ones I have chosen
+  for the letters used in the abbreviations or for other symbols.
+  If you wish to change the fonts used for specific characters,
+  then edit the <font> declarations below.
+  You can also edit these declarations to make other symbols available.
+
+  The m:x:y elements in the "display" declarations can be used
+  to fine tune the positioning of the symbols.
+  Each symbol is preceded and followed by one of these positioning elements,
+  allowing you to raise or lower each symbol
+  and to increase or decrease the amount of space before and after it.
+  Larger values for x add more space; larger values for y lower a symbol.
+  If you adjust the vertical position of a symbol
+  by editing the m: element in front of it,
+  be sure to make the opposite adjustment in the m: element after the symbol.
+
+  If you wish to change the positioning used
+  between a note and its accidental,
+  or between a chord and an alternate bass note,
+  then edit the <renderRoot> and <renderBass> declarations below.
+
+=====================================================================
+-->
+
+<!-- suggested choices: ma, M, M a, M a j, m a j, triangle -->
+  <!ENTITY display_major "m:0:-5 m a j m:0:5">
+  <!ENTITY parse_major "maj">
+<!-- if using triangle for major, you'll probably want a smaller triangle for minor (major seventh)
+  <!ENTITY display_amajor "m:0:0 striangle m:0:0"> -->
+<!-- otherwise, use ordinary symbol for major in those cases -->
+  <!ENTITY display_amajor "m:0:0 &display_major; m:0:0">
+
+<!-- suggested choices: mi, m, M i, M i n, m i n, minus -->
+  <!ENTITY display_minor "m:0:0 minus m:0:0">
+  <!ENTITY parse_minor "-">
+
+<!-- suggested choices: circle, degree, dim (circle is bigger than degree) -->
+  <!ENTITY display_diminished "m:0:0 degree m:0:0">
+  <!ENTITY parse_diminished "o">
+
+<!-- use this to represent half diminished chords as <minor>7b5 -->
+  <!ENTITY display_half_diminished "m:0:0 &display_minor; &seven; &d_alp; &alter_flat; &sfive; &d_arp; m:0:0">
+<!-- use this instead to represent them as oslash (commented out by default)
+  <!ENTITY display_half_diminished "m:0:-5 oslash m:0:5"> -->
+<!-- if using oslash for display, use this to control what you type to get that symbol -->
+  <!ENTITY parse_half_diminished "&parse_minor;7b5">
+
+<!-- use "sus4" instead of "sus" in the declarations below if you prefer C7sus4 over C7sus -->
+<!-- use the "pre" declarations if you prefer C7susb9; "post" if you prefer C7b9sus -->
+  <!ENTITY display_suspended4_pre "">
+  <!ENTITY parse_suspended4_pre "">
+  <!ENTITY display_suspended4_post "m:0:-5 sus4 m:0:5">
+  <!ENTITY parse_suspended4_post "sus4">
+
+<!-- these declarations are for suspended chords other than suspended fourth chords -->
+  <!ENTITY display_suspended "m:0:-5 sus m:0:5">
+  <!ENTITY parse_suspended "sus">
+
+<!-- the positioning elements here place the 6 vertically above the 9 for "six nine" chords -->
+  <!ENTITY display_sixnine "m:1:-2 s6 m:-4:7 s9 m:0:-5">
+  <!ENTITY parse_sixnine "69">
+
+<!-- use these declarations to yield mi(ma7) and similar chords with parens -->
+  <!ENTITY d_lp "m:1:-4 ( m:0:4">
+  <!ENTITY d_rp "m:0:-4 ) m:0:4">
+  <!ENTITY p_lp "(">
+  <!ENTITY p_rp ")">
+<!-- use these declarations instead to eliminate the parens in the above and use superscript instead (commented out by default)
+  <!ENTITY d_lp "m:0:-4"> 
+  <!ENTITY d_rp "m:0:4">
+  <!ENTITY p_lp "">
+  <!ENTITY p_rp ""> -->
+
+<!-- use these declarations to display C7(b9) and similar chords with parens (commented out by default)
+  <!ENTITY d_alp "m:1:-5 s( m:0:5">
+  <!ENTITY d_arp "m:0:-5 s) m:0:5"> -->
+<!-- use these declarations instead to eliminate the parens in the above -->
+  <!ENTITY d_alp ""> 
+  <!ENTITY d_arp "">
+
+<!-- these numbers are used for primary extensions: eg, the 7 in C7b9 -->
+  <!ENTITY two "m:0:2 2 m:0:-2">
+  <!ENTITY four "m:0:2 4 m:0:-2">
+  <!ENTITY five "m:0:2 5 m:0:-2">
+  <!ENTITY six "m:0:2 6 m:0:-2">
+  <!ENTITY seven "m:0:2 7 m:0:-2">
+  <!ENTITY nine "m:0:2 9 m:0:-2">
+  <!ENTITY eleven "m:0:2 11 m:0:-2">
+  <!ENTITY thirteen "m:0:2 13 m:0:-2">
+
+<!-- these numbers are used for secondary extensions: eg, the 9 in C7b9 -->
+  <!ENTITY stwo "m:0:-1 s2 m:0:1">
+  <!ENTITY sfour "m:0:-1 s4 m:0:1">
+  <!ENTITY sfive "m:0:-1 s5 m:0:1">
+  <!ENTITY sseven "m:0:-1 s7 m:0:1">
+  <!ENTITY snine "m:0:-1 s9 m:0:1">
+  <!ENTITY seleven "m:0:-1 s11 m:0:1">
+  <!ENTITY sthirteen "m:0:-1 s13 m:0:1">
+
+<!-- these numbers are used for extensions in special cases like mi(ma9) -->
+  <!ENTITY atwo "m:0:0 s2 m:0:0">
+  <!ENTITY athree "m:0:0 s3 m:0:0">
+  <!ENTITY afour "m:0:0 s4 m:0:0">
+  <!ENTITY afive "m:0:0 s5 m:0:0">
+  <!ENTITY aseven "m:0:0 s7 m:0:0">
+  <!ENTITY anine "m:0:0 s9 m:0:0">
+
+<!-- this is used for major seventh chords only -->
+<!-- if you wish to use a triangle by itself for major seventh, then delete the &seven; here -->
+  <!ENTITY mseven "&seven;">
+
+<!-- these are used for alterations: eg, the b in C7b9 -->
+  <!ENTITY alter_flat "m:0:0 sb m:0:0">
+  <!ENTITY alter_sharp "m:0:0 s# m:0:0">
+  <!ENTITY alter_major "m:1:0 &display_amajor; m:0:0">
+
+<!-- other customizable elements -->
+
+  <!ENTITY display_augmented "m:0:-5 a u g m:0:5">
+  <!ENTITY parse_augmented "aug">
+
+  <!ENTITY plus "m:0:0 + m:0:0">
+  <!ENTITY add "m:0:2 add m:0:-2">
+  <!ENTITY alt "m:0:-5 a l t m:0:5">
+  <!ENTITY omit "m:1:-5 o m i t m:0:5">
+  <!ENTITY no "m:0:-5 n o m:0:5">
+  <!ENTITY blues "m:0:-5 letterb l u e s m:0:5">
+  <!ENTITY Tristan "m:0:-5 t r i s t a n m:0:5">
+  <!ENTITY Lyd "m:0:-5 l y d m:0:5">
+  <!ENTITY Phryg "m:0:-5 p h r y g m:0:5">
+
+  ]>
+
+<museScore version="1.11">
+
+<!--
+      Part I: font list
+            associate symbols (code points) with names
+      If no font family is given or font family is "default" then the
+      configured text style font family is used.
+-->
+
+  <font id="0" family="MuseJazz">
+
+    <sym code="0x28" name="("/>
+    <sym code="0x29" name=")"/>
+    <sym code="0x2d" name="minus"/>
+
+    <sym code="0xe180" name="ma"/>
+    <sym code="0xe181" name="mi"/>
+    <sym code="0xe182" name="s11"/>
+    <sym code="0xe183" name="s13"/>
+    <sym code="0xe184" name="dim"/>
+    <sym code="0xe185" name="sus"/>
+    <sym code="0xe186" name="+"/>
+    <sym code="0xe187" name="degree"/>
+    <sym code="0xe188" name="sb"/>
+    <sym code="0xe189" name="s#"/>
+
+    <sym code="0xe190" name="s0"/>
+    <sym code="0xe191" name="s1"/>
+    <sym code="0xe192" name="s2"/>
+    <sym code="0xe193" name="s3"/>
+    <sym code="0xe194" name="s4"/>
+    <sym code="0xe195" name="s5"/>
+    <sym code="0xe196" name="s6"/>
+    <sym code="0xe197" name="s7"/>
+    <sym code="0xe198" name="s8"/>
+    <sym code="0xe199" name="s9"/>
+
+    <sym code="0xe18a" name="triangle"/>
+
+    <sym code="0xe18d" name="sus4"/>
+    <sym code="0xe18e" name="circle"/>
+    <sym code="0xe18f" name="oslash"/>
+
+    <sym code="0xe10c" name="#"/>
+    <sym code="0xe10d" name="b"/>
+
+    <sym class="note" name="a"/>
+    <sym class="note" name="b"/>
+    <sym class="note" name="c"/>
+    <sym class="note" name="d"/>
+    <sym class="note" name="e"/>
+    <sym class="note" name="f"/>
+    <sym class="note" name="g"/>
+    <sym class="note" name="h"/>
+
+<!-- delete code parameter to render German chords with "es" and "is" -->
+    <sym code="0x266d" class="accidental" name="es"/>
+    <sym code="0x266d" class="accidental" name="s"/>
+    <sym code="0x266f" class="accidental" name="is"/>
+
+<!-- Italian / solfege chord names
+    <sym code="0xe201" name="C"/>
+    <sym code="0xe202" name="D"/>
+    <sym code="0xe203" name="E"/>
+    <sym code="0xe204" name="F"/>
+    <sym code="0xe205" name="G"/>
+    <sym code="0xe206" name="A"/>
+    <sym code="0xe207" name="B"/> -->
+
+    </font>
+
+  <font id="2" family="MuseJazz">
+    <mag>1.25</mag>
+
+    <sym code="0xe190" name="0"/>
+    <sym code="0xe191" name="1"/>
+    <sym code="0xe192" name="2"/>
+    <sym code="0xe193" name="3"/>
+    <sym code="0xe194" name="4"/>
+    <sym code="0xe195" name="5"/>
+    <sym code="0xe196" name="6"/>
+    <sym code="0xe197" name="7"/>
+    <sym code="0xe198" name="8"/>
+    <sym code="0xe199" name="9"/>
+
+    <sym code="0xe182" name="11"/>
+    <sym code="0xe183" name="13"/>
+
+    <sym code="0xe18b" name="add"/>
+    <sym code="0xe18c" name="add11"/>
+
+    </font>
+
+  <font id="108" family="MuseJazz">
+    <mag>0.8</mag>
+
+    <sym code="0x28" name="s("/>
+    <sym code="0x29" name="s)"/>
+
+    <sym code="0xe18a" name="striangle"/>
+
+    <sym class="note" name="mi"/>
+
+<!-- true lower case letters -->
+    <sym code="0x61" name="a"/>
+    <sym code="0x62" name="letterb"/>
+    <sym code="0x63" name="c"/>
+    <sym code="0x64" name="d"/>
+    <sym code="0x65" name="e"/>
+    <sym code="0x66" name="f"/>
+    <sym code="0x67" name="g"/>
+    <sym code="0x68" name="h"/>
+    <sym code="0x69" name="i"/>
+    <sym code="0x6a" name="j"/>
+    <sym code="0x6b" name="k"/>
+    <sym code="0x6c" name="l"/>
+    <sym code="0x6d" name="m"/>
+    <sym code="0x6e" name="n"/>
+    <sym code="0x6f" name="o"/>
+    <sym code="0x70" name="p"/>
+    <sym code="0x71" name="q"/>
+    <sym code="0x72" name="r"/>
+    <sym code="0x73" name="s"/>
+    <sym code="0x74" name="t"/>
+    <sym code="0x75" name="u"/>
+    <sym code="0x76" name="v"/>
+    <sym code="0x77" name="w"/>
+    <sym code="0x78" name="x"/>
+    <sym code="0x79" name="y"/>
+    <sym code="0x7a" name="z"/>
+
+    </font>
+
+  <font id="106" family="MuseJazz">
+    <mag>0.55</mag>
+
+<!-- small caps letters
+    <sym code="0x41" name="a"/>
+    <sym code="0x42" name="letterb"/>
+    <sym code="0x43" name="c"/>
+    <sym code="0x44" name="d"/>
+    <sym code="0x45" name="e"/>
+    <sym code="0x46" name="f"/>
+    <sym code="0x47" name="g"/>
+    <sym code="0x48" name="h"/>
+    <sym code="0x49" name="i"/>
+    <sym code="0x4a" name="j"/>
+    <sym code="0x4b" name="k"/>
+    <sym code="0x4c" name="l"/>
+    <sym code="0x4d" name="m"/>
+    <sym code="0x4e" name="n"/>
+    <sym code="0x4f" name="o"/>
+    <sym code="0x50" name="p"/>
+    <sym code="0x51" name="q"/>
+    <sym code="0x52" name="r"/>
+    <sym code="0x53" name="s"/>
+    <sym code="0x54" name="t"/>
+    <sym code="0x55" name="u"/>
+    <sym code="0x56" name="v"/>
+    <sym code="0x57" name="w"/>
+    <sym code="0x58" name="x"/>
+    <sym code="0x59" name="y"/>
+    <sym code="0x5a" name="z"/> -->
+
+    </font>
+
+<!--
+      Part II: chord list
+
+         id       internal chord number
+         render   this is a script which contains render commands
+                  commands:
+                        xxx         draw symbol name xxx
+                        m:x:y       add x:y (point) to current position
+                        :push
+                        :pop
+                        :n          root or base note
+                        :a          accidental
+-->
+
+  <renderRoot>:n :a </renderRoot>
+  <renderBase>/ m:0:1 :n :a m:0:-1</renderBase>
+
+  <chord id="1">
+    <name></name>
+    <render></render>
+    </chord>
+  <chord id="2">
+    <name>&parse_major;</name>
+    <render>&display_major;</render>
+    </chord>
+  <chord id="3">
+    <name>&parse_major;b5</name>
+    <render>&display_major; &alter_flat; &sfive;</render>
+    </chord>
+  <chord id="4">
+    <render>&plus;</render>
+    </chord>
+  <chord id="5">
+    <render>&six;</render>
+    </chord>
+  <chord id="6">
+    <name>&parse_major;7</name>
+    <render>&display_major; &mseven;</render>
+    </chord>
+  <chord id="7">
+    <name>&parse_major;9</name>
+    <render>&display_major; &nine;</render>
+    </chord>
+  <chord id="8">
+    <name>&parse_major;9#11</name>
+    <render>&display_major; &nine; &d_alp; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="9">
+    <name>&parse_major;13#11</name>
+    <render>&display_major; &thirteen; &d_alp; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="10">
+    <name>&parse_major;13</name>
+    <render>&display_major; &thirteen;</render>
+    </chord>
+  <chord id="11">
+    <name>&parse_major;9&p_lp;no3&p_rp;</name>
+    <render>&display_major; &nine; &d_alp; &no; &athree; &d_arp;</render>
+    </chord>
+  <chord id="12">
+    <name>&parse_augmented;</name>
+    <render>&display_augmented;</render>
+    </chord>
+  <chord id="13">
+    <name>&parse_major;7#5</name>
+    <render>&display_major; &mseven; &d_alp; &alter_sharp; &sfive; &d_arp;</render>
+    </chord>
+  <chord id="14">
+    <name>&parse_sixnine;</name>
+    <render>&display_sixnine;</render>
+    </chord>
+  <chord id="15">
+    <render>&two;</render>
+    </chord>
+  <chord id="16">
+    <name>&parse_minor;</name>
+    <render>&display_minor;</render>
+    </chord>
+  <chord id="17">
+    <name>&parse_minor;+</name>
+    <render>&display_minor; &plus;</render>
+    </chord>
+  <chord id="18">
+    <name>&parse_minor;&p_lp;&parse_major;7&p_rp;</name>
+    <render>&display_minor; &d_lp; &display_amajor; &aseven; &d_rp;</render>
+    </chord>
+  <chord id="19">
+    <name>&parse_minor;7</name>
+    <render>&display_minor; &seven;</render>
+    </chord>
+  <chord id="20">
+    <name>&parse_minor;9</name>
+    <render>&display_minor; &nine;</render>
+    </chord>
+  <chord id="21">
+    <name>&parse_minor;11</name>
+    <render>&display_minor; &eleven;</render>
+    </chord>
+  <chord id="22">
+    <name>&parse_minor;13</name>
+    <render>&display_minor; &thirteen;</render>
+    </chord>
+  <chord id="23">
+    <name>&parse_minor;6</name>
+    <render>&display_minor; &six;</render>
+    </chord>
+  <chord id="24">
+    <name>&parse_minor;#5</name>
+    <render>&display_minor; &d_alp; &alter_sharp; &sfive; &d_arp;</render>
+    </chord>
+  <chord id="25">
+    <name>&parse_minor;7#5</name>
+    <render>&display_minor; &seven; &d_alp; &alter_sharp; &sfive; &d_arp;</render>
+    </chord>
+  <chord id="26">
+    <name>&parse_minor;&parse_sixnine;</name>
+    <render>&display_minor; &display_sixnine;</render>
+    </chord>
+  <chord id="27">
+    <render>&Lyd;</render>
+    </chord>
+  <chord id="28">
+    <name>&parse_major;7Lyd</name>
+    <render>&display_major; &mseven; &Lyd;</render>
+    </chord>
+  <chord id="29">
+    <name>&parse_major;7b5</name>
+    <render>&display_major; &mseven; &d_alp; &alter_flat; &sfive; &d_arp;</render>
+    </chord>
+  <chord id="32">
+    <name>&parse_half_diminished;</name>
+    <render>&display_half_diminished;</render>
+    </chord>
+  <chord id="33">
+    <name>&parse_diminished;</name>
+    <render>&display_diminished;</render>
+    </chord>
+  <chord id="34">
+    <name>&parse_minor;9b5</name>
+    <render>&display_minor; &nine; &d_alp; &alter_flat; &sfive; &d_arp;</render>
+    </chord>
+  <chord id="40">
+    <render>5</render>
+    </chord>
+  <chord id="56">
+    <render>&seven; &plus;</render>
+    </chord>
+  <chord id="57">
+    <render>&nine; &plus;</render>
+    </chord>
+  <chord id="58">
+    <render>&thirteen; &plus;</render>
+    </chord>
+  <chord id="59">
+    <render>&d_lp; &blues; &d_rp;</render>
+    </chord>
+  <chord id="60">
+    <render>&seven; &d_lp; &blues; &d_rp;</render>
+    </chord>
+  <chord id="64">
+    <render>&seven;</render>
+    </chord>
+  <chord id="65">
+    <render>&thirteen;</render>
+    </chord>
+  <chord id="66">
+    <render>&seven; &d_alp; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="67">
+    <render>&seven; &d_alp; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="68">
+    <render>&thirteen; &d_alp; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="69">
+    <render>&seven; &d_alp; &alter_sharp; &seleven; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="70">
+    <render>&nine;</render>
+    </chord>
+  <chord id="72">
+    <render>&nine; &d_alp; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="73">
+    <render>&nine; &d_alp; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="74">
+    <render>&thirteen; &d_alp; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="75">
+    <render>&nine; &d_alp; &alter_sharp; &seleven; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="76">
+    <render>&seven; &d_alp; &alter_flat; &snine; &d_arp;</render>
+    </chord>
+  <chord id="77">
+    <render>&thirteen; &d_alp; &alter_flat; &snine; &d_arp;</render>
+    </chord>
+  <chord id="78">
+    <render>&seven; &d_alp; &alter_flat; &snine; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="79">
+    <render>&seven; &d_alp; &alter_flat; &snine; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="80">
+    <render>&thirteen; &d_alp; &alter_flat; &snine; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="81">
+    <render>&seven; &d_alp; &alter_flat; &snine; &alter_sharp; &seleven; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="82">
+    <render>&seven; &d_alp; &alter_sharp; &snine; &d_arp;</render>
+    </chord>
+  <chord id="83">
+    <render>&thirteen; &d_alp; &alter_sharp; &snine; &d_arp;</render>
+    </chord>
+  <chord id="84">
+    <render>&seven; &d_alp; &alter_sharp; &snine; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="85">
+    <render>&nine; &d_alp; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="86">
+    <render>&thirteen; &d_alp; &alter_sharp; &snine; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="87">
+    <render>&seven; &d_alp; &alter_sharp; &snine; &alter_sharp; &seleven; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="88">
+    <render>&seven; &d_alp; &alter_flat; &sfive; &d_arp;</render>
+    </chord>
+  <chord id="89">
+    <render>&thirteen; &d_alp; &alter_flat; &sfive; &d_arp;</render>
+    </chord>
+  <chord id="90">
+    <render>&seven; &d_alp; &alter_flat; &sfive; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="91">
+    <render>&nine; &d_alp; &alter_flat; &sfive; &d_arp;</render>
+    </chord>
+  <chord id="92">
+    <render>&nine; &d_alp; &alter_flat; &sfive; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="93">
+    <render>&seven; &d_alp; &alter_flat; &sfive; &alter_flat; &snine; &d_arp;</render>
+    </chord>
+  <chord id="94">
+    <render>&thirteen; &d_alp; &alter_flat; &sfive; &alter_flat; &snine; &d_arp;</render>
+    </chord>
+  <chord id="95">
+    <render>&seven; &d_alp; &alter_flat; &sfive; &alter_flat; &snine; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="96">
+    <render>&seven; &d_alp; &alter_flat; &sfive; &alter_sharp; &snine; &d_arp;</render>
+    </chord>
+  <chord id="97">
+    <render>&thirteen; &d_alp; &alter_flat; &sfive; &alter_sharp; &snine; &d_arp;</render>
+    </chord>
+  <chord id="98">
+    <render>&seven; &d_alp; &alter_flat; &sfive; &alter_sharp; &snine; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="99">
+    <render>&seven; &d_alp; &alter_sharp; &sfive; &d_arp;</render>
+    </chord>
+  <chord id="100">
+    <render>&thirteen; &d_alp; &alter_sharp; &sfive; &d_arp;</render>
+    </chord>
+  <chord id="101">
+    <render>&seven; &d_alp; &alter_sharp; &sfive; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="102">
+    <render>&thirteen; &d_alp; &alter_sharp; &sfive; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="103">
+    <render>&nine; &d_alp; &alter_sharp; &sfive; &d_arp;</render>
+    </chord>
+  <chord id="104">
+    <render>&nine; &d_alp; &alter_sharp; &sfive; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="105">
+    <render>&seven; &d_alp; &alter_sharp; &sfive; &alter_flat; &snine; &d_arp;</render>
+    </chord>
+  <chord id="106">
+    <render>&thirteen; &d_alp; &alter_sharp; &sfive; &alter_flat; &snine; &d_arp;</render>
+    </chord>
+  <chord id="107">
+    <render>&seven; &d_alp; &alter_sharp; &sfive; &alter_flat; &snine; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="108">
+    <render>&thirteen; &d_alp; &alter_sharp; &sfive; &alter_flat; &snine; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="109">
+    <render>&seven; &d_alp; &alter_sharp; &sfive; &alter_sharp; &snine; &d_arp;</render>
+    </chord>
+  <chord id="110">
+    <render>&thirteen; &d_alp; &alter_sharp; &sfive; &alter_sharp; &snine; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="111">
+    <render>&seven; &d_alp; &alter_sharp; &sfive; &alter_sharp; &snine; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="112">
+    <render>&thirteen; &d_alp; &alter_sharp; &sfive; &alter_sharp; &snine; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="113">
+    <render>&seven; &alt;</render>
+    </chord>
+  <chord id="128">
+    <render>&seven; &display_suspended4_pre; &display_suspended4_post;</render>
+    </chord>
+  <chord id="129">
+    <render>&thirteen; &display_suspended4_pre; &display_suspended4_post;</render>
+    </chord>
+  <chord id="130">
+    <name>7&parse_suspended4_pre;b13&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_flat; &sthirteen; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="131">
+    <name>7&parse_suspended4_pre;#11&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="132">
+    <name>13&parse_suspended4_pre;#11&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="133">
+    <name>7&parse_suspended4_pre;#11b13&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_sharp; &seleven; &alter_flat; &sthirteen; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="134">
+    <render>&nine; &display_suspended4_pre; &display_suspended4_post;</render>
+    </chord>
+  <chord id="135">
+    <name>9&parse_suspended4_pre;b13&parse_suspended4_post;</name>
+    <render>&nine; &display_suspended4_pre; &d_alp; &alter_flat; &sthirteen; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="136">
+    <name>9&parse_suspended4_pre;#11&parse_suspended4_post;</name>
+    <render>&nine; &display_suspended4_pre; &d_alp; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="137">
+    <name>13&parse_suspended4_pre;#11&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="138">
+    <name>13&parse_suspended4_pre;#11&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="139">
+    <name>9&parse_suspended4_pre;#11b13&parse_suspended4_post;</name>
+    <render>&nine; &display_suspended4_pre; &d_alp; &alter_sharp; &seleven; &alter_flat; &sthirteen; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="140">
+    <name>7&parse_suspended4_pre;b9&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_flat; &snine; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="141">
+    <name>13&parse_suspended4_pre;b9&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_flat; &snine; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="142">
+    <name>7&parse_suspended4_pre;b9b13&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_flat; &snine; &alter_flat; &sthirteen; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="143">
+    <name>7&parse_suspended4_pre;b9#11&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_flat; &snine; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="144">
+    <name>13&parse_suspended4_pre;b9#11&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_flat; &snine; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="145">
+    <name>7&parse_suspended4_pre;b9#11b13&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_flat; &snine; &alter_sharp; &seleven; &alter_flat; &sthirteen; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="146">
+    <name>7&parse_suspended4_pre;#9&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_sharp; &snine; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="147">
+    <name>13&parse_suspended4_pre;#9&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_sharp; &snine; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="148">
+    <name>7&parse_suspended4_pre;#9b13&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_sharp; &snine; &alter_flat; &sthirteen; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="149">
+    <name>9&parse_suspended4_pre;#11&parse_suspended4_post;</name>
+    <render>&nine; &display_suspended4_pre; &d_alp; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="150">
+    <name>13&parse_suspended4_pre;#9#11&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_sharp; &snine; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="151">
+    <name>7&parse_suspended4_pre;#9#11b13&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_sharp; &snine; &alter_sharp; &seleven; &alter_flat; &sthirteen; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="152">
+    <name>7&parse_suspended4_pre;b5&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_flat; &sfive; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="153">
+    <name>13&parse_suspended4_pre;b5&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_flat; &sfive; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="154">
+    <name>7&parse_suspended4_pre;b5b13&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_flat; &sfive; &alter_flat; &sthirteen; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="155">
+    <name>9&parse_suspended4_pre;b5&parse_suspended4_post;</name>
+    <render>&nine; &display_suspended4_pre; &d_alp; &alter_flat; &sfive; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="156">
+    <name>9&parse_suspended4_pre;b5b13&parse_suspended4_post;</name>
+    <render>&nine; &display_suspended4_pre; &d_alp; &alter_flat; &sfive; &alter_flat; &sthirteen; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="157">
+    <name>7&parse_suspended4_pre;b5b9&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_flat; &sfive; &alter_flat; &snine; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="158">
+    <name>13&parse_suspended4_pre;b5b9&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_flat; &sfive; &alter_flat; &snine; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="159">
+    <name>7&parse_suspended4_pre;b5b913&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_flat; &sfive; &alter_flat; &snine; &alter_flat; &sthirteen; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="160">
+    <name>7&parse_suspended4_pre;b5#9&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_flat; &sfive; &alter_sharp; &snine; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="161">
+    <name>13&parse_suspended4_pre;b5#9&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_flat; &sfive; &alter_sharp; &snine; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="162">
+    <name>7&parse_suspended4_pre;b5#9b13&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_flat; &sfive; &alter_sharp; &snine; &alter_flat; &sthirteen; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="163">
+    <name>7&parse_suspended4_pre;#5&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_sharp; &sfive; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="164">
+    <name>13&parse_suspended4_pre;#5&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_sharp; &sfive; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="165">
+    <name>7&parse_suspended4_pre;#5#11&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_sharp; &sfive; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="166">
+    <name>13&parse_suspended4_pre;#5#11&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_sharp; &sfive; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="167">
+    <name>9&parse_suspended4_pre;#5&parse_suspended4_post;</name>
+    <render>&nine; &display_suspended4_pre; &d_alp; &alter_sharp; &sfive; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="168">
+    <name>9&parse_suspended4_pre;#5#11&parse_suspended4_post;</name>
+    <render>&nine; &display_suspended4_pre; &d_alp; &alter_sharp; &sfive; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="169">
+    <name>7&parse_suspended4_pre;#5b9&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_sharp; &sfive; &alter_flat; &snine; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="170">
+    <name>13&parse_suspended4_pre;#5b9&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_sharp; &sfive; &alter_flat; &snine; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="171">
+    <name>7&parse_suspended4_pre;#5b9#11&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_sharp; &sfive; &alter_flat; &snine; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="172">
+    <name>13&parse_suspended4_pre;#5b9#11</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_sharp; &sfive; &alter_flat; &snine; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="173">
+    <name>7&parse_suspended4_pre;#5#9&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_sharp; &sfive; &alter_sharp; &snine; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="174">
+    <name>13&parse_suspended4_pre;#5#9#11&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_sharp; &sfive; &alter_sharp; &snine; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="175">
+    <name>7&parse_suspended4_pre;#5#9#11&parse_suspended4_post;</name>
+    <render>&seven; &display_suspended4_pre; &d_alp; &alter_sharp; &sfive; &alter_sharp; &snine; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="176">
+    <name>13&parse_suspended4_pre;#5#9#11&parse_suspended4_post;</name>
+    <render>&thirteen; &display_suspended4_pre; &d_alp; &alter_sharp; &sfive; &alter_sharp; &snine; &alter_sharp; &seleven; &d_arp; &display_suspended4_post;</render>
+    </chord>
+  <chord id="177">
+    <render>&four;</render>
+    </chord>
+  <chord id="184">
+    <name>&parse_suspended;</name>
+    <render>&display_suspended;</render>
+    </chord>
+  <chord id="185">
+    <name>&parse_diminished;7</name>
+    <render>&display_diminished; &seven;</render>
+    </chord>
+  <chord id="186">
+    <render>&display_suspended; &atwo;</render>
+    </chord>
+  <chord id="187">
+    <name>&parse_minor;addb13</name>
+    <render>&display_minor; &d_alp; &add; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="188">
+    <name>add#13</name>
+    <render>&d_alp; &add; &alter_sharp; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="189">
+    <render>&d_alp; &add; &alter_sharp; &seleven; &alter_sharp; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="190">
+    <render>&d_alp; &add; &alter_sharp; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="191">
+    <render>&six; &d_alp; &add; &snine; &d_arp;</render>
+    </chord>
+  <chord id="192">
+    <render>&display_suspended; &afour;</render>
+    </chord>
+  <chord id="193">
+    <render>&eleven;</render>
+    </chord>
+  <chord id="194">
+    <name>&parse_major;11</name>
+    <render>&display_major; &eleven;</render>
+    </chord>
+  <chord id="195">
+    <render>&Tristan;</render>
+    </chord>
+  <chord id="196">
+    <name>&parse_minor;7add11</name>
+    <render>&display_minor; &seven; &d_alp; &add; &seleven; &d_arp;</render>
+    </chord>
+  <chord id="197">
+    <name>&parse_major;7add13</name>
+    <render>&display_major; &mseven; &d_alp; &add; &sthirteen; &d_arp;</render>
+    </chord>
+  <chord id="198">
+    <name>&parse_minor;add9</name>
+    <render>&display_minor; &d_alp; &add; &snine; &d_arp;</render>
+    </chord>
+  <chord id="199">
+    <name>&parse_minor;&p_lp;&parse_major;9&p_rp;</name>
+    <render>&display_minor; &d_lp; &display_amajor; &anine; &d_rp;</render>
+    </chord>
+  <chord id="200">
+    <render>&five;</render>
+    </chord>
+  <chord id="201">
+    <name>&parse_minor;11b5</name>
+    <render>&display_minor; &eleven; &d_alp; &alter_flat; &sfive; &d_arp;</render>
+    </chord>
+  <chord id="202">
+    <name>&parse_diminished;7add&parse_major;7</name>
+    <render>&display_diminished; &seven; &d_alp; &add; &alter_major; &sseven; &d_arp;</render>
+    </chord>
+  <chord id="203">
+    <name>&parse_augmented;add9</name>
+    <render>&display_augmented; &d_alp; &add; &snine; &d_arp;</render>
+    </chord>
+  <chord id="204">
+    <render>&d_alp; &omit; &afive; &d_arp;</render>
+    </chord>
+  <chord id="205">
+    <name>&parse_augmented;7</name>
+    <render>&display_augmented; &seven;</render>
+    </chord>
+  <chord id="206">
+    <name>&parse_augmented;9</name>
+    <render>&display_augmented; &nine;</render>
+    </chord>
+  <chord id="207">
+    <name>&parse_augmented;13</name>
+    <render>&display_augmented; &thirteen;</render>
+    </chord>
+
+  <chord id="210">
+    <name>&parse_major;7#11</name>
+    <xml>major-seventh</xml>
+    <degree>add#11</degree>
+    <voicing>C E G B F#</voicing>
+    <render>&display_major; &mseven; &d_alp; &alter_sharp; &seleven; &d_arp;</render>
+    </chord>
+
+  <chord id="211">
+    <name>&parse_major;9#5</name>
+    <xml>major-ninth</xml>
+    <degree>alt#5</degree>
+    <voicing>C E G# B D</voicing>
+    <render>&display_major; &nine; &d_alp; &alter_sharp; &sfive; &d_arp;</render>
+    </chord>
+
+  <chord id="212">
+    <name>&parse_major;7#9</name>
+    <xml>major-seventh</xml>
+    <degree>add#9</degree>
+    <voicing>C E G B D#</voicing>
+    <render>&display_major; &mseven; &d_alp; &alter_sharp; &snine; &d_arp;</render>
+    </chord>
+
+  <chord id="213">
+    <name>add2</name>
+    <xml>major</xml>
+    <degree>add9</degree>
+    <voicing>C D E G</voicing>
+    <render>&d_alp; &add; &stwo; &d_arp;</render>
+    </chord>
+
+  <chord id="214">
+    <name>add9</name>
+    <xml>major</xml>
+    <degree>add9</degree>
+    <voicing>C D E G</voicing>
+    <render>&d_alp; &add; &snine; &d_arp;</render>
+    </chord>
+
+  <chord id="215">
+    <!-- must enter "sus" before "b9" or else it would be parsed Cb 9sus rather than C b9 sus -->
+    <!-- alternative would be to enter (b9)sus; you may edit this entry by hand if you prefer that -->
+    <name>&parse_suspended4_pre;&parse_suspended4_post;b9</name>
+    <xml>suspended-fourth</xml>
+    <degree>addb9</degree>
+    <voicing>C Db F G</voicing>
+    <render>&display_suspended4_pre; &display_suspended4_post; &d_alp; &alter_flat; &snine; &d_arp;</render>
+    </chord>
+
+  <chord id="216">
+    <name>&parse_major;7&parse_suspended4_pre;&parse_suspended4_post;</name>
+    <xml>major-seventh</xml>
+    <degree>sub3</degree>
+    <degree>add4</degree>
+    <voicing>C F G B</voicing>
+    <render>&display_major; &mseven; &display_suspended4_pre; &display_suspended4_post;</render>
+    </chord>
+
+  <chord id="217">
+    <name>&parse_major;9&parse_suspended4_pre;&parse_suspended4_post;</name>
+    <xml>major-ninth</xml>
+    <degree>sub3</degree>
+    <degree>add4</degree>
+    <voicing>C F G B D</voicing>
+    <render>&display_major; &nine; &display_suspended4_pre; &display_suspended4_post;</render>
+    </chord>
+
+  <chord id="220">
+    <name>&parse_minor;7b9</name>
+    <xml>minor-seventh</xml>
+    <degree>addb9</degree>
+    <voicing>C Eb G Bb Db</voicing>
+    <render>&display_minor; &seven; &d_alp; &alter_flat; &snine; &d_arp;</render>
+    </chord>
+
+  <chord id="221">
+    <name>&parse_minor;7b13</name>
+    <xml>minor-seventh</xml>
+    <degree>addb13</degree>
+    <voicing>C Eb G Bb Ab</voicing>
+    <render>&display_minor; &seven; &d_alp; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+
+  <chord id="222">
+    <name>Phryg</name>
+    <xml>minor-seventh</xml>
+    <degree>addb9</degree>
+    <degree>add4</degree>
+    <voicing>C Db Eb F G Bb</voicing>
+    <render>&Phryg;</render>
+    </chord>
+
+  <chord id="223">
+    <name>&parse_minor;add2</name>
+    <xml>minor</xml>
+    <degree>add9</degree>
+    <voicing>C D Eb G</voicing>
+    <render>&display_minor; &d_alp; &add; &stwo; &d_arp;</render>
+    </chord>
+
+  <chord id="230">
+    <name>7b9#9</name>
+    <xml>dominant</xml>
+    <degree>addb9</degree>
+    <degree>add#9</degree>
+    <voicing>C E G Bb Db D#</voicing>
+    <render>&seven; &d_alp; &alter_flat; &snine; &alter_sharp; &snine; &d_arp;</render>
+    </chord>
+
+  <chord id="240">
+    <name>&parse_suspended;#4</name>
+    <xml>major</xml>
+    <degree>sub3</degree>
+    <degree>add#4</degree>
+    <voicing>C F# G</voicing>
+    <render>&display_suspended; &alter_sharp; &sfour;</render>
+    </chord>
+
+  <chord id="241">
+    <name>&parse_major;7b13</name>
+    <xml>major-seventh</xml>
+    <degree>addb13</degree>
+    <voicing>C E G B Ab</voicing>
+    <render>&display_major; &mseven; &d_alp; &alter_flat; &sthirteen; &d_arp;</render>
+    </chord>
+
+  </museScore>

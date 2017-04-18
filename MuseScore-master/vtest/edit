@@ -1,0 +1,9 @@
+#!/bin/sh
+
+#
+# edit file
+#
+
+MSCORE=../build.debug/mscore/mscore
+$MSCORE $1.mscz
+

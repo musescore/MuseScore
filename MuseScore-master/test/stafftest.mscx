@@ -1,0 +1,1864 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.23">
+  <programVersion>2.0.0</programVersion>
+  <programRevision>4708M</programRevision>
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <SyntiSettings>
+      <s name="soundfont" val="/usr/local/share/mscore-2.0/sound/TimGM6mb.sf2"/>
+      <f name="RevRoomsize" val="0.84"/>
+      <f name="RevDamp" val="0.2"/>
+      <f name="RevWidth" val="1"/>
+      <f name="RevGain" val="0"/>
+      <f name="ChoType" val="0"/>
+      <f name="ChoSpeed" val="0.002"/>
+      <f name="ChoDepth" val="0.8"/>
+      <f name="ChoBlocks" val="0.03"/>
+      <f name="ChoGain" val="2.00762"/>
+      </SyntiSettings>
+    <Division>480</Division>
+    <Style>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <StaffType idx="3" group="pitched">
+      <name>Pitched 5 lines</name>
+      </StaffType>
+    <StaffType idx="4" group="tablature">
+      <name>Tab</name>
+      <lines>6</lines>
+      <lineDistance>1.5</lineDistance>
+      <durations>0</durations>
+      <durationFontName>MScoreTabulatureModern</durationFontName>
+      <durationFontSize>15</durationFontSize>
+      <durationFontY>0</durationFontY>
+      <fretFontName>MScoreTabulatureModern</fretFontName>
+      <fretFontSize>10</fretFontSize>
+      <fretFontY>0</fretFontY>
+      <linesThrough>0</linesThrough>
+      <onLines>1</onLines>
+      <timesig>0</timesig>
+      <upsideDown>0</upsideDown>
+      <useNumbers>1</useNumbers>
+      </StaffType>
+    <StaffType idx="5" group="percussion">
+      <name>Percussion 5 lines</name>
+      <keysig>0</keysig>
+      </StaffType>
+    <StaffType idx="6" group="percussion">
+      <name>percussion1</name>
+      <lines>1</lines>
+      <keysig>0</keysig>
+      </StaffType>
+    <StaffType idx="7" group="percussion">
+      <name>percussion2</name>
+      <lines>2</lines>
+      <lineDistance>2</lineDistance>
+      <keysig>0</keysig>
+      </StaffType>
+    <StaffType idx="8" group="percussion">
+      <name>percussion3</name>
+      <lines>3</lines>
+      <lineDistance>2</lineDistance>
+      <keysig>0</keysig>
+      </StaffType>
+    <StaffType idx="9" group="percussion">
+      <name>percussion4</name>
+      <lines>4</lines>
+      <keysig>0</keysig>
+      </StaffType>
+    <StaffType idx="10" group="percussion">
+      <name>percussion5</name>
+      <keysig>0</keysig>
+      </StaffType>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <page-layout>
+      <page-height>1683.78</page-height>
+      <page-width>1190.55</page-width>
+      <page-margins type="even">
+        <left-margin>56.6929</left-margin>
+        <right-margin>56.6929</right-margin>
+        <top-margin>56.6929</top-margin>
+        <bottom-margin>113.386</bottom-margin>
+        </page-margins>
+      <page-margins type="odd">
+        <left-margin>56.6929</left-margin>
+        <right-margin>56.6929</right-margin>
+        <top-margin>56.6929</top-margin>
+        <bottom-margin>113.386</bottom-margin>
+        </page-margins>
+      </page-layout>
+    <metaTag name="workTitle">stafftest</metaTag>
+    <PageList>
+      <Page>
+        </Page>
+      </PageList>
+    <Part>
+      <Staff id="1">
+        <type>6</type>
+        <bracket type="0" span="5"/>
+        <barLineSpan>5</barLineSpan>
+        </Staff>
+      <trackName>Drumset 5 lines</trackName>
+      <Instrument>
+        <longName pos="0">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body>
+<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /><!--EndFragment--></p></body></html>
+          </longName>
+        <shortName pos="0">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Drs.<!--EndFragment--></p></body></html>
+          </shortName>
+        <trackName>Drumset 5 lines</trackName>
+        <useDrumset>1</useDrumset>
+        <Drum pitch="35">
+          <head>0</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Acoustic Bass Drum</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="36">
+          <head>0</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Bass Drum</name>
+          <stem>2</stem>
+          <shortcut>C</shortcut>
+          </Drum>
+        <Drum pitch="37">
+          <head>1</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Side Stick</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="38">
+          <head>0</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Snare (Acoustic)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="40">
+          <head>0</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Snare (Electric)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="41">
+          <head>0</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Tom 5</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="42">
+          <head>1</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Hi-Hat Closed</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="43">
+          <head>0</head>
+          <line>5</line>
+          <voice>1</voice>
+          <name>Tom 4</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="44">
+          <head>1</head>
+          <line>9</line>
+          <voice>1</voice>
+          <name>Hi-Hat Pedal</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="45">
+          <head>0</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Tom 3</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="46">
+          <head>1</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Hi-Hat Open</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="47">
+          <head>0</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Tom 2</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="48">
+          <head>0</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Tom 1</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="49">
+          <head>1</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Crash 1</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="50">
+          <head>0</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="51">
+          <head>1</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride</name>
+          <stem>1</stem>
+          <shortcut>D</shortcut>
+          </Drum>
+        <Drum pitch="52">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>China</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="53">
+          <head>2</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="54">
+          <head>2</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Tambourine</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="55">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="56">
+          <head>3</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="57">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="59">
+          <head>1</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="63">
+          <head>1</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>open high conga</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="64">
+          <head>1</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>low conga</name>
+          <stem>1</stem>
+          </Drum>
+        <Channel>
+          <controller tick="0" channel="0" ctrl="0" value="1"/>
+          <controller tick="0" channel="0" ctrl="32" value="0"/>
+          <program tick="0" channel="0" value="0"/>
+          <controller tick="0" channel="0" ctrl="7" value="100"/>
+          <controller tick="0" channel="0" ctrl="10" value="64"/>
+          <controller tick="0" channel="0" ctrl="93" value="30"/>
+          <controller tick="0" channel="0" ctrl="91" value="30"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="2">
+        <type>7</type>
+        <bracket type="-1" span="0"/>
+        <barLineSpan>0</barLineSpan>
+        </Staff>
+      <trackName>Drumset 5 lines</trackName>
+      <Instrument>
+        <longName pos="0">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body>
+<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /><!--EndFragment--></p></body></html>
+          </longName>
+        <shortName pos="0">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Drs.<!--EndFragment--></p></body></html>
+          </shortName>
+        <trackName>Drumset 5 lines</trackName>
+        <useDrumset>1</useDrumset>
+        <Drum pitch="35">
+          <head>0</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Acoustic Bass Drum</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="36">
+          <head>0</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Bass Drum</name>
+          <stem>2</stem>
+          <shortcut>C</shortcut>
+          </Drum>
+        <Drum pitch="37">
+          <head>1</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Side Stick</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="38">
+          <head>0</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Snare (Acoustic)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="40">
+          <head>0</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Snare (Electric)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="41">
+          <head>0</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Tom 5</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="42">
+          <head>1</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Hi-Hat Closed</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="43">
+          <head>0</head>
+          <line>5</line>
+          <voice>1</voice>
+          <name>Tom 4</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="44">
+          <head>1</head>
+          <line>9</line>
+          <voice>1</voice>
+          <name>Hi-Hat Pedal</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="45">
+          <head>0</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Tom 3</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="46">
+          <head>1</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Hi-Hat Open</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="47">
+          <head>0</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Tom 2</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="48">
+          <head>0</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Tom 1</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="49">
+          <head>1</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Crash 1</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="50">
+          <head>0</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="51">
+          <head>1</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride</name>
+          <stem>1</stem>
+          <shortcut>D</shortcut>
+          </Drum>
+        <Drum pitch="52">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>China</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="53">
+          <head>2</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="54">
+          <head>2</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Tambourine</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="55">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="56">
+          <head>3</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="57">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="59">
+          <head>1</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="63">
+          <head>1</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>open high conga</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="64">
+          <head>1</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>low conga</name>
+          <stem>1</stem>
+          </Drum>
+        <Channel>
+          <controller tick="0" channel="0" ctrl="0" value="1"/>
+          <controller tick="0" channel="0" ctrl="32" value="0"/>
+          <program tick="0" channel="0" value="0"/>
+          <controller tick="0" channel="0" ctrl="7" value="100"/>
+          <controller tick="0" channel="0" ctrl="10" value="64"/>
+          <controller tick="0" channel="0" ctrl="93" value="30"/>
+          <controller tick="0" channel="0" ctrl="91" value="30"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="3">
+        <type>8</type>
+        <bracket type="-1" span="0"/>
+        <barLineSpan>0</barLineSpan>
+        </Staff>
+      <trackName>Drumset 5 lines</trackName>
+      <Instrument>
+        <longName pos="0">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body>
+<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /><!--EndFragment--></p></body></html>
+          </longName>
+        <shortName pos="0">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Drs.<!--EndFragment--></p></body></html>
+          </shortName>
+        <trackName>Drumset 5 lines</trackName>
+        <useDrumset>1</useDrumset>
+        <Drum pitch="35">
+          <head>0</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Acoustic Bass Drum</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="36">
+          <head>0</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Bass Drum</name>
+          <stem>2</stem>
+          <shortcut>C</shortcut>
+          </Drum>
+        <Drum pitch="37">
+          <head>1</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Side Stick</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="38">
+          <head>0</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Snare (Acoustic)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="40">
+          <head>0</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Snare (Electric)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="41">
+          <head>0</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Tom 5</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="42">
+          <head>1</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Hi-Hat Closed</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="43">
+          <head>0</head>
+          <line>5</line>
+          <voice>1</voice>
+          <name>Tom 4</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="44">
+          <head>1</head>
+          <line>9</line>
+          <voice>1</voice>
+          <name>Hi-Hat Pedal</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="45">
+          <head>0</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Tom 3</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="46">
+          <head>1</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Hi-Hat Open</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="47">
+          <head>0</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Tom 2</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="48">
+          <head>0</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Tom 1</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="49">
+          <head>1</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Crash 1</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="50">
+          <head>0</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="51">
+          <head>1</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride</name>
+          <stem>1</stem>
+          <shortcut>D</shortcut>
+          </Drum>
+        <Drum pitch="52">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>China</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="53">
+          <head>2</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="54">
+          <head>2</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Tambourine</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="55">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="56">
+          <head>3</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="57">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="59">
+          <head>1</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="63">
+          <head>1</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>open high conga</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="64">
+          <head>1</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>low conga</name>
+          <stem>1</stem>
+          </Drum>
+        <Channel>
+          <controller tick="0" channel="0" ctrl="0" value="1"/>
+          <controller tick="0" channel="0" ctrl="32" value="0"/>
+          <program tick="0" channel="0" value="0"/>
+          <controller tick="0" channel="0" ctrl="7" value="100"/>
+          <controller tick="0" channel="0" ctrl="10" value="64"/>
+          <controller tick="0" channel="0" ctrl="93" value="30"/>
+          <controller tick="0" channel="0" ctrl="91" value="30"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="4">
+        <type>9</type>
+        <bracket type="-1" span="0"/>
+        <barLineSpan>0</barLineSpan>
+        </Staff>
+      <trackName>Drumset 5 lines</trackName>
+      <Instrument>
+        <longName pos="0">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body>
+<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /><!--EndFragment--></p></body></html>
+          </longName>
+        <shortName pos="0">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Drs.<!--EndFragment--></p></body></html>
+          </shortName>
+        <trackName>Drumset 5 lines</trackName>
+        <useDrumset>1</useDrumset>
+        <Drum pitch="35">
+          <head>0</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Acoustic Bass Drum</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="36">
+          <head>0</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Bass Drum</name>
+          <stem>2</stem>
+          <shortcut>C</shortcut>
+          </Drum>
+        <Drum pitch="37">
+          <head>1</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Side Stick</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="38">
+          <head>0</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Snare (Acoustic)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="40">
+          <head>0</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Snare (Electric)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="41">
+          <head>0</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Tom 5</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="42">
+          <head>1</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Hi-Hat Closed</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="43">
+          <head>0</head>
+          <line>5</line>
+          <voice>1</voice>
+          <name>Tom 4</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="44">
+          <head>1</head>
+          <line>9</line>
+          <voice>1</voice>
+          <name>Hi-Hat Pedal</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="45">
+          <head>0</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Tom 3</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="46">
+          <head>1</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Hi-Hat Open</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="47">
+          <head>0</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Tom 2</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="48">
+          <head>0</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Tom 1</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="49">
+          <head>1</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Crash 1</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="50">
+          <head>0</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="51">
+          <head>1</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride</name>
+          <stem>1</stem>
+          <shortcut>D</shortcut>
+          </Drum>
+        <Drum pitch="52">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>China</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="53">
+          <head>2</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="54">
+          <head>2</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Tambourine</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="55">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="56">
+          <head>3</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="57">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="59">
+          <head>1</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="63">
+          <head>1</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>open high conga</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="64">
+          <head>1</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>low conga</name>
+          <stem>1</stem>
+          </Drum>
+        <Channel>
+          <controller tick="0" channel="0" ctrl="0" value="1"/>
+          <controller tick="0" channel="0" ctrl="32" value="0"/>
+          <program tick="0" channel="0" value="0"/>
+          <controller tick="0" channel="0" ctrl="7" value="100"/>
+          <controller tick="0" channel="0" ctrl="10" value="64"/>
+          <controller tick="0" channel="0" ctrl="93" value="30"/>
+          <controller tick="0" channel="0" ctrl="91" value="30"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="5">
+        <type>10</type>
+        <bracket type="-1" span="0"/>
+        <barLineSpan>0</barLineSpan>
+        </Staff>
+      <trackName>Drumset 5 lines</trackName>
+      <Instrument>
+        <longName pos="0">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body>
+<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /><!--EndFragment--></p></body></html>
+          </longName>
+        <shortName pos="0">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body>
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Drs.<!--EndFragment--></p></body></html>
+          </shortName>
+        <trackName>Drumset 5 lines</trackName>
+        <useDrumset>1</useDrumset>
+        <Drum pitch="35">
+          <head>0</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Acoustic Bass Drum</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="36">
+          <head>0</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Bass Drum</name>
+          <stem>2</stem>
+          <shortcut>C</shortcut>
+          </Drum>
+        <Drum pitch="37">
+          <head>1</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Side Stick</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="38">
+          <head>0</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Snare (Acoustic)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="40">
+          <head>0</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Snare (Electric)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="41">
+          <head>0</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Tom 5</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="42">
+          <head>1</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Hi-Hat Closed</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="43">
+          <head>0</head>
+          <line>5</line>
+          <voice>1</voice>
+          <name>Tom 4</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="44">
+          <head>1</head>
+          <line>9</line>
+          <voice>1</voice>
+          <name>Hi-Hat Pedal</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="45">
+          <head>0</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Tom 3</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="46">
+          <head>1</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Hi-Hat Open</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="47">
+          <head>0</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Tom 2</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="48">
+          <head>0</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Tom 1</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="49">
+          <head>1</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Crash 1</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="50">
+          <head>0</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="51">
+          <head>1</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride</name>
+          <stem>1</stem>
+          <shortcut>D</shortcut>
+          </Drum>
+        <Drum pitch="52">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>China</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="53">
+          <head>2</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="54">
+          <head>2</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Tambourine</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="55">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="56">
+          <head>3</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="57">
+          <head>1</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="59">
+          <head>1</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Ride (Bell)</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="63">
+          <head>1</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>open high conga</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="64">
+          <head>1</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>low conga</name>
+          <stem>1</stem>
+          </Drum>
+        <Channel>
+          <controller tick="0" channel="0" ctrl="0" value="1"/>
+          <controller tick="0" channel="0" ctrl="32" value="0"/>
+          <program tick="0" channel="0" value="0"/>
+          <controller tick="0" channel="0" ctrl="7" value="100"/>
+          <controller tick="0" channel="0" ctrl="10" value="64"/>
+          <controller tick="0" channel="0" ctrl="93" value="30"/>
+          <controller tick="0" channel="0" ctrl="91" value="30"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <Text>
+          <style>Title</style>
+          <subtype>Title</subtype>
+          <text>stafftest</text>
+          </Text>
+        </VBox>
+      <Measure number="1">
+        <Clef>
+          <concertClefType>PERC2</concertClefType>
+          <transposingClefType>PERC2</transposingClefType>
+          <subtype>PERC2</subtype>
+          </Clef>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Tempo>
+          <tempo>1.66667</tempo>
+          <style>Tempo</style>
+          <subtype>Tempo</subtype>
+          <text>𝅘𝅥 = 100</text>
+          </Tempo>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <startRepeat/>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="5">
+        <endRepeat>2</endRepeat>
+        <Rest>
+          <selected>1</selected>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="6">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="7">
+        <endRepeat>2</endRepeat>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="8">
+        <startRepeat/>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="9">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="10">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="11">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="12">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="13">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="14">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="15">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="16">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="17">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="18">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="19">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="20">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="21">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <span>5</span>
+          <subtype>end</subtype>
+          </BarLine>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>PERC2</concertClefType>
+          <transposingClefType>PERC2</transposingClefType>
+          <subtype>PERC2</subtype>
+          </Clef>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="5">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="6">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="7">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="8">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="9">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="10">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="11">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="12">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="13">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="14">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="15">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="16">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="17">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="18">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="19">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="20">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="21">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      </Staff>
+    <Staff id="3">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>PERC2</concertClefType>
+          <transposingClefType>PERC2</transposingClefType>
+          <subtype>PERC2</subtype>
+          </Clef>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="5">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="6">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="7">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="8">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="9">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="10">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="11">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="12">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="13">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="14">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="15">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="16">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="17">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="18">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="19">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="20">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="21">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      </Staff>
+    <Staff id="4">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>PERC2</concertClefType>
+          <transposingClefType>PERC2</transposingClefType>
+          <subtype>PERC2</subtype>
+          </Clef>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="5">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="6">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="7">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="8">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="9">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="10">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="11">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="12">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="13">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="14">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="15">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="16">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="17">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="18">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="19">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="20">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="21">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      </Staff>
+    <Staff id="5">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>PERC2</concertClefType>
+          <transposingClefType>PERC2</transposingClefType>
+          <subtype>PERC2</subtype>
+          </Clef>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="5">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="6">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="7">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="8">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="9">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="10">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="11">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="12">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="13">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="14">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="15">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="16">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="17">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="18">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="19">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="20">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="21">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      </Staff>
+    <cursorTrack>0</cursorTrack>
+    </Score>
+  </museScore>

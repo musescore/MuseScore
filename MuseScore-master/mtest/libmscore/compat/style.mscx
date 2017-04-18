@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.14">
+  <programVersion>1.3</programVersion>
+  <programRevision>5702
+</programRevision>
+  <Spatium>1.764</Spatium>
+  <Division>480</Division>
+  <Style>
+    <staffUpperBorder>6</staffUpperBorder>
+    <staffLowerBorder>6</staffLowerBorder>
+    <staffDistance>6</staffDistance>
+    <akkoladeDistance>6.4</akkoladeDistance>
+    <systemDistance>8.2</systemDistance>
+    <lyricsDistance>1.5</lyricsDistance>
+    <lyricsMinBottomDistance>1.5</lyricsMinBottomDistance>
+    <systemFrameDistance>6</systemFrameDistance>
+    <frameSystemDistance>0</frameSystemDistance>
+    <repeatBarTips>1</repeatBarTips>
+    <startBarlineSingle>1</startBarlineSingle>
+    <startBarlineMultiple>0</startBarlineMultiple>
+    <bracketDistance>0.3</bracketDistance>
+    <clefLeftMargin>0.6</clefLeftMargin>
+    <keysigLeftMargin>0.6</keysigLeftMargin>
+    <timesigLeftMargin>0.6</timesigLeftMargin>
+    <clefKeyRightMargin>1.8</clefKeyRightMargin>
+    <clefBarlineDistance>0.19</clefBarlineDistance>
+    <shortenStem>0</shortenStem>
+    <shortStemProgression>0.3</shortStemProgression>
+    <shortestStem>2.5</shortestStem>
+    <beginRepeatLeftMargin>2</beginRepeatLeftMargin>
+    <minNoteDistance>0.5</minNoteDistance>
+    <barNoteDistance>1.3</barNoteDistance>
+    <noteBarDistance>1.1</noteBarDistance>
+    <measureSpacing>1.3</measureSpacing>
+    <ledgerLineWidth>0.13</ledgerLineWidth>
+    <accidentalDistance>0.23</accidentalDistance>
+    <accidentalNoteDistance>0.23</accidentalNoteDistance>
+    <beamWidth>0.49</beamWidth>
+    <beamDistance>0.6</beamDistance>
+    <beamMinLen>1.3</beamMinLen>
+    <beamMinSlope>0.1</beamMinSlope>
+    <beamMaxSlope>0.25</beamMaxSlope>
+    <dotNoteDistance>0.45</dotNoteDistance>
+    <dotDotDistance>0.6</dotDotDistance>
+    <propertyDistanceHead>1.1</propertyDistanceHead>
+    <propertyDistanceStem>0.6</propertyDistanceStem>
+    <propertyDistance>1.1</propertyDistance>
+    <pageFillLimit>0.69</pageFillLimit>
+    <lastSystemFillLimit>0.29</lastSystemFillLimit>
+    <hairpinHeight>1.3</hairpinHeight>
+    <hairpinContHeight>0.6</hairpinContHeight>
+    <hairpinWidth>0.14</hairpinWidth>
+    <showPageNumber>0</showPageNumber>
+    <showPageNumberOne>1</showPageNumberOne>
+    <pageNumberOddEven>0</pageNumberOddEven>
+    <showMeasureNumber>0</showMeasureNumber>
+    <showMeasureNumberOne>1</showMeasureNumberOne>
+    <measureNumberSystem>0</measureNumberSystem>
+    <measureNumberAllStaffs>1</measureNumberAllStaffs>
+    <smallNoteMag>0.71</smallNoteMag>
+    <graceNoteMag>0.71</graceNoteMag>
+    <smallStaffMag>0.71</smallStaffMag>
+    <smallClefMag>0.81</smallClefMag>
+    <genClef>0</genClef>
+    <genKeysig>0</genKeysig>
+    <genTimesig>0</genTimesig>
+    <genCourtesyTimesig>0</genCourtesyTimesig>
+    <genCourtesyKeysig>0</genCourtesyKeysig>
+    <useGermanNoteNames>1</useGermanNoteNames>
+    <concertPitch>1</concertPitch>
+    <createMultiMeasureRests>1</createMultiMeasureRests>
+    <minEmptyMeasures>3</minEmptyMeasures>
+    <minMMRestWidth>3</minMMRestWidth>
+    <hideEmptyStaves>1</hideEmptyStaves>
+    <stemDir1>2</stemDir1>
+    <stemDir2>1</stemDir2>
+    <stemDir3>2</stemDir3>
+    <stemDir4>1</stemDir4>
+    <UfermataAnchor>2</UfermataAnchor>
+    <DfermataAnchor>2</DfermataAnchor>
+    <UshortfermataAnchor>2</UshortfermataAnchor>
+    <DshortfermataAnchor>2</DshortfermataAnchor>
+    <UlongfermataAnchor>2</UlongfermataAnchor>
+    <DlongfermataAnchor>2</DlongfermataAnchor>
+    <UverylongfermataAnchor>2</UverylongfermataAnchor>
+    <DverylongfermataAnchor>2</DverylongfermataAnchor>
+    <ThumbAnchor>1</ThumbAnchor>
+    <SforzatoaccentAnchor>1</SforzatoaccentAnchor>
+    <EspressivoAnchor>1</EspressivoAnchor>
+    <StaccatoAnchor>1</StaccatoAnchor>
+    <UstaccatissimoAnchor>1</UstaccatissimoAnchor>
+    <DstaccatissimoAnchor>1</DstaccatissimoAnchor>
+    <TenutoAnchor>1</TenutoAnchor>
+    <UportatoAnchor>1</UportatoAnchor>
+    <DportatoAnchor>1</DportatoAnchor>
+    <UmarcatoAnchor>1</UmarcatoAnchor>
+    <DmarcatoAnchor>1</DmarcatoAnchor>
+    <OuvertAnchor>1</OuvertAnchor>
+    <PlusstopAnchor>1</PlusstopAnchor>
+    <UpbowAnchor>1</UpbowAnchor>
+    <DownbowAnchor>1</DownbowAnchor>
+    <TurnAnchor>1</TurnAnchor>
+    <TrillAnchor>1</TrillAnchor>
+    <PrallAnchor>1</PrallAnchor>
+    <MordentAnchor>1</MordentAnchor>
+    <PrallPrallAnchor>1</PrallPrallAnchor>
+    <PrallMordentAnchor>1</PrallMordentAnchor>
+    <UpPrallAnchor>1</UpPrallAnchor>
+    <UpMordentAnchor>1</UpMordentAnchor>
+    <DownMordentAnchor>1</DownMordentAnchor>
+    <SnappizzicatorAnchor>0</SnappizzicatorAnchor>
+    <ArpeggioNoteDistance>0.7</ArpeggioNoteDistance>
+    <ArpeggioLineWidth>0.19</ArpeggioLineWidth>
+    <ArpeggioHookLen>0.9</ArpeggioHookLen>
+    <FixMeasureNumbers>4</FixMeasureNumbers>
+    <FixMeasureWidth>1</FixMeasureWidth>
+    </Style>
+  <showInvisible>1</showInvisible>
+  <showFrames>1</showFrames>
+  <page-layout>
+    <pageFormat>A4</pageFormat>
+    <page-margins type="even">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    <page-margins type="odd">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    <page-offset>0</page-offset>
+    </page-layout>
+  <siglist>
+    <sig tick="0">
+      <nom>4</nom>
+      <denom>4</denom>
+      </sig>
+    </siglist>
+  <tempolist fix="2">
+    </tempolist>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <name>
+      <style>9</style>
+      <subtype>InstrumentLong</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:12.0008pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Flute</p></body></html>
+        </html-data>
+      </name>
+    <shortName>
+      <style>10</style>
+      <subtype>InstrumentShort</subtype>
+      <frame>0</frame>
+      <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:12.0008pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Fl.</p></body></html>
+        </html-data>
+      </shortName>
+    <Instrument>
+      <minPitchP>59</minPitchP>
+      <maxPitchP>98</maxPitchP>
+      <minPitchA>60</minPitchA>
+      <maxPitchA>93</maxPitchA>
+      <trackName>Flute</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="73"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Staff id="1">
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        <selected>1</selected>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="2">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="3">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="4">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="5">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="6">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="7">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="8">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="9">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="10">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="11">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="12">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="13">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="14">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="15">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="16">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="17">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="18">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="19">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="20">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="21">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="22">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="23">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="24">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="25">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="26">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="27">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="28">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="29">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="30">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="31">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      </Measure>
+    <Measure number="32">
+      <Rest>
+        <durationType>measure</durationType>
+        </Rest>
+      <BarLine>
+        <subtype>5</subtype>
+        </BarLine>
+      </Measure>
+    </Staff>
+  <cursorTrack>0</cursorTrack>
+  </museScore>
