@@ -3779,6 +3779,8 @@ void Measure::layoutX(qreal stretch)
                               if (ps) {
                                     ss = ps;
                                     for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+                                          if (!visible(staffIdx))
+                                                continue;
                                           int track = staffIdx * VOICES;
                                           Element* e = ss->element(track);
                                           if (e)
