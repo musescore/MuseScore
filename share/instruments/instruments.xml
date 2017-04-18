@@ -9345,7 +9345,7 @@
                         <program value="24"/>
                   </Channel>
             </Instrument>
-            <Instrument id="octave-mandolin">
+            <Instrument id="OctaveMandolin">
                   <longName>Octave Mandolin</longName>
                   <shortName>OM.</shortName>
                   <description>Octave Mandolin</description>
@@ -9957,7 +9957,7 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
-            <Instrument id="contrabasses">
+            <Instrument id="contrabasss">
                   <longName>Contrabasses</longName>
                   <shortName>Cbs.</shortName>
                   <description>Contrabasses</description>
