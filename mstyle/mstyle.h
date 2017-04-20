@@ -57,7 +57,7 @@ class MgStyle : public QCommonStyle {
                   SubtleShadow = 0x20
                   };
 
-            Q_DECLARE_FLAGS(StyleOptions, StyleOption)
+            Q_DECLARE_FLAGS(StyleOptions, StyleOption);
 
             //! used to store slab characteristics
             class SlabRect {
@@ -646,8 +646,8 @@ class MgStyle : public QCommonStyle {
             QSize sizeFromContents(ContentsType, const QStyleOption*, const QSize&, const QWidget*) const;
             SubControl hitTestComplexControl(ComplexControl, const QStyleOptionComplex*, const QPoint&, const QWidget*) const;
 
-            virtual void polish(QWidget* widget);
-            void unpolish(QWidget* widget);
+            virtual void polish(QWidget* widget) override;
+            virtual void unpolish(QWidget* widget) override;
             void drawPrimitive(PrimitiveElement, const QStyleOption*, QPainter*, const QWidget*) const;
             void drawControl(ControlElement, const QStyleOption*, QPainter*, const QWidget*) const;
             void drawComplexControl(ComplexControl, const QStyleOptionComplex*, QPainter*, const QWidget*) const;
