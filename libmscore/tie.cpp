@@ -73,6 +73,13 @@ void TieSegment::draw(QPainter* painter) const
                   pen.setWidthF(score()->styleP(StyleIdx::SlurDottedWidth));
                   pen.setStyle(Qt::DashLine);
                   break;
+            case 3:
+                  painter->setBrush(Qt::NoBrush);
+                  pen.setWidthF(score()->styleP(StyleIdx::SlurDottedWidth));
+                  pen.setStyle(Qt::CustomDashLine);
+                  QVector<qreal> dashes { 5.0, 5.0 };
+                  pen.setDashPattern(dashes);
+                  break;
             }
       painter->setPen(pen);
       painter->drawPath(path);
