@@ -9806,6 +9806,26 @@
                   </Channel>
                   <genre>ethnic</genre>
             </Instrument>
+            <Instrument id="nyckelharpa">
+                  <longName>Nyckelharpa</longName>
+                  <shortName>Nyh.</shortName>
+                  <description>Nyckelharpa</description>
+                  <musicXMLid>strings.nyckelharpa</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>48-79</aPitchRange>
+                  <pPitchRange>48-93</pPitchRange>
+                  <Channel>
+                        <program value="41"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
+                  <genre>ethnic</genre>
+            </Instrument>
             <Instrument id="violin">
                   <longName>Violin</longName>
                   <shortName>Vln.</shortName>
