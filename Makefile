@@ -120,7 +120,7 @@ clean:
 	-rm -rf win32build win32install
 
 revision:
-	@git rev-parse --short HEAD > mscore/revision.h
+	@git rev-parse --short=7 HEAD > mscore/revision.h
 
 version:
 	@echo ${VERSION}
