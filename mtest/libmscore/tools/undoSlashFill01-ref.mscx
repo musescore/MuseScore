@@ -340,6 +340,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -352,6 +353,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -385,6 +387,7 @@
         <tick>1920</tick>
         <Chord>
           <track>1</track>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -399,6 +402,7 @@
           </Chord>
         <Chord>
           <track>1</track>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -413,6 +417,7 @@
           </Chord>
         <Chord>
           <track>1</track>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -427,6 +432,7 @@
           </Chord>
         <Chord>
           <track>1</track>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -472,6 +478,7 @@
         <Chord>
           <offset x="0" y="-0.5"/>
           <track>2</track>
+          <BeamMode>no</BeamMode>
           <small>1</small>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
@@ -488,6 +495,7 @@
         <Chord>
           <offset x="0" y="-0.5"/>
           <track>2</track>
+          <BeamMode>no</BeamMode>
           <small>1</small>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
@@ -504,6 +512,7 @@
         <Chord>
           <offset x="0" y="-0.5"/>
           <track>2</track>
+          <BeamMode>no</BeamMode>
           <small>1</small>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
@@ -520,6 +529,7 @@
         <Chord>
           <offset x="0" y="-0.5"/>
           <track>2</track>
+          <BeamMode>no</BeamMode>
           <small>1</small>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
@@ -539,6 +549,7 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -551,6 +562,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -563,6 +575,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -575,6 +588,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -603,6 +617,7 @@
           <durationType>half</durationType>
           </Rest>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -615,6 +630,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -629,6 +645,7 @@
         </Measure>
       <Measure number="2">
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -641,6 +658,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -653,6 +671,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -665,6 +684,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -679,6 +699,7 @@
         </Measure>
       <Measure number="3">
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -691,6 +712,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -703,6 +725,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -715,6 +738,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -729,6 +753,7 @@
         </Measure>
       <Measure number="4">
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -741,6 +766,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -753,6 +779,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
@@ -765,6 +792,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <noStem>1</noStem>
           <Note>
