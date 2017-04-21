@@ -640,6 +640,7 @@ void TextLineSegment::spatiumChanged(qreal ov, qreal nv)
       textLine()->spatiumChanged(ov, nv);
       if (_text)
             _text->spatiumChanged(ov, nv);
+      LineSegment::spatiumChanged(ov, nv);
       }
 
 //---------------------------------------------------------

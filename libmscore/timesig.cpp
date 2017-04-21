@@ -540,9 +540,10 @@ QVariant TimeSig::propertyDefault(P_ID id) const
 //   spatiumChanged
 //---------------------------------------------------------
 
-void TimeSig::spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)
+void TimeSig::spatiumChanged(qreal oldValue, qreal newValue)
       {
       _needLayout = true;
+      Element::spatiumChanged(oldValue, newValue);
       }
 
 void TimeSig::localSpatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)

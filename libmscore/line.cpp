@@ -432,7 +432,7 @@ void LineSegment::editDrag(const EditData& ed)
 
 void LineSegment::spatiumChanged(qreal ov, qreal nv)
       {
-      Element::spatiumChanged(ov, nv);
+      SpannerSegment::spatiumChanged(ov, nv);
       _userOff2 *= nv / ov;
       }
 
@@ -442,7 +442,7 @@ void LineSegment::spatiumChanged(qreal ov, qreal nv)
 
 void LineSegment::localSpatiumChanged(qreal ov, qreal nv)
       {
-      Element::localSpatiumChanged(ov, nv);
+      SpannerSegment::localSpatiumChanged(ov, nv);
       _userOff2 *= nv / ov;
       }
 
