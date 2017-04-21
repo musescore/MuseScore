@@ -18,9 +18,9 @@ For support, contribution, bug reports, visit [MuseScore.org](https://musescore.
 
 ## More info
 * [MuseScore Homepage](https://musescore.org)
-* [MuseScore Git workflow instructions](http://musescore.org/en/developers-handbook/git-workflow).
+* [MuseScore Git workflow instructions](https://musescore.org/en/developers-handbook/git-workflow).
 * [How to compile MuseScore?](https://musescore.org/en/developers-handbook/compilation)
-* Build status: [![Build Status](https://secure.travis-ci.org/musescore/MuseScore.png)](http://travis-ci.org/musescore/MuseScore)
+* Build status: [![Build Status](https://secure.travis-ci.org/musescore/MuseScore.png)](https://travis-ci.org/musescore/MuseScore)
 
 ## License
 MuseScore is licensed under GPL version 2.0. See LICENSE.GPL in the same directory.
@@ -74,8 +74,7 @@ Kept as an example of how to integrate with a complex synthesizer.
     OSC server interface. Based on [OSC for Qt4](http://www.arnoldarts.de/projects/ofqf/)
 
     * **thirdparty/singleapp**
-    Clone from [Qt Single Application](http://qt.gitorious.org/qt-solutions/qt-solutions/trees/master/qtsingleapplication)
-    <!--Gitourious is now archived, and this link no longer works.-->
+    Clone from [Qt Single Application](https://github.com/qtproject/qt-solutions/tree/master/qtsingleapplication)
 
     * **thirdparty/portmidi**
     Clone from [PortMidi](https://sourceforge.net/projects/portmedia/)
