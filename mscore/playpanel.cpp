@@ -58,7 +58,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       enablePlay = new EnablePlayForWidget(this);
 
       tempoSlider->setDclickValue1(100.0);
-      tempoSlider->setDclickValue2(100.0);
+      tempoSlider->setDclickValue2(200.0);
       tempoSlider->setUseActualValue(true);
 
       mgainSlider->setValue(seq->metronomeGain());
