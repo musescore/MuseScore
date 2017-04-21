@@ -42,7 +42,7 @@ SSH_INDENTITY=$HOME/.ssh/osuosl_nighlies_rsa
 scp -C -i $SSH_INDENTITY $DMGFILE musescore-nightlies@ftp-osl.osuosl.org:ftp/macosx
 
 # delete old files
-ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/macosx; ls MuseScoreNightly* -t | tail -n +41 | xargs rm"
+ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/macosx; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
 
 # create and upload index.html and RSS
 python build/travis/job_macos/updateHTML.py $SSH_INDENTITY
