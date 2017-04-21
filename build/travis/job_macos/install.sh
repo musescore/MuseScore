@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # do not build mac for PR
-if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
-  exit 0
-fi
+#if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
+#  exit 0
+#fi
 
 # install dependencies
 wget -c --no-check-certificate -nv -O bottles.zip https://musescore.org/sites/musescore.org/files/bottles-MuseScore-3.0.zip
@@ -72,10 +72,10 @@ installBottleManually libsndfile
 installBottleManually portaudio
 
 #update ruby
-rvm uninstall 2.0.0-p648
-rvm uninstall 2.0.0-p643
-rvm uninstall 2.0.0
-rvm get head
+#rvm uninstall 2.0.0-p648
+#rvm uninstall 2.0.0-p643
+#rvm uninstall 2.0.0
+#rvm get head
 
 #install Qt
 which -s qmake
