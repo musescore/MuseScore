@@ -65,8 +65,8 @@ const PaperSize paperSizes[] = {
       PaperSize("Comm10E",   MM(105),  MM(241)),
       PaperSize("DLE",       MM(110),  MM(220)),
       PaperSize("Folio",     MM(210),  MM(330)),
-      PaperSize("Ledger",    MM(432),  MM(279)),
-      PaperSize("Tabloid",   MM(279),  MM(432)),
+      PaperSize("Ledger",    17,       11),
+      PaperSize("Tabloid",   11,       17),
       PaperSize(0,           MM(1),    MM(1))   // mark end of list
       };
 
