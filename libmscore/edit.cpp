@@ -2474,15 +2474,12 @@ void Score::cmdDeleteSelection()
                               for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
                                     Staff* staff = Score::staff(track / VOICES);
                                     int tick = m->tick();
-                                    TimeSig* ts = staff->timeSig(tick);
-                                    if (ts) {
-                                          Fraction f = ts->sig();
-                                          Rest* r = setRest(tick, track, f, false, 0);
-                                          if (!cr)
-                                                cr = r;
-                                          if (s2 && (m == s2->measure()))
-                                                break;
-                                          }
+                                    Fraction ff = m->stretchedLen(staff);
+                                    Rest* r = setRest(tick, track, ff, false, 0);
+                                    if (!cr)
+                                          cr = r;
+                                    if (s2 && (m == s2->measure()))
+                                          break;
                                     }
                               }
                         else {
