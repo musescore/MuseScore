@@ -60,6 +60,7 @@ LoginManager::LoginManager(QObject* parent)
       _progressDialog = new QProgressDialog(mscore);
       _progressDialog->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
       _progressDialog->setWindowModality(Qt::ApplicationModal);
+      _progressDialog->reset(); // required for Qt 5.5, see QTBUG-47042
       }
 
 //---------------------------------------------------------
