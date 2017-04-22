@@ -62,10 +62,13 @@ class ScoreTab : public QWidget {
       void updateExcerpts();
       void setExcerpt(int);
       void setCurrent(int);
+      void tabMoved(int, int);
 
    public:
       ScoreTab(QList<Score*>*, QWidget* parent = 0);
       ~ScoreTab();
+
+      QTabBar* getTab() const { return tab; }
 
       void insertTab(Score*);
       void setTabText(int, const QString&);
