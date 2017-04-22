@@ -1822,8 +1822,13 @@ bool Score::processMidiInput()
                                                 startCmd();
                                                 cmdActive = true;
                                                 }
-                                          deleteItem(n->tieBack());
-                                          deleteItem(n);
+                                          if (n && n->tieBack()) {
+                                                Note* fn =  n->tieBack()->startNote();
+                                                deleteItem(n->tieBack());
+                                                deleteItem(n);
+                                                select(fn);
+                                                _is.moveToNextInputPos();
+                                                }
                                           }
                                     }
                               }
