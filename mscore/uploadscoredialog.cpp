@@ -187,6 +187,18 @@ void UploadScoreDialog::uploadError(const QString& error)
       }
 
 //---------------------------------------------------------
+//   showOrHideUploadAudio
+//---------------------------------------------------------
+
+void UploadScoreDialog::showOrHideUploadAudio()
+      {
+      uploadAudio->setEnabled(mscore->canSaveMp3());
+      bool v = !mscore->synthesizerState().isDefaultSynthSoundfont();
+      uploadAudio->setVisible(v);
+      uploadAudioHelp->setVisible(v);
+      }
+
+//---------------------------------------------------------
 //   display
 //---------------------------------------------------------
 
@@ -207,10 +219,7 @@ void UploadScoreDialog::display()
                          }
                   }
             }
-      uploadAudio->setEnabled(mscore->canSaveMp3());
-      bool v = !mscore->synthesizerState().isDefaultSynthSoundfont();
-      uploadAudio->setVisible(v);
-      uploadAudioHelp->setVisible(v);
+      showOrHideUploadAudio();
       clear();
       setVisible(true);
       }
@@ -239,6 +248,7 @@ void UploadScoreDialog::onGetScoreSuccess(const QString &t, const QString &desc,
       linkToScore->setText(tr("[%1Link%2]")
                            .arg("<a href=\"" + url + "\">")
                            .arg("</a>"));
+      showOrHideUploadAudio();
       setVisible(true);
       }
 
