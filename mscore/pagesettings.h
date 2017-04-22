@@ -68,8 +68,7 @@ class PageSettings : public QDialog, private Ui::PageSettingsBase {
       void pageHeightChanged(double);
       void pageWidthChanged(double);
       void pageOffsetChanged(int val);
-      void portraitClicked();
-      void landscapeClicked();
+      void orientationToggled();
 
    public:
       PageSettings(QWidget* parent = 0);
