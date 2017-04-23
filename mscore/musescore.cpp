@@ -764,16 +764,6 @@ MuseScore::MuseScore()
             menuMeasure->addAction(getAction(i));
       menuEdit->addMenu(menuMeasure);
 
-      QMenu* menuTools = new QMenu(tr("&Tools"));
-      for (auto i : { "add-remove-breaks", "explode", "implode", "slash-fill", "slash-rhythm", "resequence-rehearsal-marks", "copy-lyrics-to-clipboard" })
-            menuTools->addAction(getAction(i));
-      menuEdit->addMenu(menuTools);
-
-      QMenu* menuVoices = new QMenu(tr("&Voices"));
-      for (auto i : { "voice-x12", "voice-x13", "voice-x14", "voice-x23", "voice-x24", "voice-x34" })
-            menuVoices->addAction(getAction(i));
-      menuEdit->addMenu(menuVoices);
-
 #ifdef NDEBUG
       if (enableExperimental) {
 #endif
@@ -980,7 +970,7 @@ MuseScore::MuseScore()
       menuLayout = mb->addMenu(tr("&Layout"));
       menuLayout->setObjectName("Layout");
 
-      for (auto i : { "page-settings", "reset", "stretch+", "stretch-", "reset-stretch", "reset-beammode", "reset-groupings" }) {
+      for (auto i : { "page-settings", "reset", "stretch+", "stretch-", "reset-stretch", "reset-beammode" }) {
             QAction* action = getAction(i);
             action->setMenuRole(QAction::NoRole);
             menuLayout->addAction(action);
@@ -1000,6 +990,33 @@ MuseScore::MuseScore()
       menuStyle->addSeparator();
       menuStyle->addAction(getAction("load-style"));
       menuStyle->addAction(getAction("save-style"));
+
+      //---------------------
+      //    Menu Tools
+      //---------------------
+
+      menuTools = mb->addMenu(tr("&Tools"));
+      menuTools->setObjectName("Tools");
+
+      menuTools->addAction(getAction("add-remove-breaks"));
+      menuTools->addSeparator();
+      menuTools->addAction(getAction("explode"));
+      menuTools->addAction(getAction("implode"));
+
+      QMenu* menuVoices = new QMenu(tr("&Voices"));
+      for (auto i : { "voice-x12", "voice-x13", "voice-x14", "voice-x23", "voice-x24", "voice-x34" })
+            menuVoices->addAction(getAction(i));
+      menuTools->addMenu(menuVoices);
+
+      menuTools->addSeparator();
+      menuTools->addAction(getAction("slash-fill"));
+      menuTools->addAction(getAction("slash-rhythm"));
+      menuTools->addSeparator();
+      menuTools->addAction(getAction("resequence-rehearsal-marks"));
+      menuTools->addAction(getAction("reset-groupings"));
+      menuTools->addSeparator();
+      menuTools->addAction(getAction("copy-lyrics-to-clipboard"));
+      menuTools->addAction(getAction("fotomode"));
 
       //---------------------
       //    Menu Plugins
