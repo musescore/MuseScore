@@ -873,9 +873,10 @@ void renderArpeggio(Chord *chord, QList<NoteEventList> & ell)
 int convertLine (int lineL2, ClefType clefL, ClefType clefR) {
       int lineR2 = lineL2;
       int goalpitch = line2pitch(lineL2, clefL, Key::C);
-      while ( line2pitch(lineR2, clefR, Key::C) > goalpitch )
+      int p;
+      while ( (p = line2pitch(lineR2, clefR, Key::C)) > goalpitch && p < 127)
             lineR2++;
-      while ( line2pitch(lineR2, clefR, Key::C) < goalpitch )
+      while ( (p = line2pitch(lineR2, clefR, Key::C)) < goalpitch &&  p > 0)
             lineR2--;
       return lineR2;
       }
