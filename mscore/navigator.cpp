@@ -171,7 +171,8 @@ void Navigator::setScoreView(ScoreView* v)
 
 void Navigator::setScore(Score* v)
       {
-      _cv    = 0;
+      // see https://musescore.org/en/node/185876
+      //_cv    = 0;
       _score = v;
       rescale();
       updateViewRect();

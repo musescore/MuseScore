@@ -1550,8 +1550,8 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       setPos(cs->inputPos());
       //showMessage(cs->filePath(), 2000);
       if (_navigator && _navigator->widget()) {
-            navigator()->setScore(cs);
             navigator()->setScoreView(view);
+            navigator()->setScore(cs);
             }
       ScoreAccessibility::instance()->updateAccessibilityInfo();
       }
