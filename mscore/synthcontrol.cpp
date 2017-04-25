@@ -78,6 +78,8 @@ SynthControl::SynthControl(QWidget* parent)
       readSettings();
       metronome->setDefaultAction(getAction("metronome"));
       mgain->setValue(seq->metronomeGain());
+      mgain->setDclickValue1(seq->metronomeGain() - 10.75f);
+      mgain->setDclickValue2(seq->metronomeGain() - 10.75f);
 
       updateGui();
 
