@@ -449,12 +449,10 @@ bool Score::saveFile()
       QFile::setPermissions(name, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser
          | QFile::ReadGroup | QFile::ReadOther);
 
-      startCmd();
       info.refresh();         // update file info
-      setLayoutAll(true);
-      endCmd();               // force relayout
-      undo()->undo();         // don't leave anything on undo stack
-      endUndoRedo();
+      // TODO: update score
+      // calling update() has undo implications
+      // see https://musescore.org/en/node/97106
 
       undo()->setClean();
       setSaved(true);
