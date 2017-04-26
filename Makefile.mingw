@@ -23,26 +23,28 @@ REVISION  = $(shell type mscore\revision.h)
 VERSION   = 3.0b-${REVISION}
 #VERSION = 3.0.0
 CPUS = %NUMBER_OF_PROCESSORS%
+BUILD_FOR_WINSTORE="OFF"     # Override with "ON" to enable.
+
 
 release:
 	if not exist build.release\nul mkdir build.release
 	if not exist win32install\nul mkdir win32install
-	cd build.release & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_MAKE_PROGRAM=mingw32-make.exe ..
+	cd build.release & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DBUILD_FOR_WINSTORE="${BUILD_FOR_WINSTORE}" ..
 	cd build.release & $(MAKE) lrelease
 	cd build.release & $(MAKE) -j ${CPUS}
 
 debug:
 	if not exist build.debug\nul mkdir build.debug
 	if not exist win32install\nul mkdir win32install
-	cd build.debug & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_MAKE_PROGRAM=mingw32-make.exe ..
+	cd build.debug & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DBUILD_FOR_WINSTORE="${BUILD_FOR_WINSTORE}" ..
 	cd build.debug & $(MAKE) lrelease
 	cd build.debug & $(MAKE) -j ${CPUS}
 
 install:
-	cd build.release & $(MAKE) install
+	cd build.release & $(MAKE) -j ${CPUS} install
 
 installdebug:
-	cd build.debug & $(MAKE) install
+	cd build.debug & $(MAKE) -j ${CPUS} install
 
 package:
 	cd build.release & $(MAKE) package
