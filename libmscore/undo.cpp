@@ -2508,11 +2508,11 @@ void ChangePageFormat::flip()
 //   ChangeStaff
 //---------------------------------------------------------
 
-ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible,
-   qreal _userDist, bool _neverHide, bool _showIfEmpty, bool hide)
+ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible, ClefTypeList _clefType, qreal _userDist, bool _neverHide, bool _showIfEmpty, bool hide)
       {
       staff       = _staff;
       invisible   = _invisible;
+      clefType    = _clefType;
       userDist    = _userDist;
       neverHide   = _neverHide;
       showIfEmpty = _showIfEmpty;
@@ -2536,21 +2536,23 @@ static void notifyTimeSigs(void*, Element* e)
 
 void ChangeStaff::flip()
       {
-      bool invisibleChanged = staff->invisible() != invisible;
-
-      bool oldInvisible   = staff->invisible();
-      qreal oldUserDist   = staff->userDist();
-      bool oldNeverHide   = staff->neverHide();
-      bool oldShowIfEmpty = staff->showIfEmpty();
-      bool hide           = staff->hideSystemBarLine();
+      bool invisibleChanged    = staff->invisible() != invisible;
+      ClefTypeList oldClefType = staff->defaultClefType();
+      bool oldInvisible        = staff->invisible();
+      qreal oldUserDist        = staff->userDist();
+      bool oldNeverHide        = staff->neverHide();
+      bool oldShowIfEmpty      = staff->showIfEmpty();
+      bool hide                = staff->hideSystemBarLine();
 
       staff->setInvisible(invisible);
+      staff->setDefaultClefType(clefType);
       staff->setUserDist(userDist);
       staff->setNeverHide(neverHide);
       staff->setShowIfEmpty(showIfEmpty);
       staff->setHideSystemBarLine(hideSystemBarLine);
 
       invisible   = oldInvisible;
+      clefType    = oldClefType;
       userDist    = oldUserDist;
       neverHide   = oldNeverHide;
       showIfEmpty = oldShowIfEmpty;
