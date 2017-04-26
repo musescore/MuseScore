@@ -26,6 +26,8 @@
 #cmakedefine USE_LAME
 #cmakedefine USE_WEBKIT
 
+#cmakedefine FOR_WINSTORE
+
 #cmakedefine MSCORE_UNSTABLE
 
 #cmakedefine HAS_MIDI

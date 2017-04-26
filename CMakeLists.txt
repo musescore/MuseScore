@@ -114,6 +114,7 @@ option(BUILD_PORTAUDIO "Build with support for Portaudio audio backend." ON)
 option(BUILD_PORTMIDI "Build with support for PortAudio's MIDI features." ${BUILD_PORTAUDIO}) # PortAudio required
 option(BUILD_WEBKIT "Built in webkit support" ON)
 option(BUILD_PCH "Build using precompiled headers." OFF)
+option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
@@ -223,6 +224,10 @@ SET(QT_USE_QTXMLPATTERNS TRUE)
 SET(QT_USE_QTHELP        TRUE)
 
 #find_package(Qt5 COMPONENTS Widgets Xml Svg Network Designer WebKit Declarative)
+
+if (BUILD_FOR_WINSTORE)
+  set(FOR_WINSTORE 1)
+endif(BUILD_FOR_WINSTORE)
 
 ##
 ## freetype2 >= 2.5.2

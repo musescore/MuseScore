@@ -66,8 +66,12 @@ void UpdateChecker::onRequestFinished(QNetworkReply* reply)
                         version = parseText(reader);
                   else if (reader.name() == "revision")
                         upgradeRevision = parseText(reader);
-                  else if (reader.name() == "downloadUrl")
+                  else if (reader.name() == "downloadUrl") {
                         downloadUrl = parseText(reader);
+#if defined(FOR_WINSTORE)
+                        downloadUrl = QString("%1?package=appx&version=%2").arg(downloadUrl).arg(_currentVersion);
+#endif
+                        }
                   else if (reader.name() == "infoUrl")
                         infoUrl = parseText(reader);
                   else if (reader.name() == "description")
