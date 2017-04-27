@@ -784,6 +784,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                               }
                         }
                   else {
+                        Chord* prevTiedChord = NULL;
                         for (int i = dList.size() - 1; i >= 0; --i) {
                               if (ltuplet) {
                                     // take care not to recreate tuplet we just deleted
@@ -791,7 +792,34 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                                     tick += r->actualTicks();
                                     }
                               else {
-                                    tick += addClone(cr, tick, dList[i])->actualTicks();
+                                    ChordRest* newChordRest = addClone(cr, tick, dList[i]);
+                                    tick += newChordRest->actualTicks();
+
+                                    // need to tie if is a chord
+                                    if (newChordRest->isChord()) {
+                                          Chord* currTiedChord = static_cast<Chord*>(newChordRest);
+                                          for (int n = 0; n < currTiedChord->notes().size(); n++ ) {
+                                                if (prevTiedChord) {
+
+                                                      // tie nth note of previous Chord to corresponding nth note of current Chord
+                                                      Tie* newTie = new Tie(this);
+                                                      newTie->setEndNote(currTiedChord->notes().at(n));
+                                                      prevTiedChord->notes().at(n)->add(newTie);
+
+                                                      // if final chord of duration list, must also tie forward if original notes were tied
+                                                      if (i == 0) {
+                                                            Chord* originalChord = static_cast<Chord*>(cr);
+                                                            Tie* originalTie = originalChord->notes().at(n)->tieFor();
+                                                            if (originalTie) {
+                                                                  Tie* finalTie = new Tie(this);
+                                                                  finalTie->setEndNote(originalTie->endNote());
+                                                                  currTiedChord->notes().at(n)->add(finalTie);
+                                                                  }
+                                                            }
+                                                      }
+                                                }
+                                          prevTiedChord = currTiedChord;
+                                          }
                                     }
                               }
                         }
