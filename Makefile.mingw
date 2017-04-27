@@ -20,8 +20,8 @@
 
 
 REVISION  = $(shell type mscore\revision.h)
-VERSION   = 2.1b-${REVISION}
-#VERSION = 2.1
+#VERSION   = 2.0.3b-${REVISION}
+VERSION = 2.0.3
 CPUS = %NUMBER_OF_PROCESSORS%
 BUILD_FOR_WINSTORE="OFF"     # Override with "ON" to enable.
 
@@ -50,7 +50,7 @@ package:
 	cd build.release & $(MAKE) package
 
 revision:
-	git rev-parse --short=7 HEAD > mscore/revision.h
+	git rev-parse --short HEAD > mscore/revision.h
 
 version:
 	@echo ${VERSION}
