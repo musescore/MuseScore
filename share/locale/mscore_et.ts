@@ -4,7 +4,7 @@
     <message>
         <location filename="../../mscore/aboutbox.ui" line="20"/>
         <source>About MuseScore</source>
-        <translation>MuseScore&apos;ist</translation>
+        <translation>Teave tarkvara MuseScore kohta</translation>
     </message>
     <message>
         <location filename="../../mscore/aboutbox.ui" line="130"/>
@@ -395,7 +395,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="131"/>
         <source>The attack time in milliseconds.</source>
-        <translation>Atakki aeg millisekundites</translation>
+        <translation>Ataki aeg millisekundites</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="177"/>
@@ -460,7 +460,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="476"/>
         <source>The point at which the compressor will start to kick in.</source>
-        <translation>Hetk, mil kompressor mõju avaldama hakkab.</translation>
+        <translation>Hetk, mil kompressor hakkab mõju avaldama.</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="533"/>
@@ -481,7 +481,7 @@
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="41"/>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation>Tavaline</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="42"/>
@@ -491,7 +491,7 @@
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="43"/>
         <source>Diamond</source>
-        <translation>Teemant</translation>
+        <translation>Romb</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="44"/>
@@ -682,7 +682,7 @@
     <message>
         <location filename="../../mscore/editinstrument.ui" line="135"/>
         <source>Staves:</source>
-        <translation>Noodijooned</translation>
+        <translation>Noodiread</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="224"/>
@@ -1880,7 +1880,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="533"/>
         <source>Continuous</source>
-        <translation>pidevad</translation>
+        <translation>Pidevad</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="555"/>
@@ -1910,7 +1910,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="629"/>
         <source>Broken</source>
-        <translation>katkendlikud</translation>
+        <translation>Katkendlikud</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="649"/>
@@ -1936,7 +1936,7 @@
         <location filename="../../mscore/editstafftype.ui" line="815"/>
         <location filename="../../mscore/editstafftype.ui" line="1161"/>
         <source>None</source>
-        <translation>puudub</translation>
+        <translation>Puudub</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="828"/>
@@ -1996,12 +1996,12 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1082"/>
         <source>Above</source>
-        <translation>ülal</translation>
+        <translation>Ülal</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1089"/>
         <source>Below</source>
-        <translation>all</translation>
+        <translation>All</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1139"/>
@@ -2237,12 +2237,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="197"/>
         <source>Hide empty staves</source>
-        <translation>Peida tühjad noodijooned</translation>
+        <translation>Peida tühjad noodiread</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="204"/>
         <source>Don&apos;t hide empty staves in first system</source>
-        <translation>Ära peida tühje noodijooni esimeses süsteemis</translation>
+        <translation>Ära peida tühje noodiridu esimeses süsteemis</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="211"/>
@@ -2634,7 +2634,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2328"/>
         <source>Double barline thickness:</source>
-        <translation>Topelt taktijoone paksus:</translation>
+        <translation>Topelttaktijoone paksus:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2348"/>
@@ -2966,12 +2966,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4164"/>
         <source>Custom</source>
-        <translation>Eri kujuga</translation>
+        <translation>Kohandatud</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4231"/>
         <source>Chord symbols style file:</source>
-        <translation>Akordimärkide stiili fail:</translation>
+        <translation>Akordimärkide stiilifail:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4241"/>
@@ -3247,7 +3247,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5202"/>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
-        <translation>Peale võtmemärke kui on vähem dieese või bemolle. Enne kui vahetad dieesideks või bemollideks.</translation>
+        <translation>Võtmemärke järel, kui uues helistikus on vähem dieese või bemolle. Võtmemärkide ees, kui bemollid asenduvad dieesidega või vastupidi. </translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5232"/>
@@ -3494,7 +3494,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/importmidi/importmidi_panel.ui" line="174"/>
         <source>Text charset:</source>
-        <translation type="unfinished"/>
+        <translation>Teksti märgistik</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi_panel.ui" line="249"/>
@@ -3514,7 +3514,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/importmidi/importmidi_panel.ui" line="284"/>
         <source>Cancel</source>
-        <translation>Katkesta</translation>
+        <translation>Tühista</translation>
     </message>
 </context>
 <context>
@@ -4004,7 +4004,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="816"/>
         <source>Head type:</source>
-        <translation type="unfinished"/>
+        <translation>Noodipea tüüp</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="832"/>
@@ -4868,7 +4868,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="112"/>
         <source>Reset &apos;Type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Lähtesta tüüp</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="126"/>
@@ -5075,7 +5075,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="87"/>
         <source>Reset &apos;Type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Lähtesta tüüp</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="101"/>
@@ -5739,7 +5739,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="274"/>
         <source>Mirror Head</source>
-        <translation type="unfinished"/>
+        <translation>Peegelpildis noodipea</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="286"/>
@@ -5764,7 +5764,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="343"/>
         <source>Head type:</source>
-        <translation type="unfinished"/>
+        <translation>Noodipea tüüp</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="359"/>
@@ -5891,12 +5891,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="91"/>
         <source>Reset &apos;Type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Lähtesta tüüp</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="105"/>
         <source>Placement:</source>
-        <translation type="unfinished"/>
+        <translation>Asetus</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="112"/>
@@ -6317,7 +6317,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="111"/>
         <source>Reset &apos;Tempo&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Lähtesta tempo</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="128"/>
@@ -6494,7 +6494,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="127"/>
         <source>Reset &apos;Type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Lähtesta tüüp</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="147"/>
@@ -6781,12 +6781,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="17"/>
         <source>Volta Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Voldi inspektor</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="44"/>
         <source>Volta</source>
-        <translation>Volta</translation>
+        <translation>Volt</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="84"/>
@@ -6816,7 +6816,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="111"/>
         <source>Reset &apos;Type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Lähtesta tüüp</translation>
     </message>
 </context>
 <context>
@@ -7529,7 +7529,10 @@ pickup measure</source>
 You only need to do this once.
 
 Would you like to locate %2 now?</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore ei ekspordi MP3 faile otse, vaid kasutab selleks tasita saadavat LAME teeki. Pead selle %1 hankima eraldi (üksikasjad leiad käsiraamatust) ning seejärel määra faili asukoht MuseScore jaoks. 
+Seda on vaja teha vaid üks kord. 
+
+Kas soovid praegu määrata %2 asukohta?</translation>
     </message>
 </context>
 <context>
@@ -8243,35 +8246,35 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
     <message>
         <location filename="../../mscore/drumroll.cpp" line="197"/>
         <source>&lt;%1&gt; Staff: %2</source>
-        <translation type="unfinished"/>
+        <translation>&lt;%1&gt; Partii: %2</translation>
     </message>
 </context>
 <context>
     <name>Ms::EditDrumset</name>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="74"/>
+        <location filename="../../mscore/editdrumset.cpp" line="86"/>
         <source>invalid</source>
         <translation>väär</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="375"/>
+        <location filename="../../mscore/editdrumset.cpp" line="387"/>
         <source>Open File
 %1
 failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="377"/>
+        <location filename="../../mscore/editdrumset.cpp" line="389"/>
         <source>Open File</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="387"/>
+        <location filename="../../mscore/editdrumset.cpp" line="399"/>
         <source>Write File failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="388"/>
+        <location filename="../../mscore/editdrumset.cpp" line="400"/>
         <source>Write Drumset</source>
         <translation type="unfinished"/>
     </message>
@@ -8721,88 +8724,88 @@ failed: </source>
 <context>
     <name>Ms::LoginManager</name>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Network error</source>
         <translation>Võrgu viga</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Please check your Internet connection</source>
         <translation>Palun kontrolli oma internetiühendust</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Please upgrade</source>
         <translation>Palun uuenda</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Your MuseScore version is too old to use this feature.
 %1Please upgrade first%2.</source>
         <translation>Sinu MuseScore versioon on liiga vana selle tegevuse jaoks.
 %1Alustuseks palun uuenda%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="210"/>
+        <location filename="../../mscore/loginmanager.cpp" line="211"/>
         <source>Unsuccessful login. Please try again.</source>
         <translation>Sisselogimine ebaõnnestus. Palun proovi uuesti.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="216"/>
+        <location filename="../../mscore/loginmanager.cpp" line="217"/>
         <source>Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?</source>
         <translation>Kahjuks on vale e-post, kasutajanimi või salasõna. Palun proovi uuesti. %1Kas sa oled unustanud oma salasõna%2?</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="221"/>
+        <location filename="../../mscore/loginmanager.cpp" line="222"/>
         <source>This account has been blocked.</source>
         <translation>See konto on blokeeritud.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="224"/>
+        <location filename="../../mscore/loginmanager.cpp" line="225"/>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or %1request a new activation email%2.</source>
         <translation>Sinu konto ei ole veel aktiveeritud. Palun vaata oma postkasti, et aktiveerida oma konto või %1taotle uus aktiveerimise e-kiri%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="229"/>
+        <location filename="../../mscore/loginmanager.cpp" line="230"/>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, %1contact us%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="292"/>
+        <location filename="../../mscore/loginmanager.cpp" line="293"/>
         <source>Error while getting user info. Please try again</source>
         <translation>Kasutaja info saamisel tekkis viga. Palun proovi uuesti</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="296"/>
+        <location filename="../../mscore/loginmanager.cpp" line="297"/>
         <source>Error while getting user info: %1</source>
         <translation>Kasutaja info saamisel tekkis viga: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="410"/>
+        <location filename="../../mscore/loginmanager.cpp" line="411"/>
         <source>Uploading...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="445"/>
+        <location filename="../../mscore/loginmanager.cpp" line="446"/>
         <source>Upload Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="446"/>
+        <location filename="../../mscore/loginmanager.cpp" line="447"/>
         <source>Sorry, MuseScore couldn&apos;t upload the audio file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="546"/>
+        <location filename="../../mscore/loginmanager.cpp" line="547"/>
         <source>An error occurred during the file transfer. Please try again</source>
         <translation>Faili üle kandmisel tekkis viga. Palun proovi uuesti.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="550"/>
+        <location filename="../../mscore/loginmanager.cpp" line="551"/>
         <source>Cannot upload: %1</source>
         <translation>Ei saa üles laadida: %1</translation>
     </message>
@@ -9976,19 +9979,19 @@ please choose a different name:</source>
         <location filename="../../mscore/webpage.cpp" line="173"/>
         <source>Could not
 connect</source>
-        <translation type="unfinished"/>
+        <translation>Ei saanud ühendust</translation>
     </message>
     <message>
         <location filename="../../mscore/webpage.cpp" line="174"/>
         <source>To connect with the community,
 you need to have internet
 connection enabled</source>
-        <translation type="unfinished"/>
+        <translation>Et võtta ühendust kogukonnaga peab sul olema internetiühendus</translation>
     </message>
     <message>
         <location filename="../../mscore/webpage.cpp" line="175"/>
         <source>Retry</source>
-        <translation type="unfinished"/>
+        <translation>Proovi uuesti</translation>
     </message>
     <message>
         <location filename="../../mscore/webpage.cpp" line="176"/>
@@ -10001,7 +10004,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="406"/>
         <source>New Score Wizard</source>
-        <translation type="unfinished"/>
+        <translation>Partituuri loomise abiline</translation>
     </message>
 </context>
 <context>
@@ -10081,7 +10084,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="364"/>
         <source>BPM:</source>
-        <translation>Lööke Minutis:</translation>
+        <translation>Lööke minutis:</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="366"/>
@@ -10344,7 +10347,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="255"/>
         <source>&lt;%1&gt; Staff: %2</source>
-        <translation type="unfinished"/>
+        <translation>&lt;%1&gt; Partii: %2</translation>
     </message>
 </context>
 <context>
@@ -10357,7 +10360,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="74"/>
         <source>Edit Operations</source>
-        <translation type="unfinished"/>
+        <translation>Muutmistoimingud</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="193"/>
@@ -10377,7 +10380,8 @@ connection enabled</source>
         <location filename="../../mscore/pluginCreator.cpp" line="462"/>
         <source>Plugin &quot;%1&quot; has changes.
 Save before closing?</source>
-        <translation type="unfinished"/>
+        <translation>Pluginat &quot;%1&quot; on muudetud.
+Salvestada enne sulgemist?</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="435"/>
@@ -10541,7 +10545,7 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1114"/>
         <source>Action: %1; Shortcut: %2</source>
-        <translation type="unfinished"/>
+        <translation>Toiming: %1; Otsetee: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1116"/>
@@ -10668,7 +10672,7 @@ Save before closing?</source>
         <location filename="../../mscore/resourceManager.cpp" line="160"/>
         <location filename="../../mscore/resourceManager.cpp" line="189"/>
         <source>Failed, try again</source>
-        <translation type="unfinished"/>
+        <translation>Nurjus, proovi uuesti</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="186"/>
@@ -10687,7 +10691,7 @@ Save before closing?</source>
     <message>
         <location filename="../../libmscore/rest.cpp" line="733"/>
         <source>%1; Duration: %2; %3</source>
-        <translation type="unfinished"/>
+        <translation>%1; kestus: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10695,12 +10699,12 @@ Save before closing?</source>
     <message>
         <location filename="../../libmscore/check.cpp" line="190"/>
         <source>Measure %1 Staff %2 incomplete. Expected: %3; Found: %4</source>
-        <translation>Takt %1 Noodijoonestik %2 mittetäielik. Oodatud: %3; Leitud: %4</translation>
+        <translation>Takt %1  partii %2 mittetäielik. Eeldati: %3; leiti %4</translation>
     </message>
     <message>
         <location filename="../../libmscore/check.cpp" line="197"/>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
-        <translation>Takt %1, noodijoonestik %2, hääl %3 liiga pikk. Oodatud: %4; Leitud: %5</translation>
+        <translation>Takt %1, partii %2, hääl %3 on liiga pikk. Eeldati: %4; leiti: %5</translation>
     </message>
     <message>
         <location filename="../../libmscore/score.cpp" line="342"/>
@@ -10740,38 +10744,38 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="467"/>
+        <location filename="../../libmscore/scorefile.cpp" line="470"/>
         <source>Open File
 %1
 failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="600"/>
+        <location filename="../../libmscore/scorefile.cpp" line="603"/>
         <source>Open File
 %1
 failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="622"/>
+        <location filename="../../libmscore/scorefile.cpp" line="625"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>Stiil ei ühildu antud MuseScore versiooniga.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="643"/>
+        <location filename="../../libmscore/scorefile.cpp" line="646"/>
         <source>Open Style File
 %1
 failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="653"/>
+        <location filename="../../libmscore/scorefile.cpp" line="656"/>
         <source>Write Style failed: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1195"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation type="unfinished"/>
     </message>
@@ -10947,12 +10951,12 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="148"/>
         <source>Bend Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Venituse suvandid...</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="152"/>
         <source>Tremolo Bar Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Tremolojoone omadused...</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="155"/>
@@ -11168,13 +11172,14 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="2667"/>
         <source>Cannot paste in tremolo</source>
-        <translation type="unfinished"/>
+        <translation>Tremolosse asetamine pole võimalik</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="3112"/>
         <source>No chord/rest selected:
 Please select a chord/rest and try again</source>
-        <translation type="unfinished"/>
+        <translation>Ühtki akordi/pausi pole valitud. 
+Palun vali akord/paus ja proovi uuesti.</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="3121"/>
@@ -11458,17 +11463,17 @@ please choose a different name:</source>
 <context>
     <name>Ms::TimeSig</name>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="590"/>
+        <location filename="../../libmscore/timesig.cpp" line="591"/>
         <source>Common time</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="592"/>
+        <location filename="../../libmscore/timesig.cpp" line="593"/>
         <source>Cut time</source>
         <translation>2/2 alla breve</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="594"/>
+        <location filename="../../libmscore/timesig.cpp" line="595"/>
         <source>%1/%2 time</source>
         <translation type="unfinished"/>
     </message>
@@ -11476,18 +11481,18 @@ please choose a different name:</source>
 <context>
     <name>Ms::UpdateChecker</name>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="81"/>
+        <location filename="../../mscore/updatechecker.cpp" line="85"/>
         <source>An update for MuseScore is available: %1MuseScore %2 r.%3%4</source>
         <translation>MuseScore uuendus on saadaval: %1MuseScore %2 r.%3%4</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="89"/>
+        <location filename="../../mscore/updatechecker.cpp" line="93"/>
         <source>Update Available</source>
         <translation>Uus versioon on saadaval</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="96"/>
-        <location filename="../../mscore/updatechecker.cpp" line="97"/>
+        <location filename="../../mscore/updatechecker.cpp" line="100"/>
+        <location filename="../../mscore/updatechecker.cpp" line="101"/>
         <source>No Update Available</source>
         <translation>Uut versiooni pole saadaval</translation>
     </message>
@@ -11580,7 +11585,7 @@ please choose a different name:</source>
         <translation>Viga</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="240"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="249"/>
         <source>[%1link%2]</source>
         <translation type="unfinished"/>
     </message>
@@ -14226,7 +14231,7 @@ kirjutamine ebaõnnestus: </translation>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2714"/>
+        <location filename="../../libmscore/edit.cpp" line="2711"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14236,7 +14241,7 @@ kirjutamine ebaõnnestus: </translation>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2715"/>
+        <location filename="../../libmscore/edit.cpp" line="2712"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14282,7 +14287,7 @@ Valige vähemalt üks noot või paus ja korrake operatsiooni
         <location filename="../../libmscore/utils.cpp" line="488"/>
         <source>Please select one or more staves and retry operation
 </source>
-        <translation>Valige vähemalt üks noodijoon ja korrake operatsiooni
+        <translation>Valige vähemalt üks partii ja korrake toimingut
 </translation>
     </message>
 </context>
@@ -20940,7 +20945,7 @@ kirjutamine ebaõnnestus: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3404"/>
         <source>Explode contents of top selected staff into staves below</source>
-        <translation>Eralda ülemise valitud noodijoonestiku hääled alumistesse noodijoonestikesse</translation>
+        <translation>Jaota ülemise valitud partii sisu alumistesse partiidesse</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3413"/>
@@ -20951,7 +20956,7 @@ kirjutamine ebaõnnestus: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3415"/>
         <source>Implode contents of selected staves into top selected staff</source>
-        <translation>Tõmba valitud noodijoonestike sisu ülemistesse valitud noodijoonestikesse</translation>
+        <translation>Koonda valitud partiide sisu kõige ülemisse valitud partiisse</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3424"/>

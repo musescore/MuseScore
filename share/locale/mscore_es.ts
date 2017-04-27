@@ -94,7 +94,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="17"/>
         <source>Album Manager</source>
-        <translation type="unfinished"/>
+        <translation>Gestor de Álbumes</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="28"/>
@@ -255,7 +255,7 @@
     <message>
         <location filename="../../awl/colorlabel.cpp" line="98"/>
         <source>Select Color</source>
-        <translation type="unfinished"/>
+        <translation>Seleccionar Color</translation>
     </message>
 </context>
 <context>
@@ -2097,7 +2097,7 @@
     <message>
         <location filename="../../mscore/editstyle.ui" line="14"/>
         <source>Edit Style</source>
-        <translation type="unfinished"/>
+        <translation>Editar Estilo</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="30"/>
@@ -3331,7 +3331,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="14"/>
         <source>Parts</source>
-        <translation type="unfinished"/>
+        <translation>Partes</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="20"/>
@@ -4436,7 +4436,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="400"/>
         <source>Reset &apos;Horizontal&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restablecer valor &apos;Horizontal&apos;</translation>
     </message>
 </context>
 <context>
@@ -4672,7 +4672,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="81"/>
         <source>Dynamic range:</source>
-        <translation type="unfinished"/>
+        <translation>Rango dinámico:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="88"/>
@@ -5095,7 +5095,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="118"/>
         <source>Dynamic range:</source>
-        <translation type="unfinished"/>
+        <translation>Rango dinámico:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="128"/>
@@ -6915,7 +6915,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrdialog.ui" line="14"/>
         <source>Instruments</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentos</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.ui" line="47"/>
@@ -6948,7 +6948,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="14"/>
         <source>Instruments</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentos</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="42"/>
@@ -7130,7 +7130,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/lineproperties.ui" line="14"/>
         <source>Line Properties</source>
-        <translation type="unfinished"/>
+        <translation>Propiedades de la Línea</translation>
     </message>
     <message>
         <location filename="../../mscore/lineproperties.ui" line="34"/>
@@ -7546,7 +7546,7 @@ Solo tiene que hacer esto una vez.
     <message>
         <location filename="../../mscore/masterpalette.ui" line="14"/>
         <source>Master Palette</source>
-        <translation type="unfinished"/>
+        <translation>Paleta Maestra</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="30"/>
@@ -7997,7 +7997,11 @@ Support MuseScore with your %3donation%4.
 
 Copyright &amp;copy; 1999-2017 Werner Schweer and Others.
 Published under the GNU General Public License.</source>
-        <translation type="unfinished"/>
+        <translation>Visite %1www.musescore.org%2 para nuevas versiones y más información.
+Apoye MuseScore con su %3donación%4.
+
+Copyright &amp;copy; 1999-2017 Werner Schweer and Others.
+Publicado bajo la licencia GNU General Public License.</translation>
     </message>
 </context>
 <context>
@@ -8061,7 +8065,7 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="102"/>
         <source>Load Album</source>
-        <translation type="unfinished"/>
+        <translation>Cargar Álbum</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="149"/>
@@ -8258,12 +8262,12 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
 <context>
     <name>Ms::EditDrumset</name>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="74"/>
+        <location filename="../../mscore/editdrumset.cpp" line="86"/>
         <source>invalid</source>
         <translation>no válido</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="375"/>
+        <location filename="../../mscore/editdrumset.cpp" line="387"/>
         <source>Open File
 %1
 failed: </source>
@@ -8272,17 +8276,17 @@ failed: </source>
 falló:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="377"/>
+        <location filename="../../mscore/editdrumset.cpp" line="389"/>
         <source>Open File</source>
-        <translation type="unfinished"/>
+        <translation>Abrir Archivo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="387"/>
+        <location filename="../../mscore/editdrumset.cpp" line="399"/>
         <source>Write File failed: </source>
         <translation>Escritura de archivo fallida: </translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="388"/>
+        <location filename="../../mscore/editdrumset.cpp" line="400"/>
         <source>Write Drumset</source>
         <translation type="unfinished"/>
     </message>
@@ -8597,7 +8601,7 @@ falló:</translation>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="74"/>
         <source>Save Instrument List</source>
-        <translation type="unfinished"/>
+        <translation>Guardar Lista de Instrumentos</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="76"/>
@@ -8617,7 +8621,7 @@ falló:</translation>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="89"/>
         <source>Open Instruments File</source>
-        <translation type="unfinished"/>
+        <translation>Abrir Archivo de Instrumentos</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="104"/>
@@ -8632,7 +8636,7 @@ falló:</translation>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="116"/>
         <source>Load Instrument List</source>
-        <translation type="unfinished"/>
+        <translation>Cargar Lista de Instrumentos</translation>
     </message>
 </context>
 <context>
@@ -8712,12 +8716,12 @@ falló:</translation>
     <message>
         <location filename="../../mscore/logindialog.cpp" line="48"/>
         <source>%1Create an account%2</source>
-        <translation type="unfinished"/>
+        <translation>%1Crear una cuenta%2</translation>
     </message>
     <message>
         <location filename="../../mscore/logindialog.cpp" line="51"/>
         <source>%1Forgot password?%2</source>
-        <translation type="unfinished"/>
+        <translation>%1¿Ha olvidado la contraseña?%2</translation>
     </message>
     <message>
         <location filename="../../mscore/logindialog.cpp" line="69"/>
@@ -8734,87 +8738,88 @@ falló:</translation>
 <context>
     <name>Ms::LoginManager</name>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Network error</source>
         <translation>Error de conexión</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Please check your Internet connection</source>
         <translation>Por favor compruebe su conexión a internet</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Please upgrade</source>
         <translation>Por favor actualice</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Your MuseScore version is too old to use this feature.
 %1Please upgrade first%2.</source>
-        <translation type="unfinished"/>
+        <translation>Su versión de MuseScore es demasiado antigua para utilizar esta función.
+%1Por favor, actualice primero%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="210"/>
+        <location filename="../../mscore/loginmanager.cpp" line="211"/>
         <source>Unsuccessful login. Please try again.</source>
         <translation>Autentificación errónea. Por favor inténtelo de nuevo.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="216"/>
+        <location filename="../../mscore/loginmanager.cpp" line="217"/>
         <source>Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?</source>
-        <translation type="unfinished"/>
+        <translation>Lo sentimos, la dirección de correo, el usuario o la contraseña son incorrectos. Por favor compruébelos de nuevo. %1¿Ha olvidado su contraseña%2?</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="221"/>
+        <location filename="../../mscore/loginmanager.cpp" line="222"/>
         <source>This account has been blocked.</source>
         <translation>Esta cuenta ha sido bloqueada.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="224"/>
+        <location filename="../../mscore/loginmanager.cpp" line="225"/>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or %1request a new activation email%2.</source>
-        <translation type="unfinished"/>
+        <translation>Su cuenta aún no ha sido activada. Por favor compruebe su bandeja de entrada para activar su cuenta o %1solicite una nueva activación por correo%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="229"/>
+        <location filename="../../mscore/loginmanager.cpp" line="230"/>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, %1contact us%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="292"/>
+        <location filename="../../mscore/loginmanager.cpp" line="293"/>
         <source>Error while getting user info. Please try again</source>
         <translation>Error al recuperar la información de usuario. Por favor inténtelo de nuevo</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="296"/>
+        <location filename="../../mscore/loginmanager.cpp" line="297"/>
         <source>Error while getting user info: %1</source>
         <translation>Error al recuperar la información de usuario: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="410"/>
+        <location filename="../../mscore/loginmanager.cpp" line="411"/>
         <source>Uploading...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/loginmanager.cpp" line="445"/>
-        <source>Upload Error</source>
-        <translation type="unfinished"/>
+        <translation>Subiendo...</translation>
     </message>
     <message>
         <location filename="../../mscore/loginmanager.cpp" line="446"/>
-        <source>Sorry, MuseScore couldn&apos;t upload the audio file</source>
-        <translation type="unfinished"/>
+        <source>Upload Error</source>
+        <translation>Error de subida</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="546"/>
+        <location filename="../../mscore/loginmanager.cpp" line="447"/>
+        <source>Sorry, MuseScore couldn&apos;t upload the audio file</source>
+        <translation>Lo sentimos, MuseScore no ha podido subir el archivo de audio</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/loginmanager.cpp" line="547"/>
         <source>An error occurred during the file transfer. Please try again</source>
         <translation>Ha ocurrido un error durante la transferencia del archivo. Por favor inténtelo de nuevo</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="550"/>
+        <location filename="../../mscore/loginmanager.cpp" line="551"/>
         <source>Cannot upload: %1</source>
         <translation>No se puede cargar: %1</translation>
     </message>
@@ -8959,7 +8964,7 @@ antes de cerrar?</translation>
         <location filename="../../mscore/file.cpp" line="288"/>
         <location filename="../../mscore/file.cpp" line="2285"/>
         <source>All Supported Files</source>
-        <translation type="unfinished"/>
+        <translation>Todos los Archivos Soportados</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="290"/>
@@ -8994,7 +8999,7 @@ antes de cerrar?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="297"/>
         <source>PDF Files &lt;experimental OMR&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Archivos PDF &lt;experimental OMR&gt;</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="299"/>
@@ -9009,7 +9014,7 @@ antes de cerrar?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="301"/>
         <source>Guitar Pro</source>
-        <translation type="unfinished"/>
+        <translation>Guitar Pro</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="302"/>
@@ -9035,13 +9040,13 @@ antes de cerrar?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="416"/>
         <source>Save Score</source>
-        <translation type="unfinished"/>
+        <translation>Guardar Partitura</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="424"/>
         <location filename="../../mscore/file.cpp" line="431"/>
         <source>Save File</source>
-        <translation type="unfinished"/>
+        <translation>Guardar Archivo</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="457"/>
@@ -9058,7 +9063,7 @@ antes de cerrar?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="939"/>
         <source>MuseScore Styles</source>
-        <translation type="unfinished"/>
+        <translation>Estilos de MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="944"/>
@@ -9073,28 +9078,28 @@ antes de cerrar?</translation>
         <location filename="../../mscore/file.cpp" line="965"/>
         <location filename="../../mscore/file.cpp" line="982"/>
         <source>MuseScore Style File</source>
-        <translation type="unfinished"/>
+        <translation>Archivo de Estilo de MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1006"/>
         <source>Chord Symbols Style File</source>
-        <translation type="unfinished"/>
+        <translation>Archivo de Estilo de Símbolos de Acordes</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1017"/>
         <location filename="../../mscore/file.cpp" line="1045"/>
         <source>Load Chord Symbols Style</source>
-        <translation type="unfinished"/>
+        <translation>Cargar Estilo de Símbolos de Acordes</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1024"/>
         <source>Save Chord Symbols Style</source>
-        <translation type="unfinished"/>
+        <translation>Guardar Estilo de Símbolos de Acordes</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1088"/>
         <source>PDF Scan File</source>
-        <translation type="unfinished"/>
+        <translation>Escanear Archivo PDF</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1093"/>
@@ -9105,7 +9110,7 @@ antes de cerrar?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1134"/>
         <source>Ogg Audio File</source>
-        <translation type="unfinished"/>
+        <translation>Archivo de Audio Ogg</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1139"/>
@@ -9115,12 +9120,12 @@ antes de cerrar?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1150"/>
         <source>Choose Ogg Audio File</source>
-        <translation type="unfinished"/>
+        <translation>Elegir Archivo de Audio Ogg</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1180"/>
         <source>Save Image</source>
-        <translation type="unfinished"/>
+        <translation>Guardar Imagen</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1268"/>
@@ -9131,7 +9136,7 @@ antes de cerrar?</translation>
         <location filename="../../mscore/file.cpp" line="1269"/>
         <location filename="../../mscore/file.cpp" line="1273"/>
         <source>MuseScore Palette</source>
-        <translation type="unfinished"/>
+        <translation>Paleta de MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1272"/>
@@ -9141,23 +9146,23 @@ antes de cerrar?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1350"/>
         <source>Load Plugin</source>
-        <translation type="unfinished"/>
+        <translation>Cargar Plugin</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1351"/>
         <source>MuseScore Plugin</source>
-        <translation type="unfinished"/>
+        <translation>Plugin de MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1354"/>
         <location filename="../../mscore/file.cpp" line="1404"/>
         <source>Save Plugin</source>
-        <translation type="unfinished"/>
+        <translation>Guardar Plugin</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1355"/>
         <source>MuseScore Plugin File</source>
-        <translation type="unfinished"/>
+        <translation>Archivo de Plugin de MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1433"/>
@@ -9342,7 +9347,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/file.cpp" line="2180"/>
         <source>Save a Copy</source>
-        <translation type="unfinished"/>
+        <translation>Guardar una Copia</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2235"/>
@@ -9359,12 +9364,12 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/file.cpp" line="2270"/>
         <source>Save Selected</source>
-        <translation type="unfinished"/>
+        <translation>Guardar Selección</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2283"/>
         <source>Insert Image</source>
-        <translation type="unfinished"/>
+        <translation>Insertar Imagen</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2287"/>
@@ -9642,7 +9647,7 @@ seleccione un compás e inténtelo de nuevo</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="605"/>
         <source>Playback Controls</source>
-        <translation type="unfinished"/>
+        <translation>Controles de Reproducción</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="622"/>
@@ -9712,7 +9717,7 @@ seleccione un compás e inténtelo de nuevo</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="853"/>
         <source>&amp;Toolbars</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Barras de Herramientas</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="930"/>
@@ -9925,7 +9930,7 @@ Restore session?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4785"/>
         <source>Warning</source>
-        <translation type="unfinished"/>
+        <translation>Advertencia</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4786"/>
@@ -9992,7 +9997,8 @@ escoja un nombre distinto:</translation>
         <location filename="../../mscore/webpage.cpp" line="173"/>
         <source>Could not
 connect</source>
-        <translation type="unfinished"/>
+        <translation>No se pudo
+conectar</translation>
     </message>
     <message>
         <location filename="../../mscore/webpage.cpp" line="174"/>
@@ -10399,7 +10405,7 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="435"/>
         <source>Save Plugin</source>
-        <translation type="unfinished"/>
+        <translation>Guardar Plugin</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="435"/>
@@ -10503,52 +10509,52 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="632"/>
         <source>40</source>
-        <translation type="unfinished"/>
+        <translation>40</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="633"/>
         <source>48</source>
-        <translation type="unfinished"/>
+        <translation>48</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="634"/>
         <source>56</source>
-        <translation type="unfinished"/>
+        <translation>56</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="636"/>
         <source>80</source>
-        <translation type="unfinished"/>
+        <translation>80</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="637"/>
         <source>96</source>
-        <translation type="unfinished"/>
+        <translation>96</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="638"/>
         <source>112</source>
-        <translation type="unfinished"/>
+        <translation>112</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="640"/>
         <source>160</source>
-        <translation type="unfinished"/>
+        <translation>160</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="641"/>
         <source>192</source>
-        <translation type="unfinished"/>
+        <translation>192</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="642"/>
         <source>224</source>
-        <translation type="unfinished"/>
+        <translation>224</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="644"/>
         <source>320</source>
-        <translation type="unfinished"/>
+        <translation>320</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="777"/>
@@ -10750,7 +10756,7 @@ falló: %2</translation>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="387"/>
         <source>Save File failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Error al guardar archivo: %1</translation>
     </message>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="445"/>
@@ -10760,7 +10766,7 @@ falló: %2</translation>
 %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="467"/>
+        <location filename="../../libmscore/scorefile.cpp" line="470"/>
         <source>Open File
 %1
 failed: </source>
@@ -10769,7 +10775,7 @@ failed: </source>
 falló:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="600"/>
+        <location filename="../../libmscore/scorefile.cpp" line="603"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -10778,12 +10784,12 @@ failed: %2</source>
 falló: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="622"/>
+        <location filename="../../libmscore/scorefile.cpp" line="625"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>El archivo de estilos no es compatible con esta versión de MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="643"/>
+        <location filename="../../libmscore/scorefile.cpp" line="646"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -10792,12 +10798,12 @@ failed: %2</source>
 falló: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="653"/>
+        <location filename="../../libmscore/scorefile.cpp" line="656"/>
         <source>Write Style failed: %1</source>
         <translation>Escribir estilo falló: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1195"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>error de lectura XML en la línea %1 columna %2: %3</translation>
     </message>
@@ -10907,7 +10913,7 @@ falló: %2</translation>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="641"/>
         <source>Set Output Resolution</source>
-        <translation type="unfinished"/>
+        <translation>Establecer Resolución de Salida</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="642"/>
@@ -11319,7 +11325,7 @@ seleccione un compás e inténtelo de nuevo</translation>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="58"/>
         <source>System Text Properties</source>
-        <translation type="unfinished"/>
+        <translation>Propiedades de Texto del Sistema</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="64"/>
@@ -11411,7 +11417,7 @@ seleccione un compás e inténtelo de nuevo</translation>
     <message>
         <location filename="../../mscore/textproperties.cpp" line="54"/>
         <source>Text Properties</source>
-        <translation type="unfinished"/>
+        <translation>Propiedades de Texto</translation>
     </message>
 </context>
 <context>
@@ -11489,17 +11495,17 @@ elija un nombre distinto:</translation>
 <context>
     <name>Ms::TimeSig</name>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="590"/>
+        <location filename="../../libmscore/timesig.cpp" line="591"/>
         <source>Common time</source>
         <translation>Compás común</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="592"/>
+        <location filename="../../libmscore/timesig.cpp" line="593"/>
         <source>Cut time</source>
         <translation>Alla breve</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="594"/>
+        <location filename="../../libmscore/timesig.cpp" line="595"/>
         <source>%1/%2 time</source>
         <translation>%1/%2 tiempo</translation>
     </message>
@@ -11507,18 +11513,18 @@ elija un nombre distinto:</translation>
 <context>
     <name>Ms::UpdateChecker</name>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="81"/>
+        <location filename="../../mscore/updatechecker.cpp" line="85"/>
         <source>An update for MuseScore is available: %1MuseScore %2 r.%3%4</source>
         <translation>Una actualización de MuseScore está disponible: %1MuseScore %2 r.%3%4</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="89"/>
+        <location filename="../../mscore/updatechecker.cpp" line="93"/>
         <source>Update Available</source>
         <translation>Actualización disponible</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="96"/>
-        <location filename="../../mscore/updatechecker.cpp" line="97"/>
+        <location filename="../../mscore/updatechecker.cpp" line="100"/>
+        <location filename="../../mscore/updatechecker.cpp" line="101"/>
         <source>No Update Available</source>
         <translation>No hay actualizaciones disponibles.</translation>
     </message>
@@ -11611,7 +11617,7 @@ elija un nombre distinto:</translation>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="240"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="249"/>
         <source>[%1link%2]</source>
         <translation>[%1link%2]</translation>
     </message>
@@ -11906,7 +11912,7 @@ elija un nombre distinto:</translation>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="91"/>
         <source>Portrait</source>
-        <translation type="unfinished"/>
+        <translation>Retrato</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="101"/>
@@ -12988,7 +12994,7 @@ falló:</translation>
         <location filename="../../mscore/prefsdialog.ui" line="628"/>
         <source>min</source>
         <extracomment>minutes</extracomment>
-        <translation type="unfinished"/>
+        <translation>min</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="657"/>
@@ -13014,7 +13020,7 @@ falló:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="717"/>
         <source>Theme</source>
-        <translation type="unfinished"/>
+        <translation>Tema</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="725"/>
@@ -13040,7 +13046,7 @@ falló:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="756"/>
         <source>Icon width:</source>
-        <translation type="unfinished"/>
+        <translation>Ancho de icono:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="769"/>
@@ -13053,12 +13059,12 @@ falló:</translation>
         <location filename="../../mscore/prefsdialog.ui" line="1179"/>
         <source>px</source>
         <extracomment>pixel</extracomment>
-        <translation type="unfinished"/>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="785"/>
         <source>Icon height:</source>
-        <translation type="unfinished"/>
+        <translation>Alto de icono:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="798"/>
@@ -14059,7 +14065,7 @@ falló:</translation>
         <location filename="../../mscore/prefsdialog.ui" line="3462"/>
         <location filename="../../mscore/prefsdialog.ui" line="3630"/>
         <source>Resolution:</source>
-        <translation type="unfinished"/>
+        <translation>Resolución:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3469"/>
@@ -14070,7 +14076,7 @@ falló:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3492"/>
         <source>Resolution</source>
-        <translation type="unfinished"/>
+        <translation>Resolución</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3495"/>
@@ -14083,7 +14089,7 @@ falló:</translation>
         <location filename="../../mscore/prefsdialog.ui" line="3643"/>
         <source>dpi</source>
         <extracomment>dots per inch</extracomment>
-        <translation type="unfinished"/>
+        <translation>ppp</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3535"/>
@@ -14144,12 +14150,12 @@ falló:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3806"/>
         <source>kbps</source>
-        <translation type="unfinished"/>
+        <translation>kbps</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3826"/>
         <source>MP3 bitrate:</source>
-        <translation type="unfinished"/>
+        <translation>Tasa de bits MP3</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3837"/>
@@ -14257,7 +14263,7 @@ falló:</translation>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2714"/>
+        <location filename="../../libmscore/edit.cpp" line="2711"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14267,7 +14273,7 @@ falló:</translation>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2715"/>
+        <location filename="../../libmscore/edit.cpp" line="2712"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14585,7 +14591,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/file.cpp" line="220"/>
         <source>Load Error</source>
-        <translation type="unfinished"/>
+        <translation>Error al Cargar</translation>
     </message>
     <message>
         <location filename="../../mscore/importxml.cpp" line="67"/>
@@ -14647,7 +14653,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/uploadscoredialog.cpp" line="30"/>
         <source>Upload Error</source>
-        <translation type="unfinished"/>
+        <translation>Error de subida</translation>
     </message>
 </context>
 <context>
@@ -14655,7 +14661,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/album.cpp" line="243"/>
         <source>Open Album failed</source>
-        <translation type="unfinished"/>
+        <translation>Error al Abrir el Álbum</translation>
     </message>
     <message>
         <location filename="../../mscore/album.cpp" line="245"/>
@@ -14680,7 +14686,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="149"/>
         <source>Save File</source>
-        <translation type="unfinished"/>
+        <translation>Guardar Archivo</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="209"/>
@@ -14690,7 +14696,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="307"/>
         <source>Save Album</source>
-        <translation type="unfinished"/>
+        <translation>Guardar Álbum</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="309"/>
@@ -14709,7 +14715,7 @@ falló:</translation>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="323"/>
         <source>Open Album File</source>
-        <translation type="unfinished"/>
+        <translation>Abrir Archivo de Álbum</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="329"/>
@@ -14768,17 +14774,17 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="2311"/>
         <source>Import Guitar Pro</source>
-        <translation type="unfinished"/>
+        <translation>Importar Guitar Pro</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi.cpp" line="1199"/>
         <source>Load MIDI</source>
-        <translation type="unfinished"/>
+        <translation>Cargar MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="125"/>
         <source>Load Style Failed</source>
-        <translation type="unfinished"/>
+        <translation>Error al Cargar Estilo</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2639"/>
@@ -14788,7 +14794,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4274"/>
         <source>Invalid Command</source>
-        <translation type="unfinished"/>
+        <translation>Comando Inválido</translation>
     </message>
     <message>
         <location filename="../../mscore/palettebox.cpp" line="196"/>
@@ -15001,7 +15007,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="14"/>
         <source>Select Notes</source>
-        <translation type="unfinished"/>
+        <translation>Seleccionar Notas</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="34"/>
@@ -15508,7 +15514,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textpalette.ui" line="14"/>
         <source>Special Characters</source>
-        <translation type="unfinished"/>
+        <translation>Caracteres Especiales</translation>
     </message>
 </context>
 <context>
@@ -15975,7 +15981,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textstyle.ui" line="14"/>
         <source>Edit Text Styles</source>
-        <translation type="unfinished"/>
+        <translation>Editar Estilos de Texto</translation>
     </message>
     <message>
         <location filename="../../mscore/textstyle.ui" line="45"/>
@@ -16767,7 +16773,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="366"/>
         <source>Changes:</source>
-        <translation type="unfinished"/>
+        <translation>Cambios:</translation>
     </message>
 </context>
 <context>
@@ -17380,7 +17386,7 @@ falló:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="272"/>
         <source>Rhythm</source>
-        <translation type="unfinished"/>
+        <translation>Ritmo</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="273"/>
@@ -17390,7 +17396,7 @@ falló:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="283"/>
         <source>Real-time (automatic)</source>
-        <translation type="unfinished"/>
+        <translation>Tiempo real (automático)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="284"/>
@@ -17400,7 +17406,7 @@ falló:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="294"/>
         <source>Real-time (manual)</source>
-        <translation type="unfinished"/>
+        <translation>Tiempo real (manual)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="295"/>
@@ -19194,12 +19200,12 @@ falló:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1832"/>
         <source>Playback Controls</source>
-        <translation type="unfinished"/>
+        <translation>Controles de Reproducción</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1833"/>
         <source>Playback controls toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Barra de Controles de Reproducción</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1839"/>
@@ -19390,7 +19396,7 @@ falló:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1980"/>
         <source>Add fingering</source>
-        <translation type="unfinished"/>
+        <translation>Agregar Digitación</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1986"/>

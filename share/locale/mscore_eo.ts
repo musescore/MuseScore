@@ -94,7 +94,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="17"/>
         <source>Album Manager</source>
-        <translation type="unfinished"/>
+        <translation>Administrilo de albumoj</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="28"/>
@@ -159,7 +159,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="187"/>
         <source>Save Joined Score</source>
-        <translation type="unfinished"/>
+        <translation>Konservi kunigitan partituron</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="199"/>
@@ -8253,31 +8253,31 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
 <context>
     <name>Ms::EditDrumset</name>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="74"/>
+        <location filename="../../mscore/editdrumset.cpp" line="86"/>
         <source>invalid</source>
         <translation>nevalida</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="375"/>
+        <location filename="../../mscore/editdrumset.cpp" line="387"/>
         <source>Open File
 %1
 failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="377"/>
+        <location filename="../../mscore/editdrumset.cpp" line="389"/>
         <source>Open File</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="387"/>
+        <location filename="../../mscore/editdrumset.cpp" line="399"/>
         <source>Write File failed: </source>
         <translation>Write File failed: </translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="388"/>
+        <location filename="../../mscore/editdrumset.cpp" line="400"/>
         <source>Write Drumset</source>
-        <translation type="unfinished"/>
+        <translation>Registri tamburaron</translation>
     </message>
 </context>
 <context>
@@ -8590,7 +8590,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="74"/>
         <source>Save Instrument List</source>
-        <translation type="unfinished"/>
+        <translation>Konservi liston de muzikiloj</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="76"/>
@@ -8725,87 +8725,87 @@ failed: </source>
 <context>
     <name>Ms::LoginManager</name>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Network error</source>
         <translation>Reteraro</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Please check your Internet connection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Please upgrade</source>
         <translation>Bonvole plibonigu</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Your MuseScore version is too old to use this feature.
 %1Please upgrade first%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="210"/>
+        <location filename="../../mscore/loginmanager.cpp" line="211"/>
         <source>Unsuccessful login. Please try again.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="216"/>
+        <location filename="../../mscore/loginmanager.cpp" line="217"/>
         <source>Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="221"/>
+        <location filename="../../mscore/loginmanager.cpp" line="222"/>
         <source>This account has been blocked.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="224"/>
+        <location filename="../../mscore/loginmanager.cpp" line="225"/>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or %1request a new activation email%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="229"/>
+        <location filename="../../mscore/loginmanager.cpp" line="230"/>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, %1contact us%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="292"/>
+        <location filename="../../mscore/loginmanager.cpp" line="293"/>
         <source>Error while getting user info. Please try again</source>
         <translation>Eraro dum la akirado de uzantinformoj. Bonvole reprovu.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="296"/>
+        <location filename="../../mscore/loginmanager.cpp" line="297"/>
         <source>Error while getting user info: %1</source>
         <translation>Eraro dum la akirado de uzantinformoj: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="410"/>
+        <location filename="../../mscore/loginmanager.cpp" line="411"/>
         <source>Uploading...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="445"/>
+        <location filename="../../mscore/loginmanager.cpp" line="446"/>
         <source>Upload Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="446"/>
+        <location filename="../../mscore/loginmanager.cpp" line="447"/>
         <source>Sorry, MuseScore couldn&apos;t upload the audio file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="546"/>
+        <location filename="../../mscore/loginmanager.cpp" line="547"/>
         <source>An error occurred during the file transfer. Please try again</source>
         <translation>Eraro okazis dum la dosiertransigo. Bonvole reprovu.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="550"/>
+        <location filename="../../mscore/loginmanager.cpp" line="551"/>
         <source>Cannot upload: %1</source>
         <translation>Alŝuti ne eblas: %1</translation>
     </message>
@@ -8864,7 +8864,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/metaedit.cpp" line="78"/>
         <source>Input Tag Name</source>
-        <translation type="unfinished"/>
+        <translation>Enmeta marknomo</translation>
     </message>
     <message>
         <location filename="../../mscore/metaedit.cpp" line="79"/>
@@ -8942,7 +8942,8 @@ failed: </source>
         <location filename="../../mscore/file.cpp" line="251"/>
         <source>Save changes to the score &quot;%1&quot;
 before closing?</source>
-        <translation>Save changes to the score &quot;%1&quot; before closing?</translation>
+        <translation>Konservi ŝanĝoj al la partituro &quot;%1&quot;
+antaŭ ol la fermado?</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="286"/>
@@ -9025,13 +9026,13 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="416"/>
         <source>Save Score</source>
-        <translation type="unfinished"/>
+        <translation>Konservi partituron</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="424"/>
         <location filename="../../mscore/file.cpp" line="431"/>
         <source>Save File</source>
-        <translation type="unfinished"/>
+        <translation>Konservi dosieron</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="457"/>
@@ -9056,7 +9057,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="1064"/>
         <location filename="../../mscore/musescore.cpp" line="4593"/>
         <source>Save Style</source>
-        <translation>Stilon registri</translation>
+        <translation>Konservi stilon</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="946"/>
@@ -9079,7 +9080,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1024"/>
         <source>Save Chord Symbols Style</source>
-        <translation type="unfinished"/>
+        <translation>Konservi la stilon de akordosimboloj</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1088"/>
@@ -9110,7 +9111,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1180"/>
         <source>Save Image</source>
-        <translation type="unfinished"/>
+        <translation>Konservi bildon</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1268"/>
@@ -9131,43 +9132,43 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1350"/>
         <source>Load Plugin</source>
-        <translation type="unfinished"/>
+        <translation>Ŝargi kromprogramon</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1351"/>
         <source>MuseScore Plugin</source>
-        <translation type="unfinished"/>
+        <translation>Kromprogramo de MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1354"/>
         <location filename="../../mscore/file.cpp" line="1404"/>
         <source>Save Plugin</source>
-        <translation type="unfinished"/>
+        <translation>Konservi kromprogramon</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1355"/>
         <source>MuseScore Plugin File</source>
-        <translation type="unfinished"/>
+        <translation>Komprogramdosiero de MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1433"/>
         <source>Load Drumset</source>
-        <translation type="unfinished"/>
+        <translation>Ŝargi tamburaron</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1434"/>
         <source>MuseScore Drumset</source>
-        <translation type="unfinished"/>
+        <translation>Tamburaron de MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1437"/>
         <source>Save Drumset</source>
-        <translation type="unfinished"/>
+        <translation>Konservi tamburaron</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1438"/>
         <source>MuseScore Drumset File</source>
-        <translation type="unfinished"/>
+        <translation>Tamburardosiero de MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1582"/>
@@ -9332,7 +9333,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/file.cpp" line="2180"/>
         <source>Save a Copy</source>
-        <translation type="unfinished"/>
+        <translation>Konservi ekzempleron</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2235"/>
@@ -9349,7 +9350,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/file.cpp" line="2270"/>
         <source>Save Selected</source>
-        <translation type="unfinished"/>
+        <translation>Konservi la elektitan parton</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2283"/>
@@ -9647,7 +9648,7 @@ Bonvole selektu mezuron kaj reprovu.</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="636"/>
         <source>Note Input</source>
-        <translation>Noton enigi</translation>
+        <translation>Notenmeto</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="653"/>
@@ -9821,37 +9822,37 @@ Restarigo ne forigos ajnan partiturojn el via komputilo.
     <message>
         <location filename="../../mscore/musescore.cpp" line="2825"/>
         <source>Repitch input mode</source>
-        <translation type="unfinished"/>
+        <translation>Repitĉo-enmeta reĝimo</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2830"/>
         <source>Rhythm input mode</source>
-        <translation type="unfinished"/>
+        <translation>Ritmo-enmeta reĝimo</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2835"/>
         <source>Realtime (automatic) note input mode</source>
-        <translation type="unfinished"/>
+        <translation>Tuja (aŭtomata) notenmeta reĝimo</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2840"/>
         <source>Realtime (manual) note input mode</source>
-        <translation type="unfinished"/>
+        <translation>Tuja (mana) notenmeta reĝimo</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2845"/>
         <source>Steptime note input mode</source>
-        <translation type="unfinished"/>
+        <translation>Popaŝa notenmeta reĝimo</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2852"/>
         <source>Drum input mode</source>
-        <translation>Tambureniga reĝimo</translation>
+        <translation>Tamburenmeta reĝimo</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2860"/>
         <source>TAB input mode</source>
-        <translation>Tablatureniga reĝimo</translation>
+        <translation>Tablaturenmeta reĝimo</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2863"/>
@@ -10100,7 +10101,7 @@ connection enabled</source>
     <message>
         <location filename="../../effects/noeffect/noeffect.cpp" line="41"/>
         <source>No Plugin</source>
-        <translation type="unfinished"/>
+        <translation>Neniu kromprogramo</translation>
     </message>
 </context>
 <context>
@@ -10261,7 +10262,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="63"/>
         <source>Save Palette...</source>
-        <translation type="unfinished"/>
+        <translation>Konservi paletron...</translation>
     </message>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="64"/>
@@ -10389,7 +10390,7 @@ Konservi tiojn antaŭe ol oni fermas ĝin?</translation>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="435"/>
         <source>Save Plugin</source>
-        <translation type="unfinished"/>
+        <translation>Konservi kromprogramon</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="435"/>
@@ -10737,7 +10738,7 @@ failed: %2</source>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="387"/>
         <source>Save File failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>La konservado de la dosiero malsukcesis: %1</translation>
     </message>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="445"/>
@@ -10746,38 +10747,38 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="467"/>
+        <location filename="../../libmscore/scorefile.cpp" line="470"/>
         <source>Open File
 %1
 failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="600"/>
+        <location filename="../../libmscore/scorefile.cpp" line="603"/>
         <source>Open File
 %1
 failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="622"/>
+        <location filename="../../libmscore/scorefile.cpp" line="625"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>La </translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="643"/>
+        <location filename="../../libmscore/scorefile.cpp" line="646"/>
         <source>Open Style File
 %1
 failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="653"/>
+        <location filename="../../libmscore/scorefile.cpp" line="656"/>
         <source>Write Style failed: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1195"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>XML-legaderaro je la %1-a linio de la %2-a kolumno: %3</translation>
     </message>
@@ -11408,7 +11409,7 @@ Bonvole selektu mezuron kaj reprovu.</translation>
     <message>
         <location filename="../../mscore/textstyle.cpp" line="202"/>
         <source>Text style name:</source>
-        <translation type="unfinished"/>
+        <translation>Teksta stilnomo:</translation>
     </message>
     <message>
         <location filename="../../mscore/textstyle.cpp" line="217"/>
@@ -11467,17 +11468,17 @@ bonvole elektu malsaman nomon:</translation>
 <context>
     <name>Ms::TimeSig</name>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="590"/>
+        <location filename="../../libmscore/timesig.cpp" line="591"/>
         <source>Common time</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="592"/>
+        <location filename="../../libmscore/timesig.cpp" line="593"/>
         <source>Cut time</source>
         <translation>2/2 alla breve</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="594"/>
+        <location filename="../../libmscore/timesig.cpp" line="595"/>
         <source>%1/%2 time</source>
         <translation type="unfinished"/>
     </message>
@@ -11485,18 +11486,18 @@ bonvole elektu malsaman nomon:</translation>
 <context>
     <name>Ms::UpdateChecker</name>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="81"/>
+        <location filename="../../mscore/updatechecker.cpp" line="85"/>
         <source>An update for MuseScore is available: %1MuseScore %2 r.%3%4</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="89"/>
+        <location filename="../../mscore/updatechecker.cpp" line="93"/>
         <source>Update Available</source>
         <translation>Ĝisdatigo haveblas</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="96"/>
-        <location filename="../../mscore/updatechecker.cpp" line="97"/>
+        <location filename="../../mscore/updatechecker.cpp" line="100"/>
+        <location filename="../../mscore/updatechecker.cpp" line="101"/>
         <source>No Update Available</source>
         <translation>No Update Available</translation>
     </message>
@@ -11589,7 +11590,7 @@ bonvole elektu malsaman nomon:</translation>
         <translation>Eraro</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="240"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="249"/>
         <source>[%1link%2]</source>
         <translation type="unfinished"/>
     </message>
@@ -12630,7 +12631,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/pluginCreator.ui" line="178"/>
         <source>Reload current plugin source</source>
-        <translation type="unfinished"/>
+        <translation>Reŝargi la nunan kromprogramfonton</translation>
     </message>
 </context>
 <context>
@@ -12885,7 +12886,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="465"/>
         <source>Insert path to plugin folder</source>
-        <translation type="unfinished"/>
+        <translation>Enmeti la dosierindikon al la kromprograma dosierujo</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="472"/>
@@ -12906,7 +12907,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="488"/>
         <source>Opens a folder dialog for selecting the plugin folder</source>
-        <translation type="unfinished"/>
+        <translation>Malfermas dosierujan dialogujon por la elektado de la kromprograman dosierujon</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="502"/>
@@ -12958,7 +12959,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="625"/>
         <source>Select delay (in minutes) between auto saves</source>
-        <translation type="unfinished"/>
+        <translation>Elekti la malfruigon (en minutoj) inter aŭtokonservadoj</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="628"/>
@@ -13197,13 +13198,13 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1216"/>
         <source>Note Input Tab</source>
-        <translation type="unfinished"/>
+        <translation>Notenmeta langeto</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1219"/>
         <location filename="../../mscore/prefsdialog.ui" line="1225"/>
         <source>Note Input</source>
-        <translation>Noton enigi</translation>
+        <translation>Notenmeto</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1231"/>
@@ -13485,17 +13486,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2067"/>
         <source>Note input</source>
-        <translation>Noton enigi</translation>
+        <translation>Notenmeto</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2083"/>
         <source>Note input is active</source>
-        <translation>Notenigo estas aktiva</translation>
+        <translation>Notenmeto aktivas</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2104"/>
         <source>Note input record</source>
-        <translation>Noteniga rikordo</translation>
+        <translation>Notenmeta registro</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2119"/>
@@ -13765,7 +13766,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2742"/>
         <source>Choose MIDI Input</source>
-        <translation>Selekti enigon de MIDI</translation>
+        <translation>Elekti enigon de MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2749"/>
@@ -14233,7 +14234,7 @@ failed: </source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2714"/>
+        <location filename="../../libmscore/edit.cpp" line="2711"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14243,7 +14244,7 @@ failed: </source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2715"/>
+        <location filename="../../libmscore/edit.cpp" line="2712"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14538,13 +14539,17 @@ malsukcesis: %2</translation>
 You can convert this score by opening and then
 saving with MuseScore version 1.x.
 Visit the %1MuseScore download page%2 to obtain such a 1.x version.</source>
-        <translation type="unfinished"/>
+        <translation>Oni konservis ĝin per la versio 0.9.5 aŭ pli malnova.
+Por konverti ĉi tiun partituron, malfermi kaj tiam konservi
+ĝin per versio 1.x de MuseScore.
+Ĉe la %1elŝutpaĝo de MuseScore%2 vi povas akiri tian version 1.x.</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="191"/>
         <source>This score was saved using a newer version of MuseScore.
 Visit the %1MuseScore website%2 to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Oni konservis ĉi tiun partituron per pli nova versio de MuseScore.
+Ĉe la %1retejo de MuseScore%2 vi povas elŝuti la plej lastan version.</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="198"/>
@@ -14648,12 +14653,12 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="142"/>
         <source>Save Album into Score</source>
-        <translation type="unfinished"/>
+        <translation>Konservi albumon en partituro</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="149"/>
         <source>Save File</source>
-        <translation type="unfinished"/>
+        <translation>Konservi dosieron</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="209"/>
@@ -14663,7 +14668,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="307"/>
         <source>Save Album</source>
-        <translation type="unfinished"/>
+        <translation>Konservi albumon</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="309"/>
@@ -15945,7 +15950,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textstyle.ui" line="14"/>
         <source>Edit Text Styles</source>
-        <translation type="unfinished"/>
+        <translation>Redakti la stilojn de teksto</translation>
     </message>
     <message>
         <location filename="../../mscore/textstyle.ui" line="45"/>
@@ -17185,7 +17190,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="113"/>
         <source>Save a copy of the score in various formats</source>
-        <translation type="unfinished"/>
+        <translation>Konservi ekzempleron de la partituro en diversaj formatoj</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="122"/>
@@ -17200,7 +17205,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="124"/>
         <source>Save a copy of the score&apos;s parts in various formats</source>
-        <translation type="unfinished"/>
+        <translation>Konservi ekzempleron de la partitureroj en diversaj formatoj</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="133"/>
@@ -17318,12 +17323,12 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="239"/>
         <location filename="../../mscore/shortcut.cpp" line="1853"/>
         <source>Note Input</source>
-        <translation>Notenigado</translation>
+        <translation>Notenmeto</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="240"/>
         <source>Note input</source>
-        <translation>Notenigado</translation>
+        <translation>Notenmeto</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="250"/>
@@ -17785,7 +17790,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="592"/>
         <source>Move the cursor forward in real-time input mode</source>
-        <translation type="unfinished"/>
+        <translation>Antaŭen movi la kursoron en tuja notenmeta reĝimo.</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="599"/>
@@ -18807,7 +18812,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1474"/>
         <source>Note input: Rest</source>
-        <translation>Notenigo: Silento</translation>
+        <translation>Notenmeto: Silento</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1484"/>
@@ -18817,7 +18822,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1485"/>
         <source>Note input: Double sharp</source>
-        <translation>Notenigo: Duobla dieso</translation>
+        <translation>Notenmeto: Duobla dieso</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1486"/>
@@ -18833,7 +18838,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1496"/>
         <source>Note input: Sharp</source>
-        <translation>Notenigo: Dieso</translation>
+        <translation>Notenmeto: Dieso</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1506"/>
@@ -18844,7 +18849,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1507"/>
         <source>Note input: Natural</source>
-        <translation>Notenigo: Bekvadrato</translation>
+        <translation>Notenmeto: Bekvadrato</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1517"/>
@@ -18855,7 +18860,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1518"/>
         <source>Note input: Flat</source>
-        <translation>Noton enigi: Bemolo</translation>
+        <translation>Notenmeto: Bemolo</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1528"/>
@@ -18865,7 +18870,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1529"/>
         <source>Note input: Double flat</source>
-        <translation>Noton enigi: Duobla bemolo</translation>
+        <translation>Notenmeto: Duobla bemolo</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1530"/>
@@ -19193,7 +19198,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1854"/>
         <source>Note input toolbar</source>
-        <translation>Muziknotililaro</translation>
+        <translation>Notenmeta ilobreto</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1860"/>
@@ -19503,12 +19508,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2103"/>
         <source>Save Style...</source>
-        <translation>Stilon registri...</translation>
+        <translation>Konservi stilon...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2104"/>
         <source>Save style</source>
-        <translation>Save style</translation>
+        <translation>Konservi stilon</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2114"/>
@@ -19758,7 +19763,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2373"/>
         <source>Note input: Whole rest</source>
-        <translation>Notenigo: Plensilento</translation>
+        <translation>Notenmeto: Plensilento</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2379"/>
@@ -19768,7 +19773,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2380"/>
         <source>Note input: Half rest</source>
-        <translation>Notenigo: Duonsilento</translation>
+        <translation>Notenmeto: Duonsilento</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2386"/>
@@ -19778,7 +19783,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2387"/>
         <source>Note input: Quarter rest</source>
-        <translation>Notenigo: Kvaronsilento</translation>
+        <translation>Notenmeto: Kvaronsilento</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2393"/>
@@ -19788,7 +19793,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2394"/>
         <source>Note input: Eighth rest</source>
-        <translation>Notenigo: Okonsilento</translation>
+        <translation>Notenmeto: Okonsilento</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2400"/>
@@ -20370,22 +20375,22 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2924"/>
         <source>Next Syllable</source>
-        <translation type="unfinished"/>
+        <translation>Sekva silabo</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2925"/>
         <source>Next syllable</source>
-        <translation type="unfinished"/>
+        <translation>Sekva silabo</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2931"/>
         <source>Previous Syllable</source>
-        <translation type="unfinished"/>
+        <translation>Antaŭa silabo</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2932"/>
         <source>Previous syllable</source>
-        <translation type="unfinished"/>
+        <translation>Antaŭa silabo</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2938"/>
@@ -20571,7 +20576,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3109"/>
         <source>Note input: Rest (TAB)</source>
-        <translation>Notenigo: Silento (TAB)</translation>
+        <translation>Notenmeto: Silento (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3115"/>

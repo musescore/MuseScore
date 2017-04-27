@@ -8260,12 +8260,12 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
 <context>
     <name>Ms::EditDrumset</name>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="74"/>
+        <location filename="../../mscore/editdrumset.cpp" line="86"/>
         <source>invalid</source>
         <translation>annilys</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="375"/>
+        <location filename="../../mscore/editdrumset.cpp" line="387"/>
         <source>Open File
 %1
 failed: </source>
@@ -8274,17 +8274,17 @@ failed: </source>
 methodd:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="377"/>
+        <location filename="../../mscore/editdrumset.cpp" line="389"/>
         <source>Open File</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="387"/>
+        <location filename="../../mscore/editdrumset.cpp" line="399"/>
         <source>Write File failed: </source>
         <translation>Ysgrifennu Ffeil methodd:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="388"/>
+        <location filename="../../mscore/editdrumset.cpp" line="400"/>
         <source>Write Drumset</source>
         <translation type="unfinished"/>
     </message>
@@ -8736,87 +8736,87 @@ failed: </source>
 <context>
     <name>Ms::LoginManager</name>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Network error</source>
         <translation>Rhwydwaith wall</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Please check your Internet connection</source>
         <translation>Plîs arolwgwch eich cysylltiad rhwydwaith</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Please upgrade</source>
         <translation>Plîs uwchraddio</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Your MuseScore version is too old to use this feature.
 %1Please upgrade first%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="210"/>
+        <location filename="../../mscore/loginmanager.cpp" line="211"/>
         <source>Unsuccessful login. Please try again.</source>
         <translation>Aflwyddiannus mewngofnodi. Plîs cynnig arall</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="216"/>
+        <location filename="../../mscore/loginmanager.cpp" line="217"/>
         <source>Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="221"/>
+        <location filename="../../mscore/loginmanager.cpp" line="222"/>
         <source>This account has been blocked.</source>
         <translation>Mae cyfrif hwn wedi eu gwahardd</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="224"/>
+        <location filename="../../mscore/loginmanager.cpp" line="225"/>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or %1request a new activation email%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="229"/>
+        <location filename="../../mscore/loginmanager.cpp" line="230"/>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, %1contact us%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="292"/>
+        <location filename="../../mscore/loginmanager.cpp" line="293"/>
         <source>Error while getting user info. Please try again</source>
         <translation>gwall tra&apos;n chwilo gwybodaeth defnyddiwr. Ymdrechwch eto plis</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="296"/>
+        <location filename="../../mscore/loginmanager.cpp" line="297"/>
         <source>Error while getting user info: %1</source>
         <translation>Gwall wrth cael defnyddiwr wybodaeth: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="410"/>
+        <location filename="../../mscore/loginmanager.cpp" line="411"/>
         <source>Uploading...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="445"/>
+        <location filename="../../mscore/loginmanager.cpp" line="446"/>
         <source>Upload Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="446"/>
+        <location filename="../../mscore/loginmanager.cpp" line="447"/>
         <source>Sorry, MuseScore couldn&apos;t upload the audio file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="546"/>
+        <location filename="../../mscore/loginmanager.cpp" line="547"/>
         <source>An error occurred during the file transfer. Please try again</source>
         <translation>Mae gwall wedi ymddangos tra trosglwyddiad. Yndrechwch eto plîs</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="550"/>
+        <location filename="../../mscore/loginmanager.cpp" line="551"/>
         <source>Cannot upload: %1</source>
         <translation>Methu llwytho i fyny: %1</translation>
     </message>
@@ -10759,7 +10759,7 @@ methodd: %2</translation>
 %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="467"/>
+        <location filename="../../libmscore/scorefile.cpp" line="470"/>
         <source>Open File
 %1
 failed: </source>
@@ -10768,7 +10768,7 @@ failed: </source>
 methodd:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="600"/>
+        <location filename="../../libmscore/scorefile.cpp" line="603"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -10777,12 +10777,12 @@ failed: %2</source>
 methodd: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="622"/>
+        <location filename="../../libmscore/scorefile.cpp" line="625"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>Nid yw ffeil arddull ddim yn gytûn a&apos;r fersiwn o MuseScore.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="643"/>
+        <location filename="../../libmscore/scorefile.cpp" line="646"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -10791,12 +10791,12 @@ failed: %2</source>
 methodd: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="653"/>
+        <location filename="../../libmscore/scorefile.cpp" line="656"/>
         <source>Write Style failed: %1</source>
         <translation>Ysgrifennu Arddull methodd: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1195"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>XML darllen gwall ar linell %1 colofn %2: %3</translation>
     </message>
@@ -11488,17 +11488,17 @@ os gewlch yn dda defnyddiwch enw arall:</translation>
 <context>
     <name>Ms::TimeSig</name>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="590"/>
+        <location filename="../../libmscore/timesig.cpp" line="591"/>
         <source>Common time</source>
         <translation>Anser cyffredin</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="592"/>
+        <location filename="../../libmscore/timesig.cpp" line="593"/>
         <source>Cut time</source>
         <translation>Toriad amser</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="594"/>
+        <location filename="../../libmscore/timesig.cpp" line="595"/>
         <source>%1/%2 time</source>
         <translation>%1/%2 amser</translation>
     </message>
@@ -11506,18 +11506,18 @@ os gewlch yn dda defnyddiwch enw arall:</translation>
 <context>
     <name>Ms::UpdateChecker</name>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="81"/>
+        <location filename="../../mscore/updatechecker.cpp" line="85"/>
         <source>An update for MuseScore is available: %1MuseScore %2 r.%3%4</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="89"/>
+        <location filename="../../mscore/updatechecker.cpp" line="93"/>
         <source>Update Available</source>
         <translation>Diweddariad ar Gael</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="96"/>
-        <location filename="../../mscore/updatechecker.cpp" line="97"/>
+        <location filename="../../mscore/updatechecker.cpp" line="100"/>
+        <location filename="../../mscore/updatechecker.cpp" line="101"/>
         <source>No Update Available</source>
         <translation>Dim Diweddariad ar Gael</translation>
     </message>
@@ -11610,7 +11610,7 @@ os gewlch yn dda defnyddiwch enw arall:</translation>
         <translation>Gwall</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="240"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="249"/>
         <source>[%1link%2]</source>
         <translation type="unfinished"/>
     </message>
@@ -14257,7 +14257,7 @@ h:mm:s</translation>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2714"/>
+        <location filename="../../libmscore/edit.cpp" line="2711"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14267,7 +14267,7 @@ h:mm:s</translation>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2715"/>
+        <location filename="../../libmscore/edit.cpp" line="2712"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>

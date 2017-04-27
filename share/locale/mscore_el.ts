@@ -94,7 +94,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="17"/>
         <source>Album Manager</source>
-        <translation type="unfinished"/>
+        <translation>Διαχειριστής άλμπουμ</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="28"/>
@@ -109,7 +109,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="46"/>
         <source>Add Score...</source>
-        <translation type="unfinished"/>
+        <translation>Προσθήκη παρτιτούρας...</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="53"/>
@@ -149,7 +149,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="152"/>
         <source>Load...</source>
-        <translation type="unfinished"/>
+        <translation>Φόρτωση...</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="172"/>
@@ -159,7 +159,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="187"/>
         <source>Save Joined Score</source>
-        <translation type="unfinished"/>
+        <translation>Αποθήκευση ενωμένης παρτιτούρας</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="199"/>
@@ -169,12 +169,12 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="212"/>
         <source>Add page break between scores</source>
-        <translation type="unfinished"/>
+        <translation>Προσθήκη αλλαγής σελίδας μεταξύ παρτιτούρων</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="225"/>
         <source>Add section break between scores</source>
-        <translation type="unfinished"/>
+        <translation>Προσθήκη αλλαγής ενότητας μεταξύ παρτιτούρων</translation>
     </message>
 </context>
 <context>
@@ -182,7 +182,7 @@
     <message>
         <location filename="../../mscore/articulation.ui" line="14"/>
         <source>Articulation Properties</source>
-        <translation type="unfinished"/>
+        <translation>Ιδιότητες άρθρωσης</translation>
     </message>
     <message>
         <location filename="../../mscore/articulation.ui" line="24"/>
@@ -255,7 +255,7 @@
     <message>
         <location filename="../../awl/colorlabel.cpp" line="98"/>
         <source>Select Color</source>
-        <translation type="unfinished"/>
+        <translation>Επιλογή χρώματος</translation>
     </message>
 </context>
 <context>
@@ -263,7 +263,7 @@
     <message>
         <location filename="../../mscore/bend.ui" line="14"/>
         <source>Bend Properties</source>
-        <translation type="unfinished"/>
+        <translation>Ιδιότητες bend</translation>
     </message>
     <message>
         <location filename="../../mscore/bend.ui" line="23"/>
@@ -306,7 +306,7 @@
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="14"/>
         <source>Add/Remove Line Breaks</source>
-        <translation type="unfinished"/>
+        <translation>Προσθήκη/Αφαίρεση αλλαγών γραμμής</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="24"/>
@@ -440,7 +440,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="406"/>
         <source>The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and  peak is better for heavier, fast compression and percussion.</source>
-        <translation type="unfinished"/>
+        <translation>Η ισορροπία μεταξύ των ακολουθιών RMS και κορυφής. Το RMS είναι γενικά καλύτερο για λεπτή μουσική συμπίεση και η κορυφή είναι καλύτερη για βαριά, γρήγορη συμπίεση και κρουστά.</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="435"/>
@@ -554,7 +554,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="44"/>
         <source>Load...</source>
-        <translation type="unfinished"/>
+        <translation>Φόρτωση...</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="51"/>
@@ -647,7 +647,7 @@
     <message>
         <location filename="../../mscore/editinstrument.ui" line="14"/>
         <source>Edit Instrument Properties</source>
-        <translation type="unfinished"/>
+        <translation>Επεξεργασία ιδιοτήτων οργάνου</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="20"/>
@@ -1468,7 +1468,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="26"/>
         <source>Edit Staff/Part Properties</source>
-        <translation type="unfinished"/>
+        <translation>Επεξεργασία ιδιοτήτων πενταγράμμου/μέρους</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="38"/>
@@ -1772,7 +1772,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="20"/>
         <source>Edit Staff Type</source>
-        <translation type="unfinished"/>
+        <translation>Επεξεργασία τύπου πενταγράμμου</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="37"/>
@@ -1920,7 +1920,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="656"/>
         <source>Show fingerings</source>
-        <translation type="unfinished"/>
+        <translation>Εμφάνιση δακτυλισμών</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="679"/>
@@ -2097,7 +2097,7 @@
     <message>
         <location filename="../../mscore/editstyle.ui" line="14"/>
         <source>Edit Style</source>
-        <translation type="unfinished"/>
+        <translation>Επεξεργασία στιλ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="30"/>
@@ -3183,7 +3183,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4997"/>
         <source>Stem distance:</source>
-        <translation type="unfinished"/>
+        <translation>Απόσταση στελέχους:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5007"/>
@@ -3331,7 +3331,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="14"/>
         <source>Parts</source>
-        <translation type="unfinished"/>
+        <translation>Μέρη</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="20"/>
@@ -3358,7 +3358,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="107"/>
         <source>Generate new part for each instrument</source>
-        <translation type="unfinished"/>
+        <translation>Δημιουργία νέου μέρους για κάθε όργανο</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="110"/>
@@ -3435,7 +3435,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/fretdprops.ui" line="14"/>
         <source>Fretboard Diagram Properties</source>
-        <translation type="unfinished"/>
+        <translation>Ιδιότητες διαγράμματος ταστιέρας</translation>
     </message>
     <message>
         <location filename="../../mscore/fretdprops.ui" line="31"/>
@@ -3453,7 +3453,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/glissandoprop.ui" line="14"/>
         <source>Glissando Properties</source>
-        <translation type="unfinished"/>
+        <translation>Ιδιότητες glissando</translation>
     </message>
     <message>
         <location filename="../../mscore/glissandoprop.ui" line="34"/>
@@ -3522,7 +3522,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/insertmeasuresdialog.ui" line="14"/>
         <source>Insert Measures</source>
-        <translation type="unfinished"/>
+        <translation>Εισαγωγή μέτρων</translation>
     </message>
     <message>
         <location filename="../../mscore/insertmeasuresdialog.ui" line="39"/>
@@ -3938,7 +3938,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="449"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="731"/>
         <source>Octave</source>
-        <translation type="unfinished"/>
+        <translation>Οκτάβα</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="467"/>
@@ -4506,7 +4506,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="112"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>Παύση</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="119"/>
@@ -6920,7 +6920,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrdialog.ui" line="47"/>
         <source>Load...</source>
-        <translation type="unfinished"/>
+        <translation>Φόρτωση...</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.ui" line="54"/>
@@ -7130,7 +7130,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/lineproperties.ui" line="14"/>
         <source>Line Properties</source>
-        <translation type="unfinished"/>
+        <translation>Ιδιότητες γραμμής</translation>
     </message>
     <message>
         <location filename="../../mscore/lineproperties.ui" line="34"/>
@@ -7223,7 +7223,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/logindialog.ui" line="83"/>
         <source>Username or email:</source>
-        <translation type="unfinished"/>
+        <translation>Όνομα χρήστη ή email:</translation>
     </message>
     <message>
         <location filename="../../mscore/logindialog.ui" line="90"/>
@@ -7233,7 +7233,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/logindialog.ui" line="110"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>Κωδικός</translation>
     </message>
     <message>
         <location filename="../../mscore/logindialog.ui" line="123"/>
@@ -8000,7 +8000,11 @@ Support MuseScore with your %3donation%4.
 
 Copyright &amp;copy; 1999-2017 Werner Schweer and Others.
 Published under the GNU General Public License.</source>
-        <translation type="unfinished"/>
+        <translation>Επισκευτείτε το %1www.musescore.org%2 για νέες εκδόσεις και περισσότερες πληροφορίες.
+Υποστηρίξτε το MuseScore με την %3δωρεά%4 σας.
+
+Πνευματικά δικαιώματα &amp;copy; 1999-2017 Werner Schweer και άλλοι.
+Εκδόθηκε υπό την GNU General Public License.</translation>
     </message>
 </context>
 <context>
@@ -8010,7 +8014,9 @@ Published under the GNU General Public License.</source>
         <source>MusicXML is an open file format for exchanging digital sheet music,
 supported by many applications. MusicXML is copyright &amp;copy; MakeMusic, Inc.
 All rights reserved. For more information, see: %1MusicXML.com%2.</source>
-        <translation type="unfinished"/>
+        <translation>Το MusicXML είναι ένας ανοιχτός τύπος αρχείου για ανταλαγή ψηφιακών χαρτιών μουσικής,
+που υποστηρίζεται από πολλές εφαρμογές. Το MusicXML είναι copyright &amp;copy; MakeMusic, Inc.
+Όλα τα δικαιώματα παρακρατούνται. Για περισσότερες πληροφορίες δείτε: %1MusicXML.com%2.</translation>
     </message>
 </context>
 <context>
@@ -8049,7 +8055,7 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="75"/>
         <source>MuseScore Files</source>
-        <translation type="unfinished"/>
+        <translation>Αρχεία MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="76"/>
@@ -8059,12 +8065,12 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="101"/>
         <source>MuseScore Album Files</source>
-        <translation type="unfinished"/>
+        <translation>Αρχεία άλμπουμ MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="102"/>
         <source>Load Album</source>
-        <translation type="unfinished"/>
+        <translation>Φόρτωση άλμπουμ</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="149"/>
@@ -8261,12 +8267,12 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
 <context>
     <name>Ms::EditDrumset</name>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="74"/>
+        <location filename="../../mscore/editdrumset.cpp" line="86"/>
         <source>invalid</source>
         <translation>άκυρο</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="375"/>
+        <location filename="../../mscore/editdrumset.cpp" line="387"/>
         <source>Open File
 %1
 failed: </source>
@@ -8275,17 +8281,17 @@ failed: </source>
 απέτυχε:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="377"/>
+        <location filename="../../mscore/editdrumset.cpp" line="389"/>
         <source>Open File</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="387"/>
+        <location filename="../../mscore/editdrumset.cpp" line="399"/>
         <source>Write File failed: </source>
         <translation>Αρχείο Γραφής απέτυχε: </translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="388"/>
+        <location filename="../../mscore/editdrumset.cpp" line="400"/>
         <source>Write Drumset</source>
         <translation type="unfinished"/>
     </message>
@@ -8737,87 +8743,88 @@ failed: </source>
 <context>
     <name>Ms::LoginManager</name>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Network error</source>
         <translation>Σφάλμα δικτύου</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Please check your Internet connection</source>
         <translation>Παρακαλώ ελέγξτε τη σύνδεση του Ίντερνετ σας</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Please upgrade</source>
         <translation>Παρακαλώ αναβαθμίστε </translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Your MuseScore version is too old to use this feature.
 %1Please upgrade first%2.</source>
-        <translation type="unfinished"/>
+        <translation>Η έκδοση MuseScore που έχετε είναι πολύ παλιά για χρήση αυτού του χαρακτηριστικού
+%1Παρακαλώ αναβαθμίστε πρώτα%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="210"/>
+        <location filename="../../mscore/loginmanager.cpp" line="211"/>
         <source>Unsuccessful login. Please try again.</source>
         <translation>Αποτυχία εισόδου. Παρακαλώ προσπαθήστε ξανά</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="216"/>
+        <location filename="../../mscore/loginmanager.cpp" line="217"/>
         <source>Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="221"/>
+        <location filename="../../mscore/loginmanager.cpp" line="222"/>
         <source>This account has been blocked.</source>
         <translation>Αυτός ο λογαριασμός έχει μπλοκαριστεί.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="224"/>
+        <location filename="../../mscore/loginmanager.cpp" line="225"/>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or %1request a new activation email%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="229"/>
+        <location filename="../../mscore/loginmanager.cpp" line="230"/>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, %1contact us%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="292"/>
+        <location filename="../../mscore/loginmanager.cpp" line="293"/>
         <source>Error while getting user info. Please try again</source>
         <translation>Σφάλμα κατά την λήψη πληροφοριών χρήστη. Παρακαλώ προσπαθήστε ξανά</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="296"/>
+        <location filename="../../mscore/loginmanager.cpp" line="297"/>
         <source>Error while getting user info: %1</source>
         <translation>Σφάλμα κατά την λήψη πληροφοριών χρήστη: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="410"/>
+        <location filename="../../mscore/loginmanager.cpp" line="411"/>
         <source>Uploading...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="445"/>
+        <location filename="../../mscore/loginmanager.cpp" line="446"/>
         <source>Upload Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="446"/>
+        <location filename="../../mscore/loginmanager.cpp" line="447"/>
         <source>Sorry, MuseScore couldn&apos;t upload the audio file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="546"/>
+        <location filename="../../mscore/loginmanager.cpp" line="547"/>
         <source>An error occurred during the file transfer. Please try again</source>
         <translation>Ένα σφάλμα συνέβη κατά τη μεταφορά του αρχείου. Παρακαλώ προσπαθήστε ξανά</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="550"/>
+        <location filename="../../mscore/loginmanager.cpp" line="551"/>
         <source>Cannot upload: %1</source>
         <translation>Αδυναμία μεταφόρτωσης: %1</translation>
     </message>
@@ -8967,7 +8974,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="290"/>
         <source>MuseScore Files</source>
-        <translation type="unfinished"/>
+        <translation>Αρχεία MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="291"/>
@@ -10506,52 +10513,52 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="632"/>
         <source>40</source>
-        <translation type="unfinished"/>
+        <translation>40</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="633"/>
         <source>48</source>
-        <translation type="unfinished"/>
+        <translation>48</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="634"/>
         <source>56</source>
-        <translation type="unfinished"/>
+        <translation>56</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="636"/>
         <source>80</source>
-        <translation type="unfinished"/>
+        <translation>80</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="637"/>
         <source>96</source>
-        <translation type="unfinished"/>
+        <translation>96</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="638"/>
         <source>112</source>
-        <translation type="unfinished"/>
+        <translation>112</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="640"/>
         <source>160</source>
-        <translation type="unfinished"/>
+        <translation>160</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="641"/>
         <source>192</source>
-        <translation type="unfinished"/>
+        <translation>192</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="642"/>
         <source>224</source>
-        <translation type="unfinished"/>
+        <translation>224</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="644"/>
         <source>320</source>
-        <translation type="unfinished"/>
+        <translation>320</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="777"/>
@@ -10608,7 +10615,7 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1275"/>
         <source>MuseScore Files</source>
-        <translation type="unfinished"/>
+        <translation>Αρχεία MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1275"/>
@@ -10763,7 +10770,7 @@ failed: %2</source>
 %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="467"/>
+        <location filename="../../libmscore/scorefile.cpp" line="470"/>
         <source>Open File
 %1
 failed: </source>
@@ -10772,7 +10779,7 @@ failed: </source>
 απέτυχε:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="600"/>
+        <location filename="../../libmscore/scorefile.cpp" line="603"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -10781,12 +10788,12 @@ failed: %2</source>
 απέτυχε: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="622"/>
+        <location filename="../../libmscore/scorefile.cpp" line="625"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>Αυτό το αρχείο στιλ δεν είναι συμβατό με αυτή την έκδοση του MuseScore.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="643"/>
+        <location filename="../../libmscore/scorefile.cpp" line="646"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -10795,12 +10802,12 @@ failed: %2</source>
 απέτυχε: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="653"/>
+        <location filename="../../libmscore/scorefile.cpp" line="656"/>
         <source>Write Style failed: %1</source>
         <translation>Το γράψιμο στιλ απέτυχε: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1195"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>σφάλμα ανάγνωσης XML στην γραμμή %1 στήλη %2: %3</translation>
     </message>
@@ -11492,17 +11499,17 @@ please choose a different name:</source>
 <context>
     <name>Ms::TimeSig</name>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="590"/>
+        <location filename="../../libmscore/timesig.cpp" line="591"/>
         <source>Common time</source>
         <translation>Κοινός Χρόνος</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="592"/>
+        <location filename="../../libmscore/timesig.cpp" line="593"/>
         <source>Cut time</source>
         <translation>2/2 alla breve</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="594"/>
+        <location filename="../../libmscore/timesig.cpp" line="595"/>
         <source>%1/%2 time</source>
         <translation>%1/%2 χρόνος</translation>
     </message>
@@ -11510,18 +11517,18 @@ please choose a different name:</source>
 <context>
     <name>Ms::UpdateChecker</name>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="81"/>
+        <location filename="../../mscore/updatechecker.cpp" line="85"/>
         <source>An update for MuseScore is available: %1MuseScore %2 r.%3%4</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="89"/>
+        <location filename="../../mscore/updatechecker.cpp" line="93"/>
         <source>Update Available</source>
         <translation>Διαθέσιμες Ενημερώσεις</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="96"/>
-        <location filename="../../mscore/updatechecker.cpp" line="97"/>
+        <location filename="../../mscore/updatechecker.cpp" line="100"/>
+        <location filename="../../mscore/updatechecker.cpp" line="101"/>
         <source>No Update Available</source>
         <translation>Καμία Διαθέσιμη Ενημέρωση</translation>
     </message>
@@ -11614,7 +11621,7 @@ please choose a different name:</source>
         <translation>Σφάλμα</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="240"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="249"/>
         <source>[%1link%2]</source>
         <translation type="unfinished"/>
     </message>
@@ -14260,7 +14267,7 @@ failed: </source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2714"/>
+        <location filename="../../libmscore/edit.cpp" line="2711"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14270,7 +14277,7 @@ failed: </source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2715"/>
+        <location filename="../../libmscore/edit.cpp" line="2712"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14566,13 +14573,17 @@ failed: %2</source>
 You can convert this score by opening and then
 saving with MuseScore version 1.x.
 Visit the %1MuseScore download page%2 to obtain such a 1.x version.</source>
-        <translation type="unfinished"/>
+        <translation>Τελευταία αποθηκεύτηκε με την έκδοση 0.9.5 ή παλιότερη.
+Μπορείτε να μετατρέψετε αυτή την παρτιτούρα ανοίγοντας την και
+αποθηκεύοντας με το Musescore έκδοση 1.x.
+Επισκευθείτε την %1σελίδα λήψης του MuseScore%2 για να πάρετε την έκδοση 1.x.</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="191"/>
         <source>This score was saved using a newer version of MuseScore.
 Visit the %1MuseScore website%2 to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Η παρτιτούρα αποθηκεύτηκε με χρήση νεότερης έκδοσης του MuseScore.
+Επισκευθείτε τον %1 ιστοτότπο MuseScore%2 για να πάρετε την τελευταία έκδοση.</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="198"/>
@@ -14697,7 +14708,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="309"/>
         <source>MuseScore Files</source>
-        <translation type="unfinished"/>
+        <translation>Αρχεία MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="321"/>
@@ -15180,7 +15191,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/splitstaff.ui" line="20"/>
         <source>Edit Staff/Part Properties</source>
-        <translation type="unfinished"/>
+        <translation>Επεξεργασία ιδιοτήτων πενταγράμμου/μέρους</translation>
     </message>
     <message>
         <location filename="../../mscore/splitstaff.ui" line="36"/>

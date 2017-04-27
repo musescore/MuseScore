@@ -2568,7 +2568,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1990"/>
         <source>Clef to barline distance:</source>
-        <translation>Abstand Schlüssel-Tatkstrich:</translation>
+        <translation>Abstand Schlüssel-Taktstrich:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2025"/>
@@ -8264,12 +8264,12 @@ Alle Reche vorbehalten. Für mehr Informationen siehe: %1MusicXML.com%2.</transl
 <context>
     <name>Ms::EditDrumset</name>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="74"/>
+        <location filename="../../mscore/editdrumset.cpp" line="86"/>
         <source>invalid</source>
         <translation>Ungültig</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="375"/>
+        <location filename="../../mscore/editdrumset.cpp" line="387"/>
         <source>Open File
 %1
 failed: </source>
@@ -8278,18 +8278,18 @@ failed: </source>
 fehlgeschlagen:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="377"/>
+        <location filename="../../mscore/editdrumset.cpp" line="389"/>
         <source>Open File</source>
         <translation>Datei öffnen
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="387"/>
+        <location filename="../../mscore/editdrumset.cpp" line="399"/>
         <source>Write File failed: </source>
         <translation>Datei schreiben fehlgeschlagen: </translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="388"/>
+        <location filename="../../mscore/editdrumset.cpp" line="400"/>
         <source>Write Drumset</source>
         <translation>Schlagzeug schreiben</translation>
     </message>
@@ -8741,88 +8741,88 @@ fehlgeschlagen: </translation>
 <context>
     <name>Ms::LoginManager</name>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Network error</source>
         <translation>Netzwerkfehler</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Please check your Internet connection</source>
         <translation>Bitte prüfen Sie Ihre Internet-Verbindung</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Please upgrade</source>
         <translation>Bitte aktualisieren</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Your MuseScore version is too old to use this feature.
 %1Please upgrade first%2.</source>
         <translation>Ihre MuseScore-Version ist zu alt, um diese Funktion zu benutzen.
 %1Bitte zuerst aktualisieren%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="210"/>
+        <location filename="../../mscore/loginmanager.cpp" line="211"/>
         <source>Unsuccessful login. Please try again.</source>
         <translation>Erfolglose Anmeldung. Bitte nochmal versuchen.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="216"/>
+        <location filename="../../mscore/loginmanager.cpp" line="217"/>
         <source>Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?</source>
         <translation>Es tut uns leid, falsche E-Mail-Adresse, Benutzername oder Kennwort. Bitte überprüfen. %1Haben Sie Ihr Kennwort vergessen%2?</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="221"/>
+        <location filename="../../mscore/loginmanager.cpp" line="222"/>
         <source>This account has been blocked.</source>
         <translation>Diese Konto wurde gesperrt.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="224"/>
+        <location filename="../../mscore/loginmanager.cpp" line="225"/>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or %1request a new activation email%2.</source>
         <translation>Ihr Konto wurde noch nicht aktiviert. Bitte überprüfen Sie Ihr E-Mail-Postfach, um Ihr Konto zu aktivieren oder %1fordern eine Aktivierungs-E-Mail an%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="229"/>
+        <location filename="../../mscore/loginmanager.cpp" line="230"/>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, %1contact us%2.</source>
         <translation>Die lokale Zeitzone Ihres Gerätes ist nicht richtig eingestellt. Bitte überprüfen Sie diese und stellen sie korrekt ein. Es wird empfohlen die Zeit und Zeitzone auf &apos;automatisch&apos; einzustellen. Wenn Sie sich trotzdem nicht anmelden können, %1kontaktieren Sie uns%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="292"/>
+        <location filename="../../mscore/loginmanager.cpp" line="293"/>
         <source>Error while getting user info. Please try again</source>
         <translation>Fehler bei Abfrage der Benutzerinformationen. Bitte nochmal versuchen</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="296"/>
+        <location filename="../../mscore/loginmanager.cpp" line="297"/>
         <source>Error while getting user info: %1</source>
         <translation>Fehler bei Abfrage der Benutzerinformationen: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="410"/>
+        <location filename="../../mscore/loginmanager.cpp" line="411"/>
         <source>Uploading...</source>
         <translation>Hochladen...</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="445"/>
+        <location filename="../../mscore/loginmanager.cpp" line="446"/>
         <source>Upload Error</source>
         <translation>Upload Fehler</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="446"/>
+        <location filename="../../mscore/loginmanager.cpp" line="447"/>
         <source>Sorry, MuseScore couldn&apos;t upload the audio file</source>
         <translation>Leider konnte MuseScore die Audiodatei nicht hochladen</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="546"/>
+        <location filename="../../mscore/loginmanager.cpp" line="547"/>
         <source>An error occurred during the file transfer. Please try again</source>
         <translation>Während der Dateiübertragung trat ein Fehler auf. Bitte nochmal versuchen</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="550"/>
+        <location filename="../../mscore/loginmanager.cpp" line="551"/>
         <source>Cannot upload: %1</source>
         <translation>Kann nicht hochladen: %1</translation>
     </message>
@@ -10773,7 +10773,7 @@ fehlgeschlagen: %2</translation>
 </translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="467"/>
+        <location filename="../../libmscore/scorefile.cpp" line="470"/>
         <source>Open File
 %1
 failed: </source>
@@ -10782,7 +10782,7 @@ failed: </source>
 fehlgeschlagen:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="600"/>
+        <location filename="../../libmscore/scorefile.cpp" line="603"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -10791,12 +10791,12 @@ failed: %2</source>
 fehlgeschlagen: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="622"/>
+        <location filename="../../libmscore/scorefile.cpp" line="625"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>Die Stil-Datei ist inkompatibel mit dieser Version von MuseScore.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="643"/>
+        <location filename="../../libmscore/scorefile.cpp" line="646"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -10805,12 +10805,12 @@ failed: %2</source>
 fehlgeschlagen: %</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="653"/>
+        <location filename="../../libmscore/scorefile.cpp" line="656"/>
         <source>Write Style failed: %1</source>
         <translation>Datei schreiben schlug fehl: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1195"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>XML Lesefehler in Zeile %1 Spalte %2: %3</translation>
     </message>
@@ -11502,17 +11502,17 @@ bitte wählen Sie einen anderen Namen:</translation>
 <context>
     <name>Ms::TimeSig</name>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="590"/>
+        <location filename="../../libmscore/timesig.cpp" line="591"/>
         <source>Common time</source>
         <translation>4/4</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="592"/>
+        <location filename="../../libmscore/timesig.cpp" line="593"/>
         <source>Cut time</source>
         <translation>Alla Breve (2/2)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="594"/>
+        <location filename="../../libmscore/timesig.cpp" line="595"/>
         <source>%1/%2 time</source>
         <translation>%1/%2 Takt</translation>
     </message>
@@ -11520,18 +11520,18 @@ bitte wählen Sie einen anderen Namen:</translation>
 <context>
     <name>Ms::UpdateChecker</name>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="81"/>
+        <location filename="../../mscore/updatechecker.cpp" line="85"/>
         <source>An update for MuseScore is available: %1MuseScore %2 r.%3%4</source>
         <translation>Eine neue Version von MuseScore ist verfügbar: %1MuseScore %2 r.%3%4</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="89"/>
+        <location filename="../../mscore/updatechecker.cpp" line="93"/>
         <source>Update Available</source>
         <translation>Aktualisierung verfügbar</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="96"/>
-        <location filename="../../mscore/updatechecker.cpp" line="97"/>
+        <location filename="../../mscore/updatechecker.cpp" line="100"/>
+        <location filename="../../mscore/updatechecker.cpp" line="101"/>
         <source>No Update Available</source>
         <translation>Keine Aktualisierung verfügbar</translation>
     </message>
@@ -11591,12 +11591,12 @@ bitte wählen Sie einen anderen Namen:</translation>
     <message>
         <location filename="../../mscore/uploadscoredialog.cpp" line="79"/>
         <source>Use a comma to separate the tags</source>
-        <translation>Komma benutzen, um Marken voneinander zu trennen</translation>
+        <translation>Marken mit Komma voneinander trennen</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.cpp" line="86"/>
         <source>Render the score with the current synth settings. %1More info%2.</source>
-        <translation>Wende die aktuellen Synth-Einstellungen auf die Partitur an. %1Weitere Informationen%2.</translation>
+        <translation>Partitur mit den aktuellen Synth-Einstellungen wiedergeben. %1Weitere Informationen%2.</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.cpp" line="130"/>
@@ -11624,7 +11624,7 @@ bitte wählen Sie einen anderen Namen:</translation>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="240"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="249"/>
         <source>[%1link%2]</source>
         <translation>[%1Link%2]</translation>
     </message>
@@ -13641,7 +13641,7 @@ fehlgeschlagen: </translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2396"/>
         <source>Default zoom:</source>
-        <translation>Vorgabevergrößerung:</translation>
+        <translation>Voreinstellung Vergrößerung:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2419"/>
@@ -13746,7 +13746,7 @@ fehlgeschlagen: </translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2623"/>
         <source>I/O Tab</source>
-        <translation>Tab E/A</translation>
+        <translation>Tab Ein-/Ausgabe</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2626"/>
@@ -13757,7 +13757,7 @@ fehlgeschlagen: </translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2629"/>
         <source>I/O</source>
-        <translation>E/A</translation>
+        <translation>Ein-/Ausgabe</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2647"/>
@@ -14270,7 +14270,7 @@ fehlgeschlagen: </translation>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2714"/>
+        <location filename="../../libmscore/edit.cpp" line="2711"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14280,7 +14280,7 @@ fehlgeschlagen: </translation>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2715"/>
+        <location filename="../../libmscore/edit.cpp" line="2712"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -15067,7 +15067,7 @@ Soll sie überschrieben werden?</translation>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="124"/>
         <source>Same note name:</source>
-        <translation>Gleicher Notenname:</translation>
+        <translation>Gleicher Notenname: </translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="141"/>

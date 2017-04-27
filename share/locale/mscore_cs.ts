@@ -169,12 +169,12 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="212"/>
         <source>Add page break between scores</source>
-        <translation>Přidat zalomení strany mezi notovými zápisy</translation>
+        <translation>Přidat zalomení strany mezi notové zápisy</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="225"/>
         <source>Add section break between scores</source>
-        <translation>Přidat zalomení hudebního oddílu mezi notovými zápisy</translation>
+        <translation>Přidat zalomení hudebního oddílu mezi notové zápisy</translation>
     </message>
 </context>
 <context>
@@ -1513,157 +1513,157 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="266"/>
         <source>Professional:</source>
-        <translation>Odborník:</translation>
+        <translation>Profesionál:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="325"/>
         <source>Transpose written pitches to sound:</source>
-        <translation>Transponovat zapsané výšky tónů na zvuk</translation>
+        <translation>Transponovat notový zápis oproti zvuku o:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="345"/>
         <source>octaves +</source>
-        <translation>oktávy +</translation>
+        <translation>oktáv +</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="365"/>
         <source>0 - Perfect Unison</source>
-        <translation>0 – čistá prima</translation>
+        <translation>0 – čistou primu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="370"/>
         <source>1 - Augmented Unison</source>
-        <translation>1 – zvětšená prima</translation>
+        <translation>1 – zvětšenou primu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="375"/>
         <source>0 - Diminished Second</source>
-        <translation>0 – zmenšená sekunda</translation>
+        <translation>0 – zmenšenou sekundu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="380"/>
         <source>1 - Minor Second</source>
-        <translation>1 – malá sekunda</translation>
+        <translation>1 – malou sekundu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="385"/>
         <source>2 - Major Second</source>
-        <translation>2 – velká sekunda</translation>
+        <translation>2 – velkou sekundu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="390"/>
         <source>3 - Augmented Second</source>
-        <translation>3 – zvětšená sekunda</translation>
+        <translation>3 – zvětšenou sekundu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="395"/>
         <source>2 - Diminished Third</source>
-        <translation>2 – zmenšená tercie</translation>
+        <translation>2 – zmenšenou tercii</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="400"/>
         <source>3 - Minor Third</source>
-        <translation>3 – malá tercie</translation>
+        <translation>3 – malou tercii</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="405"/>
         <source>4 - Major Third</source>
-        <translation>4 – velká tercie</translation>
+        <translation>4 – velkou tercii</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="410"/>
         <source>5 - Augmented Third</source>
-        <translation>5 – zvětšená tercie</translation>
+        <translation>5 – zvětšenou tercii</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="415"/>
         <source>4 - Diminished Fourth</source>
-        <translation>4 – zmenšená kvarta</translation>
+        <translation>4 – zmenšenou kvartu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="420"/>
         <source>5 - Perfect Fourth</source>
-        <translation>5 – čistá kvarta</translation>
+        <translation>5 – čistou kvartu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="425"/>
         <source>6 - Augmented Fourth</source>
-        <translation>6 – zvětšená kvarta</translation>
+        <translation>6 – zvětšenou kvartu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="430"/>
         <source>6 - Diminished Fifth</source>
-        <translation>6 – zmenšená kvinta</translation>
+        <translation>6 – zmenšenou kvintu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="435"/>
         <source>7 - Perfect Fifth</source>
-        <translation>7 – čistá kvinta</translation>
+        <translation>7 – čistou kvintu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="440"/>
         <source>8 - Augmented Fifth</source>
-        <translation>8 – zvětšená kvinta</translation>
+        <translation>8 – zvětšenou kvintu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="445"/>
         <source>7 - Diminished Sixth</source>
-        <translation>7 – zmenšená sexta</translation>
+        <translation>7 – zmenšenou sextu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="450"/>
         <source>8 - Minor Sixth</source>
-        <translation>8 – malá sexta</translation>
+        <translation>8 – malou sextu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="455"/>
         <source>9 - Major Sixth</source>
-        <translation>9 – velká sexta</translation>
+        <translation>9 – velkou sextu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="460"/>
         <source>10 - Augmented Sixth</source>
-        <translation>10 – zvětšená sexta</translation>
+        <translation>10 – zvětšenou sextu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="465"/>
         <source>9 - Diminished Seventh</source>
-        <translation>9 – zmenšená septima</translation>
+        <translation>9 – zmenšenou septimu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="470"/>
         <source>10 - Minor Seventh</source>
-        <translation>10 – malá septima</translation>
+        <translation>10 – malou septimu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="475"/>
         <source>11 - Major Seventh</source>
-        <translation>11 – velká septima</translation>
+        <translation>11 – velkou septimu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="480"/>
         <source>12 - Augmented Seventh</source>
-        <translation>12 – zvětšená septima</translation>
+        <translation>12 – zvětšenou septimu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="485"/>
         <source>11 - Diminished Octave</source>
-        <translation>11 – zmenšená oktáva</translation>
+        <translation>11 – zmenšenou oktávu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="490"/>
         <source>12 - Perfect Octave</source>
-        <translation>12 – čistá oktáva</translation>
+        <translation>12 – čistou oktávu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="498"/>
         <source>Up</source>
-        <translation>Nahoru</translation>
+        <translation>Dolů</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="505"/>
         <source>Down</source>
-        <translation>Dolů</translation>
+        <translation>Nahoru</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="545"/>
@@ -7676,7 +7676,7 @@ Chcete %2 najít nyní?</translation>
         <source>cannot change measure length:
 tuplet would cross measure</source>
         <translation>Nelze změnit délku taktu:
-Nepravidelná rytmická skupina by překročila takt</translation>
+Nepravidelná rytmická skupina by přesáhla takt</translation>
     </message>
 </context>
 <context>
@@ -7790,12 +7790,12 @@ Nepravidelná rytmická skupina by překročila takt</translation>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="287"/>
         <source>Do not count</source>
-        <translation>Nezapočítávat takt do číslování taktů</translation>
+        <translation>Nezapočítávat takt při číslování taktů</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="290"/>
         <source>Exclude from measure count</source>
-        <translation>Takt nepočítat</translation>
+        <translation>Vyjmout z číslování taktů</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="297"/>
@@ -8011,8 +8011,8 @@ Vydáno pod licencí GNU General Public.</translation>
         <source>MusicXML is an open file format for exchanging digital sheet music,
 supported by many applications. MusicXML is copyright &amp;copy; MakeMusic, Inc.
 All rights reserved. For more information, see: %1MusicXML.com%2.</source>
-        <translation>MusicXML je otevřený souborový formát na vyměňování digitálních notových listů,
-podporovaný mnoha programy. MusicXML je copyright &amp;copy; MakeMusic, Inc.
+        <translation>MusicXML je otevřený souborový formát pro vyměňování digitálních notových zápisů,
+podporovaný mnoha programy. MusicXML je chráněn autorskými právy &amp;copy; MakeMusic, Inc.
 Všechna práva vyhrazena. Další informace naleznete na: %1MusicXML.com%2.</translation>
     </message>
 </context>
@@ -8264,12 +8264,12 @@ Všechna práva vyhrazena. Další informace naleznete na: %1MusicXML.com%2.</tr
 <context>
     <name>Ms::EditDrumset</name>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="74"/>
+        <location filename="../../mscore/editdrumset.cpp" line="86"/>
         <source>invalid</source>
         <translation>žádná</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="375"/>
+        <location filename="../../mscore/editdrumset.cpp" line="387"/>
         <source>Open File
 %1
 failed: </source>
@@ -8278,18 +8278,17 @@ failed: </source>
 se nezdařilo:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="377"/>
+        <location filename="../../mscore/editdrumset.cpp" line="389"/>
         <source>Open File</source>
-        <translation>Otevřít soubor
-</translation>
+        <translation>Otevřít soubor</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="387"/>
+        <location filename="../../mscore/editdrumset.cpp" line="399"/>
         <source>Write File failed: </source>
         <translation>Zápis souboru se nezdařil: </translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="388"/>
+        <location filename="../../mscore/editdrumset.cpp" line="400"/>
         <source>Write Drumset</source>
         <translation>Zapsat bicí soupravu</translation>
     </message>
@@ -8624,7 +8623,7 @@ se nezdařilo:</translation>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="89"/>
         <source>Open Instruments File</source>
-        <translation>Otevřít soubor s nástrojem</translation>
+        <translation>Otevřít soubor s nástroji</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="104"/>
@@ -8741,89 +8740,89 @@ se nezdařilo:</translation>
 <context>
     <name>Ms::LoginManager</name>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Network error</source>
         <translation>Chyba sítě</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Please check your Internet connection</source>
         <translation>Prověřte, prosím, své internetové připojení</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Please upgrade</source>
         <translation>Proveďte, prosím, povýšení</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Your MuseScore version is too old to use this feature.
 %1Please upgrade first%2.</source>
         <translation>Verze MuseScore je příliš stará na použití této funkce.
 %1Nejprve, prosím, proveďte povýšení verze%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="210"/>
+        <location filename="../../mscore/loginmanager.cpp" line="211"/>
         <source>Unsuccessful login. Please try again.</source>
         <translation>Nepodařilo se přihlásit. Zkuste to, prosím, znovu.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="216"/>
+        <location filename="../../mscore/loginmanager.cpp" line="217"/>
         <source>Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?</source>
         <translation>Bohužel, adresa elektronické pošty, uživatelské jméno nebo heslo je nesprávné. Proveďte, prosím, znovu ověření.
 %1Zapomněl jste své heslo%2?</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="221"/>
+        <location filename="../../mscore/loginmanager.cpp" line="222"/>
         <source>This account has been blocked.</source>
         <translation>Tento účet byl zablokován.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="224"/>
+        <location filename="../../mscore/loginmanager.cpp" line="225"/>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or %1request a new activation email%2.</source>
         <translation>Váš účet zatím nebyl aktivován. Chcete-li zprovoznit svůj účet, podívejte se, prosím, do své poštovní schránky nebo %1požádejte o zaslání nové zprávy s aktivačním odkazem%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="229"/>
+        <location filename="../../mscore/loginmanager.cpp" line="230"/>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, %1contact us%2.</source>
         <translation>Místní čas vašeho zařízení není nastaven správně. Prověřte to prosím a upravte jej. Doporučuje se čas/časové pásmo nastavit na automatickou volbu. Pokud se nadále nemůžete připojit, %1spojte se s námi%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="292"/>
+        <location filename="../../mscore/loginmanager.cpp" line="293"/>
         <source>Error while getting user info. Please try again</source>
         <translation>Chyba při získávání údajů o uživateli. Zkuste to, prosím, znovu.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="296"/>
+        <location filename="../../mscore/loginmanager.cpp" line="297"/>
         <source>Error while getting user info: %1</source>
         <translation>Chyba při získávání údajů o uživateli: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="410"/>
+        <location filename="../../mscore/loginmanager.cpp" line="411"/>
         <source>Uploading...</source>
         <translation>Nahrává se...</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="445"/>
+        <location filename="../../mscore/loginmanager.cpp" line="446"/>
         <source>Upload Error</source>
         <translation>Chyba při nahrávání</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="446"/>
+        <location filename="../../mscore/loginmanager.cpp" line="447"/>
         <source>Sorry, MuseScore couldn&apos;t upload the audio file</source>
-        <translation>Promiňte, MuseScore se zvukový soubor nahrát nepodařilo</translation>
+        <translation>Promiňte, MuseScore se nepodařilo nahrát zvukový soubor </translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="546"/>
+        <location filename="../../mscore/loginmanager.cpp" line="547"/>
         <source>An error occurred during the file transfer. Please try again</source>
         <translation>Během přenosu souboru se vyskytla chyba. Zkuste to, prosím, znovu.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="550"/>
+        <location filename="../../mscore/loginmanager.cpp" line="551"/>
         <source>Cannot upload: %1</source>
         <translation>Nelze nahrát: %1</translation>
     </message>
@@ -8856,7 +8855,7 @@ se nezdařilo:</translation>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="119"/>
         <source>Measure Properties for Measure %1</source>
-        <translation>Vlastnosti taktu pro takt %1</translation>
+        <translation>Vlastnosti taktu %1</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="150"/>
@@ -9268,7 +9267,7 @@ do notového zápisu &quot;%1&quot;?</translation>
         <location filename="../../mscore/file.cpp" line="1721"/>
         <location filename="../../mscore/file.cpp" line="1788"/>
         <source>Export Parts</source>
-        <translation>Vyvést výtahy hlasů</translation>
+        <translation>Vyvést party</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1728"/>
@@ -9841,7 +9840,7 @@ Jste si jistý(á), že chcete pokračovat?</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2825"/>
         <source>Repitch input mode</source>
-        <translation>Režim vkládání změn výšek tónů</translation>
+        <translation>Režim vkládání výšek tónů</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2830"/>
@@ -9950,12 +9949,12 @@ Obnovit sezení?</translation>
     <message>
         <location filename="../../mscore/tupletdialog.cpp" line="120"/>
         <source>Tuplet Error</source>
-        <translation>Chyba rytmické notové skupiny</translation>
+        <translation>Chyba nepravidelné rytmické skupiny</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.cpp" line="121"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
-        <translation>Nelze vytvořit nepravidelnou rytmickou skupinu s poměrem %1 pro dobu trvání %2</translation>
+        <translation>Nelze vytvořit nepravidelnou rytmickou skupinu s poměrem %1 pro délku %2</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.cpp" line="31"/>
@@ -10179,7 +10178,7 @@ internetové spojení</translation>
     <message>
         <location filename="../../libmscore/note.cpp" line="2546"/>
         <source>%1; Pitch: %2; Duration: %3%4</source>
-        <translation>%1; Výška tónu: %2; Doba trvání: %3%4</translation>
+        <translation>%1; Výška tónu: %2; Délka: %3%4</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="2585"/>
@@ -10717,7 +10716,7 @@ Uložit před zavřením?</translation>
     <message>
         <location filename="../../libmscore/rest.cpp" line="733"/>
         <source>%1; Duration: %2; %3</source>
-        <translation>%1; Doba trvání: %2; %3</translation>
+        <translation>%1; Délka: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10725,12 +10724,12 @@ Uložit před zavřením?</translation>
     <message>
         <location filename="../../libmscore/check.cpp" line="190"/>
         <source>Measure %1 Staff %2 incomplete. Expected: %3; Found: %4</source>
-        <translation>Takt %1 Osnova %2 nedokončený. Očekáváno: %3; Nalezeno: %4</translation>
+        <translation>Takt %1 v osnově %2 je neúplný. Očekáváno: %3; Nalezeno: %4</translation>
     </message>
     <message>
         <location filename="../../libmscore/check.cpp" line="197"/>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
-        <translation>Takt %1 Osnova %2, hlas %3 příliš dlouhý. Očekáváno: %4; Nalezeno: %5</translation>
+        <translation>Takt %1 v osnově %2, hlas %3 je příliš dlouhý. Očekáváno: %4; Nalezeno: %5</translation>
     </message>
     <message>
         <location filename="../../libmscore/score.cpp" line="342"/>
@@ -10770,11 +10769,10 @@ se nezdařilo: %2</translation>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
         <translation>Přejmenování dočasného souboru &lt;%1&gt; na &lt;%2&gt; se nezdařilo:
-%3
-</translation>
+%3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="467"/>
+        <location filename="../../libmscore/scorefile.cpp" line="470"/>
         <source>Open File
 %1
 failed: </source>
@@ -10783,7 +10781,7 @@ failed: </source>
 se nezdařilo:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="600"/>
+        <location filename="../../libmscore/scorefile.cpp" line="603"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -10792,12 +10790,12 @@ failed: %2</source>
 se nezdařilo: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="622"/>
+        <location filename="../../libmscore/scorefile.cpp" line="625"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>Soubor se stylem je neslučitelný s touto verzí MuseScore.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="643"/>
+        <location filename="../../libmscore/scorefile.cpp" line="646"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -10806,12 +10804,12 @@ failed: %2</source>
 se nezdařilo: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="653"/>
+        <location filename="../../libmscore/scorefile.cpp" line="656"/>
         <source>Write Style failed: %1</source>
         <translation>Zápis stylu se nezdařil: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1195"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>Chyba při čtení XML na řádku %1, sloupec %2: %3
 </translation>
@@ -10828,13 +10826,13 @@ se nezdařilo: %2</translation>
         <location filename="../../mscore/scoreaccessibility.cpp" line="114"/>
         <location filename="../../mscore/scoreaccessibility.cpp" line="155"/>
         <source>Start Measure: %1; Start Beat: %2</source>
-        <translation>Od taktu: %1/doby: %2</translation>
+        <translation>Takt: %1; Doba: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="125"/>
         <location filename="../../mscore/scoreaccessibility.cpp" line="164"/>
         <source>End Measure: %1; End Beat: %2</source>
-        <translation>=&gt; Po takt: %1/dobu: %2</translation>
+        <translation>– Takt: %1; Doba: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="130"/>
@@ -11169,7 +11167,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="1142"/>
         <source>Pianoroll Editor...</source>
-        <translation>Editor svitkového záznamu (piano roll)...</translation>
+        <translation>Editor záznamu kláves (piano roll)...</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="1148"/>
@@ -11229,7 +11227,7 @@ první doba taktu</translation>
         <location filename="../../mscore/scoreview.cpp" line="3126"/>
         <source>Cannot split measure here:
 Cannot split tuplet</source>
-        <translation>Nelze rozdělit takt zde:
+        <translation>Nelze rozdělit takt v tomto místě:
 Nelze rozdělit nepravidelnou rytmickou skupinu</translation>
     </message>
     <message>
@@ -11504,17 +11502,17 @@ Vyberte, prosím, jiný název:</translation>
 <context>
     <name>Ms::TimeSig</name>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="590"/>
+        <location filename="../../libmscore/timesig.cpp" line="591"/>
         <source>Common time</source>
         <translation>Celý takt (4/4)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="592"/>
+        <location filename="../../libmscore/timesig.cpp" line="593"/>
         <source>Cut time</source>
         <translation>Alla breve (2/2)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="594"/>
+        <location filename="../../libmscore/timesig.cpp" line="595"/>
         <source>%1/%2 time</source>
         <translation>%1/%2 takt</translation>
     </message>
@@ -11522,18 +11520,18 @@ Vyberte, prosím, jiný název:</translation>
 <context>
     <name>Ms::UpdateChecker</name>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="81"/>
+        <location filename="../../mscore/updatechecker.cpp" line="85"/>
         <source>An update for MuseScore is available: %1MuseScore %2 r.%3%4</source>
         <translation>Je dostupná nová verze programu MuseScore: %1MuseScore %2 r.%3%4</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="89"/>
+        <location filename="../../mscore/updatechecker.cpp" line="93"/>
         <source>Update Available</source>
         <translation>Nová verze je dostupná</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="96"/>
-        <location filename="../../mscore/updatechecker.cpp" line="97"/>
+        <location filename="../../mscore/updatechecker.cpp" line="100"/>
+        <location filename="../../mscore/updatechecker.cpp" line="101"/>
         <source>No Update Available</source>
         <translation>Není dostupná žádná nová verze</translation>
     </message>
@@ -11626,7 +11624,7 @@ Vyberte, prosím, jiný název:</translation>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="240"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="249"/>
         <source>[%1link%2]</source>
         <translation>[%1odkaz%2]</translation>
     </message>
@@ -13290,7 +13288,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1321"/>
         <source>Default duration</source>
-        <translation>Výchozí doba trvání</translation>
+        <translation>Výchozí délka</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1343"/>
@@ -13369,12 +13367,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1536"/>
         <source>Whole note is active</source>
-        <translation>Celá nota je činná</translation>
+        <translation>Celá nota je v činnosti</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1554"/>
         <source>Half note is active</source>
-        <translation>Půlová nota je činná</translation>
+        <translation>Půlová nota je v činnosti</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1572"/>
@@ -13404,12 +13402,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1638"/>
         <source>Rest is active</source>
-        <translation>Pomlka je činná</translation>
+        <translation>Pomlka je v činnosti</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1656"/>
         <source>Quarter note is active</source>
-        <translation>Čtvrťová nota je činná</translation>
+        <translation>Čtvrťová nota je v činnosti</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1674"/>
@@ -13419,7 +13417,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1692"/>
         <source>Eighth note is active</source>
-        <translation>Osminová nota je činná</translation>
+        <translation>Osminová nota je v činnosti</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1710"/>
@@ -13449,7 +13447,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1765"/>
         <source>Augmentation dot is active</source>
-        <translation>Tečka je činná</translation>
+        <translation>Tečka je v činnosti</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1783"/>
@@ -13459,7 +13457,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1801"/>
         <source>Double augmentation dot is active</source>
-        <translation>Dvojitá tečka je činná</translation>
+        <translation>Dvojitá tečka je v činnosti</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1819"/>
@@ -13469,7 +13467,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1837"/>
         <source>Tie is active</source>
-        <translation>Ligatura je činná</translation>
+        <translation>Ligatura je v činnosti</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1855"/>
@@ -13479,12 +13477,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1873"/>
         <source>Real-time Advance is active</source>
-        <translation>Postup ve skutečném čase je činný</translation>
+        <translation>Postup ve skutečném čase je v činnosti</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1891"/>
         <source>Real-time Advance record</source>
-        <translation>Nahrávání postupu ve skutečném čase</translation>
+        <translation>Záznam postupu ve skutečném čase</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1909"/>
@@ -13509,7 +13507,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2010"/>
         <source>Stop is active</source>
-        <translation>Zastavení je činné</translation>
+        <translation>Zastavení je v činnosti</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2031"/>
@@ -13529,7 +13527,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2083"/>
         <source>Note input is active</source>
-        <translation>Vkládání not je činné</translation>
+        <translation>Vkládání not je v činnosti</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2104"/>
@@ -13544,7 +13542,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2132"/>
         <source>16th note is active</source>
-        <translation>Šestnáctinová nota je činná</translation>
+        <translation>Šestnáctinová nota je v činnosti</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2150"/>
@@ -13554,7 +13552,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2168"/>
         <source>32nd note is active</source>
-        <translation>Dvaatřicetinová nota je činná</translation>
+        <translation>Dvaatřicetinová nota je v činnosti</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2186"/>
@@ -13574,7 +13572,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2224"/>
         <source>64th note is active</source>
-        <translation>Čtyřiašedesátinová nota je činná</translation>
+        <translation>Čtyřiašedesátinová nota je v činnosti</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2242"/>
@@ -13600,7 +13598,7 @@ se nezdařil:</translation>
         <location filename="../../mscore/prefsdialog.ui" line="2303"/>
         <location filename="../../mscore/prefsdialog.ui" line="2313"/>
         <source>Advance on release?</source>
-        <translation>Postup při uvolnění?</translation>
+        <translation>Postoupit při uvolnění?</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2320"/>
@@ -14272,7 +14270,7 @@ se nezdařil:</translation>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2714"/>
+        <location filename="../../libmscore/edit.cpp" line="2711"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14282,7 +14280,7 @@ se nezdařil:</translation>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2715"/>
+        <location filename="../../libmscore/edit.cpp" line="2712"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14604,7 +14602,7 @@ Navštivte %1stránky MuseScore%2 pro získání poslední verze.</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="220"/>
         <source>Load Error</source>
-        <translation>Nahrát chybu</translation>
+        <translation>Chyba při nahrávání</translation>
     </message>
     <message>
         <location filename="../../mscore/importxml.cpp" line="67"/>
@@ -14727,8 +14725,7 @@ se nezdařilo:</translation>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="323"/>
         <source>Open Album File</source>
-        <translation>Otevřít soubor s albem
-</translation>
+        <translation>Otevřít soubor s albem</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="329"/>
@@ -14782,7 +14779,7 @@ Chcete ji nahradit?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="2056"/>
         <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
-        <translation>Zvuková banka nainstalována. Jděte, prosím, do Pohled -&gt; Syntetizátor pro její přidání a do Pohled -&gt; Směšovač pro výběr zvuku hudebního nástroje.</translation>
+        <translation>Zvuková banka je nainstalována. Jděte, prosím, do Pohled &gt; Syntetizátor pro její přidání a do Pohled &gt; Směšovač pro výběr zvuku hudebního nástroje.</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="2311"/>
@@ -14992,7 +14989,7 @@ Chcete ji nahradit?</translation>
     <message>
         <location filename="../../mscore/selectinstr.ui" line="14"/>
         <source>Select Instrument</source>
-        <translation>Dialog</translation>
+        <translation>Výběr nástroje</translation>
     </message>
     <message>
         <location filename="../../mscore/selectinstr.ui" line="28"/>
@@ -15045,7 +15042,7 @@ Chcete ji nahradit?</translation>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="75"/>
         <source>Same duration:</source>
-        <translation>Stejná doba trvání:</translation>
+        <translation>Stejná délka:</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="82"/>
@@ -15896,7 +15893,7 @@ Chcete ji nahradit?</translation>
     <message>
         <location filename="../../libmscore/style.cpp" line="322"/>
         <source>System</source>
-        <translation>U notového systému</translation>
+        <translation>Text u notového systému</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="326"/>
@@ -16233,7 +16230,7 @@ Chcete ji nahradit?</translation>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="200"/>
         <source>Duration:</source>
-        <translation>Doba trvání:</translation>
+        <translation>Délka:</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="300"/>
@@ -16670,7 +16667,7 @@ Chcete ji nahradit?</translation>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="14"/>
         <source>Create Tuplet</source>
-        <translation>Vytvořit rytmickou notovou skupinu</translation>
+        <translation>Vytvořit nepravidelnou rytmickou skupinu</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="34"/>
@@ -16776,7 +16773,7 @@ Chcete ji nahradit?</translation>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="311"/>
         <source>Upload score audio</source>
-        <translation type="unfinished"/>
+        <translation>Nahrát zvuk notového zápisu</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="345"/>
@@ -17404,7 +17401,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="273"/>
         <source>Enter durations with a single click or keypress</source>
-        <translation>Zadávat doby trvání pomocí jednoho klepnutí myši nebo stisknutím klávesy</translation>
+        <translation>Zadávat délku pomocí jednoho klepnutí myši nebo stisknutím klávesy</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="283"/>
@@ -17429,12 +17426,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="305"/>
         <source>Respell Pitches</source>
-        <translation>Přepočítat posuvky</translation>
+        <translation>Zkontrolovat posuvky</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="306"/>
         <source>Respell pitches</source>
-        <translation>Přepočítat posuvky</translation>
+        <translation>Zkontrolovat posuvky</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="316"/>
@@ -17956,12 +17953,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="709"/>
         <source>Regroup Rhythms</source>
-        <translation>Přeskupit rytmy</translation>
+        <translation>Obnovit výchozí rytmické členění</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="710"/>
         <source>Regroup rhythms</source>
-        <translation>Přeskupit rytmy</translation>
+        <translation>Obnovit výchozí rytmické členění</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="711"/>
@@ -18452,7 +18449,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1145"/>
         <source>Delete element and duration</source>
-        <translation>Smazat prvek a dobu trvání</translation>
+        <translation>Smazat prvek a délku</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1154"/>
@@ -18782,22 +18779,22 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1417"/>
         <source>Increase Active Duration</source>
-        <translation>Prodloužit činnou dobu trvání</translation>
+        <translation>Prodloužit činnou délku</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1418"/>
         <source>Increase active duration</source>
-        <translation>Prodloužit činnou dobu trvání</translation>
+        <translation>Prodloužit činnou délku</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1424"/>
         <source>Decrease Active Duration</source>
-        <translation>Zkrátit činnou dobu trvání</translation>
+        <translation>Zkrátit činnou délku</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1425"/>
         <source>Decrease active duration</source>
-        <translation>Zkrátit činnou dobu trvání</translation>
+        <translation>Zkrátit činnou délku</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1431"/>
@@ -18837,7 +18834,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1454"/>
         <source>Note duration: Triple augmentation dot</source>
-        <translation>Doba trvání noty: Trojitá tečka</translation>
+        <translation>Délka noty: trojitá tečka</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1455"/>
@@ -19955,12 +19952,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2510"/>
         <source>Double Duration</source>
-        <translation>Dvojnásobá doba trvání</translation>
+        <translation>Zdvojnásobit délku</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2511"/>
         <source>Double duration</source>
-        <translation>Zdvojit dobu trvání</translation>
+        <translation>Zdvojnásobit délku</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2521"/>
@@ -19975,22 +19972,22 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2532"/>
         <source>Increase Duration Dotted</source>
-        <translation>Prodloužit tečkovanou dobu trvání</translation>
+        <translation>Prodloužit délku tečkou</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2533"/>
         <source>Increase duration dotted</source>
-        <translation>Prodloužit tečkovanou dobu trvání</translation>
+        <translation>Prodloužit délku tečkou</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2543"/>
         <source>Decrease Duration Dotted</source>
-        <translation>Zkrátit tečkovanou dobu trvání</translation>
+        <translation>Zkrátit délku o tečku</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2544"/>
         <source>Decrease duration dotted</source>
-        <translation>Zkrátit tečkovanou dobu trvání</translation>
+        <translation>Zkrátit délku o tečku</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2554"/>
@@ -20005,12 +20002,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2563"/>
         <source>Pan Piano Roll</source>
-        <translation>Posouvat svitkový záznam (piano roll)</translation>
+        <translation>Posouvat záznam kláves (piano roll)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2564"/>
         <source>Toggle pan piano roll</source>
-        <translation>Zapnout/Vypnout posouvání svitkového záznamu (piano roll)</translation>
+        <translation>Zapnout/Vypnout posouvání záznamu kláves (piano roll)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2565"/>
@@ -20591,22 +20588,22 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3085"/>
         <source>Increase Active Duration (TAB)</source>
-        <translation>Prodloužit činnou dobu trvání (TAB)</translation>
+        <translation>Prodloužit činnou délku (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3086"/>
         <source>Increase active duration (TAB)</source>
-        <translation>Prodloužit činnou dobu trvání (TAB)</translation>
+        <translation>Prodloužit činnou délku (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3092"/>
         <source>Decrease Active Duration (TAB)</source>
-        <translation>Zkrátit činnou dobu trvání (TAB)</translation>
+        <translation>Zkrátit činnou délku (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3093"/>
         <source>Decrease active duration (TAB)</source>
-        <translation>Zkrátit činnou dobu trvání (TAB)</translation>
+        <translation>Zkrátit činnou délku (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3099"/>
@@ -21029,7 +21026,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3435"/>
         <source>Toggle Rhythmic Slash Notation</source>
-        <translation>Zapnout/Vypnout rytmickou notaci</translation>
+        <translation>Zapnout/Vypnout lomítkovou notaci</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3436"/>
@@ -23216,7 +23213,7 @@ takt není prázdný</translation>
     <message>
         <location filename="../../libmscore/element.cpp" line="158"/>
         <source>Tab Duration Symbol</source>
-        <translation>Symbol pro dobu trvání tabulatury</translation>
+        <translation>Symbol pro délku trvání tabulatury</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="159"/>

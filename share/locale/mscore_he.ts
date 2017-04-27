@@ -94,7 +94,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="17"/>
         <source>Album Manager</source>
-        <translation type="unfinished"/>
+        <translation>מנהל אלבום</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="28"/>
@@ -182,7 +182,7 @@
     <message>
         <location filename="../../mscore/articulation.ui" line="14"/>
         <source>Articulation Properties</source>
-        <translation type="unfinished"/>
+        <translation>מאפייני ארטיקולציה</translation>
     </message>
     <message>
         <location filename="../../mscore/articulation.ui" line="24"/>
@@ -255,7 +255,7 @@
     <message>
         <location filename="../../awl/colorlabel.cpp" line="98"/>
         <source>Select Color</source>
-        <translation type="unfinished"/>
+        <translation>בחר צבע</translation>
     </message>
 </context>
 <context>
@@ -263,7 +263,7 @@
     <message>
         <location filename="../../mscore/bend.ui" line="14"/>
         <source>Bend Properties</source>
-        <translation type="unfinished"/>
+        <translation>מאפייני מתיחה</translation>
     </message>
     <message>
         <location filename="../../mscore/bend.ui" line="23"/>
@@ -306,7 +306,7 @@
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="14"/>
         <source>Add/Remove Line Breaks</source>
-        <translation type="unfinished"/>
+        <translation>הוסף/הסר מעברי שורה</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="24"/>
@@ -400,7 +400,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="177"/>
         <source>Threshold</source>
-        <translation type="unfinished"/>
+        <translation>סף</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="192"/>
@@ -544,7 +544,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="14"/>
         <source>Edit Drumset</source>
-        <translation type="unfinished"/>
+        <translation>עריכת תופים</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="27"/>
@@ -647,7 +647,7 @@
     <message>
         <location filename="../../mscore/editinstrument.ui" line="14"/>
         <source>Edit Instrument Properties</source>
-        <translation type="unfinished"/>
+        <translation>עריכת מאפייני כלי</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="20"/>
@@ -1468,7 +1468,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="26"/>
         <source>Edit Staff/Part Properties</source>
-        <translation type="unfinished"/>
+        <translation>עריכת מאפייני חמשה/תפקיד</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="38"/>
@@ -1920,7 +1920,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="656"/>
         <source>Show fingerings</source>
-        <translation type="unfinished"/>
+        <translation>הצג אצבוע</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="679"/>
@@ -2060,7 +2060,7 @@
     <message>
         <location filename="../../mscore/editstringdata.ui" line="22"/>
         <source>Strings Tuning:</source>
-        <translation type="unfinished"/>
+        <translation>כיוונון כלי קשת:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.ui" line="38"/>
@@ -2098,7 +2098,7 @@
     <message>
         <location filename="../../mscore/editstyle.ui" line="14"/>
         <source>Edit Style</source>
-        <translation type="unfinished"/>
+        <translation>עריכת סגנון</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="30"/>
@@ -3332,7 +3332,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="14"/>
         <source>Parts</source>
-        <translation type="unfinished"/>
+        <translation>תפקידים</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="20"/>
@@ -3523,7 +3523,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/insertmeasuresdialog.ui" line="14"/>
         <source>Insert Measures</source>
-        <translation type="unfinished"/>
+        <translation>הכנס תיבות</translation>
     </message>
     <message>
         <location filename="../../mscore/insertmeasuresdialog.ui" line="39"/>
@@ -3567,7 +3567,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="87"/>
         <source>Reset &apos;Small&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;קטן&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="110"/>
@@ -4000,7 +4000,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="796"/>
         <source>Reset &apos;Head group&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;קבוצת ראש&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="816"/>
@@ -4010,7 +4010,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="832"/>
         <source>Reset &apos;Direction&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;כיוון&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="864"/>
@@ -4025,7 +4025,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="898"/>
         <source>Reset &apos;Head type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;ראש תו&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="918"/>
@@ -4073,7 +4073,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="94"/>
         <source>Reset &apos;Play&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;נגן&apos;</translation>
     </message>
 </context>
 <context>
@@ -4152,7 +4152,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="173"/>
         <source>Reset &apos;Direction&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;כיוון&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="193"/>
@@ -4197,7 +4197,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="294"/>
         <source>Reset &apos;Play&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;נגן&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="308"/>
@@ -4374,7 +4374,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="195"/>
         <source>Reset &apos;Direction&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;כיוון&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="215"/>
@@ -4460,7 +4460,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="106"/>
         <source>Reset &apos;Play&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;נגן&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="120"/>
@@ -4507,7 +4507,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="112"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>הפוגה</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="119"/>
@@ -4517,7 +4517,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="122"/>
         <source>Reset &apos;Pause&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;הפוגה&apos;</translation>
     </message>
 </context>
 <context>
@@ -4609,7 +4609,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="246"/>
         <source>Reset &apos;Small&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;קטן&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="263"/>
@@ -4689,7 +4689,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="105"/>
         <source>Velocity:</source>
-        <translation type="unfinished"/>
+        <translation>מהירות:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="112"/>
@@ -4869,7 +4869,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="112"/>
         <source>Reset &apos;Type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;סוג&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="126"/>
@@ -4940,7 +4940,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="225"/>
         <source>Reset &apos;Play&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;נגן&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="239"/>
@@ -5076,7 +5076,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="87"/>
         <source>Reset &apos;Type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;סוג&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="101"/>
@@ -5436,7 +5436,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="87"/>
         <source>Line color:</source>
-        <translation type="unfinished"/>
+        <translation>צבע קו:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="94"/>
@@ -5449,7 +5449,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="97"/>
         <source>Reset &apos;Line color&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;צבע הקו&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="111"/>
@@ -5470,7 +5470,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="141"/>
         <source>Reset &apos;Allow diagonal&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;אפשר אלכסוני&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="161"/>
@@ -5531,12 +5531,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="241"/>
         <source>Reset &apos;Line style&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;סגנון קו&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="261"/>
         <source>Reset &apos;Line visible&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;קו גלוי&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="278"/>
@@ -5559,7 +5559,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="81"/>
         <source>Reset &apos;Marker type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;סוג סמן&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="95"/>
@@ -5574,7 +5574,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="109"/>
         <source>Reset &apos;Label&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;תוית&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="123"/>
@@ -5800,27 +5800,27 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="449"/>
         <source>Line:</source>
-        <translation type="unfinished"/>
+        <translation>קו:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="465"/>
         <source>Reset &apos;Play&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;נגן&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="488"/>
         <source>Reset &apos;Small&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;קטן&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="508"/>
         <source>Velocity:</source>
-        <translation type="unfinished"/>
+        <translation>מהירות:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="524"/>
         <source>Tuning:</source>
-        <translation type="unfinished"/>
+        <translation>כוונון:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="537"/>
@@ -5836,27 +5836,27 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="576"/>
         <source>Velocity type:</source>
-        <translation type="unfinished"/>
+        <translation>סוג מהירות:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="595"/>
         <source>Reset &apos;Head group&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;קבוצת ראש&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="618"/>
         <source>Reset &apos;Head type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;ראש תו&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="635"/>
         <source>Reset &apos;Fix to line&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;תיקון לקו&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="652"/>
         <source>Reset &apos;Line&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;קו&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="669"/>
@@ -5892,12 +5892,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="91"/>
         <source>Reset &apos;Type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;סוג&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="105"/>
         <source>Placement:</source>
-        <translation type="unfinished"/>
+        <translation>מיקום:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="112"/>
@@ -5986,7 +5986,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_rest.ui" line="84"/>
         <source>Reset &apos;Small&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;קטן&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_rest.ui" line="101"/>
@@ -6102,7 +6102,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="154"/>
         <source>Reset &apos;Direction&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;כיוון&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="174"/>
@@ -6174,7 +6174,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="84"/>
         <source>Bottom gap:</source>
-        <translation type="unfinished"/>
+        <translation>פער תחתון:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="91"/>
@@ -6194,12 +6194,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="101"/>
         <source>Reset &apos;Top gap&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;פער עליון&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="118"/>
         <source>Reset &apos;Bottom gap&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;פער תחתון&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="138"/>
@@ -6222,7 +6222,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="164"/>
         <source>Reset &apos;Right margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;שול ימני&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="178"/>
@@ -6237,7 +6237,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="210"/>
         <source>Reset &apos;Bottom margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;שול תחתון&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="230"/>
@@ -6247,12 +6247,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="256"/>
         <source>Reset &apos;Top margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;שול עליון&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="273"/>
         <source>Reset &apos;Left margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;שול שמאלי&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="296"/>
@@ -6269,7 +6269,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="315"/>
         <source>Top gap:</source>
-        <translation type="unfinished"/>
+        <translation>פער עליון:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="328"/>
@@ -6495,7 +6495,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="127"/>
         <source>Reset &apos;Type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;סוג&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="147"/>
@@ -6530,7 +6530,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="201"/>
         <source>Reset &apos;Play&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;נגן&apos;</translation>
     </message>
 </context>
 <context>
@@ -6585,12 +6585,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="140"/>
         <source>Number type:</source>
-        <translation type="unfinished"/>
+        <translation>סוג מספר:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="147"/>
         <source>Bracket type:</source>
-        <translation type="unfinished"/>
+        <translation>סוג סוגר:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="154"/>
@@ -6635,7 +6635,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
         <source>Reset &apos;Direction&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;כיוון&apos;</translation>
     </message>
 </context>
 <context>
@@ -6668,12 +6668,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="97"/>
         <source>Reset &apos;Top gap&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;פער עליון&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="114"/>
         <source>Reset &apos;Bottom gap&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;פער תחתון&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="128"/>
@@ -6709,7 +6709,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="185"/>
         <source>Top gap:</source>
-        <translation type="unfinished"/>
+        <translation>פער עליון:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="198"/>
@@ -6739,7 +6739,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="260"/>
         <source>Bottom gap:</source>
-        <translation type="unfinished"/>
+        <translation>פער תחתון:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="273"/>
@@ -6759,22 +6759,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="336"/>
         <source>Reset &apos;Left margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;שול שמאלי&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="353"/>
         <source>Reset &apos;Right margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;שול ימני&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="370"/>
         <source>Reset &apos;Top margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;שול עליון&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="387"/>
         <source>Reset &apos;Bottom margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;שול תחתון&apos;</translation>
     </message>
 </context>
 <context>
@@ -6817,7 +6817,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="111"/>
         <source>Reset &apos;Type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>אפס ערך &apos;סוג&apos;</translation>
     </message>
 </context>
 <context>
@@ -7081,7 +7081,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/layer.ui" line="14"/>
         <source>Layers</source>
-        <translation type="unfinished"/>
+        <translation>שכבות</translation>
     </message>
     <message>
         <location filename="../../mscore/layer.ui" line="24"/>
@@ -7103,22 +7103,22 @@ space unit</extracomment>
         <location filename="../../mscore/layer.ui" line="81"/>
         <location filename="../../mscore/layer.ui" line="104"/>
         <source>Tags</source>
-        <translation type="unfinished"/>
+        <translation>תוויות</translation>
     </message>
     <message>
         <location filename="../../mscore/layer.ui" line="89"/>
         <source>Add Tag</source>
-        <translation type="unfinished"/>
+        <translation>הוסף תווית</translation>
     </message>
     <message>
         <location filename="../../mscore/layer.ui" line="96"/>
         <source>Delete Tag</source>
-        <translation type="unfinished"/>
+        <translation>מחק תווית</translation>
     </message>
     <message>
         <location filename="../../mscore/layer.ui" line="281"/>
         <source>Tag</source>
-        <translation type="unfinished"/>
+        <translation>תווית</translation>
     </message>
     <message>
         <location filename="../../mscore/layer.ui" line="286"/>
@@ -7131,7 +7131,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/lineproperties.ui" line="14"/>
         <source>Line Properties</source>
-        <translation type="unfinished"/>
+        <translation>מאפייני קו</translation>
     </message>
     <message>
         <location filename="../../mscore/lineproperties.ui" line="34"/>
@@ -7224,7 +7224,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/logindialog.ui" line="83"/>
         <source>Username or email:</source>
-        <translation type="unfinished"/>
+        <translation>שם משתמש או אי-מייל:</translation>
     </message>
     <message>
         <location filename="../../mscore/logindialog.ui" line="90"/>
@@ -7234,7 +7234,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/logindialog.ui" line="110"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>סיסמא:</translation>
     </message>
     <message>
         <location filename="../../mscore/logindialog.ui" line="123"/>
@@ -7545,7 +7545,7 @@ Would you like to locate %2 now?</source>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="14"/>
         <source>Master Palette</source>
-        <translation type="unfinished"/>
+        <translation>לוח כלים ראשי</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="30"/>
@@ -7580,7 +7580,7 @@ Would you like to locate %2 now?</source>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="60"/>
         <source>Arpeggios &amp; Glissandos</source>
-        <translation type="unfinished"/>
+        <translation>ארפג&apos;יוים וגליסנדוים</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="65"/>
@@ -7595,7 +7595,7 @@ Would you like to locate %2 now?</source>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="75"/>
         <source>Articulations &amp; Ornaments</source>
-        <translation type="unfinished"/>
+        <translation>ארטיקולציות וקישוטים</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="80"/>
@@ -7683,7 +7683,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="17"/>
         <source>Measure Properties</source>
-        <translation type="unfinished"/>
+        <translation>מאפייני תיבה</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="27"/>
@@ -7982,7 +7982,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="3197"/>
         <source>Version: %1</source>
-        <translation type="unfinished"/>
+        <translation>גרסה: %1</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="3198"/>
@@ -8045,7 +8045,7 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="75"/>
         <source>MuseScore Files</source>
-        <translation type="unfinished"/>
+        <translation>קבצי מיוזסקור</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="76"/>
@@ -8055,12 +8055,12 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="101"/>
         <source>MuseScore Album Files</source>
-        <translation type="unfinished"/>
+        <translation>קבצי מיוזסקור אלבום</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="102"/>
         <source>Load Album</source>
-        <translation type="unfinished"/>
+        <translation>טען אלבום</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="149"/>
@@ -8198,12 +8198,12 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
     <message>
         <location filename="../../mscore/drumtools.cpp" line="49"/>
         <source>Drum Tools</source>
-        <translation type="unfinished"/>
+        <translation>כלי תופים</translation>
     </message>
     <message>
         <location filename="../../mscore/drumtools.cpp" line="59"/>
         <source>Edit Drumset</source>
-        <translation type="unfinished"/>
+        <translation>עריכת תופים</translation>
     </message>
     <message>
         <location filename="../../mscore/drumtools.cpp" line="65"/>
@@ -8231,7 +8231,7 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
     <message>
         <location filename="../../mscore/drumroll.cpp" line="105"/>
         <source>Velocity:</source>
-        <translation type="unfinished"/>
+        <translation>מהירות:</translation>
     </message>
     <message>
         <location filename="../../mscore/drumroll.cpp" line="107"/>
@@ -8257,12 +8257,12 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
 <context>
     <name>Ms::EditDrumset</name>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="74"/>
+        <location filename="../../mscore/editdrumset.cpp" line="86"/>
         <source>invalid</source>
         <translation>לא תקף</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="375"/>
+        <location filename="../../mscore/editdrumset.cpp" line="387"/>
         <source>Open File
 %1
 failed: </source>
@@ -8271,17 +8271,18 @@ failed: </source>
 נכשלה:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="377"/>
+        <location filename="../../mscore/editdrumset.cpp" line="389"/>
         <source>Open File</source>
-        <translation type="unfinished"/>
+        <translation>פתח קובץ
+</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="387"/>
+        <location filename="../../mscore/editdrumset.cpp" line="399"/>
         <source>Write File failed: </source>
         <translation>כתיבת קובץ נכשלה:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="388"/>
+        <location filename="../../mscore/editdrumset.cpp" line="400"/>
         <source>Write Drumset</source>
         <translation type="unfinished"/>
     </message>
@@ -8731,87 +8732,87 @@ failed: </source>
 <context>
     <name>Ms::LoginManager</name>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Network error</source>
         <translation>שגיאת רשת</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Please check your Internet connection</source>
         <translation>בדוק את חיבור האינטרנט שלך</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Please upgrade</source>
         <translation>שדרג</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Your MuseScore version is too old to use this feature.
 %1Please upgrade first%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="210"/>
+        <location filename="../../mscore/loginmanager.cpp" line="211"/>
         <source>Unsuccessful login. Please try again.</source>
         <translation>הכניסה נכשלה. נסה שוב</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="216"/>
+        <location filename="../../mscore/loginmanager.cpp" line="217"/>
         <source>Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="221"/>
+        <location filename="../../mscore/loginmanager.cpp" line="222"/>
         <source>This account has been blocked.</source>
         <translation>חשבון זה נחסם</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="224"/>
+        <location filename="../../mscore/loginmanager.cpp" line="225"/>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or %1request a new activation email%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="229"/>
+        <location filename="../../mscore/loginmanager.cpp" line="230"/>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, %1contact us%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="292"/>
+        <location filename="../../mscore/loginmanager.cpp" line="293"/>
         <source>Error while getting user info. Please try again</source>
         <translation>שגיאה בקבלת פרטי משתמש. נסה שנית</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="296"/>
+        <location filename="../../mscore/loginmanager.cpp" line="297"/>
         <source>Error while getting user info: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="410"/>
+        <location filename="../../mscore/loginmanager.cpp" line="411"/>
         <source>Uploading...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="445"/>
+        <location filename="../../mscore/loginmanager.cpp" line="446"/>
         <source>Upload Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="446"/>
+        <location filename="../../mscore/loginmanager.cpp" line="447"/>
         <source>Sorry, MuseScore couldn&apos;t upload the audio file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="546"/>
+        <location filename="../../mscore/loginmanager.cpp" line="547"/>
         <source>An error occurred during the file transfer. Please try again</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="550"/>
+        <location filename="../../mscore/loginmanager.cpp" line="551"/>
         <source>Cannot upload: %1</source>
         <translation type="unfinished"/>
     </message>
@@ -8961,7 +8962,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="290"/>
         <source>MuseScore Files</source>
-        <translation type="unfinished"/>
+        <translation>קבצי מיוזסקור</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="291"/>
@@ -10323,7 +10324,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="110"/>
         <source>Velocity:</source>
-        <translation type="unfinished"/>
+        <translation>מהירות:</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="112"/>
@@ -10597,7 +10598,7 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1275"/>
         <source>MuseScore Files</source>
-        <translation type="unfinished"/>
+        <translation>קבצי מיוזסקור</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1275"/>
@@ -10746,7 +10747,7 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="467"/>
+        <location filename="../../libmscore/scorefile.cpp" line="470"/>
         <source>Open File
 %1
 failed: </source>
@@ -10755,7 +10756,7 @@ failed: </source>
 נכשלה:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="600"/>
+        <location filename="../../libmscore/scorefile.cpp" line="603"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -10764,12 +10765,12 @@ failed: %2</source>
 נכשלה: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="622"/>
+        <location filename="../../libmscore/scorefile.cpp" line="625"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>קובץ סגנון אינו תואם גירסה זו של מיוזסקור.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="643"/>
+        <location filename="../../libmscore/scorefile.cpp" line="646"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -10778,12 +10779,12 @@ failed: %2</source>
 נכשלה: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="653"/>
+        <location filename="../../libmscore/scorefile.cpp" line="656"/>
         <source>Write Style failed: %1</source>
         <translation>כתיבת סגנון נכשלה: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1195"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation type="unfinished"/>
     </message>
@@ -11299,12 +11300,12 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="58"/>
         <source>System Text Properties</source>
-        <translation type="unfinished"/>
+        <translation>מאפייני טקסט סיסטמה</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="64"/>
         <source>Staff Text Properties</source>
-        <translation type="unfinished"/>
+        <translation>מאפייני טקסט חמשה</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="196"/>
@@ -11358,7 +11359,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="564"/>
         <source>Common Symbols</source>
-        <translation type="unfinished"/>
+        <translation>סמלים נפוצים</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="601"/>
@@ -11391,7 +11392,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/textproperties.cpp" line="54"/>
         <source>Text Properties</source>
-        <translation type="unfinished"/>
+        <translation>מאפייני טקסט</translation>
     </message>
 </context>
 <context>
@@ -11468,17 +11469,17 @@ please choose a different name:</source>
 <context>
     <name>Ms::TimeSig</name>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="590"/>
+        <location filename="../../libmscore/timesig.cpp" line="591"/>
         <source>Common time</source>
         <translation>משקל נפוץ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="592"/>
+        <location filename="../../libmscore/timesig.cpp" line="593"/>
         <source>Cut time</source>
         <translation>2/2 אלה ברבה</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="594"/>
+        <location filename="../../libmscore/timesig.cpp" line="595"/>
         <source>%1/%2 time</source>
         <translation type="unfinished"/>
     </message>
@@ -11486,18 +11487,18 @@ please choose a different name:</source>
 <context>
     <name>Ms::UpdateChecker</name>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="81"/>
+        <location filename="../../mscore/updatechecker.cpp" line="85"/>
         <source>An update for MuseScore is available: %1MuseScore %2 r.%3%4</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="89"/>
+        <location filename="../../mscore/updatechecker.cpp" line="93"/>
         <source>Update Available</source>
         <translation>עדכון זמין</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="96"/>
-        <location filename="../../mscore/updatechecker.cpp" line="97"/>
+        <location filename="../../mscore/updatechecker.cpp" line="100"/>
+        <location filename="../../mscore/updatechecker.cpp" line="101"/>
         <source>No Update Available</source>
         <translation>אין עדכון זמין</translation>
     </message>
@@ -11590,7 +11591,7 @@ please choose a different name:</source>
         <translation>שגיאה</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="240"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="249"/>
         <source>[%1link%2]</source>
         <translation type="unfinished"/>
     </message>
@@ -11870,7 +11871,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="20"/>
         <source>Page Settings</source>
-        <translation type="unfinished"/>
+        <translation>הגדרות עמוד</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="47"/>
@@ -12090,7 +12091,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="519"/>
         <source>Noteheads</source>
-        <translation type="unfinished"/>
+        <translation>ראשי תווית</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="550"/>
@@ -12110,7 +12111,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="656"/>
         <source>Arpeggios &amp;&amp; Glissandos</source>
-        <translation type="unfinished"/>
+        <translation>ארפג&apos;יוים וגליסנדוים</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="719"/>
@@ -12285,12 +12286,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="63"/>
         <source>Y:</source>
-        <translation type="unfinished"/>
+        <translation>Y:</translation>
     </message>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="73"/>
         <source>X:</source>
-        <translation type="unfinished"/>
+        <translation>X:</translation>
     </message>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="83"/>
@@ -12841,7 +12842,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="386"/>
         <source>Templates:</source>
-        <translation type="unfinished"/>
+        <translation>תבניות:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="402"/>
@@ -12871,7 +12872,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="452"/>
         <source>Template folder</source>
-        <translation type="unfinished"/>
+        <translation>תיקיית תבנית</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="455"/>
@@ -12912,7 +12913,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="502"/>
         <source>SoundFonts:</source>
-        <translation type="unfinished"/>
+        <translation>&quot;גופני-צלילים&quot;:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="515"/>
@@ -12928,7 +12929,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="528"/>
         <source>Choose template folder</source>
-        <translation type="unfinished"/>
+        <translation>בחר תיקיית תבנית</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="531"/>
@@ -12965,7 +12966,7 @@ failed: </source>
         <location filename="../../mscore/prefsdialog.ui" line="628"/>
         <source>min</source>
         <extracomment>minutes</extracomment>
-        <translation type="unfinished"/>
+        <translation>דק׳</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="657"/>
@@ -13030,7 +13031,7 @@ failed: </source>
         <location filename="../../mscore/prefsdialog.ui" line="1179"/>
         <source>px</source>
         <extracomment>pixel</extracomment>
-        <translation type="unfinished"/>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="785"/>
@@ -13078,7 +13079,7 @@ failed: </source>
         <location filename="../../mscore/prefsdialog.ui" line="901"/>
         <location filename="../../mscore/prefsdialog.ui" line="1022"/>
         <source>Wallpaper:</source>
-        <translation type="unfinished"/>
+        <translation>טפט:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="927"/>
@@ -13130,12 +13131,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1067"/>
         <source>Paper Color</source>
-        <translation type="unfinished"/>
+        <translation>צבע דף</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1080"/>
         <source>Select paper color</source>
-        <translation type="unfinished"/>
+        <translation>בחר צבע דף</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1083"/>
@@ -14234,7 +14235,7 @@ failed: </source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2714"/>
+        <location filename="../../libmscore/edit.cpp" line="2711"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14244,7 +14245,7 @@ failed: </source>
         <translation>מיוזסקור</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2715"/>
+        <location filename="../../libmscore/edit.cpp" line="2712"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14655,7 +14656,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="309"/>
         <source>MuseScore Files</source>
-        <translation type="unfinished"/>
+        <translation>קבצי מיוזסקור</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="321"/>
@@ -15138,7 +15139,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/splitstaff.ui" line="20"/>
         <source>Edit Staff/Part Properties</source>
-        <translation type="unfinished"/>
+        <translation>עריכת מאפייני חמשה/תפקיד</translation>
     </message>
     <message>
         <location filename="../../mscore/splitstaff.ui" line="36"/>
@@ -16462,32 +16463,32 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="385"/>
         <source>Second</source>
-        <translation type="unfinished"/>
+        <translation>סקונדה</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="390"/>
         <source>Third</source>
-        <translation type="unfinished"/>
+        <translation>טרצה</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="395"/>
         <source>Fourth</source>
-        <translation type="unfinished"/>
+        <translation>קוורטה</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="400"/>
         <source>Fifth</source>
-        <translation type="unfinished"/>
+        <translation>קווינטה</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="405"/>
         <source>Sixth</source>
-        <translation type="unfinished"/>
+        <translation>סקסטה</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="410"/>
         <source>Seventh</source>
-        <translation type="unfinished"/>
+        <translation>ספטימה</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="425"/>
@@ -16502,7 +16503,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="453"/>
         <source>Transpose chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>טרנספוזיציית סימני אקורדים</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="467"/>
@@ -17418,47 +17419,47 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="344"/>
         <source>Fifth Above</source>
-        <translation type="unfinished"/>
+        <translation>קווינטה מעל</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="345"/>
         <source>Enter fifth above</source>
-        <translation type="unfinished"/>
+        <translation>הוסף קווינטה מעל</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="351"/>
         <source>Sixth Above</source>
-        <translation type="unfinished"/>
+        <translation>סקסטה מעל</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="352"/>
         <source>Enter sixth above</source>
-        <translation type="unfinished"/>
+        <translation>הוסף סקסטה מעל</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="358"/>
         <source>Seventh Above</source>
-        <translation type="unfinished"/>
+        <translation>ספטימה מעל</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="359"/>
         <source>Enter seventh above</source>
-        <translation type="unfinished"/>
+        <translation>הוסף ספטימה מעל</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="365"/>
         <source>Octave Above</source>
-        <translation type="unfinished"/>
+        <translation>אוקטבה מעל</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="366"/>
         <source>Enter octave above</source>
-        <translation type="unfinished"/>
+        <translation>הוסף אוקטבה מעל</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="372"/>
         <source>Ninth Above</source>
-        <translation type="unfinished"/>
+        <translation>נונה מעל</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="373"/>
@@ -17513,37 +17514,37 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="408"/>
         <source>Enter sixth below</source>
-        <translation type="unfinished"/>
+        <translation>הוסף סקסטה מתחת</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="414"/>
         <source>Seventh Below</source>
-        <translation type="unfinished"/>
+        <translation>ספטימה מתחת</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="415"/>
         <source>Enter seventh below</source>
-        <translation type="unfinished"/>
+        <translation>הוסף ספטימה מתחת</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="421"/>
         <source>Octave Below</source>
-        <translation type="unfinished"/>
+        <translation>אוקטבה מתחת</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="422"/>
         <source>Enter octave below</source>
-        <translation type="unfinished"/>
+        <translation>הוסף אוקטבה מתחת</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="428"/>
         <source>Ninth Below</source>
-        <translation type="unfinished"/>
+        <translation>נונה מתחת</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="429"/>
         <source>Enter ninth below</source>
-        <translation type="unfinished"/>
+        <translation>הוסף נונה מתחת</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="435"/>
@@ -20144,7 +20145,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2718"/>
         <source>Layers</source>
-        <translation type="unfinished"/>
+        <translation>שכבות</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2727"/>
@@ -23631,7 +23632,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="21"/>
         <source>Articulations &amp; Ornaments</source>
-        <translation type="unfinished"/>
+        <translation>ארטיקולציות וקישוטים</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="22"/>

@@ -109,7 +109,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="46"/>
         <source>Add Score...</source>
-        <translation>新增乐谱</translation>
+        <translation>新增乐谱...</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="53"/>
@@ -149,7 +149,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="152"/>
         <source>Load...</source>
-        <translation>读取...</translation>
+        <translation>加载...</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="172"/>
@@ -174,7 +174,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="225"/>
         <source>Add section break between scores</source>
-        <translation>在乐谱之间添加分段</translation>
+        <translation>在乐谱之间添加分节符</translation>
     </message>
 </context>
 <context>
@@ -182,7 +182,7 @@
     <message>
         <location filename="../../mscore/articulation.ui" line="14"/>
         <source>Articulation Properties</source>
-        <translation>装饰音属性...</translation>
+        <translation>装饰音属性</translation>
     </message>
     <message>
         <location filename="../../mscore/articulation.ui" line="24"/>
@@ -263,7 +263,7 @@
     <message>
         <location filename="../../mscore/bend.ui" line="14"/>
         <source>Bend Properties</source>
-        <translation>弯音属性...</translation>
+        <translation>弯音属性</translation>
     </message>
     <message>
         <location filename="../../mscore/bend.ui" line="23"/>
@@ -381,7 +381,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="103"/>
         <source>Knee</source>
-        <translation type="unfinished"/>
+        <translation>拐点</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="118"/>
@@ -427,42 +427,42 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="315"/>
         <source>The gain reduction ratio used when the signal level exceeds the threshold.</source>
-        <translation type="unfinished"/>
+        <translation>增益衰减率用在信号水平超过阈值时。</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="356"/>
         <source>Knee radius (dB)</source>
-        <translation type="unfinished"/>
+        <translation>拐点曲率半径 (dB)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="359"/>
         <source>The distance from the threshold where the knee curve starts.</source>
-        <translation type="unfinished"/>
+        <translation>到阈值的距离，在这个阈值处曲线开始转折</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="406"/>
         <source>The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and  peak is better for heavier, fast compression and percussion.</source>
-        <translation type="unfinished"/>
+        <translation>均方根值和峰值包络之间的平衡。均方根值总体上来说更适合轻音乐压缩，峰值包络则更适合重度、快速的压缩和打击。</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="435"/>
         <source>Makeup gain (dB)</source>
-        <translation type="unfinished"/>
+        <translation>增益补偿 (dB)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="438"/>
         <source>Controls the gain of the makeup input signal in dB&apos;s.</source>
-        <translation type="unfinished"/>
+        <translation>控制补偿输入信号的增益，单位dB</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="473"/>
         <source>Threshold level (dB)</source>
-        <translation type="unfinished"/>
+        <translation>阈值水平 (dB)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="476"/>
         <source>The point at which the compressor will start to kick in.</source>
-        <translation type="unfinished"/>
+        <translation>压缩器将要加入的点</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="533"/>
@@ -556,7 +556,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="44"/>
         <source>Load...</source>
-        <translation>读取...</translation>
+        <translation>加载...</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="51"/>
@@ -664,7 +664,7 @@
     <message>
         <location filename="../../mscore/editinstrument.ui" line="46"/>
         <source>Short name:</source>
-        <translation>简称</translation>
+        <translation>简称：</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="66"/>
@@ -1520,12 +1520,12 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="325"/>
         <source>Transpose written pitches to sound:</source>
-        <translation type="unfinished"/>
+        <translation>记谱音高移调至实际音高：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="345"/>
         <source>octaves +</source>
-        <translation type="unfinished"/>
+        <translation>个八度 +</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="365"/>
@@ -1695,7 +1695,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="685"/>
         <source>Hide system barline</source>
-        <translation type="unfinished"/>
+        <translation>隐藏谱表组小节线</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="698"/>
@@ -1774,7 +1774,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="20"/>
         <source>Edit Staff Type</source>
-        <translation type="unfinished"/>
+        <translation>编辑乐谱类型</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="37"/>
@@ -1867,7 +1867,7 @@
         <location filename="../../mscore/editstafftype.ui" line="451"/>
         <location filename="../../mscore/editstafftype.ui" line="738"/>
         <source>Vertical offset:</source>
-        <translation>垂直偏移量</translation>
+        <translation>垂直偏移量：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="495"/>
@@ -1922,7 +1922,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="656"/>
         <source>Show fingerings</source>
-        <translation type="unfinished"/>
+        <translation>显示指法</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="679"/>
@@ -1973,7 +1973,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="937"/>
         <source>Always</source>
-        <translation type="unfinished"/>
+        <translation>总是</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="987"/>
@@ -2043,7 +2043,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1313"/>
         <source>Create a new staff type of current group.</source>
-        <translation type="unfinished"/>
+        <translation>在当前组创建新的五线谱类型</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1316"/>
@@ -2099,7 +2099,7 @@
     <message>
         <location filename="../../mscore/editstyle.ui" line="14"/>
         <source>Edit Style</source>
-        <translation type="unfinished"/>
+        <translation>编辑样式</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="30"/>
@@ -2135,7 +2135,7 @@
     <message>
         <location filename="../../mscore/editstyle.ui" line="119"/>
         <source>Display in concert pitch</source>
-        <translation>以标准音高（音乐会音高）显示</translation>
+        <translation>以音乐会音高显示</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="126"/>
@@ -2357,7 +2357,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="727"/>
         <source>Vertical frame bottom margin:</source>
-        <translation>垂直占位框下边距</translation>
+        <translation>垂直占位框下边距：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="795"/>
@@ -2382,7 +2382,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="913"/>
         <source>Create courtesy clefs</source>
-        <translation type="unfinished"/>
+        <translation>创建建议的谱号</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="926"/>
@@ -2409,7 +2409,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="1218"/>
         <location filename="../../mscore/editstyle.ui" line="1392"/>
         <source>Show first</source>
-        <translation>显示首个</translation>
+        <translation>首页显示</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="995"/>
@@ -2499,7 +2499,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1461"/>
         <source>System bracket thickness:</source>
-        <translation type="unfinished"/>
+        <translation>谱表组括号粗度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1490"/>
@@ -2509,7 +2509,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1525"/>
         <source>Brace thickness:</source>
-        <translation type="unfinished"/>
+        <translation>括号粗度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1554"/>
@@ -2575,7 +2575,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2025"/>
         <source>Staff line thickness:</source>
-        <translation>谱线宽度：</translation>
+        <translation>谱线粗度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2050"/>
@@ -2585,7 +2585,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2092"/>
         <source>Multimeasure rest margin:</source>
-        <translation type="unfinished"/>
+        <translation>多小节休止符边距：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2143"/>
@@ -2621,27 +2621,27 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2268"/>
         <source>Barline thickness:</source>
-        <translation>小节线宽度：</translation>
+        <translation>小节线粗度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2288"/>
         <source>Final barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>终止小节线粗度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2308"/>
         <source>Final barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>终止小节线距离：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2328"/>
         <source>Double barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>双小节线粗度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2348"/>
         <source>Double barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>双小节线距离：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2393"/>
@@ -2687,7 +2687,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2589"/>
         <source>Ledger line thickness:</source>
-        <translation>加线宽度：</translation>
+        <translation>加线粗度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2615"/>
@@ -2697,7 +2697,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2641"/>
         <source>Stem thickness:</source>
-        <translation>符干宽度：</translation>
+        <translation>符干粗度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2667"/>
@@ -2743,7 +2743,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="3747"/>
         <location filename="../../mscore/editstyle.ui" line="4038"/>
         <source>Line thickness:</source>
-        <translation>谱线宽度：</translation>
+        <translation>直线粗度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2830"/>
@@ -2759,7 +2759,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2887"/>
         <source>Beam thickness:</source>
-        <translation>符杠宽度：</translation>
+        <translation>符杠粗度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2907"/>
@@ -2785,7 +2785,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3030"/>
         <source>Line thickness at end:</source>
-        <translation type="unfinished"/>
+        <translation>结束时的粗度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3056"/>
@@ -2937,7 +2937,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3947"/>
         <source>Pedal Line</source>
-        <translation type="unfinished"/>
+        <translation>踏板线</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4064"/>
@@ -3053,7 +3053,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4373"/>
         <source>Positioning</source>
-        <translation type="unfinished"/>
+        <translation>定位</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4411"/>
@@ -3093,7 +3093,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4635"/>
         <source>Position:</source>
-        <translation type="unfinished"/>
+        <translation>位置：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4669"/>
@@ -3129,7 +3129,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4837"/>
         <source>Line height:</source>
-        <translation type="unfinished"/>
+        <translation>行高：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4853"/>
@@ -3280,7 +3280,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5274"/>
         <source>Avoid the staves</source>
-        <translation type="unfinished"/>
+        <translation>避免谱表</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5338"/>
@@ -3333,12 +3333,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="14"/>
         <source>Parts</source>
-        <translation type="unfinished"/>
+        <translation>分谱</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="20"/>
         <source>Select Part</source>
-        <translation>选择声部</translation>
+        <translation>选择分谱</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="49"/>
@@ -3375,12 +3375,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="129"/>
         <source>Edit Part</source>
-        <translation>编辑声部</translation>
+        <translation>编辑分谱</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="138"/>
         <source>Part title:</source>
-        <translation>声部标题：</translation>
+        <translation>分谱标题：</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="148"/>
@@ -3393,7 +3393,7 @@ space unit</extracomment>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="26"/>
         <source>Sound Fonts</source>
-        <translation type="unfinished"/>
+        <translation>Sound Fonts</translation>
     </message>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="47"/>
@@ -3524,7 +3524,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/insertmeasuresdialog.ui" line="14"/>
         <source>Insert Measures</source>
-        <translation type="unfinished"/>
+        <translation>插入小节</translation>
     </message>
     <message>
         <location filename="../../mscore/insertmeasuresdialog.ui" line="39"/>
@@ -3603,7 +3603,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="93"/>
         <source>Head group:</source>
-        <translation type="unfinished"/>
+        <translation>符头组：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="106"/>
@@ -3683,7 +3683,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="186"/>
         <source>Line thickness</source>
-        <translation>谱线宽度</translation>
+        <translation>直线粗度</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="189"/>
@@ -3956,7 +3956,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="500"/>
         <source>Line thickness:</source>
-        <translation>谱线宽度：</translation>
+        <translation>直线粗度：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="513"/>
@@ -4006,7 +4006,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="816"/>
         <source>Head type:</source>
-        <translation type="unfinished"/>
+        <translation>符头类型：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="832"/>
@@ -4026,7 +4026,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="898"/>
         <source>Reset &apos;Head type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置“符头类型”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="918"/>
@@ -4211,7 +4211,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="17"/>
         <source>Barline Inspector</source>
-        <translation type="unfinished"/>
+        <translation>小节线查看器</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="44"/>
@@ -4370,7 +4370,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="182"/>
         <source>Position:</source>
-        <translation type="unfinished"/>
+        <translation>位置：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="195"/>
@@ -4479,7 +4479,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_break.ui" line="53"/>
         <source>Layout Break</source>
-        <translation type="unfinished"/>
+        <translation>布局中断</translation>
     </message>
 </context>
 <context>
@@ -4571,7 +4571,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="156"/>
         <source>Vertical offset:</source>
-        <translation>垂直偏移量</translation>
+        <translation>垂直偏移量：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="169"/>
@@ -4600,7 +4600,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="211"/>
         <source>Horizontal offset:</source>
-        <translation type="unfinished"/>
+        <translation>水平偏移量：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="224"/>
@@ -4738,7 +4738,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="96"/>
         <source>Vertical offset:</source>
-        <translation>垂直偏移量</translation>
+        <translation>垂直偏移量：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="109"/>
@@ -4775,7 +4775,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="227"/>
         <source>Horizontal offset:</source>
-        <translation type="unfinished"/>
+        <translation>水平偏移量：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="240"/>
@@ -4885,7 +4885,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="147"/>
         <source>Play Style</source>
-        <translation type="unfinished"/>
+        <translation>播放样式</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="151"/>
@@ -4990,12 +4990,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="17"/>
         <source>Horizontal Frame Inspector</source>
-        <translation type="unfinished"/>
+        <translation>水平占位框查看器</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="44"/>
         <source>Horizontal Frame</source>
-        <translation type="unfinished"/>
+        <translation>水平占位框</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="87"/>
@@ -5386,7 +5386,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_lasso.ui" line="81"/>
         <source>Position:</source>
-        <translation type="unfinished"/>
+        <translation>位置：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lasso.ui" line="88"/>
@@ -5455,7 +5455,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="111"/>
         <source>Line thickness:</source>
-        <translation>谱线宽度：</translation>
+        <translation>直线粗度：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="118"/>
@@ -5481,7 +5481,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="171"/>
         <source>Line thickness</source>
-        <translation>谱线宽度</translation>
+        <translation>直线粗度</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="174"/>
@@ -5625,7 +5625,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="170"/>
         <source>Marker type:</source>
-        <translation type="unfinished"/>
+        <translation>标记类型：</translation>
     </message>
 </context>
 <context>
@@ -5766,7 +5766,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="343"/>
         <source>Head type:</source>
-        <translation type="unfinished"/>
+        <translation>符头类型：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="359"/>
@@ -5791,7 +5791,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="416"/>
         <source>Head group:</source>
-        <translation type="unfinished"/>
+        <translation>符头组：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="435"/>
@@ -5847,7 +5847,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="618"/>
         <source>Reset &apos;Head type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置“符头类型”值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="635"/>
@@ -6011,7 +6011,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="87"/>
         <source>Trailing space:</source>
-        <translation type="unfinished"/>
+        <translation>后缀空间：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="100"/>
@@ -6033,7 +6033,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="150"/>
         <source>Leading space:</source>
-        <translation type="unfinished"/>
+        <translation>前缀空间：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="157"/>
@@ -6165,7 +6165,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="17"/>
         <source>Text Frame Inspector</source>
-        <translation type="unfinished"/>
+        <translation>文本框查看器</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="44"/>
@@ -6180,7 +6180,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="91"/>
         <source>Top margin:</source>
-        <translation>顶部边距</translation>
+        <translation>上边距：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="98"/>
@@ -6218,7 +6218,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="154"/>
         <source>Bottom margin:</source>
-        <translation>底部边距</translation>
+        <translation>下边距：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="164"/>
@@ -6228,7 +6228,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="178"/>
         <source>Right margin:</source>
-        <translation>右边距</translation>
+        <translation>右边距：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="191"/>
@@ -6280,7 +6280,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="347"/>
         <source>Left margin:</source>
-        <translation>左边距</translation>
+        <translation>左边距：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="360"/>
@@ -6386,7 +6386,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_textline.ui" line="44"/>
         <source>Text Line</source>
-        <translation type="unfinished"/>
+        <translation>文字线</translation>
     </message>
 </context>
 <context>
@@ -6539,7 +6539,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="17"/>
         <source>Tuplet Inspector</source>
-        <translation type="unfinished"/>
+        <translation>连音符查看器</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="44"/>
@@ -6586,12 +6586,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="140"/>
         <source>Number type:</source>
-        <translation type="unfinished"/>
+        <translation>数字类型：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="147"/>
         <source>Bracket type:</source>
-        <translation type="unfinished"/>
+        <translation>括号类型：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="154"/>
@@ -6644,7 +6644,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="17"/>
         <source>Vertical Frame Inspector</source>
-        <translation type="unfinished"/>
+        <translation>垂直占位框查看器</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="44"/>
@@ -6654,7 +6654,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="84"/>
         <source>Right margin:</source>
-        <translation>右边距</translation>
+        <translation>右边距：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="91"/>
@@ -6679,7 +6679,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="128"/>
         <source>Bottom margin:</source>
-        <translation>底部边距</translation>
+        <translation>下边距：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="141"/>
@@ -6730,12 +6730,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="246"/>
         <source>Top margin:</source>
-        <translation>顶部边距</translation>
+        <translation>上边距：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="253"/>
         <source>Left margin:</source>
-        <translation>左边距</translation>
+        <translation>左边距：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="260"/>
@@ -6917,12 +6917,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrdialog.ui" line="14"/>
         <source>Instruments</source>
-        <translation type="unfinished"/>
+        <translation>乐器</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.ui" line="47"/>
         <source>Load...</source>
-        <translation>载入...</translation>
+        <translation>加载...</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.ui" line="54"/>
@@ -6950,7 +6950,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="14"/>
         <source>Instruments</source>
-        <translation type="unfinished"/>
+        <translation>乐器</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="42"/>
@@ -7041,7 +7041,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="344"/>
         <source>Linked</source>
-        <translation type="unfinished"/>
+        <translation>链接</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="347"/>
@@ -7069,7 +7069,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/keyedit.ui" line="128"/>
         <source>Add time signature to master palette</source>
-        <translation type="unfinished"/>
+        <translation>将拍号添加到主面板</translation>
     </message>
     <message>
         <location filename="../../mscore/keyedit.ui" line="131"/>
@@ -7225,7 +7225,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/logindialog.ui" line="83"/>
         <source>Username or email:</source>
-        <translation type="unfinished"/>
+        <translation>用户名或电子邮件：</translation>
     </message>
     <message>
         <location filename="../../mscore/logindialog.ui" line="90"/>
@@ -7235,7 +7235,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/logindialog.ui" line="110"/>
         <source>Password:</source>
-        <translation type="unfinished"/>
+        <translation>密码：</translation>
     </message>
     <message>
         <location filename="../../mscore/logindialog.ui" line="123"/>
@@ -7298,12 +7298,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/importmidi/importmidi_model.cpp" line="254"/>
         <source>64th</source>
-        <translation type="unfinished"/>
+        <translation>六十四分音符</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi_model.cpp" line="255"/>
         <source>128th</source>
-        <translation type="unfinished"/>
+        <translation>一百二十八分音符</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi_model.cpp" line="257"/>
@@ -7443,13 +7443,15 @@ performance</source>
         <location filename="../../mscore/importmidi/importmidi_model.cpp" line="564"/>
         <source>Clef
 changes</source>
-        <translation type="unfinished"/>
+        <translation>更改
+谱号</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi_model.cpp" line="598"/>
         <source>Simplify
 durations</source>
-        <translation type="unfinished"/>
+        <translation>简化
+时值</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi_model.cpp" line="616"/>
@@ -7508,7 +7510,7 @@ pickup measure</source>
     <message>
         <location filename="../../mscore/importmidi/importmidi_model.cpp" line="1041"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>全部</translation>
     </message>
 </context>
 <context>
@@ -7540,7 +7542,7 @@ Would you like to locate %2 now?</source>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="14"/>
         <source>Master Palette</source>
-        <translation type="unfinished"/>
+        <translation>主面板</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="30"/>
@@ -7575,7 +7577,7 @@ Would you like to locate %2 now?</source>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="60"/>
         <source>Arpeggios &amp; Glissandos</source>
-        <translation type="unfinished"/>
+        <translation>琶音与滑音</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="65"/>
@@ -7669,7 +7671,8 @@ Would you like to locate %2 now?</source>
         <location filename="../../mscore/measureproperties.cpp" line="268"/>
         <source>cannot change measure length:
 tuplet would cross measure</source>
-        <translation type="unfinished"/>
+        <translation>无法更改小节长度：
+连音符将跨小节</translation>
     </message>
 </context>
 <context>
@@ -7677,7 +7680,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="17"/>
         <source>Measure Properties</source>
-        <translation type="unfinished"/>
+        <translation>小节属性</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="27"/>
@@ -7788,12 +7791,12 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="290"/>
         <source>Exclude from measure count</source>
-        <translation type="unfinished"/>
+        <translation>从小节数中排除</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="297"/>
         <source>Break multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>断开多小节休止符</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="310"/>
@@ -7808,12 +7811,12 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="384"/>
         <source>Add to measure number:</source>
-        <translation type="unfinished"/>
+        <translation>添加到小节号：</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="407"/>
         <source>Measure number mode:</source>
-        <translation type="unfinished"/>
+        <translation>小节号模式：</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="415"/>
@@ -7828,7 +7831,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="425"/>
         <source>Always Hide</source>
-        <translation type="unfinished"/>
+        <translation>总是隐藏</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="457"/>
@@ -7846,7 +7849,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/measuresdialog.ui" line="14"/>
         <source>Append Measures</source>
-        <translation type="unfinished"/>
+        <translation>追加小节</translation>
     </message>
     <message>
         <location filename="../../mscore/measuresdialog.ui" line="39"/>
@@ -7884,7 +7887,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/mediadialog.ui" line="49"/>
         <source>Add Scan</source>
-        <translation type="unfinished"/>
+        <translation>添加扫描</translation>
     </message>
     <message>
         <location filename="../../mscore/mediadialog.ui" line="89"/>
@@ -7920,7 +7923,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/metaedit.ui" line="14"/>
         <source>Score Properties</source>
-        <translation type="unfinished"/>
+        <translation>乐谱属性</translation>
     </message>
     <message>
         <location filename="../../mscore/metaedit.ui" line="28"/>
@@ -7940,7 +7943,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/metaedit.ui" line="66"/>
         <source>File Path:</source>
-        <translation type="unfinished"/>
+        <translation>文件路径：</translation>
     </message>
 </context>
 <context>
@@ -7976,7 +7979,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="3197"/>
         <source>Version: %1</source>
-        <translation type="unfinished"/>
+        <translation>版本：%1</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="3198"/>
@@ -8000,7 +8003,8 @@ Published under the GNU General Public License.</source>
         <source>MusicXML is an open file format for exchanging digital sheet music,
 supported by many applications. MusicXML is copyright &amp;copy; MakeMusic, Inc.
 All rights reserved. For more information, see: %1MusicXML.com%2.</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML 是用于交换数字乐谱的开放文件格式，很多应用程序都支持这种格式。MusicXML 由 &amp;copy; MakeMusic, Inc. 版权所有。
+保留所有权利。有关更多信息，请参见：%1MusicXML.com%2。</translation>
     </message>
 </context>
 <context>
@@ -8008,7 +8012,7 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="43"/>
         <source>Score %1</source>
-        <translation type="unfinished"/>
+        <translation>乐谱 %1</translation>
     </message>
 </context>
 <context>
@@ -8039,7 +8043,7 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="75"/>
         <source>MuseScore Files</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore 文件</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="76"/>
@@ -8049,7 +8053,7 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="101"/>
         <source>MuseScore Album Files</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore 专辑文件</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="102"/>
@@ -8149,7 +8153,7 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
     <message>
         <location filename="../../libmscore/chordrest.cpp" line="1070"/>
         <source>Custom Tuplet</source>
-        <translation type="unfinished"/>
+        <translation>自定义连音符</translation>
     </message>
     <message>
         <location filename="../../libmscore/chordrest.cpp" line="1079"/>
@@ -8251,12 +8255,12 @@ All rights reserved. For more information, see: %1MusicXML.com%2.</source>
 <context>
     <name>Ms::EditDrumset</name>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="74"/>
+        <location filename="../../mscore/editdrumset.cpp" line="86"/>
         <source>invalid</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="375"/>
+        <location filename="../../mscore/editdrumset.cpp" line="387"/>
         <source>Open File
 %1
 failed: </source>
@@ -8265,17 +8269,17 @@ failed: </source>
 失败：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="377"/>
+        <location filename="../../mscore/editdrumset.cpp" line="389"/>
         <source>Open File</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="387"/>
+        <location filename="../../mscore/editdrumset.cpp" line="399"/>
         <source>Write File failed: </source>
         <translation>写文件失败： </translation>
     </message>
     <message>
-        <location filename="../../mscore/editdrumset.cpp" line="388"/>
+        <location filename="../../mscore/editdrumset.cpp" line="400"/>
         <source>Write Drumset</source>
         <translation type="unfinished"/>
     </message>
@@ -8588,7 +8592,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="74"/>
         <source>Save Instrument List</source>
-        <translation type="unfinished"/>
+        <translation>保存乐器列表</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="76"/>
@@ -8618,12 +8622,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="105"/>
         <source>Write Style</source>
-        <translation type="unfinished"/>
+        <translation>书写样式</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="116"/>
         <source>Load Instrument List</source>
-        <translation type="unfinished"/>
+        <translation>装入乐器列表</translation>
     </message>
 </context>
 <context>
@@ -8651,7 +8655,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/instrwidget.cpp" line="366"/>
         <source>Linked</source>
-        <translation type="unfinished"/>
+        <translation>链接</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.cpp" line="366"/>
@@ -8725,87 +8729,87 @@ failed: </source>
 <context>
     <name>Ms::LoginManager</name>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Network error</source>
         <translation>网络错误</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="110"/>
-        <location filename="../../mscore/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/loginmanager.cpp" line="111"/>
+        <location filename="../../mscore/loginmanager.cpp" line="239"/>
         <source>Please check your Internet connection</source>
         <translation>请检查您的网络连接。</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Please upgrade</source>
         <translation>请升级</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="241"/>
+        <location filename="../../mscore/loginmanager.cpp" line="113"/>
+        <location filename="../../mscore/loginmanager.cpp" line="242"/>
         <source>Your MuseScore version is too old to use this feature.
 %1Please upgrade first%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="210"/>
+        <location filename="../../mscore/loginmanager.cpp" line="211"/>
         <source>Unsuccessful login. Please try again.</source>
         <translation>登录失败。请重试。</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="216"/>
+        <location filename="../../mscore/loginmanager.cpp" line="217"/>
         <source>Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="221"/>
+        <location filename="../../mscore/loginmanager.cpp" line="222"/>
         <source>This account has been blocked.</source>
         <translation>该账户已被禁止。</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="224"/>
+        <location filename="../../mscore/loginmanager.cpp" line="225"/>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or %1request a new activation email%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="229"/>
+        <location filename="../../mscore/loginmanager.cpp" line="230"/>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, %1contact us%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="292"/>
+        <location filename="../../mscore/loginmanager.cpp" line="293"/>
         <source>Error while getting user info. Please try again</source>
         <translation>获取用户信息时出错。请再试一遍。</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="296"/>
+        <location filename="../../mscore/loginmanager.cpp" line="297"/>
         <source>Error while getting user info: %1</source>
         <translation>获取用户信息时出错：%1</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="410"/>
+        <location filename="../../mscore/loginmanager.cpp" line="411"/>
         <source>Uploading...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="445"/>
+        <location filename="../../mscore/loginmanager.cpp" line="446"/>
         <source>Upload Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="446"/>
+        <location filename="../../mscore/loginmanager.cpp" line="447"/>
         <source>Sorry, MuseScore couldn&apos;t upload the audio file</source>
-        <translation type="unfinished"/>
+        <translation>抱歉，MuseScore 无法上传音频文件</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="546"/>
+        <location filename="../../mscore/loginmanager.cpp" line="547"/>
         <source>An error occurred during the file transfer. Please try again</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="550"/>
+        <location filename="../../mscore/loginmanager.cpp" line="551"/>
         <source>Cannot upload: %1</source>
         <translation>无法上传：%1</translation>
     </message>
@@ -8838,7 +8842,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="119"/>
         <source>Measure Properties for Measure %1</source>
-        <translation type="unfinished"/>
+        <translation>第 %1 小节的属性</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="150"/>
@@ -8950,12 +8954,12 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="288"/>
         <location filename="../../mscore/file.cpp" line="2285"/>
         <source>All Supported Files</source>
-        <translation type="unfinished"/>
+        <translation>支持的全部文件</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="290"/>
         <source>MuseScore Files</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore 文件</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="291"/>
@@ -8985,7 +8989,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="297"/>
         <source>PDF Files &lt;experimental OMR&gt;</source>
-        <translation type="unfinished"/>
+        <translation>PDF 文件 &lt;experimental OMR&gt;</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="299"/>
@@ -9005,7 +9009,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="302"/>
         <source>Load Score</source>
-        <translation type="unfinished"/>
+        <translation>打开乐谱</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="400"/>
@@ -9013,7 +9017,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="2178"/>
         <location filename="../../mscore/file.cpp" line="2239"/>
         <source>MuseScore File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore 文件</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="401"/>
@@ -9021,18 +9025,18 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="1673"/>
         <location filename="../../mscore/file.cpp" line="2179"/>
         <source>Uncompressed MuseScore File</source>
-        <translation type="unfinished"/>
+        <translation>未压缩的 MuseScore 文件</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="416"/>
         <source>Save Score</source>
-        <translation type="unfinished"/>
+        <translation>保存乐谱</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="424"/>
         <location filename="../../mscore/file.cpp" line="431"/>
         <source>Save File</source>
-        <translation type="unfinished"/>
+        <translation>保存文件</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="457"/>
@@ -9049,7 +9053,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="939"/>
         <source>MuseScore Styles</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore 样式</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="944"/>
@@ -9064,7 +9068,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="965"/>
         <location filename="../../mscore/file.cpp" line="982"/>
         <source>MuseScore Style File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore 样式文件</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1006"/>
@@ -9075,23 +9079,23 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="1017"/>
         <location filename="../../mscore/file.cpp" line="1045"/>
         <source>Load Chord Symbols Style</source>
-        <translation type="unfinished"/>
+        <translation>装入和弦记号样式</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1024"/>
         <source>Save Chord Symbols Style</source>
-        <translation type="unfinished"/>
+        <translation>保存和弦符号样式</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1088"/>
         <source>PDF Scan File</source>
-        <translation type="unfinished"/>
+        <translation>PDF 扫描文件</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1093"/>
         <location filename="../../mscore/file.cpp" line="1104"/>
         <source>Choose PDF Scan</source>
-        <translation>选择PDF扫描</translation>
+        <translation>选择 PDF 扫描</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1134"/>
@@ -9106,12 +9110,12 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1150"/>
         <source>Choose Ogg Audio File</source>
-        <translation type="unfinished"/>
+        <translation>选择 Ogg 音频文件</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1180"/>
         <source>Save Image</source>
-        <translation type="unfinished"/>
+        <translation>保存图像</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1268"/>
@@ -9143,12 +9147,12 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="1354"/>
         <location filename="../../mscore/file.cpp" line="1404"/>
         <source>Save Plugin</source>
-        <translation type="unfinished"/>
+        <translation>保存插件</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1355"/>
         <source>MuseScore Plugin File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore 插件文件</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1433"/>
@@ -9163,18 +9167,18 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1437"/>
         <source>Save Drumset</source>
-        <translation type="unfinished"/>
+        <translation>保存鼓组</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1438"/>
         <source>MuseScore Drumset File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore 鼓组文件</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1582"/>
         <location filename="../../mscore/file.cpp" line="1658"/>
         <source>PDF File</source>
-        <translation type="unfinished"/>
+        <translation>PDF 文件</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1583"/>
@@ -9211,7 +9215,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="1591"/>
         <location filename="../../mscore/file.cpp" line="1667"/>
         <source>MP3 Audio</source>
-        <translation type="unfinished"/>
+        <translation>MP3 音频</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1593"/>
@@ -9333,7 +9337,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/file.cpp" line="2180"/>
         <source>Save a Copy</source>
-        <translation type="unfinished"/>
+        <translation>保存副本</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2235"/>
@@ -9350,7 +9354,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/file.cpp" line="2270"/>
         <source>Save Selected</source>
-        <translation type="unfinished"/>
+        <translation>保存选中内容</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2283"/>
@@ -9375,7 +9379,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/file.cpp" line="2501"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>全部</translation>
     </message>
     <message>
         <location filename="../../mscore/help.cpp" line="163"/>
@@ -9400,7 +9404,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/menus.cpp" line="428"/>
         <source>Section break</source>
-        <translation type="unfinished"/>
+        <translation>分节符</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="434"/>
@@ -9445,7 +9449,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/menus.cpp" line="615"/>
         <source>Square</source>
-        <translation type="unfinished"/>
+        <translation>方括号</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="616"/>
@@ -9475,7 +9479,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/menus.cpp" line="1043"/>
         <source>Tempo text</source>
-        <translation type="unfinished"/>
+        <translation>速度文字</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1062"/>
@@ -9506,7 +9510,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/menus.cpp" line="1078"/>
         <source>Rehearsal mark</source>
-        <translation type="unfinished"/>
+        <translation>排练记号</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1081"/>
@@ -9608,7 +9612,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="517"/>
         <source>Show MIDI import panel</source>
-        <translation type="unfinished"/>
+        <translation>显示 MIDI 导入面板</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="577"/>
@@ -9633,12 +9637,12 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="605"/>
         <source>Playback Controls</source>
-        <translation type="unfinished"/>
+        <translation>回放控制</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="622"/>
         <source>Concert Pitch</source>
-        <translation>标准音高</translation>
+        <translation>音乐会音高</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="626"/>
@@ -9703,7 +9707,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="853"/>
         <source>&amp;Toolbars</source>
-        <translation type="unfinished"/>
+        <translation>工具栏(&amp;T)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="930"/>
@@ -9778,7 +9782,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1067"/>
         <source>Revert to Factory Settings</source>
-        <translation>恢复出厂设置</translation>
+        <translation>恢复初始设置</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1201"/>
@@ -9793,7 +9797,7 @@ Reverting will not remove any scores from your computer.
 Are you sure you want to proceed?</source>
         <translation>此操作将会重置您所有的设置。
 自定义符号，自定义快捷键，以及最近访问的文件列表都会被删除。MuseScore 在重启后将会使用默认设置。
-但是重置不会删除任何乐谱文件。
+此项重置工作将不会删除任何乐谱文件。
 您要继续吗？</translation>
     </message>
     <message>
@@ -9831,7 +9835,7 @@ Are you sure you want to proceed?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2835"/>
         <source>Realtime (automatic) note input mode</source>
-        <translation type="unfinished"/>
+        <translation>实时(自动)音符输入模式</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2840"/>
@@ -9861,7 +9865,7 @@ Are you sure you want to proceed?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2866"/>
         <source>Text edit mode</source>
-        <translation type="unfinished"/>
+        <translation>文本编辑模式</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2869"/>
@@ -9886,7 +9890,7 @@ Are you sure you want to proceed?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2882"/>
         <source>Score locked</source>
-        <translation type="unfinished"/>
+        <translation>乐谱锁定</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="3642"/>
@@ -9920,7 +9924,7 @@ Restore session?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4786"/>
         <source>Cannot create tuplet: Note value is too short</source>
-        <translation type="unfinished"/>
+        <translation>无法创建连音符：音符时值太短</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4923"/>
@@ -9930,17 +9934,17 @@ Restore session?</source>
     <message>
         <location filename="../../mscore/tupletdialog.cpp" line="120"/>
         <source>Tuplet Error</source>
-        <translation type="unfinished"/>
+        <translation>连音符错误</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.cpp" line="121"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
-        <translation type="unfinished"/>
+        <translation>无法创建比例为%1时值为%2的连音符</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.cpp" line="31"/>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
-        <translation type="unfinished"/>
+        <translation>此乐谱无法在线保存。请修复损坏的小节，然后再试一次。</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="86"/>
@@ -9966,7 +9970,7 @@ Restore session?</source>
     <message>
         <location filename="../../mscore/workspace.cpp" line="108"/>
         <source>Workspace name:</source>
-        <translation type="unfinished"/>
+        <translation>工作区名称：</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="124"/>
@@ -10007,7 +10011,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="406"/>
         <source>New Score Wizard</source>
-        <translation type="unfinished"/>
+        <translation>新建乐谱向导</translation>
     </message>
 </context>
 <context>
@@ -10020,7 +10024,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="163"/>
         <source>Enter score information:</source>
-        <translation type="unfinished"/>
+        <translation>输入乐谱信息：</translation>
     </message>
 </context>
 <context>
@@ -10033,7 +10037,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="192"/>
         <source>Choose instruments on the left to add to instrument list on the right:</source>
-        <translation type="unfinished"/>
+        <translation>从左侧的乐器中选择要添加到右侧列表中的乐器：</translation>
     </message>
 </context>
 <context>
@@ -10046,7 +10050,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="241"/>
         <source>Choose time signature:</source>
-        <translation type="unfinished"/>
+        <translation>选择拍号：</translation>
     </message>
 </context>
 <context>
@@ -10059,7 +10063,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="259"/>
         <source>Choose template file:</source>
-        <translation type="unfinished"/>
+        <translation>选择模板文件：</translation>
     </message>
 </context>
 <context>
@@ -10072,7 +10076,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="343"/>
         <source>Choose key signature and tempo:</source>
-        <translation type="unfinished"/>
+        <translation>选择调号和速度：</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="348"/>
@@ -10213,7 +10217,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/palettebox.cpp" line="49"/>
         <source>Select workspace</source>
-        <translation type="unfinished"/>
+        <translation>选择工作区</translation>
     </message>
     <message>
         <location filename="../../mscore/palettebox.cpp" line="55"/>
@@ -10261,7 +10265,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="63"/>
         <source>Save Palette...</source>
-        <translation type="unfinished"/>
+        <translation>保存面板...</translation>
     </message>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="64"/>
@@ -10279,7 +10283,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pathlistdialog.cpp" line="52"/>
         <source>Choose a directory</source>
-        <translation type="unfinished"/>
+        <translation>选择目录</translation>
     </message>
 </context>
 <context>
@@ -10383,12 +10387,13 @@ connection enabled</source>
         <location filename="../../mscore/pluginCreator.cpp" line="462"/>
         <source>Plugin &quot;%1&quot; has changes.
 Save before closing?</source>
-        <translation type="unfinished"/>
+        <translation>插件“%1”已更改。
+关闭前是否保存？</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="435"/>
         <source>Save Plugin</source>
-        <translation type="unfinished"/>
+        <translation>保存插件</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="435"/>
@@ -10562,17 +10567,17 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1202"/>
         <source>Choose Background Wallpaper</source>
-        <translation>选择背景图片</translation>
+        <translation>选择背景壁纸</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1213"/>
         <source>Choose Default Style</source>
-        <translation type="unfinished"/>
+        <translation>选择默认样式</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1224"/>
         <source>Choose Default Style for Parts</source>
-        <translation type="unfinished"/>
+        <translation>选择分谱的默认样式</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1237"/>
@@ -10594,17 +10599,17 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1275"/>
         <source>MuseScore Files</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore 文件</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1275"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>全部</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1620"/>
         <source>Choose Default Style for Imports</source>
-        <translation type="unfinished"/>
+        <translation>选择导入的默认样式</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1706"/>
@@ -10693,7 +10698,7 @@ Save before closing?</source>
     <message>
         <location filename="../../libmscore/rest.cpp" line="733"/>
         <source>%1; Duration: %2; %3</source>
-        <translation type="unfinished"/>
+        <translation>%1; 时值: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10737,7 +10742,7 @@ failed: %2</source>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="387"/>
         <source>Save File failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>保存文件失败：%1</translation>
     </message>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="445"/>
@@ -10746,7 +10751,7 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="467"/>
+        <location filename="../../libmscore/scorefile.cpp" line="470"/>
         <source>Open File
 %1
 failed: </source>
@@ -10755,31 +10760,31 @@ failed: </source>
 失败：</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="600"/>
+        <location filename="../../libmscore/scorefile.cpp" line="603"/>
         <source>Open File
 %1
 failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="622"/>
+        <location filename="../../libmscore/scorefile.cpp" line="625"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>此样式文件与本版本的 MuseScore 不兼容。</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="643"/>
+        <location filename="../../libmscore/scorefile.cpp" line="646"/>
         <source>Open Style File
 %1
 failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="653"/>
+        <location filename="../../libmscore/scorefile.cpp" line="656"/>
         <source>Write Style failed: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1195"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>读取 XML 时发生问题: 第 %1 行, 第 %2 个字符: %3</translation>
     </message>
@@ -10801,7 +10806,7 @@ failed: %2</source>
         <location filename="../../mscore/scoreaccessibility.cpp" line="125"/>
         <location filename="../../mscore/scoreaccessibility.cpp" line="164"/>
         <source>End Measure: %1; End Beat: %2</source>
-        <translation type="unfinished"/>
+        <translation>结束小节: %1; 结束拍: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="130"/>
@@ -10822,13 +10827,13 @@ failed: %2</source>
         <location filename="../../mscore/scoreaccessibility.cpp" line="165"/>
         <location filename="../../mscore/scoreaccessibility.cpp" line="166"/>
         <source>Range Selection</source>
-        <translation type="unfinished"/>
+        <translation>区域选择</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="169"/>
         <location filename="../../mscore/scoreaccessibility.cpp" line="170"/>
         <source>List Selection</source>
-        <translation type="unfinished"/>
+        <translation>列表选中</translation>
     </message>
 </context>
 <context>
@@ -10841,12 +10846,12 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/scoreBrowser.cpp" line="145"/>
         <source>Create New Score...</source>
-        <translation type="unfinished"/>
+        <translation>新建乐谱</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreBrowser.cpp" line="220"/>
         <source>Custom Templates</source>
-        <translation type="unfinished"/>
+        <translation>自定义模板</translation>
     </message>
 </context>
 <context>
@@ -10859,7 +10864,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="596"/>
         <source>Resolution (%1 DPI)...</source>
-        <translation type="unfinished"/>
+        <translation>分辨率(%1 DPI)...</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="598"/>
@@ -10869,32 +10874,32 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="604"/>
         <source>Auto-resize to page</source>
-        <translation type="unfinished"/>
+        <translation>自动缩放到页面</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="612"/>
         <source>Set Standard Size...</source>
-        <translation type="unfinished"/>
+        <translation>设为自定义大小...</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="621"/>
         <source>Save As (Print Mode)...</source>
-        <translation type="unfinished"/>
+        <translation>另存为(打印模式)...</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="624"/>
         <source>Save As (Screenshot Mode)...</source>
-        <translation type="unfinished"/>
+        <translation>另存为(抓图模式)...</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="641"/>
         <source>Set Output Resolution</source>
-        <translation type="unfinished"/>
+        <translation>设定输出分辨率</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="642"/>
         <source>Set output resolution for PNG/SVG</source>
-        <translation type="unfinished"/>
+        <translation>设定 PNG/SVG 的输出分辨率</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="737"/>
@@ -10904,7 +10909,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="738"/>
         <source>PDF File</source>
-        <translation type="unfinished"/>
+        <translation>PDF 文件</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="739"/>
@@ -11071,7 +11076,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="308"/>
         <source>Section Break Properties...</source>
-        <translation type="unfinished"/>
+        <translation>分节符属性...</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="314"/>
@@ -11161,12 +11166,12 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="2656"/>
         <source>Cannot paste into tuplet</source>
-        <translation type="unfinished"/>
+        <translation>无法粘贴到连音符</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="2659"/>
         <source>Tuplet cannot cross barlines</source>
-        <translation type="unfinished"/>
+        <translation>连音符不能跨小节线</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="2663"/>
@@ -11194,7 +11199,8 @@ First beat of measure</source>
         <location filename="../../mscore/scoreview.cpp" line="3126"/>
         <source>Cannot split measure here:
 Cannot split tuplet</source>
-        <translation type="unfinished"/>
+        <translation>无法在此处拆分小节：
+无法拆分连音符</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="3138"/>
@@ -11227,7 +11233,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/searchComboBox.cpp" line="12"/>
         <source>Type to search. Press Enter to return to score.</source>
-        <translation type="unfinished"/>
+        <translation>输入可进行搜索。按 Enter 键可返回乐谱。</translation>
     </message>
 </context>
 <context>
@@ -11295,12 +11301,12 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="58"/>
         <source>System Text Properties</source>
-        <translation type="unfinished"/>
+        <translation>谱表组文字属性</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="64"/>
         <source>Staff Text Properties</source>
-        <translation type="unfinished"/>
+        <translation>谱表文字属性</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="196"/>
@@ -11387,7 +11393,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/textproperties.cpp" line="54"/>
         <source>Text Properties</source>
-        <translation type="unfinished"/>
+        <translation>文字属性</translation>
     </message>
 </context>
 <context>
@@ -11401,7 +11407,7 @@ Please select a measure and try again</source>
         <location filename="../../mscore/textstyle.cpp" line="201"/>
         <location filename="../../mscore/textstyle.cpp" line="216"/>
         <source>Read Style Name</source>
-        <translation type="unfinished"/>
+        <translation>读取样式名称</translation>
     </message>
     <message>
         <location filename="../../mscore/textstyle.cpp" line="202"/>
@@ -11465,17 +11471,17 @@ please choose a different name:</source>
 <context>
     <name>Ms::TimeSig</name>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="590"/>
+        <location filename="../../libmscore/timesig.cpp" line="591"/>
         <source>Common time</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="592"/>
+        <location filename="../../libmscore/timesig.cpp" line="593"/>
         <source>Cut time</source>
         <translation>二二拍子（简写）</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="594"/>
+        <location filename="../../libmscore/timesig.cpp" line="595"/>
         <source>%1/%2 time</source>
         <translation type="unfinished"/>
     </message>
@@ -11483,18 +11489,18 @@ please choose a different name:</source>
 <context>
     <name>Ms::UpdateChecker</name>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="81"/>
+        <location filename="../../mscore/updatechecker.cpp" line="85"/>
         <source>An update for MuseScore is available: %1MuseScore %2 r.%3%4</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="89"/>
+        <location filename="../../mscore/updatechecker.cpp" line="93"/>
         <source>Update Available</source>
         <translation>有可用的更新</translation>
     </message>
     <message>
-        <location filename="../../mscore/updatechecker.cpp" line="96"/>
-        <location filename="../../mscore/updatechecker.cpp" line="97"/>
+        <location filename="../../mscore/updatechecker.cpp" line="100"/>
+        <location filename="../../mscore/updatechecker.cpp" line="101"/>
         <source>No Update Available</source>
         <translation>没有可用的更新</translation>
     </message>
@@ -11587,7 +11593,7 @@ please choose a different name:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="240"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="249"/>
         <source>[%1link%2]</source>
         <translation type="unfinished"/>
     </message>
@@ -11610,7 +11616,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/importmidi/importmidi_delegate.cpp" line="123"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>全部</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi_delegate.cpp" line="154"/>
@@ -11688,7 +11694,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="39"/>
         <source>F major, D minor</source>
-        <translation type="unfinished"/>
+        <translation>F 大调，d 小调</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="40"/>
@@ -11867,7 +11873,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="20"/>
         <source>Page Settings</source>
-        <translation type="unfinished"/>
+        <translation>页面设置</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="47"/>
@@ -11882,7 +11888,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="91"/>
         <source>Portrait</source>
-        <translation type="unfinished"/>
+        <translation>纵向</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="101"/>
@@ -11918,12 +11924,12 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="182"/>
         <source>Staff space (sp):</source>
-        <translation type="unfinished"/>
+        <translation>谱表间距(sp)：</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="223"/>
         <source>Unit</source>
-        <translation type="unfinished"/>
+        <translation>单位</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="229"/>
@@ -11976,27 +11982,27 @@ please choose a different name:</source>
     <message>
         <location filename="../../libmscore/barline.cpp" line="55"/>
         <source>Normal barline</source>
-        <translation type="unfinished"/>
+        <translation>普通小节线</translation>
     </message>
     <message>
         <location filename="../../libmscore/barline.cpp" line="56"/>
         <source>Dashed barline</source>
-        <translation type="unfinished"/>
+        <translation>虚线小节线</translation>
     </message>
     <message>
         <location filename="../../libmscore/barline.cpp" line="57"/>
         <source>Dotted barline</source>
-        <translation type="unfinished"/>
+        <translation>圆点小节线</translation>
     </message>
     <message>
         <location filename="../../libmscore/barline.cpp" line="58"/>
         <source>Final barline</source>
-        <translation type="unfinished"/>
+        <translation>终止小节线</translation>
     </message>
     <message>
         <location filename="../../libmscore/barline.cpp" line="59"/>
         <source>Double barline</source>
-        <translation type="unfinished"/>
+        <translation>双小节线</translation>
     </message>
     <message>
         <location filename="../../libmscore/barline.cpp" line="60"/>
@@ -12107,7 +12113,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="656"/>
         <source>Arpeggios &amp;&amp; Glissandos</source>
-        <translation type="unfinished"/>
+        <translation>琶音与滑音</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="719"/>
@@ -12137,7 +12143,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="840"/>
         <source>Diminuendo line</source>
-        <translation type="unfinished"/>
+        <translation>渐弱</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="849"/>
@@ -12507,7 +12513,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/playpanel.ui" line="155"/>
         <source>Playback Position</source>
-        <translation type="unfinished"/>
+        <translation>回放</translation>
     </message>
     <message>
         <location filename="../../mscore/playpanel.ui" line="345"/>
@@ -12563,7 +12569,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/pluginCreator.ui" line="49"/>
         <source>Run</source>
-        <translation type="unfinished"/>
+        <translation>运行</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.ui" line="62"/>
@@ -12696,7 +12702,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="103"/>
         <source>General Tab</source>
-        <translation type="unfinished"/>
+        <translation>常规标签</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="106"/>
@@ -12721,7 +12727,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="158"/>
         <source>Update Translations</source>
-        <translation type="unfinished"/>
+        <translation>更新翻译</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="168"/>
@@ -12753,7 +12759,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="218"/>
         <source>Choose starting score</source>
-        <translation type="unfinished"/>
+        <translation>选择启动乐谱</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="221"/>
@@ -12813,17 +12819,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="337"/>
         <source>Images:</source>
-        <translation type="unfinished"/>
+        <translation>图像：</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="350"/>
         <source>Scores:</source>
-        <translation type="unfinished"/>
+        <translation>乐谱：</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="363"/>
         <source>Styles:</source>
-        <translation type="unfinished"/>
+        <translation>样式：</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="376"/>
@@ -12833,17 +12839,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="379"/>
         <source>Insert path for style folder</source>
-        <translation type="unfinished"/>
+        <translation>插入样式文件夹的路径</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="386"/>
         <source>Templates:</source>
-        <translation type="unfinished"/>
+        <translation>模板：</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="402"/>
         <source>Choose score folder</source>
-        <translation type="unfinished"/>
+        <translation>选择乐谱文件夹</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="405"/>
@@ -12853,7 +12859,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="422"/>
         <source>Choose style folder</source>
-        <translation type="unfinished"/>
+        <translation>选择样式文件夹</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="425"/>
@@ -12988,12 +12994,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="717"/>
         <source>Theme</source>
-        <translation type="unfinished"/>
+        <translation>主题</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="725"/>
         <source>Select style</source>
-        <translation type="unfinished"/>
+        <translation>选择样式</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="729"/>
@@ -13014,12 +13020,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="756"/>
         <source>Icon width:</source>
-        <translation type="unfinished"/>
+        <translation>图标宽度：</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="769"/>
         <source>Icon Width</source>
-        <translation type="unfinished"/>
+        <translation>图标宽度</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="772"/>
@@ -13032,12 +13038,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="785"/>
         <source>Icon height:</source>
-        <translation type="unfinished"/>
+        <translation>图标高度：</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="798"/>
         <source>Icon Height</source>
-        <translation type="unfinished"/>
+        <translation>图标高度</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="820"/>
@@ -13069,18 +13075,18 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="898"/>
         <source>Background Wallpaper</source>
-        <translation>背景墙纸</translation>
+        <translation>背景壁纸</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="901"/>
         <location filename="../../mscore/prefsdialog.ui" line="1022"/>
         <source>Wallpaper:</source>
-        <translation type="unfinished"/>
+        <translation>壁纸：</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="927"/>
         <source>Choose Background wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>选择背景壁纸文件</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="930"/>
@@ -13117,12 +13123,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1019"/>
         <source>Paper Wallpaper</source>
-        <translation type="unfinished"/>
+        <translation>纸张壁纸</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1048"/>
         <source>Choose paper wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>选择纸张壁纸文件</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1067"/>
@@ -13142,27 +13148,27 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1093"/>
         <source>Paper wallpaper path</source>
-        <translation type="unfinished"/>
+        <translation>纸张壁纸路径</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1096"/>
         <source>Insert path to paper wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>将路径插入到纸张壁纸文件</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1106"/>
         <source>Scroll pages</source>
-        <translation type="unfinished"/>
+        <translation>滚动页面</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1112"/>
         <source>Horizontally</source>
-        <translation type="unfinished"/>
+        <translation>水平</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1122"/>
         <source>Vertically</source>
-        <translation type="unfinished"/>
+        <translation>垂直</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1145"/>
@@ -13249,7 +13255,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1321"/>
         <source>Default duration</source>
-        <translation type="unfinished"/>
+        <translation>默认时值</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1343"/>
@@ -13308,7 +13314,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1451"/>
         <source>Toggle play</source>
-        <translation type="unfinished"/>
+        <translation>切换播放</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1485"/>
@@ -13393,7 +13399,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1735"/>
         <source>Double augmentation dot</source>
-        <translation>双附点</translation>
+        <translation>复附点</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1742"/>
@@ -13639,7 +13645,7 @@ failed: </source>
         <location filename="../../mscore/prefsdialog.ui" line="2489"/>
         <location filename="../../mscore/prefsdialog.ui" line="2579"/>
         <source>Insert path to a instrument list file</source>
-        <translation type="unfinished"/>
+        <translation>插入乐器列表文件的路径</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2496"/>
@@ -13655,13 +13661,13 @@ failed: </source>
         <location filename="../../mscore/prefsdialog.ui" line="2509"/>
         <location filename="../../mscore/prefsdialog.ui" line="3224"/>
         <source>Insert path to style file</source>
-        <translation type="unfinished"/>
+        <translation>插入样式文件的路径</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2519"/>
         <location filename="../../mscore/prefsdialog.ui" line="3231"/>
         <source>Choose style</source>
-        <translation type="unfinished"/>
+        <translation>选择样式</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2522"/>
@@ -13672,27 +13678,27 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2536"/>
         <source>Style for part:</source>
-        <translation type="unfinished"/>
+        <translation>分谱样式：</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2546"/>
         <source>Style for part</source>
-        <translation type="unfinished"/>
+        <translation>分谱样式</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2549"/>
         <source>Insert path to style file for part</source>
-        <translation type="unfinished"/>
+        <translation>插入分谱样式文件的路径</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2559"/>
         <source>Choose style for part</source>
-        <translation type="unfinished"/>
+        <translation>选择分谱的样式</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2562"/>
         <source>Opens a file dialog for selecting a style file for part</source>
-        <translation type="unfinished"/>
+        <translation>打开文件对话框，以便选择分谱的样式文件</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2576"/>
@@ -13748,7 +13754,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2713"/>
         <source>Choose API</source>
-        <translation type="unfinished"/>
+        <translation>选择 API</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2720"/>
@@ -13763,7 +13769,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2742"/>
         <source>Choose MIDI Input</source>
-        <translation type="unfinished"/>
+        <translation>选择 MIDI 输入</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2749"/>
@@ -13780,7 +13786,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2768"/>
         <source>Choose device</source>
-        <translation type="unfinished"/>
+        <translation>选择设备</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2784"/>
@@ -13822,7 +13828,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2884"/>
         <source>Choose period size</source>
-        <translation type="unfinished"/>
+        <translation>选择周期大小</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2929"/>
@@ -13834,7 +13840,7 @@ failed: </source>
         <location filename="../../mscore/prefsdialog.ui" line="2932"/>
         <location filename="../../mscore/prefsdialog.ui" line="3774"/>
         <source>Choose sample rate</source>
-        <translation type="unfinished"/>
+        <translation>选择采样率</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2977"/>
@@ -13898,13 +13904,13 @@ failed: </source>
         <location filename="../../mscore/prefsdialog.ui" line="3199"/>
         <location filename="../../mscore/prefsdialog.ui" line="3202"/>
         <source>Built-in style</source>
-        <translation type="unfinished"/>
+        <translation>内建样式</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3211"/>
         <location filename="../../mscore/prefsdialog.ui" line="3221"/>
         <source>Use style file</source>
-        <translation type="unfinished"/>
+        <translation>使用样式文件</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3214"/>
@@ -13914,22 +13920,22 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3250"/>
         <source>Character Set Used When Importing Binary Files</source>
-        <translation type="unfinished"/>
+        <translation>导入二进制文件时使用的字符集</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3261"/>
         <source>Overture import character set:</source>
-        <translation type="unfinished"/>
+        <translation>Overture 导入字符集：</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3268"/>
         <source>Overture import character set</source>
-        <translation type="unfinished"/>
+        <translation>Overture 导入字符集</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3271"/>
         <source>Choose Overture import character set</source>
-        <translation type="unfinished"/>
+        <translation>选择 Overture 导入的字符集</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3278"/>
@@ -13944,7 +13950,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3288"/>
         <source>Choose Guitar Pro import character set</source>
-        <translation type="unfinished"/>
+        <translation>选择 Guitar Pro 导入的字符集</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3306"/>
@@ -13964,7 +13970,7 @@ failed: </source>
         <location filename="../../mscore/prefsdialog.ui" line="3328"/>
         <location filename="../../mscore/prefsdialog.ui" line="3331"/>
         <source>Import system and page breaks</source>
-        <translation type="unfinished"/>
+        <translation>导入系统和换页符</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3347"/>
@@ -14012,7 +14018,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3393"/>
         <source>64th</source>
-        <translation type="unfinished"/>
+        <translation>六十四分音符</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3431"/>
@@ -14033,7 +14039,7 @@ failed: </source>
         <location filename="../../mscore/prefsdialog.ui" line="3462"/>
         <location filename="../../mscore/prefsdialog.ui" line="3630"/>
         <source>Resolution:</source>
-        <translation type="unfinished"/>
+        <translation>分辨率：</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3469"/>
@@ -14044,13 +14050,13 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3492"/>
         <source>Resolution</source>
-        <translation type="unfinished"/>
+        <translation>分辨率</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3495"/>
         <location filename="../../mscore/prefsdialog.ui" line="3640"/>
         <source>Choose resolution DPI</source>
-        <translation type="unfinished"/>
+        <translation>选择分辨率 DPI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3498"/>
@@ -14097,12 +14103,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3624"/>
         <source>PDF</source>
-        <translation type="unfinished"/>
+        <translation>PDF</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3637"/>
         <source>Resolution DPI</source>
-        <translation type="unfinished"/>
+        <translation>分辨率 DPI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3675"/>
@@ -14123,7 +14129,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3826"/>
         <source>MP3 bitrate:</source>
-        <translation type="unfinished"/>
+        <translation>MP3 比特率：</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3837"/>
@@ -14204,7 +14210,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3984"/>
         <source>Print the shortcuts list</source>
-        <translation type="unfinished"/>
+        <translation>打印快捷键列表</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3997"/>
@@ -14231,7 +14237,7 @@ failed: </source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2714"/>
+        <location filename="../../libmscore/edit.cpp" line="2711"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14241,7 +14247,7 @@ failed: </source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2715"/>
+        <location filename="../../libmscore/edit.cpp" line="2712"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14356,12 +14362,12 @@ failed: %2</source>
     <message>
         <location filename="../../libmscore/durationtype.cpp" line="783"/>
         <source>64th</source>
-        <translation type="unfinished"/>
+        <translation>六十四分音符</translation>
     </message>
     <message>
         <location filename="../../libmscore/durationtype.cpp" line="784"/>
         <source>128th</source>
-        <translation type="unfinished"/>
+        <translation>一百二十八分音符</translation>
     </message>
     <message>
         <location filename="../../libmscore/durationtype.cpp" line="785"/>
@@ -14519,7 +14525,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/file.cpp" line="177"/>
         <source>unknown type</source>
-        <translation type="unfinished"/>
+        <translation>未知类型</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="182"/>
@@ -14627,17 +14633,17 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="132"/>
         <source>MuseScore File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore文件</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="142"/>
         <source>Save Album into Score</source>
-        <translation type="unfinished"/>
+        <translation>将专辑保存到乐谱</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="149"/>
         <source>Save File</source>
-        <translation type="unfinished"/>
+        <translation>保存文件</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="209"/>
@@ -14647,12 +14653,12 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="307"/>
         <source>Save Album</source>
-        <translation type="unfinished"/>
+        <translation>保存专辑</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="309"/>
         <source>MuseScore Files</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore 文件</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="321"/>
@@ -14693,7 +14699,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/file.cpp" line="2031"/>
         <source>Install SoundFont</source>
-        <translation type="unfinished"/>
+        <translation>安装 SoundFont</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2032"/>
@@ -14714,12 +14720,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="2056"/>
         <source>SoundFont installed</source>
-        <translation type="unfinished"/>
+        <translation>已安装 SoundFont</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2056"/>
         <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
-        <translation type="unfinished"/>
+        <translation>SoundFont 已安装。请转到“查看-&gt;合成器”菜单将其添加进来，然后从“查看-&gt;混音器”中选择乐器的声音。</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="2311"/>
@@ -14760,7 +14766,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/workspace.cpp" line="167"/>
         <source>Do you really want to delete the &apos;%1&apos; workspace?</source>
-        <translation type="unfinished"/>
+        <translation>您真的想要删除“%1”工作区吗？</translation>
     </message>
 </context>
 <context>
@@ -14837,7 +14843,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="14"/>
         <source>Section Break Properties</source>
-        <translation type="unfinished"/>
+        <translation>分节符属性</translation>
     </message>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="20"/>
@@ -14871,12 +14877,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="43"/>
         <source>Element type:</source>
-        <translation type="unfinished"/>
+        <translation>元素类型：</translation>
     </message>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="50"/>
         <source>Same staff</source>
-        <translation type="unfinished"/>
+        <translation>同一谱表</translation>
     </message>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="57"/>
@@ -14886,12 +14892,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="64"/>
         <source>Same subtype:</source>
-        <translation type="unfinished"/>
+        <translation>同一子类型：</translation>
     </message>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="85"/>
         <source>Same system</source>
-        <translation type="unfinished"/>
+        <translation>同一谱表组</translation>
     </message>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="92"/>
@@ -14957,7 +14963,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="14"/>
         <source>Select Notes</source>
-        <translation type="unfinished"/>
+        <translation>选择音符</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="34"/>
@@ -14967,27 +14973,27 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="47"/>
         <source>Same notehead:</source>
-        <translation>同一符头</translation>
+        <translation>同一符头：</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="54"/>
         <source>Same system</source>
-        <translation type="unfinished"/>
+        <translation>同一谱表组</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="61"/>
         <source>Same voice</source>
-        <translation>相同声部</translation>
+        <translation>同一声部</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="75"/>
         <source>Same duration:</source>
-        <translation type="unfinished"/>
+        <translation>同一时值：</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="82"/>
         <source>Same pitch:</source>
-        <translation type="unfinished"/>
+        <translation>同一音高：</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="89"/>
@@ -14997,17 +15003,17 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="103"/>
         <source>Same staff</source>
-        <translation type="unfinished"/>
+        <translation>同一谱表</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="110"/>
         <source>Same type:</source>
-        <translation type="unfinished"/>
+        <translation>同一类型：</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="124"/>
         <source>Same note name:</source>
-        <translation type="unfinished"/>
+        <translation>同一音名：</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="141"/>
@@ -15066,12 +15072,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/shortcutcapturedialog.ui" line="14"/>
         <source>Enter Shortcut Sequence</source>
-        <translation type="unfinished"/>
+        <translation>输入快捷键序列</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcutcapturedialog.ui" line="38"/>
         <source>Press up to four keys to enter shortcut sequence</source>
-        <translation type="unfinished"/>
+        <translation>按最多四个键来输入快捷键序列</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcutcapturedialog.ui" line="55"/>
@@ -15294,12 +15300,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/stafftypetemplates.ui" line="38"/>
         <source>Save Templates</source>
-        <translation type="unfinished"/>
+        <translation>保存模板</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftypetemplates.ui" line="48"/>
         <source>Load Templates</source>
-        <translation type="unfinished"/>
+        <translation>装入模板</translation>
     </message>
 </context>
 <context>
@@ -15614,7 +15620,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="605"/>
         <source>Center text on reference point</source>
-        <translation type="unfinished"/>
+        <translation>文字中心点对齐到参照点</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="628"/>
@@ -15634,7 +15640,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="707"/>
         <source>Center text vertical to reference point</source>
-        <translation type="unfinished"/>
+        <translation>文字中心点垂直对齐到参考点</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="730"/>
@@ -15674,12 +15680,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="842"/>
         <source>Border thickness:</source>
-        <translation>边框宽度：</translation>
+        <translation>边框粗度：</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="855"/>
         <source>Frame line thickness</source>
-        <translation type="unfinished"/>
+        <translation>框线粗度</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="858"/>
@@ -15843,7 +15849,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../libmscore/style.cpp" line="328"/>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>和弦符号</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="331"/>
@@ -15878,7 +15884,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../libmscore/style.cpp" line="353"/>
         <source>Text Line</source>
-        <translation type="unfinished"/>
+        <translation>文字线</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="355"/>
@@ -15931,7 +15937,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textstyle.ui" line="14"/>
         <source>Edit Text Styles</source>
-        <translation type="unfinished"/>
+        <translation>编辑文字样式</translation>
     </message>
     <message>
         <location filename="../../mscore/textstyle.ui" line="45"/>
@@ -16010,7 +16016,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/timedialog.ui" line="273"/>
         <source>Add time signature to master palette</source>
-        <translation type="unfinished"/>
+        <translation>将拍号添加到主面板</translation>
     </message>
     <message>
         <location filename="../../mscore/timedialog.ui" line="276"/>
@@ -16175,7 +16181,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="300"/>
         <source>Enter Number of Measures</source>
-        <translation type="unfinished"/>
+        <translation>输入小节数</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="303"/>
@@ -16607,7 +16613,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="14"/>
         <source>Create Tuplet</source>
-        <translation type="unfinished"/>
+        <translation>创建连音符</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="34"/>
@@ -16752,12 +16758,14 @@ Do you want to overwrite it?</source>
         <source>Writing Workspace File
 %1
 failed: </source>
-        <translation type="unfinished"/>
+        <translation>写入工作区文件
+%1
+失败：</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="240"/>
         <source>Writing Workspace File</source>
-        <translation type="unfinished"/>
+        <translation>正在写入空间区文件</translation>
     </message>
 </context>
 <context>
@@ -16796,7 +16804,7 @@ failed: </source>
         <location filename="../../thirdparty/xmlstream/xmlstream.cpp" line="1587"/>
         <location filename="../../thirdparty/xmlstream/xmlstream.cpp" line="1599"/>
         <source>Illegal namespace declaration.</source>
-        <translation type="unfinished"/>
+        <translation>无效的命名空间声明。</translation>
     </message>
     <message>
         <location filename="../../thirdparty/xmlstream/xmlstream.cpp" line="1632"/>
@@ -16938,7 +16946,7 @@ failed: </source>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="44"/>
         <source>Double flat</source>
-        <translation>双降号</translation>
+        <translation>重降号</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="45"/>
@@ -17171,12 +17179,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="113"/>
         <source>Save a copy of the score in various formats</source>
-        <translation type="unfinished"/>
+        <translation>将乐谱的副本另存为各种格式</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="122"/>
         <source>Export Parts...</source>
-        <translation>导出声部...</translation>
+        <translation>导出分谱...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="123"/>
@@ -17186,7 +17194,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="124"/>
         <source>Save a copy of the score&apos;s parts in various formats</source>
-        <translation type="unfinished"/>
+        <translation>将乐谱的分谱副本另存为各种格式</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="133"/>
@@ -17201,7 +17209,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="135"/>
         <source>Import a PDF file with an experimental service on musescore.com</source>
-        <translation type="unfinished"/>
+        <translation>在 musescore.com 上提供的试验性导入 PDF 文件</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="141"/>
@@ -17211,7 +17219,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="142"/>
         <source>File: Close</source>
-        <translation type="unfinished"/>
+        <translation>文件：关闭</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="143"/>
@@ -17288,7 +17296,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="222"/>
         <source>Swap with Clipboard</source>
-        <translation type="unfinished"/>
+        <translation>与剪贴板交换</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="232"/>
@@ -17319,7 +17327,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="251"/>
         <source>Enter notes with a mouse or keyboard</source>
-        <translation type="unfinished"/>
+        <translation>用鼠标或键盘输入音符</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="261"/>
@@ -17339,12 +17347,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="273"/>
         <source>Enter durations with a single click or keypress</source>
-        <translation type="unfinished"/>
+        <translation>用单击或按键输入时长</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="283"/>
         <source>Real-time (automatic)</source>
-        <translation type="unfinished"/>
+        <translation>实时(自动)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="284"/>
@@ -17689,7 +17697,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="534"/>
         <source>Insert note A</source>
-        <translation type="unfinished"/>
+        <translation>插入音符 A</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="540"/>
@@ -17699,7 +17707,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="541"/>
         <source>Insert note B</source>
-        <translation type="unfinished"/>
+        <translation>插入音符 B</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="547"/>
@@ -17709,7 +17717,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="548"/>
         <source>Insert note C</source>
-        <translation type="unfinished"/>
+        <translation>插入音符 C</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="554"/>
@@ -17719,7 +17727,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="555"/>
         <source>Insert note D</source>
-        <translation type="unfinished"/>
+        <translation>插入音符 D</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="561"/>
@@ -17729,7 +17737,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="562"/>
         <source>Insert note E</source>
-        <translation type="unfinished"/>
+        <translation>插入音符 E</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="568"/>
@@ -17739,7 +17747,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="569"/>
         <source>Insert note F</source>
-        <translation type="unfinished"/>
+        <translation>插入音符 F</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="575"/>
@@ -17749,7 +17757,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="576"/>
         <source>Insert note G</source>
-        <translation type="unfinished"/>
+        <translation>插入音符 G</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="582"/>
@@ -17891,12 +17899,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="709"/>
         <source>Regroup Rhythms</source>
-        <translation type="unfinished"/>
+        <translation>重组旋律</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="710"/>
         <source>Regroup rhythms</source>
-        <translation type="unfinished"/>
+        <translation>重组旋律</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="711"/>
@@ -18161,7 +18169,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="956"/>
         <source>Select to Beginning of Measure</source>
-        <translation type="unfinished"/>
+        <translation>选择到小节起点</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="957"/>
@@ -18291,7 +18299,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1057"/>
         <source>Page: End</source>
-        <translation type="unfinished"/>
+        <translation>页面：页尾</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1063"/>
@@ -18367,7 +18375,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1133"/>
         <source>Full measure rest</source>
-        <translation type="unfinished"/>
+        <translation>全小节休止</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1134"/>
@@ -18568,7 +18576,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1308"/>
         <source>Note duration: Longa</source>
-        <translation type="unfinished"/>
+        <translation>音符时值：四全音符</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1318"/>
@@ -18856,7 +18864,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1530"/>
         <source>Double flat</source>
-        <translation>双降号</translation>
+        <translation>重降号</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1539"/>
@@ -19062,7 +19070,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1731"/>
         <source>Auto Beam</source>
-        <translation type="unfinished"/>
+        <translation>自动符杠</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1732"/>
@@ -19148,18 +19156,18 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1832"/>
         <source>Playback Controls</source>
-        <translation type="unfinished"/>
+        <translation>回放控制</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1833"/>
         <source>Playback controls toolbar</source>
-        <translation type="unfinished"/>
+        <translation>回放控制工具栏</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1839"/>
         <location filename="../../mscore/shortcut.cpp" line="2224"/>
         <source>Concert Pitch</source>
-        <translation>标准音高</translation>
+        <translation>音乐会音高</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1840"/>
@@ -19264,7 +19272,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1924"/>
         <source>Add title text</source>
-        <translation type="unfinished"/>
+        <translation>添加标题文字</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1930"/>
@@ -19274,7 +19282,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1931"/>
         <source>Add subtitle text</source>
-        <translation type="unfinished"/>
+        <translation>添加副标题文字</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1937"/>
@@ -19284,7 +19292,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1938"/>
         <source>Add composer text</source>
-        <translation type="unfinished"/>
+        <translation>添加作曲者文字</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1944"/>
@@ -19294,7 +19302,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1945"/>
         <source>Add lyricist text</source>
-        <translation type="unfinished"/>
+        <translation>添加词作者文字</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1951"/>
@@ -19309,7 +19317,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1958"/>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>和弦符号</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1959"/>
@@ -19324,7 +19332,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1966"/>
         <source>Add rehearsal mark</source>
-        <translation type="unfinished"/>
+        <translation>增加排练记号</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1972"/>
@@ -19384,12 +19392,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2014"/>
         <source>Play Previous Measure</source>
-        <translation type="unfinished"/>
+        <translation>播放上一小节</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2015"/>
         <source>Play previous measure</source>
-        <translation type="unfinished"/>
+        <translation>播放上一小节</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2024"/>
@@ -19404,12 +19412,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2034"/>
         <source>Play Next Measure</source>
-        <translation type="unfinished"/>
+        <translation>播放下一小节</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2035"/>
         <source>Play next measure</source>
-        <translation type="unfinished"/>
+        <translation>播放下一小节</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2044"/>
@@ -19519,7 +19527,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2136"/>
         <source>Treble Clef</source>
-        <translation type="unfinished"/>
+        <translation>高音谱号</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2137"/>
@@ -19599,7 +19607,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2225"/>
         <source>Display in concert pitch</source>
-        <translation>以标准音高（音乐会音高）显示</translation>
+        <translation>以音乐会音高显示</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2235"/>
@@ -19614,12 +19622,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2244"/>
         <source>Score Properties...</source>
-        <translation type="unfinished"/>
+        <translation>乐谱属性</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2245"/>
         <source>Edit score properties</source>
-        <translation type="unfinished"/>
+        <translation>编辑乐谱属性</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2255"/>
@@ -19639,17 +19647,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2267"/>
         <source>Toggle page break</source>
-        <translation type="unfinished"/>
+        <translation>切换翻页</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2277"/>
         <source>Toggle Section Break</source>
-        <translation type="unfinished"/>
+        <translation>切换分节</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2278"/>
         <source>Toggle section break</source>
-        <translation type="unfinished"/>
+        <translation>切换分节</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2288"/>
@@ -19684,7 +19692,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2309"/>
         <source>Reset measure stretch</source>
-        <translation type="unfinished"/>
+        <translation>重置小节拉伸</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2319"/>
@@ -19830,7 +19838,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2451"/>
         <source>Edit general style</source>
-        <translation type="unfinished"/>
+        <translation>编辑常规样式</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2461"/>
@@ -19890,42 +19898,42 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2510"/>
         <source>Double Duration</source>
-        <translation type="unfinished"/>
+        <translation>时值加倍</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2511"/>
         <source>Double duration</source>
-        <translation type="unfinished"/>
+        <translation>时值加倍</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2521"/>
         <source>Half Duration</source>
-        <translation type="unfinished"/>
+        <translation>时值减半</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2522"/>
         <source>Half duration</source>
-        <translation type="unfinished"/>
+        <translation>时值减半</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2532"/>
         <source>Increase Duration Dotted</source>
-        <translation type="unfinished"/>
+        <translation>增加时值附点</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2533"/>
         <source>Increase duration dotted</source>
-        <translation type="unfinished"/>
+        <translation>增加时值附点</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2543"/>
         <source>Decrease Duration Dotted</source>
-        <translation type="unfinished"/>
+        <translation>减少时值附点</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2544"/>
         <source>Decrease duration dotted</source>
-        <translation type="unfinished"/>
+        <translation>减少时值附点</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2554"/>
@@ -19975,7 +19983,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2588"/>
         <source>Parts...</source>
-        <translation>声部...</translation>
+        <translation>分谱...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2589"/>
@@ -20005,12 +20013,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2609"/>
         <source>Create New Revision</source>
-        <translation type="unfinished"/>
+        <translation>创建新的副本</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2610"/>
         <source>Create new revision</source>
-        <translation type="unfinished"/>
+        <translation>创建新的副本</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2616"/>
@@ -20045,22 +20053,22 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2643"/>
         <source>Enable Snap to Horizontal Grid</source>
-        <translation type="unfinished"/>
+        <translation>允许吸附到水平网格</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2644"/>
         <source>Enable snap to horizontal grid</source>
-        <translation type="unfinished"/>
+        <translation>允许吸附到水平网格</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2654"/>
         <source>Enable Snap to Vertical Grid</source>
-        <translation type="unfinished"/>
+        <translation>允许吸附到垂直网格</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2655"/>
         <source>Enable snap to vertical grid</source>
-        <translation type="unfinished"/>
+        <translation>允许吸附到垂直网格</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2665"/>
@@ -20095,22 +20103,22 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2686"/>
         <source>Split Measure Before Selected Note</source>
-        <translation type="unfinished"/>
+        <translation>在选中的音符前拆分小节</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2687"/>
         <source>Split measure before selected note</source>
-        <translation type="unfinished"/>
+        <translation>在选中的音符前拆分小节</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2693"/>
         <source>Join Selected Measures</source>
-        <translation type="unfinished"/>
+        <translation>合并选中的小节</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2694"/>
         <source>Join selected measures</source>
-        <translation type="unfinished"/>
+        <translation>合并选中的小节</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2700"/>
@@ -20150,7 +20158,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2728"/>
         <source>Next score</source>
-        <translation type="unfinished"/>
+        <translation>下一个乐谱</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2737"/>
@@ -20195,7 +20203,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2774"/>
         <source>Resource Manager...</source>
-        <translation>资源管理/更新</translation>
+        <translation>语言资源管理/更新</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2775"/>
@@ -20221,7 +20229,7 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="2794"/>
         <location filename="../../mscore/shortcut.cpp" line="2795"/>
         <source>Toggle loop playback</source>
-        <translation type="unfinished"/>
+        <translation>切换循环回放</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2804"/>
@@ -20261,17 +20269,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2837"/>
         <source>Count-In</source>
-        <translation type="unfinished"/>
+        <translation>起拍</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2838"/>
         <source>Toggle count-in playback</source>
-        <translation type="unfinished"/>
+        <translation>切换起拍回放</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2839"/>
         <source>Play count-in at playback start</source>
-        <translation type="unfinished"/>
+        <translation>在回放开始前播放起拍</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2848"/>
@@ -20286,22 +20294,22 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2859"/>
         <source>Transpose Up</source>
-        <translation type="unfinished"/>
+        <translation>向上移调</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2860"/>
         <source>Transpose up</source>
-        <translation type="unfinished"/>
+        <translation>向上移调</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2866"/>
         <source>Transpose Down</source>
-        <translation type="unfinished"/>
+        <translation>向下移调</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2867"/>
         <source>Transpose down</source>
-        <translation type="unfinished"/>
+        <translation>向下移调</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2873"/>
@@ -20351,7 +20359,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2914"/>
         <source>Toggle view mode</source>
-        <translation type="unfinished"/>
+        <translation>切换视图模式</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2924"/>
@@ -20376,12 +20384,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2938"/>
         <source>Toggle Visibility</source>
-        <translation type="unfinished"/>
+        <translation>切换可见性</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2939"/>
         <source>Toggle visibility</source>
-        <translation type="unfinished"/>
+        <translation>切换可见性</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2945"/>
@@ -20431,7 +20439,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2976"/>
         <source>Note duration: Longa (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>音符时值：四全音符(TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2986"/>
@@ -20441,7 +20449,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2987"/>
         <source>Note duration: Double whole (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>音符时值：二全音符(TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2997"/>
@@ -20451,7 +20459,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2998"/>
         <source>Note duration: Whole (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>音符时值：全音符(TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3008"/>
@@ -20461,7 +20469,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3009"/>
         <source>Note duration: Half (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>音符时值：二分音符(TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3019"/>
@@ -20471,7 +20479,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3020"/>
         <source>Note duration: Quarter (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>音符时值：四分音符(TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3030"/>
@@ -20481,7 +20489,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3031"/>
         <source>Note duration: Eighth (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>音符时值：八分音符(TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3041"/>
@@ -20526,12 +20534,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3085"/>
         <source>Increase Active Duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>增加当前时值(TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3086"/>
         <source>Increase active duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>增加当前时值(TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3092"/>
@@ -20552,7 +20560,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3100"/>
         <source>Enter rest (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>输入休止(TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3109"/>
@@ -20872,12 +20880,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3339"/>
         <source>Toggle Create Multimeasure Rest</source>
-        <translation type="unfinished"/>
+        <translation>切换创建多小节休止符</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3340"/>
         <source>Toggle create multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>切换创建多小节休止符</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3350"/>
@@ -20984,22 +20992,22 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3457"/>
         <source>Resequence Rehearsal Marks</source>
-        <translation type="unfinished"/>
+        <translation>对排练记号进行排序</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3458"/>
         <source>Resequence rehearsal marks</source>
-        <translation type="unfinished"/>
+        <translation>对排练记号进行排序</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3468"/>
         <source>Copy Lyrics to Clipboard</source>
-        <translation type="unfinished"/>
+        <translation>将歌词复制到剪贴板</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3469"/>
         <source>Copy lyrics to clipboard</source>
-        <translation type="unfinished"/>
+        <translation>将歌词复制到剪贴板</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3479"/>
@@ -21009,7 +21017,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3480"/>
         <source>Start center</source>
-        <translation type="unfinished"/>
+        <translation>启动中心</translation>
     </message>
 </context>
 <context>
@@ -21024,7 +21032,8 @@ failed: </source>
         <location filename="../../libmscore/edit.cpp" line="535"/>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
-        <translation type="unfinished"/>
+        <translation>无法重写小节：
+连音符将跨小节</translation>
     </message>
     <message>
         <location filename="../../libmscore/edit.cpp" line="551"/>
@@ -22650,7 +22659,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="299"/>
         <source>Claves</source>
-        <translation>响棒</translation>
+        <translation>击木</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="300"/>
@@ -23029,7 +23038,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/element.cpp" line="134"/>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>和弦符号</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="135"/>
@@ -23089,12 +23098,12 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/element.cpp" line="146"/>
         <source>Glissando Segment</source>
-        <translation type="unfinished"/>
+        <translation>滑音段</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="147"/>
         <source>Layout Break</source>
-        <translation type="unfinished"/>
+        <translation>布局中断</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="148"/>
@@ -23184,7 +23193,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/element.cpp" line="165"/>
         <source>Text Line</source>
-        <translation type="unfinished"/>
+        <translation>文字线</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="166"/>
@@ -23239,22 +23248,22 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/element.cpp" line="176"/>
         <source>Element List</source>
-        <translation type="unfinished"/>
+        <translation>元素列表</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="177"/>
         <source>Staff List</source>
-        <translation type="unfinished"/>
+        <translation>谱表列表</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="178"/>
         <source>Measure List</source>
-        <translation type="unfinished"/>
+        <translation>小节列表</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="179"/>
         <source>Horizontal Frame</source>
-        <translation type="unfinished"/>
+        <translation>水平占位框</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="180"/>
@@ -23292,42 +23301,42 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="567"/>
         <source>Resize to A</source>
-        <translation type="unfinished"/>
+        <translation>重取为第一组自定义大小</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="568"/>
         <source>Resize to B</source>
-        <translation type="unfinished"/>
+        <translation>重取为第二组自定义大小</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="569"/>
         <source>Resize to C</source>
-        <translation type="unfinished"/>
+        <translation>重取为第三组自定义大小</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="570"/>
         <source>Resize to D</source>
-        <translation type="unfinished"/>
+        <translation>重取为第四组自定义大小</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="574"/>
         <source>Set size A</source>
-        <translation type="unfinished"/>
+        <translation>设为第一组</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="575"/>
         <source>Set size B</source>
-        <translation type="unfinished"/>
+        <translation>设为第二组</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="576"/>
         <source>Set size C</source>
-        <translation type="unfinished"/>
+        <translation>设为第三组</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="577"/>
         <source>Set size D</source>
-        <translation type="unfinished"/>
+        <translation>设为第四组</translation>
     </message>
 </context>
 <context>
@@ -23419,7 +23428,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="831"/>
         <source>Crescendo line</source>
-        <translation type="unfinished"/>
+        <translation>渐强</translation>
     </message>
 </context>
 <context>
@@ -23577,7 +23586,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="11"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>全部</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="12"/>
@@ -23622,7 +23631,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="20"/>
         <source>Other Text</source>
-        <translation type="unfinished"/>
+        <translation>其它文字</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="21"/>
@@ -23632,7 +23641,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="22"/>
         <source>Slurs</source>
-        <translation type="unfinished"/>
+        <translation>连句线</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="23"/>
@@ -23647,7 +23656,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="25"/>
         <source>Pedal Lines</source>
-        <translation type="unfinished"/>
+        <translation>踏板线</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="26"/>
@@ -23662,7 +23671,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="28"/>
         <source>Glissandos</source>
-        <translation type="unfinished"/>
+        <translation>滑音</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="29"/>
@@ -23672,7 +23681,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="30"/>
         <source>Breath Marks</source>
-        <translation type="unfinished"/>
+        <translation>呼吸记号</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="31"/>
@@ -23724,7 +23733,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="185"/>
         <source>Templates</source>
-        <translation type="unfinished"/>
+        <translation>模板</translation>
     </message>
 </context>
 <context>
@@ -24072,7 +24081,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="355"/>
         <source>General Punctuation</source>
-        <translation type="unfinished"/>
+        <translation>常规标点</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="356"/>
@@ -24907,7 +24916,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="525"/>
         <source>Emoticons (Emoji)</source>
-        <translation type="unfinished"/>
+        <translation>表情符号</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="526"/>
