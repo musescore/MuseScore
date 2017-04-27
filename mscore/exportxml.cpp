@@ -331,6 +331,94 @@ public:
       };
 
 //---------------------------------------------------------
+//   addPositioningAttributes
+//   According to the specs (common.dtd), all direction-type and note elements must be relative to the measure
+//   while all other elements are relative to their position or the nearest note.
+//---------------------------------------------------------
+
+static QString addPositioningAttributes(QString& xml, Element const* const el, bool isSpanStart = true)
+    {
+        if (!preferences.musicxmlExportLayout)
+            return xml;
+
+        const float positionElipson = 0.1f;
+        float defaultX = 0, defaultY = 0, relativeX = 0, relativeY = 0;
+        float spatium = el->spatium();
+
+        if (SLine const* const span = dynamic_cast<SLine const* const>(el)) {
+            SpannerSegment* seg;
+            if(isSpanStart) {
+                seg = span->spannerSegments().first();
+                QPointF userOff = seg->userOff();
+                QPointF p = seg->pos();
+                defaultX = userOff.x();
+                defaultY = p.y();
+            }
+            else {
+                seg = span->spannerSegments().last();
+                QPointF userOff = seg->userOff(); // This is the offset accessible from the inspector
+                QPointF userOff2 = seg->userOff2(); // Offset of the actual dragged anchor, which doesn't affect the inspector offset
+                QPointF pos = seg->pos();
+                QPointF pos2 = seg->pos2();
+
+                Note* n = dynamic_cast<Note*>(span->endElement());
+                ChordRest* cr = n ? n->chord() : dynamic_cast<ChordRest*>(span->endElement());
+                int t = span->tick2();
+                Measure* m = cr ? cr->measure() : span->score()->tick2measure(t);
+
+                if (!cr)
+                    qDebug("ExportMusicXml::addPositionAttribute: Expected ChordRest or Note from endElement, got %s (%p)",
+                           Element::name(span->endElement()->type()), span->endElement());
+
+                System* s;
+                QPointF linePos(span->linePos(Grip::END, &s)); // find the position of the end anchor
+
+                float mX = cr ?  m->pos().x() : m->tick2pos(t); // Distance the start of the measure is from the beginning of the line
+                float crSpace = cr ? cr->x() + cr->space().rw() : 0; // this is the space between the left edge of hte note to the right edge of the note
+
+                defaultX = (((linePos.x() - mX - crSpace) + (userOff2.x() + userOff.x())) - m->width());
+                // add the position of the end anchor to the offset to get the absolute X
+                // the x's go from the right edge of the measure for some reason in finale, while in the spec they're supposed to go from the left edge,
+                // so to keep compiant with finale we must subtract the measure width and multiply by -10 instead of 10 to get a negative
+                // LinePos includes the measureX, so we must subtract that because defaultX is relative to the current measure
+                defaultY = pos.y() + pos2.y();
+
+             /* qDebug("CR SegPos X: %f", cr->segment()->pos().x());
+                qDebug("CR Pos X: %f", cr->pos().x());
+                qDebug("CR Space: %f", cr->space().rw());
+                qDebug("measure pos X: %f", m->pos().x());
+                qDebug("measure width : %f", m->width());
+                qDebug("linePos2 x: %f", linePos.x());
+                qDebug("userOFf2 x: %f", userOff2.x());
+                qDebug("userOFf x: %f", userOff.x());
+                qDebug("defaultX : %f", defaultX); */
+            }
+        }
+        else {
+            // defaultX = el->ipos().x();
+            // finale doesn't play nicely with defaultX's for some reason, espeically dynamics, which causes an incorrect offset, but we can account
+            // for this by using pos() instead of userOff() for relativeX
+            defaultY = el->ipos().y();
+            relativeX = el->pos().x();
+            relativeY = el->userOff().y();
+        }
+
+        defaultX *=  10 / spatium; defaultY *=  -10 / spatium; // convert into spatium tenths for musicxml
+        relativeX *=  10 / spatium; relativeY *=  -10 / spatium;
+
+        if (fabsf(defaultX) > positionElipson)
+              xml += QString(" default-x=\"%1\"").arg(QString::number(defaultX, 'f', 2));
+        if (fabsf(defaultY) > positionElipson)
+              xml += QString(" default-y=\"%1\"").arg(QString::number(defaultY, 'f', 2));
+        if (fabsf(relativeX) > positionElipson)
+              xml += QString(" relative-x=\"%1\"").arg(QString::number(relativeX, 'f', 2));
+        if (fabsf(relativeY) > positionElipson)
+              xml += QString(" relative-y=\"%1\"").arg(QString::number(relativeY, 'f', 2));
+
+        return xml;
+    }
+
+//---------------------------------------------------------
 //   tag
 //---------------------------------------------------------
 
@@ -581,6 +669,7 @@ void SlurHandler::doSlurStart(const Slur* s, Notations& notations, Xml& xml)
       tagName += color2xml(s);
       tagName += QString(" type=\"start\"%1")
             .arg(s->slurDirection() == MScore::Direction::UP ? " placement=\"above\"" : "");
+      addPositioningAttributes(tagName, s, true);
 
       if (i >= 0) {
             // remove from list and print start
@@ -626,7 +715,9 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, Xml& xml)
                   slur[i] = s;
                   started[i] = false;
                   notations.tag(xml);
-                  xml.tagE(QString("slur type=\"stop\" number=\"%1\"").arg(i + 1));
+                  QString tagName = QString("slur type=\"stop\" number=\"%1\"").arg(i + 1);
+                  addPositioningAttributes(tagName, s, false);
+                  xml.tagE(tagName);
                   }
             else
                   qDebug("no free slur slot");
@@ -636,7 +727,9 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, Xml& xml)
             slur[i] = 0;
             started[i] = false;
             notations.tag(xml);
-            xml.tagE(QString("slur type=\"stop\" number=\"%1\"").arg(i + 1));
+            QString tagName = QString("slur type=\"stop\" number=\"%1\"").arg(i + 1);
+            addPositioningAttributes(tagName, s, false);
+            xml.tagE(tagName);
             }
       }
 
@@ -670,6 +763,7 @@ static void glissando(const Glissando* gli, int number, bool start, Notations& n
             }
       tagName += QString(" number=\"%1\" type=\"%2\"").arg(number).arg(start ? "start" : "stop");
       tagName += color2xml(gli);
+      addPositioningAttributes(tagName, gli, start);
       notations.tag(xml);
       if (start && gli->showText() && gli->text() != "")
             xml.tag(tagName, gli->text());
@@ -1397,6 +1491,7 @@ static void ending(Xml& xml, Volta* v, bool left)
                   number += ", ";
             number += QString("%1").arg(i);
             }
+      QString voltaXml = "ending number=\"%1\" type=\"%2\"";
       if (left) {
             type = "start";
             }
@@ -1415,7 +1510,8 @@ static void ending(Xml& xml, Volta* v, bool left)
                         break;
                   }
             }
-      xml.tagE(QString("ending number=\"%1\" type=\"%2\"").arg(number).arg(type));
+      addPositioningAttributes(voltaXml, v, left);
+      xml.tagE(voltaXml.arg(number).arg(type));
       }
 
 //---------------------------------------------------------
@@ -1730,7 +1826,9 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
             if (n >= 0) {
                   notations.tag(xml);
                   ornaments.tag(xml);
-                  xml.tagE(QString("wavy-line type=\"stop\" number=\"%1\"").arg(n + 1));
+                  QString trillXml = QString("wavy-line type=\"stop\" number=\"%1\"").arg(n + 1);
+                  addPositioningAttributes(trillXml, tr, false);
+                  xml.tagE(trillXml);
                   }
             trillStop.remove(chord);
             }
@@ -1749,7 +1847,8 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
                         xml.tagE("trill-mark");
                         QString tagName = "wavy-line type=\"start\"";
                         tagName += QString(" number=\"%1\"").arg(n + 1);
-                        tagName += color2xml(tr);
+                        tagName += color2xml(tr);                        
+                        addPositioningAttributes(tagName, tr, true);
                         xml.tagE(tagName);
                         }
                   else
@@ -2195,35 +2294,40 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 
 static void arpeggiate(Arpeggio* arp, bool front, bool back, Xml& xml, Notations& notations)
       {
+      QString tagName = "";
       switch (arp->arpeggioType()) {
             case ArpeggioType::NORMAL:
                   notations.tag(xml);
-                  xml.tagE("arpeggiate");
+                  tagName = "arpeggiate";
                   break;
             case ArpeggioType::UP:          // fall through
             case ArpeggioType::UP_STRAIGHT: // not supported by MusicXML, export as normal arpeggio
                   notations.tag(xml);
-                  xml.tagE("arpeggiate direction=\"up\"");
+                  tagName = "arpeggiate direction=\"up\"";
                   break;
             case ArpeggioType::DOWN:          // fall through
             case ArpeggioType::DOWN_STRAIGHT: // not supported by MusicXML, export as normal arpeggio
                   notations.tag(xml);
-                  xml.tagE("arpeggiate direction=\"down\"");
+                  tagName = "arpeggiate direction=\"down\"";
                   break;
             case ArpeggioType::BRACKET:
                   if (front) {
                         notations.tag(xml);
-                        xml.tagE("non-arpeggiate type=\"bottom\"");
+                        tagName = "non-arpeggiate type=\"bottom\"";
                         }
                   if (back) {
                         notations.tag(xml);
-                        xml.tagE("non-arpeggiate type=\"top\"");
+                        tagName = "non-arpeggiate type=\"top\"";
                         }
                   break;
             default:
                   qDebug("unknown arpeggio subtype %d", int(arp->arpeggioType()));
                   break;
             }
+
+      addPositioningAttributes(tagName, arp);
+      if (tagName != "")
+          xml.tagE(tagName);
       }
 
 // find the next chord in the same track
@@ -3144,14 +3248,17 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
 
             if (wordsLeft.size() > 0) {
                   xml.stag("direction-type");
-                  QString attr; // TODO TBD
+                  QString attr = ""; // TODO TBD
+                  addPositioningAttributes(attr, text);
                   MScoreTextToMXML mttm("words", attr, defFmt, mtf);
                   mttm.writeTextFragments(wordsLeft, xml);
                   xml.etag();
                   }
 
             xml.stag("direction-type");
-            xml.stag(QString("metronome parentheses=\"%1\"").arg(hasParen ? "yes" : "no"));
+            QString tagName = QString("metronome parentheses=\"%1\"").arg(hasParen ? "yes" : "no");
+            addPositioningAttributes(tagName, text);
+            xml.stag(tagName);
             int len1 = 0;
             TDuration dur;
             TempoText::findTempoDuration(metroLeft, len1, dur);
@@ -3167,7 +3274,8 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
 
             if (wordsRight.size() > 0) {
                   xml.stag("direction-type");
-                  QString attr; // TODO TBD
+                  QString attr = ""; // TODO TBD
+                  addPositioningAttributes(attr, text);
                   MScoreTextToMXML mttm("words", attr, defFmt, mtf);
                   mttm.writeTextFragments(wordsRight, xml);
                   xml.etag();
@@ -3176,13 +3284,14 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
 
       else {
             xml.stag("direction-type");
-            QString attr;
+            QString attr = "";
             if (text->textStyle().hasFrame()) {
                   if (text->textStyle().circle())
                         attr = " enclosure=\"circle\"";
                   else
                         attr = " enclosure=\"rectangle\"";
-                  }
+                  }            
+            addPositioningAttributes(attr, text);
             MScoreTextToMXML mttm("words", attr, defFmt, mtf);
             //qDebug("words('%s')", qPrintable(text->text()));
             mttm.writeTextFragments(text->fragmentList(), xml);
@@ -3247,7 +3356,8 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
 
       directionTag(xml, attr, rmk);
       xml.stag("direction-type");
-      QString attr;
+      QString attr = "";
+      addPositioningAttributes(attr, rmk);
       if (!rmk->textStyle().hasFrame()) attr = " enclosure=\"none\"";
       // set the default words format
       const TextStyle tsStaff = _score->textStyle(TextStyleType::STAFF);
@@ -3295,27 +3405,30 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
 
       directionTag(xml, attr, hp);
       xml.stag("direction-type");
-            
+
+      QString hairpinXml;
       if (hp->tick() == tick) {
             if ( hp->hairpinType() == Hairpin::Type::CRESCENDO ) {
                   if ( hp->hairpinCircledTip() ) {
-                        xml.tagE(QString("wedge type=\"crescendo\" niente=\"yes\" number=\"%1\"").arg(n + 1));
+                        hairpinXml = QString("wedge type=\"crescendo\" niente=\"yes\" number=\"%1\"").arg(n + 1);
                         }
                   else {
-                        xml.tagE(QString("wedge type=\"crescendo\" number=\"%1\"").arg(n + 1));
+                      hairpinXml = QString("wedge type=\"crescendo\" number=\"%1\"").arg(n + 1);
                         }
                   }
             else {
-                  xml.tagE(QString("wedge type=\"diminuendo\" number=\"%1\"").arg(n + 1));
+                hairpinXml = QString("wedge type=\"diminuendo\" number=\"%1\"").arg(n + 1);
                   }
             }
       else {
             if ( hp->hairpinCircledTip() && hp->hairpinType() == Hairpin::Type::DECRESCENDO )
-                  xml.tagE(QString("wedge type=\"stop\" niente=\"yes\" number=\"%1\"").arg(n + 1));
+                  hairpinXml = QString("wedge type=\"stop\" niente=\"yes\" number=\"%1\"").arg(n + 1);
             else
-                  xml.tagE(QString("wedge type=\"stop\" number=\"%1\"").arg(n + 1));
+                  hairpinXml = QString("wedge type=\"stop\" number=\"%1\"").arg(n + 1);
 
             }
+      addPositioningAttributes(hairpinXml, hp, hp->tick() == tick);
+      xml.tagE(hairpinXml);
       xml.etag();
       directionETag(xml, staff);
       }
@@ -3356,6 +3469,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
       directionTag(xml, attr, ot);
       xml.stag("direction-type");
 
+      QString octaveShiftXml;
       Ottava::Type st = ot->ottavaType();
       if (ot->tick() == tick) {
             const char* sz = 0;
@@ -3381,16 +3495,18 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
                         qDebug("ottava subtype %hhd not understood", st);
                   }
             if (sz && tp)
-                  xml.tagE(QString("octave-shift type=\"%1\" size=\"%2\" number=\"%3\"").arg(tp).arg(sz).arg(n + 1));
+                  octaveShiftXml = QString("octave-shift type=\"%1\" size=\"%2\" number=\"%3\"").arg(tp).arg(sz).arg(n + 1);
             }
       else {
             if (st == Ottava::Type::OTTAVA_8VA || st == Ottava::Type::OTTAVA_8VB)
-                  xml.tagE(QString("octave-shift type=\"stop\" size=\"8\" number=\"%1\"").arg(n + 1));
+                  octaveShiftXml = QString("octave-shift type=\"stop\" size=\"8\" number=\"%1\"").arg(n + 1);
             else if (st == Ottava::Type::OTTAVA_15MA || st == Ottava::Type::OTTAVA_15MB)
-                  xml.tagE(QString("octave-shift type=\"stop\" size=\"15\" number=\"%1\"").arg(n + 1));
+                  octaveShiftXml = QString("octave-shift type=\"stop\" size=\"15\" number=\"%1\"").arg(n + 1);
             else
                   qDebug("ottava subtype %hhd not understood", st);
             }
+      addPositioningAttributes(octaveShiftXml, ot, ot->tick() == tick);
+      xml.tagE(octaveShiftXml);
       xml.etag();
       directionETag(xml, staff);
       }
@@ -3403,10 +3519,13 @@ void ExportMusicXml::pedal(Pedal const* const pd, int staff, int tick)
       {
       directionTag(xml, attr, pd);
       xml.stag("direction-type");
+      QString pedalXml;
       if (pd->tick() == tick)
-            xml.tagE("pedal type=\"start\" line=\"yes\"");
+            pedalXml = "pedal type=\"start\" line=\"yes\"";
       else
-            xml.tagE("pedal type=\"stop\" line=\"yes\"");
+            pedalXml = "pedal type=\"stop\" line=\"yes\"";
+      addPositioningAttributes(pedalXml, pd, pd->tick() == tick);
+      xml.tagE(pedalXml);
       xml.etag();
       directionETag(xml, staff);
       }
@@ -3494,10 +3613,7 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
             rest += QString(" end-length=\"%1\"").arg(hookHeight * 10);
             }
 
-      if (preferences.musicxmlExportLayout && p.x() != 0)
-            rest += QString(" default-x=\"%1\"").arg(p.x() * 10 / tl->spatium());
-      if (preferences.musicxmlExportLayout && p.y() != 0)
-            rest += QString(" default-y=\"%1\"").arg(p.y() * -10 / tl->spatium());
+      addPositioningAttributes(rest, tl, tl->tick() == tick);
 
       directionTag(xml, attr, tl);
       if (!tl->beginText().isEmpty() && tl->tick() == tick) {
@@ -3540,7 +3656,9 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
 
       xml.stag("direction-type");
 
-      xml.stag("dynamics");
+      QString tagName = "dynamics";
+      addPositioningAttributes(tagName, dyn);
+      xml.stag(tagName);
       QString dynTypeName = dyn->dynamicTypeName();
       if (set.contains(dynTypeName)) {
             xml.tagE(dynTypeName);
@@ -3579,7 +3697,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
 void ExportMusicXml::symbol(Symbol const* const sym, int staff)
       {
       QString name = Sym::id2name(sym->sym());
-      const char* mxmlName = "";
+      QString mxmlName = "";
       if (name == "keyboardPedalPed")
             mxmlName = "pedal type=\"start\"";
       else if (name == "keyboardPedalUp")
@@ -3589,6 +3707,7 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
             return;
             }
       directionTag(xml, attr, sym);
+      addPositioningAttributes(mxmlName, sym);
       xml.stag("direction-type");
       xml.tagE(mxmlName);
       xml.etag();
@@ -3604,7 +3723,9 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
       for (const Lyrics* l : *ll) {
             if (l && !l->xmlText().isEmpty()) {
                   if ((l)->track() == trk) {
-                        xml.stag(QString("lyric number=\"%1\"").arg((l)->no() + 1));
+                        QString lyricXml = QString("lyric number=\"%1\"").arg((l)->no() + 1);
+                        addPositioningAttributes(lyricXml, l);
+                        xml.stag(lyricXml);
                         Lyrics::Syllabic syl = (l)->syllabic();
                         QString s = "";
                         switch (syl) {
@@ -3708,8 +3829,10 @@ static void directionJump(Xml& xml, const Jump* const jp)
       if (sound != "") {
             xml.stag("direction placement=\"above\"");
             xml.stag("direction-type");
-            if (type != "") xml.tagE(type);
-            if (words != "") xml.tag("words", words);
+            QString positioning = "";
+            addPositioningAttributes(positioning, jp);
+            if (type != "") xml.tagE(type + positioning);
+            if (words != "") xml.tag("words" + positioning, words);
             xml.etag();
             if (sound != "") xml.tagE(QString("sound ") + sound);
             xml.etag();
@@ -3761,8 +3884,10 @@ static void directionMarker(Xml& xml, const Marker* const m)
       if (sound != "") {
             xml.stag("direction placement=\"above\"");
             xml.stag("direction-type");
-            if (type != "") xml.tagE(type);
-            if (words != "") xml.tag("words", words);
+            QString positioning = "";
+            addPositioningAttributes(positioning, m);
+            if (type != "") xml.tagE(type + positioning);
+            if (words != "") xml.tag("words" + positioning, words);
             xml.etag();
             if (sound != "") xml.tagE(QString("sound ") + sound);
             xml.etag();

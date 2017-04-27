@@ -53,15 +53,13 @@ class Pedal : public TextLine {
       PropertyStyle lineWidthStyle;
       PropertyStyle lineStyleStyle;
 
-   protected:
-      QPointF linePos(Grip, System**) const override;
-
    public:
       Pedal(Score* s);
       virtual Pedal* clone() const override       { return new Pedal(*this); }
       virtual Element::Type type() const override { return Element::Type::PEDAL; }
       virtual void read(XmlReader&) override;
       LineSegment* createLineSegment();
+      QPointF linePos(Grip, System**) const override;
       virtual void setYoff(qreal) override;
       virtual bool setProperty(P_ID propertyId, const QVariant& val) override;
       virtual QVariant propertyDefault(P_ID propertyId) const override;

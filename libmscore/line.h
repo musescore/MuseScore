@@ -90,9 +90,6 @@ class SLine : public Spanner {
       Qt::PenStyle _lineStyle;
       bool _diagonal;
 
-   protected:
-      virtual QPointF linePos(Grip, System** system) const;
-
    public:
       SLine(Score* s);
       SLine(const SLine&);
@@ -103,6 +100,7 @@ class SLine : public Spanner {
       virtual LineSegment* createLineSegment() = 0;
       void setLen(qreal l);
       virtual const QRectF& bbox() const override;
+      virtual QPointF linePos(Grip, System** system) const;
 
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
