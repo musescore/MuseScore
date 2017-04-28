@@ -3705,8 +3705,10 @@ void Unlink::undo()
       {
       if (MScore::debugMode)
             qDebug("LinkUnlink: link %p (e) to %p (le)", e, le);
-      Q_ASSERT(le != nullptr);
-      e->linkTo(le);
+      // see https://musescore.org/en/node/163691
+      // Q_ASSERT(le != nullptr);
+      if (le)
+            e->linkTo(le);
       }
 
 void LinkStaff::redo()   { s1->linkTo(s2); } // s1 is added
