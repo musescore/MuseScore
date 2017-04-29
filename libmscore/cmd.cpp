@@ -99,7 +99,8 @@ void Score::startCmd()
             return;
             }
       undo()->beginMacro();
-      undo(new SaveState(this));
+      for (Score* s : scoreList())
+            undo(new SaveState(s));
       }
 
 //---------------------------------------------------------
@@ -140,7 +141,8 @@ void Score::endCmd(bool rollback)
 
       if (MScore::debugMode)
             qDebug("===endCmd() %d", undo()->current()->childCount());
-      bool noUndo = (undo()->current()->childCount() <= 1);       // nothing to undo?
+      // nothing to undo if current undo macro has only the SaveState commands for each score
+      bool noUndo = (undo()->current()->childCount() <= scoreList().size());
       undo()->endMacro(noUndo);
       end();      // DEBUG
 
