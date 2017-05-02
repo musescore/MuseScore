@@ -2368,7 +2368,7 @@
              <string>Default zoom</string>
             </property>
             <property name="accessibleDescription">
-             <string>default scale for new score views</string>
+             <string>Default scale for new score views</string>
             </property>
             <property name="suffix">
              <string notr="true">%</string>
