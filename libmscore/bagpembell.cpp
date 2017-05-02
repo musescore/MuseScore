@@ -157,9 +157,9 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "Half heavy D throw"), "D LG C" },
       { QT_TRANSLATE_NOOP("bagpipe", "Taorluath"), "D LG E" },
 
-      // Birl, Bubly, D Throws (continued) and Taorluaths (continued)
+      // Birl, Bubbly, D Throws (continued) and Taorluaths (continued)
       { QT_TRANSLATE_NOOP("bagpipe", "Birl"), "LA LG LA LG" },
-      { QT_TRANSLATE_NOOP("bagpipe", "Bubly"), "D LG C LG" },
+      { QT_TRANSLATE_NOOP("bagpipe", "Bubbly"), "D LG C LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Heavy D throw"), "LG D LG C" },
       { QT_TRANSLATE_NOOP("bagpipe", "Taorluath"), "LG D LG E" },
       { QT_TRANSLATE_NOOP("bagpipe", "Taorluath"), "LG B LG E" },
@@ -215,8 +215,8 @@ BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {
       { QT_TRANSLATE_NOOP("bagpipe", "Thumb grip on F"), "HA F LG F LG" },
       { QT_TRANSLATE_NOOP("bagpipe", "Thumb grip on high G"), "HA HG LG F LG" },
 
-      // Bubly
-      { QT_TRANSLATE_NOOP("bagpipe", "Bubly"), "LG D LG C LG" },
+      // Bubbly
+      { QT_TRANSLATE_NOOP("bagpipe", "Bubbly"), "LG D LG C LG" },
 
       //  Birls
       { QT_TRANSLATE_NOOP("bagpipe", "Birl"), "HG LA LG LA LG" },
