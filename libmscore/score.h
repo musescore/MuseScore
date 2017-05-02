@@ -595,8 +595,7 @@ class Score : public QObject, ScoreElement {
       int staffIdx(const Part*) const;
       Staff* staff(int n) const              { return ((n >= 0) && (n < _staves.size())) ? _staves.at(n) : nullptr; }
 
-      MeasureBase* pos2measure(const QPointF&, int* staffIdx, int* pitch,
-         Segment**, QPointF* offset) const;
+      Measure* pos2measure(const QPointF&, int* staffIdx, int* pitch, Segment**, QPointF* offset) const;
       void dragPosition(const QPointF&, int* staffIdx, Segment**) const;
 
       void undoAddElement(Element* element);

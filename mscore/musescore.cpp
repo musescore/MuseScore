@@ -526,7 +526,7 @@ void MuseScore::populateNoteInputMenu()
 MuseScore::MuseScore()
    : QMainWindow()
       {
-      QScreen* screen      = QGuiApplication::primaryScreen();
+      QScreen* screen = QGuiApplication::primaryScreen();
       if (userDPI == 0.0) {
 #if defined(Q_OS_WIN)
       if (QSysInfo::WindowsVersion <= QSysInfo::WV_WINDOWS7)
@@ -586,8 +586,6 @@ MuseScore::MuseScore()
       _modeText->setAutoFillBackground(false);
       _modeText->setObjectName("modeLabel");
 
-      _statusBar = new QStatusBar;
-
       hRasterAction   = getAction("hraster");
       vRasterAction   = getAction("vraster");
       loopAction      = getAction("loop");
@@ -597,6 +595,7 @@ MuseScore::MuseScore()
       countInAction   = getAction("countin");
       panAction       = getAction("pan");
 
+      _statusBar = new QStatusBar;
       _statusBar->addPermanentWidget(new QWidget(this), 2);
       _statusBar->addPermanentWidget(new QWidget(this), 100);
       _statusBar->addPermanentWidget(_modeText, 0);
@@ -614,6 +613,7 @@ MuseScore::MuseScore()
             _statusBar->addPermanentWidget(playMode);
             _statusBar->addPermanentWidget(layerSwitch);
             }
+
       _statusBar->addPermanentWidget(_positionLabel, 0);
 
       setStatusBar(_statusBar);
@@ -1258,7 +1258,6 @@ MuseScore::MuseScore()
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       checkForUpdateAction = menuHelp->addAction("", this, SLOT(checkForUpdate()));
 #endif
-
       menuHelp->addSeparator();
       askForHelpAction = menuHelp->addAction("", this, SLOT(askForHelp()));
       reportBugAction = menuHelp->addAction("", this, SLOT(reportBug()));
@@ -1294,6 +1293,7 @@ MuseScore::MuseScore()
       QClipboard* cb = QApplication::clipboard();
       connect(cb, SIGNAL(dataChanged()), SLOT(clipboardChanged()));
       connect(cb, SIGNAL(selectionChanged()), SLOT(clipboardChanged()));
+
       autoSaveTimer = new QTimer(this);
       autoSaveTimer->setSingleShot(true);
       connect(autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSaveTimerTimeout()));
@@ -3115,7 +3115,7 @@ void MuseScore::changeState(ScoreState val)
       if (_sstate == STATE_NOTE_ENTRY_STAFF_DRUM)
             showDrumTools(0, 0);
 
-      switch(val) {
+      switch (val) {
             case STATE_DISABLED:
                   showModeText(tr("No score"));
                   if (debugger)
@@ -3202,21 +3202,16 @@ void MuseScore::changeState(ScoreState val)
       a->setChecked(noteEntry);
       _sstate = val;
 
-      Element* e = 0;
-      if (_sstate & STATE_ALLTEXTUAL_EDIT || _sstate == STATE_EDIT) {
-            if (cv)
-                  e = cv->getEditElement();
-            }
+      Element* e = cv && (_sstate & STATE_ALLTEXTUAL_EDIT || _sstate == STATE_EDIT) ? cv->getEditElement() : 0;
       if (!e) {
             textTools()->hide();
             if (textTools()->kbAction()->isChecked())
                   textTools()->kbAction()->setChecked(false);
             }
       else {
-            if (cv && e->isText()) {
-                  textTools()->setView(cv);
+            if (e->isText()) {
                   textTools()->updateTools(cv->getEditData());
-                  if (!e->isFiguredBass() && !e->isHarmony())   // do not show text tools for f.b.
+                  if (!(e->isFiguredBass() || e->isHarmony()))   // do not show text tools for f.b.
                         textTools()->show();
                   }
             if (_inspector)
@@ -5347,7 +5342,6 @@ SynthesizerState MuseScore::synthesizerState()
 
 using namespace Ms;
 
-
 //---------------------------------------------------------
 //   main
 //---------------------------------------------------------
@@ -5369,18 +5363,23 @@ int main(int argc, char* av[])
       revision = QString(f.readAll()).trimmed();
       f.close();
 
-      MuseScoreApplication* app;
+      const char* appName;
+      const char* appName2;
       if (MuseScore::unstable()) {
-            app = new MuseScoreApplication("mscore-dev3", argc, av);
-            QCoreApplication::setApplicationName("MuseScoreDevelopment");
+            appName2 = "mscore-dev3";
+            appName  = "MuseScoreDevelopment";
             }
       else {
-            app = new MuseScoreApplication("mscore3", argc, av);
-            QCoreApplication::setApplicationName("MuseScore3");
+            appName2 = "mscore3";
+            appName  = "MuseScore3";
             }
+      MuseScoreApplication* app = new MuseScoreApplication(appName2, argc, av);
+      QCoreApplication::setApplicationName(appName);
+
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
       QCoreApplication::setApplicationVersion(VERSION);
+
       QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
       QAccessible::installFactory(AccessibleSearchBox::SearchBoxFactory);
       QAccessible::installFactory(Awl::AccessibleAbstractSlider::AbstractSliderFactory);
@@ -5570,7 +5569,6 @@ int main(int argc, char* av[])
                   if (app->sendMessage(QString("")))
                       return 0;
             }
-
       if (dataPath.isEmpty())
             dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 
@@ -5609,8 +5607,8 @@ int main(int argc, char* av[])
       MScore::init();         // initialize libmscore
 
       // initialize current page size from default printer
-      if (!MScore::testMode) {
 #ifndef QT_NO_PRINTER
+      if (!MScore::testMode) {
             QPrinter p;
             if (p.isValid()) {
                   qDebug("set paper size from default printer");
@@ -5619,8 +5617,8 @@ int main(int argc, char* av[])
                   MScore::defaultStyle().set(StyleIdx::pageHeight, psf.height());
                   MScore::defaultStyle().set(StyleIdx::pagePrintableWidth, psf.width()-20.0/INCH);
                   }
-#endif
             }
+#endif
 
 #ifdef SCRIPT_INTERFACE
       qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
@@ -5762,7 +5760,7 @@ int main(int argc, char* av[])
             seq         = 0;
             MScore::seq = 0;
             }
-
+//---
       //
       // avoid font problems by overriding the environment
       //    fall back to "C" locale
@@ -5791,7 +5789,6 @@ int main(int argc, char* av[])
             }
 
       mscore = new MuseScore();
-
       // create a score for internal use
       gscore = new MasterScore();
       gscore->setMovements(new Movements());
@@ -5813,7 +5810,6 @@ int main(int argc, char* av[])
       QApplication::instance()->installEventFilter(mscore);
 
       mscore->setRevision(revision);
-
       int files = 0;
       bool restoredSession = false;
       if (MScore::noGui) {
@@ -5852,6 +5848,7 @@ int main(int argc, char* av[])
             if (!restoredSession || files)
                   loadScores(argv);
             }
+
       errorMessage = new QErrorMessage(mscore);
       mscore->loadPlugins();
       mscore->writeSessionFile(false);

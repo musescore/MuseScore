@@ -1511,10 +1511,11 @@ void Text::startEdit(EditData& ed)
       ted->cursor->setColumn(0);
       ted->cursor->clearSelection();
 
-      if (ted->cursor->set(ed.startMove))
-            ted->cursor->updateCursorFormat();
-      else
+printf("%p Text::startEdit %f\n", this, ed.startMove.x());
+      if (!ted->cursor->set(ed.startMove)) {
             ted->cursor->init();
+            printf("    init Cursor\n");
+            }
       ed.addData(ted);
       if (layoutInvalid)
             layout();
@@ -1526,7 +1527,7 @@ void Text::startEdit(EditData& ed)
 
 void Text::endEdit(EditData&)
       {
-printf("Text::endEdit\n");
+printf("%p Text::endEdit\n", this);
       static const qreal w = 2.0;
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
       }
@@ -1972,6 +1973,8 @@ bool TextCursor::set(const QPointF& p, QTextCursor::MoveMode mode)
                   }
             }
       setColumn(curLine().column(pt.x(), _text));
+printf("cursor set col %d\n", _column);
+
       _text->score()->setUpdateAll();
       if (mode == QTextCursor::MoveAnchor)
             clearSelection();
@@ -2403,7 +2406,7 @@ bool Text::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Text::drop(EditData& data)
+Element* Text::drop(EditData& /*data*/)
       {
 #if 0
       Element* e = data.element;
@@ -3372,6 +3375,10 @@ void Text::drawEditMode(QPainter* p, EditData& ed)
       p->translate(pos);
 
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+      if (!ted) {
+            qDebug("ted not found");
+            return;
+            }
       TextCursor* _cursor = ted->cursor;
 
       if (_cursor->hasSelection()) {
