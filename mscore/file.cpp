@@ -195,10 +195,10 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
                   canIgnore = true;
                   break;
             case Score::FileError::FILE_NOT_FOUND:
-                  msg = QObject::tr("File not found %1").arg(name);
+                  msg = QObject::tr("File \"%1\" not found.").arg(name);
                   break;
             case Score::FileError::FILE_CORRUPTED:
-                  msg = QObject::tr("File corrupted %1").arg(name);
+                  msg = QObject::tr("File \"%1\" corrupted.").arg(name);
                   detailedMsg = MScore::lastError;
                   canIgnore = true;
                   break;
