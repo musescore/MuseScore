@@ -490,14 +490,10 @@ static bool validSegment(Segment* s, int startTrack, int endTrack)
 
 //---------------------------------------------------------
 //   pos2measure
+//     Return measure for canvas relative position \a p.
 //---------------------------------------------------------
 
-/**
- Return measure for canvas relative position \a p.
-*/
-
-MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
-   Segment** seg, QPointF* offset) const
+Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** seg, QPointF* offset) const
       {
       Measure* m = searchMeasure(p);
       if (m == 0)
@@ -942,15 +938,10 @@ QList<System*> Score::searchSystem(const QPointF& pos) const
 Measure* Score::searchMeasure(const QPointF& p) const
       {
       QList<System*> systems = searchSystem(p);
-      if (systems.empty())
-            return 0;
-
-      foreach(System* system, systems) {
+      for (System* system : systems) {
             qreal x = p.x() - system->canvasPos().x();
-            foreach(MeasureBase* mb, system->measures()) {
-                  if (mb->type() != ElementType::MEASURE)
-                        continue;
-                  if (x < (mb->x() + mb->bbox().width()))
+            for (MeasureBase* mb : system->measures()) {
+                  if (mb->isMeasure() && (x < (mb->x() + mb->bbox().width())))
                         return toMeasure(mb);
                   }
             }

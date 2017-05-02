@@ -1,21 +1,13 @@
 //=============================================================================
 //  MuseScore
-//  Linux Music Score Editor
-//  $Id: scoreview.cpp 3446 2010-09-10 20:18:16Z wschweer $
+//  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer and others
+//  Copyright (C) 2002-2017 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
 //=============================================================================
 
 #include "scoreview.h"
@@ -29,312 +21,51 @@
 #include "libmscore/mscore.h"
 #include "svggenerator.h"
 #include "inspector/inspector.h"
+#include "fotomode.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   FotoScoreViewDragTransition
+//   startEdit
 //---------------------------------------------------------
 
-class FotoScoreViewDragTransition : public QMouseEventTransition
+void FotoLasso::startEdit(EditData& ed)
       {
-      ScoreView* canvas;
-
-   protected:
-      virtual bool eventTest(QEvent* event) {
-            if (!QMouseEventTransition::eventTest(event))
-                  return false;
-            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(event);
-            QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-            if (me->modifiers() & Qt::ShiftModifier)
-                  return false;
-            return canvas->fotoScoreViewDragTest(me);
-            }
-   public:
-      FotoScoreViewDragTransition(ScoreView* c, QState* target)
-         : QMouseEventTransition(c, QEvent::MouseButtonPress, Qt::LeftButton), canvas(c) {
-            setTargetState(target);
-            }
-      };
+      printf("Foto: startEdit\n");
+      ed.grips   = 8;
+      ed.curGrip = Grip(0);
+      }
 
 //---------------------------------------------------------
-//   FotoScoreViewDragRectTransition
+//   endEdit
 //---------------------------------------------------------
 
-class FotoScoreViewDragRectTransition : public QMouseEventTransition
+void FotoLasso::endEdit(EditData&)
       {
-      ScoreView* canvas;
-
-   protected:
-      virtual bool eventTest(QEvent* event) {
-            if (!QMouseEventTransition::eventTest(event))
-                  return false;
-            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(event);
-            QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-            if (me->modifiers() & Qt::ShiftModifier)
-                  return false;
-            return canvas->fotoScoreViewDragRectTest(me);
-            }
-   public:
-      FotoScoreViewDragRectTransition(ScoreView* c, QState* target)
-         : QMouseEventTransition(c, QEvent::MouseButtonPress, Qt::LeftButton), canvas(c) {
-            setTargetState(target);
-            }
-      };
+      printf("Foto: endEdit\n");
+      }
 
 //---------------------------------------------------------
-//   FotoFrameTransition
+//   updateGrips
 //---------------------------------------------------------
 
-class FotoFrameTransition : public QMouseEventTransition
+void FotoLasso::updateGrips(EditData& ed) const
       {
-      ScoreView* canvas;
-
-   protected:
-      virtual bool eventTest(QEvent* event) {
-            if (!QMouseEventTransition::eventTest(event))
-                  return false;
-            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(event);
-            QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-            return !canvas->fotoRectHit(me->pos());
-            }
-   public:
-      FotoFrameTransition(ScoreView* c, QState* target)
-         : QMouseEventTransition(c, QEvent::MouseButtonPress, Qt::LeftButton), canvas(c) {
-            setTargetState(target);
-            setModifierMask(Qt::ShiftModifier);
-            }
-      };
+      printf("Foto: updateGrips\n");
+      Lasso::updateGrips(ed);
+      }
 
 //---------------------------------------------------------
-//   FotoEditElementDragTransition
+//   drawEditMode
 //---------------------------------------------------------
 
-class FotoEditElementDragTransition : public QMouseEventTransition
+void FotoLasso::drawEditMode(QPainter* p, EditData& ed)
       {
-      ScoreView* canvas;
-
-   protected:
-      virtual bool eventTest(QEvent* event) {
-            if (!QMouseEventTransition::eventTest(event))
-                  return false;
-            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(event);
-            QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-            return canvas->fotoEditElementDragTransition(me);
-            }
-   public:
-      FotoEditElementDragTransition(ScoreView* c, QState* target)
-         : QMouseEventTransition(c, QEvent::MouseButtonPress, Qt::LeftButton), canvas(c) {
-            setTargetState(target);
-            }
-      };
-
-//---------------------------------------------------------
-//   FotoDragEditTransition
-//---------------------------------------------------------
-
-class FotoDragEditTransition : public QEventTransition
-      {
-      ScoreView* canvas;
-
-   protected:
-      virtual void onTransition(QEvent* e) {
-            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
-            QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-            canvas->doFotoDragEdit(me);
-            }
-   public:
-      FotoDragEditTransition(ScoreView* c)
-         : QEventTransition(c, QEvent::MouseMove), canvas(c) {}
-      };
-
-//---------------------------------------------------------
-//   FotoDragTransition
-//---------------------------------------------------------
-
-class FotoDragTransition : public QEventTransition
-      {
-      ScoreView* canvas;
-
-   protected:
-      virtual void onTransition(QEvent* e) {
-            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
-            QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-            canvas->doDragFoto(me);
-            }
-   public:
-      FotoDragTransition(ScoreView* c)
-         : QEventTransition(c, QEvent::MouseMove), canvas(c) {}
-      };
-
-//---------------------------------------------------------
-//   FotoDragRectTransition
-//---------------------------------------------------------
-
-class FotoDragRectTransition : public QEventTransition
-      {
-      ScoreView* canvas;
-
-   protected:
-      virtual void onTransition(QEvent* e) {
-            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
-            QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-            canvas->doDragFotoRect(me);
-            }
-   public:
-      FotoDragRectTransition(ScoreView* c)
-         : QEventTransition(c, QEvent::MouseMove), canvas(c) {}
-      };
-
-//---------------------------------------------------------
-//   FotoContextTransition
-//---------------------------------------------------------
-
-class FotoContextTransition : public QEventTransition
-      {
-      ScoreView* canvas;
-
-   protected:
-      virtual bool eventTest(QEvent* e) {
-            if (!QEventTransition::eventTest(e))
-                  return false;
-            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
-            QContextMenuEvent* me = static_cast<QContextMenuEvent*>(we->event());
-            return canvas->fotoRectHit(me->pos());
-            }
-      virtual void onTransition(QEvent* e) {
-            QContextMenuEvent* me = static_cast<QContextMenuEvent*>(static_cast<QStateMachine::WrappedEvent*>(e)->event());
-            canvas->fotoContextPopup(me);
-            }
-   public:
-      FotoContextTransition(ScoreView* c)
-         : QEventTransition(c, QEvent::ContextMenu), canvas(c) {}
-      };
-
-//---------------------------------------------------------
-//   FotoDragDropTransition
-//---------------------------------------------------------
-
-class FotoDragDropTransition : public QMouseEventTransition
-      {
-      ScoreView* canvas;
-
-   protected:
-      virtual bool eventTest(QEvent* event) {
-            if (!QMouseEventTransition::eventTest(event))
-                  return false;
-            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(event);
-            QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-            return canvas->fotoRectHit(me->pos());
-            }
-      virtual void onTransition(QEvent* e) {
-            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
-            QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-            canvas->fotoDragDrop(me);
-            }
-   public:
-      FotoDragDropTransition(ScoreView* c)
-         : QMouseEventTransition(c, QEvent::MouseButtonPress, Qt::LeftButton), canvas(c)
-            {
-            setModifierMask(Qt::KeyboardModifiers(Qt::ShiftModifier | Qt::ControlModifier));
-            }
-      };
-
-//---------------------------------------------------------
-//   setupFotoMode
-//---------------------------------------------------------
-
-void ScoreView::setupFotoMode()
-      {
-      QState* s = states[FOTOMODE];
-      s->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
-      s->addTransition(new CommandTransition("escape", states[NORMAL]));    // ->normal
-      s->addTransition(new CommandTransition("fotomode", states[NORMAL]));  // ->normal
-      s->addTransition(new ScoreViewDragTransition(this, states[DRAG]));    // ->stateDrag
-      CommandTransition* ct = new CommandTransition("copy", 0);             // copy
-      connect(ct, SIGNAL(triggered()), SLOT(fotoModeCopy()));
-      s->addTransition(ct);
-
-      QState* f1 = new QState(s);
-      f1->setObjectName("foto-normal");
-      connect(f1, SIGNAL(entered()), SLOT(enterState()));
-      connect(f1, SIGNAL(exited()), SLOT(exitState()));
-
-      //
-      // in the f2 state the canvas is dragged
-      //
-      QState* f2 = new QState(s);
-      f2->setObjectName("foto-drag");
-      connect(f2, SIGNAL(entered()), SLOT(enterState()));
-      connect(f2, SIGNAL(exited()), SLOT(exitState()));
-
-      //
-      // state f3 draws the foto rectangle
-      //
-      QState* f3 = new QState(s);
-      f3->setObjectName("foto-frame");
-      connect(f3, SIGNAL(entered()), SLOT(enterState()));
-      connect(f3, SIGNAL(exited()), SLOT(exitState()));
-
-      //
-      // f4 drags the foto rectangle grips
-      //
-      QState* f4 = new QState(s);
-      f4->setObjectName("foto-drag-edit");
-      connect(f4, SIGNAL(entered()), SLOT(enterState()));
-      connect(f4, SIGNAL(exited()), SLOT(exitState()));
-
-      //
-      // f5 drags the foto rectangle itself
-      //
-      QState* f5 = new QState(s);
-      f5->setObjectName("foto-drag-rect");
-      connect(f5, SIGNAL(entered()), SLOT(enterState()));
-      connect(f5, SIGNAL(exited()), SLOT(exitState()));
-
-      f1->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
-      f1->addTransition(new FotoScoreViewDragTransition(this,   f2));   // ->stateDrag
-      f1->addTransition(new FotoFrameTransition(this,           f3));   // ->stateLasso
-      f1->addTransition(new FotoEditElementDragTransition(this, f4));   // ->editDrag
-      f1->addTransition(new FotoScoreViewDragRectTransition(this, f5)); // ->foto-drag-rect
-      f1->addTransition(new FotoContextTransition(this));               // context menu
-      f1->addTransition(new FotoDragDropTransition(this));
-
-      // drag canvas in foto state
-      f2->assignProperty(this, "cursor", QCursor(Qt::SizeAllCursor));
-      QEventTransition* cl = new QEventTransition(this, QEvent::MouseButtonRelease);
-      cl->setTargetState(f1);
-      f2->addTransition(cl);
-      f2->addTransition(new DragTransition(this));
-
-      // drag foto frame
-      f3->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
-      cl = new QEventTransition(this, QEvent::MouseButtonRelease);
-      cl->setTargetState(f1);
-      f3->addTransition(cl);
-      f3->addTransition(new class FotoDragTransition(this));
-      connect(f3, SIGNAL(entered()), SLOT(startFotoDrag()));
-      connect(f3, SIGNAL(exited()),  SLOT(endFotoDrag()));
-
-      // foto drag edit state
-      f4->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
-      cl = new QEventTransition(this, QEvent::MouseButtonRelease);
-      cl->setTargetState(f1);
-      f4->addTransition(cl);
-      f4->addTransition(new FotoDragEditTransition(this));
-      connect(f4, SIGNAL(exited()), SLOT(endFotoDragEdit()));
-
-      f5->assignProperty(this, "cursor", QCursor(Qt::SizeAllCursor));
-      cl = new QEventTransition(this, QEvent::MouseButtonRelease);
-      cl->setTargetState(f1);
-      f5->addTransition(cl);
-      f5->addTransition(new class FotoDragRectTransition(this));
-
-      s->setInitialState(f1);
-      s->addTransition(new ScoreViewDragTransition(this, f2));
-
-      connect(s, SIGNAL(entered()), SLOT(startFotomode()));
-      connect(s, SIGNAL(exited()),  SLOT(stopFotomode()));
+      QPointF pos(canvasPos());
+      p->translate(pos);
+      draw(p);
+      p->translate(-pos);
+      Lasso::drawEditMode(p, ed);
       }
 
 //---------------------------------------------------------
@@ -343,30 +74,26 @@ void ScoreView::setupFotoMode()
 
 void ScoreView::startFotomode()
       {
-      editElement = _foto;
-      _foto->startEdit(editData);
-      qreal w = 8.0 / _matrix.m11();
-      qreal h = 8.0 / _matrix.m22();
-      QRectF r(-w*.5, -h*.5, w, h);
+      printf("start foto mode\n");
+      if (!_foto)
+            _foto = new FotoLasso(_score);
+      else
+            _foto->setScore(_score);
+      _foto->setVisible(true);
+      _foto->layout();
+      _score->select(_foto);
 
       // try to find existing rect within current view
       QRectF view = toLogical(QRect(0.0, 0.0, width(), height()));
-      if (_foto->rect().isEmpty() || !view.intersects(_foto->rect())) {
+      if (_foto->bbox().isEmpty() || !view.intersects(_foto->bbox())) {
             // rect not found - construct new rect with default size & relative position
             qreal w = view.width();
             qreal h = view.height();
             QRectF rect(w * .3, h * .3, w * .4, h * .4);
             // convert to absolute position
-            _foto->setRect(rect.translated(view.topLeft()));
+            _foto->setbbox(rect.translated(view.topLeft()));
             }
-      editData.grip.resize(8);
-      for (QRectF& p : editData.grip)
-            p = r;
-      editData.curGrip = Grip::START;
-      updateGrips();
-      _score->addRefresh(_foto->abbox());
-      _score->update();
-      mscore->changeState(STATE_FOTO);
+      startEditMode(_foto);
       }
 
 //---------------------------------------------------------
@@ -377,11 +104,8 @@ void ScoreView::stopFotomode()
       {
       QAction* a = getAction("fotomode");
       a->setChecked(false);
-
-      editElement    = 0;
-      editData.grips = 0;
-
-      _foto->endEdit(editData);
+      _foto->setVisible(false);
+      endEdit();
       update();
       }
 
@@ -406,9 +130,9 @@ void ScoreView::doDragFoto(QMouseEvent* ev)
       QPointF p = toLogical(ev->pos());
       QRectF r;
       r.setCoords(editData.startMove.x(), editData.startMove.y(), p.x(), p.y());
-      _foto->setRect(r.normalized());
+      _foto->setbbox(r.normalized());
 
-      QRectF rr(_foto->rect());
+      QRectF rr(_foto->bbox());
       r = _matrix.mapRect(rr);
       //QSize sz(r.size().toSize());
       //mscore->statusBar()->showMessage(QString("%1 x %2").arg(sz.width()).arg(sz.height()), 3000);
@@ -426,9 +150,10 @@ void ScoreView::endFotoDrag()
       qreal w = 8.0 / _matrix.m11();
       qreal h = 8.0 / _matrix.m22();
       QRectF r(-w*.5, -h*.5, w, h);
+      editData.grip.resize(8);
       for (int i = 0; i < 8; ++i)
             editData.grip[i] = r;
-      editElement = _foto;
+      editData.element = _foto;
       updateGrips();
       _score->setUpdateAll();
       _score->update();
@@ -506,7 +231,7 @@ bool ScoreView::fotoEditElementDragTransition(QMouseEvent* ev)
 bool ScoreView::fotoScoreViewDragTest(QMouseEvent* me)
       {
       QPointF p(imatrix.map(QPointF(me->pos())));
-      if (_foto->rect().contains(p))
+      if (_foto->bbox().contains(p))
             return false;
       for (int i = 0; i < editData.grips; ++i) {
             if (editData.grip[i].contains(p))
@@ -523,7 +248,7 @@ bool ScoreView::fotoScoreViewDragTest(QMouseEvent* me)
 bool ScoreView::fotoScoreViewDragRectTest(QMouseEvent* me)
       {
       QPointF p(toLogical(me->pos()));
-      if (!_foto->rect().contains(p))
+      if (!_foto->bbox().contains(p))
             return false;
       for (int i = 0; i < editData.grips; ++i) {
             if (editData.grip[i].contains(p))
@@ -542,7 +267,7 @@ void ScoreView::doDragFotoRect(QMouseEvent* ev)
       QPointF p(toLogical(ev->pos()));
       QPointF delta = p - editData.startMove;
       score()->addRefresh(_foto->abbox());
-      _foto->setRect(_foto->rect().translated(delta));
+      _foto->setbbox(_foto->bbox().translated(delta));
       score()->addRefresh(_foto->abbox());
       editData.startMove = p;
       updateGrips();
@@ -627,9 +352,9 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
             return;
       QString cmd(a->data().toString());
       if (cmd == "print")
-            saveFotoAs(true, _foto->rect());
+            saveFotoAs(true, _foto->bbox());
       else if (cmd == "screenshot")
-            saveFotoAs(false, _foto->rect());
+            saveFotoAs(false, _foto->bbox());
       else if (cmd == "copy")
             ;
       else if (cmd == "set-res") {
@@ -647,11 +372,11 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
                   }
             }
       else if (cmd == "resizePage") {
-            QRectF r = _foto->rect();
+            QRectF r = _foto->bbox();
             Page* page = point2page(r.center());
             if (page) {
                   r = page->tbbox().translated(page->canvasPos());
-                  _foto->setRect(r);
+                  _foto->setbbox(r);
                   updateGrips();
                   }
             }
@@ -659,12 +384,12 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
             QString size = QSettings().value(QString("fotoSize%1").arg(cmd[6]), "50x40").toString();
             qreal w = size.split("x")[0].toDouble();
             qreal h = size.split("x")[1].toDouble();
-            _foto->setSize(w * DPMM, h * DPMM);
+            _foto->bbox().setSize(QSizeF(w * DPMM, h * DPMM));
             updateGrips();
             }
       else if (cmd.startsWith("set")) {
-            qreal w   = _foto->rect().width() / DPMM;
-            qreal h   = _foto->rect().height() / DPMM;
+            qreal w   = _foto->bbox().width() / DPMM;
+            qreal h   = _foto->bbox().height() / DPMM;
             QString val(QString("%1x%2").arg(w).arg(h));
             QSettings().setValue(QString("fotoSize%1").arg(cmd[3]), val);
             }
@@ -685,7 +410,7 @@ void ScoreView::fotoModeCopy()
       double convDpi   = preferences.pngResolution;
       double mag       = convDpi / DPI;
 
-      QRectF r(_foto->rect());
+      QRectF r(_foto->bbox());
 
       int w = lrint(r.width()  * mag);
       int h = lrint(r.height() * mag);
@@ -720,7 +445,7 @@ bool ScoreView::fotoRectHit(const QPoint& pos)
                   return false;
             }
       editData.startMove = p;
-      return _foto->rect().contains(p);
+      return _foto->bbox().contains(p);
       }
 
 //---------------------------------------------------------
@@ -863,7 +588,7 @@ void ScoreView::paintRect(bool printMode, QPainter& p, const QRectF& r, double m
 void ScoreView::fotoDragDrop(QMouseEvent*)
       {
       bool printMode   = true;
-      QRectF r(_foto->rect());
+      QRectF r(_foto->bbox());
 
       QTemporaryFile tf(QDir::tempPath() + QString("/imgXXXXXX.svg"));
       tf.setAutoRemove(false);
