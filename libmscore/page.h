@@ -76,10 +76,6 @@ class Page : public Element {
       QList<Element*> items(const QPointF& p);
       void rebuildBspTree()   { bspTreeValid = false; }
       QPointF pagePos() const { return QPointF(); }     ///< position in page coordinates
-      QList<System*> searchSystem(const QPointF& pos) const;
-      Measure* searchMeasure(const QPointF& p) const;
-      MeasureBase* pos2measure(const QPointF&, int* staffIdx, int* pitch,
-         Segment**, QPointF* offset) const;
       QList<Element*> elements();               ///< list of visible elements
       QRectF tbbox();                           // tight bounding box, excluding white space
       int endTick() const;

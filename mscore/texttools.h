@@ -28,7 +28,8 @@ class ScoreView;
 class TextTools : public QDockWidget {
       Q_OBJECT
 
-      ScoreView* _view;
+      Text* text;
+      TextCursor* cursor;
 
       QDoubleSpinBox* typefaceSize;
       QFontComboBox* typefaceFamily;
@@ -55,14 +56,12 @@ class TextTools : public QDockWidget {
 
    public:
       TextTools(QWidget* parent = 0);
-      void setView(ScoreView* v)       { _view = v; }
       void updateTools(EditData&);
-      QAction* kbAction() const        { return showKeyboard; }
+      QAction* kbAction() const      { return showKeyboard; }
       void toggleBold();
       void toggleItalic();
       void toggleUnderline();
       Text* textElement();
-      TextCursor* cursor();
       };
 }
 

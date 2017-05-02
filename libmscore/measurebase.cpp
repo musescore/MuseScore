@@ -112,7 +112,7 @@ void MeasureBase::scanElements(void* data, void (*func)(void*, Element*), bool a
                         e->scanElements(data, func, all);
                   }
             }
-      func(data, this);
+//      func(data, this);
       }
 
 //---------------------------------------------------------

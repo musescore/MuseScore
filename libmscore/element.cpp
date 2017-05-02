@@ -338,6 +338,7 @@ QRectF Element::drag(EditData& ed)
             y = vRaster * n;
             }
 
+printf("drag: %f %f\n", x, y);
       setUserOff(QPointF(x, y));
       setGenerated(false);
 
@@ -1853,7 +1854,7 @@ void EditData::addData(ElementEditData* ed)
 
 void Element::drawEditMode(QPainter* p, EditData& ed)
       {
-      printf("==drawEditMode %s\n", name());
+      printf("==drawEditMode %s, grips %d\n", name(), ed.grips);
 //      if (ed.grips)
 //            draw(p);
       if (ed.grips == 6) {       // HACK: this are grips of a slur

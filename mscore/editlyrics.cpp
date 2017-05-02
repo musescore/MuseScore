@@ -25,7 +25,7 @@ namespace Ms {
 
 void ScoreView::lyricsUpDown(bool up, bool end)
       {
-      Lyrics* lyrics   = toLyrics(editElement);
+      Lyrics* lyrics   = toLyrics(editData.element);
       int track        = lyrics->track();
       ChordRest* cr    = lyrics->chordRest();
       int verse        = lyrics->no();
@@ -61,7 +61,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
       mscore->changeState(mscoreState());
       adjustCanvasPosition(lyrics, false);
 
-      lyrics = toLyrics(editElement);
+      lyrics = toLyrics(editData.element);
       TextCursor* cursor = lyrics->cursor(editData);
       if (end) {
             cursor->movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
@@ -82,7 +82,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
 
 void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       {
-      Lyrics* lyrics   = (Lyrics*)editElement;
+      Lyrics* lyrics   = (Lyrics*)editData.element;
       int track        = lyrics->track();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
@@ -186,7 +186,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
 
       adjustCanvasPosition(_toLyrics, false);
 
-      TextCursor* cursor = toLyrics(editElement)->cursor(editData);
+      TextCursor* cursor = toLyrics(editData.element)->cursor(editData);
       if (end) {
             cursor->movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
             cursor->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
@@ -205,7 +205,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
 
 void ScoreView::lyricsMinus()
       {
-      Lyrics* lyrics   = toLyrics(editElement);
+      Lyrics* lyrics   = toLyrics(editData.element);
       int track        = lyrics->track();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
@@ -285,8 +285,8 @@ void ScoreView::lyricsMinus()
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(toLyrics, false);
-      TextCursor* cursor = Ms::toLyrics(editElement)->cursor(editData);
-      Ms::toLyrics(editElement)->selectAll(cursor);
+      TextCursor* cursor = Ms::toLyrics(editData.element)->cursor(editData);
+      Ms::toLyrics(editData.element)->selectAll(cursor);
 
       _score->setLayoutAll();
       _score->update();
@@ -298,7 +298,7 @@ void ScoreView::lyricsMinus()
 
 void ScoreView::lyricsUnderscore()
       {
-      Lyrics* lyrics   = static_cast<Lyrics*>(editElement);
+      Lyrics* lyrics   = static_cast<Lyrics*>(editData.element);
       int track        = lyrics->track();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
@@ -405,8 +405,8 @@ void ScoreView::lyricsUnderscore()
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(toLyrics, false);
-      TextCursor* cursor = Ms::toLyrics(editElement)->cursor(editData);
-      Ms::toLyrics(editElement)->selectAll(cursor);
+      TextCursor* cursor = Ms::toLyrics(editData.element)->cursor(editData);
+      Ms::toLyrics(editData.element)->selectAll(cursor);
 
       _score->setLayoutAll();
       //_score->update();
@@ -419,7 +419,7 @@ void ScoreView::lyricsUnderscore()
 
 void ScoreView::lyricsReturn()
       {
-      Lyrics* lyrics   = toLyrics(editElement);
+      Lyrics* lyrics   = toLyrics(editData.element);
       Segment* segment = lyrics->segment();
 
       endEdit();
@@ -470,7 +470,7 @@ void ScoreView::lyricsReturn()
 
 void ScoreView::lyricsEndEdit()
       {
-      Lyrics* lyrics = toLyrics(editElement);
+      Lyrics* lyrics = toLyrics(editData.element);
 
       // if no text, just remove this lyrics
       if (lyrics->empty())
