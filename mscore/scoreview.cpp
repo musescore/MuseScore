@@ -1718,8 +1718,6 @@ void ScoreView::cmd(const QAction* a)
                   editSwap();
             }
       else if (cmd == "lyrics") {
-//            if (noteEntryMode())          // force out of entry mode
-//TODO:state                  sm->postEvent(new CommandEvent("note-input"));
             Lyrics* lyrics = _score->addLyrics();
             if (lyrics) {
                   startEditMode(lyrics);
@@ -2483,42 +2481,6 @@ void ScoreView::endNoteEntry()
       setCursorOn(false);
       _score->setUpdateAll();
       _score->update();
-      }
-
-//---------------------------------------------------------
-//   contextPopup
-//---------------------------------------------------------
-
-void ScoreView::contextPopup(QContextMenuEvent* ev)
-      {
-      QPoint gp = ev->globalPos();
-
-      editData.startMove = toLogical(ev->pos());
-      Element* e = elementNear(editData.startMove);
-      if (e) {
-            if (!e->selected()) {
-                  // bool control = (ev->modifiers() & Qt::ControlModifier) ? true : false;
-                  // _score->select(e, control ? SelectType::ADD : SelectType::SINGLE, 0);
-                  editData.element = e;
-//TODO?                  select(ev);
-                  }
-            ElementType type = e->type();
-            if (seq)
-                  seq->stopNotes();       // stop now because we dont get a mouseRelease event
-            if (type == ElementType::MEASURE)
-                  measurePopup(gp, static_cast<Measure*>(e));
-            else {
-                  objectPopup(gp, e);
-                  }
-            }
-      else {
-            QMenu* popup = new QMenu();
-            popup->addAction(getAction("edit-style"));
-            popup->addAction(getAction("page-settings"));
-            popup->addAction(getAction("load-style"));
-            _score->update();
-            popup->popup(gp);
-            }
       }
 
 //---------------------------------------------------------

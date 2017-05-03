@@ -294,8 +294,8 @@ class Text : public Element {
       qreal lineHeight() const;
       virtual qreal baseLine() const override;
 
-      bool empty() const                  { return _text.isEmpty(); }
-      void clear()                        { _text.clear();          }
+      bool empty() const                  { return xmlText().isEmpty(); }
+      void clear()                        { setXmlText(QString());      }
 
       bool layoutToParentWidth() const    { return _layoutToParentWidth; }
       void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v;   }

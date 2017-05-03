@@ -82,7 +82,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
 
 void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       {
-      Lyrics* lyrics   = (Lyrics*)editData.element;
+      Lyrics* lyrics   = toLyrics(editData.element);
       int track        = lyrics->track();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
@@ -108,6 +108,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       if (nextSegment == 0)
             return;
 
+printf("lyricsTab: endEdit\n");
       endEdit();
 
       // look for the lyrics we are moving from; may be the current lyrics or a previous one
@@ -136,7 +137,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       if (!_toLyrics) {
             _toLyrics = new Lyrics(_score);
             _toLyrics->setTrack(track);
-            ChordRest* cr = static_cast<ChordRest*>(nextSegment->element(track));
+            ChordRest* cr = toChordRest(nextSegment->element(track));
             _toLyrics->setParent(cr);
             _toLyrics->setNo(verse);
             _toLyrics->setPlacement(placement);
@@ -145,7 +146,6 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             }
 
       _score->startCmd();
-
       if (fromLyrics && !moveOnly) {
             switch (_toLyrics->syllabic()) {
                   // as we arrived at toLyrics by a [Space], it can be the beginning
@@ -162,7 +162,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
                   }
             // as we moved away from fromLyrics by a [Space], it can be
             // the end of a multi-syllable, but cannot have syllabic dashes after
-            switch(fromLyrics->syllabic()) {
+            switch (fromLyrics->syllabic()) {
                   case Lyrics::Syllabic::SINGLE:
                   case Lyrics::Syllabic::END:
                         break;
@@ -177,12 +177,12 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             fromLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, 0);
             }
 
+printf("lyricsTab: newLyrics %d\n", newLyrics);
       if (newLyrics)
           _score->undoAddElement(_toLyrics);
 
       _score->select(_toLyrics, SelectType::SINGLE, 0);
       startEdit(_toLyrics, Grip::NO_GRIP);
-      mscore->changeState(mscoreState());
 
       adjustCanvasPosition(_toLyrics, false);
 
@@ -196,7 +196,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             cursor->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
             }
       _score->setLayoutAll();
-      _score->update();
+      _score->endCmd();
       }
 
 //---------------------------------------------------------
@@ -473,8 +473,10 @@ void ScoreView::lyricsEndEdit()
       Lyrics* lyrics = toLyrics(editData.element);
 
       // if no text, just remove this lyrics
-      if (lyrics->empty())
+      if (lyrics->empty()) {
+            qDebug("lyrics empty: remove");
             lyrics->parent()->remove(lyrics);
+            }
       // if not empty, make sure this new lyrics does not fall in the middle
       // of an existing melisma from a previous lyrics; in case, shorten it
       else {
