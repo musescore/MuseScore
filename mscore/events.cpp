@@ -209,7 +209,7 @@ void ScoreView::focusOutEvent(QFocusEvent* event)
 
 void ScoreView::mouseMoveEvent(QMouseEvent* me)
       {
-      if (!me->button())
+      if (editData.buttons == Qt::NoButton)
             return;
       switch (state) {
             case ViewState::NORMAL:
@@ -256,6 +256,7 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
 
 void ScoreView::mouseReleaseEvent(QMouseEvent*)
       {
+      editData.buttons = Qt::NoButton;
       if (seq)
             seq->stopNoteTimer();
       switch (state) {
@@ -349,6 +350,7 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
 void ScoreView::mousePressEvent(QMouseEvent* ev)
       {
       editData.startMove = toLogical(ev->pos());
+      editData.buttons   = ev->buttons();
       Element* e         = elementNear(editData.startMove);
       qDebug("%s", e ? e->name() : "--");
 
@@ -430,32 +432,29 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
       if (MScore::debugMode)
             qDebug("keyPressEvent key 0x%02x(%c) mod 0x%04x <%s> nativeKey 0x%02x scancode %d",
                editData.key, editData.key, int(editData.modifiers), qPrintable(editData.s), ev->nativeVirtualKey(), ev->nativeScanCode());
+      _score->startCmd();
+      _keyPressEvent(ev);
+      _score->endCmd();
+      }
 
+void ScoreView::_keyPressEvent(QKeyEvent* ev)
+      {
       if (editData.element->isLyrics()) {
-            if (editKeyLyrics(ev)) {
-                  ev->accept();
+            if (editKeyLyrics(ev))
                   return;
-                  }
             }
       else if (editData.element->isHarmony()) {
             if (editData.key == Qt::Key_Space && !(editData.modifiers & CONTROL_MODIFIER)) {
                   harmonyBeatsTab(true, editData.modifiers & Qt::ShiftModifier);
-                  ev->accept();
                   return;
                   }
             }
       else if (editData.element->isFiguredBass()) {
-            int found = false;
             if (editData.key == Qt::Key_Space && !(editData.modifiers & CONTROL_MODIFIER)) {
                   figuredBassTab(false, editData.modifiers & Qt::ShiftModifier);
-                  found = true;
-                  }
-            if (found) {
-                  ev->accept();
                   return;
                   }
             }
-
 
 #ifdef Q_OS_WIN // Japenese IME on Windows needs to know when Contrl/Alt/Shift/CapsLock is pressed while in predit
       if (editData.element->isText()) {
@@ -471,22 +470,12 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
 #endif
 
       if (!((editData.modifiers & Qt::ShiftModifier) && (editData.key == Qt::Key_Backtab))) {
-            _score->startCmd();
             if (editData.element->edit(editData)) {
                   if (editData.element->isText())
                         mscore->textTools()->updateTools(editData);
                   updateGrips();
-                  ev->accept();
-                  _score->endCmd();
-                  mscore->endCmd();
                   return;
                   }
-            if (editData.element->isText() && (editData.key == Qt::Key_Left || editData.key == Qt::Key_Right)) {
-                  ev->accept();
-                  //return;
-                  }
-            _score->endCmd();
-            mscore->endCmd();
             }
       QPointF delta;
       qreal _spatium = editData.element->spatium();
@@ -544,14 +533,10 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
       editData.vRaster = mscore->vRaster();
       if (editData.curGrip != Grip::NO_GRIP && int(editData.curGrip) < editData.grips)
             editData.pos = editData.grip[int(editData.curGrip)].center() + delta;
-      editData.element->score()->startCmd();
       editData.element->startEditDrag(editData);
       editData.element->editDrag(editData);
       editData.element->endEditDrag(editData);
-      editData.element->score()->endCmd();
       updateGrips();
-      mscore->endCmd();
-      ev->accept();
       }
 
 //---------------------------------------------------------
@@ -621,6 +606,7 @@ void ScoreView::escapeCmd()
                   break;
             case ViewState::FOTO:
             case ViewState::NOTE_ENTRY:
+            case ViewState::PLAY:
                   changeState(ViewState::NORMAL);
                   break;
             default:

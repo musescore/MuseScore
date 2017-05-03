@@ -54,13 +54,13 @@ class MuseScoreView {
       virtual QCursor cursor() const { return QCursor(); }
       virtual void setCursor(const QCursor&) {};
       virtual int gripCount() const { return 0; }
-//      virtual const QRectF& getGrip(Grip) const = 0;
       virtual void setDropRectangle(const QRectF&) {};
       virtual void cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/) {};
       virtual void cmdAddHairpin(HairpinType) {};
       virtual void startEdit() {};
       virtual void startEditMode(Element*) {};
       virtual void startEdit(Element*, Grip /*startGrip*/) {};
+      virtual void startNoteEntryMode() {};
       virtual void drawBackground(QPainter*, const QRectF&) const = 0;
       virtual void setDropTarget(const Element*) {}
 

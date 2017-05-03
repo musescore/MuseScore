@@ -174,6 +174,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void mouseDoubleClickEvent(QMouseEvent*);
 
       virtual void keyPressEvent(QKeyEvent*) override;
+      void _keyPressEvent(QKeyEvent*);
       virtual void keyReleaseEvent(QKeyEvent*) override;
 
       virtual void contextMenuEvent(QContextMenuEvent*) override;
@@ -204,7 +205,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void figuredBassTicksTab(int ticks);
       void figuredBassEndEdit();
       void realtimeAdvance(bool allowRests);
-      void cmdAddPitch(int note, bool addFlag, bool insert);
       void cmdAddFret(int fret);
       void cmdAddChordName();
       void cmdAddText(TEXT style);
@@ -250,6 +250,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void endDragEdit();
 
       void startNoteEntry();
+      virtual void startNoteEntryMode() override;
       void endNoteEntry();
 
       void endLasso();

@@ -12,12 +12,68 @@
 
 #include "musescore.h"
 #include "scoreview.h"
+#include "texttools.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
 
 namespace Ms {
+
+//---------------------------------------------------------
+//   editKeyLyrics
+//---------------------------------------------------------
+
+bool ScoreView::editKeyLyrics(QKeyEvent* ev)
+      {
+      editData.key       = ev->key();
+      editData.modifiers = ev->modifiers();
+      editData.s         = ev->text();
+
+      switch (editData.key) {
+            case Qt::Key_Space:
+                  if (!editData.control()) {
+                        if (editData.s == "_")
+                              lyricsUnderscore();
+                        else // TODO: shift+tab events are filtered by qt
+                              lyricsTab(editData.modifiers & Qt::ShiftModifier, true, false);
+                        }
+                  else
+                        return false;
+                  break;
+
+            case Qt::Key_Left:
+            case Qt::Key_Right:
+                  if (!editData.control() && editData.element->edit(editData))
+                        mscore->textTools()->updateTools(editData);
+                  else {
+                        bool kl = editData.key == Qt::Key_Left;
+                        lyricsTab(kl, kl, true);      // go to previous/next lyrics
+                        }
+                  break;
+
+            case Qt::Key_Up:
+            case Qt::Key_Down:
+                  lyricsUpDown(editData.key == Qt::Key_Up, true);
+                  break;
+
+            case Qt::Key_Return:
+                  lyricsReturn();
+                  break;
+
+            default:
+                  if (!editData.control()) {
+                        if (editData.s == "-")
+                              lyricsMinus();
+                        else if (editData.s == "_")
+                              lyricsUnderscore();
+                        else
+                              return false;
+                        }
+                  break;
+            }
+      return true;
+      }
 
 //---------------------------------------------------------
 //   lyricsUpDown
@@ -108,7 +164,6 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       if (nextSegment == 0)
             return;
 
-printf("lyricsTab: endEdit\n");
       endEdit();
 
       // look for the lyrics we are moving from; may be the current lyrics or a previous one
@@ -145,7 +200,6 @@ printf("lyricsTab: endEdit\n");
             newLyrics = true;
             }
 
-      _score->startCmd();
       if (fromLyrics && !moveOnly) {
             switch (_toLyrics->syllabic()) {
                   // as we arrived at toLyrics by a [Space], it can be the beginning
@@ -177,7 +231,6 @@ printf("lyricsTab: endEdit\n");
             fromLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, 0);
             }
 
-printf("lyricsTab: newLyrics %d\n", newLyrics);
       if (newLyrics)
           _score->undoAddElement(_toLyrics);
 
@@ -196,7 +249,6 @@ printf("lyricsTab: newLyrics %d\n", newLyrics);
             cursor->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
             }
       _score->setLayoutAll();
-      _score->endCmd();
       }
 
 //---------------------------------------------------------
@@ -282,14 +334,11 @@ void ScoreView::lyricsMinus()
 
       _score->select(toLyrics, SelectType::SINGLE, 0);
       startEdit(toLyrics, Grip::NO_GRIP);
-      mscore->changeState(mscoreState());
 
       adjustCanvasPosition(toLyrics, false);
       TextCursor* cursor = Ms::toLyrics(editData.element)->cursor(editData);
       Ms::toLyrics(editData.element)->selectAll(cursor);
-
       _score->setLayoutAll();
-      _score->update();
       }
 
 //---------------------------------------------------------
@@ -298,7 +347,7 @@ void ScoreView::lyricsMinus()
 
 void ScoreView::lyricsUnderscore()
       {
-      Lyrics* lyrics   = static_cast<Lyrics*>(editData.element);
+      Lyrics* lyrics   = toLyrics(editData.element);
       int track        = lyrics->track();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
@@ -357,9 +406,7 @@ void ScoreView::lyricsUnderscore()
             mscore->changeState(STATE_NORMAL);
             if (fromLyrics)
                   _score->select(fromLyrics, SelectType::SINGLE, 0);
-            //_score->update();
             _score->setLayoutAll();
-            _score->endCmd();
             return;
             }
 
@@ -402,15 +449,12 @@ void ScoreView::lyricsUnderscore()
 
       _score->select(toLyrics, SelectType::SINGLE, 0);
       startEdit(toLyrics, Grip::NO_GRIP);
-      mscore->changeState(mscoreState());
 
       adjustCanvasPosition(toLyrics, false);
       TextCursor* cursor = Ms::toLyrics(editData.element)->cursor(editData);
       Ms::toLyrics(editData.element)->selectAll(cursor);
 
       _score->setLayoutAll();
-      //_score->update();
-      _score->endCmd();
       }
 
 //---------------------------------------------------------
@@ -423,8 +467,6 @@ void ScoreView::lyricsReturn()
       Segment* segment = lyrics->segment();
 
       endEdit();
-
-      _score->startCmd();
 
       Lyrics* oldLyrics = lyrics;
 
@@ -447,7 +489,7 @@ void ScoreView::lyricsReturn()
             }
       else
             newVerse = oldLyrics->no() + 1;
-      lyrics = static_cast<Lyrics*>(Element::create(lyrics->type(), _score));
+      lyrics = toLyrics(Element::create(lyrics->type(), _score));
       lyrics->setTrack(oldLyrics->track());
       lyrics->setParent(segment->element(oldLyrics->track()));
       lyrics->setPlacement(oldLyrics->placement());
@@ -457,11 +499,9 @@ void ScoreView::lyricsReturn()
       _score->undoAddElement(lyrics);
       _score->select(lyrics, SelectType::SINGLE, 0);
       startEdit(lyrics, Grip::NO_GRIP);
-      mscore->changeState(mscoreState());
 
       adjustCanvasPosition(lyrics, false);
       _score->setLayoutAll();
-      _score->update();
       }
 
 //---------------------------------------------------------
@@ -485,9 +525,9 @@ void ScoreView::lyricsEndEdit()
             int track   = lyrics->track();
 
             // search previous lyric
-            Lyrics*     prevLyrics  = 0;
-            Segment*    prevSegment = lyrics->segment()->prev1(SegmentType::ChordRest);
-            Segment*    segment     = prevSegment;
+            Lyrics*  prevLyrics  = 0;
+            Segment* prevSegment = lyrics->segment()->prev1(SegmentType::ChordRest);
+            Segment* segment     = prevSegment;
             while (segment) {
                   ChordRest* cr = toChordRest(segment->element(track));
                   if (cr) {

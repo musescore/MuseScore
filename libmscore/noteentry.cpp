@@ -118,52 +118,6 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
       }
 
 //---------------------------------------------------------
-//   cmdAddPitch
-//---------------------------------------------------------
-
-void Score::cmdAddPitch(int step, bool addFlag, bool insert)
-      {
-      startCmd();
-      Position pos;
-      if (addFlag) {
-            Element* el = selection().element();
-            if (el && el->isNote()) {
-                  Note* selectedNote = toNote(el);
-                  Chord* chord  = selectedNote->chord();
-                  Segment* seg  = chord->segment();
-                  pos.segment   = seg;
-                  pos.staffIdx  = selectedNote->track() / VOICES;
-                  ClefType clef = staff(pos.staffIdx)->clef(seg->tick());
-                  pos.line      = relStep(step, clef);
-                  bool error;
-                  NoteVal nval = noteValForPosition(pos, error);
-                  if (error) {
-                        endCmd();
-                        return;
-                        }
-                  addNote(chord, nval);
-                  endCmd();
-                  return;
-                  }
-            }
-
-      pos.segment   = inputState().segment();
-      pos.staffIdx  = inputState().track() / VOICES;
-      ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
-      pos.line      = relStep(step, clef);
-
-      if (inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH))
-            repitchNote(pos, !addFlag);
-      else {
-            if (insert)
-                  insertChord(pos);
-            else
-                  putNote(pos, !addFlag);
-            }
-      endCmd();
-      }
-
-//---------------------------------------------------------
 //   addPitch
 //---------------------------------------------------------
 

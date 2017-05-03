@@ -505,8 +505,10 @@ class Score : public QObject, ScoreElement {
       void selectAdd(Element* e);
       void selectRange(Element* e, int staffIdx);
 
-//      QQmlListProperty<Ms::Part> qmlParts() { return QmlListAccess<Ms::Part>(this, _parts); }
       void createBeams(Measure*);
+      void cmdAddPitch(const EditData&, int note, bool addFlag, bool insert);
+      void cmdAddFret(int fret);
+      void cmdToggleVisible();
 
    protected:
       int _fileDivision; ///< division of current loading *.msc file
@@ -543,8 +545,6 @@ class Score : public QObject, ScoreElement {
 
       virtual inline QList<Excerpt*>& excerpts();
       virtual inline const QList<Excerpt*>& excerpts() const;
-
-//      QQmlListProperty<Ms::Excerpt> qmlExcerpts() { return QmlListAccess<Ms::Excerpt>(this, excerpts()); }
 
       virtual ElementType type() const override { return ElementType::SCORE; }
 
@@ -683,7 +683,6 @@ class Score : public QObject, ScoreElement {
 
       void repitchNote(const Position& pos, bool replace);
       void regroupNotesAndRests(int startTick, int endTick, int track);
-      void cmdAddPitch(int pitch, bool addFlag, bool insert);
       void timeDelete(Measure*, Segment*, const Fraction&);
 
       void startCmd();                          // start undoable command
@@ -776,7 +775,7 @@ class Score : public QObject, ScoreElement {
       Segment* tick2rightSegment(int tick) const;
       void fixTicks();
 
-      void cmd(const QAction*);
+      void cmd(const QAction*, EditData&);
       int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision/2) / _fileDivision; }
       void setFileDivision(int t) { _fileDivision = t; }
 

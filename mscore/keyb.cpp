@@ -62,69 +62,6 @@ void ScoreView::editCmd(const QString& cmd)
       }
 
 //---------------------------------------------------------
-//   editKeyLyrics
-//---------------------------------------------------------
-
-bool ScoreView::editKeyLyrics(QKeyEvent* ev)
-      {
-      editData.key       = ev->key();
-      editData.modifiers = ev->modifiers();
-      editData.s         = ev->text();
-      bool ctrl          = editData.modifiers == Qt::ControlModifier;
-
-      switch (editData.key) {
-            case Qt::Key_Space:
-                  if (!(editData.modifiers & CONTROL_MODIFIER)) {
-                        if (editData.s == "_")
-                              lyricsUnderscore();
-                        else // TODO: shift+tab events are filtered by qt
-                              lyricsTab(editData.modifiers & Qt::ShiftModifier, true, false);
-                        }
-                  else
-                        return false;
-                  break;
-
-            case Qt::Key_Left:
-                  if (!ctrl && editData.element->edit(editData)) {
-                        mscore->textTools()->updateTools(editData);
-                        _score->update();
-                        mscore->endCmd();
-                        }
-                  else
-                        lyricsTab(true, true, true);      // go to previous lyrics
-                  break;
-            case Qt::Key_Right:
-                  if (!ctrl && editData.element->edit(editData)) {
-                        mscore->textTools()->updateTools(editData);
-                        _score->update();
-                        mscore->endCmd();
-                        }
-                  else
-                        lyricsTab(false, false, true);    // go to next lyrics
-                  break;
-            case Qt::Key_Up:
-                  lyricsUpDown(true, true);
-                  break;
-            case Qt::Key_Down:
-                  lyricsUpDown(false, true);
-                  break;
-            case Qt::Key_Return:
-                  lyricsReturn();
-                  break;
-            default:
-                  {
-                  if (editData.s == "-" && !(editData.modifiers & CONTROL_MODIFIER))
-                        lyricsMinus();
-                  else if (editData.s == "_" && !(editData.modifiers & CONTROL_MODIFIER))
-                        lyricsUnderscore();
-                  else
-                        return false;
-                  }
-            }
-      return true;
-      }
-
-//---------------------------------------------------------
 //   updateInputState
 //---------------------------------------------------------
 
