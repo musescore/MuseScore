@@ -3161,10 +3161,194 @@ void Score::cmdUnsetVisible()
       }
 
 //---------------------------------------------------------
+//   cmdAddPitch
+///   insert note or add note to chord
+//    c d e f g a b entered:
+//---------------------------------------------------------
+
+void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
+      {
+      InputState& is = inputState();
+      if (is.track() == -1)          // invalid state
+            return;
+      if (is.segment() == 0) {
+            qDebug("cannot enter notes here (no chord rest at current position)");
+            return;
+            }
+      const Drumset* ds = is.drumset();
+      int octave = 4;
+      if (ds) {
+            char note1 = "CDEFGAB"[note];
+            int pitch = -1;
+            int voice = 0;
+            for (int i = 0; i < 127; ++i) {
+                  if (!ds->isValid(i))
+                        continue;
+                  if (ds->shortcut(i) && (ds->shortcut(i) == note1)) {
+                        pitch = i;
+                        voice = ds->voice(i);
+                        break;
+                        }
+                  }
+            if (pitch == -1) {
+                  qDebug("  shortcut %c not defined in drumset", note1);
+                  return;
+                  }
+            is.setDrumNote(pitch);
+            is.setTrack((is.track() / VOICES) * VOICES + voice);
+            octave = pitch / 12;
+            if (is.segment()) {
+                  Segment* seg = is.segment();
+                  while (seg) {
+                        if (seg->element(is.track()))
+                              break;
+                        seg = seg->prev(SegmentType::ChordRest);
+                        }
+                  if (seg)
+                        is.setSegment(seg);
+                  else
+                        is.setSegment(is.segment()->measure()->first(SegmentType::ChordRest));
+                  }
+            }
+      else {
+            static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
+
+            // if adding notes, add above the upNote of the current chord
+            Element* el = selection().element();
+            if (addFlag && el && el->isNote()) {
+                  Chord* chord = toNote(el)->chord();
+                  Note* n      = chord->upNote();
+                  octave = n->epitch() / 12;
+                  int tpc = n->tpc();
+                  if (tpc == Tpc::TPC_C_BB || tpc == Tpc::TPC_C_B)
+                        ++octave;
+                  else if (tpc == Tpc::TPC_B_S || tpc == Tpc::TPC_B_SS)
+                        --octave;
+                  if (note <= tpc2step(tpc))
+                        octave++;
+                  }
+            else {
+                  int curPitch = 60;
+                  if (is.segment()) {
+                        Staff* staff = Score::staff(is.track() / VOICES);
+                        Segment* seg = is.segment()->prev1(SegmentType::ChordRest | SegmentType::Clef);
+                        while (seg) {
+                              if (seg->isChordRestType()) {
+                                    Element* p = seg->element(is.track());
+                                    if (p && p->isChord()) {
+                                          curPitch = toChord(p)->downNote()->epitch();
+                                          break;
+                                          }
+                                    }
+                              else if (seg->isClefType()) {
+                                    Element* p = seg->element( (is.track() / VOICES) * VOICES); // clef on voice 1
+                                    if (p && p->isClef()) {
+                                          Clef* clef = toClef(p);
+                                          // check if it's an actual change or just a courtesy
+                                          ClefType ctb = staff->clef(clef->tick() - 1);
+                                          if (ctb != clef->clefType() || clef->tick() == 0) {
+                                                curPitch = line2pitch(4, clef->clefType(), Key::C); // C 72 for treble clef
+                                                break;
+                                                }
+                                          }
+                                    }
+                              seg = seg->prev1MM(SegmentType::ChordRest | SegmentType::Clef);
+                              }
+                        octave = curPitch / 12;
+                        }
+
+                  int delta = octave * 12 + tab[note] - curPitch;
+                  if (delta > 6)
+                        --octave;
+                  else if (delta < -6)
+                        ++octave;
+                  }
+            }
+      ed.view->startNoteEntryMode();
+
+      int step = octave * 7 + note;
+      Position pos;
+      if (addFlag) {
+            Element* el = selection().element();
+            if (el && el->isNote()) {
+                  Note* selectedNote = toNote(el);
+                  Chord* chord  = selectedNote->chord();
+                  Segment* seg  = chord->segment();
+                  pos.segment   = seg;
+                  pos.staffIdx  = selectedNote->track() / VOICES;
+                  ClefType clef = staff(pos.staffIdx)->clef(seg->tick());
+                  pos.line      = relStep(step, clef);
+                  bool error;
+                  NoteVal nval = noteValForPosition(pos, error);
+                  if (error)
+                        return;
+                  addNote(chord, nval);
+                  return;
+                  }
+            }
+
+      pos.segment   = inputState().segment();
+      pos.staffIdx  = inputState().track() / VOICES;
+      ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
+      pos.line      = relStep(step, clef);
+
+      if (inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH))
+            repitchNote(pos, !addFlag);
+      else {
+            if (insert)
+                  insertChord(pos);
+            else
+                  putNote(pos, !addFlag);
+            }
+
+      ed.view->adjustCanvasPosition(is.cr(), false);
+      }
+
+//---------------------------------------------------------
+//   cmdToggleVisible
+//---------------------------------------------------------
+
+void Score::cmdToggleVisible()
+      {
+      QSet<Element*> spanners;
+      for (Element* e : selection().elements()) {
+            if (e->isBracket())     // ignore
+                  continue;
+            bool spannerSegment = e->isSpannerSegment();
+            if (!spannerSegment || !spanners.contains(static_cast<SpannerSegment*>(e)->spanner()))
+                  e->undoChangeProperty(P_ID::VISIBLE, !e->getProperty(P_ID::VISIBLE).toBool());
+            if (spannerSegment)
+                  spanners.insert(static_cast<SpannerSegment*>(e)->spanner());
+            }
+      }
+
+//---------------------------------------------------------
+//   cmdAddFret
+///   insert note with given fret on current string
+//---------------------------------------------------------
+
+void Score::cmdAddFret(int fret)
+      {
+      InputState& is = inputState();
+      if (is.track() == -1)                     // invalid state
+            return;
+      if (!is.segment()) {
+            qDebug("cannot enter notes here (no chord rest at current position)");
+            return;
+            }
+      Position pos;
+      pos.segment   = is.segment();
+      pos.staffIdx  = is.track() / VOICES;
+      pos.line      = is.string();
+      pos.fret      = fret;
+      putNote(pos, false);
+      }
+
+//---------------------------------------------------------
 //   cmd
 //---------------------------------------------------------
 
-void Score::cmd(const QAction* a)
+void Score::cmd(const QAction* a, EditData& ed)
       {
       QString cmd(a ? a->data().toString() : "");
       if (MScore::debugMode)
@@ -3174,8 +3358,44 @@ void Score::cmd(const QAction* a)
             const char* name;
             std::function<void()> cmd;
             };
-      //static const std::vector<ScoreCmd> cmdList {
       const std::vector<ScoreCmd> cmdList {
+            { "note-c",                     [this,ed]{ cmdAddPitch(ed, 0, false, false);                        }},
+            { "note-d",                     [this,ed]{ cmdAddPitch(ed, 1, false, false);                        }},
+            { "note-e",                     [this,ed]{ cmdAddPitch(ed, 2, false, false);                        }},
+            { "note-f",                     [this,ed]{ cmdAddPitch(ed, 3, false, false);                        }},
+            { "note-g",                     [this,ed]{ cmdAddPitch(ed, 4, false, false);                        }},
+            { "note-a",                     [this,ed]{ cmdAddPitch(ed, 5, false, false);                        }},
+            { "note-b",                     [this,ed]{ cmdAddPitch(ed, 6, false, false);                        }},
+            { "chord-c",                    [this,ed]{ cmdAddPitch(ed, 0, true, false);                         }},
+            { "chord-d",                    [this,ed]{ cmdAddPitch(ed, 1, true, false);                         }},
+            { "chord-e",                    [this,ed]{ cmdAddPitch(ed, 2, true, false);                         }},
+            { "chord-f",                    [this,ed]{ cmdAddPitch(ed, 3, true, false);                         }},
+            { "chord-g",                    [this,ed]{ cmdAddPitch(ed, 4, true, false);                         }},
+            { "chord-a",                    [this,ed]{ cmdAddPitch(ed, 5, true, false);                         }},
+            { "chord-b",                    [this,ed]{ cmdAddPitch(ed, 6, true, false);                         }},
+            { "insert-c",                   [this,ed]{ cmdAddPitch(ed, 0, false, true);                         }},
+            { "insert-d",                   [this,ed]{ cmdAddPitch(ed, 1, false, true);                         }},
+            { "insert-e",                   [this,ed]{ cmdAddPitch(ed, 2, false, true);                         }},
+            { "insert-f",                   [this,ed]{ cmdAddPitch(ed, 3, false, true);                         }},
+            { "insert-g",                   [this,ed]{ cmdAddPitch(ed, 4, false, true);                         }},
+            { "insert-a",                   [this,ed]{ cmdAddPitch(ed, 5, false, true);                         }},
+            { "insert-b",                   [this,ed]{ cmdAddPitch(ed, 6, false, true);                         }},
+            { "fret-0",                     [this]{ cmdAddFret(0);                                              }},
+            { "fret-1",                     [this]{ cmdAddFret(1);                                              }},
+            { "fret-2",                     [this]{ cmdAddFret(2);                                              }},
+            { "fret-3",                     [this]{ cmdAddFret(3);                                              }},
+            { "fret-4",                     [this]{ cmdAddFret(4);                                              }},
+            { "fret-5",                     [this]{ cmdAddFret(5);                                              }},
+            { "fret-6",                     [this]{ cmdAddFret(6);                                              }},
+            { "fret-7",                     [this]{ cmdAddFret(7);                                              }},
+            { "fret-8",                     [this]{ cmdAddFret(8);                                              }},
+            { "fret-9",                     [this]{ cmdAddFret(9);                                              }},
+            { "fret-10",                    [this]{ cmdAddFret(10);                                             }},
+            { "fret-11",                    [this]{ cmdAddFret(11);                                             }},
+            { "fret-12",                    [this]{ cmdAddFret(12);                                             }},
+            { "fret-13",                    [this]{ cmdAddFret(13);                                             }},
+            { "fret-14",                    [this]{ cmdAddFret(14);                                             }},
+            { "toggle-visible",             [this]{ cmdToggleVisible();                                         }},
             { "reset-stretch",              [this]{ resetUserStretch();                                         }},
             { "mirror-note",                [this]{ cmdMirrorNoteHead();                                        }},
             { "double-duration",            [this]{ cmdDoubleDuration();                                        }},

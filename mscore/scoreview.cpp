@@ -1738,6 +1738,8 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "play") {
             if (state == ViewState::NORMAL || state == ViewState::NOTE_ENTRY)
                   changeState(ViewState::PLAY);
+            else if (state == ViewState::PLAY)
+                  changeState(ViewState::NORMAL);
             }
       else if (cmd == "fotomode") {
             if (state == ViewState::NORMAL)
@@ -1753,51 +1755,8 @@ void ScoreView::cmd(const QAction* a)
             cmdAddHairpin(HairpinType::DECRESC_HAIRPIN);
       else if (cmd == "add-noteline")
             cmdAddNoteLine();
-      else if (cmd == "note-c")
-            cmdAddPitch(0, false, false);
-      else if (cmd == "note-d")
-            cmdAddPitch(1, false, false);
-      else if (cmd == "note-e")
-            cmdAddPitch(2, false, false);
-      else if (cmd == "note-f")
-            cmdAddPitch(3, false, false);
-      else if (cmd == "note-g")
-            cmdAddPitch(4, false, false);
-      else if (cmd == "note-a")
-            cmdAddPitch(5, false, false);
-      else if (cmd == "note-b")
-            cmdAddPitch(6, false, false);
-      else if (cmd == "chord-c")
-            cmdAddPitch(0, true, false);
-      else if (cmd == "chord-d")
-            cmdAddPitch(1, true, false);
-      else if (cmd == "chord-e")
-            cmdAddPitch(2, true, false);
-      else if (cmd == "chord-f")
-            cmdAddPitch(3, true, false);
-      else if (cmd == "chord-g")
-            cmdAddPitch(4, true, false);
-      else if (cmd == "chord-a")
-            cmdAddPitch(5, true, false);
-      else if (cmd == "chord-b")
-            cmdAddPitch(6, true, false);
-      else if (cmd == "insert-c")
-            cmdAddPitch(0, false, true);
-      else if (cmd == "insert-d")
-            cmdAddPitch(1, false, true);
-      else if (cmd == "insert-e")
-            cmdAddPitch(2, false, true);
-      else if (cmd == "insert-f")
-            cmdAddPitch(3, false, true);
-      else if (cmd == "insert-g")
-            cmdAddPitch(4, false, true);
-      else if (cmd == "insert-a")
-            cmdAddPitch(5, false, true);
-      else if (cmd == "insert-b")
-            cmdAddPitch(6, false, true);
       else if (cmd == "chord-text") {
-//            if (noteEntryMode())          // force out of entry mode
-//                  TODO:state   sm->postEvent(new CommandEvent("note-input"));
+            changeState(ViewState::NOTE_ENTRY);
             cmdAddChordName();
             }
       else if (cmd == "title-text")
@@ -1848,11 +1807,8 @@ void ScoreView::cmd(const QAction* a)
                   }
             }
       else if (cmd == "play") {
-            if (seq && seq->canStart()) {
-                  // if (noteEntryMode())          // force out of entry mode
-                  //      ; // TODO:state         sm->postEvent(new CommandEvent("note-input"));
-                  // sm->postEvent(new CommandEvent(cmd));
-                  }
+            if (seq && seq->canStart())
+                  changeState(ViewState::PLAY);
             else
                   getAction("play")->setChecked(false);
             }
@@ -2113,7 +2069,7 @@ void ScoreView::cmd(const QAction* a)
                   for (Element* e : _score->selection().elements()) {
                         e->reset();
                         if (e->isSpanner()) {
-                              Spanner* sp = static_cast<Spanner*>(e);
+                              Spanner* sp = toSpanner(e);
                               for (SpannerSegment* ss : sp->spannerSegments())
                                     ss->reset();
                               }
@@ -2150,36 +2106,17 @@ void ScoreView::cmd(const QAction* a)
                   _score->cmdJoinMeasure(m1, m2);
                   }
             }
-      else if (cmd == "next-lyric" || cmd == "prev-lyric") {
+      else if (cmd == "next-lyric" || cmd == "prev-lyric")
             editCmd(cmd);
-            }
-      else if (cmd == "toggle-visible") {
-            _score->startCmd();
-            QSet<Element*> spanners;
-            for (Element* e : _score->selection().elements()) {
-                  if (e->isBracket())     // ignore
-                        continue;
-                  bool spannerSegment = e->isSpannerSegment();
-                  if (!spannerSegment || !spanners.contains(static_cast<SpannerSegment*>(e)->spanner()))
-                        _score->undo(new ChangeProperty(e, P_ID::VISIBLE, !e->getProperty(P_ID::VISIBLE).toBool()));
-                  if (spannerSegment)
-                        spanners.insert(static_cast<SpannerSegment*>(e)->spanner());
-                  }
-            _score->endCmd();
-            }
-
-      else if (cmd == "add-remove-breaks") {
+      else if (cmd == "add-remove-breaks")
             cmdAddRemoveBreaks();
-            }
-      else if (cmd == "copy-lyrics-to-clipboard") {
+      else if (cmd == "copy-lyrics-to-clipboard")
             cmdCopyLyricsToClipboard();
-            }
 
       // STATE_NOTE_ENTRY_REALTIME actions (auto or manual)
 
-      else if (cmd == "realtime-advance") {
+      else if (cmd == "realtime-advance")
             realtimeAdvance(true);
-            }
 
       // STATE_HARMONY_FIGBASS_EDIT actions
 
@@ -2243,36 +2180,6 @@ void ScoreView::cmd(const QAction* a)
                   moveCursor();
                   }
             }
-      else if(cmd == "fret-0")
-            cmdAddFret(0);
-      else if(cmd == "fret-1")
-            cmdAddFret(1);
-      else if(cmd == "fret-2")
-            cmdAddFret(2);
-      else if(cmd == "fret-3")
-            cmdAddFret(3);
-      else if(cmd == "fret-4")
-            cmdAddFret(4);
-      else if(cmd == "fret-5")
-            cmdAddFret(5);
-      else if(cmd == "fret-6")
-            cmdAddFret(6);
-      else if(cmd == "fret-7")
-            cmdAddFret(7);
-      else if(cmd == "fret-8")
-            cmdAddFret(8);
-      else if(cmd == "fret-9")
-            cmdAddFret(9);
-      else if(cmd == "fret-10")
-            cmdAddFret(10);
-      else if(cmd == "fret-11")
-            cmdAddFret(11);
-      else if(cmd == "fret-12")
-            cmdAddFret(12);
-      else if(cmd == "fret-13")
-            cmdAddFret(13);
-      else if(cmd == "fret-14")
-            cmdAddFret(14);
 #if 0       // TODO
       else if (cmd == "text-word-left")
             static_cast<Text*>(editData.element)->movePosition(QTextCursor::WordLeft);
@@ -2287,7 +2194,8 @@ void ScoreView::cmd(const QAction* a)
                   }
             }
       else {
-            _score->cmd(a);
+            editData.view = this;
+            _score->cmd(a, editData);
             }
       if (_score->processMidiInput())
             mscore->endCmd();
@@ -3524,7 +3432,11 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
       cmdCreateTuplet(cr, tuplet);
       }
 
-void ScoreView::cmdCreateTuplet( ChordRest* cr, Tuplet* tuplet)
+//---------------------------------------------------------
+//   cmdCreateTuplet
+//---------------------------------------------------------
+
+void ScoreView::cmdCreateTuplet(ChordRest* cr, Tuplet* tuplet)
       {
       _score->cmdCreateTuplet(cr, tuplet);
 
@@ -3537,9 +3449,8 @@ void ScoreView::cmdCreateTuplet( ChordRest* cr, Tuplet* tuplet)
             el = cl[1];
       if (el) {
             _score->select(el, SelectType::SINGLE, 0);
-//            if (!noteEntryMode())
-//TODO:state                  sm->postEvent(new CommandEvent("note-input"));
             _score->inputState().setDuration(tuplet->baseLen());
+            changeState(ViewState::NOTE_ENTRY);
             }
       }
 
@@ -4010,158 +3921,6 @@ void ScoreView::cmdRealtimeAdvance()
             // just advanced across barline. Now simplify tied notes.
             score()->regroupNotesAndRests(prevCR->measure()->tick(), is.segment()->measure()->tick(), is.track());
             }
-      _score->endCmd();
-      }
-
-//---------------------------------------------------------
-//   cmdAddPitch
-///   insert note or add note to chord
-//    c d e f g a b entered:
-//---------------------------------------------------------
-
-void ScoreView::cmdAddPitch(int note, bool addFlag, bool insert)
-      {
-      InputState& is = _score->inputState();
-      if (is.track() == -1)          // invalid state
-            return;
-      if (is.segment() == 0) {
-            qDebug("cannot enter notes here (no chord rest at current position)");
-            return;
-            }
-      const Drumset* ds = is.drumset();
-      int octave = 4;
-      if (ds) {
-            char note1 = "CDEFGAB"[note];
-            int pitch = -1;
-            int voice = 0;
-            for (int i = 0; i < 127; ++i) {
-                  if (!ds->isValid(i))
-                        continue;
-                  if (ds->shortcut(i) && (ds->shortcut(i) == note1)) {
-                        pitch = i;
-                        voice = ds->voice(i);
-                        break;
-                        }
-                  }
-            if (pitch == -1) {
-                  qDebug("  shortcut %c not defined in drumset", note1);
-                  return;
-                  }
-            is.setDrumNote(pitch);
-            is.setTrack((is.track() / VOICES) * VOICES + voice);
-            octave = pitch / 12;
-            if (is.segment()) {
-                  Segment* seg = is.segment();
-                  while (seg) {
-                        if (seg->element(is.track()))
-                              break;
-                        seg = seg->prev(SegmentType::ChordRest);
-                        }
-                  if (seg)
-                        is.setSegment(seg);
-                  else
-                        is.setSegment(is.segment()->measure()->first(SegmentType::ChordRest));
-                  }
-            }
-      else {
-            static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
-
-            // if adding notes, add above the upNote of the current chord
-            Element* el = score()->selection().element();
-            if (addFlag && el && el->type() == ElementType::NOTE) {
-                  Chord* chord = static_cast<Note*>(el)->chord();
-                  Note* n = chord->upNote();
-                  octave = n->epitch() / 12;
-                  int tpc = n->tpc();
-                  if (tpc == Tpc::TPC_C_BB || tpc == Tpc::TPC_C_B)
-                        ++octave;
-                  else if (tpc == Tpc::TPC_B_S || tpc == Tpc::TPC_B_SS)
-                        --octave;
-                  if (note <= tpc2step(tpc))
-                        octave++;
-                  }
-            else {
-                  int curPitch = 60;
-                  if (is.segment()) {
-                        Staff* staff = score()->staff(is.track() / VOICES);
-                        Segment* seg = is.segment()->prev1(SegmentType::ChordRest | SegmentType::Clef);
-                        while (seg) {
-                              if (seg->segmentType() == SegmentType::ChordRest) {
-                                    Element* p = seg->element(is.track());
-                                    if (p && p->type() == ElementType::CHORD) {
-                                          Chord* ch = static_cast<Chord*>(p);
-                                          curPitch = ch->downNote()->epitch();
-                                          break;
-                                          }
-                                    }
-                              else if (seg->segmentType() == SegmentType::Clef) {
-                                    Element* p = seg->element( (is.track() / VOICES) * VOICES); // clef on voice 1
-                                    if (p && p->type() == ElementType::CLEF) {
-                                          Clef* clef = static_cast<Clef*>(p);
-                                          // check if it's an actual change or just a courtesy
-                                          ClefType ctb = staff->clef(clef->tick() - 1);
-                                          if (ctb != clef->clefType() || clef->tick() == 0) {
-                                                curPitch = line2pitch(4, clef->clefType(), Key::C); // C 72 for treble clef
-                                                break;
-                                                }
-                                          }
-                                    }
-                              seg = seg->prev1MM(SegmentType::ChordRest | SegmentType::Clef);
-                              }
-                        octave = curPitch / 12;
-                        }
-
-                  int delta = octave * 12 + tab[note] - curPitch;
-                  if (delta > 6)
-                        --octave;
-                  else if (delta < -6)
-                        ++octave;
-                  }
-            }
-
-      if (!noteEntryMode()) {
-//TODO:state            sm->postEvent(new CommandEvent("note-input"));
-//            qApp->processEvents();
-            }
-      is.segment()->score()->cmdAddPitch(octave * 7 + note, addFlag, insert);
-      adjustCanvasPosition(is.cr(), false);
-      }
-
-//---------------------------------------------------------
-//   cmdAddFret
-///   insert note with given fret on current string
-//---------------------------------------------------------
-
-void ScoreView::cmdAddFret(int fret)
-      {
-      if (mscoreState() != STATE_NOTE_ENTRY_STAFF_TAB) // only acceptable in TAB note entry
-            return;
-      InputState& is = _score->inputState();
-      if (is.track() == -1)                     // invalid state
-            return;
-      if (is.segment() == 0 /*|| is.cr() == 0*/) {
-            qDebug("cannot enter notes here (no chord rest at current position)");
-            return;
-            }
-
-      _score->startCmd();
-      Position pos;
-      pos.segment   = is.segment();
-/* frets are always put at cursor position, never at selected note position
-      if(addFlag)
-            {
-            Element* el = score()->selection().element();
-            if (el && el->type() == Element::NOTE) {
-                 ChordRest* cr = static_cast<ChordRest*>(((Note*)el)->chord());
-                 if (cr) pos.segment = cr->segment();
-                 }
-            }
-*/
-      pos.staffIdx  = is.track() / VOICES;
-      pos.line      = is.string();
-      pos.fret      = fret;
-
-      score()->putNote(pos, false);
       _score->endCmd();
       }
 
@@ -5034,6 +4793,15 @@ static const char* stateName(ViewState s)
       }
 
 //---------------------------------------------------------
+//   startNoteEntryMode
+//---------------------------------------------------------
+
+void ScoreView::startNoteEntryMode()
+      {
+      changeState(ViewState::NOTE_ENTRY);
+      }
+
+//---------------------------------------------------------
 //   changeState
 //---------------------------------------------------------
 
@@ -5045,6 +4813,8 @@ void ScoreView::changeState(ViewState s)
             startEdit();
             return;
             }
+      if (s == ViewState::PLAY && !seq)
+            return;
       if (s == state)
             return;
       //
@@ -5070,6 +4840,9 @@ void ScoreView::changeState(ViewState s)
                   break;
             case ViewState::LASSO:
                   endLasso();
+                  break;
+            case ViewState::PLAY:
+                  seq->stop();
                   break;
             default:
                   break;
@@ -5110,7 +4883,10 @@ void ScoreView::changeState(ViewState s)
                   startEdit();
                   break;
             case ViewState::LASSO:
+                  break;
             case ViewState::PLAY:
+                  seq->start();
+                  break;
             case ViewState::ENTRY_PLAY:
             case ViewState::FOTO_LASSO:
                   break;

@@ -109,6 +109,8 @@ class EditData {
       Qt::KeyboardModifiers modifiers  { 0     };
       QString s;
 
+      Qt::MouseButtons buttons         { Qt::NoButton };
+
       // drop data:
       QPointF dragOffset;
       Element* element                 { 0     };
