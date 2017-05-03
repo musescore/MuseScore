@@ -3267,6 +3267,12 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
       ed.view->startNoteEntryMode();
 
       int step = octave * 7 + note;
+      cmdAddPitch(step,  addFlag, insert);
+      ed.view->adjustCanvasPosition(is.cr(), false);
+      }
+
+void Score::cmdAddPitch(int step, bool addFlag, bool insert)
+      {
       Position pos;
       if (addFlag) {
             Element* el = selection().element();
@@ -3300,8 +3306,6 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
             else
                   putNote(pos, !addFlag);
             }
-
-      ed.view->adjustCanvasPosition(is.cr(), false);
       }
 
 //---------------------------------------------------------
