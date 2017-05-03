@@ -209,7 +209,8 @@ void ScoreView::focusOutEvent(QFocusEvent* event)
 
 void ScoreView::mouseMoveEvent(QMouseEvent* me)
       {
-      printf("mouseMoveEvent\n");
+      if (!me->button())
+            return;
       switch (state) {
             case ViewState::NORMAL:
                   if (!editData.element && (me->modifiers() & Qt::ShiftModifier))
@@ -353,6 +354,8 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
 
       switch (state) {
             case ViewState::NORMAL:
+                  if (ev->button() == Qt::RightButton)   // context menu?
+                        break;
                   editData.element = e;
                   mousePressEventNormal(ev);
                   break;
@@ -368,8 +371,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   break;
 
             case ViewState::NOTE_ENTRY:
-                  if (ev->type() == QEvent::MouseButtonPress)
-                        noteEntryButton(ev);
+                  noteEntryButton(ev);
                   break;
 
             case ViewState::EDIT:
@@ -391,7 +393,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   break;
 
             default:
-                  printf("mousePressEvent in state %d\n", int(state));
+                  qDebug("mousePressEvent in state %d", int(state));
                   break;
             }
       }
@@ -429,7 +431,6 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
             qDebug("keyPressEvent key 0x%02x(%c) mod 0x%04x <%s> nativeKey 0x%02x scancode %d",
                editData.key, editData.key, int(editData.modifiers), qPrintable(editData.s), ev->nativeVirtualKey(), ev->nativeScanCode());
 
-
       if (editData.element->isLyrics()) {
             if (editKeyLyrics(ev)) {
                   ev->accept();
@@ -437,49 +438,18 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
                   }
             }
       else if (editData.element->isHarmony()) {
-/*
-            if (editData.key == Qt::Key_Tab || editData.key == Qt::Key_Backtab) {
-                  harmonyTab(editData.key == Qt::Key_Backtab ? true : (editData.modifiers & Qt::ShiftModifier));
-                  ev->accept();
-                  return;
-                  }
-*/
             if (editData.key == Qt::Key_Space && !(editData.modifiers & CONTROL_MODIFIER)) {
                   harmonyBeatsTab(true, editData.modifiers & Qt::ShiftModifier);
                   ev->accept();
                   return;
                   }
-/*
-            if (editData.key == Qt::Key_Semicolon || editData.key == Qt::Key_Colon) {
-                  harmonyBeatsTab(false, editData.key == Qt::Key_Colon);
-                  ev->accept();
-                  return;
-                  }
-            if (editData.key >= Qt::Key_1 && editData.key <= Qt::Key_9 && (modifiers & CONTROL_MODIFIER)) {
-                  int ticks = (MScore::division >> 4) << (editData.key - Qt::Key_1);
-                  harmonyTicksTab(ticks);
-                  ev->accept();
-                  return;
-                  }
-*/
             }
-      else if (editData.element->type() == ElementType::FIGURED_BASS) {
+      else if (editData.element->isFiguredBass()) {
             int found = false;
             if (editData.key == Qt::Key_Space && !(editData.modifiers & CONTROL_MODIFIER)) {
                   figuredBassTab(false, editData.modifiers & Qt::ShiftModifier);
                   found = true;
                   }
-/*
-            if (editData.key == Qt::Key_Tab || editData.key == Qt::Key_Backtab) {
-                  figuredBassTab(true, editData.key == Qt::Key_Backtab ? true : (editData.modifiers & Qt::ShiftModifier) );
-                  found = true;
-                  }
-            if (editData.key >= Qt::Key_1 && editData.key <= Qt::Key_9 && (editData.modifiers & CONTROL_MODIFIER)) {
-                  int ticks = (MScore::division >> 4) << (editData.key - Qt::Key_1);
-                  figuredBassTicksTab(ticks);
-                  found = true;
-                  }
-*/
             if (found) {
                   ev->accept();
                   return;
@@ -599,6 +569,43 @@ void ScoreView::keyReleaseEvent(QKeyEvent* ev)
                   update();
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   contextPopup
+//---------------------------------------------------------
+
+void ScoreView::contextMenuEvent(QContextMenuEvent* ev)
+      {
+      QPoint gp          = ev->globalPos();
+      editData.startMove = toLogical(ev->pos());
+      Element* e         = elementNear(editData.startMove);
+      if (e) {
+            if (!e->selected()) {
+                  // bool control = (ev->modifiers() & Qt::ControlModifier) ? true : false;
+                  // _score->select(e, control ? SelectType::ADD : SelectType::SINGLE, 0);
+                  // editData.element = e;
+                  // select(ev);
+                  }
+            if (seq)
+                  seq->stopNotes();       // stop now because we dont get a mouseRelease event
+            objectPopup(gp, e);
+            }
+      else {
+            int staffIdx;
+            Measure* m = _score->pos2measure(editData.startMove, &staffIdx, 0, 0, 0);
+            if (m && m->staffLines(staffIdx)->abbox().contains(editData.startMove))
+                  measurePopup(gp, m);
+            else {
+                  QMenu* popup = new QMenu();
+                  popup->addAction(getAction("edit-style"));
+                  popup->addAction(getAction("page-settings"));
+                  popup->addAction(getAction("load-style"));
+                  _score->update();
+                  popup->popup(gp);
+                  }
+            }
+      ev->accept();
       }
 
 //---------------------------------------------------------

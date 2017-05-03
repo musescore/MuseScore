@@ -176,6 +176,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void keyPressEvent(QKeyEvent*) override;
       virtual void keyReleaseEvent(QKeyEvent*) override;
 
+      virtual void contextMenuEvent(QContextMenuEvent*) override;
+
       void mousePressEventNormal(QMouseEvent*);
       void escapeCmd();
 

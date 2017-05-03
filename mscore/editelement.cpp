@@ -90,7 +90,7 @@ void ScoreView::startEditMode(Element* e)
             return;
             }
       editData.element = e;
-      startEdit();
+      changeState(ViewState::EDIT);
       }
 
 //---------------------------------------------------------
@@ -104,7 +104,7 @@ void ScoreView::startEdit(Element* element, Grip startGrip)
             return;
             }
       editData.element = element;
-      startEdit();
+      changeState(ViewState::EDIT);
       if (startGrip != Grip::NO_GRIP)
             editData.curGrip = startGrip;
       }
@@ -127,7 +127,6 @@ void ScoreView::startEdit()
       updateGrips();
       _score->update();
       setCursor(QCursor(Qt::ArrowCursor));
-printf("====start edit %d\n", int(state));
       }
 
 //---------------------------------------------------------
