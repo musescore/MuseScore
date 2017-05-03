@@ -134,7 +134,6 @@ void TextTools::blockAllSignals(bool val)
 
 void TextTools::updateTools(EditData& ed)
       {
-      qDebug("==");
       text   = toText(ed.element);
       cursor = text->cursor(ed);
       blockAllSignals(true);
