@@ -2533,9 +2533,16 @@ static bool doConvert(Score* cs, QString fn, QString plugin = "")
             }
       if (!plugin.isEmpty()) {
             mscore->setCurrentScore(cs);
+            LayoutMode layoutMode = cs->layoutMode();
+            cs->startCmd();
+            cs->setLayoutAll(true);
+            cs->endCmd();
+            cs->switchToPageMode();
             if (mscore->loadPlugin(plugin))
                   mscore->pluginTriggered(0);
             mscore->unloadPlugins();
+            if (layoutMode != cs->layoutMode())
+                  cs->endCmd(true);       // rollback
             }
       if (fn.endsWith(".mscx")) {
             QFileInfo fi(fn);
