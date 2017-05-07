@@ -743,7 +743,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                         }
                   // poet is in the left column
                   else if (defx < pw1) {
-                        // found poet
+                        // found poet/lyricist
                         addText2(vbox, score, w->words,
                                  SubStyle::POET, Align::LEFT | Align::BOTTOM,
                                  (miny - w->defaultY) * score->spatium() / (10 * DPI));
@@ -824,6 +824,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             QString metaPoet = score->metaTag("poet");
             QString metaTranslator = score->metaTag("translator");
             if (!metaComposer.isEmpty()) strComposer = metaComposer;
+            if (metaPoet.isEmpty()) metaPoet = score->metaTag("lyricist");
             if (!metaPoet.isEmpty()) strPoet = metaPoet;
             if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
 
