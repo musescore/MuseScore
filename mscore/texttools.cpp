@@ -57,6 +57,9 @@ TextTools::TextTools(QWidget* parent)
       setWindowTitle(tr("Text Tools"));
       setAllowedAreas(Qt::DockWidgetAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea));
 
+      text = nullptr;
+      cursor = nullptr;
+
       QToolBar* tb = new QToolBar(tr("Text Edit"));
       tb->setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
 
