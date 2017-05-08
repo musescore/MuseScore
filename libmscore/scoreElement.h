@@ -14,6 +14,7 @@
 #define __SCORE_ELEMENT_H__
 
 namespace Ms {
+Q_NAMESPACE
 
 class ScoreElement;
 class MasterScore;
@@ -137,7 +138,7 @@ class LinkedElements : public QList<ScoreElement*> {
 //   Note: keep in sync with array elementNames[] in scoreElement.cpp
 //-------------------------------------------------------------------
 
-enum class ElementType : char {
+enum class ElementType {
       INVALID = 0,
       BRACKET_ITEM,
       PART,
@@ -239,6 +240,8 @@ enum class ElementType : char {
 
       MAXTYPE
       };
+
+Q_ENUM_NS(ElementType)
 
 //---------------------------------------------------------
 //   ElementName

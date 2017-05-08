@@ -240,7 +240,6 @@ constexpr bool operator& (NoteType t1, NoteType t2) {
       return static_cast<int>(t1) & static_cast<int>(t2);
       }
 
-
 //---------------------------------------------------------
 //    AccidentalVal
 //---------------------------------------------------------
@@ -304,7 +303,6 @@ enum class BarLineType {
       END_REPEAT       = 8,
       BROKEN           = 0x10,
       END              = 0x20,
-//      END_START_REPEAT = 0x40,
       DOTTED           = 0x80
       };
 
