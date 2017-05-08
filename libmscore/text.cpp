@@ -45,7 +45,6 @@ struct TextEditData : public ElementEditData {
             cursor = 0;
             }
       ~TextEditData() {
-            printf("====destructor TextEditData\n");
             }
       };
 
@@ -1511,10 +1510,9 @@ void Text::startEdit(EditData& ed)
       ted->cursor->setColumn(0);
       ted->cursor->clearSelection();
 
-printf("%p Text::startEdit %f\n", this, ed.startMove.x());
+// printf("%p Text::startEdit %f\n", this, ed.startMove.x());
       if (!ted->cursor->set(ed.startMove)) {
             ted->cursor->init();
-            printf("    init Cursor\n");
             }
       ed.addData(ted);
       if (layoutInvalid)
@@ -1527,7 +1525,7 @@ printf("%p Text::startEdit %f\n", this, ed.startMove.x());
 
 void Text::endEdit(EditData&)
       {
-printf("%p Text::endEdit\n", this);
+// printf("%p Text::endEdit\n", this);
       static const qreal w = 2.0;
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
       }
@@ -1544,6 +1542,8 @@ const TextBlock& TextCursor::curLine() const
 
 TextBlock& TextCursor::curLine()
       {
+      if (_line >= _text->_layout.size())
+            qDebug("bad index %d, size %d", _line, _text->_layout.size());
       return _text->_layout[_line];
       }
 
@@ -1593,26 +1593,6 @@ bool Text::edit(EditData& ed)
 
       if (!wasHex) {
             switch (ed.key) {
-                  case Qt::Key_Enter:
-                  case Qt::Key_Return: {
-                        if (_cursor->hasSelection())
-                              deleteSelectedText(_cursor);
-                        int line = _cursor->line();
-
-                        CharFormat* charFmt = _cursor->format();         // take current format
-                        _layout.insert(line + 1, _cursor->curLine().split(_cursor->column()));
-                        _layout[line].setEol(true);
-                        if (_layout.last() != _layout[line+1])
-                              _layout[line+1].setEol(true);
-
-                        _cursor->setLine(line+1);
-                        _cursor->setColumn(0);
-                        _cursor->setFormat(*charFmt);                    // restore orig. format at new line
-                        s.clear();
-                        _cursor->clearSelection();
-                        break;
-                        }
-
                   case Qt::Key_Backspace:
                         if (_cursor->hasSelection())
                               deleteSelectedText(_cursor);
@@ -1761,21 +1741,35 @@ bool Text::edit(EditData& ed)
 void Text::editInsertText(TextCursor* _cursor, const QString& s)
       {
       textInvalid = true;
-      QRectF refresh(canvasBoundingRect());
-      insertText(_cursor, s);
-      layout1();
-      if (parent() && parent()->isTBox()) {
-            TBox* tbox = toTBox(parent());
-            tbox->layout();
-            System* system = tbox->system();
-            system->setHeight(tbox->height());
-            score()->setUpdateAll();
+
+      if (_cursor->hasSelection())
+            deleteSelectedText(_cursor);
+
+      if (s.size() == 1 && (s[0] == QChar::CarriageReturn)) {
+            int line = _cursor->line();
+
+            CharFormat* charFmt = _cursor->format();         // take current format
+            _layout.insert(line + 1, _cursor->curLine().split(_cursor->column()));
+
+            _layout[line].setEol(true);
+            if (_layout.last() != _layout[line+1])
+                  _layout[line+1].setEol(true);
+
+            _cursor->setLine(line+1);
+            _cursor->setColumn(0);
+            _cursor->setFormat(*charFmt);                    // restore orig. format at new line
             }
       else {
-            static const qreal w = 2.0; // 8.0 / view->matrix().m11();
-            refresh |= canvasBoundingRect();
-            score()->addRefresh(refresh.adjusted(-w, -w, w, w));
+            if (_cursor->format()->type() == CharFormatType::SYMBOL) {
+                  QString face = family();
+                  _cursor->format()->setFontFamily(face);
+                  _cursor->format()->setType(CharFormatType::TEXT);
+                  }
+            _cursor->curLine().insert(_cursor, s);
+            _cursor->setColumn(_cursor->column() + s.size());
             }
+      _cursor->clearSelection();
+      triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -1973,7 +1967,7 @@ bool TextCursor::set(const QPointF& p, QTextCursor::MoveMode mode)
                   }
             }
       setColumn(curLine().column(pt.x(), _text));
-printf("cursor set col %d\n", _column);
+// printf("cursor set col %d\n", _column);
 
       _text->score()->setUpdateAll();
       if (mode == QTextCursor::MoveAnchor)
@@ -2360,7 +2354,7 @@ void Text::paste(EditData& ed)
 
 bool Text::mousePress(EditData& ed, QMouseEvent* ev)
       {
-printf("========================mousePRess %p\n", this);
+// printf("========================mousePress %p\n", this);
       QPointF p = ed.startMove;
       bool shift = ev->modifiers() & Qt::ShiftModifier;
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
@@ -3454,7 +3448,6 @@ bool TextCursor::deleteChar()
             }
       else {
             QString s = l1.remove(_column);
-            printf("remove <%s>\n", qPrintable(s));
             _text->score()->undoStack()->push1(new RemoveText(this, s));
             }
       clearSelection();
@@ -3494,8 +3487,14 @@ void Text::undoRedoRemoveText(EditData& ed, ChangeText* ct)
 // printf("Text: undoRedoRemoveText <%s>\n", qPrintable(s));
       TextBlock& l = _cursor->curLine();
       int column   = _cursor->column();
-      for (int n = 0; n < s.size(); ++n)
-            l.remove(column);
+
+      if (s.size() == 1 && (s[0] == QChar::CarriageReturn))
+            _cursor->deleteChar();
+      else {
+            for (int n = 0; n < s.size(); ++n)
+                  l.remove(column);
+            }
+      triggerLayout();
       }
 }
 
