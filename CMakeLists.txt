@@ -48,7 +48,7 @@ if(POLICY CMP0046)
 endif(POLICY CMP0046)
 
 #  Look for Qt5
-SET(QT_MIN_VERSION    "5.6.0")
+SET(QT_MIN_VERSION    "5.8.0")
 # Include modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
 include (FindQt5)

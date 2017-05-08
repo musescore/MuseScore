@@ -36,7 +36,9 @@ enum class SegmentType;
 
 class ElementW : public QObject {
       Q_OBJECT
-      Q_PROPERTY(QString type READ type)
+      Q_PROPERTY(int       type READ type)
+      Q_PROPERTY(QString   name READ name)
+      Q_PROPERTY(int       tick READ tick)
 
       ScoreElement* e;
 
@@ -45,8 +47,9 @@ class ElementW : public QObject {
    public:
       ElementW(ScoreElement* _e) : QObject() { e = _e; }
       ElementW() {}
-      QString type() const;
-      Q_INVOKABLE QVariant tick() const;
+      QString name() const;
+      int type() const;
+      int tick() const;
       Q_INVOKABLE QVariant get(const QString& s) const;
       };
 
@@ -56,7 +59,7 @@ class ElementW : public QObject {
 //   @P staffIdx  int           current staff (track / 4)
 //   @P voice     int           current voice (track % 4)
 //   @P filter    enum          segment type filter
-//   @P element   Ms::Element*  current element at track, read only
+//   @P element   Ms::ElementW*  current element at track, read only
 //   @P segment   Ms::Segment*  current segment, read only
 //   @P measure   Ms::Measure*  current measure, read only
 //   @P tick      int           midi tick position, read only

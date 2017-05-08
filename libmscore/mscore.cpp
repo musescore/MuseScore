@@ -212,7 +212,6 @@ void MScore::init()
             qFatal("registerConverter doubleToSpatium failed");
 
 #ifdef SCRIPT_INTERFACE
-      qRegisterMetaType<ElementType>     ("ElementType");
       qRegisterMetaType<Note::ValueType>   ("ValueType");
 
       qRegisterMetaType<Direction::E>("Direction");
@@ -415,7 +414,7 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
             qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
             //-----------mscore bindings
-//            qmlRegisterUncreatableMetaObject(Ms::staticMetaObject, "MuseScore", 1, 0, "Ms", enumErr);
+            qmlRegisterUncreatableMetaObject(Ms::staticMetaObject, "MuseScore", 1, 0, "Ms", enumErr);
             qmlRegisterUncreatableType<Direction>("MuseScore", 1, 0, "Direction", tr(enumErr));
 
             qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
