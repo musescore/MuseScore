@@ -27,7 +27,7 @@ MuseScore is licensed under GPL version 2.0. See LICENSE.GPL in the same directo
 Disabled by default in the stable releases. See http://dev-list.musescore.org/Aeolus-Organ-Synth-td7578364.html
 Kept as an example of how to integrate with a complex synthesizer.
 
-* **assets** Graphical assets, use them if you need a MuseScore icon. For logo, color etc... see http://musescore.org/en/about/logos-and-graphics 
+* **assets** Graphical assets, use them if you need a MuseScore icon. For logo, color etc... see http://musescore.org/en/about/logos-and-graphics
 
 * **awl** Audio Widget Library, from the MusE project
 
@@ -75,9 +75,9 @@ Kept as an example of how to integrate with a complex synthesizer.
 
     * **thirdparty/portmidi**
     Clone from [PortMidi](http://portmedia.sourceforge.net/)
-   
+
     * **thirdparty/beatroot**
-    It's a core part of BeatRoot Vamp Plugin by Simon Dixon and Chris Cannam, 
+    It's a core part of BeatRoot Vamp Plugin by Simon Dixon and Chris Cannam,
     used in MIDI import for beat detection. (http://code.soundsoftware.ac.uk/projects/beatroot-vamp/repository)
 
 
@@ -109,7 +109,7 @@ To start MuseScore, type:
 
 The Start Center window will appear on every invocation, until you disable that setting via the "Preferences" dialog.
 
-### Installing 
+### Installing
 To install to default prefix using root user, type:
 
     sudo make install
@@ -130,3 +130,7 @@ To generate program documentation using DoxyGen, first do `make debug`, then typ
     make doxy
 
 Browse the documentation in subdirectory Doc/html/index.html using any html browser.
+
+
+### Export data for OMR
+mscore file.mscz -o file.png -E

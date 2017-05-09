@@ -2379,7 +2379,11 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
       if (edata) {
             convDpi     = DPI * 10.0 / score->spatium();          // spatium is allways 10 pixel in image output
             transparent = false;
+#if (QT_VERSION >= QT_VERSION_CHECK(5,5,0))
             format      = QImage::Format_Grayscale8;
+#endif
+            format      = QImage::Format_ARGB32;
+
             }
 
       int padding = QString("%1").arg(pages).size();
@@ -2430,9 +2434,11 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
                         }
                   printer = printer.convertToFormat(QImage::Format_Indexed8, colorTable);
                   }
+#if (QT_VERSION >= QT_VERSION_CHECK(5,5,0))
             else if (format == QImage::Format_Grayscale8) {
                   printer = printer.convertToFormat(QImage::Format_Grayscale8);
                   }
+#endif
 
             QString fName(name);
             if (fName.endsWith(".png"))
@@ -2786,7 +2792,7 @@ void MuseScore::writeEdata(const QString& edataName, Score* score, qreal mag, co
       {
       QFile f(edataName);
       if (!f.open(QIODevice::WriteOnly)) {
-            MScore::lastError = tr("Open Element metatdata xml file\n%1\nfailed: %2").arg(f.fileName().arg(QString(strerror(errno))));
+            MScore::lastError = tr("Open Element metadata xml file\n%1\nfailed: %2").arg(f.fileName().arg(QString(strerror(errno))));
             return;
             }
       Xml xml(&f);
