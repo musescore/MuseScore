@@ -3508,14 +3508,16 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
                   }
             hook       = tl->beginHookType() != HookType::NONE;
             hookHeight = tl->beginHookHeight().val();
-            p = tl->spannerSegments().first()->userOff();
+            if (!tl->spannerSegments().empty())
+                  p = tl->spannerSegments().first()->userOff();
             // offs = tl->mxmlOff();
             type = "start";
             }
       else {
             hook = tl->endHookType() != HookType::NONE;
             hookHeight = tl->endHookHeight().val();
-            p = ((LineSegment*)tl->spannerSegments().last())->userOff2();
+            if (!tl->spannerSegments().empty())
+                  p = ((LineSegment*)tl->spannerSegments().last())->userOff2();
             // offs = tl->mxmlOff2();
             type = "stop";
             }
