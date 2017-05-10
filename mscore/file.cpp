@@ -2673,6 +2673,8 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                   for (int i = 0, n = s->staves()->size(); i < n; i++) {
                         if (score->staff(i)->invisible())
                               continue;  // ignore invisible staves
+                        if (s->staves()->isEmpty() || !s->staff(i)->show())
+                              continue;
 
                         // The goal here is to draw SVG staff lines more efficiently.
                         // MuseScore draws staff lines by measure, but for SVG they can
