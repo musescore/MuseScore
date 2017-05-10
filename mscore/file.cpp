@@ -2649,7 +2649,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                         for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
                               if (mb->type() == Element::Type::HBOX
                                || mb->type() == Element::Type::VBOX
-                               || !static_cast<Measure*>(mb)->visible(i)) {
+                               || (!static_cast<Measure*>(mb)->visible(i) && mb->system() == s)) {
                                     byMeasure = true;
                                     break;
                               }
