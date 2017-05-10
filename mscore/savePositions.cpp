@@ -61,8 +61,8 @@ bool savePositions(Score* score, const QString& name, bool segments)
 
       qreal ndpi = ((qreal)converterDpi / DPI) * 12.0;
       if (segments) {
-            for (Segment* s = score->firstMeasure()->first(Segment::Type::ChordRest);
-               s; s = s->next1(Segment::Type::ChordRest)) {
+            for (Segment* s = score->firstMeasureMM()->first(Segment::Type::ChordRest);
+               s; s = s->next1MM(Segment::Type::ChordRest)) {
                   qreal sx   = 0;
                   int tracks = score->nstaves() * VOICES;
                   for (int track = 0; track < tracks; track++) {
