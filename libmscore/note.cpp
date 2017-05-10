@@ -1093,8 +1093,12 @@ void Note::draw(QPainter* painter) const
                   QRectF bb = QRectF(bbox().x()-d, tab->fretMaskY()*magS(), bbox().width() + 2*d, tab->fretMaskH()*magS());
                   // we do not know which viewer did this draw() call
                   // so update all:
-                  for (MuseScoreView* view : score()->getViewer())
-                        view->drawBackground(painter, bb);
+                  if (!score()->getViewer().empty()) {
+                        for (MuseScoreView* view : score()->getViewer())
+                              view->drawBackground(painter, bb);
+                        }
+                  else
+                        painter->fillRect(bb, Qt::white);
 
                   if (fretConflict() && !score()->printing()) {          //on fret conflict, draw on red background
                         painter->save();
