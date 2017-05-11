@@ -310,7 +310,7 @@ void FretDiagram::draw(QPainter* painter) const
       if (_barre) {
             int string = -1;
             for (int i = 0; i < _strings; ++i) {
-                  if (_dots[i] == _barre) {
+                  if (_dots && _dots[i] == _barre) {
                         string = i;
                         break;
                         }
