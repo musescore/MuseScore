@@ -2632,6 +2632,8 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                               continue;  // ignore invisible staves
                         if (s->staves()->isEmpty() || !s->staff(i)->show())
                               continue;
+                        if (!s->firstMeasure())
+                              continue;
 
                         // The goal here is to draw SVG staff lines more efficiently.
                         // MuseScore draws staff lines by measure, but for SVG they can
@@ -2646,7 +2648,8 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                         // are drawn by measure.
                         //
                         bool byMeasure = false;
-                        for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
+                        MeasureBase* mb = nullptr;
+                        for (mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
                               if (mb->type() == Element::Type::HBOX
                                || mb->type() == Element::Type::VBOX
                                || (!static_cast<Measure*>(mb)->visible(i) && mb->system() == s)) {
@@ -2654,6 +2657,8 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                                     break;
                               }
                         }
+                        if (mb && mb->type() == Element::Type::VBOX) // no need for staff lines
+                              byMeasure = false;
                         if (!byMeasure && !s->lastMeasure())
                               byMeasure = true;
                         if (byMeasure) { // Draw visible staff lines by measure
