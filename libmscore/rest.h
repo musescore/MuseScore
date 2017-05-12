@@ -95,6 +95,8 @@ class Rest : public ChordRest {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual QVariant propertyDefault(P_ID) const override;
 
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;
       Shape shape() const override;

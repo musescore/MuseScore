@@ -2859,19 +2859,114 @@ QString Note::subtypeName() const
       }
 
 //---------------------------------------------------------
+//   nextInEl
+//   returns next element in _el
+//---------------------------------------------------------
+
+Element* Note::nextInEl(Element* e) 
+      {
+      if (e == _el.back())
+            return nullptr;
+      auto i = std::find(_el.begin(), _el.end(), e);
+      return *(i+1);
+      }
+
+//---------------------------------------------------------
+//   prevInEl
+//   returns prev element in _el
+//---------------------------------------------------------
+
+Element* Note::prevInEl(Element* e)
+      {
+      if (e == _el.front())
+            return nullptr;
+      auto i = std::find(_el.begin(), _el.end(), e);
+      return *(i-1);
+      }
+
+//---------------------------------------------------------
 //   nextElement
 //---------------------------------------------------------
 
 Element* Note::nextElement()
       {
-      if (chord()->isGrace())
-            return Element::nextElement();
-
-      const std::vector<Note*>& notes = chord()->notes();
-      if (this == notes.front())
-            return chord()->nextElement();
-      auto i = std::find(notes.begin(), notes.end(), this);
-      return *(i-1);
+      Element* e = score()->selection().element();
+      if (!e && !score()->selection().elements().isEmpty() )
+            e = score()->selection().elements().first();      
+      switch (e->type()) {
+            case ElementType::SYMBOL:
+            case ElementType::IMAGE:
+            case ElementType::FINGERING:
+            case ElementType::TEXT:
+            case ElementType::BEND: {
+                  Element* next = nextInEl(e); // return next element in _el
+                  if (next)
+                        return next;
+                  else if (_tieFor)
+                        return _tieFor->frontSegment();
+                  else if (!_spannerFor.empty()) {
+                        for (auto i : _spannerFor) {
+                              if (i->type() == ElementType::GLISSANDO)
+                                    return i->spannerSegments().front();
+                              }
+                        }
+                  else
+                        return nullptr;
+                  }
+            case ElementType::TIE_SEGMENT: {
+                  if (!_spannerFor.empty()) {
+                      for (auto i : _spannerFor) {
+                            if (i->type() == ElementType::GLISSANDO)
+                                  return i->spannerSegments().front();
+                                  }
+                            }
+                  Chord* c = chord();
+                  return c->nextElement();
+                  }
+            case ElementType::GLISSANDO_SEGMENT: {
+                  Chord* c = chord();
+                  return c->nextElement();
+                  }
+            case ElementType::ACCIDENTAL: {
+                  if (!_el.empty()) {
+                        return _el[0];
+                        }
+                  else if (_tieFor) {
+                        return _tieFor->frontSegment();
+                        }
+                  else if (!_spannerFor.empty()) {
+                        for (auto i : _spannerFor) {
+                              if (i->type() == ElementType::GLISSANDO)
+                                    return i->spannerSegments().front();
+                              }
+                        }
+                  else {
+                        return nullptr;
+                        }
+                  }
+            case ElementType::NOTE: {            
+                  /*if (_accidental) {
+                        return _accidental;
+                        }*/
+                  if (!_el.empty()) {
+                        return _el[0];
+                        }
+                  else if (_tieFor) {
+                        return _tieFor->frontSegment();
+                        }
+                  else if (!_spannerFor.empty()) {
+                        for (auto i : _spannerFor) {
+                              if (i->type() == ElementType::GLISSANDO)
+                                    return i->spannerSegments().front();
+                              }
+                        }
+                  else {
+                        return nullptr;
+                        }
+                  }
+            default:
+                  return nullptr;                  
+            }
       }
 
 //---------------------------------------------------------
@@ -2880,12 +2975,102 @@ Element* Note::nextElement()
 
 Element* Note::prevElement()
       {
+      Element* e = score()->selection().element();
+      if (!e && !score()->selection().elements().isEmpty() )
+            e = score()->selection().elements().last();
+      switch (e->type()) {
+            case ElementType::SYMBOL:
+            case ElementType::IMAGE:
+            case ElementType::FINGERING:
+            case ElementType::TEXT:
+            case ElementType::BEND: {
+                  Element* prev = prevInEl(e); // return prev element in _el
+                  if (prev)
+                        return prev;
+                  /*else if (_accidental)
+                        return _accidental;*/
+                  else
+                        return this;
+                  }
+            case ElementType::TIE_SEGMENT: {
+                  if (!_el.empty())
+                        return _el.back();
+                  /*else if (_accidental)
+                        return _accidental;*/
+                  else
+                        return this;
+                  }
+            case ElementType::GLISSANDO_SEGMENT: {
+                  if (_tieFor)
+                        return _tieFor->frontSegment();
+                  else if (!_el.empty())
+                        return _el.back();
+                  /*else if (_accidental)
+                        return _accidental;*/
+                  else
+                        return this;
+                  }
+            case ElementType::ACCIDENTAL:
+                  return this;
+            default:
+                  return nullptr;
+            }
+      }
+
+//---------------------------------------------------------
+//   lastElementBeforeSegment
+//---------------------------------------------------------
+
+Element* Note::lastElementBeforeSegment()
+      {
+      if (!_spannerFor.empty()) {
+            for (auto i : _spannerFor) {
+                  if (i->type() == ElementType::GLISSANDO)
+                        return i->spannerSegments().front();
+                  }                
+            }
+      if (_tieFor) {
+            return _tieFor->frontSegment();
+            }
+      else if (!_el.empty()) {
+              return _el.back();
+            }
+      /*else if (_accidental) {
+            return _accidental;
+            }*/
+      else {
+            return this;
+            }
+      }
+
+//---------------------------------------------------------
+//   nextSegmentElement
+//---------------------------------------------------------
+
+Element* Note::nextSegmentElement()
+      {
       if (chord()->isGrace())
-            return Element::prevElement();
+            return Element::nextSegmentElement();
+
+      const std::vector<Note*>& notes = chord()->notes();
+      if (this == notes.front())
+            return chord()->nextSegmentElement();
+      auto i = std::find(notes.begin(), notes.end(), this);
+      return *(i-1);
+      }
+
+//---------------------------------------------------------
+//   prevSegmentElement
+//---------------------------------------------------------
+
+Element* Note::prevSegmentElement()
+      {
+      if (chord()->isGrace())
+            return Element::prevSegmentElement();
 
       const std::vector<Note*>& notes = chord()->notes();
       if (this == notes.back())
-            return chord()->prevElement();
+            return chord()->prevSegmentElement();
       auto i = std::find(notes.begin(), notes.end(), this);
       return *++i;
       }

@@ -3163,12 +3163,163 @@ TremoloChordType Chord::tremoloChordType() const
       return TremoloChordType::TremoloSingle;
       }
 
-
 //---------------------------------------------------------
 //   nextElement
 //---------------------------------------------------------
 
 Element* Chord::nextElement()
+      {
+      Element* e = score()->selection().element();
+      if (!e && !score()->selection().elements().isEmpty())
+            e = score()->selection().elements().first();   
+      switch(e->type()) {
+            case ElementType::SYMBOL:
+            case ElementType::IMAGE:
+            case ElementType::FINGERING:
+            case ElementType::TEXT:
+            case ElementType::BEND: {
+                  Note* n = static_cast<Note*>(e->parent());
+                  if(n == _notes.front()) {                       
+                        if (_arpeggio)
+                              return _arpeggio;
+                        else if (_tremolo)
+                              return _tremolo;
+                        break;
+                        }
+                  for (auto &i : _notes) {
+                        if (i == n) {
+                              return *(&i-1);
+                              }
+                        }
+                  }
+            case ElementType::GLISSANDO_SEGMENT:
+            case ElementType::TIE_SEGMENT: {
+                  SpannerSegment* s = static_cast<SpannerSegment*>(e);
+                  Spanner* sp = s->spanner();
+                  Element* elSt = sp->startElement();
+                  Q_ASSERT(elSt->type() == ElementType::NOTE);
+                  Note* n = static_cast<Note*>(elSt);
+                  Q_ASSERT(n != NULL);
+                  if (n == _notes.front()) {
+                        if (_arpeggio)
+                              return _arpeggio;
+                        else if (_tremolo)
+                              return _tremolo;
+                        break;
+                        }
+                  for (auto &i : _notes) {
+                        if (i == n) {
+                              return *(&i-1);
+                              }
+                        }
+                  }
+            case ElementType::ARPEGGIO:
+                  if (_tremolo)
+                        return _tremolo;
+                  else
+                        break;
+            case ElementType::ACCIDENTAL:
+                  e = e->parent();
+                  // fall through
+            case ElementType::NOTE: {                  
+                  if (e == _notes.front()) {
+                        if (_arpeggio)
+                              return _arpeggio;
+                        else if (_tremolo)
+                              return _tremolo;
+                        break;
+                        }
+                  for (auto &i : _notes) {
+                        if (i == e) {
+                              return *(&i -1);
+                              }
+                        }
+                  }
+            case ElementType::CHORD: {                  
+                  return _notes.back();
+                  }
+            default:
+                  break;                  
+            }
+
+            Element* next = ChordRest::nextElement();
+            if (next)
+                  return next;
+            else
+                  return nullptr;
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* Chord::prevElement()
+      {
+      Element* e = score()->selection().element();
+      if (!e && !score()->selection().elements().isEmpty())
+            e = score()->selection().elements().last();
+      switch (e->type()) {
+            case ElementType::NOTE: {
+                  if (e == _notes.back())
+                        break;
+                  Note* prevNote;
+                  for (auto &i : _notes) {
+                        if (i == e) {
+                              prevNote = *(&i+1);
+                              }
+                        }
+                  Element* next = prevNote->lastElementBeforeSegment();
+                  return next;
+                  }
+            case ElementType::CHORD: {
+                  return _notes.front();
+                  }
+            case ElementType::TREMOLO: {
+                  if (_arpeggio)
+                        return _arpeggio;
+                  // fall through
+                  }
+            case ElementType::ARPEGGIO: {
+                  Note* n = _notes.front();
+                  Element* elN = n->lastElementBeforeSegment();
+                  Q_ASSERT(elN != NULL);
+                  return elN;
+                  }
+            default:
+                  break;
+            }
+            Element* prev = ChordRest::prevElement();
+            if (prev)
+                  return prev;
+            else
+                  return nullptr;
+      }
+
+//---------------------------------------------------------
+//   lastElementBeforeSegment
+//---------------------------------------------------------
+
+Element* Chord::lastElementBeforeSegment()
+      {
+      if (_tremolo) {
+            return _tremolo;
+            }
+      else if (_arpeggio) {
+            return _arpeggio;
+            }
+      else {
+            Note* n = _notes.front();
+            Element* elN = n->lastElementBeforeSegment();
+            Q_ASSERT(elN != NULL);
+            return elN;
+            }
+      }
+
+//---------------------------------------------------------
+//   nextSegmentElement
+//---------------------------------------------------------
+
+Element* Chord::nextSegmentElement()
       {
       for (int v = track() + 1; staffIdx() == v/VOICES; ++v) {
             Element* e = segment()->element(v);
@@ -3180,25 +3331,26 @@ Element* Chord::nextElement()
                   }
             }
 
-      return ChordRest::nextElement();
+      return ChordRest::nextSegmentElement();
       }
 
 //---------------------------------------------------------
-//   prevElement
+//   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Chord::prevElement()
+Element* Chord::prevSegmentElement()
       {
-      for (int v = track() - 1; staffIdx() == v/VOICES; --v) {
-            Element* e = segment()->element(v);
-            if (e) {
-                  if (e->type() == ElementType::CHORD)
-                        return static_cast<Chord*>(e)->notes().front();
-
-                  return e;
-                  }
+      Element* el = score()->selection().element();
+      if (!el && !score()->selection().elements().isEmpty() )
+            el = score()->selection().elements().first();
+      Element* e = segment()->lastInPrevSegments(el->staffIdx());
+      if (e) {
+            if (e->type() == ElementType::CHORD)
+                  return static_cast<Chord*>(e)->notes().front();
+            return e;
             }
-      return ChordRest::prevElement();
+
+      return ChordRest::prevSegmentElement();
       }
 
 //---------------------------------------------------------

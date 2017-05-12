@@ -220,10 +220,27 @@ class Segment : public Element {
       bool operator>(const Segment&) const;
 
       virtual QString accessibleExtraInfo() const override;
+
+
       Element* firstInNextSegments(int activeStaff); //<
       Element* lastInPrevSegments(int activeStaff);   //<
       Element* firstElement(int staff);              //<  These methods are used for navigation
       Element* lastElement(int staff);               //<  for next-element and prev-element
+      Element* firstElementOfSegment(Segment* s, int activeStaff);
+      Element* nextElementOfSegment(Segment* s, Element* e, int activeStaff);
+      Element* prevElementOfSegment(Segment* s, Element* e, int activeStaff);
+      Element* lastElementOfSegment(Segment* s, int activeStaff);
+      Element* nextAnnotation(Element* e);
+      Element* prevAnnotation(Element* e);
+      Element* firstAnnotation(Segment* s, int activeStaff);
+      Element* lastAnnotation(Segment* s, int activeStaff);
+      Spanner* firstSpanner(int activeStaff);
+      Spanner* lastSpanner(int activeStaff);
+      bool notChordRestType(Segment* s);
+      using Element::nextElement;
+      Element* nextElement(int activeStaff);
+      using Element::prevElement;
+      Element* prevElement(int activeStaff);
 
       std::vector<Shape> shapes()                     { return _shapes; }
       const std::vector<Shape>& shapes() const        { return _shapes; }

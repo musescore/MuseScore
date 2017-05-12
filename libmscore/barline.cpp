@@ -1155,19 +1155,19 @@ QVariant BarLine::propertyDefault(P_ID propertyId) const
       }
 
 //---------------------------------------------------------
-//   nextElement
+//   nextSegmentElement
 //---------------------------------------------------------
 
-Element* BarLine::nextElement()
+Element* BarLine::nextSegmentElement()
       {
       return segment()->firstInNextSegments(score()->inputState().prevTrack() / VOICES);
       }
 
 //---------------------------------------------------------
-//   prevElement
+//   prevSegmentElement
 //---------------------------------------------------------
 
-Element* BarLine::prevElement()
+Element* BarLine::prevSegmentElement()
       {
       return segment()->lastInPrevSegments(score()->inputState().prevTrack() / VOICES);
       }

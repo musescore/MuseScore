@@ -129,8 +129,8 @@ class TimeSig : public Element {
 
       bool isLocal() const                 { return _stretch != Fraction(1,1); }
 
-      virtual Element* nextElement();
-      virtual Element* prevElement();
+      virtual Element* nextSegmentElement();
+      virtual Element* prevSegmentElement();
       virtual QString accessibleInfo() const override;
       };
 

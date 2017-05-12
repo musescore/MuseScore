@@ -232,22 +232,22 @@ QVariant Jump::propertyDefault(P_ID propertyId) const
       }
 
 //---------------------------------------------------------
-//   nextElement
+//   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Jump::nextElement()
+Element* Jump::nextSegmentElement()
       {
       Segment* seg = measure()->last();
       return seg->firstElement(staffIdx());
       }
 
 //---------------------------------------------------------
-//   prevElement
+//   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Jump::prevElement()
+Element* Jump::prevSegmentElement()
       {
-      return nextElement();
+      return nextSegmentElement();
       }
 
 //---------------------------------------------------------
