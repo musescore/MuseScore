@@ -1921,13 +1921,33 @@ void ScoreView::cmd(const QAction* a)
             if (el && el->type() == ElementType::NOTE)
                   cmdGotoElement(score()->downAltCtrl(static_cast<Note*>(el)));
             }
+      else if (cmd == "next-segment-element"){
+            Element* el = score()->selection().element();
+            if (!el && !score()->selection().elements().isEmpty() )
+                el = score()->selection().elements().first();
+
+            if (el)
+                  cmdGotoElement(el->nextSegmentElement());
+            else
+                  cmdGotoElement(score()->firstElement());
+            }
+      else if (cmd == "prev-segment-element"){
+            Element* el = score()->selection().element();
+            if (!el && !score()->selection().elements().isEmpty())
+                el = score()->selection().elements().last();
+
+            if (el)
+                  cmdGotoElement(el->prevSegmentElement());
+            else
+                  cmdGotoElement(score()->lastElement());
+            }
       else if (cmd == "next-element"){
             Element* el = score()->selection().element();
             if (!el && !score()->selection().elements().isEmpty() )
                 el = score()->selection().elements().first();
 
             if (el)
-                  cmdGotoElement(el->nextElement());
+                  cmdGotoElement(score()->nextElement());
             else
                   cmdGotoElement(score()->firstElement());
             }
@@ -1937,7 +1957,7 @@ void ScoreView::cmd(const QAction* a)
                 el = score()->selection().elements().last();
 
             if (el)
-                  cmdGotoElement(el->prevElement());
+                  cmdGotoElement(score()->prevElement());
             else
                   cmdGotoElement(score()->lastElement());
             }

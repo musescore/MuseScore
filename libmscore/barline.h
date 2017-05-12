@@ -132,8 +132,8 @@ class BarLine : public Element {
 
       static void layoutWidth(Score*, BarLineType, qreal mag, qreal* lx, qreal* rx);
 
-      virtual Element* nextElement() override;
-      virtual Element* prevElement() override;
+      virtual Element* nextSegmentElement() override;
+      virtual Element* prevSegmentElement() override;
 
       virtual QString accessibleInfo() const override;
       virtual QString accessibleExtraInfo() const override;

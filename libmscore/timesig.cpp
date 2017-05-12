@@ -526,19 +526,19 @@ void TimeSig::styleChanged()
       }
 
 //---------------------------------------------------------
-//   nextElement
+//   nextSegmentElement
 //---------------------------------------------------------
 
-Element* TimeSig::nextElement()
+Element* TimeSig::nextSegmentElement()
       {
       return segment()->firstInNextSegments(staffIdx());
       }
 
 //---------------------------------------------------------
-//   prevElement
+//   prevSegmentElement
 //---------------------------------------------------------
 
-Element* TimeSig::prevElement()
+Element* TimeSig::prevSegmentElement()
       {
       return segment()->lastInPrevSegments(staffIdx());
       }

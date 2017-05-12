@@ -84,10 +84,10 @@ namespace Ms {
 
 void CmdState::reset()
       {
-      layoutFlags = LayoutFlag::NO_FLAGS;
-      _updateMode = UpdateMode::DoNothing;
-      _startTick  = -1;
-      _endTick    = -1;
+      layoutFlags         = LayoutFlag::NO_FLAGS;
+      _updateMode         = UpdateMode::DoNothing;
+      _startTick          = -1;
+      _endTick            = -1;
       }
 
 //---------------------------------------------------------
@@ -3016,6 +3016,46 @@ void Score::cmdPitchDownOctave()
             upDown(false, UpDownMode::OCTAVE);
       }
 
+/*//---------------------------------------------------------
+//   cmdnextElement
+//---------------------------------------------------------
+
+void Score::cmdNextElement()
+      {
+      Element* el = selection().element();
+            if (!el && !selection().elements().isEmpty() )
+                el = selection().elements().first();
+
+            if (el){
+                  Element* next = nextElement();
+                  int staffId = el->staffIdx();
+                  selectSingle(next, staffId);
+                  }
+            else
+                  selectSingle(score()->firstElement(), 0); // check staffId
+
+      }
+
+//---------------------------------------------------------
+//   cmdprevElement
+//---------------------------------------------------------
+
+void Score::cmdPrevElement()
+      {
+      Element* el = selection().element();
+            if (!el && !selection().elements().isEmpty() )
+                el = selection().elements().last();
+
+            if (el){
+                  Element* prev = prevElement();
+                  int staffId = el->staffIdx();
+                  selectSingle(prev, staffId);
+                  }
+            else
+                  selectSingle(score()->lastElement(), 0); // check staffId
+
+      }
+*/
 //---------------------------------------------------------
 //   cmdPadNoteInclreaseTAB
 //---------------------------------------------------------
