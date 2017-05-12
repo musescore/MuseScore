@@ -817,6 +817,28 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL,
+         "next-segment-element",
+         QT_TRANSLATE_NOOP("action","Next Segment Element"),
+         QT_TRANSLATE_NOOP("action","Accessibility: Next segment element"),
+         QT_TRANSLATE_NOOP("action","Accessibility: Next segment element"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         "prev-segment-element",
+         QT_TRANSLATE_NOOP("action","Previous Segment Element"),
+         QT_TRANSLATE_NOOP("action","Accessibility: Previous segment element"),
+         QT_TRANSLATE_NOOP("action","Accessibility: Previous segment element"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
          "next-element",
          QT_TRANSLATE_NOOP("action","Next Element"),
          QT_TRANSLATE_NOOP("action","Accessibility: Next element"),

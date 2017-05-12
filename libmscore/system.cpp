@@ -972,10 +972,10 @@ void System::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   nextElement
+//   nextSegmentElement
 //---------------------------------------------------------
 
-Element* System::nextElement()
+Element* System::nextSegmentElement()
       {
       Measure* m = firstMeasure();
       if (m) {
@@ -987,10 +987,10 @@ Element* System::nextElement()
       }
 
 //---------------------------------------------------------
-//   prevElement
+//   prevSegmentElement
 //---------------------------------------------------------
 
-Element* System::prevElement()
+Element* System::prevSegmentElement()
       {
       Segment* seg = firstMeasure()->first();
       Element* re = 0;

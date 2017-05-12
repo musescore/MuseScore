@@ -253,11 +253,11 @@
     <seq>Ctrl+End</seq>
     </SC>
   <SC>
-    <key>next-element</key>
+    <key>next-segment-element</key>
     <seq>Ctrl+Alt+Shift+Right</seq>
     </SC>
   <SC>
-    <key>prev-element</key>
+    <key>prev-segment-element</key>
     <seq>Ctrl+Alt+Shift+Left</seq>
     </SC>
   <SC>

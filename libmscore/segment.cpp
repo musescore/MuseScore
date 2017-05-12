@@ -1011,12 +1011,12 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
 Element* Segment::firstElement(int staff)
       {
       if (segmentType() == SegmentType::ChordRest) {
-            for (int v = staff * VOICES; v/VOICES == staff; v++) {
-                Element* el = element(v);
+            for (int v = staff * VOICES; v/VOICES == staff; v++) {                 
+                Element* el = element(v);              
                 if (!el) {      //there is no chord or rest on this voice
                       continue;
                       }
-                if (el->isChord()) {
+                if (el->isChord()) {                       
                       return toChord(el)->notes().back();
                       }
                 else {
@@ -1024,7 +1024,7 @@ Element* Segment::firstElement(int staff)
                       }
                 }
             }
-      else {
+      else {           
             return getElement(staff);
             }
 
@@ -1070,10 +1070,12 @@ Element* Segment::lastElement(int staff)
 //---------------------------------------------------------
 
 Element* Segment::getElement(int staff)
-      {
-      if (segmentType() == SegmentType::ChordRest)
+      {      
+      segmentType();     
+      if (segmentType() == SegmentType::ChordRest) {            
             return firstElement(staff);
-      else if (segmentType() & (SegmentType::EndBarLine | SegmentType::BarLine | SegmentType::StartRepeatBarLine)) {
+      }
+      else if (segmentType() & (SegmentType::EndBarLine | SegmentType::BarLine | SegmentType::StartRepeatBarLine)) {            
             for (int i = staff; i >= 0; i--) {
                   if (!element(i * VOICES))
                         continue;
@@ -1082,9 +1084,70 @@ Element* Segment::getElement(int staff)
                         return element(i*VOICES);
                   }
             }
-      else
-            return element(staff * VOICES);
+      else            
+            return element(staff);
       return 0;
+      }
+
+//---------------------------------------------------------
+//   nextAnnotation
+//   return next element in _annotations
+//---------------------------------------------------------
+
+Element* Segment::nextAnnotation(Element* e) 
+      {
+      if (e == _annotations.back())
+            return nullptr;
+      auto i = std::find(_annotations.begin(), _annotations.end(), e);
+      Element* next = *(i+1);
+      if (next && next->staffIdx() == e->staffIdx())
+            return next;
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   prevAnnotation
+//   return previous element in _annotations
+//---------------------------------------------------------
+
+Element* Segment::prevAnnotation(Element* e)
+      {
+      if (e == _annotations.front())
+          return nullptr;
+      auto i = std::find(_annotations.begin(), _annotations.end(), e);
+            Element* prev = *(i-1);
+      if (prev && prev->staffIdx() == e->staffIdx())
+            return prev;
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   firstAnnotation
+//---------------------------------------------------------
+
+Element* Segment::firstAnnotation(Segment* s, int activeStaff)
+      {
+      for (auto i = s->annotations().begin(); i != s->annotations().end(); ++i) {
+            if ((*i)->staffIdx() == activeStaff)
+                  return *i;
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   lastAnnotation
+//---------------------------------------------------------
+
+Element* Segment::lastAnnotation(Segment* s, int activeStaff)
+      {
+      for (auto i = --s->annotations().end(); i != s->annotations().begin(); --i) {
+            if ((*i)->staffIdx() == activeStaff)
+                  return *i;
+            }
+      auto i = s->annotations().begin();
+      if ((*i)->staffIdx() == activeStaff)
+            return *i;
+      return nullptr;
       }
 
 //--------------------------------------------------------
@@ -1115,12 +1178,497 @@ Element* Segment::firstInNextSegments(int activeStaff)
             seg = score()->firstSegment(SegmentType::All);
             return seg->element( (activeStaff + 1) * VOICES );
             }
-
       return 0;
       }
 
+//---------------------------------------------------------
+//   firstElementOfSegment
+//   returns the first non null element in the given segment
+//---------------------------------------------------------
+
+Element* Segment::firstElementOfSegment(Segment* s, int activeStaff)
+      {
+      for (auto i: s->elist()) {
+            if (i && i->staffIdx() == activeStaff) {
+                  if (i->type() == ElementType::CHORD)
+                        return static_cast<Chord*>(i)->notes().back();
+                  else
+                        return i;
+                  }
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   nextElementOfSegment
+//   returns the next element in the given segment
+//---------------------------------------------------------
+
+Element* Segment::nextElementOfSegment(Segment* s, Element* e, int activeStaff)
+      {
+      for (int track = 0; track < score()->nstaves() * VOICES - 1; ++track) {
+            if (s->element(track) == 0)
+                  continue;
+             Element* el = s->element(track);
+             if (el == e) {
+                 Element* next = s->element(track+1);
+                 while (track < score()->nstaves() * VOICES - 1 &&
+                        (!next || next->staffIdx() != activeStaff)) {
+                       next = s->element(++track);
+                       }
+                 if (!next)
+                       return nullptr;
+                 if (next->type() == ElementType::CHORD)
+                       return static_cast<Chord*>(next)->notes().back();
+                 else
+                       return next;
+             }
+             if (el->type() == ElementType::CHORD) {
+                   std::vector<Note*> notes = static_cast<Chord*>(el)->notes();
+                   auto i = std::find(notes.begin(), notes.end(), e);
+                   if (i == notes.end())
+                         continue;
+                   if (i!= notes.begin()) {
+                         return *(i-1);
+                         }
+                   else {
+                         Element* nextEl = s->element(++track);
+                         while (track < score()->nstaves() * VOICES - 1 &&
+                                (!nextEl || nextEl->staffIdx() != activeStaff)) {
+                               nextEl = s->element(++track);                         
+                               }
+                         if (!nextEl)
+                               return nullptr;
+                         if (nextEl->type() == ElementType::CHORD)
+                               return static_cast<Chord*>(nextEl)->notes().back();
+                         return nextEl;
+                         }
+                   }            
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   prevElementOfSegment
+//   returns the previous element in the given segment
+//---------------------------------------------------------
+
+Element* Segment::prevElementOfSegment(Segment* s, Element* e, int activeStaff)
+      {
+      for (int track = score()->nstaves() * VOICES - 1; track > 0; --track) {
+            if (s->element(track) == 0)
+                  continue;
+             Element* el = s->element(track);
+             if (el == e) {
+                 Element* prev = s->element(track-1);
+                 while (track > 0 &&
+                        (!prev || prev->staffIdx() != activeStaff)) {
+                       prev = s->element(--track);
+                       }
+                 if (!prev)
+                       return nullptr;
+                 if (prev->staffIdx() == e->staffIdx()) {
+                 if (prev->type() == ElementType::CHORD)
+                       return static_cast<Chord*>(prev)->notes().front();
+                 else
+                       return prev;
+                       }
+                 return nullptr;
+             }
+             if (el->type() == ElementType::CHORD) {
+                   std::vector<Note*> notes = static_cast<Chord*>(el)->notes();
+                   auto i = std::find(notes.begin(), notes.end(), e);
+                   if (i == notes.end())
+                         continue;
+                   if (i!= --notes.end()) {
+                         return *(i+1);
+                         }
+                   else {
+                         Element* prevEl = s->element(--track);
+                         while (track > 0 &&
+                                (!prevEl || prevEl->staffIdx() != activeStaff)) {
+                               prevEl = s->element(--track);
+                               }
+                         if (!prevEl)
+                               return nullptr;
+                         if (prevEl->staffIdx() == e->staffIdx()) {
+                         if (prevEl->type() == ElementType::CHORD)
+                               return static_cast<Chord*>(prevEl)->notes().front();
+                         return prevEl;
+                               }
+                         return nullptr;
+                         }
+                   }
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   lastElementOfSegment
+//   returns the last element in the given segment
+//---------------------------------------------------------
+
+Element* Segment::lastElementOfSegment(Segment* s, int activeStaff)
+      {
+      std::vector<Element*> elements = s->elist();
+      for (auto i = --elements.end(); i != elements.begin(); --i) {
+            if (*i && (*i)->staffIdx() == activeStaff) {
+                  if ((*i)->type() == ElementType::CHORD)
+                      return static_cast<Chord*>(*i)->notes().front();
+                  else
+                        return *i;
+                  }
+            }
+      auto i = elements.begin();
+      if (*i && (*i)->staffIdx() == activeStaff) {
+            if ((*i)->type() == ElementType::CHORD)
+                  return static_cast<Chord*>(*i)->notes().front();
+            else
+                  return *i;
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   firstSpanner
+//---------------------------------------------------------
+
+Spanner* Segment::firstSpanner(int activeStaff)
+      {
+      std::multimap<int, Spanner*> mmap = score()->spanner();
+      auto range = mmap.equal_range(tick());
+      if (range.first != range.second){ // range not empty
+            for (auto i = range.first; i != range.second; ++i) {
+                  Spanner* s = i->second;
+                  Element* e = s->startElement();
+                  if (!e)
+                        continue;
+                  if (s->startSegment() == this && s->startElement()->staffIdx() == activeStaff)
+                        return s;
+                  }
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   lastSpanner
+//---------------------------------------------------------
+
+Spanner* Segment::lastSpanner(int activeStaff)
+      {
+      std::multimap<int, Spanner*> mmap = score()->spanner();
+      auto range = mmap.equal_range(tick());
+      if (range.first != range.second){ // range not empty
+            for (auto i = --range.second; i != range.first; --i) {
+                  Spanner* s = i->second;
+                  Element* st = s->startElement();
+                  if (!st)
+                        continue;
+                  if (s->startElement()->staffIdx() == activeStaff)
+                        return s;
+                  }
+            if ((range.first)->second->startElement()->staffIdx() == activeStaff) {
+                  return (range.first)->second;
+                  }
+            }
+      return nullptr;
+      }
+
+
+
+//---------------------------------------------------------
+//   notChordRestType
+//---------------------------------------------------------
+
+bool Segment::notChordRestType(Segment* s)
+      {
+      if (s->segmentType() == SegmentType::KeySig ||
+          s->segmentType() == SegmentType::TimeSig ||
+          s->segmentType() == SegmentType::Clef ||
+          s->segmentType() == SegmentType::HeaderClef ||
+          s->segmentType() == SegmentType::BeginBarLine ||
+          s->segmentType() == SegmentType::EndBarLine ||
+          s->segmentType() == SegmentType::BarLine ||
+          s->segmentType() == SegmentType::KeySigAnnounce ||
+          s->segmentType() == SegmentType::TimeSigAnnounce) {
+            return true;
+            }
+      else {
+            return false;
+            }
+      }
+
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* Segment::nextElement(int activeStaff) 
+      {           
+      Element* e = score()->selection().element();
+      if (!e && !score()->selection().elements().isEmpty() )
+            e = score()->selection().elements().first();
+      switch (e->type()) {
+            case ElementType::DYNAMIC:
+            case ElementType::HARMONY:
+            case ElementType::SYMBOL:
+            case ElementType::FRET_DIAGRAM:
+            case ElementType::TEMPO_TEXT:
+            case ElementType::STAFF_TEXT:
+            case ElementType::SYSTEM_TEXT:
+            case ElementType::REHEARSAL_MARK:
+            case ElementType::MARKER:
+            case ElementType::IMAGE:
+            case ElementType::TEXT:
+            case ElementType::TREMOLOBAR:
+            case ElementType::TAB_DURATION_SYMBOL:
+            case ElementType::FIGURED_BASS:
+            case ElementType::STAFF_STATE:
+            case ElementType::INSTRUMENT_CHANGE: {                  
+                  Element* next = nextAnnotation(e);
+                  if (next)
+                        return next;                  
+                  else {
+                        Spanner* s = firstSpanner(activeStaff);
+                        if (s)
+                              return s->spannerSegments().front();                 
+                        }                 
+                  Segment* nextSegment = this->next1();
+                  while (nextSegment) {
+                        Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
+                        if (nextEl)
+                              return nextEl;
+                        nextSegment = nextSegment->next1();
+                        }
+                  break;
+                  }
+            case ElementType::SEGMENT: {                                 
+                  if (!_annotations.empty()) {
+                        Element* next = firstAnnotation(this, activeStaff);
+                        if (next)
+                              return next;
+                        }
+                  Spanner* sp = firstSpanner(activeStaff);
+                  if (sp)
+                        return sp->spannerSegments().front();
+
+                  Segment* nextSegment = this->next1();
+                  while (nextSegment) {
+                        Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
+                        if (nextEl)
+                              return nextEl;
+                        nextSegment = nextSegment->next1();
+                        }
+                  break;
+                  }
+            default: {
+                  Element* p;
+                  if (e->type() == ElementType::TIE_SEGMENT ||
+                        e->type() == ElementType::GLISSANDO_SEGMENT) {
+                        SpannerSegment* s = static_cast<SpannerSegment*>(e);
+                        Spanner* sp = s->spanner();
+                        p = sp->startElement();
+                        }
+                  else if (e->type() == ElementType::ACCIDENTAL ||
+                           e->type() == ElementType::ARTICULATION) {
+                       p = e->parent();
+                        }
+                  else {
+                        p = e;
+                        }
+                  Element* el = p;
+                  for (; p && p->type() != ElementType::SEGMENT; p = p->parent()) {
+                        ;
+                       }
+                  Segment* seg = static_cast<Segment*>(p);      
+                  // next in _elist
+                  Element* nextEl = nextElementOfSegment(seg, el, activeStaff);
+                  if (nextEl)
+                        return nextEl;               
+                  if (!_annotations.empty()) {
+                        Element* next = firstAnnotation(seg, activeStaff);
+                        if (next)
+                              return next;
+                        }                                
+                  Spanner* s = firstSpanner(activeStaff);
+                  if (s)
+                        return s->spannerSegments().front();
+                  Segment* nextSegment =  seg->next1();
+                  while (nextSegment) {
+                        Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
+                        if (nextEl)
+                              return nextEl;
+                        nextSegment = nextSegment->next1();
+                        }          
+                  }
+                  break;
+            }
+            return nullptr;
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* Segment::prevElement(int activeStaff)
+      {    
+      Element* e = score()->selection().element();
+      if (!e && !score()->selection().elements().isEmpty() )
+            e = score()->selection().elements().last();
+      switch (e->type()) {
+            case ElementType::DYNAMIC:
+            case ElementType::HARMONY:
+            case ElementType::SYMBOL:
+            case ElementType::FRET_DIAGRAM:
+            case ElementType::TEMPO_TEXT:
+            case ElementType::STAFF_TEXT:
+            case ElementType::SYSTEM_TEXT:
+            case ElementType::REHEARSAL_MARK:
+            case ElementType::MARKER:
+            case ElementType::IMAGE:
+            case ElementType::TEXT:
+            case ElementType::TREMOLOBAR:
+            case ElementType::TAB_DURATION_SYMBOL:
+            case ElementType::FIGURED_BASS:
+            case ElementType::STAFF_STATE:
+            case ElementType::INSTRUMENT_CHANGE: {                  
+                  Element* prev = prevAnnotation(e);
+                  if (prev)
+                        return prev;
+                  if (notChordRestType(this)) {
+                        Element* lastEl = lastElementOfSegment(this, activeStaff);
+                        if (lastEl)
+                              return lastEl;
+                        }
+                   int track = score()->nstaves() * VOICES - 1;
+                   Segment* s = this;
+                   Element* el = s->element(track);
+                   while (track > 0 && (!el || el->staffIdx() != activeStaff)) {
+                         el = s->element(--track);
+                         if (track == 0) {
+                               track = score()->nstaves() * VOICES - 1;
+                               s = s->prev1();
+                               }
+                         }
+                   if (el->staffIdx() != activeStaff)
+                         return nullptr;
+                   if (el->type() == ElementType::CHORD || el->type() == ElementType::REST
+                            || el->type() == ElementType::REPEAT_MEASURE) {
+                         ChordRest* cr = this->cr(el->track());
+                         if (cr) {
+                               Element* elCr = cr->lastElementBeforeSegment();
+                               if (elCr) {
+                                     return elCr;
+                                     }
+                               }
+                          }
+                   if (el->type() == ElementType::CHORD) {
+                         return static_cast<Chord*>(el)->lastElementBeforeSegment();
+                         }
+                   else if (el->type() == ElementType::NOTE) {
+                         Chord* c = static_cast<Note*>(el)->chord();
+                         return c->lastElementBeforeSegment();
+                         }
+                   else {
+                         return el;
+                         }
+                  }
+            case ElementType::ARPEGGIO:
+            case ElementType::TREMOLO: {
+                  Element* el = this->element(e->track());
+                  Q_ASSERT(el->type() == ElementType::CHORD);
+                  return static_cast<Chord*>(el)->prevElement();
+                  }                           
+            default: {
+                  Element* el = e;
+                  Segment* seg = this;
+                  if (e->type() == ElementType::TIE_SEGMENT ||
+                      e->type() == ElementType::GLISSANDO_SEGMENT) {
+                        SpannerSegment* s = static_cast<SpannerSegment*>(e);
+                        Spanner* sp = s->spanner();
+                        el = sp->startElement();
+                        seg = sp->startSegment();
+                        }
+                  else if (e->type() == ElementType::ACCIDENTAL ||
+                           e->type() == ElementType::ARTICULATION) {
+                        el = e->parent();
+                        }
+
+                 Element* prev = seg->prevElementOfSegment(seg, el, activeStaff);
+                  if (prev) {
+                        if (prev->type() == ElementType::CHORD || prev->type() == ElementType::REST
+                               || prev->type() == ElementType::REPEAT_MEASURE) {
+                              ChordRest* cr = seg->cr(prev->track());
+                              if (cr) {
+                                    Element* elCr = cr->lastElementBeforeSegment();
+                                    if (elCr) {
+                                          return elCr;
+                                          }
+                                    }
+                              }
+                        if (prev->type() == ElementType::CHORD) {
+                              return static_cast<Chord*>(prev)->lastElementBeforeSegment();
+                              }
+                        else if (prev->type() == ElementType::NOTE) {
+                              Chord* c = static_cast<Note*>(prev)->chord();
+                              return c->lastElementBeforeSegment();
+                              }
+                        else {
+                              return prev;
+                              }
+                        }
+                   Segment* prevSeg = seg->prev1();
+                   if (!prevSeg)
+                         return score()->lastElement();
+
+                   prev = lastElementOfSegment(prevSeg, activeStaff);
+                   while (!prev && prevSeg) {
+                         prevSeg = prevSeg->prev1();
+                         prev = lastElementOfSegment(prevSeg, activeStaff);
+                         }
+                   if (!prevSeg)
+                         return score()->lastElement();
+
+                   if (notChordRestType(prevSeg)) {
+                         Element* lastEl = lastElementOfSegment(prevSeg, activeStaff);
+                         if (lastEl)
+                               return lastEl;
+                         }
+                   Spanner* s1 = prevSeg->lastSpanner(activeStaff);
+                   if (s1) {
+                         return s1->spannerSegments().front();
+                         }
+                   else if (!prevSeg->annotations().empty()) {
+                         Element* next = lastAnnotation(prevSeg, activeStaff);
+                         if (next)
+                               return next;
+                         }
+                   if (prev->type() == ElementType::CHORD || prev->type() == ElementType::REST
+                            || prev->type() == ElementType::REPEAT_MEASURE || prev->type() == ElementType::NOTE) {
+                         ChordRest* cr = prevSeg->cr(prev->track());
+                         if (cr) {
+                               Element* elCr = cr->lastElementBeforeSegment();
+                               if (elCr) {
+                                     return elCr;
+                                     }
+                               }
+                         }
+                   if (prev->type() == ElementType::CHORD) {
+                         return static_cast<Chord*>(prev)->lastElementBeforeSegment();
+                         }
+                   else if (prev->type() == ElementType::NOTE) {
+                         Chord* c = static_cast<Note*>(prev)->chord();
+                         return c->lastElementBeforeSegment();
+                         }
+                   else {
+                         return prev;
+                         }
+                  }
+            }
+            return nullptr;
+      }
+
 //--------------------------------------------------------
-//   firstInNextSegments
+//   lastInPrevSegments
 //   Searches for the previous segment that has elements on
 //   the active staff and returns its last element
 //
@@ -1138,7 +1686,7 @@ Element* Segment::lastInPrevSegments(int activeStaff)
             if (!seg) //end of staff, or score
                   break;
 
-            re = seg->lastElement(activeStaff);
+            re = seg->lastElementOfSegment(seg, activeStaff);
             }
 
       if (re)

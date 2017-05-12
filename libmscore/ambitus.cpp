@@ -721,19 +721,19 @@ QVariant Ambitus::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
-//   nextElement
+//   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Ambitus::nextElement()
+Element* Ambitus::nextSegmentElement()
       {
       return segment()->firstInNextSegments(staffIdx());
       }
 
 //---------------------------------------------------------
-//   prevElement
+//   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Ambitus::prevElement()
+Element* Ambitus::prevSegmentElement()
       {
       return segment()->lastInPrevSegments(staffIdx());
       }

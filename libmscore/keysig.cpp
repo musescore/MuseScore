@@ -559,19 +559,19 @@ QVariant KeySig::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
-//   nextElement
+//   nextSegmentElement
 //---------------------------------------------------------
 
-Element* KeySig::nextElement()
+Element* KeySig::nextSegmentElement()
       {
       return segment()->firstInNextSegments(staffIdx());
       }
 
 //---------------------------------------------------------
-//   prevElement
+//   prevSegmentElement
 //---------------------------------------------------------
 
-Element* KeySig::prevElement()
+Element* KeySig::prevSegmentElement()
       {
       return segment()->lastInPrevSegments(staffIdx());
       }
