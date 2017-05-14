@@ -191,9 +191,11 @@ void Fluid::play(const PlayEvent& event)
             int midiPitch = event.dataB() * 128 + event.dataA();  // msb * 128 + lsb
             cp->pitchBend(midiPitch);
             }
-      if (err)
-            qWarning("FluidSynth error: event 0x%2x channel %d: %s",
-               type, ch, qPrintable(error()));
+      if (err) {
+            // TODO: distinguish between types of error code.
+            // Lack of a soundfont should not produce qDebug messages, because user could deliberately be using MIDI out only.
+            //qWarning("FluidSynth error: event 0x%2x channel %d: %s", type, ch, qPrintable(error()));
+            }
       }
 
 //---------------------------------------------------------
@@ -335,7 +337,8 @@ void Fluid::program_change(int chan, int prognum)
 
       Preset* preset = find_preset(banknum, prognum);
       if (!preset) {
-            qDebug("Fluid::program_change: preset %d %d not found", banknum, prognum);
+            //Suppressing qDebug because might not have soundfont if using MIDI out only.
+            //qDebug("Fluid::program_change: preset %d %d not found", banknum, prognum);
             preset = find_preset(0, 0);
             }
 

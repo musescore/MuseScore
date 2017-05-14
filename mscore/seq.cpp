@@ -48,6 +48,12 @@
 
 #include <vorbis/vorbisfile.h>
 
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+  #include "portmidi/porttime/porttime.h"
+#else
+  #include <porttime.h>
+#endif
+
 namespace Ms {
 
 Seq* seq;
@@ -143,19 +149,18 @@ Seq::Seq()
       tickRemain        = 0;
       maxMidiOutPort  = 0;
 
-      endTick  = 0;
+      endUTick  = 0;
       state    = Transport::STOP;
       oggInit  = false;
       _driver  = 0;
       playPos  = events.cbegin();
-
-      playTime  = 0;
+      playFrame  = 0;
       metronomeVolume = 0.3;
       useJackTransportSavedFlag = false;
 
       inCountIn         = false;
       countInPlayPos    = countInEvents.cbegin();
-      countInPlayTime   = 0;
+      countInPlayFrame  = 0;
 
       meterValue[0]     = 0.0;
       meterValue[1]     = 0.0;
@@ -178,6 +183,8 @@ Seq::Seq()
       prevTempo = 0;
       connect(this, SIGNAL(timeSigChanged()),this,SLOT(handleTimeSigTempoChanged()));
       connect(this, SIGNAL(tempoChanged()),this,SLOT(handleTimeSigTempoChanged()));
+
+      initialMillisecondTimestampWithLatency = 0;
       }
 
 //---------------------------------------------------------
@@ -280,7 +287,7 @@ bool Seq::canStart()
             return false;
       if (playlistChanged)
             collectEvents();
-      return (!events.empty() && endTick != 0);
+      return (!events.empty() && endUTick != 0);
       }
 
 //---------------------------------------------------------
@@ -290,6 +297,11 @@ bool Seq::canStart()
 
 void Seq::start()
       {
+      if (!_driver) {
+            qDebug("No driver!");
+            return;
+            }
+
       if (playlistChanged)
             collectEvents();
       if (cs->playMode() == PlayMode::AUDIO) {
@@ -420,7 +432,7 @@ void Seq::guiStop()
       if (!cs)
             return;
 
-      cs->setPlayPos(cs->repeatList()->utick2tick(cs->utime2utick(qreal(playTime) / qreal(MScore::sampleRate))));
+      cs->setPlayPos(cs->repeatList()->utick2tick(cs->utime2utick(qreal(playFrame) / qreal(MScore::sampleRate))));
       cs->update();
       emit stopped();
       }
@@ -547,10 +559,10 @@ void Seq::processMessages()
                         {
                         if (!cs)
                               continue;
-                        if (playTime != 0) {
-                              int utick = cs->utime2utick(qreal(playTime) / qreal(MScore::sampleRate));
+                        if (playFrame != 0) {
+                              int utick = cs->utime2utick(qreal(playFrame) / qreal(MScore::sampleRate));
                               cs->tempomap()->setRelTempo(msg.realVal);
-                              playTime = cs->utick2utime(utick) * MScore::sampleRate;
+                              playFrame = cs->utick2utime(utick) * MScore::sampleRate;
                               if (preferences.jackTimebaseMaster && preferences.useJackTransport)
                                     _driver->seekTransport(utick + 2 * cs->utime2utick(qreal((_driver->bufferSize()) + 1) / qreal(MScore::sampleRate)));
                               }
@@ -643,7 +655,7 @@ void Seq::addCountInClicks()
       countInEvents.insert( std::pair<int,NPlayEvent>(endTick, event));
       // initialize play parameters to count-in events
       countInPlayPos  = countInEvents.cbegin();
-      countInPlayTime = 0;
+      countInPlayFrame = 0;
       }
 
 //-------------------------------------------------------------------
@@ -654,12 +666,12 @@ void Seq::addCountInClicks()
 //    methods like semaphores can also not be used.
 //-------------------------------------------------------------------
 
-void Seq::process(unsigned n, float* buffer)
+void Seq::process(unsigned framesPerPeriod, float* buffer)
       {
-      unsigned frames = n;
+      unsigned framesRemain = framesPerPeriod; // the number of frames remaining to be processed by this call to Seq::process
       Transport driverState = _driver->getState();
       // Checking for the reposition from JACK Transport
-      _driver->checkTransportSeek(playTime, frames, inCountIn);
+      _driver->checkTransportSeek(playFrame, framesRemain, inCountIn);
 
       if (driverState != state) {
             // Got a message from JACK Transport panel: Play
@@ -707,7 +719,7 @@ void Seq::process(unsigned n, float* buffer)
                   initInstruments(true);
                   if (playPos == events.cend()) {
                         if (mscore->loop()) {
-                              qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->pos() = %d", playPos->first,cs->pos());
+                              qDebug("Seq.cpp - Process - Loop whole score. playPos = %d, cs->pos() = %d", playPos->first, cs->pos());
                               emit toGui('4');
                               return;
                               }
@@ -724,7 +736,7 @@ void Seq::process(unsigned n, float* buffer)
                      (int)state, (int)driverState);
             }
 
-      memset(buffer, 0, sizeof(float) * n * 2); // assume two channels
+      memset(buffer, 0, sizeof(float) * framesPerPeriod * 2); // assume two channels
       float* p = buffer;
 
       processMessages();
@@ -732,64 +744,64 @@ void Seq::process(unsigned n, float* buffer)
       if (state == Transport::PLAY) {
             if (!cs)
                   return;
-            EventMap::const_iterator* pPlayPos = &playPos;
-            EventMap* pEvents   = &events;
-            int*      pPlayTime = &playTime;
-            //
-            // in count-in?
-            //
+
+            // if currently in count-in, these pointers will reference data in the count-in
+            EventMap::const_iterator* pPlayPos   = &playPos;
+            EventMap*                 pEvents    = &events;
+            int*                      pPlayFrame = &playFrame;
             if (inCountIn) {
                   if (countInEvents.size() == 0)
                         addCountInClicks();
-                  pEvents   = &countInEvents;
-                  pPlayPos  = &countInPlayPos;
-                  pPlayTime = &countInPlayTime;
+                  pEvents    = &countInEvents;
+                  pPlayPos   = &countInPlayPos;
+                  pPlayFrame = &countInPlayFrame;
                   }
+
             //
             // play events for one segment
             //
-            unsigned framePos = 0;
-            int endTime = *pPlayTime + frames;
-            int utickEnd = cs->repeatList()->tick2utick(cs->lastMeasure()->endTick());
-            for ( ; *pPlayPos != pEvents->cend(); ) {
-                  int n;
+            unsigned framePos = 0; // frame currently being processed relative to the first frame of this call to Seq::process
+            int periodEndFrame = *pPlayFrame + framesPerPeriod; // the ending frame (relative to start of playback) of the period being processed by this call to Seq::process
+            int scoreEndUTick = cs->repeatList()->tick2utick(cs->lastMeasure()->endTick());
+            while (*pPlayPos != pEvents->cend()) {
+                  int playPosUTick = (*pPlayPos)->first;
+                  int n; // current frame (relative to start of playback) that is being synthesized
+
                   if (inCountIn) {
-
-                        qreal bps = curTempo() * cs->tempomap()->relTempo();
-                        // relTempo needed here to ensure that bps changes as we slide the tempo bar
-
-                        qreal tickssec = bps * MScore::division;
-                        qreal secs = (*pPlayPos)->first / tickssec;
-                        int f = secs * MScore::sampleRate;
-                        if (f >= endTime)
+                        qreal beatsPerSecond = curTempo() * cs->tempomap()->relTempo(); // relTempo needed here to ensure that bps changes as we slide the tempo bar
+                        qreal ticksPerSecond = beatsPerSecond * MScore::division;
+                        qreal playPosSeconds = playPosUTick / ticksPerSecond;
+                        int playPosFrame = playPosSeconds * MScore::sampleRate;
+                        if (playPosFrame >= periodEndFrame)
                               break;
-                        n = f - *pPlayTime;
+                        n = playPosFrame - *pPlayFrame;
                         if (n < 0) {
-                              qDebug("Count-in: %d:  %d - %d", (*pPlayPos)->first, f, *pPlayTime);
+                              qDebug("Count-in: playPosUTick %d: n = %d - %d", playPosUTick, playPosFrame, *pPlayFrame);
                               n = 0;
                               }
                         }
                   else {
-                        int f = cs->utick2utime(playPos->first) * MScore::sampleRate;
-                        if (f >= endTime)
+                        qreal playPosSeconds = cs->utick2utime(playPosUTick);
+                        int playPosFrame = playPosSeconds * MScore::sampleRate;
+                        if (playPosFrame >= periodEndFrame)
                               break;
-                        n = f - *pPlayTime;
+                        n = playPosFrame - *pPlayFrame;
                         if (n < 0) {
-                              qDebug("%d:  %d - %d", (*pPlayPos)->first, f, *pPlayTime);
+                              qDebug("%d:  %d - %d", playPosUTick, playPosFrame, *pPlayFrame);
                               n = 0;
                               }
                         if (mscore->loop()) {
-                              int utickLoop = cs->repeatList()->tick2utick(cs->loopOutTick());
-                              if (utickLoop < utickEnd) {
+                              int loopOutUTick = cs->repeatList()->tick2utick(cs->loopOutTick());
+                              if (loopOutUTick < scoreEndUTick) {
                                     // Also make sure we are not "before" the loop
-                                    if ((*pPlayPos)->first >= utickLoop || cs->repeatList()->utick2tick((*pPlayPos)->first) < cs->loopInTick()) {
-                                          qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   tickLoop = %d   playTime = %d",
-                                             (*pPlayPos)->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), utickLoop, *pPlayTime);
+                                    if (playPosUTick >= loopOutUTick || cs->repeatList()->utick2tick(playPosUTick) < cs->loopInTick()) {
+                                          qDebug ("Process: playPosUTick = %d, cs->loopInTick() = %d, cs->loopOutTick() = %d, getCurTick() = %d, loopOutUTick = %d, playFrame = %d",
+                                                            playPosUTick,      cs->loopInTick(),      cs->loopOutTick(),      getCurTick(),      loopOutUTick,    *pPlayFrame);
                                           if (preferences.useJackTransport) {
-                                                int loopInUtick = cs->repeatList()->tick2utick(cs->loopInTick());
-                                                _driver->seekTransport(loopInUtick);
-                                                if (loopInUtick != 0) {
-                                                      int seekto = loopInUtick - 2 * cs->utime2utick((qreal)_driver->bufferSize() / MScore::sampleRate);
+                                                int loopInUTick = cs->repeatList()->tick2utick(cs->loopInTick());
+                                                _driver->seekTransport(loopInUTick);
+                                                if (loopInUTick != 0) {
+                                                      int seekto = loopInUTick - 2 * cs->utime2utick((qreal)_driver->bufferSize() / MScore::sampleRate);
                                                       seekRT((seekto > 0) ? seekto : 0 );
                                                       }
                                                 }
@@ -807,9 +819,9 @@ void Seq::process(unsigned n, float* buffer)
                               metronome(n, p, inCountIn);
                               _synti->process(n, p);
                               p += n * 2;
-                              *pPlayTime  += n;
-                              frames    -= n;
-                              framePos  += n;
+                              *pPlayFrame  += n;
+                              framesRemain -= n;
+                              framePos     += n;
                               }
                         else {
                               while (n > 0) {
@@ -822,10 +834,10 @@ void Seq::process(unsigned n, float* buffer)
                                           *p++ = pcm[0][i];
                                           *p++ = pcm[1][i];
                                           }
-                                    *pPlayTime += rn;
-                                    frames   -= rn;
-                                    framePos += rn;
-                                    n        -= rn;
+                                    *pPlayFrame  += rn;
+                                    framesRemain -= rn;
+                                    framePos     += rn;
+                                    n            -= rn;
                                     }
                               }
                         }
@@ -843,14 +855,14 @@ void Seq::process(unsigned n, float* buffer)
                   ++(*pPlayPos);
                   mutex.unlock();
                   }
-            if (frames) {
+            if (framesRemain) {
                   if (cs->playMode() == PlayMode::SYNTHESIZER) {
-                        metronome(frames, p, inCountIn);
-                        _synti->process(frames, p);
-                        *pPlayTime += frames;
+                        metronome(framesRemain, p, inCountIn);
+                        _synti->process(framesRemain, p);
+                        *pPlayFrame += framesRemain;
                         }
                   else {
-                        int n = frames;
+                        int n = framesRemain;
                         while (n > 0) {
                               int section;
                               float** pcm;
@@ -861,10 +873,10 @@ void Seq::process(unsigned n, float* buffer)
                                     *p++ = pcm[0][i];
                                     *p++ = pcm[1][i];
                                     }
-                              *pPlayTime += rn;
-                              frames     -= rn;
-                              framePos   += rn;
-                              n          -= rn;
+                              *pPlayFrame  += rn;
+                              framesRemain -= rn;
+                              framePos     += rn;
+                              n            -= rn;
                               }
                         }
                   }
@@ -897,9 +909,9 @@ void Seq::process(unsigned n, float* buffer)
                         tackVolume = event.velo() ? qreal(event.value()) / 127.0 : 1.0;
                         }
                   }
-            if (frames) {
-                  metronome(frames, p, true);
-                  _synti->process(frames, p);
+            if (framesRemain) {
+                  metronome(framesRemain, p, true);
+                  _synti->process(framesRemain, p);
                   }
             }
       //
@@ -908,7 +920,7 @@ void Seq::process(unsigned n, float* buffer)
       qreal lv = 0.0f;
       qreal rv = 0.0f;
       p = buffer;
-      for (unsigned i = 0; i < n; ++i) {
+      for (unsigned i = 0; i < framesRemain; ++i) {
             qreal val = *p;
             lv = qMax(lv, qAbs(val));
             *p++ = val;
@@ -990,12 +1002,12 @@ void Seq::collectEvents()
       events.clear();
 
       cs->renderMidi(&events);
-      endTick = 0;
+      endUTick = 0;
 
       if (!events.empty()) {
             auto e = events.cend();
             --e;
-            endTick = e->first;
+            endUTick = e->first;
             }
       playPos  = events.cbegin();
       mutex.unlock();
@@ -1009,7 +1021,7 @@ void Seq::collectEvents()
 
 int Seq::getCurTick()
       {
-      return cs->utime2utick(qreal(playTime) / qreal(MScore::sampleRate));
+      return cs->utime2utick(qreal(playFrame) / qreal(MScore::sampleRate));
       }
 
 //---------------------------------------------------------
@@ -1043,7 +1055,7 @@ void Seq::setPos(int utick)
       if (utick != ucur)
             updateSynthesizerState(ucur, utick);
 
-      playTime  = cs->utick2utime(utick) * MScore::sampleRate;
+      playFrame = cs->utick2utime(utick) * MScore::sampleRate;
       playPos   = events.lower_bound(utick);
       mutex.unlock();
       }
@@ -1082,7 +1094,7 @@ void Seq::seekCommon(int utick)
 void Seq::seek(int utick)
       {
       if (preferences.useJackTransport) {
-            if (utick > endTick)
+            if (utick > endUTick)
                   utick = 0;
             _driver->seekTransport(utick);
             if (utick != 0)
@@ -1106,7 +1118,7 @@ void Seq::seek(int utick)
 
 void Seq::seekRT(int utick)
       {
-      if (preferences.useJackTransport && utick > endTick)
+      if (preferences.useJackTransport && utick > endUTick)
                   utick = 0;
       seekCommon(utick);
       setPos(utick);
@@ -1405,9 +1417,13 @@ void Seq::putEvent(const NPlayEvent& event, unsigned framePos)
             qDebug("bad channel value %d >= %d", channel, cs->midiMapping()->size());
             return;
             }
+
+      // audio
       int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti);
       _synti->play(event, syntiIdx);
-      if (_driver != 0 && (preferences.useJackMidi || preferences.useAlsaAudio))
+
+      // midi
+      if (_driver != 0 && (preferences.useJackMidi || preferences.useAlsaAudio || preferences.usePortaudioAudio))
             _driver->putEvent(event, framePos);
       }
 
@@ -1443,7 +1459,7 @@ void Seq::heartBeatTimeout()
       if (state != Transport::PLAY || inCountIn)
             return;
 
-      int endTime = playTime;
+      int endFrame = playFrame;
 
       mutex.lock();
       auto ppos = playPos;
@@ -1493,7 +1509,7 @@ void Seq::heartBeatTimeout()
       mscore->currentScoreView()->moveCursor(tick);
       mscore->setPos(tick);
 
-      emit(heartBeat(tick, utick, endTime));
+      emit(heartBeat(tick, utick, endFrame));
 
       PianorollEditor* pre = mscore->getPianorollEditor();
       if (pre && pre->isVisible())
@@ -1603,5 +1619,39 @@ void Seq::setLoopSelection()
 void Seq::handleTimeSigTempoChanged()
       {
       _driver->handleTimeSigTempoChanged();
+      }
+
+//---------------------------------------------------------
+//  setInitialMillisecondTimestampWithLatency
+//   Called whenever seq->process() starts.
+//   Sets a starting reference time for which subsequent PortMidi events will be offset from.
+//   Time is relative to the start of PortMidi's initialization.
+//---------------------------------------------------------
+
+void Seq::setInitialMillisecondTimestampWithLatency()
+      {
+     #ifdef USE_PORTMIDI
+           initialMillisecondTimestampWithLatency = Pt_Time() + preferences.portMidiOutputLatencyMilliseconds;
+           //qDebug("PortMidi initialMillisecondTimestampWithLatency: %d = %d + %d", initialMillisecondTimestampWithLatency, unsigned(Pt_Time()), preferences.portMidiOutputLatencyMilliseconds);
+     #endif
+     }
+
+//---------------------------------------------------------
+//  getCurrentMillisecondTimestampWithLatency
+//   Called when midi messages are sent to PortMidi device.
+//   Returns the time in milliseconds of the current play cursor.
+//   Time is relative to the start of PortMidi's initialization.
+//---------------------------------------------------------
+
+unsigned Seq::getCurrentMillisecondTimestampWithLatency(unsigned framePos) const
+      {
+#ifdef USE_PORTMIDI
+      unsigned playTimeMilliseconds = unsigned(framePos * 1000) / unsigned(MScore::sampleRate);
+      //qDebug("PortMidi timestamp = %d + %d", initialMillisecondTimestampWithLatency, playTimeMilliseconds);
+      return initialMillisecondTimestampWithLatency + playTimeMilliseconds;
+#else
+      qDebug("Shouldn't be using this function if not using PortMidi");
+      return 0;
+#endif
       }
 }
