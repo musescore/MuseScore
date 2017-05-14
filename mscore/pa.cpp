@@ -47,6 +47,7 @@ static PaStream* stream;
 int paCallback(const void*, void* out, long unsigned frames,
    const PaStreamCallbackTimeInfo*, PaStreamCallbackFlags, void *)
       {
+      seq->setInitialMillisecondTimestampWithLatency();
       seq->process((unsigned)frames, (float*)out);
       return 0;
       }
@@ -96,8 +97,10 @@ bool Portaudio::init(bool)
             qDebug("using PortAudio Version: %s", Pa_GetVersionText());
 
       PaDeviceIndex idx = preferences.portaudioDevice;
-      if (idx < 0)
+      if (idx < 0) {
             idx = Pa_GetDefaultOutputDevice();
+            qDebug("No device selected.  PortAudio detected %d devices.  Will use the default device (index %d).", Pa_GetDeviceCount(), idx);
+            }
 
       const PaDeviceInfo* di = Pa_GetDeviceInfo(idx);
 
@@ -271,6 +274,83 @@ void Portaudio::midiRead()
       {
       if (midiDriver)
             midiDriver->read();
+      }
+
+//---------------------------------------------------------
+//   putEvent
+//---------------------------------------------------------
+
+// Prevent killing sequencer with wrong data
+#define less128(__less) ((__less >=0 && __less <= 127) ? __less : 0)
+
+// TODO: this was copied from Jack version...I'd like to eventually unify these two, so that they handle midi event types in the same manner
+void Portaudio::putEvent(const NPlayEvent& e, unsigned framePos)
+      {
+      PortMidiDriver* portMidiDriver = static_cast<PortMidiDriver*>(midiDriver);
+      if (!portMidiDriver || !portMidiDriver->getOutputStream() || !portMidiDriver->canOutput())
+            return;
+
+      int portIdx = seq->score()->midiPort(e.channel());
+      int chan    = seq->score()->midiChannel(e.channel());
+
+      if (portIdx < 0 ) {
+            qDebug("Portaudio::putEvent: invalid port %d", portIdx);
+            return;
+            }
+
+      if (midiOutputTrace) {
+            int a     = e.dataA();
+            int b     = e.dataB();
+            qDebug("MidiOut<%d>: Portaudio: %02x %02x %02x, chan: %i", portIdx, e.type(), a, b, chan);
+            }
+
+      switch(e.type()) {
+            case ME_NOTEON:
+            case ME_NOTEOFF:
+            case ME_POLYAFTER:
+            case ME_CONTROLLER:
+                  // Catch CTRL_PROGRAM and let other ME_CONTROLLER events to go
+                  if (e.dataA() == CTRL_PROGRAM) {
+                        // Convert CTRL_PROGRAM event to ME_PROGRAM
+                        long msg = Pm_Message(ME_PROGRAM | chan, less128(e.dataB()), 0);
+                        PmError error = Pm_WriteShort(portMidiDriver->getOutputStream(), seq->getCurrentMillisecondTimestampWithLatency(framePos), msg);
+                        if (error != pmNoError) {
+                              qDebug("Portaudio: error %d", error);
+                              return;
+                              }
+                        break;
+                        }
+                  //Fallback
+            case ME_PITCHBEND:
+                  {
+                  long msg = Pm_Message(e.type() | chan, less128(e.dataA()), less128(e.dataB()));
+                  PmError error = Pm_WriteShort(portMidiDriver->getOutputStream(), seq->getCurrentMillisecondTimestampWithLatency(framePos), msg);
+                  if (error != pmNoError) {
+                        qDebug("Portaudio: error %d", error);
+                        return;
+                        }
+                  }
+                  break;
+
+            case ME_PROGRAM:
+            case ME_AFTERTOUCH:
+                  {
+                  long msg = Pm_Message(e.type() | chan, less128(e.dataA()), 0);
+                  PmError error = Pm_WriteShort(portMidiDriver->getOutputStream(), seq->getCurrentMillisecondTimestampWithLatency(framePos), msg);
+                  if (error != pmNoError) {
+                        qDebug("Portaudio: error %d", error);
+                        return;
+                        }
+                  }
+                  break;
+            case ME_SONGPOS:
+            case ME_CLOCK:
+            case ME_START:
+            case ME_CONTINUE:
+            case ME_STOP:
+                  qDebug("Portaudio: event type %x not supported", e.type());
+                  break;
+            }
       }
 
 //---------------------------------------------------------
