@@ -134,16 +134,17 @@ class Seq : public QObject, public Sequencer {
       int peakTimer[2];
 
       EventMap events;                    // playlist for playback mode (pre-rendered)
-      EventMap countInEvents;
-      QQueue<NPlayEvent> _liveEventQueue;  // playlist for score editing and note entry (rendered live)
+      EventMap countInEvents;             // playlist of any metronome countin clicks
+      QQueue<NPlayEvent> _liveEventQueue; // playlist for score editing and note entry (rendered live)
 
-      int playTime;                       // current play position in samples
-      int countInPlayTime;
-      int endTick;
+      int playFrame;                      // current play position in samples, relative to the first frame of playback
+      int countInPlayFrame;               // current play position in samples, relative to the first frame of countin
+      int endUTick;                       // the final tick of midi events collected by collectEvents()
 
       EventMap::const_iterator playPos;   // moved in real time thread
       EventMap::const_iterator countInPlayPos;
       EventMap::const_iterator guiPos;    // moved in gui thread
+
       QList<const Note*> markedNotes;     // notes marked as sounding
 
       uint tackRemain;        // metronome state (remaining audio samples)
@@ -151,6 +152,8 @@ class Seq : public QObject, public Sequencer {
       qreal tackVolume;       // relative volumes
       qreal tickVolume;
       qreal metronomeVolume;  // overall volume
+
+      unsigned initialMillisecondTimestampWithLatency; // millisecond timestamp (relative to PortAudio's initialization) of start of playback
 
       QTimer* heartBeatTimer;
       QTimer* noteTimer;
@@ -219,8 +222,8 @@ class Seq : public QObject, public Sequencer {
       bool isStopped() const    { return state == Transport::STOP; }
 
       void processMessages();
-      void process(unsigned, float*);
-      int getEndTick() const    { return endTick;  }
+      void process(unsigned framesPerPeriod, float* buffer);
+      int getEndUTick() const   { return endUTick;  }
       bool isRealtime() const   { return true;     }
       void sendMessage(SeqMsg&) const;
 
@@ -249,6 +252,9 @@ class Seq : public QObject, public Sequencer {
       void stopNoteTimer();
       void recomputeMaxMidiOutPort();
       float metronomeGain() const      { return metronomeVolume; }
+
+      void setInitialMillisecondTimestampWithLatency();
+      unsigned getCurrentMillisecondTimestampWithLatency(unsigned framePos) const;
       };
 
 extern Seq* seq;

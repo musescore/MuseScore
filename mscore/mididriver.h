@@ -59,6 +59,7 @@ class Port {
       bool operator<(const Port& p) const;
       friend class MidiDriver;
       friend class AlsaMidiDriver;
+      friend class PortMidiDriver;
       };
 
 //---------------------------------------------------------

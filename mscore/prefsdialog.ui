@@ -2699,7 +2699,7 @@
            </spacer>
           </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="label_21">
+           <widget class="QLabel" name="portAudioApiLabel">
             <property name="text">
              <string>API:</string>
             </property>
@@ -2754,7 +2754,7 @@
            </widget>
           </item>
           <item row="0" column="2">
-           <widget class="QLabel" name="label_3">
+           <widget class="QLabel" name="portAudioDeviceLabel">
             <property name="text">
              <string>Device:</string>
             </property>
@@ -2778,6 +2778,68 @@
              <string>Choose device</string>
             </property>
            </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="portMidiOutputLabel">
+            <property name="text">
+             <string>MIDI Output:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4">
+           <widget class="QComboBox" name="portMidiOutput">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="accessibleName">
+             <string>MIDI Output</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose MIDI Output</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="6">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QLabel" name="portMidiOutputLatencyLabel">
+              <property name="text">
+               <string>MIDI Output Latency:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="portMidiOutputLatencyMilliseconds">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Latency&lt;/span&gt; is a delay in milliseconds applied to timestamps, to inform the driver about when the output should actually occur.&lt;/p&gt;&lt;p&gt;If &lt;span style=&quot; font-weight:600;&quot;&gt;latency&lt;/span&gt; is zero, MIDI messages are delivered as fast as possible, but may contain jitter.&lt;/p&gt;&lt;p&gt;Setting &lt;span style=&quot; font-weight:600;&quot;&gt;latency&lt;/span&gt; greater than zero may help the driver alleviate any jitter.&lt;/p&gt;&lt;p&gt;Adjusting &lt;span style=&quot; font-weight:600;&quot;&gt;latency&lt;/span&gt; can help synchronize your midi hardware with MuseScore's internal audio synthesizer, so that they both sound notes at the same time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="accessibleName">
+               <string>MIDI Output Latency</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Choose MIDI Output Latency</string>
+              </property>
+              <property name="suffix">
+               <string extracomment="milliseconds">ms</string>
+              </property>
+              <property name="maximum">
+               <number>999</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
@@ -2833,7 +2895,7 @@
            </widget>
           </item>
           <item row="1" column="4">
-           <widget class="QLabel" name="label_13">
+           <widget class="QLabel" name="alsaFragmentsLabel">
             <property name="text">
              <string>Fragments:</string>
             </property>
@@ -2843,7 +2905,7 @@
            </widget>
           </item>
           <item row="1" column="6">
-           <widget class="QLabel" name="label_12">
+           <widget class="QLabel" name="alsaPeriodLabel">
             <property name="text">
              <string>Period Size:</string>
             </property>
@@ -2853,14 +2915,14 @@
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="label_10">
+           <widget class="QLabel" name="alsaDeviceLabel">
             <property name="text">
              <string>Device:</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_11">
+           <widget class="QLabel" name="alsaSampleRateLabel">
             <property name="text">
              <string>Sample rate:</string>
             </property>
@@ -2979,7 +3041,7 @@
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QLabel" name="label_22">
+           <widget class="QLabel" name="alsaSampleRateHzLabel">
             <property name="text">
              <string extracomment="Hertz">Hz</string>
             </property>
@@ -3161,7 +3223,7 @@
           </palette>
          </property>
          <property name="text">
-          <string>Attention: Any changes on this page require a restart of MuseScore.</string>
+          <string>Attention: Any changes on this page require a restart of MuseScore.  Precise MIDI output timing is only possible via JACK.</string>
          </property>
         </widget>
        </item>
@@ -4164,6 +4226,8 @@
   <tabstop>portaudioApi</tabstop>
   <tabstop>portaudioDevice</tabstop>
   <tabstop>portMidiInput</tabstop>
+  <tabstop>portMidiOutput</tabstop>
+  <tabstop>portMidiOutputLatencyMilliseconds</tabstop>
   <tabstop>alsaDriver</tabstop>
   <tabstop>alsaDevice</tabstop>
   <tabstop>alsaSampleRate</tabstop>

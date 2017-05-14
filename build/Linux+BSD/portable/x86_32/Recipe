@@ -48,6 +48,7 @@ yum -y install \
   libxslt-devel \
   mesa-libGL-devel \
   portaudio-devel \
+  portmidi-devel \
   pulseaudio-libs-devel
 
 # get Qt

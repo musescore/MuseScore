@@ -41,8 +41,9 @@ class Seq;
 class PortMidiDriver : public MidiDriver {
       int inputId;
       int outputId;
-      PmStream* inputStream;
       QTimer* timer;
+      PmStream* inputStream;
+      PmStream* outputStream;
 
    public:
       PortMidiDriver(Seq*);
@@ -55,7 +56,13 @@ class PortMidiDriver : public MidiDriver {
       virtual void read();
       virtual void write(const Event&);
       QStringList deviceInList() const;
-      int getDeviceIn(const QString& name);
+      QStringList deviceOutList() const;
+      int getDeviceIn(const QString& interfaceAndName);
+      int getDeviceOut(const QString& interfaceAndName);
+      PmStream* getInputStream() { return inputStream; }
+      PmStream* getOutputStream() { return outputStream; }
+      bool canOutput() { return outputStream != 0; }
+      bool isSameCoreMidiIacBus(const QString& inInterfaceAndName, const QString& outInterfaceAndName);
       };
 
 
