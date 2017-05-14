@@ -32,6 +32,7 @@ matrix:
             - curl
             - libasound2-dev
             - portaudio19-dev
+            - libportmidi-dev
             - libsndfile1-dev
             - zlib1g-dev
             - libfreetype6-dev
