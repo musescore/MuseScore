@@ -141,7 +141,6 @@ class Xml : public QTextStream {
       static const int BS = 2048;
 
       QList<QString> stack;
-      void putLevel();
       QList<std::pair<int,const Spanner*>> _spanner;
       int _spannerId = 1;
       SelectionFilter _filter;
@@ -197,6 +196,8 @@ class Xml : public QTextStream {
 
       static QString xmlString(const QString&);
       static QString xmlString(ushort c);
+
+      void putLevel();
       };
 
 extern PlaceText readPlacement(XmlReader&);
