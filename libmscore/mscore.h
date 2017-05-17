@@ -455,6 +455,7 @@ class MScore : public QObject {
       static bool noImages;
 
       static bool pdfPrinting;
+      static bool svgPrinting;
 
       static qreal verticalPageGap;
       static qreal horizontalPageGapEven;

@@ -98,6 +98,7 @@ int     MScore::mtcType;
 bool    MScore::noExcerpts = false;
 bool    MScore::noImages = false;
 bool    MScore::pdfPrinting = false;
+bool    MScore::svgPrinting = false;
 
 #ifdef SCRIPT_INTERFACE
 QQmlEngine* MScore::_qml = 0;
