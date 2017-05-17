@@ -2608,6 +2608,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       QString title(score->title());
       score->setPrinting(true);
       MScore::pdfPrinting = true;
+      MScore::svgPrinting = true;
       const QList<Page*>& pl = score->pages();
       int pages = pl.size();
       int padding = QString("%1").arg(pages).size();
@@ -2748,6 +2749,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       MScore::pixelRatio = pr;
       score->setPrinting(false);
       MScore::pdfPrinting = false;
+      MScore::svgPrinting = false;
       return true;
       }
 

@@ -109,6 +109,8 @@ int     MScore::mtcType;
 bool    MScore::noExcerpts = false;
 bool    MScore::noImages = false;
 bool    MScore::pdfPrinting = false;
+bool    MScore::svgPrinting = false;
+
 double  MScore::pixelRatio  = 0.8;        // DPI / logicalDPI
 
 MPaintDevice* MScore::_paintDevice;
