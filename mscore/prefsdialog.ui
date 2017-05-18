@@ -3450,7 +3450,7 @@
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_9">
          <property name="title">
-          <string>PNG/SVG</string>
+          <string>PNG</string>
          </property>
          <property name="flat">
           <bool>false</bool>
