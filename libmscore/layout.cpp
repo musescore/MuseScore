@@ -1789,6 +1789,10 @@ static bool validMMRestMeasure(Measure* m)
 #endif
 
       for (Segment* s = m->first(); s; s = s->next()) {
+	    if (s->segmentType() == Segment::Type::Breath) {
+		return false;
+		}
+
             for (Element* e : s->annotations()) {
                   if (e->type() != Element::Type::REHEARSAL_MARK &&
                       e->type() != Element::Type::TEMPO_TEXT &&
