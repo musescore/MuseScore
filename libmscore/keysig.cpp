@@ -19,6 +19,7 @@
 #include "score.h"
 #include "undo.h"
 #include "xml.h"
+#include "jianpunote.h"
 
 namespace Ms {
 
@@ -39,6 +40,25 @@ const char* keyNames[] = {
       QT_TRANSLATE_NOOP("MuseScore", "F major, D minor"),
       QT_TRANSLATE_NOOP("MuseScore", "C major, A minor"),
       QT_TRANSLATE_NOOP("MuseScore", "Open/Atonal")
+      };
+
+// Jianpu staff key names (major-key/minor-key) in the order of Ms::Key values.
+const char* jianpuKeyNames[(int) Key::NUM_OF] = {
+      "Cb/Abm",   // C_B
+      "Gb/Ebm",   // G_B
+      "Db/Bbm",   // D_B
+      "Ab/Fm",    // A_B
+      "Eb/Cm",    // E_B
+      "Bb/Gm",    // B_B
+      "F/Dm",     // F
+      "C/Am",     // C
+      "G/Em",     // G
+      "D/Bm",     // D
+      "A/F#m",    // A
+      "E/C#m",    // E
+      "B/G#m",    // B
+      "F#/D#m",   // F_S
+      "C#/A#m",   // C_S
       };
 
 //---------------------------------------------------------
@@ -103,6 +123,25 @@ void KeySig::layout()
       _sig.keySymbols().clear();
       if (staff() && !staff()->genKeySig())     // no key sigs on TAB staves
             return;
+
+      // Lay out Jianpu staff key signature.
+      if (staff() && staff()->isJianpuStaff(segment()->tick())) {
+            // Update Jianpu key name if empty.
+            // Jianpu key name is updated in KeySig::setKey(). But setKey() does not get called normally.
+            if (_jianpuKeyName.isEmpty()) {
+                  Key key = staff()->key(segment()->tick());
+                  _jianpuKeyName = QString(jianpuKeyNames[(int) key - (int) Key::MIN]);
+                  }
+            // Get note font metrics.
+            StaffType* st = staff()->staffType(segment()->tick());
+            QFontMetricsF fm(st->jianpuKeyFont(), MScore::paintDevice());
+            QRectF rect = fm.tightBoundingRect(_jianpuKeyName);
+            // Font bounding rectangle height is too large; make it smaller.
+            rect.setHeight(rect.height() * 0.7);
+            setbbox(rect);
+            setPos(0, JianpuNote::NOTE_BASELINE * spatium() * 0.5);
+            return;
+            }
 
       // determine current clef for this staff
       ClefType clef = ClefType::G;
@@ -265,6 +304,25 @@ void KeySig::layout()
 
 void KeySig::draw(QPainter* p) const
       {
+      // Draw Jianpu staff key signature.
+      if (staff() && staff()->isJianpuStaff(segment()->tick())) {
+            // Get note font metrics.
+            StaffType* st = staff()->staffType(segment()->tick());
+            QFont f(st->jianpuKeyFont());
+            f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+            p->setFont(f);
+            p->setPen(QColor(curColor()));
+            // We take bounding box y-position as top of the font character.
+            // But function "drawText" takes y-position as baseline of the font,
+            // which is the near bottom of font character.
+            // So adjust y-position for "drawText" to the bottom of the bounding box.
+            qreal dy=35; // Manual adjustment
+            p->drawText(QPointF(pos().x() + bbox().x(),
+                                pos().y() + bbox().y() + bbox().height() + dy),
+                        _jianpuKeyName);
+            return;
+            }
+
       p->setPen(curColor());
       for (const KeySym& ks: _sig.keySymbols())
             drawSymbol(ks.sym, p, QPointF(ks.pos.x(), ks.pos.y()));
@@ -319,6 +377,8 @@ void KeySig::setKey(Key key)
       KeySigEvent e;
       e.setKey(key);
       setKeySigEvent(e);
+
+      _jianpuKeyName = QString(jianpuKeyNames[(int) key - (int) Key::MIN]);
       }
 
 //---------------------------------------------------------
@@ -599,6 +659,4 @@ QString KeySig::accessibleInfo() const
       }
 
 }
-
-
 

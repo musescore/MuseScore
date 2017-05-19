@@ -155,6 +155,7 @@ enum class StaffTypes : signed char {
       TAB_6SIMPLE, TAB_6COMMON, TAB_6FULL,
             TAB_4SIMPLE, TAB_4COMMON, TAB_4FULL,
             TAB_UKULELE, TAB_BALALAJKA, TAB_ITALIAN, TAB_FRENCH,
+      JIANPU,
       STAFF_TYPES,
       // some useful shorthands:
             PERC_DEFAULT = StaffTypes::PERC_5LINE,
@@ -243,6 +244,13 @@ class StaffType {
       static QList<TablatureFretFont> _fretFonts;
       static QList<TablatureDurationFont> _durationFonts;
       static std::vector<StaffType> _presets;
+
+      // Jianpu: configurable properties
+      // TODO: read them from configuration file.
+      QFont _jianpuNoteFont = QFont("FreeSerif", 11.0, QFont::Bold); // font used to draw Jianpu notes/rests.
+      qreal _jianpuNoteFontSize  = 11.0;  // the size (in points) for the Jianpu note/rest font.
+      QFont _jianpuKeyFont = QFont("FreeSerif", 11.0, QFont::Bold); // font used to draw Jianpu key signature.
+      qreal _jianpuKeyFontSize  = 11.0;   // the size (in points) for the Jianpu key signature font.
 
       void  setDurationMetrics();
       void  setFretMetrics();
@@ -362,6 +370,12 @@ class StaffType {
       bool  useNumbers() const            { return _useNumbers;         }
       bool  showBackTied() const          { return _showBackTied;       }
 
+      bool isJianpuStaff() const  { return _group == StaffGroup::JIANPU; }
+      const QFont& jianpuNoteFont() const { return _jianpuNoteFont; }
+      qreal jianpuNoteFontSize() const    { return _jianpuNoteFontSize; }
+      const QFont& jianpuKeyFont() const  { return _jianpuKeyFont; }
+      qreal jianpuKeyFontSize() const     { return _jianpuKeyFontSize; }
+
       // properties setters (setting some props invalidates metrics)
       void  setDurationFontName(const QString&);
       void  setDurationFontSize(qreal);
@@ -381,6 +395,11 @@ class StaffType {
       void  setShowTabFingering (bool val) { _showTabFingering = val;         }
       void  setUseNumbers(bool val)       { _useNumbers = val; _fretMetricsValid = false; }
       void  setShowBackTied(bool val)     { _showBackTied = val;        }
+
+      void setJianpuNoteFont(QFont& font)       { _jianpuNoteFont = font; }
+      void setJianpuNoteFontSize(qreal size)    { _jianpuNoteFontSize = size; }
+      void setJianpuKeyFont(QFont& font)        { _jianpuKeyFont = font; }
+      void setJianpuKeyFontSize(qreal size)     { _jianpuKeyFontSize = size; }
 
       // utility functions for tab specially managed elements
       QPointF chordStemPos(const Chord*) const;

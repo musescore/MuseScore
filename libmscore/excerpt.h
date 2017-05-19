@@ -13,6 +13,8 @@
 #ifndef __EXCERPT_H__
 #define __EXCERPT_H__
 
+#include "element.h"
+
 namespace Ms {
 
 class MasterScore;

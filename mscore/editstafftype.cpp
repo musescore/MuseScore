@@ -281,6 +281,10 @@ void EditStaffType::setValues()
                   showLedgerLinesPercussion->setChecked(staffType.showLedgerLines());
                   stemlessPercussion->setChecked(staffType.slashStyle());
                   break;
+
+            case StaffGroup::JIANPU:
+                  //TODO: TBD
+                  break;
             }
       updatePreview();
       blockSignals(false);
@@ -568,6 +572,9 @@ QString EditStaffType::createUniqueStaffTypeName(StaffGroup group)
                         break;
                   case StaffGroup::TAB:
                         name = QString("Tab-%1 [*]").arg(idx);
+                        break;
+                  case StaffGroup::JIANPU:
+                        //TODO: TBD
                         break;
                   }
             bool found = false;

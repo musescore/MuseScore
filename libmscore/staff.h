@@ -117,7 +117,7 @@ class Staff final : public ScoreElement {
       void cleanBrackets();
 
    public:
-      Staff(Score* score = 0) : ScoreElement(score) {}
+      Staff(Score* score = 0) : ScoreElement(score) { }
       ~Staff();
       void init(const InstrumentTemplate*, const StaffType *staffType, int);
       void initFromStaffType(const StaffType* staffType);
@@ -210,6 +210,7 @@ class Staff final : public ScoreElement {
       bool isPitchedStaff(int tick) const;
       bool isTabStaff(int tick) const;
       bool isDrumStaff(int tick) const;
+      bool isJianpuStaff(int tick) const;
 
       int lines(int tick) const;
       void setLines(int tick, int lines);

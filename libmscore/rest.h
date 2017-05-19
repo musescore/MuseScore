@@ -27,6 +27,8 @@ enum class SymId;
 //---------------------------------------------------------
 
 class Rest : public ChordRest {
+      friend class JianpuRest;
+
       // values calculated by layout:
       SymId _sym;
       int dotline    { -1  };       // depends on rest symbol

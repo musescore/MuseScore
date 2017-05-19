@@ -31,7 +31,9 @@ struct BeamFragment;
 //   @@ Beam
 //---------------------------------------------------------
 
-class Beam final : public Element {
+class Beam : public Element {
+      friend class JianpuBeam;
+
       QVector<ChordRest*> _elements;        // must be sorted by tick
       QVector<QLineF*> beamSegments;
       Direction _direction;

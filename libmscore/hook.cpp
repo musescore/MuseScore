@@ -29,6 +29,10 @@ Hook::Hook(Score* s)
       setZ(int(type()) * 100);
       }
 
+Hook::~Hook()
+      {
+      }
+
 //---------------------------------------------------------
 //   setHookType
 //---------------------------------------------------------
@@ -82,4 +86,4 @@ void Hook::draw(QPainter* painter) const
       Symbol::draw(painter);
       }
 
-}
+} // namespace Ms

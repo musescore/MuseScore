@@ -34,6 +34,7 @@ class Chord;
 class StemSlash;
 class LedgerLine;
 class AccidentalState;
+class StaffFactory;
 
 enum class TremoloChordType : char { TremoloSingle, TremoloFirstNote, TremoloSecondNote };
 enum class PlayEventType : char    {
@@ -58,7 +59,9 @@ enum class PlayEventType : char    {
 //   @P stemDirection Direction       the stem slash of the chord (acciaccatura) if any (read only)
 //---------------------------------------------------------
 
-class Chord final : public ChordRest {
+class Chord : public ChordRest {
+      friend class JianpuChord;
+
       std::vector<Note*>   _notes;       // sorted to decreasing line step
       LedgerLine*          _ledgerLines; // single linked list
 
@@ -86,7 +89,7 @@ class Chord final : public ChordRest {
       virtual qreal downPos() const;
       qreal centerX() const;
       void addLedgerLines();
-      void processSiblings(std::function<void(Element*)> func) const;
+      virtual void processSiblings(std::function<void(Element*)> func) const;
 
       void layoutPitched();
       void layoutTablature();
@@ -94,12 +97,12 @@ class Chord final : public ChordRest {
 
    public:
       Chord(Score* s = 0);
-      Chord(const Chord&, bool link = false);
+      Chord(const Chord&, bool link = false, StaffFactory* fac = nullptr);
       ~Chord();
       Chord &operator=(const Chord&) = delete;
 
-      virtual Chord* clone() const       { return new Chord(*this, false); }
-      virtual Element* linkedClone()     { return new Chord(*this, true); }
+      virtual Chord* clone() const       { return new Chord(*this, false, nullptr); }
+      virtual Element* linkedClone()     { return new Chord(*this, true, nullptr); }
       virtual void undoUnlink() override;
 
       virtual void setScore(Score* s);
@@ -119,7 +122,7 @@ class Chord final : public ChordRest {
       qreal defaultStemLength();
 
       virtual void layoutStem1() override;
-      void layoutStem();
+      virtual void layoutStem();
       void layoutArpeggio2();
 
       std::vector<Note*>& notes()                 { return _notes; }

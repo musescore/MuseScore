@@ -113,6 +113,7 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
 
       bool canUseTabs = false; // assume only normal staves are applicable
       bool canUsePerc = false;
+      bool canUseJianpu = false;
       PartListItem* part = static_cast<PartListItem*>(QTreeWidgetItem::parent());
 
       // PartListItem has different members filled out if used in New Score Wizard
@@ -123,6 +124,7 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
             canUseTabs = stringData && stringData->strings() > 0;
             canUsePerc = part->it ? part->it->useDrumset :
                         ( (part->part && part->part->instrument()) ? part->part->instrument()->useDrumset() : false);
+            canUseJianpu = !canUsePerc;
             }
       _staffTypeCombo = new QComboBox();
       _staffTypeCombo->setAutoFillBackground(true);
@@ -130,7 +132,8 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       for (const StaffType& st : StaffType::presets()) {
             if ( (st.group() == StaffGroup::STANDARD && (!canUsePerc))    // percussion excludes standard
                         || (st.group() == StaffGroup::PERCUSSION && canUsePerc)
-                        || (st.group() == StaffGroup::TAB && canUseTabs)) {
+                        || (st.group() == StaffGroup::TAB && canUseTabs)
+                        || (st.group() == StaffGroup::JIANPU && canUseJianpu)) {
                   _staffTypeCombo->addItem(st.name(), idx);
                   }
             ++idx;
@@ -285,6 +288,9 @@ void PartListItem::updateClefs()
                         break;
                   case StaffGroup::PERCUSSION:
                         clefType = ClefTypeList(ClefType::PERC);
+                        break;
+                  case StaffGroup::JIANPU:
+                        //TODO: TBD
                         break;
                   }
             sli->setClefType(clefType);

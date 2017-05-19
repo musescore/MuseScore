@@ -19,6 +19,7 @@
 #include "tremolo.h"
 #include "note.h"
 #include "xml.h"
+#include "jianpuchord.h"
 
 // TEMPORARY HACK!!
 #include "sym.h"
@@ -134,6 +135,17 @@ void Stem::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Stem::draw(QPainter* painter) const
       {
+#if 0
+      // This does not work when Jianpu staff is created on the fly as a link to a Standard staff.
+      // This works when opening a score file that has Jianpu staff saved previously.
+      if (staff() && staff()->isJianpuStaff(chord()->tick()))
+            return;
+#else
+      // This works for all cases.
+      if (dynamic_cast<JianpuChord*>(this->parent()))
+            return;
+#endif
+
       // hide if second chord of a cross-measure pair
       if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND)
             return;

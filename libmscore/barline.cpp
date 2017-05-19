@@ -291,11 +291,11 @@ void BarLine::getY() const
 
       int from    = _spanFrom;
       int to      = _spanTo;
-      int oneLine = st1->lines() == 1;
-      if (oneLine && _spanFrom == 0)
+      int oneOrNoLine = st1->lines() == 1 || st1->lines() == 0;
+      if (oneOrNoLine && _spanFrom == 0)
             from = BARLINE_SPAN_1LINESTAFF_FROM;
       if (!_spanStaff) {
-            if (oneLine && _spanTo == 0)
+            if (oneOrNoLine && _spanTo == 0)
                   to = BARLINE_SPAN_1LINESTAFF_TO;
             }
 
@@ -867,7 +867,7 @@ void BarLine::endEditDrag(EditData& ed)
                   newSpanFrom = ((int)floor(y1 / (staff()->lineDistance(tick()) * spatium()) + 0.5 )) * 2;
                   // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
                   // except for 1-line staves
-                  int minFrom = staff1lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO;
+                  int minFrom = staff1lines <= 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO;
                   if (newSpanFrom <  minFrom)
                         newSpanFrom = minFrom;
                   if (newSpanFrom > staff1lines * 2)
@@ -880,7 +880,7 @@ void BarLine::endEditDrag(EditData& ed)
                   qreal staff2TopY = systTopY + syst->staff(staffIdx2)->y();
                   newSpanTo = ((int)floor( (ay2 - staff2TopY) / (staff2->lineDistance(tick()) * spatium()) + 0.5 )) * 2;
                   // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
-                  int maxTo = staff2lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : staff2lines * 2;
+                  int maxTo = staff2lines <= 1 ? BARLINE_SPAN_1LINESTAFF_TO : staff2lines * 2;
                   if (newSpanTo <  MIN_BARLINE_SPAN_FROMTO)
                         newSpanTo = MIN_BARLINE_SPAN_FROMTO;
                   if (newSpanTo > maxTo)

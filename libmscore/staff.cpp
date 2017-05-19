@@ -278,6 +278,10 @@ ClefTypeList Staff::clefType(int tick) const
                   case StaffGroup::PERCUSSION:
                         ct = ClefTypeList(ClefType::PERC);
                         break;
+                  case StaffGroup::JIANPU:
+                        //TODO: Replace with Jianpu clef type.
+                        ct = defaultClefType();
+                        break;
                   }
             }
       return ct;
@@ -727,7 +731,17 @@ bool Staff::readProperties(XmlReader& e)
 qreal Staff::height() const
       {
       int tick = 0;     // TODO
-      return (lines(tick) == 1 ? 2 : lines(tick)-1) * spatium(tick) * staffType(tick)->lineDistance().val();
+      int lineCount, spaceCount;
+      lineCount = lines(tick);
+      if (lineCount == 0)
+            // Jianpu staff with no lines.
+            spaceCount = 4; // note by ericfont: I don't like using lineCount == 0 as the test for jianpu.  Would rather just test if isJianpuStaff().
+      else if (lineCount == 1)
+            spaceCount = 2;
+      else
+            spaceCount = lineCount - 1;
+
+      return spaceCount * spatium(tick) * staffType(tick)->lineDistance().val();
       }
 
 //---------------------------------------------------------
@@ -1407,6 +1421,15 @@ bool Staff::isTabStaff(int tick) const
 bool Staff::isDrumStaff(int tick) const
       {
       return staffType(tick)->group() == StaffGroup::PERCUSSION;
+      }
+
+//---------------------------------------------------------
+//   isJianpuStaff
+//---------------------------------------------------------
+
+bool Staff::isJianpuStaff(int tick) const
+      {
+      return staffType(tick)->group() == StaffGroup::JIANPU;
       }
 
 //---------------------------------------------------------

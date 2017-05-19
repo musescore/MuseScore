@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2017 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -10,37 +10,33 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __HOOK_H__
-#define __HOOK_H__
+#ifndef __JIANPUHOOK_H__
+#define __JIANPUHOOK_H__
 
-#include "symbol.h"
+#include "hook.h"
 
 namespace Ms {
 
 class Chord;
 
 //---------------------------------------------------------
-//   @@ Hook
+//   @@ JianpuHook for drawing duration beams in place of hooks.
 //---------------------------------------------------------
 
-class Hook : public Symbol {
-      friend class JianpuHook;
+class JianpuHook : public Hook {
+      Q_GADGET
 
-      int _hookType;
+   private:
+      std::vector<QLineF*> _durationBeams;  ///< Duration beams for hooks.
 
    public:
-      Hook(Score* = 0);
-      ~Hook();
-      virtual Hook* clone() const override        { return new Hook(*this); }
-      virtual qreal mag() const override          { return parent()->mag(); }
-      virtual ElementType type() const override   { return ElementType::HOOK; }
-      void setHookType(int v);
-      int hookType() const                        { return _hookType; }
+      JianpuHook(Score* = 0);
+      JianpuHook(const Hook& h);
+      ~JianpuHook();
+      virtual JianpuHook* clone() const override { return new JianpuHook(*this); }
       virtual void layout() override;
       virtual void draw(QPainter*) const override;
-      Chord* chord() const                         { return (Chord*)parent(); }
       };
-
 
 }     // namespace Ms
 #endif

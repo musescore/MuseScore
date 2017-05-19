@@ -1449,6 +1449,9 @@ void Score::upDown(bool up, UpDownMode mode)
                                     break;
                               }
                         break;
+                  case StaffGroup::JIANPU:
+                        //TODO: TBD
+                        break;
                   }
 
             if ((oNote->pitch() != newPitch) || (oNote->tpc1() != newTpc1) || oNote->tpc2() != newTpc2) {

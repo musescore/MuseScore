@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2017 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -10,38 +10,47 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __HOOK_H__
-#define __HOOK_H__
+#ifndef __JIANPUBEAM_H__
+#define __JIANPUBEAM_H__
 
-#include "symbol.h"
+#include "beam.h"
+#include "element.h"
+#include "durationtype.h"
+#include "xml.h"
+
+class QPainter;
 
 namespace Ms {
 
+class ChordRest;
+class MuseScoreView;
 class Chord;
+class System;
 
 //---------------------------------------------------------
-//   @@ Hook
+//   @@ JianpuBeam
 //---------------------------------------------------------
 
-class Hook : public Symbol {
-      friend class JianpuHook;
-
-      int _hookType;
+class JianpuBeam : public Beam {
+      Q_GADGET
 
    public:
-      Hook(Score* = 0);
-      ~Hook();
-      virtual Hook* clone() const override        { return new Hook(*this); }
-      virtual qreal mag() const override          { return parent()->mag(); }
-      virtual ElementType type() const override   { return ElementType::HOOK; }
-      void setHookType(int v);
-      int hookType() const                        { return _hookType; }
+      JianpuBeam(Score* = 0);
+      JianpuBeam(const Beam&);
+      JianpuBeam(const JianpuBeam&);
+      ~JianpuBeam();
+
+      virtual JianpuBeam* clone() const override { return new JianpuBeam(*this); }
+      virtual bool isEditable() const override { return false; }
+
+      virtual void read(XmlReader& xml) override;
+      virtual void write(XmlWriter& xml) const override;
+
       virtual void layout() override;
       virtual void draw(QPainter*) const override;
-      Chord* chord() const                         { return (Chord*)parent(); }
       };
 
+} // namespace Ms
 
-}     // namespace Ms
 #endif
 

@@ -36,10 +36,11 @@ QList<TablatureDurationFont> StaffType::_durationFonts  = QList<TablatureDuratio
 const char StaffType::groupNames[STAFF_GROUP_MAX][STAFF_GROUP_NAME_MAX_LENGTH] = {
       QT_TRANSLATE_NOOP("Staff type group name", "Standard"),
       QT_TRANSLATE_NOOP("Staff type group name", "Percussion"),
-      QT_TRANSLATE_NOOP("Staff type group name", "Tablature")
+      QT_TRANSLATE_NOOP("Staff type group name", "Tablature"),
+      QT_TRANSLATE_NOOP("Staff type group name", "Jianpu")
       };
 
-const QString StaffType::fileGroupNames[STAFF_GROUP_MAX] = { "pitched", "percussion", "tablature" };
+const QString StaffType::fileGroupNames[STAFF_GROUP_MAX] = { "pitched", "percussion", "tablature", "jianpu" };
 
 //---------------------------------------------------------
 //   StaffType
@@ -219,7 +220,7 @@ void StaffType::write(XmlWriter& xml) const
       if (_group == StaffGroup::STANDARD) {
             xml.tag("noteheadScheme", StaffType::scheme2name(_noteHeadScheme), StaffType::scheme2name(NoteHeadScheme::HEAD_NORMAL));
             }
-      if (_group == StaffGroup::STANDARD || _group == StaffGroup::PERCUSSION) {
+      if (_group == StaffGroup::STANDARD || _group == StaffGroup::PERCUSSION || _group == StaffGroup::JIANPU) {
             if (!_genKeysig)
                   xml.tag("keysig", _genKeysig);
             if (!_showLedgerLines)
@@ -265,6 +266,8 @@ void StaffType::read(XmlReader& e)
             _group = StaffGroup::PERCUSSION;
       else if (group == fileGroupNames[(int)StaffGroup::STANDARD])
             _group = StaffGroup::STANDARD;
+      else if (group == fileGroupNames[(int)StaffGroup::JIANPU])
+            _group = StaffGroup::JIANPU;
       else {
             qDebug("StaffType::read: unknown group: %s", qPrintable(group));
             _group = StaffGroup::STANDARD;
@@ -1295,7 +1298,8 @@ bool StaffType::fontData(bool bDuration, int nIdx, QString* pFamily, QString* pD
 static const int _defaultPreset[STAFF_GROUP_MAX] =
       { 0,              // default pitched preset is "stdNormal"
         3,              // default percussion preset is "perc5lines"
-        5               // default tab preset is "tab6StrCommon"
+        5,              // default tab preset is "tab6StrCommon"
+        17              // default Jianpu preset
       };
 
 static const QString _emptyString = QString();
@@ -1409,7 +1413,8 @@ void StaffType::initStaffTypes()
 //         StaffType(StaffGroup::TAB, "tab6StrItalian",QObject::tr("Tab. 6-str. Italian"),6, 2,     1.5, false, true, true,  true,  "MuseScore Tab Italian",15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   true,  true,  false, false, true,  false, true, false),
 //         StaffType(StaffGroup::TAB, "tab6StrFrench", QObject::tr("Tab. 6-str. French"), 6, 2,     1.5, false, true, true,  true,  "MuseScore Tab French", 15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   false, false, false, false, false, false, false,false)
          StaffType(StaffGroup::TAB, "tab6StrItalian",QObject::tr("Tab. 6-str. Italian"),6, 0,     1.5, false, true, true,  true,  "MuseScore Tab Italian",15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   true,  true,  false, false, true,  false, true, false),
-         StaffType(StaffGroup::TAB, "tab6StrFrench", QObject::tr("Tab. 6-str. French"), 6, 0,     1.5, false, true, true,  true,  "MuseScore Tab French", 15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   false, false, false, false, false, false, false,false)
+         StaffType(StaffGroup::TAB, "tab6StrFrench", QObject::tr("Tab. 6-str. French"), 6, 0,     1.5, false, true, true,  true,  "MuseScore Tab French", 15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   false, false, false, false, false, false, false,false),
+         StaffType(StaffGroup::JIANPU,     "jianpu",    QObject::tr("Jianpu"),          0,  0,     1,  false, true, false, true, true, false)
          };
       }
 

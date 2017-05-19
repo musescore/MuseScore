@@ -309,6 +309,12 @@ void MuseScore::editInstrList()
                               staff->setPart(part);
                               staff->initFromStaffType(sli->staffType());
                               sli->setStaff(staff);
+                              if (staff->isJianpuStaff(0)) {
+                                    // Jianpu staff with no lines.
+                                    staff->setLines(0, 0);
+                                    staff->setBarLineFrom(BARLINE_SPAN_1LINESTAFF_FROM);
+                                    staff->setBarLineTo(BARLINE_SPAN_1LINESTAFF_TO);
+                                    }
                               staff->setDefaultClefType(sli->defaultClefType());
 
                               KeySigEvent ke;
