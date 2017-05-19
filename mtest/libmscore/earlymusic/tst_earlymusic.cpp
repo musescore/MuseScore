@@ -90,7 +90,7 @@ void TestEarlymusic::earlymusic01()
       QVERIFY(saveCompareScore(score, "mensurstrich01.mscx", DIR + "mensurstrich01-ref.mscx"));
 
       // UNDO AND VERIFY
-      score->undoStack()->undo(ed);
+      score->undoStack()->undo(&ed);
       score->doLayout();
       QVERIFY(chord->crossMeasure() == CrossMeasure::UNKNOWN);
       cmDur = chord->crossMeasureDurationType();

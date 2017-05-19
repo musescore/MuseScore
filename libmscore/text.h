@@ -89,6 +89,7 @@ class TextCursor {
       void clearSelection();
 
       CharFormat* format()                { return &_format;  }
+      const CharFormat* format() const    { return &_format;  }
       void setFormat(const CharFormat& f) { _format = f;      }
 
       int line() const              { return _line; }
@@ -103,8 +104,8 @@ class TextCursor {
       int columns() const;
       void init();
 
-      const TextBlock& curLine() const;
-      TextBlock& curLine();
+//      const TextBlock& curLine() const;
+      TextBlock& curLine() const;
       QRectF cursorRect() const;
       bool movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int count = 1);
       void moveCursorToEnd()   { movePosition(QTextCursor::End);   }
@@ -116,7 +117,7 @@ class TextCursor {
       void insertSym(SymId);
       void setFormat(FormatId, QVariant);
       void changeSelectionFormat(FormatId id, QVariant val);
-      bool deleteChar();
+      bool deleteChar() const;
       };
 
 class Text;
@@ -260,7 +261,7 @@ class Text : public Element {
       void layoutFrame();
       void layoutEdit();
       void createLayout();
-      const TextBlock& textBlock(int line) { return _layout[line]; }
+      void insertSym(EditData& ed, SymId id);
 
    public:
       Text(Score* = 0);
@@ -286,7 +287,7 @@ class Text : public Element {
       QString xmlText() const;
       QString plainText(bool noSym = false) const;
 
-      void insertText(TextCursor*, const QString&);
+      void insertText(EditData&, const QString&);
 
       virtual void layout() override;
       virtual void layout1();
@@ -305,10 +306,8 @@ class Text : public Element {
       virtual void editCut(EditData&) override;
       virtual void editCopy(EditData&) override;
       virtual void endEdit(EditData&) override;
-      void undoRedoInsertText(EditData&, ChangeText*);
-      void undoRedoRemoveText(EditData&, ChangeText*);
 
-      void deleteSelectedText(TextCursor*);
+      bool deleteSelectedText(EditData&);
 
       void selectAll(TextCursor*);
 
@@ -371,6 +370,9 @@ class Text : public Element {
 
       CharFormat* curFormat(EditData&);
       TextCursor* cursor(EditData&);
+      const TextBlock& textBlock(int line) const { return _layout[line]; }
+      TextBlock& textBlock(int line)             { return _layout[line]; }
+      QList<TextBlock>& textBlockList()          { return _layout; }
 
       friend class TextCursor;
       };

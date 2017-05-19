@@ -96,15 +96,15 @@ void TestKeySig::keysig()
       QVERIFY(saveCompareScore(score, writeFile3, reference3));
 
       // undo remove
-      score->undoStack()->undo(ed);
+      score->undoStack()->undo(&ed);
       QVERIFY(saveCompareScore(score, writeFile4, reference4));
 
       // undo change
-      score->undoStack()->undo(ed);
+      score->undoStack()->undo(&ed);
       QVERIFY(saveCompareScore(score, writeFile5, reference5));
 
       // undo add
-      score->undoStack()->undo(ed);
+      score->undoStack()->undo(&ed);
       QVERIFY(saveCompareScore(score, writeFile6, reference6));
 
       delete score;
