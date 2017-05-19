@@ -2362,6 +2362,7 @@ void Score::cmdRemoveStaff(int staffIdx)
             undo(new RemoveElement(i));
             }
 
+      int srstaff = s->rstaff();
       undoRemoveStaff(s);
 
       // remove linked staff and measures in linked staves in excerpts
@@ -2373,7 +2374,7 @@ void Score::cmdRemoveStaff(int staffIdx)
                   if (staff == s)
                         continue;
                   Score* lscore = staff->score();
-                  if (lscore != this) {
+                  if ((lscore != this) && (srstaff == staff->rstaff())) {
                         lscore->undoRemoveStaff(staff);
                         s->score()->undo(new UnlinkStaff(s, staff));
                         if (staff->part()->nstaves() == 0) {
