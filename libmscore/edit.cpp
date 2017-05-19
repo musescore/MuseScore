@@ -3148,7 +3148,7 @@ void Score::undoPropertyChanged(Element* e, P_ID t, const QVariant& st)
                         // property in linked element has not changed yet
                         // push() calls redo() to change it
                         if (ee->getProperty(t) != e->getProperty(t))
-                              undoStack()->push(new ChangeProperty(ee, t, e->getProperty(t)));
+                              undoStack()->push(new ChangeProperty(ee, t, e->getProperty(t)), 0);
                         }
                   }
             }
@@ -3194,7 +3194,7 @@ void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
       {
       for (ScoreElement* e : note->linkList()) {
             Note* n = static_cast<Note*>(e);
-            undoStack()->push(new ChangePitch(n, pitch, tpc1, tpc2));
+            undoStack()->push(new ChangePitch(n, pitch, tpc1, tpc2), 0);
             }
       }
 
@@ -3213,11 +3213,11 @@ void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int 
       if (l) {
             for (ScoreElement* e : *l) {
                   Note* n = static_cast<Note*>(e);
-                  undoStack()->push(new ChangeFretting(n, pitch, string, fret, tpc1, tpc2));
+                  undo(new ChangeFretting(n, pitch, string, fret, tpc1, tpc2));
                   }
             }
       else
-            undoStack()->push(new ChangeFretting(note, pitch, string, fret, tpc1, tpc2));
+            undo(new ChangeFretting(note, pitch, string, fret, tpc1, tpc2));
       }
 
 //---------------------------------------------------------

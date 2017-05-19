@@ -3009,12 +3009,8 @@ ScoreState ScoreView::mscoreState() const
 
 void ScoreView::startUndoRedo(bool undo)
       {
-      // exit edit mode
-//TODO:state      if (sm->configuration().contains(states[EDIT]))
-//            sm->postEvent(new CommandEvent("escape"));
-
-      editData.init();
-      editData.view = this;
+      if (state != ViewState::EDIT)
+            editData.init();
       _score->undoRedo(undo, editData);
 
       if (_score->inputState().segment())

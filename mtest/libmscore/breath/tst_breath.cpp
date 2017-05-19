@@ -76,7 +76,7 @@ void TestBreath::breath()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undoStack()->undo(ed);
+      score->undoStack()->undo(0);
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;

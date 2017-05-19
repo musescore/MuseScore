@@ -77,7 +77,7 @@ void TestImplodeExplode::undoExplode()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undoStack()->undo(ed);
+      score->undoStack()->undo(&ed);
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -123,7 +123,7 @@ void TestImplodeExplode::undoImplode()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undoStack()->undo(ed);
+      score->undoStack()->undo(&ed);
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -169,7 +169,7 @@ void TestImplodeExplode::undoImplodeVoice()
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // undo
-      score->undoStack()->undo(ed);
+      score->undoStack()->undo(&ed);
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
       delete score;
@@ -201,7 +201,7 @@ void TestImplodeExplode::implode1()
       QVERIFY(saveCompareScore(score, writeFile1, reference));
 
       // undo
-      score->undoStack()->undo(ed);
+      score->undoStack()->undo(&ed);
       QVERIFY(saveCompareScore(score, writeFile2, readFile));
 
       delete score;
