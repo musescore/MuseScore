@@ -401,6 +401,13 @@
                   </property>
                  </widget>
                 </item>
+                <item row="2" column="0">
+                  <widget class="QCheckBox" name="showMeasureNumberRange">
+                   <property name="text">
+                    <string>Display Measure Number Range</string>
+                   </property>
+                  </widget>
+                </item>
                </layout>
               </item>
              </layout>
@@ -11521,6 +11528,7 @@
   <tabstop>multiMeasureRests</tabstop>
   <tabstop>minEmptyMeasures</tabstop>
   <tabstop>minMeasureWidth</tabstop>
+  <tabstop>showMeasureNumberRange</tabstop>
   <tabstop>hideEmptyStaves</tabstop>
   <tabstop>dontHideStavesInFirstSystem</tabstop>
   <tabstop>crossMeasureValues</tabstop>

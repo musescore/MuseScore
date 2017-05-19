@@ -202,6 +202,7 @@ static const StyleType styleTypes[] {
       { Sid::vibratoPlacement,        "vibratoPlacement",        int(Placement::ABOVE)  },
       { Sid::vibratoPosAbove,         "vibratoPosAbove",         Spatium(-1) },
       { Sid::vibratoPosBelow,         "vibratoPosBelow",         Spatium(1) },
+      { Sid::showMeasureNumberRange,  "showMeasureNumberRange",  QVariant(false) },
 
       { Sid::harmonyY,                "harmonyY",                Spatium(2.5) },
       { Sid::harmonyFretDist,         "harmonyFretDist",         Spatium(0.5) },
