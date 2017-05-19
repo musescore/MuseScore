@@ -71,6 +71,8 @@ add_library (
       read206.cpp
       read300.cpp stafftypelist.cpp stafftypechange.cpp
       bracketItem.cpp
+      standardfactory.cpp jianpufactory.cpp jianpuchord.cpp jianpunote.cpp jianpurest.cpp 
+      jianpuhook.cpp jianpubeam.cpp jianpunotedot.cpp
       )
 
 set_target_properties (

@@ -41,6 +41,7 @@ class Accidental;
 class NoteDot;
 class Spanner;
 class StaffType;
+class TDuration;
 enum class SymId;
 enum class AccidentalType : char;
 
@@ -238,6 +239,8 @@ class Note : public Element {
 //TODO-WS      Q_ENUMS(Ms::MScore::Direction)
       Q_ENUMS(Ms::MScore::DirectionH)
 
+      friend class JianpuNote;
+
    public:
       enum class ValueType : char { OFFSET_VAL, USER_VAL };
       int qmlAccidentalType() const { return int(accidentalType()); }
@@ -317,8 +320,8 @@ class Note : public Element {
 
       virtual qreal mag() const override;
 
-      void layout();
-      void layout2();
+      virtual void layout() override;
+      virtual void layout2();
       void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
       void setTrack(int val);
 
@@ -339,7 +342,7 @@ class Note : public Element {
       virtual int subtype() const override { return (int) _headGroup; }
       virtual QString subtypeName() const override;
 
-      void setPitch(int val);
+      virtual void setPitch(int val);
       void undoSetPitch(int val);
       void setPitch(int pitch, int tpc1, int tpc2);
       int pitch() const                   { return _pitch;    }
@@ -359,7 +362,7 @@ class Note : public Element {
       int tpc2() const            { return _tpc[1]; }     // transposed tpc
       QString tpcUserName(bool explicitAccidental = false) const;
 
-      void setTpc(int v);
+      virtual void setTpc(int v);
       void setTpc1(int v)         { _tpc[0] = v; }
       void setTpc2(int v)         { _tpc[1] = v; }
       void setTpcFromPitch();
@@ -499,7 +502,7 @@ class Note : public Element {
       bool mark() const               { return _mark;   }
       void setMark(bool v) const      { _mark = v;   }
       virtual void setScore(Score* s) override;
-      void setDotY(Direction);
+      virtual void setDotY(Direction);
 
       void addParentheses();
 
