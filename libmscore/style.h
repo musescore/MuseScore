@@ -250,6 +250,7 @@ enum class StyleIdx : unsigned char {
       pageNumberOddEven,
       showMeasureNumber,
       showMeasureNumberOne,
+      showMultiMeasureNumberRange,
       measureNumberInterval,
       measureNumberSystem,
 

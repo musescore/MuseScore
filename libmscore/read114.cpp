@@ -115,6 +115,7 @@ static const StyleVal2 style114[] = {
       { StyleIdx::pageNumberOddEven,            QVariant(true) },
       { StyleIdx::showMeasureNumber,            QVariant(true) },
       { StyleIdx::showMeasureNumberOne,         QVariant(false) },
+      { StyleIdx::showMultiMeasureNumberRange,  QVariant(false) },
       { StyleIdx::measureNumberInterval,        QVariant(5) },
       { StyleIdx::measureNumberSystem,          QVariant(true) },
       { StyleIdx::measureNumberAllStaffs,       QVariant(false) },
@@ -788,4 +789,3 @@ Score::FileError Score::read114(XmlReader& e)
       }
 
 }
-

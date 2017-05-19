@@ -429,6 +429,7 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::measureSpacing,          measureSpacing->value());
       lstyle.set(StyleIdx::showMeasureNumber,       showMeasureNumber->isChecked());
       lstyle.set(StyleIdx::showMeasureNumberOne,    showFirstMeasureNumber->isChecked());
+      lstyle.set(StyleIdx::showMultiMeasureNumberRange,    showMultiMeasureNumberRange->isChecked());
       lstyle.set(StyleIdx::measureNumberInterval,   intervalMeasureNumber->value());
       lstyle.set(StyleIdx::measureNumberSystem,     showEverySystemMeasureNumber->isChecked());
       lstyle.set(StyleIdx::measureNumberAllStaffs,  showAllStaffsMeasureNumber->isChecked());
@@ -644,6 +645,7 @@ void EditStyle::setValues()
 
       showMeasureNumber->setChecked(lstyle.value(StyleIdx::showMeasureNumber).toBool());
       showFirstMeasureNumber->setChecked(lstyle.value(StyleIdx::showMeasureNumberOne).toBool());
+      showMultiMeasureNumberRange->setChecked(lstyle.value(StyleIdx::showMultiMeasureNumberRange).toBool());
       intervalMeasureNumber->setValue(lstyle.value(StyleIdx::measureNumberInterval).toInt());
       showIntervalMeasureNumber->setChecked(!lstyle.value(StyleIdx::measureNumberSystem).toBool());
       showAllStaffsMeasureNumber->setChecked(lstyle.value(StyleIdx::measureNumberAllStaffs).toBool());
@@ -935,4 +937,3 @@ void EditStyle::resetStyleValue(int i)
       }
 
 }
-
