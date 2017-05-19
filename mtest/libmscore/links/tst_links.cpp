@@ -128,7 +128,7 @@ void TestLinks::test3LinkedSameScore_99796()
       QVERIFY(e->links()->size() == 2);
 
       // undo
-      score->undoStack()->undo(ed);
+      score->undoStack()->undo(&ed);
       // now 3 staves
       QVERIFY(score->staves().size() == 3);
       e = s->element(0);
@@ -142,7 +142,7 @@ void TestLinks::test3LinkedSameScore_99796()
       QVERIFY(e->links()->size() == 3);
 
       // redo, back to 2 staves
-      score->undoStack()->redo(ed);
+      score->undoStack()->redo(&ed);
       QVERIFY(score->staves().size() == 2);
       e = s->element(0);
       QVERIFY(e->type() == ElementType::REST);
@@ -332,7 +332,7 @@ void TestLinks::test4LinkedParts_94911()
       qDebug() << score->excerpts().size();
 
       // undo
-      score->undoStack()->undo(ed);
+      score->undoStack()->undo(&ed);
       // we should have now 2 staves and 4 linked rests
       QCOMPARE(nscore->staves().size(), 2);
       QCOMPARE(score->staves().size(), 2);
@@ -346,7 +346,7 @@ void TestLinks::test4LinkedParts_94911()
       QVERIFY(score->excerpts().size() == 1);
 
       // redo
-      score->undoStack()->redo(ed);
+      score->undoStack()->redo(&ed);
       // we should have now 2 staves and *4* linked rest
       // no excerpt
       QVERIFY(score->staves().size() == 1);
@@ -431,7 +431,7 @@ void TestLinks::test5LinkedParts_94911()
       QVERIFY(score->excerpts().size() == 1);
 
       // undo
-      score->undoStack()->undo(ed);
+      score->undoStack()->undo(&ed);
       // we should have now 1 staves and 2 linked rests
       QVERIFY(score->staves().size() == 1);
       QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 2);
@@ -441,7 +441,7 @@ void TestLinks::test5LinkedParts_94911()
       QVERIFY(score->excerpts().size() == 1);
 
       // redo
-      score->undoStack()->redo(ed);
+      score->undoStack()->redo(&ed);
       // we should have now 2 staves and 3 linked rests
       QVERIFY(score->staves().size() == 2);
       QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 3);

@@ -140,7 +140,7 @@ void UndoCommand::cleanup(bool undo)
 //   undo
 //---------------------------------------------------------
 
-void UndoCommand::undo(EditData& ed)
+void UndoCommand::undo(EditData* ed)
       {
       int n = childList.size();
       for (int i = n-1; i >= 0; --i) {
@@ -154,7 +154,7 @@ void UndoCommand::undo(EditData& ed)
 //   redo
 //---------------------------------------------------------
 
-void UndoCommand::redo(EditData& ed)
+void UndoCommand::redo(EditData* ed)
       {
       int n = childList.size();
       for (int i = 0; i < n; ++i) {
@@ -170,11 +170,9 @@ void UndoCommand::redo(EditData& ed)
 
 void UndoCommand::unwind()
       {
-      EditData ed;
-      ed.init();
       while (!childList.empty()) {
             UndoCommand* c = childList.takeLast();
-            c->undo(ed);
+            c->undo(0);
             delete c;
             }
       }
@@ -244,15 +242,11 @@ void UndoStack::endMacro(bool rollback)
 //   push
 //---------------------------------------------------------
 
-void UndoStack::push(UndoCommand* cmd)
+void UndoStack::push(UndoCommand* cmd, EditData* ed)
       {
-      EditData ed;
-      ed.init();
-
       if (!curCmd) {
             // this can happen for layout() outside of a command (load)
             // qWarning("UndoStack:push(): no active command, UndoStack %p", this);
-
 
             cmd->redo(ed);
             delete cmd;
@@ -277,10 +271,11 @@ void UndoStack::push(UndoCommand* cmd)
 
 void UndoStack::push1(UndoCommand* cmd)
       {
-      if (curCmd)
-            curCmd->appendChild(cmd);
-      else
+      if (!curCmd) {
             qWarning("UndoStack:push1(): no active command, UndoStack %p", this);
+            return;
+            }
+      curCmd->appendChild(cmd);
       }
 
 //---------------------------------------------------------
@@ -293,10 +288,8 @@ void UndoStack::pop()
             qWarning("UndoStack:pop(): no active command");
             return;
             }
-      EditData ed;
-      ed.init();
       UndoCommand* cmd = curCmd->removeChild();
-      cmd->undo(ed);
+      cmd->undo(0);
       }
 
 //---------------------------------------------------------
@@ -312,7 +305,7 @@ void UndoStack::setClean()
 //   undo
 //---------------------------------------------------------
 
-void UndoStack::undo(EditData& ed)
+void UndoStack::undo(EditData* ed)
       {
       qCDebug(undoRedo) << "===";
       if (curIdx) {
@@ -326,7 +319,7 @@ void UndoStack::undo(EditData& ed)
 //   redo
 //---------------------------------------------------------
 
-void UndoStack::redo(EditData& ed)
+void UndoStack::redo(EditData* ed)
       {
       qCDebug(undoRedo) << "===";
       if (canRedo())
@@ -344,7 +337,7 @@ SaveState::SaveState(Score* s)
 //      redoSelection  = score->selection();
       }
 
-void SaveState::undo(EditData&)
+void SaveState::undo(EditData*)
       {
       redoInputState = score->inputState();
 //      redoSelection  = score->selection();
@@ -352,7 +345,7 @@ void SaveState::undo(EditData&)
 //      score->setSelection(undoSelection);
       }
 
-void SaveState::redo(EditData&)
+void SaveState::redo(EditData*)
       {
       undoInputState = score->inputState();
 //      undoSelection  = score->selection();
@@ -376,7 +369,7 @@ CloneVoice::CloneVoice(Segment* _sf, int _lTick, Segment* _d, int _strack, int _
                               // if false add elements in every linked staff
       }
 
-void CloneVoice::undo(EditData&)
+void CloneVoice::undo(EditData*)
       {
       Score* s = d->score();
       int ticks = d->tick() + lTick - sf->tick();
@@ -423,7 +416,7 @@ void CloneVoice::undo(EditData&)
       first = false;
       }
 
-void CloneVoice::redo(EditData&)
+void CloneVoice::redo(EditData*)
       {
       Score* s = d->score();
       int ticks = d->tick() + lTick - sf->tick();
@@ -532,7 +525,7 @@ void AddElement::endUndoRedo(bool isUndo) const
 //   undo
 //---------------------------------------------------------
 
-void AddElement::undo(EditData&)
+void AddElement::undo(EditData*)
       {
       if (!element->isTuplet())
             element->score()->removeElement(element);
@@ -543,7 +536,7 @@ void AddElement::undo(EditData&)
 //   redo
 //---------------------------------------------------------
 
-void AddElement::redo(EditData&)
+void AddElement::redo(EditData*)
       {
       if (!element->isTuplet())
             element->score()->addElement(element);
@@ -620,7 +613,7 @@ void RemoveElement::cleanup(bool undo)
 //   undo
 //---------------------------------------------------------
 
-void RemoveElement::undo(EditData&)
+void RemoveElement::undo(EditData*)
       {
       if (!element->isTuplet())
             element->score()->addElement(element);
@@ -646,7 +639,7 @@ void RemoveElement::undo(EditData&)
 //   redo
 //---------------------------------------------------------
 
-void RemoveElement::redo(EditData&)
+void RemoveElement::redo(EditData*)
       {
       if (!element->isTuplet())
             element->score()->removeElement(element);
@@ -694,12 +687,12 @@ InsertPart::InsertPart(Part* p, int i)
       idx  = i;
       }
 
-void InsertPart::undo(EditData&)
+void InsertPart::undo(EditData*)
       {
       part->score()->removePart(part);
       }
 
-void InsertPart::redo(EditData&)
+void InsertPart::redo(EditData*)
       {
       part->score()->insertPart(part, idx);
       }
@@ -714,12 +707,12 @@ RemovePart::RemovePart(Part* p, int i)
       idx  = i;
       }
 
-void RemovePart::undo(EditData&)
+void RemovePart::undo(EditData*)
       {
       part->score()->insertPart(part, idx);
       }
 
-void RemovePart::redo(EditData&)
+void RemovePart::redo(EditData*)
       {
       part->score()->removePart(part);
       }
@@ -734,12 +727,12 @@ InsertStaff::InsertStaff(Staff* p, int _ridx)
       ridx  = _ridx;
       }
 
-void InsertStaff::undo(EditData&)
+void InsertStaff::undo(EditData*)
       {
       staff->score()->removeStaff(staff);
       }
 
-void InsertStaff::redo(EditData&)
+void InsertStaff::redo(EditData*)
       {
       staff->score()->insertStaff(staff, ridx);
       }
@@ -754,12 +747,12 @@ RemoveStaff::RemoveStaff(Staff* p)
       ridx  = staff->rstaff();
       }
 
-void RemoveStaff::undo(EditData&)
+void RemoveStaff::undo(EditData*)
       {
       staff->score()->insertStaff(staff, ridx);
       }
 
-void RemoveStaff::redo(EditData&)
+void RemoveStaff::redo(EditData*)
       {
       staff->score()->removeStaff(staff);
       }
@@ -775,12 +768,12 @@ InsertMStaff::InsertMStaff(Measure* m, MStaff* ms, int i)
       idx     = i;
       }
 
-void InsertMStaff::undo(EditData&)
+void InsertMStaff::undo(EditData*)
       {
       measure->removeMStaff(mstaff, idx);
       }
 
-void InsertMStaff::redo(EditData&)
+void InsertMStaff::redo(EditData*)
       {
       measure->insertMStaff(mstaff, idx);
       }
@@ -796,12 +789,12 @@ RemoveMStaff::RemoveMStaff(Measure* m, MStaff* ms, int i)
       idx     = i;
       }
 
-void RemoveMStaff::undo(EditData&)
+void RemoveMStaff::undo(EditData*)
       {
       measure->insertMStaff(mstaff, idx);
       }
 
-void RemoveMStaff::redo(EditData&)
+void RemoveMStaff::redo(EditData*)
       {
       measure->removeMStaff(mstaff, idx);
       }
@@ -820,12 +813,12 @@ SortStaves::SortStaves(Score* s, QList<int> l)
       list  = l;
       }
 
-void SortStaves::redo(EditData&)
+void SortStaves::redo(EditData*)
       {
       score->sortStaves(list);
       }
 
-void SortStaves::undo(EditData&)
+void SortStaves::undo(EditData*)
       {
       score->sortStaves(rlist);
       }
@@ -842,7 +835,7 @@ ChangePitch::ChangePitch(Note* _note, int _pitch, int _tpc1, int _tpc2)
       tpc2  = _tpc2;
       }
 
-void ChangePitch::flip(EditData&)
+void ChangePitch::flip(EditData*)
       {
       int f_pitch = note->pitch();
       int f_tpc1  = note->tpc1();
@@ -878,7 +871,7 @@ ChangeFretting::ChangeFretting(Note* _note, int _pitch, int _string, int _fret, 
       tpc2  = _tpc2;
       }
 
-void ChangeFretting::flip(EditData&)
+void ChangeFretting::flip(EditData*)
       {
       int f_pitch = note->pitch();
       int f_string= note->string();
@@ -911,7 +904,7 @@ ChangeElement::ChangeElement(Element* oe, Element* ne)
       newElement = ne;
       }
 
-void ChangeElement::flip(EditData&)
+void ChangeElement::flip(EditData*)
       {
       const LinkedElements* links = oldElement->links();
       if (links) {
@@ -968,12 +961,12 @@ InsertStaves::InsertStaves(Measure* m, int _a, int _b)
       b       = _b;
       }
 
-void InsertStaves::undo(EditData&)
+void InsertStaves::undo(EditData*)
       {
       measure->removeStaves(a, b);
       }
 
-void InsertStaves::redo(EditData&)
+void InsertStaves::redo(EditData*)
       {
       measure->insertStaves(a, b);
       }
@@ -989,12 +982,12 @@ RemoveStaves::RemoveStaves(Measure* m, int _a, int _b)
       b       = _b;
       }
 
-void RemoveStaves::undo(EditData&)
+void RemoveStaves::undo(EditData*)
       {
       measure->insertStaves(a, b);
       }
 
-void RemoveStaves::redo(EditData&)
+void RemoveStaves::redo(EditData*)
       {
       measure->removeStaves(a, b);
       }
@@ -1003,7 +996,7 @@ void RemoveStaves::redo(EditData&)
 //   ChangeKeySig::flip
 //---------------------------------------------------------
 
-void ChangeKeySig::flip(EditData&)
+void ChangeKeySig::flip(EditData*)
       {
       KeySigEvent oe = keysig->keySigEvent();
       bool sc        = keysig->showCourtesy();
@@ -1032,7 +1025,7 @@ ChangeMeasureLen::ChangeMeasureLen(Measure* m, Fraction l)
       len         = l;
       }
 
-void ChangeMeasureLen::flip(EditData&)
+void ChangeMeasureLen::flip(EditData*)
       {
       Fraction oLen = measure->len();
 
@@ -1063,7 +1056,7 @@ TransposeHarmony::TransposeHarmony(Harmony* h, int rtpc, int btpc)
       baseTpc = btpc;
       }
 
-void TransposeHarmony::flip(EditData&)
+void TransposeHarmony::flip(EditData*)
       {
       int baseTpc1 = harmony->baseTpc();
       int rootTpc1 = harmony->rootTpc();
@@ -1086,13 +1079,13 @@ ExchangeVoice::ExchangeVoice(Measure* m, int _val1, int _val2, int _staff)
       staff   = _staff;
       }
 
-void ExchangeVoice::undo(EditData&)
+void ExchangeVoice::undo(EditData*)
       {
       measure->exchangeVoice(val2, val1, staff);
       measure->checkMultiVoices(staff);
       }
 
-void ExchangeVoice::redo(EditData&)
+void ExchangeVoice::redo(EditData*)
       {
       measure->exchangeVoice(val1, val2, staff);
       }
@@ -1108,7 +1101,7 @@ ChangeInstrumentShort::ChangeInstrumentShort(int _tick, Part* p, QList<StaffName
       text = t;
       }
 
-void ChangeInstrumentShort::flip(EditData&)
+void ChangeInstrumentShort::flip(EditData*)
       {
       QList<StaffName> s = part->shortNames(tick);
       part->setShortNames(text, tick);
@@ -1127,7 +1120,7 @@ ChangeInstrumentLong::ChangeInstrumentLong(int _tick, Part* p, QList<StaffName> 
       text = t;
       }
 
-void ChangeInstrumentLong::flip(EditData&)
+void ChangeInstrumentLong::flip(EditData*)
       {
       QList<StaffName> s = part->longNames(tick);
       part->setLongNames(text, tick);
@@ -1139,7 +1132,7 @@ void ChangeInstrumentLong::flip(EditData&)
 //   EditText::undo
 //---------------------------------------------------------
 
-void EditText::undo(EditData&)
+void EditText::undo(EditData*)
       {
 /*      if (!text->styled()) {
             for (int i = 0; i < undoLevel; ++i)
@@ -1153,7 +1146,7 @@ void EditText::undo(EditData&)
 //   EditText::redo
 //---------------------------------------------------------
 
-void EditText::redo(EditData&)
+void EditText::redo(EditData*)
       {
 /*
       if (!text->styled()) {
@@ -1180,7 +1173,7 @@ void EditText::undoRedo()
 //   ChangePatch
 //---------------------------------------------------------
 
-void ChangePatch::flip(EditData&)
+void ChangePatch::flip(EditData*)
       {
       MidiPatch op;
       op.prog          = channel->program;
@@ -1242,7 +1235,7 @@ ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible,
 //   flip
 //---------------------------------------------------------
 
-void ChangeStaff::flip(EditData&)
+void ChangeStaff::flip(EditData*)
       {
       bool invisibleChanged = staff->invisible() != invisible;
 
@@ -1282,7 +1275,7 @@ void ChangeStaff::flip(EditData&)
 //   ChangeStaffType::flip
 //---------------------------------------------------------
 
-void ChangeStaffType::flip(EditData&)
+void ChangeStaffType::flip(EditData*)
       {
       StaffType st = *staff->staffType(0);      // TODO
 
@@ -1309,7 +1302,7 @@ ChangePart::ChangePart(Part* _part, Instrument* i, const QString& s)
 //   flip
 //---------------------------------------------------------
 
-void ChangePart::flip(EditData&)
+void ChangePart::flip(EditData*)
       {
       Instrument* oi = part->instrument();
       QString s      = part->partName();
@@ -1343,7 +1336,7 @@ ChangeStyle::ChangeStyle(Score* s, const MStyle& st)
 //   flip
 //---------------------------------------------------------
 
-void ChangeStyle::flip(EditData&)
+void ChangeStyle::flip(EditData*)
       {
       MStyle tmp = score->style();
 
@@ -1361,7 +1354,7 @@ void ChangeStyle::flip(EditData&)
 //   ChangeStyleVal::flip
 //---------------------------------------------------------
 
-void ChangeStyleVal::flip(EditData&)
+void ChangeStyleVal::flip(EditData*)
       {
       QVariant v = score->styleV(idx);
       if (v != value) {
@@ -1384,7 +1377,7 @@ ChangeChordStaffMove::ChangeChordStaffMove(ChordRest* cr, int v)
       {
       }
 
-void ChangeChordStaffMove::flip(EditData&)
+void ChangeChordStaffMove::flip(EditData*)
       {
       int v = chordRest->staffMove();
       for (ScoreElement* e : chordRest->linkList()) {
@@ -1404,7 +1397,7 @@ ChangeVelocity::ChangeVelocity(Note* n, Note::ValueType t, int o)
       {
       }
 
-void ChangeVelocity::flip(EditData&)
+void ChangeVelocity::flip(EditData*)
       {
       Note::ValueType t = note->veloType();
       int o       = note->veloOffset();
@@ -1427,7 +1420,7 @@ ChangeMStaffProperties::ChangeMStaffProperties(Measure* m, int i, bool v, bool s
 //   flip
 //---------------------------------------------------------
 
-void ChangeMStaffProperties::flip(EditData&)
+void ChangeMStaffProperties::flip(EditData*)
       {
       bool v = measure->visible(staffIdx);
       bool s = measure->slashStyle(staffIdx);
@@ -1596,7 +1589,7 @@ qDebug("remove system");
 //   flip
 //---------------------------------------------------------
 
-void ChangeImage::flip(EditData&)
+void ChangeImage::flip(EditData*)
       {
       bool _lockAspectRatio = image->lockAspectRatio();
       bool _autoScale       = image->autoScale();
@@ -1613,7 +1606,7 @@ void ChangeImage::flip(EditData&)
 //   AddExcerpt::undo
 //---------------------------------------------------------
 
-void AddExcerpt::undo(EditData&)
+void AddExcerpt::undo(EditData*)
       {
       excerpt->oscore()->removeExcerpt(excerpt);
       }
@@ -1622,7 +1615,7 @@ void AddExcerpt::undo(EditData&)
 //   AddExcerpt::redo
 //---------------------------------------------------------
 
-void AddExcerpt::redo(EditData&)
+void AddExcerpt::redo(EditData*)
       {
       excerpt->oscore()->addExcerpt(excerpt);
       }
@@ -1631,7 +1624,7 @@ void AddExcerpt::redo(EditData&)
 //   RemoveExcerpt::undo()
 //---------------------------------------------------------
 
-void RemoveExcerpt::undo(EditData&)
+void RemoveExcerpt::undo(EditData*)
       {
       excerpt->oscore()->addExcerpt(excerpt);
       }
@@ -1640,7 +1633,7 @@ void RemoveExcerpt::undo(EditData&)
 //   RemoveExcerpt::redo()
 //---------------------------------------------------------
 
-void RemoveExcerpt::redo(EditData&)
+void RemoveExcerpt::redo(EditData*)
       {
       excerpt->oscore()->removeExcerpt(excerpt);
       }
@@ -1649,7 +1642,7 @@ void RemoveExcerpt::redo(EditData&)
 //   SwapExcerpt::flip
 //---------------------------------------------------------
 
-void SwapExcerpt::flip(EditData&)
+void SwapExcerpt::flip(EditData*)
       {
       score->excerpts().swap(pos1, pos2);
       score->setExcerptsChanged(true);
@@ -1659,7 +1652,7 @@ void SwapExcerpt::flip(EditData&)
 //   ChangeExcerptTitle::flip
 //---------------------------------------------------------
 
-void ChangeExcerptTitle::flip(EditData&)
+void ChangeExcerptTitle::flip(EditData*)
       {
       QString s = title;
       title = excerpt->title();
@@ -1671,7 +1664,7 @@ void ChangeExcerptTitle::flip(EditData&)
 //   flip
 //---------------------------------------------------------
 
-void ChangeBend::flip(EditData&)
+void ChangeBend::flip(EditData*)
       {
       QList<PitchValue> pv = bend->points();
       bend->score()->addRefresh(bend->canvasBoundingRect());
@@ -1685,7 +1678,7 @@ void ChangeBend::flip(EditData&)
 //   flip
 //---------------------------------------------------------
 
-void ChangeTremoloBar::flip(EditData&)
+void ChangeTremoloBar::flip(EditData*)
       {
       QList<PitchValue> pv = bend->points();
       bend->setPoints(points);
@@ -1696,7 +1689,7 @@ void ChangeTremoloBar::flip(EditData&)
 //   ChangeNoteEvents::flip
 //---------------------------------------------------------
 
-void ChangeNoteEvents::flip(EditData&)
+void ChangeNoteEvents::flip(EditData*)
       {
 /*TODO:      QList<NoteEvent*> e = chord->playEvents();
       chord->setPlayEvents(events);
@@ -1708,7 +1701,7 @@ void ChangeNoteEvents::flip(EditData&)
 //   ChangeInstrument::flip
 //---------------------------------------------------------
 
-void ChangeInstrument::flip(EditData&)
+void ChangeInstrument::flip(EditData*)
       {
       Instrument* oi = is->instrument();  //new Instrument(*is->instrument());
       is->setInstrument(instrument);      //*instrument
@@ -1734,7 +1727,7 @@ void ChangeInstrument::flip(EditData&)
 //   flip
 //---------------------------------------------------------
 
-void SwapCR::flip(EditData&)
+void SwapCR::flip(EditData*)
       {
       Segment* s1 = cr1->segment();
       Segment* s2 = cr2->segment();
@@ -1762,7 +1755,7 @@ ChangeClefType::ChangeClefType(Clef* c, ClefType cl, ClefType tc)
 //   ChangeClefType::flip
 //---------------------------------------------------------
 
-void ChangeClefType::flip(EditData&)
+void ChangeClefType::flip(EditData*)
       {
       ClefType ocl = clef->concertClef();
       ClefType otc = clef->transposingClef();
@@ -1785,7 +1778,7 @@ void ChangeClefType::flip(EditData&)
 //   flip
 //---------------------------------------------------------
 
-void MoveStaff::flip(EditData&)
+void MoveStaff::flip(EditData*)
       {
       Part* oldPart = staff->part();
       int idx = staff->rstaff();
@@ -1800,7 +1793,7 @@ void MoveStaff::flip(EditData&)
 //   ChangeStaffUserDist::flip
 //---------------------------------------------------------
 
-void ChangeStaffUserDist::flip(EditData&)
+void ChangeStaffUserDist::flip(EditData*)
       {
       qreal v = staff->userDist();
       staff->setUserDist(dist);
@@ -1812,7 +1805,7 @@ void ChangeStaffUserDist::flip(EditData&)
 //   ChangeProperty::flip
 //---------------------------------------------------------
 
-void ChangeProperty::flip(EditData&)
+void ChangeProperty::flip(EditData*)
       {
       qCDebug(undoRedo) << element->name() << propertyName(id) << element->getProperty(id) << "->" << property;
 
@@ -1844,7 +1837,7 @@ void ChangeProperty::flip(EditData&)
 //   ChangeMetaText::flip
 //---------------------------------------------------------
 
-void ChangeMetaText::flip(EditData&)
+void ChangeMetaText::flip(EditData*)
       {
       QString s = score->metaTag(id);
       score->setMetaTag(id, text);
@@ -1865,7 +1858,7 @@ ChangeEventList::ChangeEventList(Chord* c, const QList<NoteEventList> l)
 //   ChangeEventList::flip
 //---------------------------------------------------------
 
-void ChangeEventList::flip(EditData&)
+void ChangeEventList::flip(EditData*)
       {
       int n = chord->notes().size();
       for (int i = 0; i < n; ++i) {
@@ -1881,31 +1874,31 @@ void ChangeEventList::flip(EditData&)
 //   ChangeSynthesizerState::flip
 //---------------------------------------------------------
 
-void ChangeSynthesizerState::flip(EditData&)
+void ChangeSynthesizerState::flip(EditData*)
       {
       std::swap(state, score->_synthesizerState);
       }
 
-void AddBracket::redo(EditData&)
+void AddBracket::redo(EditData*)
       {
       staff->setBracketType(level, type);
       staff->setBracketSpan(level, span);
       staff->score()->setLayoutAll();
       }
 
-void AddBracket::undo(EditData&)
+void AddBracket::undo(EditData*)
       {
       staff->setBracketType(level, BracketType::NO_BRACKET);
       staff->score()->setLayoutAll();
       }
 
-void RemoveBracket::redo(EditData&)
+void RemoveBracket::redo(EditData*)
       {
       staff->setBracketType(level, BracketType::NO_BRACKET);
       staff->score()->setLayoutAll();
       }
 
-void RemoveBracket::undo(EditData&)
+void RemoveBracket::undo(EditData*)
       {
       staff->setBracketType(level, type);
       staff->setBracketSpan(level, span);
@@ -1916,7 +1909,7 @@ void RemoveBracket::undo(EditData&)
 //   ChangeSpannerElements
 //---------------------------------------------------------
 
-void ChangeSpannerElements::flip(EditData&)
+void ChangeSpannerElements::flip(EditData*)
       {
       Element*    oldStartElement   = spanner->startElement();
       Element*    oldEndElement     = spanner->endElement();
@@ -1997,7 +1990,7 @@ void ChangeSpannerElements::flip(EditData&)
 //   ChangeParent
 //---------------------------------------------------------
 
-void ChangeParent::flip(EditData&)
+void ChangeParent::flip(EditData*)
       {
       Element* p = element->parent();
       int si = element->staffIdx();
@@ -2013,7 +2006,7 @@ void ChangeParent::flip(EditData&)
 //   ChangeMMRest
 //---------------------------------------------------------
 
-void ChangeMMRest::flip(EditData&)
+void ChangeMMRest::flip(EditData*)
       {
       Measure* mmr = m->mmRest();
       m->setMMRest(mmrest);
@@ -2024,12 +2017,12 @@ void ChangeMMRest::flip(EditData&)
 //   InsertTime
 //---------------------------------------------------------
 
-void InsertTime::redo(EditData&)
+void InsertTime::redo(EditData*)
       {
       score->insertTime(tick, len);
       }
 
-void InsertTime::undo(EditData&)
+void InsertTime::undo(EditData*)
       {
       score->insertTime(tick, -len);
       }
@@ -2038,7 +2031,7 @@ void InsertTime::undo(EditData&)
 //   ChangeNoteEvent::flip
 //---------------------------------------------------------
 
-void ChangeNoteEvent::flip(EditData&)
+void ChangeNoteEvent::flip(EditData*)
       {
       note->score()->setPlaylistDirty();
       NoteEvent e = *oldEvent;
@@ -2091,16 +2084,16 @@ void LinkUnlink::doUnlink()
             qWarning("nothing found to unlink");
       }
 
-void LinkStaff::redo(EditData&)   { s1->linkTo(s2); } // s1 is added
-void LinkStaff::undo(EditData&)   { s2->unlink(s1); } // s1 is removed
-void UnlinkStaff::redo(EditData&) { s1->unlink(s2); } // s2 is removed
-void UnlinkStaff::undo(EditData&) { s2->linkTo(s1); } // s2 is added
+void LinkStaff::redo(EditData*)   { s1->linkTo(s2); } // s1 is added
+void LinkStaff::undo(EditData*)   { s2->unlink(s1); } // s1 is removed
+void UnlinkStaff::redo(EditData*) { s1->unlink(s2); } // s2 is removed
+void UnlinkStaff::undo(EditData*) { s2->linkTo(s1); } // s2 is added
 
 //---------------------------------------------------------
 //   ChangeStartEndSpanner::flip
 //---------------------------------------------------------
 
-void ChangeStartEndSpanner::flip(EditData&)
+void ChangeStartEndSpanner::flip(EditData*)
       {
       Element* s = spanner->startElement();
       Element* e = spanner->endElement();
@@ -2114,7 +2107,7 @@ void ChangeStartEndSpanner::flip(EditData&)
 //   ChangeMetaTags::flip
 //---------------------------------------------------------
 
-void ChangeMetaTags::flip(EditData&)
+void ChangeMetaTags::flip(EditData*)
       {
       QMap<QString,QString> t = score->metaTags();
       score->setMetaTags(metaTags);
@@ -2125,7 +2118,7 @@ void ChangeMetaTags::flip(EditData&)
 //   ChangeDrumset::flip
 //---------------------------------------------------------
 
-void ChangeDrumset::flip(EditData&)
+void ChangeDrumset::flip(EditData*)
       {
       Drumset d = *instrument->drumset();
       instrument->setDrumset(&drumset);
@@ -2136,26 +2129,76 @@ void ChangeDrumset::flip(EditData&)
 //   undoChangeGap
 //---------------------------------------------------------
 
-void ChangeGap::flip(EditData&)
+void ChangeGap::flip(EditData*)
       {
       rest->setGap(v);
       v = !v;
       }
 
 //---------------------------------------------------------
-//  ChangeText
+//  ChangeText::insertText
 //---------------------------------------------------------
 
-void ChangeText::insertText(EditData& ed)
+void ChangeText::insertText(EditData* ed)
       {
-      ed.view->startEditMode(c.text());
-      c.text()->undoRedoInsertText(ed, this);
+      TextCursor tc = c;
+      c.text()->editInsertText(&tc, s);
+      c.text()->triggerLayout();
+      if (ed) {
+            TextCursor* ttc = c.text()->cursor(*ed);
+            *ttc = tc;
+            }
       }
 
-void ChangeText::removeText(EditData& ed)
+//---------------------------------------------------------
+//  ChangeText::removeText
+//---------------------------------------------------------
+
+void ChangeText::removeText(EditData* ed)
       {
-      ed.view->startEditMode(c.text());
-      c.text()->undoRedoRemoveText(ed, this);
+      TextCursor tc = c;
+      TextBlock& l  = c.curLine();
+      int column    = c.column();
+
+      for (int n = 0; n < s.size(); ++n)
+            l.remove(column);
+      c.text()->triggerLayout();
+      if (ed)
+            *c.text()->cursor(*ed) = tc;
+      }
+
+//---------------------------------------------------------
+//   SplitText
+//---------------------------------------------------------
+
+void SplitText::undo(EditData* ed)
+      {
+      TextCursor tc = c;
+      tc.deleteChar();
+      c.text()->triggerLayout();
+      if (ed)
+            *c.text()->cursor(*ed) = tc;
+      }
+
+void SplitText::redo(EditData* ed)
+      {
+      TextCursor tc = c;
+      Text* t       = tc.text();
+      int line      = tc.line();
+
+      CharFormat* charFmt = tc.format();         // take current format
+      t->textBlockList().insert(line + 1, tc.curLine().split(tc.column()));
+      t->textBlock(line).setEol(true);
+      if (t->textBlockList().last() != t->textBlock(line+1))
+            t->textBlock(line+1).setEol(true);
+
+      c.text()->triggerLayout();
+      if (ed) {
+            tc.setLine(line+1);
+            tc.setColumn(0);
+            tc.setFormat(*charFmt);             // restore orig. format at new line
+            *c.text()->cursor(*ed) = tc;
+            }
       }
 
 }

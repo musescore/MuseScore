@@ -622,7 +622,7 @@ class Score : public QObject, ScoreElement {
       void undoPropertyChanged(Element*, P_ID, const QVariant& v);
       void undoPropertyChanged(ScoreElement*, P_ID, const QVariant& v);
       inline virtual UndoStack* undoStack() const;
-      void undo(UndoCommand* cmd) const;
+      void undo(UndoCommand*, EditData* = 0) const;
       void undoRemoveMeasures(Measure*, Measure*);
       void undoAddBracket(Staff* staff, int level, BracketType type, int span);
       void undoRemoveBracket(Bracket*);

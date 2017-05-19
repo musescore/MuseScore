@@ -3255,9 +3255,9 @@ void Score::cmdSelectSection()
 //   undo
 //---------------------------------------------------------
 
-void Score::undo(UndoCommand* cmd) const
+void Score::undo(UndoCommand* cmd, EditData* ed) const
       {
-      undoStack()->push(cmd);
+      undoStack()->push(cmd, ed);
       }
 
 //---------------------------------------------------------
