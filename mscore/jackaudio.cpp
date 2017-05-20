@@ -536,8 +536,8 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
       if (!preferences.useJackMidi)
             return;
 
-      int portIdx = seq->score()->midiPort(e.channel());
-      int chan    = seq->score()->midiChannel(e.channel());
+      int portIdx = seq->score()->masterScore()->midiPort(e.channel());
+      int chan    = seq->score()->masterScore()->midiChannel(e.channel());
 
 // qDebug("JackAudio::putEvent %d:%d  pos %d(%d)", portIdx, chan, framePos, _segmentSize);
 
