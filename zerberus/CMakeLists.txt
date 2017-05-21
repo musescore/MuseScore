@@ -14,8 +14,23 @@ include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
 QT5_WRAP_UI (zerberusUi zerberus_gui.ui)
 
+include_directories(
+      ${PROJECT_SOURCE_DIR}/thirdparty
+      ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
+      )
+
+QT5_WRAP_UI (ui_headers
+      ../mscore/insertmeasuresdialog.ui
+      ../mscore/measuresdialog.ui
+      ../mscore/aboutbox.ui
+      ../mscore/aboutmusicxmlbox.ui
+      ../mscore/startdialog.ui
+      ../mscore/uploadscoredialog.ui
+      )
+
 add_library (zerberus STATIC
       ${zerberusUi}
+      ${ui_headers}
       channel.cpp
       instrument.cpp
       sfz.cpp

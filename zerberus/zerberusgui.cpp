@@ -13,6 +13,7 @@
 #include "zerberusgui.h"
 
 #include "mscore/preferences.h"
+#include "mscore/musescore.h"
 
 //---------------------------------------------------------
 //   SfzListDialog
@@ -173,7 +174,9 @@ void ZerberusGui::loadSfz() {
             QFuture<bool> future = QtConcurrent::run(zerberus(), &Zerberus::addSoundFont, sfName);
             _futureWatcher.setFuture(future);
             _progressTimer->start(1000);
-            _progressDialog->exec();
+            _progressDialog->open();
+            _progressBar = Ms::mscore->showProgressBar();
+            _progressBar->setFormat(tr("Loading sfz %p\%"));
             }
       }
 
@@ -215,6 +218,7 @@ void ZerberusGui::cancelLoadClicked()
 void ZerberusGui::updateProgress()
       {
       _progressDialog->setValue(zerberus()->loadProgress());
+      _progressBar->setValue(zerberus()->loadProgress());
       }
 
 //---------------------------------------------------------
@@ -237,6 +241,8 @@ void ZerberusGui::onSoundFontLoaded()
       bool wasNotCanceled = !_progressDialog->wasCanceled();
       _progressTimer->stop();
       _progressDialog->reset();
+      Ms::mscore->hideProgressBar();
+      _progressBar = 0;
       if (loaded) {
             QListWidgetItem* item = new QListWidgetItem;
             item->setText(_loadedSfName);
