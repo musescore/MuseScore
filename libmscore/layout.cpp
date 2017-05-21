@@ -1913,6 +1913,9 @@ static bool validMMRestMeasure(Measure* m)
 
       int n = 0;
       for (Segment* s = m->first(); s; s = s->next()) {
+            if (s->isBreathType())
+                  return false;
+
             for (Element* e : s->annotations()) {
                   if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText()))
                         return false;
