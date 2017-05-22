@@ -119,14 +119,8 @@ QString MScoreTextToMXML::toPlainText(const QString& text)
 QString MScoreTextToMXML::toPlainTextPlusSymbols(const QList<TextFragment>& list)
       {
       QString res;
-      for (const TextFragment& f : list) {
-            if (f.format.type() == CharFormatType::TEXT)
-                  res += f.text;
-            else {
-                  for (const SymId id : f.ids)
-                        res += QString("<sym>%1</sym>").arg(Sym::id2name(id));
-                  }
-            }
+      for (const TextFragment& f : list)
+            res += f.text;
       return res;
       }
 
@@ -136,14 +130,7 @@ QString MScoreTextToMXML::toPlainTextPlusSymbols(const QList<TextFragment>& list
 
 static int plainTextPlusSymbolsFragmentSize(const TextFragment& f)
       {
-      int res = 0;
-      if (f.format.type() == CharFormatType::TEXT)
-            res += f.columns();
-      else {
-            for (const SymId id : f.ids)
-                  res += QString("<sym>%1</sym>").arg(Sym::id2name(id)).size();
-            }
-      return res;
+      return f.columns();
       }
 
 //---------------------------------------------------------
@@ -249,11 +236,6 @@ void MScoreTextToMXML::writeTextFragments(const QList<TextFragment>& fr, XmlWrit
       bool firstTime = true; // write additional attributes only the first time characters are written
       for (const TextFragment& f : fr) {
             newFormat = f.format;
-            if (f.format.type() == CharFormatType::SYMBOL) {
-                  // for symbols, only an explicit font change is required
-                  // fragment text is already SMuFL-compliant
-                  newFormat.setFontFamily(musicalTextFont);
-                  }
             QString formatAttr = updateFormat();
             xml.tag(tagname + (firstTime ? attribs : "") + formatAttr, f.text);
             firstTime = false;

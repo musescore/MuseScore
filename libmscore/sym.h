@@ -2780,7 +2780,6 @@ class ScoreFont {
 
       static QVector<ScoreFont> _scoreFonts;
       static QJsonObject _glyphnamesJson;
-      const Sym& sym(SymId id) const { return _symbols[int(id)]; }
       void load();
       void computeMetrics(Sym* sym, int code);
 
@@ -2838,6 +2837,8 @@ class ScoreFont {
 
       bool isValid(SymId id) const                    { return sym(id).isValid(); }
       bool useFallbackFont(SymId id) const;
+
+      const Sym& sym(SymId id) const { return _symbols[int(id)]; }
       };
 
 extern void initScoreFonts();
