@@ -25,6 +25,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/icon.h"
 #include "libmscore/xml.h"
+#include "libmscore/stafflines.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "continuouspanel.h"
@@ -284,13 +285,17 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
       dropData.modifiers  = event->keyboardModifiers();
 
       if (editData.element) {
-            switch(editData.element->type()) {
+            switch (editData.element->type()) {
                   case ElementType::IMAGE:
                   case ElementType::SYMBOL:
                         {
                         // dragSymbol(pos);
                         const QList<Element*> el = elementsAt(pos);
                         const Element* e = el.isEmpty() ? 0 : el[0];
+                        if (!e) {
+                              int staffIdx;
+                              e = _score->pos2measure(pos, &staffIdx, 0, 0, 0);
+                              }
                         if (e && (e->isNote() || e->isSymbol() || e->isImage() || e->isText())) {
                               EditData dropData;
                               dropData.view       = this;
@@ -361,12 +366,13 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case ElementType::TREMOLOBAR:
                   case ElementType::FIGURED_BASS:
                   case ElementType::LYRICS:
-                  case ElementType::STAFFTYPE_CHANGE:
-                        {
+                  case ElementType::STAFFTYPE_CHANGE: {
                         QList<Element*> el = elementsAt(pos);
                         bool found = false;
                         setDropTarget(0);
                         for (const Element* e : el) {
+                              if (e->isStaffLines())
+                                    e = toStaffLines(e)->measure();
                               if (e->acceptDrop(dropData)) {
                                     if (!e->isMeasure())
                                           setDropTarget(e);
@@ -488,12 +494,12 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::HARMONY:
                         {
                         Element* el = elementAt(pos);
-                        if (el == 0 || el->type() == ElementType::MEASURE) {
+                        if (el == 0 || el->type() == ElementType::STAFF_LINES) {
                               int staffIdx;
                               Segment* seg;
                               QPointF offset;
                               el = _score->pos2measure(pos, &staffIdx, 0, &seg, &offset);
-                              if (el && el->type() == ElementType::MEASURE) {
+                              if (el && el->isMeasure()) {
                                     editData.element->setTrack(staffIdx * VOICES);
                                     editData.element->setParent(seg);
                                     if (applyUserOffset)
@@ -561,8 +567,11 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::LYRICS:
                   case ElementType::STAFFTYPE_CHANGE:
                         {
+                        QList<Element*> elist = elementsAt(pos);
                         Element* el = 0;
-                        for (const Element* e : elementsAt(pos)) {
+                        for (const Element* e : elist) {
+                              if (e->isStaffLines())
+                                    e = toStaffLines(e)->measure();
                               if (e->acceptDrop(dropData)) {
                                     el = const_cast<Element*>(e);
                                     break;
