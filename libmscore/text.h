@@ -25,7 +25,6 @@ class Text;
 class TextBlock;
 class ChangeText;
 
-enum class CharFormatType : char    { TEXT, SYMBOL };
 enum class VerticalAlignment : char { AlignNormal, AlignSuperScript, AlignSubScript };
 enum class FormatId : char          { Bold, Italic, Underline, Valign, FontSize, FontFamily };
 
@@ -34,7 +33,6 @@ enum class FormatId : char          { Bold, Italic, Underline, Valign, FontSize,
 //---------------------------------------------------------
 
 class CharFormat {
-      CharFormatType _type      { CharFormatType::TEXT };
       bool _bold                { false };
       bool _italic              { false };
       bool _underline           { false };
@@ -46,7 +44,6 @@ class CharFormat {
    public:
       CharFormat() {}
       bool operator==(const CharFormat&) const;
-      CharFormatType type() const            { return _type;        }
       bool bold() const                      { return _bold;        }
       bool italic() const                    { return _italic;      }
       bool underline() const                 { return _underline;   }
@@ -55,7 +52,6 @@ class CharFormat {
       qreal fontSize() const                 { return _fontSize;    }
       QString fontFamily() const             { return _fontFamily;  }
 
-      void setType(CharFormatType val)       { _type        = val;  }
       void setBold(bool val)                 { _bold        = val;  }
       void setItalic(bool val)               { _italic      = val;  }
       void setUnderline(bool val)            { _underline   = val;  }
@@ -104,7 +100,6 @@ class TextCursor {
       int columns() const;
       void init();
 
-//      const TextBlock& curLine() const;
       TextBlock& curLine() const;
       QRectF cursorRect() const;
       bool movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int count = 1);
@@ -114,7 +109,7 @@ class TextCursor {
       bool set(const QPointF& p, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
       QString selectedText() const;
       void updateCursorFormat();
-      void insertSym(SymId);
+//      void insertSym(SymId);
       void setFormat(FormatId, QVariant);
       void changeSelectionFormat(FormatId id, QVariant val);
       bool deleteChar() const;
@@ -124,7 +119,7 @@ class Text;
 
 //---------------------------------------------------------
 //   TextFragment
-//    contains a styled text or symbol with name "text"
+//    contains a styled text
 //---------------------------------------------------------
 
 class TextFragment {
@@ -134,13 +129,13 @@ class TextFragment {
       QPointF pos;                  // y is relative to TextBlock->y()
 
       mutable QString text;
-      QList<SymId> ids;
+//      QList<SymId> ids;
 
       bool operator ==(const TextFragment& f) const;
 
       TextFragment();
       TextFragment(const QString& s);
-      TextFragment(TextCursor*, SymId);
+//      TextFragment(TextCursor*, SymId);
       TextFragment(TextCursor*, const QString&);
       TextFragment split(int column);
       void draw(QPainter*, const Text*) const;
@@ -175,7 +170,7 @@ class TextBlock {
       QRectF boundingRect(int col1, int col2, const Text*) const;
       int columns() const;
       void insert(TextCursor*, const QString&);
-      void insert(TextCursor*, SymId);
+//      void insert(TextCursor*, SymId);
       QString remove(int column);
       QString remove(int start, int n);
       int column(qreal x, Text*) const;
@@ -194,10 +189,7 @@ class TextBlock {
       };
 
 //---------------------------------------------------------
-//   @@ MText
-///    Graphic representation of a text.
-//
-//   @P text           string  the raw text
+//   Text
 //---------------------------------------------------------
 
 class Text : public Element {
@@ -249,13 +241,12 @@ class Text : public Element {
 
       void insert(TextCursor*, QChar, QChar);
       void insert(TextCursor*, QChar);
-      void insert(TextCursor*, SymId);
+//      void insert(TextCursor*, SymId);
       void genText();
 
       PropertyFlags* propertyFlagsP(P_ID id);
 
    protected:
-
       QColor textColor() const;
       QRectF frame;           // calculated in layout()
       void layoutFrame();

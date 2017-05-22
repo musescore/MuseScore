@@ -53,8 +53,6 @@ struct TextEditData : public ElementEditData {
 
 bool CharFormat::operator==(const CharFormat& cf) const
       {
-      if (cf.type() != type())
-            return false;
       if (cf.bold() != bold()
          || cf.italic() != italic()
          || cf.underline() != underline()
@@ -63,9 +61,7 @@ bool CharFormat::operator==(const CharFormat& cf) const
          || cf.fontSize() != fontSize()
          )
             return false;
-      if (type() == CharFormatType::TEXT)
-            return cf.fontFamily() == fontFamily();
-      return true;
+      return cf.fontFamily() == fontFamily();
       }
 
 //---------------------------------------------------------
@@ -140,21 +136,20 @@ TextFragment::TextFragment()
 
 TextFragment::TextFragment(const QString& s)
       {
-      format.setType(CharFormatType::TEXT);
       text = s;
       }
 
+#if 0
 TextFragment::TextFragment(TextCursor* cursor, SymId id)
       {
       format = *cursor->format();
-      format.setType(CharFormatType::SYMBOL);
       ids.append(id);
       }
+#endif
 
 TextFragment::TextFragment(TextCursor* cursor, const QString& s)
       {
       format = *cursor->format();
-      format.setType(CharFormatType::TEXT);
       text = s;
       }
 
@@ -175,16 +170,6 @@ TextFragment TextFragment::split(int column)
                         if (idx < text.size()) {
                               f.text = text.mid(idx);
                               text   = text.left(idx);
-                              if (format.type() == CharFormatType::SYMBOL) {
-                                    QList<SymId> l1;
-                                    for (int k = 0; k < ids.size(); ++k) {
-                                          if (k < idx)
-                                                l1.append(ids[k]);
-                                          else
-                                                f.ids.append(ids[k]);
-                                          }
-                                    ids = l1;
-                                    }
                               }
                         }
                   return f;
@@ -219,7 +204,7 @@ int TextFragment::columns() const
 
 bool TextFragment::operator ==(const TextFragment& f) const
       {
-      return format == f.format && (format.type() == CharFormatType::TEXT ? text == f.text : ids == f.ids);
+      return format == f.format && text == f.text;
       }
 
 //---------------------------------------------------------
@@ -250,23 +235,9 @@ QFont TextFragment::font(const Text* t) const
             m *= subScriptSize;
 
       font.setUnderline(format.underline() || format.preedit());
-      if (format.type() == CharFormatType::TEXT) {
-            font.setFamily(format.fontFamily());
-            font.setBold(format.bold());
-            font.setItalic(format.italic());
-            }
-      else {
-            text.clear();
-            ScoreFont* sf = ScoreFont::fallbackFont();
-            for (SymId id : ids)
-                  text.append(sf->toString(id));
-            QString sfn = t->score()->styleSt(StyleIdx::MusicalTextFont);
-            font.setFamily(sfn);
-            font.setWeight(QFont::Normal);      // if not set we get system default
-            //font.setStyleStrategy(QFont::NoFontMerging);
-            font.setHintingPreference(QFont::PreferVerticalHinting);
-            }
-
+      font.setFamily(format.fontFamily());
+      font.setBold(format.bold());
+      font.setItalic(format.italic());
       Q_ASSERT(m > 0.0);
 
       font.setPointSizeF(m);
@@ -488,82 +459,48 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
       int rcol, ridx;
       auto i = fragment(cursor->column(), &rcol, &ridx);
       if (i != _fragments.end()) {
-            if (i->format.type() == CharFormatType::TEXT) {
-                  if (!(i->format == *cursor->format())) {
-                        if (rcol == 0)
-                              _fragments.insert(i, TextFragment(cursor, s));
-                        else {
-                              TextFragment f2 = i->split(rcol);
-                              i = _fragments.insert(i+1, TextFragment(cursor, s));
-                              _fragments.insert(i+1, f2);
-                              }
-                        }
-                  else
-                        i->text.insert(ridx, s);
-                  }
-            else {
-                  if (rcol == 0) {
-                        if (i != _fragments.begin() && (i-1)->format == *cursor->format())
-                              (i-1)->text.append(s);
-                        else
-                              _fragments.insert(i, TextFragment(cursor, s));
-                        }
+            if (!(i->format == *cursor->format())) {
+                  if (rcol == 0)
+                        _fragments.insert(i, TextFragment(cursor, s));
                   else {
                         TextFragment f2 = i->split(rcol);
                         i = _fragments.insert(i+1, TextFragment(cursor, s));
-                        f2.format = *cursor->format();
-                        f2.format.setType(CharFormatType::SYMBOL);
                         _fragments.insert(i+1, f2);
                         }
                   }
+            else
+                  i->text.insert(ridx, s);
             }
       else {
-            if (!_fragments.empty() && _fragments.back().format.type() == CharFormatType::TEXT && _fragments.back().format == *cursor->format())
+            if (!_fragments.empty() && _fragments.back().format == *cursor->format())
                   _fragments.back().text.append(s);
             else
                   _fragments.append(TextFragment(cursor, s));
             }
       }
 
+#if 0
 void TextBlock::insert(TextCursor* cursor, SymId id)
       {
       int rcol, ridx;
       auto i = fragment(cursor->column(), &rcol, &ridx);
       if (i != _fragments.end()) {
-            if (i->format.type() == CharFormatType::SYMBOL) {
-                  if (!(i->format == *cursor->format())) {
-                        if (rcol == 0)
-                              _fragments.insert(i, TextFragment(cursor, id));
-                        else {
-                              TextFragment f2 = i->split(rcol);
-                              i = _fragments.insert(i+1, TextFragment(cursor, id));
-                              _fragments.insert(i+1, f2);
-                              }
-                        }
+            if (rcol == 0) {
+                  if (i != _fragments.begin() && (i-1)->format == *cursor->format())
+                        (i-1)->ids.append(id);
                   else
-                        i->ids.insert(rcol, id);
+                        _fragments.insert(i, TextFragment(cursor, id));
                   }
-            else if (i->format.type() == CharFormatType::TEXT) {
-                  if (rcol == 0) {
-                        if (i != _fragments.begin() && (i-1)->format == *cursor->format())
-                              (i-1)->ids.append(id);
-                        else
-                              _fragments.insert(i, TextFragment(cursor, id));
-                        }
-                  else {
-                        TextFragment f2 = i->split(rcol);
-                        i = _fragments.insert(i+1, TextFragment(cursor, id));
-                        _fragments.insert(i+1, f2);
-                        }
+            else {
+                  TextFragment f2 = i->split(rcol);
+                  i = _fragments.insert(i+1, TextFragment(cursor, id));
+                  _fragments.insert(i+1, f2);
                   }
             }
-      else {
-            if (!_fragments.empty() && _fragments.back().format.type() == CharFormatType::SYMBOL)
-                  _fragments.back().ids.append(id);
-            else
-                  _fragments.append(TextFragment(cursor, id));
-            }
+      else
+            _fragments.append(TextFragment(cursor, id));
       }
+#endif
 
 //---------------------------------------------------------
 //   fragment
@@ -607,23 +544,16 @@ QString TextBlock::remove(int column)
             int rcol = 0;
             for (const QChar& c : i->text) {
                   if (col == column) {
-                        if (i->format.type() == CharFormatType::SYMBOL) {
-                              i->ids.removeAt(idx);
-                              if (i->ids.empty())
-                                    _fragments.erase(i);
+                        if (c.isSurrogate()) {
+                              s = i->text.mid(idx, 2);
+                              i->text.remove(idx, 2);
                               }
                         else {
-                              if (c.isSurrogate()) {
-                                    s = i->text.mid(idx, 2);
-                                    i->text.remove(idx, 2);
-                                    }
-                              else {
-                                    s = i->text.mid(idx, 1);
-                                    i->text.remove(idx, 1);
-                                    }
-                              if (i->text.isEmpty())
-                                    _fragments.erase(i);
+                              s = i->text.mid(idx, 1);
+                              i->text.remove(idx, 1);
                               }
+                        if (i->text.isEmpty())
+                              _fragments.erase(i);
                         simplify();
                         return s;
                         }
@@ -651,10 +581,7 @@ void TextBlock::simplify()
       ++i;
       for (; i != _fragments.end(); ++i) {
             while (i != _fragments.end() && (i->format == f->format)) {
-                  if (f->format.type() == CharFormatType::SYMBOL)
-                        f->ids.append(i->ids);
-                  else
-                        f->text.append(i->text);
+                  f->text.append(i->text);
                   i = _fragments.erase(i);
                   }
             if (i == _fragments.end())
@@ -686,8 +613,6 @@ QString TextBlock::remove(int start, int n)
                               }
                         s += c;
                         i->text.remove(idx, 1);
-                        if (i->format.type() == CharFormatType::SYMBOL)
-                              i->ids.removeAt(idx);
                         if (i->text.isEmpty() && (_fragments.size() > 1)) {
                               i = _fragments.erase(i);
                               inc = false;
@@ -810,18 +735,6 @@ TextBlock TextBlock::split(int column)
                                     tf.format = i->format;
                                     tl._fragments.append(tf);
                                     i->text = i->text.left(idx);
-                                    if (i->format.type() == CharFormatType::SYMBOL) {
-                                          QList<SymId> l1, l2;
-                                          for (int k = 0; k < i->ids.size(); ++k) {
-                                                if (k < idx)
-                                                      l1.append(i->ids[k]);
-                                                else
-                                                      l2.append(i->ids[k]);
-                                                }
-                                          i->ids = l1;
-                                          tl._fragments.back().format.setType(CharFormatType::SYMBOL);
-                                          tl._fragments.back().ids = l2;
-                                          }
                                     ++i;
                                     }
                               }
@@ -854,20 +767,11 @@ QString TextBlock::text(int col1, int len) const
       for (auto f : _fragments) {
             if (f.text.isEmpty())
                   continue;
-            if (f.format.type() == CharFormatType::TEXT) {
-                  for (const QChar& c : f.text) {
-                        if (col >= col1 && (len < 0 || ((col-col1) < len)))
-                              s += XmlWriter::xmlString(c.unicode());
-                        if (!c.isHighSurrogate())
-                              ++col;
-                        }
-                  }
-            else {
-                  for (SymId id : f.ids) {
-                        if (col >= col1 && (len < 0 || ((col-col1) < len)))
-                              s += QString("<sym>%1</sym>").arg(Sym::id2name(id));
+            for (const QChar& c : f.text) {
+                  if (col >= col1 && (len < 0 || ((col-col1) < len)))
+                        s += XmlWriter::xmlString(c.unicode());
+                  if (!c.isHighSurrogate())
                         ++col;
-                        }
                   }
             }
       return s;
@@ -1054,6 +958,7 @@ void Text::insert(TextCursor* cursor, QChar c)
 //     version for SMUFL symbols
 //---------------------------------------------------------
 
+#if 0
 void Text::insert(TextCursor* cursor, SymId id)
       {
       if (cursor->line() >= _layout.size())
@@ -1062,6 +967,7 @@ void Text::insert(TextCursor* cursor, SymId id)
       cursor->setColumn(cursor->column() + 1);
       cursor->clearSelection();
       }
+#endif
 
 //---------------------------------------------------------
 //   parseStringProperty
@@ -1158,7 +1064,15 @@ void Text::createLayout()
                               }
                         else if (token == "/sym") {
                               symState = false;
-                              insert(&cursor, Sym::name2id(sym));
+                              QString sfn = score()->styleSt(StyleIdx::MusicalTextFont);
+                              cursor.format()->setFontFamily(sfn);
+                              SymId id = Sym::name2id(sym);
+                              const Sym& sym = score()->scoreFont()->sym(id);
+                              int code = sym.code();
+                              if (code & 0xffff0000)
+                                    insert(&cursor, QChar(QChar::highSurrogate(code)), QChar(QChar::lowSurrogate(code)));
+                              else
+                                    insert(&cursor, QChar(code));
                               }
                         else if (token.startsWith("font ")) {
                               token = token.mid(5);
@@ -1166,7 +1080,7 @@ void Text::createLayout()
                                     cursor.format()->setFontSize(parseNumProperty(token.mid(6)));
                               else if (token.startsWith("face=\"")) {
                                     QString face = parseStringProperty(token.mid(6));
-                                    face = Text::unEscape(face);
+                                    face = unEscape(face);
                                     cursor.format()->setFontFamily(face);
                                     }
                               else
@@ -1187,8 +1101,9 @@ void Text::createLayout()
                               insert(&cursor, '&');
                         else if (token == "quot")
                               insert(&cursor, '"');
-                        else
-                              insert(&cursor, Sym::name2id(token));
+                        else {
+                              // TODO insert(&cursor, Sym::name2id(token));
+                              }
                         }
                   else
                         token += c;
@@ -1473,12 +1388,7 @@ void Text::genText()
                                     break;
                               }
                         }
-                  if (format.type() == CharFormatType::TEXT)
-                        _text += XmlWriter::xmlString(f.text);
-                  else {
-                        for (SymId id : f.ids)
-                              _text += QString("<sym>%1</sym>").arg(Sym::id2name(id));
-                        }
+                  _text += XmlWriter::xmlString(f.text);
                   cursor.setFormat(format);
                   }
             if (block.eol())
@@ -1503,10 +1413,8 @@ void Text::startEdit(EditData& ed)
       ted->cursor->setColumn(0);
       ted->cursor->clearSelection();
 
-printf("%p Text::startEdit %f\n", this, ed.startMove.x());
-      if (!ted->cursor->set(ed.startMove)) {
+      if (!ted->cursor->set(ed.startMove))
             ted->cursor->init();
-            }
       ed.addData(ted);
       if (layoutInvalid)
             layout();
@@ -1551,11 +1459,6 @@ void Text::editInsertText(TextCursor* cursor, const QString& s)
       else if (s.size() == 1 && (s[0].unicode() == 0x7f))
             cursor->deleteChar();
       else {
-            if (cursor->format()->type() == CharFormatType::SYMBOL) {
-                  QString face = family();
-                  cursor->format()->setFontFamily(face);
-                  cursor->format()->setType(CharFormatType::TEXT);
-                  }
             cursor->curLine().insert(cursor, s);
             cursor->setColumn(cursor->column() + s.size());
             cursor->clearSelection();
@@ -1958,11 +1861,6 @@ void Text::insertText(EditData& ed, const QString& s)
       {
       TextCursor* _cursor = cursor(ed);
       deleteSelectedText(ed);
-      if (_cursor->format()->type() == CharFormatType::SYMBOL) {
-            QString face = family();
-            _cursor->format()->setFontFamily(face);
-            _cursor->format()->setType(CharFormatType::TEXT);
-            }
       _cursor->curLine().insert(_cursor, s);
       _cursor->setColumn(_cursor->column() + s.size());
       _cursor->clearSelection();
@@ -1972,6 +1870,7 @@ void Text::insertText(EditData& ed, const QString& s)
 //   insertSym
 //---------------------------------------------------------
 
+#if 0
 void TextCursor::insertSym(SymId id)
       {
       curLine().insert(this, id);
@@ -1979,6 +1878,7 @@ void TextCursor::insertSym(SymId id)
       clearSelection();
       _text->layout();
       }
+#endif
 
 //---------------------------------------------------------
 //   insertSym
@@ -1987,7 +1887,8 @@ void TextCursor::insertSym(SymId id)
 void Text::insertSym(EditData& ed, SymId id)
       {
       deleteSelectedText(ed);
-      cursor(ed)->insertSym(id);
+      QString s = score()->scoreFont()->toString(id);
+      score()->undo(new InsertText(cursor(ed), s), &ed);
       }
 
 //---------------------------------------------------------
@@ -2219,7 +2120,7 @@ Element* Text::drop(EditData& ed)
                   delete e;
 
                   deleteSelectedText(ed);
-                  insert(_cursor, id);
+                  insertSym(ed, id);
                   }
                   break;
 
@@ -2278,28 +2179,7 @@ QString Text::plainText(bool noSym) const
       for (const TextBlock& block : _layout) {
             for (const TextFragment& f : block.fragments()) {
                   const CharFormat& format = f.format;
-                  if (format.type() == CharFormatType::TEXT) {
-                        s += f.text;
-                        }
-                  else if (noSym) {
-                        // do some simple symbol substitution
-                        for (SymId id : f.ids) {
-                              switch (id) {
-                                    case SymId::accidentalFlat:
-                                          s += "b";
-                                          break;
-                                    case SymId::accidentalSharp:
-                                          s += "#";
-                                          break;
-                                    default:
-                                          break;
-                                    }
-                              }
-                        }
-                  else {
-                        for (SymId id : f.ids)
-                              s += QString("<sym>%1</sym>").arg(Sym::id2name(id));
-                        }
+                  s += f.text;
                   }
             if (block.eol())
                   s += QChar::LineFeed;
@@ -2592,21 +2472,8 @@ QList<TextFragment> Text::fragmentList() const
                    */
                   res.append(f);
                   if (block.eol()) {
-                        if (f.format.type() == CharFormatType::TEXT) {
-                              // simply append a newline
-                              res.last().text += "\n";
-                              }
-                        else {
-                              // create and append a fragment containing only a newline,
-                              // with the same formatting as f
-                              TextFragment newline("\n");
-                              newline.changeFormat(FormatId::FontSize, f.format.fontSize());
-                              newline.changeFormat(FormatId::FontFamily, f.format.fontFamily());
-                              newline.changeFormat(FormatId::Bold, f.format.bold());
-                              newline.changeFormat(FormatId::Underline, f.format.underline());
-                              newline.changeFormat(FormatId::Italic, f.format.italic());
-                              res.append(newline);
-                              }
+                        // simply append a newline
+                        res.last().text += "\n";
                         }
                   }
             }

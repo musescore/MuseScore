@@ -144,7 +144,7 @@ void TextTools::updateTools(EditData& ed)
 
       QFont f(format->fontFamily());
       typefaceFamily->setCurrentFont(f);
-      typefaceFamily->setEnabled(format->type() == CharFormatType::TEXT);
+      typefaceFamily->setEnabled(true);
       typefaceSize->setValue(format->fontSize());
 
       typefaceItalic->setChecked(format->italic());
