@@ -36,11 +36,11 @@ Element* MuseScoreView::elementAt(const QPointF& p)
       QList<Element*> el = elementsAt(p);
 #if 0
       qDebug("elementAt");
-      foreach(const Element* e, el)
+      for (const Element* e : el)
             qDebug("  %s %d", e->name(), e->selected());
 #endif
       Element* e = el.value(0);
-      if (e && (e->type() == ElementType::PAGE))
+      if (e && e->isPage())
             e = el.value(1);
       return e;
       }

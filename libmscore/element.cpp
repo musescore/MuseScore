@@ -1336,7 +1336,7 @@ bool Element::isPrintable() const
 
 Element* Element::findMeasure()
       {
-      if (type() == ElementType::MEASURE)
+      if (isMeasure())
             return this;
       else if (_parent)
             return _parent->findMeasure();
