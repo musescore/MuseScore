@@ -359,7 +359,7 @@ void Harmony::read(XmlReader& e)
             // but we no longer support user-applied formatting for chord symbols anyhow
             // with any luck, the resulting text will be parseable now, so give it a shot
             createLayout();
-            QString s = plainText(true);
+            QString s = plainText();
             if (!s.isEmpty()) {
                   setHarmony(s);
                   return;
@@ -1009,7 +1009,7 @@ const ChordDescription* Harmony::generateDescription()
 void Harmony::textChanged()
       {
 //      Text::createLayout();
-      setHarmony(plainText(true));
+      setHarmony(plainText());
       }
 
 //---------------------------------------------------------

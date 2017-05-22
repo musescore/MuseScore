@@ -2169,7 +2169,7 @@ void Text::setXmlText(const QString& s)
 //    return plain text with symbols
 //---------------------------------------------------------
 
-QString Text::plainText(bool noSym) const
+QString Text::plainText() const
       {
       QString s;
 
@@ -2177,10 +2177,8 @@ QString Text::plainText(bool noSym) const
             ((Text*)(this))->createLayout();  // ugh!
 
       for (const TextBlock& block : _layout) {
-            for (const TextFragment& f : block.fragments()) {
-                  const CharFormat& format = f.format;
+            for (const TextFragment& f : block.fragments())
                   s += f.text;
-                  }
             if (block.eol())
                   s += QChar::LineFeed;
             }
@@ -2405,7 +2403,7 @@ QString Text::accessibleInfo() const
                   rez = Element::accessibleInfo();
                   break;
             }
-      QString s = plainText(true).simplified();
+      QString s = plainText().simplified();
       if (s.length() > 20) {
             s.truncate(20);
             s += "...";

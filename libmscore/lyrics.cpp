@@ -284,7 +284,7 @@ void Lyrics::layout1()
       bool hasNumber     = false; // _verseNumber;
       qreal centerAdjust = 0.0;
       qreal leftAdjust   = 0.0;
-      QString s          = plainText(true);
+      QString s          = plainText();
 
       // find:
       // 1) string of numbers and non-word characters at start of syllable
