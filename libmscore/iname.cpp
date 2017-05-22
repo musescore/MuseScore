@@ -68,21 +68,29 @@ void InstrumentName::setInstrumentNameType(InstrumentNameType st)
 void InstrumentName::endEdit(EditData& ed)
       {
       Text::endEdit(ed);
-      Part* part = staff()->part();
-      Instrument* instrument = new Instrument(*part->instrument());
+      }
 
-      QString s = plainText();
+bool InstrumentName::edit(EditData& ed)
+      {
+      if (Text::edit(ed)) {
+            Part* part = staff()->part();
+            Instrument* instrument = new Instrument(*part->instrument());
 
-      if (!validateText(s)) {
-            qWarning("Invalid instrument name: <%s>", s.toUtf8().data());
-            return;
+            QString s = plainText();
+
+            if (!validateText(s)) {
+                  qWarning("Invalid instrument name: <%s>", s.toUtf8().data());
+                  return true;
+                  }
+
+            if (_instrumentNameType == InstrumentNameType::LONG)
+                  instrument->setLongName(s);
+            else
+                  instrument->setShortName(s);
+            score()->undo(new ChangePart(part, instrument, part->partName()));
+            return true;
             }
-
-      if (_instrumentNameType == InstrumentNameType::LONG)
-            instrument->setLongName(s);
-      else
-            instrument->setShortName(s);
-      score()->undo(new ChangePart(part, instrument, part->partName()));
+      return false;
       }
 
 //---------------------------------------------------------
