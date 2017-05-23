@@ -50,8 +50,9 @@ class StaffText : public Text  {
       StaffText(SubStyle, Score* = 0);
       virtual StaffText* clone() const                    { return new StaffText(*this);    }
       virtual ElementType type() const                    { return ElementType::STAFF_TEXT; }
-      virtual void write(XmlWriter& xml) const;
-      virtual void read(XmlReader&);
+      virtual void write(XmlWriter& xml) const override;
+      virtual void read(XmlReader&) override;
+      virtual bool readProperties(XmlReader&) override;
       virtual int subtype() const                         { return (int) subStyle(); }
       virtual void layout() override;
       virtual QString subtypeName() const                 { return "??"; }
