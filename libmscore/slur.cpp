@@ -525,7 +525,7 @@ inline static qreal slurDistance(const Shape& shape, const QPointF& pt, qreal sd
       }
 
 //---------------------------------------------------------
-//   layout
+//   layoutSegment
 //    p1, p2  are in System coordinates
 //---------------------------------------------------------
 
@@ -704,7 +704,7 @@ void Slur::slurPosChord(SlurPos* sp)
             enChord = startChord();
             _up = false;
             }
-      else{
+      else {
             stChord = startChord();
             enChord = endChord();
             }
@@ -716,8 +716,10 @@ void Slur::slurPosChord(SlurPos* sp)
 
       Measure* measure = endChord()->measure();
       sp->system1 = measure->system();
-      if (!sp->system1)             // DEBUG
+      if (!sp->system1) {             // DEBUG
+            qDebug("no system1");
             return;
+            }
       Q_ASSERT(sp->system1);
       sp->system2 = sp->system1;
       QPointF pp(sp->system1->pagePos());
@@ -795,16 +797,20 @@ void Slur::slurPos(SlurPos* sp)
       sp->system1 = scr->measure()->system();
       sp->system2 = ecr->measure()->system();
 
-      if (sp->system1 == 0 || sp->system2 == 0)
+      if (sp->system1 == 0) {
+            qDebug("no system1");
             return;
+            }
 
       sp->p1 = scr->pagePos() - sp->system1->pagePos();
       QPointF ppp = ecr->pagePos();
-      System* sss = sp->system2;
-      QPointF pppp = sss->pagePos();
-      sp->p2 = ppp - pppp;
 
-//      sp->p2 = ecr->pagePos() - sp->system2->pagePos();
+      if (sp->system2) {                        // system2 might not be available yet (if on next page)
+            System* sss = sp->system2;
+            QPointF pppp = sss->pagePos();
+            sp->p2 = ppp - pppp;
+            }
+
       // account for centering or other adjustments (other than mirroring)
       if (note1 && !note1->mirror())
             sp->p1.rx() += note1->x();
