@@ -1040,10 +1040,10 @@ bool SvgPaintEngine::begin(QPaintDevice *)
                 " xmlns:xlink=\"http://www.w3.org/1999/xlink\""
                 " version=\"1.2\" baseProfile=\"tiny\">" << endl;
     if (!d->attributes.title.isEmpty()) {
-        stream() << SVG_TITLE_BEGIN << d->attributes.title << SVG_TITLE_END << endl;
+        stream() << SVG_TITLE_BEGIN << d->attributes.title.toHtmlEscaped() << SVG_TITLE_END << endl;
     }
     if (!d->attributes.description.isEmpty()) {
-        stream() << SVG_DESC_BEGIN  << d->attributes.description << SVG_DESC_END << endl;
+        stream() << SVG_DESC_BEGIN  << d->attributes.description.toHtmlEscaped() << SVG_DESC_END << endl;
     }
 
 // <defs> is currently empty. It's necessary for gradients.
