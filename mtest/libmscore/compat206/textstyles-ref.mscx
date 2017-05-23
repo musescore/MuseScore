@@ -93,6 +93,7 @@
       <ottavaFontSize>10</ottavaFontSize>
       <ottavaFontItalic>1</ottavaFontItalic>
       <pedalFontFace>MuseJazz Text</pedalFontFace>
+      <hairpinFontFace>MuseJazz Text</hairpinFontFace>
       <bendFontFace>MuseJazz Text</bendFontFace>
       <headerFontFace>MuseJazz Text</headerFontFace>
       <footerFontFace>MuseJazz Text</footerFontFace>
@@ -325,7 +326,8 @@
         </Measure>
       <Measure number="11">
         <StaffText>
-          <style>default</style>
+          <style>Expression</style>
+          <offset x="0" y="5.5"/>
           <text>technique</text>
           </StaffText>
         <Rest>

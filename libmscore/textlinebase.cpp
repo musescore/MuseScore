@@ -620,7 +620,7 @@ bool TextLineBase::setProperty(P_ID id, const QVariant& v)
                   break;
             case P_ID::BEGIN_FONT_SIZE:
                   if (v.toReal() <= 0)
-                        qDebug("font size is %f", v.toReal());
+                        qFatal("font size is %f", v.toReal());
                   setBeginFontSize(v.toReal());
                   break;
             case P_ID::BEGIN_FONT_BOLD:
