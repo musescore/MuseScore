@@ -46,6 +46,7 @@
 #include "hairpin.h"
 #include "ottava.h"
 #include "trill.h"
+#include "rehearsalmark.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -495,18 +496,33 @@ static void readTextStyle(MStyle* style, XmlReader& e)
                         case P_ID::SUB_STYLE:
                               value = int(ss);
                               break;
+                        case P_ID::BEGIN_FONT_FACE:
+                        case P_ID::CONTINUE_FONT_FACE:
+                        case P_ID::END_FONT_FACE:
                         case P_ID::FONT_FACE:
                               value = family;
                               break;
+                        case P_ID::BEGIN_FONT_SIZE:
+                        case P_ID::CONTINUE_FONT_SIZE:
+                        case P_ID::END_FONT_SIZE:
                         case P_ID::FONT_SIZE:
                               value = size;
                               break;
+                        case P_ID::BEGIN_FONT_BOLD:
+                        case P_ID::CONTINUE_FONT_BOLD:
+                        case P_ID::END_FONT_BOLD:
                         case P_ID::FONT_BOLD:
                               value = bold;
                               break;
+                        case P_ID::BEGIN_FONT_ITALIC:
+                        case P_ID::CONTINUE_FONT_ITALIC:
+                        case P_ID::END_FONT_ITALIC:
                         case P_ID::FONT_ITALIC:
                               value = italic;
                               break;
+                        case P_ID::BEGIN_FONT_UNDERLINE:
+                        case P_ID::CONTINUE_FONT_UNDERLINE:
+                        case P_ID::END_FONT_UNDERLINE:
                         case P_ID::FONT_UNDERLINE:
                               value = underline;
                               break;
@@ -537,6 +553,9 @@ static void readTextStyle(MStyle* style, XmlReader& e)
                         case P_ID::FONT_SPATIUM_DEPENDENT:
                               value = sizeIsSpatiumDependent;
                               break;
+                        case P_ID::BEGIN_TEXT_ALIGN:
+                        case P_ID::CONTINUE_TEXT_ALIGN:
+                        case P_ID::END_TEXT_ALIGN:
                         case P_ID::ALIGN:
                               value = QVariant::fromValue(align);
                               break;
@@ -979,6 +998,28 @@ static void readChord(Chord* chord, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
+static void readText(XmlReader& e, Text* t, Element* be)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "style") {
+                  QString s = e.readElementText();
+                  SubStyle ss = subStyleFromName(s);
+                  be->initSubStyle(ss);
+                  }
+            else if (tag == "foregroundColor")  // same as "color" ?
+                  e.skipCurrentElement();
+            else if (tag == "frame")
+                  t->setHasFrame(e.readBool());
+            else if (!t->readProperties(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
 //   readTextLineProperties
 //---------------------------------------------------------
 
@@ -988,19 +1029,19 @@ static bool readTextLineProperties(XmlReader& e, TextLineBase* tl)
 
       if (tag == "beginText") {
             Text* text = new Text(tl->score());
-            text->read(e);
+            readText(e, text, tl);
             tl->setBeginText(text->xmlText());
             delete text;
             }
       else if (tag == "continueText") {
             Text* text = new Text(tl->score());
-            text->read(e);
+            readText(e, text, tl);
             tl->setContinueText(text->xmlText());
             delete text;
             }
       else if (tag == "endText") {
             Text* text = new Text(tl->score());
-            text->read(e);
+            readText(e, text, tl);
             tl->setEndText(text->xmlText());
             delete text;
             }
@@ -1669,7 +1710,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Text") {
                   Text* t = new StaffText(score);
                   t->setTrack(e.track());
-                  t->read(e);
+                  readText(e, t, t);
                   if (t->empty()) {
                         qDebug("reading empty text: deleted");
                         delete t;
@@ -1690,13 +1731,32 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(dyn);
                   }
+            else if (tag == "RehearsalMark") {
+                  RehearsalMark* el = new RehearsalMark(score);
+                  el->setTrack(e.track());
+                  readText(e, el, el);
+                  segment = m->getSegment(SegmentType::ChordRest, e.tick());
+                  segment->add(el);
+                  }
+            else if (tag == "StaffText") {
+                  StaffText* el = new StaffText(score);
+                  el->setTrack(e.track());
+
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "foregroundColor")
+                              e.skipCurrentElement();
+                        else if (!el->readProperties(e))
+                              e.unknown();
+                        }
+                  segment = m->getSegment(SegmentType::ChordRest, e.tick());
+                  segment->add(el);
+                  }
             else if (tag == "Harmony"
                || tag == "FretDiagram"
                || tag == "TremoloBar"
                || tag == "Symbol"
                || tag == "Tempo"
-               || tag == "StaffText"
-               || tag == "RehearsalMark"
                || tag == "InstrumentChange"
                || tag == "StaffState"
                || tag == "FiguredBass"
@@ -2301,6 +2361,7 @@ Score::FileError MasterScore::read206(XmlReader& e)
 
       for (unsigned int i = 0; i < sizeof(style206)/sizeof(*style206); ++i)
             style().set(style206[i].idx, style206[i].val);
+
       // old text style default
       style().set(StyleIdx::rehearsalMarkFrameSquare, false);
       style().set(StyleIdx::rehearsalMarkFrameRound, 20);
