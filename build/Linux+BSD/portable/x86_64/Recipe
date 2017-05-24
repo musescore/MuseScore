@@ -49,7 +49,14 @@ apt-get -y install \
   lame \
   libmp3lame-dev \
   libegl1-mesa-dev \
-  libpulse-dev
+  libpulse-dev \
+  libnss3-dev \
+  libxss1 \
+  libnspr4-dev \
+  libxi-dev \
+  libxcursor-dev \
+  libxtst-dev
+
 
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 40 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8
 
