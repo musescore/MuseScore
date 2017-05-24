@@ -5844,7 +5844,11 @@ void ScoreFont::computeMetrics(Sym* sym, int code)
                         sym->setAdvance(face->glyph->linearHoriAdvance * DPI_F/ 655360.0);
                         }
                   }
+            else
+                  qDebug("load glyph failed");
             }
+//      else
+//            qDebug("no index");
       }
 
 //---------------------------------------------------------
@@ -5877,11 +5881,11 @@ void ScoreFont::load()
                   qDebug("codepoint not recognized for glyph %s", qPrintable(i));
             if (Sym::lnhash.contains(i)) {
                   SymId symId = Sym::lnhash.value(i);
-                  Sym* sym = &_symbols[int(symId)];
+                  Sym* sym    = &_symbols[int(symId)];
                   computeMetrics(sym, code);
                   }
-            //else
-            //      qDebug("unknown glyph: %s", qPrintable(i));
+            else
+                  qDebug("unknown glyph: %s", qPrintable(i));
             }
 
       QJsonParseError error;
@@ -6144,6 +6148,7 @@ void ScoreFont::load()
       // add space symbol
       Sym* sym = &_symbols[int(SymId::space)];
       computeMetrics(sym, 32);
+
 #if 0
       //
       // check for missing symbols
@@ -6350,6 +6355,7 @@ ScoreFont::~ScoreFont()
       {
       delete cache;
       }
+
 }
 
 

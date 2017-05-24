@@ -1065,14 +1065,46 @@ void Text::createLayout()
                         else if (token == "/sym") {
                               symState = false;
                               QString sfn = score()->styleSt(StyleIdx::MusicalTextFont);
-                              cursor.format()->setFontFamily(sfn);
                               SymId id = Sym::name2id(sym);
-                              const Sym& sym = score()->scoreFont()->sym(id);
-                              int code = sym.code();
-                              if (code & 0xffff0000)
-                                    insert(&cursor, QChar(QChar::highSurrogate(code)), QChar(QChar::lowSurrogate(code)));
-                              else
-                                    insert(&cursor, QChar(code));
+                              uint code;
+                              if (id == SymId::noSym) {
+                                    qDebug("symbol <%s> not known", qPrintable(sym));
+                                    // Unicode
+                                    struct UnicodeAlternate {
+                                          const char* name;
+                                          int a;
+                                          int b;
+                                          }
+                                    unicodes[] = {
+                                           { "unicodeNoteDoubleWhole", 0xd834, 0xdd5c },
+                                           { "unicodeNoteWhole",       0xd834, 0xdd5d },
+                                           { "unicodeNoteHalfUp",      0xd834, 0xdd5e },
+                                           { "unicodeNoteQuarterUp",   0xd834, 0xdd5f },
+                                           { "unicodeNote8thUp",       0xd834, 0xdd60 },
+                                           { "unicodeNote16thUp",      0xd834, 0xdd61 },
+                                           { "unicodeNote32ndUp",      0xd834, 0xdd62 },
+                                           { "unicodeNote64thUp",      0xd834, 0xdd63 },
+                                           { "unicodeNote128thUp",     0xd834, 0xdd64 },
+                                           { "unicodeAugmentationDot", 0xd834, 0xdd6D }
+                                           };
+
+                                    for (const UnicodeAlternate& unicode : unicodes) {
+                                          if (unicode.name == sym) {
+                                                code = QChar::surrogateToUcs4(QChar(unicode.a), QChar(unicode.b));
+                                                break;
+                                                }
+                                          }
+                                    }
+                              else {
+                                    cursor.format()->setFontFamily(sfn);
+                                    code = score()->scoreFont()->sym(id).code();
+                                    }
+                              if (code) {
+                                    if (code & 0xffff0000)
+                                          insert(&cursor, QChar(QChar::highSurrogate(code)), QChar(QChar::lowSurrogate(code)));
+                                    else
+                                          insert(&cursor, QChar(code));
+                                    }
                               }
                         else if (token.startsWith("font ")) {
                               token = token.mid(5);
