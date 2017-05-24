@@ -5415,34 +5415,34 @@ int main(int argc, char* av[])
     //parser.addOption(QCommandLineOption({"v", "version"}, "Print version")); // see above
       parser.addOption(QCommandLineOption(      "long-version", "Print detailed version information"));
       parser.addOption(QCommandLineOption({"d", "debug"}, "Debug mode"));
-      parser.addOption(QCommandLineOption({"L", "layout-debug"}, "Layout debug"));
+      parser.addOption(QCommandLineOption({"L", "layout-debug"}, "Layout debug mode"));
       parser.addOption(QCommandLineOption({"s", "no-synthesizer"}, "No internal synthesizer"));
-      parser.addOption(QCommandLineOption({"m", "no-midi"}, "No midi"));
+      parser.addOption(QCommandLineOption({"m", "no-midi"}, "No MIDI"));
       parser.addOption(QCommandLineOption({"a", "use-audio"}, "Use audio driver: jack, alsa, pulse, or portaudio", "driver"));
       parser.addOption(QCommandLineOption({"n", "new-score"}, "Start with new score"));
       parser.addOption(QCommandLineOption({"I", "dump-midi-in"}, "Dump midi input"));
       parser.addOption(QCommandLineOption({"O", "dump-midi-out"}, "Dump midi output"));
-      parser.addOption(QCommandLineOption({"o", "export-to"}, "Export to 'file'; format depends on file extension", "file"));
-      parser.addOption(QCommandLineOption({"r", "image-resolution"}, "Set output resolution for image export", "dpi"));
-      parser.addOption(QCommandLineOption({"T", "trim-image"}, "Trim exported image with specified margin (in pixels)", "margin"));
+      parser.addOption(QCommandLineOption({"o", "export-to"}, "Export to 'file'. Format depends on file's extension", "file"));
+      parser.addOption(QCommandLineOption({"r", "image-resolution"}, "Used with '-o <file>.png'. Set output resolution for image export", "DPI"));
+      parser.addOption(QCommandLineOption({"T", "trim-image"}, "Used with '-o <file>.png' and '-o <file.svg>'. Trim exported image with specified margin (in pixels)", "margin"));
       parser.addOption(QCommandLineOption({"x", "gui-scaling"}, "Set scaling factor for GUI elements", "factor"));
-      parser.addOption(QCommandLineOption({"D", "monitor-resolution"}, "Specify monitor resolution", "dpi"));
+      parser.addOption(QCommandLineOption({"D", "monitor-resolution"}, "Specify monitor resolution", "DPI"));
       parser.addOption(QCommandLineOption({"S", "style"}, "Load style file", "style"));
       parser.addOption(QCommandLineOption({"p", "plugin"}, "Execute named plugin", "name"));
       parser.addOption(QCommandLineOption(      "template-mode", "Save template mode, no page size"));
       parser.addOption(QCommandLineOption({"F", "factory-settings"}, "Use factory settings"));
       parser.addOption(QCommandLineOption({"R", "revert-settings"}, "Revert to default preferences"));
       parser.addOption(QCommandLineOption({"i", "load-icons"}, "Load icons from INSTALLPATH/icons"));
-      parser.addOption(QCommandLineOption({"j", "job"}, "process a conversion job", "file"));
+      parser.addOption(QCommandLineOption({"j", "job"}, "Process a conversion job", "file"));
       parser.addOption(QCommandLineOption({"e", "experimental"}, "Enable experimental features"));
-      parser.addOption(QCommandLineOption({"c", "config-folder"}, "Override config/settings folder", "dir"));
-      parser.addOption(QCommandLineOption({"t", "test-mode"}, "Set testMode flag for all files"));
+      parser.addOption(QCommandLineOption({"c", "config-folder"}, "Override configuration and settings folder", "dir"));
+      parser.addOption(QCommandLineOption({"t", "test-mode"}, "Set test mode flag for all files"));
       parser.addOption(QCommandLineOption({"M", "midi-operations"}, "Specify MIDI import operations file", "file"));
       parser.addOption(QCommandLineOption({"w", "no-webview"}, "No web view in start center"));
-      parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Used with -o <file>.pdf, export score + parts"));
-      parser.addOption(QCommandLineOption(      "no-fallback-font", "will not use Bravura as fallback musical font"));
-      parser.addOption(QCommandLineOption({"f", "force"}, "Used with -o, ignore warnings reg. score being corrupted or from wrong version"));
-      parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with -o <file>.mp3, sets bitrate", "bitrate"));
+      parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Used with '-o <file>.pdf', export score and parts"));
+      parser.addOption(QCommandLineOption(      "no-fallback-font", "Don't use Bravura as fallback musical font"));
+      parser.addOption(QCommandLineOption({"f", "force"}, "Used with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
+      parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate", "bitrate"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
