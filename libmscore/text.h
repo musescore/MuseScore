@@ -276,7 +276,7 @@ class Text : public Element {
       void setPlainText(const QString&);
       void setXmlText(const QString&);
       QString xmlText() const;
-      QString plainText(bool noSym = false) const;
+      QString plainText() const;
 
       void insertText(EditData&, const QString&);
 
