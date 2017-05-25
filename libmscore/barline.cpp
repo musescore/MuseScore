@@ -1487,7 +1487,8 @@ QString BarLine::accessibleExtraInfo()
                   Measure* nextM = m->nextMeasureMM();
                   if (nextM) {
                         foreach (Element* e, nextM->el()) {
-                              if (!score()->selectionFilter().canSelect(e)) continue;
+                              if (!score()->selectionFilter().canSelect(e))
+                                    continue;
                               if (e->type() == Element::Type::MARKER)
                                     if (static_cast<Marker*>(e)->markerType() == Marker::Type::FINE)
                                           continue; //added above^
