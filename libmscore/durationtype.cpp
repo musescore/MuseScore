@@ -414,7 +414,7 @@ Fraction TDuration::fraction() const
       }
 
 // Longest TDuration that fits into Fraction. Must fit exactly if truncate = false.
-TDuration::TDuration(const Fraction& l, bool truncate, int maxDots, DurationType maxType)
+TDuration::TDuration(const Fraction& l, bool /*truncate*/, int maxDots, DurationType maxType)
       {
       setType(maxType); // use maxType to avoid testing all types if you know that l is smaller than a certain DurationType
       setDots(maxDots);
