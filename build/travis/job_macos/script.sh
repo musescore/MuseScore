@@ -16,6 +16,7 @@ REVISION="$(echo "$TRAVIS_COMMIT" | cut -c 1-7)"
 [ "REVISION" ] || REVISION="$(make -f Makefile.osx revision && cat mscore/revision.h)"
 
 if [ "$(grep '^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)' CMakeLists.txt)" ]
+then
 cp -f build/travis/resources/splash-nightly.png  mscore/data/splash.png
 cp -f build/travis/resources/mscore-nightly.icns mscore/data/mscore.icns
 else
