@@ -442,7 +442,7 @@ QString Trill::trillTypeName() const
             case Type::PRALLPRALL_LINE:
                   return "prallprall";
             default:
-                  qDebug("unknown Trill subtype %hhd", trillType());
+                  qDebug("unknown Trill subtype %d", int(trillType()));
                   return "?";
             }
       }
