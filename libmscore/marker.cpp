@@ -98,7 +98,7 @@ void Marker::setMarkerType(Type t)
                   break;
 
             default:
-                  qDebug("unknown marker type %hhd", t);
+                  qDebug("unknown marker type %d", int(t));
                   break;
             }
       if (isEmpty() && txt)

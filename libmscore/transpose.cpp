@@ -64,7 +64,7 @@ static Interval keydiff2Interval(Key oKey, Key nKey, TransposeDirection dir)
             if (chromatic == -12)
                   chromatic = 0;
             }
-qDebug("TransposeByKey %d -> %d   chromatic %d diatonic %d", oKey, nKey, chromatic, diatonic);
+qDebug("TransposeByKey %d -> %d   chromatic %d diatonic %d", int(oKey), int(nKey), chromatic, diatonic);
       return Interval(diatonic, chromatic);
       }
 

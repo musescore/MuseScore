@@ -160,7 +160,7 @@ void KeySig::layout()
                         case 1: naturals = 0x1;  break;
                         case 0: naturals = 0;    break;
                         default:
-                              qDebug("illegal t2 key %d", t2);
+                              qDebug("illegal t2 key %d", int(t2));
                               break;
                         }
                   // remove redundant naturals
