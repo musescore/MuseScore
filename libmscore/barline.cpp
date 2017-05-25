@@ -1492,7 +1492,7 @@ QString BarLine::accessibleExtraInfo()
                               if (e->type() == Element::Type::MARKER)
                                     if (static_cast<Marker*>(e)->markerType() == Marker::Type::FINE)
                                           continue; //added above^
-                                    rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+                              rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                               }
                         }
                   }
