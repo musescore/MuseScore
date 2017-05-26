@@ -1040,10 +1040,12 @@ void Text::createLayout()
                                           insert(&cursor, code);
                                     }
                               else {
-                                    QString origFontFace = cursor.format()->fontFamily();
+                                    CharFormat fmt = *cursor.format();
                                     cursor.format()->setFontFamily("ScoreText");
+                                    cursor.format()->setBold(false);
+                                    cursor.format()->setItalic(false);
                                     insert(&cursor, score()->scoreFont()->sym(id).code());
-                                    cursor.format()->setFontFamily(origFontFace);
+                                    cursor.setFormat(fmt);
                                     }
                               }
                         else if (token.startsWith("font ")) {
