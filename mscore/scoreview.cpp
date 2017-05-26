@@ -1052,16 +1052,19 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                         if (MScore::showMeasureShapes) {
                               for (const System* system : page->systems()) {
                                     for (const MeasureBase* mb : system->measures()) {
-                                          if (mb->type() == ElementType::MEASURE) {
-                                                const Measure* m = static_cast<const Measure*>(mb);
+                                          if (mb->isMeasure()) {
+                                                const Measure* m = toMeasure(mb);
                                                 p.setPen(Qt::NoPen);
                                                 p.setBrush(QBrush(QColor(0, 0, 255, 60)));
                                                 for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-                                                      QPointF pt(m->pos().x() + system->pos().x(), 0);
-                                                      p.translate(pt);
-                                                      QPointF o(0.0, m->system()->staffYpage(staffIdx));
-                                                      m->staffShape(staffIdx).translated(o).draw(&p);
-                                                      p.translate(-pt);
+                                                      Staff* staff = score()->staff(staffIdx);
+                                                      if (!staff->invisible() && staff->part()->show()) {
+                                                            QPointF pt(m->pos().x() + system->pos().x(), 0);
+                                                            p.translate(pt);
+                                                            QPointF o(0.0, m->system()->staffYpage(staffIdx));
+                                                            m->staffShape(staffIdx).translated(o).draw(&p);
+                                                            p.translate(-pt);
+                                                            }
                                                       }
                                                 }
                                           }
