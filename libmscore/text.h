@@ -129,13 +129,11 @@ class TextFragment {
       QPointF pos;                  // y is relative to TextBlock->y()
 
       mutable QString text;
-//      QList<SymId> ids;
 
       bool operator ==(const TextFragment& f) const;
 
       TextFragment();
       TextFragment(const QString& s);
-//      TextFragment(TextCursor*, SymId);
       TextFragment(TextCursor*, const QString&);
       TextFragment split(int column);
       void draw(QPainter*, const Text*) const;
@@ -239,9 +237,7 @@ class Text : public Element {
 
       void drawSelection(QPainter*, const QRectF&) const;
 
-      void insert(TextCursor*, QChar, QChar);
-      void insert(TextCursor*, QChar);
-//      void insert(TextCursor*, SymId);
+      void insert(TextCursor*, uint code);
       void genText();
 
       PropertyFlags* propertyFlagsP(P_ID id);

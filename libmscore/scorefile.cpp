@@ -261,6 +261,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly)
             while (score->prev())
                   score = score->prev();
             while (score) {
+printf("write movement...\n");
                   score->writeMovement(xml, selectionOnly);
                   score = score->next();
                   }
