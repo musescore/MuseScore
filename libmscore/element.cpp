@@ -1506,7 +1506,7 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             default:
                   qFatal("Element::setProperty: unknown <%s>(%d), data <%s>",
-                     propertyName(propertyId), static_cast<int>(propertyId), qPrintable(v.toString()));
+                     propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
                   return false;
             }
       setGenerated(false);
