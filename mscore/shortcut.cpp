@@ -61,7 +61,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "file-save-online",
          QT_TRANSLATE_NOOP("action","Save Online..."),
          QT_TRANSLATE_NOOP("action","File: Save online"),
@@ -84,7 +84,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "file-save-selection",
          QT_TRANSLATE_NOOP("action","Save Selection..."),
          QT_TRANSLATE_NOOP("action","Save selection"),
@@ -95,7 +95,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "file-save-a-copy",
          QT_TRANSLATE_NOOP("action","Save a Copy..."),
          QT_TRANSLATE_NOOP("action","File: Save a copy"),
@@ -117,7 +117,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "file-part-export",
          QT_TRANSLATE_NOOP("action","Export Parts..."),
          QT_TRANSLATE_NOOP("action","Export parts"),
@@ -136,7 +136,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "file-close",
          QT_TRANSLATE_NOOP("action","Close"),
          QT_TRANSLATE_NOOP("action","File: Close"),
@@ -144,7 +144,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "file-new",
          QT_TRANSLATE_NOOP("action","New..."),
          QT_TRANSLATE_NOOP("action","File: New"),
@@ -1755,7 +1755,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "toggle-palette",
          QT_TRANSLATE_NOOP("action","Palettes"),
          QT_TRANSLATE_NOOP("action","Palettes"),
@@ -1765,7 +1765,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "toggle-playpanel",
          QT_TRANSLATE_NOOP("action","Play Panel"),
          QT_TRANSLATE_NOOP("action","Play panel"),
@@ -1775,7 +1775,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "toggle-selection-window",
          QT_TRANSLATE_NOOP("action","Selection Filter"),
          QT_TRANSLATE_NOOP("action","Selection filter"),
@@ -1785,7 +1785,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "toggle-navigator",
          QT_TRANSLATE_NOOP("action","Navigator"),
          0,
@@ -1795,7 +1795,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "toggle-midiimportpanel",
          QT_TRANSLATE_NOOP("action","MIDI Import Panel"),
          QT_TRANSLATE_NOOP("action","MIDI import panel"),
@@ -1809,7 +1809,7 @@ Shortcut Shortcut::_sc[] = {
          //Avoid conflict with M in text
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
 #else
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
 #endif
          "toggle-mixer",
          QT_TRANSLATE_NOOP("action","Mixer"),
@@ -1862,7 +1862,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY | STATE_FOTO,
+         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY | STATE_FOTO,
          "quit",
          QT_TRANSLATE_NOOP("action","Quit")
          },
@@ -2049,7 +2049,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "rewind",
          QT_TRANSLATE_NOOP("action","Rewind"),
          QT_TRANSLATE_NOOP("action","Player rewind"),
@@ -2412,7 +2412,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "zoomin",
          QT_TRANSLATE_NOOP("action","Zoom In"),
          QT_TRANSLATE_NOOP("action","Zoom in")
@@ -2427,7 +2427,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "zoom100",
          QT_TRANSLATE_NOOP("action","Zoom to 100%"),
          QT_TRANSLATE_NOOP("action","Zoom to 100%")
@@ -2674,7 +2674,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY | STATE_FOTO,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY | STATE_FOTO,
          "media",
          QT_TRANSLATE_NOOP("action","Additional Media..."),
          QT_TRANSLATE_NOOP("action","Show media dialog")
@@ -2695,7 +2695,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY | STATE_FOTO,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY | STATE_FOTO,
          "page-settings",
          QT_TRANSLATE_NOOP("action","Page Settings..."),
          QT_TRANSLATE_NOOP("action","Page settings")
@@ -2742,7 +2742,8 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT  | STATE_FOTO,
+         // conflicts with Ctrl+Shift-P when editing dynamics
+         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_FOTO,
          "plugin-creator",
          QT_TRANSLATE_NOOP("action", "Plugin Creator..."),
          QT_TRANSLATE_NOOP("action", "Plugin creator"),
@@ -2752,7 +2753,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT  | STATE_FOTO,
+         STATE_ALL,
          "plugin-manager",
          QT_TRANSLATE_NOOP("action", "Plugin Manager..."),
          QT_TRANSLATE_NOOP("action", "Plugin manager"),
@@ -2762,7 +2763,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT  | STATE_FOTO,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_FOTO,
          "inspector",
          QT_TRANSLATE_NOOP("action","Inspector"),
          QT_TRANSLATE_NOOP("action","Show inspector")
@@ -3474,7 +3475,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY,
+         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "startcenter",
          QT_TRANSLATE_NOOP("action","Start Center"),
          QT_TRANSLATE_NOOP("action","Start center"),
