@@ -53,15 +53,13 @@ struct TextEditData : public ElementEditData {
 
 bool CharFormat::operator==(const CharFormat& cf) const
       {
-      if (cf.bold() != bold()
-         || cf.italic() != italic()
-         || cf.underline() != underline()
-         || cf.preedit() != preedit()
-         || cf.valign() != valign()
-         || cf.fontSize() != fontSize()
-         )
-            return false;
-      return cf.fontFamily() == fontFamily();
+      return cf.bold()      == bold()
+         && cf.italic()     == italic()
+         && cf.underline()  == underline()
+         && cf.preedit()    == preedit()
+         && cf.valign()     == valign()
+         && cf.fontSize()   == fontSize()
+         && cf.fontFamily() == fontFamily();
       }
 
 //---------------------------------------------------------
@@ -233,9 +231,12 @@ QFont TextFragment::font(const Text* t) const
             m *= t->spatium() / SPATIUM20;
       if (format.valign() != VerticalAlignment::AlignNormal)
             m *= subScriptSize;
-
       font.setUnderline(format.underline() || format.preedit());
-      font.setFamily(format.fontFamily());
+
+      QString family = format.fontFamily();
+      if (family == "ScoreText")
+            family = t->score()->styleSt(StyleIdx::MusicalTextFont);
+      font.setFamily(family);
       font.setBold(format.bold());
       font.setItalic(format.italic());
       Q_ASSERT(m > 0.0);
@@ -478,29 +479,6 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
                   _fragments.append(TextFragment(cursor, s));
             }
       }
-
-#if 0
-void TextBlock::insert(TextCursor* cursor, SymId id)
-      {
-      int rcol, ridx;
-      auto i = fragment(cursor->column(), &rcol, &ridx);
-      if (i != _fragments.end()) {
-            if (rcol == 0) {
-                  if (i != _fragments.begin() && (i-1)->format == *cursor->format())
-                        (i-1)->ids.append(id);
-                  else
-                        _fragments.insert(i, TextFragment(cursor, id));
-                  }
-            else {
-                  TextFragment f2 = i->split(rcol);
-                  i = _fragments.insert(i+1, TextFragment(cursor, id));
-                  _fragments.insert(i+1, f2);
-                  }
-            }
-      else
-            _fragments.append(TextFragment(cursor, id));
-      }
-#endif
 
 //---------------------------------------------------------
 //   fragment
@@ -915,59 +893,26 @@ QColor Text::textColor() const
 
 //---------------------------------------------------------
 //   insert
-//     version for Supplementary Unicode, which must be inputted together as a pair
+//    insert character
 //---------------------------------------------------------
 
-void Text::insert(TextCursor* cursor, QChar highSurrogate, QChar lowSurrogate)
+void Text::insert(TextCursor* cursor, uint code)
       {
       if (cursor->line() >= _layout.size())
             _layout.append(TextBlock());
-      QString surrogatePair = QString(highSurrogate).append(lowSurrogate);
-      _layout[cursor->line()].insert(cursor, surrogatePair);
+      if (code == '\t')
+            code = ' ';
+
+      QString s;
+      if (QChar::requiresSurrogates(code))
+            s = QString(QChar(QChar::highSurrogate(code))).append(QChar(QChar::lowSurrogate(code)));
+      else
+            s = QString(code);
+      _layout[cursor->line()].insert(cursor, s);
+
       cursor->setColumn(cursor->column() + 1);
       cursor->clearSelection();
       }
-
-//---------------------------------------------------------
-//   insert
-//     version for Basic Unicode
-//---------------------------------------------------------
-
-void Text::insert(TextCursor* cursor, QChar c)
-      {
-      if (cursor->line() >= _layout.size())
-            _layout.append(TextBlock());
-      if (c == QChar::Tabulation)
-            c = QChar::Space;
-      else if (c == QChar::LineFeed) {
-            _layout[cursor->line()].setEol(true);
-            cursor->setLine(cursor->line() + 1);
-            cursor->setColumn(0);
-            if (_layout.size() <= cursor->line())
-                  _layout.append(TextBlock());
-            }
-      else {
-            _layout[cursor->line()].insert(cursor, QString(c));
-            cursor->setColumn(cursor->column() + 1);
-            }
-      cursor->clearSelection();
-      }
-
-//---------------------------------------------------------
-//   insert
-//     version for SMUFL symbols
-//---------------------------------------------------------
-
-#if 0
-void Text::insert(TextCursor* cursor, SymId id)
-      {
-      if (cursor->line() >= _layout.size())
-            _layout.append(TextBlock());
-      _layout[cursor->line()].insert(cursor, id);
-      cursor->setColumn(cursor->column() + 1);
-      cursor->clearSelection();
-      }
-#endif
 
 //---------------------------------------------------------
 //   parseStringProperty
@@ -1024,14 +969,12 @@ void Text::createLayout()
                               sym += c;
                         else {
                               if (c.isHighSurrogate()) {
-                                    const QChar& highSurrogate = c;
                                     i++;
                                     Q_ASSERT(i < _text.length());
-                                    const QChar& lowSurrogate = _text[i];
-                                    insert(&cursor, highSurrogate, lowSurrogate);
+                                    insert(&cursor, QChar::surrogateToUcs4(c, _text[i]));
                                     }
                               else
-                                    insert(&cursor, c);
+                                    insert(&cursor, c.unicode());
                               }
                         }
                   }
@@ -1064,9 +1007,7 @@ void Text::createLayout()
                               }
                         else if (token == "/sym") {
                               symState = false;
-                              QString sfn = score()->styleSt(StyleIdx::MusicalTextFont);
                               SymId id = Sym::name2id(sym);
-                              uint code;
                               if (id == SymId::noSym) {
                                     qDebug("symbol <%s> not known", qPrintable(sym));
                                     // Unicode
@@ -1076,7 +1017,7 @@ void Text::createLayout()
                                           int b;
                                           }
                                     unicodes[] = {
-                                           { "unicodeNoteDoubleWhole", 0xd834, 0xdd5c },
+                                           { "unicodeNoteDoubleWhole", 0xd834, 0xdd5c },  // TODO: use unicode code points
                                            { "unicodeNoteWhole",       0xd834, 0xdd5d },
                                            { "unicodeNoteHalfUp",      0xd834, 0xdd5e },
                                            { "unicodeNoteQuarterUp",   0xd834, 0xdd5f },
@@ -1088,22 +1029,21 @@ void Text::createLayout()
                                            { "unicodeAugmentationDot", 0xd834, 0xdd6D }
                                            };
 
+                                    uint code = 0;
                                     for (const UnicodeAlternate& unicode : unicodes) {
                                           if (unicode.name == sym) {
-                                                code = QChar::surrogateToUcs4(QChar(unicode.a), QChar(unicode.b));
+                                                code = QChar::surrogateToUcs4(unicode.a, unicode.b);
                                                 break;
                                                 }
                                           }
+                                    if (code)
+                                          insert(&cursor, code);
                                     }
                               else {
-                                    cursor.format()->setFontFamily(sfn);
-                                    code = score()->scoreFont()->sym(id).code();
-                                    }
-                              if (code) {
-                                    if (code & 0xffff0000)
-                                          insert(&cursor, QChar(QChar::highSurrogate(code)), QChar(QChar::lowSurrogate(code)));
-                                    else
-                                          insert(&cursor, QChar(code));
+                                    QString origFontFace = cursor.format()->fontFamily();
+                                    cursor.format()->setFontFamily("ScoreText");
+                                    insert(&cursor, score()->scoreFont()->sym(id).code());
+                                    cursor.format()->setFontFamily(origFontFace);
                                     }
                               }
                         else if (token.startsWith("font ")) {
@@ -1902,20 +1842,6 @@ void Text::insertText(EditData& ed, const QString& s)
 //   insertSym
 //---------------------------------------------------------
 
-#if 0
-void TextCursor::insertSym(SymId id)
-      {
-      curLine().insert(this, id);
-      setColumn(column() + 1);
-      clearSelection();
-      _text->layout();
-      }
-#endif
-
-//---------------------------------------------------------
-//   insertSym
-//---------------------------------------------------------
-
 void Text::insertSym(EditData& ed, SymId id)
       {
       deleteSelectedText(ed);
@@ -2029,10 +1955,10 @@ void Text::paste(EditData& ed)
                                     Q_ASSERT(i + 1 < txt.length());
                                     i++;
                                     QChar lowSurrogate = txt[i];
-                                    insert(_cursor, highSurrogate, lowSurrogate);
+                                    insert(_cursor, QChar::surrogateToUcs4(highSurrogate, lowSurrogate));
                                     }
                               else {
-                                    insert(_cursor, c);
+                                    insert(_cursor, c.unicode());
                                     }
                               }
                         }
@@ -2162,10 +2088,7 @@ Element* Text::drop(EditData& ed)
                   delete e;
 
                   deleteSelectedText(ed);
-                  if (QChar::requiresSurrogates(code))
-                        insert(_cursor, QChar::highSurrogate(code), QChar::lowSurrogate(code));
-                  else
-                        insert(_cursor, QChar(code));
+                  insert(_cursor, code);
                   }
                   break;
 
