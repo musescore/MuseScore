@@ -33,7 +33,7 @@ BUILD_LAME="ON" # Non-free, required for MP3 support. Override with "OFF" to dis
 BUILD_PULSEAUDIO="ON" # Override with "OFF" to disable.
 BUILD_JACK="ON"       # Override with "OFF" to disable.
 BUILD_PORTAUDIO="ON"  # Override with "OFF" to disable.
-
+USE_SYSTEM_FREETYPE="OFF" # Override with "ON" to enable. Requires freetype >= 2.5.2.
 
 UPDATE_CACHE="TRUE"# Override if building a DEB or RPM, or when installing to a non-standard location.
 NO_RPATH="FALSE"# Package maintainers may want to override this (e.g. Debian)
@@ -52,6 +52,7 @@ release:
   	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"       \
   	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"      \
   	  -DMUSESCORE_LABEL="${LABEL}"             \
+  	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}" \
   	  -DBUILD_LAME="${BUILD_LAME}"             \
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}" \
   	  -DBUILD_JACK="${BUILD_JACK}"             \
@@ -76,6 +77,7 @@ debug:
   	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"                  \
   	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"                 \
   	  -DMUSESCORE_LABEL="${LABEL}"                        \
+  	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}"      \
   	  -DBUILD_LAME="${BUILD_LAME}"                        \
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}"            \
   	  -DBUILD_JACK="${BUILD_JACK}"                        \
