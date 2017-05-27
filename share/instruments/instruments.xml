@@ -8963,14 +8963,10 @@
             <Instrument id="lute">
                   <longName>Lute</longName>
                   <shortName>Lt.</shortName>
-                  <description>Rennaissance Lute in G, up to 11 courses</description>
+                  <description>Lute</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
-                        <string open="1">35</string>
-                        <string open="1">36</string>
-                        <string open="1">38</string>
-                        <string>40</string>
-                        <string>41</string>
+                        <frets>13</frets>
                         <string>43</string>
                         <string>48</string>
                         <string>53</string>
@@ -8978,7 +8974,7 @@
                         <string>62</string>
                         <string>67</string>
                   </StringData>
-                  <clef>G8vb</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>33-79</aPitchRange>
                   <pPitchRange>33-79</pPitchRange>
@@ -8987,21 +8983,12 @@
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
-            <Instrument id="lute-frenchtab">
-                  <trackName>Rennaissance Lute [French Tab]</trackName>
+            <Instrument id="lute-tablature">
+                  <trackName>Lute [Tablature]</trackName>
                   <init>lute</init>
-                  <description>Rennaissance Lute in G (French Tablature)</description>
+                  <description>Lute (Tablature)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
-<!--                  <clef>TAB</clef> -->
-                  <genre>earlymusic</genre>
-            </Instrument>
-            <Instrument id="lute-italiantab">
-                  <trackName>Rennaissance Lute [Italian Tab]</trackName>
-                  <init>lute</init>
-                  <description>Rennaissance Lute in G (French Tablature)</description>
-                  <musicXMLid>pluck.lute</musicXMLid>
-                  <stafftype staffTypePreset="tab6StrItalian">tablature</stafftype>
 <!--                  <clef>TAB</clef> -->
                   <genre>earlymusic</genre>
             </Instrument>
@@ -9019,7 +9006,7 @@
                         <string>62</string>
                         <string>67</string>
                   </StringData>
-                  <clef>G8vb</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-79</aPitchRange>
                   <pPitchRange>48-79</pPitchRange>
@@ -9028,15 +9015,144 @@
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
-           <Instrument id="baroque-lute">
-                  <longName>Baroque Lute</longName>
-                  <shortName>Bar-Lt.</shortName>
-                  <trackName>Baroque Lute</trackName>
-                  <description>Baroque Lute (up to 14 courses)</description>
+            <Instrument id="ren.-tenor-lute-6-course">
+                  <longName>Lute</longName>
+                  <shortName>Lt.</shortName>
+                  <trackName>Lute 6-course</trackName>
+                  <description>Ren. Tenor Lute (6-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
-                        <string open="1">31</string>
+                        <string>43</string>
+                        <string>48</string>
+                        <string>53</string>
+                        <string>57</string>
+                        <string>62</string>
+                        <string>67</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>43-79</aPitchRange>
+                  <pPitchRange>43-79</pPitchRange>
+                  <Channel>
+                        <program value="25"/>
+                  </Channel>
+                  <genre>earlymusic</genre>
+            </Instrument>
+            <Instrument id="ren.-tenor-lute-7-course">
+                  <longName>Lute</longName>
+                  <shortName>Lt.</shortName>
+                  <trackName>Lute 7-course</trackName>
+                  <description>Ren. Tenor Lute (7-course)</description>
+                  <musicXMLid>pluck.lute</musicXMLid>
+                  <StringData>
+                        <frets>13</frets>
+                        <string>38</string>
+                        <string>43</string>
+                        <string>48</string>
+                        <string>53</string>
+                        <string>57</string>
+                        <string>62</string>
+                        <string>67</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>38-79</aPitchRange>
+                  <pPitchRange>38-79</pPitchRange>
+                  <Channel>
+                        <program value="25"/>
+                  </Channel>
+                  <genre>earlymusic</genre>
+            </Instrument>
+            <Instrument id="ren.-tenor-lute-8-course">
+                  <longName>Lute</longName>
+                  <shortName>Lt.</shortName>
+                  <trackName>Lute 8-course</trackName>
+                  <description>Ren. Tenor Lute (8-course)</description>
+                  <musicXMLid>pluck.lute</musicXMLid>
+                  <StringData>
+                        <frets>13</frets>
+                        <string>38</string>
+                        <string>41</string>
+                        <string>43</string>
+                        <string>48</string>
+                        <string>53</string>
+                        <string>57</string>
+                        <string>62</string>
+                        <string>67</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>38-79</aPitchRange>
+                  <pPitchRange>38-79</pPitchRange>
+                  <Channel>
+                        <program value="25"/>
+                  </Channel>
+                  <genre>earlymusic</genre>
+            </Instrument>
+            <Instrument id="ren.-tenor-lute-9-course">
+                  <longName>Lute</longName>
+                  <shortName>Lt.</shortName>
+                  <trackName>Lute 9-course</trackName>
+                  <description>Ren. Tenor Lute (9-course)</description>
+                  <musicXMLid>pluck.lute</musicXMLid>
+                  <StringData>
+                        <frets>13</frets>
+                        <string open="1">36</string>
+                        <string>38</string>
+                        <string>41</string>
+                        <string>43</string>
+                        <string>48</string>
+                        <string>53</string>
+                        <string>57</string>
+                        <string>62</string>
+                        <string>67</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>36-79</aPitchRange>
+                  <pPitchRange>36-79</pPitchRange>
+                  <Channel>
+                        <program value="25"/>
+                  </Channel>
+                  <genre>earlymusic</genre>
+            </Instrument>
+            <Instrument id="ren.-tenor-lute-10-course">
+                  <longName>Lute</longName>
+                  <shortName>Lt.</shortName>
+                  <trackName>Lute 10-course</trackName>
+                  <description>Ren. Tenor Lute (10-course)</description>
+                  <musicXMLid>pluck.lute</musicXMLid>
+                  <StringData>
+                        <frets>13</frets>
+                        <string open="1">36</string>
+                        <string open="1">38</string>
+                        <string>40</string>
+                        <string>41</string>
+                        <string>43</string>
+                        <string>48</string>
+                        <string>53</string>
+                        <string>57</string>
+                        <string>62</string>
+                        <string>67</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>36-79</aPitchRange>
+                  <pPitchRange>36-79</pPitchRange>
+                  <Channel>
+                        <program value="25"/>
+                  </Channel>
+                  <genre>earlymusic</genre>
+            </Instrument>
+            <Instrument id="baroque-lute-13-course">
+                  <longName>Lute</longName>
+                  <shortName>Lt.</shortName>
+                  <trackName>Lute 13-course</trackName>
+                  <description>Baroque Lute (13-course)</description>
+                  <musicXMLid>pluck.lute</musicXMLid>
+                  <StringData>
+                        <frets>13</frets>
                         <string open="1">33</string>
                         <string open="1">35</string>
                         <string open="1">36</string>
@@ -9051,22 +9167,13 @@
                         <string>62</string>
                         <string>65</string>
                   </StringData>
-                  <clef>G8vb</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>33-77</aPitchRange>
                   <pPitchRange>33-77</pPitchRange>
                   <Channel>
                         <program value="25"/>
                   </Channel>
-                  <genre>earlymusic</genre>
-            </Instrument>
-            <Instrument id="baroque-lute-frenchtab">
-                  <trackName>Baroque Lute [French Tab]</trackName>
-                  <init>baroque-lute</init>
-                  <description>Baroque Lute (French Tablature)</description>
-                  <musicXMLid>pluck.lute</musicXMLid>
-                  <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
-<!--                  <clef>TAB</clef> -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="archlute-14-course">
@@ -9091,22 +9198,13 @@
                         <string>62</string>
                         <string>67</string>
                   </StringData>
-                  <clef>G8vb</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>29-77</aPitchRange>
                   <pPitchRange>29-77</pPitchRange>
                   <Channel>
                         <program value="25"/>
                   </Channel>
-                  <genre>earlymusic</genre>
-            </Instrument>
-            <Instrument id="archlute-italiantab">
-                  <trackName>Archlute [Italian Tab]</trackName>
-                  <init>archlute</init>
-                  <description>Archlute (Italian Tablature)</description>
-                  <musicXMLid>pluck.lute</musicXMLid>
-                  <stafftype staffTypePreset="tab6StrItalian">tablature</stafftype>
-<!--                  <clef>TAB</clef> -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="theorbo-14-course">
@@ -9131,31 +9229,13 @@
                         <string>52</string>
                         <string>57</string>
                   </StringData>
-                  <clef>G8vb</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>31-71</aPitchRange>
                   <pPitchRange>31-71</pPitchRange>
                   <Channel>
                         <program value="25"/>
                   </Channel>
-                  <genre>earlymusic</genre>
-            </Instrument>
-            <Instrument id="theorbo-italiantab">
-                  <trackName>Theorbo [Italian Tab]</trackName>
-                  <init>theorbo-14-course</init>
-                  <description>Theorbo (Italian Tablature)</description>
-                  <musicXMLid>pluck.lute</musicXMLid>
-                  <stafftype staffTypePreset="tab6StrItalian">tablature</stafftype>
-<!--                  <clef>TAB</clef> -->
-                  <genre>earlymusic</genre>
-            </Instrument>
-            <Instrument id="theorbo-frenchtab">
-                  <trackName>Theorbo [French Tab]</trackName>
-                  <init>theorbo-14-course</init>
-                  <description>Theorbo (French Tablature)</description>
-                  <musicXMLid>pluck.lute</musicXMLid>
-                  <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
-<!--                  <clef>TAB</clef> -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="mandolin">
