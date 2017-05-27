@@ -50,7 +50,8 @@ getCrossPlatformDependencies() {
   #copyLib libvorbis.so # Assume provided by system
   #copyLib libvorbisfile.so # Assume provided by system
   copyLib libportaudio.so.2
-  copyLib libportmidi.so
+  copyLib libportmidi.so.0
+  copyLib libporttime.so.0
   #copyLib libeay32.so # Assume provided by system
   #copyLib ssleay32.so # Assume provided by system
 
