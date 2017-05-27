@@ -336,6 +336,7 @@ void EditStaff::apply()
       instrument.setLongName(ln);
 
       bool inv       = invisible->isChecked();
+      ClefTypeList clefType = instrument.clefType(orgStaff->rstaff());
       qreal userDist = spinExtraDistance->value();
       bool ifEmpty   = showIfEmpty->isChecked();
       bool hideSystemBL = hideSystemBarLine->isChecked();
@@ -359,13 +360,14 @@ void EditStaff::apply()
       orgStaff->undoChangeProperty(P_ID::SMALL, small->isChecked());
 
       if (inv != orgStaff->invisible()
+         || clefType != orgStaff->defaultClefType()
          || userDist != orgStaff->userDist()
          || cutAway != orgStaff->cutaway()
          || hideEmpty != orgStaff->hideWhenEmpty()
          || ifEmpty != orgStaff->showIfEmpty()
          || hideSystemBL != orgStaff->hideSystemBarLine()
          ) {
-            score->undo(new ChangeStaff(orgStaff, inv, userDist * score->spatium(), hideEmpty, ifEmpty, cutAway, hideSystemBL));
+            score->undo(new ChangeStaff(orgStaff, inv, clefType, userDist * score->spatium(), hideEmpty, ifEmpty, cutAway, hideSystemBL));
             }
 
       if ( !(*orgStaff->staffType(0) == *staff->staffType(0)) ) {

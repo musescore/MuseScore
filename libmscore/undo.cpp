@@ -1219,11 +1219,12 @@ void ChangePatch::flip(EditData*)
 //   ChangeStaff
 //---------------------------------------------------------
 
-ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible,
+ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible, ClefTypeList _clefType,
    qreal _userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway, bool hide)
       {
       staff       = _staff;
       invisible   = _invisible;
+      clefType    = _clefType;
       userDist    = _userDist;
       hideMode    = _hideMode;
       showIfEmpty = _showIfEmpty;
@@ -1238,7 +1239,7 @@ ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible,
 void ChangeStaff::flip(EditData*)
       {
       bool invisibleChanged = staff->invisible() != invisible;
-
+      ClefTypeList oldClefType = staff->defaultClefType();
       bool oldInvisible   = staff->invisible();
       qreal oldUserDist   = staff->userDist();
       Staff::HideMode oldHideMode    = staff->hideWhenEmpty();
@@ -1247,6 +1248,7 @@ void ChangeStaff::flip(EditData*)
       bool hide           = staff->hideSystemBarLine();
 
       staff->setInvisible(invisible);
+      staff->setDefaultClefType(clefType);
       staff->setUserDist(userDist);
       staff->setHideWhenEmpty(hideMode);
       staff->setShowIfEmpty(showIfEmpty);
@@ -1254,6 +1256,7 @@ void ChangeStaff::flip(EditData*)
       staff->setHideSystemBarLine(hideSystemBarLine);
 
       invisible   = oldInvisible;
+      clefType    = oldClefType;
       userDist    = oldUserDist;
       hideMode    = oldHideMode;
       showIfEmpty = oldShowIfEmpty;
