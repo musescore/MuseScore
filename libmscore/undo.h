@@ -561,6 +561,7 @@ class ChangePatch : public UndoCommand {
 class ChangeStaff : public UndoCommand {
       Staff*   staff;
       bool     invisible;
+      ClefTypeList clefType;
       qreal    userDist;
       Staff::HideMode hideMode;
       bool     showIfEmpty;
@@ -570,7 +571,7 @@ class ChangeStaff : public UndoCommand {
       void flip(EditData*) override;
 
    public:
-      ChangeStaff(Staff*, bool invisible, qreal userDist, Staff::HideMode _hideMode,
+      ChangeStaff(Staff*, bool invisible, ClefTypeList _clefType, qreal userDist, Staff::HideMode _hideMode,
          bool _showIfEmpty, bool _cutaway, bool hide);
       UNDO_NAME("ChangeStaff")
       };
