@@ -48,7 +48,7 @@
             <Instrument id="piccolo">
                   <longName>Piccolo</longName>
                   <shortName>Picc.</shortName>
-                  <description>Piccolo</description>
+                  <description>Piccolo Flute</description>
                   <musicXMLid>wind.flutes.flute.piccolo</musicXMLid>
                   <transposingClef>G</transposingClef>
                   <concertClef>G8va</concertClef>
@@ -64,6 +64,22 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
+                  <Instrument id="db-piccolo">
+                        <longName>D♭ Piccolo</longName>
+                        <shortName>D♭ Picc.</shortName>
+                        <description>Piccolo Flute in Db</description>
+                        <musicXMLid>wind.flutes.flute.piccolo</musicXMLid>
+                        <transposingClef>G</transposingClef>
+                        <concertClef>G8va</concertClef>
+                        <barlineSpan>1</barlineSpan>
+                        <aPitchRange>75-106</aPitchRange>
+                        <pPitchRange>75-109</pPitchRange>
+                        <transposeDiatonic>8</transposeDiatonic>
+                        <transposeChromatic>13</transposeChromatic>
+                        <Channel>
+                              <program value="72"/>
+                        </Channel>
+                  </Instrument>
             <Instrument id="flute">
                   <longName>Flute</longName>
                   <shortName>Fl.</shortName>
@@ -6282,7 +6298,7 @@
                         <head>0</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>HanClap</name>
+                        <name>Hand Clap</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
