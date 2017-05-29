@@ -28,14 +28,13 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="1" span="2"/>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="2">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
-        <barLineSpan>0</barLineSpan>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
@@ -117,7 +116,7 @@
           </Rest>
         <BarLine>
           <subtype>end</subtype>
-          <span>2</span>
+          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>

@@ -1009,7 +1009,6 @@ void Text::createLayout()
                               symState = false;
                               SymId id = Sym::name2id(sym);
                               if (id == SymId::noSym) {
-                                    qDebug("symbol <%s> not known", qPrintable(sym));
                                     // Unicode
                                     struct UnicodeAlternate {
                                           const char* name;
@@ -1038,6 +1037,8 @@ void Text::createLayout()
                                           }
                                     if (code)
                                           insert(&cursor, code);
+                                    else
+                                          qDebug("symbol <%s> not known", qPrintable(sym));
                                     }
                               else {
                                     CharFormat fmt = *cursor.format();

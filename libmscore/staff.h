@@ -91,7 +91,7 @@ class Staff : public ScoreElement {
       std::map<int,TimeSig*> timesigs;
 
       QList <BracketItem*> _brackets;
-      bool _barLineSpan        { false };    ///< true - span barline to next staff
+      int  _barLineSpan        { false };    ///< true - span barline to next staff
       int _barLineFrom         { 0     };    ///< line of start staff to draw the barline from (0 = staff top line, ...)
       int _barLineTo           { 0     };    ///< line of end staff to draw the bar line to (0= staff bottom line, ...)
 
@@ -190,10 +190,10 @@ class Staff : public ScoreElement {
       HideMode hideWhenEmpty() const      { return _hideWhenEmpty;     }
       void setHideWhenEmpty(HideMode v)   { _hideWhenEmpty = v;        }
 
-      bool barLineSpan() const       { return _barLineSpan; }
+      int barLineSpan() const        { return _barLineSpan; }
       int barLineFrom() const        { return _barLineFrom; }
       int barLineTo() const          { return _barLineTo;   }
-      void setBarLineSpan(bool val)  { _barLineSpan = val;  }
+      void setBarLineSpan(int val)   { _barLineSpan = val;  }
       void setBarLineFrom(int val)   { _barLineFrom = val;  }
       void setBarLineTo(int val)     { _barLineTo = val;    }
       qreal height() const;

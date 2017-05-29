@@ -470,7 +470,6 @@ void BarLine::write(XmlWriter& xml) const
 
 void BarLine::read(XmlReader& e)
       {
-//      resetProperty(P_ID::BARLINE_TYPE);
       resetProperty(P_ID::BARLINE_SPAN);
       resetProperty(P_ID::BARLINE_SPAN_FROM);
       resetProperty(P_ID::BARLINE_SPAN_TO);

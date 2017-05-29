@@ -803,7 +803,7 @@ static void readStaff(Staff* staff, XmlReader& e)
                   staff->setBarLineFrom(e.intAttribute("from", 0));
                   staff->setBarLineTo(e.intAttribute("to", 0));
                   int span     = e.readInt();
-                  staff->setBarLineSpan(span > 1);    // TODO: set flag for other staves if span > 2
+                  staff->setBarLineSpan(span - 1);
                   }
             else if (staff->readProperties(e))
                   ;
@@ -1419,9 +1419,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         else if (tag == "customSubtype")                      // obsolete
                               e.readInt();
                         else if (tag == "span") {
-                              bl->setSpanFrom(e.intAttribute("from", bl->spanFrom()));      // obsolete
-                              bl->setSpanTo(e.intAttribute("to", bl->spanTo()));          // obsolete
-                              bl->setSpanStaff(e.readInt() > 1);
+                              //TODO bl->setSpanFrom(e.intAttribute("from", bl->spanFrom()));  // obsolete
+                              // bl->setSpanTo(e.intAttribute("to", bl->spanTo()));            // obsolete
+                              int span = e.readInt();
+                              if (span)
+                                    span--;
+                              bl->setSpanStaff(span);
                               }
                         else if (tag == "spanFromOffset")
                               bl->setSpanFrom(e.readInt());
@@ -2391,6 +2394,40 @@ Score::FileError MasterScore::read206(XmlReader& e)
 
       for (Staff* s : staves())
             s->updateOttava();
+
+      // fix segment span
+      SegmentType st = SegmentType::BarLineType;
+      for (Segment* s = firstSegment(st); s; s = s->next1(st)) {
+            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                  BarLine* b = toBarLine(s->element(staffIdx * VOICES));
+                  if (!b)
+                        continue;
+                  int sp = b->spanStaff();
+                  if (sp == 0)
+                        continue;
+                  for (int span = 1; span <= sp; ++span) {
+                        BarLine* nb = toBarLine(s->element((staffIdx + span) * VOICES));
+                        if (!nb) {
+                              nb = b->clone();
+                              nb->setTrack((staffIdx + span) * VOICES);
+                              s->add(nb);
+                              }
+                        nb->setSpanStaff(sp - span);
+                        }
+                  staffIdx += sp;
+                  }
+            }
+      for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+            Staff* s = staff(staffIdx);
+            int sp = s->barLineSpan();
+            if (sp == 0)
+                  continue;
+            for (int span = 1; span <= sp; ++span) {
+                  Staff* ns = staff(staffIdx + span);
+                  ns->setBarLineSpan(sp - span);
+                  }
+            staffIdx += sp;
+            }
 
       // treat reading a 2.06 file as import
       // on save warn if old file will be overwritten
