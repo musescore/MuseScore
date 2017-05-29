@@ -264,7 +264,7 @@ OmrPattern OmrPage::searchPattern(const std::vector<Pattern*>& pl, int y, int x1
                   p.sym  = pattern->id();
                   p.prob = val;
                   }
-            printf("Pattern found %d %f %d\n", pattern->id(), val, xx);
+            printf("Pattern found %d %f %d\n", int(pattern->id()), val, xx);
             }
       return p;
       }

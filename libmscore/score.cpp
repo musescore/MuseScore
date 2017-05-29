@@ -2825,8 +2825,8 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   setPlayPos(tick);
             }
       if (MScore::debugMode)
-            qDebug("select element <%s> type %hhd(state %hhd) staff %d",
-               e ? e->name() : "", type, selection().state(), e ? e->staffIdx() : -1);
+            qDebug("select element <%s> type %d(state %d) staff %d",
+               e ? e->name() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
 
       switch (type) {
             case SelectType::SINGLE:     return selectSingle(e, staffIdx);
@@ -2979,7 +2979,7 @@ void Score::selectRange(Element* e, int staffIdx)
                         }
                   }
             else {
-                  qDebug("SELECT_RANGE: measure: sel state %hhd", _selection.state());
+                  qDebug("SELECT_RANGE: measure: sel state %d", int(_selection.state()));
                   return;
                   }
             }
@@ -3027,7 +3027,7 @@ void Score::selectRange(Element* e, int staffIdx)
                   _selection.extendRangeSelection(cr);
                   }
             else {
-                  qDebug("sel state %hhd", _selection.state());
+                  qDebug("sel state %d", int(_selection.state()));
                   return;
                   }
             if (!endRangeSelected && !_selection.endSegment())
