@@ -1203,7 +1203,8 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   }
             ++span;
             if (cl->barlineMode == 1) {
-                  bstaff->setBarLineSpan(span);
+//                  bstaff->setBarLineSpan(span);
+                  bstaff->setBarLineSpan(span != 0);
                   bstaff = 0;
                   }
             s->setSmall(0, cl->bSmall);
@@ -1218,7 +1219,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             // _parts.push_back(part);
             }
       if (bstaff)
-            bstaff->setBarLineSpan(span);
+            bstaff->setBarLineSpan(span != 0);
 
       foreach(CapBracket cb, cap->brackets) {
             qDebug("Bracket %d-%d curly %d", cb.from, cb.to, cb.curly);

@@ -57,8 +57,8 @@ struct BarLineTableItem {
 class BarLine : public Element {
       Q_GADGET
 
-      char _spanStaff         { false };       // span barline to next staff if true
-      char _spanFrom          { 0 };           // line number on start and end staves
+      int _spanStaff          { 0 };       // span barline to next staff if true, values > 1 are used for importing from 2.x
+      char _spanFrom          { 0 };       // line number on start and end staves
       char _spanTo            { 0 };
       BarLineType _barLineType { BarLineType::NORMAL };
       mutable qreal y1;
@@ -102,10 +102,10 @@ class BarLine : public Element {
       Segment* segment() const        { return toSegment(parent()); }
       Measure* measure() const        { return toMeasure(parent()->parent()); }
 
-      void setSpanStaff(bool val)     { _spanStaff = val;     }
+      void setSpanStaff(int val)      { _spanStaff = val;     }
       void setSpanFrom(int val)       { _spanFrom = val;      }
       void setSpanTo(int val)         { _spanTo = val;        }
-      bool spanStaff() const          { return _spanStaff;    }
+      int spanStaff() const           { return _spanStaff;    }
       int spanFrom() const            { return _spanFrom;     }
       int spanTo() const              { return _spanTo;       }
 

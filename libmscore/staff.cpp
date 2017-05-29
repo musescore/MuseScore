@@ -663,7 +663,7 @@ bool Staff::readProperties(XmlReader& e)
             e.readNext();
             }
       else if (tag == "barLineSpan")
-            _barLineSpan = e.readBool();
+            _barLineSpan = e.readInt();
       else if (tag == "barLineSpanFrom")
             _barLineFrom = e.readInt();
       else if (tag == "barLineSpanTo")

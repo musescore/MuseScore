@@ -224,6 +224,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
                               else
                                     forceTimeSig = false;
                               }
+                        printf("write measure %d\n", m->tick());
                         writeMeasure(xml, m, staffIdx, writeSystemElements, forceTimeSig);
                         }
                   xml.etag();
@@ -261,7 +262,6 @@ void Score::write(XmlWriter& xml, bool selectionOnly)
             while (score->prev())
                   score = score->prev();
             while (score) {
-printf("write movement...\n");
                   score->writeMovement(xml, selectionOnly);
                   score = score->next();
                   }

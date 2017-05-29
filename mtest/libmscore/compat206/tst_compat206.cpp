@@ -41,6 +41,7 @@ class TestCompat206 : public QObject, public MTest
       void textstyles()       { compat("textstyles");       }
       void tuplets()          { compat("tuplets");          }
       void hairpin()          { compat("hairpin");          }
+      void brlines()          { compat("barlines");         }
       };
 
 //---------------------------------------------------------
