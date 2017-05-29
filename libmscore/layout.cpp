@@ -2338,6 +2338,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                         break;
                   case LayoutMode::FLOAT:
                   case LayoutMode::LINE:
+                  default:
                         pbreak = false;
                         break;
                   }

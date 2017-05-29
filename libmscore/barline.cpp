@@ -1457,12 +1457,14 @@ QString BarLine::accessibleExtraInfo()
             QString rez = "";
 
             foreach (Element* e, *el()) {
-                  if (!score()->selectionFilter().canSelect(e)) continue;
+                  if (!score()->selectionFilter().canSelect(e))
+                        continue;
                   rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
 
             foreach (Element* e, seg->annotations()) {
-                  if (!score()->selectionFilter().canSelect(e)) continue;
+                  if (!score()->selectionFilter().canSelect(e))
+                        continue;
                   if (e->track() == track())
                         rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
@@ -1485,11 +1487,12 @@ QString BarLine::accessibleExtraInfo()
                   Measure* nextM = m->nextMeasureMM();
                   if (nextM) {
                         foreach (Element* e, nextM->el()) {
-                              if (!score()->selectionFilter().canSelect(e)) continue;
+                              if (!score()->selectionFilter().canSelect(e))
+                                    continue;
                               if (e->type() == Element::Type::MARKER)
                                     if (static_cast<Marker*>(e)->markerType() == Marker::Type::FINE)
                                           continue; //added above^
-                                    rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+                              rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                               }
                         }
                   }
