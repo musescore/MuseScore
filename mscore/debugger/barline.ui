@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>172</height>
+    <width>434</width>
+    <height>162</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -95,7 +95,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string notr="true">subtype:</string>
+           <string notr="true">barLineType:</string>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -160,10 +160,29 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="2" colspan="3">
-         <widget class="QCheckBox" name="span">
+        <item row="0" column="4">
+         <widget class="QSpinBox" name="span">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="maximum">
+           <number>999999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2" colspan="2">
+         <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>spanStaff</string>
+           <string notr="true">staffSpan:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="buddy">
+           <cstring>spanTo</cstring>
           </property>
          </widget>
         </item>

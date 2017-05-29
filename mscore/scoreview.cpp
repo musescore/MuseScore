@@ -1058,7 +1058,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                                                 p.setBrush(QBrush(QColor(0, 0, 255, 60)));
                                                 for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
                                                       Staff* staff = score()->staff(staffIdx);
-                                                      if (!staff->invisible() && staff->part()->show()) {
+//                                                      if (staff->show() && staff->part()->show()) {
+                                                      if (staff->show()) {
                                                             QPointF pt(m->pos().x() + system->pos().x(), 0);
                                                             p.translate(pt);
                                                             QPointF o(0.0, m->system()->staffYpage(staffIdx));

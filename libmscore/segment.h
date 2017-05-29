@@ -48,7 +48,8 @@ enum class SegmentType {
       EndBarLine         = 0x400,
       KeySigAnnounce     = 0x800,
       TimeSigAnnounce    = 0x1000,
-      All                = -1
+      All                = -1,
+      BarLineType        = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine
       };
 
 constexpr SegmentType operator| (const SegmentType t1, const SegmentType t2) {
