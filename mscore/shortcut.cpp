@@ -2549,15 +2549,17 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
          "enh-up",
-         QT_TRANSLATE_NOOP("action","Enharmonic Up"),
-         QT_TRANSLATE_NOOP("action","Enharmonic up")
+         QT_TRANSLATE_NOOP("action","Change Enharmonic Spelling (Both Modes)"),
+         QT_TRANSLATE_NOOP("action","Change enharmonic spelling (both modes)"),
+         QT_TRANSLATE_NOOP("action","Change enharmonic note (alters the spelling in concert pitch and transposed mode)")
          },
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
          "enh-down",
-         QT_TRANSLATE_NOOP("action","Enharmonic Down"),
-         QT_TRANSLATE_NOOP("action","Enharmonic down")
+         QT_TRANSLATE_NOOP("action","Change Enharmonic Spelling (Current Mode)"),
+         QT_TRANSLATE_NOOP("action","Change enharmonic spelling (current mode)"),
+         QT_TRANSLATE_NOOP("action","Change enharmonic note (alters the spelling in the current mode only)")
          },
       {
          MsWidget::MAIN_WINDOW,
