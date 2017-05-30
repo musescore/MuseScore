@@ -1047,6 +1047,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       popup->addAction(getAction("copy"));
       popup->addAction(getAction("paste"));
       popup->addAction(getAction("swap"));
+      popup->addAction(getAction("delete"));
 
       QMenu* selMenu = popup->addMenu(tr("Select"));
       selMenu->addAction(getAction("select-similar"));
@@ -1075,7 +1076,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       if (a == 0)
             return;
       QString cmd(a->data().toString());
-      if (cmd == "cut" || cmd =="copy" || cmd == "paste" || cmd == "swap") {
+      if (cmd == "cut" || cmd =="copy" || cmd == "paste" || cmd == "swap" || cmd == "delete") {
             // these actions are already activated
             return;
             }

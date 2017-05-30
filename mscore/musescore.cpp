@@ -753,6 +753,7 @@ MuseScore::MuseScore()
       menuEdit->addAction(getAction("copy"));
       menuEdit->addAction(getAction("paste"));
       menuEdit->addAction(getAction("swap"));
+      menuEdit->addAction(getAction("delete"));
 
       menuEdit->addSeparator();
       menuEdit->addAction(getAction("select-all"));
@@ -1272,6 +1273,7 @@ void MuseScore::selectionChanged(SelState selectionState)
       bool enable = selectionState != SelState::NONE;
       getAction("cut")->setEnabled(enable);
       getAction("copy")->setEnabled(enable);
+      getAction("delete")->setEnabled(enable);
       getAction("select-similar-range")->setEnabled(selectionState == SelState::RANGE);
       if (pianorollEditor)
             pianorollEditor->changeSelection(selectionState);
@@ -2769,6 +2771,8 @@ void MuseScore::changeState(ScoreState val)
                   a->setEnabled(cs && cs->selection().state() != SelState::NONE);
             else if (enable && (s->key() == "copy"))
                   a->setEnabled(cs && (cs->selection().state() != SelState::NONE || val == STATE_FOTO));
+            else if (enable && (s->key() == "delete"))
+                  a->setEnabled(cs && cs->selection().state() != SelState::NONE);
             else if (enable && (s->key() == "select-similar-range"))
                   a->setEnabled(cs && cs->selection().state() == SelState::RANGE);
             else if (enable && (s->key() == "synth-control")) {
