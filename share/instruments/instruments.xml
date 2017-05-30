@@ -856,8 +856,8 @@
                   <musicXMLid>wind.flutes.whistle.tin</musicXMLid>
                   <clef>G8va</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>74-98</aPitchRange>
-                  <pPitchRange>74-98</pPitchRange>
+                  <aPitchRange>72-96</aPitchRange>
+                  <pPitchRange>72-102</pPitchRange>
                   <Channel>
                         <program value="78"/>
                   </Channel>
@@ -869,21 +869,21 @@
                   <musicXMLid>wind.flutes.whistle.tin.bflat</musicXMLid>
                   <clef>G8va</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>74-98</aPitchRange>
-                  <pPitchRange>74-98</pPitchRange>
+                  <aPitchRange>70-94</aPitchRange>
+                  <pPitchRange>70-100</pPitchRange>
                   <Channel>
                         <program value="78"/>
                   </Channel>
             </Instrument>
             <Instrument id="d-tin-whistle">
-                  <longName>Tin Whistle</longName>
-                  <shortName>Tin Wh.</shortName>
+                  <longName>D Tin Whistle</longName>
+                  <shortName>D Tin Wh.</shortName>
                   <description>same as 6 hole Flageolet but metal construction</description>
                   <musicXMLid>wind.flutes.whistle.tin.d</musicXMLid>
                   <clef>G8va</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>74-98</aPitchRange>
-                  <pPitchRange>74-98</pPitchRange>
+                  <pPitchRange>74-104</pPitchRange>
                   <Channel>
                         <program value="78"/>
                   </Channel>
