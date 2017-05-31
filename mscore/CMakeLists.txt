@@ -475,7 +475,6 @@ if (MINGW)
       ${CROSS}/lib/portaudio.dll
       ${CROSS}/opt/bin/libeay32.dll
       ${CROSS}/opt/bin/ssleay32.dll
-      ${CROSSQT}/bin/Qt5CLucene.dll
       ${CROSSQT}/bin/Qt5Core.dll
       ${CROSSQT}/bin/Qt5Gui.dll
       ${CROSSQT}/bin/Qt5Help.dll
