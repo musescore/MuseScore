@@ -3081,14 +3081,14 @@ System* Score::collectSystem(LayoutContext& lc)
                         if (!mb->isMeasure())
                               continue;
                         Measure* m = toMeasure(mb);
-                        for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                        for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
                               qreal yMax = findLyricsMaxY(m, staffIdx);
                               applyLyricsMax(m, staffIdx, yMax);
                               }
                         }
                   break;
             case VerticalAlignRange::SYSTEM:
-                  for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                  for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
                         qreal yMax = 0.0;
                         qreal yMin = 0.0;
                         for (MeasureBase* mb : system->measures()) {
@@ -3110,7 +3110,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         if (!mb->isMeasure())
                               continue;
                         Measure* m = toMeasure(mb);
-                        for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                        for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
                               for (Segment& s : m->segments()) {
                                     qreal yMax = findLyricsMaxY(s, staffIdx);
                                     applyLyricsMax(s, staffIdx, yMax);
