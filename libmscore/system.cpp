@@ -318,18 +318,28 @@ void System::layoutSystem(qreal xo1)
       }
 
 //---------------------------------------------------------
+//   nextVisibleStaff
+//---------------------------------------------------------
+
+int System::nextVisibleStaff(int staffIdx) const
+      {
+      int i;
+      for (i = staffIdx + 1; i < _staves.size(); ++i) {
+            Staff*    s  = score()->staff(i);
+            SysStaff* ss = _staves[i];
+            if (s->show() && ss->show())
+                  break;
+            }
+      return i;
+      }
+
+//---------------------------------------------------------
 //   firstVisibleStaff
 //---------------------------------------------------------
 
 int System::firstVisibleStaff() const
       {
-      for (int i = 0; i < _staves.size(); ++i) {
-            Staff*    s  = score()->staff(i);
-            SysStaff* ss = _staves[i];
-            if (s->show() && ss->show())
-                  return i;
-            }
-      return 0;
+      return nextVisibleStaff(-1);
       }
 
 //---------------------------------------------------------

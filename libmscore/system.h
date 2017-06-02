@@ -159,6 +159,7 @@ class System : public Element {
       void moveBracket(int staffIdx, int srcCol, int dstCol);
       bool hasFixedDownDistance() const { return fixedDownDistance; }
       int firstVisibleStaff() const;
+      int nextVisibleStaff(int) const;
       };
 
 typedef QList<System*>::iterator iSystem;

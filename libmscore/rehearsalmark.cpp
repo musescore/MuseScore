@@ -13,6 +13,7 @@
 #include "score.h"
 #include "rehearsalmark.h"
 #include "measure.h"
+#include "system.h"
 
 namespace Ms {
 
@@ -60,8 +61,9 @@ void RehearsalMark::layout()
                         }
                   }
             if (autoplace()) {
+                  int firstStaffIdx = s->measure()->system()->firstVisibleStaff();
                   qreal minDistance = score()->styleP(StyleIdx::rehearsalMarkMinDistance);
-                  Shape s1 = s->measure()->staffShape(staffIdx());
+                  Shape s1 = s->measure()->staffShape(firstStaffIdx);
                   Shape s2 = shape().translated(s->pos() + pos());
                   if (placeAbove()) {
                         qreal d = s2.minVerticalDistance(s1);
