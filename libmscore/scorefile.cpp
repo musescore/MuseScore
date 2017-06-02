@@ -526,7 +526,7 @@ QImage Score::createThumbnail()
 //    file is already opened
 //---------------------------------------------------------
 
-bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection)
+bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection, bool doCreateThumbnail)
       {
       MQZipWriter uz(f);
 
@@ -539,7 +539,7 @@ bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
       xml.stag("rootfiles");
       xml.stag(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString(fn)));
       xml.etag();
-      foreach(ImageStoreItem* ip, imageStore) {
+      for (ImageStoreItem* ip : imageStore) {
             if (!ip->isUsed(this))
                   continue;
             QString path = QString("Pictures/") + ip->hashName();
@@ -562,15 +562,17 @@ bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
             }
 
       // create thumbnail
-      QImage pm = createThumbnail();
+      if (doCreateThumbnail) {
+            QImage pm = createThumbnail();
 
-      QByteArray ba;
-      QBuffer b(&ba);
-      if (!b.open(QIODevice::WriteOnly))
-            qDebug("open buffer failed");
-      if (!pm.save(&b, "PNG"))
-            qDebug("save failed");
-      uz.addFile("Thumbnails/thumbnail.png", ba);
+            QByteArray ba;
+            QBuffer b(&ba);
+            if (!b.open(QIODevice::WriteOnly))
+                  qDebug("open buffer failed");
+            if (!pm.save(&b, "PNG"))
+                  qDebug("save failed");
+            uz.addFile("Thumbnails/thumbnail.png", ba);
+            }
 
 #ifdef OMR
       //
