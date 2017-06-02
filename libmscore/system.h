@@ -89,7 +89,7 @@ class System : public Element {
       System(Score*);
       ~System();
       virtual System* clone() const override      { return new System(*this); }
-      virtual ElementType type() const override { return ElementType::SYSTEM; }
+      virtual ElementType type() const override   { return ElementType::SYSTEM; }
 
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
@@ -158,6 +158,7 @@ class System : public Element {
 
       void moveBracket(int staffIdx, int srcCol, int dstCol);
       bool hasFixedDownDistance() const { return fixedDownDistance; }
+      int firstVisibleStaff() const;
       };
 
 typedef QList<System*>::iterator iSystem;

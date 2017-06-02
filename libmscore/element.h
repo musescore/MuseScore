@@ -119,9 +119,10 @@ class EditData {
       void init();
       void clearData();
 
-      ElementEditData* getData(Element*) const;
+      ElementEditData* getData(const Element*) const;
       void addData(ElementEditData*);
       bool control() const { return modifiers & Qt::ControlModifier; }
+      bool shift() const   { return modifiers & Qt::ShiftModifier; }
       };
 
 //-------------------------------------------------------------------

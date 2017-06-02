@@ -972,7 +972,7 @@ void SLine::layout()
       if (sysIdx1 == -1 || sysIdx2 == -1)
             return;
 
-      for (int i = sysIdx1; i < sysIdx2+1;  ++i) {
+      for (int i = sysIdx1; i <= sysIdx2;  ++i) {
             if (systems.at(i)->vbox())
                   continue;
             ++segmentsNeeded;

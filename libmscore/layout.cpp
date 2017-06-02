@@ -3022,7 +3022,7 @@ System* Score::collectSystem(LayoutContext& lc)
                               TempoText* tt = toTempoText(e);
                               setTempo(tt->segment(), tt->tempo());
                               tt->layout();
-                              if (e->visible()) {
+                              if (tt->visible()) {
                                     int si = tt->staffIdx();
                                     s->staffShape(si).add(tt->shape().translated(e->pos()));
                                     m->staffShape(si).add(tt->shape().translated(s->pos() + e->pos()));
@@ -3372,6 +3372,9 @@ void LayoutContext::collectPage()
 
 void Score::doLayout()
       {
+//      qDeleteAll(_systems);
+//      _systems.clear();
+
       doLayoutRange(0, -1);
       }
 
@@ -3426,7 +3429,7 @@ qDebug("%p %d-%d %s systems %d", this, stick, etick, isMaster() ? "Master" : "Pa
             m = toMeasure(m)->mmRest();
             }
 
-      qDebug("start <%s> tick %d, system %p", m->name(), m->tick(), m->system());
+//      qDebug("start <%s> tick %d, system %p", m->name(), m->tick(), m->system());
       lc.score        = m->score();
 
       if (!layoutAll && m->system()) {
@@ -3457,7 +3460,7 @@ qDebug("%p %d-%d %s systems %d", this, stick, etick, isMaster() ? "Master" : "Pa
                   }
             }
       else {
-            qDebug("layoutAll, systems %p %d", &_systems, int(_systems.size()));
+//            qDebug("layoutAll, systems %p %d", &_systems, int(_systems.size()));
             //lc.measureNo   = 0;
             //lc.tick        = 0;
             // qDeleteAll(_systems);

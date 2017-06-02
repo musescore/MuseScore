@@ -60,7 +60,7 @@ class SpannerSegment : public Element {
       bool isEndType() const                           { return spannerSegmentType() == SpannerSegmentType::END;    }
 
       void setSystem(System* s);
-      System* system() const                { return (System*)parent();   }
+      System* system() const;
 
       const QPointF& userOff2() const       { return _userOff2;       }
       void setUserOff2(const QPointF& o)    { _userOff2 = o;          }
