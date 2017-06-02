@@ -1522,6 +1522,7 @@ void Note::endDrag(EditData& ed)
       Staff* staff = score()->staff(chord()->vStaffIdx());
       int tick     = chord()->tick();
 
+      NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
       if (staff->isTabStaff(tick)) {
 #if 0 // TODO
             // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
@@ -1549,7 +1550,6 @@ void Note::endDrag(EditData& ed)
 #endif
             }
       else {
-            NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
             for (Note* nn : tiedNotes()) {
                   for (PropertyData pd : ned->propertyData) {
                         score()->undoPropertyChanged(nn, pd.id, pd.data);

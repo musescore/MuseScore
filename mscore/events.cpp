@@ -287,6 +287,8 @@ void ScoreView::mouseReleaseEvent(QMouseEvent*)
 
 void ScoreView::mousePressEventNormal(QMouseEvent* ev)
       {
+      _score->masterScore()->cmdState().reset();      // DEBUG: should not be necessary
+
       Qt::KeyboardModifiers keyState = ev->modifiers();
       SelectType st = SelectType::SINGLE;
       if (keyState == Qt::NoModifier)

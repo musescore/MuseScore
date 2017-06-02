@@ -408,8 +408,12 @@ QPointF Element::pagePos() const
                   system = measure->system();
                   p.ry() += measure->staffLines(vStaffIdx())->y();
                   }
-            if (system)
+            if (system) {
+                  if (system->staves()->size() <= vStaffIdx()) {
+                        qDebug("staffIdx out of bounds: %s", name());
+                        }
                   p.ry() += system->staffYpage(vStaffIdx());
+                  }
             p.rx() = pageX();
             }
       else {
@@ -1830,7 +1834,7 @@ void EditData::clearData()
 //   getData
 //---------------------------------------------------------
 
-ElementEditData* EditData::getData(Element* e) const
+ElementEditData* EditData::getData(const Element* e) const
       {
       for (ElementEditData* ed : data) {
             if (ed->e == e)
@@ -1854,7 +1858,6 @@ void EditData::addData(ElementEditData* ed)
 
 void Element::drawEditMode(QPainter* p, EditData& ed)
       {
-      printf("==drawEditMode %s, grips %d\n", name(), ed.grips);
 //      if (ed.grips)
 //            draw(p);
       if (ed.grips == 6) {       // HACK: this are grips of a slur

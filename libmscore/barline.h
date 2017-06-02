@@ -65,18 +65,12 @@ class BarLine : public Element {
       mutable qreal y2;
       ElementList _el;        ///< fermata or other articulations
 
-      // static variables used while dragging
-      static bool _origSpanStaff;         // original span value before editing
-      static int _origSpanFrom;
-      static int _origSpanTo;
-      static qreal yoff1;                 // used during drag edit to extend y1 and y2
-      static qreal yoff2;
-
       void getY() const;
       void drawDots(QPainter* painter, qreal x) const;
       void drawTips(QPainter* painter, bool reversed, qreal x) const;
       bool isTop() const;
       bool isBottom() const;
+      void drawEditMode(QPainter*, EditData&);
 
    public:
       BarLine(Score* s = 0);

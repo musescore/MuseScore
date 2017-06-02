@@ -318,6 +318,21 @@ void System::layoutSystem(qreal xo1)
       }
 
 //---------------------------------------------------------
+//   firstVisibleStaff
+//---------------------------------------------------------
+
+int System::firstVisibleStaff() const
+      {
+      for (int i = 0; i < _staves.size(); ++i) {
+            Staff*    s  = score()->staff(i);
+            SysStaff* ss = _staves[i];
+            if (s->show() && ss->show())
+                  return i;
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   layout2
 //    called after measure layout
 //    adjusts staff distance
@@ -335,33 +350,16 @@ void System::layout2()
       setPos(0.0, 0.0);
       QList<std::pair<int,SysStaff*>> visibleStaves;
 
-      int firstStaffIdx        = -1;
-      int lastStaffIdx         = 0;
-      int firstStaffInitialIdx = -1;
-      Measure* fm              = firstMeasure();
-
       for (int i = 0; i < _staves.size(); ++i) {
             Staff*    s  = score()->staff(i);
             SysStaff* ss = _staves[i];
             if (s->show() && ss->show()) {
                   visibleStaves.append(std::pair<int,SysStaff*>(i, ss));
-                  if (firstStaffIdx == -1)
-                        firstStaffIdx = i;
-                  if (i > lastStaffIdx)
-                        lastStaffIdx = i;
-                  if (fm && fm->visible(i)) {
-                        if (firstStaffInitialIdx == -1)
-                              firstStaffInitialIdx = i;
-                        }
                   }
             else {
                   ss->setbbox(QRectF());  // already done in layout() ?
                   }
             }
-      if (firstStaffIdx == -1)
-            firstStaffIdx = 0;
-      if (firstStaffInitialIdx == -1)
-            firstStaffInitialIdx = 0;
 
       qreal _spatium            = spatium();
       qreal y                   = 0.0;
@@ -431,7 +429,7 @@ void System::layout2()
             y += dist;
             }
 
-      qreal systemHeight = staff(lastStaffIdx)->bbox().bottom();
+      qreal systemHeight = staff(visibleStaves.back().first)->bbox().bottom();
       setHeight(systemHeight);
 
       for (MeasureBase* m : ml) {
@@ -477,8 +475,6 @@ void System::layout2()
                   ey = _staves[staffIdx2]->bbox().bottom();
                   }
             b->rypos() = sy;
-//            if (score()->staff(firstStaffInitialIdx)->lines() == 1)   // bbox of one line staff bad?
-//                  b->rypos() -= _spatium;
             b->setHeight(ey - sy);
             b->layout();
             }
@@ -916,8 +912,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
 qreal System::staffYpage(int staffIdx) const
       {
       if (_staves.size() <= staffIdx || staffIdx < 0) {
-            qDebug("staffY: staves %d: bad staffIdx %d", _staves.size(), staffIdx);
-//            abort();
+            qFatal("staffY: staves %d: bad staffIdx %d", _staves.size(), staffIdx);
             return pagePos().y();
             }
       return _staves[staffIdx]->y() + y();
