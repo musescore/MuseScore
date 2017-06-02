@@ -28,14 +28,14 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   static members init
+//   BarLineEditData
 //---------------------------------------------------------
 
-qreal BarLine::yoff1;
-qreal BarLine::yoff2;
-bool BarLine::_origSpanStaff;
-int BarLine::_origSpanFrom;
-int BarLine::_origSpanTo;
+class BarLineEditData : public ElementEditData {
+   public:
+      qreal yoff1;
+      qreal yoff2;
+      };
 
 //---------------------------------------------------------
 //   BarLineTable
@@ -248,11 +248,11 @@ void BarLine::getY() const
       qreal d  = st1->lineDistance().val() * spatium1;
       qreal yy = measure->staffLines(staffIdx1)->y1() - yp;
       qreal lw = score()->styleS(StyleIdx::staffLineWidth).val() * spatium1 * .5;
-      y1       = yy + from * d * .5 + yoff1 - lw;
+      y1       = yy + from * d * .5 - lw;
       if (spanStaves)
-             y2 = measure->staffLines(staffIdx2)->y1() - yp - to * d * .5 + yoff2;
+             y2 = measure->staffLines(staffIdx2)->y1() - yp - to * d * .5;
       else
-             y2 = yy + (st1->lines() * 2 - 2 + to) * d * .5 + yoff2 + lw;
+             y2 = yy + (st1->lines() * 2 - 2 + to) * d * .5 + lw;
       }
 
 //---------------------------------------------------------
@@ -447,6 +447,24 @@ void BarLine::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
+//   drawEditMode
+//---------------------------------------------------------
+
+void BarLine::drawEditMode(QPainter* p, EditData& ed)
+      {
+      Element::drawEditMode(p, ed);
+      BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this));
+      y1 += bed->yoff1;
+      y2 += bed->yoff2;
+      QPointF pos(pagePos());
+      p->translate(pos);
+      BarLine::draw(p);
+      p->translate(-pos);
+      y1 -= bed->yoff1;
+      y2 -= bed->yoff2;
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -583,10 +601,12 @@ Element* BarLine::drop(EditData& data)
 
 void BarLine::updateGrips(EditData& ed) const
       {
+      const BarLineEditData* bed = static_cast<const BarLineEditData*>(ed.getData(this));
+
       qreal lw = score()->styleP(StyleIdx::barWidth) * staff()->mag(tick());
       getY();
-      ed.grip[0].translate(QPointF(lw * .5, y1) + pagePos());
-      ed.grip[1].translate(QPointF(lw * .5, y2) + pagePos());
+      ed.grip[0].translate(QPointF(lw * .5, y1 + bed->yoff1) + pagePos());
+      ed.grip[1].translate(QPointF(lw * .5, y2 + bed->yoff2) + pagePos());
       }
 
 //---------------------------------------------------------
@@ -597,10 +617,12 @@ void BarLine::startEdit(EditData& ed)
       {
       ed.grips   = 2;
       ed.curGrip = Grip::END;
-      // keep a copy of original span values
-      _origSpanStaff = _spanStaff;
-      _origSpanFrom  = _spanFrom;
-      _origSpanTo    = _spanTo;
+
+      BarLineEditData* bed = new BarLineEditData();
+      bed->e     = this;
+      bed->yoff1 = 0;
+      bed->yoff2 = 0;
+      ed.addData(bed);
       }
 
 //---------------------------------------------------------
@@ -609,12 +631,6 @@ void BarLine::startEdit(EditData& ed)
 
 void BarLine::endEdit(EditData&)
       {
-      // for mid-measure barlines, edit is local
-//      bool midMeasure = false;
-//      if (segment()->isBarLine()) {
-//            ctrlDrag = true;
-//            midMeasure = true;
-//            }
 #if 0 // TODO
       if (ctrlDrag) {                           // if single bar line edit
             char newSpanStaff = _spanStaff;          // copy edited span values
@@ -677,14 +693,12 @@ void BarLine::endEdit(EditData&)
             undoChangeProperty(P_ID::BARLINE_SPAN_FROM, newSpanTo);
             return;
             }
-#endif
 
       // if same as staff settings, do nothing
       if (staff()->barLineSpan() == _spanStaff && staff()->barLineFrom() == _spanFrom && staff()->barLineTo() == _spanTo)
             return;
 
 //      int idx1 = staffIdx();
-#if 0  // TODO
       if (_span != staff()->barLineSpan()) {
             // if now bar lines span more staves
             if (_span > staff()->barLineSpan()) {
@@ -720,11 +734,11 @@ void BarLine::endEdit(EditData&)
                         }
                   }
             }
-#endif
       // update span for the staff the edited bar line belongs to
       staff()->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN,      _spanStaff);
       staff()->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN_FROM, _spanFrom);
       staff()->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN_TO,   _spanTo);
+#endif
       }
 
 //---------------------------------------------------------
@@ -733,35 +747,34 @@ void BarLine::endEdit(EditData&)
 
 void BarLine::editDrag(EditData& ed)
       {
+      BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this));
+
       qreal lineDist = staff()->lineDistance(tick()) * spatium();
-      qreal min, max, lastmax;
       getY();
-      y1 -= yoff1;                  // current positions of barline ends, ignoring any in-process dragging
-      y2 -= yoff2;
       if (ed.curGrip == Grip::START) {
             // min offset for top grip is line -1 (-2 for 1-line staves)
             // max offset is 1 line above bottom grip or 1 below last staff line, whichever comes first
             int lines = staff()->lines(tick());
-            min = (-y1 - lines == 1) ? lineDist * 2 : lineDist;
-            max = y2 - y1 - lineDist;                                   // 1 line above bottom grip
-            lastmax = (lines - _spanFrom/2) * lineDist;      // 1 line below last staff line
+            qreal min = (-y1 - lines == 1) ? lineDist * 2 : lineDist;
+            qreal max = y2 - y1 - lineDist;                                   // 1 line above bottom grip
+            qreal lastmax = (lines - _spanFrom/2) * lineDist;      // 1 line below last staff line
             if (lastmax < max)
                   max = lastmax;
             // update yoff1 and bring it within limits
-            yoff1 += ed.delta.y();
-            if (yoff1 < min)
-                  yoff1 = min;
-            if (yoff1 > max)
-                  yoff1 = max;
+            bed->yoff1 += ed.delta.y();
+            if (bed->yoff1 < min)
+                  bed->yoff1 = min;
+            if (bed->yoff1 > max)
+                  bed->yoff1 = max;
             }
       else {
             // min for bottom grip is 1 line below top grip
             // no max
-            min = y1 - y2 + lineDist;
+            qreal min = y1 - y2 + lineDist;
             // update yoff2 and bring it within limit
-            yoff2 += ed.delta.y();
-            if (yoff2 < min)
-                  yoff2 = min;
+            bed->yoff2 += ed.delta.y();
+            if (bed->yoff2 < min)
+                  bed->yoff2 = min;
             }
       }
 
@@ -770,20 +783,21 @@ void BarLine::editDrag(EditData& ed)
 //    snap to nearest staff / staff line
 //---------------------------------------------------------
 
-void BarLine::endEditDrag(EditData&)
+void BarLine::endEditDrag(EditData& ed)
       {
-      if (yoff1 == 0.0 && yoff2 == 0.0)         // if no drag, do nothing
-            return;
-
       getY();
-      qreal ay0 = pagePos().y();
-      qreal ay2 = ay0 + y2;                     // absolute (page-relative) bar line bottom coord
-      int staffIdx1 = staffIdx();
-      int staffIdx2;
+      BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this));
+      y1 += bed->yoff1;
+      y2 += bed->yoff2;
+
+      qreal ay0      = pagePos().y();
+      qreal ay2      = ay0 + y2;                     // absolute (page-relative) bar line bottom coord
+      int staffIdx1  = staffIdx();
       System* syst   = segment()->measure()->system();
       qreal systTopY = syst->pagePos().y();
 
       // determine new span value
+      int staffIdx2;
       int numOfStaves = syst->staves()->size();
       if (staffIdx1 + 1 >= numOfStaves)
             // if initial staff is last staff, ending staff must be the same
@@ -807,7 +821,6 @@ void BarLine::endEditDrag(EditData&)
                   }
             staffIdx2 -= 1;
             }
-      int newSpanStaff = staffIdx2 - staffIdx1 + 1;
 
       // determine new spanFrom and spanTo values
       int newSpanFrom, newSpanTo;
@@ -850,15 +863,32 @@ void BarLine::endEditDrag(EditData&)
             newSpanTo   = 0;
             }
 
-      // if any value changed, update
-      if (newSpanStaff != _spanStaff || newSpanFrom != _spanFrom || newSpanTo != _spanTo) {
-            _spanStaff  = newSpanStaff;
-            _spanFrom   = newSpanFrom;
-            _spanTo     = newSpanTo;
+      bool localDrag = ed.control() || segment()->isBarLine();
+      if (localDrag) {
+            Segment* s = segment();
+            for (int staffIdx = staffIdx1; staffIdx < staffIdx2; ++staffIdx) {
+                  BarLine* b = toBarLine(s->element(staffIdx * VOICES));
+                  if (!b) {
+                        b = toBarLine(linkedClone());
+                        b->setSpanStaff(true);
+                        b->setTrack(staffIdx * VOICES);
+                        b->setScore(score());
+                        b->setParent(s);
+                        score()->undoAddElement(b);
+                        }
+                  b->undoChangeProperty(P_ID::BARLINE_SPAN, true);
+                  }
+            BarLine* b = toBarLine(s->element(staffIdx2 * VOICES));
+            if (b)
+                  b->undoChangeProperty(P_ID::BARLINE_SPAN, false);
             }
-
-      yoff1 = 0.0;
-      yoff2 = 0.0;
+      else {
+            for (int staffIdx = staffIdx1; staffIdx < staffIdx2; ++staffIdx)
+                  score()->staff(staffIdx)->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN, true);
+            score()->staff(staffIdx2)->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN, false);
+            staff()->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN_FROM, newSpanFrom);
+            staff()->undoChangeProperty(P_ID::STAFF_BARLINE_SPAN_TO,   newSpanTo);
+            }
       }
 
 //---------------------------------------------------------
@@ -965,7 +995,6 @@ void BarLine::layout()
 void BarLine::layout2()
       {
       getY();
-
       bbox().setTop(y1);
       bbox().setBottom(y2);
 

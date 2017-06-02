@@ -84,10 +84,10 @@ namespace Ms {
 
 void CmdState::reset()
       {
-      layoutFlags         = LayoutFlag::NO_FLAGS;
-      _updateMode         = UpdateMode::DoNothing;
-      _startTick          = -1;
-      _endTick            = -1;
+      layoutFlags = LayoutFlag::NO_FLAGS;
+      _updateMode = UpdateMode::DoNothing;
+      _startTick  = -1;
+      _endTick    = -1;
       }
 
 //---------------------------------------------------------

@@ -2227,6 +2227,23 @@ void Score::insertStaff(Staff* staff, int ridx)
                   continue;
             if (s->staffIdx() >= idx) {
                   int t = s->track() + VOICES;
+                  if (t >= ntracks())
+                        t = ntracks() - 1;
+                  s->setTrack(t);
+                  for (SpannerSegment* ss : s->spannerSegments())
+                        ss->setTrack(t);
+                  if (s->track2() != -1) {
+                        t = s->track2() + VOICES;
+                        s->setTrack2(t < ntracks() ? t : s->track());
+                        }
+                  }
+            }
+#if 0
+      for (Spanner* s : staff->score()->unmanagedSpanners()) {
+            if (s->systemFlag())
+                  continue;
+            if (s->staffIdx() >= idx) {
+                  int t = s->track() + VOICES;
                   s->setTrack(t < ntracks() ? t : ntracks() - 1);
                   if (s->track2() != -1) {
                         t = s->track2() + VOICES;
@@ -2234,6 +2251,7 @@ void Score::insertStaff(Staff* staff, int ridx)
                         }
                   }
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -2247,13 +2265,29 @@ void Score::removeStaff(Staff* staff)
             Spanner* s = i->second;
             if (s->staffIdx() > idx) {
                   int t = s->track() - VOICES;
-                  s->setTrack(t >=0 ? t : 0);
+                  if (t < 0)
+                        t = 0;
+                  s->setTrack(t);
+                  for (SpannerSegment* ss : s->spannerSegments())
+                        ss->setTrack(t);
                   if (s->track2() != -1) {
                         t = s->track2() - VOICES;
-                        s->setTrack2(t >=0 ? t : s->track());
+                        s->setTrack2(t >= 0 ? t : s->track());
                         }
                   }
             }
+#if 0
+      for (Spanner* s : staff->score()->unmanagedSpanners()) {
+            if (s->staffIdx() > idx) {
+                  int t = s->track() - VOICES;
+                  s->setTrack(t >= 0 ? t : 0);
+                  if (s->track2() != -1) {
+                        t = s->track2() - VOICES;
+                        s->setTrack2(t >= 0 ? t : s->track());
+                        }
+                  }
+            }
+#endif
       _staves.removeAll(staff);
       staff->part()->removeStaff(staff);
       }
@@ -2354,6 +2388,10 @@ void Score::cmdRemoveStaff(int staffIdx)
       QList<Spanner*> sl;
       for (auto i = _spanner.cbegin(); i != _spanner.cend(); ++i) {
             Spanner* s = i->second;
+            if (s->staffIdx() == staffIdx && (staffIdx != 0 || !s->systemFlag()))
+                  sl.append(s);
+            }
+      for (Spanner* s : _unmanagedSpanner) {
             if (s->staffIdx() == staffIdx && (staffIdx != 0 || !s->systemFlag()))
                   sl.append(s);
             }

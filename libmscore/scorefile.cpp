@@ -224,7 +224,6 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
                               else
                                     forceTimeSig = false;
                               }
-//                        printf("write measure %d\n", m->tick());
                         writeMeasure(xml, m, staffIdx, writeSystemElements, forceTimeSig);
                         }
                   xml.etag();

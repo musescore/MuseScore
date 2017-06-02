@@ -155,7 +155,7 @@ class LyricsLine : public SLine {
       LyricsLine(const LyricsLine&);
 
       virtual LyricsLine* clone() const override      { return new LyricsLine(*this); }
-      virtual ElementType type() const override     { return ElementType::LYRICSLINE; }
+      virtual ElementType type() const override       { return ElementType::LYRICSLINE; }
       virtual void layout() override;
       virtual LineSegment* createLineSegment() override;
       virtual void removeUnmanaged() override;
