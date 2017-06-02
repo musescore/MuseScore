@@ -1055,7 +1055,7 @@ qDebug("createRevision");
 void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
    Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick, bool forceTimeSig)
       {
-      int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
+      int endTick = ls ? ls->tick() : lastMeasure()->endTick();
       // in clipboard mode, ls might be in an mmrest
       // since we are traversing regular measures,
       // force them out of mmRest
@@ -1075,6 +1075,25 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                         fs = fm->first();
                   }
             }
+
+      QList<Spanner*> spanners;
+#if 0
+      auto endIt   = spanner().upper_bound(endTick);
+      for (auto i = spanner().begin(); i != endIt; ++i) {
+            Spanner* s = i->second;
+#else
+      auto sl = spannerMap().findOverlapping(fs->tick(), endTick);
+      for (auto i : sl) {
+            Spanner* s = i.value;
+#endif
+            if (s->generated() || !xml.canWrite(s))
+                  continue;
+            // don't write voltas to clipboard
+            if (clip && s->isVolta())
+                  continue;
+            spanners.push_back(s);
+            }
+
       for (int track = strack; track < etrack; ++track) {
             if (!xml.canWriteVoice(track))
                   continue;
@@ -1120,17 +1139,9 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                         }
                   Measure* m = segment->measure();
                   // don't write spanners for multi measure rests
+
                   if ((!(m && m->isMMRest())) && segment->isChordRestType()) {
-                        auto endIt = spanner().upper_bound(endTick);
-                        for (auto i = spanner().begin(); i != endIt; ++i) {
-                              Spanner* s = i->second;
-                              if (s->generated() || !xml.canWrite(s))
-                                    continue;
-
-                              // don't write voltas to clipboard
-                              if (clip && s->isVolta())
-                                    continue;
-
+                        for (Spanner* s : spanners) {
                               if (s->track() == track) {
                                     bool end = false;
                                     if (s->anchor() == Spanner::Anchor::CHORD || s->anchor() == Spanner::Anchor::NOTE)
@@ -1215,13 +1226,10 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                               crWritten = true;
                         }
                   }
+
             //write spanner ending after the last segment, on the last tick
             if (clip || ls == 0) {
-                  auto endIt = spanner().upper_bound(endTick);
-                  for (auto i = spanner().begin(); i != endIt; ++i) {
-                        Spanner* s = i->second;
-                        if (s->generated() || !xml.canWrite(s))
-                              continue;
+                  for (Spanner* s : spanners) {
                         if ((s->tick2() == endTick)
                           && s->isSlur()
                           && (s->track2() == track || (s->track2() == -1 && s->track() == track))
