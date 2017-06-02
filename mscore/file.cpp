@@ -2660,24 +2660,29 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                         }
                         if (mb && mb->type() == Element::Type::VBOX) // no need for staff lines
                               byMeasure = false;
-                        if (!byMeasure && !s->lastMeasure())
+                        if (!byMeasure && (!s->lastMeasure() || !s->lastMeasure()->system()))
                               byMeasure = true;
                         if (byMeasure) { // Draw visible staff lines by measure
                               for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
                                     if (mb->type() != Element::Type::HBOX
                                      && mb->type() != Element::Type::VBOX
                                      && static_cast<Measure*>(mb)->visible(i)) {
-                                          StaffLines* sl = static_cast<Measure*>(mb)->staffLines(i);
-                                          printer.setElement(sl);
-                                          paintElement(p, sl);
+                                          Measure* m = static_cast<Measure*>(mb);
+                                          if (score->styleB(StyleIdx::createMultiMeasureRests) && m->hasMMRest())
+                                                m = m->mmRest();
+                                          StaffLines* sl = m->staffLines(i);
+                                          if (sl->measure()->system()) {
+                                                printer.setElement(sl);
+                                                paintElement(p, sl);
+                                                }
+                                          }
                                     }
                               }
-                        }
                         else { // Draw staff lines once per system
                               StaffLines* firstSL = s->firstMeasure()->staffLines(i)->clone();
                               StaffLines*  lastSL =  s->lastMeasure()->staffLines(i);
                               firstSL->bbox().setRight(lastSL->bbox().right()
-                                                    +  lastSL->pagePos().x()
+                                                    + lastSL->pagePos().x()
                                                     - firstSL->pagePos().x());
                               printer.setElement(firstSL);
                               paintElement(p, firstSL);
