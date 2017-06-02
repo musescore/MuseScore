@@ -3870,7 +3870,7 @@ void MuseScore::removeSessionFile()
 void MuseScore::autoSaveTimerTimeout()
       {
       bool sessionChanged = false;
-      foreach (MasterScore* s, scoreList) {
+      for (MasterScore* s : scoreList) {
             if (s->autosaveDirty()) {
                   QString tmp = s->tmpName();
                   if (!tmp.isEmpty()) {
@@ -3889,7 +3889,7 @@ void MuseScore::autoSaveTimerTimeout()
                               }
                         s->setTmpName(tf.fileName());
                         QFileInfo info(tf.fileName());
-                        s->saveCompressedFile(&tf, info, false);
+                        s->saveCompressedFile(&tf, info, false, false);  // no thumbnail
                         tf.close();
                         sessionChanged = true;
                         }
