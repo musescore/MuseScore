@@ -1290,8 +1290,8 @@ bool MgStyle::drawFrameGroupBoxPrimitive(const QStyleOption* option, QPainter* p
             return true;
 
       // no frame for flat groupboxes
-      QStyleOptionFrameV2 fOpt2(*fOpt);
-      if (fOpt2.features & QStyleOptionFrameV2::Flat)
+      QStyleOptionFrame fOpt2(*fOpt);
+      if (fOpt2.features & QStyleOptionFrame::Flat)
             return true;
 
       // normal frame
@@ -2004,14 +2004,14 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
       }
 
 bool MgStyle::drawPanelItemViewItemPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget) const {
-      const QStyleOptionViewItemV4* opt = qstyleoption_cast<const QStyleOptionViewItemV4*>(option);
+      const QStyleOptionViewItem* opt = qstyleoption_cast<const QStyleOptionViewItem*>(option);
       const QAbstractItemView* view = qobject_cast<const QAbstractItemView*>(widget);
       const bool hover = (option->state & State_MouseOver) && (!view || view->selectionMode() != QAbstractItemView::NoSelection);
 
       const bool hasCustomBackground = opt->backgroundBrush.style() != Qt::NoBrush && !(option->state & State_Selected);
       const bool hasSolidBackground = !hasCustomBackground || opt->backgroundBrush.style() == Qt::SolidPattern;
 
-      if ( !hover && !(option->state & State_Selected) && !hasCustomBackground && !(opt->features & QStyleOptionViewItemV2::Alternate) ) {
+      if ( !hover && !(option->state & State_Selected) && !hasCustomBackground && !(opt->features & QStyleOptionViewItem::Alternate) ) {
             return true;
             }
 
@@ -2028,7 +2028,7 @@ bool MgStyle::drawPanelItemViewItemPrimitive( const QStyleOption* option, QPaint
             else color = color.lighter(110);
             }
 
-      if ( opt && (opt->features & QStyleOptionViewItemV2::Alternate)) {
+      if ( opt && (opt->features & QStyleOptionViewItem::Alternate)) {
             painter->fillRect(option->rect, option->palette.brush(cg, QPalette::AlternateBase));
             }
 
@@ -2056,10 +2056,10 @@ bool MgStyle::drawPanelItemViewItemPrimitive( const QStyleOption* option, QPaint
             bool roundedRight = false;
             if ( opt ) {
 
-                  roundedLeft  = (opt->viewItemPosition == QStyleOptionViewItemV4::Beginning);
-                  roundedRight = (opt->viewItemPosition == QStyleOptionViewItemV4::End);
-                  if ( opt->viewItemPosition == QStyleOptionViewItemV4::OnlyOne ||
-                              opt->viewItemPosition == QStyleOptionViewItemV4::Invalid ||
+                  roundedLeft  = (opt->viewItemPosition == QStyleOptionViewItem::Beginning);
+                  roundedRight = (opt->viewItemPosition == QStyleOptionViewItem::End);
+                  if ( opt->viewItemPosition == QStyleOptionViewItem::OnlyOne ||
+                              opt->viewItemPosition == QStyleOptionViewItem::Invalid ||
                               (view && view->selectionBehavior() != QAbstractItemView::SelectRows)) {
                         roundedLeft  = true;
                         roundedRight = true;
@@ -2573,7 +2573,7 @@ bool MgStyle::drawIndicatorTabTearPrimitive( const QStyleOption* option, QPainte
 
       // in fact with current version of Qt (4.6.0) the cast fails and document mode is always false
       // this will hopefully be fixed in later versions
-      const QStyleOptionTabV3* tabOptV3( qstyleoption_cast<const QStyleOptionTabV3*>(option) );
+      const QStyleOptionTab* tabOptV3( qstyleoption_cast<const QStyleOptionTab*>(option) );
       bool documentMode( tabOptV3 ? tabOptV3->documentMode : false );
 
       if(!widget)
@@ -4639,7 +4639,7 @@ bool MgStyle::drawCapacityBarControl( const QStyleOption* option, QPainter* pain
       if ( !cbOption ) return true;
 
       // draw container
-      QStyleOptionProgressBarV2 sub_opt(*cbOption);
+      QStyleOptionProgressBar sub_opt(*cbOption);
       sub_opt.rect = subElementRect( QStyle::SE_ProgressBarGroove, cbOption, widget);
       drawProgressBarGrooveControl( &sub_opt, painter, widget);
 
@@ -4716,7 +4716,7 @@ bool MgStyle::drawDockWidgetTitleControl( const QStyleOption* option, QPainter* 
             widget = QApplication::activeWindow();
 
       // cast to v2 to check vertical bar
-      const QStyleOptionDockWidgetV2* v2 = qstyleoption_cast<const QStyleOptionDockWidgetV2*>( option );
+      const QStyleOptionDockWidget* v2 = qstyleoption_cast<const QStyleOptionDockWidget*>( option );
       const bool verticalTitleBar( v2 ? v2->verticalTitleBar : false);
 
       const QRect btnr(subElementRect(dwOpt->floatable ? SE_DockWidgetFloatButton : SE_DockWidgetCloseButton, option, widget));
@@ -5195,7 +5195,7 @@ bool MgStyle::drawProgressBarControl( const QStyleOption* option, QPainter* pain
                   widget = QApplication::activeWindow();
 
             // same as QCommonStyle::drawControl, except that it handles animations
-            QStyleOptionProgressBarV2 subopt = *pb;
+            QStyleOptionProgressBar subopt = *pb;
             subopt.rect = subElementRect(SE_ProgressBarGroove, pb, widget);
             drawProgressBarGrooveControl(&subopt, painter, widget);
 
@@ -5226,7 +5226,7 @@ bool MgStyle::drawProgressBarContentsControl( const QStyleOption* option, QPaint
       const QStyleOptionProgressBar* pbOpt = qstyleoption_cast<const QStyleOptionProgressBar*>(option);
       if ( !pbOpt ) return true;
 
-      const QStyleOptionProgressBarV2* pbOpt2 = qstyleoption_cast<const QStyleOptionProgressBarV2*>(option);
+      const QStyleOptionProgressBar* pbOpt2 = qstyleoption_cast<const QStyleOptionProgressBar*>(option);
 
       const QRect& r( option->rect );
       const QPalette& palette( option->palette );
@@ -5285,7 +5285,7 @@ bool MgStyle::drawProgressBarContentsControl( const QStyleOption* option, QPaint
 
 bool MgStyle::drawProgressBarGrooveControl( const QStyleOption* option, QPainter* painter, const QWidget* ) const {
 
-      const QStyleOptionProgressBarV2* pbOpt = qstyleoption_cast<const QStyleOptionProgressBarV2*>(option);
+      const QStyleOptionProgressBar* pbOpt = qstyleoption_cast<const QStyleOptionProgressBar*>(option);
       const Qt::Orientation orientation( pbOpt ? pbOpt->orientation : Qt::Horizontal );
 
       renderScrollBarHole( painter, option->rect, option->palette.color(QPalette::Window), orientation);
@@ -5302,7 +5302,7 @@ bool MgStyle::drawProgressBarLabelControl( const QStyleOption* option, QPainter*
       const State& flags( option->state );
       const bool enabled( flags & State_Enabled );
 
-      const QStyleOptionProgressBarV2* pbOpt2 = qstyleoption_cast<const QStyleOptionProgressBarV2*>(option);
+      const QStyleOptionProgressBar* pbOpt2 = qstyleoption_cast<const QStyleOptionProgressBar*>(option);
       const bool horizontal = !pbOpt2 || pbOpt2->orientation == Qt::Horizontal;
       const bool reverseLayout = ( option->direction == Qt::RightToLeft );
 
@@ -5736,7 +5736,7 @@ bool MgStyle::drawScrollBarSubPageControl( const QStyleOption* option, QPainter*
 bool MgStyle::drawShapedFrameControl( const QStyleOption* option, QPainter* painter, const QWidget* ) const {
 
       // cast option and check
-      const QStyleOptionFrameV3* frameOpt = qstyleoption_cast<const QStyleOptionFrameV3*>( option );
+      const QStyleOptionFrame* frameOpt = qstyleoption_cast<const QStyleOptionFrame*>( option );
       if ( !frameOpt ) return false;
 
       switch ( frameOpt->frameShape ) {
@@ -5770,7 +5770,7 @@ bool MgStyle::drawTabBarTabLabelControl( const QStyleOption* option, QPainter* p
       if ( !tabOpt ) return true;
 
       const bool selected( option->state & State_Selected );
-      QStyleOptionTabV3 tabOptV3( *tabOpt );
+      QStyleOptionTab tabOptV3( *tabOpt );
 
       if(!widget)
             widget = QApplication::activeWindow();
@@ -5855,7 +5855,7 @@ bool MgStyle::drawTabBarTabShapeControl_Single(const QStyleOption* option, QPain
       const bool isRightOfSelected( tabOpt->selectedPosition == QStyleOptionTab::PreviousIsSelected );
 
       // document mode
-      const QStyleOptionTabV3* tabOptV3 = qstyleoption_cast<const QStyleOptionTabV3*>(option);
+      const QStyleOptionTab* tabOptV3 = qstyleoption_cast<const QStyleOptionTab*>(option);
       bool documentMode = tabOptV3 ? tabOptV3->documentMode : false;
       const QTabWidget* tabWidget = (widget && widget->parentWidget()) ? qobject_cast<const QTabWidget*>(widget->parentWidget()) : NULL;
       documentMode |= (tabWidget ? tabWidget->documentMode() : true );
@@ -6347,7 +6347,7 @@ bool MgStyle::drawTabBarTabShapeControl_Plain( const QStyleOption* option, QPain
       bool isRightOfSelected( tabOpt->selectedPosition == QStyleOptionTab::PreviousIsSelected );
 
       // document mode
-      const QStyleOptionTabV3* tabOptV3 = qstyleoption_cast<const QStyleOptionTabV3*>(option);
+      const QStyleOptionTab* tabOptV3 = qstyleoption_cast<const QStyleOptionTab*>(option);
       bool documentMode = tabOptV3 ? tabOptV3->documentMode : false;
       const QTabWidget* tabWidget = (widget && widget->parentWidget()) ? qobject_cast<const QTabWidget*>(widget->parentWidget()) : NULL;
       documentMode |= (tabWidget ? tabWidget->documentMode() : true );
@@ -6993,7 +6993,7 @@ void MgStyle::TabBarData::drawTabBarBaseControl( const QStyleOptionTab* tabOpt, 
       const bool reverseLayout( tabOpt->direction == Qt::RightToLeft );
 
       // get documentMode flag
-      const QStyleOptionTabV3* tabOptV3 = qstyleoption_cast<const QStyleOptionTabV3*>(tabOpt);
+      const QStyleOptionTab* tabOptV3 = qstyleoption_cast<const QStyleOptionTab*>(tabOpt);
       bool documentMode = tabOptV3 ? tabOptV3->documentMode : false;
       const QTabWidget* tabWidget = (widget && widget->parentWidget()) ? qobject_cast<const QTabWidget*>(widget->parentWidget()) : NULL;
       documentMode |= (tabWidget ? tabWidget->documentMode() : true );
@@ -7160,8 +7160,8 @@ bool MgStyle::drawToolBoxTabShapeControl( const QStyleOption* option, QPainter* 
 
 
       // cast to v2 and disable paint is tab is first
-      const QStyleOptionToolBoxV2* v2 = qstyleoption_cast<const QStyleOptionToolBoxV2*>(option);
-      if ( v2 && v2->position == QStyleOptionToolBoxV2::Beginning && selected ) return true;
+      const QStyleOptionToolBox* v2 = qstyleoption_cast<const QStyleOptionToolBox*>(option);
+      if ( v2 && v2->position == QStyleOptionToolBox::Beginning && selected ) return true;
 
       /*
       the proper widget (the toolbox tab) is not passed as argument by Qt.
@@ -7307,7 +7307,7 @@ QRect MgStyle::groupBoxSubControlRect( const QStyleOptionComplex* option, SubCon
                   const QStyleOptionGroupBox* gbOpt = qstyleoption_cast<const QStyleOptionGroupBox*>(option);
                   if ( !gbOpt) break;
 
-                  const bool isFlat( gbOpt->features & QStyleOptionFrameV2::Flat );
+                  const bool isFlat( gbOpt->features & QStyleOptionFrame::Flat );
                   const int th( gbOpt->fontMetrics.height() + 8 );
                   const QRect cr( subElementRect(SE_CheckBoxIndicator, option, widget) );
                   const int fw( pixelMetric(PM_DefaultFrameWidth, option, widget) );
@@ -7334,7 +7334,7 @@ QRect MgStyle::groupBoxSubControlRect( const QStyleOptionComplex* option, SubCon
                   const QStyleOptionGroupBox* gbOpt = qstyleoption_cast<const QStyleOptionGroupBox*>(option);
                   if ( !gbOpt) break;
 
-                  const bool isFlat( gbOpt->features & QStyleOptionFrameV2::Flat );
+                  const bool isFlat( gbOpt->features & QStyleOptionFrame::Flat );
                   QFontMetrics fontMetrics = gbOpt->QStyleOption::fontMetrics;
                   if(widget) {
                         QFont font = widget->font();

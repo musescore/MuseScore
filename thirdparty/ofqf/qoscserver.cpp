@@ -82,8 +82,8 @@ void QOscServer::readyRead()
         		      for ( ; i<size && data[ i ] != char( 0 ); ++i )
         		            path += data[ i ];
         
-        			    while ( data[ i ] != ',' ) ++i;
-        			    ++i;
+        			  while ( data[ i ] != ',' ) ++i;
+        			  ++i;
         		      while ( data[ i ] != char( 0 ) )
         		            args += data[ i++ ];
                   i++; //move one byte more!

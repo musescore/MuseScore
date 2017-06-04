@@ -835,8 +835,8 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
             offsBelow = -0.75;
             }
       else
-            qDebug("addElem el %p unsupported type %hhd",
-                   el, el->type());  //TODO
+            qDebug("addElem el %p unsupported type %d",
+                   el, int(el->type()));  //TODO
 
       // move to correct position
       // TODO: handle rx, ry
@@ -1361,8 +1361,8 @@ static void setSLinePlacement(SLine* sli, const QString placement)
             // ignore
             }
       else
-            qDebug("setSLinePlacement sli %p unsupported type %hhd",
-                   sli, sli->type());
+            qDebug("setSLinePlacement sli %p unsupported type %d",
+                   sli, int(sli->type()));
 
       // move to correct position
       qreal y = 0;
@@ -1881,8 +1881,8 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const MScor
             // and in a beam ...
             // (note no check is done on correct order of beam begin/continue/end)
             if (cr->track() != beam->track()) {
-                  qDebug("handleBeamAndStemDir() from track %d to track %d -> abort beam",
-                         beam->track(), cr->track());
+                  qDebug("handleBeamAndStemDir() from track %d to track %d bm %d -> abort beam",
+                         beam->track(), cr->track(), int(bm));
                   // reset beam mode for all elements and remove the beam
                   removeBeam(beam);
                   }
