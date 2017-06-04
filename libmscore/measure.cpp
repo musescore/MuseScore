@@ -577,14 +577,25 @@ void Measure::layout2()
                   if (score()->styleB(StyleIdx::measureNumberSystem))
                         smn = system()->firstMeasure() == this;
                   else {
+                        int interval = score()->style(StyleIdx::measureNumberInterval).toInt();
                         smn = (_no == 0 && score()->styleB(StyleIdx::showMeasureNumberOne)) ||
-                              ( ((_no+1) % score()->style(StyleIdx::measureNumberInterval).toInt()) == 0 );
+                              ( ((_no+1) % interval == 0 ) ||
+                                // We're in a multimeasure rest, and we want to show the range
+			                          (_mmRestCount > 0 && score()->styleB(StyleIdx::showMultiMeasureNumberRange) &&
+                                  // And the rest encompasses a measure we would normally display a number for
+                                  // Either the rest is longer than the measureNumberInterval...
+                                  (_mmRestCount >= interval ||
+                                  // ...or one is inside it (the modulo of the final measure is less than the modulo of the current)
+                                  (_no+1) % interval > (_no + _mmRestCount) % interval)));
                         }
                   }
             }
       QString s;
-      if (smn)
+      if (smn && _mmRestCount && score()->styleB(StyleIdx::createMultiMeasureRests) && score()->styleB(StyleIdx::showMultiMeasureNumberRange)) {
+            s = QString("%1 - %2").arg(_no + 1).arg(_no + _mmRestCount);
+      } else if (smn) {
             s = QString("%1").arg(_no + 1);
+	}
       int nn = 1;
       bool nas = score()->styleB(StyleIdx::measureNumberAllStaffs);
 
@@ -4300,4 +4311,3 @@ QString Measure::accessibleInfo()
       }
 
 }
-
