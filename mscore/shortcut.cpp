@@ -2494,6 +2494,13 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Select all similar elements in the range selection")
          },
       {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "select-dialog",
+         QT_TRANSLATE_NOOP("action","All Similar Elements with more options"),
+         QT_TRANSLATE_NOOP("action","Select all similar elements with more options")
+         },
+      {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          "synth-control",
