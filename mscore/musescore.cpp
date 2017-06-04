@@ -1260,7 +1260,9 @@ MuseScore::MuseScore()
       menuHelp->addAction(aboutMusicXMLAction);
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+#if not defined(FOR_WINSTORE)
       checkForUpdateAction = menuHelp->addAction("", this, SLOT(checkForUpdate()));
+#endif
 #endif
       menuHelp->addSeparator();
       askForHelpAction = menuHelp->addAction("", this, SLOT(askForHelp()));
