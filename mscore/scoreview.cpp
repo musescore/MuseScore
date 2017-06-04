@@ -2014,9 +2014,9 @@ void ScoreView::cmd(const QAction* a)
             changeVoice(2);
       else if (cmd == "voice-4")
             changeVoice(3);
-      else if (cmd == "enh-up")
+      else if (cmd == "enh-both")
             cmdChangeEnharmonic(true);
-      else if (cmd == "enh-down")
+      else if (cmd == "enh-current")
             cmdChangeEnharmonic(false);
       else if (cmd == "revision") {
             Score* s = _score->masterScore();
@@ -3276,7 +3276,7 @@ void ScoreView::cmdAddHairpin(HairpinType type)
 //   cmdChangeEnharmonic
 //---------------------------------------------------------
 
-void ScoreView::cmdChangeEnharmonic(bool up)
+void ScoreView::cmdChangeEnharmonic(bool both)
       {
       _score->startCmd();
       Selection selection = _score->selection();
@@ -3286,7 +3286,7 @@ void ScoreView::cmdChangeEnharmonic(bool up)
             if (staff->part()->instrument()->useDrumset())
                   continue;
             if (staff->isTabStaff(n->tick())) {
-                  int string = n->line() + (up ? 1 : -1);
+                  int string = n->line() + (both ? 1 : -1);
                   int fret   = staff->part()->instrument()->stringData()->fret(n->pitch(), string, staff, n->chord()->tick());
                   if (fret != -1) {
                         score()->undoChangeProperty(n, P_ID::FRET, fret);
@@ -3329,7 +3329,7 @@ void ScoreView::cmdChangeEnharmonic(bool up)
                         }
                   else {
                         n->undoSetTpc(tpc);
-                        if (up || staff->part()->instrument(n->chord()->tick())->transpose().isZero()) {
+                        if (both || staff->part()->instrument(n->chord()->tick())->transpose().isZero()) {
                               // change both spellings
                               int t = n->transposeTpc(tpc);
                               if (n->concertPitch())

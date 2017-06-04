@@ -687,11 +687,11 @@
     <seq>R</seq>
     </SC>
   <SC>
-    <key>enh-up</key>
+    <key>enh-both</key>
     <seq>J</seq>
     </SC>
   <SC>
-    <key>enh-down</key>
+    <key>enh-current</key>
     <seq>Ctrl+J</seq>
     </SC>
   <SC>
