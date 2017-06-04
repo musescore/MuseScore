@@ -132,7 +132,10 @@ void MeasureProperties::setMeasure(Measure* _m)
       breakMultiMeasureRest->setChecked(m->breakMultiMeasureRest());
       int n  = m->repeatCount();
       count->setValue(n);
-      count->setEnabled(m->repeatEnd());
+      bool enableCount = m->repeatEnd();
+      count->setEnabled(enableCount);
+      count->setVisible(enableCount);
+      labelCount->setVisible(enableCount);
       layoutStretch->setValue(m->userStretch());
       measureNumberMode->setCurrentIndex(int(m->measureNumberMode()));
       measureNumberOffset->setValue(m->noOffset());
