@@ -1938,6 +1938,7 @@ void Score::deleteItem(Element* el)
                   // else fall through
                   el = chord;
                   }
+                  // fall through
 
             case Element::Type::CHORD:
                   {
@@ -1993,6 +1994,7 @@ void Score::deleteItem(Element* el)
                   Segment* segment = rm->segment();
                   undoAddCR(rest, segment->measure(), segment->tick());
                   }
+                  // fall through
 
             case Element::Type::REST:
                   //

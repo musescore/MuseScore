@@ -1140,10 +1140,11 @@ bool XmlStreamReaderPrivate::parse()
             case '\n':
                 ++lineNumber;
                 lastLineStart = characterOffset + readBufferPos;
+                // fall through
 
                        // Changes for MuseScore:
-            case 0x03: // this characters are illegal in xml
-            case 0x10: // we treat them as space to allow reading of broken files
+            case 0x03: // these characters are illegal in xml
+            case 0x10: // we treat them as spaces to allow reading of broken files
             case 0x11:
             case 0x12:
             case 0x0c:

@@ -377,6 +377,7 @@ void BarLine::draw(QPainter* painter) const
             case BarLineType::DOTTED:
                   pen.setStyle(Qt::DotLine);
                   painter->setPen(pen);
+                  // fall through
 
             case BarLineType::NORMAL:
                   painter->drawLine(QLineF(lw * .5, y1, lw * .5, y2));
