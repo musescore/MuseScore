@@ -4156,7 +4156,21 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
             m = static_cast<const Segment*>(el->parent()->parent())->measure();
       else if (el->type() == Element::Type::MEASURE || el->type() == Element::Type::VBOX)
             m = static_cast<const MeasureBase*>(el);
-      else
+      else if (el->isSpannerSegment())
+            m = static_cast<const SpannerSegment*>(el)->spanner()->startMeasure();
+      else if (el->isSpanner())
+            m = static_cast<const Spanner*>(el)->startMeasure();
+      else {
+            // attempt to find measure
+            Element* e = el->parent();
+            while (e && e->type() != ElementType::MEASURE)
+                  e = e->parent();
+            if (e)
+                  m = static_cast<Measure*>(e);
+            else
+                  return;
+            }
+      if (!m)
             return;
 
       int staffIdx = el->staffIdx();
