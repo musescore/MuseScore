@@ -102,7 +102,7 @@ Tuplet* MuseScore::tupletDialog()
       tuplet->setTrack(cr->track());
       tuplet->setTick(cr->tick());
       td.setupTuplet(tuplet);
-      //      tuplet->setRatio(tuplet->ratio().reduced());
+      tuplet->setRatio(tuplet->ratio().reduced());
       Fraction f1(cr->duration());
       tuplet->setDuration(f1);
       Fraction f = f1 * tuplet->ratio();
@@ -113,7 +113,14 @@ Tuplet* MuseScore::tupletDialog()
          qPrintable(tuplet->ratio().print()),
          qPrintable(f.print()));
 
-      tuplet->setBaseLen(Fraction(1, f.denominator()));
+      // check if the duration is exactly divisible by the number of actual notes corresponding to the tuplet
+      // and that the result is a valid duration type (1 over a power of two)
+      Fraction f2 = f1 * Fraction(1,tuplet->ratio().denominator());
+      f2.reduce();
+      if ((f2.numerator() == 1) && ((f2.denominator() & (f2.denominator() - 1)) == 0))
+            tuplet->setBaseLen(Fraction(1, f.denominator()));
+      else
+            tuplet->setBaseLen(TDuration::DurationType::V_INVALID);
 
       if (tuplet->baseLen() == TDuration::DurationType::V_INVALID) {
             QMessageBox::warning(0,
