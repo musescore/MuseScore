@@ -171,8 +171,6 @@ void VoltaSegment::styleChanged()
 Volta::Volta(Score* s)
    : TextLineBase(s)
       {
-      setBeginText("1.");
-
       setBeginTextPlace(PlaceText::BELOW);
       setContinueTextPlace(PlaceText::BELOW);
 
