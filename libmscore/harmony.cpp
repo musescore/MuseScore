@@ -1630,4 +1630,34 @@ QString Harmony::screenReaderInfo()
       return rez;
       }
 
+//---------------------------------------------------------
+//   acceptDrop
+//---------------------------------------------------------
+
+bool Harmony::acceptDrop(const DropData& data) const
+      {
+      return data.element->type() == Element::Type::FRET_DIAGRAM;
+      }
+
+//---------------------------------------------------------
+//   drop
+//---------------------------------------------------------
+
+Element* Harmony::drop(const DropData& data)
+      {
+      Element* e = data.element;
+      if (e->type() == Element::Type::FRET_DIAGRAM) {
+            FretDiagram* fd = static_cast<FretDiagram*>(e);
+            fd->setParent(parent());
+            fd->setTrack(track());
+            score()->undoAddElement(fd);
+            }
+      else {
+            qWarning("Harmony: cannot drop <%s>\n", e->name());
+            delete e;
+            e = 0;
+            }
+      return e;
+      }
+
 }

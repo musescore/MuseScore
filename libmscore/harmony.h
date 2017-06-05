@@ -182,6 +182,10 @@ class Harmony : public Text {
 
       virtual QString accessibleInfo() override;
       virtual QString screenReaderInfo() override;
+
+      virtual bool acceptDrop(const DropData&) const override;
+      virtual Element* drop(const DropData&) override;
+
       };
 
 
