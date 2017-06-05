@@ -124,6 +124,7 @@ class Tuplet : public DurationElement {
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant& v);
       QVariant propertyDefault(P_ID id) const;
+      void sanitizeTuplet();
       };
 
 

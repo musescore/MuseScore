@@ -75,6 +75,7 @@ class TDuration {
       void setDots(int v);
       Fraction fraction() const;
       QString durationTypeUserName() const;
+      static bool isValid(Fraction f);
       };
 
 QList<TDuration> toDurationList(Fraction l, bool useDots, int maxDots = MAX_DOTS, bool printRestRemains = true);
