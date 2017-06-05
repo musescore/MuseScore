@@ -3862,8 +3862,8 @@
                   <musicXMLid>brass.trombone</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>35-70</aPitchRange>
-                  <pPitchRange>35-74</pPitchRange>
+                  <aPitchRange>40-71</aPitchRange>
+                  <pPitchRange>36-74</pPitchRange>
                   <Channel>
                         <program value="57"/>
                   </Channel>
@@ -3880,8 +3880,8 @@
                   <transposingClef>G</transposingClef>
                   <concertClef>F</concertClef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>35-70</aPitchRange>
-                  <pPitchRange>35-74</pPitchRange>
+                  <aPitchRange>40-71</aPitchRange>
+                  <pPitchRange>36-74</pPitchRange>
                   <transposeDiatonic>-8</transposeDiatonic>
                   <transposeChromatic>-14</transposeChromatic>
                   <Channel>
@@ -3937,8 +3937,8 @@
                   <musicXMLid>brass.trombone.bass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>36-70</aPitchRange>
-                  <pPitchRange>36-74</pPitchRange>
+                  <aPitchRange>32-68</aPitchRange>
+                  <pPitchRange>27-72</pPitchRange>
                   <Channel>
                         <program value="57"/>
                   </Channel>
