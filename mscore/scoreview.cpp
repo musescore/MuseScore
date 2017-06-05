@@ -44,6 +44,7 @@
 #include "libmscore/fingering.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/harmony.h"
+#include "libmscore/fret.h"
 #include "libmscore/icon.h"
 #include "libmscore/image.h"
 #include "libmscore/instrchange.h"
@@ -3948,13 +3949,31 @@ void ScoreView::cmdAddChordName()
       if (!_score->checkHasMeasures())
             return;
 
-      ChordRest* cr = _score->getSelectedChordRest();
-      if (!cr)
+      int track = -1;
+      Segment* segment = nullptr;
+      Element* el = _score->selection().element();
+      if (el && el->type() == ElementType::FRET_DIAGRAM) {
+            FretDiagram* fd = toFretDiagram(el);
+            track = fd->track();
+            while (el && !el->isSegment())
+                  el = el->parent();
+            if (el)
+                  segment = toSegment(el);
+            }
+      else {
+            ChordRest* cr = _score->getSelectedChordRest();
+            if (cr) {
+                  track = cr->track();
+                  segment = cr->segment();
+                  }
+            }
+      if (track == -1 || !segment)
             return;
+
       _score->startCmd();
       Harmony* harmony = new Harmony(_score);
-      harmony->setTrack(cr->track());
-      harmony->setParent(cr->segment());
+      harmony->setTrack(track);
+      harmony->setParent(segment);
       _score->undoAddElement(harmony);
 
       _score->select(harmony, SelectType::SINGLE, 0);

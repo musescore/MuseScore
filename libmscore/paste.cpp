@@ -16,6 +16,7 @@
 #include "staff.h"
 #include "measure.h"
 #include "harmony.h"
+#include "fret.h"
 #include "breath.h"
 #include "beam.h"
 #include "figuredbass.h"
@@ -622,10 +623,11 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         segDelta = e.readInt();
                   else {
 
-                        if (tag == "Harmony") {
+                        if (tag == "Harmony" || tag == "FretDiagram") {
                               //
                               // Harmony elements (= chord symbols) are positioned respecting
                               // the original tickOffset: advance to destTick (or near)
+                              // same for FretDiagram elements
                               //
                               Segment* harmSegm;
                               for (harmSegm = startSegm; harmSegm && (harmSegm->tick() < destTick);
@@ -644,21 +646,31 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                     e.skipCurrentElement();       // ignore
                                     continue;
                                     }
-                              Harmony* el = new Harmony(this);
-                              el->setTrack(trackZeroVoice(destTrack));
-                              el->read(e);
-                              el->setTrack(trackZeroVoice(destTrack));
-                              // transpose
-                              Part* partDest = staff(track2staff(destTrack))->part();
-                              Interval interval = partDest->instrument(destTick)->transpose();
-                              if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
-                                    interval.flip();
-                                    int rootTpc = transposeTpc(el->rootTpc(), interval, true);
-                                    int baseTpc = transposeTpc(el->baseTpc(), interval, true);
-                                    undoTransposeHarmony(el, rootTpc, baseTpc);
+                              if (tag == "Harmony") {
+                                    Harmony* el = new Harmony(this);
+                                    el->setTrack(trackZeroVoice(destTrack));
+                                    el->read(e);
+                                    el->setTrack(trackZeroVoice(destTrack));
+                                    // transpose
+                                    Part* partDest = staff(track2staff(destTrack))->part();
+                                    Interval interval = partDest->instrument(destTick)->transpose();
+                                    if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
+                                          interval.flip();
+                                          int rootTpc = transposeTpc(el->rootTpc(), interval, true);
+                                          int baseTpc = transposeTpc(el->baseTpc(), interval, true);
+                                          undoTransposeHarmony(el, rootTpc, baseTpc);
+                                          }
+                                    el->setParent(harmSegm);
+                                    undoAddElement(el);
                                     }
-                              el->setParent(harmSegm);
-                              undoAddElement(el);
+                              else {
+                                    FretDiagram* el = new FretDiagram(this);
+                                    el->setTrack(trackZeroVoice(destTrack));
+                                    el->read(e);
+                                    el->setTrack(trackZeroVoice(destTrack));
+                                    el->setParent(harmSegm);
+                                    undoAddElement(el);
+                                    }
                               }
                         else {
                               //
