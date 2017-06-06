@@ -3015,7 +3015,7 @@ void Text::drawEditMode(QPainter* p, EditData& ed)
       p->setBrush(Qt::NoBrush);
 
       qreal m = spatium();
-      QRectF r = pageBoundingRect().adjusted(-m, -m, m, m);
+      QRectF r = canvasBoundingRect().adjusted(-m, -m, m, m);
       p->drawRect(r);
       pen = QPen(MScore::defaultColor, 0.0);
       }
