@@ -617,6 +617,7 @@ enum class StyleIdx {
       ottavaFontBold,
       ottavaFontItalic,
       ottavaFontUnderline,
+      ottavaTextAlign,
 
       pedalFontFace,
       pedalFontSize,
