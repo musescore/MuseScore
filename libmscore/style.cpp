@@ -636,6 +636,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::ottavaFontBold,                "ottavaFontBold",               false },
       { StyleIdx::ottavaFontItalic,              "ottavaFontItalic",             false },
       { StyleIdx::ottavaFontUnderline,           "ottavaFontUnderline",          false },
+      { StyleIdx::ottavaTextAlign,               "ottavaTextAlign",              QVariant::fromValue(Align::LEFT | Align::VCENTER) },
 
       { StyleIdx::pedalFontFace,                 "pedalFontFace",                "FreeSerif" },
       { StyleIdx::pedalFontSize,                 "pedalFontSize",                12.0 },
@@ -1045,6 +1046,7 @@ const std::vector<StyledProperty> ottavaStyle {
       { StyleIdx::ottavaFontBold,                     P_ID::FONT_BOLD              },
       { StyleIdx::ottavaFontItalic,                   P_ID::FONT_ITALIC            },
       { StyleIdx::ottavaFontUnderline,                P_ID::FONT_UNDERLINE         },
+      { StyleIdx::ottavaTextAlign,                    P_ID::BEGIN_TEXT_ALIGN       },
       };
 
 const std::vector<StyledProperty> pedalStyle {
