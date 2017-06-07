@@ -2460,9 +2460,11 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
                   }
 
             QString fileName(name);
-            if (fileName.endsWith(".png"))
-                  fileName = fileName.left(fileName.size() - 4);
-            fileName += QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+            if (pages > 1) {
+                  if (fileName.endsWith(".png"))
+                        fileName = fileName.left(fileName.size() - 4);
+                  fileName += QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+                  }
             if (!converterMode) {
                   QFileInfo fip(fileName);
                   if(fip.exists() && !overwrite) {
@@ -2621,9 +2623,11 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
             printer.setTitle(pages > 1 ? QString("%1 (%2)").arg(title).arg(pageNumber + 1) : title);
 
             QString fileName(saveName);
-            if (fileName.endsWith(".svg"))
-                  fileName = fileName.left(fileName.size() - 4);
-            fileName += QString("-%1.svg").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+            if (pages > 1) {
+                  if (fileName.endsWith(".svg"))
+                        fileName = fileName.left(fileName.size() - 4);
+                  fileName += QString("-%1.svg").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+                  }
             if (!converterMode) {
                   QFileInfo fip(fileName);
                   if(fip.exists() && !overwrite) {
