@@ -179,6 +179,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::pedalLineWidth,          "pedalLineWidth",          Spatium(.15) },
       { StyleIdx::pedalLineStyle,          "pedalListStyle",          QVariant(int(Qt::SolidLine)) },
       { StyleIdx::pedalBeginTextOffset,    "pedalBeginTextOffset",    QPointF(0.0, 0.15) },
+      { StyleIdx::pedalHookHeight,         "pedalHookHeight",         Spatium(-1.2) },
 
       { StyleIdx::trillPlacement,          "trillPlacement",          int(Element::Placement::ABOVE)  },
       { StyleIdx::trillPosAbove,           "trillPosAbove",           Spatium(-1) },
@@ -643,6 +644,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::pedalFontBold,                 "pedalFontBold",                false },
       { StyleIdx::pedalFontItalic,               "pedalFontItalic",              false },
       { StyleIdx::pedalFontUnderline,            "pedalFontUnderline",           false },
+      { StyleIdx::pedalTextAlign,                "pedalTextAlign",               QVariant::fromValue(Align::LEFT | Align::BASELINE) },
 
       { StyleIdx::hairpinFontFace,               "hairpinFontFace",              "FreeSerif" },
       { StyleIdx::hairpinFontSize,               "hairpinFontSize",              12.0 },
@@ -1055,6 +1057,10 @@ const std::vector<StyledProperty> pedalStyle {
       { StyleIdx::pedalFontBold,                      P_ID::FONT_BOLD              },
       { StyleIdx::pedalFontItalic,                    P_ID::FONT_ITALIC            },
       { StyleIdx::pedalFontUnderline,                 P_ID::FONT_UNDERLINE         },
+      { StyleIdx::pedalTextAlign,                     P_ID::BEGIN_TEXT_ALIGN       },
+      { StyleIdx::pedalTextAlign,                     P_ID::CONTINUE_TEXT_ALIGN    },
+      { StyleIdx::pedalHookHeight,                    P_ID::BEGIN_HOOK_HEIGHT      },
+      { StyleIdx::pedalHookHeight,                    P_ID::END_HOOK_HEIGHT        },
       };
 
 const std::vector<StyledProperty> hairpinStyle {

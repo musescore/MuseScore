@@ -1211,7 +1211,6 @@ Palette* MuseScore::newLinesPalette(PaletteType t)
             pedal->setBeginText("<sym>keyboardPedalPed</sym>");
             pedal->setContinueText("(<sym>keyboardPedalPed</sym>)");
             pedal->setEndText("<sym>keyboardPedalUp</sym>");
-//TODO            pedal->setEndTextAlign(Aling::TOP | Align::HCENTER);
             pedal->setLineVisible(false);
             sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
             }

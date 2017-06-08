@@ -568,11 +568,16 @@ static void readTextStyle(MStyle* style, XmlReader& e)
                         case P_ID::SYSTEM_FLAG:
                               value = systemFlag;
                               break;
+                        case P_ID::BEGIN_HOOK_HEIGHT:
+                        case P_ID::END_HOOK_HEIGHT:
+                              value = QVariant();
+                              break;
                         default:
                               qDebug("unhandled property %s", propertyName(i.propertyIdx));
                               break;
                         }
-                  style->set(i.styleIdx, value);
+                  if (value.isValid())
+                        style->set(i.styleIdx, value);
                   }
             }
       }

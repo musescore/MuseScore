@@ -158,6 +158,7 @@ enum class StyleIdx {
       pedalLineWidth,
       pedalLineStyle,
       pedalBeginTextOffset,
+      pedalHookHeight,
 
       trillPlacement,
       trillPosAbove,
@@ -624,6 +625,7 @@ enum class StyleIdx {
       pedalFontBold,
       pedalFontItalic,
       pedalFontUnderline,
+      pedalTextAlign,
 
       hairpinFontFace,
       hairpinFontSize,
