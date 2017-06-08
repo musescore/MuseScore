@@ -52,6 +52,7 @@ void PedalSegment::layout()
             }
       }
 
+
 //---------------------------------------------------------
 //   Pedal
 //---------------------------------------------------------
@@ -59,11 +60,13 @@ void PedalSegment::layout()
 Pedal::Pedal(Score* s)
    : TextLineBase(s)
       {
-//      setBeginHookHeight(Spatium(-1.2));
-//      setEndHookHeight(Spatium(-1.2));
-
       setLineWidth(score()->styleS(StyleIdx::pedalLineWidth));
       setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::pedalLineStyle)));
+      resetProperty(P_ID::BEGIN_TEXT_ALIGN);
+      resetProperty(P_ID::CONTINUE_TEXT_ALIGN);
+      resetProperty(P_ID::END_TEXT_ALIGN);
+      resetProperty(P_ID::BEGIN_HOOK_HEIGHT);
+      resetProperty(P_ID::END_HOOK_HEIGHT);
       }
 
 //---------------------------------------------------------
@@ -112,19 +115,57 @@ QVariant Pedal::propertyDefault(P_ID propertyId) const
                   return QVariant::fromValue(Align::LEFT | Align::BASELINE);
 
             case P_ID::LINE_STYLE:
-                  return int(score()->styleI(StyleIdx::pedalLineStyle));
+                  return score()->styleV(StyleIdx::pedalLineStyle);
 
             case P_ID::BEGIN_TEXT_OFFSET:
                   return score()->styleV(StyleIdx::pedalBeginTextOffset).toPointF();
 
+            case P_ID::BEGIN_TEXT_ALIGN:
+            case P_ID::CONTINUE_TEXT_ALIGN:
+            case P_ID::END_TEXT_ALIGN:
+                  return score()->styleV(StyleIdx::pedalTextAlign);
+
             case P_ID::BEGIN_HOOK_HEIGHT:
             case P_ID::END_HOOK_HEIGHT:
-                  return Spatium(-1.2);
+                  return score()->styleV(StyleIdx::pedalHookHeight);
 
             default:
                   return TextLineBase::propertyDefault(propertyId);
             }
       }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx Pedal::getPropertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::PLACEMENT:
+                  return StyleIdx::pedalPlacement;
+            case P_ID::BEGIN_FONT_FACE:
+                  return StyleIdx::pedalFontFace;
+            case P_ID::BEGIN_FONT_SIZE:
+                  return StyleIdx::pedalFontSize;
+            case P_ID::BEGIN_FONT_BOLD:
+                  return StyleIdx::pedalFontBold;
+            case P_ID::BEGIN_FONT_ITALIC:
+                  return StyleIdx::pedalFontItalic;
+            case P_ID::BEGIN_FONT_UNDERLINE:
+                  return StyleIdx::pedalFontUnderline;
+            case P_ID::BEGIN_TEXT_ALIGN:
+            case P_ID::CONTINUE_TEXT_ALIGN:
+            case P_ID::END_TEXT_ALIGN:
+                  return StyleIdx::pedalTextAlign;
+            case P_ID::BEGIN_HOOK_HEIGHT:
+            case P_ID::END_HOOK_HEIGHT:
+                  return StyleIdx::pedalHookHeight;
+            default:
+                  break;
+            }
+      return StyleIdx::NOSTYLE;
+      }
+
 
 //---------------------------------------------------------
 //   linePos

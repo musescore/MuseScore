@@ -56,6 +56,7 @@ class Pedal : public TextLineBase {
       LineSegment* createLineSegment();
       virtual void setYoff(qreal) override;
       virtual QVariant propertyDefault(P_ID propertyId) const override;
+      virtual StyleIdx getPropertyStyle(P_ID) const override;
 
       friend class PedalLine;
       };
