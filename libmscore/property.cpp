@@ -287,7 +287,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { P_ID::BEGIN_TEXT_OFFSET,       "begin_text_offset",       false, "beginTextOffset",       P_TYPE::POINT           },
 
       { P_ID::CONTINUE_TEXT,           "continue_text",           false, "continueText",          P_TYPE::STRING          },
-      { P_ID::CONTINUE_TEXT_ALIGN,     "continue_text_align",     false, "cotinueTextAlign",      P_TYPE::ALIGN           },
+      { P_ID::CONTINUE_TEXT_ALIGN,     "continue_text_align",     false, "continueTextAlign",     P_TYPE::ALIGN           },
       { P_ID::CONTINUE_TEXT_PLACE,     "continue_text_place",     false, "continueTextPlace",     P_TYPE::INT             },
       { P_ID::CONTINUE_FONT_FACE,      "continue_font_face",      false, "continueFontFace",      P_TYPE::FONT            },
       { P_ID::CONTINUE_FONT_SIZE,      "continue_font_size",      false, "continueFontSize",      P_TYPE::REAL            },
