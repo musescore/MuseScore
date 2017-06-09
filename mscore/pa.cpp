@@ -320,7 +320,7 @@ void Portaudio::putEvent(const NPlayEvent& e, unsigned framePos)
                               }
                         break;
                         }
-                  //Fallback
+                  // fall through
             case ME_PITCHBEND:
                   {
                   long msg = Pm_Message(e.type() | chan, less128(e.dataA()), less128(e.dataB()));

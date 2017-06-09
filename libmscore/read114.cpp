@@ -254,30 +254,35 @@ static void readAccidental(Accidental* a, XmlReader& e)
                                     break;
                               case 6:
                                     a->setBracket(AccidentalBracket::PARENTHESIS);
+                                    // fall through
                               case 1:
                               case 11:
                                     at = AccidentalType::SHARP;
                                     break;
                               case 7:
                                     a->setBracket(AccidentalBracket::PARENTHESIS);
+                                    // fall through
                               case 2:
                               case 12:
                                     at = AccidentalType::FLAT;
                                     break;
                               case 8:
                                     a->setBracket(AccidentalBracket::PARENTHESIS);
+                                    // fall through
                               case 3:
                               case 13:
                                     at = AccidentalType::SHARP2;
                                     break;
                               case 9:
                                     a->setBracket(AccidentalBracket::PARENTHESIS);
+                                    // fall through
                               case 4:
                               case 14:
                                     at = AccidentalType::FLAT2;
                                     break;
                               case 10:
                                     a->setBracket(AccidentalBracket::PARENTHESIS);
+                                    // fall through
                               case 5:
                               case 15:
                                     at = AccidentalType::NATURAL;

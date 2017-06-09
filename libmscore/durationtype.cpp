@@ -147,6 +147,7 @@ QString TDuration::name() const
             case DurationType::V_LONG:      return "long";
             default:
 qDebug("TDuration::name(): invalid duration type %d", static_cast<int>(_val));
+                 // fall through
             case DurationType::V_ZERO:
             case DurationType::V_INVALID:   return "";
             }
