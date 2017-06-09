@@ -127,6 +127,7 @@ static inline void convertGfxColor(SplashColorPtr dest,
     break;
     case splashModeXBGR8:
       color[3] = 255;
+      // fall through
     case splashModeBGR8:
     case splashModeRGB8:
       colorSpace->getRGB(src, &rgb);
@@ -174,6 +175,7 @@ static inline void convertGfxShortColor(SplashColorPtr dest,
     break;
     case splashModeXBGR8:
       dest[3] = 255;
+      // fall through
     case splashModeBGR8:
     case splashModeRGB8:
     {
@@ -1015,6 +1017,7 @@ static void splashOutBlendHue(SplashColorPtr src, SplashColorPtr dest,
     break;
   case splashModeXBGR8:
     src[3] = 255;
+    // fall through
   case splashModeRGB8:
   case splashModeBGR8:
     setSat(src[0], src[1], src[2], getSat(dest[0], dest[1], dest[2]),
@@ -1065,6 +1068,7 @@ static void splashOutBlendSaturation(SplashColorPtr src, SplashColorPtr dest,
     break;
   case splashModeXBGR8:
     src[3] = 255;
+    // fall through
   case splashModeRGB8:
   case splashModeBGR8:
     setSat(dest[0], dest[1], dest[2], getSat(src[0], src[1], src[2]),
@@ -1112,6 +1116,7 @@ static void splashOutBlendColor(SplashColorPtr src, SplashColorPtr dest,
     break;
   case splashModeXBGR8:
     src[3] = 255;
+    // fall through
   case splashModeRGB8:
   case splashModeBGR8:
     setLum(src[0], src[1], src[2], getLum(dest[0], dest[1], dest[2]),
@@ -1156,6 +1161,7 @@ static void splashOutBlendLuminosity(SplashColorPtr src, SplashColorPtr dest,
     break;
   case splashModeXBGR8:
     src[3] = 255;
+    // fall through
   case splashModeRGB8:
   case splashModeBGR8:
     setLum(dest[0], dest[1], dest[2], getLum(src[0], src[1], src[2]),
@@ -1560,11 +1566,13 @@ void SplashOutputDev::startPage(int pageNum, GfxState *state, XRef *xrefA) {
   }
   switch (colorMode) {
   case splashModeMono1:
+    // fall through
   case splashModeMono8:
     color[0] = 0;
     break;
   case splashModeXBGR8:
     color[3] = 255;
+    // fall through
   case splashModeRGB8:
   case splashModeBGR8:
     color[0] = color[1] = color[2] = 0;
@@ -4392,6 +4400,7 @@ void SplashOutputDev::setSoftMask(GfxState *state, double *bbox,
 	break;
       case splashModeXBGR8:
 	color[3] = 255;
+        // fall through
       case splashModeRGB8:
       case splashModeBGR8:
 	transpGroupStack->blendingColorSpace->getRGB(backdropColor, &rgb);
