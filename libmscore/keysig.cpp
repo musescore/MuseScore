@@ -203,19 +203,31 @@ void KeySig::layout()
 
       switch(t1) {
             case 7:  addLayout(SymId::accidentalSharp, xo + 6.0 * sspread, lines[6]);
+                     // fall through
             case 6:  addLayout(SymId::accidentalSharp, xo + 5.0 * sspread, lines[5]);
+                     // fall through
             case 5:  addLayout(SymId::accidentalSharp, xo + 4.0 * sspread, lines[4]);
+                     // fall through
             case 4:  addLayout(SymId::accidentalSharp, xo + 3.0 * sspread, lines[3]);
+                     // fall through
             case 3:  addLayout(SymId::accidentalSharp, xo + 2.0 * sspread, lines[2]);
+                     // fall through
             case 2:  addLayout(SymId::accidentalSharp, xo + 1.0 * sspread, lines[1]);
+                     // fall through
             case 1:  addLayout(SymId::accidentalSharp, xo,                 lines[0]);
                      break;
             case -7: addLayout(SymId::accidentalFlat, xo + 6.0 * fspread, lines[13]);
+                     // fall through
             case -6: addLayout(SymId::accidentalFlat, xo + 5.0 * fspread, lines[12]);
+                     // fall through
             case -5: addLayout(SymId::accidentalFlat, xo + 4.0 * fspread, lines[11]);
+                     // fall through
             case -4: addLayout(SymId::accidentalFlat, xo + 3.0 * fspread, lines[10]);
+                     // fall through
             case -3: addLayout(SymId::accidentalFlat, xo + 2.0 * fspread, lines[9]);
+                     // fall through
             case -2: addLayout(SymId::accidentalFlat, xo + 1.0 * fspread, lines[8]);
+                     // fall through
             case -1: addLayout(SymId::accidentalFlat, xo,                 lines[7]);
             case 0:
                   break;

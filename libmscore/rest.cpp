@@ -290,7 +290,7 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
             case TDuration::DurationType::V_MEASURE:
                   if (duration() >= Fraction(2, 1))
                         return SymId::restDoubleWhole;
-                  // fall trough
+                  // fall through
             case TDuration::DurationType::V_WHOLE:
                   *yoffset = 1;
                   return (line <= -2 || line >= (lines - 1)) ? SymId::restWholeLegerLine : SymId::restWhole;

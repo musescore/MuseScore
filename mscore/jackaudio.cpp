@@ -582,7 +582,7 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
                         p[1] = less128(e.dataB());
                         break;
                         }
-                  //Fallback
+                  //fall through
             case ME_PITCHBEND:
                   {
                   unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
