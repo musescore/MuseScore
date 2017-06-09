@@ -1331,6 +1331,8 @@ void PreferenceDialog::buttonBoxClicked(QAbstractButton* button)
                   break;
             case QDialogButtonBox::Ok:
                   apply();
+                  // intentional ??
+                  // fall through
             case QDialogButtonBox::Cancel:
             default:
                   hide();
