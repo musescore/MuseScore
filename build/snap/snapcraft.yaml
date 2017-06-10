@@ -37,6 +37,8 @@ parts:
         source-branch: "2.2"
         source-type: git
         plugin: make
+        prepare: |
+            make revision
         build-packages:
             - extra-cmake-modules
             - doxygen
