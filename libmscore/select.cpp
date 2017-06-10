@@ -24,6 +24,7 @@
 #include "figuredbass.h"
 #include "glissando.h"
 #include "harmony.h"
+#include "fret.h"
 #include "hook.h"
 #include "input.h"
 #include "limits.h"
@@ -780,7 +781,6 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   case Element::Type::STAFF_TEXT:
                   case Element::Type::REHEARSAL_MARK:
                   case Element::Type::INSTRUMENT_CHANGE:
-                  case Element::Type::FRET_DIAGRAM:
                   case Element::Type::BEND:
                   case Element::Type::TREMOLOBAR:
                   case Element::Type::VOLTA:
@@ -850,6 +850,13 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                         // ignore chord sybols not attached to segment
                         if (e->parent()->type() == Element::Type::SEGMENT) {
                               seg = static_cast<Segment*>( (static_cast<Harmony*>(e))->parent() );
+                              break;
+                              }
+                        continue;
+                  case Element::Type::FRET_DIAGRAM:
+                        // ignore fret diagrams not attached to segment
+                        if (e->parent()->type() == Element::Type::SEGMENT) {
+                              seg = static_cast<Segment*>( (static_cast<FretDiagram*>(e))->parent() );
                               break;
                               }
                         continue;
