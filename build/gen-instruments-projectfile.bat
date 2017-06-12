@@ -35,6 +35,7 @@ echo       %1/../../share/locale/instruments_he.ts \
 echo       %1/../../share/locale/instruments_hi_IN.ts \
 echo       %1/../../share/locale/instruments_hr.ts \
 echo       %1/../../share/locale/instruments_hu.ts \
+echo       %1/../../share/locale/instruments_hy.ts \
 echo       %1/../../share/locale/instruments_id.ts \
 echo       %1/../../share/locale/instruments_it.ts \
 echo       %1/../../share/locale/instruments_ja.ts \
