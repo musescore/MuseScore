@@ -4163,7 +4163,7 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
       else {
             // attempt to find measure
             Element* e = el->parent();
-            while (e && e->type() != ElementType::MEASURE)
+            while (e && e->type() != Element::Type::MEASURE)
                   e = e->parent();
             if (e)
                   m = static_cast<Measure*>(e);
