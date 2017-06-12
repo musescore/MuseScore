@@ -51,6 +51,7 @@ install(FILES
       mscore_hi_IN.qm
       mscore_hr.qm
       mscore_hu.qm
+      mscore_hy.qm
       mscore_id.qm
       mscore_it.qm
       mscore_ja.qm
@@ -147,6 +148,7 @@ install(FILES
       instruments_hi_IN.qm
       instruments_hr.qm
       instruments_hu.qm
+      instruments_hy.qm
       instruments_id.qm
       instruments_it.qm
       instruments_ja.qm
