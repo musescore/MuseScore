@@ -25,6 +25,8 @@
 #cmakedefine USE_PULSEAUDIO
 #cmakedefine USE_LAME
 
+#cmakedefine FOR_WINSTORE
+
 #cmakedefine MSCORE_UNSTABLE
 
 #cmakedefine HAS_MIDI

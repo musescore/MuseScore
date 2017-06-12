@@ -158,7 +158,7 @@ void Preferences::init()
       mag                     = 1.0;
       showMidiControls        = false;
 
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+#if defined(Q_OS_MAC) || (defined(Q_OS_WIN) && !defined(FOR_WINSTORE))
       checkUpdateStartup      = true;
 #else
       checkUpdateStartup      = false;
@@ -731,8 +731,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       updateRemote();
 
       MuseScore::restoreGeometry(this);
-#if !defined(Q_OS_MAC) && !defined(Q_OS_WIN)
-      General->removeTab(General->indexOf(tabUpdate)); // updateTab not needed on Linux
+#if !defined(Q_OS_MAC) && (!defined(Q_OS_WIN) || defined(FOR_WINSTORE))
+      General->removeTab(General->indexOf(tabUpdate)); // updateTab not needed on Linux and not wanted in Windows Store
 #endif
       }
 
