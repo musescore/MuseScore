@@ -244,9 +244,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
 
       if (unhide) {
             endCmd();
-            EditData ed;
-            ed.init();
-            undoRedo(true, ed);   // undo
+            undoRedo(true, 0);   // undo
             }
       }
 

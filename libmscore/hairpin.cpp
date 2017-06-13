@@ -288,15 +288,15 @@ void HairpinSegment::updateGrips(EditData& ed) const
       qreal y = pos2().y();
       QPointF p(x, y);
 
-// Calc QPointF for Grip Aperture
+      // Calc QPointF for Grip Aperture
       QTransform doRotation;
       QPointF gripLineAperturePoint;
       qreal h1 = hairpin()->hairpinHeight().val() * spatium() * .5;
       qreal len = sqrt( x * x + y * y );
-      doRotation.rotateRadians( asin(y/len) );
+      doRotation.rotateRadians(asin(y/len));
       qreal lineApertureX;
       qreal offsetX = 10;                               // Horizontal offset for x Grip
-      if(len < offsetX * 3 )                            // For small hairpin, offset = 30% of len
+      if (len < offsetX * 3)                            // For small hairpin, offset = 30% of len
           offsetX = len/3;                              // else offset is fixed to 10
 
       if (hairpin()->hairpinType() == HairpinType::CRESC_HAIRPIN)
@@ -307,12 +307,12 @@ void HairpinSegment::updateGrips(EditData& ed) const
       gripLineAperturePoint.setX( lineApertureX );
       gripLineAperturePoint.setY( lineApertureH );
       gripLineAperturePoint = doRotation.map( gripLineAperturePoint );
-// End calc position grip aperture
 
+      // End calc position grip aperture
       ed.grip[int(Grip::START)].translate( pp );
       ed.grip[int(Grip::END)].translate( p + pp );
       ed.grip[int(Grip::MIDDLE)].translate( p * .5 + pp );
-      ed.grip[int(Grip::APERTURE)].translate( gripLineAperturePoint + pp );
+      ed.grip[int(Grip::APERTURE)].translate(gripLineAperturePoint + pp);
       }
 
 //---------------------------------------------------------
@@ -352,15 +352,16 @@ void HairpinSegment::editDrag(EditData& ed)
             undoChangeProperty(P_ID::AUTOPLACE, false);
             triggerLayout();
             }
-      LineSegment::editDrag(ed);
+      TextLineBaseSegment::editDrag(ed);
       }
 
 //---------------------------------------------------------
 //   endEdit
 //---------------------------------------------------------
 
-void HairpinSegment::endEdit(EditData&)
+void HairpinSegment::endEdit(EditData& ed)
       {
+      TextLineBaseSegment::endEdit(ed);
       }
 
 //---------------------------------------------------------
@@ -898,12 +899,21 @@ void Hairpin::setYoff(qreal val)
 
 void Hairpin::styleChanged()
       {
-      if (lineWidthStyle == PropertyFlags::STYLED)
+      bool changed = false;
+      if (lineWidthStyle == PropertyFlags::STYLED) {
             setLineWidth(score()->styleS(StyleIdx::hairpinLineWidth));
-      if (hairpinHeightStyle == PropertyFlags::STYLED)
+            changed = true;
+            }
+      if (hairpinHeightStyle == PropertyFlags::STYLED) {
             setHairpinHeight(score()->styleS(StyleIdx::hairpinHeight));
-      if (hairpinContHeightStyle == PropertyFlags::STYLED)
+            changed = true;
+            }
+      if (hairpinContHeightStyle == PropertyFlags::STYLED) {
             setHairpinContHeight(score()->styleS(StyleIdx::hairpinContHeight));
+            changed = true;
+            }
+      if (changed)
+            triggerLayout();
       }
 
 //---------------------------------------------------------

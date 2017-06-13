@@ -1858,8 +1858,6 @@ void EditData::addData(ElementEditData* ed)
 
 void Element::drawEditMode(QPainter* p, EditData& ed)
       {
-//      if (ed.grips)
-//            draw(p);
       if (ed.grips == 6) {       // HACK: this are grips of a slur
             QPolygonF polygon(7);
             polygon[0] = QPointF(ed.grip[int(Grip::START)].center());

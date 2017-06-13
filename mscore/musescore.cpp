@@ -3679,10 +3679,8 @@ void MuseScore::undoRedo(bool undo)
       {
       Q_ASSERT(cv);
       Q_ASSERT(cs);
-      if (_sstate & (STATE_EDIT | STATE_TEXT_EDIT | STATE_HARMONY_FIGBASS_EDIT | STATE_LYRICS_EDIT)) {
-            cv->postCmd("escape");
-            qApp->processEvents();
-            }
+      if (_sstate & (STATE_EDIT | STATE_TEXT_EDIT | STATE_HARMONY_FIGBASS_EDIT | STATE_LYRICS_EDIT))
+            cv->changeState(ViewState::NORMAL);
       cv->startUndoRedo(undo);
       updateInputState(cs);
       endCmd();
