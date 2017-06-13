@@ -100,6 +100,7 @@ class EditData {
 
       QPointF pos;
       QPointF startMove;
+      QPoint  startMovePixel;
       QPointF lastPos;
       QPointF delta;
       bool hRaster                     { false };

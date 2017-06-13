@@ -410,9 +410,6 @@ void LineSegment::editDrag(EditData& ed)
       // Only for resizing according to the diagonal properties
       QPointF deltaResize(ed.delta.x(), line()->diagonal() ? ed.delta.y() : 0.0);
 
-      // Only for moving, no y limitaion
-      QPointF deltaMove(ed.delta.x(), ed.delta.y());
-
       switch (ed.curGrip) {
             case Grip::START: // Resize the begin of element (left grip)
                   setUserOff(userOff() + deltaResize);
@@ -423,9 +420,12 @@ void LineSegment::editDrag(EditData& ed)
                   _userOff2 += deltaResize;
                   undoChangeProperty(P_ID::AUTOPLACE, false);
                   break;
-            case Grip::MIDDLE: // Move the element (middle grip)
+            case Grip::MIDDLE: { // Move the element (middle grip)
+                  // Only for moving, no y limitaion
+                  QPointF deltaMove(ed.delta.x(), ed.delta.y());
                   setUserOff(userOff() + deltaMove);
                   undoChangeProperty(P_ID::AUTOPLACE, false);
+                  }
                   break;
             default:
                   break;
@@ -436,13 +436,13 @@ void LineSegment::editDrag(EditData& ed)
             // if we touch a different note, change anchor
             //
             Element* e = ed.view->elementNear(ed.pos);
-            if (e && e->type() == ElementType::NOTE) {
+            if (e && e->isNote()) {
                   SLine* l = line();
                   if (ed.curGrip == Grip::END && e != line()->endElement()) {
                         qDebug("LineSegment: move end anchor");
-                        Note* noteOld = static_cast<Note*>(l->endElement());
-                        Note* noteNew = static_cast<Note*>(e);
-                        Note* sNote = static_cast<Note*>(l->startElement());
+                        Note* noteOld = toNote(l->endElement());
+                        Note* noteNew = toNote(e);
+                        Note* sNote   = toNote(l->startElement());
                         // do not change anchor if new note is before start note
                         if (sNote && sNote->chord() && noteNew->chord() && sNote->chord()->tick() < noteNew->chord()->tick()) {
                               noteOld->removeSpannerBack(l);
