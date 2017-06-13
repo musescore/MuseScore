@@ -3028,9 +3028,9 @@ ScoreState ScoreView::mscoreState() const
 
 void ScoreView::startUndoRedo(bool undo)
       {
-      if (state != ViewState::EDIT)
-            editData.init();
-      _score->undoRedo(undo, editData);
+//      if (state != ViewState::EDIT)
+//            editData.init();
+      _score->undoRedo(undo, state == ViewState::EDIT ? &editData : 0);
 
       if (_score->inputState().segment())
             mscore->setPos(_score->inputState().tick());
@@ -4867,6 +4867,8 @@ void ScoreView::changeState(ViewState s)
       //
       switch (s) {
             case ViewState::NORMAL:
+                  if (state == ViewState::EDIT)
+                        endEdit();
                   setCursor(QCursor(Qt::ArrowCursor));
                   break;
             case ViewState::DRAG:
@@ -4895,7 +4897,8 @@ void ScoreView::changeState(ViewState s)
                         startFotomode();
                   break;
             case ViewState::EDIT:
-                  startEdit();
+                  if (state != ViewState::DRAG_EDIT)
+                        startEdit();
                   break;
             case ViewState::LASSO:
                   break;

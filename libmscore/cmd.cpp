@@ -146,14 +146,14 @@ void Score::startCmd()
 //   undoRedo
 //---------------------------------------------------------
 
-void Score::undoRedo(bool undo, EditData& ed)
+void Score::undoRedo(bool undo, EditData* ed)
       {
       deselectAll();
       cmdState().reset();
       if (undo)
-            undoStack()->undo(&ed);
+            undoStack()->undo(ed);
       else
-            undoStack()->redo(&ed);
+            undoStack()->redo(ed);
       update();
       updateSelection();
       }

@@ -135,7 +135,7 @@ void TestMeasure::insertBfClefChange()
       score->endCmd();
       QVERIFY(score->checkClefs());
       QVERIFY(saveCompareScore(score, "measure-insert_bf_clef.mscx", DIR + "measure-insert_bf_clef-ref.mscx"));
-      score->undoRedo(true, ed);
+      score->undoRedo(true, 0);
       QVERIFY(score->checkClefs());
       QVERIFY(saveCompareScore(score, "measure-insert_bf_clef_undo.mscx", DIR + "measure-insert_bf_clef.mscx"));
       m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
@@ -144,7 +144,7 @@ void TestMeasure::insertBfClefChange()
       score->endCmd();
       QVERIFY(score->checkClefs());
       QVERIFY(saveCompareScore(score, "measure-insert_bf_clef-2.mscx", DIR + "measure-insert_bf_clef-2-ref.mscx"));
-      score->undoRedo(true, ed);
+      score->undoRedo(true, 0);
       QVERIFY(score->checkClefs());
       QVERIFY(saveCompareScore(score, "measure-insert_bf_clef_undo.mscx", DIR + "measure-insert_bf_clef.mscx"));
       delete score;
@@ -165,7 +165,7 @@ void TestMeasure::insertBfKeyChange()
       score->endCmd();
       QVERIFY(score->checkKeys());
       QVERIFY(saveCompareScore(score, "measure-insert_bf_key.mscx", DIR + "measure-insert_bf_key-ref.mscx"));
-      score->undoRedo(true, ed);
+      score->undoRedo(true, 0);
       QVERIFY(score->checkKeys());
       QVERIFY(saveCompareScore(score, "measure-insert_bf_key_undo.mscx", DIR + "measure-insert_bf_key.mscx"));
       m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
@@ -174,7 +174,7 @@ void TestMeasure::insertBfKeyChange()
       score->endCmd();
       QVERIFY(score->checkKeys());
       QVERIFY(saveCompareScore(score, "measure-insert_bf_key-2.mscx", DIR + "measure-insert_bf_key-2-ref.mscx"));
-      score->undoRedo(true, ed);
+      score->undoRedo(true, 0);
       QVERIFY(score->checkKeys());
       QVERIFY(saveCompareScore(score, "measure-insert_bf_key_undo.mscx", DIR + "measure-insert_bf_key.mscx"));
       delete score;
