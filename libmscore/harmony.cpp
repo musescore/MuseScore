@@ -1616,6 +1616,36 @@ QString Harmony::screenReaderInfo() const
       }
 
 //---------------------------------------------------------
+//   acceptDrop
+//---------------------------------------------------------
+
+bool Harmony::acceptDrop(EditData& data) const
+      {
+      return data.element->type() == ElementType::FRET_DIAGRAM;
+      }
+
+//---------------------------------------------------------
+//   drop
+//---------------------------------------------------------
+
+Element* Harmony::drop(EditData& data)
+      {
+      Element* e = data.element;
+      if (e->type() == ElementType::FRET_DIAGRAM) {
+            FretDiagram* fd = toFretDiagram(e);
+            fd->setParent(parent());
+            fd->setTrack(track());
+            score()->undoAddElement(fd);
+            }
+      else {
+            qWarning("Harmony: cannot drop <%s>\n", e->name());
+            delete e;
+            e = 0;
+            }
+      return e;
+      }
+
+//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
