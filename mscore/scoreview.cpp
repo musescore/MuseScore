@@ -1761,7 +1761,7 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "add-noteline")
             cmdAddNoteLine();
       else if (cmd == "chord-text") {
-            changeState(ViewState::NOTE_ENTRY);
+            changeState(ViewState::NORMAL);
             cmdAddChordName();
             }
       else if (cmd == "title-text")
@@ -2153,7 +2153,7 @@ void ScoreView::cmd(const QAction* a)
             if (editData.element->isHarmony())
                   harmonyTab(false);
             else if (editData.element->isFiguredBass())
-                  figuredBassTab(true,false);
+                  figuredBassTab(true, false);
             }
       else if (cmd == "prev-beat-TEXT") {
             if (editData.element->isHarmony())
@@ -2161,7 +2161,7 @@ void ScoreView::cmd(const QAction* a)
             }
       else if (cmd == "next-beat-TEXT") {
             if (editData.element->isHarmony())
-                  harmonyBeatsTab(false,false);
+                  harmonyBeatsTab(false, false);
             }
 
       // STATE_NOTE_ENTRY_TAB actions
@@ -3622,7 +3622,7 @@ void ScoreView::harmonyTab(bool back)
 void ScoreView::harmonyBeatsTab(bool noterest, bool back)
       {
       Harmony* harmony = toHarmony(editData.element);
-      int track         = harmony->track();
+      int track        = harmony->track();
       Segment* segment = toSegment(harmony->parent());
       if (!segment) {
             qDebug("harmonyBeatsTab: no segment");
@@ -3643,15 +3643,15 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
       Fraction f = measure->len();
       int ticksPerBeat = f.ticks() / ((f.numerator()>3 && (f.numerator()%3)==0 && f.denominator()>4) ? f.numerator()/3 : f.numerator());
       int tickInBar = tick - measure->tick();
-      int newTick   = ((tickInBar + (back?-1:ticksPerBeat)) / ticksPerBeat) * ticksPerBeat;
+      int newTick   = measure->tick() + ((tickInBar + (back?-1:ticksPerBeat)) / ticksPerBeat) * ticksPerBeat;
 
       // look for next/prev beat, note, rest or chord
       for (;;) {
             segment = back ? segment->prev1(SegmentType::ChordRest) : segment->next1(SegmentType::ChordRest);
 
-            if (!segment || (back ? (segment->rtick() < newTick) : (segment->rtick() > newTick))) {
+            if (!segment || (back ? (segment->tick() < newTick) : (segment->tick() > newTick))) {
                   // no segment or moved past the beat - create new segment
-                  if (!back && newTick >= f.ticks()) {
+                  if (!back && newTick >= measure->tick() + f.ticks()) {
                         // next bar, if any
                         measure = measure->nextMeasure();
                         if (!measure) {
@@ -3659,7 +3659,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
                               return;
                               }
                         }
-                  segment = new Segment(measure, SegmentType::ChordRest, newTick);
+                  segment = new Segment(measure, SegmentType::ChordRest, newTick - measure->tick());
                   if (!segment) {
                         qDebug("harmonyBeatsTab: no prev segment");
                         return;
@@ -3668,7 +3668,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
                   break;
                   }
 
-            if (segment->rtick() == newTick)
+            if (segment->tick() == newTick)
                   break;
 
             if (noterest) {
