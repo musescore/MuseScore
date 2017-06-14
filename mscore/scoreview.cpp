@@ -55,6 +55,7 @@
 #include "libmscore/undo.h"
 #include "libmscore/slur.h"
 #include "libmscore/harmony.h"
+#include "libmscore/fret.h"
 #include "libmscore/navigate.h"
 #include "libmscore/stringdata.h"
 #include "libmscore/shadownote.h"
@@ -5498,13 +5499,31 @@ void ScoreView::cmdAddChordName()
       if (!_score->checkHasMeasures())
             return;
 
-      ChordRest* cr = _score->getSelectedChordRest();
-      if (!cr)
+      int track = -1;
+      Segment* segment = nullptr;
+      Element* el = _score->selection().element();
+      if (el && el->type() == Element::Type::FRET_DIAGRAM) {
+            FretDiagram* fd = static_cast<FretDiagram*>(el);
+            track = fd->track();
+            while (el && el->type() != Element::Type::SEGMENT)
+                  el = el->parent();
+            if (el)
+                  segment = static_cast<Segment*>(el);
+            }
+      else {
+            ChordRest* cr = _score->getSelectedChordRest();
+            if (cr) {
+                  track = cr->track();
+                  segment = cr->segment();
+                  }
+            }
+      if (!segment || track == -1)
             return;
+
       _score->startCmd();
       Harmony* harmony = new Harmony(_score);
-      harmony->setTrack(cr->track());
-      harmony->setParent(cr->segment());
+      harmony->setTrack(track);
+      harmony->setParent(segment);
       _score->undoAddElement(harmony);
 
       _score->select(harmony, SelectType::SINGLE, 0);

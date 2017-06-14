@@ -337,7 +337,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case Element::Type::TRILL:
                   case Element::Type::HAIRPIN:
                   case Element::Type::TEXTLINE:
-                  case Element::Type::FRET_DIAGRAM:
                         dragTimeAnchorElement(pos);
                         break;
                   case Element::Type::IMAGE:
@@ -379,6 +378,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case Element::Type::TREMOLOBAR:
                   case Element::Type::FIGURED_BASS:
                   case Element::Type::LYRICS:
+                  case Element::Type::FRET_DIAGRAM:
                         {
                         QList<Element*> el = elementsAt(pos);
                         bool found = false;

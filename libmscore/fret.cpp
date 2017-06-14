@@ -547,7 +547,7 @@ Element* FretDiagram::drop(const DropData& data)
       if (e->type() == Element::Type::HARMONY) {
             Harmony* h = static_cast<Harmony*>(e);
             h->setParent(parent());
-            h->setTrack((track() / VOICES) * VOICES);
+            h->setTrack(track());
             score()->undoAddElement(h);
             }
       else {

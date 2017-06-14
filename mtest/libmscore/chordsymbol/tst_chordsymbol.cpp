@@ -21,6 +21,7 @@
 #include "libmscore/segment.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/harmony.h"
+#include "libmscore/fret.h"
 #include "libmscore/duration.h"
 #include "libmscore/durationtype.h"
 
@@ -47,6 +48,7 @@ class TestChordSymbol : public QObject, public MTest {
       void testNoSystem();
       void testTranspose();
       void testTransposePart();
+      void testAddFretboard();
       };
 
 //---------------------------------------------------------
@@ -194,6 +196,21 @@ void TestChordSymbol::testTransposePart()
       score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
       score->endCmd();
       test_post(score, "transpose-part");
+      }
+
+void TestChordSymbol::testAddFretboard()
+      {
+      Score* score = test_pre("add-fretboard");
+      Segment* seg = score->firstSegment(Segment::Type::ChordRest);
+      Harmony* harmony = static_cast<Harmony*>(seg->annotations().front());
+      FretDiagram* fd = new FretDiagram(score);
+      fd->setDot(1, 1);
+      fd->setTrack(harmony->track());
+      fd->setParent(seg);
+      DropData dd;
+      dd.element = fd;
+      harmony->drop(dd);
+      test_post(score, "add-fretboard");
       }
 
 QTEST_MAIN(TestChordSymbol)
