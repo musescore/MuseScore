@@ -181,9 +181,11 @@ class Harmony : public Text {
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;
 
+      virtual bool acceptDrop(EditData&) const override;
+      virtual Element* drop(EditData&) override;
+
       virtual QVariant propertyDefault(P_ID id) const override;
       };
-
 
 }     // namespace Ms
 #endif
