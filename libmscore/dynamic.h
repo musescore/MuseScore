@@ -113,6 +113,7 @@ class Dynamic : public Text {
       virtual QVariant propertyDefault(P_ID id) const override;
 
       virtual QString accessibleInfo() override;
+      virtual QString screenReaderInfo() override;
       };
 
 }     // namespace Ms

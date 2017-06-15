@@ -89,7 +89,6 @@ class Ambitus : public Element {
       virtual Space     space() const override;
       virtual void      write(Xml&) const override;
       virtual QString   accessibleInfo() override;
-      virtual QString   screenReaderInfo() override;
 
       // properties
       QVariant getProperty(P_ID ) const;

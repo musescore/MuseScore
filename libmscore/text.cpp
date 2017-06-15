@@ -3045,6 +3045,34 @@ QString Text::accessibleInfo()
       }
 
 //---------------------------------------------------------
+//   screenReaderInfo
+//---------------------------------------------------------
+
+QString Text::screenReaderInfo()
+      {
+      QString rez;
+      const QList<TextStyle>& ts = score()->style()->textStyles();
+      switch (textStyleType()) {
+            case TextStyleType::TITLE:
+            case TextStyleType::SUBTITLE:
+            case TextStyleType::COMPOSER:
+            case TextStyleType::POET:
+            case TextStyleType::TRANSLATOR:
+            case TextStyleType::MEASURE_NUMBER:
+                  rez = qApp->translate("TextStyle",ts.at(int(textStyleType())).name().toUtf8());
+                  break;
+            default:
+                  if ((type() == Element::Type::STAFF_TEXT) && systemFlag())
+                        rez = tr("System Text");
+                  else
+                        rez = Element::accessibleInfo();
+                  break;
+            }
+      QString s = plainText(true).simplified();
+      return  QString("%1: %2").arg(rez).arg(s);
+      }
+
+//---------------------------------------------------------
 //   subtype
 //---------------------------------------------------------
 
