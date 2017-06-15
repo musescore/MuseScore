@@ -750,14 +750,5 @@ QString Ambitus::accessibleInfo() const
                                                           .arg(tpc2name(bottomTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false))
                                                           .arg(QString::number(bottomOctave()));
       }
-
-//---------------------------------------------------------
-//   screenReaderInfo
-//---------------------------------------------------------
-
-QString Ambitus::screenReaderInfo() const
-      {
-      return accessibleInfo();
-      }
 }
 

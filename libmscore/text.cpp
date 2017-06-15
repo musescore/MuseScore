@@ -2371,6 +2371,30 @@ QString Text::accessibleInfo() const
       }
 
 //---------------------------------------------------------
+//   screenReaderInfo
+//---------------------------------------------------------
+
+QString Text::screenReaderInfo() const
+      {
+      QString rez;
+      switch (subStyle()) {
+            case SubStyle::TITLE:
+            case SubStyle::SUBTITLE:
+            case SubStyle::COMPOSER:
+            case SubStyle::POET:
+            case SubStyle::TRANSLATOR:
+            case SubStyle::MEASURE_NUMBER:
+                  rez = subStyleUserName(subStyle());
+                  break;
+            default:
+                  rez = Element::accessibleInfo();
+                  break;
+            }
+      QString s = plainText().simplified();
+      return  QString("%1: %2").arg(rez).arg(s);
+      }
+
+//---------------------------------------------------------
 //   subtype
 //---------------------------------------------------------
 
