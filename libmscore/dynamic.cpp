@@ -388,5 +388,21 @@ QString Dynamic::accessibleInfo() const
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(s);
       }
 
+//---------------------------------------------------------
+//   screenReaderInfo
+//---------------------------------------------------------
+
+QString Dynamic::screenReaderInfo() const
+      {
+      QString s;
+
+      if (dynamicType() == Dynamic::Type::OTHER)
+            s = plainText().simplified();
+      else {
+            s = dynamicTypeName();
+            }
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(s);
+      }
+
 }
 
