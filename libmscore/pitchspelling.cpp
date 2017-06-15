@@ -725,9 +725,11 @@ void spell(QList<Event>& notes, int key)
                         case 3:
                               k = end - start - 3;
                               notes[end-3].setTpc(tab[(notes[end-3].dataA() % 12) * 2 + ((opt & (1<<k)) >> k)]);
+                              // fall through
                         case 2:
                               k = end - start - 2;
                               notes[end-2].setTpc(tab[(notes[end-2].dataA() % 12) * 2 + ((opt & (1<<k)) >> k)]);
+                              // fall through
                         case 1:
                               k = end - start - 1;
                               notes[end-1].setTpc(tab[(notes[end-1].dataA() % 12) * 2 + ((opt & (1<<k)) >> k)]);
@@ -797,9 +799,11 @@ void Score::spellNotelist(QList<Note*>& notes)
                         case 3:
                               k = end - start - 3;
                               changeAllTpcs(notes[end-3], tab[(notes[end-3]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
+                              // fall through
                         case 2:
                               k = end - start - 2;
                               changeAllTpcs(notes[end-2], tab[(notes[end-2]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
+                              // fall through
                         case 1:
                               k = end - start - 1;
                               changeAllTpcs(notes[end-1], tab[(notes[end-1]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);

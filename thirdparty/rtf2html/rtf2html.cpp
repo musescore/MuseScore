@@ -420,6 +420,7 @@ QString rtf2html(const QString& iString)
                case rtf_keyword::rkw_trowd:
                   CurCellDefs=CellDefsList.insert(CellDefsList.end(),
                                                   table_cell_defs());
+                  // fall through
                case rtf_keyword::rkw_row:
                   if (!trCurRow->Cells.empty())
                   {

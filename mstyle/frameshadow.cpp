@@ -298,7 +298,9 @@ bool FrameShadowBase::event(QEvent* e) {
 
             case QEvent::MouseButtonPress:
                   releaseMouse();
+                  // fall through
             case QEvent::MouseMove:
+                  // fall through
             case QEvent::MouseButtonRelease:
                   if ( viewport ) {
                         QMouseEvent* me = static_cast<QMouseEvent*>(e);

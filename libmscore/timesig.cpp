@@ -589,8 +589,10 @@ QString TimeSig::accessibleInfo()
       switch (timeSigType()) {
             case TimeSigType::FOUR_FOUR:
                   timeSigString = tr("Common time");
+                  break;
             case TimeSigType::ALLA_BREVE:
                   timeSigString = tr("Cut time");
+                  break;
             default:
                   timeSigString = tr("%1/%2 time").arg(QString::number(numerator())).arg(QString::number(denominator()));
             }
