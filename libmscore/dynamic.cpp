@@ -373,7 +373,19 @@ QVariant Dynamic::propertyDefault(P_ID id) const
 
 QString Dynamic::accessibleInfo() const
       {
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(this->dynamicTypeName());
+      QString s;
+
+      if (dynamicType() == Dynamic::Type::OTHER) {
+            s = plainText().simplified();
+            if (s.length() > 20) {
+                  s.truncate(20);
+                  s += "...";
+                  }
+            }
+      else {
+            s = dynamicTypeName();
+            }
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(s);
       }
 
 }
