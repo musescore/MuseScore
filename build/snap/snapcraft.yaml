@@ -1,0 +1,85 @@
+name: musescore
+version: '2.2.0'
+summary: Create, play and print beautiful sheet music.
+description: |
+    MuseScore is the world's leading free and open-source software for writing
+    music, with a user-friendly interface and immensely powerful features.
+    It is free to install on Windows, Mac, and Linux.
+
+    Some interfaces need to be connected manually:
+
+        $ sudo snap connect musescore:cups-control
+        $ sudo snap connect musescore:network-manager
+
+    But most of the application functionality works without them.
+
+grade: devel
+confinement: strict
+
+apps:
+    mscore:
+        command: desktop-launch mscore
+        plugs:
+          - gsettings
+          - home
+          - network
+          - network-bind
+          - network-manager
+          - pulseaudio
+          - unity7
+          - x11
+          - opengl
+          - cups-control
+
+parts:
+    musescore:
+        source: https://github.com/musescore/MuseScore
+        source-branch: "2.2"
+        source-type: git
+        plugin: make
+        prepare: |
+            make revision
+        build-packages:
+            - extra-cmake-modules
+            - doxygen
+            - portaudio19-dev
+            - libasound2-dev
+            - libmp3lame-dev
+            - libsndfile1-dev
+            - libssl-dev
+            - libpulse-dev
+            - libfreetype6-dev
+            - libfreetype6
+            - libdrm-dev
+            - libgl1-mesa-dev
+            - libegl1-mesa-dev
+            - libqt4-dev
+            - qtbase5-dev
+            - qttools5-dev
+            - qttools5-dev-tools
+            - qtquick1-5-dev
+            - qtscript5-dev
+            - libqt5xmlpatterns5-dev
+            - libqt5svg5-dev
+            - libqt5webkit5-dev
+            - libqt5opengl5-dev
+            - cmake
+            - g++
+        make-parameters:
+            - PREFIX=/usr
+            - UPDATE_CACHE=FALSE
+        stage-packages:
+            - libqt5core5a
+            - libqt5gui5
+            - libqt5network5
+            - libqt5xml5
+            - libqt5xmlpatterns5
+            - libqt5svg5
+            - libqt5printsupport5
+            - libqt5webkit5
+            - libcanberra-gtk-module
+            - overlay-scrollbar-gtk2
+            - unity-gtk2-module
+            - libatk-adaptor
+            - libgail-common
+        after: [desktop-qt5]

@@ -1,0 +1,16 @@
+[Desktop Entry]
+Version=1.1
+Name=MuseScore 2.2
+GenericName=Music notation
+GenericName[de]=Notensatz
+GenericName[fr]=Notation musicale
+Comment=Create, play and print sheet music
+Comment[ru]=Визуальный редактор нотных партитур
+Comment[fr]=Gravure de partitions musicales
+Exec=musescore.mscore %F
+Icon=${SNAP}/usr/share/icons/hicolor/scalable/apps/mscore.svg
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Qt;Audio;Sequencer;Midi;AudioVideoEditing;Music;AudioVideo;
+MimeType=application/x-musescore;application/x-musescore+xml;application/vnd.recordare.musicxml;application/vnd.recordare.musicxml+xml;
