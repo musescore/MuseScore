@@ -330,6 +330,7 @@ class Text : public Element {
 
       void undoSetText(const QString& s) { undoChangeProperty(P_ID::TEXT, s); }
       virtual QString accessibleInfo() const override;
+      virtual QString screenReaderInfo() const override;
 
       virtual int subtype() const;
       virtual QString subtypeName() const;
