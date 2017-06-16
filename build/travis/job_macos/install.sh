@@ -104,10 +104,10 @@ rvm get head
 #  echo "Qt ${QT_LONG_VERSION} already installed"
 #fi
 
-wget -nv http://utils.musescore.org.s3.amazonaws.com/qt580_mac.zip
+wget -nv http://utils.musescore.org.s3.amazonaws.com/qt590_mac.zip
 mkdir -p $QT_MACOS
-unzip -qq qt580_mac.zip -d $QT_MACOS
-rm qt580_mac.zip
+unzip -qq qt590_mac.zip -d $QT_MACOS
+rm qt590_mac.zip
 
 #install signing certificate
 export CERTIFICATE_P12=Certificate.p12
