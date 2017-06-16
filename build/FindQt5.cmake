@@ -14,7 +14,6 @@ set(_components
     Widgets
     PrintSupport
     Concurrent
-    UiTools
     OpenGL
     LinguistTools
     Help
