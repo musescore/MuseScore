@@ -102,7 +102,7 @@ void PaletteBox::retranslate()
       }
 
 //---------------------------------------------------------
-//   retransfilterPaletteslate
+//   filterPalettes
 //---------------------------------------------------------
 
 void PaletteBox::filterPalettes(const QString& text)

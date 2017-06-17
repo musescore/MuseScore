@@ -283,7 +283,7 @@ void Palette::setGrid(int hh, int vv)
 
 Element* Palette::element(int idx)
       {
-      if (idx < size() &&  cellAt(idx))
+      if (idx < size() && cellAt(idx))
             return cellAt(idx)->element;
       else
             return 0;
@@ -1426,7 +1426,7 @@ QSize Palette::sizeHint() const
 void Palette::actionToggled(bool /*val*/)
       {
       selectedIdx = -1;
-      int nn = size();
+      int nn = ccp()->size();
       for (int n = 0; n < nn; ++n) {
             Element* e = cellAt(n)->element;
             if (e && e->type() == ElementType::ICON) {
