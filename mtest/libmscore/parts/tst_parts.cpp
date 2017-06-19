@@ -408,8 +408,7 @@ MasterScore* TestParts::doAddBreath()
       Segment* s   = m->tick2segment(MScore::division);
       Ms::Chord* chord = toChord(s->element(0));
       Note* note   = chord->upNote();
-      EditData dd;
-      dd.view = 0;
+      EditData dd(0);
       Breath* b = new Breath(score);
       b->setSymId(SymId::breathMarkComma);
       dd.element = b;
@@ -530,8 +529,7 @@ MasterScore* TestParts::doAddFingering()
       Segment* s   = m->tick2segment(MScore::division);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
-      EditData dd;
-      dd.view = 0;
+      EditData dd(0);
       Fingering* b = new Fingering(score);
       b->setXmlText("3");
       dd.element = b;
@@ -654,8 +652,7 @@ MasterScore* TestParts::doAddSymbol()
       Segment* s   = m->tick2segment(MScore::division);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
-      EditData dd;
-      dd.view = 0;
+      EditData dd(0);
       Symbol* b  = new Symbol(score);
       b->setSym(SymId::gClef);
       dd.element = b;
@@ -778,8 +775,7 @@ MasterScore* TestParts::doAddChordline()
       Segment* s   = m->tick2segment(MScore::division);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
-      EditData dd;
-      dd.view = 0;
+      EditData dd(0);
       ChordLine* b  = new ChordLine(score);
       b->setChordLineType(ChordLineType::FALL);
       dd.element = b;
@@ -902,8 +898,7 @@ MasterScore* TestParts::doAddImage()
       Segment* s   = m->tick2segment(MScore::division);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
-      EditData dd;
-      dd.view = 0;
+      EditData dd(0);
       RasterImage* b = new RasterImage(score);
       b->load(DIR + "schnee.png");
       dd.element = b;

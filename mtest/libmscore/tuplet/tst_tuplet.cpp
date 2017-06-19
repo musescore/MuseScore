@@ -137,12 +137,11 @@ void TestTuplet::split(const char* p1, const char* p2)
       TimeSig* ts = new TimeSig(score);
       ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
-      EditData dd;
+      EditData dd(0);
       dd.element = ts;
       dd.modifiers = 0;
       dd.dragOffset = QPointF();
       dd.pos = m->pagePos();
-      dd.view = 0;
       m->drop(dd);
 
       QVERIFY(saveCompareScore(score, p1, DIR + p2));

@@ -327,7 +327,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void doDragFoto(QMouseEvent* ev);
       void doDragEdit(QMouseEvent* ev);
       bool testElementDragTransition(QMouseEvent* ev);
-      bool editElementDragTransition(QMouseEvent* ev);
       bool fotoEditElementDragTransition(QMouseEvent* ev);
       bool editScoreViewDragTransition(QMouseEvent* e);
       bool editSelectTransition(QMouseEvent* me);
@@ -417,6 +416,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void editTremoloBarProperties(TremoloBar*);
       EditData& getEditData()        { return editData; }
       void changeState(ViewState);
+
+      virtual const QRect geometry() const override { return QWidget::geometry(); }
       };
 
 } // namespace Ms

@@ -24,8 +24,6 @@ namespace Ms {
 class Lasso : public Element {
       Q_GADGET
 
-      MuseScoreView* view;        // valid in edit mode
-
    public:
       Lasso(Score*);
       virtual Lasso* clone() const override        { return new Lasso(*this); }
