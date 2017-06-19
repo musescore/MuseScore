@@ -64,7 +64,7 @@ void TestBreath::breath()
       score->startCmd();
       score->cmdSelectAll();
       for (Element* e : score->selection().elements()) {
-            EditData dd;
+            EditData dd(0);
             dd.view = 0;
             Breath* b = new Breath(score);
             b->setSymId(SymId::breathMarkComma);

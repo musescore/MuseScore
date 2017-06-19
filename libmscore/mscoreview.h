@@ -70,6 +70,8 @@ class MuseScoreView {
       virtual void lyricsUpDown(bool /*up*/, bool /*end*/)  {}
       virtual void lyricsMinus()  {}
       virtual void lyricsUnderscore()  {}
+
+      virtual const QRect geometry() const = 0;
       };
 
 

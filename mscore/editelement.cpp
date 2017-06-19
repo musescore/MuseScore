@@ -172,33 +172,6 @@ void ScoreView::endEdit()
       }
 
 //---------------------------------------------------------
-//   editData.elementDragTransition
-//    start dragEdit
-//---------------------------------------------------------
-
-bool ScoreView::editElementDragTransition(QMouseEvent* ev)
-      {
-      score()->startCmd();
-      editData.element->startEditDrag(editData);
-
-      if (editData.element->isText()) {
-            qreal margin = editData.element->spatium();
-            QRectF r = editData.element->pageBoundingRect().adjusted(-margin, -margin, margin, margin);
-            if (r.contains(editData.pos)) {
-                  if (editData.element->shape().translated(editData.element->pagePos()).contains(editData.pos)) {
-                        if (editData.element->mousePress(editData, ev)) {
-                              _score->addRefresh(editData.element->canvasBoundingRect());
-                              _score->update();
-                              }
-                        }
-                  return true;
-                  }
-            return false;
-            }
-      return true;
-      }
-
-//---------------------------------------------------------
 //   doDragEdit
 //---------------------------------------------------------
 

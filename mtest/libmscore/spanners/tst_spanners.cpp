@@ -70,7 +70,7 @@ void TestSpanners::initTestCase()
 
 void TestSpanners::spanners01()
       {
-      EditData    dropData;
+      EditData    dropData(0);
       Glissando*  gliss;
 
       MasterScore* score = readScore(DIR + "glissando01.mscx");
@@ -185,7 +185,7 @@ void TestSpanners::spanners02()
 
 void TestSpanners::spanners03()
       {
-      EditData    dropData;
+      EditData    dropData(0);
       Glissando*  gliss;
 
       MasterScore* score = readScore(DIR + "glissando-graces01.mscx");
@@ -319,7 +319,7 @@ void TestSpanners::spanners05()
 
 void TestSpanners::spanners06()
       {
-      EditData    dropData;
+      EditData    dropData(0);
       Glissando*  gliss;
 
       MasterScore* score = readScore(DIR + "glissando-cloning03.mscx");
@@ -351,7 +351,7 @@ void TestSpanners::spanners06()
 
 void TestSpanners::spanners07()
       {
-      EditData    dropData;
+      EditData    dropData(0);
       Glissando*  gliss;
 
       MasterScore* score = readScore(DIR + "glissando-cloning04.mscx");
@@ -560,7 +560,7 @@ void TestSpanners::spanners12()
 
 void TestSpanners::spanners13()
       {
-      EditData          dropData;
+      EditData          dropData(0);
       LayoutBreak*      brk;
 
       MasterScore* score = readScore(DIR + "lyricsline06.mscx");

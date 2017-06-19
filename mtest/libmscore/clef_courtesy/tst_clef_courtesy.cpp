@@ -58,7 +58,7 @@ static void dropClef(Measure* m, ClefType t)
       {
       Clef* clef = new Clef(m->score()); // create a new element, as Measure::drop() will eventually delete it
       clef->setClefType(t);
-      EditData dropData;
+      EditData dropData(0);
       dropData.pos = m->pagePos();
       dropData.element = clef;
       m->score()->startCmd();
@@ -124,7 +124,7 @@ void TestClefCourtesy::clef_courtesy02()
       // make a clef-drop object and drop it to the measure
       Clef* clef = new Clef(score); // create a new element, as Measure::drop() will eventually delete it
       clef->setClefType(ClefType::G8_VA);
-      EditData dropData;
+      EditData dropData(0);
       dropData.pos = m1->pagePos();
       dropData.element = clef;
       m1->drop(dropData);
@@ -180,7 +180,7 @@ void TestClefCourtesy::clef_courtesy03()
       // make a clef-drop object and drop it to the 2nd measure
       Clef* clef = new Clef(score); // create a new element, as Measure::drop() will eventually delete it
       clef->setClefType(ClefType::G8_VA);
-      EditData dropData;
+      EditData dropData(0);
       dropData.pos = m2->pagePos();
       dropData.element = clef;
       m2->drop(dropData);

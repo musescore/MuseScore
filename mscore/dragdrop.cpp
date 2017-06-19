@@ -278,8 +278,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
       // convert window to canvas position
       QPointF pos(imatrix.map(QPointF(event->pos())));
 
-      EditData dropData;
-      dropData.view       = this;
+      EditData dropData(this);
       dropData.pos        = pos;
       dropData.element    = editData.element;
       dropData.modifiers  = event->keyboardModifiers();
@@ -297,8 +296,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                               e = _score->pos2measure(pos, &staffIdx, 0, 0, 0);
                               }
                         if (e && (e->isNote() || e->isSymbol() || e->isImage() || e->isText())) {
-                              EditData dropData;
-                              dropData.view       = this;
+                              EditData dropData(this);
                               dropData.pos        = pos;
                               dropData.element    = editData.element;
                               dropData.modifiers  = 0;
@@ -459,8 +457,7 @@ void ScoreView::dropEvent(QDropEvent* event)
       {
       QPointF pos(imatrix.map(QPointF(event->pos())));
 
-      EditData dropData;
-      dropData.view       = this;
+      EditData dropData(this);
       dropData.pos        = pos;
       dropData.element    = editData.element;
       dropData.modifiers  = event->keyboardModifiers();
