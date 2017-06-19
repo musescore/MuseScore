@@ -418,6 +418,8 @@ if (OSC)
 endif (OSC)
 
 if (MINGW)
+   set (QT_WRC_EXECUTABLE        ${PROJECT_SOURCE_DIR}/build/wrc.bat)
+   set (QT_WINE_EXECUTABLE       ${PROJECT_SOURCE_DIR}/build/wine.bat)
    add_custom_command(
       OUTPUT ${PROJECT_BINARY_DIR}/resfile.o
       COMMAND ${QT_WRC_EXECUTABLE} -i mscore.rc -o ${PROJECT_BINARY_DIR}/mscore.res
@@ -435,13 +437,13 @@ if (MINGW)
      set_target_properties( mscore
         PROPERTIES
            COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
-           LINK_FLAGS "-mwindows -mconsole -L ${CROSSQT}/lib"
+           LINK_FLAGS "-mwindows -mconsole -L ${QT_INSTALL_PREFIX}/lib"
         )
    else(CMAKE_BUILD_TYPE MATCHES "DEBUG")
      set_target_properties( mscore
           PROPERTIES
              COMPILE_FLAGS "${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
-             LINK_FLAGS "-Wl,-S -mwindows -L ${CROSSQT}/lib"
+             LINK_FLAGS "-Wl,-S -mwindows -L ${QT_INSTALL_PREFIX}/lib"
           )
    endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
@@ -460,69 +462,70 @@ if (MINGW)
       endif (OCR)
    endif (OMR)
 
-   target_link_libraries(mscore ${QT_mingw_LIBRARIES})
+   target_link_libraries(mscore ${QT_LIBRARIES})
 
    install( TARGETS mscore RUNTIME DESTINATION bin )
 
    # Keep dependencies in alphabetical order. Changes made to this list
    # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
+   get_filename_component(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
+   get_filename_component (MINGW_ROOT ${COMPILER_DIR} DIRECTORY)
    install( FILES
-      ${CROSS}/bin/libgcc_s_dw2-1.dll
-      ${CROSS}/bin/libstdc++-6.dll
-      ${CROSS}/bin/libwinpthread-1.dll
-      ${CROSS}/lib/libogg.dll
-      ${CROSS}/lib/libsndfile-1.dll
-      ${CROSS}/lib/libvorbis.dll
-      ${CROSS}/lib/libvorbisfile.dll
-      ${CROSS}/lib/portaudio.dll
-      ${CROSS}/opt/bin/libeay32.dll
-      ${CROSS}/opt/bin/ssleay32.dll
-      ${CROSSQT}/bin/Qt5CLucene.dll
-      ${CROSSQT}/bin/Qt5Core.dll
-      ${CROSSQT}/bin/Qt5Gui.dll
-      ${CROSSQT}/bin/Qt5Help.dll
-      ${CROSSQT}/bin/Qt5Multimedia.dll
-      ${CROSSQT}/bin/Qt5MultimediaWidgets.dll
-      ${CROSSQT}/bin/Qt5Network.dll
-      ${CROSSQT}/bin/Qt5OpenGL.dll
-      ${CROSSQT}/bin/Qt5Positioning.dll
-      ${CROSSQT}/bin/Qt5PrintSupport.dll
-      ${CROSSQT}/bin/Qt5Qml.dll
-      ${CROSSQT}/bin/Qt5Quick.dll
-      ${CROSSQT}/bin/Qt5Sensors.dll
-      ${CROSSQT}/bin/Qt5Sql.dll
-      ${CROSSQT}/bin/Qt5Svg.dll
-      ${CROSSQT}/bin/Qt5WebChannel.dll
-      ${CROSSQT}/bin/Qt5Widgets.dll
-      ${CROSSQT}/bin/Qt5Xml.dll
-      ${CROSSQT}/bin/Qt5XmlPatterns.dll
+      ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
+      ${MINGW_ROOT}/bin/libstdc++-6.dll
+      ${MINGW_ROOT}/bin/libwinpthread-1.dll
+      ${MINGW_ROOT}/lib/libogg.dll
+      ${MINGW_ROOT}/lib/libsndfile-1.dll
+      ${MINGW_ROOT}/lib/libvorbis.dll
+      ${MINGW_ROOT}/lib/libvorbisfile.dll
+      ${MINGW_ROOT}/lib/portaudio.dll
+      ${MINGW_ROOT}/opt/bin/libeay32.dll
+      ${MINGW_ROOT}/opt/bin/ssleay32.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5Core.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5Gui.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5Help.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5Multimedia.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5MultimediaWidgets.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5Network.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5OpenGL.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5Positioning.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5PrintSupport.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5Qml.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5Quick.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5Sensors.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5Sql.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5Svg.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5WebChannel.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5Widgets.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5Xml.dll
+      ${QT_INSTALL_PREFIX}/bin/Qt5XmlPatterns.dll
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
 
     install(FILES
-      ${CROSSQT}/plugins/iconengines/qsvgicon.dll
+      ${QT_INSTALL_PREFIX}/plugins/iconengines/qsvgicon.dll
       DESTINATION bin/iconengines)
 
     install(FILES
-      ${CROSSQT}/plugins/imageformats/qjpeg.dll
-      ${CROSSQT}/plugins/imageformats/qsvg.dll
-      ${CROSSQT}/plugins/imageformats/qtiff.dll
+      ${QT_INSTALL_PREFIX}/plugins/imageformats/qjpeg.dll
+      ${QT_INSTALL_PREFIX}/plugins/imageformats/qsvg.dll
+      ${QT_INSTALL_PREFIX}/plugins/imageformats/qtiff.dll
       DESTINATION bin/imageformats)
 
     install(FILES
-      ${CROSSQT}/plugins/platforms/qwindows.dll
+      ${QT_INSTALL_PREFIX}/plugins/platforms/qwindows.dll
       DESTINATION bin/platforms)
 
     install(FILES
-      ${CROSSQT}/plugins/printsupport/windowsprintersupport.dll
+      ${QT_INSTALL_PREFIX}/plugins/printsupport/windowsprintersupport.dll
       DESTINATION bin/printsupport)
 
     install(FILES
-      ${CROSSQT}/plugins/sqldrivers/qsqlite.dll
+      ${QT_INSTALL_PREFIX}/plugins/sqldrivers/qsqlite.dll
       DESTINATION bin/sqldrivers)
 
     install(DIRECTORY
-      ${CROSSQT}/qml
+      ${QT_INSTALL_PREFIX}/qml
       DESTINATION .
       REGEX ".*d\\.dll" EXCLUDE
       REGEX ".*QtGraphicalEffects.*" EXCLUDE
