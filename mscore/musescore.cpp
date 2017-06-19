@@ -5370,6 +5370,9 @@ SynthesizerState MuseScore::synthesizerState()
 
 bool MuseScore::canSaveMp3()
       {
+#ifndef USE_LAME
+      return false;
+#else
       MP3Exporter exporter;
       if (!exporter.loadLibrary(MP3Exporter::AskUser::NO)) {
             qDebug("Could not open MP3 encoding library!");
@@ -5381,6 +5384,7 @@ bool MuseScore::canSaveMp3()
             return false;
             }
       return true;
+#endif
       }
 
 //---------------------------------------------------------
@@ -5389,6 +5393,9 @@ bool MuseScore::canSaveMp3()
 
 bool MuseScore::saveMp3(Score* score, const QString& name)
       {
+#ifndef USE_LAME
+      return false;
+#else
       EventMap events;
       score->renderMidi(&events);
       if(events.size() == 0)
@@ -5646,6 +5653,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
             file.remove();
       MScore::sampleRate = oldSampleRate;
       return true;
+#endif
       }
 }
 
