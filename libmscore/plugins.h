@@ -145,6 +145,7 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
       void setColor(const QColor& c)  { _color = c;           }
       qreal scale() const             { return mag;        }
       void setScale(qreal v)          { mag = v;           }
+      virtual const QRect geometry() const override { return QRect(QQuickPaintedItem::x(), y(), width(), height()); }
       };
 } // namespace Ms
 #endif

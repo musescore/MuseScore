@@ -113,6 +113,7 @@ Element* MTest::writeReadElement(Element* element)
 //---------------------------------------------------------
 
 MTest::MTest()
+   : ed(0)
       {
       MScore::testMode = true;
       }

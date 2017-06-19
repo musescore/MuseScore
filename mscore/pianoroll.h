@@ -108,6 +108,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       void setLocator(POS pos, int tick) { locator[int(pos)].setTick(tick); }
 
       void writeSettings();
+      virtual const QRect geometry() const override { return QMainWindow::geometry(); }
       };
 
 

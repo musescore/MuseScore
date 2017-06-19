@@ -97,7 +97,7 @@ extern QErrorMessage* errorMessage;
 //---------------------------------------------------------
 
 ScoreView::ScoreView(QWidget* parent)
-   : QWidget(parent)
+   : QWidget(parent), editData(this)
       {
       setStatusTip("scoreview");
       setAcceptDrops(true);
@@ -4801,136 +4801,12 @@ void ScoreView::setEditElement(Element* e)
 #endif
 
 //---------------------------------------------------------
-//   stateName
-//---------------------------------------------------------
-
-static const char* stateName(ViewState s)
-      {
-      const char* p;
-      switch (s) {
-            case ViewState::NORMAL:             p = "NORMAL";           break;
-            case ViewState::DRAG:               p = "DRAG";             break;
-            case ViewState::DRAG_OBJECT:        p = "DRAG_OBJECT";      break;
-            case ViewState::EDIT:               p = "EDIT";             break;
-            case ViewState::DRAG_EDIT:          p = "DRAG_EDIT";        break;
-            case ViewState::LASSO:              p = "LASSO";            break;
-            case ViewState::NOTE_ENTRY:         p = "NOTE_ENTRY";       break;
-            case ViewState::PLAY:               p = "PLAY";             break;
-            case ViewState::ENTRY_PLAY:         p = "ENTRY_PLAY";       break;
-            case ViewState::FOTO:               p = "FOTO";             break;
-            case ViewState::FOTO_DRAG:          p = "FOTO_DRAG";        break;
-            case ViewState::FOTO_DRAG_EDIT:     p = "FOTO_DRAG_EDIT";   break;
-            case ViewState::FOTO_DRAG_OBJECT:   p = "FOTO_DRAG_OBJECT"; break;
-            case ViewState::FOTO_LASSO:         p = "FOTO_LASSO";       break;
-            }
-      return p;
-      }
-
-//---------------------------------------------------------
 //   startNoteEntryMode
 //---------------------------------------------------------
 
 void ScoreView::startNoteEntryMode()
       {
       changeState(ViewState::NOTE_ENTRY);
-      }
-
-//---------------------------------------------------------
-//   changeState
-//---------------------------------------------------------
-
-void ScoreView::changeState(ViewState s)
-      {
-      printf("changeState %s  -> %s\n", stateName(state), stateName(s));
-
-      if (state == ViewState::EDIT && s == ViewState::EDIT) {
-            startEdit();
-            return;
-            }
-      if (s == ViewState::PLAY && !seq)
-            return;
-      if (s == state)
-            return;
-      //
-      //    end current state
-      //
-      switch (state) {
-            case ViewState::NOTE_ENTRY:
-                  endNoteEntry();
-                  break;
-            case ViewState::DRAG:
-                  break;
-            case ViewState::DRAG_OBJECT:
-            case ViewState::FOTO_DRAG_OBJECT:
-                  endDrag();
-                  break;
-            case ViewState::FOTO_DRAG_EDIT:
-            case ViewState::DRAG_EDIT:
-                  endDragEdit();
-                  break;
-            case ViewState::FOTO:
-                  if (s != ViewState::FOTO_DRAG && s != ViewState::FOTO_DRAG_EDIT && s != ViewState::FOTO_DRAG_OBJECT)
-                        stopFotomode();
-                  break;
-            case ViewState::LASSO:
-                  endLasso();
-                  break;
-            case ViewState::PLAY:
-                  seq->stop();
-                  break;
-            default:
-                  break;
-            }
-      //
-      //    start new state
-      //
-      switch (s) {
-            case ViewState::NORMAL:
-                  if (state == ViewState::EDIT)
-                        endEdit();
-                  setCursor(QCursor(Qt::ArrowCursor));
-                  break;
-            case ViewState::DRAG:
-                  setCursor(QCursor(Qt::SizeAllCursor));
-                  break;
-            case ViewState::FOTO_DRAG_OBJECT:
-                  _score->select(_foto);
-                  // fall through
-            case ViewState::DRAG_OBJECT:
-                  setCursor(QCursor(Qt::ArrowCursor));
-                  startDrag();
-                  break;
-            case ViewState::FOTO_DRAG:
-                  setCursor(QCursor(Qt::SizeAllCursor));
-                  break;
-            case ViewState::NOTE_ENTRY:
-                  startNoteEntry();
-                  break;
-            case ViewState::DRAG_EDIT:
-            case ViewState::FOTO_DRAG_EDIT:
-                  setCursor(QCursor(Qt::ArrowCursor));
-                  break;
-            case ViewState::FOTO:
-                  setCursor(QCursor(Qt::ArrowCursor));
-                  if (state != ViewState::FOTO_DRAG && state != ViewState::FOTO_DRAG_EDIT && state != ViewState::FOTO_DRAG_OBJECT)
-                        startFotomode();
-                  break;
-            case ViewState::EDIT:
-                  if (state != ViewState::DRAG_EDIT)
-                        startEdit();
-                  break;
-            case ViewState::LASSO:
-                  break;
-            case ViewState::PLAY:
-                  seq->start();
-                  break;
-            case ViewState::ENTRY_PLAY:
-            case ViewState::FOTO_LASSO:
-                  break;
-            }
-
-      state = s;
-      mscore->changeState(mscoreState());
       }
 
 //---------------------------------------------------------
