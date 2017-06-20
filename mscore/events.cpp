@@ -387,13 +387,19 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
       {
       if (editData.buttons == Qt::NoButton)
             return;
+
+      // start some drag operations after a minimum of movement:
       bool drag = (me->pos() - editData.startMovePixel).manhattanLength() > 4;
+
       switch (state) {
             case ViewState::NORMAL:
                   if (!editData.element && (me->modifiers() & Qt::ShiftModifier))
                         changeState(ViewState::LASSO);
-                  else if (editData.element && !(me->modifiers()))
+                  else if (editData.element && !(me->modifiers())) {
+                        if (!drag)
+                              return;
                         changeState(ViewState::DRAG_OBJECT);
+                        }
                   else
                         changeState(ViewState::DRAG);
                   break;
@@ -422,11 +428,11 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
                   break;
 
             case ViewState::EDIT:
-                  if (drag) {
-                        score()->startCmd();
-                        editData.element->startEditDrag(editData);
-                        changeState(ViewState::DRAG_EDIT);
-                        }
+                  if (!drag)
+                        return;
+                  score()->startCmd();
+                  editData.element->startEditDrag(editData);
+                  changeState(ViewState::DRAG_EDIT);
                   break;
 
             default:
