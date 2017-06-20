@@ -338,7 +338,6 @@ QRectF Element::drag(EditData& ed)
             y = vRaster * n;
             }
 
-printf("drag: %f %f\n", x, y);
       setUserOff(QPointF(x, y));
       setGenerated(false);
 
