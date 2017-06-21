@@ -326,6 +326,8 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   break;
 
             case ViewState::FOTO: {
+                  if (ev->buttons() & Qt::RightButton)
+                        break;
                   editData.element = _foto;
                   bool gripClicked = false;
                   qreal a = editData.grip[0].width() * 1.0;
@@ -608,6 +610,10 @@ void ScoreView::keyReleaseEvent(QKeyEvent* ev)
 
 void ScoreView::contextMenuEvent(QContextMenuEvent* ev)
       {
+      if (state == ViewState::FOTO) {
+            fotoContextPopup(ev);
+            return;
+            }
       QPoint gp          = ev->globalPos();
       editData.startMove = toLogical(ev->pos());
       Element* e         = elementNear(editData.startMove);
@@ -691,7 +697,7 @@ static const char* stateName(ViewState s)
 
 void ScoreView::changeState(ViewState s)
       {
-      printf("changeState %s  -> %s\n", stateName(state), stateName(s));
+      qDebug("changeState %s  -> %s", stateName(state), stateName(s));
 
       if (state == ViewState::EDIT && s == ViewState::EDIT) {
             startEdit();
