@@ -31,7 +31,6 @@ namespace Ms {
 
 void FotoLasso::startEdit(EditData& ed)
       {
-printf("Foto: startEdit\n");
       ed.grips   = 8;
       ed.curGrip = Grip(0);
       QRectF view = ((ScoreView*)ed.view)->toLogical(QRect(0.0, 0.0, ed.view->geometry().width(), ed.view->geometry().height()));
@@ -52,7 +51,6 @@ printf("Foto: startEdit\n");
 
 void FotoLasso::endEdit(EditData&)
       {
-printf("Foto: endEdit\n");
       setVisible(false);
       }
 
@@ -62,7 +60,6 @@ printf("Foto: endEdit\n");
 
 void FotoLasso::updateGrips(EditData& ed) const
       {
-      printf("Foto: updateGrips\n");
       Lasso::updateGrips(ed);
       }
 
