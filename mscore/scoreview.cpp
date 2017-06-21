@@ -3410,6 +3410,9 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
             mscore->noteTooShortForTupletDialog();
             return;
             }
+      Measure* measure = cr->measure();
+      if (measure && measure->isMMRest())
+            return;
 
       Fraction f(cr->duration());
       Tuplet* ot  = cr->tuplet();
@@ -3439,7 +3442,6 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
 
       tuplet->setTrack(cr->track());
       tuplet->setTick(cr->tick());
-      Measure* measure = cr->measure();
       tuplet->setParent(measure);
 
       if (ot)
@@ -3796,10 +3798,10 @@ void ScoreView::cmdTuplet(int n)
             }
       else {
             QSet<ChordRest*> set;
-            foreach(Element* e, _score->selection().elements()) {
+            for (Element* e : _score->selection().elements()) {
                   if (e->type() == ElementType::NOTE) {
                         Note* note = static_cast<Note*>(e);
-                        if(note->noteType() != NoteType::NORMAL) { //no tuplet on grace notes
+                        if (note->noteType() != NoteType::NORMAL) { //no tuplet on grace notes
                               _score->endCmd();
                               return;
                               }
@@ -3807,7 +3809,7 @@ void ScoreView::cmdTuplet(int n)
                         }
                   if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
-                        if(!set.contains(cr)) {
+                        if (!set.contains(cr)) {
                               cmdTuplet(n, cr);
                               set.insert(cr);
                               }

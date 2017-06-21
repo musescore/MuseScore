@@ -94,6 +94,10 @@ Tuplet* MuseScore::tupletDialog()
             noteTooShortForTupletDialog();
             return 0;
             }
+      Measure* measure = cr->measure();
+      if (measure && measure->isMMRest())
+            return 0;
+
       TupletDialog td;
       if (!td.exec())
             return 0;
@@ -126,7 +130,6 @@ Tuplet* MuseScore::tupletDialog()
             return 0;
             }
 
-      Measure* measure = cr->measure();
       tuplet->setParent(measure);
 
       return tuplet;
