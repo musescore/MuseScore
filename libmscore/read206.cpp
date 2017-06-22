@@ -1326,7 +1326,7 @@ void readArticulation(Articulation* a, XmlReader& e)
                                     if (s == al[i].name) {
                                           a->setSymId(al[i].id);
                                           a->setUp(al[i].up);
-                                          a->setDirection(a->up() ? Direction_UP : Direction_DOWN);
+                                          a->setDirection(a->up() ? Direction::UP : Direction::DOWN);
                                           break;
                                           }
                                     }

@@ -204,7 +204,7 @@ Chord::Chord(Score* s)
       _ledgerLines      = 0;
       _stem             = 0;
       _hook             = 0;
-      _stemDirection    = Direction_AUTO;
+      _stemDirection    = Direction::AUTO;
       _arpeggio         = 0;
       _tremolo          = 0;
       _endsGlissando    = false;
@@ -807,8 +807,8 @@ void Chord::computeUp()
             }
 
       // PITCHED STAVES (or TAB with stems through staves)
-      if (_stemDirection != Direction_AUTO) {
-            _up = _stemDirection == Direction_UP;
+      if (_stemDirection != Direction::AUTO) {
+            _up = _stemDirection == Direction::UP;
             }
       else if (!parent())
             // hack for palette and drumset editor
@@ -2590,7 +2590,7 @@ QVariant Chord::getProperty(P_ID propertyId) const
       switch (propertyId) {
             case P_ID::NO_STEM:        return noStem();
             case P_ID::SMALL:          return small();
-            case P_ID::STEM_DIRECTION: return stemDirection();
+            case P_ID::STEM_DIRECTION: return QVariant::fromValue<Direction>(stemDirection());
             default:
                   return ChordRest::getProperty(propertyId);
             }
@@ -2605,7 +2605,7 @@ QVariant Chord::propertyDefault(P_ID propertyId) const
       switch (propertyId) {
             case P_ID::NO_STEM:        return false;
             case P_ID::SMALL:          return false;
-            case P_ID::STEM_DIRECTION: return Direction_AUTO;
+            case P_ID::STEM_DIRECTION: return QVariant::fromValue<Direction>(Direction::AUTO);
             default:
                   return ChordRest::propertyDefault(propertyId);
             }
@@ -2836,8 +2836,8 @@ QPointF Chord::layoutArticulation(Articulation* a)
       //
       // determine Direction
       //
-      if (a->direction() != Direction_AUTO) {
-            a->setUp(a->direction() == Direction_UP);
+      if (a->direction() != Direction::AUTO) {
+            a->setUp(a->direction() == Direction::UP);
             }
       else {
             if (measure()->hasVoices(a->staffIdx())) {
@@ -2883,7 +2883,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
 
 void Chord::reset()
       {
-      undoChangeProperty(P_ID::STEM_DIRECTION, Direction_AUTO);
+      undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
       undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::AUTO));
       score()->createPlayEvents(this);
       ChordRest::reset();
@@ -2923,7 +2923,7 @@ void Chord::setSlash(bool flag, bool stemless)
                         const Drumset* ds = part()->instrument()->drumset();
                         int pitch = n->pitch();
                         if (ds && ds->isValid(pitch)) {
-                              undoChangeProperty(P_ID::STEM_DIRECTION, ds->stemDirection(pitch));
+                              undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(ds->stemDirection(pitch)));
                               n->undoChangeProperty(P_ID::HEAD_GROUP, int(ds->noteHead(pitch)));
                               }
                         }
@@ -2932,7 +2932,7 @@ void Chord::setSlash(bool flag, bool stemless)
             }
 
       // set stem to auto (mostly important for rhythmic notation on drum staves)
-      undoChangeProperty(P_ID::STEM_DIRECTION, Direction_AUTO);
+      undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
 
       // make stemless if asked
       if (stemless) {

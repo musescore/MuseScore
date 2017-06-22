@@ -2226,7 +2226,7 @@ void Note::reset()
       {
       undoChangeProperty(P_ID::USER_OFF, QPointF());
       chord()->undoChangeProperty(P_ID::USER_OFF, QPointF());
-      chord()->undoChangeProperty(P_ID::STEM_DIRECTION, Direction(Direction::AUTO));
+      chord()->undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
       }
 
 //---------------------------------------------------------
@@ -2430,7 +2430,7 @@ QVariant Note::getProperty(P_ID propertyId) const
             case P_ID::MIRROR_HEAD:
                   return int(userMirror());
             case P_ID::DOT_POSITION:
-                  return userDotPosition();
+                  return QVariant::fromValue<Direction>(userDotPosition());
             case P_ID::HEAD_GROUP:
                   return int(headGroup());
             case P_ID::VELO_OFFSET:
@@ -2636,7 +2636,7 @@ void Note::undoSetUserMirror(MScore::DirectionH val)
 
 void Note::undoSetUserDotPosition(Direction val)
       {
-      undoChangeProperty(P_ID::DOT_POSITION, val);
+      undoChangeProperty(P_ID::DOT_POSITION, QVariant::fromValue<Direction>(val));
       }
 
 //---------------------------------------------------------
@@ -2679,7 +2679,7 @@ QVariant Note::propertyDefault(P_ID propertyId) const
             case P_ID::MIRROR_HEAD:
                   return int(MScore::DirectionH::AUTO);
             case P_ID::DOT_POSITION:
-                  return Direction(Direction::AUTO);
+                  return QVariant::fromValue<Direction>(Direction::AUTO);
             case P_ID::HEAD_GROUP:
                   return int(NoteHead::Group::HEAD_NORMAL);
             case P_ID::VELO_OFFSET:

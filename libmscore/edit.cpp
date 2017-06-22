@@ -1255,19 +1255,19 @@ void Score::cmdFlip()
                               continue;
                   else {
                         Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
-                        undoChangeProperty(chord, P_ID::STEM_DIRECTION, dir);
+                        undoChangeProperty(chord, P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
                         }
                   }
 
             else if (e->isBeam()) {
                   Beam* beam = toBeam(e);
                   Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
-                  undoChangeProperty(beam, P_ID::STEM_DIRECTION, dir);
+                  undoChangeProperty(beam, P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
                   }
             else if (e->isSlurTieSegment()) {
                   SlurTie* slur = toSlurTieSegment(e)->slurTie();
                   Direction dir = slur->up() ? Direction::DOWN : Direction::UP;
-                  undoChangeProperty(slur, P_ID::SLUR_DIRECTION, dir);
+                  undoChangeProperty(slur, P_ID::SLUR_DIRECTION, QVariant::fromValue<Direction>(dir));
                   }
             else if (e->isHairpinSegment()) {
                   Hairpin* h = toHairpinSegment(e)->hairpin();
@@ -1306,12 +1306,12 @@ void Score::cmdFlip()
             else if (e->isTuplet()) {
                   Tuplet* tuplet = toTuplet(e);
                   Direction d = tuplet->isUp() ? Direction::DOWN : Direction::UP;
-                  undoChangeProperty(tuplet, P_ID::DIRECTION, d);
+                  undoChangeProperty(tuplet, P_ID::DIRECTION, QVariant::fromValue<Direction>(d));
                   }
             else if (e->isNoteDot()) {
                   Note* note = toNote(e->parent());
                   Direction d = note->dotIsUp() ? Direction::DOWN : Direction::UP;
-                  undoChangeProperty(note, P_ID::DOT_POSITION, d);
+                  undoChangeProperty(note, P_ID::DOT_POSITION, QVariant::fromValue<Direction>(d));
                   }
             else if (e->isTempoText()
                || e->isStaffText()

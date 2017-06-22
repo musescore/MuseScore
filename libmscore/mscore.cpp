@@ -160,28 +160,30 @@ MsError MScore::_error { MS_NO_ERROR };
 //   Direction
 //---------------------------------------------------------
 
-Direction::Direction(const QString& s)
+Direction toDirection(const QString& s)
       {
+      Direction val;
       if (s == "up")
-            val = UP;
+            val = Direction::UP;
       else if (s == "down")
-            val = DOWN;
+            val = Direction::DOWN;
       else if (s == "auto")
-            val = AUTO;
+            val = Direction::AUTO;
       else
-            val = s.toInt();
+            val = Direction(s.toInt());
+      return val;
       }
 
 //---------------------------------------------------------
 //   Direction::toString
 //---------------------------------------------------------
 
-const char* Direction::toString() const
+const char* toString(Direction val)
       {
       switch (val) {
-            case AUTO: return "auto";
-            case UP:   return "up";
-            case DOWN: return "down";
+            case Direction::AUTO: return "auto";
+            case Direction::UP:   return "up";
+            case Direction::DOWN: return "down";
             }
       __builtin_unreachable();
       }
@@ -190,12 +192,12 @@ const char* Direction::toString() const
 //   fillComboBox
 //---------------------------------------------------------
 
-void Direction::fillComboBox(QComboBox* cb)
+void fillComboBoxDirection(QComboBox* cb)
       {
       cb->clear();
-      cb->addItem(qApp->translate("Direction", "auto"), int(AUTO));
-      cb->addItem(qApp->translate("Direction", "up"),   int(UP));
-      cb->addItem(qApp->translate("Direction", "down"), int(DOWN));
+      cb->addItem(qApp->translate("Direction", "auto"), QVariant::fromValue<Direction>(Direction::AUTO));
+      cb->addItem(qApp->translate("Direction", "up"),   QVariant::fromValue<Direction>(Direction::UP));
+      cb->addItem(qApp->translate("Direction", "down"), QVariant::fromValue<Direction>(Direction::DOWN));
       }
 
 static Spatium doubleToSpatium(double d) { return Spatium(d); }
@@ -214,7 +216,7 @@ void MScore::init()
 #ifdef SCRIPT_INTERFACE
       qRegisterMetaType<Note::ValueType>   ("ValueType");
 
-      qRegisterMetaType<Direction::E>("Direction");
+//      qRegisterMetaType<Direction::E>("Direction");
 
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
       qRegisterMetaType<Element::Placement>("Placement");
@@ -415,7 +417,7 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
             //-----------mscore bindings
             qmlRegisterUncreatableMetaObject(Ms::staticMetaObject, "MuseScore", 1, 0, "Ms", enumErr);
-            qmlRegisterUncreatableType<Direction>("MuseScore", 1, 0, "Direction", tr(enumErr));
+//            qmlRegisterUncreatableType<Direction>("MuseScore", 1, 0, "Direction", tr(enumErr));
 
             qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
             qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");

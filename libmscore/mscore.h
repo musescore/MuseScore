@@ -17,7 +17,6 @@
 #include "style.h"
 
 namespace Ms {
-//      Q_NAMESPACE
 
 #define MSC_VERSION     "3.00"
 static constexpr int MSCVERSION = 300;
@@ -138,41 +137,6 @@ static const int  FRET_NONE               = -1;       // no ordinal for a fret
             };\
       };
 #endif
-
-//---------------------------------------------------------
-//   Direction
-//---------------------------------------------------------
-
-class Direction  {
-      Q_GADGET
-      Q_ENUMS(E)
-      int val;
-
-   public:
-      enum E { AUTO, UP, DOWN };
-
-      Direction()                                {}
-      constexpr Direction(const int v) : val(v)  {}
-      Direction(const Direction& v) : val(v.val) {}
-      Direction(const QString&);
-
-      // automatic conversions
-      operator QVariant() const                { return QVariant::fromValue(*this); }
-//      explicit constexpr operator int() const  { return val; }
-      constexpr operator int() const  { return val; }
-
-      bool operator==(const Direction d) const { return val == d.val; }
-      bool operator!=(const Direction d) const { return val != d.val; }
-      bool operator==(const E d) const         { return val == d; }
-      bool operator!=(const E d) const         { return val != d; }
-
-      const char* toString() const;
-      static void fillComboBox(QComboBox*);
-      };
-
-constexpr Direction Direction_AUTO(0);
-constexpr Direction Direction_UP(1);
-constexpr Direction Direction_DOWN(2);
 
 //---------------------------------------------------------
 //   BracketType
@@ -535,9 +499,10 @@ public:
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Direction);
-//Q_DECLARE_METATYPE(Ms::MSQE_Direction::E);
-Q_DECLARE_METATYPE(Ms::Direction::E);
+// Q_DECLARE_METATYPE(Ms::Direction);
+// Q_DECLARE_METATYPE(Ms::MSQE_Direction::E);
+// Q_DECLARE_METATYPE(Ms::Direction::E);
+
 Q_DECLARE_METATYPE(Ms::MScore::DirectionH);
 Q_DECLARE_METATYPE(Ms::BarLineType);
 

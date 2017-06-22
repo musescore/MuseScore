@@ -2341,8 +2341,8 @@ void Score::getNextMeasure(LayoutContext& lc)
                                           for (Chord* c : chord->graceNotes()) {
                                                 c->setMag(m * score()->styleD(StyleIdx::graceNoteMag));
                                                 c->computeUp();
-                                                if (c->stemDirection() != Direction_AUTO)
-                                                      c->setUp(c->stemDirection() == Direction_UP);
+                                                if (c->stemDirection() != Direction::AUTO)
+                                                      c->setUp(c->stemDirection() == Direction::UP);
                                                 else
                                                       c->setUp(!(t % 2));
                                                 c->layoutStem1();
