@@ -2177,7 +2177,7 @@ void Beam::reset()
             undoChangeProperty(P_ID::USER_MODIFIED, false);
             }
       if (beamDirection() != Direction::AUTO)
-            undoChangeProperty(P_ID::STEM_DIRECTION, Direction(Direction::AUTO));
+            undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
       if (noSlopeStyle == PropertyFlags::UNSTYLED)
             resetProperty(P_ID::BEAM_NO_SLOPE);       // TODO: make undoable
 
@@ -2334,7 +2334,7 @@ void Beam::setUserModified(bool val)
 QVariant Beam::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_ID::STEM_DIRECTION: return beamDirection();
+            case P_ID::STEM_DIRECTION: return QVariant::fromValue<Direction>(beamDirection());
             case P_ID::DISTRIBUTE:     return distribute();
             case P_ID::GROW_LEFT:      return growLeft();
             case P_ID::GROW_RIGHT:     return growRight();
@@ -2396,7 +2396,7 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Beam::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case P_ID::STEM_DIRECTION: return Direction(Direction::AUTO);
+            case P_ID::STEM_DIRECTION: return QVariant::fromValue<Direction>(Direction::AUTO);
             case P_ID::DISTRIBUTE:     return false;
             case P_ID::GROW_LEFT:      return 1.0;
             case P_ID::GROW_RIGHT:     return 1.0;

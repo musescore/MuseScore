@@ -273,7 +273,7 @@ void SlurTie::undoSetLineType(int t)
 
 void SlurTie::undoSetSlurDirection(Direction d)
       {
-      undoChangeProperty(P_ID::SLUR_DIRECTION, d);
+      undoChangeProperty(P_ID::SLUR_DIRECTION, QVariant::fromValue<Direction>(d));
       }
 
 //---------------------------------------------------------
@@ -286,7 +286,7 @@ QVariant SlurTie::getProperty(P_ID propertyId) const
             case P_ID::LINE_TYPE:
                   return lineType();
             case P_ID::SLUR_DIRECTION:
-                  return slurDirection();
+                  return QVariant::fromValue<Direction>(slurDirection());
             default:
                   return Spanner::getProperty(propertyId);
             }
@@ -322,7 +322,7 @@ QVariant SlurTie::propertyDefault(P_ID id) const
             case P_ID::LINE_TYPE:
                   return 0;
             case P_ID::SLUR_DIRECTION:
-                  return Direction_AUTO;
+                  return QVariant::fromValue<Direction>(Direction::AUTO);
             default:
                   return Spanner::propertyDefault(id);
             }

@@ -202,7 +202,7 @@ subdirs (
         biab
 #        musicxml
         guitarpro
-#        scripting
+        scripting
 #        testoves
         zerberus/comments
         zerberus/envelopes

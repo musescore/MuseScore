@@ -305,7 +305,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::tupletNoteLeftDistance,  "tupletNoteLeftDistance",  Spatium(0.0) },
       { StyleIdx::tupletNoteRightDistance, "tupletNoteRightDistance", Spatium(0.0) },
       { StyleIdx::tupletBracketWidth,      "tupletBracketWidth",      Spatium(0.1) },
-      { StyleIdx::tupletDirection,         "tupletDirection",         Direction(Direction::AUTO) },
+      { StyleIdx::tupletDirection,         "tupletDirection",         QVariant::fromValue<Direction>(Direction::AUTO) },
       { StyleIdx::tupletNumberType,        "tupletNumberType",        int(Tuplet::NumberType::SHOW_NUMBER) },
       { StyleIdx::tupletBracketType,       "tupletBracketType",       int(Tuplet::BracketType::AUTO_BRACKET) },
 
