@@ -35,7 +35,7 @@ Articulation::Articulation(Score* s)
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _symId         = SymId::noSym;
       _anchor        = ArticulationAnchor::TOP_STAFF;
-      _direction     = Direction_AUTO;
+      _direction     = Direction::AUTO;
       _up            = true;
       _timeStretch   = 1.0;
       _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
@@ -249,8 +249,8 @@ void Articulation::layout()
 void Articulation::setDirection(Direction d)
       {
       _direction = d;
-//      if (d != Direction_AUTO)
-//            _up = (d == Direction_UP);
+//      if (d != Direction::AUTO)
+//            _up = (d == Direction::UP);
       }
 
 //---------------------------------------------------------
@@ -260,8 +260,8 @@ void Articulation::setDirection(Direction d)
 void Articulation::reset()
       {
 #if 0
-      if (_direction != Direction_AUTO)
-            undoChangeProperty(P_ID::DIRECTION, Direction_AUTO);
+      if (_direction != Direction::AUTO)
+            undoChangeProperty(P_ID::DIRECTION, Direction::AUTO);
       ArticulationAnchor a = score()->style()->articulationAnchor(int(articulationType()));
       if (_anchor != a)
             undoChangeProperty(P_ID::ARTICULATION_ANCHOR, int(a));
@@ -285,7 +285,7 @@ QLineF Articulation::dragAnchor() const
 QVariant Articulation::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_ID::DIRECTION:           return direction();
+            case P_ID::DIRECTION:           return QVariant::fromValue<Direction>(direction());
             case P_ID::ARTICULATION_ANCHOR: return int(anchor());
             case P_ID::TIME_STRETCH:        return timeStretch();
             case P_ID::ORNAMENT_STYLE:      return int(ornamentStyle());
@@ -333,7 +333,7 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::DIRECTION:
-                  return Direction_AUTO;
+                  return QVariant::fromValue<Direction>(Direction::AUTO);
 
             case P_ID::ARTICULATION_ANCHOR:
                   switch (_symId) {

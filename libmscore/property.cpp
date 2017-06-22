@@ -410,7 +410,7 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   }
 
             case P_TYPE::DIRECTION:
-                  return QVariant::fromValue(Direction(e.readElementText()));
+                  return QVariant::fromValue<Direction>(toDirection(e.readElementText()));
 
             case P_TYPE::DIRECTION_H:
                   {

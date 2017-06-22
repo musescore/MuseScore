@@ -34,6 +34,7 @@ add_library (
       ${PROJECT_BINARY_DIR}/all.h
       ${INCS}
       ${LIB_SCRIPT_FILES}
+      types.h
       segmentlist.cpp fingering.cpp accidental.cpp arpeggio.cpp
       articulation.cpp barline.cpp beam.cpp bend.cpp box.cpp
       bracket.cpp breath.cpp bsp.cpp chord.cpp chordline.cpp

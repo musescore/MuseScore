@@ -5,29 +5,18 @@ MuseScore {
       menuPath: "Plugins.p1"
       onRun: {
             openLog("p1.log");
-            logn("test script p1")
+            logn("test script p1: read score elements")
 
-            // check Direction enum
-            log2("     Direction.AUTO: ", Direction.AUTO);
-            log2("     Direction.UP:   ", Direction.UP);
-            log2("     Direction.DOWN: ", Direction.DOWN);
-
-            log2("     Ms.CHORD: ", Ms.CHORD);
-
-            var cursor = curScore.newCursor();
-            cursor.voice = 0;
+            var cursor      = curScore.newCursor();
+            cursor.voice    = 0;
             cursor.staffIdx = 0;
-            log2("filter:", cursor.filter);
-            cursor.filter = -1;
-            log2("filter:", cursor.filter);
+            cursor.filter   = -1;
             cursor.rewind(0);
 
             while (cursor.segment()) {
                   var e = cursor.element();
                   if (e) {
-                        log2("type is:", e.type);
-                        log2("name is:", e.name);
-                        log2("tick is:", e.tick);
+                        log2("found:", e.name + " (" + e.type + ") at " + e.tick);
                         if (e.type == Ms.CHORD) {
                             log2("  durationType:",  e.durationType);
                             log2("  beamMode:",      e.get("beam_mode"));

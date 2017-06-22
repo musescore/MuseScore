@@ -1,42 +1,18 @@
-test script p1
-     Direction.AUTO: 0
-     Direction.UP:   1
-     Direction.DOWN: 2
-filter:512
-filter:-1
-Clef
-type is:16
-KeySig
-type is:17
-TimeSig
-type is:19
-Chord
-type is:80
-  durationType:480
+test script p1: read score elements
+found:Clef (20) at 0
+found:KeySig (21) at 0
+found:TimeSig (23) at 0
+found:Chord (85) at 0
+  durationType:
   beamMode:0
   small:false
-  stemDirection:0
+  stemDirection:AUTO
   duration:
-    numerator:1
-    denominator:4
-    ticks:480
-Rest
-type is:20
-  duration:
-    numerator:1
-    denominator:4
-    ticks:480
-  beamMode:4
-  small:false
-Chord
-type is:80
-  durationType:960
+found:Rest (24) at 480
+found:Chord (85) at 960
+  durationType:
   beamMode:0
   small:false
-  stemDirection:0
+  stemDirection:AUTO
   duration:
-    numerator:1
-    denominator:2
-    ticks:960
-BarLine
-type is:7
+found:BarLine (11) at 1920

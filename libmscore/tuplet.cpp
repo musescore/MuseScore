@@ -900,7 +900,7 @@ QVariant Tuplet::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::DIRECTION:
-                  return _direction;
+                  return QVariant::fromValue<Direction>(_direction);
             case P_ID::NUMBER_TYPE:
                   return int(_numberType);
             case P_ID::BRACKET_TYPE:

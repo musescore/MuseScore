@@ -355,7 +355,7 @@ void XmlWriter::tag(const QString& name, QVariant data)
                         *this << QString("<%1>%2/%3</%1>\n").arg(name).arg(f.numerator()).arg(f.denominator());
                         }
                   else if (strcmp(type, "Ms::Direction") == 0)
-                        *this << QString("<%1>%2</%1>\n").arg(name).arg(data.value<Direction>().toString());
+                        *this << QString("<%1>%2</%1>\n").arg(name).arg(toString(data.value<Direction>()));
                   else if (strcmp(type, "Ms::Align") == 0) {
                         Align a = Align(data.toInt());
                         const char* h;

@@ -464,7 +464,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
             if (!strcmp("Direction", type)) {
                   QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
-                  Direction::fillComboBox(cb);
+                  fillComboBoxDirection(cb);
                   }
             if (sw.reset) {
                   sw.reset->setIcon(*icons[int(Icons::reset_ICON)]);
@@ -633,7 +633,7 @@ QVariant EditStyle::getValue(StyleIdx idx)
       else if (!strcmp("Ms::Direction", type)) {
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
             if (cb)
-                  return Direction(cb->currentIndex());
+                  return cb->currentIndex();
             else
                   qFatal("unhandled Direction");
             }
