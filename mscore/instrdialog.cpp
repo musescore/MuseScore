@@ -104,8 +104,8 @@ void InstrumentsDialog::on_saveButton_clicked()
             }
       xml.etag();
       if (f.error() != QFile::NoError) {
-            QString s = tr("Write Style failed: ") + f.errorString();
-            QMessageBox::critical(this, tr("Write Style"), s);
+            QString s = tr("Write Instruments File failed: ") + f.errorString();
+            QMessageBox::critical(this, tr("Write Instruments File"), s);
             }
       }
 
