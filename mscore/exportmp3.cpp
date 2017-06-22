@@ -78,7 +78,10 @@ bool MP3Exporter::findLibrary()
       QString libPath = QFileDialog::getOpenFileName(
            0, qApp->translate("MP3Exporter", "Where is %1 ?").arg(getLibraryName()),
            path,
-           getLibraryTypeString());
+           getLibraryTypeString(),
+           0,
+           preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
+           );
 
       if (libPath.isEmpty())
             return false;

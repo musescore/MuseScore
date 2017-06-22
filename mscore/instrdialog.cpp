@@ -20,6 +20,7 @@
 
 #include "instrdialog.h"
 #include "musescore.h"
+#include "preferences.h"
 #include "scoreview.h"
 #include "seq.h"
 #include "libmscore/barline.h"
@@ -73,7 +74,9 @@ void InstrumentsDialog::on_saveButton_clicked()
          this,
          tr("Save Instrument List"),
          ".",
-         tr("MuseScore Instruments") + " (*.xml)"
+         tr("MuseScore Instruments") + " (*.xml)",
+         0,
+         preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
       if (name.isEmpty())
             return;
@@ -115,7 +118,9 @@ void InstrumentsDialog::on_loadButton_clicked()
       QString fn = QFileDialog::getOpenFileName(
          this, tr("Load Instrument List"),
           mscoreGlobalShare + "/templates",
-         tr("MuseScore Instruments") + " (*.xml)"
+         tr("MuseScore Instruments") + " (*.xml)",
+         0,
+         preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
       if (fn.isEmpty())
             return;
