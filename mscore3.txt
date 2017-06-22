@@ -147,26 +147,8 @@ Palette handling
                   ...
 
       * enums
-        Some scoped enums can be replaced by classes. Example:
-
-            class Direction {
-                  ...
-               public:
-                  enum _Direction { AUTO, UP, DOWN };
-                  ...
-                  };
-
-        Goal is to allow
-            - allow type conversion (to QVariant for example)
-            - add conversion to/from string for use in Xml::read(...)/Xml::write(xxx)
-            - export to qml scripting
-
-        Drawbacks:
-            - forward declaration is not possible as for c++11 "enum class"
-            - the enum _Direction is a different type than Direction; which sometimes
-              require a static_cast
-
-        This is somehow experimental.
+            To export enums for scripting we collect them in types.h and use the new
+            qt feature Q_NAMESPACE.
 
       * debug messages
             - use qWarning(), qCritical() and qFatal()
