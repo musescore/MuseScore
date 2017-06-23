@@ -6656,6 +6656,7 @@
                       <line>7</line>
                       <voice>0</voice>
                       <name>Drum4</name>
+                      <shortcut>A</shortcut>
                       <stem>1</stem>
                       </Drum>
                     <Drum pitch="37">
@@ -6663,6 +6664,7 @@
                       <line>7</line>
                       <voice>0</voice>
                       <name>Drum4 Rim</name>
+                      <shortcut>B</shortcut>
                       <stem>1</stem>
                       </Drum>
                     <Drum pitch="38">
@@ -6698,6 +6700,7 @@
                       <line>5</line>
                       <voice>0</voice>
                       <name>Drum3</name>
+                      <shortcut>C</shortcut>
                       <stem>1</stem>
                       </Drum>
                     <Drum pitch="49">
@@ -6705,6 +6708,7 @@
                       <line>5</line>
                       <voice>0</voice>
                       <name>Drum3 Rim</name>
+                      <shortcut>D</shortcut>
                       <stem>1</stem>
                       </Drum>
                     <Drum pitch="50">
@@ -6733,6 +6737,7 @@
                       <line>3</line>
                       <voice>0</voice>
                       <name>Drum2</name>
+                      <shortcut>E</shortcut>
                       <stem>1</stem>
                       </Drum>
                     <Drum pitch="61">
@@ -6740,6 +6745,7 @@
                       <line>3</line>
                       <voice>0</voice>
                       <name>Drum2 Rim</name>
+                      <shortcut>F</shortcut>
                       <stem>1</stem>
                       </Drum>
                     <Drum pitch="62">
@@ -6761,6 +6767,7 @@
                       <line>1</line>
                       <voice>0</voice>
                       <name>Drum1</name>
+                      <shortcut>G</shortcut>
                       <stem>1</stem>
                       </Drum>
                     <Drum pitch="73">
@@ -6854,6 +6861,7 @@
                       <line>7</line>
                       <voice>0</voice>
                       <name>Bass Drum 1</name>
+                      <shortcut>A</shortcut>
                       <stem>1</stem>
                       </Drum>
                     <Drum pitch="39">
@@ -6861,6 +6869,7 @@
                       <line>7</line>
                       <voice>0</voice>
                       <name>Bass Drum 1 Rim Knock</name>
+                      <shortcut>B</shortcut>
                       <stem>1</stem>
                       </Drum>
                     <Drum pitch="49">
@@ -6868,6 +6877,7 @@
                       <line>5</line>
                       <voice>0</voice>
                       <name>Bass Drum 2</name>
+                      <shortcut>C</shortcut>
                       <stem>1</stem>
                       </Drum>
                     <Drum pitch="51">
@@ -6875,6 +6885,7 @@
                       <line>5</line>
                       <voice>0</voice>
                       <name>Bass Drum 2 Rim Knock</name>
+                      <shortcut>D</shortcut>
                       <stem>1</stem>
                       </Drum>
                     <Drum pitch="61">
@@ -6882,6 +6893,7 @@
                       <line>3</line>
                       <voice>0</voice>
                       <name>Bass Drum 3</name>
+                      <shortcut>E</shortcut>
                       <stem>1</stem>
                       </Drum>
                     <Drum pitch="63">
@@ -6889,6 +6901,7 @@
                       <line>3</line>
                       <voice>0</voice>
                       <name>Bass Drum 3 Rim Knock</name>
+                      <shortcut>F</shortcut>
                       <stem>1</stem>
                       </Drum>
                     <Drum pitch="73">
@@ -6896,6 +6909,7 @@
                       <line>1</line>
                       <voice>0</voice>
                       <name>Bass Drum 4</name>
+                      <shortcut>G</shortcut>
                       <stem>1</stem>
                       </Drum>
                     <Drum pitch="75">
