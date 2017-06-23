@@ -1330,10 +1330,6 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
       for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
             qreal d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx));
             w       = qMax(w, d);
-            if (st == SegmentType::EndBarLine && nst == SegmentType::TimeSigAnnounce) {
-                  printf("=====ebl - tsa  %f %f\n", d, w);
-                  w = 0;
-                  }
             }
 
       if (isChordRestType()) {
