@@ -131,7 +131,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::systemHeaderDistance,    "systemHeaderDistance",    Spatium(2.5) },     // gould: 2.5
       { StyleIdx::systemHeaderTimeSigDistance, "systemHeaderTimeSigDistance", Spatium(2.0) },  // gould: 2.0
 
-      { StyleIdx::clefBarlineDistance,     "clefBarlineDistance",     Spatium(0.18) },      // was 0.5
+      { StyleIdx::clefBarlineDistance,     "clefBarlineDistance",     Spatium(0.5) },
       { StyleIdx::timesigBarlineDistance,  "timesigBarlineDistance",  Spatium(0.5) },
       { StyleIdx::stemWidth,               "stemWidth",               Spatium(0.13) },      // 0.09375
       { StyleIdx::shortenStem,             "shortenStem",             QVariant(true) },
