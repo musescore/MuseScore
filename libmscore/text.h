@@ -168,7 +168,6 @@ class TextBlock {
       QRectF boundingRect(int col1, int col2, const Text*) const;
       int columns() const;
       void insert(TextCursor*, const QString&);
-//      void insert(TextCursor*, SymId);
       QString remove(int column);
       QString remove(int start, int n);
       int column(qreal x, Text*) const;
