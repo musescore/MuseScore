@@ -21,6 +21,7 @@
       <repeatBarTips>1</repeatBarTips>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
+      <clefBarlineDistance>0.18</clefBarlineDistance>
       <stemWidth>0.16</stemWidth>
       <lastSystemFillLimit>0.25</lastSystemFillLimit>
       <pedalPosBelow>0</pedalPosBelow>
