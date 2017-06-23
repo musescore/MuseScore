@@ -2629,7 +2629,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
             // 1st pass: StaffLines
             for  (System* s : *page->systems()) {
                   for (int i = 0, n = s->staves()->size(); i < n; i++) {
-                        if (score->staff(i)->invisible())
+                        if (score->staff(i)->invisible() || !score->staff(i)->show())
                               continue;  // ignore invisible staves
                         if (s->staves()->isEmpty() || !s->staff(i)->show())
                               continue;
