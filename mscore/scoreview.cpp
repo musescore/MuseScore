@@ -1816,8 +1816,8 @@ void ScoreView::cmd(const QAction* a)
             else
                   getAction("play")->setChecked(false);
             }
-      else if (cmd == "find")
-            ; // TODO:state         sm->postEvent(new CommandEvent(cmd));
+//      else if (cmd == "find")
+//            ; // TODO:state         sm->postEvent(new CommandEvent(cmd));
       else if (cmd == "page-prev")
             pagePrev();
       else if (cmd == "page-next")
@@ -3176,7 +3176,7 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
                   }
             if ((lastNote == 0) && !el.isEmpty()) {
                   editData.element = el.front();
-//TODO:state                  sm->postEvent(new CommandEvent("edit"));  // calls startCmd()
+                  changeState(ViewState::EDIT);
                   }
             else
                   _score->endCmd();
@@ -3239,7 +3239,7 @@ void ScoreView::cmdAddHairpin(HairpinType type)
             else {
                   if (!el.isEmpty()) {
                         editData.element = el.front();
-//TODO:state                        sm->postEvent(new CommandEvent("edit"));  // calls startCmd()
+                        changeState(ViewState::EDIT);
                         }
                   else
                         _score->endCmd();
@@ -3954,8 +3954,8 @@ void ScoreView::cmdAddText(TEXT type)
       {
       if (!_score->checkHasMeasures())
             return;
-//      if (noteEntryMode())          // force out of entry mode
-//TODO:state            sm->postEvent(new CommandEvent("note-input"));
+      if (noteEntryMode())          // force out of entry mode
+            changeState(ViewState::NORMAL);
 
       Text* s = 0;
       _score->startCmd();
