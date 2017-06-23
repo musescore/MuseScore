@@ -966,7 +966,7 @@ Segment* skipTuplet(Tuplet* tuplet)
 std::vector<SymId> toTimeSigString(const QString& s)
       {
       struct Dict {
-            int code;
+            QChar code;
             SymId id;
             };
       static const std::vector<Dict> dict = {
