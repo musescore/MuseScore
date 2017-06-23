@@ -83,7 +83,6 @@
         <TimeSig>
           <sigN>2</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
           <lid>1</lid>
@@ -125,7 +124,6 @@
         <TimeSig>
           <sigN>2</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
           <lid>1</lid>

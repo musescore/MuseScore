@@ -76,7 +76,6 @@
         <TimeSig>
           <sigN>9</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
           <dots>1</dots>

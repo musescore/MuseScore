@@ -1534,47 +1534,6 @@ bool Element::symIsValid(SymId id) const
       }
 
 //---------------------------------------------------------
-//   toTimeSigString
-//---------------------------------------------------------
-
-std::vector<SymId> Element::toTimeSigString(const QString& s) const
-      {
-      std::vector<SymId> d;
-      for (int i = 0; i < s.size(); ++i) {
-            switch (s[i].unicode()) {
-                  case 43: d.push_back(SymId::timeSigPlusSmall); break; // '+'
-                  case 48: d.push_back(SymId::timeSig0); break;         // '0'
-                  case 49: d.push_back(SymId::timeSig1); break;         // '1'
-                  case 50: d.push_back(SymId::timeSig2); break;         // '2'
-                  case 51: d.push_back(SymId::timeSig3); break;         // '3'
-                  case 52: d.push_back(SymId::timeSig4); break;         // '4'
-                  case 53: d.push_back(SymId::timeSig5); break;         // '5'
-                  case 54: d.push_back(SymId::timeSig6); break;         // '6'
-                  case 55: d.push_back(SymId::timeSig7); break;         // '7'
-                  case 56: d.push_back(SymId::timeSig8); break;         // '8'
-                  case 57: d.push_back(SymId::timeSig9); break;         // '9'
-                  case 67: d.push_back(SymId::timeSigCommon); break;    // 'C'
-                  case 40: d.push_back(SymId::timeSigParensLeftSmall); break;  // '('
-                  case 41: d.push_back(SymId::timeSigParensRightSmall); break; // ')'
-                  case 162: d.push_back(SymId::timeSigCutCommon); break;    // '¢'
-                  case 59664: d.push_back(SymId::mensuralProlation1); break;
-                  case 79:                                          // 'O'
-                  case 59665: d.push_back(SymId::mensuralProlation2); break;
-                  case 216:                                        // 'Ø'
-                  case 59666: d.push_back(SymId::mensuralProlation3); break;
-                  case 59667: d.push_back(SymId::mensuralProlation4); break;
-                  case 59668: d.push_back(SymId::mensuralProlation5); break;
-                  case 59670: d.push_back(SymId::mensuralProlation7); break;
-                  case 59671: d.push_back(SymId::mensuralProlation8); break;
-                  case 59673: d.push_back(SymId::mensuralProlation10); break;
-                  case 59674: d.push_back(SymId::mensuralProlation11); break;
-                  default:  break;  // d += s[i]; break;
-                  }
-            }
-      return d;
-      }
-
-//---------------------------------------------------------
 //   concertPitch
 //---------------------------------------------------------
 

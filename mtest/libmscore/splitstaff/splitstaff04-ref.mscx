@@ -84,7 +84,7 @@
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>0</showCourtesySig>
+          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <Rest>
           <durationType>quarter</durationType>
@@ -120,7 +120,7 @@
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>0</showCourtesySig>
+          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <Rest>
           <durationType>quarter</durationType>

@@ -124,7 +124,6 @@
         <TimeSig>
           <sigN>6</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
           <style>Instrument Change</style>
@@ -426,7 +425,6 @@
         <TimeSig>
           <sigN>9</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
           <style>Instrument Change</style>
@@ -694,7 +692,6 @@
         <TimeSig>
           <sigN>12</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
           <style>Instrument Change</style>
@@ -852,7 +849,6 @@
         <TimeSig>
           <sigN>6</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>eighth</durationType>
@@ -1100,7 +1096,6 @@
         <TimeSig>
           <sigN>9</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
           <durationType>quarter</durationType>
@@ -1297,7 +1292,6 @@
         <TimeSig>
           <sigN>12</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <dots>1</dots>

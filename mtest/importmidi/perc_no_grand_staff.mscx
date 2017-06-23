@@ -319,7 +319,6 @@
         <TimeSig>
           <sigN>12</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
@@ -353,7 +352,6 @@
         <TimeSig>
           <sigN>12</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>

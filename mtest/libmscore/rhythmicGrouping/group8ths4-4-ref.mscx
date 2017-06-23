@@ -128,7 +128,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
           <style>Instrument Change</style>
@@ -647,7 +646,6 @@ N = 1 eighth note</text>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>eighth</durationType>
