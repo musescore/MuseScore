@@ -90,7 +90,6 @@
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
@@ -226,7 +225,6 @@
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>

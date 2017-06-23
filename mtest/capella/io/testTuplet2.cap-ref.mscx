@@ -56,7 +56,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Beam id="1">
           <l1>8</l1>
@@ -548,7 +547,6 @@
         <TimeSig>
           <sigN>12</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Beam id="6">
           <l1>8</l1>
@@ -1192,7 +1190,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Beam id="13">
           <l1>8</l1>

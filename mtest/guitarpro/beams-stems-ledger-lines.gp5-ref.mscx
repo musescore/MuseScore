@@ -66,7 +66,6 @@
           <lid>3</lid>
           <sigN>12</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <RehearsalMark>
           <lid>4</lid>
@@ -994,7 +993,6 @@
             <lid>3</lid>
             <sigN>12</sigN>
             <sigD>8</sigD>
-            <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <RehearsalMark>
             <lid>4</lid>

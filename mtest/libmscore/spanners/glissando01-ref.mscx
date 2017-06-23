@@ -85,7 +85,6 @@
         <TimeSig>
           <sigN>2</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>0</showCourtesySig>
           </TimeSig>
         <StaffText>
           <text>Simple case</text>
@@ -258,7 +257,6 @@ in other staff</text>
         <TimeSig>
           <sigN>2</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>0</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>

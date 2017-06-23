@@ -76,7 +76,6 @@
         <TimeSig>
           <sigN>6</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Tuplet id="1">
           <normalNotes>3</normalNotes>

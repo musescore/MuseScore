@@ -80,7 +80,6 @@
           <lid>1</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Harmony>
           <root>17</root>
@@ -191,7 +190,6 @@
             <lid>1</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Harmony>
             <root>17</root>

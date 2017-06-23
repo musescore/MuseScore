@@ -145,7 +145,6 @@
           <lid>2</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <lid>3</lid>
@@ -217,7 +216,6 @@
           <lid>17</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <lid>18</lid>
@@ -354,7 +352,6 @@
             <lid>2</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Rest>
             <lid>3</lid>
@@ -508,7 +505,6 @@
             <lid>17</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Rest>
             <lid>18</lid>

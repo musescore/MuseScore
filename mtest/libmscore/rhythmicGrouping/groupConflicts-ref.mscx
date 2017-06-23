@@ -138,7 +138,6 @@
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
           <style>Instrument Change</style>
@@ -200,7 +199,6 @@
         <TimeSig>
           <sigN>6</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
           <style>Instrument Change</style>
@@ -280,7 +278,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
           <style>Instrument Change</style>
@@ -534,7 +531,6 @@
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
           <text>Incorrect</text>
@@ -607,7 +603,6 @@
         <TimeSig>
           <sigN>6</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
           <text>Incorrect</text>
@@ -699,7 +694,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
           <text>Correct</text>

@@ -260,7 +260,6 @@
         <TimeSig>
           <sigN>6</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
           <durationType>eighth</durationType>

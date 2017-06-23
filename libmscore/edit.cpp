@@ -706,11 +706,9 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
       if (ots && ots->sig().identical(ns) && ots->stretch() == ts->stretch()) {
             ots->undoChangeProperty(P_ID::TIMESIG, QVariant::fromValue(ns));
             ots->undoChangeProperty(P_ID::GROUPS,  QVariant::fromValue(ts->groups()));
-            if (ts->hasCustomText()) {
-                  ots->undoChangeProperty(P_ID::NUMERATOR_STRING, ts->numeratorString());
-                  ots->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
-                  }
-            foreach (Score* score, scoreList()) {
+            ots->undoChangeProperty(P_ID::NUMERATOR_STRING,   ts->numeratorString());
+            ots->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
+            for (Score* score : scoreList()) {
                   Measure* fm = score->tick2measure(tick);
                   for (Measure* m = fm; m; m = m->nextMeasure()) {
                         if ((m != fm) && m->first(SegmentType::TimeSig))
@@ -726,10 +724,8 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
                   TimeSig* nsig = toTimeSig(seg->element(staffIdx * VOICES));
                   undoChangeProperty(nsig, P_ID::TIMESIG_TYPE, int(ts->timeSigType()));
-                  if (ts->hasCustomText()) {
-                        nsig->undoChangeProperty(P_ID::NUMERATOR_STRING, ts->numeratorString());
-                        nsig->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
-                        }
+                  nsig->undoChangeProperty(P_ID::NUMERATOR_STRING,   ts->numeratorString());
+                  nsig->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
                   }
             }
       else {
@@ -806,10 +802,9 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               nsig->undoChangeProperty(P_ID::SHOW_COURTESY, ts->showCourtesySig());
                               nsig->undoChangeProperty(P_ID::TIMESIG_TYPE, int(ts->timeSigType()));
                               nsig->undoChangeProperty(P_ID::TIMESIG, QVariant::fromValue(ts->sig()));
-                              if (ts->hasCustomText()) {
-                                    nsig->undoChangeProperty(P_ID::NUMERATOR_STRING, ts->numeratorString());
-                                    nsig->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
-                                    }
+                              nsig->undoChangeProperty(P_ID::NUMERATOR_STRING, ts->numeratorString());
+                              nsig->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
+
                               // HACK do it twice to accommodate undo
                               nsig->undoChangeProperty(P_ID::TIMESIG_TYPE, int(ts->timeSigType()));
                               nsig->undoChangeProperty(P_ID::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));

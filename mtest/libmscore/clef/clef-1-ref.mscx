@@ -73,7 +73,6 @@
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Clef>
           <concertClefType>F</concertClefType>
@@ -153,7 +152,6 @@
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Clef>
           <concertClefType>G</concertClefType>

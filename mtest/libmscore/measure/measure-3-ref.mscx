@@ -120,7 +120,6 @@
           <lid>1</lid>
           <sigN>2</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Tempo>
           <tempo>1.66667</tempo>
@@ -210,7 +209,6 @@
           <lid>2</lid>
           <sigN>2</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <lid>3</lid>
@@ -257,7 +255,6 @@
           <lid>8</lid>
           <sigN>2</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <lid>9</lid>
@@ -382,7 +379,6 @@
             <lid>1</lid>
             <sigN>2</sigN>
             <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Tempo>
             <tempo>1.66667</tempo>
@@ -472,7 +468,6 @@
             <lid>2</lid>
             <sigN>2</sigN>
             <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Rest>
             <lid>3</lid>
@@ -591,7 +586,6 @@
             <lid>8</lid>
             <sigN>2</sigN>
             <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Tempo>
             <tempo>1.66667</tempo>
@@ -609,7 +603,6 @@
           <TimeSig>
             <sigN>2</sigN>
             <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Tempo>
             <tempo>1.66667</tempo>
