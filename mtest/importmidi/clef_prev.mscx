@@ -77,7 +77,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
           <durationType>quarter</durationType>

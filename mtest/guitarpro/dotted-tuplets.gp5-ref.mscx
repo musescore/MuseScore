@@ -68,7 +68,6 @@
           <lid>3</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <lid>4</lid>
@@ -244,7 +243,6 @@
             <lid>3</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Rest>
             <lid>4</lid>

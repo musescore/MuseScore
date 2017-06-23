@@ -105,7 +105,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
                   otherCombo->setItemData(idx, (int)symId);
                   // if time sig matches this symbol string, set as selected
                   if (timesig->timeSigType() == TimeSigType::NORMAL && timesig->denominatorString().isEmpty()
-                  && timesig->numeratorString() == str) {
+                     && timesig->numeratorString() == str) {
                         textButton->setChecked(false);
                         otherButton->setChecked(true);
                         otherCombo->setCurrentIndex(idx);
@@ -128,11 +128,6 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
 
 void TimeSigProperties::accept()
       {
-      if (zText->text() != timesig->numeratorString())
-            timesig->setNumeratorString(zText->text());
-      if (nText->text() != timesig->denominatorString())
-            timesig->setDenominatorString(nText->text());
-
       TimeSigType ts = TimeSigType::NORMAL;
       if (textButton->isChecked())
             ts = TimeSigType::NORMAL;
@@ -154,6 +149,11 @@ void TimeSigProperties::accept()
       Fraction nominal(zNominal->value(), nNominal->value());
       timesig->setSig(actual, ts);
       timesig->setStretch(nominal / actual);
+
+      if (zText->text() != timesig->numeratorString())
+            timesig->setNumeratorString(zText->text());
+      if (nText->text() != timesig->denominatorString())
+            timesig->setDenominatorString(nText->text());
 
       Groups g = groups->groups();
       timesig->setGroups(g);

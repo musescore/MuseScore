@@ -115,7 +115,6 @@
           <lid>7</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Dynamic>
           <subtype>mf</subtype>
@@ -160,7 +159,6 @@
           <lid>17</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
           <lid>18</lid>
@@ -340,7 +338,6 @@
             <lid>7</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
@@ -385,7 +382,6 @@
             <lid>17</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Chord>
             <lid>18</lid>

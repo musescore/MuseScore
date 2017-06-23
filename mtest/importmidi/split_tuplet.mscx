@@ -82,7 +82,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Tuplet id="1">
           <normalNotes>2</normalNotes>
@@ -132,7 +131,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
           <durationType>16th</durationType>

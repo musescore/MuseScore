@@ -19,6 +19,7 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "segment.h"
+#include "utils.h"
 
 namespace Ms {
 
@@ -35,7 +36,6 @@ TimeSig::TimeSig(Score* s)
       {
       setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
       _showCourtesySig = true;
-      customText       = false;
       scaleStyle       = PropertyFlags::STYLED;
       setProperty(P_ID::SCALE, propertyDefault(P_ID::SCALE));
       _stretch.set(1, 1);
@@ -60,14 +60,11 @@ qreal TimeSig::mag() const
 
 void TimeSig::setSig(const Fraction& f, TimeSigType st)
       {
-      if (!_sig.identical(f)) {
-            _sig = f;
-            }
-      if (_timeSigType != st) {
-            _timeSigType = st;
-            }
-      customText = false;
+      _sig              = f;
+      _timeSigType      = st;
       _largeParentheses = false;
+      _numeratorString.clear();
+      _denominatorString.clear();
       }
 
 //---------------------------------------------------------
@@ -76,7 +73,7 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
 
 bool TimeSig::acceptDrop(EditData& data) const
       {
-      return data.element->type() == ElementType::TIMESIG;
+      return data.element->isTimeSig();
       }
 
 //---------------------------------------------------------
@@ -104,11 +101,8 @@ Element* TimeSig::drop(EditData& data)
 
 void TimeSig::setNumeratorString(const QString& a)
       {
-      if (_timeSigType ==  TimeSigType::NORMAL) {
+      if (_timeSigType == TimeSigType::NORMAL)
             _numeratorString = a;
-            customText = (_denominatorString != QString::number(_sig.denominator()))
-               || (_numeratorString != QString::number(_sig.numerator()));
-            }
       }
 
 //---------------------------------------------------------
@@ -118,11 +112,8 @@ void TimeSig::setNumeratorString(const QString& a)
 
 void TimeSig::setDenominatorString(const QString& a)
       {
-      if (_timeSigType ==  TimeSigType::NORMAL) {
+      if (_timeSigType ==  TimeSigType::NORMAL)
             _denominatorString = a;
-            customText = (_denominatorString != QString::number(_sig.denominator()))
-               || (_numeratorString != QString::number(_sig.numerator()));
-            }
       }
 
 //---------------------------------------------------------
@@ -132,8 +123,7 @@ void TimeSig::setDenominatorString(const QString& a)
 void TimeSig::write(XmlWriter& xml) const
       {
       xml.stag("TimeSig");
-      if (timeSigType() != TimeSigType::NORMAL)
-            xml.tag("subtype", int(timeSigType()));
+      writeProperty(xml, P_ID::TIMESIG_TYPE);
       Element::writeProperties(xml);
 
       xml.tag("sigN",  _sig.numerator());
@@ -142,15 +132,11 @@ void TimeSig::write(XmlWriter& xml) const
             xml.tag("stretchN", stretch().numerator());
             xml.tag("stretchD", stretch().denominator());
             }
-      if (customText) {
-            if (!_numeratorString.isEmpty())
-                  xml.tag("textN", _numeratorString);
-            if (!_denominatorString.isEmpty())
-                  xml.tag("textD", _denominatorString);
-            }
+      writeProperty(xml, P_ID::NUMERATOR_STRING);
+      writeProperty(xml, P_ID::DENOMINATOR_STRING);
       if (!_groups.empty())
             _groups.write(xml);
-      xml.tag("showCourtesySig", _showCourtesySig);
+      writeProperty(xml, P_ID::SHOW_COURTESY);
       writeProperty(xml, P_ID::SCALE);
 
       xml.etag();
@@ -164,8 +150,6 @@ void TimeSig::read(XmlReader& e)
       {
       int n=0, z1=0, z2=0, z3=0, z4=0;
       bool old = false;
-
-      customText = false;
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -228,7 +212,6 @@ void TimeSig::read(XmlReader& e)
             }
       if (old) {
             _sig.set(z1+z2+z3+z4, n);
-            customText = false;
             }
       _stretch.reduce();
       }
@@ -286,25 +269,24 @@ void TimeSig::layout()
       if (sigType ==  TimeSigType::FOUR_FOUR) {
             pz = QPointF(0.0, yoff);
             setbbox(symBbox(SymId::timeSigCommon).translated(pz));
-            _numeratorString = "C";
-            _denominatorString.clear();
+            ns.clear();
+            ns.push_back(SymId::timeSigCommon);
+            ds.clear();
             }
       else if (sigType == TimeSigType::ALLA_BREVE) {
             pz = QPointF(0.0, yoff);
             setbbox(symBbox(SymId::timeSigCutCommon).translated(pz));
-            _numeratorString = '\xA2';
-            _denominatorString.clear();
+            ns.clear();
+            ns.push_back(SymId::timeSigCutCommon);
+            ds.clear();
             }
       else {
-            if (!customText) {
-                  _numeratorString   = QString("%1").arg(_sig.numerator());   // build numerator string
-                  _denominatorString = QString("%1").arg(_sig.denominator()); // build denominator string
-                  }
-            std::vector<SymId> ns = toTimeSigString(_numeratorString);
-            std::vector<SymId> ds = toTimeSigString(_denominatorString);
+            ns = toTimeSigString(_numeratorString.isEmpty()   ? QString::number(_sig.numerator())   : _numeratorString);
+            ds = toTimeSigString(_denominatorString.isEmpty() ? QString::number(_sig.denominator()) : _denominatorString);
 
             ScoreFont* font = score()->scoreFont();
             QSizeF mag(magS() * _scale);
+
             QRectF numRect = font->bbox(ns, mag);
             QRectF denRect = font->bbox(ds, mag);
 
@@ -315,8 +297,6 @@ void TimeSig::layout()
             qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
 
             //align on the wider
-//            qreal pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + _spatium));
-//            pnY = yoff + displ + _spatium;
             qreal pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + numRect.height() * .5));
             qreal pnY = yoff + displ + denRect.height() * .5;
 
@@ -357,8 +337,6 @@ void TimeSig::draw(QPainter* painter) const
       if (staff() && !staff()->staffType(tick())->genTimesig())
             return;
       painter->setPen(curColor());
-      std::vector<SymId> ns = toTimeSigString(_numeratorString);
-      std::vector<SymId> ds = toTimeSigString(_denominatorString);
 
       drawSymbols(ns, painter, pz, _scale);
       drawSymbols(ds, painter, pn, _scale);
@@ -380,7 +358,6 @@ void TimeSig::setFrom(const TimeSig* ts)
       _denominatorString = ts->_denominatorString;
       _sig               = ts->_sig;
       _stretch           = ts->_stretch;
-      customText         = ts->customText;
       }
 
 //---------------------------------------------------------
@@ -487,7 +464,7 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant TimeSig::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::SHOW_COURTESY:
                   return true;
             case P_ID::NUMERATOR_STRING:
@@ -596,8 +573,8 @@ bool TimeSig::operator==(const TimeSig& ts) const
          && (sig().identical(ts.sig()))
          && (stretch() == ts.stretch())
          && (groups() == ts.groups())
-         && (customText == ts.customText)
-         && (!customText || (_numeratorString == ts._numeratorString && _denominatorString == ts._denominatorString))
+         && (_numeratorString == ts._numeratorString)
+         && (_denominatorString == ts._denominatorString)
          ;
       }
 

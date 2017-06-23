@@ -127,7 +127,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>2</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
           <durationType>breve</durationType>
@@ -190,7 +189,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>2</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>whole</durationType>

@@ -76,7 +76,6 @@
           <lid>4</lid>
           <sigN>12</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <lid>5</lid>
@@ -242,7 +241,6 @@
             <lid>4</lid>
             <sigN>12</sigN>
             <sigD>8</sigD>
-            <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Rest>
             <lid>5</lid>

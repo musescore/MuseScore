@@ -34,7 +34,7 @@ enum class SubStyle;
 //   Grip
 //---------------------------------------------------------
 
-enum class Grip : int {
+enum class Grip {
       NO_GRIP = -1,
       START = 0, END = 1,                         // arpeggio etc.
           MIDDLE = 2, APERTURE = 3,               // Line
@@ -437,7 +437,6 @@ class Element : public ScoreElement {
       QPointF symCutOutSE(SymId id) const;
       QPointF symCutOutSW(SymId id) const;
       qreal symAdvance(SymId id) const;
-      std::vector<SymId> toTimeSigString(const QString& s) const;
       bool symIsValid(SymId id) const;
 
       bool concertPitch() const;

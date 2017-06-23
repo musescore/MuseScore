@@ -84,7 +84,6 @@
         <TimeSig>
           <sigN>2</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Beam id="1">
           <l1>23</l1>
@@ -248,7 +247,6 @@
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
           <durationType>16th</durationType>
@@ -647,7 +645,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Beam id="8">
           <l1>20</l1>
@@ -859,7 +856,6 @@
         <TimeSig>
           <sigN>6</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Beam id="10">
           <l1>20</l1>

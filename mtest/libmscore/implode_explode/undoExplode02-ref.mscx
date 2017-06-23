@@ -240,7 +240,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Dynamic>
           <subtype>mf</subtype>
@@ -556,7 +555,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
@@ -590,7 +588,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
@@ -624,7 +621,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>

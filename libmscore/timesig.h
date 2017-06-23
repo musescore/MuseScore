@@ -53,6 +53,9 @@ class TimeSig : public Element {
       QString _numeratorString;     // calculated from actualSig() if !customText
       QString _denominatorString;
 
+      std::vector<SymId> ns;
+      std::vector<SymId> ds;
+
       QPointF pz;
       QPointF pn;
       QPointF pointLargeLeftParen;
@@ -64,7 +67,6 @@ class TimeSig : public Element {
       QSizeF _scale;
       TimeSigType _timeSigType;
       bool _showCourtesySig;
-      bool customText;        // if false, sz and sn are calculated from _sig
       bool _largeParentheses;
       PropertyFlags scaleStyle;
 
@@ -127,8 +129,6 @@ class TimeSig : public Element {
       virtual StyleIdx getPropertyStyle(P_ID id) const override;
       virtual void styleChanged() override;
       virtual PropertyFlags propertyFlags(P_ID id) const override;
-
-      bool hasCustomText() const { return customText; }
 
       const Groups& groups() const    { return _groups; }
       void setGroups(const Groups& e) { _groups = e; }

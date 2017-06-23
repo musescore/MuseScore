@@ -8,7 +8,9 @@ fi
 
 for a in undoAddLineBreaks \
    undoSlashFill \
-   undoSlashRhythm undoResequenceAlpha undoResequenceNumeric \
+   undoSlashRhythm \
+   undoResequenceAlpha \
+   undoResequenceNumeric \
    undoResequencePart undoSlashFill undoSlashRhythm \
    undoResequencePart \
    undoResequenceMeasure; do

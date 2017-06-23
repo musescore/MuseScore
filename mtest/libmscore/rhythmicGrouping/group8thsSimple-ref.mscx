@@ -128,7 +128,6 @@
         <TimeSig>
           <sigN>2</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
           <style>Instrument Change</style>
@@ -237,7 +236,6 @@ N = 1 eighth note</text>
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
           <style>Instrument Change</style>
@@ -497,7 +495,6 @@ N = 1 eighth note</text>
         <TimeSig>
           <sigN>5</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
           <style>Instrument Change</style>
@@ -840,7 +837,6 @@ N = 1 eighth note</text>
         <TimeSig>
           <sigN>2</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>eighth</durationType>
@@ -937,7 +933,6 @@ N = 1 eighth note</text>
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
           <durationType>eighth</durationType>
@@ -1171,7 +1166,6 @@ N = 1 eighth note</text>
         <TimeSig>
           <sigN>5</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
           <durationType>eighth</durationType>

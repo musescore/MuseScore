@@ -81,7 +81,6 @@
           <lid>2</lid>
           <sigN>2</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
           <lid>3</lid>
@@ -186,7 +185,6 @@
             <lid>2</lid>
             <sigN>2</sigN>
             <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Chord>
             <lid>3</lid>

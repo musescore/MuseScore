@@ -64,7 +64,6 @@
           <lid>3</lid>
           <sigN>12</sigN>
           <sigD>8</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Tempo>
           <tempo>2</tempo>
@@ -962,7 +961,6 @@
             <lid>3</lid>
             <sigN>12</sigN>
             <sigD>8</sigD>
-            <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Tempo>
             <tempo>2</tempo>
