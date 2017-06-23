@@ -901,8 +901,6 @@ void ScoreView::paintEvent(QPaintEvent* ev)
             _continuousPanel->paint(ev->rect(), vp);
 
       lasso->draw(&vp);
-//      if (fotoMode())
-//            _foto->draw(&vp);
       shadowNote->draw(&vp);
 
       if (!dropAnchor.isNull()) {
@@ -2229,7 +2227,6 @@ void ScoreView::showOmr(bool flag)
 
 void ScoreView::startNoteEntry()
       {
-      setCursor(QCursor(Qt::UpArrowCursor));
       InputState& is = _score->inputState();
 
       is.setSegment(0);
@@ -2347,7 +2344,6 @@ void ScoreView::startNoteEntry()
       getAction("pad-rest")->setChecked(false);
       setMouseTracking(true);
       shadowNote->setVisible(true);
-//      dragElement = 0;
       _score->setUpdateAll();
       _score->update();
 
@@ -2368,7 +2364,6 @@ void ScoreView::startNoteEntry()
             case StaffGroup::PERCUSSION:
                   break;
             }
-
       // set cursor after setting the stafftype-dependent state
       moveCursor();
       mscore->updateInputState(_score);
@@ -2424,36 +2419,6 @@ void ScoreView::dragScoreView(QMouseEvent* ev)
             update(width() - 50 + dx, 0, width() + 10, height());
       emit offsetChanged(_matrix.dx(), _matrix.dy());
       emit viewRectChanged();
-      }
-
-//---------------------------------------------------------
-//   dragNoteEntry
-//    mouse move event in note entry mode
-//---------------------------------------------------------
-
-void ScoreView::dragNoteEntry(QMouseEvent* ev)
-      {
-      QPointF p = toLogical(ev->pos());
-      QRectF r(shadowNote->canvasBoundingRect());
-      setShadowNote(p);
-      r |= shadowNote->canvasBoundingRect();
-      update(toPhysical(r).adjusted(-2, -2, 2, 2));
-      }
-
-//---------------------------------------------------------
-//   noteEntryButton
-//    mouse button press in note entry mode
-//---------------------------------------------------------
-
-void ScoreView::noteEntryButton(QMouseEvent* ev)
-      {
-      QPointF p = toLogical(ev->pos());
-      _score->startCmd();
-      _score->putNote(p, ev->modifiers() & Qt::ShiftModifier, ev->modifiers() & Qt::ControlModifier);
-      _score->endCmd();
-      ChordRest* cr = _score->inputState().cr();
-      if (cr)
-            adjustCanvasPosition(cr, false);
       }
 
 //---------------------------------------------------------
@@ -4789,16 +4754,6 @@ Element* ScoreView::getEditElement()
       {
       return editData.element;
       }
-#if 0
-//---------------------------------------------------------
-//   setEditElement
-//---------------------------------------------------------
-
-void ScoreView::setEditElement(Element* e)
-      {
-      editData.element = e;
-      }
-#endif
 
 //---------------------------------------------------------
 //   startNoteEntryMode

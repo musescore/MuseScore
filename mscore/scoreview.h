@@ -320,8 +320,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void contextPopup(QContextMenuEvent* ev);
       bool editKeyLyrics(QKeyEvent*);
       void dragScoreView(QMouseEvent* ev);
-      void dragNoteEntry(QMouseEvent* ev);
-      void noteEntryButton(QMouseEvent* ev);
       void doDragElement(QMouseEvent* ev);
       void doDragLasso(QMouseEvent* ev);
       void doDragFoto(QMouseEvent* ev);
