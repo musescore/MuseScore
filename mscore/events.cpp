@@ -23,6 +23,8 @@
 #include "libmscore/text.h"
 #include "libmscore/measure.h"
 #include "libmscore/stafflines.h"
+#include "libmscore/chord.h"
+#include "libmscore/shadownote.h"
 
 namespace Ms {
 
@@ -350,7 +352,11 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   break;
 
             case ViewState::NOTE_ENTRY:
-                  noteEntryButton(ev);
+                  _score->startCmd();
+                  _score->putNote(editData.startMove, ev->modifiers() & Qt::ShiftModifier, ev->modifiers() & Qt::ControlModifier);
+                  _score->endCmd();
+                  if (_score->inputState().cr())
+                        adjustCanvasPosition(_score->inputState().cr(), false);
                   break;
 
             case ViewState::EDIT: {
@@ -387,7 +393,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
 
 void ScoreView::mouseMoveEvent(QMouseEvent* me)
       {
-      if (editData.buttons == Qt::NoButton)
+      if (state != ViewState::NOTE_ENTRY && editData.buttons == Qt::NoButton)
             return;
 
       // start some drag operations after a minimum of movement:
@@ -406,8 +412,13 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
                         changeState(ViewState::DRAG);
                   break;
 
-            case ViewState::NOTE_ENTRY:
-                  dragNoteEntry(me);
+            case ViewState::NOTE_ENTRY: {
+                  QPointF p = toLogical(me->pos());
+                  QRectF r(shadowNote->canvasBoundingRect());
+                  setShadowNote(p);
+                  r |= shadowNote->canvasBoundingRect();
+                  update(toPhysical(r).adjusted(-2, -2, 2, 2));
+                  }
                   break;
 
             case ViewState::DRAG:
@@ -760,6 +771,7 @@ void ScoreView::changeState(ViewState s)
                   setCursor(QCursor(Qt::SizeAllCursor));
                   break;
             case ViewState::NOTE_ENTRY:
+                  setCursor(QCursor(Qt::ArrowCursor));
                   startNoteEntry();
                   break;
             case ViewState::DRAG_EDIT:
