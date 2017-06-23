@@ -137,14 +137,6 @@ TextFragment::TextFragment(const QString& s)
       text = s;
       }
 
-#if 0
-TextFragment::TextFragment(TextCursor* cursor, SymId id)
-      {
-      format = *cursor->format();
-      ids.append(id);
-      }
-#endif
-
 TextFragment::TextFragment(TextCursor* cursor, const QString& s)
       {
       format = *cursor->format();
@@ -233,9 +225,41 @@ QFont TextFragment::font(const Text* t) const
             m *= subScriptSize;
       font.setUnderline(format.underline() || format.preedit());
 
-      QString family = format.fontFamily();
-      if (family == "ScoreText")
+      QString family;
+      if (format.fontFamily() == "ScoreText") {
             family = t->score()->styleSt(StyleIdx::MusicalTextFont);
+
+            // check if all symbols are available
+            font.setFamily(family);
+            QFontMetricsF fm(font);
+
+            bool fail = false;
+            for (int i = 0; i < text.size(); ++i) {
+                  QChar c = text[i];
+                  if (c.isHighSurrogate()) {
+                        if (i+1 == text.size())
+                              qFatal("bad string");
+                        QChar c2 = text[i+1];
+                        ++i;
+                        uint v = QChar::surrogateToUcs4(c, c2);
+                        if (!fm.inFontUcs4(v)) {
+                              fail = true;
+                              break;
+                              }
+                        }
+                  else {
+                        if (!fm.inFont(c)) {
+                              fail = true;
+                              break;
+                              }
+                        }
+                  }
+            if (fail)
+                  family = ScoreFont::fallbackTextFont();
+            }
+      else
+            family = format.fontFamily();
+
       font.setFamily(family);
       font.setBold(format.bold());
       font.setItalic(format.italic());
@@ -1008,6 +1032,7 @@ void Text::createLayout()
                         else if (token == "/sym") {
                               symState = false;
                               SymId id = Sym::name2id(sym);
+
                               if (id == SymId::noSym) {
                                     // Unicode
                                     struct UnicodeAlternate {
@@ -1041,12 +1066,14 @@ void Text::createLayout()
                                           qDebug("symbol <%s> not known", qPrintable(sym));
                                     }
                               else {
-                                    CharFormat fmt = *cursor.format();
+                                    CharFormat fmt = *cursor.format();  // save format
+                                    // uint code = score()->scoreFont()->sym(id).code();
+                                    uint code = ScoreFont::fallbackFont()->sym(id).code();
                                     cursor.format()->setFontFamily("ScoreText");
                                     cursor.format()->setBold(false);
                                     cursor.format()->setItalic(false);
-                                    insert(&cursor, score()->scoreFont()->sym(id).code());
-                                    cursor.setFormat(fmt);
+                                    insert(&cursor, code);
+                                    cursor.setFormat(fmt);  // restore format
                                     }
                               }
                         else if (token.startsWith("font ")) {
@@ -1402,7 +1429,6 @@ void Text::startEdit(EditData& ed)
 
 void Text::endEdit(EditData&)
       {
-// printf("%p Text::endEdit\n", this);
       static const qreal w = 2.0;
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
       }
