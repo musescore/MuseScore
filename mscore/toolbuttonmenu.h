@@ -29,7 +29,7 @@ class ToolButtonMenu : public AccessibleToolButton { // : public QToolButton {
       Q_OBJECT
 
    public:
-      enum class TYPES {
+      enum class TYPES : char {
             // What happens to the default action if an alternative (non-default) action is triggered?
             FIXED, // default action is also triggered but is otherwise unchanged.
             ICON_CHANGED, // default action is triggered and its icon is modified and/or set to that of the triggering action.

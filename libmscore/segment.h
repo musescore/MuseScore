@@ -31,7 +31,7 @@ class System;
 //    Type values determine the order of segments for a given tick
 //-------------------------------------------------------------------
 
-enum class SegmentType {
+enum class SegmentType : short {
       Invalid            = 0x0,
       BeginBarLine       = 0x1,
       HeaderClef         = 0x2,

@@ -114,9 +114,9 @@ class Page;
 class SystemText;
 class BracketItem;
 
-enum class P_ID : int;
+enum class P_ID : unsigned char;
 enum class PropertyFlags : char;
-enum class StyleIdx : int;
+enum class StyleIdx : short;
 
 //---------------------------------------------------------
 //   LinkedElements

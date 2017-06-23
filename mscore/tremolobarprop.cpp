@@ -30,7 +30,7 @@
 
 namespace Ms {
 
-enum class TremoloBarType { DIP, DIVE, RELEASE_UP, INVERTED_DIP, RETURN, RELEASE_DOWN };
+enum class TremoloBarType : char { DIP, DIVE, RELEASE_UP, INVERTED_DIP, RETURN, RELEASE_DOWN };
 
 //---------------------------------------------------------
 //   TremoloBarProperties

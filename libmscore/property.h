@@ -16,7 +16,7 @@
 namespace Ms {
 
 class XmlReader;
-enum class StyleIdx : int;
+enum class StyleIdx : short;
 
 //---------------------------------------------------------
 //   PropertyFlags
@@ -30,7 +30,7 @@ enum class PropertyFlags : char {
 //   Element Properties
 //------------------------------------------------------------------------
 
-enum class P_ID {
+enum class P_ID : unsigned char {
       SUBTYPE,
       SELECTED,
       GENERATED,

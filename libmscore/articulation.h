@@ -24,7 +24,7 @@ class Measure;
 class System;
 class Page;
 
-enum class SymId;
+enum class SymId : short;
 
 //---------------------------------------------------------
 //   ArticulationInfo

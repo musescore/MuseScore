@@ -17,7 +17,7 @@
 
 namespace Ms {
 
-enum class P_ID : int;
+enum class P_ID : unsigned char;
 class XmlWriter;
 struct ChordDescription;
 class Element;
@@ -28,7 +28,7 @@ class Element;
 //    Keep in sync with styleTypes[] in style.cpp
 //---------------------------------------------------------
 
-enum class StyleIdx {
+enum class StyleIdx : short {
       NOSTYLE = -1,
 
       pageWidth,
@@ -698,7 +698,7 @@ extern const std::vector<StyledProperty> titleStyle;
 //    must be in sync with namedStyles array
 //-------------------------------------------------------------------
 
-enum class SubStyle {
+enum class SubStyle : char {
       DEFAULT,
       TITLE,
       SUBTITLE,

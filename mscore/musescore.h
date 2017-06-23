@@ -104,7 +104,7 @@ enum class IconType : signed char;
 enum class MagIdx : char;
 
 
-enum class PaletteType { MASTER, ADVANCED, BASIC };
+enum class PaletteType : char { MASTER, ADVANCED, BASIC };
 
 extern QString mscoreGlobalShare;
 static const int PROJECT_LIST_LEN = 6;
