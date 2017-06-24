@@ -77,17 +77,10 @@ class HairpinSegment : public TextLineBaseSegment {
 
 class Hairpin : public TextLineBase {
       Q_GADGET
-      Q_ENUMS(Type)
-      Q_ENUMS(Ms::Dynamic::Range)
 
-   private:
-      Q_PROPERTY(Ms::Dynamic::Range dynRange    READ  dynRange    WRITE undoSetDynRange)
-      Q_PROPERTY(Ms::HairpinType    hairpinType READ  hairpinType WRITE undoSetHairpinType)
-      Q_PROPERTY(int                veloChange  READ  veloChange  WRITE undoSetVeloChange)
-
-      bool  _hairpinCircledTip;
       HairpinType _hairpinType;
       int _veloChange;
+      bool  _hairpinCircledTip;
       Dynamic::Range _dynRange;
       PropertyFlags lineWidthStyle;
 
