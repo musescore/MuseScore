@@ -193,6 +193,30 @@ void SlurTieSegment::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   drawEditMode
+//---------------------------------------------------------
+
+void SlurTieSegment::drawEditMode(QPainter* p, EditData& ed)
+      {
+      QPolygonF polygon(7);
+      polygon[0] = QPointF(ed.grip[int(Grip::START)].center());
+      polygon[1] = QPointF(ed.grip[int(Grip::BEZIER1)].center());
+      polygon[2] = QPointF(ed.grip[int(Grip::SHOULDER)].center());
+      polygon[3] = QPointF(ed.grip[int(Grip::BEZIER2)].center());
+      polygon[4] = QPointF(ed.grip[int(Grip::END)].center());
+      polygon[5] = QPointF(ed.grip[int(Grip::DRAG)].center());
+      polygon[6] = QPointF(ed.grip[int(Grip::START)].center());
+      p->setPen(QPen(MScore::frameMarginColor, 0.0));
+      p->drawPolyline(polygon);
+
+      p->setPen(QPen(MScore::defaultColor, 0.0));
+      for (int i = 0; i < ed.grips; ++i) {
+            p->setBrush(Grip(i) == ed.curGrip ? MScore::frameMarginColor : Qt::NoBrush);
+            p->drawRect(ed.grip[i]);
+            }
+      }
+
+//---------------------------------------------------------
 //   SlurTie
 //---------------------------------------------------------
 

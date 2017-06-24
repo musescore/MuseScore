@@ -81,6 +81,7 @@ class SlurTieSegment : public SpannerSegment {
 
       void writeSlur(XmlWriter& xml, int no) const;
       void read(XmlReader&);
+      virtual void drawEditMode(QPainter*, EditData&) override;
       };
 
 //-------------------------------------------------------------------
@@ -137,9 +138,9 @@ class SlurTie : public Spanner {
       virtual void startEdit(EditData&) override;
       virtual void endEdit(EditData&) override;
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID id) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
       };
 
 }
