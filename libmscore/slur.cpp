@@ -544,7 +544,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                   Collision(qreal a, const QPointF b) : dist(a), p(b) {}
                   };
             QList<Collision> pl;                // skyline
-            qreal sdist = spatium() * 0.5;      // minimum distance to slur
+            qreal sdist = score()->styleP(StyleIdx::SlurMinDistance);
 
             QPointF pp1 = ups(Grip::START).p;
             QPointF pp2 = ups(Grip::END).p;
