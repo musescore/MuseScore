@@ -260,6 +260,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void triggerCmdRealtimeAdvance();
       void cmdRealtimeAdvance();
       void extendCurrentNote();
+      void seqStopped();
 
    public slots:
       void setViewRect(const QRectF&);

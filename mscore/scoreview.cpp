@@ -182,6 +182,8 @@ ScoreView::ScoreView(QWidget* parent)
             }
 
       connect(getAction("loop"), SIGNAL(toggled(bool)), SLOT(loopToggled(bool)));
+      if (seq)
+            connect(seq, SIGNAL(stopped()), SLOT(seqStopped()));
       }
 
 //---------------------------------------------------------
