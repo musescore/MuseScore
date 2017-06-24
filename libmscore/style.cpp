@@ -916,6 +916,7 @@ const std::vector<StyledProperty> tempoStyle {
       { StyleIdx::tempoFontUnderline,                 P_ID::FONT_UNDERLINE         },
       { StyleIdx::tempoOffset,                        P_ID::OFFSET                 },
       { StyleIdx::tempoSystemFlag,                    P_ID::SYSTEM_FLAG            },
+      { StyleIdx::tempoAlign,                         P_ID::ALIGN                  },
       };
 
 const std::vector<StyledProperty> metronomeStyle {
