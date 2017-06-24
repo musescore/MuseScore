@@ -35,6 +35,7 @@ static const qreal BKEY_HEIGHT = 25.0;
 HPiano::HPiano(QWidget* parent)
    : QGraphicsView(parent)
       {
+      scaleVal = 1.0;
       setLineWidth(0);
       setMidLineWidth(0);
 

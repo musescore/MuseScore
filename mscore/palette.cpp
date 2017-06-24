@@ -402,7 +402,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       Score* score = mscore->currentScore();
       if (score == 0)
             return;
-      const Selection& sel = score->selection();
+      Selection sel = score->selection();       // make a copy of the list
       if (sel.isNone())
             return;
 
@@ -472,10 +472,8 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                   score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
                   }
             else {
-                  for (Element* e : sel.elements()) {
-                        if (e)
-                              applyDrop(score, viewer, e, element);
-                        }
+                  for (Element* e : sel.elements())
+                        applyDrop(score, viewer, e, element);
                   }
             }
       else if (sel.isRange()) {
