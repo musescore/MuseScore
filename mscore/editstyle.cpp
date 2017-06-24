@@ -166,6 +166,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::SlurEndWidth,            false, slurEndLineWidth,        0 },
       { StyleIdx::SlurMidWidth,            false, slurMidLineWidth,        0 },
       { StyleIdx::SlurDottedWidth,         false, slurDottedLineWidth,     0 },
+      { StyleIdx::SlurMinDistance,         false, slurMinDistance,         resetSlurMinDistance },
       { StyleIdx::MinTieLength,            false, minTieLength,            0 },
       { StyleIdx::bracketWidth,            false, bracketWidth,            0 },
       { StyleIdx::bracketDistance,         false, bracketDistance,         0 },
