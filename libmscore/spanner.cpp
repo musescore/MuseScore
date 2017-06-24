@@ -398,8 +398,8 @@ void Spanner::startEdit(EditData&)
       editTick2  = tick2();
       editTrack2 = _track2;
       if (_anchor == Spanner::Anchor::NOTE) {
-            editEndNote       = static_cast<Note*>(_endElement);
-            editStartNote     = static_cast<Note*>(_startElement);
+            editEndNote   = toNote(_endElement);
+            editStartNote = toNote(_startElement);
             }
 
       userOffsets.clear();

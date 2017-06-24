@@ -82,7 +82,6 @@ void SlurSegment::startEdit(EditData& ed)
 void SlurSegment::updateGrips(EditData& ed) const
       {
       QPointF p(pagePos());
-      p -= QPointF(0.0, system()->staff(staffIdx())->y());   // ??
       for (int i = 0; i < int(Grip::GRIPS); ++i)
             ed.grip[i].translate(_ups[i].p + _ups[i].off + p);
       }
@@ -482,10 +481,6 @@ void SlurSegment::computeBezier(QPointF p6o)
       ups(Grip::DRAG).p     = t.map(p5);
       ups(Grip::SHOULDER).p = t.map(p6);
 
-      QPointF staffOffset;
-      if (system() && track() >= 0)
-            staffOffset = QPointF(0.0, -system()->staff(staffIdx())->y());
-
       QPainterPath p;
       p.moveTo(QPointF());
       p.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
@@ -496,12 +491,9 @@ void SlurSegment::computeBezier(QPointF p6o)
       for (int i = 1; i <= nbShapes; i++) {
             QPointF point = t.map(p.pointAtPercent(i/float(nbShapes)));
             QRectF re(start, point);
-            re.translate(staffOffset);
             _shape.add(re);
             start = point;
             }
-      path.translate(staffOffset);
-      shapePath.translate(staffOffset);
       }
 
 //---------------------------------------------------------
@@ -514,7 +506,7 @@ inline static qreal slurDistance(const Shape& shape, const QPointF& pt, qreal sd
       if (up) {
             ddy = -shape.bottomDistance(pt) + sdist;
             if (ddy <= 0.0)   // assume no more collisions
-                  ddy = 0;
+                  ddy = 0.0;
             }
       else {
             ddy = shape.topDistance(pt) - sdist;
@@ -569,13 +561,13 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                   if (pp2.x() >= x1 && pp2.x() < x2)
                         break;
                   if (up) {
-                        QPointF pt = QPoint(s->x() + s->parent()->x(), s->staffShape(staffIdx()).top() + s->pos().y());
+                        QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).top() + s->y() + s->measure()->y());
                         qreal dist = _shape.bottomDistance(pt) - sdist;
                         if (dist < 0.0)
                               pl.append(Collision(-dist, pt));
                         }
                   else {
-                        QPointF pt = QPoint(s->x() + s->parent()->x(), s->staffShape(staffIdx()).bottom() + s->pos().y());
+                        QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).bottom() + s->y() + s->measure()->y());
                         qreal dist = _shape.topDistance(pt) - sdist;
                         if (dist < 0.0)
                               pl.append(Collision(dist, pt));
@@ -585,46 +577,49 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             // compute shape
             //    pl contains a list of colliding points
             //
-
+#if 0  // does not work
             for (int i = 0; i < pl.size() - 1; ++i) {
                   Collision& c1 = pl[i];
                   Collision& c2 = pl[i+1];
                   if (qAbs(c1.p.y() - c2.p.y()) < 0.1) {
                         // combine the collisions
+                        printf("  combine\n");
                         c1.p.rx() += (c2.p.x() - c1.p.x()) / 2.0;
                         pl.erase(pl.begin() + i + 1);
                         }
                   }
-            qSort(pl.begin(), pl.end(), [](const Collision& a, const Collision& b) { return a.dist < b.dist; });
-
-            if (pl.empty()) // no collision: do nothing
-                  ;
-            else {
-                  qreal ddy = pl[0].dist;
-                  for (int i = 0;;) {
-                        qreal x = pl[i].p.x();
-                        qreal x1 = ups(Grip::BEZIER1).p.x();  // p1.x();
-                        qreal x2 = ups(Grip::BEZIER2).p.x();  // p2.x();
+#endif
+            if (!pl.empty()) {
+//                  printf("%p collisions %d\n", this, pl.size());
+                  qSort(pl.begin(), pl.end(), [](const Collision& a, const Collision& b) { return a.dist < b.dist; });
+                  for (int i = 0; i < pl.size(); ++i) {
+                        qreal ddy   = pl[i].dist;
+                        qreal x     = pl[i].p.x();
+                        qreal x1    = ups(Grip::BEZIER1).p.x();  // p1.x();
+                        qreal x2    = ups(Grip::BEZIER2).p.x();  // p2.x();
                         qreal ratio = (x - x1) / (x2 - x1);
 
-                        for (int k = 0; k < 10; ++k) {
+                        for (int k = 0; k < 30; ++k) {
                               const qreal magic = 1.1;
                               _ups[int(Grip::BEZIER1)].off.ry() -= ddy * magic * (1.0 - ratio);
                               _ups[int(Grip::BEZIER2)].off.ry() -= ddy * magic * ratio;
                               computeBezier();
-                              if (qAbs(ddy) < spatium() * .2) {
-                                    // printf("collision %d  -- tries %d\n", i, k);
+                              qreal nddy = slurDistance(_shape, pl[i].p, sdist, up);
+//                              printf("%d %d ddy %f  nddy %f  magic %f ratio %f\n", i, k, ddy, nddy, magic, ratio);
+                              if (qAbs(nddy) <= spatium() * 0.1) {
+//                                    printf("   collision %d  -- tries %d\n", i, k);
                                     break;
                                     }
-                              ddy = slurDistance(_shape, pl[i].p, sdist, up);
+                              ddy = nddy;
                               }
 
-                        ++i;
-                        if (i == pl.size())
-                              break;
-                        ddy = slurDistance(_shape, pl[i].p, sdist, up);
-                        if (ddy == 0.0)
-                              break;
+//                        ++i;
+//                        if (i == pl.size())
+//                              break;
+//                        ddy = slurDistance(_shape, pl[i].p, sdist, up);
+//                        printf("%p %f %f < %f\n", this, ddy, qAbs(ddy), minDistance);
+//                        if (ddy < minDistance)
+//                              break;
                         }
                   }
 #if 0

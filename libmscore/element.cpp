@@ -1816,19 +1816,6 @@ void EditData::addData(ElementEditData* ed)
 
 void Element::drawEditMode(QPainter* p, EditData& ed)
       {
-      if (ed.grips == 6) {       // HACK: this are grips of a slur
-            QPolygonF polygon(7);
-            polygon[0] = QPointF(ed.grip[int(Grip::START)].center());
-            polygon[1] = QPointF(ed.grip[int(Grip::BEZIER1)].center());
-            polygon[2] = QPointF(ed.grip[int(Grip::SHOULDER)].center());
-            polygon[3] = QPointF(ed.grip[int(Grip::BEZIER2)].center());
-            polygon[4] = QPointF(ed.grip[int(Grip::END)].center());
-            polygon[5] = QPointF(ed.grip[int(Grip::DRAG)].center());
-            polygon[6] = QPointF(ed.grip[int(Grip::START)].center());
-            QPen pen(MScore::frameMarginColor, 0.0);
-            p->setPen(pen);
-            p->drawPolyline(polygon);
-            }
       QPen pen(MScore::defaultColor, 0.0);
       p->setPen(pen);
       for (int i = 0; i < ed.grips; ++i) {
