@@ -1909,10 +1909,10 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direc
                   beam->add(cr);
                   }
             }
-      // if no beam, set stem direction on chord itself
+      // if no beam, set stem direction on chord itself and set beam to auto
       if (!beam) {
             static_cast<Chord*>(cr)->setStemDirection(sd);
-            cr->setBeamMode(Beam::Mode::NONE);
+            cr->setBeamMode(Beam::Mode::AUTO);
             }
       // terminate the currect beam and add to the score
       if (beam && bm == Beam::Mode::END)
@@ -3934,12 +3934,16 @@ static Chord* findOrCreateChord(Score* score, Measure* m,
                                 const TDuration duration, const Fraction dura,
                                 Beam::Mode bm)
       {
-      //qDebug("findOrCreateChord tick %d track %d dur ticks %d ticks %s",
-      //       tick, track, duration.ticks(), qPrintable(dura.print()));
+      //qDebug("findOrCreateChord tick %d track %d dur ticks %d ticks %s bm %hhd",
+      //       tick, track, duration.ticks(), qPrintable(dura.print()), bm);
       Chord* c = m->findChord(tick, track);
       if (c == 0) {
             c = new Chord(score);
-            c->setBeamMode(bm);
+            // better not to force beam end, as the beam palette does not support it
+            if (bm == Beam::Mode::END)
+                  c->setBeamMode(Beam::Mode::AUTO);
+            else
+                  c->setBeamMode(bm);
             c->setTrack(track);
 
             setChordRestDuration(c, duration, dura);
@@ -4124,7 +4128,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       bool graceSlash = false;
       bool printObject = _e.attributes().value("print-object") != "no";
       TDuration normalType;
-      Beam::Mode bm  = Beam::Mode::NONE;
+      Beam::Mode bm  = Beam::Mode::AUTO;
       int displayStep = -1;       // invalid
       int displayOctave = -1; // invalid
       bool unpitched = false;
