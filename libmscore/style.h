@@ -227,6 +227,7 @@ enum class StyleIdx {
       SlurMidWidth,
       SlurDottedWidth,
       MinTieLength,
+      SlurMinDistance,
 
       SectionPause,
       MusicalSymbolFont,
