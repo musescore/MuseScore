@@ -5427,9 +5427,9 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
       QStringList dynamics;
       // qreal rx = 0.0;
       // qreal ry = 0.0;
-      qreal yoffset = 0.0; // actually this is default-y
+      // qreal yoffset = 0.0; // actually this is default-y
       // qreal xoffset = 0.0; // not used
-      bool hasYoffset = false;
+      // bool hasYoffset = false;
       QString chordLineType;
 
       while (_e.readNextStartElement()) {
@@ -5559,7 +5559,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                   if (preferences.musicxmlImportLayout) {
                         // ry        = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
                         // rx        = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
-                        yoffset   = _e.attributes().value("default-y").toDouble(&hasYoffset) * -0.1;
+                        // yoffset   = _e.attributes().value("default-y").toDouble(&hasYoffset) * -0.1;
                         // xoffset   = ee.attribute("default-x", "0.0").toDouble() * 0.1;
                         }
                   while (_e.readNextStartElement()) {
