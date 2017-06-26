@@ -70,12 +70,12 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::ottavaLineStyle,         false, ottavaLineStyle,         resetOttavaLineStyle },
       { StyleIdx::pedalLineStyle,          false, pedalLineStyle,          resetPedalLineStyle },
 
-      { StyleIdx::staffUpperBorder,        false, staffUpperBorder,        0 },
-      { StyleIdx::staffLowerBorder,        false, staffLowerBorder,        0 },
-      { StyleIdx::staffDistance,           false, staffDistance,           0 },
-      { StyleIdx::akkoladeDistance,        false, akkoladeDistance,        0 },
-      { StyleIdx::minSystemDistance,       false, minSystemDistance,       0 },
-      { StyleIdx::maxSystemDistance,       false, maxSystemDistance,       0 },
+      { StyleIdx::staffUpperBorder,        false, staffUpperBorder,        resetStaffUpperBorder  },
+      { StyleIdx::staffLowerBorder,        false, staffLowerBorder,        resetStaffLowerBorder  },
+      { StyleIdx::staffDistance,           false, staffDistance,           resetStaffDistance     },
+      { StyleIdx::akkoladeDistance,        false, akkoladeDistance,        resetAkkoladeDistance  },
+      { StyleIdx::minSystemDistance,       false, minSystemDistance,       resetMinSystemDistance },
+      { StyleIdx::maxSystemDistance,       false, maxSystemDistance,       resetMaxSystemDistance },
 
       { StyleIdx::lyricsPlacement,         false, lyricsPlacement,         resetLyricsPlacement },
       { StyleIdx::lyricsPosAbove,          false, lyricsPosAbove,          resetLyricsPosAbove },
@@ -90,8 +90,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::lyricsAlignVerseNumber,  false, lyricsAlignVerseNumber,  resetLyricsAlignVerseNumber },
       { StyleIdx::lyricsLineThickness,     false, lyricsLineThickness,     resetLyricsLineThickness },
 
-      { StyleIdx::systemFrameDistance,     false, systemFrameDistance,     0 },
-      { StyleIdx::frameSystemDistance,     false, frameSystemDistance,     0 },
+      { StyleIdx::systemFrameDistance,     false, systemFrameDistance,     resetSystemFrameDistance },
+      { StyleIdx::frameSystemDistance,     false, frameSystemDistance,     resetFrameSystemDistance },
       { StyleIdx::minMeasureWidth,         false, minMeasureWidth_2,       resetMinMeasureWidth },
       { StyleIdx::measureSpacing,          false, measureSpacing,          resetMeasureSpacing },
 
@@ -163,11 +163,11 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::ArpeggioNoteDistance,    false, arpeggioNoteDistance,    0 },
       { StyleIdx::ArpeggioLineWidth,       false, arpeggioLineWidth,       0 },
       { StyleIdx::ArpeggioHookLen,         false, arpeggioHookLen,         0 },
-      { StyleIdx::SlurEndWidth,            false, slurEndLineWidth,        0 },
-      { StyleIdx::SlurMidWidth,            false, slurMidLineWidth,        0 },
-      { StyleIdx::SlurDottedWidth,         false, slurDottedLineWidth,     0 },
-      { StyleIdx::SlurMinDistance,         false, slurMinDistance,         resetSlurMinDistance },
-      { StyleIdx::MinTieLength,            false, minTieLength,            0 },
+      { StyleIdx::SlurEndWidth,            false, slurEndLineWidth,        resetSlurEndLineWidth    },
+      { StyleIdx::SlurMidWidth,            false, slurMidLineWidth,        resetSlurMidLineWidth    },
+      { StyleIdx::SlurDottedWidth,         false, slurDottedLineWidth,     resetSlurDottedLineWidth },
+      { StyleIdx::SlurMinDistance,         false, slurMinDistance,         resetSlurMinDistance     },
+      { StyleIdx::MinTieLength,            false, minTieLength,            resetMinTieLength        },
       { StyleIdx::bracketWidth,            false, bracketWidth,            0 },
       { StyleIdx::bracketDistance,         false, bracketDistance,         0 },
       { StyleIdx::akkoladeWidth,           false, akkoladeWidth,           0 },
@@ -261,11 +261,11 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       { StyleIdx::beamDistance,            true,  beamDistance,                 0 },
       { StyleIdx::beamNoSlope,             false, beamNoSlope,                  0 },
-      { StyleIdx::graceNoteMag,            true,  graceNoteSize,                0 },
-      { StyleIdx::smallStaffMag,           true,  smallStaffSize,               0 },
-      { StyleIdx::smallNoteMag,            true,  smallNoteSize,                0 },
-      { StyleIdx::smallClefMag,            true,  smallClefSize,                0 },
-      { StyleIdx::lastSystemFillLimit,     true,  lastSystemFillThreshold,      0 },
+      { StyleIdx::graceNoteMag,            true,  graceNoteSize,                resetGraceNoteSize  },
+      { StyleIdx::smallStaffMag,           true,  smallStaffSize,               resetSmallStaffSize },
+      { StyleIdx::smallNoteMag,            true,  smallNoteSize,                resetSmallNoteSize  },
+      { StyleIdx::smallClefMag,            true,  smallClefSize,                resetSmallClefSize  },
+      { StyleIdx::lastSystemFillLimit,     true,  lastSystemFillThreshold,      resetLastSystemFillThreshold },
       { StyleIdx::genClef,                 false, genClef,                      0 },
       { StyleIdx::genKeysig,               false, genKeysig,                    0 },
       { StyleIdx::genCourtesyTimesig,      false, genCourtesyTimesig,           0 },
@@ -663,7 +663,7 @@ void EditStyle::setValues()
                   if (sw.showPercent)
                         qobject_cast<QSpinBox*>(sw.widget)->setValue(int(val.value<Spatium>().val() * 100.0));
                   else
-                        qobject_cast<QDoubleSpinBox*>(sw.widget)->setValue(val.value<Spatium>().val());
+                        sw.widget->setProperty("value", val);
                   }
             else if (!strcmp("double", type)) {
                   if (sw.showPercent)
