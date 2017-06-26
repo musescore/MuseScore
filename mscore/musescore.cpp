@@ -2771,8 +2771,6 @@ void MuseScore::changeState(ScoreState val)
                   a->setEnabled(cs && cs->selection().state() != SelState::NONE);
             else if (enable && (s->key() == "copy"))
                   a->setEnabled(cs && (cs->selection().state() != SelState::NONE || val == STATE_FOTO));
-            else if (enable && (s->key() == "delete"))
-                  a->setEnabled(cs && cs->selection().state() != SelState::NONE);
             else if (enable && (s->key() == "select-similar-range"))
                   a->setEnabled(cs && cs->selection().state() == SelState::RANGE);
             else if (enable && (s->key() == "synth-control")) {
@@ -2782,7 +2780,7 @@ void MuseScore::changeState(ScoreState val)
                         qDebug("disable synth control");
                   a->setEnabled(driver);
                   }
-            else if (s->key() == "pad-dot" || s->key() == "pad-dot-dot")
+            else if (s->key() == "pad-dot" || s->key() == "pad-dot-dot" || s->key() == "delete")
                         a->setEnabled(!(val & (STATE_ALLTEXTUAL_EDIT | STATE_EDIT)));
             else {
                   a->setEnabled(s->state() & val);
