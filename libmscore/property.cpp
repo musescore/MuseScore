@@ -174,7 +174,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { P_ID::TIMESIG,                 "timesig",                 false, 0,                       P_TYPE::FRACTION        },
       { P_ID::TIMESIG_GLOBAL,          "timesig_global",          false, 0,                       P_TYPE::FRACTION        },
       { P_ID::TIMESIG_STRETCH,         "timesig_stretch",         false, 0,                       P_TYPE::FRACTION        },
-      { P_ID::TIMESIG_TYPE,            "timesig_type",            true,  0,                       P_TYPE::INT             },
+      { P_ID::TIMESIG_TYPE,            "timesig_type",            true,  "subtype",               P_TYPE::INT             },
       { P_ID::SPANNER_TICK,            "spanner_tick",            true,  "tick",                  P_TYPE::INT             },
       { P_ID::SPANNER_TICKS,           "spanner_ticks",           true,  "ticks",                 P_TYPE::INT             },
       { P_ID::SPANNER_TRACK2,          "spanner_track2",          true,  "track2",                P_TYPE::INT             },
