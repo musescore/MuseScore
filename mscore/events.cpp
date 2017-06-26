@@ -292,7 +292,7 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
             // special case: chacke if measure is selected
             int staffIdx;
             Measure* m = _score->pos2measure(editData.startMove, &staffIdx, 0, 0, 0);
-            if (m && m->staffLines(staffIdx)->abbox().contains(editData.startMove)) {
+            if (m && m->staffLines(staffIdx)->canvasBoundingRect().contains(editData.startMove)) {
                   _score->select(m, st, staffIdx);
                   _score->setUpdateAll();
                   }
