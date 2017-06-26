@@ -36,15 +36,6 @@ enum class TimeSigType : char {
 //---------------------------------------------------------------------------------------
 //   @@ TimeSig
 ///    This class represents a time signature.
-//
-//   @P denominator         int           (read only)
-//   @P denominatorStretch  int           (read only)
-//   @P denominatorString   string        text of denominator
-//   @P groups              Groups
-//   @P numerator           int           (read only)
-//   @P numeratorStretch    int           (read only)
-//   @P numeratorString     string        text of numerator
-//   @P showCourtesySig     bool          show courtesy time signature for this sig if appropriate
 //---------------------------------------------------------------------------------------
 
 class TimeSig : public Element {
