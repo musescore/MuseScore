@@ -200,7 +200,14 @@ void fillComboBoxDirection(QComboBox* cb)
       cb->addItem(qApp->translate("Direction", "down"), QVariant::fromValue<Direction>(Direction::DOWN));
       }
 
-static Spatium doubleToSpatium(double d) { return Spatium(d); }
+//---------------------------------------------------------
+//   doubleToSpatium
+//---------------------------------------------------------
+
+static Spatium doubleToSpatium(double d)
+      {
+      return Spatium(d);
+      }
 
 //---------------------------------------------------------
 //   init
@@ -212,11 +219,11 @@ void MScore::init()
             qFatal("registerConverter Spatium::toDouble failed");
       if (!QMetaType::registerConverter<double, Spatium>(&doubleToSpatium))
             qFatal("registerConverter doubleToSpatium failed");
+//      if (!QMetaType::registerComparators<Spatium>())
+//            qFatal("registerComparators for Spatium failed");
 
 #ifdef SCRIPT_INTERFACE
       qRegisterMetaType<Note::ValueType>   ("ValueType");
-
-//      qRegisterMetaType<Direction::E>("Direction");
 
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
       qRegisterMetaType<Element::Placement>("Placement");
