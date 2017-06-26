@@ -28,6 +28,7 @@
 #include "libmscore/part.h"
 #include "exampleview.h"
 #include "musescore.h"
+#include "icons.h"
 
 namespace Ms {
 
@@ -42,6 +43,9 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       {
       setObjectName("TimeSigProperties");
       setupUi(this);
+      fourfourButton->setIcon(*icons[int(Icons::timesig_common_ICON)]);
+      allaBreveButton->setIcon(*icons[int(Icons::timesig_allabreve_ICON)]);
+
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       timesig = t;
 
@@ -83,26 +87,29 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
             }
 
       // set ID's of other symbols
-      static const SymId prolatioSymbols[] = {
-            SymId::mensuralProlation1,          // tempus perfectum, prol. perfecta
-            SymId::mensuralProlation2,          // tempus perfectum, prol. imperfecta
-            SymId::mensuralProlation3,          // tempus perfectum, prol. imperfecta, dimin.
-            SymId::mensuralProlation4,          // tempus perfectum, prol. perfecta, dimin.
-            SymId::mensuralProlation5,          // tempus imperf. prol. perfecta
-//            SymId::mensuralProlation6,              // same shape as common time
-            SymId::mensuralProlation7,          // tempus imperf., prol. imperfecta, reversed
-            SymId::mensuralProlation8,          // tempus imperf., prol. perfecta, dimin.
-//            SymId::mensuralProlation9,              // same shape as alla breve
-            SymId::mensuralProlation10,         // tempus imperf., prol imperfecta, dimin., reversed
-            SymId::mensuralProlation11,         // tempus inperf., prol. perfecta, reversed
+      struct ProlatioTable {
+            SymId id;
+            Icons icon;
+            };
+      static const std::vector<ProlatioTable> prolatioList = {
+            { SymId::mensuralProlation1,  Icons::timesig_prolatio01_ICON },  // tempus perfectum, prol. perfecta
+            { SymId::mensuralProlation2,  Icons::timesig_prolatio02_ICON },  // tempus perfectum, prol. imperfecta
+            { SymId::mensuralProlation3,  Icons::timesig_prolatio03_ICON },  // tempus perfectum, prol. imperfecta, dimin.
+            { SymId::mensuralProlation4,  Icons::timesig_prolatio04_ICON },  // tempus perfectum, prol. perfecta, dimin.
+            { SymId::mensuralProlation5,  Icons::timesig_prolatio05_ICON },  // tempus imperf. prol. perfecta
+            { SymId::mensuralProlation7,  Icons::timesig_prolatio07_ICON },  // tempus imperf., prol. imperfecta, reversed
+            { SymId::mensuralProlation8,  Icons::timesig_prolatio08_ICON },  // tempus imperf., prol. perfecta, dimin.
+            { SymId::mensuralProlation10, Icons::timesig_prolatio10_ICON },  // tempus imperf., prol imperfecta, dimin., reversed
+            { SymId::mensuralProlation11, Icons::timesig_prolatio11_ICON },  // tempus inperf., prol. perfecta, reversed
             };
 
       ScoreFont* scoreFont = gscore->scoreFont();
       int idx = 0;
-      for (SymId symId : prolatioSymbols) {
-            const QString& str = scoreFont->toString(symId);
+      otherCombo->clear();
+      for (ProlatioTable t : prolatioList) {
+            const QString& str = scoreFont->toString(t.id);
             if (str.size() > 0) {
-                  otherCombo->setItemData(idx, (int)symId);
+                  otherCombo->addItem(*icons[int(t.icon)],"", int(t.id));
                   // if time sig matches this symbol string, set as selected
                   if (timesig->timeSigType() == TimeSigType::NORMAL && timesig->denominatorString().isEmpty()
                      && timesig->numeratorString() == str) {

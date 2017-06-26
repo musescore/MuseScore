@@ -158,13 +158,17 @@ static const char* iconNames[] = {
       "arrow_down.svg"
       };
 
+//---------------------------------------------------------
+//   genIcons
+//---------------------------------------------------------
+
 void genIcons()
       {
       for (int i = 0; i < int(Icons::voice1_ICON); ++i) {
             QIcon* icon = new QIcon(new MIconEngine);
             icon->addFile(iconPath + iconNames[i]);
             icons[i] = icon;
-            if (icons[i]->isNull() || icons[i]->pixmap(12).isNull()) {
+            if (icon->isNull() || icon->pixmap(12).isNull()) {
                   qDebug("cannot load Icon <%s>", qPrintable(iconPath + iconNames[i]));
                   }
             }
