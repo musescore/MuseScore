@@ -1550,7 +1550,6 @@ void MuseScore::selectionChanged(SelState selectionState)
       bool enable = selectionState != SelState::NONE;
       getAction("cut")->setEnabled(enable);
       getAction("copy")->setEnabled(enable);
-      getAction("delete")->setEnabled(enable);
       getAction("select-similar-range")->setEnabled(selectionState == SelState::RANGE);
       if (pianorollEditor)
             pianorollEditor->changeSelection(selectionState);
@@ -3099,7 +3098,7 @@ void MuseScore::changeState(ScoreState val)
                   a->setEnabled(driver);
                   }
             else if (s->key() == "pad-dot" || s->key() == "pad-dot-dot" || s->key() == "delete")
-                        a->setEnabled(!(val & (STATE_ALLTEXTUAL_EDIT | STATE_EDIT)));
+                  a->setEnabled(!(val & (STATE_ALLTEXTUAL_EDIT | STATE_EDIT)));
             else {
                   a->setEnabled(s->state() & val);
                   }
