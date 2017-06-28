@@ -5935,7 +5935,8 @@ int main(int argc, char* av[])
 #endif
 
 #ifdef SCRIPT_INTERFACE
-      qmlRegisterType<QmlPlugin>  ("MuseScore", 2, 0, "MuseScore");
+      if (-1 == qmlRegisterType<QmlPlugin>  ("MuseScore", 3, 0, "MuseScore"))
+            qDebug("qmlRegisterType failed: MuseScore");
 #endif
       if (MScore::debugMode) {
             qDebug("DPI %f", DPI);
