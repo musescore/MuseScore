@@ -420,18 +420,18 @@ QQmlEngine* MScore::qml()
             _qml->setImportPathList(importPaths);
 #endif
             const char* enumErr = "You can't create an enumeration";
-            qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
-            qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
+            qmlRegisterType<MsProcess>  ("MuseScore", 3, 0, "QProcess");
+            qmlRegisterType<FileIO, 1>  ("FileIO",    3, 0, "FileIO");
             //-----------mscore bindings
-            qmlRegisterUncreatableMetaObject(Ms::staticMetaObject, "MuseScore", 1, 0, "Ms", enumErr);
-//            qmlRegisterUncreatableType<Direction>("MuseScore", 1, 0, "Direction", tr(enumErr));
+            qmlRegisterUncreatableMetaObject(Ms::staticMetaObject, "MuseScore", 3, 0, "Ms", enumErr);
+//            qmlRegisterUncreatableType<Direction>("MuseScore", 3, 0, "Direction", tr(enumErr));
 
-            qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
-            qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
+            qmlRegisterType<MScore>     ("MuseScore", 3, 0, "MScore");
+            qmlRegisterType<MsScoreView>("MuseScore", 3, 0, "ScoreView");
 
-            qmlRegisterType<Score>      ("MuseScore", 1, 0, "Score");
-            qmlRegisterType<Cursor>     ("MuseScore", 1, 0, "Cursor");
-            qmlRegisterType<ElementW>   ("MuseScore", 1, 0, "Element");
+            qmlRegisterType<Score>      ("MuseScore", 3, 0, "Score");
+            qmlRegisterType<Cursor>     ("MuseScore", 3, 0, "Cursor");
+            qmlRegisterType<ElementW>   ("MuseScore", 3, 0, "Element");
             qRegisterMetaType<ElementW*>("ElementWrapper*");
 #if 0
             qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
@@ -472,7 +472,7 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<SlurTie>();
             qmlRegisterType<Spanner>();
 #endif
-            qmlRegisterType<FractionWrapper>   ("MuseScore", 1, 1, "Fraction");
+            qmlRegisterType<FractionWrapper>   ("MuseScore", 3, 1, "Fraction");
             qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
             }
       return _qml;
