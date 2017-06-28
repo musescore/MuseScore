@@ -130,7 +130,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Rehearsal Mark</string>
+        <string>Rehearsal Marks</string>
        </property>
       </item>
       <item>
@@ -171,7 +171,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -1043,7 +1043,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Last system fill threshold' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -1060,7 +1060,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Max. system distance' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -1077,7 +1077,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Vertical frame bottom margin' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -1094,7 +1094,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Min. system distance' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -1111,7 +1111,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Grand staff distance' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -1128,7 +1128,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Staff distance' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -1145,7 +1145,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Music bottom margin' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -1162,7 +1162,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset Music top margin' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -1179,7 +1179,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Vertical frame top margin' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -1208,7 +1208,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="PageHeaderFooterNumbers">
+      <widget class="QWidget" name="PageHeaderFooter">
        <layout class="QGridLayout" name="gridLayout_10">
         <property name="leftMargin">
          <number>8</number>
@@ -3883,7 +3883,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page">
+      <widget class="QWidget" name="PageMeasureNumbers">
        <layout class="QVBoxLayout" name="verticalLayout_44">
         <item>
          <widget class="QGroupBox" name="showMeasureNumber">
@@ -5183,7 +5183,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Line thickness at end' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5200,7 +5200,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Line thickness middle' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5217,7 +5217,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Dotted line thickness' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5234,7 +5234,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Minimum tie length' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5305,7 +5305,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Small staff size' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5449,7 +5449,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Small note size' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5466,7 +5466,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Grace note size' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5483,7 +5483,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
+              <string>Reset 'Small clef size' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5512,7 +5512,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="PageHairpinsVoltaOttava">
+      <widget class="QWidget" name="PageHairpins">
        <layout class="QVBoxLayout" name="verticalLayout_19">
         <property name="spacing">
          <number>0</number>
@@ -5874,7 +5874,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_2">
+      <widget class="QWidget" name="PageVolta">
        <layout class="QVBoxLayout" name="verticalLayout_46">
         <item>
          <widget class="QGroupBox" name="groupBox_15">
@@ -6107,7 +6107,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_3">
+      <widget class="QWidget" name="PageOttava">
        <layout class="QVBoxLayout" name="verticalLayout_47">
         <item>
          <widget class="QGroupBox" name="groupBox_16">
@@ -6136,7 +6136,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset Position Above' value</string>
+              <string>Reset 'Position Above' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -6422,7 +6422,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="PagePedalTrillDynamics">
+      <widget class="QWidget" name="PagePedal">
        <layout class="QVBoxLayout" name="verticalLayout_34">
         <item>
          <widget class="QGroupBox" name="groupBox_21">
@@ -6681,7 +6681,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_4">
+      <widget class="QWidget" name="PageTrill">
        <layout class="QVBoxLayout" name="verticalLayout_48">
         <item>
          <widget class="QGroupBox" name="groupBox_22">
@@ -6847,7 +6847,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_5">
+      <widget class="QWidget" name="PageDynamics">
        <layout class="QVBoxLayout" name="verticalLayout_49">
         <item>
          <widget class="QGroupBox" name="groupBox_31">
@@ -7053,7 +7053,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="PageTextLineTempoText">
+      <widget class="QWidget" name="PageTextLine">
        <layout class="QVBoxLayout" name="verticalLayout_45">
         <item>
          <widget class="QGroupBox" name="groupBox_32">
@@ -7243,7 +7243,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_6">
+      <widget class="QWidget" name="PageTempoText">
        <layout class="QVBoxLayout" name="verticalLayout_50">
         <item>
          <widget class="QGroupBox" name="groupBox_34">
@@ -7479,12 +7479,12 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_7">
+      <widget class="QWidget" name="PageRehearsalMarks">
        <layout class="QVBoxLayout" name="verticalLayout_51">
         <item>
          <widget class="QGroupBox" name="groupBox_35">
           <property name="title">
-           <string>Rehearsal Mark</string>
+           <string>Rehearsal Marks</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_28">
            <item row="3" column="0">
@@ -7715,7 +7715,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="PageChordSymbolsFretboardDiagrams">
+      <widget class="QWidget" name="PageChordSymbols">
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <property name="spacing">
          <number>0</number>
@@ -8159,7 +8159,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_8">
+      <widget class="QWidget" name="PageFretboardDiagrams">
        <layout class="QVBoxLayout" name="verticalLayout_52">
         <item>
          <widget class="QGroupBox" name="groupBox_51">
