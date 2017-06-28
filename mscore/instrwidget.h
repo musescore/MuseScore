@@ -18,7 +18,7 @@
 
 namespace Ms {
 
-class EditInstrument;
+//class EditInstrument;
 class InstrumentTemplate;
 class Instrument;
 class Part;
