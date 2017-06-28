@@ -91,7 +91,7 @@ void TestScripting::initTestCase()
       {
       initMTest();
       qmlRegisterType<MScore>    ("MuseScore", 1, 0, "MScore");
-      qmlRegisterType<QmlPlugin> ("MuseScore", 1, 0, "MuseScore");
+      qmlRegisterType<QmlPlugin> ("MuseScore", 3, 0, "MuseScore");
       MsQmlEngine = Ms::MScore::qml();
       }
 
