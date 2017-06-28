@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>660</width>
-    <height>514</height>
+    <width>486</width>
+    <height>450</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,6 @@
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="sizeConstraint">
-    <enum>QLayout::SetFixedSize</enum>
-   </property>
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
@@ -54,8 +51,8 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>623</width>
-        <height>1839</height>
+        <width>448</width>
+        <height>2356</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
