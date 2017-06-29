@@ -109,7 +109,6 @@ class TextCursor {
       bool set(const QPointF& p, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
       QString selectedText() const;
       void updateCursorFormat();
-//      void insertSym(SymId);
       void setFormat(FormatId, QVariant);
       void changeSelectionFormat(FormatId id, QVariant val);
       bool deleteChar() const;
@@ -360,6 +359,8 @@ class Text : public Element {
       const TextBlock& textBlock(int line) const { return _layout[line]; }
       TextBlock& textBlock(int line)             { return _layout[line]; }
       QList<TextBlock>& textBlockList()          { return _layout; }
+
+      void setTextInvalid()                      { textInvalid = true;  };
 
       friend class TextCursor;
       };
