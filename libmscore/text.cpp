@@ -826,7 +826,6 @@ Text::Text(const Text& st)
       frame                        = st.frame;
       _subStyle                    = st._subStyle;
       _layoutToParentWidth         = st._layoutToParentWidth;
-//      _editMode                    = false;
       hexState                     = -1;
       _family                      = st._family;
       _size                        = st._size;
@@ -987,6 +986,13 @@ void Text::createLayout()
                   else if (c == '&') {
                         state = 2;
                         token.clear();
+                        }
+                  else if (c == '\n') {
+                        _layout[cursor.line()].setEol(true);
+                        cursor.setLine(cursor.line() + 1);
+                        cursor.setColumn(0);
+                        if (_layout.size() <= cursor.line())
+                              _layout.append(TextBlock());
                         }
                   else {
                         if (symState)
@@ -1336,8 +1342,14 @@ void Text::genText()
                         _underline = true;
                   }
             }
-      TextCursor cursor(this);
-      cursor.init();
+      CharFormat fmt;
+      fmt.setFontFamily(family());
+      fmt.setFontSize(size());
+      fmt.setBold(bold());
+      fmt.setItalic(italic());
+      fmt.setUnderline(underline());
+      fmt.setPreedit(false);
+      fmt.setValign(VerticalAlignment::AlignNormal);
 
       XmlNesting xmlNesting(&_text);
       if (_bold)
@@ -1352,32 +1364,32 @@ void Text::genText()
                   if (f.text.isEmpty())                     // skip empty fragments, not to
                         continue;                           // insert extra HTML formatting
                   const CharFormat& format = f.format;
-                  if (cursor.format()->bold() != format.bold()) {
+                  if (fmt.bold() != format.bold()) {
                         if (format.bold())
                               xmlNesting.pushB();
                         else
                               xmlNesting.popB();
                         }
-                  if (cursor.format()->italic() != format.italic()) {
+                  if (fmt.italic() != format.italic()) {
                         if (format.italic())
                               xmlNesting.pushI();
                         else
                               xmlNesting.popI();
                         }
-                  if (cursor.format()->underline() != format.underline()) {
+                  if (fmt.underline() != format.underline()) {
                         if (format.underline())
                               xmlNesting.pushU();
                         else
                               xmlNesting.popU();
                         }
 
-                  if (format.fontSize() != cursor.format()->fontSize())
+                  if (format.fontSize() != fmt.fontSize())
                         _text += QString("<font size=\"%1\"/>").arg(format.fontSize());
-                  if (format.fontFamily() != cursor.format()->fontFamily())
+                  if (format.fontFamily() != fmt.fontFamily())
                         _text += QString("<font face=\"%1\"/>").arg(Text::escape(format.fontFamily()));
 
                   VerticalAlignment va = format.valign();
-                  VerticalAlignment cva = cursor.format()->valign();
+                  VerticalAlignment cva = fmt.valign();
                   if (cva != va) {
                         switch (va) {
                               case VerticalAlignment::AlignNormal:
@@ -1392,7 +1404,7 @@ void Text::genText()
                               }
                         }
                   _text += XmlWriter::xmlString(f.text);
-                  cursor.setFormat(format);
+                  fmt = format;
                   }
             if (block.eol())
                   _text += QChar::LineFeed;
@@ -1663,7 +1675,6 @@ bool TextCursor::set(const QPointF& p, QTextCursor::MoveMode mode)
                   }
             }
       setColumn(curLine().column(pt.x(), _text));
-// printf("cursor set col %d\n", _column);
 
       _text->score()->setUpdateAll();
       if (mode == QTextCursor::MoveAnchor)

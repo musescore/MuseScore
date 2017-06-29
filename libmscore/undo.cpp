@@ -2192,6 +2192,7 @@ void SplitText::redo(EditData* ed)
       CharFormat* charFmt = tc.format();         // take current format
       t->textBlockList().insert(line + 1, tc.curLine().split(tc.column()));
       t->textBlock(line).setEol(true);
+      t->setTextInvalid();
       if (t->textBlockList().last() != t->textBlock(line+1))
             t->textBlock(line+1).setEol(true);
 
