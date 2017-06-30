@@ -5789,7 +5789,7 @@ int buggyFunc() {
 int main(int argc, char* av[])
       {
 
-    Breakpad::CrashHandler::instance()->Init(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+
 
 
 #ifndef NDEBUG
@@ -5874,6 +5874,8 @@ int main(int argc, char* av[])
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
       parser.process(QCoreApplication::arguments());
+
+      Breakpad::CrashHandler::instance()->Init(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 
     //if (parser.isSet("v")) parser.showVersion(); // a) needs Qt >= 5.4 , b) instead we use addVersionOption()
       if (parser.isSet("long-version")) {
