@@ -34,8 +34,8 @@
 #include <dbghelp.h>
 #include <string>
 #include <utility>
-#include "breakpad/common/windows/string_utils-inl.h"
-#include "breakpad/google_breakpad/common/minidump_format.h"
+#include "common/windows/string_utils-inl.h"
+#include "google_breakpad/common/minidump_format.h"
 
 namespace google_breakpad {
 

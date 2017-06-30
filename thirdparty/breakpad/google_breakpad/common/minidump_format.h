@@ -63,7 +63,7 @@
 
 #include <stddef.h>
 
-#include "breakpad/google_breakpad/common/breakpad_types.h"
+#include "google_breakpad/common/breakpad_types.h"
 
 
 #if defined(_MSC_VER)

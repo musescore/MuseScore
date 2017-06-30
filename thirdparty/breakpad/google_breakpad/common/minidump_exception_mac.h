@@ -41,7 +41,7 @@
 
 #include <stddef.h>
 
-#include "breakpad/google_breakpad/common/breakpad_types.h"
+#include "google_breakpad/common/breakpad_types.h"
 
 /* For (MDException).exception_code.  Breakpad minidump extension for Mac OS X
  * support.  Based on Darwin/Mac OS X' mach/exception_types.h.  This is

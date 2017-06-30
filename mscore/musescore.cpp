@@ -111,6 +111,8 @@
 #include "help.h"
 #include "awl/aslider.h"
 
+#include "breakpad/crash_handler.h"
+
 #ifdef USE_LAME
 #include "exportmp3.h"
 #endif

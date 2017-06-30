@@ -34,8 +34,8 @@
 #include <dbghelp.h>
 #include <string>
 #include <utility>
-#include "breakpad/client/windows/common/ipc_protocol.h"
-#include "breakpad/common/scoped_ptr.h"
+#include "client/windows/common/ipc_protocol.h"
+#include "common/scoped_ptr.h"
 
 namespace google_breakpad {
 

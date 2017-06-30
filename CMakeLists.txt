@@ -556,7 +556,7 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 subdirs(
       mscore awl bww2mxml share midi audiofile fluid libmscore synthesizer
       effects thirdparty/rtf2html thirdparty/diff thirdparty/beatroot
-      thirdparty/qzip thirdparty/kQOAuth
+      thirdparty/qzip thirdparty/kQOAuth thirdparty/breakpad
       )
 #      thirdparty/xmlstream
 
@@ -623,6 +623,8 @@ if (OMR)
    include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler)
    include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler/poppler)
 endif (OMR)
+
+include_directories(${PROJECT_SOURCE_DIR}/thirdparty/breakpad)
 
 ##
 ##  Include packaging

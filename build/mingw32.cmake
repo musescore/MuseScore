@@ -4,8 +4,8 @@
 
 set (CMAKE_SYSTEM_NAME "Windows")
 
-set (CROSS /home/ws/mingw)
-set (CROSSQT ${CROSS}/Qt/2010.05-rc1/qt)
+set (CROSS C:/Qt/Tools/mingw530_32)
+set (CROSSQT C:/Qt/5.8/mingw53_32)
 
 set (CMAKE_C_COMPILER     ${CROSS}/bin/amd64-mingw32msvc-gcc)
 set (CMAKE_CXX_COMPILER   ${CROSS}/bin/amd64-mingw32msvc-gcc)

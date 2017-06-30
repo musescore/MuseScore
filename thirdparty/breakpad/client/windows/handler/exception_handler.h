@@ -69,10 +69,10 @@
 #include <string>
 #include <vector>
 
-#include "breakpad/client/windows/common/ipc_protocol.h"
-#include "breakpad/client/windows/crash_generation/crash_generation_client.h"
-#include "breakpad/common/scoped_ptr.h"
-#include "breakpad/google_breakpad/common/minidump_format.h"
+#include "client/windows/common/ipc_protocol.h"
+#include "client/windows/crash_generation/crash_generation_client.h"
+#include "common/scoped_ptr.h"
+#include "google_breakpad/common/minidump_format.h"
 
 namespace google_breakpad {
 
