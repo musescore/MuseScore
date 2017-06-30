@@ -68,7 +68,7 @@ bool CharFormat::operator==(const CharFormat& cf) const
 
 void TextCursor::clearSelection()
       {
-      _selectLine   = _line;
+      _selectLine   = _row;
       _selectColumn = _column;
       }
 
@@ -93,7 +93,7 @@ void TextCursor::init()
 
 int TextCursor::columns() const
       {
-      return _text->textBlock(_line).columns();
+      return _text->textBlock(_row).columns();
       }
 
 //---------------------------------------------------------
@@ -102,7 +102,7 @@ int TextCursor::columns() const
 
 QChar TextCursor::currentCharacter() const
       {
-      const TextBlock& t = _text->_layout[line()];
+      const TextBlock& t = _text->_layout[_row];
       QString s = t.text(column(), column());
       if (s.isEmpty())
             return QChar();
@@ -115,7 +115,7 @@ QChar TextCursor::currentCharacter() const
 
 void TextCursor::updateCursorFormat()
       {
-      TextBlock* block = &_text->_layout[line()];
+      TextBlock* block = &_text->_layout[_row];
       int col = hasSelection() ? selectColumn() : column();
       const CharFormat* format = block->formatAt(col);
       if (format)
@@ -921,7 +921,7 @@ QColor Text::textColor() const
 
 void Text::insert(TextCursor* cursor, uint code)
       {
-      if (cursor->line() >= _layout.size())
+      if (cursor->row() >= rows())
             _layout.append(TextBlock());
       if (code == '\t')
             code = ' ';
@@ -931,7 +931,7 @@ void Text::insert(TextCursor* cursor, uint code)
             s = QString(QChar(QChar::highSurrogate(code))).append(QChar(QChar::lowSurrogate(code)));
       else
             s = QString(code);
-      _layout[cursor->line()].insert(cursor, s);
+      _layout[cursor->row()].insert(cursor, s);
 
       cursor->setColumn(cursor->column() + 1);
       cursor->clearSelection();
@@ -988,10 +988,10 @@ void Text::createLayout()
                         token.clear();
                         }
                   else if (c == '\n') {
-                        _layout[cursor.line()].setEol(true);
-                        cursor.setLine(cursor.line() + 1);
+                        _layout[cursor.row()].setEol(true);
+                        cursor.setRow(cursor.row() + 1);
                         cursor.setColumn(0);
-                        if (_layout.size() <= cursor.line())
+                        if (rows() <= cursor.row())
                               _layout.append(TextBlock());
                         }
                   else {
@@ -1147,7 +1147,7 @@ void Text::layout1()
 
       QRectF bb;
       qreal y = 0;
-      for (int i = 0; i < _layout.size(); ++i) {
+      for (int i = 0; i < rows(); ++i) {
             TextBlock* t = &_layout[i];
             t->layout(this);
             const QRectF* r = &t->boundingRect();
@@ -1424,7 +1424,7 @@ void Text::startEdit(EditData& ed)
       ted->e      = this;
       ted->cursor = new TextCursor(this);
       ted->cursor->setText(this);
-      ted->cursor->setLine(0);
+      ted->cursor->setRow(0);
       ted->cursor->setColumn(0);
       ted->cursor->clearSelection();
 
@@ -1452,7 +1452,7 @@ void Text::endEdit(EditData&)
 
 TextBlock& TextCursor::curLine() const
       {
-      return _text->_layout[_line];
+      return _text->_layout[_row];
       }
 
 //---------------------------------------------------------
@@ -1464,7 +1464,7 @@ void Text::editInsertText(TextCursor* cursor, const QString& s)
       textInvalid = true;
 
       if (s.size() == 1 && (s[0] == QChar::CarriageReturn)) {
-            int line = cursor->line();
+            int line = cursor->row();
             _layout.insert(line + 1, cursor->curLine().split(cursor->column()));
             _layout[line].setEol(true);
             if (_layout.last() != _layout[line+1])
@@ -1492,7 +1492,7 @@ void Text::endHexState()
                   int c2 = _cursor->column();
                   int c1 = c2 - (hexState + 1);
 
-                  TextBlock& t = _layout[_cursor->line()];
+                  TextBlock& t = _layout[_cursor->row()];
                   QString ss   = t.remove(c1, hexState + 1);
                   bool ok;
                   int code     = ss.mid(1).toInt(&ok, 16);
@@ -1517,7 +1517,7 @@ void Text::selectAll(TextCursor* _cursor)
       {
       _cursor->setSelectLine(0);
       _cursor->setSelectColumn(0);
-      _cursor->setLine(_layout.size() - 1);
+      _cursor->setRow(rows() - 1);
       _cursor->setColumn(_cursor->curLine().columns());
       }
 
@@ -1532,7 +1532,7 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                   case QTextCursor::Left:
                         if (hasSelection() && mode == QTextCursor::MoveAnchor) {
                               int r1 = selectLine();
-                              int r2 = line();
+                              int r2 = row();
                               int c1 = selectColumn();
                               int c2 = column();
 
@@ -1545,13 +1545,13 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                                            qSwap(c1, c2);
                                     }
                               clearSelection();
-                              setLine(r1);
+                              setRow(r1);
                               setColumn(c1);
                               }
                         else if (column() == 0) {
-                              if (line() == 0)
+                              if (row() == 0)
                                     return false;
-                              setLine(line()-1);
+                              --_row;
                               setColumn(curLine().columns());
                               }
                         else
@@ -1561,7 +1561,7 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                   case QTextCursor::Right:
                         if (hasSelection() && mode == QTextCursor::MoveAnchor) {
                               int r1 = selectLine();
-                              int r2 = line();
+                              int r2 = _row;
                               int c1 = selectColumn();
                               int c2 = column();
 
@@ -1574,13 +1574,13 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                                            qSwap(c1, c2);
                                     }
                               clearSelection();
-                              setLine(r2);
+                              setRow(r2);
                               setColumn(c2);
                               }
                         else if (column() >= curLine().columns()) {
-                              if (line() >= _text->_layout.size()-1)
+                              if (_row >= _text->rows() - 1)
                                     return false;
-                              setLine(line()+1);
+                              setRow(row()+1);
                               setColumn(0);
                               }
                         else
@@ -1588,28 +1588,28 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                         break;
 
                   case QTextCursor::Up:
-                        if (line() == 0)
+                        if (_row == 0)
                               return false;
-                        setLine(line()-1);
+                        setRow(row()-1);
                         if (column() > curLine().columns())
                               setColumn(curLine().columns());
                         break;
 
                   case QTextCursor::Down:
-                        if (line() >= _text->_layout.size()-1)
+                        if (_row >= _text->rows() - 1)
                               return false;
-                        setLine(line()+1);
+                        ++_row;
                         if (column() > curLine().columns())
                               setColumn(curLine().columns());
                         break;
 
                   case QTextCursor::Start:
-                        setLine(0);
+                        setRow(0);
                         setColumn(0);
                         break;
 
                   case QTextCursor::End:
-                        setLine(_text->_layout.size() - 1);
+                        setRow(_text->rows() - 1);
                         setColumn(curLine().columns());
                         break;
 
@@ -1666,11 +1666,11 @@ bool TextCursor::set(const QPointF& p, QTextCursor::MoveMode mode)
       QPointF pt  = p - _text->canvasPos();
       if (!_text->bbox().contains(pt))
             return false;
-      setLine(0);
-      for (int row = 0; row < _text->_layout.size(); ++row) {
+      _row = 0;
+      for (int row = 0; row < _text->rows(); ++row) {
             const TextBlock& l = _text->_layout.at(row);
             if (l.y() > pt.y()) {
-                  setLine(row);
+                  setRow(row);
                   break;
                   }
             }
@@ -1694,7 +1694,7 @@ QString TextCursor::selectedText() const
       {
       QString s;
       int r1 = selectLine();
-      int r2 = line();
+      int r2 = _row;
       int c1 = selectColumn();
       int c2 = column();
 
@@ -1706,7 +1706,7 @@ QString TextCursor::selectedText() const
             if (c1 > c2)
                   qSwap(c1, c2);
             }
-      int rows = _text->_layout.size();
+      int rows = _text->rows();
       for (int row = 0; row < rows; ++row) {
             const TextBlock& t = _text->_layout.at(row);
             if (row >= r1 && row <= r2) {
@@ -1740,7 +1740,7 @@ bool Text::deleteSelectedText(EditData& ed)
       int r1 = _cursor->selectLine();
       int c1 = _cursor->selectColumn();
 #if 0
-      int r2 = _cursor->line();
+      int r2 = _cursor->row();
       int c2 = _cursor->column();
 
       if (r1 > r2) {
@@ -1751,7 +1751,7 @@ bool Text::deleteSelectedText(EditData& ed)
             if (c1 > c2)
                   qSwap(c1, c2);
             }
-      int rows = _layout.size();
+      int rows = Text::rows();
 
       for (int row = 0; row < rows; ++row) {
             TextBlock& t = _layout[row];
@@ -1774,7 +1774,7 @@ bool Text::deleteSelectedText(EditData& ed)
                   l1.setEol(false);
             }
 #endif
-      _cursor->setLine(r1);
+      _cursor->setRow(r1);
       _cursor->setColumn(c1);
       _cursor->clearSelection();
       return true;
@@ -2201,7 +2201,7 @@ void TextCursor::changeSelectionFormat(FormatId id, QVariant val)
       if (!hasSelection())
             return;
       int r1 = selectLine();
-      int r2 = line();
+      int r2 = row();
       int c1 = selectColumn();
       int c2 = column();
 
@@ -2213,7 +2213,7 @@ void TextCursor::changeSelectionFormat(FormatId id, QVariant val)
             if (c1 > c2)
                   qSwap(c1, c2);
             }
-      int rows = _text->_layout.size();
+      int rows = _text->rows();
       QList<TextBlock> toDelete;
       for (int row = 0; row < rows; ++row) {
             TextBlock& t = _text->_layout[row];
@@ -3034,7 +3034,7 @@ void Text::drawEditMode(QPainter* p, EditData& ed)
             p->setBrush(Qt::NoBrush);
             p->setPen(textColor());
             int r1 = _cursor->selectLine();
-            int r2 = _cursor->line();
+            int r2 = _cursor->row();
             int c1 = _cursor->selectColumn();
             int c2 = _cursor->column();
 
@@ -3090,11 +3090,11 @@ bool TextCursor::deleteChar() const
       {
       TextBlock& l1 = curLine();
       if (_column == l1.columns()) {
-            if (_line + 1 < _text->_layout.size()) {
-                  const TextBlock& l2 = _text->_layout[_line + 1];
+            if (_row + 1 < _text->rows()) {
+                  const TextBlock& l2 = _text->_layout[_row + 1];
                   for (const TextFragment& f : l2.fragments())
                         l1.fragments().append(f);
-                  _text->_layout.removeAt(_line + 1);
+                  _text->_layout.removeAt(_row + 1);
                   if (_text->_layout.last() == l1)
                         l1.setEol(false);
                   }
@@ -3171,9 +3171,13 @@ bool Text::edit(EditData& ed)
 
                   case Qt::Key_Backspace:
                         if (!deleteSelectedText(ed)) {
-                              if (!_cursor->movePosition(QTextCursor::Left))
-                                    return false;
-                              score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())));
+                              if (_cursor->column() == 0 && _cursor->row() != 0)
+                                    score()->undo(new JoinText(_cursor), &ed);
+                              else {
+                                    if (!_cursor->movePosition(QTextCursor::Left))
+                                          return false;
+                                    score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())));
+                                    }
                               }
                         return true;
 
