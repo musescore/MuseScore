@@ -72,7 +72,7 @@ class CharFormat {
 class TextCursor {
       Text*      _text;
       CharFormat _format;
-      int _line          { 0 };
+      int _row           { 0 };
       int _column        { 0 };
       int _selectLine    { 0 };         // start of selection
       int _selectColumn  { 0 };
@@ -81,18 +81,18 @@ class TextCursor {
       TextCursor(Text* t) : _text(t) {}
 
       Text* text() const        { return _text; }
-      bool hasSelection() const { return (_selectLine != _line) || (_selectColumn != _column); }
+      bool hasSelection() const { return (_selectLine != _row) || (_selectColumn != _column); }
       void clearSelection();
 
       CharFormat* format()                { return &_format;  }
       const CharFormat* format() const    { return &_format;  }
       void setFormat(const CharFormat& f) { _format = f;      }
 
-      int line() const              { return _line; }
+      int row() const               { return _row; }
       int column() const            { return _column; }
       int selectLine() const        { return _selectLine; }
       int selectColumn() const      { return _selectColumn; }
-      void setLine(int val)         { _line = val; }
+      void setRow(int val)          { _row = val; }
       void setColumn(int val)       { _column = val; }
       void setSelectLine(int val)   { _selectLine = val; }
       void setSelectColumn(int val) { _selectColumn = val; }
@@ -359,6 +359,7 @@ class Text : public Element {
       const TextBlock& textBlock(int line) const { return _layout[line]; }
       TextBlock& textBlock(int line)             { return _layout[line]; }
       QList<TextBlock>& textBlockList()          { return _layout; }
+      int rows() const                           { return _layout.size(); }
 
       void setTextInvalid()                      { textInvalid = true;  };
 

@@ -2187,7 +2187,7 @@ void SplitText::redo(EditData* ed)
       {
       TextCursor tc = c;
       Text* t       = tc.text();
-      int line      = tc.line();
+      int line      = tc.row();
 
       CharFormat* charFmt = tc.format();         // take current format
       t->textBlockList().insert(line + 1, tc.curLine().split(tc.column()));
@@ -2198,11 +2198,58 @@ void SplitText::redo(EditData* ed)
 
       c.text()->triggerLayout();
       if (ed) {
-            tc.setLine(line+1);
+            tc.setRow(line+1);
             tc.setColumn(0);
             tc.setFormat(*charFmt);             // restore orig. format at new line
             *c.text()->cursor(*ed) = tc;
             }
+      }
+
+//---------------------------------------------------------
+//   JoinText
+//---------------------------------------------------------
+
+void JoinText::redo(EditData* ed)
+      {
+      Text* t       = c.text();
+      int line      = c.row();
+      t->setTextInvalid();
+      t->triggerLayout();
+
+      CharFormat* charFmt = c.format();         // take current format
+      int col             = t->textBlock(line-1).columns();
+      int eol             = t->textBlock(line).eol();
+      t->textBlock(line-1).fragments().append(t->textBlock(line).fragments());
+      int lines = t->rows();
+      if (line < lines)
+            t->textBlock(line).setEol(eol);
+      t->textBlockList().removeAt(line);
+      c.setRow(line-1);
+      c.setColumn(col);
+      c.setFormat(*charFmt);             // restore orig. format at new line
+      c.clearSelection();
+      if (ed)
+            *t->cursor(*ed) = c;
+      }
+
+void JoinText::undo(EditData* ed)
+      {
+      Text* t       = c.text();
+      int line      = c.row();
+      t->setTextInvalid();
+      t->triggerLayout();
+
+      CharFormat* charFmt = c.format();         // take current format
+      t->textBlockList().insert(line + 1, c.curLine().split(c.column()));
+      c.curLine().setEol(true);
+
+      c.setRow(line+1);
+      c.setColumn(0);
+      c.setFormat(*charFmt);             // restore orig. format at new line
+      c.clearSelection();
+
+      if (ed)
+            *t->cursor(*ed) = c;
       }
 
 }
