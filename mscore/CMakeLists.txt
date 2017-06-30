@@ -450,6 +450,7 @@ if (MINGW)
       winmm
       mscore_freetype
       z
+      breakpad
       )
 
    if (OMR)

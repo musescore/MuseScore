@@ -5781,8 +5781,17 @@ using namespace Ms;
 //   main
 //---------------------------------------------------------
 
+int buggyFunc() {
+    delete reinterpret_cast<QString*>(0xFEE1DEAD);
+    return 0;
+}
+
 int main(int argc, char* av[])
       {
+
+    Breakpad::CrashHandler::instance()->Init(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+
+
 #ifndef NDEBUG
       qSetMessagePattern("%{file}:%{function}: %{message}");
       Ms::checkStyles();
@@ -6339,6 +6348,9 @@ int main(int argc, char* av[])
             mscore->showSynthControl(true);
       if (settings.value("mixerVisible", false).toBool())
             mscore->showMixer(true);
+
+      //TESTING BREAKPAD
+      //buggyFunc();
 
       return qApp->exec();
       }
