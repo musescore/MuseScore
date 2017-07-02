@@ -10,8 +10,12 @@
 #include <QMutex>
 
 
-
 #include "client/windows/handler/exception_handler.h"
+#include "common/windows/http_upload.h"
+
+
+using std::wstring;
+using std::pair;
 
 
 namespace Breakpad {
