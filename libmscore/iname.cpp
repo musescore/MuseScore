@@ -26,6 +26,7 @@ InstrumentName::InstrumentName(Score* s)
    : Text(s)
       {
       setInstrumentNameType(InstrumentNameType::SHORT);
+      setSelectable(false);
       }
 
 //---------------------------------------------------------
@@ -59,38 +60,6 @@ void InstrumentName::setInstrumentNameType(InstrumentNameType st)
       {
       _instrumentNameType = st;
       initSubStyle(st == InstrumentNameType::SHORT ? SubStyle::INSTRUMENT_SHORT : SubStyle::INSTRUMENT_LONG);
-      }
-
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
-
-void InstrumentName::endEdit(EditData& ed)
-      {
-      Text::endEdit(ed);
-      }
-
-bool InstrumentName::edit(EditData& ed)
-      {
-      if (Text::edit(ed)) {
-            Part* part = staff()->part();
-            Instrument* instrument = new Instrument(*part->instrument());
-
-            QString s = plainText();
-
-            if (!validateText(s)) {
-                  qWarning("Invalid instrument name: <%s>", s.toUtf8().data());
-                  return true;
-                  }
-
-            if (_instrumentNameType == InstrumentNameType::LONG)
-                  instrument->setLongName(s);
-            else
-                  instrument->setShortName(s);
-            score()->undo(new ChangePart(part, instrument, part->partName()));
-            return true;
-            }
-      return false;
       }
 
 //---------------------------------------------------------

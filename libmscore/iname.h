@@ -41,8 +41,6 @@ class InstrumentName : public Text  {
       InstrumentNameType instrumentNameType() const { return _instrumentNameType; }
       void setInstrumentNameType(InstrumentNameType v);
       void setInstrumentNameType(const QString& s);
-      virtual bool edit(EditData&) override;
-      virtual void endEdit(EditData&) override;
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
