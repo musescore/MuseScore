@@ -3675,8 +3675,11 @@ bool MuseScore::restoreSession(bool always)
                                     else if (tag == "path") {
                                           Score* score = readScore(e.readElementText());
                                           if (score) {
-                                                if (!name.isEmpty())
-                                                      score->setName(name);
+                                                if (!name.isEmpty()) {
+                                                      QFileInfo* fi = score->fileInfo();
+                                                      fi->setFile(name);
+                                                      // TODO: what if that path is no longer valid?
+                                                      }
                                                 if (cleanExit) {
                                                       // override if last session did a clean exit
                                                       created = false;
