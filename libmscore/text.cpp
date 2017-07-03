@@ -125,6 +125,291 @@ void TextCursor::updateCursorFormat()
       }
 
 //---------------------------------------------------------
+//   cursorRect
+//---------------------------------------------------------
+
+QRectF TextCursor::cursorRect() const
+      {
+      const TextBlock& tline       = curLine();
+      const TextFragment* fragment = tline.fragment(column());
+
+      QFont _font  = fragment ? fragment->font(_text) : _text->font();
+      qreal ascent = QFontMetricsF(_font, MScore::paintDevice()).ascent();
+      qreal h = ascent;
+      qreal x = tline.xpos(column(), _text);
+      qreal y = tline.y() - ascent * .9;
+      return QRectF(x, y, 4.0, h);
+      }
+
+//---------------------------------------------------------
+//   curLine
+//    return the current text line in edit mode
+//---------------------------------------------------------
+
+TextBlock& TextCursor::curLine() const
+      {
+      return _text->_layout[_row];
+      }
+
+//---------------------------------------------------------
+//   changeSelectionFormat
+//---------------------------------------------------------
+
+void TextCursor::changeSelectionFormat(FormatId id, QVariant val)
+      {
+      if (!hasSelection())
+            return;
+      int r1 = selectLine();
+      int r2 = row();
+      int c1 = selectColumn();
+      int c2 = column();
+
+      if (r1 > r2) {
+            qSwap(r1, r2);
+            qSwap(c1, c2);
+            }
+      else if (r1 == r2) {
+            if (c1 > c2)
+                  qSwap(c1, c2);
+            }
+      int rows = _text->rows();
+      QList<TextBlock> toDelete;
+      for (int row = 0; row < rows; ++row) {
+            TextBlock& t = _text->_layout[row];
+            if (row < r1)
+                  continue;
+            if (row > r2)
+                  break;
+            if (row == r1 && r1 == r2)
+                  t.changeFormat(id, val, c1, c2 - c1);
+            else if (row == r1)
+                  t.changeFormat(id, val, c1, t.columns() - c1);
+            else if (row == r2)
+                  t.changeFormat(id, val, 0, c2);
+            else
+                  t.changeFormat(id, val, 0, t.columns());
+            }
+      _text->layout1();
+      _text->score()->addRefresh(_text->canvasBoundingRect());
+      }
+
+//---------------------------------------------------------
+//   setFormat
+//---------------------------------------------------------
+
+void TextCursor::setFormat(FormatId id, QVariant val)
+      {
+      changeSelectionFormat(id, val);
+      format()->setFormat(id, val);
+      }
+
+//---------------------------------------------------------
+//   movePosition
+//---------------------------------------------------------
+
+bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode, int count)
+      {
+      for (int i = 0; i < count; i++) {
+            switch (op) {
+                  case QTextCursor::Left:
+                        if (hasSelection() && mode == QTextCursor::MoveAnchor) {
+                              int r1 = _selectLine;
+                              int r2 = _row;
+                              int c1 = _selectColumn;
+                              int c2 = _column;
+
+                              if (r1 > r2) {
+                                    qSwap(r1, r2);
+                                    qSwap(c1, c2);
+                                    }
+                              else if (r1 == r2) {
+                                    if (c1 > c2)
+                                           qSwap(c1, c2);
+                                    }
+                              clearSelection();
+                              _row    = r1;
+                              _column = c1;
+                              }
+                        else if (_column == 0) {
+                              if (_row == 0)
+                                    return false;
+                              --_row;
+                              _column = curLine().columns();
+                              }
+                        else
+                              --_column;
+                        break;
+
+                  case QTextCursor::Right:
+                        if (hasSelection() && mode == QTextCursor::MoveAnchor) {
+                              int r1 = _selectLine;
+                              int r2 = _row;
+                              int c1 = _selectColumn;
+                              int c2 = _column;
+
+                              if (r1 > r2) {
+                                    qSwap(r1, r2);
+                                    qSwap(c1, c2);
+                                    }
+                              else if (r1 == r2) {
+                                    if (c1 > c2)
+                                           qSwap(c1, c2);
+                                    }
+                              clearSelection();
+                              _row    = r2;
+                              _column = c2;
+                              }
+                        else if (column() >= curLine().columns()) {
+                              if (_row >= _text->rows() - 1)
+                                    return false;
+                              ++_row;
+                              _column = 0;
+                              }
+                        else
+                              ++_column;
+                        break;
+
+                  case QTextCursor::Up:
+                        if (_row == 0)
+                              return false;
+                        --_row;
+                        if (_column > curLine().columns())
+                              _column = curLine().columns();
+                        break;
+
+                  case QTextCursor::Down:
+                        if (_row >= _text->rows() - 1)
+                              return false;
+                        ++_row;
+                        if (_column > curLine().columns())
+                              _column = curLine().columns();
+                        break;
+
+                  case QTextCursor::Start:
+                        _row    = 0;
+                        _column = 0;
+                        break;
+
+                  case QTextCursor::End:
+                        _row    = _text->rows() - 1;
+                        _column = curLine().columns();
+                        break;
+
+                  case QTextCursor::StartOfLine:
+                        _column = 0;
+                        break;
+
+                  case QTextCursor::EndOfLine:
+                        _column = curLine().columns();
+                        break;
+
+                  case QTextCursor::WordLeft:
+                        if (_column > 0) {
+                              --_column;
+                              while (_column > 0 && currentCharacter().isSpace())
+                                    --_column;
+                              while (_column > 0 && !currentCharacter().isSpace())
+                                    --_column;
+                              if (currentCharacter().isSpace())
+                                    ++_column;
+                              }
+                        break;
+
+                  case QTextCursor::NextWord: {
+                        int cols =  columns();
+                        if (_column < cols) {
+                              ++_column;
+                              while (_column < cols && !currentCharacter().isSpace())
+                                    ++_column;
+                              while (_column < cols && currentCharacter().isSpace())
+                                    ++_column;
+                              }
+                        }
+                        break;
+
+                  default:
+                        qDebug("Text::movePosition: not implemented");
+                        return false;
+                  }
+            if (mode == QTextCursor::MoveAnchor)
+                  clearSelection();
+            }
+      updateCursorFormat();
+      _text->score()->addRefresh(_text->canvasBoundingRect());
+      return true;
+      }
+
+//---------------------------------------------------------
+//   set
+//---------------------------------------------------------
+
+bool TextCursor::set(const QPointF& p, QTextCursor::MoveMode mode)
+      {
+      QPointF pt  = p - _text->canvasPos();
+      if (!_text->bbox().contains(pt))
+            return false;
+      _row = 0;
+      for (int row = 0; row < _text->rows(); ++row) {
+            const TextBlock& l = _text->_layout.at(row);
+            if (l.y() > pt.y()) {
+                  setRow(row);
+                  break;
+                  }
+            }
+      _column = curLine().column(pt.x(), _text);
+
+      _text->score()->setUpdateAll();
+      if (mode == QTextCursor::MoveAnchor)
+            clearSelection();
+      if (hasSelection())
+            QApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
+      updateCursorFormat();
+      return true;
+      }
+
+//---------------------------------------------------------
+//   selectedText
+//    return current selection
+//---------------------------------------------------------
+
+QString TextCursor::selectedText() const
+      {
+      QString s;
+      int r1 = selectLine();
+      int r2 = _row;
+      int c1 = selectColumn();
+      int c2 = column();
+
+      if (r1 > r2) {
+            qSwap(r1, r2);
+            qSwap(c1, c2);
+            }
+      else if (r1 == r2) {
+            if (c1 > c2)
+                  qSwap(c1, c2);
+            }
+      int rows = _text->rows();
+      for (int row = 0; row < rows; ++row) {
+            const TextBlock& t = _text->_layout.at(row);
+            if (row >= r1 && row <= r2) {
+                  if (row == r1 && r1 == r2)
+                        s += t.text(c1, c2 - c1);
+                  else if (row == r1) {
+                        s += t.text(c1, -1);
+                        s += "\n";
+                        }
+                  else if (row == r2)
+                        s += t.text(0, c2);
+                  else {
+                        s += t.text(0, -1);
+                        s += "\n";
+                        }
+                  }
+            }
+      return s;
+      }
+
+//---------------------------------------------------------
 //   TextFragment
 //---------------------------------------------------------
 
@@ -883,23 +1168,6 @@ void Text::drawSelection(QPainter* p, const QRectF& r) const
       }
 
 //---------------------------------------------------------
-//   cursorRect
-//---------------------------------------------------------
-
-QRectF TextCursor::cursorRect() const
-      {
-      const TextBlock& tline       = curLine();
-      const TextFragment* fragment = tline.fragment(column());
-
-      QFont _font  = fragment ? fragment->font(_text) : _text->font();
-      qreal ascent = QFontMetricsF(_font, MScore::paintDevice()).ascent();
-      qreal h = ascent;
-      qreal x = tline.xpos(column(), _text);
-      qreal y = tline.y() - ascent * .9;
-      return QRectF(x, y, 4.0, h);
-      }
-
-//---------------------------------------------------------
 //   textColor
 //---------------------------------------------------------
 
@@ -1446,16 +1714,6 @@ void Text::endEdit(EditData&)
       }
 
 //---------------------------------------------------------
-//   curLine
-//    return the current text line in edit mode
-//---------------------------------------------------------
-
-TextBlock& TextCursor::curLine() const
-      {
-      return _text->_layout[_row];
-      }
-
-//---------------------------------------------------------
 //   editInsertText
 //---------------------------------------------------------
 
@@ -1519,212 +1777,6 @@ void Text::selectAll(TextCursor* _cursor)
       _cursor->setSelectColumn(0);
       _cursor->setRow(rows() - 1);
       _cursor->setColumn(_cursor->curLine().columns());
-      }
-
-//---------------------------------------------------------
-//   movePosition
-//---------------------------------------------------------
-
-bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode, int count)
-      {
-      for (int i = 0; i < count; i++) {
-            switch (op) {
-                  case QTextCursor::Left:
-                        if (hasSelection() && mode == QTextCursor::MoveAnchor) {
-                              int r1 = selectLine();
-                              int r2 = row();
-                              int c1 = selectColumn();
-                              int c2 = column();
-
-                              if (r1 > r2) {
-                                    qSwap(r1, r2);
-                                    qSwap(c1, c2);
-                                    }
-                              else if (r1 == r2) {
-                                    if (c1 > c2)
-                                           qSwap(c1, c2);
-                                    }
-                              clearSelection();
-                              setRow(r1);
-                              setColumn(c1);
-                              }
-                        else if (column() == 0) {
-                              if (row() == 0)
-                                    return false;
-                              --_row;
-                              setColumn(curLine().columns());
-                              }
-                        else
-                              setColumn(column()-1);
-                        break;
-
-                  case QTextCursor::Right:
-                        if (hasSelection() && mode == QTextCursor::MoveAnchor) {
-                              int r1 = selectLine();
-                              int r2 = _row;
-                              int c1 = selectColumn();
-                              int c2 = column();
-
-                              if (r1 > r2) {
-                                    qSwap(r1, r2);
-                                    qSwap(c1, c2);
-                                    }
-                              else if (r1 == r2) {
-                                    if (c1 > c2)
-                                           qSwap(c1, c2);
-                                    }
-                              clearSelection();
-                              setRow(r2);
-                              setColumn(c2);
-                              }
-                        else if (column() >= curLine().columns()) {
-                              if (_row >= _text->rows() - 1)
-                                    return false;
-                              setRow(row()+1);
-                              setColumn(0);
-                              }
-                        else
-                              setColumn(column()+1);
-                        break;
-
-                  case QTextCursor::Up:
-                        if (_row == 0)
-                              return false;
-                        setRow(row()-1);
-                        if (column() > curLine().columns())
-                              setColumn(curLine().columns());
-                        break;
-
-                  case QTextCursor::Down:
-                        if (_row >= _text->rows() - 1)
-                              return false;
-                        ++_row;
-                        if (column() > curLine().columns())
-                              setColumn(curLine().columns());
-                        break;
-
-                  case QTextCursor::Start:
-                        setRow(0);
-                        setColumn(0);
-                        break;
-
-                  case QTextCursor::End:
-                        setRow(_text->rows() - 1);
-                        setColumn(curLine().columns());
-                        break;
-
-                  case QTextCursor::StartOfLine:
-                        setColumn(0);
-                        break;
-
-                  case QTextCursor::EndOfLine:
-                        setColumn(curLine().columns());
-                        break;
-
-                  case QTextCursor::WordLeft:
-                        if (column() > 0) {
-                              setColumn(column()-1);
-                              while (column() > 0 && currentCharacter().isSpace())
-                                    setColumn(column()-1);
-                              while (column() > 0 && !currentCharacter().isSpace())
-                                    setColumn(column()-1);
-                              if (currentCharacter().isSpace())
-                                    setColumn(column()+1);
-                              }
-                        break;
-
-                  case QTextCursor::NextWord: {
-                        int cols =  columns();
-                        if (column() < cols) {
-                              setColumn(column() + 1);
-                              while (column() < cols && !currentCharacter().isSpace())
-                                    setColumn(column()+1);
-                              while (column() < cols && currentCharacter().isSpace())
-                                    setColumn(column()+1);
-                              }
-                        }
-                        break;
-
-                  default:
-                        qDebug("Text::movePosition: not implemented");
-                        return false;
-                  }
-            if (mode == QTextCursor::MoveAnchor)
-                  clearSelection();
-            }
-      updateCursorFormat();
-      _text->score()->addRefresh(_text->canvasBoundingRect());
-      return true;
-      }
-
-//---------------------------------------------------------
-//   set
-//---------------------------------------------------------
-
-bool TextCursor::set(const QPointF& p, QTextCursor::MoveMode mode)
-      {
-      QPointF pt  = p - _text->canvasPos();
-      if (!_text->bbox().contains(pt))
-            return false;
-      _row = 0;
-      for (int row = 0; row < _text->rows(); ++row) {
-            const TextBlock& l = _text->_layout.at(row);
-            if (l.y() > pt.y()) {
-                  setRow(row);
-                  break;
-                  }
-            }
-      setColumn(curLine().column(pt.x(), _text));
-
-      _text->score()->setUpdateAll();
-      if (mode == QTextCursor::MoveAnchor)
-            clearSelection();
-      if (hasSelection())
-            QApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
-      updateCursorFormat();
-      return true;
-      }
-
-//---------------------------------------------------------
-//   selectedText
-//    return current selection
-//---------------------------------------------------------
-
-QString TextCursor::selectedText() const
-      {
-      QString s;
-      int r1 = selectLine();
-      int r2 = _row;
-      int c1 = selectColumn();
-      int c2 = column();
-
-      if (r1 > r2) {
-            qSwap(r1, r2);
-            qSwap(c1, c2);
-            }
-      else if (r1 == r2) {
-            if (c1 > c2)
-                  qSwap(c1, c2);
-            }
-      int rows = _text->rows();
-      for (int row = 0; row < rows; ++row) {
-            const TextBlock& t = _text->_layout.at(row);
-            if (row >= r1 && row <= r2) {
-                  if (row == r1 && r1 == r2)
-                        s += t.text(c1, c2 - c1);
-                  else if (row == r1) {
-                        s += t.text(c1, -1);
-                        s += "\n";
-                        }
-                  else if (row == r2)
-                        s += t.text(0, c2);
-                  else {
-                        s += t.text(0, -1);
-                        s += "\n";
-                        }
-                  }
-            }
-      return s;
       }
 
 //---------------------------------------------------------
@@ -2190,58 +2242,6 @@ QString Text::xmlText() const
       if (textInvalid)
             ((Text*)(this))->genText();    // ugh!
       return _text;
-      }
-
-//---------------------------------------------------------
-//   changeSelectionFormat
-//---------------------------------------------------------
-
-void TextCursor::changeSelectionFormat(FormatId id, QVariant val)
-      {
-      if (!hasSelection())
-            return;
-      int r1 = selectLine();
-      int r2 = row();
-      int c1 = selectColumn();
-      int c2 = column();
-
-      if (r1 > r2) {
-            qSwap(r1, r2);
-            qSwap(c1, c2);
-            }
-      else if (r1 == r2) {
-            if (c1 > c2)
-                  qSwap(c1, c2);
-            }
-      int rows = _text->rows();
-      QList<TextBlock> toDelete;
-      for (int row = 0; row < rows; ++row) {
-            TextBlock& t = _text->_layout[row];
-            if (row < r1)
-                  continue;
-            if (row > r2)
-                  break;
-            if (row == r1 && r1 == r2)
-                  t.changeFormat(id, val, c1, c2 - c1);
-            else if (row == r1)
-                  t.changeFormat(id, val, c1, t.columns() - c1);
-            else if (row == r2)
-                  t.changeFormat(id, val, 0, c2);
-            else
-                  t.changeFormat(id, val, 0, t.columns());
-            }
-      _text->layout1();
-      _text->score()->addRefresh(_text->canvasBoundingRect());
-      }
-
-//---------------------------------------------------------
-//   setFormat
-//---------------------------------------------------------
-
-void TextCursor::setFormat(FormatId id, QVariant val)
-      {
-      changeSelectionFormat(id, val);
-      format()->setFormat(id, val);
       }
 
 //---------------------------------------------------------
