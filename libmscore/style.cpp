@@ -899,6 +899,7 @@ const std::vector<StyledProperty> dynamicsStyle {
       { StyleIdx::dynamicsFontBold,                   P_ID::FONT_BOLD              },
       { StyleIdx::dynamicsFontItalic,                 P_ID::FONT_ITALIC            },
       { StyleIdx::dynamicsFontUnderline,              P_ID::FONT_UNDERLINE         },
+      { StyleIdx::dynamicsAlign,                      P_ID::ALIGN                  },
       };
 
 const std::vector<StyledProperty> expressionStyle {
