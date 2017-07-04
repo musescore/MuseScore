@@ -2989,7 +2989,6 @@ System* Score::collectSystem(LayoutContext& lc)
       //
       // layout
       //    - beams
-      //    - TempoText
       //    - RehearsalMark, StaffText
       //    - Dynamic
       //    - update the segment shape + measure shape
@@ -3018,17 +3017,7 @@ System* Score::collectSystem(LayoutContext& lc)
                               }
                         }
                   for (Element* e : s->annotations()) {
-                        if (e->isTempoText()) {
-                              TempoText* tt = toTempoText(e);
-                              setTempo(tt->segment(), tt->tempo());
-                              tt->layout();
-                              if (tt->visible()) {
-                                    int si = tt->staffIdx();
-                                    s->staffShape(si).add(tt->shape().translated(e->pos()));
-                                    m->staffShape(si).add(tt->shape().translated(s->pos() + e->pos()));
-                                    }
-                              }
-                        else if (e->visible() && (e->isRehearsalMark() || e->isStaffText())) {
+                        if (e->visible() && (e->isRehearsalMark() || e->isStaffText())) {
                               e->layout();
                               int si = e->staffIdx();
                               s->staffShape(si).add(e->shape().translated(e->pos()));
@@ -3213,6 +3202,29 @@ System* Score::collectSystem(LayoutContext& lc)
                               // to measure coordinate space
                               Shape* shape = &m->staffShape(sp->staffIdx());
                               shape->add(ss->shape().translated(ss->pos() - m->pos()));
+                              }
+                        }
+                  }
+            }
+
+      // tempo text
+
+      for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure())
+                  continue;
+            SegmentType st = SegmentType::ChordRest;
+            Measure* m = toMeasure(mb);
+            for (Segment* s = m->first(st); s; s = s->next(st)) {
+                  for (Element* e : s->annotations()) {
+                        if (e->isTempoText()) {
+                              TempoText* tt = toTempoText(e);
+                              setTempo(tt->segment(), tt->tempo());
+                              tt->layout();
+                              if (tt->visible()) {
+                                    int si = tt->staffIdx();
+                                    s->staffShape(si).add(tt->shape().translated(e->pos()));
+                                    m->staffShape(si).add(tt->shape().translated(s->pos() + e->pos()));
+                                    }
                               }
                         }
                   }
