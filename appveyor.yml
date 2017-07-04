@@ -71,4 +71,5 @@ deploy:
   override: true
 # to run your custom scripts instead of automatic MSBuild
 build_script:
+  - mingw32-make -f Makefile.mingw clean
   - mingw32-make -f Makefile.mingw release && mingw32-make -f Makefile.mingw install
