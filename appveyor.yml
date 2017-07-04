@@ -39,7 +39,7 @@ before_build:
     xcopy i686-w64-mingw32 "C:\Qt\Tools\mingw530_32\i686-w64-mingw32" /E &&
     xcopy lib "C:\Qt\Tools\mingw530_32\lib" /E &&
     xcopy Jack "C:\Program Files (x86)\Jack" /E /I &&
-    xcopy ccache "C:\ccache" /E /I &&
+    xcopy ccache "C:\ccache" /E /I
     )
   # copy /y cc1plus.exe "C:\Qt\Tools\mingw530_32\libexec\gcc\i686-w64-mingw32\5.3.0\cc1plus.exe"
   
