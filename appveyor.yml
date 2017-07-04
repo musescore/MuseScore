@@ -1,0 +1,74 @@
+# clone directory
+clone_folder: C:\MuseScore
+# fetch repository as zip archive
+# shallow_clone: true                 # default is "false"
+# set clone depth
+clone_depth: 3                      # clone entire repository history if not defined
+# environment variables
+# this is how to allow failing jobs in the matrix
+#matrix:
+#  fast_finish: true
+#  allow_failures:
+#    - platform: x86
+#      configuration: Release
+# build cache to preserve files/folders between builds
+cache:
+  - dependencies.7z
+  - C:\Qt\Tools\mingw491_32\lib
+  - C:\Qt\Tools\mingw491_32\i686-w64-mingw32
+  - C:\Program Files (x86)\Jack
+  - C:\Qt\Tools\mingw491_32\libexec\gcc\i686-w64-mingw32\4.9.1\cc1plus.exe
+  - C:\MuseScore\build.release\thirdparty
+  - C:\ccache
+#cache:
+#  - packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
+#  - projectA\libs
+#  - node_modules                    # local npm modules
+#  - %APPDATA%\npm-cache             # npm cache
+# build platform, i.e. x86, x64, Any CPU. This setting is optional.
+platform:
+  - x86
+# build Configuration, i.e. Debug, Release, etc.
+configuration: Release
+# scripts to run before build
+before_build:
+  - IF NOT EXIST dependencies.7z (
+    start " " /wait "C:\MinGW\msys\1.0\bin\wget" --no-check-certificate "https://drive.google.com/uc?export=download&id=0BxjayMZiuupOSXF6a0ZDUG5rNDg" -O dependencies.7z &&
+    start " " /wait "7z" x -y dependencies.7z > nul &&
+    cd dependencies &&
+    xcopy i686-w64-mingw32 "C:\Qt\Tools\mingw491_32\i686-w64-mingw32" /E &&
+    xcopy lib "C:\Qt\Tools\mingw491_32\lib" /E &&
+    xcopy Jack "C:\Program Files (x86)\Jack" /E /I &&
+    xcopy ccache "C:\ccache" /E /I &&
+    copy /y cc1plus.exe "C:\Qt\Tools\mingw491_32\libexec\gcc\i686-w64-mingw32\4.9.1\cc1plus.exe"
+    )
+  - cd C:\MuseScore
+  - set PATH=C:\Qt\5.4\mingw491_32\bin;C:\Qt\Tools\mingw491_32\bin;%PATH%
+  - mingw32-make -f Makefile.mingw revision
+  # CMake refuses to generate MinGW Makefiles if sh.exe is in the Path
+  - set PATH=C:\Qt\5.4\mingw491_32\bin;C:\Qt\Tools\mingw491_32\bin;C:\Program Files (x86)\CMake\bin;C:\Program Files\7-Zip;C:\ccache\bin
+  - set CCACHE_DIR=C:\ccache\cache
+  - set /p MSversion=<mscore\revision.h
+# scripts to run *after* solution is built and *before* automatic packaging occurs (web apps, NuGet packages, Azure Cloud Services)
+#before_package:
+# scripts to run after build
+after_build:
+  - ccache.exe -s
+  - cmd: 7z a C:\MuseScore\MuseScoreTest%MSversion%.7z C:\MuseScore\win32install
+  - cd C:\MuseScore
+artifacts:
+  - path: MuseScoreTest$(MSversion).7z
+deploy:
+- provider: BinTray
+  username: antoniobl
+  api_key:
+    secure: 2hZMhDAPtVbeoNZHA0GSzenAHtU+g4SzW4KwJp1h9/r7uWr2j9kMYo93iOGlEvtp
+  subject: antoniobl
+  repo: archive
+  package: musescoretest
+  version: $(MSversion)
+  publish: true
+  override: true
+# to run your custom scripts instead of automatic MSBuild
+build_script:
+  - mingw32-make -f Makefile.mingw release && mingw32-make -f Makefile.mingw install
