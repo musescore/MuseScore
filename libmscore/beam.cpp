@@ -587,8 +587,8 @@ bool Beam::slopeZero(const std::vector<ChordRest*>& cl)
       if (cl.size() == 2 && (cl.front()->isRest() || cl.back()->isRest()))
             return true;
 
-//      for(const ChordRest* cr : cl) {
-//            if (cr->type() != ElementType::CHORD)
+//      for (const ChordRest* cr : cl) {
+//            if (!cr->isChord())
 //                  return true;
 //            }
       int l1 = cl.front()->line();
@@ -599,9 +599,8 @@ bool Beam::slopeZero(const std::vector<ChordRest*>& cl)
             int l2 = cl[1]->line();
             int l3 = cl[2]->line();
 
-            if ((l1 < le) && (l2 > l1) && (l2 > l3) && (l3 > le)) {
+            if ((l1 < le) && (l2 > l1) && (l2 > l3) && (l3 > le))
                   return true;
-                  }
             if ((l1 == l3) && (l2 == le))
                   return true;
             }
@@ -623,11 +622,9 @@ bool Beam::slopeZero(const std::vector<ChordRest*>& cl)
             int l4 = cl[1]->line(_up);
             for (unsigned  i = 1; i < cl.size()-1; ++i) {
                   // Don't consider interior rests
-                  if (cl[i]->type() != ElementType::CHORD)
+                  if (!cl[i]->isChord())
                         continue;
                   int l3 = cl[i]->line(_up);
-                  if (l3 != l4)
-                        sameLine = false;
                   if (_up) {
                         if (l3 < l1 && l3 < le)
                               return true;
@@ -636,8 +633,9 @@ bool Beam::slopeZero(const std::vector<ChordRest*>& cl)
                         if (l3 > l1 && l3 > le)
                               return true;
                         }
+                  sameLine = l3 == l4;
                   }
-            if (sameLine && (l1 == l4 || le == l4) && cl[1]->type() == ElementType::CHORD) {
+            if (sameLine && (l1 == l4 || le == l4) && cl[1]->isChord()) {
                   if (_up) {
                         if (l1 == l4 && l1 < le)
                               return true;
