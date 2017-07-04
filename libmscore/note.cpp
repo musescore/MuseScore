@@ -585,6 +585,8 @@ Note::Note(const Note& n, bool link)
       _fixed             = n._fixed;
       _fixedLine         = n._fixedLine;
       _accidental        = 0;
+      _cachedNoteheadSym = n._cachedNoteheadSym;
+      _cachedSymNull     = n._cachedSymNull;
 
       if (n._accidental)
             add(new Accidental(*(n._accidental)));
@@ -2972,8 +2974,7 @@ void Note::setAccidentalType(AccidentalType type)
 
 Shape Note::shape() const
       {
-      Shape shape;
-      shape.add(symBbox(_cachedNoteheadSym));
+      Shape shape(bbox());
       for (NoteDot* dot : _dots)
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
       if (_accidental)
