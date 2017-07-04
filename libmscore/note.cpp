@@ -2973,7 +2973,7 @@ void Note::setAccidentalType(AccidentalType type)
 Shape Note::shape() const
       {
       Shape shape;
-      shape.add(symBbox(noteHead()));
+      shape.add(symBbox(_cachedNoteheadSym));
       for (NoteDot* dot : _dots)
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
       if (_accidental)

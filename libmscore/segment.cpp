@@ -1343,16 +1343,18 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                   bool isGap = false;
                   for (int i = 0; i < score()->nstaves() * VOICES; i++) {
                         Element* el = element(i);
-                        if (el && el->isRest() && toRest(el)->isGap())
+                        if (!el)
+                              continue;
+                        if (el->isRest() && toRest(el)->isGap())
                               isGap = true;
-                        else if (el) {
+                        else {
                               isGap = false;
                               break;
                               }
                         }
                   if (isGap)
                         return 0.0;
-
+                  // minimum distance between notes is one note head width
                   w = qMax(w, score()->noteHeadWidth()) + score()->styleP(StyleIdx::minNoteDistance);
                   }
             }
