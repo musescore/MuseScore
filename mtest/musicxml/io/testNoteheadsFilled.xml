@@ -62,9 +62,6 @@
           </time-modification>
         <stem>down</stem>
         <notehead filled="no">normal</notehead>
-        <beam number="1">begin</beam>
-        <beam number="2">begin</beam>
-        <beam number="3">begin</beam>
         <notations>
           <tuplet type="start" bracket="no" show-number="none"/>
           </notations>
@@ -84,9 +81,6 @@
           </time-modification>
         <stem>down</stem>
         <notehead filled="no">normal</notehead>
-        <beam number="1">end</beam>
-        <beam number="2">end</beam>
-        <beam number="3">end</beam>
         <notations>
           <tuplet type="stop"/>
           </notations>
@@ -106,8 +100,6 @@
           </time-modification>
         <stem>down</stem>
         <notehead filled="no">normal</notehead>
-        <beam number="1">begin</beam>
-        <beam number="2">begin</beam>
         <notations>
           <tuplet type="start" bracket="no" show-number="none"/>
           </notations>
@@ -127,8 +119,6 @@
           </time-modification>
         <stem>down</stem>
         <notehead filled="no">normal</notehead>
-        <beam number="1">end</beam>
-        <beam number="2">end</beam>
         <notations>
           <tuplet type="stop"/>
           </notations>
