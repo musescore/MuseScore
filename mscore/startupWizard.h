@@ -27,6 +27,7 @@ class StartupWizard {
       ~StartupWizard();
       static QString layoutInput();
       static void autoSelectShortcuts(QString keyboardLayout);
+      static void selectWorkspace();
       };
 }
 #endif

@@ -121,4 +121,9 @@ void StartupWizard::autoSelectShortcuts(QString keyboardLayout)
       QString fileLocation = layoutToShortcut->value(keyboardLayout);
       Shortcut::loadFromNewFile(fileLocation);
       }
+
+void StartupWizard::selectWorkspace()
+      {
+        
+      }
 }
