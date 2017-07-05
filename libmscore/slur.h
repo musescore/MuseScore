@@ -47,9 +47,6 @@ class SlurSegment : public SlurTieSegment {
       virtual void updateGrips(EditData&) const override;
       virtual QPointF gripAnchor(Grip grip) const override;
 
-      QPointF getGrip(Grip) const override;
-      void setGrip(Grip, const QPointF&) override;
-
       Slur* slur() const { return (Slur*)spanner(); }
 
       void computeBezier(QPointF so = QPointF());

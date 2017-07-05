@@ -468,17 +468,6 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       }
 
 //---------------------------------------------------------
-//   setEditPos
-//---------------------------------------------------------
-
-void ScoreView::setEditPos(const QPointF& pt)
-      {
-      editData.element->setGrip(editData.curGrip, pt);
-      updateGrips();
-      _score->update();
-      }
-
-//---------------------------------------------------------
 //   setBackground
 //---------------------------------------------------------
 

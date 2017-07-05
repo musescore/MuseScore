@@ -1121,26 +1121,6 @@ bool elementLessThan(const Element* const e1, const Element* const e2)
       }
 
 //---------------------------------------------------------
-//   getGrip
-//---------------------------------------------------------
-
-QPointF Element::getGrip(Grip) const
-      {
-      qreal _spatium = score()->spatium();
-      return QPointF(userOff().x() / _spatium, userOff().y() / _spatium);
-      }
-
-//---------------------------------------------------------
-//   setGrip
-//---------------------------------------------------------
-
-void Element::setGrip(Grip, const QPointF& pt)
-      {
-      qreal _spatium = score()->spatium();
-      setUserOff(QPointF(pt.x() * _spatium, pt.y() * _spatium));
-      }
-
-//---------------------------------------------------------
 //   collectElements
 //---------------------------------------------------------
 

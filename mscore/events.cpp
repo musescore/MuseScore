@@ -586,7 +586,6 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
                   ev->ignore();
                   return;
             }
-      editData.init();
       editData.delta   = delta;
       editData.hRaster = mscore->hRaster();
       editData.vRaster = mscore->vRaster();
