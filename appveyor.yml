@@ -55,6 +55,11 @@ before_build:
 # scripts to run after build
 after_build:
   - ccache.exe -s
+  - cd C:\MuseScore\win32install
+  - "C:\MinGW\msys\1.0\bin\wget" --no-check-certificate "https://github.com/gsocnikos/musescore_crash/raw/master/cv2pdb/cv2pdb.exe"
+  - "C:\MinGW\msys\1.0\bin\wget" --no-check-certificate "https://github.com/gsocnikos/musescore_crash/raw/master/cv2pdb/dump_syms.exe"
+  - cv2pdb.exe MuseScore.exe
+  - dump_syms.exe MuseScore.pdb > MuseScore.sym
   - cmd: 7z a C:\MuseScore\MuseScoreTest%MSversion%.7z C:\MuseScore\win32install
   - cd C:\MuseScore
 artifacts:
