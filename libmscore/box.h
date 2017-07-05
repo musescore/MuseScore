@@ -142,8 +142,6 @@ class VBox : public Box {
 
       virtual void layout() override;
 
-      virtual QPointF getGrip(Grip) const override;
-      virtual void setGrip(Grip, const QPointF&) override;
       };
 
 //---------------------------------------------------------

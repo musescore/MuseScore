@@ -102,59 +102,6 @@ void LineSegment::updateGrips(EditData& ed) const
       }
 
 //---------------------------------------------------------
-//   setGrip
-//---------------------------------------------------------
-
-void LineSegment::setGrip(Grip grip, const QPointF& p)
-      {
-      QPointF pt(p * spatium());
-
-      switch (grip) {
-            case Grip::START: {
-                  QPointF delta(pt - userOff());
-                  setUserOff(pt);
-                  setUserOff2(userOff2() - delta);
-                  }
-                  break;
-            case Grip::END:
-                  setUserOff2(pt);
-                  break;
-            case Grip::MIDDLE:
-                  setUserOff(pt);
-                  break;
-            case Grip::APERTURE:
-            default:
-                  break;
-            }
-      layout();   // needed?
-      }
-
-//---------------------------------------------------------
-//   getGrip
-//---------------------------------------------------------
-
-QPointF LineSegment::getGrip(Grip grip) const
-      {
-      QPointF p;
-      switch (grip) {
-            case Grip::START:
-                  p = userOff();
-                  break;
-            case Grip::END:
-                  p = userOff2();
-                  break;
-            case Grip::MIDDLE:
-                  p = userOff();
-                  break;
-            case Grip::APERTURE:
-            default:
-                  break;
-            }
-      p /= spatium();
-      return p;
-      }
-
-//---------------------------------------------------------
 //   gripAnchor
 //    return page coordinates
 //---------------------------------------------------------
