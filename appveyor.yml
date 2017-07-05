@@ -64,17 +64,17 @@ after_build:
   - cd C:\MuseScore
 artifacts:
   - path: MuseScoreTest$(MSversion).7z
-deploy:
-- provider: BinTray
-  username: antoniobl
-  api_key:
-    secure: 2hZMhDAPtVbeoNZHA0GSzenAHtU+g4SzW4KwJp1h9/r7uWr2j9kMYo93iOGlEvtp
-  subject: antoniobl
-  repo: archive
-  package: musescoretest
-  version: $(MSversion)
-  publish: true
-  override: true
+#deploy:
+#- provider: BinTray
+#  username: antoniobl
+#  api_key:
+#    secure: 2hZMhDAPtVbeoNZHA0GSzenAHtU+g4SzW4KwJp1h9/r7uWr2j9kMYo93iOGlEvtp
+#  subject: antoniobl
+#  repo: archive
+#  package: musescoretest
+#  version: $(MSversion)
+#  publish: true
+#  override: true
 # to run your custom scripts instead of automatic MSBuild
 build_script:
   - mingw32-make -f Makefile.mingw clean
