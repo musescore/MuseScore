@@ -40,8 +40,6 @@ class LineSegment : public SpannerSegment {
       virtual void editDrag(EditData&) override;
       virtual bool edit(EditData&) override;
       virtual void updateGrips(EditData&) const override;
-      virtual void setGrip(Grip, const QPointF& p) override;
-      virtual QPointF getGrip(Grip) const override;
       virtual QPointF gripAnchor(Grip) const override;
       virtual void startEditDrag(EditData&) override;
       virtual void endEditDrag(EditData&) override;

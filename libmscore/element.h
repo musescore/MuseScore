@@ -287,8 +287,6 @@ class Element : public ScoreElement {
       virtual bool nextGrip(EditData&) const;
       virtual bool prevGrip(EditData&) const;
       virtual QPointF gripAnchor(Grip) const     { return QPointF(); }
-      virtual void setGrip(Grip, const QPointF&);
-      virtual QPointF getGrip(Grip) const;
 
       int track() const                       { return _track; }
       virtual void setTrack(int val)          { _track = val;  }

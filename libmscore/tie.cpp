@@ -224,39 +224,6 @@ QPointF TieSegment::gripAnchor(Grip grip) const
       }
 
 //---------------------------------------------------------
-//   getGrip
-//---------------------------------------------------------
-
-QPointF TieSegment::getGrip(Grip n) const
-      {
-      switch (n) {
-            case Grip::START:
-            case Grip::END:
-                  return (ups(n).p - gripAnchor(n)) / spatium() + ups(n).off / spatium();
-            default:
-                  return ups(n).off / spatium();
-            }
-      }
-
-//---------------------------------------------------------
-//   setGrip
-//---------------------------------------------------------
-
-void TieSegment::setGrip(Grip n, const QPointF& pt)
-      {
-      switch (n) {
-            case Grip::START:
-            case Grip::END:
-                  ups(n).off = ((pt * spatium()) - (ups(n).p - gripAnchor(n)));
-                  break;
-            default:
-                  ups(n).off = pt * spatium();
-                  break;
-            }
-      tie()->layout();
-      }
-
-//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
