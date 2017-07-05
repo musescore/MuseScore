@@ -129,7 +129,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Alignment' value</string>
+         <string>Reset 'Alignment' values</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -318,7 +318,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset Border thickness' value</string>
+            <string>Reset 'Border thickness' value</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -335,7 +335,7 @@
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
-            <string>Reset Text margin' value</string>
+            <string>Reset 'Text margin' value</string>
            </property>
            <property name="text">
             <string notr="true"/>

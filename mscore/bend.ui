@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>469</width>
-    <height>243</height>
+    <width>308</width>
+    <height>186</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -54,14 +54,18 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0">
-    <widget class="QToolButton" name="bend1">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="1" column="1" rowspan="6">
+    <widget class="Ms::BendCanvas" name="bendCanvas">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QRadioButton" name="bend1">
      <property name="text">
       <string>Bend</string>
      </property>
@@ -77,13 +81,7 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="QToolButton" name="bend2">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+    <widget class="QRadioButton" name="bend2">
      <property name="text">
       <string>Bend/Release</string>
      </property>
@@ -96,13 +94,7 @@
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="QToolButton" name="bend3">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+    <widget class="QRadioButton" name="bend3">
      <property name="text">
       <string>Bend/Release/Bend</string>
      </property>
@@ -115,13 +107,7 @@
     </widget>
    </item>
    <item row="4" column="0">
-    <widget class="QToolButton" name="bend4">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+    <widget class="QRadioButton" name="bend4">
      <property name="text">
       <string>Prebend</string>
      </property>
@@ -134,13 +120,7 @@
     </widget>
    </item>
    <item row="5" column="0">
-    <widget class="QToolButton" name="bend5">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+    <widget class="QRadioButton" name="bend5">
      <property name="text">
       <string>Prebend/Release</string>
      </property>
@@ -149,22 +129,6 @@
      </property>
      <property name="autoExclusive">
       <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" rowspan="6">
-    <widget class="Ms::BendCanvas" name="bendCanvas">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
      </property>
     </widget>
    </item>
