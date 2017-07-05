@@ -267,10 +267,11 @@ void Lyrics::layout1()
           return;
 
       qreal lh = lineSpacing() * score()->styleD(StyleIdx::lyricsLineHeight);
-      qreal y;
+      qreal y = 0;
 
       if (placeBelow())
-            y  = lh * (_no+1) + score()->styleP(StyleIdx::lyricsPosBelow) + staff()->height();
+//            y  = lh * (_no+1) + score()->styleP(StyleIdx::lyricsPosBelow) + staff()->height();
+            y  = lh * _no + score()->styleP(StyleIdx::lyricsPosBelow) + staff()->height();
       else {
             // we are counting _no from bottom to top for verses above
             y = -lh * _no + score()->styleP(StyleIdx::lyricsPosAbove);
@@ -369,12 +370,13 @@ void Lyrics::layout1()
                   }
 #endif
             }
-      else
+      else {
             if (_separator) {
                   _separator->removeUnmanaged();
                   delete _separator;
                   _separator = nullptr;
                   }
+            }
       }
 
 //---------------------------------------------------------
@@ -859,8 +861,7 @@ void LyricsLineSegment::layout()
             _dashLength = lyr->dashLength();
 #else
             // set conventional dash Y pos
-            qreal dashOffset = lyr->fontMetrics().xHeight() * Lyrics::LYRICS_DASH_Y_POS_RATIO;
-            rypos() -= dashOffset;
+            rypos() -= MScore::pixelRatio * lyr->fontMetrics().xHeight() * Lyrics::LYRICS_DASH_Y_POS_RATIO;
             _dashLength = score()->styleP(StyleIdx::lyricsDashMaxLength) * mag();  // and dash length
 #endif
             qreal len         = pos2().x();
