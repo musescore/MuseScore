@@ -1024,7 +1024,7 @@ int totalTiedNoteTicks(Note* note)
 bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, int requestedTicksPerNote,
    const vector<int>& prefix, const vector<int>& body,
    bool repeatp, bool sustainp, const vector<int>& suffix,
-   int fastestFreq=16, int slowestFreq=8 // 16 Hz and 8 Hz
+   int fastestFreq=64, int slowestFreq=8 // 64 Hz and 8 Hz
    )
       {
       events->clear();
