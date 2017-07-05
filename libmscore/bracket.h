@@ -73,6 +73,9 @@ class Bracket : public Element {
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
 
+      virtual void write(XmlWriter& xml) const override;
+      virtual void read(XmlReader&) override;
+
       virtual bool isEditable() const override { return true; }
       virtual void startEdit(EditData&) override;
       virtual bool edit(EditData&) override;
@@ -80,7 +83,6 @@ class Bracket : public Element {
       virtual void editDrag(EditData&) override;
       virtual void endEditDrag(EditData&) override;
       virtual void updateGrips(EditData&) const override;
-//      virtual int grips() const override { return 1; }
 
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;

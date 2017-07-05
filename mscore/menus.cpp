@@ -866,7 +866,7 @@ Palette* MuseScore::newBracketsPalette()
          { BracketType::SQUARE, "Square"  },
          { BracketType::LINE,   "Line"    }}
          } ) {
-            Bracket* b1 = new Bracket(gscore);
+            Bracket* b1      = new Bracket(gscore);
             BracketItem* bi1 = new BracketItem(gscore);
             bi1->setBracketType(t.first);
             b1->setBracketItem(bi1);
