@@ -3756,7 +3756,7 @@ void Measure::setStretchedWidth(qreal w)
 void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
       {
       Segment* fs = s;
-      bool first = system()->firstMeasure() == this;
+      bool first  = system()->firstMeasure() == this;
       const Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
       while (s) {
             s->rxpos() = x;
@@ -3827,6 +3827,25 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
       setStretchedWidth(x);
       }
 
+//---------------------------------------------------------
+//   hasAccidental
+//---------------------------------------------------------
+
+static bool hasAccidental(Segment* s)
+      {
+      for (int track = 0; track < s->score()->ntracks(); ++track) {
+            Element* e = s->element(track);
+            if (!e || !e->isChord())
+                  continue;
+            Chord* c = toChord(e);
+            for (Note* n : c->notes()) {
+                  if (n->accidental())
+                        return true;
+                  }
+            }
+      return false;
+      }
+
 void Measure::computeMinWidth()
       {
       Segment* s;
@@ -3851,8 +3870,9 @@ void Measure::computeMinWidth()
       Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
 
       x = s->minLeft(ls);
-      if (s->isChordRestType())
-            x += score()->styleP(StyleIdx::barNoteDistance);
+      if (s->isChordRestType()) {
+            x += score()->styleP(hasAccidental(s) ? StyleIdx::barAccidentalDistance : StyleIdx::barNoteDistance);
+            }
       else if (s->isClefType())
             x += score()->styleP(StyleIdx::clefLeftMargin);
       else if (s->isKeySigType())
