@@ -59,7 +59,6 @@ class Beam : public Element {
       TDuration maxDuration;
       qreal slope { 0.0 };
 
-      int editFragment;       // valid in edit mode
 
       void layout2(std::vector<ChordRest*>, SpannerSegmentType, int frag);
       bool twoBeamedNotes();
