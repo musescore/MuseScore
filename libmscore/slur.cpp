@@ -82,7 +82,7 @@ void SlurSegment::startEdit(EditData& ed)
 void SlurSegment::updateGrips(EditData& ed) const
       {
       QPointF p(pagePos());
-      for (int i = 0; i < int(Grip::GRIPS); ++i)
+      for (int i = 0; i < ed.grips; ++i)
             ed.grip[i].translate(_ups[i].p + _ups[i].off + p);
       }
 
@@ -163,7 +163,6 @@ bool SlurSegment::edit(EditData& ed)
             }
       if (cr && cr != e1)
             changeAnchor(ed.view, ed.curGrip, cr);
-//      undoChangeProperty(P_ID::AUTOPLACE, false);
       return true;
       }
 
@@ -232,10 +231,11 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, Grip curGrip, Element* ele
             QList<SpannerSegment*>& ss = spanner()->spannerSegments();
 
             SlurSegment* newSegment = toSlurSegment(curGrip == Grip::END ? ss.back() : ss.front());
-            score()->endCmd();
-            score()->startCmd();
+//            score()->endCmd();
+//            score()->startCmd();
             viewer->startEdit(newSegment, curGrip);
-            score()->setLayoutAll();
+//            score()->setLayoutAll();
+            triggerLayout();
             }
       }
 
@@ -248,9 +248,10 @@ QPointF SlurSegment::gripAnchor(Grip grip) const
       SlurPos spos;
       slurTie()->slurPos(&spos);
 
-      QPointF sp(system()->pagePos());
-      QPointF p1(spos.p1 + spos.system1->pagePos());
-      QPointF p2(spos.p2 + spos.system2->pagePos());
+      QPointF pp(pagePos());
+      QPointF p1(ups(Grip::START).p + pp);
+      QPointF p2(ups(Grip::END).p + pp);
+
       switch (spannerSegmentType()) {
             case SpannerSegmentType::SINGLE:
                   if (grip == Grip::START)
@@ -268,14 +269,14 @@ QPointF SlurSegment::gripAnchor(Grip grip) const
 
             case SpannerSegmentType::MIDDLE:
                   if (grip == Grip::START)
-                        return sp;
+                        return system()->pagePos();
                   else if (grip == Grip::END)
                         return system()->abbox().topRight();
                   break;
 
             case SpannerSegmentType::END:
                   if (grip == Grip::START)
-                        return sp;
+                        return system()->pagePos();
                   else if (grip == Grip::END)
                         return p2;
                   break;
@@ -284,47 +285,13 @@ QPointF SlurSegment::gripAnchor(Grip grip) const
       }
 
 //---------------------------------------------------------
-//   getGrip
-//---------------------------------------------------------
-
-QPointF SlurSegment::getGrip(Grip n) const
-      {
-      switch (n) {
-            case Grip::START:
-            case Grip::END:
-                  return (ups(n).p - gripAnchor(n)) / spatium() + ups(n).off / spatium();
-            default:
-                  return ups(n).off / spatium();
-            }
-      }
-
-//---------------------------------------------------------
-//   setGrip
-//---------------------------------------------------------
-
-void SlurSegment::setGrip(Grip n, const QPointF& pt)
-      {
-      switch (n) {
-            case Grip::START:
-            case Grip::END:
-                  ups(n).off = ((pt * spatium()) - (ups(n).p - gripAnchor(n)));
-                  break;
-            default:
-                  ups(n).off = pt * spatium();
-                  break;
-            }
-      slurTie()->layout();
-      }
-
-//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
 void SlurSegment::editDrag(EditData& ed)
       {
-      ups(ed.curGrip).off += ed.delta;
-
       Grip g = ed.curGrip;
+      ups(g).off += ed.delta;
 
       if (g == Grip::START || g == Grip::END) {
             computeBezier();
@@ -797,14 +764,8 @@ void Slur::slurPos(SlurPos* sp)
             return;
             }
 
-      sp->p1 = scr->pagePos() - sp->system1->pagePos();
-      QPointF ppp = ecr->pagePos();
-
-      if (sp->system2) {                        // system2 might not be available yet (if on next page)
-            System* sss = sp->system2;
-            QPointF pppp = sss->pagePos();
-            sp->p2 = ppp - pppp;
-            }
+      sp->p1 = scr->pos() + scr->segment()->pos() + scr->measure()->pos();
+      sp->p2 = ecr->pos() + ecr->segment()->pos() + ecr->measure()->pos();
 
       // account for centering or other adjustments (other than mirroring)
       if (note1 && !note1->mirror())

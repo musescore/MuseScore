@@ -33,6 +33,7 @@ Bracket::Bracket(Score* s)
       h2           = 3.5 * spatium();
       _firstStaff  = 0;
       _lastStaff   = 0;
+      _bi          = 0;
       setGenerated(true);     // brackets are not saved
       }
 
@@ -426,6 +427,67 @@ void Bracket::setSelected(bool f)
       _bi->setSelected(f);
       Element::setSelected(f);
       }
+
+//---------------------------------------------------------
+//   Bracket::write
+//    used only for palettes
+//---------------------------------------------------------
+
+void Bracket::write(XmlWriter& xml) const
+      {
+      switch (_bi->bracketType()) {
+            case BracketType::BRACE:
+                  xml.stag("Bracket type=\"Brace\"");
+                  break;
+            case BracketType::NORMAL:
+                  xml.stag("Bracket");
+                  break;
+            case BracketType::SQUARE:
+                  xml.stag("Bracket type=\"Square\"");
+                  break;
+            case BracketType::LINE:
+                  xml.stag("Bracket type=\"Line\"");
+                  break;
+            case BracketType::NO_BRACKET:
+                  break;
+            }
+      if (_bi->column())
+            xml.tag("level", _bi->column());
+      Element::writeProperties(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Bracket::read
+//    used only for palettes
+//---------------------------------------------------------
+
+void Bracket::read(XmlReader& e)
+      {
+      QString t(e.attribute("type", "Normal"));
+      _bi = new BracketItem(score());
+
+      if (t == "Normal")
+            _bi->setBracketType(BracketType::NORMAL);
+      else if (t == "Akkolade")  //compatibility, not used anymore
+            _bi->setBracketType(BracketType::BRACE);
+      else if (t == "Brace")
+            _bi->setBracketType(BracketType::BRACE);
+      else if (t == "Square")
+            _bi->setBracketType(BracketType::SQUARE);
+      else if (t == "Line")
+            _bi->setBracketType(BracketType::LINE);
+      else
+            qDebug("unknown brace type <%s>", qPrintable(t));
+
+      while (e.readNextStartElement()) {
+            if (e.name() == "level")
+                  _bi->setColumn(e.readInt());
+            else if (!Element::readProperties(e))
+                  e.unknown();
+            }
+      }
+
 
 }
 
