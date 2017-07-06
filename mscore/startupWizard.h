@@ -21,12 +21,12 @@
 
 namespace Ms {
 
-class StartupWizard {
+      class StartupWizard {
       public:
-      StartupWizard();
-      ~StartupWizard();
-      static QString layoutInput();
-      static void autoSelectShortcuts(QString keyboardLayout);
+          StartupWizard();
+          ~StartupWizard();
+          static QString layoutInput();
+          static void autoSelectShortcuts(QString keyboardLayout);
       };
 }
 #endif

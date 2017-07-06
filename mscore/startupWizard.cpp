@@ -35,7 +35,7 @@ QString StartupWizard::layoutInput()
                  << QObject::tr("JIS - Standard Japanese")
                  << QObject::tr("OYAYUBI SHIFUTO")
                  << QObject::tr("T1 - Standard German")
-                 << QObject::tr("T2 - German")
+                 << QObject::tr("T2")
                  << QObject::tr("Swiss German")
                  << QObject::tr("Belgian French")
                  << QObject::tr("Canadian French")
@@ -51,9 +51,9 @@ QString StartupWizard::layoutInput()
                  << QObject::tr("Sebeolsik (세벌식)")
                  << QObject::tr("OTHER");
 
-      QString labelMessage = QObject::tr("Enter your keyboard layout");
-      QString result = QInputDialog::getItem(new QWidget(), "Startup Wizard", labelMessage, layoutList);
-      return result;
+        QString labelMessage = QObject::tr("Enter your keyboard layout");
+        QString result = QInputDialog::getItem(new QWidget(), "Startup Wizard", labelMessage, layoutList);
+        return result;
       }
 
 void StartupWizard::autoSelectShortcuts(QString keyboardLayout)

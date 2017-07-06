@@ -1319,7 +1319,6 @@ MuseScore::MuseScore()
             }
       QSettings s;
       QString keyboardLayout;
-      s.remove("keyboardLayout");
       if (!s.contains("keyboardLayout")) {
             keyboardLayout = StartupWizard::layoutInput();
             s.setValue("keyboardLayout", keyboardLayout);
