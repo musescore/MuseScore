@@ -2313,8 +2313,7 @@ void Score::getNextMeasure(LayoutContext& lc)
             Staff* staff           = Score::staff(staffIdx);
             const Drumset* drumset = staff->part()->instrument()->useDrumset() ? staff->part()->instrument()->drumset() : 0;
             AccidentalState as;      // list of already set accidentals for this measure
-            int tick = measure->tick();
-            as.init(staff->keySigEvent(tick), staff->clef(tick));
+            as.init(staff->keySigEvent(measure->tick()), staff->clef(measure->tick()));
 
             for (Segment& segment : measure->segments()) {
                   if (segment.isKeySigType()) {
@@ -2331,43 +2330,43 @@ void Score::getNextMeasure(LayoutContext& lc)
 
                         for (int t = track; t < endTrack; ++t) {
                               ChordRest* cr = segment.cr(t);
-                              if (cr) {
-                                    qreal m = staff->mag(segment.tick());
-                                    if (cr->small())
-                                          m *= score()->styleD(StyleIdx::smallNoteMag);
+                              if (!cr)
+                                    continue;
+                              qreal m = staff->mag(segment.tick());
+                              if (cr->small())
+                                    m *= score()->styleD(StyleIdx::smallNoteMag);
 
-                                    if (cr->isChord()) {
-                                          Chord* chord = toChord(cr);
-                                          for (Chord* c : chord->graceNotes()) {
-                                                c->setMag(m * score()->styleD(StyleIdx::graceNoteMag));
-                                                c->computeUp();
-                                                if (c->stemDirection() != Direction::AUTO)
-                                                      c->setUp(c->stemDirection() == Direction::UP);
-                                                else
-                                                      c->setUp(!(t % 2));
-                                                c->layoutStem1();
-                                                }
-                                          chord->cmdUpdateNotes(&as);
-                                          if (drumset) {
-                                                for (Note* note : chord->notes()) {
-                                                      int pitch = note->pitch();
-                                                      if (!drumset->isValid(pitch)) {
-                                                            // qDebug("unmapped drum note %d", pitch);
-                                                            }
-                                                      else if (!note->fixed()) {
-                                                            note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
-                                                            // note->setHeadGroup(drumset->noteHead(pitch));
-                                                            note->setLine(drumset->line(pitch));
-                                                            continue;
-                                                            }
+                              if (cr->isChord()) {
+                                    Chord* chord = toChord(cr);
+                                    chord->cmdUpdateNotes(&as);
+                                    for (Chord* c : chord->graceNotes()) {
+                                          c->setMag(m * score()->styleD(StyleIdx::graceNoteMag));
+                                          c->computeUp();
+                                          if (c->stemDirection() != Direction::AUTO)
+                                                c->setUp(c->stemDirection() == Direction::UP);
+                                          else
+                                                c->setUp(!(t % 2));
+                                          c->layoutStem1();
+                                          }
+                                    if (drumset) {
+                                          for (Note* note : chord->notes()) {
+                                                int pitch = note->pitch();
+                                                if (!drumset->isValid(pitch)) {
+                                                      // qDebug("unmapped drum note %d", pitch);
+                                                      }
+                                                else if (!note->fixed()) {
+                                                      note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
+                                                      // note->setHeadGroup(drumset->noteHead(pitch));
+                                                      note->setLine(drumset->line(pitch));
+                                                      continue;
                                                       }
                                                 }
-                                          chord->computeUp();
-                                          chord->layoutStem1();   // create stems needed to calculate spacing
-                                                                  // stem direction can change later during beam processing
                                           }
-                                    cr->setMag(m);
+                                    chord->computeUp();
+                                    chord->layoutStem1();   // create stems needed to calculate spacing
+                                                            // stem direction can change later during beam processing
                                     }
+                              cr->setMag(m);
                               }
                         }
                   else if (segment.isClefType()) {
