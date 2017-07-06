@@ -2701,9 +2701,17 @@ static void updateTimeSigs(void*, Element* e)
             }
       }
 
-static void updateTextStyle2(void*, Element* e)
+static void updateTextStyle2(void* data, Element* e)
       {
       e->styleChanged();
+      if (e->isText()) {
+            Text* t = static_cast<Text*>(e);
+            TextStyleType tst = t->textStyleType();
+            MStyle* oldStyle = static_cast<MStyle*>(data);
+            TextStyle ots = oldStyle->textStyle(tst);
+            TextStyle nts = t->score()->textStyle(tst);
+            t->textStyle().restyle(ots, nts);
+            }
       }
 
 //---------------------------------------------------------
@@ -2724,7 +2732,7 @@ void ChangeStyle::flip()
             score->spatiumChanged(score->style()->spatium(), style.spatium());
 
       score->setStyle(style);
-      score->scanElements(0, updateTextStyle2);
+      score->scanElements(&tmp, updateTextStyle2);
       score->setLayoutAll(true);
 
       style = tmp;
