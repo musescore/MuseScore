@@ -165,9 +165,7 @@ class Shortcut {
       static void init();
       static void retranslate();
       static void load();
-      static void loadFromNewFile(QString fileLocation);
       static void save();
-      static void saveToNewFile(QString fileLocation);
       static void resetToDefault();
       static bool dirty;
       static Shortcut* getShortcut(const char* key);

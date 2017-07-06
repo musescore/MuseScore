@@ -189,7 +189,6 @@ void Preferences::init()
       myTemplatesPath = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("templates_directory",  "Templates"))).absoluteFilePath();
       myPluginsPath   = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("plugins_directory",    "Plugins"))).absoluteFilePath();
       mySoundfontsPath = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absoluteFilePath();
-      myShortcutPath = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("shortcuts_directory", "Shortcuts"))).absoluteFilePath();
 
       MScore::setNudgeStep(.1);         // cursor key (default 0.1)
       MScore::setNudgeStep10(1.0);      // Ctrl + cursor key (default 1.0)
@@ -338,7 +337,6 @@ void Preferences::write()
       s.setValue("myTemplatesPath", myTemplatesPath);
       s.setValue("myPluginsPath", myPluginsPath);
       s.setValue("mySoundfontsPath", mySoundfontsPath);
-      s.setValue("myShortcutPath", myShortcutPath);
 
       s.setValue("hraster", MScore::hRaster());
       s.setValue("vraster", MScore::vRaster());
@@ -503,7 +501,6 @@ void Preferences::read()
       myTemplatesPath  = s.value("myTemplatesPath",  myTemplatesPath).toString();
       myPluginsPath    = s.value("myPluginsPath",    myPluginsPath).toString();
       mySoundfontsPath = s.value("mySoundfontsPath", mySoundfontsPath).toString();
-      myShortcutPath   = s.value("myShortcutPath",   myShortcutPath).toString();
 
       //Create directories if they are missing
       QDir dir;
@@ -696,8 +693,6 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 
       connect(shortcutList,   SIGNAL(itemActivated(QTreeWidgetItem*, int)), SLOT(defineShortcutClicked()));
       connect(resetShortcut,  SIGNAL(clicked()), SLOT(resetShortcutClicked()));
-      connect(saveShortcutList,  SIGNAL(clicked()), SLOT(saveShortcutListClicked()));
-      connect(loadShortcutList,  SIGNAL(clicked()), SLOT(loadShortcutListClicked()));
       connect(clearShortcut,  SIGNAL(clicked()), SLOT(clearShortcutClicked()));
       connect(defineShortcut, SIGNAL(clicked()), SLOT(defineShortcutClicked()));
       connect(resetToDefault, SIGNAL(clicked()), SLOT(resetAllValues()));
@@ -1153,22 +1148,6 @@ void PreferenceDialog::resetShortcutClicked()
 
       active->setText(1, shortcut->keysToString());
       shortcutsChanged = true;
-      }
-
-void PreferenceDialog::saveShortcutListClicked()
-      {
-      QString saveFileName = QFileDialog::getSaveFileName(this, tr("Save Shortcuts"), prefs.myShortcutPath + "/shortcuts.xml", tr("MuseScore Shortcuts File") + " (*.xml)", 0, preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog);
-      prefs.myShortcutPath = saveFileName;
-      Shortcut::saveToNewFile(saveFileName);
-      }
-
-void PreferenceDialog::loadShortcutListClicked()
-      {
-      QString loadFileName = QFileDialog::getOpenFileName(this, tr("Load Shortcuts"), prefs.myShortcutPath, tr("MuseScore Shortcuts File") +  " (*.xml)", 0, preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog);
-      if (!loadFileName.isNull()) {
-            prefs.myShortcutPath = loadFileName;
-            Shortcut::loadFromNewFile(loadFileName);
-            }
       }
 
 //---------------------------------------------------------

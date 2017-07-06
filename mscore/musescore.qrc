@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file>data/shortcuts.xml</file>
         <file>data/icons/edit.svg</file>
         <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>
         <file alias="fonts/gootville/metadata.json">../fonts/gootville/metadata.json</file>
