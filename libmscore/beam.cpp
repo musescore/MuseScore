@@ -62,7 +62,6 @@ Beam::Beam(Score* s)
       _userModified[1] = false;
       _grow1           = 1.0;
       _grow2           = 1.0;
-      editFragment     = -1;
       _isGrace         = false;
       _cross           = false;
       _noSlope         = score()->styleB(StyleIdx::beamNoSlope);
@@ -87,7 +86,6 @@ Beam::Beam(const Beam& b)
       _userModified[1] = b._userModified[1];
       _grow1           = b._grow1;
       _grow2           = b._grow2;
-      editFragment     = b.editFragment;
       for (const BeamFragment* f : b.fragments)
             fragments.append(new BeamFragment(*f));
       minMove          = b.minMove;
@@ -1567,7 +1565,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                                     score()->layoutChords1(c->segment(), c->staffIdx());
                                     // DEBUG: attempting to layout during beam edit causes crash
                                     // probably because ledger lines are deleted and added back
-                                    if (editFragment == -1)
+                                    // if (editFragment == -1)
                                           c->layout();
                                     }
                               else {
@@ -2087,6 +2085,15 @@ void Beam::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   BeamEditData
+//---------------------------------------------------------
+
+class BeamEditData : public ElementEditData {
+   public:
+      int editFragment;
+      };
+
+//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
@@ -2094,27 +2101,19 @@ void Beam::editDrag(EditData& ed)
       {
       int idx  = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       qreal dy = ed.delta.y();
-      BeamFragment* f = fragments[editFragment];
+      BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
+      BeamFragment* f = fragments[bed->editFragment];
+      qreal y1 = f->py1[idx];
+      qreal y2 = f->py2[idx] + dy;
       if (ed.curGrip == Grip::START)
-            f->py1[idx] += dy;
-      f->py2[idx] += dy;
-      _userModified[idx] = true;
-      setGenerated(false);
-      if (_elements.front()->isGrace()) {
-            layoutGraceNotes();
-            score()->rebuildBspTree(); // ledger lines might be deleted. See #138256
-            }
-      else
-            layout1();
-      layout();
-      for (ChordRest* cr : _elements) {
-            if (cr->tuplet())
-                  cr->tuplet()->layout();
-            // TODO: would be nice to redraw stems while dragging beam,
-            // the following is not sufficient - a full (?) relayout would still be needed
-            //if (cr->type() == ElementType::CHORD)
-            //      static_cast<Chord*>(cr)->layoutStem();
-            }
+            y1 += dy;
+
+      qreal _spatium = spatium();
+      undoChangeProperty(P_ID::BEAM_POS, QPointF(y1 / _spatium, y2 / _spatium));
+      undoChangeProperty(P_ID::USER_MODIFIED, true);
+      undoChangeProperty(P_ID::GENERATED, false);
+
+      triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -2124,7 +2123,8 @@ void Beam::editDrag(EditData& ed)
 void Beam::updateGrips(EditData& ed) const
       {
       int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
-      BeamFragment* f = fragments[editFragment];
+      BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
+      BeamFragment* f = fragments[bed->editFragment];
 
       ChordRest* c1 = nullptr;
       ChordRest* c2 = nullptr;
@@ -2190,21 +2190,20 @@ void Beam::startEdit(EditData& ed)
       {
       ed.grips   = 2;
       ed.curGrip = Grip::END;
-
-      undoPushProperty(P_ID::BEAM_POS);
-      undoPushProperty(P_ID::USER_MODIFIED);
-      undoPushProperty(P_ID::GENERATED);
+      BeamEditData* bed = new BeamEditData();
+      bed->e    = this;
+      bed->editFragment = 0;
+      ed.addData(bed);
 
       QPointF pt(ed.startMove - pagePos());
       qreal ydiff = 100000000.0;
       int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       int i = 0;
-      editFragment = 0;
       for (BeamFragment* f : fragments) {
             qreal d = fabs(f->py1[idx] - pt.y());
             if (d < ydiff) {
                   ydiff = d;
-                  editFragment = i;
+                  bed->editFragment = i;
                   }
             ++i;
             }
@@ -2217,8 +2216,6 @@ void Beam::startEdit(EditData& ed)
 void Beam::endEdit(EditData& ed)
       {
       Element::endEdit(ed);
-      editFragment = -1;
-      triggerLayout();
       }
 
 //---------------------------------------------------------
