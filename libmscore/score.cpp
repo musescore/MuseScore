@@ -199,7 +199,6 @@ void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
 
 void MeasureBaseList::remove(MeasureBase* fm, MeasureBase* lm)
       {
-      printf("remove measures %p %p\n", fm, lm);
       --_size;
       for (MeasureBase* m = fm; m != lm; m = m->next())
             --_size;
