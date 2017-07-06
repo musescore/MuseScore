@@ -2717,7 +2717,7 @@ void ScoreView::pageEnd()
 //   adjustCanvasPosition
 //---------------------------------------------------------
 
-void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
+void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff )
       {
       if (this != mscore->currentScoreView())
             return;
@@ -2831,8 +2831,19 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
 
       double _spatium    = score()->spatium();
       const qreal border = _spatium * 3;
-      QRectF showRect = QRectF(mRect.x(), sysRect.y(), mRect.width(), sysRect.height())
+      QRectF showRect;
+      if (staff == -1) {
+            showRect = QRectF(mRect.x(), sysRect.y(), mRect.width(), sysRect.height())
                         .adjusted(-border, -border, border, border);
+            }
+      else {
+            //find a box for the individual stave in a system
+            QRectF stave = QRectF(sys->canvasBoundingRect().left(),
+                                  sys->staffCanvasYpage(staff),
+                                  sys->width(),
+                                  sys->staff(staff)->bbox().height());
+            showRect = mRect.intersected(stave).adjusted(-border, -border, border, border);
+            }
 
 /*      printf("%f %f %f %f   %f %f %f %f  %d\n",
             showRect.x(), showRect.y(), showRect.width(), showRect.height(),
