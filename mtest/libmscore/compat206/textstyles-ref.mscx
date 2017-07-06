@@ -23,6 +23,7 @@
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <clefBarlineDistance>0.18</clefBarlineDistance>
       <stemWidth>0.16</stemWidth>
+      <barNoteDistance>1.2</barNoteDistance>
       <lastSystemFillLimit>0.25</lastSystemFillLimit>
       <pedalPosBelow>0</pedalPosBelow>
       <trillPosAbove>0</trillPosAbove>
