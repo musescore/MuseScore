@@ -2122,9 +2122,14 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
 
       int tick = m->endTick();
 
+      //
+      //  implement section break rest
+      //
+      if (m->sectionBreak() && m->pause() != 0.0)
+            setPause(m->endTick()-1, m->pause());
+
       // locate a time sig. in the next measure and, if found,
       // check if it has caut. sig. turned off
-
       Segment* ns       = nm->findSegment(Segment::Type::TimeSig, tick);
       bool showCourtesy = styleB(StyleIdx::genCourtesyTimesig);
 
