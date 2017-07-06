@@ -3797,6 +3797,22 @@ void Shortcut::save()
       f.close();
       }
 
+void Shortcut::saveToNewFile(QString fileLocation)
+      {
+      QFile f(fileLocation);
+      if (!f.open(QIODevice::WriteOnly)) {
+            qDebug("cannot save shortcuts");
+            return;
+            }
+      XmlWriter xml(0, &f);
+      xml.header();
+      xml.stag("Shortcuts");
+      for (auto i : _sc)
+            i.write(xml);
+      xml.etag();
+      f.close();
+      }
+
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
@@ -3908,16 +3924,18 @@ struct Shortcut1 {
       QKeySequence::StandardKey standardKey { QKeySequence::UnknownKey };
       };
 
+
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
-static QList<Shortcut1> loadDefaultShortcuts()
+static QList<Shortcut1> loadShortcuts(QString fileLocation)
       {
       QList<Shortcut1> list;
-      QFile f(":/data/shortcuts.xml");
+      QFile f(fileLocation);
       if (!f.open(QIODevice::ReadOnly)) {
             qDebug("Cannot open shortcuts");
+            QMessageBox::critical(0, QObject::tr("Load Shortcuts"), QObject::tr("Can't load shortcuts file: ") + QString(strerror(errno)));
             return list;
             }
       XmlReader e(0, &f);
@@ -3947,6 +3965,19 @@ static QList<Shortcut1> loadDefaultShortcuts()
                   e.unknown();
             }
       return list;
+      }
+
+void Shortcut::loadFromNewFile(QString fileLocation)
+      {
+      QList<Shortcut1> list = loadShortcuts(fileLocation);
+      for (const Shortcut1& sc : list) {
+            Shortcut* s = getShortcut(sc.key);
+            if (s) {
+                  s->setKeys(sc.keys);
+                  s->setStandardKey(sc.standardKey);
+                  }
+            }
+      dirty = true;
       }
 
 //---------------------------------------------------------
@@ -3983,7 +4014,7 @@ QActionGroup* Shortcut::getActionGroupForWidget(MsWidget w, Qt::ShortcutContext 
 
 void Shortcut::resetToDefault()
       {
-      QList<Shortcut1> sl = loadDefaultShortcuts();
+      QList<Shortcut1> sl = loadShortcuts(":/data/shortcuts.xml");
       for (const Shortcut1& sc : sl) {
             Shortcut* s = getShortcut(sc.key);
             if (s) {
@@ -4002,7 +4033,7 @@ void Shortcut::reset()
       {
       _standardKey = QKeySequence::UnknownKey;
       _keys.clear();
-      QList<Shortcut1> sl = loadDefaultShortcuts();
+      QList<Shortcut1> sl = loadShortcuts(":/data/shortcuts.xml");
       for (const Shortcut1& sc : sl) {
             if (sc.key == _key) {
                   setKeys(sc.keys);

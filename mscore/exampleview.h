@@ -74,6 +74,7 @@ class ExampleView : public QFrame, public MuseScoreView {
       virtual QCursor cursor() const;
       virtual void setCursor(const QCursor&);
       virtual int gripCount() const;
+      virtual const QRectF& getGrip(Grip) const;
       virtual void setDropRectangle(const QRectF&);
       virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
       virtual void cmdAddHairpin(bool) {}

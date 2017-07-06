@@ -143,6 +143,12 @@ int ExampleView::gripCount() const
       return 0;
       }
 
+const QRectF& ExampleView::getGrip(Grip) const
+      {
+      static QRectF r;
+      return r;
+      }
+
 void ExampleView::setDropRectangle(const QRectF&)
       {
       }

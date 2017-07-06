@@ -2769,7 +2769,6 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
                   rv = Element::setProperty(propertyId, v);
                   break;
             }
-      layoutInvalid = true;
       triggerLayout();
       return rv;
       }

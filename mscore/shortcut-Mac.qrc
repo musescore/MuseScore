@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>data/shortcuts_AZERTY.xml</file>
+        <file alias="data/shortcuts.xml">data/shortcuts-Mac.xml</file>
+    </qresource>
+</RCC>
