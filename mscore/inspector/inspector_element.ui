@@ -95,7 +95,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Offset' values</string>
+         <string>Reset 'Offset' value</string>
         </property>
         <property name="text">
          <string notr="true"/>

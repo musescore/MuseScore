@@ -1436,6 +1436,8 @@ void Chord::layoutStem()
       // NON-TAB (or TAB with stems through staff)
       //
       if (_stem) {
+            // if (isGrace())
+            //      abort();
             if (_hook) {
                   _hook->layout();
                   QPointF p(_stem->hookPos());
@@ -2051,6 +2053,10 @@ void Chord::layoutPitched()
 
       for (Note* note : _notes)
             note->layout2();
+
+//      QRectF bb;
+//      processSiblings([&bb] (Element* e) { bb |= e->bbox().translated(e->pos()); } );
+//      setbbox(bb.translated(_spatium*2, 0));
       }
 
 //---------------------------------------------------------
