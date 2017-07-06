@@ -36,7 +36,7 @@ release:
 RelWithDebInfo:
 	if not exist build.release\nul mkdir build.release
 	if not exist win32install\nul mkdir win32install
-	cd build.release & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_CXX_FLAGS_RELEASE "-std=c++11 -mno-ms-bitfields -O2 -DNDEBUG -DQT_NO_DEBUG -g" -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DBUILD_FOR_WINSTORE="${BUILD_FOR_WINSTORE}" ..
+	cd build.release & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_CXX_FLAGS_RELEASE="-std=c++11 -mno-ms-bitfields -O2 -DNDEBUG -DQT_NO_DEBUG -g" -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DBUILD_FOR_WINSTORE="${BUILD_FOR_WINSTORE}" ..
 	cd build.release & $(MAKE) lrelease
 	cd build.release & $(MAKE) -j ${CPUS}
 
