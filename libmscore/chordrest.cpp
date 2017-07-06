@@ -1133,7 +1133,7 @@ QVariant ChordRest::propertyDefault(P_ID propertyId) const
 
 bool ChordRest::isGrace() const
       {
-      return isChord() && toChord(this)->noteType() != NoteType::NORMAL;
+      return isChord() && toChord(this)->isGrace();
       }
 
 //---------------------------------------------------------
