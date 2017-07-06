@@ -143,7 +143,7 @@ QT5_WRAP_UI (ui_headers
       )
 
 if (APPLE)
-      QT5_ADD_RESOURCES (qrc_files musescore.qrc musescorefonts-Mac.qrc shortcut-Mac.qrc)
+      QT5_ADD_RESOURCES (qrc_files musescore.qrc musescorefonts-Mac.qrc)
 else (APPLE)
       QT5_ADD_RESOURCES (qrc_files musescore.qrc
             musescorefonts-MScore.qrc
@@ -151,8 +151,7 @@ else (APPLE)
             musescorefonts-Bravura.qrc
             musescorefonts-MuseJazz.qrc
             musescorefonts-FreeSerif.qrc
-            musescorefonts-Free.qrc
-            shortcut.qrc)
+            musescorefonts-Free.qrc)
 endif (APPLE)
 
 
@@ -268,7 +267,7 @@ add_executable ( ${ExecutableName}
       fretproperties.cpp sectionbreakprop.cpp
       bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
-      dragelement.cpp startupWizard.cpp
+      dragelement.cpp
       svggenerator.cpp
       masterpalette.cpp
       dragdrop.cpp

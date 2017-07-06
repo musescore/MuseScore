@@ -177,7 +177,6 @@ struct Preferences {
       QString myTemplatesPath;
       QString myPluginsPath;
       QString mySoundfontsPath;
-      QString myShortcutPath;
 
       bool nativeDialogs;
 

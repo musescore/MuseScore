@@ -59,8 +59,6 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       void selectInstrumentList2();
       void selectStartWith();
       void resetShortcutClicked();
-      void saveShortcutListClicked();
-      void loadShortcutListClicked();
       void clearShortcutClicked();
       void defineShortcutClicked();
       void portaudioApiActivated(int idx);
