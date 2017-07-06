@@ -3975,6 +3975,32 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="saveShortcutList">
+           <property name="accessibleName">
+            <string>Saves a Shortcut List</string>
+           </property>
+           <property name="accessibleDescription">
+            <string>Saves a Shortcut List</string>
+           </property>
+           <property name="text">
+            <string>Save</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="loadShortcutList">
+           <property name="accessibleName">
+            <string>Loads a Shortcut List</string>
+           </property>
+           <property name="accessibleDescription">
+            <string>Loads a Shortcut List</string>
+           </property>
+           <property name="text">
+            <string>Load</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="clearShortcut">
            <property name="accessibleName">
             <string>Clear</string>
@@ -4257,6 +4283,8 @@
   <tabstop>exportNoBreaks</tabstop>
   <tabstop>shortcutList</tabstop>
   <tabstop>resetShortcut</tabstop>
+  <tabstop>saveShortcutList</tabstop>
+  <tabstop>loadShortcutList</tabstop>
   <tabstop>clearShortcut</tabstop>
   <tabstop>defineShortcut</tabstop>
   <tabstop>printShortcuts</tabstop>
