@@ -139,7 +139,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::shortestStem,            "shortestStem",            Spatium(2.25) },
       { StyleIdx::beginRepeatLeftMargin,   "beginRepeatLeftMargin",   Spatium(1.0) },
       { StyleIdx::minNoteDistance,         "minNoteDistance",         Spatium(0.25) },      // 0.4
-      { StyleIdx::barNoteDistance,         "barNoteDistance",         Spatium(1.2) },
+      { StyleIdx::barNoteDistance,         "barNoteDistance",         Spatium(1.0) },     // was 1.2
 
       { StyleIdx::barAccidentalDistance,   "barAccidentalDistance",   Spatium(.3) },
       { StyleIdx::multiMeasureRestMargin,  "multiMeasureRestMargin",  Spatium(1.2) },
