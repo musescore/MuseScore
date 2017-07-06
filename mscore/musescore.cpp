@@ -55,6 +55,7 @@
 #include "keyedit.h"
 #include "harmonyedit.h"
 #include "navigator.h"
+#include "timeline.h"
 #include "importmidi/importmidi_panel.h"
 #include "libmscore/chord.h"
 #include "mstyle/mstyle.h"
@@ -648,6 +649,12 @@ MuseScore::MuseScore()
       scorePageLayoutChanged();
       showNavigator(preferences.showNavigator);
 
+      _timeline = new TDockWidget;
+      _timeline->setFocusPolicy(Qt::NoFocus);
+      addDockWidget(Qt::BottomDockWidgetArea, _timeline);
+      scorePageLayoutChanged();
+      showTimeline(false);
+
       mainWindow->setStretchFactor(0, 1);
       mainWindow->setStretchFactor(1, 0);
       mainWindow->setSizes(QList<int>({500, 50}));
@@ -926,6 +933,10 @@ MuseScore::MuseScore()
       a = getAction("toggle-navigator");
       a->setCheckable(true);
       a->setChecked(preferences.showNavigator);
+      menuView->addAction(a);
+
+      a = getAction("toggle-timeline");
+      a->setCheckable(true);
       menuView->addAction(a);
 
       a = getAction("toggle-mixer");
@@ -1555,6 +1566,8 @@ void MuseScore::selectionChanged(SelState selectionState)
             pianorollEditor->changeSelection(selectionState);
       if (drumrollEditor)
             drumrollEditor->changeSelection(selectionState);
+      if (timeline())
+            timeline()->changeSelection(selectionState);
       updateInspector();
       }
 
@@ -1774,6 +1787,10 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                   navigator()->setScoreView(cv);
                   navigator()->setScore(0);
                   }
+            if (_timeline && _timeline->widget()) {
+                  timeline()->setScoreView(cv);
+                  timeline()->setScore(0);
+                  }
             if (_inspector)
                   _inspector->update(0);
             viewModeCombo->setEnabled(false);
@@ -1831,6 +1848,14 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       if (_navigator && _navigator->widget()) {
             navigator()->setScore(cs);
             navigator()->setScoreView(view);
+            }
+      if (_timeline && _timeline->widget()) {
+            QSplitter* s = static_cast<QSplitter*>(_timeline->widget());
+            if (s && s->count() > 0) {
+                  Timeline* t = static_cast<Timeline*>(s->widget(1));
+                  t->setScore(cs);
+                  t->setScoreView(view);
+                  }
             }
       ScoreAccessibility::instance()->updateAccessibilityInfo();
       }
@@ -4597,6 +4622,8 @@ void MuseScore::cmd(QAction* a)
 
 void MuseScore::endCmd()
       {
+      if (timeline())
+            timeline()->updateGrid();
       if (MScore::_error != MS_NO_ERROR)
             showError();
       if (cs) {
@@ -4812,6 +4839,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showPlayPanel(a->isChecked());
       else if (cmd == "toggle-navigator")
             showNavigator(a->isChecked());
+      else if (cmd == "toggle-timeline")
+            showTimeline(a->isChecked());
       else if (cmd == "toggle-midiimportpanel")
             importmidiPanel->setVisible(a->isChecked());
       else if (cmd == "toggle-mixer")
@@ -5056,6 +5085,21 @@ void MuseScore::openExternalLink(const QString& url)
 Navigator* MuseScore::navigator() const
       {
       return _navigator ? static_cast<Navigator*>(_navigator->widget()) : 0;
+      }
+
+//---------------------------------------------------------
+//   timeline
+//---------------------------------------------------------
+
+Timeline* MuseScore::timeline() const
+      {
+      if (_timeline) {
+            QSplitter* s = static_cast<QSplitter *>(_timeline->widget());
+            if (s && s->count() > 0)
+                  return _timeline ? static_cast<Timeline*>(s->widget(1)) : 0;
+            return 0;
+            }
+      return 0;
       }
 
 //---------------------------------------------------------
