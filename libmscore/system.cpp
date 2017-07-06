@@ -395,9 +395,10 @@ void System::layout2()
                   }
 
             int si2    = ni->first;
+            Staff* staff2  = score()->staff(si2);
             qreal dist = h;
 
-            switch (staff->innerBracket()) {
+            switch (staff2->innerBracket()) {
                   case BracketType::BRACE:
                         dist += akkoladeDistance;
                         break;
@@ -408,7 +409,7 @@ void System::layout2()
                         dist += staffDistance;
                         break;
                   }
-            dist += score()->staff(si2)->userDist();
+            dist += staff2->userDist();
 
             for (MeasureBase* mb : ml) {
                   if (!mb->isMeasure())
