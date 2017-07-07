@@ -436,14 +436,23 @@ if (MINGW)
            COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
            LINK_FLAGS "-mwindows -mconsole -L ${CROSSQT}/lib"
         )
-   else(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+   endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+   
+   if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+     set_target_properties( mscore
+          PROPERTIES
+             COMPILE_FLAGS "${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+             LINK_FLAGS "-Wl,-S -mwindows -L ${CROSSQT}/lib"
+          )
+   endif(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+   
+   if(CMAKE_BUILD_TYPE MATCHES "RELWITHDEBINFO")
      set_target_properties( mscore
           PROPERTIES
              COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
-             #LINK_FLAGS "-Wl,-S -mwindows -L ${CROSSQT}/lib"
 			 LINK_FLAGS " -mwindows -L ${CROSSQT}/lib"
           )
-   endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+   endif(CMAKE_BUILD_TYPE MATCHES "RELWITHDEBINFO")
 
    target_link_libraries(mscore
       portaudio

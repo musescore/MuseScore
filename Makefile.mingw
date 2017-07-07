@@ -33,6 +33,13 @@ release:
 	cd build.release & $(MAKE) lrelease
 	cd build.release & $(MAKE) -j ${CPUS}
 
+RelWithDebInfo:
+	if not exist build.release\nul mkdir build.release
+	if not exist win32install\nul mkdir win32install
+	cd build.release & cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../build/mingw32.mingw.cmake -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELWITHDEBINFO -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DBUILD_FOR_WINSTORE="${BUILD_FOR_WINSTORE}" ..
+	cd build.release & $(MAKE) lrelease
+	cd build.release & $(MAKE) -j ${CPUS}
+
 debug:
 	if not exist build.debug\nul mkdir build.debug
 	if not exist win32install\nul mkdir win32install
