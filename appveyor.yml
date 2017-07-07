@@ -79,5 +79,19 @@ artifacts:
 #  publish: true
 #  override: true
 # to run your custom scripts instead of automatic MSBuild
+deploy:
+  release: MuseScore-breakpad-v$(appveyor_build_version)
+  description: 'MuseScore with breakpad'
+  provider: GitHub
+  auth_token:
+    secure: e7dcc78cf1b1030dfe15790d068be8217ab65f48
+#  artifact: /.*\.nupkg/            # upload all NuGet packages to release assets
+  artifact: MuseScoreTest$(MSversion).7z
+  draft: false
+  prerelease: false
+  on:
+    branch: add-breakpad                 # release from master branch only
+    appveyor_repo_tag: true              # deploy on tag push only
+
 build_script:
   - mingw32-make -f Makefile.mingw RelWithDebInfo && mingw32-make -f Makefile.mingw install
