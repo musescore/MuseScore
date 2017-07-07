@@ -404,7 +404,7 @@ QVariant TimeSig::getProperty(P_ID propertyId) const
             case P_ID::TIMESIG_STRETCH:
                   return QVariant::fromValue(stretch());
             case P_ID::TIMESIG_TYPE:
-                  return QVariant::fromValue(int(_timeSigType));
+                  return int(_timeSigType);
             case P_ID::SCALE:
                   return _scale;
             default:
