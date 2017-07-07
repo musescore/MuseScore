@@ -2321,7 +2321,9 @@ void MuseScore::addImage(Score* score, Element* e)
          tr("All Supported Files") + " (*.svg *.jpg *.jpeg *.png);;" +
          tr("Scalable Vector Graphics") + " (*.svg);;" +
          tr("JPEG") + " (*.jpg *.jpeg);;" +
-         tr("PNG") + " (*.png)"
+         tr("PNG") + " (*.png)",
+         0,
+         preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
       if (fn.isEmpty())
             return;
