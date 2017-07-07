@@ -241,6 +241,7 @@ add_executable ( ${ExecutableName}
       instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
+      timeline.cpp
       mixer.cpp playpanel.cpp selectionwindow.cpp preferences.cpp measureproperties.cpp
       seq.cpp textpalette.cpp
       timedialog.cpp symboldialog.cpp shortcutcapturedialog.cpp

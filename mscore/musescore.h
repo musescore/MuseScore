@@ -75,6 +75,7 @@ class ScriptEngine;
 class KeyEditor;
 class ChordStyleEditor;
 class Navigator;
+class Timeline;
 class PianoTools;
 class MediaDialog;
 class Workspace;
@@ -85,6 +86,7 @@ class Capella;
 class Inspector;
 class OmrPanel;
 class NScrollArea;
+class TDockWidget;
 class Sym;
 class MasterPalette;
 class PluginCreator;
@@ -232,6 +234,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreTab* tab1;
       ScoreTab* tab2;
       NScrollArea* _navigator;
+      TDockWidget* _timeline;
       ImportMidiPanel* importmidiPanel     { 0 };
       QFrame* importmidiShowPanel;
       QSplitter* mainWindow;
@@ -428,6 +431,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showInspector(bool);
       void showOmrPanel(bool);
       void showNavigator(bool);
+      void showTimeline(bool);
       void showSelectionWindow(bool);
       void showSearchDialog();
       void showToolbarEditor();
@@ -669,6 +673,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       Q_INVOKABLE QString getLocaleISOCode() const;
       Navigator* navigator() const;
       NScrollArea* navigatorScrollArea() const { return _navigator; }
+      Timeline* timeline() const;
+      TDockWidget* timelineScrollArea() const { return _timeline; }
       QWidget*   searchDialog() const;
       SelectionWindow* getSelectionWindow() const { return selectionWindow; }
       void updateLayer();
