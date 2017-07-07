@@ -703,29 +703,30 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             return;
             }
 
-      if (ots && ots->sig().identical(ns) && ots->stretch() == ts->stretch()) {
-            ots->undoChangeProperty(P_ID::TIMESIG, QVariant::fromValue(ns));
-            ots->undoChangeProperty(P_ID::GROUPS,  QVariant::fromValue(ts->groups()));
-            ots->undoChangeProperty(P_ID::NUMERATOR_STRING,   ts->numeratorString());
-            ots->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
+//      if (ots && ots->sig().identical(ns) && ots->stretch() == ts->stretch()) {
+      if (ots && ots->sig() == ns && ots->stretch() == ts->stretch()) {
+            //
+            // the measure duration does not change,
+            // so its ok to just update the time signatures
+            //
+            TimeSig* nts = staff(staffIdx)->nextTimeSig(tick+1);
+            Measure* lm  = nts ? nts->segment()->measure() : 0;
             for (Score* score : scoreList()) {
                   Measure* fm = score->tick2measure(tick);
-                  for (Measure* m = fm; m; m = m->nextMeasure()) {
-                        if ((m != fm) && m->first(SegmentType::TimeSig))
-                              break;
+                  for (Measure* m = fm; m != lm; m = m->nextMeasure()) {
                         bool changeActual = m->len() == m->timesig();
                         undoChangeProperty(m, P_ID::TIMESIG_NOMINAL, QVariant::fromValue(ns));
                         if (changeActual)
                               undoChangeProperty(m, P_ID::TIMESIG_ACTUAL,  QVariant::fromValue(ns));
-                        // undoChangeProperty(ots, P_ID::GROUPS,  QVariant::fromValue(ts->groups()));
                         }
                   }
             int n = nstaves();
             for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
                   TimeSig* nsig = toTimeSig(seg->element(staffIdx * VOICES));
-                  undoChangeProperty(nsig, P_ID::TIMESIG_TYPE, int(ts->timeSigType()));
+                  nsig->undoChangeProperty(P_ID::TIMESIG_TYPE,       int(ts->timeSigType()));
                   nsig->undoChangeProperty(P_ID::NUMERATOR_STRING,   ts->numeratorString());
                   nsig->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
+                  nsig->undoChangeProperty(P_ID::GROUPS,             QVariant::fromValue(ts->groups()));
                   }
             }
       else {

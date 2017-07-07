@@ -163,6 +163,7 @@ class Staff : public ScoreElement {
       void clearTimeSig();
       Fraction timeStretch(int tick) const;
       TimeSig* timeSig(int tick) const;
+      TimeSig* nextTimeSig(int tick) const;
       bool isLocalTimeSignature(int tick) { return timeStretch(tick) != Fraction(1, 1); }
 
       const Groups& group(int tick) const;

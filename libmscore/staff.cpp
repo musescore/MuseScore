@@ -420,6 +420,17 @@ TimeSig* Staff::timeSig(int tick) const
       }
 
 //---------------------------------------------------------
+//   nextTimeSig
+//    lookup time signature at tick or after
+//---------------------------------------------------------
+
+TimeSig* Staff::nextTimeSig(int tick) const
+      {
+      auto i = timesigs.lower_bound(tick);
+      return (i == timesigs.end()) ? 0 : i->second;
+      }
+
+//---------------------------------------------------------
 //   group
 //---------------------------------------------------------
 
