@@ -60,6 +60,7 @@ after_build:
   - start " " /wait C:\MinGW\msys\1.0\bin\wget --no-check-certificate "https://github.com/gsocnikos/musescore_crash/raw/master/cv2pdb/dump_syms.exe"
   - cv2pdb.exe MuseScore.exe
   - dump_syms.exe MuseScore.pdb > MuseScore.sym
+  - strip -s MuseScore.exe
   - del cv2pdb.exe
   - del dump_syms.exe
   - cmd: 7z a C:\MuseScore\MuseScoreTest%MSversion%.7z C:\MuseScore\win32install
@@ -79,5 +80,4 @@ artifacts:
 #  override: true
 # to run your custom scripts instead of automatic MSBuild
 build_script:
-  - mingw32-make -f Makefile.mingw clean
-  - mingw32-make -f Makefile.mingw release VERBOSE=1 && mingw32-make -f Makefile.mingw install
+  - mingw32-make -f Makefile.mingw RelWithDebInfo && mingw32-make -f Makefile.mingw install
