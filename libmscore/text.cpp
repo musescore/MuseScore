@@ -348,22 +348,27 @@ bool TextCursor::set(const QPointF& p, QTextCursor::MoveMode mode)
       QPointF pt  = p - _text->canvasPos();
       if (!_text->bbox().contains(pt))
             return false;
+      int oldRow    = _row;
+      int oldColumn = _column;
+
       _row = 0;
       for (int row = 0; row < _text->rows(); ++row) {
             const TextBlock& l = _text->_layout.at(row);
             if (l.y() > pt.y()) {
-                  setRow(row);
+                  _row = row;
                   break;
                   }
             }
       _column = curLine().column(pt.x(), _text);
 
-      _text->score()->setUpdateAll();
-      if (mode == QTextCursor::MoveAnchor)
-            clearSelection();
-      if (hasSelection())
-            QApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
-      updateCursorFormat();
+      if (oldRow != _row || oldColumn != _column) {
+            _text->score()->setUpdateAll();
+            if (mode == QTextCursor::MoveAnchor)
+                  clearSelection();
+            if (hasSelection())
+                  QApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
+            updateCursorFormat();
+            }
       return true;
       }
 
@@ -1688,9 +1693,11 @@ void Text::genText()
 
 void Text::startEdit(EditData& ed)
       {
+      ed.grips = 0;
       TextEditData* ted = new TextEditData();
       ted->e      = this;
       ted->cursor = new TextCursor(this);
+
       ted->cursor->setText(this);
       ted->cursor->setRow(0);
       ted->cursor->setColumn(0);
@@ -2111,17 +2118,15 @@ void Text::paste(EditData& ed)
 //    set text cursor
 //---------------------------------------------------------
 
-bool Text::mousePress(EditData& ed, QMouseEvent* ev)
+bool Text::mousePress(EditData& ed)
       {
-// printf("========================mousePress %p\n", this);
-      QPointF p = ed.startMove;
-      bool shift = ev->modifiers() & Qt::ShiftModifier;
+      bool shift = ed.modifiers & Qt::ShiftModifier;
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-      TextCursor* _cursor = ted->cursor;
-      if (!_cursor->set(p, shift ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor))
+      if (!ted->cursor->set(ed.startMove, shift ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor))
             return false;
-      if (ev->button() == Qt::MidButton)
+      if (ed.buttons == Qt::MidButton)
             paste(ed);
+      score()->setUpdateAll();
       return true;
       }
 
@@ -2970,16 +2975,6 @@ TextCursor* Text::cursor(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
       return ted->cursor;
-      }
-
-//---------------------------------------------------------
-//   curFormat
-//---------------------------------------------------------
-
-CharFormat* Text::curFormat(EditData& ed)
-      {
-      TextCursor* _cursor = cursor(ed);
-      return _cursor->format();
       }
 
 //---------------------------------------------------------

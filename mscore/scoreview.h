@@ -215,7 +215,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdRepeatSelection();
       void cmdChangeEnharmonic(bool);
 
-
       MeasureBase* insertMeasure(ElementType, MeasureBase*);
       MeasureBase* checkSelectionStateForInsertMeasure();
 
@@ -338,8 +337,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool editMode() const      { return state == ViewState::EDIT; }
       bool fotoMode() const;
 
-      void editInputTransition(QInputMethodEvent* ie);
-      void onEditPasteTransition(QMouseEvent* ev);
+//      void editInputTransition(QInputMethodEvent* ie);
+//      void onEditPasteTransition(QMouseEvent* ev);
 
       virtual void setDropRectangle(const QRectF&);
       virtual void setDropTarget(const Element*) override;

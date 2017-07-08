@@ -1711,7 +1711,6 @@ void Element::triggerLayout() const
 
 void Element::startDrag(EditData& data)
       {
-      printf("start Drag==\n");
       ElementEditData* elementData = new ElementEditData();
       elementData->startDragPosition = userOff();
       elementData->e = this;
