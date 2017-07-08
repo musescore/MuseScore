@@ -351,7 +351,7 @@ class Element : public ScoreElement {
  delivers mouseEvent to element in edit mode
  returns true if mouse event is accepted by element
  */
-      virtual bool mousePress(EditData&, QMouseEvent*) { return false; }
+      virtual bool mousePress(EditData&) { return false; }
 
       mutable bool itemDiscovered;     ///< helper flag for bsp
 

@@ -317,7 +317,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
       editData.modifiers = qApp->keyboardModifiers();
 
       Element* e         = elementNear(editData.startMove);
-      qDebug("%s", e ? e->name() : "--");
+      qDebug("element %s", e ? e->name() : "--");
 
       switch (state) {
             case ViewState::NORMAL:
@@ -360,23 +360,27 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   break;
 
             case ViewState::EDIT: {
-                  bool gripClicked = false;
                   if (editData.grips) {
                         qreal a = editData.grip[0].width() * 1.0;
                         for (int i = 0; i < editData.grips; ++i) {
                               if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
                                     editData.curGrip = Grip(i);
                                     updateGrips();
-                                    gripClicked = true;
                                     score()->update();
                                     break;
                                     }
                               }
                         }
-                  if (!gripClicked) {
-                        editData.element = e;
-                        changeState(ViewState::NORMAL);
-                        mousePressEventNormal(ev);
+                  else {
+                        if (!editData.element->canvasBoundingRect().contains(editData.startMove)) {
+                              editData.element = e;
+                              changeState(ViewState::NORMAL);
+                              mousePressEventNormal(ev);
+                              }
+                        else {
+                              editData.element->mousePress(editData);
+                              score()->update();
+                              }
                         }
                   }
                   break;
@@ -718,10 +722,10 @@ void ScoreView::changeState(ViewState s)
       {
       qDebug("changeState %s  -> %s", stateName(state), stateName(s));
 
-      if (state == ViewState::EDIT && s == ViewState::EDIT) {
-            startEdit();
-            return;
-            }
+//      if (state == ViewState::EDIT && s == ViewState::EDIT) {
+//            startEdit();
+//            return;
+//            }
       if (s == ViewState::PLAY && !seq)
             return;
       if (s == state)

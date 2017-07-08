@@ -260,7 +260,7 @@ class Text : public Element {
 
       virtual Text* clone() const override         { return new Text(*this); }
       virtual ElementType type() const override    { return ElementType::TEXT; }
-      virtual bool mousePress(EditData&, QMouseEvent* ev) override;
+      virtual bool mousePress(EditData&) override;
 
       Text &operator=(const Text&) = delete;
 
@@ -354,7 +354,6 @@ class Text : public Element {
 
       void editInsertText(TextCursor*, const QString&);
 
-      CharFormat* curFormat(EditData&);
       TextCursor* cursor(EditData&);
       const TextBlock& textBlock(int line) const { return _layout[line]; }
       TextBlock& textBlock(int line)             { return _layout[line]; }
