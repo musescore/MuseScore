@@ -784,7 +784,7 @@ Segment* Spanner::endSegment() const
 
 Measure* Spanner::startMeasure() const
       {
-      Q_ASSERT(!_endElement || _endElement->type() == ElementType::MEASURE);
+      Q_ASSERT(!_startElement || _startElement->type() == ElementType::MEASURE);
       return static_cast<Measure*>(_startElement);
       }
 
