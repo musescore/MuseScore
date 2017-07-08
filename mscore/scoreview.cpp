@@ -2412,6 +2412,7 @@ void ScoreView::dragScoreView(QMouseEvent* ev)
       emit viewRectChanged();
       }
 
+#if 0
 //---------------------------------------------------------
 //   onEditPasteTransition
 //---------------------------------------------------------
@@ -2420,11 +2421,12 @@ void ScoreView::onEditPasteTransition(QMouseEvent* ev)
       {
       editData.startMove = imatrix.map(QPointF(ev->pos()));
       Element* e = elementNear(editData.startMove);
-      if (e == editData.element && editData.element->mousePress(editData, ev)) {
+      if (e == editData.element && editData.element->mousePress(editData)) {
             _score->addRefresh(editData.element->canvasBoundingRect());
             _score->update();
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   editScoreViewDragTransition
@@ -2510,6 +2512,7 @@ void ScoreView::deselectAll()
 //   editInputTransition
 //---------------------------------------------------------
 
+#if 0
 void ScoreView::editInputTransition(QInputMethodEvent* ie)
       {
       if (editData.element->isText()) {
@@ -2517,6 +2520,7 @@ void ScoreView::editInputTransition(QInputMethodEvent* ie)
             QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   inputMethodQuery
