@@ -58,7 +58,7 @@ after_build:
   - cd C:\MuseScore\win32install\bin
   - start " " /wait C:\MinGW\msys\1.0\bin\wget --no-check-certificate "https://github.com/gsocnikos/musescore_crash/raw/master/cv2pdb/cv2pdb.exe"
   - start " " /wait C:\MinGW\msys\1.0\bin\wget --no-check-certificate "https://github.com/gsocnikos/musescore_crash/raw/master/cv2pdb/dump_syms.exe"
-  - start " " /wait C:\MinGW\msys\1.0\bin\wget --no-check-certificate "https://github.com/gsocnikos/musescore_crash/raw/master/cv2pdb/curl"
+  - start " " /wait C:\MinGW\msys\1.0\bin\wget --no-check-certificate "https://github.com/gsocnikos/musescore_crash/raw/master/cv2pdb/curl.exe"
   - start " " /wait C:\MinGW\msys\1.0\bin\wget --no-check-certificate "https://github.com/gsocnikos/musescore_crash/raw/master/cv2pdb/curl-ca-bundle.crt"
   - start " " /wait C:\MinGW\msys\1.0\bin\wget --no-check-certificate "https://github.com/gsocnikos/musescore_crash/raw/master/cv2pdb/libcurl.dll"  
   - cv2pdb.exe MuseScore.exe
