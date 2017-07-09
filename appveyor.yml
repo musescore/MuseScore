@@ -58,11 +58,17 @@ after_build:
   - cd C:\MuseScore\win32install\bin
   - start " " /wait C:\MinGW\msys\1.0\bin\wget --no-check-certificate "https://github.com/gsocnikos/musescore_crash/raw/master/cv2pdb/cv2pdb.exe"
   - start " " /wait C:\MinGW\msys\1.0\bin\wget --no-check-certificate "https://github.com/gsocnikos/musescore_crash/raw/master/cv2pdb/dump_syms.exe"
+  - start " " /wait C:\MinGW\msys\1.0\bin\wget --no-check-certificate "https://github.com/gsocnikos/musescore_crash/raw/master/cv2pdb/curl"
+  - start " " /wait C:\MinGW\msys\1.0\bin\wget --no-check-certificate "https://github.com/gsocnikos/musescore_crash/raw/master/cv2pdb/curl-ca-bundle.crt"
+  - start " " /wait C:\MinGW\msys\1.0\bin\wget --no-check-certificate "https://github.com/gsocnikos/musescore_crash/raw/master/cv2pdb/libcurl.dll"  
   - cv2pdb.exe MuseScore.exe
   - dump_syms.exe MuseScore.pdb > MuseScore.sym
-  - strip -s MuseScore.exe
+  - curl.exe  --data-binary @MuseScore.sym "https://musescore.sp.backtrace.io:6098/post?format=symbols&token=8ca1150d51c4988ef90d5cd10388091eb2885290766acb100e7ca422ee64744d"
   - del cv2pdb.exe
   - del dump_syms.exe
+  - del curl.exe
+  - del libcurl.dll
+  - del curl-ca-bundle.crt
   - cmd: 7z a C:\MuseScore\MuseScoreTest%MSversion%.7z C:\MuseScore\win32install
   - cd C:\MuseScore
 artifacts:
@@ -79,19 +85,6 @@ artifacts:
 #  publish: true
 #  override: true
 # to run your custom scripts instead of automatic MSBuild
-deploy:
-  release: MuseScore-breakpad-v$(appveyor_build_version)
-  description: 'MuseScore with breakpad'
-  provider: GitHub
-  auth_token:
-    secure: e7dcc78cf1b1030dfe15790d068be8217ab65f48
-#  artifact: /.*\.nupkg/            # upload all NuGet packages to release assets
-  artifact: MuseScoreTest$(MSversion).7z
-  draft: false
-  prerelease: false
-  on:
-    branch: add-breakpad                 # release from master branch only
-    appveyor_repo_tag: true              # deploy on tag push only
 
 build_script:
   - mingw32-make -f Makefile.mingw RelWithDebInfo && mingw32-make -f Makefile.mingw install
