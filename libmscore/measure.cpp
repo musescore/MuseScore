@@ -532,11 +532,13 @@ void Measure::layout2()
                   }
             }
       QString s;
-      if (smn && _mmRestCount && score()->styleB(Sid::createMultiMeasureRests) && score()->styleB(Sid::showMeasureNumberRange)) {
-            s = QString("%1 - %2").arg(no() + 1).arg(no() + _mmRestCount);
-      } else if (smn) {
-            s = QString("%1").arg(no() + 1);
-      }
+      if (smn) {
+            if (_mmRestCount && score()->styleB(Sid::createMultiMeasureRests) && score()->styleB(Sid::showMeasureNumberRange))
+                   s = QString("%1 - %2").arg(no() + 1).arg(no() + _mmRestCount);
+            else
+                   s = QString("%1").arg(no() + 1);
+            }
+
       int nn = 1;
       bool nas = score()->styleB(Sid::measureNumberAllStaffs);
 

@@ -404,7 +404,7 @@
                 <item row="2" column="0">
                   <widget class="QCheckBox" name="showMeasureNumberRange">
                    <property name="text">
-                    <string>Display Measure Number Range</string>
+                    <string>Display measure number range</string>
                    </property>
                   </widget>
                 </item>

@@ -871,7 +871,6 @@ void EditStyle::setValues()
       toggleFooterOddEven(lstyle.value(Sid::footerOddEven).toBool());
 
       showMeasureNumberRange->setChecked(lstyle.value(Sid::showMeasureNumberRange).toBool());
-
       }
 
 //---------------------------------------------------------
