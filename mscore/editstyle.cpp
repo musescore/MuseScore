@@ -90,6 +90,17 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::lyricsAlignVerseNumber,  false, lyricsAlignVerseNumber,  resetLyricsAlignVerseNumber },
       { StyleIdx::lyricsLineThickness,     false, lyricsLineThickness,     resetLyricsLineThickness },
 
+      { StyleIdx::lyricsOddFontFace,       false, lyricsOddFontFace,       resetLyricsOddFontFace       },
+      { StyleIdx::lyricsOddFontSize,       false, lyricsOddFontSize,       resetLyricsOddFontSize       },
+      { StyleIdx::lyricsOddFontBold,       false, lyricsOddFontBold,       resetLyricsOddFontBold       },
+      { StyleIdx::lyricsOddFontItalic,     false, lyricsOddFontItalic,     resetLyricsOddFontItalic     },
+      { StyleIdx::lyricsOddFontUnderline,  false, lyricsOddFontUnderline,  resetLyricsOddFontUnderline  },
+      { StyleIdx::lyricsEvenFontFace,      false, lyricsEvenFontFace,      resetLyricsEvenFontFace      },
+      { StyleIdx::lyricsEvenFontSize,      false, lyricsEvenFontSize,      resetLyricsEvenFontSize      },
+      { StyleIdx::lyricsEvenFontBold,      false, lyricsEvenFontBold,      resetLyricsEvenFontBold      },
+      { StyleIdx::lyricsEvenFontItalic,    false, lyricsEvenFontItalic,    resetLyricsEvenFontItalic    },
+      { StyleIdx::lyricsEvenFontUnderline, false, lyricsEvenFontUnderline, resetLyricsEvenFontUnderline },
+
       { StyleIdx::systemFrameDistance,     false, systemFrameDistance,     resetSystemFrameDistance },
       { StyleIdx::frameSystemDistance,     false, frameSystemDistance,     resetFrameSystemDistance },
       { StyleIdx::minMeasureWidth,         false, minMeasureWidth_2,       resetMinMeasureWidth },

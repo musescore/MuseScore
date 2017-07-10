@@ -501,9 +501,9 @@ void Lyrics::setNo(int n)
       // adjust beween LYRICS1 and LYRICS2 only; keep other styles as they are
       // (_no is 0-based, so odd _no means even line and viceversa)
       if (type() == ElementType::LYRICS) {
-            if( (_no & 1) && subStyle() == SubStyle::LYRIC1)
+            if ((_no & 1) && subStyle() == SubStyle::LYRIC1)
                   initSubStyle(SubStyle::LYRIC2);
-            if( !(_no & 1) && subStyle() == SubStyle::LYRIC2)
+            if (!(_no & 1) && subStyle() == SubStyle::LYRIC2)
                   initSubStyle(SubStyle::LYRIC1);
             }
       }
@@ -945,6 +945,18 @@ StyleIdx Lyrics::getPropertyStyle(P_ID id) const
       switch (id) {
             case P_ID::PLACEMENT:
                   return StyleIdx::lyricsPlacement;
+            case P_ID::FONT_FACE:
+                  return isEven() ? StyleIdx::lyricsEvenFontFace : StyleIdx::lyricsOddFontFace;
+            case P_ID::FONT_SIZE:
+                  return isEven() ? StyleIdx::lyricsEvenFontSize : StyleIdx::lyricsOddFontSize;
+            case P_ID::FONT_BOLD:
+                  return isEven() ? StyleIdx::lyricsEvenFontBold : StyleIdx::lyricsOddFontBold;
+            case P_ID::FONT_ITALIC:
+                  return isEven() ? StyleIdx::lyricsEvenFontItalic : StyleIdx::lyricsOddFontItalic;
+            case P_ID::FONT_UNDERLINE:
+                  return isEven() ? StyleIdx::lyricsEvenFontUnderline : StyleIdx::lyricsOddFontUnderline;
+            case P_ID::ALIGN:
+                  return isEven() ? StyleIdx::lyricsEvenAlign : StyleIdx::lyricsOddAlign;
             default:
                   break;
             }
@@ -960,6 +972,7 @@ void Lyrics::styleChanged()
       {
       if (placementStyle == PropertyFlags::STYLED)
             setPlacement(Placement(score()->styleI(StyleIdx::lyricsPlacement)));
+      Text::styleChanged();
       }
 
 //---------------------------------------------------------
