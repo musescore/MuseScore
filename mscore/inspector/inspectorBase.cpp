@@ -318,26 +318,26 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
             }
 
       //deal with reset if only one element, or if values are the same
-      bool reset = true;
+      bool enableReset = true;
       if (!valuesAreDifferent) {
             PropertyFlags styledValue = inspector->el()->front()->propertyFlags(ii.t);
             switch (styledValue) {
                   case PropertyFlags::STYLED:
                         ii.w->setStyleSheet(QString("* { color: %1 }").arg(c.name()));
-                        reset = false;
+                        enableReset = false;
                         break;
                   case PropertyFlags::UNSTYLED:
                         ii.w->setStyleSheet("");
-                        reset = true;
+                        enableReset = true;
                         break;
                   case PropertyFlags::NOSTYLE:
-                        reset = !isDefault(ii);
+                        enableReset = !isDefault(ii);
                         ii.w->setStyleSheet("");
                         break;
                   }
             }
       if (ii.r)
-            ii.r->setEnabled(reset);
+            ii.r->setEnabled(enableReset);
       }
 
 //---------------------------------------------------------
@@ -396,7 +396,7 @@ void InspectorBase::resetClicked(int i)
 
       Score* s = e->score();
       s->startCmd();
-      e->undoChangeProperty(id, def);
+      e->undoResetProperty(id);
       inspector->setInspectorEdit(true);
       s->endCmd();      // this may remove element
       inspector->setInspectorEdit(false);

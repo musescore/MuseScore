@@ -36,6 +36,7 @@
 #include "musescore.h"
 #include "scoreview.h"
 #include "bendproperties.h"
+#include "icons.h"
 
 #include "libmscore/element.h"
 #include "libmscore/score.h"
@@ -680,12 +681,19 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
       t.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::DIRECTION,    0, t.direction,   t.resetDirection   },
-            { P_ID::NUMBER_TYPE,  0, t.numberType,  t.resetNumberType  },
-            { P_ID::BRACKET_TYPE, 0, t.bracketType, t.resetBracketType }
+            { P_ID::FONT_FACE,      0, t.tupletFontFace,  t.resetTupletFontFace    },
+            { P_ID::FONT_SIZE,      0, t.tupletFontSize,  t.resetTupletFontSize    },
+            { P_ID::FONT_BOLD,      0, t.tupletBold,      t.resetTupletBold        },
+            { P_ID::FONT_ITALIC,    0, t.tupletItalic,    t.resetTupletItalic      },
+            { P_ID::FONT_UNDERLINE, 0, t.tupletUnderline, t.resetTupletUnderline   },
+            { P_ID::DIRECTION,      0, t.direction,       t.resetDirection         },
+            { P_ID::NUMBER_TYPE,    0, t.numberType,      t.resetNumberType        },
+            { P_ID::BRACKET_TYPE,   0, t.bracketType,     t.resetBracketType       }
             };
       const std::vector<InspectorPanel> ppList = { {t.title, t.panel} };
-
+      t.tupletBold->setIcon(*icons[int(Icons::textBold_ICON)]);
+      t.tupletUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
+      t.tupletItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
       mapSignals(iiList, ppList);
       }
 
@@ -729,6 +737,9 @@ InspectorBend::InspectorBend(QWidget* parent)
             { P_ID::FONT_UNDERLINE, 0, g.underline,   g.resetUnderline   },
             };
       const std::vector<InspectorPanel> ppList = { {g.title, g.panel} };
+      g.bold->setIcon(*icons[int(Icons::textBold_ICON)]);
+      g.underline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
+      g.italic->setIcon(*icons[int(Icons::textItalic_ICON)]);
       mapSignals(iiList, ppList);
       connect(g.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
       }

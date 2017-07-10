@@ -145,7 +145,7 @@ void Tuplet::layout()
       //
       if (_direction == Direction::AUTO) {
             int up = 1;
-            foreach (const DurationElement* e, _elements) {
+            for (const DurationElement* e : _elements) {
                   if (e->isChord()) {
                         const Chord* c = toChord(e);
                         if (c->stemDirection() != Direction::AUTO)
@@ -913,6 +913,13 @@ QVariant Tuplet::getProperty(P_ID propertyId) const
                   return _p1;
             case P_ID::P2:
                   return _p2;
+            case P_ID::FONT_SIZE:
+            case P_ID::FONT_FACE:
+            case P_ID::FONT_BOLD:
+            case P_ID::FONT_ITALIC:
+            case P_ID::FONT_UNDERLINE:
+            case P_ID::ALIGN:
+                  return _number ? _number->getProperty(propertyId) : QVariant();
             default:
                   break;
             }
@@ -950,6 +957,15 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::P2:
                   _p2 = v.toPointF();
                   break;
+            case P_ID::FONT_SIZE:
+            case P_ID::FONT_FACE:
+            case P_ID::FONT_BOLD:
+            case P_ID::FONT_ITALIC:
+            case P_ID::FONT_UNDERLINE:
+            case P_ID::ALIGN:
+                  if (_number)
+                        _number->setProperty(propertyId, v);
+                  break;
             default:
                   return DurationElement::setProperty(propertyId, v);
             }
@@ -976,6 +992,13 @@ QVariant Tuplet::propertyDefault(P_ID id) const
             case P_ID::NORMAL_NOTES:
             case P_ID::ACTUAL_NOTES:
                   return 0;
+            case P_ID::FONT_SIZE:
+            case P_ID::FONT_FACE:
+            case P_ID::FONT_BOLD:
+            case P_ID::FONT_ITALIC:
+            case P_ID::FONT_UNDERLINE:
+            case P_ID::ALIGN:
+                  return score()->styleV(getPropertyStyle(id));
             case P_ID::P1:
             case P_ID::P2:
                   return QPointF();
@@ -1002,6 +1025,13 @@ PropertyFlags Tuplet::propertyFlags(P_ID id) const
             case P_ID::P1:
             case P_ID::P2:
                   return PropertyFlags::NOSTYLE;
+            case P_ID::FONT_FACE:
+            case P_ID::FONT_SIZE:
+            case P_ID::FONT_BOLD:
+            case P_ID::FONT_ITALIC:
+            case P_ID::FONT_UNDERLINE:
+            case P_ID::ALIGN:
+                  return _number ? _number->propertyFlags(id) : PropertyFlags::NOSTYLE;
             default:
                   return DurationElement::propertyFlags(id);
             }
@@ -1020,6 +1050,18 @@ StyleIdx Tuplet::getPropertyStyle(P_ID id) const
                   return StyleIdx::tupletNumberType;
             case P_ID::BRACKET_TYPE:
                   return StyleIdx::tupletBracketType;
+            case P_ID::FONT_FACE:
+                  return StyleIdx::tupletFontFace;
+            case P_ID::FONT_SIZE:
+                  return StyleIdx::tupletFontSize;
+            case P_ID::FONT_BOLD:
+                  return StyleIdx::tupletFontBold;
+            case P_ID::FONT_ITALIC:
+                  return StyleIdx::tupletFontItalic;
+            case P_ID::FONT_UNDERLINE:
+                  return StyleIdx::tupletFontUnderline;
+            case P_ID::ALIGN:
+                  return StyleIdx::tupletAlign;
             default:
                   break;
             }
@@ -1032,6 +1074,7 @@ StyleIdx Tuplet::getPropertyStyle(P_ID id) const
 
 void Tuplet::resetProperty(P_ID id)
       {
+printf("reset property %s\n", propertyQmlName(id));
       switch (id) {
             case P_ID::DIRECTION:
                   setProperty(id, propertyDefault(id));
@@ -1052,8 +1095,52 @@ void Tuplet::resetProperty(P_ID id)
             case P_ID::P2:
                   setProperty(id, propertyDefault(id));
                   break;
+            case P_ID::FONT_FACE:
+            case P_ID::FONT_SIZE:
+            case P_ID::FONT_BOLD:
+            case P_ID::FONT_ITALIC:
+            case P_ID::FONT_UNDERLINE:
+            case P_ID::ALIGN:
+                  if (_number)
+                        _number->resetProperty(id);
+                  break;
             default:
                   return DurationElement::resetProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   setPropertyFlags
+//---------------------------------------------------------
+
+void Tuplet::setPropertyFlags(P_ID id, PropertyFlags f)
+      {
+      switch (id) {
+            case P_ID::DIRECTION:
+                  directionStyle = f;
+                  break;
+            case P_ID::NUMBER_TYPE:
+                  numberStyle = f;
+                  break;
+            case P_ID::BRACKET_TYPE:
+                  bracketStyle = f;
+                  break;
+            case P_ID::NORMAL_NOTES:
+            case P_ID::ACTUAL_NOTES:
+            case P_ID::P1:
+            case P_ID::P2:
+                  break;
+            case P_ID::FONT_FACE:
+            case P_ID::FONT_SIZE:
+            case P_ID::FONT_BOLD:
+            case P_ID::FONT_ITALIC:
+            case P_ID::FONT_UNDERLINE:
+            case P_ID::ALIGN:
+                  if (_number)
+                        _number->setPropertyFlags(id, f);
+                  break;
+            default:
+                  return DurationElement::setPropertyFlags(id, f);
             }
       }
 
@@ -1074,6 +1161,8 @@ void Tuplet::styleChanged()
             _elements.front()->triggerLayout();
             _elements.back()->triggerLayout();
             }
+      if (_number)
+            _number->styleChanged();
       }
 
 //---------------------------------------------------------
