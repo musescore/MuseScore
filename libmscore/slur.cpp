@@ -245,8 +245,8 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, Grip curGrip, Element* ele
 
 QPointF SlurSegment::gripAnchor(Grip grip) const
       {
-      SlurPos spos;
-      slurTie()->slurPos(&spos);
+//      SlurPos spos;
+//      slurTie()->slurPos(&spos);
 
       QPointF pp(pagePos());
       QPointF p1(ups(Grip::START).p + pp);
@@ -450,14 +450,20 @@ void SlurSegment::computeBezier(QPointF p6o)
 
       QPainterPath p;
       p.moveTo(QPointF());
-      p.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
+//      p.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
+      p.cubicTo(p3 + p3o, p4 + p4o, p2);
       _shape.clear();
       QPointF start;
       start = t.map(start);
       int nbShapes = 15;
+      qreal minH = qAbs(3 * w);
       for (int i = 1; i <= nbShapes; i++) {
             QPointF point = t.map(p.pointAtPercent(i/float(nbShapes)));
-            QRectF re(start, point);
+            QRectF re = QRectF(start, point).normalized();
+            if (re.height() < minH) {
+                  qreal d = (minH - re.height()) * .5;
+                  re.adjust(0.0, -d, 0.0, d);
+                  }
             _shape.add(re);
             start = point;
             }
