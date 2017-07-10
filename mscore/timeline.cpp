@@ -1337,19 +1337,69 @@ void Timeline::setScoreView(ScoreView* v)
 void Timeline::updateView(double, double)
       {
       if (_cv) {
+            QRectF canvas = QRectF(_cv->matrix().inverted().mapRect(_cv->geometry()));
 
             std::set<std::pair<Measure*, int>> visible_items;
+
+            //Find visible measures of score
             for (Measure* m = _score->firstMeasure(); m; m = m->nextMeasure()) {
                   System* sys = m->system();
+
+                  if (m->mmRest() && _score->styleB(StyleIdx::createMultiMeasureRests)) {
+                        //Handle mmRests
+                        Measure* mmr = m->mmRest();
+                        sys = mmr->system();
+                        if (!sys)
+                              continue;
+
+                        //Add all measures within mmRest to visible_items if mmRest_visible
+                        for (; m != mmr->mmRestLast(); m = m->nextMeasure()) {
+                              for (int staff = 0; staff < _score->staves().length(); staff++) {
+                                    if (!_score->staff(staff)->show())
+                                          continue;
+                                    QRectF stave = QRectF(sys->canvasBoundingRect().left(),
+                                                          sys->staffCanvasYpage(staff),
+                                                          sys->width(),
+                                                          sys->staff(staff)->bbox().height());
+                                    QRectF showRect = mmr->canvasBoundingRect().intersected(stave);
+
+                                    if (canvas.intersects(showRect)) {
+                                          std::pair<Measure*, int> p(m, staff);
+                                          visible_items.insert(p);
+                                          }
+                                    }
+                              }
+
+                        //Handle last measure in mmRest
+                        for (int staff = 0; staff < _score->staves().length(); staff++) {
+                              if (!_score->staff(staff)->show())
+                                    continue;
+                              QRectF stave = QRectF(sys->canvasBoundingRect().left(),
+                                                    sys->staffCanvasYpage(staff),
+                                                    sys->width(),
+                                                    sys->staff(staff)->bbox().height());
+                              QRectF showRect = mmr->canvasBoundingRect().intersected(stave);
+
+                              if (canvas.intersects(showRect)) {
+                                    std::pair<Measure*, int> p(m, staff);
+                                    visible_items.insert(p);
+                                    }
+                              }
+                        continue;
+                        }
+
+                  if (!sys)
+                        continue;
+
                   for (int staff = 0; staff < _score->staves().length(); staff++) {
                         if (!_score->staff(staff)->show())
                               continue;
                         QRectF stave = QRectF(sys->canvasBoundingRect().left(),
-                                                          sys->staffCanvasYpage(staff),
-                                                          sys->width(),
-                                                          sys->staff(0)->bbox().height());
+                                              sys->staffCanvasYpage(staff),
+                                              sys->width(),
+                                              sys->staff(staff)->bbox().height());
                         QRectF showRect = m->canvasBoundingRect().intersected(stave);
-                        QRectF canvas = QRectF(_cv->matrix().inverted().mapRect(_cv->geometry()));
+
                         if (canvas.intersects(showRect)) {
                               std::pair<Measure*, int> p(m, staff);
                               visible_items.insert(p);
@@ -1358,6 +1408,8 @@ void Timeline::updateView(double, double)
 
                         }
                   }
+
+            //Find respective visible elements in timeline
             QPainterPath pp = QPainterPath();
             pp.setFillRule(Qt::WindingFill);
             for (QGraphicsItem* gi : scene()->items()) {
