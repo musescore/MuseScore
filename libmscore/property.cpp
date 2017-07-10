@@ -111,7 +111,6 @@ static constexpr PropertyMetaData propertyList[] = {
       { P_ID::TEXT,                    "text",                    false, 0,                       P_TYPE::STRING          },
       { P_ID::HTML_TEXT,               "html_text",               false, 0,                       P_TYPE::STRING          },
       { P_ID::USER_MODIFIED,           "user_modified",           false, 0,                       P_TYPE::BOOL            },
-//      { P_ID::BEAM_POS,                "beam_pos",                false, 0,                       P_TYPE::POINT_SP        },
       { P_ID::BEAM_POS,                "beam_pos",                false, 0,                       P_TYPE::POINT           },
       { P_ID::BEAM_MODE,               "beam_mode",               true, "BeamMode",               P_TYPE::BEAM_MODE       },
       { P_ID::BEAM_NO_SLOPE,           "beam_no_slope",           true, "noSlope",                P_TYPE::BOOL            },
