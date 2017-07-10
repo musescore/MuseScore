@@ -2817,13 +2817,9 @@ void Text::resetProperty(P_ID id)
       if (p) {
             setProperty(id, propertyDefault(id));
             *p = PropertyFlags::STYLED;
-            return;
             }
-
-      switch (id) {
-            default:
-                  return Element::resetProperty(id);
-            }
+      else
+            Element::resetProperty(id);
       }
 
 //---------------------------------------------------------
