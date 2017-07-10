@@ -42,8 +42,6 @@ class LyricsLine;
 
 class Lyrics : public Text {
       Q_GADGET
-      Q_PROPERTY(Ms::Lyrics::Syllabic syllabic READ syllabic WRITE setSyllabic)
-      Q_ENUMS(Syllabic)
 
    public:
       enum class Syllabic : char { SINGLE, BEGIN, END, MIDDLE };
@@ -107,6 +105,7 @@ class Lyrics : public Text {
       virtual QString subtypeName() const override    { return QObject::tr("Verse %1").arg(_no + 1); }
       void setNo(int n);
       int no() const                                  { return _no; }
+      bool isEven() const                             { return _no % 1; }
       void setSyllabic(Syllabic s)                    { _syllabic = s; }
       Syllabic syllabic() const                       { return _syllabic; }
       virtual void add(Element*) override;
