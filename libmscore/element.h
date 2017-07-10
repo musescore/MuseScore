@@ -26,15 +26,15 @@ namespace Ms {
 
 class XmlReader;
 class XmlWriter;
-enum class SymId;
-enum class P_ID;
-enum class SubStyle;
+enum class SymId : short;
+enum class P_ID : unsigned char;
+enum class SubStyle: char;
 
 //---------------------------------------------------------
 //   Grip
 //---------------------------------------------------------
 
-enum class Grip {
+enum class Grip : char {
       NO_GRIP = -1,
       START = 0, END = 1,                         // arpeggio etc.
           MIDDLE = 2, APERTURE = 3,               // Line
@@ -47,7 +47,7 @@ enum class Grip {
 //   ElementFlag
 //---------------------------------------------------------
 
-enum class ElementFlag {
+enum class ElementFlag : int {
       DROP_TARGET     = 0x00000001,
       SELECTABLE      = 0x00000002,
       MOVABLE         = 0x00000004,

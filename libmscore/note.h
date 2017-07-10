@@ -41,7 +41,7 @@ class Accidental;
 class NoteDot;
 class Spanner;
 class StaffType;
-enum class SymId;
+enum class SymId : short;
 enum class AccidentalType : char;
 
 static const int MAX_DOTS = 4;

@@ -22,7 +22,7 @@ class Score;
 class Note;
 class Chord;
 class Icon;
-enum class Grip : int;
+enum class Grip : char;
 
 //---------------------------------------------------------
 //   ExampleView

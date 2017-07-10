@@ -25,7 +25,7 @@ enum class ClefType : signed char;
 //   Key
 //---------------------------------------------------------
 
-enum class Key {
+enum class Key : signed char {
       C_B = -7,
       G_B,
       D_B,
@@ -52,7 +52,7 @@ enum class Key {
 //   KeyMode
 //---------------------------------------------------------
 
-enum class KeyMode {
+enum class KeyMode : signed char {
       UNKNOWN = -1,
       NONE,
       MAJOR,
@@ -68,7 +68,7 @@ static inline bool operator!= (Key a, Key b) { return int(a) != int(b); }
 static inline Key  operator+= (Key& a, const Key& b) { return a = Key(int(a) + int(b)); }
 static inline Key  operator-= (Key& a, const Key& b) { return a = Key(int(a) - int(b)); }
 
-enum class SymId;
+enum class SymId : short;
 
 //---------------------------------------------------------
 //   KeySym

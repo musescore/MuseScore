@@ -53,7 +53,7 @@ class TremoloBar;
 #define CONTROL_MODIFIER Qt::ControlModifier
 #endif
 
-enum class Grip : int;
+enum class Grip : char;
 enum class POS : char;
 enum class MagIdx : char;
 
@@ -61,7 +61,7 @@ enum class MagIdx : char;
 //   ViewState
 //---------------------------------------------------------
 
-enum class ViewState {
+enum class ViewState : char {
       NORMAL,
       DRAG,
       DRAG_OBJECT,

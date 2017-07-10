@@ -17,7 +17,7 @@
 
 namespace Ms {
 
-enum class SymId;
+enum class SymId : short;
 
 //---------------------------------------------------------
 //   BreathType

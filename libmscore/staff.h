@@ -43,7 +43,7 @@ class TimeSig;
 class Ottava;
 class BracketItem;
 
-enum class Key;
+enum class Key : signed char;
 
 //---------------------------------------------------------
 //   LinkedStaves
@@ -79,7 +79,7 @@ class Staff : public ScoreElement {
       Q_GADGET
 
    public:
-      enum class HideMode { AUTO, ALWAYS, NEVER, INSTRUMENT };
+      enum class HideMode : char { AUTO, ALWAYS, NEVER, INSTRUMENT };
 
    private:
       Part* _part       { 0 };

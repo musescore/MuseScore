@@ -37,7 +37,7 @@ class Articulation;
 class Lyrics;
 class TabDurationSymbol;
 class Spanner;
-enum class SegmentType;
+enum class SegmentType : short;
 
 //-------------------------------------------------------------------
 //   @@ ChordRest

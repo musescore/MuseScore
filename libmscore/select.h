@@ -72,7 +72,7 @@ enum class SelState : char {
                   // is selected
       };
 
-enum class SelectionFilterType {
+enum class SelectionFilterType : int {
       NONE                    = 0,
       FIRST_VOICE             = 1 << 0,
       SECOND_VOICE            = 1 << 1,

@@ -18,8 +18,8 @@
 
 namespace Ms {
 
-enum class Key;
-enum class SymId;
+enum class Key : signed char;
+enum class SymId : short;
 
 //---------------------------------------------------------
 //   cycles

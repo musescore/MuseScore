@@ -17,7 +17,7 @@
 
 namespace Ms {
 
-enum class SubStyle;
+enum class SubStyle : char;
 
 //---------------------------------------------------------
 //   @@ Jump

@@ -253,7 +253,7 @@ int findOptimalSplitPoint(
 // which part of chord notes, sorted by length - low note indexes or high note indexes
 // - should be moved to another voice
 
-enum class MovedVoiceGroup {
+enum class MovedVoiceGroup : char {
       LOW,
       HIGH
       };

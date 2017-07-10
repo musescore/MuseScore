@@ -260,7 +260,7 @@ enum class NoteHeadScheme : char {
 //   BarLineType
 //---------------------------------------------------------
 
-enum class BarLineType {
+enum class BarLineType : unsigned char {
       NORMAL           = 1,
       DOUBLE           = 2,
       START_REPEAT     = 4,

@@ -22,7 +22,7 @@ Q_NAMESPACE
 //   Note: keep in sync with array elementNames[] in scoreElement.cpp
 //-------------------------------------------------------------------
 
-enum class ElementType {
+enum class ElementType : char {
       INVALID = 0,
       BRACKET_ITEM,
       PART,
@@ -125,17 +125,17 @@ enum class ElementType {
       MAXTYPE
       };
 
-Q_ENUM_NS(ElementType)
+Q_ENUM_NS(ElementType);
 
 //---------------------------------------------------------
 //   Direction
 //---------------------------------------------------------
 
-enum class Direction {
+enum class Direction : char {
       AUTO, UP, DOWN
       };
 
-Q_ENUM_NS(Direction)
+Q_ENUM_NS(Direction);
 
 //hack: to force the build system to run moc on this file
 class Mops : public QObject {

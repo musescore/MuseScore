@@ -56,7 +56,7 @@ struct LayoutContext {
 //   VerticalAlignRange
 //---------------------------------------------------------
 
-enum class VerticalAlignRange {
+enum class VerticalAlignRange : char {
       SEGMENT, MEASURE, SYSTEM
       };
 

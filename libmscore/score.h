@@ -88,13 +88,13 @@ struct Interval;
 struct TEvent;
 struct LayoutContext;
 
-enum class SubStyle;
+enum class SubStyle : char;
 enum class ClefType : signed char;
 enum class BeatType : char;
-enum class SymId;
-enum class Key;
+enum class SymId : short;
+enum class Key : signed char;
 enum class HairpinType : char;
-enum class SegmentType;
+enum class SegmentType : short;
 enum class OttavaType : char;
 
 extern bool showRubberBand;
@@ -227,7 +227,7 @@ struct Layer {
 //    recreates all.
 //---------------------------------------------------------
 
-enum class UpdateMode {
+enum class UpdateMode : char {
       DoNothing,
       Update,           // do screen refresh of QRectF "refresh"
       UpdateAll,        // do complete screen refresh

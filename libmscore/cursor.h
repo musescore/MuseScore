@@ -27,7 +27,7 @@ class ChordRest;
 class StaffText;
 class Measure;
 
-enum class SegmentType;
+enum class SegmentType : short;
 
 //---------------------------------------------------------
 //   ElementW
