@@ -301,9 +301,9 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
       /******************* mod env **********************/
 
       // if we wouldn't calculate sample accurate volume
-      // we wouldn't advance beyond FLUID_VOICE_ENVDELAY in the first call of voice::write
+      // we wouldn't advance beyond FLUID_VOICE_ENVDELAY
       // and effectively always skip the first buffer rendering thus adding n to modenv_count
-      if (ticks == 0 && volenv_section > FLUID_VOICE_ENVDELAY)
+      if (volenv_section > FLUID_VOICE_ENVDELAY)
             modenv_count += n;
 
       env_data = &modenv_data[modenv_section];
