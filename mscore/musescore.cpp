@@ -1787,7 +1787,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                   navigator()->setScoreView(cv);
                   navigator()->setScore(0);
                   }
-            if (_timeline && _timeline->widget()) {
+            if (timeline()) {
                   timeline()->setScoreView(cv);
                   timeline()->setScore(0);
                   }
@@ -1849,13 +1849,9 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             navigator()->setScore(cs);
             navigator()->setScoreView(view);
             }
-      if (_timeline && _timeline->widget()) {
-            QSplitter* s = static_cast<QSplitter*>(_timeline->widget());
-            if (s && s->count() > 0) {
-                  Timeline* t = static_cast<Timeline*>(s->widget(1));
-                  t->setScore(cs);
-                  t->setScoreView(view);
-                  }
+      if (timeline()) {
+            timeline()->setScore(cs);
+            timeline()->setScoreView(view);
             }
       ScoreAccessibility::instance()->updateAccessibilityInfo();
       }
