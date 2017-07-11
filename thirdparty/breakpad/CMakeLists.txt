@@ -31,8 +31,6 @@ add_library (
     google_breakpad/common/breakpad_types.h
     client/windows/crash_generation/crash_generation_client.h
     common/scoped_ptr.h
-    common/windows/http_upload.cc
-    common/windows/http_upload.h
 )
 
 
