@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2017 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -100,7 +100,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
                   return;
             }
 
-      endEdit();
+      changeState(ViewState::NORMAL);
       _score->startCmd();
       lyrics = cr->lyrics(verse, placement);
       if (!lyrics) {
@@ -164,7 +164,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       if (nextSegment == 0)
             return;
 
-      endEdit();
+      changeState(ViewState::NORMAL);
 
       // look for the lyrics we are moving from; may be the current lyrics or a previous one
       // if we are skipping several chords with spaces
@@ -263,7 +263,7 @@ void ScoreView::lyricsMinus()
       int verse        = lyrics->no();
       Element::Placement placement = lyrics->placement();
 
-      endEdit();
+      changeState(ViewState::NORMAL);
 
       // search next chord
       Segment* nextSegment = segment;
@@ -354,7 +354,7 @@ void ScoreView::lyricsUnderscore()
       Element::Placement placement = lyrics->placement();
       int endTick      = segment->tick(); // a previous melisma cannot extend beyond this point
 
-      endEdit();
+      changeState(ViewState::NORMAL);
 
       // search next chord
       Segment* nextSegment = segment;
@@ -466,7 +466,7 @@ void ScoreView::lyricsReturn()
       Lyrics* lyrics   = toLyrics(editData.element);
       Segment* segment = lyrics->segment();
 
-      endEdit();
+      changeState(ViewState::NORMAL);
 
       Lyrics* oldLyrics = lyrics;
 
