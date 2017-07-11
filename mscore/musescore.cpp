@@ -111,7 +111,9 @@
 #include "help.h"
 #include "awl/aslider.h"
 
+#ifdef _WIN32
 #include "breakpad/crash_handler.h"
+#endif
 
 #ifdef USE_LAME
 #include "exportmp3.h"
@@ -5875,7 +5877,10 @@ int main(int argc, char* av[])
 
       parser.process(QCoreApplication::arguments());
 
+      //Instantiate breakpad instanse currently will produce the minidumps under the c:\Users\username directory
+#ifdef _WIN32
       Breakpad::CrashHandler::instance()->Init(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+#endif
 
     //if (parser.isSet("v")) parser.showVersion(); // a) needs Qt >= 5.4 , b) instead we use addVersionOption()
       if (parser.isSet("long-version")) {
