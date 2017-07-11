@@ -166,10 +166,8 @@ void ScoreElement::resetProperty(P_ID id)
 void ScoreElement::undoResetProperty(P_ID id)
       {
       PropertyFlags f = propertyFlags(id);
-      if (f == PropertyFlags::UNSTYLED) {
-            printf("reset property ==\n");
+      if (f == PropertyFlags::UNSTYLED)
             undoChangeProperty(id, propertyDefault(id), PropertyFlags::STYLED);
-            }
       else
             undoChangeProperty(id, propertyDefault(id), f);
       }
