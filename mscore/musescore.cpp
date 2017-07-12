@@ -85,6 +85,7 @@
 #include "textpalette.h"
 #include "resourceManager.h"
 #include "scoreaccessibility.h"
+#include "startupWizard.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
@@ -1326,6 +1327,19 @@ MuseScore::MuseScore()
             cornerLabel->setScaledContents(true);
             cornerLabel->setPixmap(QPixmap(":/data/mscore.png"));
             cornerLabel->setGeometry(width() - 48, 0, 48, 48);
+            }
+
+      if (!MScore::noGui) {
+            QSettings s;
+            if (!s.contains("firstStart")) {
+                  StartupWizard* sw = new StartupWizard;
+                  sw->exec();
+                  s.setValue("firstStart", false);
+                  s.setValue("keyboardLayout", sw->keyboardLayout());
+                  delete sw;
+                  }
+            QString keyboardLayout = s.value("keyboardLayout").toString();
+            StartupWizard::autoSelectShortcuts(keyboardLayout);
             }
       }
 
