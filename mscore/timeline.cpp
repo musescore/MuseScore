@@ -167,6 +167,8 @@ void TRowLabels::updateLabels(std::vector<QString> labels, int height)
 
       scene()->clear();
       meta_labels.clear();
+      if (labels.empty())
+            return;
 
       int max_width = -1;
       for (unsigned int r = 0; r < labels.size(); r++) {
@@ -1046,6 +1048,9 @@ void Timeline::drawSelection()
 
 void Timeline::mousePressEvent(QMouseEvent* ev)
       {
+      if (!_score)
+            return;
+
       //Set as clicked
       mouse_pressed = true;
       scene()->clearSelection();
@@ -1313,6 +1318,17 @@ void Timeline::setScore(Score* s)
             drawGrid(nstaves(), _score->nmeasures());
             changeSelection(SelState::NONE);
             }
+      else {
+            //Clear timeline if no score is present
+            QSplitter* s = scrollArea->grid();
+            if (s && s->count() > 0) {
+                  TRowLabels* t = static_cast<TRowLabels*>(s->widget(0));
+                  std::vector<QString> empty;
+                  t->updateLabels(empty, 0);
+                  }
+            meta_rows.clear();
+            setSceneRect(0, 0, 0, 0);
+            }
 
       viewport()->update();
       }
@@ -1512,6 +1528,10 @@ QColor Timeline::colorBox(QGraphicsRectItem* item)
 
 std::vector<QString> Timeline::getLabels()
       {
+      if (!_score) {
+            std::vector<QString> empty;
+            return empty;
+            }
       QList<Part*> pl = _score->parts();
       //transfer them into a vector of qstrings and then add the meta row names
       std::vector<QString> labels;
@@ -1535,6 +1555,8 @@ std::vector<QString> Timeline::getLabels()
 
 void Timeline::handle_scroll(int value)
       {
+      if (!_score)
+            return;
       for (std::vector<std::pair<QGraphicsItem*, int>>::iterator it = meta_rows.begin();
            it != meta_rows.end(); ++it) {
             std::pair<QGraphicsItem*, int> p = *it;
