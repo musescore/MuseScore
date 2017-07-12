@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>data/shortcuts.xml</file>
+        <file>data/shortcuts_AZERTY.xml</file>
+    </qresource>
+</RCC>
