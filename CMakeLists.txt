@@ -88,6 +88,7 @@ endif (NOT APPLE AND NOT MINGW)
 option(AEOLUS        "Enable pipe organ synthesizer"      OFF)
 option(ZERBERUS      "Enable experimental SFZ sampler"    ON)
 option(OSC           "Enable OSC remote control protocol" ON)
+option(BREAKPAD      "Enable breakpad"                    ON)
 option(OMR           "Enable PDF import"  ON)                 # OMR - optical music recognition
 # For installation see: http://ubuntuforums.org/showthread.php?t=1647350
 option(OCR           "Enable OCR, requires OMR" OFF)           # Requires tesseract 3.0, needs work on mac/win
@@ -154,12 +155,12 @@ if (APPLE)
 else (APPLE)
    if (MINGW)
       # -mno-ms-bitfields see #22048
-      set(CMAKE_CXX_FLAGS_DEBUG          "-g -std=c++11 -mno-ms-bitfields")
-	  set(CMAKE_C_FLAGS_DEBUG            "-g -mno-ms-bitfields")
+      set(CMAKE_CXX_FLAGS_DEBUG          "-std=c++11 -mno-ms-bitfields -g")
+      set(CMAKE_C_FLAGS_DEBUG            "-mno-ms-bitfields -g")
       set(CMAKE_CXX_FLAGS_RELEASE        "-O2 -std=c++11 -mno-ms-bitfields -DNDEBUG -DQT_NO_DEBUG")
-	  set(CMAKE_C_FLAGS_RELEASE          "-O2 -mno-ms-bitfields  -DNDEBUG -DQT_NO_DEBUG")
-	  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g -O2 -std=c++11 -mno-ms-bitfields -DNDEBUG -DQT_NO_DEBUG")
-	  set(CMAKE_C_FLAGS_RELWITHDEBINFO   "-g -O2 -mno-ms-bitfields  -DNDEBUG -DQT_NO_DEBUG")
+      set(CMAKE_C_FLAGS_RELEASE          "-O2 -mno-ms-bitfields  -DNDEBUG -DQT_NO_DEBUG")
+      set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -std=c++11 -mno-ms-bitfields -g -DNDEBUG -DQT_NO_DEBUG")
+      set(CMAKE_C_FLAGS_RELWITHDEBINFO   "-O2 -mno-ms-bitfields -g -DNDEBUG -DQT_NO_DEBUG")
       set(CMAKE_EXE_LINKER_FLAGS         "-Wl,--large-address-aware")
    else (MINGW)
       set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++11 -fPIC -g -Wall -Wextra -Woverloaded-virtual")
@@ -560,7 +561,7 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 subdirs(
       mscore awl bww2mxml share midi audiofile fluid libmscore synthesizer
       effects thirdparty/rtf2html thirdparty/diff thirdparty/beatroot
-      thirdparty/qzip thirdparty/kQOAuth thirdparty/breakpad
+      thirdparty/qzip thirdparty/kQOAuth
       )
 #      thirdparty/xmlstream
 
@@ -593,6 +594,11 @@ endif (ZERBERUS)
 if (OMR)
       subdirs (omr thirdparty/poppler)
 endif (OMR)
+
+if (BREAKPAD)
+    subdirs (thirdparty/breakpad)
+
+endif (BREAKPAD)
 
 if (OSC)
       subdirs (thirdparty/ofqf)
