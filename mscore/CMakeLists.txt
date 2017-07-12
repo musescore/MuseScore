@@ -460,7 +460,6 @@ if (MINGW)
       winmm
       mscore_freetype
       z
-      breakpad
       )
 
    if (OMR)
@@ -469,6 +468,10 @@ if (MINGW)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)
    endif (OMR)
+
+   if (BREAKPAD)
+       target_link_libraries(mscore breakpad)
+   endif (BREAKPAD)
 
    target_link_libraries(mscore ${QT_mingw_LIBRARIES})
 

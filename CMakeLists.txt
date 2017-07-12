@@ -597,6 +597,7 @@ endif (OMR)
 
 if (BREAKPAD)
     subdirs (thirdparty/breakpad)
+    include_directories(${PROJECT_SOURCE_DIR}/thirdparty/breakpad)
 
 endif (BREAKPAD)
 
@@ -634,7 +635,7 @@ if (OMR)
    include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler/poppler)
 endif (OMR)
 
-include_directories(${PROJECT_SOURCE_DIR}/thirdparty/breakpad)
+
 
 
 ##
