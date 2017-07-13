@@ -44,6 +44,7 @@ before_build:
   # copy /y cc1plus.exe "C:\Qt\Tools\mingw530_32\libexec\gcc\i686-w64-mingw32\5.3.0\cc1plus.exe"
   
   - cd C:\MuseScore
+  - where curl
   - set PATH=C:\Qt\5.8\mingw53_32\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%
   - mingw32-make -f Makefile.mingw revision
   # CMake refuses to generate MinGW Makefiles if sh.exe is in the Path
