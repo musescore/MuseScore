@@ -57,7 +57,7 @@ after_build:
   - ccache.exe -s
   - cd c:\MuseScore
   - start " " /wait C:\MinGW\msys\1.0\bin\wget --no-check-certificate "http://utils.musescore.org.s3.amazonaws.com/musescore_tools_win32.zip"
-  - start " " /wait "7z" x -y musescore_tools_win32.zip  > nul &&
+  - cmd: 7z x -y musescore_tools_win32.zip
   - cd C:\MuseScore\win32install\bin
   - C:\MuseScore\cv2pdb.exe MuseScore.exe
   - C:\MuseScore\dump_syms.exe MuseScore.pdb > MuseScore.sym
