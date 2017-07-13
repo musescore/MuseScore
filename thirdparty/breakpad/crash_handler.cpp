@@ -209,7 +209,6 @@ namespace Breakpad {
 
     void CrashHandler::Init( const QString& reportPath )
     {
-
         d->InitCrashHandler(reportPath);
 
     }
