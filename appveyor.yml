@@ -33,7 +33,7 @@ configuration: Release
 # scripts to run before build
 before_build:
   - IF NOT EXIST dependencies.7z (
-    start " " /wait "C:\MinGW\msys\1.0\bin\wget" --no-check-certificate "https://drive.google.com/uc?export=download&id=0BxjayMZiuupOSXF6a0ZDUG5rNDg" -O dependencies.7z &&
+    start " " /wait "C:\MinGW\msys\1.0\bin\wget" --no-check-certificate "http://utils.musescore.org.s3.amazonaws.com/musescore_dependencies_win32.7z" -O dependencies.7z &&
     start " " /wait "7z" x -y dependencies.7z > nul &&
     cd dependencies &&
     xcopy i686-w64-mingw32 "C:\Qt\Tools\mingw530_32\i686-w64-mingw32" /E &&
