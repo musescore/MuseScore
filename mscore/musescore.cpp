@@ -5786,9 +5786,6 @@ using namespace Ms;
 int main(int argc, char* av[])
       {
 
-
-
-
 #ifndef NDEBUG
       qSetMessagePattern("%{file}:%{function}: %{message}");
       Ms::checkStyles();
