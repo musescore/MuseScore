@@ -88,7 +88,7 @@ endif (NOT APPLE AND NOT MINGW)
 option(AEOLUS        "Enable pipe organ synthesizer"      OFF)
 option(ZERBERUS      "Enable experimental SFZ sampler"    ON)
 option(OSC           "Enable OSC remote control protocol" ON)
-option(BREAKPAD      "Enable breakpad"                    ON)
+option(BREAKPAD      "Enable breakpad crash report"       ON)
 option(OMR           "Enable PDF import"  ON)                 # OMR - optical music recognition
 # For installation see: http://ubuntuforums.org/showthread.php?t=1647350
 option(OCR           "Enable OCR, requires OMR" OFF)           # Requires tesseract 3.0, needs work on mac/win
@@ -598,7 +598,6 @@ endif (OMR)
 if (BREAKPAD)
     subdirs (thirdparty/breakpad)
     include_directories(${PROJECT_SOURCE_DIR}/thirdparty/breakpad)
-
 endif (BREAKPAD)
 
 if (OSC)

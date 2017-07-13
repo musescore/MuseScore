@@ -123,9 +123,7 @@ extern Ms::Synthesizer* createZerberus();
 #endif
 
 #ifdef BREAKPAD
-#ifdef _WIN32
 #include "breakpad/crash_handler.h"
-#endif
 #endif
 
 #ifdef QT_NO_DEBUG
@@ -5876,9 +5874,7 @@ int main(int argc, char* av[])
 
       //Initiate breakpad instance currently will produce the minidumps under the c:\Users\username directory
 #ifdef BREAKPAD
-#ifdef _WIN32
       Breakpad::CrashHandler::instance()->Init(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
-#endif
 #endif
     //if (parser.isSet("v")) parser.showVersion(); // a) needs Qt >= 5.4 , b) instead we use addVersionOption()
       if (parser.isSet("long-version")) {
