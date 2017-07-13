@@ -195,19 +195,19 @@ QVariant Breath::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
-//   nextElement
+//   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Breath::nextElement()
+Element* Breath::nextSegmentElement()
       {
       return segment()->firstInNextSegments(staffIdx());
       }
 
 //---------------------------------------------------------
-//   prevElement
+//   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Breath::prevElement()
+Element* Breath::prevSegmentElement()
       {
       return segment()->lastInPrevSegments(staffIdx());
       }

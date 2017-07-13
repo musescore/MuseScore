@@ -1227,12 +1227,90 @@ void ChordRest::processSiblings(std::function<void(Element*)> func)
       }
 
 //---------------------------------------------------------
+//   nextArticulationOrLyric
+//---------------------------------------------------------
+
+Element* ChordRest::nextArticulationOrLyric(Element* e)
+      {  
+      auto i = std::find(_articulations.begin(), _articulations.end(), e);
+      if (i != _articulations.end()) {
+            if (i != _articulations.end()-1) {
+                  return *(i+1);
+                  }
+            else {
+                  if (!_lyrics.empty())
+                        return _lyrics[0];
+                  else
+                        return nullptr;
+                  }
+            }
+      else {
+            auto i = std::find(_lyrics.begin(), _lyrics.end(), e);
+            if (i != _lyrics.end()) {
+                  if (i != _lyrics.end()-1)
+                      return *(i+1);
+                  }
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   prevArticulationOrLyric
+//---------------------------------------------------------
+
+Element* ChordRest::prevArticulationOrLyric(Element* e)
+      {
+      auto i = std::find(_lyrics.begin(), _lyrics.end(), e);
+      if (i != _lyrics.end()) {
+            if (i != _lyrics.begin()) {
+                  return *(i-1);
+                  }
+            else {
+                  if (!_articulations.empty())
+                        return _articulations.back();
+                  else
+                        return nullptr;
+                  }
+            }
+      else {
+            auto i = std::find(_articulations.begin(), _articulations.end(), e);
+            if (i != _articulations.end()) {
+                  if (i != _articulations.begin())
+                        return *(i-1);
+                  }
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
 //   nextElement
 //---------------------------------------------------------
 
 Element* ChordRest::nextElement()
       {
-      return segment()->firstInNextSegments(staffIdx());
+      Element* e = score()->selection().element();
+            if (!e && !score()->selection().elements().isEmpty())
+                  e = score()->selection().elements().first();
+      switch (e->type()) {
+            case ElementType::ARTICULATION:
+            case ElementType::LYRICS: {                  
+                  Element* next = nextArticulationOrLyric(e);
+                  if (next)
+                        return next;
+                  else
+                        break;
+                  }
+            default: {                  
+                  if (!_articulations.empty())
+                        return _articulations[0];
+                  else if (!_lyrics.empty())
+                        return _lyrics[0];                
+                  else 
+                        break;
+                  }
+            }
+      int staffId = e->staffIdx();
+      return segment()->nextElement(staffId);
       }
 
 //---------------------------------------------------------
@@ -1240,6 +1318,61 @@ Element* ChordRest::nextElement()
 //---------------------------------------------------------
 
 Element* ChordRest::prevElement()
+      {
+      Element* e = score()->selection().element();
+            if (!e && !score()->selection().elements().isEmpty())
+                  e = score()->selection().elements().last();
+      switch (e->type()) {
+            case ElementType::ARTICULATION:
+            case ElementType::LYRICS: {
+                  Element* prev = prevArticulationOrLyric(e);
+                  if (prev)
+                        return prev;
+                  else {
+                        if (type() == ElementType::CHORD)
+                              return static_cast<Chord*>(this)->lastElementBeforeSegment();
+                        }
+                  // fall through
+                  }           
+            default: {
+                  break;                 
+                  }
+            }
+      int staffId = e->staffIdx();
+      return segment()->prevElement(staffId);
+      }
+
+//---------------------------------------------------------
+//   lastElementBeforeSegment
+//---------------------------------------------------------
+
+Element* ChordRest::lastElementBeforeSegment()
+      {
+      if (!_lyrics.empty()) {
+            return _lyrics.back();
+            }
+      else if (!_articulations.empty()) {
+            return _articulations.back();
+            }
+      else {
+            return nullptr;
+            }
+      }
+
+//---------------------------------------------------------
+//   nextSegmentElement
+//---------------------------------------------------------
+
+Element* ChordRest::nextSegmentElement()
+      {
+      return segment()->firstInNextSegments(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   prevSegmentElement
+//---------------------------------------------------------
+
+Element* ChordRest::prevSegmentElement()
       {
       return segment()->lastInPrevSegments(staffIdx());
       }

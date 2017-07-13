@@ -507,8 +507,13 @@ class Note : public Element {
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);
       NoteVal noteVal() const;
 
+      Element* nextInEl(Element* e);
+      Element* prevInEl(Element* e);
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
+      virtual Element* lastElementBeforeSegment();
+      virtual Element* nextSegmentElement() override;
+      virtual Element* prevSegmentElement() override;
 
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;

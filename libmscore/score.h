@@ -774,6 +774,8 @@ class Score : public QObject, ScoreElement {
       Segment* tick2leftSegment(int tick) const;
       Segment* tick2rightSegment(int tick) const;
       void fixTicks();
+      Element* nextElement();
+      Element* prevElement();
 
       void cmd(const QAction*, EditData&);
       int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision/2) / _fileDivision; }

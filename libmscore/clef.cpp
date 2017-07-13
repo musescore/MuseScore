@@ -466,19 +466,19 @@ QVariant Clef::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
-//   nextElement
+//   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Clef::nextElement()
+Element* Clef::nextSegmentElement()
       {
       return segment()->firstInNextSegments(staffIdx());
       }
 
 //---------------------------------------------------------
-//   prevElement
+//   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Clef::prevElement()
+Element* Clef::prevSegmentElement()
       {
       return segment()->lastInPrevSegments(staffIdx());
       }

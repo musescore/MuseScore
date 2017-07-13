@@ -515,5 +515,207 @@ ChordRest* Score::prevMeasure(ChordRest* element, bool mmRest)
       return 0;
       }
 
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* Score::nextElement()
+      {
+      Element* e = getSelectedElement();
+      if (!e)
+            return nullptr;
+      int staffId = e->staffIdx();
+      while (e) {
+            switch (e->type()) {
+                  case ElementType::NOTE:
+                  case ElementType::CHORD: {
+                        Element* next = e->nextElement();
+                        if (next)
+                              return next;
+                        else
+                              break;
+                       }
+                  case ElementType::SEGMENT: {
+                        Segment* s = static_cast<Segment*>(e);
+                        Element* next = s->nextElement(staffId);
+                        if (next)
+                              return next;
+                        else
+                              break;
+                        }
+                  case ElementType::MEASURE: {
+                        Measure* m = static_cast<Measure*>(e);                 
+                        Element* next = m->nextElementStaff(staffId);
+                        if (next)
+                              return next;
+                        else
+                              break;
+                        }
+                  case ElementType::CLEF:              
+                  case ElementType::KEYSIG:            
+                  case ElementType::TIMESIG:           
+                  case ElementType::BAR_LINE: {                                          
+                       for (; e && e->type() != ElementType::SEGMENT; e = e->parent()) {
+                             ;
+                             }
+                       Segment* s = static_cast<Segment*>(e);
+                       Element* next = s->nextElement(staffId);
+                       if (next)
+                             return next;
+                       else
+                             return score()->firstElement();
+                       }
+                  case ElementType::SLUR_SEGMENT:
+                  case ElementType::TEXTLINE_SEGMENT:
+                  case ElementType::HAIRPIN_SEGMENT:
+                  case ElementType::OTTAVA_SEGMENT:
+                  case ElementType::TRILL_SEGMENT:
+                  case ElementType::VOLTA_SEGMENT:
+                  case ElementType::PEDAL_SEGMENT: {
+                        SpannerSegment* s = static_cast<SpannerSegment*>(e);
+                        Spanner* sp = s->spanner();
+                        Spanner* nextSp = sp->nextSpanner(sp, staffId);
+                        if (nextSp)
+                              return nextSp->spannerSegments().front();
+
+                        Segment* seg = tick2segment(sp->tick());
+                        if (seg) {
+                              Segment* nextSegment = seg->next1();
+                              while (nextSegment) {
+                                    Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, staffId);
+                                    if (nextEl)
+                                          return nextEl;
+                                    nextSegment = nextSegment->next1();
+                                    }
+                              }
+                        break;
+                        }                  
+                  case ElementType::GLISSANDO_SEGMENT:
+                  case ElementType::TIE_SEGMENT: {
+                        SpannerSegment* s = static_cast<SpannerSegment*>(e);
+                        Spanner* sp = s->spanner();                   
+                        Element* elSt = sp->startElement();              
+                        Note* n = static_cast<Note*>(elSt);
+                        Element* next =  n->nextElement();
+                        if (next)
+                              return next;
+                        else
+                              break;
+                        }
+                  default:
+                        break;
+                  }
+            e = e->parent();
+            }
+      return score()->firstElement();
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* Score::prevElement()
+      {
+      Element* e = getSelectedElement();
+      if (!e)
+            return nullptr;
+      int staffId = e->staffIdx();
+      while (e) {
+            switch (e->type()) {
+                  case ElementType::NOTE:
+                  case ElementType::REST:
+                  case ElementType::CHORD: {
+                        Element* prev = e->prevElement();
+                        if (prev)
+                              return prev;
+                        else
+                              break;
+                        }
+                  case ElementType::SEGMENT: {
+                        Segment* s = static_cast<Segment*>(e);
+                        Element* prev = s->prevElement(staffId);
+                        if (prev)
+                              return prev;
+                        else
+                              break;
+                        }
+                  case ElementType::MEASURE: {
+                        Measure* m = static_cast<Measure*>(e);                       
+                        return m->prevElementStaff(staffId);
+                        }
+                  case ElementType::CLEF:
+                  case ElementType::KEYSIG:
+                  case ElementType::TIMESIG:
+                  case ElementType::BAR_LINE: {                    
+                        for (; e && e->type() != ElementType::SEGMENT; e = e->parent()) {
+                              ;
+                              }
+                        Segment* s = static_cast<Segment*>(e);
+                        return s->prevElement(staffId);
+                        }
+                  case ElementType::SLUR_SEGMENT:
+                  case ElementType::TEXTLINE_SEGMENT:
+                  case ElementType::HAIRPIN_SEGMENT:
+                  case ElementType::OTTAVA_SEGMENT:
+                  case ElementType::TRILL_SEGMENT:
+                  case ElementType::VOLTA_SEGMENT:
+                  case ElementType::PEDAL_SEGMENT: {
+                        SpannerSegment* s = static_cast<SpannerSegment*>(e);
+                        Spanner* sp = s->spanner();
+                        Element* stEl = sp->startElement();
+                        Spanner* prevSp = sp->prevSpanner(sp, staffId);
+                        if (prevSp)
+                              return prevSp->spannerSegments().front();
+                        else {
+                              Segment* startSeg = sp->startSegment();
+                              if (!startSeg->annotations().empty()) {
+                                    Element* last = startSeg->lastAnnotation(startSeg, staffId);
+                                    if (last)
+                                          return last;
+                                    }
+                              Element* el = startSeg->lastElementOfSegment(startSeg, staffId);
+                              if (stEl->type() == ElementType::CHORD || stEl->type() == ElementType::REST
+                                       || stEl->type() == ElementType::REPEAT_MEASURE || stEl->type() == ElementType::NOTE) {
+                                    ChordRest* cr = startSeg->cr(stEl->track());
+                                    if (cr) {
+                                          Element* elCr = cr->lastElementBeforeSegment();
+                                          if (elCr) {
+                                                return elCr;
+                                                }
+                                          }
+                                    }
+                              if (el->type() == ElementType::CHORD) {
+                                    return static_cast<Chord*>(el)->lastElementBeforeSegment();
+                                    }
+                              else if (el->type() == ElementType::NOTE) {
+                                    Chord* c = static_cast<Note*>(el)->chord();
+                                    return c->lastElementBeforeSegment();
+                                    }
+                              else {
+                                    return el;
+                                    }
+                             }             
+                        }
+                  case ElementType::GLISSANDO_SEGMENT:
+                  case ElementType::TIE_SEGMENT: {
+                        SpannerSegment* s = static_cast<SpannerSegment*>(e);
+                        Spanner* sp = s->spanner();
+                        Element* elSt = sp->startElement();
+                        Q_ASSERT(elSt->type() == ElementType::NOTE);
+                        Note* n = static_cast<Note*>(elSt);
+                        Element* prev =  n->prevElement();
+                        if(prev)
+                              return prev;
+                        else
+                              break;
+                        }
+                  default:
+                        break;
+                  }
+            e = e->parent();
+            }
+      return score()->lastElement();
+      }
+
 }
 

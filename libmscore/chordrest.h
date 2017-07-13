@@ -178,8 +178,13 @@ class ChordRest : public DurationElement {
       Segment* nextSegmentAfterCR(SegmentType types) const;
 
       virtual void setScore(Score* s) override;
+      Element* nextArticulationOrLyric(Element* e);
+      Element* prevArticulationOrLyric(Element* e);
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
+      Element* lastElementBeforeSegment();
+      virtual Element* nextSegmentElement() override;
+      virtual Element* prevSegmentElement() override;
       virtual QString accessibleExtraInfo() const override;
       virtual Shape shape() const override;
       virtual void layoutStem1() {};
