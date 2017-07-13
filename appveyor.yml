@@ -61,7 +61,7 @@ after_build:
   - cd C:\MuseScore\win32install\bin
   - C:\MuseScore\cv2pdb.exe MuseScore.exe
   - C:\MuseScore\dump_syms.exe MuseScore.pdb > MuseScore.sym
-  - curl  --data-binary @MuseScore.sym "https://musescore.sp.backtrace.io:6098/post?format=symbols&token=8ca1150d51c4988ef90d5cd10388091eb2885290766acb100e7ca422ee64744d"
+  - cmd: curl  --data-binary @MuseScore.sym "https://musescore.sp.backtrace.io:6098/post?format=symbols&token=8ca1150d51c4988ef90d5cd10388091eb2885290766acb100e7ca422ee64744d"
   - cmd: 7z a C:\MuseScore\MuseScoreTest%MSversion%.7z C:\MuseScore\win32install
   - cd C:\MuseScore
 artifacts:
