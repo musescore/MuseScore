@@ -216,7 +216,7 @@ void TRowLabels::updateLabels(std::vector<QString> labels, int height)
       meta_labels.push_back(li_p);
 
       setMaximumWidth(max_width);
-      setSceneRect(0, 0, max_width, parent->getHeight());
+      setSceneRect(0, 0, max_width, parent->getHeight() + parent->horizontalScrollBar()->height());
       }
 
 //---------------------------------------------------------
