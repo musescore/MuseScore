@@ -46,6 +46,7 @@
 #cmakedefine OSC
 #cmakedefine OPENGL
 #cmakedefine SOUNDFONT3
+#cmakedefine BREAKPAD
 
 #cmakedefine Q_WS_UIKIT
 
