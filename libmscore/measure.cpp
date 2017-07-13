@@ -2939,9 +2939,18 @@ qreal Measure::userStretch() const
 
 Element* Measure::nextElementStaff(int staff)
       {
-      Segment* firstSeg = segments().first();
-      if (firstSeg)
-            return firstSeg->firstElement(staff);
+      Element* e = score()->selection().element();
+      if (!e && !score()->selection().elements().isEmpty())
+            e = score()->selection().elements().first();
+      for (; e && e->type() != ElementType::SEGMENT; e = e->parent()) {
+            ;
+      }
+      Segment* seg = static_cast<Segment*>(e);
+      Segment* nextSegment = seg->next();
+      Element* next = seg->firstElementOfSegment(nextSegment, staff);
+      if (next)
+            return next;
+
       return score()->firstElement();
       }
 

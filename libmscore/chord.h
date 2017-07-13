@@ -221,6 +221,9 @@ class Chord : public ChordRest {
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
+      virtual Element* nextSegmentElement() override;
+      virtual Element* lastElementBeforeSegment();
+      virtual Element* prevSegmentElement() override;
       virtual QString accessibleExtraInfo() const override;
 
       virtual Shape shape() const override;

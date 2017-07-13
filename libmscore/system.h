@@ -147,8 +147,8 @@ class System : public Element {
       SystemDivider* systemDividerLeft() const  { return _systemDividerLeft; }
       SystemDivider* systemDividerRight() const { return _systemDividerRight; }
 
-      virtual Element* nextElement() override;
-      virtual Element* prevElement() override;
+      virtual Element* nextSegmentElement() override;
+      virtual Element* prevSegmentElement() override;
 
       qreal minDistance(System*) const;
       qreal topDistance(int staffIdx, const Shape&) const;

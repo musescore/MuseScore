@@ -199,21 +199,21 @@ void SpannerSegment::setColor(const QColor& col)
       }
 
 //---------------------------------------------------------
-//   nextElement
+//   nextSegmentElement
 //---------------------------------------------------------
 
-Element* SpannerSegment::nextElement()
+Element* SpannerSegment::nextSegmentElement()
       {
-      return spanner()->nextElement();
+      return spanner()->nextSegmentElement();
       }
 
 //---------------------------------------------------------
-//   prevElement
+//   prevSegmentElement
 //---------------------------------------------------------
 
-Element* SpannerSegment::prevElement()
+Element* SpannerSegment::prevSegmentElement()
       {
-      return spanner()->prevElement();
+      return spanner()->prevSegmentElement();
       }
 
 //---------------------------------------------------------
@@ -766,6 +766,7 @@ ChordRest* Spanner::endCR()
 
 Segment* Spanner::startSegment() const
       {
+      Q_ASSERT(score() != NULL);
       return score()->tick2rightSegment(tick());
       }
 
@@ -858,10 +859,72 @@ void Spanner::setEndElement(Element* e)
       }
 
 //---------------------------------------------------------
-//   nextElement
+//   nextSpanner
 //---------------------------------------------------------
 
-Element* Spanner::nextElement()
+Spanner* Spanner::nextSpanner(Element* e, int activeStaff)
+      {
+    std::multimap<int, Spanner*> mmap = score()->spanner();
+          auto range = mmap.equal_range(tick());
+          if (range.first != range.second) { // range not empty
+                for (auto i = range.first; i != range.second; ++i) {
+                      if (i->second == e) {
+                            while (i != range.second) {
+                                  ++i;
+                                  if (i == range.second)
+                                        return nullptr;
+                                  Spanner* s =  i->second;
+                                  Element* st = s->startElement();
+                                  if (!st)
+                                        continue;
+                                  if (s->startSegment() == static_cast<Spanner*>(e)->startSegment() &&
+                                      st->staffIdx() == activeStaff)
+                                        return s;
+                                  //else
+                                        //return nullptr;
+                                  }
+                            break;
+                           /* else {
+                                  break;
+                                  }*/
+                            }
+                      }
+                 }
+          return nullptr;
+      }
+
+//---------------------------------------------------------
+//   prevSpanner
+//---------------------------------------------------------
+
+Spanner* Spanner::prevSpanner(Element* e, int activeStaff)
+      {
+      std::multimap<int, Spanner*> mmap = score()->spanner();
+      auto range = mmap.equal_range(tick());
+      if (range.first != range.second) { // range not empty
+            for (auto i = range.first; i != range.second; ++i) {
+                  if (i->second == e) {
+                        if (i == range.first)
+                              return nullptr;
+                        while (i != range.first) {
+                              --i;
+                              Spanner* s =  i->second;
+                              if (s->startSegment() == static_cast<Spanner*>(e)->startSegment() &&
+                                  s->startElement()->staffIdx() == activeStaff)
+                                    return s;
+                              }
+                        break;
+                        }
+                  }
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   nextSegmentElement
+//---------------------------------------------------------
+
+Element* Spanner::nextSegmentElement()
       {
       Segment* s = startSegment();
       if (s)
@@ -870,10 +933,10 @@ Element* Spanner::nextElement()
       }
 
 //---------------------------------------------------------
-//   prevElement
+//   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Spanner::prevElement()
+Element* Spanner::prevSegmentElement()
       {
       Segment* s = endSegment();
       if (s)

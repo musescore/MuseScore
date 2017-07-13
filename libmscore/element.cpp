@@ -1521,16 +1521,83 @@ bool Element::concertPitch() const
       {
       return score()->styleB(StyleIdx::concertPitch);
       }
+//---------------------------------------------------------
+//   nextElement
+//   selects the next score element
+//---------------------------------------------------------
+
+Element* Element::nextElement()
+      {
+      Element* e = score()->selection().element();
+      if (!e && !score()->selection().elements().isEmpty())
+            e = score()->selection().elements().first();
+      if (e) {
+            switch (e->type()) {
+                  case ElementType::SEGMENT: {
+                        Segment* s = static_cast<Segment*>(e);
+                        return s->nextElement(staffIdx()); 
+                        }
+                  case ElementType::MEASURE: {
+                        Measure* m = static_cast<Measure*>(e);
+                        return m->nextElementStaff(staffIdx());
+                        }
+                  case ElementType::CLEF:              
+                  case ElementType::KEYSIG:            
+                  case ElementType::TIMESIG:           
+                  case ElementType::BAR_LINE: 
+                        return nextSegmentElement();
+                  default: {
+                        return e->parent()->nextElement();
+                        }
+                  }
+            }
+      return nullptr;
+      }
+
+
+//---------------------------------------------------------
+//   prevElement
+//   selects the previous score element
+//---------------------------------------------------------
+
+Element* Element::prevElement()
+      {
+      Element* e = score()->selection().element();
+      if (!e && !score()->selection().elements().isEmpty() )
+            e = score()->selection().elements().last();
+      if (e) {
+            switch(e->type()) {
+                  case ElementType::SEGMENT: {
+                        Segment* s = static_cast<Segment*>(e);
+                        return s->prevElement(staffIdx());
+                        }
+                  case ElementType::MEASURE: {
+                        Measure* m = static_cast<Measure*>(e);
+                        return m->prevElementStaff(staffIdx());
+                        }
+                  case ElementType::CLEF:
+                  case ElementType::KEYSIG:
+                  case ElementType::TIMESIG:
+                  case ElementType::BAR_LINE:
+                        return prevSegmentElement();
+                  default: {
+                        return e->parent()->prevElement();
+                        }
+                  }
+            }
+      return nullptr;
+      }
+
 
 //------------------------------------------------------------------------------------------
-//   nextElement
+//   nextSegmentElement
 //   This function is used in for the next-element command to navigate between main elements
 //   of segments. (Note, Rest, Clef, Time Signature, Key Signature, Barline, Ambitus, Breath, etc.)
 //   The default implementation is to look for the first such element. After it is found each
 //   element knows how to find the next one and overrides this method
 //------------------------------------------------------------------------------------------
 
-Element* Element::nextElement()
+Element* Element::nextSegmentElement()
       {
       Element* p = this;
       while (p) {
@@ -1557,7 +1624,7 @@ Element* Element::nextElement()
                         }
                   case ElementType::SYSTEM: {
                         System* sys = static_cast<System*>(p);
-                        return sys->nextElement();
+                        return sys->nextSegmentElement();
                         }
                   default:
                         break;
@@ -1568,14 +1635,14 @@ Element* Element::nextElement()
       }
 
 //------------------------------------------------------------------------------------------
-//   prevElement
+//   prevSegmentElement
 //   This function is used in for the prev-element command to navigate between main elements
 //   of segments. (Note, Rest, Clef, Time Signature, Key Signature, Barline, Ambitus, Breath, etc.)
 //   The default implementation is to look for the first such element. After it is found each
 //   element knows how to find the previous one and overrides this method
 //------------------------------------------------------------------------------------------
 
-Element* Element::prevElement()
+Element* Element::prevSegmentElement()
       {
       Element* p = this;
       while (p) {
@@ -1602,7 +1669,7 @@ Element* Element::prevElement()
                         }
                   case ElementType::SYSTEM: {
                         System* sys = static_cast<System*>(p);
-                        return sys->prevElement();
+                        return sys->prevSegmentElement();
                         }
                   default:
                         break;

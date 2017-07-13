@@ -90,8 +90,8 @@ class Jump : public Text {
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
 
-      Element* nextElement() override;
-      Element* prevElement() override;
+      Element* nextSegmentElement() override;
+      Element* prevSegmentElement() override;
       virtual QString accessibleInfo() const override;
       };
 
