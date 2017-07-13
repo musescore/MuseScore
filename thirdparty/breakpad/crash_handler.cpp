@@ -44,7 +44,9 @@ namespace Breakpad {
         }
 
         void InitCrashHandler(const QString& dumpPath);
+#if defined(Q_OS_WIN32)
         static google_breakpad::ExceptionHandler* pHandler;
+#endif
         static bool bReportCrashesToSystem;
 
     };
