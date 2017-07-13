@@ -75,18 +75,22 @@ namespace Breakpad {
     /************************************************************************/
     /* DumpCallback                                                         */
     /************************************************************************/
-
+#if defined(Q_OS_WIN32)
     bool DumpCallback(const wchar_t* _dump_dir,const wchar_t* _minidump_id,void* context,EXCEPTION_POINTERS* exinfo,MDRawAssertionInfo* assertion,bool success)
+#endif
     {
+        Q_UNUSED(context);
+#if defined(Q_OS_WIN32)
         Q_UNUSED(_dump_dir);
         Q_UNUSED(_minidump_id);
         Q_UNUSED(assertion);
         Q_UNUSED(exinfo);
+#endif
 
         qDebug("BreakpadQt crash");
 
         //PrintMyCrashReport();
-
+#if defined(Q_OS_WIN32)
         wstring minidump_path;
 
         minidump_path =  wstring(_dump_dir) + L"/" + wstring(_minidump_id) + L".dmp";
@@ -123,6 +127,7 @@ namespace Breakpad {
 
         int mytimeout, my_error;
 
+
         google_breakpad::HTTPUpload *test_upload;
         test_upload->SendRequest(url,
                                    parameters,
@@ -134,6 +139,7 @@ namespace Breakpad {
 
         std::string s( response.begin(), response.end() );
         qDebug("%s\n",s.c_str());
+#endif
 
 
         /*
@@ -147,6 +153,7 @@ namespace Breakpad {
     {
         if ( pHandler != NULL )
             return;
+ #if defined(Q_OS_WIN32)
         std::wstring pathAsStr = (const wchar_t*)dumpPath.utf16();
         pHandler = new google_breakpad::ExceptionHandler(
             pathAsStr,
@@ -156,6 +163,7 @@ namespace Breakpad {
             0,
             true
             );
+ #endif
 
 
 

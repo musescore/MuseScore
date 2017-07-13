@@ -28,9 +28,10 @@
 #include <QtCore/QCoreApplication>
 #include <QMutex>
 
-
+#if defined(Q_OS_WIN32)
 #include "client/windows/handler/exception_handler.h"
 #include "common/windows/http_upload.h"
+#endif
 
 
 using std::wstring;
