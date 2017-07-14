@@ -193,7 +193,7 @@ class Palette : public QWidget {
       qreal yOffset() const          { return _yOffset;        }
       int columns() const            { return width() / hgrid; }
       int rows() const;
-      int size() const               { return cells.size(); }
+      int size() const               { return filterActive ? dragCells.size() : cells.size(); }
       PaletteCell* cellAt(int index) const { return ccp()->value(index); }
       void setCellReadOnly(int c, bool v)  { cells[c]->readOnly = v;   }
       QString name() const           { return _name;        }
