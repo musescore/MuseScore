@@ -81,14 +81,14 @@ deploy:
 - provider: BinTray
   username: gsocnikos
   api_key:
-    secure: a1dcc4f6037cd95e19b066c404e8feeafa94b246
-  subject: musescoregsoc
+    secure: d326b82a47f4001489154fe5f314dadaae444e76
+  subject: gsocnikos
   repo: myrepo
-  package: MuseScoreBreakpads
+  package: musescoretest
   version: $(MSversion)
   publish: true
   override: true
-  explode: true
+#  explode: true
 
 build_script:
   - mingw32-make -f Makefile.mingw RelWithDebInfo && mingw32-make -f Makefile.mingw install
