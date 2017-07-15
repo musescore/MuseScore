@@ -28,6 +28,13 @@ cache:
 platform:
   - x86
 # build Configuration, i.e. Debug, Release, etc.
+
+environment:
+  SYM_TOKEN:
+    secure: xFp6AKlTVT0xWaC57bONdw+96d1x+ZVKh8ytpLR+/FW5tACmC2qZDmPP1Pzglvu8TPoxrf0tiv7F1vp5/SRewFaTnj6hIvakziSAHmjWp2g=
+  BINTRAY_API_KEY:
+    secure: XFr4i9vkGli031KQGEVTuipPdAqMYpAyUWlVIrH7OhhicVIvA8x6EwiKGi+Zf22S
+
 configuration: Release
 # scripts to run before build
 before_build:
@@ -60,8 +67,9 @@ after_build:
   - cd C:\MuseScore\win32install\bin
   - C:\MuseScore\cv2pdb.exe MuseScore.exe
   - C:\MuseScore\dump_syms.exe MuseScore.pdb > MuseScore.sym
-  - cmd: curl  --data-binary @MuseScore.sym "https://musescore.sp.backtrace.io:6098/post?format=symbols&token=8ca1150d51c4988ef90d5cd10388091eb2885290766acb100e7ca422ee64744d"
+  - cmd: curl  --data-binary @MuseScore.sym "https://musescore.sp.backtrace.io:6098/post?format=symbols&token="%SYM_TOKEN%
   - cmd: 7z a C:\MuseScore\MuseScoreTest%MSversion%.7z C:\MuseScore\win32install
+  - cmd: curl -T C:\MuseScore\MuseScoreTest%MSversion%.7z -ugsocnikos:%BINTRAY_API_KEY% https://api.bintray.com/content/musescoregsoc/myrepo/musescoretest/%MSversion%/MuseScoreTest%MSversion%.7z
   - cd C:\MuseScore
 artifacts:
   - path: MuseScoreTest$(MSversion).7z
@@ -77,19 +85,19 @@ artifacts:
 #  publish: true
 #  override: true
 # to run your custom scripts instead of automatic MSBuild
-deploy:
-- provider: BinTray
-  username: gsocnikos
-  api_key:
-    # api key from https://bintray.com/profile/edit
-    # encrypted in https://ci.appveyor.com/tools/encrypt
-    secure: XFr4i9vkGli031KQGEVTuipPdAqMYpAyUWlVIrH7OhhicVIvA8x6EwiKGi+Zf22S
-  subject: gsocnikos
-  repo: myrepo
-  package: musescoretest
-  version: $(MSversion)
-  publish: true
-  override: true
+#deploy:
+#- provider: BinTray
+#  username: gsocnikos
+#  api_key:
+#    # api key from https://bintray.com/profile/edit
+#    # encrypted in https://ci.appveyor.com/tools/encrypt
+#    secure: XFr4i9vkGli031KQGEVTuipPdAqMYpAyUWlVIrH7OhhicVIvA8x6EwiKGi+Zf22S
+#  subject: gsocnikos
+#  repo: myrepo
+#  package: musescoretest
+#  version: $(MSversion)
+#  publish: true
+#  override: true
 #  explode: true
 
 build_script:
