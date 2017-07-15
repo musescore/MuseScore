@@ -82,7 +82,7 @@ deploy:
   username: gsocnikos
   api_key:
     secure: a1dcc4f6037cd95e19b066c404e8feeafa94b246
-  subject: gsocnikos
+  subject: musescoregsoc
   repo: myrepo
   package: MuseScoreBreakpads
   version: $(MSversion)
