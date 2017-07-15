@@ -35,6 +35,7 @@ before_build:
     start " " /wait "C:\MinGW\msys\1.0\bin\wget" --no-check-certificate "http://utils.musescore.org.s3.amazonaws.com/musescore_dependencies_win32.7z" -O dependencies.7z &&
     start " " /wait "7z" x -y dependencies.7z > nul &&
     cd dependencies &&
+    xcopy i686-w64-mingw32 "C:\Qt\Tools\mingw530_32\i686-w64-mingw32" /E &&
     xcopy lib "C:\Qt\Tools\mingw530_32\lib" /E &&
     xcopy Jack "C:\Program Files (x86)\Jack" /E /I &&
     xcopy ccache "C:\ccache" /E /I
