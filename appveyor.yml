@@ -77,6 +77,18 @@ artifacts:
 #  publish: true
 #  override: true
 # to run your custom scripts instead of automatic MSBuild
+deploy:
+- provider: BinTray
+  username: gsocnikos
+  api_key:
+    secure: a1dcc4f6037cd95e19b066c404e8feeafa94b246
+  subject: gsocnikos
+  repo: myrepo
+  package: MuseScoreBreakpads
+  version: $(MSversion)
+  publish: true
+  override: true
+  explode: true
 
 build_script:
   - mingw32-make -f Makefile.mingw RelWithDebInfo && mingw32-make -f Makefile.mingw install
