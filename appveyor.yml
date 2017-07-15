@@ -81,7 +81,9 @@ deploy:
 - provider: BinTray
   username: gsocnikos
   api_key:
-    secure: d326b82a47f4001489154fe5f314dadaae444e76
+    # api key from https://bintray.com/profile/edit
+    # encrypted in https://ci.appveyor.com/tools/encrypt
+    secure: XFr4i9vkGli031KQGEVTuipPdAqMYpAyUWlVIrH7OhhicVIvA8x6EwiKGi+Zf22S
   subject: gsocnikos
   repo: myrepo
   package: musescoretest
