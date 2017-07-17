@@ -3148,9 +3148,40 @@ void Score::cmdPadNoteDecreaseTAB()
 
 void Score::cmdToggleLayoutBreak(LayoutBreak::Type type)
       {
-      Element* el = selection().element();
-      if (el && el->isBarLine() && el->parent()->isSegment()) {
-            Measure* measure = toMeasure(el->parent()->parent());
+      // find measure(s)
+      QList<Measure*> ml;
+      if (selection().isRange()) {
+            Measure* startMeasure = nullptr;
+            Measure* endMeasure = nullptr;
+            if (!selection().measureRange(&startMeasure, &endMeasure))
+                  return;
+            if (!startMeasure || !endMeasure)
+                  return;
+#if 1
+            // toggle break on the last measure of the range
+            ml.append(endMeasure);
+            // if more than one measure selected,
+            // also toggle break *before* the range (to try to fit selection on a single line)
+            if (startMeasure != endMeasure && startMeasure->prevMeasure())
+                  ml.append(startMeasure->prevMeasure());
+#else
+            // toggle breaks throughout the selection
+            for (Measure* m = startMeasure; m; m = m->nextMeasure()) {
+                  ml.append(m);
+                  if (m == endMeasure)
+                        break;
+                  }
+#endif
+            }
+      else {
+            for (Element* el : selection().elements()) {
+                  Measure* measure = toMeasure(el->findMeasure());
+                  if (measure)
+                        ml.append(measure);
+                  }
+            }
+      // toggle the breaks
+      for (Measure* measure : ml) {
             // if measure is mm rest, then propagate to last original measure
             measure = measure->isMMRest() ? measure->mmRestLast() : measure;
             if (measure)
