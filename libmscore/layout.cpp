@@ -1426,18 +1426,25 @@ static void checkDivider(bool left, System* s, qreal sdd)
 //   layoutPage
 //    restHeight - vertical space which has to be distributed
 //                 between systems
+//    The algorithm tries to produce most equally spaced
+//    systems.
 //---------------------------------------------------------
 
 static void layoutPage(Page* page, qreal restHeight)
       {
-      Score* score = page->score();
-      int gaps = 0;
-      int nsystems = page->systems().size();
-      for (int i = 0; i < nsystems - 1; ++i) {
+      Score* score  = page->score();
+      int gaps      = 0;
+      int nsystems  = page->systems().size() - 1;
+
+      QList<System*> sList;
+
+      for (int i = 0; i < nsystems; ++i) {
             System* s1 = page->systems().at(i);
             System* s2 = page->systems().at(i+1);
+            s1->setDistance(s2->y() - s1->y());
             if (s1->vbox() || s2->vbox() || s1->hasFixedDownDistance())
                   continue;
+            sList.push_back(s1);
             ++gaps;
             }
 
@@ -1463,31 +1470,32 @@ static void layoutPage(Page* page, qreal restHeight)
             return;
             }
 
-      const qreal maxDistance = score->styleP(StyleIdx::maxSystemDistance);
-      qreal stretch = restHeight / gaps;
+      std::sort(sList.begin(), sList.end(), [](System* a, System* b) { return a->distance() < b->distance(); });
 
-      qreal yoff = 0;
-      for (int i = 0; i < nsystems - 1; ++i) {
-            System* s1 = page->systems().at(i);
-            System* s2 = page->systems().at(i+1);
-            if (!(s1->vbox() || s2->vbox() || s1->hasFixedDownDistance())) {
-                  qreal dist   = (s2->y() + yoff) - (s1->y() + s1->height());
-                  qreal offset = stretch;
-                  if (dist + stretch > maxDistance) {       // limit stretch
-                        offset = maxDistance - dist;
-                        if (offset < 0)
-                              offset = 0;
+      qreal dist = sList[0]->distance();
+      for (int i = 1; i < sList.size() && restHeight > 0.0; ++i) {
+            qreal ndist = sList[i]->distance();
+            qreal fill = ndist - dist;
+            dist       = ndist;
+            if (fill > 0.0) {
+                  qreal totalFill = fill * i;
+                  if (totalFill > restHeight) {
+                        totalFill = restHeight;
+                        fill = restHeight / i;
                         }
-
-                  yoff += offset;
-
-                  // add / remove system dividers
-
-                  qreal sdd = (s2->y() + yoff - s1->y() - s1->height()) * .5 + s1->height();
-                  checkDivider(true,  s1, sdd);
-                  checkDivider(false, s1, sdd);
+                  for (int k = 0; k < i; ++k) {
+                        System* s = sList[k];
+                        s->setDistance(s->distance() + fill);
+                        }
+                  restHeight -= totalFill;
                   }
-            s2->rypos() += yoff;
+            }
+
+      qreal y = page->systems().at(0)->y();
+      for (int i = 0; i < nsystems + 1; ++i) {
+            System* s = page->systems().at(i);
+            s->rypos() = y;
+            y += s->distance();
             }
       }
 
