@@ -3563,6 +3563,16 @@ Shortcut Shortcut::_sc[] = {
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "relayout",
+         "re-layout",
+         "re-layout",
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
          }
 #endif
       };

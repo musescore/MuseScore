@@ -701,6 +701,8 @@ class Score : public QObject, ScoreElement {
       virtual inline void setInstrumentsChanged(bool);
       void addRefresh(const QRectF&);
 
+      void cmdRelayout();
+
       bool playNote() const                 { return _updateState._playNote; }
       void setPlayNote(bool v)              { _updateState._playNote = v;    }
       bool playChord() const                { return _updateState._playChord; }
