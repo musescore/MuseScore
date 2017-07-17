@@ -3389,6 +3389,15 @@ void Score::cmdAddFret(int fret)
       }
 
 //---------------------------------------------------------
+//   cmdRelayout
+//---------------------------------------------------------
+
+void Score::cmdRelayout()
+      {
+      setLayoutAll();
+      }
+
+//---------------------------------------------------------
 //   cmd
 //---------------------------------------------------------
 
@@ -3542,6 +3551,7 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "system-break",               [this]{ cmdToggleLayoutBreak(LayoutBreak::Type::LINE);              }},
             { "page-break",                 [this]{ cmdToggleLayoutBreak(LayoutBreak::Type::PAGE);              }},
             { "section-break",              [this]{ cmdToggleLayoutBreak(LayoutBreak::Type::SECTION);           }},
+            { "relayout",                   [this]{ cmdRelayout();                                              }},
             { "",                           [this]{                                                             }},
             };
 
