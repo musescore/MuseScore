@@ -34,15 +34,28 @@ class StartupWizardPage1 : public QWizardPage {
         void init();
       };
 
+class StartupWizardPage2 : public QWizardPage {
+      Q_OBJECT
+
+      QComboBox* _languages;
+
+      public:
+        StartupWizardPage2(QWidget* parent = 0);
+        QString language()    {return _languages->currentText();}
+        void init();
+      };
+
 class StartupWizard : public QWizard {
       Q_OBJECT
 
       StartupWizardPage1* p1;
+      StartupWizardPage2* p2;
 
       public:
           StartupWizard(QWidget* parent = 0);
           static void autoSelectShortcuts(QString keyboardLayout);
           QString keyboardLayout()      {return p1->keyboardLayout();}
+          QString language()     {return p2->language();}
       };
 }
 #endif

@@ -1330,19 +1330,6 @@ MuseScore::MuseScore()
             cornerLabel->setPixmap(QPixmap(":/data/mscore.png"));
             cornerLabel->setGeometry(width() - 48, 0, 48, 48);
             }
-
-      if (!MScore::noGui) {
-            QSettings s;
-            if (!s.contains("firstStart")) {
-                  StartupWizard* sw = new StartupWizard;
-                  sw->exec();
-                  s.setValue("firstStart", false);
-                  s.setValue("keyboardLayout", sw->keyboardLayout());
-                  delete sw;
-                  }
-            QString keyboardLayout = s.value("keyboardLayout").toString();
-            StartupWizard::autoSelectShortcuts(keyboardLayout);
-            }
       }
 
 MuseScore::~MuseScore()
@@ -6181,6 +6168,22 @@ int main(int argc, char* av[])
 
       //read languages list
       mscore->readLanguages(mscoreGlobalShare + "locale/languages.xml");
+
+      if (!MScore::noGui) {
+            QSettings s;
+            if (!s.contains("firstStart")) {
+                  StartupWizard* sw = new StartupWizard;
+                  sw->exec();
+                  s.setValue("firstStart", false);
+                  s.setValue("keyboardLayout", sw->keyboardLayout());
+                  s.setValue("language", sw->language());
+                  delete sw;
+            }
+            QString keyboardLayout = s.value("keyboardLayout").toString();
+            StartupWizard::autoSelectShortcuts(keyboardLayout);
+            setMscoreLocale(s.value("language").toString());
+            mscore->update();
+            }
 
       QApplication::instance()->installEventFilter(mscore);
 

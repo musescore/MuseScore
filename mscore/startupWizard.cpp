@@ -84,6 +84,24 @@ StartupWizardPage1::StartupWizardPage1(QWidget* parent)
       setLayout(layout);
       }
 
+StartupWizardPage2::StartupWizardPage2(QWidget* parent)
+    : QWizardPage(parent)
+      {
+      setTitle(QObject::tr("Language"));
+      QLabel *label = new QLabel(QObject::tr("Choose your language"), this);
+      QStringList languageList;
+      for (auto language : Ms::mscore->languages()) {
+            languageList.append(qApp->translate("language", language.name.toStdString().c_str()));
+            };
+      languageList.removeFirst();
+      _languages = new QComboBox(this);
+      _languages->addItems(languageList);
+      QVBoxLayout *layout = new QVBoxLayout(this);
+      layout->addWidget(label);
+      layout->addWidget(_languages);
+      setLayout(layout);
+      }
+
 StartupWizard::StartupWizard(QWidget* parent)
     : QWizard(parent)
       {
@@ -92,8 +110,10 @@ StartupWizard::StartupWizard(QWidget* parent)
       setWindowTitle(tr("Startup Wizard"));
 
       p1 = new StartupWizardPage1(this);
+      p2 = new StartupWizardPage2(this);
 
       addPage(p1);
+      addPage(p2);
       }
 
 void StartupWizard::autoSelectShortcuts(QString keyboardLayout)
