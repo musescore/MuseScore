@@ -66,16 +66,14 @@ class SysStaff {
       };
 
 //---------------------------------------------------------
-//   @@ System
+//   System
 ///    One row of measures for all instruments;
 ///    a complete piece of the timeline.
 //---------------------------------------------------------
 
 class System : public Element {
-      Q_GADGET
-
-      SystemDivider*  _systemDividerLeft    { 0 };
-      SystemDivider*  _systemDividerRight   { 0 };
+      SystemDivider* _systemDividerLeft    { 0 };
+      SystemDivider* _systemDividerRight   { 0 };
 
       std::vector<MeasureBase*> ml;
       QList<SysStaff*> _staves;
@@ -84,6 +82,7 @@ class System : public Element {
 
       qreal _leftMargin              { 0.0    };     ///< left margin for instrument name, brackets etc.
       mutable bool fixedDownDistance { false  };
+      qreal _distance;                                 // temp. variable used during layout
 
    public:
       System(Score*);
@@ -160,6 +159,8 @@ class System : public Element {
       bool hasFixedDownDistance() const { return fixedDownDistance; }
       int firstVisibleStaff() const;
       int nextVisibleStaff(int) const;
+      qreal distance() const { return _distance; }
+      void setDistance(qreal d) { _distance = d; }
       };
 
 typedef QList<System*>::iterator iSystem;
