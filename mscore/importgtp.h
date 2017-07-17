@@ -353,6 +353,7 @@ class GuitarPro6 : public GuitarPro {
             };
       // a mapping from identifiers to fret diagrams
       QMap<int, FretDiagram*> fretDiagrams;
+      QMap<int, QString> chordnames;
       void parseFile(char* filename, QByteArray* data);
       int readBit();
       QByteArray getBytes(QByteArray* buffer, int offset, int length);
@@ -363,7 +364,7 @@ class GuitarPro6 : public GuitarPro {
       int readBitsReversed(int bitsToRead);
       void readGpif(QByteArray* data);
       void readScore(QDomNode* metadata);
-      void readChord(QDomNode* diagram, int track);
+      void readFretboardDiagram(QDomNode* diagram, int track);
       int findNumMeasures(GPPartInfo* partInfo);
       void readMasterTracks(QDomNode* masterTrack);
       void readDrumNote(Note* note, int element, int variation);

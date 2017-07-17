@@ -70,7 +70,9 @@ const static std::map<QString, QString> instrumentMapping = {
             {"f-bass5", "bass-guitar"},
             {"snt-bass-ss", "metallic-synth"},
             {"mrcs", "maracas"},
-            {"drmkt", "drumset"}
+            {"drmkt", "drumset"},
+            {"a-piano-gs", "piano"},
+            {"a-piano-ss", "piano"}
             };
 
 //---------------------------------------------------------
@@ -316,7 +318,7 @@ void GuitarPro6::readMasterTracks(QDomNode* masterTrack)
 //   readChord
 //---------------------------------------------------------
 
-void GuitarPro6::readChord(QDomNode* diagram, int track)
+void GuitarPro6::readFretboardDiagram(QDomNode* diagram, int track)
       {
       // initialise a new fret diagram for our current track
       FretDiagram* fretDiagram = new FretDiagram(score);
@@ -456,7 +458,17 @@ void GuitarPro6::readTracks(QDomNode* track)
                                     QDomNode items = currentProperty.firstChild();
                                     QDomNode currentItem = items.firstChild();
                                     while (!currentItem.isNull()) {
-                                          readChord(&currentItem, trackCounter);
+                                          readFretboardDiagram(&currentItem, trackCounter);
+                                          currentItem = currentItem.nextSibling();
+                                          }
+                                    }
+                              else if (!propertyName.compare("ChordCollection")) {
+                                    QDomNode items = currentProperty.firstChild();
+                                    QDomNode currentItem = items.firstChild();
+                                    while (!currentItem.isNull()) {
+                                          int id = currentItem.attributes().namedItem("id").toAttr().value().toInt();
+                                          QString name = currentItem.attributes().namedItem("name").toAttr().value();
+                                          chordnames.insert(id, name);
                                           currentItem = currentItem.nextSibling();
                                           }
                                     }
@@ -1240,7 +1252,18 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               }
                         else if (!currentNode.nodeName().compare("Chord")) {
                               int key = currentNode.toElement().text().toInt();
-                              segment->add(fretDiagrams[key]);
+                              // TODO, verify the fretdiagram are indeed handled the same than chordnames
+                              if (fretDiagrams.contains(key))
+                                    segment->add(fretDiagrams[key]);
+                              else if (chordnames.contains(key)){
+                                    Harmony* h = new Harmony(score);
+                                    h->setHarmony(chordnames[key]);
+                                    h->setTrack(track);
+                                    segment->add(h);
+                                    }
+                              else  {
+                                    qDebug() << "Unknown chord id";
+                                    }
                               }
                         else if (currentNode.nodeName() == "Rhythm") {
                               // we have found a rhythm
