@@ -326,6 +326,7 @@ void GuitarPro6::readFretboardDiagram(QDomNode* diagram, int track)
 
       // get the identifier to set as the domain in the map
       int id = diagram->attributes().namedItem("id").toAttr().value().toInt();
+      QString name = diagram->attributes().namedItem("name").toAttr().value();
       QDomNode diagramNode = diagram->firstChild();
 
       // set the number of strings on this part
@@ -374,6 +375,7 @@ void GuitarPro6::readFretboardDiagram(QDomNode* diagram, int track)
 
       // insert the fret diagram into the map of diagrams
       fretDiagrams.insert(id, fretDiagram);
+      chordnames.insert(id, name);
       }
 
 //---------------------------------------------------------
@@ -1252,17 +1254,13 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               }
                         else if (!currentNode.nodeName().compare("Chord")) {
                               int key = currentNode.toElement().text().toInt();
-                              // TODO, verify the fretdiagram are indeed handled the same than chordnames
                               if (fretDiagrams.contains(key))
-                                    segment->add(fretDiagrams[key]);
-                              else if (chordnames.contains(key)){
+                                    segment->add(fretDiagrams[key]->clone());
+                              if (chordnames.contains(key)){
                                     Harmony* h = new Harmony(score);
                                     h->setHarmony(chordnames[key]);
                                     h->setTrack(track);
                                     segment->add(h);
-                                    }
-                              else  {
-                                    qDebug() << "Unknown chord id";
                                     }
                               }
                         else if (currentNode.nodeName() == "Rhythm") {
@@ -1862,6 +1860,8 @@ void GuitarPro6::read(QFile* fp)
 
       // decompress and read files contained within GPX file
       readGPX(this->buffer);
+      qDeleteAll(fretDiagrams);
+      fretDiagrams.clear();
       delete this->buffer;
       }
 
