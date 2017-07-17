@@ -142,6 +142,7 @@ private slots:
       void gpxOttava3()      { gpReadTest("ottava3", "gpx"); }
       void gpxOttava4()      { gpReadTest("ottava4", "gpx"); }
       void gpxOttava5()      { gpReadTest("ottava5", "gpx"); }
+      void gpxChornamesKeyboard() { gpReadTest("chordnames_keyboard", "gpx"); }
       };
 
 //---------------------------------------------------------
