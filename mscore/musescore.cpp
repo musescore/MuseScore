@@ -1234,6 +1234,8 @@ MuseScore::MuseScore()
       a->setCheckable(true);
       a->setChecked(true);
       menuDebug->addAction(a);
+      a = getAction("relayout");
+      menuDebug->addAction(a);
 #endif
 
       //---------------------
