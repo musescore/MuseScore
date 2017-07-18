@@ -6177,10 +6177,22 @@ int main(int argc, char* av[])
                   s.setValue("firstStart", false);
                   s.setValue("keyboardLayout", sw->keyboardLayout());
                   s.setValue("language", sw->language());
+                  QString workspace = sw->workspace();
+                  QList<Workspace*> workspaceList = Workspace::workspaces();
+                  for (auto ws : workspaceList) {
+                        if (workspace.compare(ws->name()) == 0) {
+                              s.setValue("workspace", ws->name());
+                              Ms::mscore->changeWorkspace(ws);
+                              preferences.workspace = ws->name();
+                              PaletteBox* paletteBox = mscore->getPaletteBox();
+                              paletteBox->updateWorkspaces();
+                              }
+                        }
                   delete sw;
             }
             QString keyboardLayout = s.value("keyboardLayout").toString();
             StartupWizard::autoSelectShortcuts(keyboardLayout);
+            localeName = s.value("language").toString();
             setMscoreLocale(s.value("language").toString());
             mscore->update();
             }
@@ -6271,7 +6283,6 @@ int main(int argc, char* av[])
             mscore->showSynthControl(true);
       if (settings.value("mixerVisible", false).toBool())
             mscore->showMixer(true);
-
       return qApp->exec();
       }
 

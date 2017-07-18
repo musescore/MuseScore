@@ -29,9 +29,9 @@ class StartupWizardPage1 : public QWizardPage {
       QComboBox* _keyLayouts;
 
       public:
-        StartupWizardPage1(QWidget* parent = 0);
-        QString keyboardLayout()    {return _keyLayouts->currentText();}
-        void init();
+            StartupWizardPage1(QWidget* parent = 0);
+            QString keyboardLayout()    {return _keyLayouts->currentText();}
+            void init();
       };
 
 class StartupWizardPage2 : public QWizardPage {
@@ -40,9 +40,20 @@ class StartupWizardPage2 : public QWizardPage {
       QComboBox* _languages;
 
       public:
-        StartupWizardPage2(QWidget* parent = 0);
-        QString language()    {return _languages->currentText();}
-        void init();
+            StartupWizardPage2(QWidget* parent = 0);
+            QString language();
+            void init();
+      };
+
+class StartupWizardPage3 : public QWizardPage {
+      Q_OBJECT
+
+      QComboBox* _workspaces;
+
+      public:
+            StartupWizardPage3(QWidget* parent = 0);
+            QString workspace()   {return _workspaces->currentText();}
+            void init();
       };
 
 class StartupWizard : public QWizard {
@@ -50,12 +61,14 @@ class StartupWizard : public QWizard {
 
       StartupWizardPage1* p1;
       StartupWizardPage2* p2;
+      StartupWizardPage3* p3;
 
       public:
-          StartupWizard(QWidget* parent = 0);
-          static void autoSelectShortcuts(QString keyboardLayout);
-          QString keyboardLayout()      {return p1->keyboardLayout();}
-          QString language()     {return p2->language();}
+            StartupWizard(QWidget* parent = 0);
+            static void autoSelectShortcuts(QString keyboardLayout);
+            QString keyboardLayout()      {return p1->keyboardLayout();}
+            QString language()     {return p2->language();}
+            QString workspace()    {return p3->workspace();}
       };
 }
 #endif
