@@ -74,6 +74,7 @@ TDockWidget::TDockWidget(QWidget* w)
       setMinimumHeight(50);
 
       setWindowTitle(tr("Timeline"));
+      setObjectName("Timeline");
       }
 
 //---------------------------------------------------------
