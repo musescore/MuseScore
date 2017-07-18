@@ -29,15 +29,18 @@
         </Staff>
       <trackName>S-Gt</trackName>
       <Instrument>
-        <longName>Acoustic Guitar</longName>
+        <longName>Guitar</longName>
         <shortName>Guit.</shortName>
-        <trackName>Acoustic Guitar</trackName>
+        <trackName>Acoustic Guitar (Treble Clef)</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>83</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>83</maxPitchA>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
         <instrumentId>pluck.guitar.acoustic</instrumentId>
-        <clef>G8vb</clef>
+        <concertClef>G8vb</concertClef>
+        <transposingClef>G</transposingClef>
         <StringData>
           <frets>21</frets>
           <string>40</string>
@@ -87,8 +90,8 @@
         </VBox>
       <Measure number="1">
         <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
           <lid>1</lid>
           </Clef>
         <KeySig>
@@ -122,8 +125,8 @@
             <lid>7</lid>
             <pitch>62</pitch>
             <tpc>16</tpc>
-            <fret>3</fret>
-            <string>1</string>
+            <fret>10</fret>
+            <string>0</string>
             </Note>
           </Chord>
         <Chord>
@@ -133,8 +136,8 @@
             <lid>9</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
-            <fret>0</fret>
-            <string>1</string>
+            <fret>7</fret>
+            <string>0</string>
             </Note>
           </Chord>
         <Dynamic>
@@ -150,8 +153,8 @@
             <lid>12</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
-            <fret>1</fret>
-            <string>1</string>
+            <fret>8</fret>
+            <string>0</string>
             </Note>
           </Chord>
         <Chord>
@@ -161,8 +164,8 @@
             <lid>14</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
-            <fret>0</fret>
-            <string>2</string>
+            <fret>3</fret>
+            <string>0</string>
             </Note>
           </Chord>
         </Measure>
@@ -213,15 +216,18 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName>Acoustic Guitar</longName>
+          <longName>Guitar</longName>
           <shortName>Guit.</shortName>
-          <trackName>Acoustic Guitar</trackName>
+          <trackName>Acoustic Guitar (Treble Clef)</trackName>
           <minPitchP>40</minPitchP>
           <maxPitchP>83</maxPitchP>
           <minPitchA>40</minPitchA>
           <maxPitchA>83</maxPitchA>
+          <transposeDiatonic>-7</transposeDiatonic>
+          <transposeChromatic>-12</transposeChromatic>
           <instrumentId>pluck.guitar.acoustic</instrumentId>
-          <clef>G8vb</clef>
+          <concertClef>G8vb</concertClef>
+          <transposingClef>G</transposingClef>
           <StringData>
             <frets>21</frets>
             <string>40</string>
@@ -270,13 +276,13 @@
           <lid>0</lid>
           <Text>
             <style>Instrument Name (Part)</style>
-            <text>Acoustic Guitar</text>
+            <text>Guitar</text>
             </Text>
           </VBox>
         <Measure number="1">
           <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
             <lid>1</lid>
             </Clef>
           <KeySig>
@@ -310,8 +316,8 @@
               <lid>7</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
-              <fret>3</fret>
-              <string>1</string>
+              <fret>10</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -321,8 +327,8 @@
               <lid>9</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
-              <fret>0</fret>
-              <string>1</string>
+              <fret>7</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <Dynamic>
@@ -338,8 +344,8 @@
               <lid>12</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>1</fret>
-              <string>1</string>
+              <fret>8</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -349,8 +355,8 @@
               <lid>14</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
-              <fret>0</fret>
-              <string>2</string>
+              <fret>3</fret>
+              <string>0</string>
               </Note>
             </Chord>
           </Measure>
@@ -373,8 +379,8 @@
               <lid>7</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
-              <fret>3</fret>
-              <string>1</string>
+              <fret>10</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -384,8 +390,8 @@
               <lid>9</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
-              <fret>0</fret>
-              <string>1</string>
+              <fret>7</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -396,8 +402,8 @@
               <lid>12</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>1</fret>
-              <string>1</string>
+              <fret>8</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -407,8 +413,8 @@
               <lid>14</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
-              <fret>0</fret>
-              <string>2</string>
+              <fret>3</fret>
+              <string>0</string>
               </Note>
             </Chord>
           </Measure>
