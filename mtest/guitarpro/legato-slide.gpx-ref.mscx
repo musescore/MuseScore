@@ -53,15 +53,18 @@
         </Staff>
       <trackName>S-Gt</trackName>
       <Instrument>
-        <longName>Acoustic Guitar</longName>
+        <longName>Guitar</longName>
         <shortName>Guit.</shortName>
-        <trackName>Acoustic Guitar</trackName>
+        <trackName>Acoustic Guitar (Treble Clef)</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>83</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>83</maxPitchA>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
         <instrumentId>pluck.guitar.acoustic</instrumentId>
-        <clef>G8vb</clef>
+        <concertClef>G8vb</concertClef>
+        <transposingClef>G</transposingClef>
         <StringData>
           <frets>21</frets>
           <string>40</string>
@@ -111,8 +114,8 @@
         </VBox>
       <Measure number="1">
         <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
           <lid>1</lid>
           </Clef>
         <KeySig>
@@ -151,8 +154,8 @@
             <lid>8</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
-            <fret>7</fret>
-            <string>3</string>
+            <fret>5</fret>
+            <string>0</string>
             <Glissando id="3">
               <subtype>0</subtype>
               <lid>12</lid>
@@ -175,8 +178,8 @@
             <lid>11</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
-            <fret>9</fret>
-            <string>3</string>
+            <fret>7</fret>
+            <string>0</string>
             <endSpanner id="3"/>
             </Note>
           </Chord>
@@ -281,15 +284,18 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName>Acoustic Guitar</longName>
+          <longName>Guitar</longName>
           <shortName>Guit.</shortName>
-          <trackName>Acoustic Guitar</trackName>
+          <trackName>Acoustic Guitar (Treble Clef)</trackName>
           <minPitchP>40</minPitchP>
           <maxPitchP>83</maxPitchP>
           <minPitchA>40</minPitchA>
           <maxPitchA>83</maxPitchA>
+          <transposeDiatonic>-7</transposeDiatonic>
+          <transposeChromatic>-12</transposeChromatic>
           <instrumentId>pluck.guitar.acoustic</instrumentId>
-          <clef>G8vb</clef>
+          <concertClef>G8vb</concertClef>
+          <transposingClef>G</transposingClef>
           <StringData>
             <frets>21</frets>
             <string>40</string>
@@ -338,13 +344,13 @@
           <lid>0</lid>
           <Text>
             <style>Instrument Name (Part)</style>
-            <text>Acoustic Guitar</text>
+            <text>Guitar</text>
             </Text>
           </VBox>
         <Measure number="1">
           <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
             <lid>1</lid>
             </Clef>
           <KeySig>
@@ -383,8 +389,8 @@
               <lid>8</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
-              <fret>7</fret>
-              <string>3</string>
+              <fret>5</fret>
+              <string>0</string>
               <Glissando id="5">
                 <subtype>0</subtype>
                 <lid>12</lid>
@@ -407,8 +413,8 @@
               <lid>11</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
-              <fret>9</fret>
-              <string>3</string>
+              <fret>7</fret>
+              <string>0</string>
               <endSpanner id="5"/>
               </Note>
             </Chord>
@@ -465,8 +471,8 @@
               <lid>8</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
-              <fret>7</fret>
-              <string>3</string>
+              <fret>5</fret>
+              <string>0</string>
               <Glissando id="7">
                 <subtype>0</subtype>
                 <lid>12</lid>
@@ -484,8 +490,8 @@
               <lid>11</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
-              <fret>9</fret>
-              <string>3</string>
+              <fret>7</fret>
+              <string>0</string>
               <endSpanner id="7"/>
               </Note>
             </Chord>

@@ -55,11 +55,13 @@
       <Instrument>
         <longName>Electric Guitar</longName>
         <shortName>El. Guit.</shortName>
-        <trackName>Electric Guitar</trackName>
+        <trackName>Electric Guitar (Treble Clef)</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>86</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>86</maxPitchA>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
         <instrumentId>pluck.guitar.electric</instrumentId>
         <clef>G8vb</clef>
         <StringData>
@@ -111,8 +113,8 @@
         </VBox>
       <Measure number="1">
         <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
           <lid>1</lid>
           </Clef>
         <KeySig>
@@ -142,8 +144,8 @@
             <lid>9</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>5</fret>
-            <string>4</string>
+            <fret>3</fret>
+            <string>1</string>
             </Note>
           <Note>
             <lid>7</lid>
@@ -159,8 +161,8 @@
             <pitch>62</pitch>
             <tpc>16</tpc>
             <head>2</head>
-            <fret>3</fret>
-            <string>1</string>
+            <fret>10</fret>
+            <string>0</string>
             </Note>
           </Chord>
         <Chord>
@@ -170,8 +172,8 @@
             <lid>13</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>5</fret>
-            <string>4</string>
+            <fret>3</fret>
+            <string>1</string>
             </Note>
           <Note>
             <lid>11</lid>
@@ -187,7 +189,7 @@
             <pitch>69</pitch>
             <tpc>17</tpc>
             <head>2</head>
-            <fret>5</fret>
+            <fret>17</fret>
             <string>0</string>
             </Note>
           </Chord>
@@ -198,8 +200,8 @@
             <lid>17</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>5</fret>
-            <string>4</string>
+            <fret>3</fret>
+            <string>1</string>
             </Note>
           <Note>
             <lid>15</lid>
@@ -215,7 +217,7 @@
             <pitch>74</pitch>
             <tpc>16</tpc>
             <head>2</head>
-            <fret>10</fret>
+            <fret>0</fret>
             <string>0</string>
             </Note>
           </Chord>
@@ -226,8 +228,8 @@
             <lid>21</lid>
             <pitch>64</pitch>
             <tpc>18</tpc>
-            <fret>5</fret>
-            <string>1</string>
+            <fret>12</fret>
+            <string>0</string>
             </Note>
           <Note>
             <lid>19</lid>
@@ -259,8 +261,8 @@
             <lid>26</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>5</fret>
-            <string>4</string>
+            <fret>3</fret>
+            <string>1</string>
             </Note>
           <Note>
             <lid>24</lid>
@@ -276,7 +278,7 @@
             <pitch>81</pitch>
             <tpc>17</tpc>
             <head>2</head>
-            <fret>17</fret>
+            <fret>0</fret>
             <string>0</string>
             </Note>
           </Chord>
@@ -287,8 +289,8 @@
             <lid>30</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
-            <fret>10</fret>
-            <string>4</string>
+            <fret>3</fret>
+            <string>0</string>
             </Note>
           <Note>
             <lid>28</lid>
@@ -315,8 +317,8 @@
             <lid>34</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>5</fret>
-            <string>4</string>
+            <fret>3</fret>
+            <string>1</string>
             </Note>
           <Note>
             <lid>32</lid>
@@ -343,8 +345,8 @@
             <lid>38</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>5</fret>
-            <string>4</string>
+            <fret>3</fret>
+            <string>1</string>
             </Note>
           <Note>
             <lid>36</lid>
@@ -442,11 +444,13 @@
         <Instrument>
           <longName>Electric Guitar</longName>
           <shortName>El. Guit.</shortName>
-          <trackName>Electric Guitar</trackName>
+          <trackName>Electric Guitar (Treble Clef)</trackName>
           <minPitchP>40</minPitchP>
           <maxPitchP>86</maxPitchP>
           <minPitchA>40</minPitchA>
           <maxPitchA>86</maxPitchA>
+          <transposeDiatonic>-7</transposeDiatonic>
+          <transposeChromatic>-12</transposeChromatic>
           <instrumentId>pluck.guitar.electric</instrumentId>
           <clef>G8vb</clef>
           <StringData>
@@ -502,8 +506,8 @@
           </VBox>
         <Measure number="1">
           <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
             <lid>1</lid>
             </Clef>
           <KeySig>
@@ -533,8 +537,8 @@
               <lid>9</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>7</lid>
@@ -550,8 +554,8 @@
               <pitch>62</pitch>
               <tpc>16</tpc>
               <head>2</head>
-              <fret>3</fret>
-              <string>1</string>
+              <fret>10</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -561,8 +565,8 @@
               <lid>13</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>11</lid>
@@ -578,7 +582,7 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               <head>2</head>
-              <fret>5</fret>
+              <fret>17</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -589,8 +593,8 @@
               <lid>17</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>15</lid>
@@ -606,7 +610,7 @@
               <pitch>74</pitch>
               <tpc>16</tpc>
               <head>2</head>
-              <fret>10</fret>
+              <fret>0</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -617,8 +621,8 @@
               <lid>21</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
-              <fret>5</fret>
-              <string>1</string>
+              <fret>12</fret>
+              <string>0</string>
               </Note>
             <Note>
               <lid>19</lid>
@@ -650,8 +654,8 @@
               <lid>26</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>24</lid>
@@ -667,7 +671,7 @@
               <pitch>81</pitch>
               <tpc>17</tpc>
               <head>2</head>
-              <fret>17</fret>
+              <fret>0</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -678,8 +682,8 @@
               <lid>30</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
-              <fret>10</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>0</string>
               </Note>
             <Note>
               <lid>28</lid>
@@ -706,8 +710,8 @@
               <lid>34</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>32</lid>
@@ -734,8 +738,8 @@
               <lid>38</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>36</lid>
@@ -774,8 +778,8 @@
               <lid>9</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>7</lid>
@@ -791,8 +795,8 @@
               <pitch>62</pitch>
               <tpc>16</tpc>
               <head>2</head>
-              <fret>3</fret>
-              <string>1</string>
+              <fret>10</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -802,8 +806,8 @@
               <lid>13</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>11</lid>
@@ -819,7 +823,7 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               <head>2</head>
-              <fret>5</fret>
+              <fret>17</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -830,8 +834,8 @@
               <lid>17</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>15</lid>
@@ -847,7 +851,7 @@
               <pitch>74</pitch>
               <tpc>16</tpc>
               <head>2</head>
-              <fret>10</fret>
+              <fret>0</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -858,8 +862,8 @@
               <lid>21</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
-              <fret>5</fret>
-              <string>1</string>
+              <fret>12</fret>
+              <string>0</string>
               </Note>
             <Note>
               <lid>19</lid>
@@ -888,8 +892,8 @@
               <lid>26</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>24</lid>
@@ -905,7 +909,7 @@
               <pitch>81</pitch>
               <tpc>17</tpc>
               <head>2</head>
-              <fret>17</fret>
+              <fret>0</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -916,8 +920,8 @@
               <lid>30</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
-              <fret>10</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>0</string>
               </Note>
             <Note>
               <lid>28</lid>
@@ -944,8 +948,8 @@
               <lid>34</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>32</lid>
@@ -972,8 +976,8 @@
               <lid>38</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>36</lid>

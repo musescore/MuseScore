@@ -111,3 +111,11 @@ cp   $MSCORE/free-time.gpx.mscx free-time.gpx-ref.mscx
 cp   $MSCORE/repeated-bars.gpx.mscx repeated-bars.gpx-ref.mscx
 cp   $MSCORE/dotted-gliss.gp3.mscx dotted-gliss.gp3-ref.mscx
 cp   $MSCORE/high-pitch.gp3.mscx high-pitch.gp3-ref.mscx
+cp   $MSCORE/multivoices.gpx.mscx multivoices.gpx-ref.mscx
+cp   $MSCORE/ottava1.gpx.mscx ottava1.gpx-ref.mscx
+cp   $MSCORE/ottava2.gpx.mscx ottava2.gpx-ref.mscx
+cp   $MSCORE/ottava3.gpx.mscx ottava3.gpx-ref.mscx
+cp   $MSCORE/ottava4.gpx.mscx ottava4.gpx-ref.mscx
+cp   $MSCORE/ottava5.gpx.mscx ottava5.gpx-ref.mscx
+cp   $MSCORE/chordnames_keyboard.gpx.mscx chordnames_keyboard.gpx-ref.mscx
+cp   $MSCORE/clefs.gpx.mscx clefs.gpx-ref.mscx
