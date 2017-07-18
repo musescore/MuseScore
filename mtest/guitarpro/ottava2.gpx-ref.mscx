@@ -29,15 +29,18 @@
         </Staff>
       <trackName>N-Gt</trackName>
       <Instrument>
-        <longName>Classical Guitar</longName>
+        <longName>Guitar</longName>
         <shortName>Guit.</shortName>
-        <trackName>Classical Guitar</trackName>
+        <trackName>Guitar (Treble Clef)</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>83</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>83</maxPitchA>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
         <instrumentId>pluck.guitar.nylon-string</instrumentId>
-        <clef>G8vb</clef>
+        <concertClef>G8vb</concertClef>
+        <transposingClef>G</transposingClef>
         <StringData>
           <frets>21</frets>
           <string>40</string>
@@ -91,11 +94,13 @@
       <Instrument>
         <longName>Electric Guitar</longName>
         <shortName>El. Guit.</shortName>
-        <trackName>Electric Guitar</trackName>
+        <trackName>Electric Guitar (Treble Clef)</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>86</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>86</maxPitchA>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
         <instrumentId>pluck.guitar.electric</instrumentId>
         <clef>G8vb</clef>
         <StringData>
@@ -149,8 +154,8 @@
         </VBox>
       <Measure number="1">
         <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
           <lid>1</lid>
           </Clef>
         <KeySig>
@@ -182,8 +187,8 @@
             <lid>7</lid>
             <pitch>35</pitch>
             <tpc>19</tpc>
-            <fret>0</fret>
-            <string>5</string>
+            <fret>2</fret>
+            <string>4</string>
             </Note>
           </Chord>
         </Measure>
@@ -195,8 +200,8 @@
             <lid>10</lid>
             <pitch>36</pitch>
             <tpc>14</tpc>
-            <fret>0</fret>
-            <string>5</string>
+            <fret>3</fret>
+            <string>4</string>
             </Note>
           </Chord>
         </Measure>
@@ -212,8 +217,8 @@
             <lid>13</lid>
             <pitch>62</pitch>
             <tpc>16</tpc>
-            <fret>3</fret>
-            <string>1</string>
+            <fret>10</fret>
+            <string>0</string>
             </Note>
           </Chord>
         </Measure>
@@ -226,8 +231,8 @@
             <lid>16</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>5</fret>
-            <string>4</string>
+            <fret>3</fret>
+            <string>1</string>
             </Note>
           </Chord>
         </Measure>
@@ -239,8 +244,8 @@
             <lid>19</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
-            <fret>3</fret>
-            <string>4</string>
+            <fret>1</fret>
+            <string>1</string>
             </Note>
           </Chord>
         </Measure>
@@ -255,8 +260,8 @@
               </Accidental>
             <pitch>46</pitch>
             <tpc>12</tpc>
-            <fret>1</fret>
-            <string>4</string>
+            <fret>3</fret>
+            <string>2</string>
             </Note>
           </Chord>
         </Measure>
@@ -268,8 +273,8 @@
             <lid>25</lid>
             <pitch>47</pitch>
             <tpc>19</tpc>
-            <fret>2</fret>
-            <string>4</string>
+            <fret>0</fret>
+            <string>1</string>
             </Note>
           </Chord>
         </Measure>
@@ -291,8 +296,8 @@
     <Staff id="2">
       <Measure number="1">
         <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
           <lid>31</lid>
           </Clef>
         <KeySig>
@@ -316,8 +321,8 @@
             <lid>36</lid>
             <pitch>47</pitch>
             <tpc>19</tpc>
-            <fret>2</fret>
-            <string>4</string>
+            <fret>0</fret>
+            <string>1</string>
             </Note>
           </Chord>
         </Measure>
@@ -329,8 +334,8 @@
             <lid>38</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
-            <fret>3</fret>
-            <string>4</string>
+            <fret>1</fret>
+            <string>1</string>
             </Note>
           </Chord>
         </Measure>
@@ -342,8 +347,8 @@
             <lid>40</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>5</fret>
-            <string>4</string>
+            <fret>3</fret>
+            <string>1</string>
             </Note>
           </Chord>
         </Measure>
@@ -355,8 +360,8 @@
             <lid>42</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>5</fret>
-            <string>4</string>
+            <fret>3</fret>
+            <string>1</string>
             </Note>
           </Chord>
         </Measure>
@@ -368,8 +373,8 @@
             <lid>44</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
-            <fret>3</fret>
-            <string>4</string>
+            <fret>1</fret>
+            <string>1</string>
             </Note>
           </Chord>
         </Measure>
@@ -384,8 +389,8 @@
               </Accidental>
             <pitch>46</pitch>
             <tpc>12</tpc>
-            <fret>1</fret>
-            <string>4</string>
+            <fret>3</fret>
+            <string>2</string>
             </Note>
           </Chord>
         </Measure>
@@ -397,8 +402,8 @@
             <lid>48</lid>
             <pitch>47</pitch>
             <tpc>19</tpc>
-            <fret>2</fret>
-            <string>4</string>
+            <fret>0</fret>
+            <string>1</string>
             </Note>
           </Chord>
         </Measure>
@@ -463,15 +468,18 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName>Classical Guitar</longName>
+          <longName>Guitar</longName>
           <shortName>Guit.</shortName>
-          <trackName>Classical Guitar</trackName>
+          <trackName>Guitar (Treble Clef)</trackName>
           <minPitchP>40</minPitchP>
           <maxPitchP>83</maxPitchP>
           <minPitchA>40</minPitchA>
           <maxPitchA>83</maxPitchA>
+          <transposeDiatonic>-7</transposeDiatonic>
+          <transposeChromatic>-12</transposeChromatic>
           <instrumentId>pluck.guitar.nylon-string</instrumentId>
-          <clef>G8vb</clef>
+          <concertClef>G8vb</concertClef>
+          <transposingClef>G</transposingClef>
           <StringData>
             <frets>21</frets>
             <string>40</string>
@@ -520,13 +528,13 @@
           <lid>0</lid>
           <Text>
             <style>Instrument Name (Part)</style>
-            <text>Classical Guitar</text>
+            <text>Guitar</text>
             </Text>
           </VBox>
         <Measure number="1">
           <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
             <lid>1</lid>
             </Clef>
           <KeySig>
@@ -555,8 +563,8 @@
               <lid>7</lid>
               <pitch>35</pitch>
               <tpc>19</tpc>
-              <fret>0</fret>
-              <string>5</string>
+              <fret>2</fret>
+              <string>4</string>
               </Note>
             </Chord>
           </Measure>
@@ -568,8 +576,8 @@
               <lid>10</lid>
               <pitch>36</pitch>
               <tpc>14</tpc>
-              <fret>0</fret>
-              <string>5</string>
+              <fret>3</fret>
+              <string>4</string>
               </Note>
             </Chord>
           </Measure>
@@ -581,8 +589,8 @@
               <lid>13</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
-              <fret>3</fret>
-              <string>1</string>
+              <fret>10</fret>
+              <string>0</string>
               </Note>
             </Chord>
           </Measure>
@@ -594,8 +602,8 @@
               <lid>16</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -607,8 +615,8 @@
               <lid>19</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
-              <fret>3</fret>
-              <string>4</string>
+              <fret>1</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -623,8 +631,8 @@
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
-              <fret>1</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>2</string>
               </Note>
             </Chord>
           </Measure>
@@ -636,8 +644,8 @@
               <lid>25</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
-              <fret>2</fret>
-              <string>4</string>
+              <fret>0</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -676,8 +684,8 @@
               <lid>7</lid>
               <pitch>35</pitch>
               <tpc>19</tpc>
-              <fret>0</fret>
-              <string>5</string>
+              <fret>2</fret>
+              <string>4</string>
               </Note>
             </Chord>
           </Measure>
@@ -689,8 +697,8 @@
               <lid>10</lid>
               <pitch>36</pitch>
               <tpc>14</tpc>
-              <fret>0</fret>
-              <string>5</string>
+              <fret>3</fret>
+              <string>4</string>
               </Note>
             </Chord>
           </Measure>
@@ -702,8 +710,8 @@
               <lid>13</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
-              <fret>3</fret>
-              <string>1</string>
+              <fret>10</fret>
+              <string>0</string>
               </Note>
             </Chord>
           </Measure>
@@ -715,8 +723,8 @@
               <lid>16</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -728,8 +736,8 @@
               <lid>19</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
-              <fret>3</fret>
-              <string>4</string>
+              <fret>1</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -741,8 +749,8 @@
               <lid>22</lid>
               <pitch>46</pitch>
               <tpc>12</tpc>
-              <fret>1</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>2</string>
               </Note>
             </Chord>
           </Measure>
@@ -754,8 +762,8 @@
               <lid>25</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
-              <fret>2</fret>
-              <string>4</string>
+              <fret>0</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -831,11 +839,13 @@
         <Instrument>
           <longName>Electric Guitar</longName>
           <shortName>El. Guit.</shortName>
-          <trackName>Electric Guitar</trackName>
+          <trackName>Electric Guitar (Treble Clef)</trackName>
           <minPitchP>40</minPitchP>
           <maxPitchP>86</maxPitchP>
           <minPitchA>40</minPitchA>
           <maxPitchA>86</maxPitchA>
+          <transposeDiatonic>-7</transposeDiatonic>
+          <transposeChromatic>-12</transposeChromatic>
           <instrumentId>pluck.guitar.electric</instrumentId>
           <clef>G8vb</clef>
           <StringData>
@@ -891,8 +901,8 @@
           </VBox>
         <Measure number="1">
           <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
             <lid>31</lid>
             </Clef>
           <KeySig>
@@ -921,8 +931,8 @@
               <lid>36</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
-              <fret>2</fret>
-              <string>4</string>
+              <fret>0</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -934,8 +944,8 @@
               <lid>38</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
-              <fret>3</fret>
-              <string>4</string>
+              <fret>1</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -947,8 +957,8 @@
               <lid>40</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -960,8 +970,8 @@
               <lid>42</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -973,8 +983,8 @@
               <lid>44</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
-              <fret>3</fret>
-              <string>4</string>
+              <fret>1</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -989,8 +999,8 @@
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
-              <fret>1</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>2</string>
               </Note>
             </Chord>
           </Measure>
@@ -1002,8 +1012,8 @@
               <lid>48</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
-              <fret>2</fret>
-              <string>4</string>
+              <fret>0</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -1042,8 +1052,8 @@
               <lid>36</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
-              <fret>2</fret>
-              <string>4</string>
+              <fret>0</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -1055,8 +1065,8 @@
               <lid>38</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
-              <fret>3</fret>
-              <string>4</string>
+              <fret>1</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -1068,8 +1078,8 @@
               <lid>40</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -1081,8 +1091,8 @@
               <lid>42</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -1094,8 +1104,8 @@
               <lid>44</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
-              <fret>3</fret>
-              <string>4</string>
+              <fret>1</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -1107,8 +1117,8 @@
               <lid>46</lid>
               <pitch>46</pitch>
               <tpc>12</tpc>
-              <fret>1</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>2</string>
               </Note>
             </Chord>
           </Measure>
@@ -1120,8 +1130,8 @@
               <lid>48</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
-              <fret>2</fret>
-              <string>4</string>
+              <fret>0</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>

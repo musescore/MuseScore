@@ -62,17 +62,55 @@
 namespace Ms {
 
 const static std::map<QString, QString> instrumentMapping = {
-            {"e-gtr6", "electric-guitar"},
-            {"tnr-s", "voice"},
-            {"s-gtr6", "guitar-steel"},
-            {"n-gtr6", "guitar-nylon"},
-            {"snt-lead-ss", "poly-synth"},
-            {"f-bass5", "bass-guitar"},
-            {"snt-bass-ss", "metallic-synth"},
-            {"mrcs", "maracas"},
-            {"drmkt", "drumset"},
+            {"a-bass4", "acoustic-bass"},
+            {"a-bass5", "acoustic-bass"},
+            {"a-bass6", "acoustic-bass"},
+            {"alt-c",   "alto"},
+            {"alt-s",   "alto"},
             {"a-piano-gs", "piano"},
-            {"a-piano-ss", "piano"}
+            {"a-piano-ss", "piano"},
+            {"bass-c",     "bass"},
+            {"bass-flt-c", "bass-flute"},
+            {"bassn",      "bassoon"},
+            {"bass-s",     "bass"},
+            {"basstuba-bb",     "bass-eb-tuba"},
+            {"basstuba-eb",     "bb-tuba"},  //???
+            {"bnj4",     "banjo"},
+            {"bnj5",     "banjo"},
+            {"bnj6",     "banjo"},
+            {"cello",    "violoncello"},
+            {"drmkt", "drumset"},
+            {"e-bass4", "bass-guitar"},
+            {"e-bass5", "bass-guitar"},
+            {"e-bass6", "bass-guitar"},
+            {"e-gtr12", "electric-guitar-treble-clef"},
+            {"e-gtr6", "electric-guitar-treble-clef"},
+            {"e-gtr7", "electric-guitar-treble-clef"},
+            {"e-gtr8", "electric-guitar-treble-clef"},
+            {"em-organ-gs", "organ"},
+            {"em-organ-ss", "organ"},
+            {"en-horn", "english-horn"},
+            {"e-piano-gs", "electric-piano"},
+            {"e-piano-ss", "electric-piano"},
+            //{"f-bass5", "bass-guitar"},  /// ??? not in the list
+            {"hrpch-gs", "harpsichord"},
+            {"hrpch-ss", "harpsichord"},
+            {"mrcs", "maracas"},
+            {"mrcs", "oboe"},
+            {"mrcs", "oboe"},
+            {"n-gtr6", "guitar-nylon-treble-clef"},
+            {"n-gtr7", "guitar-nylon-treble-clef"},
+            {"n-gtr8", "guitar-nylon-treble-clef"},
+            {"s-gtr12", "guitar-steel-treble-clef"},
+            {"s-gtr6", "guitar-steel-treble-clef"},
+            {"s-gtr7", "guitar-steel-treble-clef"},
+            {"s-gtr8", "guitar-steel-treble-clef"},
+            {"snt-lead-ss", "poly-synth"},
+            {"tnr-s",  "voice"},
+            {"snt-bass-ss", "metallic-synth"},
+            {"vla", "viola"},
+            {"vln", "violin"},
+            {"xlphn", "xylophone"}
             };
 
 //---------------------------------------------------------
@@ -211,7 +249,8 @@ void GuitarPro6::readGPX(QByteArray* buffer) {
             *buffer = buffer->right(buffer->length()-sizeof(int));
             int sectorSize = 0x1000;
             int offset = 0;
-            while ((offset = (offset + sectorSize)) + 3 < buffer->length()) {
+            while (((offset = (offset + sectorSize)) + 3) < buffer->length()) {
+                  qDebug() << offset << buffer->length();
                   int newInt = readInteger(buffer,offset);
                   if (newInt == 2) {
                         int indexFileName = (offset + 4);
@@ -1403,13 +1442,39 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                   // get the clef of the bar and apply
                   if (!currentNode.nodeName().compare("Clef")) {
                         QString clefString = currentNode.toElement().text();
-                        ClefType clefId = ClefType::G8_VB;
-                        if (!clefString.compare("F4"))
-                              clefId = ClefType::F8_VB;
-                        else if (!clefString.compare("G2"))
-                              clefId = ClefType::G8_VB;
+                        QDomNode nextNode = currentNode.nextSibling();
+                        QString clefOctave;
+                        if (!nextNode.nodeName().compare("Ottavia"))
+                              clefOctave = nextNode.toElement().text();
+                        ClefType clefId = ClefType::G;
+                        if (!clefString.compare("F4")) {
+                              clefId = ClefType::F;
+                              if (clefOctave == "8va")
+                                    clefId = ClefType::F_8VA;
+                              else if (clefOctave == "8vb")
+                                    clefId = ClefType::F8_VB;
+                              else if (clefOctave == "15ma")
+                                    clefId = ClefType::F_15MA;
+                              else if (clefOctave == "15mb")
+                                    clefId = ClefType::F15_MB;
+                              }
+                        else if (!clefString.compare("G2")) {
+                              clefId = ClefType::G;
+                              if (clefOctave == "8va")
+                                    clefId = ClefType::G8_VA;
+                              else if (clefOctave == "8vb")
+                                    clefId = ClefType::G8_VB;
+                              else if (clefOctave == "15ma")
+                                    clefId = ClefType::G15_MA;
+                              else if (clefOctave == "15mb")
+                                    clefId = ClefType::G15_MB;
+                              }
+                        else if (!clefString.compare("C3"))
+                              clefId = ClefType::C3;
+                        else if (!clefString.compare("C4"))
+                              clefId = ClefType::C4;
                         else if (!clefString.compare("Neutral"))
-                              clefId = ClefType::PERC;
+                               clefId = ClefType::PERC;
                         else
                               qDebug() << "WARNING: unhandled clef type: " << clefString;
                         Clef* newClef = new Clef(score);
@@ -1490,6 +1555,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                               }
                         }
                   else if (!currentNode.nodeName().compare("XProperties")) {}
+                  else { qDebug() << currentNode.nodeName(); }
                   // go to the next node in the tree
                   currentNode = currentNode.nextSibling();
                   }

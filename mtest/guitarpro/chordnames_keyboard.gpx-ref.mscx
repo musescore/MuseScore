@@ -86,8 +86,8 @@
         </VBox>
       <Measure number="1">
         <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
           <lid>1</lid>
           </Clef>
         <KeySig>
@@ -160,8 +160,8 @@
     <Staff id="2">
       <Measure number="1">
         <Clef>
-          <concertClefType>F8vb</concertClefType>
-          <transposingClefType>F8vb</transposingClefType>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
           </Clef>
         <KeySig>
           <accidental>0</accidental>
@@ -269,8 +269,8 @@
           </VBox>
         <Measure number="1">
           <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
             <lid>1</lid>
             </Clef>
           <KeySig>
