@@ -44,11 +44,12 @@ void MuseScore::showTimeline(bool visible)
       Timeline* t = static_cast<Timeline*>(s->widget(1));
 
       QAction* a = getAction("toggle-timeline");
-      if (t == 0 && visible) {
+      if (!t) {
             t = new Timeline(_timeline);
-            t->setScore(cv->score());
+            t->setScore(0);
             t->setScoreView(cv);
             }
+      connect(_timeline, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
       connect(_timeline, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
       _timeline->setVisible(visible);
 
