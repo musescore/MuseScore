@@ -72,7 +72,7 @@ class SysStaff {
 //---------------------------------------------------------
 
 class System : public Element {
-      SystemDivider* _systemDividerLeft    { 0 };
+      SystemDivider* _systemDividerLeft    { 0 };     // to the next system
       SystemDivider* _systemDividerRight   { 0 };
 
       std::vector<MeasureBase*> ml;
