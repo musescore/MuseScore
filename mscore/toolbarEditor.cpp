@@ -17,7 +17,9 @@
 namespace Ms {
 
 static const char* toolbars[] = {
-      "Note Input"
+      "Note Input",
+      "File Operations",
+      "Playback Controls"
       };
 
 //---------------------------------------------------------
@@ -222,6 +224,11 @@ void ToolbarEditor::toolbarChanged(int tb)
             case 0:     // NoteInput
                   populateLists(MuseScore::allNoteInputMenuEntries(), mscore->noteInputMenuEntries());
                   break;
+            case 1:     //FileOperations
+                  populateLists(MuseScore::allFileOperationEntries(), mscore->fileOperationEntries());
+                  break;
+            case 2:     //PlaybackControls
+                  populateLists(MuseScore::allPlaybackControlEntries(), mscore->playbackControlEntries());
             }
       }
 

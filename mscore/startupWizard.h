@@ -23,26 +23,76 @@
 
 namespace Ms {
 
+class StartupWizardIntroPage : public QWizardPage {
+      Q_OBJECT
+
+      public:
+            StartupWizardIntroPage(QWidget* parent = 0);
+            void init();
+      };
+
 class StartupWizardPage1 : public QWizardPage {
+      Q_OBJECT
+
+      QComboBox* _languages;
+
+      public:
+            StartupWizardPage1(QWidget* parent = 0);
+            QString language();
+            void init();
+            QComboBox* getLanguages()     {return _languages;}
+            QString getCurrentLangCode();
+      };
+
+class StartupWizardPage2 : public QWizardPage {
       Q_OBJECT
 
       QComboBox* _keyLayouts;
 
       public:
-        StartupWizardPage1(QWidget* parent = 0);
-        QString keyboardLayout()    {return _keyLayouts->currentText();}
-        void init();
+            StartupWizardPage2(QWidget* parent = 0);
+            QString keyboardLayout()    {return _keyLayouts->currentText();}
+            void init();
+            void setCurrentLayout(QString langCode);
+      };
+
+class StartupWizardPage3 : public QWizardPage {
+      Q_OBJECT
+
+      QComboBox* _workspaces;
+
+      public:
+            StartupWizardPage3(QWidget* parent = 0);
+            QString workspace()   {return _workspaces->currentText();}
+            void init();
+      };
+
+class StartupWizardFinalPage : public QWizardPage {
+      Q_OBJECT
+
+      public:
+            StartupWizardFinalPage(QWidget* parent = 0);
+            void init();
       };
 
 class StartupWizard : public QWizard {
       Q_OBJECT
 
+      StartupWizardIntroPage* p0;
       StartupWizardPage1* p1;
+      StartupWizardPage2* p2;
+      StartupWizardPage3* p3;
+      StartupWizardFinalPage* p4;
 
       public:
-          StartupWizard(QWidget* parent = 0);
-          static void autoSelectShortcuts(QString keyboardLayout);
-          QString keyboardLayout()      {return p1->keyboardLayout();}
+            StartupWizard(QWidget* parent = 0);
+            static void autoSelectShortcuts(QString keyboardLayout);
+            QString keyboardLayout()      {return p2->keyboardLayout();}
+            QString language()     {return p1->language();}
+            QString workspace()    {return p3->workspace();}
+
+      private slots:
+            void langChanged();
       };
 }
 #endif
