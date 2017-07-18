@@ -351,9 +351,9 @@ class GuitarPro6 : public GuitarPro {
             QDomNode notes;
             QDomNode rhythms;
             };
-      // a mapping from identifiers to fret diagrams
-      QMap<int, FretDiagram*> fretDiagrams;
-      QMap<int, QString> chordnames;
+      // a mapping from identifiers to fret diagrams by tracks
+      QMap<int, QMap<int, FretDiagram*>> fretDiagrams;
+      QMap<int, QMap<int, QString>> chordnames;
       void parseFile(char* filename, QByteArray* data);
       int readBit();
       QByteArray getBytes(QByteArray* buffer, int offset, int length);
