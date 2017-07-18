@@ -250,7 +250,6 @@ void GuitarPro6::readGPX(QByteArray* buffer) {
             int sectorSize = 0x1000;
             int offset = 0;
             while (((offset = (offset + sectorSize)) + 3) < buffer->length()) {
-                  qDebug() << offset << buffer->length();
                   int newInt = readInteger(buffer,offset);
                   if (newInt == 2) {
                         int indexFileName = (offset + 4);
@@ -361,7 +360,7 @@ void GuitarPro6::readFretboardDiagram(QDomNode* diagram, int track)
       {
       // initialise a new fret diagram for our current track
       FretDiagram* fretDiagram = new FretDiagram(score);
-      fretDiagram->setTrack(track);
+      fretDiagram->setTrack(track * VOICES);
 
       // get the identifier to set as the domain in the map
       int id = diagram->attributes().namedItem("id").toAttr().value().toInt();
@@ -413,8 +412,12 @@ void GuitarPro6::readFretboardDiagram(QDomNode* diagram, int track)
             }
 
       // insert the fret diagram into the map of diagrams
-      fretDiagrams.insert(id, fretDiagram);
-      chordnames.insert(id, name);
+      auto fds = fretDiagrams.value(track);
+      fds.insert(id, fretDiagram);
+      fretDiagrams.insert(track, fds);
+      auto cns = chordnames.value(track);
+      cns.insert(id, name);
+      chordnames.insert(track, cns);
       }
 
 //---------------------------------------------------------
@@ -509,7 +512,9 @@ void GuitarPro6::readTracks(QDomNode* track)
                                     while (!currentItem.isNull()) {
                                           int id = currentItem.attributes().namedItem("id").toAttr().value().toInt();
                                           QString name = currentItem.attributes().namedItem("name").toAttr().value();
-                                          chordnames.insert(id, name);
+                                          auto cns = chordnames.value(trackCounter);
+                                          cns.insert(id, name);
+                                          chordnames.insert(trackCounter, cns);
                                           currentItem = currentItem.nextSibling();
                                           }
                                     }
@@ -1293,11 +1298,13 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               }
                         else if (!currentNode.nodeName().compare("Chord")) {
                               int key = currentNode.toElement().text().toInt();
-                              if (fretDiagrams.contains(key))
-                                    segment->add(fretDiagrams[key]->clone());
-                              if (chordnames.contains(key)){
+                              if (fretDiagrams.contains(staffIdx) && fretDiagrams[staffIdx].contains(key)) {
+                                    auto fds = fretDiagrams[staffIdx];
+                                    segment->add(fds[key]->clone());
+                                    }
+                              if (chordnames.contains(staffIdx) && chordnames[staffIdx].contains(key)){
                                     Harmony* h = new Harmony(score);
-                                    h->setHarmony(chordnames[key]);
+                                    h->setHarmony(chordnames[staffIdx][key]);
                                     h->setTrack(track);
                                     segment->add(h);
                                     }
@@ -1926,8 +1933,11 @@ void GuitarPro6::read(QFile* fp)
 
       // decompress and read files contained within GPX file
       readGPX(this->buffer);
-      qDeleteAll(fretDiagrams);
-      fretDiagrams.clear();
+      
+      for (auto i : fretDiagrams.keys()) {
+            qDeleteAll(fretDiagrams.value(i));
+            fretDiagrams[i].clear();
+            }
       delete this->buffer;
       }
 
