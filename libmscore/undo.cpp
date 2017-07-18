@@ -1442,9 +1442,13 @@ void InsertRemoveMeasures::insertMeasures()
       Score* score = fm->score();
       QList<Clef*> clefs;
       QList<KeySig*> keys;
+      Segment* fs;
+      Segment* ls;
       if (fm->isMeasure()) {
             score->setPlaylistDirty();
-            for (Segment* s = toMeasure(fm)->first(); s != toMeasure(lm)->last(); s = s->next1()) {
+            fs = toMeasure(fm)->first();
+            ls = toMeasure(lm)->last();
+            for (Segment* s = fs; s && s != ls; s = s->next1()) {
                   if (!(s->segmentType() & (SegmentType::Clef | SegmentType::KeySig)))
                         continue;
                   for (int track = 0; track < score->ntracks(); track += VOICES) {
@@ -1465,7 +1469,7 @@ void InsertRemoveMeasures::insertMeasures()
             score->insertTime(fm->tick(), lm->endTick() - fm->tick());
 
             // move ownership of Instrument back to part
-            for (Segment* s = static_cast<Measure*>(fm)->first(); s != static_cast<Measure*>(lm)->last(); s = s->next1()) {
+            for (Segment* s = fs; s && s != ls; s = s->next1()) {
                   for (Element* e : s->annotations()) {
                         if (e->isInstrumentChange()) {
                               e->part()->setInstrument(toInstrumentChange(e)->instrument(), s->tick());

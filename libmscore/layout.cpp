@@ -1389,7 +1389,7 @@ void Score::connectTies(bool silent)
 //   checkDivider
 //---------------------------------------------------------
 
-static void checkDivider(bool left, System* s, qreal sdd)
+static void checkDivider(bool left, System* s, qreal yOffset)
       {
       SystemDivider* divider = left ? s->systemDividerLeft() : s->systemDividerRight();
       if (s->score()->styleB(left ? StyleIdx::dividerLeft : StyleIdx::dividerRight)) {
@@ -1400,7 +1400,7 @@ static void checkDivider(bool left, System* s, qreal sdd)
                   s->add(divider);
                   }
             divider->layout();
-            divider->rypos() = divider->height() * .5 + sdd;
+            divider->rypos() = divider->height() * .5 + yOffset;
             if (left) {
                   divider->rypos() += s->score()->styleD(StyleIdx::dividerLeftY) * SPATIUM20;
                   divider->rxpos() =  s->score()->styleD(StyleIdx::dividerLeftX) * SPATIUM20;
@@ -1492,11 +1492,19 @@ static void layoutPage(Page* page, qreal restHeight)
             }
 
       qreal y = page->systems().at(0)->y();
-      for (int i = 0; i < nsystems + 1; ++i) {
-            System* s = page->systems().at(i);
-            s->rypos() = y;
-            y += s->distance();
+      for (int i = 0; i < nsystems; ++i) {
+            System* s1  = page->systems().at(i);
+            System* s2  = page->systems().at(i+1);
+            s1->rypos() = y;
+            y          += s1->distance();
+
+            if (!(s1->vbox() || s2->vbox() || s1->hasFixedDownDistance())) {
+                  qreal yOffset = s1->height() + (s1->distance()-s1->height()) * .5;
+                  checkDivider(true,  s1, yOffset);
+                  checkDivider(false, s1, yOffset);
+                  }
             }
+      page->systems().back()->rypos() = y;
       }
 
 //---------------------------------------------------------
