@@ -29,15 +29,18 @@
         </Staff>
       <trackName>S-Gt</trackName>
       <Instrument>
-        <longName>Acoustic Guitar</longName>
+        <longName>Guitar</longName>
         <shortName>Guit.</shortName>
-        <trackName>Acoustic Guitar</trackName>
+        <trackName>Acoustic Guitar (Treble Clef)</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>83</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>83</maxPitchA>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
         <instrumentId>pluck.guitar.acoustic</instrumentId>
-        <clef>G8vb</clef>
+        <concertClef>G8vb</concertClef>
+        <transposingClef>G</transposingClef>
         <StringData>
           <frets>21</frets>
           <string>40</string>
@@ -87,8 +90,8 @@
         </VBox>
       <Measure number="1">
         <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
           <lid>1</lid>
           </Clef>
         <KeySig>
@@ -117,22 +120,22 @@
             <lid>8</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>0</fret>
-            <string>3</string>
+            <fret>7</fret>
+            <string>2</string>
             </Note>
           <Note>
             <lid>7</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
-            <fret>8</fret>
-            <string>4</string>
+            <fret>6</fret>
+            <string>1</string>
             </Note>
           <Note>
             <lid>9</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
-            <fret>2</fret>
-            <string>2</string>
+            <fret>5</fret>
+            <string>0</string>
             </Note>
           <Arpeggio>
             <lid>10</lid>
@@ -148,22 +151,22 @@
             <lid>13</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
-            <fret>3</fret>
-            <string>4</string>
+            <fret>5</fret>
+            <string>2</string>
             </Note>
           <Note>
             <lid>14</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
-            <fret>3</fret>
-            <string>3</string>
+            <fret>6</fret>
+            <string>1</string>
             </Note>
           <Note>
             <lid>15</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
-            <fret>2</fret>
-            <string>2</string>
+            <fret>5</fret>
+            <string>0</string>
             </Note>
           <Arpeggio>
             <lid>16</lid>
@@ -218,15 +221,18 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName>Acoustic Guitar</longName>
+          <longName>Guitar</longName>
           <shortName>Guit.</shortName>
-          <trackName>Acoustic Guitar</trackName>
+          <trackName>Acoustic Guitar (Treble Clef)</trackName>
           <minPitchP>40</minPitchP>
           <maxPitchP>83</maxPitchP>
           <minPitchA>40</minPitchA>
           <maxPitchA>83</maxPitchA>
+          <transposeDiatonic>-7</transposeDiatonic>
+          <transposeChromatic>-12</transposeChromatic>
           <instrumentId>pluck.guitar.acoustic</instrumentId>
-          <clef>G8vb</clef>
+          <concertClef>G8vb</concertClef>
+          <transposingClef>G</transposingClef>
           <StringData>
             <frets>21</frets>
             <string>40</string>
@@ -275,13 +281,13 @@
           <lid>0</lid>
           <Text>
             <style>Instrument Name (Part)</style>
-            <text>Acoustic Guitar</text>
+            <text>Guitar</text>
             </Text>
           </VBox>
         <Measure number="1">
           <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
             <lid>1</lid>
             </Clef>
           <KeySig>
@@ -310,22 +316,22 @@
               <lid>8</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>0</fret>
-              <string>3</string>
+              <fret>7</fret>
+              <string>2</string>
               </Note>
             <Note>
               <lid>7</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
-              <fret>8</fret>
-              <string>4</string>
+              <fret>6</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>9</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
-              <fret>2</fret>
-              <string>2</string>
+              <fret>5</fret>
+              <string>0</string>
               </Note>
             <Arpeggio>
               <lid>10</lid>
@@ -341,22 +347,22 @@
               <lid>13</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
-              <fret>3</fret>
-              <string>4</string>
+              <fret>5</fret>
+              <string>2</string>
               </Note>
             <Note>
               <lid>14</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
-              <fret>3</fret>
-              <string>3</string>
+              <fret>6</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>15</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
-              <fret>2</fret>
-              <string>2</string>
+              <fret>5</fret>
+              <string>0</string>
               </Note>
             <Arpeggio>
               <lid>16</lid>
@@ -378,22 +384,22 @@
               <lid>8</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>0</fret>
-              <string>3</string>
+              <fret>7</fret>
+              <string>2</string>
               </Note>
             <Note>
               <lid>7</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
-              <fret>8</fret>
-              <string>4</string>
+              <fret>6</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>9</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
-              <fret>2</fret>
-              <string>2</string>
+              <fret>5</fret>
+              <string>0</string>
               </Note>
             <Arpeggio>
               <lid>10</lid>
@@ -409,22 +415,22 @@
               <lid>13</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
-              <fret>3</fret>
-              <string>4</string>
+              <fret>5</fret>
+              <string>2</string>
               </Note>
             <Note>
               <lid>14</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
-              <fret>3</fret>
-              <string>3</string>
+              <fret>6</fret>
+              <string>1</string>
               </Note>
             <Note>
               <lid>15</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
-              <fret>2</fret>
-              <string>2</string>
+              <fret>5</fret>
+              <string>0</string>
               </Note>
             <Arpeggio>
               <lid>16</lid>

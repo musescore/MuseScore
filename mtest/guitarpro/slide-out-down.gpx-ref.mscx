@@ -29,15 +29,18 @@
         </Staff>
       <trackName>S-Gt</trackName>
       <Instrument>
-        <longName>Acoustic Guitar</longName>
+        <longName>Guitar</longName>
         <shortName>Guit.</shortName>
-        <trackName>Acoustic Guitar</trackName>
+        <trackName>Acoustic Guitar (Treble Clef)</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>83</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>83</maxPitchA>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
         <instrumentId>pluck.guitar.acoustic</instrumentId>
-        <clef>G8vb</clef>
+        <concertClef>G8vb</concertClef>
+        <transposingClef>G</transposingClef>
         <StringData>
           <frets>21</frets>
           <string>40</string>
@@ -87,8 +90,8 @@
         </VBox>
       <Measure number="1">
         <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
           <lid>1</lid>
           </Clef>
         <KeySig>
@@ -117,8 +120,8 @@
             <lid>7</lid>
             <pitch>45</pitch>
             <tpc>17</tpc>
-            <fret>5</fret>
-            <string>5</string>
+            <fret>2</fret>
+            <string>2</string>
             </Note>
           <ChordLine>
             <subtype>1</subtype>
@@ -133,8 +136,8 @@
             <lid>10</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
-            <fret>7</fret>
-            <string>3</string>
+            <fret>5</fret>
+            <string>0</string>
             </Note>
           <ChordLine>
             <subtype>1</subtype>
@@ -149,8 +152,8 @@
             <lid>13</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
-            <fret>5</fret>
-            <string>2</string>
+            <fret>8</fret>
+            <string>0</string>
             </Note>
           <ChordLine>
             <subtype>1</subtype>
@@ -165,7 +168,7 @@
             <lid>16</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
-            <fret>3</fret>
+            <fret>15</fret>
             <string>0</string>
             </Note>
           <ChordLine>
@@ -243,15 +246,18 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName>Acoustic Guitar</longName>
+          <longName>Guitar</longName>
           <shortName>Guit.</shortName>
-          <trackName>Acoustic Guitar</trackName>
+          <trackName>Acoustic Guitar (Treble Clef)</trackName>
           <minPitchP>40</minPitchP>
           <maxPitchP>83</maxPitchP>
           <minPitchA>40</minPitchA>
           <maxPitchA>83</maxPitchA>
+          <transposeDiatonic>-7</transposeDiatonic>
+          <transposeChromatic>-12</transposeChromatic>
           <instrumentId>pluck.guitar.acoustic</instrumentId>
-          <clef>G8vb</clef>
+          <concertClef>G8vb</concertClef>
+          <transposingClef>G</transposingClef>
           <StringData>
             <frets>21</frets>
             <string>40</string>
@@ -300,13 +306,13 @@
           <lid>0</lid>
           <Text>
             <style>Instrument Name (Part)</style>
-            <text>Acoustic Guitar</text>
+            <text>Guitar</text>
             </Text>
           </VBox>
         <Measure number="1">
           <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
             <lid>1</lid>
             </Clef>
           <KeySig>
@@ -335,8 +341,8 @@
               <lid>7</lid>
               <pitch>45</pitch>
               <tpc>17</tpc>
-              <fret>5</fret>
-              <string>5</string>
+              <fret>2</fret>
+              <string>2</string>
               </Note>
             <ChordLine>
               <subtype>1</subtype>
@@ -351,8 +357,8 @@
               <lid>10</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
-              <fret>7</fret>
-              <string>3</string>
+              <fret>5</fret>
+              <string>0</string>
               </Note>
             <ChordLine>
               <subtype>1</subtype>
@@ -367,8 +373,8 @@
               <lid>13</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
+              <fret>8</fret>
+              <string>0</string>
               </Note>
             <ChordLine>
               <subtype>1</subtype>
@@ -383,7 +389,7 @@
               <lid>16</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
-              <fret>3</fret>
+              <fret>15</fret>
               <string>0</string>
               </Note>
             <ChordLine>
@@ -428,8 +434,8 @@
               <lid>7</lid>
               <pitch>45</pitch>
               <tpc>17</tpc>
-              <fret>5</fret>
-              <string>5</string>
+              <fret>2</fret>
+              <string>2</string>
               </Note>
             <ChordLine>
               <subtype>1</subtype>
@@ -444,8 +450,8 @@
               <lid>10</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
-              <fret>7</fret>
-              <string>3</string>
+              <fret>5</fret>
+              <string>0</string>
               </Note>
             <ChordLine>
               <subtype>1</subtype>
@@ -460,8 +466,8 @@
               <lid>13</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
+              <fret>8</fret>
+              <string>0</string>
               </Note>
             <ChordLine>
               <subtype>1</subtype>
@@ -476,7 +482,7 @@
               <lid>16</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
-              <fret>3</fret>
+              <fret>15</fret>
               <string>0</string>
               </Note>
             <ChordLine>

@@ -29,15 +29,18 @@
         </Staff>
       <trackName>S-Gt</trackName>
       <Instrument>
-        <longName>Acoustic Guitar</longName>
+        <longName>Guitar</longName>
         <shortName>Guit.</shortName>
-        <trackName>Acoustic Guitar</trackName>
+        <trackName>Acoustic Guitar (Treble Clef)</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>83</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>83</maxPitchA>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
         <instrumentId>pluck.guitar.acoustic</instrumentId>
-        <clef>G8vb</clef>
+        <concertClef>G8vb</concertClef>
+        <transposingClef>G</transposingClef>
         <StringData>
           <frets>21</frets>
           <string>40</string>
@@ -87,8 +90,8 @@
         </VBox>
       <Measure number="1">
         <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
           <lid>1</lid>
           </Clef>
         <KeySig>
@@ -117,8 +120,8 @@
             <lid>7</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
-            <fret>5</fret>
-            <string>2</string>
+            <fret>8</fret>
+            <string>0</string>
             </Note>
           </Chord>
         <HairPin id="2">
@@ -132,8 +135,8 @@
             <lid>9</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
-            <fret>2</fret>
-            <string>3</string>
+            <fret>0</fret>
+            <string>0</string>
             </Note>
           </Chord>
         <endSpanner id="2"/>
@@ -144,8 +147,8 @@
             <lid>11</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
-            <fret>15</fret>
-            <string>4</string>
+            <fret>8</fret>
+            <string>0</string>
             </Note>
           </Chord>
         </Measure>
@@ -157,8 +160,8 @@
             <lid>14</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
-            <fret>5</fret>
-            <string>2</string>
+            <fret>8</fret>
+            <string>0</string>
             </Note>
           </Chord>
         <HairPin id="3">
@@ -172,8 +175,8 @@
             <lid>16</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
-            <fret>2</fret>
-            <string>3</string>
+            <fret>0</fret>
+            <string>0</string>
             </Note>
           </Chord>
         <endSpanner id="3"/>
@@ -184,8 +187,8 @@
             <lid>18</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
-            <fret>15</fret>
-            <string>4</string>
+            <fret>8</fret>
+            <string>0</string>
             </Note>
           </Chord>
         </Measure>
@@ -236,15 +239,18 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName>Acoustic Guitar</longName>
+          <longName>Guitar</longName>
           <shortName>Guit.</shortName>
-          <trackName>Acoustic Guitar</trackName>
+          <trackName>Acoustic Guitar (Treble Clef)</trackName>
           <minPitchP>40</minPitchP>
           <maxPitchP>83</maxPitchP>
           <minPitchA>40</minPitchA>
           <maxPitchA>83</maxPitchA>
+          <transposeDiatonic>-7</transposeDiatonic>
+          <transposeChromatic>-12</transposeChromatic>
           <instrumentId>pluck.guitar.acoustic</instrumentId>
-          <clef>G8vb</clef>
+          <concertClef>G8vb</concertClef>
+          <transposingClef>G</transposingClef>
           <StringData>
             <frets>21</frets>
             <string>40</string>
@@ -293,13 +299,13 @@
           <lid>0</lid>
           <Text>
             <style>Instrument Name (Part)</style>
-            <text>Acoustic Guitar</text>
+            <text>Guitar</text>
             </Text>
           </VBox>
         <Measure number="1">
           <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
             <lid>1</lid>
             </Clef>
           <KeySig>
@@ -328,8 +334,8 @@
               <lid>7</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
+              <fret>8</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <HairPin id="4">
@@ -343,8 +349,8 @@
               <lid>9</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
-              <fret>2</fret>
-              <string>3</string>
+              <fret>0</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <endSpanner id="4"/>
@@ -355,8 +361,8 @@
               <lid>11</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>15</fret>
-              <string>4</string>
+              <fret>8</fret>
+              <string>0</string>
               </Note>
             </Chord>
           </Measure>
@@ -368,8 +374,8 @@
               <lid>14</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
+              <fret>8</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <HairPin id="5">
@@ -383,8 +389,8 @@
               <lid>16</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
-              <fret>2</fret>
-              <string>3</string>
+              <fret>0</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <endSpanner id="5"/>
@@ -395,8 +401,8 @@
               <lid>18</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>15</fret>
-              <string>4</string>
+              <fret>8</fret>
+              <string>0</string>
               </Note>
             </Chord>
           </Measure>
@@ -414,8 +420,8 @@
               <lid>7</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
+              <fret>8</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <HairPin id="6">
@@ -429,8 +435,8 @@
               <lid>9</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
-              <fret>2</fret>
-              <string>3</string>
+              <fret>0</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <endSpanner id="6"/>
@@ -441,8 +447,8 @@
               <lid>11</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>15</fret>
-              <string>4</string>
+              <fret>8</fret>
+              <string>0</string>
               </Note>
             </Chord>
           </Measure>
@@ -454,8 +460,8 @@
               <lid>14</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
+              <fret>8</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <HairPin id="7">
@@ -469,8 +475,8 @@
               <lid>16</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
-              <fret>2</fret>
-              <string>3</string>
+              <fret>0</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <endSpanner id="7"/>
@@ -481,8 +487,8 @@
               <lid>18</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>15</fret>
-              <string>4</string>
+              <fret>8</fret>
+              <string>0</string>
               </Note>
             </Chord>
           </Measure>
