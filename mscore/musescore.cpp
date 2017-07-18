@@ -263,6 +263,24 @@ const std::list<const char*> MuseScore::_basicNoteInputMenuEntries {
             "voice-4"
             };
 
+const std::list<const char*> MuseScore::_allFileOperationEntries {
+            "file-new",
+            "file-open",
+            "file-save",
+            "print",
+            "redo",
+            "undo"
+            };
+
+const std::list<const char*> MuseScore::_allPlaybackControlEntries {
+            "midi-on",
+            "rewind",
+            "play",
+            "loop",
+            "repeat",
+            "pan",
+            "metronome"
+            };
 
 extern bool savePositions(Score*, const QString& name, bool segments );
 extern TextPalette* textPalette;
@@ -1329,19 +1347,6 @@ MuseScore::MuseScore()
             cornerLabel->setScaledContents(true);
             cornerLabel->setPixmap(QPixmap(":/data/mscore.png"));
             cornerLabel->setGeometry(width() - 48, 0, 48, 48);
-            }
-
-      if (!MScore::noGui) {
-            QSettings s;
-            if (!s.contains("firstStart")) {
-                  StartupWizard* sw = new StartupWizard;
-                  sw->exec();
-                  s.setValue("firstStart", false);
-                  s.setValue("keyboardLayout", sw->keyboardLayout());
-                  delete sw;
-                  }
-            QString keyboardLayout = s.value("keyboardLayout").toString();
-            StartupWizard::autoSelectShortcuts(keyboardLayout);
             }
       }
 
@@ -6201,6 +6206,27 @@ int main(int argc, char* av[])
 
       //read languages list
       mscore->readLanguages(mscoreGlobalShare + "locale/languages.xml");
+
+      if (!MScore::noGui) {
+            QSettings s;
+            if (!s.contains("firstStart")) {
+                  StartupWizard* sw = new StartupWizard;
+                  sw->exec();
+                  s.setValue("firstStart", false);
+                  s.setValue("keyboardLayout", sw->keyboardLayout());
+                  s.setValue("language", sw->language());
+                  setMscoreLocale(sw->language());
+                  for (auto ws : Workspace::workspaces()) {
+                        if (ws->name().compare(sw->workspace()) == 0) {
+                              mscore->changeWorkspace(ws);
+                              mscore->getPaletteBox()->updateWorkspaces();
+                        }
+                  }
+                  delete sw;
+                  }
+            QString keyboardLayout = s.value("keyboardLayout").toString();
+            StartupWizard::autoSelectShortcuts(keyboardLayout);
+            }
 
       QApplication::instance()->installEventFilter(mscore);
 
