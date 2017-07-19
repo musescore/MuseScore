@@ -333,7 +333,7 @@ void UndoStack::redo(EditData* ed)
 SaveState::SaveState(Score* s)
    : undoInputState(s), redoInputState(s->inputState())
       {
-      score          = s;
+      score = s;
 //      redoSelection  = score->selection();
       }
 

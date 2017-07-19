@@ -972,20 +972,13 @@ void Note::add(Element* e)
             case ElementType::BEND:
                   _el.push_back(e);
                   break;
-            case ElementType::TIE:
-                  {
+            case ElementType::TIE: {
                   Tie* tie = toTie(e);
                   tie->setStartNote(this);
                   tie->setTrack(track());
                   setTieFor(tie);
                   if (tie->endNote())
                         tie->endNote()->setTieBack(tie);
-                  int n = tie->spannerSegments().size();
-                  for (int i = 0; i < n; ++i) {
-                        SpannerSegment* ss = tie->spannerSegments().at(i);
-                        if (ss->system())
-                              ss->system()->add(ss);
-                        }
                   }
                   break;
             case ElementType::ACCIDENTAL:
@@ -1021,17 +1014,11 @@ void Note::remove(Element* e)
                   if (!_el.remove(e))
                         qDebug("Note::remove(): cannot find %s", e->name());
                   break;
-            case ElementType::TIE:
-                  {
+            case ElementType::TIE: {
                   Tie* tie = toTie(e);
                   setTieFor(0);
                   if (tie->endNote())
                         tie->endNote()->setTieBack(0);
-                  for (SpannerSegment* ss : tie->spannerSegments()) {
-                        Q_ASSERT(ss->spanner() == tie);
-                        if (ss->system())
-                              ss->system()->remove(ss);
-                        }
                   }
                   break;
 
@@ -2190,6 +2177,10 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
             func(data, _accidental);
       for (NoteDot* dot : _dots)
             func(data, dot);
+      if (_tieFor && !_tieFor->spannerSegments().empty())
+            _tieFor->spannerSegments().front()->scanElements(data, func, all);
+      if (_tieBack && _tieBack->spannerSegments().size() > 1)
+            _tieBack->spannerSegments().back()->scanElements(data, func, all);
       }
 
 //---------------------------------------------------------
@@ -2863,7 +2854,7 @@ QString Note::subtypeName() const
 //   returns next element in _el
 //---------------------------------------------------------
 
-Element* Note::nextInEl(Element* e) 
+Element* Note::nextInEl(Element* e)
       {
       if (e == _el.back())
             return nullptr;
@@ -2892,7 +2883,7 @@ Element* Note::nextElement()
       {
       Element* e = score()->selection().element();
       if (!e && !score()->selection().elements().isEmpty() )
-            e = score()->selection().elements().first();      
+            e = score()->selection().elements().first();
       switch (e->type()) {
             case ElementType::SYMBOL:
             case ElementType::IMAGE:
@@ -2944,7 +2935,7 @@ Element* Note::nextElement()
                         return nullptr;
                         }
                   }
-            case ElementType::NOTE: {            
+            case ElementType::NOTE: {
                   /*if (_accidental) {
                         return _accidental;
                         }*/
@@ -2965,7 +2956,7 @@ Element* Note::nextElement()
                         }
                   }
             default:
-                  return nullptr;                  
+                  return nullptr;
             }
       }
 
@@ -3027,7 +3018,7 @@ Element* Note::lastElementBeforeSegment()
             for (auto i : _spannerFor) {
                   if (i->type() == ElementType::GLISSANDO)
                         return i->spannerSegments().front();
-                  }                
+                  }
             }
       if (_tieFor) {
             return _tieFor->frontSegment();

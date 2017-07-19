@@ -589,10 +589,7 @@ void Tie::slurPos(SlurPos* sp)
             return;
             }
       sp->system2 = ec->measure()->system();
-      if (!sp->system2) {
-            qDebug("Tie::slurPos no system2");
-            sp->system2 = sp->system1;
-            }
+
       hw = endNote()->tabHeadWidth(stt);
       if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up))
             xo = endNote()->x() - hw * 0.12;
@@ -716,10 +713,11 @@ void Tie::calculateDirection()
       }
 
 //---------------------------------------------------------
-//   layout
+//   layoutFor
+//    layout the first SpannerSegment of a slur
 //---------------------------------------------------------
 
-void Tie::layout()
+void Tie::layoutFor(System* system)
       {
       //
       //    show short bow
@@ -749,74 +747,62 @@ void Tie::layout()
             segment->layoutSegment(sPos.p1, sPos.p2);
             return;
             }
-
       calculateDirection();
-
-      qreal w   = startNote()->headWidth();
-      qreal xo1 = w * 1.12;
-      qreal h   = w * 0.3;
-      qreal yo  = _up ? -h : h;
-
-      QPointF off1(xo1, yo);
-      QPointF off2(0.0, yo);
-
-      // TODO: cleanup
 
       SlurPos sPos;
       slurPos(&sPos);
 
-      // p1, p2, s1, s2
-
-      const QList<System*>& systems = score()->systems();
       setPos(0, 0);
 
-      //---------------------------------------------------------
-      //   count number of segments, if no change, all
-      //    user offsets (drags) are retained
-      //---------------------------------------------------------
-
-      int sysIdx1 = systems.indexOf(sPos.system1);
-      if (sysIdx1 == -1) {
-            qDebug("system not found");
-            for (System* s : systems)
-                  qDebug("   search %p in %p", sPos.system1, s);
-            return;
+      int n;
+      if (sPos.system1 != sPos.system2) {
+            n = 2;
+            sPos.p2 = QPointF(system->width(), sPos.p1.y());
             }
+      else
+            n = 1;
 
-      int sysIdx2     = systems.indexOf(sPos.system2);
-      if (sysIdx2 < 0)
-            sysIdx2 = sysIdx1;
-      unsigned nsegs  = sysIdx2 - sysIdx1 + 1;
-      fixupSegments(nsegs);
+      fixupSegments(n);
+      TieSegment* segment = segmentAt(0);
+      segment->setParent(system);
+      segment->layoutSegment(sPos.p1, sPos.p2);
+      segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
+      }
 
-      int i = 0;
-      for (uint ii = 0; ii < nsegs; ++ii) {
-            System* system = systems[sysIdx1++];
-            if (system->vbox())
-                  continue;
-            TieSegment* segment = segmentAt(i);
-            segment->setSystem(system);
+//---------------------------------------------------------
+//   layoutBack
+//    layout the second SpannerSegment of a splitted slur
+//---------------------------------------------------------
 
-            // case 1: one segment
-            if (sPos.system1 == sPos.system2) {
-                  segment->layoutSegment(sPos.p1, sPos.p2);
-                  segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+void Tie::layoutBack(System* system)
+      {
+      SlurPos sPos;
+      slurPos(&sPos);
+
+      fixupSegments(2);
+      TieSegment* segment = segmentAt(1);
+      segment->setParent(system);
+
+      qreal x;
+      Segment* seg = endNote()->chord()->segment()->prev();
+      if (seg) {
+            // find maximum width
+            qreal width = 0.0;
+            int n = score()->nstaves();
+            for (int i = 0; i < n; ++i) {
+                  if (!system->staff(i)->show())
+                        continue;
+                  Element* e = seg->element(i * VOICES);
+                  if (e)
+                        width = qMax(width, e->width());
                   }
-            // case 2: start segment
-            else if (i == 0) {
-                  qreal x = system->bbox().width();
-                  segment->layoutSegment(sPos.p1, QPointF(x, sPos.p1.y()));
-                  segment->setSpannerSegmentType(SpannerSegmentType::BEGIN);
-                  }
-            // case 4: end segment
-            else {
-                  qreal x = firstNoteRestSegmentX(system);
-
-                  segment->layoutSegment(QPointF(x, sPos.p2.y()), sPos.p2);
-                  segment->setSpannerSegmentType(SpannerSegmentType::END);
-                  }
-            ++i;
+            x = seg->measure()->pos().x() + seg->pos().x() + width;
             }
+      else
+            x = 0.0;
+
+      segment->layoutSegment(QPointF(x, sPos.p2.y()), sPos.p2);
+      segment->setSpannerSegmentType(SpannerSegmentType::END);
       }
 
 //---------------------------------------------------------

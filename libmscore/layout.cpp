@@ -2979,7 +2979,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   mb->setPos(pos);
             pos.rx() += ww;
             }
-      if (lineMode())
+//      if (lineMode())
             system->setWidth(pos.x());
 
       //
@@ -3010,15 +3010,15 @@ System* Score::collectSystem(LayoutContext& lc)
       //
       //
       int stick = -1;
-      int etick = -1;
+      int etick;
       for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure())
                   continue;
-            if (stick == -1)
-                  stick = mb->tick();
-            etick = mb->endTick();
             SegmentType st = SegmentType::ChordRest;
             Measure* m = toMeasure(mb);
+            if (stick == -1)
+                  stick = m->tick();
+            etick = m->endTick();
             for (Segment* s = m->first(st); s; s = s->next(st)) {
                   for (Element* e : s->elist()) {
                         if (!e)
@@ -3028,6 +3028,19 @@ System* Score::collectSystem(LayoutContext& lc)
                               if (isTopBeam(cr)) {
                                     cr->beam()->layout();
                                     s->staffShape(cr->staffIdx()).add(cr->beam()->shape().translated(-(cr->segment()->pos()+mb->pos())));
+                                    }
+                              if (e->isChord()) {
+                                    for (Note* note : toChord(e)->notes()) {
+                                          if (note->tieFor()) {
+                                                Tie* tie = toTie(note->tieFor());
+                                                tie->layoutFor(system);
+                                                }
+                                          if (note->tieBack()) {
+                                                Tie* tie = toTie(note->tieBack());
+                                                if (tie->startNote()->tick() < stick)
+                                                      tie->layoutBack(system);
+                                                }
+                                          }
                                     }
                               }
                         }

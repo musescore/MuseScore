@@ -319,7 +319,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       a = popup->exec(pos);
       if (a == 0)
             return;
-      QString cmd(a->data().toString());
+      const QByteArray& cmd(a->data().toByteArray());
       if (cmd == "cut" || cmd =="copy" || cmd == "paste" || cmd == "swap" || cmd == "delete") {
             // these actions are already activated
             return;
@@ -1674,9 +1674,16 @@ void ScoreView::ticksTab(int ticks)
 
 void ScoreView::cmd(const QAction* a)
       {
-      QString cmd(a ? a->data().toString() : "");
+      const char* s = a ? a->data().toByteArray().data() : "";
+      cmd(s);
+      }
+
+void ScoreView::cmd(const char* s)
+      {
+      const QByteArray cmd(s);
+
       if (MScore::debugMode)
-            qDebug("ScoreView::cmd <%s>", qPrintable(cmd));
+            qDebug("ScoreView::cmd <%s>", s);
 
       if (cmd == "escape")
             escapeCmd();
@@ -2202,6 +2209,7 @@ void ScoreView::cmd(const QAction* a)
             static_cast<Text*>(editData.element)->movePosition(QTextCursor::NextWord);
 #endif
       else if (cmd == "concert-pitch") {
+            QAction* a = getAction(cmd);
             if (_score->styleB(StyleIdx::concertPitch) != a->isChecked()) {
                   _score->startCmd();
                   _score->cmdConcertPitchChanged(a->isChecked(), true);
@@ -2210,6 +2218,7 @@ void ScoreView::cmd(const QAction* a)
             }
       else {
             editData.view = this;
+            QAction* a = getAction(cmd);
             _score->cmd(a, editData);
             }
       if (_score->processMidiInput())
@@ -2394,7 +2403,7 @@ void ScoreView::endNoteEntry()
             const QList<SpannerSegment*>& el = is.slur()->spannerSegments();
             if (!el.isEmpty())
                   el.front()->setSelected(false);
-            is.setSlur(nullptr);
+            is.setSlur(0);
             }
       setMouseTracking(false);
       shadowNote->setVisible(false);
@@ -3024,16 +3033,14 @@ ScoreState ScoreView::mscoreState() const
 
 void ScoreView::startUndoRedo(bool undo)
       {
-//      if (state != ViewState::EDIT)
-//            editData.init();
       _score->undoRedo(undo, state == ViewState::EDIT ? &editData : 0);
 
       if (_score->inputState().segment())
             mscore->setPos(_score->inputState().tick());
       if (_score->noteEntryMode() && !noteEntryMode())
-            postCmd("note-input");    // enter note entry mode
+            cmd("note-input");    // enter note entry mode
       else if (!_score->noteEntryMode() && noteEntryMode())
-            postCmd("escape");        // leave note entry mode
+            cmd("escape");        // leave note entry mode
       }
 
 //---------------------------------------------------------
@@ -3586,7 +3593,7 @@ void ScoreView::midiNoteReceived(int pitch, bool chord, int velocity)
       score()->masterScore()->enqueueMidiEvent(ev);
 
       if (!score()->undoStack()->active())
-            cmd(0);
+            cmd((const char*)0);
 
       if (!chord && velocity && !realtimeTimer->isActive() && score()->usingNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO)) {
             // First note pressed in automatic real-time mode.
