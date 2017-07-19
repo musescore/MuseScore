@@ -640,9 +640,6 @@ if (OMR)
    include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler/poppler)
 endif (OMR)
 
-
-
-
 ##
 ##  Include packaging
 ##

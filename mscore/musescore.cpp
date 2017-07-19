@@ -5869,10 +5869,6 @@ int main(int argc, char* av[])
 
       parser.process(QCoreApplication::arguments());
 
-      //Initiate breakpad instance currently will produce the minidumps under the c:\Users\username directory
-#ifdef BREAKPAD
-      Breakpad::CrashHandler::instance()->Init(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
-#endif
     //if (parser.isSet("v")) parser.showVersion(); // a) needs Qt >= 5.4 , b) instead we use addVersionOption()
       if (parser.isSet("long-version")) {
             printVersion("MuseScore");
@@ -6025,6 +6021,17 @@ int main(int argc, char* av[])
       // create local plugin directory
       // if not already there:
       QDir().mkpath(dataPath + "/plugins");
+
+      //Initiate breakpad instance currently will produce the minidumps under the c:\Users\username directory
+#ifdef BREAKPAD
+      QString breakpad_path = dataPath+"/crash_reports";
+      if (! QDir(breakpad_path).exists()){
+          QDir().mkpath(breakpad_path);
+      }
+
+      //Breakpad::CrashHandler::instance()->Init(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+      Breakpad::CrashHandler::instance()->Init(breakpad_path);
+#endif
 
       if (MScore::debugMode)
             qDebug("global share: <%s>", qPrintable(mscoreGlobalShare));
