@@ -1011,12 +1011,12 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
 Element* Segment::firstElement(int staff)
       {
       if (segmentType() == SegmentType::ChordRest) {
-            for (int v = staff * VOICES; v/VOICES == staff; v++) {                 
-                Element* el = element(v);              
+            for (int v = staff * VOICES; v/VOICES == staff; v++) {
+                Element* el = element(v);
                 if (!el) {      //there is no chord or rest on this voice
                       continue;
                       }
-                if (el->isChord()) {                       
+                if (el->isChord()) {
                       return toChord(el)->notes().back();
                       }
                 else {
@@ -1024,7 +1024,7 @@ Element* Segment::firstElement(int staff)
                       }
                 }
             }
-      else {           
+      else {
             return getElement(staff);
             }
 
@@ -1070,12 +1070,12 @@ Element* Segment::lastElement(int staff)
 //---------------------------------------------------------
 
 Element* Segment::getElement(int staff)
-      {      
-      segmentType();     
-      if (segmentType() == SegmentType::ChordRest) {            
+      {
+      segmentType();
+      if (segmentType() == SegmentType::ChordRest) {
             return firstElement(staff);
       }
-      else if (segmentType() & (SegmentType::EndBarLine | SegmentType::BarLine | SegmentType::StartRepeatBarLine)) {            
+      else if (segmentType() & (SegmentType::EndBarLine | SegmentType::BarLine | SegmentType::StartRepeatBarLine)) {
             for (int i = staff; i >= 0; i--) {
                   if (!element(i * VOICES))
                         continue;
@@ -1084,7 +1084,7 @@ Element* Segment::getElement(int staff)
                         return element(i*VOICES);
                   }
             }
-      else            
+      else
             return element(staff);
       return 0;
       }
@@ -1094,7 +1094,7 @@ Element* Segment::getElement(int staff)
 //   return next element in _annotations
 //---------------------------------------------------------
 
-Element* Segment::nextAnnotation(Element* e) 
+Element* Segment::nextAnnotation(Element* e)
       {
       if (e == _annotations.back())
             return nullptr;
@@ -1235,7 +1235,7 @@ Element* Segment::nextElementOfSegment(Segment* s, Element* e, int activeStaff)
                          Element* nextEl = s->element(++track);
                          while (track < score()->nstaves() * VOICES - 1 &&
                                 (!nextEl || nextEl->staffIdx() != activeStaff)) {
-                               nextEl = s->element(++track);                         
+                               nextEl = s->element(++track);
                                }
                          if (!nextEl)
                                return nullptr;
@@ -1243,7 +1243,7 @@ Element* Segment::nextElementOfSegment(Segment* s, Element* e, int activeStaff)
                                return static_cast<Chord*>(nextEl)->notes().back();
                          return nextEl;
                          }
-                   }            
+                   }
             }
       return nullptr;
       }
@@ -1402,8 +1402,8 @@ bool Segment::notChordRestType(Segment* s)
 //   nextElement
 //---------------------------------------------------------
 
-Element* Segment::nextElement(int activeStaff) 
-      {           
+Element* Segment::nextElement(int activeStaff)
+      {
       Element* e = score()->selection().element();
       if (!e && !score()->selection().elements().isEmpty() )
             e = score()->selection().elements().first();
@@ -1423,15 +1423,15 @@ Element* Segment::nextElement(int activeStaff)
             case ElementType::TAB_DURATION_SYMBOL:
             case ElementType::FIGURED_BASS:
             case ElementType::STAFF_STATE:
-            case ElementType::INSTRUMENT_CHANGE: {                  
+            case ElementType::INSTRUMENT_CHANGE: {
                   Element* next = nextAnnotation(e);
                   if (next)
-                        return next;                  
+                        return next;
                   else {
                         Spanner* s = firstSpanner(activeStaff);
                         if (s)
-                              return s->spannerSegments().front();                 
-                        }                 
+                              return s->spannerSegments().front();
+                        }
                   Segment* nextSegment = this->next1();
                   while (nextSegment) {
                         Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
@@ -1441,7 +1441,7 @@ Element* Segment::nextElement(int activeStaff)
                         }
                   break;
                   }
-            case ElementType::SEGMENT: {                                 
+            case ElementType::SEGMENT: {
                   if (!_annotations.empty()) {
                         Element* next = firstAnnotation(this, activeStaff);
                         if (next)
@@ -1462,15 +1462,14 @@ Element* Segment::nextElement(int activeStaff)
                   }
             default: {
                   Element* p;
-                  if (e->type() == ElementType::TIE_SEGMENT ||
-                        e->type() == ElementType::GLISSANDO_SEGMENT) {
+                  if (e->isTieSegment() || e->isGlissandoSegment()) {
                         SpannerSegment* s = static_cast<SpannerSegment*>(e);
                         Spanner* sp = s->spanner();
                         p = sp->startElement();
                         }
                   else if (e->type() == ElementType::ACCIDENTAL ||
                            e->type() == ElementType::ARTICULATION) {
-                       p = e->parent();
+                        p = e->parent();
                         }
                   else {
                         p = e;
@@ -1479,16 +1478,16 @@ Element* Segment::nextElement(int activeStaff)
                   for (; p && p->type() != ElementType::SEGMENT; p = p->parent()) {
                         ;
                        }
-                  Segment* seg = static_cast<Segment*>(p);      
+                  Segment* seg = static_cast<Segment*>(p);
                   // next in _elist
                   Element* nextEl = nextElementOfSegment(seg, el, activeStaff);
                   if (nextEl)
-                        return nextEl;               
+                        return nextEl;
                   if (!_annotations.empty()) {
                         Element* next = firstAnnotation(seg, activeStaff);
                         if (next)
                               return next;
-                        }                                
+                        }
                   Spanner* s = firstSpanner(activeStaff);
                   if (s)
                         return s->spannerSegments().front();
@@ -1498,7 +1497,7 @@ Element* Segment::nextElement(int activeStaff)
                         if (nextEl)
                               return nextEl;
                         nextSegment = nextSegment->next1();
-                        }          
+                        }
                   }
                   break;
             }
@@ -1510,7 +1509,7 @@ Element* Segment::nextElement(int activeStaff)
 //---------------------------------------------------------
 
 Element* Segment::prevElement(int activeStaff)
-      {    
+      {
       Element* e = score()->selection().element();
       if (!e && !score()->selection().elements().isEmpty() )
             e = score()->selection().elements().last();
@@ -1530,7 +1529,7 @@ Element* Segment::prevElement(int activeStaff)
             case ElementType::TAB_DURATION_SYMBOL:
             case ElementType::FIGURED_BASS:
             case ElementType::STAFF_STATE:
-            case ElementType::INSTRUMENT_CHANGE: {                  
+            case ElementType::INSTRUMENT_CHANGE: {
                   Element* prev = prevAnnotation(e);
                   if (prev)
                         return prev;
@@ -1577,7 +1576,7 @@ Element* Segment::prevElement(int activeStaff)
                   Element* el = this->element(e->track());
                   Q_ASSERT(el->type() == ElementType::CHORD);
                   return static_cast<Chord*>(el)->prevElement();
-                  }                           
+                  }
             default: {
                   Element* el = e;
                   Segment* seg = this;

@@ -23,7 +23,7 @@ class Spanner;
 //   SpannerSegmentType
 //---------------------------------------------------------
 
-enum class SpannerSegmentType : char {
+enum class SpannerSegmentType {
       SINGLE, BEGIN, MIDDLE, END
       };
 
@@ -106,19 +106,12 @@ class SpannerSegment : public Element {
 //----------------------------------------------------------------------------------
 
 class Spanner : public Element {
-      Q_GADGET
-      Q_ENUMS(Anchor)
 
    public:
-      enum class Anchor : char {
+      enum class Anchor {
             SEGMENT, MEASURE, CHORD, NOTE
             };
    private:
-      Q_PROPERTY(Ms::Spanner::Anchor      anchor            READ anchor       WRITE setAnchor)
-      Q_PROPERTY(Ms::Element*             endElement        READ endElement)
-      Q_PROPERTY(Ms::Element*             startElement      READ startElement)
-      Q_PROPERTY(int                      tick              READ tick         WRITE setTick)
-      Q_PROPERTY(int                      tick2             READ tick2        WRITE setTick2)
 
       Element* _startElement { 0  };
       Element* _endElement   { 0  };
@@ -137,7 +130,8 @@ class Spanner : public Element {
       // used to store spanner properties as they were at start of editing
       // and detect edit changes when edit is over
       static int editTick, editTick2, editTrack2;
-      static Note * editEndNote, * editStartNote;
+      static Note* editEndNote;
+      static Note* editStartNote;
 
    public:
       Spanner(Score* = 0);

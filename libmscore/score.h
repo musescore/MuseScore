@@ -837,8 +837,8 @@ class Score : public QObject, ScoreElement {
       int pos(POS pos) const                   {  return _pos[int(pos)]; }
       void setPos(POS pos, int tick);
 
-      bool noteEntryMode() const               { return inputState().noteEntryMode(); }
-      void setNoteEntryMode(bool val)          { inputState().setNoteEntryMode(val); }
+      bool noteEntryMode() const                   { return inputState().noteEntryMode(); }
+      void setNoteEntryMode(bool val)              { inputState().setNoteEntryMode(val); }
       NoteEntryMethod noteEntryMethod() const      { return inputState().noteEntryMethod();        }
       void setNoteEntryMethod(NoteEntryMethod m)   { inputState().setNoteEntryMethod(m);           }
       bool usingNoteEntryMethod(NoteEntryMethod m) { return inputState().usingNoteEntryMethod(m);  }

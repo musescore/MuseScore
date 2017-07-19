@@ -22,7 +22,7 @@ class ChordRest;
 class MuseScoreView;
 class Chord;
 class System;
-enum class SpannerSegmentType : char;
+enum class SpannerSegmentType;
 
 struct BeamFragment;
 

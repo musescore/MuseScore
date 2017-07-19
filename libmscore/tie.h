@@ -81,10 +81,13 @@ class Tie : public SlurTie {
       void calculateDirection();
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
-      virtual void layout() override;
+//      virtual void layout() override;
       virtual void slurPos(SlurPos*) override;
       virtual void startEdit(EditData&) override;
       virtual void endEdit(EditData&) override;
+
+      void layoutFor(System*);
+      void layoutBack(System*);
 
       bool readProperties(XmlReader&);
 
