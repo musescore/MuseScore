@@ -42,12 +42,12 @@
         <clef>G8vb</clef>
         <StringData>
           <frets>21</frets>
-          <string>40</string>
-          <string>45</string>
-          <string>50</string>
-          <string>55</string>
-          <string>59</string>
-          <string>64</string>
+          <string>52</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
+          <string>71</string>
+          <string>76</string>
           </StringData>
         <Articulation>
           <velocity>100</velocity>
@@ -119,8 +119,8 @@
             <lid>7</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>3</fret>
-            <string>1</string>
+            <fret>5</fret>
+            <string>4</string>
             </Note>
           </Chord>
         <Chord>
@@ -135,8 +135,8 @@
               </Text>
             <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>3</fret>
-            <string>1</string>
+            <fret>5</fret>
+            <string>4</string>
             </Note>
           </Chord>
         <Chord>
@@ -146,8 +146,8 @@
             <lid>12</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>3</fret>
-            <string>1</string>
+            <fret>5</fret>
+            <string>4</string>
             </Note>
           </Chord>
         <Chord>
@@ -157,8 +157,8 @@
             <lid>14</lid>
             <pitch>64</pitch>
             <tpc>18</tpc>
-            <fret>12</fret>
-            <string>0</string>
+            <fret>5</fret>
+            <string>1</string>
             </Note>
           </Chord>
         </Measure>
@@ -222,12 +222,12 @@
           <clef>G8vb</clef>
           <StringData>
             <frets>21</frets>
-            <string>40</string>
-            <string>45</string>
-            <string>50</string>
-            <string>55</string>
-            <string>59</string>
-            <string>64</string>
+            <string>52</string>
+            <string>57</string>
+            <string>62</string>
+            <string>67</string>
+            <string>71</string>
+            <string>76</string>
             </StringData>
           <Articulation>
             <velocity>100</velocity>
@@ -303,8 +303,8 @@
               <lid>7</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>3</fret>
-              <string>1</string>
+              <fret>5</fret>
+              <string>4</string>
               </Note>
             </Chord>
           <Chord>
@@ -319,8 +319,8 @@
                 </Text>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>3</fret>
-              <string>1</string>
+              <fret>5</fret>
+              <string>4</string>
               </Note>
             </Chord>
           <Chord>
@@ -330,8 +330,8 @@
               <lid>12</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>3</fret>
-              <string>1</string>
+              <fret>5</fret>
+              <string>4</string>
               </Note>
             </Chord>
           <Chord>
@@ -341,8 +341,8 @@
               <lid>14</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
-              <fret>12</fret>
-              <string>0</string>
+              <fret>5</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
@@ -360,8 +360,8 @@
               <lid>7</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>3</fret>
-              <string>1</string>
+              <fret>5</fret>
+              <string>4</string>
               </Note>
             </Chord>
           <Chord>
@@ -376,8 +376,8 @@
                 </Text>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>3</fret>
-              <string>1</string>
+              <fret>5</fret>
+              <string>4</string>
               </Note>
             </Chord>
           <Chord>
@@ -387,8 +387,8 @@
               <lid>12</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>3</fret>
-              <string>1</string>
+              <fret>5</fret>
+              <string>4</string>
               </Note>
             </Chord>
           <Chord>
@@ -398,8 +398,8 @@
               <lid>14</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
-              <fret>12</fret>
-              <string>0</string>
+              <fret>5</fret>
+              <string>1</string>
               </Note>
             </Chord>
           </Measure>
