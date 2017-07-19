@@ -994,10 +994,8 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
 
       switch (st->staffType()->group()) {
             case StaffGroup::PERCUSSION: {
-                  if (_is.rest()) {
-                        error = true;
+                  if (_is.rest())
                         break;
-                        }
                   const Drumset* ds = instr->drumset();
                   nval.pitch        = _is.drumNote();
                   if (nval.pitch < 0) {

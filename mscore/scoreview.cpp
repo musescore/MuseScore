@@ -5353,6 +5353,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             qDebug("cannot enter notes here (no chord rest at current position)");
             return;
             }
+      is.setRest(false);
       const Drumset* ds = is.drumset();
       int octave = 4;
       if (ds) {
