@@ -686,7 +686,7 @@ void System::add(Element* el)
             case ElementType::VBOX:
             case ElementType::TBOX:
             case ElementType::FBOX:
-                  score()->addElement(static_cast<MeasureBase*>(el));
+                  score()->addElement(el);
                   break;
             case ElementType::TEXTLINE_SEGMENT:
             case ElementType::HAIRPIN_SEGMENT:
@@ -711,7 +711,7 @@ void System::add(Element* el)
 
             case ElementType::SYSTEM_DIVIDER:
                   {
-                  SystemDivider* sd = static_cast<SystemDivider*>(el);
+                  SystemDivider* sd = toSystemDivider(el);
                   if (sd->dividerType() == SystemDivider::Type::LEFT)
                         _systemDividerLeft = sd;
                   else

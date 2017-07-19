@@ -312,7 +312,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void setMag(qreal m);
       bool navigatorVisible() const;
-      void cmd(const QAction* a);
+      void cmd(const QAction*);
+      void cmd(const char*);
 
       void startUndoRedo(bool);
       void zoomStep(qreal step, const QPoint& pos);
@@ -365,7 +366,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool searchPage(int i);
       bool searchRehearsalMark(const QString& s);
       void gotoMeasure(Measure*);
-      void postCmd(const char*)   {}            // TODO: remove
       void setFocusRect();
       void changeVoice(int voice);
       virtual void drawBackground(QPainter* p, const QRectF& r) const;

@@ -1536,7 +1536,7 @@ void Score::deleteItem(Element* el)
                               }
                         // Set input position
                         // TODO If deleted element is last of a sequence, use prev?
-                        if (_is.noteEntryMode())
+                        if (noteEntryMode())
                               score()->move("prev-chord");
                         }
                   }
@@ -2047,7 +2047,7 @@ void Score::cmdDeleteSelection()
 
       deselectAll();
       // make new selection if appropriate
-      if (_is.noteEntryMode())
+      if (noteEntryMode())
             cr = _is.cr();
       if (cr) {
             if (cr->isChord())
@@ -2071,7 +2071,7 @@ void Score::cmdFullMeasureRest()
       int track2 = -1;
       Rest* r = nullptr;
 
-      if (inputState().noteEntryMode()) {
+      if (noteEntryMode()) {
             s1 = inputState().segment();
             if (!s1 || s1->rtick() != 0)
                   return;
@@ -2146,7 +2146,7 @@ void Score::cmdFullMeasureRest()
                               removeChordRest(cr, true);
                               r = addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
                               }
-                        else if (inputState().noteEntryMode()) {
+                        else if (noteEntryMode()) {
                               // might be no cr at input position
                               r = addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
                               }
