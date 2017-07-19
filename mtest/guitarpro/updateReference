@@ -120,3 +120,4 @@ cp   $MSCORE/ottava4.gpx.mscx ottava4.gpx-ref.mscx
 cp   $MSCORE/ottava5.gpx.mscx ottava5.gpx-ref.mscx
 cp   $MSCORE/chordnames_keyboard.gpx.mscx chordnames_keyboard.gpx-ref.mscx
 cp   $MSCORE/clefs.gpx.mscx clefs.gpx-ref.mscx
+cp   $MSCORE/fret-diagram_2instruments.gpx.mscx fret-diagram_2instruments.gpx-ref.mscx
