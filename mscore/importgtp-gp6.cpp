@@ -1914,6 +1914,24 @@ void GuitarPro6::readGpif(QByteArray* data)
       createMeasures();
       fermatas.clear();
       readMasterBars(&partInfo);
+      // change the tuning to deal with transposition
+      // It's needed to create correct tabs
+      for (Part * p : score->parts()) {
+            Instrument* instr = p->instrument();
+            if (instr->transpose().chromatic == 0)
+                  continue;
+            const StringData* sd = instr->stringData();
+            if (sd) {
+                  int tuning[sd->strings()];
+                  int frets   = sd->frets();
+                  int strings;
+                  for (strings = 0; strings < sd->strings(); strings++) {
+                        tuning[strings] = sd->stringList()[strings].pitch - instr->transpose().chromatic;
+                        }
+                  StringData* stringData = new StringData(frets, strings, tuning);
+                  instr->setStringData(*stringData);
+                  }
+            }
       // set the starting tempo of the score
       setTempo(/*tempo*/120, score->firstMeasure());
       }

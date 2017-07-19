@@ -67,12 +67,12 @@
         <transposingClef>G</transposingClef>
         <StringData>
           <frets>21</frets>
-          <string>40</string>
-          <string>45</string>
-          <string>50</string>
-          <string>55</string>
-          <string>59</string>
-          <string>64</string>
+          <string>52</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
+          <string>71</string>
+          <string>76</string>
           </StringData>
         <Articulation>
           <velocity>100</velocity>
@@ -145,22 +145,22 @@
             <lid>8</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>7</fret>
-            <string>2</string>
+            <fret>0</fret>
+            <string>3</string>
             </Note>
           <Note>
             <lid>7</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
-            <fret>6</fret>
-            <string>1</string>
+            <fret>8</fret>
+            <string>4</string>
             </Note>
           <Note>
             <lid>9</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
-            <fret>5</fret>
-            <string>0</string>
+            <fret>2</fret>
+            <string>2</string>
             </Note>
           <Arpeggio>
             <lid>10</lid>
@@ -176,22 +176,22 @@
             <lid>13</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
-            <fret>5</fret>
-            <string>2</string>
+            <fret>3</fret>
+            <string>4</string>
             </Note>
           <Note>
             <lid>14</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
-            <fret>6</fret>
-            <string>1</string>
+            <fret>3</fret>
+            <string>3</string>
             </Note>
           <Note>
             <lid>15</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
-            <fret>5</fret>
-            <string>0</string>
+            <fret>2</fret>
+            <string>2</string>
             </Note>
           <Arpeggio>
             <lid>16</lid>
@@ -288,12 +288,12 @@
           <transposingClef>G</transposingClef>
           <StringData>
             <frets>21</frets>
-            <string>40</string>
-            <string>45</string>
-            <string>50</string>
-            <string>55</string>
-            <string>59</string>
-            <string>64</string>
+            <string>52</string>
+            <string>57</string>
+            <string>62</string>
+            <string>67</string>
+            <string>71</string>
+            <string>76</string>
             </StringData>
           <Articulation>
             <velocity>100</velocity>
@@ -370,22 +370,22 @@
               <lid>8</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>7</fret>
-              <string>2</string>
+              <fret>0</fret>
+              <string>3</string>
               </Note>
             <Note>
               <lid>7</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
-              <fret>6</fret>
-              <string>1</string>
+              <fret>8</fret>
+              <string>4</string>
               </Note>
             <Note>
               <lid>9</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
-              <fret>5</fret>
-              <string>0</string>
+              <fret>2</fret>
+              <string>2</string>
               </Note>
             <Arpeggio>
               <lid>10</lid>
@@ -401,22 +401,22 @@
               <lid>13</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
+              <fret>3</fret>
+              <string>4</string>
               </Note>
             <Note>
               <lid>14</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
-              <fret>6</fret>
-              <string>1</string>
+              <fret>3</fret>
+              <string>3</string>
               </Note>
             <Note>
               <lid>15</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
-              <fret>5</fret>
-              <string>0</string>
+              <fret>2</fret>
+              <string>2</string>
               </Note>
             <Arpeggio>
               <lid>16</lid>
@@ -442,22 +442,22 @@
               <lid>8</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>7</fret>
-              <string>2</string>
+              <fret>0</fret>
+              <string>3</string>
               </Note>
             <Note>
               <lid>7</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
-              <fret>6</fret>
-              <string>1</string>
+              <fret>8</fret>
+              <string>4</string>
               </Note>
             <Note>
               <lid>9</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
-              <fret>5</fret>
-              <string>0</string>
+              <fret>2</fret>
+              <string>2</string>
               </Note>
             <Arpeggio>
               <lid>10</lid>
@@ -473,22 +473,22 @@
               <lid>13</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
+              <fret>3</fret>
+              <string>4</string>
               </Note>
             <Note>
               <lid>14</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
-              <fret>6</fret>
-              <string>1</string>
+              <fret>3</fret>
+              <string>3</string>
               </Note>
             <Note>
               <lid>15</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
-              <fret>5</fret>
-              <string>0</string>
+              <fret>2</fret>
+              <string>2</string>
               </Note>
             <Arpeggio>
               <lid>16</lid>

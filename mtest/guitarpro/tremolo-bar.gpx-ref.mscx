@@ -66,12 +66,12 @@
         <clef>G8vb</clef>
         <StringData>
           <frets>21</frets>
-          <string>40</string>
-          <string>45</string>
-          <string>50</string>
-          <string>55</string>
-          <string>59</string>
-          <string>64</string>
+          <string>52</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
+          <string>71</string>
+          <string>76</string>
           </StringData>
         <Articulation>
           <velocity>100</velocity>
@@ -154,8 +154,8 @@
             <lid>8</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
-            <fret>8</fret>
-            <string>0</string>
+            <fret>5</fret>
+            <string>2</string>
             </Note>
           </Chord>
         <Rest>
@@ -189,8 +189,8 @@
             <lid>15</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
-            <fret>8</fret>
-            <string>0</string>
+            <fret>15</fret>
+            <string>4</string>
             </Note>
           </Chord>
         <Rest>
@@ -224,8 +224,8 @@
             <lid>22</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
-            <fret>8</fret>
-            <string>0</string>
+            <fret>1</fret>
+            <string>1</string>
             </Note>
           </Chord>
         <TremoloBar>
@@ -245,8 +245,8 @@
             <lid>25</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
-            <fret>8</fret>
-            <string>0</string>
+            <fret>15</fret>
+            <string>4</string>
             </Note>
           </Chord>
         <Rest>
@@ -276,8 +276,8 @@
             <lid>31</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
-            <fret>8</fret>
-            <string>0</string>
+            <fret>1</fret>
+            <string>1</string>
             </Note>
           </Chord>
         <TremoloBar>
@@ -295,8 +295,8 @@
             <lid>34</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
-            <fret>8</fret>
-            <string>0</string>
+            <fret>1</fret>
+            <string>1</string>
             </Note>
           </Chord>
         <Rest>
@@ -396,12 +396,12 @@
           <clef>G8vb</clef>
           <StringData>
             <frets>21</frets>
-            <string>40</string>
-            <string>45</string>
-            <string>50</string>
-            <string>55</string>
-            <string>59</string>
-            <string>64</string>
+            <string>52</string>
+            <string>57</string>
+            <string>62</string>
+            <string>67</string>
+            <string>71</string>
+            <string>76</string>
             </StringData>
           <Articulation>
             <velocity>100</velocity>
@@ -488,8 +488,8 @@
               <lid>8</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>8</fret>
-              <string>0</string>
+              <fret>5</fret>
+              <string>2</string>
               </Note>
             </Chord>
           <Rest>
@@ -523,8 +523,8 @@
               <lid>15</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>8</fret>
-              <string>0</string>
+              <fret>15</fret>
+              <string>4</string>
               </Note>
             </Chord>
           <Rest>
@@ -558,8 +558,8 @@
               <lid>22</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>8</fret>
-              <string>0</string>
+              <fret>1</fret>
+              <string>1</string>
               </Note>
             </Chord>
           <TremoloBar>
@@ -579,8 +579,8 @@
               <lid>25</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>8</fret>
-              <string>0</string>
+              <fret>15</fret>
+              <string>4</string>
               </Note>
             </Chord>
           <Rest>
@@ -610,8 +610,8 @@
               <lid>31</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>8</fret>
-              <string>0</string>
+              <fret>1</fret>
+              <string>1</string>
               </Note>
             </Chord>
           <TremoloBar>
@@ -629,8 +629,8 @@
               <lid>34</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>8</fret>
-              <string>0</string>
+              <fret>1</fret>
+              <string>1</string>
               </Note>
             </Chord>
           <Rest>
@@ -665,8 +665,8 @@
               <lid>8</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>8</fret>
-              <string>0</string>
+              <fret>5</fret>
+              <string>2</string>
               </Note>
             </Chord>
           <Rest>
@@ -695,8 +695,8 @@
               <lid>15</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>8</fret>
-              <string>0</string>
+              <fret>15</fret>
+              <string>4</string>
               </Note>
             </Chord>
           <Rest>
@@ -725,8 +725,8 @@
               <lid>22</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>8</fret>
-              <string>0</string>
+              <fret>1</fret>
+              <string>1</string>
               </Note>
             </Chord>
           <TremoloBar>
@@ -741,8 +741,8 @@
               <lid>25</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>8</fret>
-              <string>0</string>
+              <fret>15</fret>
+              <string>4</string>
               </Note>
             </Chord>
           <Rest>
@@ -767,8 +767,8 @@
               <lid>31</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>8</fret>
-              <string>0</string>
+              <fret>1</fret>
+              <string>1</string>
               </Note>
             </Chord>
           <TremoloBar>
@@ -782,8 +782,8 @@
               <lid>34</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>8</fret>
-              <string>0</string>
+              <fret>1</fret>
+              <string>1</string>
               </Note>
             </Chord>
           <Rest>
