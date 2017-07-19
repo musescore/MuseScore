@@ -339,7 +339,8 @@ void ScoreView::lyricsUnderscore()
                         fromLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, endTick - fromLyrics->segment()->tick());
                   }
             // leave edit mode, select something (just for user feedback) and update to show extended melisam
-            mscore->changeState(STATE_NORMAL);
+            cmd(getAction("escape"));
+            qApp->processEvents();
             if (fromLyrics)
                   _score->select(fromLyrics, SelectType::SINGLE, 0);
             //_score->update();
