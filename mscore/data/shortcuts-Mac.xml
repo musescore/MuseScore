@@ -253,11 +253,11 @@
     <seq>Ctrl+End</seq>
     </SC>
   <SC>
-    <key>next-element</key>
+    <key>next-segment-element</key>
     <seq>Ctrl+Alt+Shift+Right</seq>
     </SC>
   <SC>
-    <key>prev-element</key>
+    <key>prev-segment-element</key>
     <seq>Ctrl+Alt+Shift+Left</seq>
     </SC>
   <SC>
@@ -527,7 +527,7 @@
     <seq>F11</seq>
     </SC>
   <SC>
-    <key>toggle-navigator</key>
+    <key>toggle-timeline</key>
     <seq>F12</seq>
     </SC>
   <SC>
