@@ -3014,7 +3014,7 @@ static MeasureBase* searchMeasureBase(Score* score, MeasureBase* mb)
 //    If measure is zero, append new MeasureBase.
 //---------------------------------------------------------
 
-MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool createEmptyMeasures)
+MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool createEmptyMeasures, bool moveHeader)
       {
       int tick;
       int ticks = 0;
@@ -3076,7 +3076,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   //
                   // remove clef, time and key signatures
                   //
-                  if (mi) {
+                  if (mi && moveHeader) {
                         for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                               Measure* pm = mi->prevMeasure();
                               if (pm) {
