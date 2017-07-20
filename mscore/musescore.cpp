@@ -5785,7 +5785,6 @@ using namespace Ms;
 
 int main(int argc, char* av[])
       {
-
 #ifndef NDEBUG
       qSetMessagePattern("%{file}:%{function}: %{message}");
       Ms::checkStyles();
@@ -6024,13 +6023,8 @@ int main(int argc, char* av[])
 
       //Initiate breakpad instance currently will produce the minidumps under the c:\Users\username directory
 #ifdef BREAKPAD
-      QString breakpad_path = dataPath+"/crash_reports";
-      if (! QDir(breakpad_path).exists()){
-          QDir().mkpath(breakpad_path);
-      }
-
-      //Breakpad::CrashHandler::instance()->Init(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
-      Breakpad::CrashHandler::instance()->Init(breakpad_path);
+      QDir().mkpath(dataPath+"/crash_reports");
+      Breakpad::CrashHandler::instance()->Init(dataPath+"/crash_reports");
 #endif
 
       if (MScore::debugMode)

@@ -68,11 +68,13 @@ after_build:
   - C:\MuseScore\cv2pdb.exe MuseScore.exe
   - C:\MuseScore\dump_syms.exe MuseScore.pdb > MuseScore.sym
   - cmd: curl  --data-binary @MuseScore.sym "https://musescore.sp.backtrace.io:6098/post?format=symbols&token="%SYM_TOKEN%
-  - cmd: 7z a C:\MuseScore\MuseScoreTest%MSversion%.7z C:\MuseScore\win32install
-  - cmd: curl -T C:\MuseScore\MuseScoreTest%MSversion%.7z -ugsocnikos:%BINTRAY_API_KEY% https://api.bintray.com/content/musescoregsoc/myrepo/musescoretest/%MSversion%/MuseScoreTest%MSversion%.7z
+  - del MuseScore.pdb
+  - del MuseScore.sym
+  - cmd: 7z a C:\MuseScore\MuseScoreNightly-%MSversion%.7z C:\MuseScore\win32install
+  - cmd: curl -T C:\MuseScore\MuseScoreNightly-%MSversion%.7z -ugsocnikos:%BINTRAY_API_KEY% https://api.bintray.com/content/musescoregsoc/myrepo/MuseScoreNightly/%MSversion%/MuseScoreNightly-%MSversion%.7z
   - cd C:\MuseScore
 artifacts:
-  - path: MuseScoreTest$(MSversion).7z
+  - path: MuseScoreNightly-$(MSversion).7z
 #deploy:
 #- provider: BinTray
 #  username: antoniobl

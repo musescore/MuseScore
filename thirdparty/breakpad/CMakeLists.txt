@@ -9,8 +9,6 @@ else (APPLE)
         set(INCS "")
 endif (APPLE)
 
-
-
 add_library (
     breakpad STATIC
     ${PROJECT_BINARY_DIR}/all.h
@@ -35,22 +33,16 @@ add_library (
     common/scoped_ptr.h
 )
 
-
-
 target_link_libraries(breakpad
     "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.14393.0/um/x86/wininet.lib"
     )
 
-
-
-set_target_properties (
-    breakpad
+set_target_properties ( breakpad
     PROPERTIES
-        COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Wunknown-pragmas"
+        COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-unknown-pragmas"
     )
 
 xcode_pch(breakpad all)
-
 
 ADD_DEFINITIONS(-DUNICODE)
 
