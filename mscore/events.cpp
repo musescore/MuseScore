@@ -645,7 +645,7 @@ void ScoreView::contextMenuEvent(QContextMenuEvent* ev)
       else {
             int staffIdx;
             Measure* m = _score->pos2measure(editData.startMove, &staffIdx, 0, 0, 0);
-            if (m && m->staffLines(staffIdx)->abbox().contains(editData.startMove))
+            if (m && m->staffLines(staffIdx)->canvasBoundingRect().contains(editData.startMove))
                   measurePopup(gp, m);
             else {
                   QMenu* popup = new QMenu();
