@@ -1026,7 +1026,7 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
             setSmall(0, false);
             }
       else {
-            setSmall(0, t->smallStaff[cidx]);
+            setSmall(0,       t->smallStaff[cidx]);
             setBracketType(0, t->bracket[cidx]);
             setBracketSpan(0, t->bracketSpan[cidx]);
             setBarLineSpan(t->barlineSpan[cidx]);
@@ -1047,7 +1047,11 @@ void Staff::init(const Staff* s)
       {
       _staffTypeList     = s->_staffTypeList;
       setDefaultClefType(s->defaultClefType());
-      _brackets          = s->_brackets;
+      for (BracketItem* i : s->_brackets){
+            BracketItem* ni = new BracketItem(*i);
+            ni->setScore(score());
+            _brackets.push_back(ni);
+            }
       _barLineSpan       = s->_barLineSpan;
       _barLineFrom       = s->_barLineFrom;
       _barLineTo         = s->_barLineTo;
