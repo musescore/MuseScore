@@ -19,7 +19,6 @@ if (Qt5Core_FOUND)
         Widgets
         PrintSupport
         Concurrent
-        UiTools
         WebKit
         WebKitWidgets
         OpenGL
