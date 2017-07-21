@@ -1937,18 +1937,15 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   }
 
             Stem* stem   = c->stem();
-            Shape& shape = c->segment()->staffShape(c->vStaffIdx());
 
             if (stem) {
-                  shape.remove(stem->shape());
-
                   qreal sw2  = stem->lineWidth() * .5;
                   if (c->up())
                         sw2 = -sw2;
                   stem->rxpos() = c->stemPosX() + sw2;
                   stem->setLen(y2 - (by + _pagePos.y()));
 
-                  shape.add(stem->shape());
+                  c->segment()->createShape(c->vStaffIdx());      // recreate shape
                   }
 
             StemSlash* stemSlash = c->stemSlash();

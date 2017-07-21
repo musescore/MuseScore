@@ -2579,7 +2579,7 @@ static qreal findLyricsMaxY(Segment& s, int staffIdx)
 
       for (int voice = 0; voice < VOICES; ++voice) {
             ChordRest* cr = s.cr(staffIdx * VOICES + voice);
-            if (cr) {
+            if (cr && !cr->lyrics().empty()) {
                   Shape sh;
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeBelow()) {
@@ -2587,9 +2587,6 @@ static qreal findLyricsMaxY(Segment& s, int staffIdx)
                               sh.add(l->bbox().translated(l->pos()));
                               }
                         }
-                  // lyrics shapes must be moved, so first remove them from segment
-                  s.staffShape(staffIdx).remove(sh);
-
                   qreal lyricsMinTopDistance = s.score()->styleP(StyleIdx::lyricsMinTopDistance);
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeBelow()) {
@@ -2622,7 +2619,7 @@ static qreal findLyricsMinY(Segment& s, int staffIdx)
             return yMin;
       for (int voice = 0; voice < VOICES; ++voice) {
             ChordRest* cr = s.cr(staffIdx * VOICES + voice);
-            if (cr) {
+            if (cr && !cr->lyrics().empty()) {
                   Shape sh;
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeAbove()) {
@@ -2630,9 +2627,6 @@ static qreal findLyricsMinY(Segment& s, int staffIdx)
                               sh.add(l->bbox().translated(l->pos()));
                               }
                         }
-                  // lyrics shapes must be moved, so first remove them from segment
-                  s.staffShape(staffIdx).remove(sh);
-
                   qreal lyricsMinTopDistance = s.score()->styleP(StyleIdx::lyricsMinTopDistance);
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeAbove()) {
