@@ -1790,6 +1790,7 @@ void Segment::createShape(int staffIdx)
       {
       Shape& s = _shapes[staffIdx];
       s.clear();
+
 #if 1
       if (segmentType() & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
             BarLine* bl = toBarLine(element(0));
