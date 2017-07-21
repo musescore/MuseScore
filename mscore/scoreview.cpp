@@ -2935,14 +2935,18 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
 
       // align to page borders if extends beyond
       Page* page = sys->page();
-      if (x < page->x() || r.width() >= page->width())
-            x = page->x();
-      else if (r.width() < page->width() && r.width() + x > page->width() + page->x())
-            x = (page->width() + page->x()) - r.width();
-      if (y < page->y() || r.height() >= page->height())
-            y = page->y();
-      else if (r.height() < page->height() && r.height() + y > page->height())
-            y = (page->height() + page->y()) - r.height();
+      if (!MScore::verticalOrientation()) {
+            if (x < page->x() || r.width() >= page->width())
+                  x = page->x();
+            else if (r.width() < page->width() && r.width() + x > page->width() + page->x())
+                  x = (page->width() + page->x()) - r.width();
+                  }
+      else {
+            if (y < page->y() || r.height() >= page->height())
+                  y = page->y();
+            else if (r.height() < page->height() && r.height() + y > page->height() + page->y())
+                  y = (page->height() + page->y()) - r.height();
+            }
 
       // hack: don't update if we haven't changed the offset
       if (oldX == x && oldY == y)
