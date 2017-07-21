@@ -496,23 +496,19 @@ MasterScore* MuseScore::getNewFile()
       if (pickupMeasure)
             measures += 1;
 
-      MasterScore* score;
-      QString tp = newWizard->templatePath();
+      MasterScore* score = new MasterScore(MScore::defaultStyle());
+      QString tp         = newWizard->templatePath();
 
       QList<Excerpt*> excerpts;
       if (!newWizard->emptyScore()) {
-            MasterScore* tscore = new MasterScore();
-            tscore->setMovements(new Movements());
-            tscore->setStyle(MScore::defaultStyle());
+            MasterScore* tscore = new MasterScore(MScore::defaultStyle());
             Score::FileError rv = Ms::readScore(tscore, tp, false);
             if (rv != Score::FileError::FILE_NO_ERROR) {
                   readScoreError(newWizard->templatePath(), rv, false);
                   delete tscore;
+                  delete score;
                   return 0;
                   }
-            score = new MasterScore();
-            score->setMovements(new Movements());
-            score->setStyle(tscore->style());
             // create instruments from template
             for (Part* tpart : tscore->parts()) {
                   Part* part = new Part(score);
@@ -545,8 +541,8 @@ MasterScore* MuseScore::getNewFile()
                   excerpts.append(x);
                   }
             MeasureBase* mb = tscore->first();
-            if (mb && mb->type() == ElementType::VBOX) {
-                  VBox* tvb = static_cast<VBox*>(mb);
+            if (mb && mb->isVBox()) {
+                  VBox* tvb = toVBox(mb);
                   nvb = new VBox(score);
                   nvb->setBoxHeight(tvb->boxHeight());
                   nvb->setBoxWidth(tvb->boxWidth());
@@ -560,13 +556,11 @@ MasterScore* MuseScore::getNewFile()
             delete tscore;
             }
       else {
-            score = new MasterScore();
-            score->setMovements(new Movements());
-            score->setStyle(MScore::defaultStyle());
+            score = new MasterScore(MScore::defaultStyle());
             newWizard->createInstruments(score);
             }
       score->setCreated(true);
-      score->masterScore()->fileInfo()->setFile(createDefaultName());
+      score->fileInfo()->setFile(createDefaultName());
 
       if (!score->style().chordList()->loaded()) {
             if (score->styleB(StyleIdx::chordsXmlFile))
@@ -574,7 +568,7 @@ MasterScore* MuseScore::getNewFile()
             score->style().chordList()->read(score->styleSt(StyleIdx::chordDescriptionFile));
             }
       if (!newWizard->title().isEmpty())
-            score->masterScore()->fileInfo()->setFile(newWizard->title());
+            score->fileInfo()->setFile(newWizard->title());
 
       score->sigmap()->add(0, timesig);
 
