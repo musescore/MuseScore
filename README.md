@@ -20,7 +20,7 @@ For support, contribution, bug reports, visit [MuseScore.org](https://musescore.
 * [MuseScore Homepage](https://musescore.org)
 * [MuseScore Git workflow instructions](https://musescore.org/en/developers-handbook/git-workflow).
 * [How to compile MuseScore?](https://musescore.org/en/developers-handbook/compilation)
-* Build status: [![Build Status](https://secure.travis-ci.org/musescore/MuseScore.png)](https://travis-ci.org/musescore/MuseScore)
+* Build status: [![Build Status](https://secure.travis-ci.org/musescore/MuseScore.svg)](https://travis-ci.org/musescore/MuseScore)
 
 ## License
 MuseScore is licensed under GPL version 2.0. See LICENSE.GPL in the same directory.
