@@ -481,7 +481,6 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                 || element->type() == ElementType::MARKER
                 || element->type() == ElementType::JUMP
                 || element->type() == ElementType::SPACER
-                || element->type() == ElementType::LAYOUT_BREAK
                 || element->type() == ElementType::VBOX
                 || element->type() == ElementType::HBOX
                 || element->type() == ElementType::TBOX
@@ -502,6 +501,10 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                         if (m == last)
                               break;
                         }
+                  }
+            else if (element->type() == ElementType::LAYOUT_BREAK) {
+                  LayoutBreak* breakElement = static_cast<LayoutBreak*>(element);
+                  score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
                   }
             else if (element->isClef() || element->isKeySig() || element->isTimeSig()) {
                   Measure* m1 = sel.startSegment()->measure();
