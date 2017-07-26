@@ -123,8 +123,9 @@ class EditData {
 
       ElementEditData* getData(const Element*) const;
       void addData(ElementEditData*);
-      bool control() const { return modifiers & Qt::ControlModifier; }
-      bool shift() const   { return modifiers & Qt::ShiftModifier; }
+      bool control() const  { return modifiers & Qt::ControlModifier; }
+      bool shift() const    { return modifiers & Qt::ShiftModifier; }
+      bool isStartEndGrip() { return curGrip == Grip::START || curGrip == Grip::END; }
       };
 
 //-------------------------------------------------------------------
@@ -276,10 +277,11 @@ class Element : public ScoreElement {
 
       virtual void startEdit(EditData&);
       virtual bool edit(EditData&);
-      virtual void startEditDrag(EditData&)      {}
+      virtual void startEditDrag(EditData&);
       virtual void editDrag(EditData&);
-      virtual void endEditDrag(EditData&)        {}
-      virtual void endEdit(EditData&)            {}
+      virtual void endEditDrag(EditData&);
+      virtual void endEdit(EditData&);
+
       virtual void editCut(EditData&)            {}
       virtual void editCopy(EditData&)           {}
 
@@ -474,7 +476,6 @@ class ElementEditData {
    public:
       Element* e;
       QList<PropertyData> propertyData;
-      QPointF startDragPosition;
 
       void pushProperty(P_ID pid) { propertyData.push_back(PropertyData({pid, e->getProperty(pid) })); }
       };

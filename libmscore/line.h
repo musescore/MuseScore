@@ -20,7 +20,6 @@ namespace Ms {
 
 class SLine;
 class System;
-class MuseScoreView;
 
 //---------------------------------------------------------
 //   @@ LineSegment
@@ -42,7 +41,6 @@ class LineSegment : public SpannerSegment {
       virtual void updateGrips(EditData&) const override;
       virtual QPointF gripAnchor(Grip) const override;
       virtual void startEditDrag(EditData&) override;
-      virtual void endEditDrag(EditData&) override;
 
    public:
       LineSegment(Score* s) : SpannerSegment(s) {}

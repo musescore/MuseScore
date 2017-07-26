@@ -23,10 +23,9 @@ namespace Ms {
 //---------------------------------------------------------
 
 class SlurSegment : public SlurTieSegment {
-      Q_GADGET
 
    protected:
-      void changeAnchor(MuseScoreView*, Grip, Element*);
+      virtual void changeAnchor(EditData&, Element*);
 
    public:
       SlurSegment(Score* s) : SlurTieSegment(s) {}
@@ -41,15 +40,12 @@ class SlurSegment : public SlurTieSegment {
       void layoutSegment(const QPointF& p1, const QPointF& p2);
 
       bool isEdited() const;
-      virtual void startEdit(EditData&) override;
-      virtual void editDrag(EditData&) override;
       virtual bool edit(EditData&) override;
       virtual void updateGrips(EditData&) const override;
-      virtual QPointF gripAnchor(Grip grip) const override;
 
       Slur* slur() const { return (Slur*)spanner(); }
 
-      void computeBezier(QPointF so = QPointF());
+      virtual void computeBezier(QPointF so = QPointF());
       };
 
 //---------------------------------------------------------
@@ -57,7 +53,6 @@ class SlurSegment : public SlurTieSegment {
 //---------------------------------------------------------
 
 class Slur : public SlurTie {
-      Q_GADGET
 
       void slurPosChord(SlurPos*);
 
