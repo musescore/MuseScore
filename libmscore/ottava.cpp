@@ -260,13 +260,15 @@ LineSegment* Ottava::createLineSegment()
       return new OttavaSegment(score());
       }
 
+#if 0
 //---------------------------------------------------------
 //   endEdit
 //---------------------------------------------------------
 
 void Ottava::endEdit(EditData& ed)
       {
-      if (editTick != tick() || editTick2 != tick2()) {
+      SpannerEditData* ned = static_cast<SpannerEditData*>(ed.getData(this));
+      if (ned->editTick != tick() || ned->editTick2 != tick2()) {
             Staff* s = staff();
             s->updateOttava();
             score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
@@ -274,6 +276,7 @@ void Ottava::endEdit(EditData& ed)
             }
       TextLineBase::endEdit(ed);
       }
+#endif
 
 //---------------------------------------------------------
 //   write

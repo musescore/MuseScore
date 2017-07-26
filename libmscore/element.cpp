@@ -315,73 +315,6 @@ QColor Element::curColor(const Element* proxy) const
       }
 
 //---------------------------------------------------------
-//   drag
-///   Return update Rect relative to canvas.
-//---------------------------------------------------------
-
-QRectF Element::drag(EditData& ed)
-      {
-      QRectF r(canvasBoundingRect());
-
-      qreal x = ed.delta.x();
-      qreal y = ed.delta.y();
-
-      qreal _spatium = spatium();
-      if (ed.hRaster) {
-            qreal hRaster = _spatium / MScore::hRaster();
-            int n = lrint(x / hRaster);
-            x = hRaster * n;
-            }
-      if (ed.vRaster) {
-            qreal vRaster = _spatium / MScore::vRaster();
-            int n = lrint(y / vRaster);
-            y = vRaster * n;
-            }
-
-      setUserOff(QPointF(x, y));
-      setGenerated(false);
-
-      if (isText()) {         // TODO: check for other types
-            //
-            // restrict move to page boundaries
-            //
-            QRectF r(canvasBoundingRect());
-            Page* p = 0;
-            Element* e = this;
-            while (e) {
-                  if (e->type() == ElementType::PAGE) {
-                        p = static_cast<Page*>(e);
-                        break;
-                        }
-                  e = e->parent();
-                  }
-            if (p) {
-                  bool move = false;
-                  QRectF pr(p->canvasBoundingRect());
-                  if (r.right() > pr.right()) {
-                        x -= r.right() - pr.right();
-                        move = true;
-                        }
-                  else if (r.left() < pr.left()) {
-                        x += pr.left() - r.left();
-                        move = true;
-                        }
-                  if (r.bottom() > pr.bottom()) {
-                        y -= r.bottom() - pr.bottom();
-                        move = true;
-                        }
-                  else if (r.top() < pr.top()) {
-                        y += pr.top() - r.top();
-                        move = true;
-                        }
-                  if (move)
-                        setUserOff(QPointF(x, y));
-                  }
-            }
-      return canvasBoundingRect() | r;
-      }
-
-//---------------------------------------------------------
 //   pagePos
 //    return position in canvas coordinates
 //---------------------------------------------------------
@@ -928,41 +861,6 @@ ElementType Element::readType(XmlReader& e, QPointF* dragOffset,
                   e.unknown();
             }
       return ElementType::INVALID;
-      }
-
-//---------------------------------------------------------
-//   editDrag
-//---------------------------------------------------------
-
-void Element::editDrag(EditData& ed)
-      {
-      score()->addRefresh(canvasBoundingRect());
-      setUserOff(userOff() + ed.delta);
-      undoChangeProperty(P_ID::AUTOPLACE, false);
-      score()->addRefresh(canvasBoundingRect());
-      }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Element::startEdit(EditData&)
-      {
-      undoPushProperty(P_ID::USER_OFF);
-      }
-
-//---------------------------------------------------------
-//   edit
-//    return true if event is accepted
-//---------------------------------------------------------
-
-bool Element::edit(EditData& ed)
-      {
-      if (ed.key ==  Qt::Key_Home) {
-            setUserOff(QPoint());
-            return true;
-            }
-      return false;
       }
 
 //---------------------------------------------------------
@@ -1535,16 +1433,16 @@ Element* Element::nextElement()
             switch (e->type()) {
                   case ElementType::SEGMENT: {
                         Segment* s = static_cast<Segment*>(e);
-                        return s->nextElement(staffIdx()); 
+                        return s->nextElement(staffIdx());
                         }
                   case ElementType::MEASURE: {
                         Measure* m = static_cast<Measure*>(e);
                         return m->nextElementStaff(staffIdx());
                         }
-                  case ElementType::CLEF:              
-                  case ElementType::KEYSIG:            
-                  case ElementType::TIMESIG:           
-                  case ElementType::BAR_LINE: 
+                  case ElementType::CLEF:
+                  case ElementType::KEYSIG:
+                  case ElementType::TIMESIG:
+                  case ElementType::BAR_LINE:
                         return nextSegmentElement();
                   default: {
                         return e->parent()->nextElement();
@@ -1773,33 +1671,6 @@ void Element::triggerLayout() const
       }
 
 //---------------------------------------------------------
-//   startDrag
-//---------------------------------------------------------
-
-void Element::startDrag(EditData& data)
-      {
-      ElementEditData* elementData = new ElementEditData();
-      elementData->startDragPosition = userOff();
-      elementData->e = this;
-      data.addData(elementData);
-      }
-
-//---------------------------------------------------------
-//   endDrag
-//---------------------------------------------------------
-
-void Element::endDrag(EditData& data)
-      {
-      ElementEditData* ed = data.getData(this);
-      if (ed) {
-            if (userOff() != ed->startDragPosition) {
-                  undoChangeProperty(P_ID::AUTOPLACE, false);
-                  score()->undoPropertyChanged(this, P_ID::USER_OFF, ed->startDragPosition);
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
@@ -1871,6 +1742,165 @@ void Element::drawEditMode(QPainter* p, EditData& ed)
                   p->setBrush(Qt::NoBrush);
             p->drawRect(ed.grip[i]);
             }
+      }
+
+//---------------------------------------------------------
+//   startDrag
+//---------------------------------------------------------
+
+void Element::startDrag(EditData& ed)
+      {
+      ElementEditData* eed = new ElementEditData();
+      eed->e = this;
+      eed->pushProperty(P_ID::USER_OFF);
+      ed.addData(eed);
+      }
+
+//---------------------------------------------------------
+//   drag
+///   Return update Rect relative to canvas.
+//---------------------------------------------------------
+
+QRectF Element::drag(EditData& ed)
+      {
+      QRectF r(canvasBoundingRect());
+
+      qreal x = ed.delta.x();
+      qreal y = ed.delta.y();
+
+      qreal _spatium = spatium();
+      if (ed.hRaster) {
+            qreal hRaster = _spatium / MScore::hRaster();
+            int n = lrint(x / hRaster);
+            x = hRaster * n;
+            }
+      if (ed.vRaster) {
+            qreal vRaster = _spatium / MScore::vRaster();
+            int n = lrint(y / vRaster);
+            y = vRaster * n;
+            }
+
+      setUserOff(QPointF(x, y));
+      setGenerated(false);
+
+      if (isText()) {         // TODO: check for other types
+            //
+            // restrict move to page boundaries
+            //
+            QRectF r(canvasBoundingRect());
+            Page* p = 0;
+            Element* e = this;
+            while (e) {
+                  if (e->type() == ElementType::PAGE) {
+                        p = static_cast<Page*>(e);
+                        break;
+                        }
+                  e = e->parent();
+                  }
+            if (p) {
+                  bool move = false;
+                  QRectF pr(p->canvasBoundingRect());
+                  if (r.right() > pr.right()) {
+                        x -= r.right() - pr.right();
+                        move = true;
+                        }
+                  else if (r.left() < pr.left()) {
+                        x += pr.left() - r.left();
+                        move = true;
+                        }
+                  if (r.bottom() > pr.bottom()) {
+                        y -= r.bottom() - pr.bottom();
+                        move = true;
+                        }
+                  else if (r.top() < pr.top()) {
+                        y += pr.top() - r.top();
+                        move = true;
+                        }
+                  if (move)
+                        setUserOff(QPointF(x, y));
+                  }
+            }
+      return canvasBoundingRect() | r;
+      }
+
+//---------------------------------------------------------
+//   endDrag
+//---------------------------------------------------------
+
+void Element::endDrag(EditData& ed)
+      {
+      ElementEditData* eed = ed.getData(this);
+      for (PropertyData pd : eed->propertyData)
+            score()->undoPropertyChanged(this, pd.id, pd.data);
+      undoChangeProperty(P_ID::AUTOPLACE, false);
+      }
+
+//---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void Element::startEdit(EditData& ed)
+      {
+      ElementEditData* elementData = new ElementEditData();
+      elementData->e = this;
+      ed.addData(elementData);
+      }
+
+//---------------------------------------------------------
+//   edit
+//    return true if event is accepted
+//---------------------------------------------------------
+
+bool Element::edit(EditData& ed)
+      {
+      if (ed.key ==  Qt::Key_Home) {
+            setUserOff(QPoint());
+            return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   startEditDrag
+//---------------------------------------------------------
+
+void Element::startEditDrag(EditData& ed)
+      {
+      ElementEditData* eed = ed.getData(this);
+      eed->pushProperty(P_ID::USER_OFF);
+      }
+
+//---------------------------------------------------------
+//   editDrag
+//---------------------------------------------------------
+
+void Element::editDrag(EditData& ed)
+      {
+      score()->addRefresh(canvasBoundingRect());
+      setUserOff(userOff() + ed.delta);
+      undoChangeProperty(P_ID::AUTOPLACE, false);
+      score()->addRefresh(canvasBoundingRect());
+      }
+
+//---------------------------------------------------------
+//   endEditDrag
+//---------------------------------------------------------
+
+void Element::endEditDrag(EditData& ed)
+      {
+      ElementEditData* eed = ed.getData(this);
+      for (PropertyData pd : eed->propertyData)
+            score()->undoPropertyChanged(this, pd.id, pd.data);
+      undoChangeProperty(P_ID::AUTOPLACE, false);
+      eed->propertyData.clear();
+      }
+
+//---------------------------------------------------------
+//   endEdit
+//---------------------------------------------------------
+
+void Element::endEdit(EditData&)
+      {
       }
 
 }

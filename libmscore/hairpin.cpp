@@ -323,6 +323,7 @@ void HairpinSegment::startEdit(EditData& ed)
       {
       ed.grips   = 4;
       ed.curGrip = Grip::END;
+      Element::startEdit(ed);
       }
 
 //---------------------------------------------------------
@@ -332,7 +333,7 @@ void HairpinSegment::startEdit(EditData& ed)
 void HairpinSegment::startEditDrag(EditData& ed)
       {
       TextLineBaseSegment::startEditDrag(ed);
-      ElementEditData* eed = static_cast<ElementEditData*>(ed.getData(this));
+      ElementEditData* eed = ed.getData(this);
 
       eed->pushProperty(P_ID::HAIRPIN_HEIGHT);
       eed->pushProperty(P_ID::HAIRPIN_CONT_HEIGHT);
@@ -349,19 +350,9 @@ void HairpinSegment::editDrag(EditData& ed)
             if (newHeight < 0.5)
                   newHeight = 0.5;
             hairpin()->setHairpinHeight(Spatium(newHeight));
-            undoChangeProperty(P_ID::AUTOPLACE, false);
             triggerLayout();
             }
       TextLineBaseSegment::editDrag(ed);
-      }
-
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
-
-void HairpinSegment::endEdit(EditData& ed)
-      {
-      TextLineBaseSegment::endEdit(ed);
       }
 
 //---------------------------------------------------------

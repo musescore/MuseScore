@@ -319,8 +319,8 @@ static void readTextStyle(MStyle* style, XmlReader& e)
       Align align = Align::LEFT;
       bool sizeIsSpatiumDependent = true;
       bool hasFrame = false;
-      double frameWidthMM = 0.0;
-      double paddingWidthMM = 0.0;
+//      double frameWidthMM = 0.0;
+//      double paddingWidthMM = 0.0;
       Spatium paddingWidth(0.0);
       int frameRound = 0;
       QColor frameColor = QColor(0, 0, 0, 255);
@@ -406,7 +406,7 @@ static void readTextStyle(MStyle* style, XmlReader& e)
                   sizeIsSpatiumDependent = e.readInt();
             else if (tag == "frameWidth") { // obsolete
                   hasFrame = true;
-                  frameWidthMM = e.readDouble();
+                  /*frameWidthMM =*/ e.readDouble();
                   }
             else if (tag == "frameWidthS") {
                   hasFrame = true;
@@ -415,7 +415,7 @@ static void readTextStyle(MStyle* style, XmlReader& e)
             else if (tag == "frame")
                   hasFrame = e.readInt();
             else if (tag == "paddingWidth")          // obsolete
-                  paddingWidthMM = e.readDouble();
+                  /*paddingWidthMM =*/ e.readDouble();
             else if (tag == "paddingWidthS")
                   paddingWidth = Spatium(e.readDouble());
             else if (tag == "frameRound")

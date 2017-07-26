@@ -65,16 +65,6 @@ void SlurSegment::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void SlurSegment::startEdit(EditData& ed)
-      {
-      ed.grips   = int(Grip::GRIPS);
-      ed.curGrip = Grip::END;
-      }
-
-//---------------------------------------------------------
 //   updateGrips
 //    return grip rectangles in page coordinates
 //---------------------------------------------------------
@@ -120,12 +110,12 @@ bool SlurSegment::edit(EditData& ed)
       Slur* sl = slur();
 
       if (ed.key == Qt::Key_X) {
-            sl->setSlurDirection(sl->up() ? Direction::DOWN : Direction::UP);
+            sl->undoChangeProperty(P_ID::SLUR_DIRECTION, QVariant::fromValue<Direction>(sl->up() ? Direction::DOWN : Direction::UP));
             sl->layout();
             return true;
             }
       if (ed.key == Qt::Key_Home) {
-            ups(ed.curGrip).off = QPointF();
+            ups(ed.curGrip).off = QPointF();          //TODO
             sl->layout();
             return true;
             }
@@ -137,11 +127,11 @@ bool SlurSegment::edit(EditData& ed)
       ChordRest* e;
       ChordRest* e1;
       if (ed.curGrip == Grip::START) {
-            e = sl->startCR();
+            e  = sl->startCR();
             e1 = sl->endCR();
             }
       else {
-            e = sl->endCR();
+            e  = sl->endCR();
             e1 = sl->startCR();
             }
 
@@ -162,7 +152,7 @@ bool SlurSegment::edit(EditData& ed)
             cr = searchCR(e->segment(), startTrack, endTrack);
             }
       if (cr && cr != e1)
-            changeAnchor(ed.view, ed.curGrip, cr);
+            changeAnchor(ed, cr);
       return true;
       }
 
@@ -170,165 +160,29 @@ bool SlurSegment::edit(EditData& ed)
 //   changeAnchor
 //---------------------------------------------------------
 
-void SlurSegment::changeAnchor(MuseScoreView* viewer, Grip curGrip, Element* element)
+void SlurSegment::changeAnchor(EditData& ed, Element* element)
       {
-      if (curGrip == Grip::START) {
-            spanner()->setStartElement(element);
-            switch (spanner()->anchor()) {
-                  case Spanner::Anchor::NOTE: {
-                        Tie* tie = toTie(spanner());
-                        Note* note = toNote(element);
-                        if (note->chord()->tick() <= tie->endNote()->tick()) {
-                              tie->startNote()->setTieFor(0);
-                              tie->setStartNote(note);
-                              note->setTieFor(tie);
-                              }
-                        break;
-                        }
-                  case Spanner::Anchor::CHORD:
-                        spanner()->setTick(element->tick());
-                        spanner()->setTick2(spanner()->endElement()->tick());
-                        spanner()->setTrack(element->track());
-                        if (score()->spannerMap().removeSpanner(spanner()))
-                              score()->addSpanner(spanner());
-                        break;
-                  case Spanner::Anchor::SEGMENT:
-                  case Spanner::Anchor::MEASURE:
-                        qDebug("SlurSegment::changeAnchor: bad anchor");
-                        break;
-                  }
+      if (ed.curGrip == Grip::START) {
+            int ticks = spanner()->endElement()->tick() - element->tick();
+            spanner()->undoChangeProperty(P_ID::SPANNER_TICK, element->tick());
+            spanner()->undoChangeProperty(P_ID::SPANNER_TICKS, ticks);
+            spanner()->undoChangeProperty(P_ID::TRACK, element->track());
+            if (score()->spannerMap().removeSpanner(spanner()))
+                  score()->addSpanner(spanner());
             }
       else {
-            spanner()->setEndElement(element);
-            switch (spanner()->anchor()) {
-                  case Spanner::Anchor::NOTE: {
-                        Tie* tie = toTie(spanner());
-                        Note* note = toNote(element);
-                        // do not allow backward ties
-                        if (note->chord()->tick() >= tie->startNote()->tick()) {
-                              tie->endNote()->setTieBack(0);
-                              tie->setEndNote(note);
-                              note->setTieBack(tie);
-                              }
-                        break;
-                        }
-                  case Spanner::Anchor::CHORD:
-                        spanner()->setTick2(element->tick());
-                        spanner()->setTrack2(element->track());
-                        break;
-
-                  case Spanner::Anchor::SEGMENT:
-                  case Spanner::Anchor::MEASURE:
-                        qDebug("SlurSegment::changeAnchor: bad anchor");
-                        break;
-                  }
+            spanner()->undoChangeProperty(P_ID::SPANNER_TICKS,  element->tick() - spanner()->startElement()->tick());
+            spanner()->undoChangeProperty(P_ID::SPANNER_TRACK2, element->track());
             }
-
       int segments  = spanner()->spannerSegments().size();
-      ups(curGrip).off = QPointF();
+      ups(ed.curGrip).off = QPointF();
       spanner()->layout();
       if (spanner()->spannerSegments().size() != segments) {
             QList<SpannerSegment*>& ss = spanner()->spannerSegments();
-
-            SlurSegment* newSegment = toSlurSegment(curGrip == Grip::END ? ss.back() : ss.front());
-//            score()->endCmd();
-//            score()->startCmd();
-            viewer->startEdit(newSegment, curGrip);
-//            score()->setLayoutAll();
+            SlurSegment* newSegment = toSlurSegment(ed.curGrip == Grip::END ? ss.back() : ss.front());
+            ed.view->startEdit(newSegment, ed.curGrip);
             triggerLayout();
             }
-      }
-
-//---------------------------------------------------------
-//   gripAnchor
-//---------------------------------------------------------
-
-QPointF SlurSegment::gripAnchor(Grip grip) const
-      {
-//      SlurPos spos;
-//      slurTie()->slurPos(&spos);
-
-      QPointF pp(pagePos());
-      QPointF p1(ups(Grip::START).p + pp);
-      QPointF p2(ups(Grip::END).p + pp);
-
-      switch (spannerSegmentType()) {
-            case SpannerSegmentType::SINGLE:
-                  if (grip == Grip::START)
-                        return p1;
-                  else if (grip == Grip::END)
-                        return p2;
-                  break;
-
-            case SpannerSegmentType::BEGIN:
-                  if (grip == Grip::START)
-                        return p1;
-                  else if (grip == Grip::END)
-                        return system()->abbox().topRight();
-                  break;
-
-            case SpannerSegmentType::MIDDLE:
-                  if (grip == Grip::START)
-                        return system()->pagePos();
-                  else if (grip == Grip::END)
-                        return system()->abbox().topRight();
-                  break;
-
-            case SpannerSegmentType::END:
-                  if (grip == Grip::START)
-                        return system()->pagePos();
-                  else if (grip == Grip::END)
-                        return p2;
-                  break;
-            }
-      return QPointF();
-      }
-
-//---------------------------------------------------------
-//   editDrag
-//---------------------------------------------------------
-
-void SlurSegment::editDrag(EditData& ed)
-      {
-      Grip g = ed.curGrip;
-      ups(g).off += ed.delta;
-
-      if (g == Grip::START || g == Grip::END) {
-            computeBezier();
-            //
-            // move anchor for slurs/ties
-            //
-            if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
-                  Spanner* spanner = slurTie();
-                  Qt::KeyboardModifiers km = qApp->keyboardModifiers();
-                  Note* note = static_cast<Note*>(ed.view->elementNear(ed.pos));
-                  if (note && note->isNote()
-                     && ((g == Grip::END && note->tick() > slurTie()->tick()) || (g == Grip::START && note->tick() < slurTie()->tick2()))
-                     ) {
-                        if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
-                              Chord* c = note->chord();
-                              ed.view->setDropTarget(note);
-                              if (c != spanner->endCR()) {
-                                    changeAnchor(ed.view, g, c);
-                                    }
-                              }
-                        }
-                  else
-                        ed.view->setDropTarget(0);
-                  }
-            }
-      else if (ed.curGrip == Grip::BEZIER1 || ed.curGrip == Grip::BEZIER2) {
-            computeBezier();
-            }
-      else if (ed.curGrip == Grip::SHOULDER) {
-            ups(ed.curGrip).off = QPointF();
-            computeBezier(ed.delta);
-            }
-      else if (ed.curGrip == Grip::DRAG) {
-            ups(Grip::DRAG).off = QPointF();
-            setUserOff(userOff() + ed.delta);
-            }
-      undoChangeProperty(P_ID::AUTOPLACE, false);
       }
 
 //---------------------------------------------------------

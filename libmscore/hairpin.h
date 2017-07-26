@@ -46,7 +46,6 @@ class HairpinSegment : public TextLineBaseSegment {
       virtual void startEditDrag(EditData&) override;
       virtual void editDrag(EditData&) override;
       virtual void updateGrips(EditData&) const override;
-      virtual void endEdit(EditData&) override;
 
       virtual void draw(QPainter*) const override;
 
