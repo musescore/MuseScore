@@ -329,17 +329,14 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool fotoEditElementDragTransition(QMouseEvent* ev);
       bool editScoreViewDragTransition(QMouseEvent* e);
       bool editSelectTransition(QMouseEvent* me);
-      void cmdAddSlur();
+      void addSlur();
+      virtual void cmdAddSlur(ChordRest*, ChordRest*) override;
       virtual void cmdAddHairpin(HairpinType) override;
       void cmdAddNoteLine();
-      virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
 
       bool noteEntryMode() const { return state == ViewState::NOTE_ENTRY; }
       bool editMode() const      { return state == ViewState::EDIT; }
       bool fotoMode() const;
-
-//      void editInputTransition(QInputMethodEvent* ie);
-//      void onEditPasteTransition(QMouseEvent* ev);
 
       virtual void setDropRectangle(const QRectF&);
       virtual void setDropTarget(const Element*) override;
@@ -395,7 +392,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void layoutChanged();
       virtual void dataChanged(const QRectF&);
       virtual void updateAll()    { update(); }
-      virtual void adjustCanvasPosition(const Element* el, bool playBack, int staff = -1);
+      virtual void adjustCanvasPosition(const Element* el, bool playBack, int staff = -1) override;
       virtual void setCursor(const QCursor& c) { QWidget::setCursor(c); }
       virtual QCursor cursor() const { return QWidget::cursor(); }
       void loopUpdate(bool val)   {  loopToggled(val); }

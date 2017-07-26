@@ -452,7 +452,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                         qDebug("nowhere to place drum note");
                   }
             else if (element->isSlur() && addSingle) {
-                  viewer->cmdAddSlur();
+                  viewer->addSlur();
                   }
             else if (element->isSLine() && element->type() != ElementType::GLISSANDO && addSingle) {
                   Segment* startSegment = cr1->segment();
@@ -597,8 +597,8 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                               }
                         }
                   }
-            else if (element->type() == ElementType::SLUR) {
-                  viewer->cmdAddSlur();
+            else if (element->isSlur()) {
+                  viewer->addSlur();
                   }
             else if (element->isSLine() && element->type() != ElementType::GLISSANDO) {
                   Segment* startSegment = sel.startSegment();
