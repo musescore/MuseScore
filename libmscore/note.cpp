@@ -1649,7 +1649,7 @@ Element* Note::drop(EditData& data)
 
             case ElementType::SLUR:
                   delete e;
-                  data.view->cmdAddSlur(this, 0);
+                  data.view->cmdAddSlur(chord(), nullptr);
                   return 0;
 
             case ElementType::HAIRPIN:

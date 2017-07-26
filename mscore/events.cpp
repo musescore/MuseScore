@@ -674,6 +674,10 @@ void ScoreView::escapeCmd()
             case ViewState::PLAY:
                   changeState(ViewState::NORMAL);
                   break;
+            case ViewState::NORMAL:
+                  _score->deselectAll();
+                  update();
+                  break;
             default:
                   break;
             }

@@ -1750,7 +1750,7 @@ void ScoreView::cmd(const char* s)
                   changeState(ViewState::NORMAL);
             }
       else if (cmd == "add-slur")
-            cmdAddSlur();
+            addSlur();
       else if (cmd == "add-hairpin")
             cmdAddHairpin(HairpinType::CRESC_HAIRPIN);
       else if (cmd == "add-hairpin-reverse")
@@ -3048,11 +3048,11 @@ void ScoreView::startUndoRedo(bool undo)
       }
 
 //---------------------------------------------------------
-//   cmdAddSlur
+//   addSlur
 //    command invoked, or icon double clicked
 //---------------------------------------------------------
 
-void ScoreView::cmdAddSlur()
+void ScoreView::addSlur()
       {
       InputState& is = _score->inputState();
       if (noteEntryMode() && is.slur()) {
@@ -3062,56 +3062,188 @@ void ScoreView::cmdAddSlur()
             is.setSlur(nullptr);
             return;
             }
-      bool undoActive = _score->undoStack()->active();
-      if (_score->selection().isRange()) {
-            if (!undoActive)
-                  _score->startCmd();
-            int startTrack = _score->selection().staffStart() * VOICES;
-            int endTrack   = _score->selection().staffEnd() * VOICES;
+      ChordRest* cr1;
+      ChordRest* cr2;
+      const auto& sel = _score->selection();
+      auto el         = sel.uniqueElements();
+
+      if (sel.isRange()) {
+            int startTrack = sel.staffStart() * VOICES;
+            int endTrack   = sel.staffEnd() * VOICES;
             for (int track = startTrack; track < endTrack; ++track) {
-                  std::vector<Note*> nl = _score->selection().noteList(track);
-                  Note* firstNote = 0;
-                  Note* lastNote  = 0;
-                  for (Note* n : nl) {
-                        if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick())
-                              firstNote = n;
-                        if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick())
-                              lastNote = n;
+                  cr1 = 0;
+                  cr2 = 0;
+                  for (Element* e : el) {
+                        if (e->track() != track)
+                              continue;
+                        if (e->isNote())
+                              e = toNote(e)->chord();
+                        if (!e->isChordRest())
+                              continue;
+                        ChordRest* cr = toChordRest(e);
+                        if (!cr1 || cr1->tick() > cr->tick())
+                              cr1 = cr;
+                        if (!cr2 || cr2->tick() < cr->tick())
+                              cr2 = cr;
                         }
-                  if (firstNote) {
-                        if (firstNote == lastNote)
-                              lastNote = 0;
-                        ChordRest* cr1 = firstNote->chord();
-                        ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1);
-                        if (cr2 == 0)
-                              cr2 = cr1;
-                        Slur* slur = new Slur(_score);
-                        slur->setTick(cr1->tick());
-                        slur->setTick2(cr2->tick());
-                        slur->setTrack(cr1->track());
-                        slur->setTrack2(cr2->track());
-                        slur->setParent(0);
-                        _score->undoAddElement(slur);
-                        }
+                  if (cr1)
+                        cmdAddSlur(cr1, cr2);
                   }
-            if (!undoActive)
-                  _score->endCmd();
-            mscore->endCmd();
             }
       else {
-            Note* firstNote = 0;
-            Note* lastNote  = 0;
-            for (Note* n : _score->selection().noteList()) {
-                  if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick())
-                        firstNote = n;
-                  if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick() || (firstNote && firstNote->chord()->parent() == n->chord()))
-                        lastNote = n;
+            cr1 = 0;
+            cr2 = 0;
+            for (Element* e : el) {
+                  if (e->isNote())
+                        e = toNote(e)->chord();
+                  if (!e->isChordRest())
+                        continue;
+                  ChordRest* cr = toChordRest(e);
+                  if (!cr1 || cr1->tick() > cr->tick())
+                        cr1 = cr;
+                  if (!cr2 || cr2->tick() < cr->tick() || (cr1 && cr1->parent() == cr))
+                        cr2 = cr;
                   }
-            if (!firstNote)
+            if (cr1 == cr2)
+                  cr2 = 0;
+            if (cr1)
+                  cmdAddSlur(cr1, cr2);
+            }
+      }
+
+//---------------------------------------------------------
+//   cmdAddSlur
+//---------------------------------------------------------
+
+void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2)
+      {
+      bool startEditMode = false;
+      if (cr2 == 0) {
+            cr2 = nextChordRest(cr1);
+            if (cr2 == 0)
+                  cr2 = cr1;
+            startEditMode = true;      // start slur in edit mode if last chord is not given
+            }
+
+      auto l1 = cr1->linkList();
+      auto l2 = cr2->linkList();    // QList<ScoreElement*> linkList() const;
+
+      SlurSegment* ss = 0;
+      Slur* slur      = 0;
+      Slur* lSlur     = 0;
+      _score->startCmd();
+      for (ScoreElement* se1 : l1) {
+            ChordRest* _cr1 = toChordRest(se1);
+            ChordRest* _cr2 = 0;
+            // search corresponding _cr2 for _cr1
+            for (ScoreElement* se2 : l2) {
+                  ChordRest* cr = toChordRest(se2);
+                  if (_cr1->score() == cr->score() && _cr1->staffIdx() == cr->staffIdx()) {
+                        _cr2 = cr;
+                        break;
+                        }
+                  }
+            if (!_cr2)
+                  qFatal("link not found");
+
+            Slur* _slur = new Slur(_cr1->score());
+            if (lSlur)
+                  lSlur->linkTo(_slur);
+            else
+                  lSlur = _slur;
+            _slur->setTick(_cr1->tick());
+            _slur->setTick2(_cr2->tick());
+            _slur->setTrack(_cr1->track());
+            if (_cr2->staff()->part() == _cr1->staff()->part() && !_cr2->staff()->isLinked(_cr1->staff()))
+                  _slur->setTrack2(_cr2->track());
+            else
+                  _slur->setTrack2(_cr1->track());
+            _slur->setStartElement(_cr1);
+            _slur->setEndElement(_cr2);
+
+            _cr1->score()->undoAddElement(_slur);
+            SlurSegment* _ss = new SlurSegment(_cr1->score());
+            _ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+            if (_cr1 == _cr2)
+                  _ss->setSlurOffset(Grip::END, QPointF(3.0 * _cr1->score()->spatium(), 0.0));
+            _ss->setAutoplace(false);
+            _slur->add(_ss);
+            if (_cr1 == cr1) {
+                  ss = _ss;
+                  slur = _slur;
+                  }
+            }
+      _score->endCmd();
+
+      if (noteEntryMode()) {
+            _score->inputState().setSlur(slur);
+            ss->setSelected(true);
+            }
+      else if (startEditMode) {
+            editData.element = ss;
+            changeState(ViewState::EDIT);
+            }
+      }
+
+//---------------------------------------------------------
+//   cmdAddHairpin
+//    '<' typed on keyboard
+//---------------------------------------------------------
+
+void ScoreView::cmdAddHairpin(HairpinType type)
+      {
+      const Selection& selection = _score->selection();
+      // special case for two selected chordrests on same staff
+      bool twoNotesSameStaff = false;
+      if (selection.isList() && selection.elements().size() == 2) {
+            ChordRest* cr1 = selection.firstChordRest();
+            ChordRest* cr2 = selection.lastChordRest();
+            if (cr1 && cr2 && cr1 != cr2 && cr1->staffIdx() == cr2->staffIdx())
+                  twoNotesSameStaff = true;
+            }
+      // add hairpin on each staff if possible
+      if (selection.isRange() && selection.staffStart() != selection.staffEnd() - 1) {
+            _score->startCmd();
+            for (int staffIdx = selection.staffStart() ; staffIdx < selection.staffEnd(); ++staffIdx) {
+                  ChordRest* cr1 = selection.firstChordRest(staffIdx * VOICES);
+                  ChordRest* cr2 = selection.lastChordRest(staffIdx * VOICES);
+                  if (!cr1)
+                       continue;
+                  if (cr2 == 0)
+                       cr2 = cr1;
+                  _score->addHairpin(type, cr1->tick(), cr2->tick() + cr2->actualTicks(), cr1->track());
+                  }
+            _score->endCmd();
+            }
+      else if (selection.isRange() || selection.isSingle() || twoNotesSameStaff) {
+            // for single staff range selection, or single selection,
+            // find start & end elements elements
+            ChordRest* cr1;
+            ChordRest* cr2;
+            _score->getSelectedChordRest2(&cr1, &cr2);
+            if (!cr1)
                   return;
-            if (firstNote == lastNote)
-                  lastNote = 0;
-            cmdAddSlur(firstNote, lastNote);
+            if (cr2 == 0)
+                  cr2 = cr1;
+
+            _score->startCmd();
+            int tick2 = twoNotesSameStaff ? cr2->tick() : cr2->tick() + cr2->actualTicks();
+            Hairpin* pin = _score->addHairpin(type, cr1->tick(), tick2, cr1->track());
+            pin->layout();
+            _score->endCmd();
+
+            const QList<SpannerSegment*>& el = pin->spannerSegments();
+            if (!noteEntryMode()) {
+                  if (!el.isEmpty()) {
+                        editData.element = el.front();
+                        changeState(ViewState::EDIT);
+                        }
+                  }
+            }
+      else {
+            // do not attempt for list selection
+            // or we will keep adding hairpins to the same chordrests
+            return;
             }
       }
 
@@ -3161,136 +3293,6 @@ void ScoreView::cmdAddNoteLine()
       _score->startCmd();
       _score->undoAddElement(tl);
       _score->endCmd();
-      }
-
-//---------------------------------------------------------
-//   cmdAddSlur
-//---------------------------------------------------------
-
-void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
-      {
-      _score->startCmd();
-      ChordRest* cr1 = firstNote->chord();
-      ChordRest* cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1);
-
-      if (cr2 == 0)
-            cr2 = cr1;
-
-      Slur* slur = new Slur(_score);
-      slur->setTick(cr1->tick());
-      slur->setTick2(cr2->tick());
-      slur->setTrack(cr1->track());
-      if (cr2->staff()->part() == cr1->staff()->part() && !cr2->staff()->isLinked(cr1->staff()))
-            slur->setTrack2(cr2->track());
-      else
-            slur->setTrack2(cr1->track());
-
-      slur->setStartElement(cr1);
-      slur->setEndElement(cr2);
-
-      _score->undoAddElement(slur);
-      slur->layout();
-
-      _score->endCmd();
-      _score->startCmd();
-
-      if (cr1 == cr2) {
-            SlurSegment* ss = slur->frontSegment();
-            ss->setSlurOffset(Grip::END, QPointF(3.0, 0.0));
-            }
-      const QList<SpannerSegment*>& el = slur->spannerSegments();
-      if (noteEntryMode()) {
-            _score->inputState().setSlur(slur);
-            if (!el.isEmpty())
-                  el.front()->setSelected(true);
-            else
-                  qDebug("addSlur: no segment");
-            _score->endCmd();
-            }
-      else {
-            //
-            // start slur in edit mode if lastNote is not given
-            //
-            if (editData.element && editData.element->isText()) {
-                  _score->endCmd();
-                  return;
-                  }
-            if ((lastNote == 0) && !el.isEmpty()) {
-                  editData.element = el.front();
-                  changeState(ViewState::EDIT);
-                  }
-            else
-                  _score->endCmd();
-            }
-      }
-
-//---------------------------------------------------------
-//   cmdAddHairpin
-//    '<' typed on keyboard
-//---------------------------------------------------------
-
-void ScoreView::cmdAddHairpin(HairpinType type)
-      {
-      Selection selection = _score->selection();
-      // special case for two selected chordrests on same staff
-      bool twoNotesSameStaff = false;
-      if (selection.isList() && selection.elements().size() == 2) {
-            ChordRest* cr1 = selection.firstChordRest();
-            ChordRest* cr2 = selection.lastChordRest();
-            if (cr1 && cr2 && cr1 != cr2 && cr1->staffIdx() == cr2->staffIdx())
-                  twoNotesSameStaff = true;
-            }
-      // add hairpin on each staff if possible
-      if (selection.isRange() && selection.staffStart() != selection.staffEnd() - 1) {
-            _score->startCmd();
-            for (int staffIdx = selection.staffStart() ; staffIdx < selection.staffEnd(); ++staffIdx) {
-                  ChordRest* cr1 = selection.firstChordRest(staffIdx * VOICES);
-                  ChordRest* cr2 = selection.lastChordRest(staffIdx * VOICES);
-                  if (!cr1)
-                       continue;
-                  if (cr2 == 0)
-                       cr2 = cr1;
-                  _score->addHairpin(type, cr1->tick(), cr2->tick() + cr2->actualTicks(), cr1->track());
-                  }
-            _score->endCmd();
-            _score->startCmd();
-            }
-      else if (selection.isRange() || selection.isSingle() || twoNotesSameStaff) {
-            // for single staff range selection, or single selection,
-            // find start & end elements elements
-            ChordRest* cr1;
-            ChordRest* cr2;
-            _score->getSelectedChordRest2(&cr1, &cr2);
-            if (!cr1)
-                  return;
-            if (cr2 == 0)
-                  cr2 = cr1;
-
-            _score->startCmd();
-            int tick2 = twoNotesSameStaff ? cr2->tick() : cr2->tick() + cr2->actualTicks();
-            Hairpin* pin = _score->addHairpin(type, cr1->tick(), tick2, cr1->track());
-            pin->layout();
-            _score->endCmd();
-            _score->startCmd();
-
-            const QList<SpannerSegment*>& el = pin->spannerSegments();
-            if (noteEntryMode()) {
-                  _score->endCmd();
-                  }
-            else {
-                  if (!el.isEmpty()) {
-                        editData.element = el.front();
-                        changeState(ViewState::EDIT);
-                        }
-                  else
-                        _score->endCmd();
-                  }
-            }
-      else {
-            // do not attempt for list selection
-            // or we will keep adding hairpins to the same chordrests
-            return;
-            }
       }
 
 //---------------------------------------------------------
