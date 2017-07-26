@@ -28,6 +28,21 @@ enum class SpannerSegmentType {
       };
 
 //---------------------------------------------------------
+//   SpannerEditData
+//---------------------------------------------------------
+
+class SpannerEditData : public ElementEditData {
+   public:
+      Element* editStartElement;
+      Element* editEndElement;
+      int editTick;
+      int editTick2;
+      int editTrack2;
+      QList<QPointF> userOffsets;
+      QList<QPointF> userOffsets2;
+      };
+
+//---------------------------------------------------------
 //   @@ SpannerSegment
 //!    parent: System
 //---------------------------------------------------------
@@ -74,8 +89,6 @@ class SpannerSegment : public Element {
       qreal& rxpos2()                       { return _p2.rx();        }
       qreal& rypos2()                       { return _p2.ry();        }
 
-      virtual void startEdit(EditData&) override;
-      virtual void endEdit(EditData&) override;
       virtual bool isEditable() const override { return true; }
 
       virtual QVariant getProperty(P_ID id) const override;
@@ -122,16 +135,8 @@ class Spanner : public Element {
       int _track2            { -1 };
       bool _broken           { false };
 
-      static QList<QPointF> userOffsets;
-      static QList<QPointF> userOffsets2;
-
    protected:
       QList<SpannerSegment*> segments;
-      // used to store spanner properties as they were at start of editing
-      // and detect edit changes when edit is over
-      static int editTick, editTick2, editTrack2;
-      static Note* editEndNote;
-      static Note* editStartNote;
 
    public:
       Spanner(Score* = 0);
@@ -167,8 +172,6 @@ class Spanner : public Element {
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
-      virtual void startEdit(EditData&) override;
-      virtual void endEdit(EditData&) override;
       bool removeSpannerBack();
       virtual void removeUnmanaged();
       virtual void undoInsertTimeUnmanaged(int tick, int len);
@@ -217,7 +220,7 @@ class Spanner : public Element {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Spanner::Anchor);
+// Q_DECLARE_METATYPE(Ms::Spanner::Anchor);
 
 #endif
 

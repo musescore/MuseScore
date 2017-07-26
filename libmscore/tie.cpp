@@ -36,16 +36,6 @@ void TieSegment::updateGrips(EditData& ed) const
       }
 
 //---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void TieSegment::startEdit(EditData& ed)
-      {
-      ed.grips   = int(Grip::GRIPS);
-      ed.curGrip = Grip::END;
-      }
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -111,119 +101,40 @@ bool TieSegment::edit(EditData& ed)
 //   changeAnchor
 //---------------------------------------------------------
 
-void TieSegment::changeAnchor(MuseScoreView* viewer, Grip curGrip, Element* element)
+void TieSegment::changeAnchor(EditData& ed, Element* element)
       {
-      if (curGrip == Grip::START) {
+      if (ed.curGrip == Grip::START) {
             spanner()->setStartElement(element);
-            switch (spanner()->anchor()) {
-                  case Spanner::Anchor::NOTE: {
-                        Tie* tie = toTie(spanner());
-                        Note* note = toNote(element);
-                        if (note->chord()->tick() <= tie->endNote()->chord()->tick()) {
-                              tie->startNote()->setTieFor(0);
-                              tie->setStartNote(note);
-                              note->setTieFor(tie);
-                              }
-                        break;
-                        }
-                  case Spanner::Anchor::CHORD:
-                        spanner()->setTick(toChord(element)->tick());
-                        spanner()->setTick2(spanner()->endElement()->tick());
-                        spanner()->setTrack(element->track());
-                        if (score()->spannerMap().removeSpanner(spanner()))
-                              score()->addSpanner(spanner());
-                        break;
-                  case Spanner::Anchor::SEGMENT:
-                  case Spanner::Anchor::MEASURE:
-                        qDebug("TieSegment::changeAnchor: bad anchor");
-                        break;
+            Note* note = toNote(element);
+            if (note->chord()->tick() <= tie()->endNote()->chord()->tick()) {
+                  tie()->startNote()->setTieFor(0);
+                  tie()->setStartNote(note);
+                  note->setTieFor(tie());
                   }
             }
       else {
             spanner()->setEndElement(element);
-            switch (spanner()->anchor()) {
-                  case Spanner::Anchor::NOTE: {
-                        Tie* tie = toTie(spanner());
-                        Note* note = toNote(element);
-                        // do not allow backward ties
-                        if (note->chord()->tick() >= tie->startNote()->chord()->tick()) {
-                              tie->endNote()->setTieBack(0);
-                              tie->setEndNote(note);
-                              note->setTieBack(tie);
-                              }
-                        break;
-                        }
-                  case Spanner::Anchor::CHORD:
-                        spanner()->setTick2(toChord(element)->tick());
-                        spanner()->setTrack2(element->track());
-                        break;
-
-                  case Spanner::Anchor::SEGMENT:
-                  case Spanner::Anchor::MEASURE:
-                        qDebug("TieSegment::changeAnchor: bad anchor");
-                        break;
+            Note* note = toNote(element);
+            // do not allow backward ties
+            if (note->chord()->tick() >= tie()->startNote()->chord()->tick()) {
+                  tie()->endNote()->setTieBack(0);
+                  tie()->setEndNote(note);
+                  note->setTieBack(tie());
                   }
             }
 
       int segments  = spanner()->spannerSegments().size();
-      ups(curGrip).off = QPointF();
+      ups(ed.curGrip).off = QPointF();
       spanner()->layout();
       if (spanner()->spannerSegments().size() != segments) {
             QList<SpannerSegment*>& ss = spanner()->spannerSegments();
 
-            TieSegment* newSegment = toTieSegment(curGrip == Grip::END ? ss.back() : ss.front());
+            TieSegment* newSegment = toTieSegment(ed.curGrip == Grip::END ? ss.back() : ss.front());
             score()->endCmd();
             score()->startCmd();
-            viewer->startEdit(newSegment, curGrip);
+            ed.view->startEdit(newSegment, ed.curGrip);
             score()->setLayoutAll();
             }
-      }
-
-//---------------------------------------------------------
-//   gripAnchor
-//---------------------------------------------------------
-
-QPointF TieSegment::gripAnchor(Grip grip) const
-      {
-      SlurPos spos;
-      tie()->slurPos(&spos);
-
-      QPointF sp(system()->pagePos());
-
-      QPointF pp(pagePos());
-      QPointF p1(ups(Grip::START).p + pp);
-      QPointF p2(ups(Grip::END).p + pp);
-
-      switch (spannerSegmentType()) {
-            case SpannerSegmentType::SINGLE:
-                  if (grip == Grip::START)
-                        return p1;
-                  else if (grip == Grip::END)
-                        return p2;
-                  break;
-
-            case SpannerSegmentType::BEGIN:
-                  if (grip == Grip::START)
-                        return p1;
-                  else if (grip == Grip::END)
-                        return system()->abbox().topRight();
-                  break;
-
-            case SpannerSegmentType::MIDDLE:
-                  if (grip == Grip::START)
-                        return sp;
-                  else if (grip == Grip::END)
-                        return system()->abbox().topRight();
-                  break;
-
-            case SpannerSegmentType::END:
-                  if (grip == Grip::START)
-                        return sp;
-                  else if (grip == Grip::END)
-                        return p2;
-                  break;
-            }
-      return QPointF();
       }
 
 //---------------------------------------------------------
@@ -252,7 +163,7 @@ void TieSegment::editDrag(EditData& ed)
                                  && tie->startNote()->chord()->tick() < note->chord()->tick()) {
                                     ed.view->setDropTarget(note);
                                     if (note != tie->endNote()) {
-                                          changeAnchor(ed.view, g, note);
+                                          changeAnchor(ed, note);
                                           return;
                                           }
                                     }
@@ -805,14 +716,16 @@ void Tie::layoutBack(System* system)
       segment->setSpannerSegmentType(SpannerSegmentType::END);
       }
 
+#if 0
 //---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------
 
 void Tie::startEdit(EditData& ed)
       {
+      printf("tie start edit %p %p\n", editStartNote, editEndNote);
       editStartNote = startNote();
-      editEndNote = endNote();
+      editEndNote   = endNote();
       SlurTie::startEdit(ed);
       }
 
@@ -822,12 +735,13 @@ void Tie::startEdit(EditData& ed)
 
 void Tie::endEdit(EditData& ed)
       {
-      if (editStartNote != startNote() || editEndNote != endNote()) {
-            score()->undoStack()->push1(new ChangeSpannerElements(this, editStartNote, editEndNote));
-            }
+      printf("tie::endEdit\n");
+//      if (editStartNote != startNote() || editEndNote != endNote()) {
+//            score()->undoStack()->push1(new ChangeSpannerElements(this, editStartNote, editEndNote));
+//            }
       SlurTie::endEdit(ed);
-      score()->setLayoutAll();
       }
+#endif
 
 //---------------------------------------------------------
 //   setStartNote

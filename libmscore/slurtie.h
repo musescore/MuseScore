@@ -41,9 +41,7 @@ struct UP {
       QPointF p;            // layout position relative to pos()
       QPointF off;          // user offset in point units
 
-      bool operator!=(const UP& up) const {
-            return p != up.p || off != up.off;
-            }
+      bool operator!=(const UP& up) const { return p != up.p || off != up.off; }
       };
 
 class SlurTie;
@@ -57,15 +55,25 @@ class SlurTieSegment : public SpannerSegment {
 
    protected:
       struct UP _ups[int(Grip::GRIPS)];
+
       QPainterPath path;
       QPainterPath shapePath;
       Shape _shape;
+
+      virtual void changeAnchor(EditData&, Element*) = 0;
+      virtual QPointF gripAnchor(Grip grip) const override;
 
    public:
       SlurTieSegment(Score*);
       SlurTieSegment(const SlurTieSegment&);
       virtual void spatiumChanged(qreal, qreal) override;
       SlurTie* slurTie() const { return (SlurTie*)spanner(); }
+
+      virtual void startEdit(EditData&) override;
+      virtual void endEdit(EditData&) override;
+      virtual void startEditDrag(EditData& ed) override;
+      virtual void endEditDrag(EditData& ed) override;
+      virtual void editDrag(EditData&) override;
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
@@ -82,6 +90,7 @@ class SlurTieSegment : public SpannerSegment {
       void writeSlur(XmlWriter& xml, int no) const;
       void read(XmlReader&);
       virtual void drawEditMode(QPainter*, EditData&) override;
+      virtual void computeBezier(QPointF so = QPointF()) = 0;
       };
 
 //-------------------------------------------------------------------
@@ -91,9 +100,6 @@ class SlurTieSegment : public SpannerSegment {
 //-------------------------------------------------------------------
 
 class SlurTie : public Spanner {
-      Q_GADGET
-      Q_PROPERTY(int lineType                         READ lineType       WRITE undoSetLineType)
-
       int _lineType;    // 0 = solid, 1 = dotted, 2 = dashed, 3 = wide dashed
 
       static Element* editStartElement;
@@ -135,8 +141,6 @@ class SlurTie : public Spanner {
       virtual void slurPos(SlurPos*) = 0;
       virtual SlurTieSegment* newSlurTieSegment() = 0;
 
-      virtual void startEdit(EditData&) override;
-      virtual void endEdit(EditData&) override;
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;

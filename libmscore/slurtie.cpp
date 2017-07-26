@@ -16,6 +16,7 @@
 #include "undo.h"
 #include "slurtie.h"
 #include "tie.h"
+#include "chord.h"
 
 namespace Ms {
 
@@ -40,6 +41,36 @@ SlurTieSegment::SlurTieSegment(const SlurTieSegment& b)
       }
 
 //---------------------------------------------------------
+//   gripAnchor
+//---------------------------------------------------------
+
+QPointF SlurTieSegment::gripAnchor(Grip grip) const
+      {
+      if (grip != Grip::START && grip != Grip::END)
+            return QPointF();
+
+      QPointF sp(system()->pagePos());
+      QPointF pp(pagePos());
+      QPointF p1(ups(Grip::START).p + pp);
+      QPointF p2(ups(Grip::END).p + pp);
+
+      switch (spannerSegmentType()) {
+            case SpannerSegmentType::SINGLE:
+                  return grip == Grip::START ? p1 : p2;
+
+            case SpannerSegmentType::BEGIN:
+                  return grip == Grip::START ? p1 : system()->abbox().topRight();
+
+            case SpannerSegmentType::MIDDLE:
+                  return grip == Grip::START ? sp : system()->abbox().topRight();
+
+            case SpannerSegmentType::END:
+                  return grip == Grip::START ? sp : p2;
+            }
+      return QPointF();
+      }
+
+//---------------------------------------------------------
 //   move
 //---------------------------------------------------------
 
@@ -59,6 +90,99 @@ void SlurTieSegment::spatiumChanged(qreal oldValue, qreal newValue)
       qreal diff = newValue / oldValue;
       for (UP& u : _ups)
             u.off *= diff;
+      }
+
+//---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void SlurTieSegment::startEdit(EditData& ed)
+      {
+      Element::startEdit(ed);
+      ed.grips   = int(Grip::GRIPS);
+      ed.curGrip = Grip::END;
+      }
+
+//---------------------------------------------------------
+//   endEdit
+//---------------------------------------------------------
+
+void SlurTieSegment::endEdit(EditData&)
+      {
+      }
+
+//---------------------------------------------------------
+//   startEditDrag
+//---------------------------------------------------------
+
+void SlurTieSegment::startEditDrag(EditData& ed)
+      {
+      ElementEditData* eed = ed.getData(this);
+      for (auto i : { P_ID::SLUR_UOFF1, P_ID::SLUR_UOFF2, P_ID::SLUR_UOFF3, P_ID::SLUR_UOFF4, P_ID::USER_OFF })
+            eed->pushProperty(i);
+      }
+
+//---------------------------------------------------------
+//   endEditDrag
+//---------------------------------------------------------
+
+void SlurTieSegment::endEditDrag(EditData& ed)
+      {
+      Element::endEditDrag(ed);
+      }
+
+//---------------------------------------------------------
+//   editDrag
+//---------------------------------------------------------
+
+void SlurTieSegment::editDrag(EditData& ed)
+      {
+      Grip g     = ed.curGrip;
+      ups(g).off += ed.delta;
+
+      QPointF delta;
+
+      switch (g) {
+            case Grip::START:
+            case Grip::END:
+                  //
+                  // move anchor for slurs/ties
+                  //
+                  if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
+                        Spanner* spanner = slurTie();
+                        Qt::KeyboardModifiers km = qApp->keyboardModifiers();
+                        Note* note = static_cast<Note*>(ed.view->elementNear(ed.pos));
+                        if (note && note->isNote()
+                           && ((g == Grip::END && note->tick() > slurTie()->tick()) || (g == Grip::START && note->tick() < slurTie()->tick2()))
+                           ) {
+                              if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
+                                    Chord* c = note->chord();
+                                    ed.view->setDropTarget(note);
+                                    if (c != spanner->endChord())
+                                          changeAnchor(ed, c);
+                                    }
+                              }
+                        else
+                              ed.view->setDropTarget(0);
+                        }
+                  break;
+            case Grip::BEZIER1:
+                  break;
+            case Grip::BEZIER2:
+                  break;
+            case Grip::SHOULDER:
+                  ups(g).off = QPointF();
+                  delta = ed.delta;
+                  break;
+            case Grip::DRAG:
+                  ups(g).off = QPointF();
+                  setUserOff(userOff() + ed.delta);
+                  break;
+            case Grip::NO_GRIP:
+            case Grip::GRIPS:
+                  break;
+            }
+      computeBezier(delta);
       }
 
 //---------------------------------------------------------
@@ -417,89 +541,6 @@ void SlurTie::fixupSegments(unsigned nsegs)
                   delSegments.enqueue(s);  // cannot delete: used in SlurSegment->edit()
                   }
             }
-      }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void SlurTie::startEdit(EditData& ed)
-      {
-      Spanner::startEdit(ed);
-
-      editStartElement = startElement();
-      editEndElement   = endElement();
-
-      editUps.clear();
-      for (SpannerSegment* s : spannerSegments()) {
-            SlurOffsets o;
-            SlurTieSegment* ss = static_cast<SlurTieSegment*>(s);
-            o.o[0] = ss->getProperty(P_ID::SLUR_UOFF1).toPointF();
-            o.o[1] = ss->getProperty(P_ID::SLUR_UOFF2).toPointF();
-            o.o[2] = ss->getProperty(P_ID::SLUR_UOFF3).toPointF();
-            o.o[3] = ss->getProperty(P_ID::SLUR_UOFF4).toPointF();
-            editUps.append(o);
-            }
-      }
-
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
-
-void SlurTie::endEdit(EditData& ed)
-      {
-      Spanner::endEdit(ed);
-      if (isSlur()) {
-            if ((editStartElement != startElement()) || (editEndElement != endElement())) {
-                  //
-                  // handle parts:
-                  //    search new start/end elements
-                  //
-                  for (ScoreElement* e : linkList()) {
-                        Spanner* spanner = static_cast<Spanner*>(e);
-                        if (spanner == this)
-                              score()->undoStack()->push1(new ChangeStartEndSpanner(this, editStartElement, editEndElement));
-                        else {
-                              Element* se = 0;
-                              Element* ee = 0;
-                              if (startElement()) {
-                                    QList<ScoreElement*> sel = startElement()->linkList();
-                                    for (ScoreElement* eee : sel) {
-                                          Element* e = static_cast<Element*>(eee);
-                                          if (e->score() == spanner->score() && e->track() == spanner->track()) {
-                                                se = e;
-                                                break;
-                                                }
-                                          }
-                                    }
-                              if (endElement()) {
-                                    QList<ScoreElement*> sel = endElement()->linkList();
-                                    for (ScoreElement* eee : sel) {
-                                          Element* e = static_cast<Element*>(eee);
-                                          if (e->score() == spanner->score() && e->track() == spanner->track2()) {
-                                                ee = e;
-                                                break;
-                                                }
-                                          }
-                                    }
-                              score()->undo(new ChangeStartEndSpanner(spanner, se, ee));
-                              }
-                        }
-                  }
-            }
-      if (spannerSegments().size() != editUps.size()) {
-            qDebug("SlurTie::endEdit(): segment size changed %d != %d", spannerSegments().size(), editUps.size());
-            return;
-            }
-      for (int i = 0; i < editUps.size(); ++i) {
-            SpannerSegment* ss = segments[i];
-            SlurOffsets o = editUps[i];
-            score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF1, o.o[0]);
-            score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF2, o.o[1]);
-            score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF3, o.o[2]);
-            score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF4, o.o[3]);
-            }
-      score()->setLayoutAll();
       }
 
 //---------------------------------------------------------
