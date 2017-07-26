@@ -19,6 +19,8 @@ class Element;
 class Score;
 class Note;
 class Page;
+class ChordRest;
+
 enum class Grip : int;
 enum class HairpinType : char;
 
@@ -45,7 +47,7 @@ class MuseScoreView {
       virtual void moveCursor()          {}
       virtual void showLoopCursors(bool) {}
 
-      virtual void adjustCanvasPosition(const Element*, bool /*playBack*/) {};
+      virtual void adjustCanvasPosition(const Element*, bool /*playBack*/, int /*staffIdx*/ = 0) {};
       virtual void setScore(Score* s) { _score = s; }
       Score* score() const            { return _score; }
       virtual void removeScore() {};
@@ -55,7 +57,7 @@ class MuseScoreView {
       virtual void setCursor(const QCursor&) {};
       virtual int gripCount() const { return 0; }
       virtual void setDropRectangle(const QRectF&) {};
-      virtual void cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/) {};
+      virtual void cmdAddSlur(ChordRest*, ChordRest*) {};
       virtual void cmdAddHairpin(HairpinType) {};
       virtual void startEdit() {};
       virtual void startEditMode(Element*) {};
