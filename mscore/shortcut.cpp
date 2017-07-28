@@ -3770,8 +3770,12 @@ QString Shortcut::keysToString() const
 
 QString Shortcut::getMenuShortcutString(const QMenu *menu)
       {
-      int shortcutKeyPosition = menu->title().indexOf('&') + 1;
-      return QString("Alt+") + menu->title().at(shortcutKeyPosition);
+      if (menu->title().isEmpty())
+            return "";
+      int shortcutKeyPosition = menu->title().indexOf('&');
+      if (shortcutKeyPosition < 0)
+            return "";
+      return QString("Alt+") + menu->title().at(shortcutKeyPosition + 1);
       }
 
 //---------------------------------------------------------
