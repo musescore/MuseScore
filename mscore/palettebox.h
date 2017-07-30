@@ -32,10 +32,11 @@ class PaletteBox : public QDockWidget {
       QVBoxLayout* vbox;
       Palette* newPalette(const QString& name, int slot);
       QComboBox* workspaceList;
-      QLineEdit* searchBox;
+      QLineEdit* _searchBox;
       const int paletteStretch = 1000;
       QAction* singlePaletteAction;
       QToolButton* addWorkspaceButton;
+      bool keyboardNavigation = false;
 
    private slots:
       void paletteCmd(PaletteCommand, int);
@@ -60,6 +61,13 @@ class PaletteBox : public QDockWidget {
       void clear();
       QList<Palette*> palettes() const;
       void updateWorkspaces();
+      QLineEdit* searchBox() { return _searchBox; }
+      bool noSelection();
+      void mousePressEvent(QMouseEvent* ev, Palette* p1);
+      void navigation(QKeyEvent *event);
+      bool eventFilter(QObject* obj, QEvent *event);
+      void setKeyboardNavigation(bool val) { keyboardNavigation = val; }
+      bool getKeyboardNavigation() { return keyboardNavigation; }
       };
 
 //---------------------------------------------------------
