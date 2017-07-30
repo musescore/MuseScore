@@ -53,13 +53,15 @@ PaletteBox::PaletteBox(QWidget* parent)
 
       setWidget(w);
 
-      searchBox = new QLineEdit(this);
-      searchBox->setClearButtonEnabled(true);
-      searchBox->setPlaceholderText(tr("Search"));
-      connect(searchBox, SIGNAL(textChanged(const QString&)), this, SLOT(filterPalettes(const QString&)));
+      _searchBox = new QLineEdit(this);
+      _searchBox->setFocusPolicy(Qt::StrongFocus);
+      _searchBox->installEventFilter(this);
+      _searchBox->setClearButtonEnabled(true);
+      _searchBox->setPlaceholderText(tr("Search"));
+      connect(_searchBox, SIGNAL(textChanged(const QString&)), this, SLOT(filterPalettes(const QString&)));
       QHBoxLayout* hlSearch = new QHBoxLayout;
       hlSearch->setContentsMargins(5,0,5,0);
-      hlSearch->addWidget(searchBox);
+      hlSearch->addWidget(_searchBox);
 
       PaletteBoxScrollArea* sa = new PaletteBoxScrollArea;
       sa->setFocusPolicy(Qt::NoFocus);
@@ -422,5 +424,141 @@ void PaletteBox::changeEvent(QEvent *event)
       if (event->type() == QEvent::LanguageChange)
             retranslate();
       }
+
+//---------------------------------------------------------
+//   noSelection
+//---------------------------------------------------------
+
+bool PaletteBox::noSelection()
+      {
+      for (Palette* p : palettes()) {
+            if (p->getCurrentIdx() != -1)
+                  return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   mousePressEvent
+//---------------------------------------------------------
+
+void PaletteBox::mousePressEvent(QMouseEvent* ev, Palette* p1)
+      {
+      for (Palette* p : palettes()) {
+            QList<PaletteCell*> cells = p->getDragCells();
+            if (cells.isEmpty())
+                  continue;
+            if (p->getCurrentIdx() != -1) {
+                  p->setCurrentIdx(-1);
+                  p->update();
+                  }
+            }
+      p1->setCurrentIdx(p1->idx(ev->pos()));
+      p1->update();
+      _searchBox->setFocus();
+      }
+
+//---------------------------------------------------------
+//   navigation
+//---------------------------------------------------------
+
+void PaletteBox::navigation(QKeyEvent *event)
+      {
+      if (!palettes().first()->isFilterActive())
+            return;
+      if (event->key() == Qt::Key_Down) {
+            for (Palette* p : palettes()) {
+                  if (p->getCurrentIdx() == -1)
+                        continue;
+                  if (p->getCurrentIdx() != p->getDragCells().size() - 1) {
+                        p->nextPaletteElement();
+                        return;
+                        }
+                  else {
+                        int index = palettes().indexOf(p);
+                        p->setCurrentIdx(-1);
+                        p->update();
+                        for (int i = index + 1; i < palettes().size(); i++) {
+                              Palette* next = palettes()[i];
+                              if (!next->getDragCells().isEmpty()) {
+                                    next->setCurrentIdx(0);
+                                    next->update();
+                                    return;
+                                    }
+                              }
+                       }
+                  }
+            for (Palette* p : palettes()) {
+                  if (!p->getDragCells().isEmpty()) {
+                        p->setCurrentIdx(0);
+                        p->update();
+                        keyboardNavigation = true;
+                        return;
+                        }
+                  }
+            }
+      else if (event->key() == Qt::Key_Up) {
+            for (Palette* p : palettes()) {
+                  if (p->getCurrentIdx() == -1)
+                        continue;
+                  if (p->getCurrentIdx() != 0) {
+                        p->prevPaletteElement();
+                        return;
+                        }
+                  else {
+                        int index = palettes().indexOf(p);
+                        p->setCurrentIdx(-1);
+                        p->update();
+                        for (int i = index - 1; i >= 0; i--) {
+                              Palette* prev = palettes()[i];
+                              if (!prev->getDragCells().isEmpty()) {
+                                    QList<PaletteCell*> cells = p->getDragCells();
+                                    int l = prev->getDragCells().size() - 1;
+                                    prev->setCurrentIdx(l);
+                                    prev->update();
+                                    return;
+                                    }
+                              }
+                        }
+                  }
+            for (int j = palettes().size() - 1; j >= 0; j--) {
+                  Palette* p = palettes()[j];
+                  if (!p->getDragCells().isEmpty()) {
+                        int l = p->getDragCells().size() - 1;
+                        p->setCurrentIdx(l);
+                        p->update();
+                        keyboardNavigation = true;
+                        return;
+                        }
+                  }
+            }
+      else if ((event->key() == Qt::Key_Enter) ||
+                (event->key() == Qt::Key_Return)) {
+            for (Palette* p : palettes()) {
+                  if (p->getCurrentIdx() != -1) {
+                        p->applyPaletteElement();
+                        return;
+                        }
+                  }
+            }
+
+      }
+
+bool PaletteBox::eventFilter(QObject* obj, QEvent *event)
+      {
+      if (obj == _searchBox) {
+            if (event->type() == QEvent::KeyPress) {
+                  QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+                  if (keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down ||
+                          keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
+                        navigation(keyEvent);
+                        return true;
+                        }
+                  }
+            return false;
+            }
+      return QDockWidget::eventFilter(obj, event);
+      }
+
 }
 

@@ -1928,7 +1928,7 @@ void ScoreView::cmd(const char* s)
             if (el && el->type() == ElementType::NOTE)
                   cmdGotoElement(score()->downAltCtrl(static_cast<Note*>(el)));
             }
-      else if (cmd == "next-segment-element"){
+      else if (cmd == "next-segment-element") {
             Element* el = score()->selection().element();
             if (!el && !score()->selection().elements().isEmpty() )
                 el = score()->selection().elements().first();
@@ -1938,7 +1938,7 @@ void ScoreView::cmd(const char* s)
             else
                   cmdGotoElement(score()->firstElement());
             }
-      else if (cmd == "prev-segment-element"){
+      else if (cmd == "prev-segment-element") {
             Element* el = score()->selection().element();
             if (!el && !score()->selection().elements().isEmpty())
                 el = score()->selection().elements().last();
@@ -1948,7 +1948,7 @@ void ScoreView::cmd(const char* s)
             else
                   cmdGotoElement(score()->lastElement());
             }
-      else if (cmd == "next-element"){
+      else if (cmd == "next-element") {
             Element* el = score()->selection().element();
             if (!el && !score()->selection().elements().isEmpty() )
                 el = score()->selection().elements().first();
@@ -1958,7 +1958,7 @@ void ScoreView::cmd(const char* s)
             else
                   cmdGotoElement(score()->firstElement());
             }
-      else if (cmd == "prev-element"){
+      else if (cmd == "prev-element") {
             Element* el = score()->selection().element();
             if (!el && !score()->selection().elements().isEmpty())
                 el = score()->selection().elements().last();
@@ -1968,10 +1968,10 @@ void ScoreView::cmd(const char* s)
             else
                   cmdGotoElement(score()->lastElement());
             }
-      else if (cmd == "first-element"){
+      else if (cmd == "first-element") {
             cmdGotoElement(score()->firstElement());
             }
-      else if (cmd == "last-element"){
+      else if (cmd == "last-element") {
             cmdGotoElement(score()->lastElement());
             }
       else if (cmd == "rest" || cmd == "rest-TAB")

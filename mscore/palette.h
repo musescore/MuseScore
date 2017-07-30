@@ -134,13 +134,13 @@ class Palette : public QWidget {
       virtual void leaveEvent(QEvent*) override;
       virtual bool event(QEvent*) override;
       virtual void resizeEvent(QResizeEvent*) override;
+      void applyPaletteElement(PaletteCell* cell);
 
       virtual void dragEnterEvent(QDragEnterEvent*) override;
       virtual void dragMoveEvent(QDragMoveEvent*) override;
       virtual void dropEvent(QDropEvent*) override;
       virtual void contextMenuEvent(QContextMenuEvent*) override;
 
-      int idx(const QPoint&) const;
       int idx2(const QPoint&) const;
       QRect idxRect(int) const;
 
@@ -160,6 +160,9 @@ class Palette : public QWidget {
       Palette(QWidget* parent = 0);
       virtual ~Palette();
 
+      void nextPaletteElement();
+      void prevPaletteElement();
+      void applyPaletteElement();
       PaletteCell* append(Element*, const QString& name, QString tag = QString(),
          qreal mag = 1.0);
       PaletteCell* add(int idx, Element*, const QString& name,
@@ -205,8 +208,13 @@ class Palette : public QWidget {
       bool filter(const QString& text);
       void setShowContextMenu(bool val) { _showContextMenu = val; }
 
+      int getCurrentIdx() { return currentIdx; }
+      void setCurrentIdx(int i) { currentIdx = i; }
+      bool isFilterActive() { return filterActive == true; }
+      QList<PaletteCell*> getDragCells() { return dragCells; }
       virtual int heightForWidth(int) const;
       virtual QSize sizeHint() const;
+      int idx(const QPoint&) const;
       };
 
 
