@@ -4599,6 +4599,26 @@ void MuseScore::cmd(QAction* a)
                QString("Command %1 not valid in current state").arg(cmdn));
             return;
             }
+      if (cmdn == "palette-search") {
+            PaletteBox* pb = getPaletteBox();
+            QLineEdit* sb = pb->searchBox();
+            sb->setFocus();
+            if (pb->noSelection())
+                  pb->setKeyboardNavigation(false);
+            else
+                  pb->setKeyboardNavigation(true);
+            return;
+            }
+      if (cmdn == "apply-current-palette-element") {
+            PaletteBox* pb = getPaletteBox();
+            for (Palette* p : pb->palettes()) {
+                  if (p->getCurrentIdx() != -1) {
+                        p->applyPaletteElement();
+                        break;
+                        }
+                  }
+            return;
+            }
       if (cmdn == "repeat-cmd") {
             a  = lastCmd;
             sc = lastShortcut;

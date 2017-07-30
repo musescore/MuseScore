@@ -859,6 +859,28 @@ Shortcut Shortcut::_sc[] = {
          ShortcutFlags::A_CMD
          },
       {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "palette-search",
+         QT_TRANSLATE_NOOP("action","Palette Search"),
+         QT_TRANSLATE_NOOP("action","Palette Search"),
+         QT_TRANSLATE_NOOP("action","Palette Search"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "apply-current-palette-element",
+         QT_TRANSLATE_NOOP("action","Apply Current Palette Element"),
+         QT_TRANSLATE_NOOP("action","Apply current palette element"),
+         QT_TRANSLATE_NOOP("action","Apply current palette element"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
          MsWidget::SCORE_TAB,
          STATE_NORMAL,
          "first-element",
