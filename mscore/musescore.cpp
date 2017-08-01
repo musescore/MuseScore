@@ -6219,9 +6219,10 @@ int main(int argc, char* av[])
                   for (auto ws : Workspace::workspaces()) {
                         if (ws->name().compare(sw->workspace()) == 0) {
                               mscore->changeWorkspace(ws);
+                              preferences.workspace = ws->name();
                               mscore->getPaletteBox()->updateWorkspaces();
+                              }
                         }
-                  }
                   delete sw;
                   }
             QString keyboardLayout = s.value("keyboardLayout").toString();

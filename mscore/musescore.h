@@ -230,10 +230,10 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       std::list<const char*> _noteInputMenuEntries { _allNoteInputMenuEntries };
 
       static const std::list<const char*> _allFileOperationEntries;
-      std::list<const char*> _fileOperationEntries {_allFileOperationEntries };
+      std::list<const char*> _fileOperationEntries { _allFileOperationEntries };
 
       static const std::list<const char*> _allPlaybackControlEntries;
-      std::list<const char*> _playbackControlEntries {_allPlaybackControlEntries};
+      std::list<const char*> _playbackControlEntries { _allPlaybackControlEntries };
       
       QVBoxLayout* layout;    // main window layout
       QSplitter* splitter;
@@ -759,11 +759,11 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static const std::list<const char*>& advancedNoteInputMenuEntries() { return _advancedNoteInputMenuEntries; }
       std::list<const char*>* noteInputMenuEntries()                 { return &_noteInputMenuEntries; }
 
-      static const std::list<const char*>& allFileOperationEntries() {return _allFileOperationEntries;}
-      std::list<const char*>* fileOperationEntries()              {return &_fileOperationEntries;}
+      static const std::list<const char*>& allFileOperationEntries() { return _allFileOperationEntries; }
+      std::list<const char*>* fileOperationEntries()              { return &_fileOperationEntries; }
 
-      static const std::list<const char*>& allPlaybackControlEntries() {return _allPlaybackControlEntries;}
-      std::list<const char*>* playbackControlEntries()      {return &_playbackControlEntries;}
+      static const std::list<const char*>& allPlaybackControlEntries() { return _allPlaybackControlEntries; }
+      std::list<const char*>* playbackControlEntries()      { return &_playbackControlEntries; }
 
       void setNoteInputMenuEntries(std::list<const char*> l)         { _noteInputMenuEntries = l; }
       void populateNoteInputMenu();
