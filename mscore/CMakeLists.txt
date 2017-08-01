@@ -470,6 +470,13 @@ if (MINGW)
    # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
    get_filename_component(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
    get_filename_component (MINGW_ROOT ${COMPILER_DIR} DIRECTORY)
+   foreach (QtLibrary ${QT_LIBRARIES})
+      get_target_property(QtSharedLibrary ${QtLibrary} LOCATION_${CMAKE_BUILD_TYPE})
+      if (EXISTS ${QtSharedLibrary})
+          list (APPEND QtInstallLibraries ${QtSharedLibrary})
+      endif (EXISTS ${QtSharedLibrary})
+   endforeach (QtLibrary ${QT_LIBRARIES})
+   list(REMOVE_DUPLICATES QtInstallLibraries)
    install( FILES
       ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
       ${MINGW_ROOT}/bin/libstdc++-6.dll
@@ -481,24 +488,7 @@ if (MINGW)
       ${MINGW_ROOT}/lib/portaudio.dll
       ${MINGW_ROOT}/opt/bin/libeay32.dll
       ${MINGW_ROOT}/opt/bin/ssleay32.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5Core.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5Gui.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5Help.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5Multimedia.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5MultimediaWidgets.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5Network.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5OpenGL.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5Positioning.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5PrintSupport.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5Qml.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5Quick.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5Sensors.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5Sql.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5Svg.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5WebChannel.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5Widgets.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5Xml.dll
-      ${QT_INSTALL_PREFIX}/bin/Qt5XmlPatterns.dll
+      ${QtInstallLibraries}
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
 
