@@ -6220,8 +6220,8 @@ int main(int argc, char* av[])
                         if (ws->name().compare(sw->workspace()) == 0) {
                               mscore->changeWorkspace(ws);
                               mscore->getPaletteBox()->updateWorkspaces();
+                              }
                         }
-                  }
                   delete sw;
                   }
             QString keyboardLayout = s.value("keyboardLayout").toString();
