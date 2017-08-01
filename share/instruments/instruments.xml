@@ -406,7 +406,7 @@
                   <longName>Irish Flute</longName>
                   <shortName>Ir. Fl.</shortName>
                   <description>6 hole tranverse flute</description>
-                  <musicXMLid>wind.flutes.flute</musicXMLid>
+                  <musicXMLid>wind.flutes.flute.irish</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>62-86</aPitchRange>
@@ -742,7 +742,7 @@
                   <longName>Sopranino Recorder</longName>
                   <shortName>Si. Rec.</shortName>
                   <description>Sopranino Recorder</description>
-                  <musicXMLid>wind.flutes.recorder</musicXMLid>
+                  <musicXMLid>wind.flutes.recorder.sopranino</musicXMLid>
                   <clef>G8va</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>77-100</aPitchRange>
@@ -756,7 +756,7 @@
                   <longName>Soprano Recorder</longName>
                   <shortName>S. Rec.</shortName>
                   <description>Soprano Recorder</description>
-                  <musicXMLid>wind.flutes.recorder</musicXMLid>
+                  <musicXMLid>wind.flutes.recorder.soprano</musicXMLid>
                   <clef>G8va</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>72-93</aPitchRange>
@@ -770,7 +770,7 @@
                   <longName>Alto Recorder</longName>
                   <shortName>A. Rec.</shortName>
                   <description>Alto Recorder</description>
-                  <musicXMLid>wind.flutes.recorder</musicXMLid>
+                  <musicXMLid>wind.flutes.recorder.alto</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>65-88</aPitchRange>
@@ -784,7 +784,7 @@
                   <longName>Tenor Recorder</longName>
                   <shortName>T. Rec.</shortName>
                   <description>Tenor Recorder</description>
-                  <musicXMLid>wind.flutes.recorder</musicXMLid>
+                  <musicXMLid>wind.flutes.recorder.tenor</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>60-81</aPitchRange>
@@ -798,7 +798,7 @@
                   <longName>Bass Recorder</longName>
                   <shortName>B. Rec.</shortName>
                   <description>Bass Recorder</description>
-                  <musicXMLid>wind.flutes.recorder</musicXMLid>
+                  <musicXMLid>wind.flutes.recorder.bass</musicXMLid>
                   <clef>F8va</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>53-74</aPitchRange>
@@ -812,7 +812,7 @@
                   <longName>Greatbass Recorder</longName>
                   <shortName>Gb. Rec.</shortName>
                   <description>Greatbass Recorder</description>
-                  <musicXMLid>wind.flutes.recorder</musicXMLid>
+                  <musicXMLid>wind.flutes.recorder.great-bass</musicXMLid>
                   <clef>F8va</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-69</aPitchRange>
@@ -826,7 +826,7 @@
                   <longName>Contrabass Recorder</longName>
                   <shortName>Cb. Rec.</shortName>
                   <description>Contrabass Recorder</description>
-                  <musicXMLid>wind.flutes.recorder</musicXMLid>
+                  <musicXMLid>wind.flutes.recorder.contrabass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>41-62</aPitchRange>
@@ -936,7 +936,7 @@
                   <longName>Oboe d'amore</longName>
                   <shortName>Ob. d'a.</shortName>
                   <description>Oboe d'amore</description>
-                  <musicXMLid>wind.reed.oboe=damore</musicXMLid>
+                  <musicXMLid>wind.reed.oboe-damore</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>56-84</aPitchRange>
@@ -1929,7 +1929,7 @@
                   <longName>Dulcian</longName>
                   <shortName>Du.</shortName>
                   <description>Dulcian</description>
-                  <musicXMLid>wind.reed.dilcian</musicXMLid>
+                  <musicXMLid>wind.reed.dulcian</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-62</aPitchRange>
@@ -5625,7 +5625,7 @@
                   <longName>Wood Blocks</longName>
                   <shortName>Wd. Bl.</shortName>
                   <description>Wood Blocks</description>
-                  <musicXMLid>wood.wood.block</musicXMLid>
+                  <musicXMLid>wood.wood-block</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
@@ -9823,7 +9823,7 @@
                   <longName>Prima</longName>
                   <shortName>Pr.</shortName>
                   <description>Prima</description>
-                  <musicXMLid>pluck.tambura.prima</musicXMLid>
+                  <musicXMLid>pluck.tambura</musicXMLid>
                   <StringData>
                         <frets>15</frets>
                         <string>52</string>
@@ -9846,7 +9846,7 @@
                   <longName>Brač</longName>
                   <shortName>Br.</shortName>
                   <description>Brač</description>
-                  <musicXMLid>pluck.tambura.brac</musicXMLid>
+                  <musicXMLid>pluck.tambura</musicXMLid>
                   <StringData>
                         <frets>15</frets>
                         <string>40</string>
@@ -9867,7 +9867,7 @@
                   <longName>Čelo</longName>
                   <shortName>Č.</shortName>
                   <description>Čelo</description>
-                  <musicXMLid>pluck.tambura.celo</musicXMLid>
+                  <musicXMLid>pluck.tambura</musicXMLid>
                   <StringData>
                         <frets>15</frets>
                         <string>40</string>
@@ -9890,7 +9890,7 @@
                   <longName>Bugarija</longName>
                   <shortName>Bu.</shortName>
                   <description>Bugarija</description>
-                  <musicXMLid>pluck.tambura.bugarija</musicXMLid>
+                  <musicXMLid>pluck.tambura</musicXMLid>
                   <StringData>
                         <frets>15</frets>
                         <string>38</string>
@@ -9913,7 +9913,7 @@
                   <longName>Berda</longName>
                   <shortName>Be.</shortName>
                   <description>Berda</description>
-                  <musicXMLid>pluck.tambura.berda</musicXMLid>
+                  <musicXMLid>pluck.tambura</musicXMLid>
                   <StringData>
                         <frets>15</frets>
                         <string>28</string>
