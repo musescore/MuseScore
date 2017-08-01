@@ -64,7 +64,7 @@ const static QMap<QString, QString> langToLayout = {
       };
 
 StartupWizardIntroPage::StartupWizardIntroPage(QWidget* parent)
-    : QWizardPage(parent)
+      : QWizardPage(parent)
       {
       setTitle(tr("Welcome to MuseScore!"));
       QLabel* label = new QLabel(tr("This wizard will help you choose settings for MuseScore based on your locale,\n music level, and personal preferences."), this);
@@ -74,7 +74,7 @@ StartupWizardIntroPage::StartupWizardIntroPage(QWidget* parent)
       }
 
 StartupWizardPage1::StartupWizardPage1(QWidget* parent)
-    : QWizardPage(parent)
+      : QWizardPage(parent)
       {
       setTitle(tr("Language"));
       QLabel* label = new QLabel(tr("Choose your language"), this);
@@ -103,9 +103,8 @@ QString StartupWizardPage1::language()
 QString StartupWizardPage1::getCurrentLangCode()
       {
       int index = QWizardPage::field("langIndex").toInt();
-      if (_languages->itemData(index).toString().compare("system") == 0) {
+      if (_languages->itemData(index).toString().compare("system") == 0)
             return mscore->getLocaleISOCode();
-            }
       return _languages->itemData(index).toString();
       }
 
@@ -116,9 +115,8 @@ StartupWizardPage2::StartupWizardPage2(QWidget* parent)
       QLabel* label = new QLabel(tr("Enter your keyboard layout"), this);
       QStringList layoutList;
       QList<QString> keyboardLayouts = layoutToShortcut.keys();
-      for (auto layout : keyboardLayouts) {
+      for (auto layout : keyboardLayouts)
             layoutList.append(qApp->translate("keyboard-layout", layout.toStdString().c_str()));
-            }
       _keyLayouts = new QComboBox(this);
       _keyLayouts->addItems(layoutList);
       int targetIndex = layoutList.indexOf("US - International", 0);
@@ -136,22 +134,20 @@ void StartupWizardPage2::setCurrentLayout(QString langCode)
       QString bestLayout = langToLayout.value(langCode, "US - International");
       QStringList layoutList;
       QList<QString> keyboardLayouts = layoutToShortcut.keys();
-      for (auto layout : keyboardLayouts) {
+      for (auto layout : keyboardLayouts)
             layoutList.append(qApp->translate("keyboard-layout", layout.toStdString().c_str()));
-            }
       int targetIndex = layoutList.indexOf(bestLayout);
       _keyLayouts->setCurrentIndex(targetIndex);
       }
 
 StartupWizardPage3::StartupWizardPage3(QWidget* parent)
-    : QWizardPage(parent)
+      : QWizardPage(parent)
       {
       setTitle(tr("Workspace"));
       QLabel* label = new QLabel(tr("Choose your workspace"), this);
       QStringList workspaceList;
-      for (auto workspace : Workspace::workspaces()) {
+      for (auto workspace : Workspace::workspaces())
             workspaceList.append(qApp->translate("workspace", workspace->name().toStdString().c_str()));
-            }
       _workspaces = new QComboBox(this);
       _workspaces->addItems(workspaceList);
       QVBoxLayout* layout = new QVBoxLayout(this);
@@ -161,7 +157,7 @@ StartupWizardPage3::StartupWizardPage3(QWidget* parent)
       }
 
 StartupWizardFinalPage::StartupWizardFinalPage(QWidget* parent)
-    : QWizardPage(parent)
+      : QWizardPage(parent)
       {
       setTitle(tr("Thank you!"));
       QLabel* label = new QLabel(tr("Your preferences have been saved. Click \"Finish\" to start using MuseScore."), this);
@@ -171,7 +167,7 @@ StartupWizardFinalPage::StartupWizardFinalPage(QWidget* parent)
       }
 
 StartupWizard::StartupWizard(QWidget* parent)
-    : QWizard(parent)
+      : QWizard(parent)
       {
       setObjectName("StartupWizard");
       setWizardStyle(QWizard::ClassicStyle);
