@@ -26,9 +26,9 @@ namespace Ms {
 class StartupWizardIntroPage : public QWizardPage {
       Q_OBJECT
 
-      public:
-            StartupWizardIntroPage(QWidget* parent = 0);
-            void init();
+   public:
+      StartupWizardIntroPage(QWidget* parent = 0);
+      void init();
       };
 
 class StartupWizardPage1 : public QWizardPage {
@@ -36,12 +36,12 @@ class StartupWizardPage1 : public QWizardPage {
 
       QComboBox* _languages;
 
-      public:
-            StartupWizardPage1(QWidget* parent = 0);
-            QString language();
-            void init();
-            QComboBox* getLanguages()     {return _languages;}
-            QString getCurrentLangCode();
+   public:
+      StartupWizardPage1(QWidget* parent = 0);
+      QString language();
+      void init();
+      QComboBox* getLanguages()     { return _languages; }
+      QString getCurrentLangCode();
       };
 
 class StartupWizardPage2 : public QWizardPage {
@@ -49,11 +49,11 @@ class StartupWizardPage2 : public QWizardPage {
 
       QComboBox* _keyLayouts;
 
-      public:
-            StartupWizardPage2(QWidget* parent = 0);
-            QString keyboardLayout()    {return _keyLayouts->currentText();}
-            void init();
-            void setCurrentLayout(QString langCode);
+   public:
+      StartupWizardPage2(QWidget* parent = 0);
+      QString keyboardLayout()    { return _keyLayouts->currentText(); }
+      void init();
+      void setCurrentLayout(QString langCode);
       };
 
 class StartupWizardPage3 : public QWizardPage {
@@ -61,18 +61,18 @@ class StartupWizardPage3 : public QWizardPage {
 
       QComboBox* _workspaces;
 
-      public:
-            StartupWizardPage3(QWidget* parent = 0);
-            QString workspace()   {return _workspaces->currentText();}
-            void init();
+   public:
+      StartupWizardPage3(QWidget* parent = 0);
+      QString workspace()   { return _workspaces->currentText(); }
+      void init();
       };
 
 class StartupWizardFinalPage : public QWizardPage {
       Q_OBJECT
 
-      public:
-            StartupWizardFinalPage(QWidget* parent = 0);
-            void init();
+   public:
+      StartupWizardFinalPage(QWidget* parent = 0);
+      void init();
       };
 
 class StartupWizard : public QWizard {
@@ -84,15 +84,15 @@ class StartupWizard : public QWizard {
       StartupWizardPage3* p3;
       StartupWizardFinalPage* p4;
 
-      public:
-            StartupWizard(QWidget* parent = 0);
-            static void autoSelectShortcuts(QString keyboardLayout);
-            QString keyboardLayout()      {return p2->keyboardLayout();}
-            QString language()     {return p1->language();}
-            QString workspace()    {return p3->workspace();}
+   public:
+      StartupWizard(QWidget* parent = 0);
+      static void autoSelectShortcuts(QString keyboardLayout);
+      QString keyboardLayout()      { return p2->keyboardLayout(); }
+      QString language()     { return p1->language(); }
+      QString workspace()    { return p3->workspace(); }
 
-      private slots:
-            void langChanged();
+   private slots:
+      void langChanged();
       };
 }
 #endif
