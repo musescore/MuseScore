@@ -269,22 +269,22 @@ void MuseScore::loadFiles()
       {
       QStringList files = getOpenScoreNames(
 #ifdef OMR
-         tr("All Supported Files") + " (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;" +
+         tr("All Supported Files") + " (*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.pdf *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx);;" +
 #else
-         tr("All Supported Files") + " (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;" +
+         tr("All Supported Files") + " (*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx);;" +
 #endif
          tr("MuseScore Files") + " (*.mscz *.mscx);;" +
-         tr("MusicXML Files") + " (*.xml *.mxl);;" +
+         tr("MusicXML Files") + " (*.mxl *.musicxml *.xml);;" +
          tr("MIDI Files") + " (*.mid *.midi *.kar);;" +
          tr("Muse Data Files") + " (*.md);;" +
          tr("Capella Files") + " (*.cap *.capx);;" +
-         tr("BB Files <experimental>") + " (*.mgu *.MGU *.sgu *.SGU);;" +
+         tr("BB Files <experimental>") + " (*.mgu *.sgu);;" +
 #ifdef OMR
          tr("PDF Files <experimental OMR>") + " (*.pdf);;" +
 #endif
          tr("Overture / Score Writer Files <experimental>") + " (*.ove *.scw);;" +
          tr("Bagpipe Music Writer Files <experimental>") + " (*.bww);;" +
-         tr("Guitar Pro") + " (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)",
+         tr("Guitar Pro") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx)",
          tr("Load Score")
          );
       for (const QString& s : files)
@@ -1601,8 +1601,8 @@ void MuseScore::exportFile()
       fl.append(tr("MP3 Audio") + " (*.mp3)");
 #endif
       fl.append(tr("Standard MIDI File") + " (*.mid)");
-      fl.append(tr("MusicXML File") + " (*.xml)");
       fl.append(tr("Compressed MusicXML File") + " (*.mxl)");
+      fl.append(tr("Uncompressed MusicXML File") + " (*.musicxml)");
       fl.append(tr("Uncompressed MuseScore File") + " (*.mscx)");
 
       QString saveDialogTitle = tr("Export");
@@ -1677,8 +1677,8 @@ bool MuseScore::exportParts()
       fl.append(tr("MP3 Audio") + " (*.mp3)");
 #endif
       fl.append(tr("Standard MIDI File") + " (*.mid)");
-      fl.append(tr("MusicXML File") + " (*.xml)");
       fl.append(tr("Compressed MusicXML File") + " (*.mxl)");
+      fl.append(tr("Uncompressed MusicXML File") + " (*.musicxml)");
       fl.append(tr("MuseScore File") + " (*.mscz)");
       fl.append(tr("Uncompressed MuseScore File") + " (*.mscx)");
 
@@ -1846,8 +1846,8 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
                   writeSessionFile(false);
                   }
             }
-      else if (ext == "xml") {
-            // save as MusicXML *.xml file
+      else if (ext == "musicxml") {
+            // save as MusicXML *.musicxml file
             rv = saveXml(cs, fn);
             }
       else if (ext == "mxl") {
@@ -2120,6 +2120,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
                   };
             static const ImportDef imports[] = {
                   { "xml",  &importMusicXml           },
+                  { "musicxml", &importMusicXml       },
                   { "mxl",  &importCompressedMusicXml },
                   { "mid",  &importMidi               },
                   { "midi", &importMidi               },
