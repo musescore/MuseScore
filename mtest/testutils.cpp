@@ -154,7 +154,7 @@ Score* MTest::readCreatedScore(const QString& name)
       else if (csl == "pdf")
             rv = importPdf(score, name);
 #endif
-      else if (csl == "xml")
+      else if (csl == "xml" || csl == "musicxml")
             rv = importMusicXml(score, name);
       else if (csl == "gp3" || csl == "gp4" || csl == "gp5" || csl == "gpx")
             rv = importGTP(score, name);

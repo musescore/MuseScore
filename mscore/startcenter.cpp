@@ -254,7 +254,8 @@ void MyWebView::link(const QUrl& url)
       {
       QString path(url.path());
       QFileInfo fi(path);
-      if (fi.suffix() == "mscz" || fi.suffix() == "xml" || fi.suffix() == "mxl") {
+      if (fi.suffix() == "mscz" || fi.suffix() == "xml"
+          || fi.suffix() == "musicxml" || fi.suffix() == "mxl") {
             mscore->loadFile(url);
             QAction* a = getAction("startcenter");
             a->setChecked(false);

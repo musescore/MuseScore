@@ -2247,7 +2247,7 @@ static bool doConvert(Score* cs, QString fn, QString plugin = "")
                   return false;
             return true;
             }
-      else if (fn.endsWith(".xml")) {
+      else if (fn.endsWith(".xml") || fn.endsWith(".musicxml")) {
             cs->switchToPageMode();
             rv = saveXml(cs, fn);
             }
