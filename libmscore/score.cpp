@@ -3073,14 +3073,10 @@ void Score::collectMatch(void* data, Element* e)
       if ((p->staffStart != -1)
          && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
             return;
-      if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
-         || e->type() == Element::Type::ARTICULATION || e->type() == Element::Type::ACCIDENTAL || e->type() == Element::Type::LYRICS
-         || e->type() == Element::Type::BEAM || e->type() == Element::Type::HOOK || e->type() == Element::Type::STEM
-         || e->type() == Element::Type::SLUR_SEGMENT || e->type() == Element::Type::NOTEDOT
-         || e->type() == Element::Type::FINGERING || e->type() == Element::Type::TUPLET) {
-            if (p->voice != -1 && p->voice != e->voice())
-                  return;
-            }
+
+      if (p->voice != -1 && p->voice != e->voice())
+            return;
+
       if (p->system) {
             Element* ee = e;
             do {
