@@ -9087,6 +9087,33 @@
                   </Channel>
                   <genre>ethnic</genre>
             </Instrument>
+            <Instrument id="oud">
+                  <longName>Oud</longName>
+                  <shortName>O.</shortName>
+                  <description>Oud</description>
+                  <musicXMLid>pluck.oud</musicXMLid>
+                  <StringData>
+                        <frets>15</frets>
+                        <string>48</string>
+                        <string>53</string>
+                        <string>57</string>
+                        <string>62</string>
+                        <string>67</string>
+                        <string>72</string>
+                  </StringData>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>36-75</aPitchRange>
+                  <pPitchRange>36-75</pPitchRange>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
+                  <Channel>
+                        <program value="25"/>
+                  </Channel>
+                  <genre>earlymusic</genre>
+                  <genre>ethnic</genre>
+            </Instrument>
             <Instrument id="lute">
                   <longName>Lute</longName>
                   <shortName>Lt.</shortName>
