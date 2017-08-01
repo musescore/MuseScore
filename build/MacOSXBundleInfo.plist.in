@@ -103,10 +103,28 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>MusicXML File</string>
+			<string>Uncompressed MusicXML File</string>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>xml</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.recordare.musicxml+xml</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>XML</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Uncompressed MusicXML File</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>musicxml</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
