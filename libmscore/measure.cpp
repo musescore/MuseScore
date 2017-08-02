@@ -3138,10 +3138,8 @@ void Measure::stretchMeasure(qreal targetWidth)
                               c->tremolo()->layout();
                         }
                   else if (t == ElementType::BAR_LINE) {
-                        if (s.isEndBarLineType())           // right align
-                              e->rxpos() = s.width() * .5;  // barline is centered on reference point
-                        else
-                              e->setPos(0.0, 0.0);
+                        e->rypos() = 0.0;
+                        e->rxpos() = s.isEndBarLineType() ? s.width() * .5 : 0.0;
                         e->adjustReadPos();
                         }
                   else

@@ -196,7 +196,7 @@ void SlurSegment::computeBezier(QPointF p6o)
       qreal shoulderW;              // height as fraction of slur-length
       qreal shoulderH;
       //
-      // p1 and p2 are the end points of the slur
+      // pp1 and pp2 are the end points of the slur
       //
       QPointF pp1 = ups(Grip::START).p + ups(Grip::START).off;
       QPointF pp2 = ups(Grip::END).p   + ups(Grip::END).off;
@@ -304,16 +304,16 @@ void SlurSegment::computeBezier(QPointF p6o)
 
       QPainterPath p;
       p.moveTo(QPointF());
-//      p.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
       p.cubicTo(p3 + p3o, p4 + p4o, p2);
+      p = t.map(p);
+
       _shape.clear();
-      QPointF start;
-      start = t.map(start);
-      int nbShapes = 15;
-      qreal minH = qAbs(3 * w);
+      QPointF start = pp1;
+      int nbShapes  = 32;  // (pp2.x() - pp1.x()) / _spatium;
+      qreal minH    = qAbs(3 * w);
       for (int i = 1; i <= nbShapes; i++) {
-            QPointF point = t.map(p.pointAtPercent(i/float(nbShapes)));
-            QRectF re = QRectF(start, point).normalized();
+            QPointF point = p.pointAtPercent(i/float(nbShapes));
+            QRectF re     = QRectF(start, point).normalized();
             if (re.height() < minH) {
                   qreal d = (minH - re.height()) * .5;
                   re.adjust(0.0, -d, 0.0, d);
@@ -351,7 +351,6 @@ inline static qreal slurDistance(const Shape& shape, const QPointF& pt, qreal sd
 void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       {
       if (autoplace()) {
-            // TODO: must be saved when switching to autoplace
             for (UP& up : _ups)
                   up.off = QPointF();
             rUserYoffset() = 0;
@@ -377,7 +376,13 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             QPointF pp2 = ups(Grip::END).p;
             Segment* ls = system()->lastMeasure()->last();
             Segment* fs = system()->firstMeasure()->first();
+            qreal _spatium = spatium();
 
+            //
+            //    look for collisions near start/end of slur
+            //
+            bool recomputeBezier = false;
+            qreal nearDistance = _spatium * 2;
             for (Segment* s = fs; s && s != ls; s = s->next1()) {
                   if (!s->enabled())
                         continue;
@@ -389,75 +394,103 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                         break;
                   if (up) {
                         QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).top() + s->y() + s->measure()->y());
-                        qreal dist = _shape.bottomDistance(pt) - sdist;
-                        if (dist < 0.0)
-                              pl.append(Collision(-dist, pt));
+                        qreal dist = _shape.minVerticalDistance(s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos()));
+                        if (dist > 0.0) {
+                              if (pt.x() - x1 < nearDistance) {
+                                    // collision near beginning of slur
+                                    printf("collision near beginning of slur (up)\n");
+                                    _ups[int(Grip::START)].off.ry() -= dist * .8;
+                                    recomputeBezier = true;
+                                    }
+                              else if (x2  - pt.x() < nearDistance) {
+                                    printf("collision near end of slur (up)\n");
+                                    _ups[int(Grip::END)].off.ry() -= dist * .8;
+                                    recomputeBezier = true;
+                                    }
+                              }
                         }
                   else {
                         QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).bottom() + s->y() + s->measure()->y());
-                        qreal dist = _shape.topDistance(pt) - sdist;
-                        if (dist < 0.0)
+                        qreal dist = s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos()).minVerticalDistance(_shape);
+                        if (dist > 0.0) {
+                              if (pt.x() - x1 < nearDistance) {
+                                    // collision near beginning of slur
+
+                                    printf("collision near beginning of slur (down)\n");
+                                    _ups[int(Grip::START)].off.ry() += dist * .8;
+                                    recomputeBezier = true;
+                                    }
+                              else if (x2  - pt.x() < nearDistance) {
+                                    printf("collision near end of slur (down)\n");
+                                    _ups[int(Grip::END)].off.ry() += dist * .8;
+                                    recomputeBezier = true;
+                                    }
+                              }
+                        }
+                  }
+            if (recomputeBezier)
+                  computeBezier();
+
+            //
+            //    look for collisions in the middle of a slur
+            //
+            for (Segment* s = fs; s && s != ls; s = s->next1()) {
+                  if (!s->enabled())
+                        continue;
+                  qreal x1 = s->x() + s->measure()->x();
+                  qreal x2 = x1 + s->width();
+                  if (pp1.x() > x2)
+                        continue;
+                  if (pp2.x() >= x1 && pp2.x() < x2)
+                        break;
+                  if (up) {
+                        QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).top() + s->y() + s->measure()->y());
+                        qreal dist = _shape.minVerticalDistance(s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos()));
+//                        dist += sdist;
+                        if (dist > 0.0) {
                               pl.append(Collision(dist, pt));
+//                            printf("collision at %d %s %f %f\n", s->tick(), s->subTypeName(), pt.x(), pt.y());
+                              }
+                        }
+                  else {
+                        QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).bottom() + s->y() + s->measure()->y());
+                        qreal dist = s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos()).minVerticalDistance(_shape);
+//                        dist += sdist;
+                        if (dist > 0.0)
+                              pl.append(Collision(-dist, pt));
                         }
                   }
             //
             // compute shape
             //    pl contains a list of colliding points
             //
-#if 0  // does not work
-            for (int i = 0; i < pl.size() - 1; ++i) {
-                  Collision& c1 = pl[i];
-                  Collision& c2 = pl[i+1];
-                  if (qAbs(c1.p.y() - c2.p.y()) < 0.1) {
-                        // combine the collisions
-                        printf("  combine\n");
-                        c1.p.rx() += (c2.p.x() - c1.p.x()) / 2.0;
-                        pl.erase(pl.begin() + i + 1);
-                        }
-                  }
-#endif
             if (!pl.empty()) {
-//                  printf("%p collisions %d\n", this, pl.size());
                   qSort(pl.begin(), pl.end(), [](const Collision& a, const Collision& b) { return a.dist < b.dist; });
                   for (int i = 0; i < pl.size(); ++i) {
                         qreal ddy   = pl[i].dist;
                         qreal x     = pl[i].p.x();
-                        qreal x1    = ups(Grip::BEZIER1).p.x();  // p1.x();
-                        qreal x2    = ups(Grip::BEZIER2).p.x();  // p2.x();
+//                        qreal x1    = ups(Grip::BEZIER1).p.x();
+//                        qreal x2    = ups(Grip::BEZIER2).p.x();
+                        qreal x1    = pp1.x();
+                        qreal x2    = pp2.x();
                         qreal ratio = (x - x1) / (x2 - x1);
+//printf("ratio %f    %f %f %f\n", ratio, pp1.x(), x, pp2.x());
 
+#if 1
                         for (int k = 0; k < 30; ++k) {
                               const qreal magic = 1.1;
                               _ups[int(Grip::BEZIER1)].off.ry() -= ddy * magic * (1.0 - ratio);
                               _ups[int(Grip::BEZIER2)].off.ry() -= ddy * magic * ratio;
+// printf("   %d: %f %f\n", k, ddy * magic * (1.0 - ratio), ddy * magic * ratio);
                               computeBezier();
                               qreal nddy = slurDistance(_shape, pl[i].p, sdist, up);
-//                              printf("%d %d ddy %f  nddy %f  magic %f ratio %f\n", i, k, ddy, nddy, magic, ratio);
-                              if (qAbs(nddy) <= spatium() * 0.1) {
-//                                    printf("   collision %d  -- tries %d\n", i, k);
+                              if (qAbs(nddy) <= spatium() * 0.1)
                                     break;
-                                    }
                               ddy = nddy;
                               }
-
-//                        ++i;
-//                        if (i == pl.size())
-//                              break;
-//                        ddy = slurDistance(_shape, pl[i].p, sdist, up);
-//                        printf("%p %f %f < %f\n", this, ddy, qAbs(ddy), minDistance);
-//                        if (ddy < minDistance)
-//                              break;
+#endif
                         }
                   }
-#if 0
-            else {
-                  // fallback: move whole slur
-                  qreal ddy = up ? -1000000 : +1000000;
-                  for (const Collision& c : pl)
-                        ddy = up ? qMax(ddy, c.dist) : qMin(ddy, c.dist);
-                  rUserYoffset() = -ddy;
-                  }
-#endif
             }
       else {
             if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
@@ -987,6 +1020,8 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
 
 SpannerSegment* Slur::layoutSystem(System* system)
       {
+//      printf("Slur::layoutSystem %p %p\n", this, system);
+
       int stick = system->firstMeasure()->tick();
       int etick = system->lastMeasure()->endTick();
 
@@ -998,6 +1033,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
                   }
             }
       if (!slurSegment) {
+//            printf("   create slur segment\n");
             slurSegment = new SlurSegment(score());
             add(slurSegment);
             }
@@ -1114,6 +1150,8 @@ SpannerSegment* Slur::layoutSystem(System* system)
 
 void Slur::layout()
       {
+      printf("Slur::layout %p\n", this);
+
       if (track2() == -1)
             setTrack2(track());
 
