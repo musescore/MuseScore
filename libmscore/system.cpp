@@ -363,12 +363,10 @@ void System::layout2()
       for (int i = 0; i < _staves.size(); ++i) {
             Staff*    s  = score()->staff(i);
             SysStaff* ss = _staves[i];
-            if (s->show() && ss->show()) {
+            if (s->show() && ss->show())
                   visibleStaves.append(std::pair<int,SysStaff*>(i, ss));
-                  }
-            else {
+            else
                   ss->setbbox(QRectF());  // already done in layout() ?
-                  }
             }
 
       qreal _spatium            = spatium();
@@ -415,11 +413,11 @@ void System::layout2()
                   if (!mb->isMeasure())
                         continue;
                   Measure* m = toMeasure(mb);
-                  Shape& s1 = m->staffShape(si1);
-                  Shape& s2 = m->staffShape(si2);
+                  Shape& s1  = m->staffShape(si1);
+                  Shape& s2  = m->staffShape(si2);
 
-                  qreal d = s1.minVerticalDistance(s2) + minVerticalDistance;
-                  dist    = qMax(dist, d);
+                  qreal d    = s1.minVerticalDistance(s2);
+                  dist       = qMax(dist, d + minVerticalDistance);
 
                   Spacer* sp = m->vspacerDown(si1);
                   if (sp) {

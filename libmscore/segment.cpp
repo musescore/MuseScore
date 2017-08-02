@@ -1804,10 +1804,13 @@ void Segment::createShape(int staffIdx)
             }
 #endif
 
-      for (Element* e : _elist) {
-            if (e && e->vStaffIdx() == staffIdx)
+      for (int track = staffIdx * VOICES; track < (staffIdx + 1) * VOICES; ++track) {
+            Element* e = _elist[track];
+            if (e) {
                   s.add(e->shape().translated(e->pos()));
+                  }
             }
+
       for (Element* e : _annotations) {
             // probably only allow for lyrics and chordnames
             if (e->staffIdx() == staffIdx
