@@ -2977,7 +2977,7 @@ System* Score::collectSystem(LayoutContext& lc)
             system->setWidth(pos.x());
 
       //
-      // compute shape of measures
+      // compute measure shape
       //
 
       for (int si = 0; si < score()->nstaves(); ++si) {
@@ -2985,13 +2985,15 @@ System* Score::collectSystem(LayoutContext& lc)
                   if (!mb->isMeasure())
                         continue;
                   Measure* m = toMeasure(mb);
-                  m->staffShape(si).clear();
+                  Shape& ss  = m->staffShape(si);
+                  ss.clear();
+
                   for (Segment& s : m->segments()) {
                         if (s.isTimeSigType())       // hack: ignore time signatures
                               continue;
-                        m->staffShape(si).add(s.staffShape(si).translated(s.pos()));
+                        ss.add(s.staffShape(si).translated(s.pos()));
                         }
-                  m->staffShape(si).add(m->staffLines(si)->bbox());
+                  ss.add(m->staffLines(si)->bbox());
                   }
             }
 
@@ -3144,10 +3146,6 @@ System* Score::collectSystem(LayoutContext& lc)
                   if (sp->isOttava())
                         continue;
                   if (sp->tick() < etick && sp->tick2() > stick) {
-//                        if (sp->isOttava() && sp->ticks() == 0) {       // sanity check?
-//                              sp->setTick2(lastMeasure()->endTick());
-//                              sp->staff()->updateOttava();
-//                              }
                         SpannerSegment* ss = sp->layoutSystem(system);     // create/layout spanner segment for this system
                         if (ss->isVoltaSegment() && ss->autoplace())
                               voltaSegments.push_back(ss);
@@ -3207,6 +3205,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         sp->layoutSystem(system);     // create/layout spanner segment for this system
                         }
                   }
+
             //
             // add ottava shapes to staff shapes
             //

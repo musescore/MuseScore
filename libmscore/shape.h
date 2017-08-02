@@ -54,7 +54,7 @@ class Shape : std::vector<QRectF> {
       bool intersects(const QRectF& rr) const;
       void paint(QPainter&);
 
-#ifdef DEBUG_SHAPES
+#ifndef NDEBUG
       void dump(const char*) const;
 #endif
       };
