@@ -78,6 +78,9 @@
 #include "stafftypechange.h"
 #include "stafflines.h"
 #include "bracketItem.h"
+#include "jianpuchord.h"
+#include "jianpurest.h"
+#include "jianpubeam.h"
 
 namespace Ms {
 
@@ -1890,7 +1893,11 @@ void Measure::read(XmlReader& e, int staffIdx)
                   barLine->layout();
                   }
             else if (tag == "Chord") {
-                  Chord* chord = new Chord(score());
+                  Chord* chord;
+                  if (staff->isJianpuStaff(tick()))
+                        chord = new JianpuChord(score());
+                  else
+                        chord = new Chord(score());
                   chord->setTrack(e.track());
                   chord->read(e);
                   segment = getSegment(SegmentType::ChordRest, e.tick());
@@ -1909,7 +1916,11 @@ void Measure::read(XmlReader& e, int staffIdx)
                         }
                   }
             else if (tag == "Rest") {
-                  Rest* rest = new Rest(score());
+                  Rest* rest;
+                  if (staff->isJianpuStaff(tick()))
+                        rest = new JianpuRest(score());
+                  else
+                        rest = new Rest(score());
                   rest->setDurationType(TDuration::DurationType::V_MEASURE);
                   rest->setDuration(timesig()/timeStretch);
                   rest->setTrack(e.track());
@@ -2210,7 +2221,11 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "slashStyle")
                   _mstaves[staffIdx]->setSlashStyle(e.readInt());
             else if (tag == "Beam") {
-                  Beam* beam = new Beam(score());
+                  Beam* beam;
+                  if (staff->isJianpuStaff(tick()))
+                        beam = new JianpuBeam(score());
+                  else
+                        beam = new Beam(score());
                   beam->setTrack(e.track());
                   beam->read(e);
                   beam->setParent(0);

@@ -70,6 +70,9 @@
 #include "rehearsalmark.h"
 #include "breath.h"
 #include "instrchange.h"
+#include "stafffactory.h"
+#include "jianpufactory.h"
+#include "standardfactory.h"
 
 namespace Ms {
 
@@ -2057,6 +2060,12 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       int strack = staffIdx * VOICES;
       int dtrack = (staffIdx + 1) * VOICES;
 
+      StaffFactory* fac;
+      if (s->isJianpuStaff(0))
+            fac = JianpuFactory::instance();
+      else
+            fac = StandardFactory::instance();
+
       for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             for (int voice = 0; voice < VOICES; ++voice) {
                   Element* e = s->element(strack + voice);
@@ -2070,13 +2079,13 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         Chord* chord = toChord(s->element(dtrack + voice));
                         Q_ASSERT(!chord || (chord->isChord()));
                         if (chord == 0) {
-                              chord = new Chord(*c);
+                              chord = fac->cloneChord(c);
                               qDeleteAll(chord->notes());
                               chord->notes().clear();
                               chord->setTrack(dtrack + voice);
                               undoAddElement(chord);
                               }
-                        Note* nnote = new Note(*note);
+                        Note* nnote = fac->cloneNote(note);
                         nnote->setTrack(dtrack + voice);
                         chord->add(nnote);
                         nnote->updateLine();

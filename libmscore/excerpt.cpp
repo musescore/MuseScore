@@ -42,6 +42,9 @@
 #include "barline.h"
 #include "undo.h"
 #include "bracketItem.h"
+#include "stafffactory.h"
+#include "jianpufactory.h"
+#include "standardfactory.h"
 
 namespace Ms {
 
@@ -796,6 +799,12 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
       int srcStaffIdx = srcStaff->idx();
       int dstStaffIdx = dstStaff->idx();
 
+      StaffFactory* fac;
+      if (dstStaff->isJianpuStaff(0))
+            fac = JianpuFactory::instance();
+      else
+            fac = StandardFactory::instance();
+
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
             int sTrack = srcStaffIdx * VOICES;
             int eTrack = sTrack + VOICES;
@@ -805,22 +814,32 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                   Tremolo* tremolo = 0;
                   for (Segment* seg = m->first(); seg; seg = seg->next()) {
                         Element* oe = seg->element(srcTrack);
-                        if (oe == 0 || oe->generated())
+                        if (oe == 0 || (oe->generated() && !dstStaff->isJianpuStaff(0)))
                               continue;
                         if (oe->isTimeSig())
                               continue;
                         Element* ne = 0;
                         if (oe->isClef()) {
-                              // only clone clef if it matches staff group and does not exists yet
-                              Clef* clef = static_cast<Clef*>(oe);
-                              int   tick = seg->tick();
-                              if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->staffType(0)->group()
-                                          && dstStaff->clefType(tick) != clef->clefTypeList()) {
+                              if (dstStaff->isJianpuStaff(0)) {
+                                    // For destination Jianpu staff, clone the original clef for now.
+                                    // TODO: Create new Jianpu clef type if needed in the future.
                                     ne = oe->clone();
+                                    ne->setVisible(false);
+                                    }
+                              else {
+                                    // only clone clef if it matches staff group and does not exists yet
+                                    Clef* clef = static_cast<Clef*>(oe);
+                                    int   tick = seg->tick();
+                                    if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->staffType(0)->group()
+                                        && dstStaff->clefType(tick) != clef->clefTypeList()) {
+                                          ne = oe->clone();
+                                          }
                                     }
                               }
-                        else
-                              ne = oe->linkedClone();
+                        else {
+                              // Make a linked clone.
+                              ne = fac->cloneElement(oe, true);
+                              }
                         if (ne) {
                               ne->setTrack(dstTrack);
                               ne->setParent(seg);
@@ -866,7 +885,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           case ElementType::LYRICS:   // not normally segment-attached
                                                 continue;
                                           default:
-                                                Element* ne = e->clone();
+                                                Element* ne = fac->cloneElement(e);
                                                 ne->setTrack(dstTrack);
                                                 ne->setParent(seg);
                                                 ne->setScore(score);

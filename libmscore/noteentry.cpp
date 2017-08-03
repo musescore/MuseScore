@@ -111,6 +111,9 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
                         }
                   }
                   break;
+            case StaffGroup::JIANPU:
+                  //TODO: TBD
+                  break;
             }
       return nval;
       }
@@ -320,6 +323,9 @@ void Score::putNote(const Position& p, bool replace)
                   stringData = st->part()->instrument(s->tick())->stringData();
                   break;
             case StaffGroup::STANDARD:
+                  break;
+            case StaffGroup::JIANPU:
+                  //TODO: TBD
                   break;
             }
 

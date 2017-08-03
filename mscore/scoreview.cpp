@@ -2383,6 +2383,9 @@ void ScoreView::startNoteEntry()
                   }
             case StaffGroup::PERCUSSION:
                   break;
+            case StaffGroup::JIANPU:
+                  //TODO: TBD
+                  break;
             }
       // set cursor after setting the stafftype-dependent state
       moveCursor();
@@ -3014,6 +3017,10 @@ ScoreState ScoreView::mscoreState() const
                         return STATE_NOTE_ENTRY_STAFF_TAB;
                   case StaffGroup::PERCUSSION:
                         return STATE_NOTE_ENTRY_STAFF_DRUM;
+                  case StaffGroup::JIANPU:
+                        //TODO: TBD
+                        return STATE_NOTE_ENTRY_STAFF_PITCHED;
+                        break;
                   }
             }
       if (state == ViewState::EDIT || state == ViewState::DRAG_EDIT) {

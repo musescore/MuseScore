@@ -13,6 +13,7 @@
 #include "accidental.h"
 #include "barline.h"
 #include "beam.h"
+#include "jianpubeam.h"
 #include "box.h"
 #include "chord.h"
 #include "clef.h"
@@ -1153,7 +1154,10 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
                   else {
                         beam = a1->beam();
                         if (beam == 0 || beam->elements().front() != a1) {
-                              beam = new Beam(this);
+                              if (mainNote->staff()->isJianpuStaff(mainNote->tick()))
+                                    beam = new JianpuBeam(this);
+                              else
+                                    beam = new Beam(this);
                               beam->setGenerated(true);
                               beam->setTrack(mainNote->track());
                               a1->removeDeleteBeam(true);
@@ -2219,7 +2223,10 @@ void Score::createBeams(Measure* measure)
                         else {
                               beam = a1->beam();
                               if (beam == 0 || beam->elements().front() != a1) {
-                                    beam = new Beam(this);
+                                    if (stf->isJianpuStaff(measure->tick()))
+                                          beam = new JianpuBeam(this);
+                                    else
+                                          beam = new Beam(this);
                                     beam->setGenerated(true);
                                     beam->setTrack(track);
                                     a1->removeDeleteBeam(true);
