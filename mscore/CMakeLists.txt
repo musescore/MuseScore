@@ -422,6 +422,18 @@ if (MINGW)
               list (APPEND QtInstallLibraries ${QtSharedLibrary})
           endif (EXISTS ${QtSharedLibrary})
       endforeach (QtLibrary ${QT_LIBRARIES})
+      set (D "")
+      if (CMAKE_BUILD_TYPE MATCHES "DEBUG")
+          set (D "d")
+      endif (CMAKE_BUILD_TYPE MATCHES "DEBUG")
+      list (APPEND QtInstallLibraries ${QT_INSTALL_PREFIX}/bin/Qt5CLucene${D}.dll)
+      list (APPEND QtInstallLibraries ${QT_INSTALL_PREFIX}/bin/Qt5Multimedia${D}.dll)
+      list (APPEND QtInstallLibraries ${QT_INSTALL_PREFIX}/bin/Qt5MultimediaWidgets${D}.dll)
+      list (APPEND QtInstallLibraries ${QT_INSTALL_PREFIX}/bin/Qt5Sensors${D}.dll)
+      list (APPEND QtInstallLibraries ${QT_INSTALL_PREFIX}/bin/Qt5Positioning${D}.dll)
+      list (APPEND QtInstallLibraries ${QT_INSTALL_PREFIX}/bin/Qt5WebChannel${D}.dll)
+      list (APPEND QtInstallLibraries ${QT_INSTALL_PREFIX}/bin/Qt5Sensors${D}.dll)
+
       list(REMOVE_DUPLICATES QtInstallLibraries)
       install(FILES
             ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
@@ -434,6 +446,9 @@ if (MINGW)
             ${MINGW_ROOT}/lib/portaudio.dll
             ${MINGW_ROOT}/opt/bin/libeay32.dll
             ${MINGW_ROOT}/opt/bin/ssleay32.dll
+            ${QT_INSTALL_PREFIX}/bin/icudt53.dll
+            ${QT_INSTALL_PREFIX}/bin/icuin53.dll
+            ${QT_INSTALL_PREFIX}/bin/icuuc53.dll
             ${QtInstallLibraries}
             ${PROJECT_SOURCE_DIR}/build/qt.conf
             DESTINATION bin
@@ -453,7 +468,7 @@ if (MINGW)
             )
 
       install(FILES
-            ${QT_INSTALL_PREFIX}/plugins/platforms/qwindows.dll
+            ${QT_INSTALL_PREFIX}/plugins/platforms/qwindows${D}.dll
             DESTINATION bin/platforms
             )
 
