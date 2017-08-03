@@ -129,6 +129,7 @@ class Palette : public QWidget {
 
       bool _moreElements;
       bool _showContextMenu { true };
+      bool newScoreWizard { false };  // true if it is in new score wizard
 
       virtual void paintEvent(QPaintEvent*) override;
       virtual void mousePressEvent(QMouseEvent*) override;
@@ -137,7 +138,6 @@ class Palette : public QWidget {
       virtual void leaveEvent(QEvent*) override;
       virtual bool event(QEvent*) override;
       virtual void resizeEvent(QResizeEvent*) override;
-      void applyPaletteElement(PaletteCell* cell);
 
       virtual void dragEnterEvent(QDragEnterEvent*) override;
       virtual void dragMoveEvent(QDragMoveEvent*) override;
@@ -166,6 +166,7 @@ class Palette : public QWidget {
       void nextPaletteElement();
       void prevPaletteElement();
       void applyPaletteElement();
+      void applyPaletteElement(PaletteCell* p);
       PaletteCell* append(Element*, const QString& name, QString tag = QString(),
          qreal mag = 1.0);
       PaletteCell* add(int idx, Element*, const QString& name,
@@ -215,9 +216,12 @@ class Palette : public QWidget {
       void setCurrentIdx(int i) { currentIdx = i; }
       bool isFilterActive() { return filterActive == true; }
       QList<PaletteCell*> getDragCells() { return dragCells; }
+      QList<PaletteCell*>getCells() { return cells; }
       virtual int heightForWidth(int) const;
       virtual QSize sizeHint() const;
       int idx(const QPoint&) const;
+      bool newScoreWizardFlag() { return newScoreWizard; }
+      void setNewScoreWizardFlag(bool v) { newScoreWizard = v; }
       };
 
 

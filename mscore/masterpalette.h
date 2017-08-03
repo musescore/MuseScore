@@ -55,6 +55,7 @@ class MasterPalette : public QWidget, Ui::MasterPalette
       MasterPalette(QWidget* parent = 0);
       void selectItem(const QString& s);
       QString selectedItem();
+      virtual void keyPressEvent(QKeyEvent *event) override;
       };
 
 } // namespace Ms

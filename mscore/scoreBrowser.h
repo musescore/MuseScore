@@ -33,6 +33,8 @@ class ScoreListWidget : public QListWidget
 
       virtual QSize sizeHint() const override;
 
+   protected:
+      virtual void keyPressEvent(QKeyEvent* event) override;
    public:
       ScoreListWidget(QWidget* parent = 0) : QListWidget(parent) {}
       int cellWidth() const { return CELLW; }
@@ -69,6 +71,9 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
       void scoreSelected(QString);
       void scoreActivated(QString);
 
+   protected:
+      virtual bool focusNextPrevChild(bool next) override;
+
    public:
       ScoreBrowser(QWidget* parent = 0);
       void setScores(QFileInfoList&);
@@ -78,6 +83,8 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
       void setBoldTitle(bool bold) { _boldTitle = bold; }
       void setShowCustomCategory(bool showCustomCategory) { _showCustomCategory = showCustomCategory; }
       void filter(const QString&);
+      virtual void keyPressEvent(QKeyEvent *event) override;
+      QList<ScoreListWidget*> getScoreLists() { return scoreLists; }
       };
 }
 

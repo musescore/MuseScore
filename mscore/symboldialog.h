@@ -52,6 +52,7 @@ class SymbolDialog : public QWidget, Ui::SymbolDialogBase {
 
    public:
       SymbolDialog(const QString&, QWidget* parent = 0);
+      Palette* getPalette() { return sp; }
       };
 }
 

@@ -314,6 +314,8 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
 void NewWizardPage4::initializePage()
       {
       templateFileBrowser->show();
+      templateFileBrowser->selectFirst();
+      templateFileBrowser->update();
       path.clear();
       }
 
@@ -379,6 +381,7 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
       sp->setSelectable(true);
       sp->setDisableDoubleClick(true);
       sp->setSelected(14);
+      sp->setNewScoreWizardFlag(true);
       PaletteScrollArea* sa = new PaletteScrollArea(sp);
       QVBoxLayout* l1 = new QVBoxLayout;
       l1->addWidget(sa);
