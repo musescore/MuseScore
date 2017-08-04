@@ -1940,7 +1940,7 @@ void Chord::layoutPitched()
 
             else {
                   // grace note
-                  Chord* mainChord = static_cast<Chord*>(parent());
+                  Chord* mainChord = toChord(parent());
                   bool before = isGraceBefore();
                   int incIdx = before ? -1 : 1;
                   int endIdx = before ? -1 : mainChord->graceNotes().size();
@@ -1963,8 +1963,8 @@ void Chord::layoutPitched()
                         else if (mainChord->rtick()) {
                               // grace note before - use previous normal note of measure
                               Segment* s = mainChord->segment()->prev(SegmentType::ChordRest);
-                              if (s && s->element(track()) && s->element(track())->type() == ElementType::CHORD)
-                                    pc = static_cast<Chord*>(s->element(track()));
+                              if (s && s->element(track()) && s->element(track())->isChord())
+                                    pc = toChord(s->element(track()));
                               }
                         }
                   }
@@ -3171,7 +3171,7 @@ Element* Chord::nextElement()
       {
       Element* e = score()->selection().element();
       if (!e && !score()->selection().elements().isEmpty())
-            e = score()->selection().elements().first();   
+            e = score()->selection().elements().first();
       switch(e->type()) {
             case ElementType::SYMBOL:
             case ElementType::IMAGE:
@@ -3179,7 +3179,7 @@ Element* Chord::nextElement()
             case ElementType::TEXT:
             case ElementType::BEND: {
                   Note* n = static_cast<Note*>(e->parent());
-                  if(n == _notes.front()) {                       
+                  if(n == _notes.front()) {
                         if (_arpeggio)
                               return _arpeggio;
                         else if (_tremolo)
@@ -3221,7 +3221,7 @@ Element* Chord::nextElement()
             case ElementType::ACCIDENTAL:
                   e = e->parent();
                   // fall through
-            case ElementType::NOTE: {                  
+            case ElementType::NOTE: {
                   if (e == _notes.front()) {
                         if (_arpeggio)
                               return _arpeggio;
@@ -3235,11 +3235,11 @@ Element* Chord::nextElement()
                               }
                         }
                   }
-            case ElementType::CHORD: {                  
+            case ElementType::CHORD: {
                   return _notes.back();
                   }
             default:
-                  break;                  
+                  break;
             }
 
             Element* next = ChordRest::nextElement();
@@ -3361,13 +3361,11 @@ QString Chord::accessibleExtraInfo() const
       {
       QString rez = "";
 
-      if (!isGrace()) {
-            foreach (Chord* c, graceNotes()) {
-                  if (!score()->selectionFilter().canSelect(c)) continue;
-                  foreach (Note* n, c->notes()) {
-                        rez = QString("%1 %2").arg(rez).arg(n->screenReaderInfo());
-                        }
-                  }
+      for (const Chord* c : graceNotes()) {
+            if (!score()->selectionFilter().canSelect(c))
+                  continue;
+            for (const Note* n : c->notes())
+                  rez = QString("%1 %2").arg(rez).arg(n->screenReaderInfo());
             }
 
       if (arpeggio() && score()->selectionFilter().canSelect(arpeggio()))

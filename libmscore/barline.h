@@ -130,7 +130,7 @@ class BarLine : public Element {
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID propertyId) const override;
 
-      static void layoutWidth(Score*, BarLineType, qreal mag, qreal* lx, qreal* rx);
+      static qreal layoutWidth(Score*, BarLineType);
 
       virtual Element* nextSegmentElement() override;
       virtual Element* prevSegmentElement() override;
