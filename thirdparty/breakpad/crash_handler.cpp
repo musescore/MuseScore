@@ -95,6 +95,7 @@ namespace Breakpad {
 #if defined(Q_OS_WIN32)
         wstring minidump_path;
 
+        // Minidump Path
         minidump_path =  wstring(_dump_dir) + L"/" + wstring(_minidump_id) + L".dmp";
 
         qDebug("minidump path: %s\n", std::string(minidump_path.begin(),minidump_path.end()).c_str());
@@ -112,7 +113,7 @@ namespace Breakpad {
         parameters.insert(pair<wstring, wstring>(L"version", L"0.1.0"));
         // parameters["uptime"] uptime_sec;
 
-        // Pass Crash table data
+        // Pass Crash table data to the parameters hash map
         QHashIterator<QString, QString> i(crashTable);
         while (i.hasNext()) {
             i.next();
@@ -123,12 +124,12 @@ namespace Breakpad {
         //files["upload_file_minidump"] = minidump_path.toStdString();
         files.insert(pair<wstring, wstring>(L"upload_file_minidump", minidump_path));
 
+
+        // Upload the minidump to the server
         wstring url = L"https://musescore.sp.backtrace.io:6098/post?format=minidump&token=00268871877ba102d69a23a8e713fff9700acf65999b1f043ec09c5c253b9c03";
 
         wstring response;
-
         int mytimeout, my_error;
-
 
         google_breakpad::HTTPUpload *test_upload;
         test_upload->SendRequest(url,
@@ -140,6 +141,12 @@ namespace Breakpad {
 
 
         std::string s( response.begin(), response.end() );
+
+        // Start a new processs that will run the crashReporter widnow
+        wstring program_path;
+        program_path = L"C:/Users/nickhatz/MuseScore/build.release/thirdparty/breakpad/crashReporter.exe";
+        launcher(program_path,minidump_path);
+
         qDebug("%s\n",s.c_str());
 #endif
 
@@ -213,21 +220,26 @@ namespace Breakpad {
 
     }
 
-    bool CrashHandler::launcher(const char* program, const char* path){
+    bool launcher(wstring program, wstring minidump_path){
 
         STARTUPINFO si;
         PROCESS_INFORMATION pi;
+        wstring mycmd;
+
+        //example command: c:\...\crashReporter.exe minidump_path
+        mycmd = program + L" " + minidump_path;
 
         ZeroMemory( &si, sizeof(si) );
         si.cb = sizeof(si);
         ZeroMemory( &pi, sizeof(pi) );
 
 
-        std::cout << "CrashReporter: "   << program
-                     << "Dmppath: "      << path;
+        std::wcout << "CrashReporter: "  << program
+                   << "Dmppath: "        << minidump_path;
 
+        // Open a Windows Process equivelant to fork() for Linux
         if( !CreateProcess( NULL,   // No module name (use command line)
-                L"test.exe",        // Command line
+                 (WCHAR *)mycmd.c_str(),          // Command line
                 NULL,           // Process handle not inheritable
                 NULL,           // Thread handle not inheritable
                 FALSE,          // Set handle inheritance to FALSE
@@ -243,10 +255,9 @@ namespace Breakpad {
             }
 
 
+        Q_UNUSED(program);
+        return false;
 
-
-               Q_UNUSED(program);
-               return false;
     }
 
 

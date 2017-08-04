@@ -47,6 +47,7 @@ namespace Breakpad {
 
     int AnnotateCrashReport(const QString& aKey, const QString& aData);
     int PrintMyCrashReport();
+    bool launcher(wstring program, wstring minidump_path);
 
 
 
@@ -60,9 +61,7 @@ namespace Breakpad {
         void Init(const QString&  reportPath);
         void setReportCrashesToSystem(bool report);
         bool writeMinidump();
-        bool launcher(const char* program, const char* path);
-
-
+        bool launcher(wstring program, wstring minidump_path);
 
 
     private:
