@@ -3139,7 +3139,8 @@ void Measure::stretchMeasure(qreal targetWidth)
                         }
                   else if (t == ElementType::BAR_LINE) {
                         e->rypos() = 0.0;
-                        e->rxpos() = s.isEndBarLineType() ? s.width() * .5 : 0.0;
+                        e->rxpos() = 0.0;
+//                        e->rxpos() = s.isEndBarLineType() ? s.width() * .5 : 0.0;
                         e->adjustReadPos();
                         }
                   else
