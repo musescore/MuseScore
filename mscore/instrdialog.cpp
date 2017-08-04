@@ -286,8 +286,6 @@ void MuseScore::editInstrList()
                               linked.append(staff);
                               }
                         }
-                  if (linked.size() == 0)
-                        part->staves()->front()->setBarLineSpan(part->nstaves());
 
                   //insert keysigs
                   int sidx = masterScore->staffIdx(part);
@@ -324,7 +322,6 @@ void MuseScore::editInstrList()
 
                               Staff* linkedStaff = 0;
                               if (sli->linked()) {
-
                                     if (rstaff > 0)
                                           linkedStaff = part->staves()->front();
                                     else {
