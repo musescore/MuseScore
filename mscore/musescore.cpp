@@ -6025,6 +6025,7 @@ int main(int argc, char* av[])
 #ifdef BREAKPAD
       QDir().mkpath(dataPath+"/crash_reports");
       Breakpad::CrashHandler::instance()->Init(dataPath+"/crash_reports");
+      Breakpad::AnnotateCrashReport("semver",VERSION);
 #endif
 
       if (MScore::debugMode)

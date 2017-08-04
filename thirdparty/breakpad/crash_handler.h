@@ -33,9 +33,14 @@
 #include "common/windows/http_upload.h"
 #endif
 
+#include <iostream>
+//#include <unistd.h>
+#include <windows.h>
+
 
 using std::wstring;
 using std::pair;
+
 
 
 namespace Breakpad {
@@ -55,6 +60,7 @@ namespace Breakpad {
         void Init(const QString&  reportPath);
         void setReportCrashesToSystem(bool report);
         bool writeMinidump();
+        bool launcher(const char* program, const char* path);
 
 
 

@@ -49,4 +49,6 @@ ADD_DEFINITIONS(-DUNICODE)
 ADD_DEPENDENCIES(breakpad mops1)
 ADD_DEPENDENCIES(breakpad mops2)
 
+add_executable(crashReporter crashReporter.cpp)
+
 
