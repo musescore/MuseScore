@@ -132,7 +132,7 @@ InstrumentTemplate::InstrumentTemplate()
             smallStaff[i]  = false;
             bracket[i]     = BracketType::NO_BRACKET;
             bracketSpan[i] = 0;
-            barlineSpan[i] = 0;
+            barlineSpan[i] = false;
             }
       transpose.diatonic   = 0;
       transpose.chromatic  = 0;
@@ -340,8 +340,8 @@ void InstrumentTemplate::read(XmlReader& e)
             else if (tag == "staves") {
                   staves = e.readInt();
                   bracketSpan[0] = staves;
-                  for (int i = 0; i < staves-1; ++i)
-                        barlineSpan[i] = true;
+//                  for (int i = 0; i < staves-1; ++i)
+//                        barlineSpan[i] = true;
                   }
             else if (tag == "clef") {           // sets both transposing and concert clef
                   int idx = readStaffIdx(e);
@@ -473,25 +473,6 @@ void InstrumentTemplate::read(XmlReader& e)
                   }
             else
                   e.unknown();
-            }
-      //
-      // check bar line spans
-      //
-      int barLine = 0;
-      for (int i = 0; i < staves; ++i) {
-            int bls = barlineSpan[i];
-            if (barLine) {
-                  if (bls)
-                        barlineSpan[i] = 0;
-                  }
-            else {
-                  if (bls == 0) {
-                        bls = 1;
-                        barlineSpan[i] = 1;
-                        }
-                  barLine = bls;
-                  }
-            --barLine;
             }
       if (channel.empty()) {
             Channel a;
