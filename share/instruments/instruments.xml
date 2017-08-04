@@ -7220,6 +7220,38 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
+            <Instrument id="women">
+                  <longName>Women</longName>
+                  <shortName>W.</shortName>
+                  <description>Women</description>
+                  <musicXMLid>voice.female</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>55-81</aPitchRange>
+                  <pPitchRange>55-84</pPitchRange>
+                  <Channel>
+                        <program value="52"/>
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>jazz</genre>
+                  <genre>orchestra</genre>
+            </Instrument>
+            <Instrument id="men">
+                  <longName>Men</longName>
+                  <shortName>M.</shortName>
+                  <description>Men</description>
+                  <musicXMLid>voice.male</musicXMLid>
+                  <clef>F</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>41-67</aPitchRange>
+                  <pPitchRange>38-69</pPitchRange>
+                  <Channel>
+                        <program value="52"/>
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>jazz</genre>
+                  <genre>orchestra</genre>
+            </Instrument>
             <Instrument id="kazoo">
                   <longName>Kazoo</longName>
                   <shortName>Kaz.</shortName>
