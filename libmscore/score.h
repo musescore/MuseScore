@@ -527,7 +527,6 @@ class Score : public QObject, ScoreElement {
       void cmdToggleHideEmpty();
       void cmdSetVisible();
       void cmdUnsetVisible();
-      void cmdToggleLayoutBreak(LayoutBreak::Type);
       inline virtual Movements* movements();
       inline virtual const Movements* movements() const;
 
@@ -574,6 +573,7 @@ class Score : public QObject, ScoreElement {
       void cmdHalfDuration()        { cmdIncDecDuration( 1, 0); }
       void cmdIncDurationDotted()   { cmdIncDecDuration(-1, 1); }
       void cmdDecDurationDotted()   { cmdIncDecDuration( 1, 1); }
+      void cmdToggleLayoutBreak(LayoutBreak::Type);
 
       void addRemoveBreaks(int interval, bool lock);
 
