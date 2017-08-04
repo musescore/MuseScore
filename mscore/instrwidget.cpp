@@ -984,7 +984,7 @@ void InstrumentsWidget::createInstruments(Score* cs)
                   }
             // if a staff was removed from instrument:
             if (part->staff(0)->barLineSpan() > rstaff) {
-                  part->staff(0)->setBarLineSpan(rstaff);
+//TODO                  part->staff(0)->setBarLineSpan(rstaff);
                   part->staff(0)->setBracketType(0, BracketType::NO_BRACKET);
                   }
 
@@ -996,6 +996,7 @@ void InstrumentsWidget::createInstruments(Score* cs)
                   m->cmdAddStaves(sidx, eidx, true);
             staffIdx += rstaff;
             }
+#if 0 // TODO
       //
       // check for bar lines
       //
@@ -1014,7 +1015,7 @@ void InstrumentsWidget::createInstruments(Score* cs)
 
             staffIdx = nstaffIdx;
             }
-
+#endif
       cs->setLayoutAll();
       }
 

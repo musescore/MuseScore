@@ -3388,7 +3388,6 @@ void Score::appendPart(const QString& name)
                   }
             undoInsertStaff(staff, i);
             }
-
       part->staves()->front()->setBarLineSpan(part->nstaves());
       undoInsertPart(part, n);
       fixTicks();
