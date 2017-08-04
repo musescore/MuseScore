@@ -144,6 +144,8 @@ namespace Breakpad {
 
         // Start a new processs that will run the crashReporter widnow
         wstring program_path;
+
+        // How are we going to define the path of the crashReporter???
         program_path = L"C:/Users/nickhatz/MuseScore/build.release/thirdparty/breakpad/crashReporter.exe";
         launcher(program_path,minidump_path);
 
@@ -239,7 +241,7 @@ namespace Breakpad {
 
         // Open a Windows Process equivelant to fork() for Linux
         if( !CreateProcess( NULL,   // No module name (use command line)
-                 (WCHAR *)mycmd.c_str(),          // Command line
+                (WCHAR *)mycmd.c_str(),          // Command line
                 NULL,           // Process handle not inheritable
                 NULL,           // Thread handle not inheritable
                 FALSE,          // Set handle inheritance to FALSE
