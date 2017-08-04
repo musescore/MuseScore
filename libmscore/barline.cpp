@@ -352,58 +352,61 @@ void BarLine::draw(QPainter* painter) const
             case BarLineType::NORMAL: {
                   qreal lw = score()->styleP(StyleIdx::barWidth) * mag();
                   painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
-                  painter->drawLine(QLineF(0.0, y1, 0.0, y2));
+                  painter->drawLine(QLineF(lw * .5, y1, lw * .5, y2));
                   }
                   break;
 
             case BarLineType::BROKEN: {
                   qreal lw = score()->styleP(StyleIdx::barWidth) * mag();
                   painter->setPen(QPen(curColor(), lw, Qt::DashLine, Qt::FlatCap));
-                  painter->drawLine(QLineF(0.0, y1, 0.0, y2));
+                  painter->drawLine(QLineF(lw * .5, y1, lw * .5, y2));
                   }
                   break;
 
             case BarLineType::DOTTED: {
                   qreal lw = score()->styleP(StyleIdx::barWidth) * mag();
                   painter->setPen(QPen(curColor(), lw, Qt::DotLine, Qt::FlatCap));
-                  painter->drawLine(QLineF(0.0, y1, 0.0, y2));
+                  painter->drawLine(QLineF(lw * .5, y1, lw * .5, y2));
                   }
                   break;
 
             case BarLineType::END: {
-                  qreal lw2 = score()->styleP(StyleIdx::endBarWidth) * mag();
-                  painter->setPen(QPen(curColor(), lw2, Qt::SolidLine, Qt::FlatCap));
-                  painter->drawLine(QLineF(0.0, y1, 0.0, y2));
-
                   qreal lw = score()->styleP(StyleIdx::barWidth) * mag();
                   painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
-                  qreal x  = score()->styleP(StyleIdx::endBarDistance) * mag() + (lw + lw2) * .5;
-                  painter->drawLine(QLineF(-x, y1, -x, y2));
+                  qreal x  = lw * .5;
+                  painter->drawLine(QLineF(x, y1, x, y2));
+
+                  qreal lw2 = score()->styleP(StyleIdx::endBarWidth) * mag();
+                  painter->setPen(QPen(curColor(), lw2, Qt::SolidLine, Qt::FlatCap));
+                  x  += score()->styleP(StyleIdx::endBarDistance) * mag();
+                  painter->drawLine(QLineF(x, y1, x, y2));
                   }
                   break;
 
             case BarLineType::DOUBLE: {
                   qreal lw2 = score()->styleP(StyleIdx::doubleBarWidth)    * mag();
                   qreal d   = score()->styleP(StyleIdx::doubleBarDistance) * mag();
-
                   painter->setPen(QPen(curColor(), lw2, Qt::SolidLine, Qt::FlatCap));
-                  qreal x = (lw2 + d) * .5;
+                  qreal x = lw2 * .5;
                   painter->drawLine(QLineF(x, y1, x, y2));
-                  painter->drawLine(QLineF(-x, y1, -x, y2));
+                  x += d;
+                  painter->drawLine(QLineF(x, y1, x, y2));
                   }
                   break;
 
             case BarLineType::START_REPEAT: {
                   qreal lw2 = score()->styleP(StyleIdx::endBarWidth) * mag();
                   painter->setPen(QPen(curColor(), lw2, Qt::SolidLine, Qt::FlatCap));
-                  painter->drawLine(QLineF(0.0, y1, 0.0, y2));
+                  qreal x = lw2 * .5;
+                  painter->drawLine(QLineF(x, y1, x, y2));
 
                   qreal lw = score()->styleP(StyleIdx::barWidth) * mag();
                   painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
-                  qreal x  = score()->styleP(StyleIdx::endBarDistance) * mag() + (lw + lw2) * .5;
+                  x  += score()->styleP(StyleIdx::endBarDistance) * mag();
                   painter->drawLine(QLineF(x, y1, x, y2));
 
-                  x += score()->styleP(StyleIdx::repeatBarlineDotSeparation) * mag() + lw * .5;
+                  x += score()->styleP(StyleIdx::repeatBarlineDotSeparation) * mag();
+                  x -= symBbox(SymId::repeatDot).width() * .5;
                   drawDots(painter, x);
 
                   if (score()->styleB(StyleIdx::repeatBarTips))
@@ -412,21 +415,23 @@ void BarLine::draw(QPainter* painter) const
                   break;
 
             case BarLineType::END_REPEAT: {
-                  qreal lw2 = score()->styleP(StyleIdx::endBarWidth) * mag();
-                  painter->setPen(QPen(curColor(), lw2, Qt::SolidLine, Qt::FlatCap));
-                  painter->drawLine(QLineF(0.0, y1, 0.0, y2));
+                  qreal x = 0.0; // symBbox(SymId::repeatDot).width() * .5;
+                  drawDots(painter, x);
 
+                  x += score()->styleP(StyleIdx::repeatBarlineDotSeparation) * mag();
+                  x += symBbox(SymId::repeatDot).width() * .5;
                   qreal lw = score()->styleP(StyleIdx::barWidth) * mag();
                   painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
-                  qreal x  = score()->styleP(StyleIdx::endBarDistance) * mag() + (lw + lw2) * .5;
-                  painter->drawLine(QLineF(-x, y1, -x, y2));
+                  painter->drawLine(QLineF(x, y1, x, y2));
 
-                  x += score()->styleP(StyleIdx::repeatBarlineDotSeparation) * mag() + lw * .5;
-                  x += symBbox(SymId::repeatDot).width();
-                  drawDots(painter, -x);
+                  x  += score()->styleP(StyleIdx::endBarDistance) * mag();
+
+                  qreal lw2 = score()->styleP(StyleIdx::endBarWidth) * mag();
+                  painter->setPen(QPen(curColor(), lw2, Qt::SolidLine, Qt::FlatCap));
+                  painter->drawLine(QLineF(x, y1, x, y2));
 
                   if (score()->styleB(StyleIdx::repeatBarTips))
-                        drawTips(painter, true, lw2 * .5);
+                        drawTips(painter, true, x);
                   }
                   break;
             }
@@ -895,42 +900,33 @@ void BarLine::endEditDrag(EditData& ed)
 //   layoutWidth
 //---------------------------------------------------------
 
-void BarLine::layoutWidth(Score* score, BarLineType type, qreal mag, qreal* lx, qreal* rx)
+qreal BarLine::layoutWidth(Score* score, BarLineType type)
       {
       qreal dotwidth = score->scoreFont()->width(SymId::repeatDot, 1.0);
 
+      qreal w;
       switch (type) {
             case BarLineType::DOUBLE:
-                  *rx = score->styleP(StyleIdx::doubleBarWidth) + score->styleP(StyleIdx::doubleBarDistance) * .5;
-                  *lx = -*rx;
+                  w = score->styleP(StyleIdx::doubleBarWidth) + score->styleP(StyleIdx::doubleBarDistance);
                   break;
             case BarLineType::START_REPEAT:
-                  *lx = -score->styleP(StyleIdx::endBarWidth) * .5;
-                  *rx = -*lx + score->styleP(StyleIdx::barWidth)
-                     + dotwidth
-                     + score->styleP(StyleIdx::repeatBarlineDotSeparation)
-                     + score->styleP(StyleIdx::endBarDistance);
-                  break;
             case BarLineType::END_REPEAT:
-                  *rx = score->styleP(StyleIdx::endBarWidth) * .5;
-                  *lx = -*rx - score->styleP(StyleIdx::barWidth)
-                     - dotwidth
-                     - score->styleP(StyleIdx::repeatBarlineDotSeparation)
-                     - score->styleP(StyleIdx::endBarDistance);
+                  w = score->styleP(StyleIdx::endBarWidth) * .5
+                     + score->styleP(StyleIdx::endBarDistance)
+                     + score->styleP(StyleIdx::repeatBarlineDotSeparation)
+                     + dotwidth * .5;
                   break;
             case BarLineType::END:
-                  *rx = score->styleP(StyleIdx::endBarWidth) * .5;
-                  *lx = -*rx - score->styleP(StyleIdx::barWidth) - score->styleP(StyleIdx::endBarDistance);
+                  w = (score->styleP(StyleIdx::endBarWidth) + score->styleP(StyleIdx::barWidth)) * .5
+                     + score->styleP(StyleIdx::endBarDistance);
                   break;
             case BarLineType::BROKEN:
             case BarLineType::NORMAL:
             case BarLineType::DOTTED:
-                  *rx = score->styleP(StyleIdx::barWidth) * .5;
-                  *lx = -*rx;
+                  w = score->styleP(StyleIdx::barWidth);
                   break;
             }
-      *lx *= mag;
-      *rx *= mag;
+      return w;
       }
 
 //---------------------------------------------------------
@@ -946,9 +942,8 @@ void BarLine::layout()
       y2 = _spatium * .5 * (8.0 + _spanTo);
 
       // bar lines not hidden
-      qreal lx, rx;
-      layoutWidth(score(), barLineType(), mag(), &lx, &rx);
-      QRectF r(lx, y1, rx - lx, y2 - y1);
+      qreal w = layoutWidth(score(), barLineType()) * mag();
+      QRectF r(0.0, y1, w, y2 - y1);
 
       if (score()->styleB(StyleIdx::repeatBarTips)) {
             switch (barLineType()) {

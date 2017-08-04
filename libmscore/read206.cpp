@@ -87,7 +87,7 @@ struct StyleVal2 {
       { StyleIdx::doubleBarWidth,              QVariant(0.16) },
       { StyleIdx::endBarWidth,                 QVariant(0.5) },       // 0.5
       { StyleIdx::doubleBarDistance,           QVariant(0.30) },
-      { StyleIdx::endBarDistance,              QVariant(0.40) },     // 0.3
+      { StyleIdx::endBarDistance,              QVariant(0.65) },     // 0.3
       { StyleIdx::repeatBarTips,               QVariant(false) },
       { StyleIdx::startBarlineSingle,          QVariant(false) },
       { StyleIdx::startBarlineMultiple,        QVariant(true) },
