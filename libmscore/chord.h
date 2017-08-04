@@ -19,6 +19,7 @@
 */
 
 #include <functional>
+#include <QQmlListProperty>
 #include "chordrest.h"
 
 namespace Ms {
@@ -58,9 +59,24 @@ enum class PlayEventType : char    {
 //   @P stemDirection Direction       the stem slash of the chord (acciaccatura) if any (read only)
 //---------------------------------------------------------
 
-class Chord : public ChordRest {
-      Q_GADGET
+class ChordW : public ChordRestW {
+      Q_OBJECT
+      Q_PROPERTY(QQmlListProperty<Ms::ChordW> graceNotes READ qmlGraceNotes)
+      Q_PROPERTY(QQmlListProperty<Ms::NoteW>  notes      READ qmlNotes)
+private:
+      QVector<ChordW*> _gnotes;
+      QVector<NoteW*>  _notes;
+public:
+      ChordW() : ChordRestW() {}
+      ChordW(ScoreElement* _e) : ChordRestW(_e) {}
+      Chord* chord();
+      QQmlListProperty<ChordW> qmlGraceNotes();
+      QQmlListProperty<NoteW>  qmlNotes();
+      };
 
+class Chord : public ChordRest {
+      friend class ChordW;
+      Q_GADGET
       Q_PROPERTY(Ms::Beam* beam                         READ beam)
 //      Q_PROPERTY(QQmlListProperty<Ms::Chord> graceNotes READ qmlGraceNotes)
       Q_PROPERTY(Ms::Hook* hook                         READ hook)

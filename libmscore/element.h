@@ -137,6 +137,7 @@ class EditData {
 //-------------------------------------------------------------------
 
 class Element : public ScoreElement {
+      friend class ElementW;
       Q_GADGET
       Q_ENUMS(Placement)
 
@@ -165,7 +166,6 @@ class Element : public ScoreElement {
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
-
    public:
       Element(Score* s = 0);
       Element(const Element&);
@@ -412,6 +412,7 @@ class Element : public ScoreElement {
 
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID) const override;
       virtual void initSubStyle(SubStyle);
 

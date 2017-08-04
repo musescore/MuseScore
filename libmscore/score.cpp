@@ -1637,6 +1637,12 @@ Segment* Score::lastSegment() const
       {
       Measure* m = lastMeasure();
       return m ? m->last() : 0;
+}
+
+ElementW* Score::lastSegmentW() const
+      {
+      Segment* result = lastSegment();
+      return ElementW::buildWrapper(result);
       }
 
 //---------------------------------------------------------

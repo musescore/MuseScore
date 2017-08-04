@@ -3,7 +3,7 @@
 //  Music Composition & Notation
 //
 //  Copyright (C) 2012 Werner Schweer
-//  Copyright (C) 2013-2017 Nicolas Froment, Joachim Schmitz
+//  Copyright (C) 2013-2015 Nicolas Froment, Joachim Schmitz
 //  Copyright (C) 2014 Jörn Eichler
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -12,7 +12,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-import QtQuick 2.2
+import QtQuick 2.0
 import MuseScore 3.0
 
 MuseScore {
@@ -34,7 +34,7 @@ MuseScore {
                "#8d5ba6", // A#/Bb
                "#cf3e96"  // B
                ]
-      property string black : "#000000"
+      property variant black : "#000000"
 
       // Apply the given function to all notes in selection
       // or, if nothing is selected, in the entire score
@@ -46,14 +46,14 @@ MuseScore {
             var endStaff;
             var endTick;
             var fullScore = false;
-            if (!cursor.segment) { // no selection
+            if (!cursor.segment()) { // no selection
                   fullScore = true;
                   startStaff = 0; // start with 1st staff
                   endStaff = curScore.nstaves - 1; // and end with last
             } else {
                   startStaff = cursor.staffIdx;
                   cursor.rewind(2);
-                  if (cursor.tick === 0) {
+                  if (cursor.tick == 0) {
                         // this happens when the selection includes
                         // the last measure of the score.
                         // rewind(2) goes behind the last segment (where
@@ -73,19 +73,20 @@ MuseScore {
 
                         if (fullScore)
                               cursor.rewind(0) // if no selection, beginning of score
-
-                        while (cursor.segment && (fullScore || cursor.tick < endTick)) {
-                              if (cursor.element && cursor.element.type === Element.CHORD) {
-                                    var graceChords = cursor.element.graceNotes;
+                        console.log("voice="+voice+" segment="+cursor.segment()+" fullscore="+fullScore);
+                        while (cursor.segment() && (fullScore || cursor.tick < endTick)) {
+                              console.log("Element="+cursor.element());
+                              if (cursor.element() && cursor.element().type == Ms.CHORD) {
+                                    var graceChords = cursor.element().graceNotes;
                                     for (var i = 0; i < graceChords.length; i++) {
                                           // iterate through all grace chords
-                                          var graceNotes = graceChords[i].notes;
-                                          for (var j = 0; j < graceNotes.length; j++)
-                                                func(graceNotes[j]);
+                                          var notes = graceChords[i].notes;
+                                          for (var j = 0; j < notes.length; j++)
+                                                func(notes[j]);
                                     }
-                                    var notes = cursor.element.notes;
-                                    for (var k = 0; k < notes.length; k++) {
-                                          var note = notes[k];
+                                    var notes = cursor.element().notes;
+                                    for (var i = 0; i < notes.length; i++) {
+                                          var note = notes[i];
                                           func(note);
                                     }
                               }
@@ -96,24 +97,20 @@ MuseScore {
       }
 
       function colorNote(note) {
-            if (note.color == black)
-                  note.color = colors[note.pitch % 12];
+            var pitch = note.get("pitch");
+            var color = note.get("color");
+            var newcolor;
+            console.log("Pitch="+pitch+" color="+color);
+            if (color == black) 
+                  newcolor = colors[pitch % 12];
             else
-                  note.color = black;
+                  newcolor = black;
 
-            if (note.accidental) {
-                  if (note.accidental.color == black)
-                        note.accidental.color = colors[note.pitch % 12];
-                  else
-                        note.accidental.color = black;
-                  }
-
+            note.set("color", newcolor);
+            if (note.accidental) note.accidental.set("color",newcolor);
             for (var i = 0; i < note.dots.length; i++) {
                   if (note.dots[i]) {
-                        if (note.dots[i].color == black)
-                              note.dots[i].color = colors[note.pitch % 12];
-                        else
-                              note.dots[i].color = black;
+                        note.dots[i].set("color",newcolor);
                         }
                   }
          }

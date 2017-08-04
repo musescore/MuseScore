@@ -3400,6 +3400,29 @@ Shape Chord::shape() const
             });
       shape.add(ChordRest::shape());      // add articulation + lyrics
       return shape;
+}
+
+Chord* ChordW::chord()
+      {
+      return dynamic_cast<Chord*>(e);
+      }
+
+QQmlListProperty<ChordW> ChordW::qmlGraceNotes()
+      {
+      _gnotes.clear();
+      for (Chord* c : chord()->_graceNotes) {
+            _gnotes << dynamic_cast<ChordW*>(ElementW::buildWrapper(c));
+            }
+      return QmlListAccess<ChordW>(this, _gnotes);
+      }
+
+QQmlListProperty<NoteW> ChordW::qmlNotes()
+      {
+      _notes.clear();
+      for (Note* n : chord()->notes()) {
+            _notes << dynamic_cast<NoteW*>(ElementW::buildWrapper(n));
+            }
+      return QmlListAccess<NoteW>(this, _notes);
       }
 }
 

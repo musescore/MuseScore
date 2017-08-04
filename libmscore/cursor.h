@@ -39,7 +39,7 @@ class ElementW : public QObject {
       Q_PROPERTY(int       type READ type)
       Q_PROPERTY(QString   name READ name)
       Q_PROPERTY(int       tick READ tick)
-
+   protected:
       ScoreElement* e;
 
    public slots:
@@ -47,10 +47,13 @@ class ElementW : public QObject {
    public:
       ElementW(ScoreElement* _e) : QObject() { e = _e; }
       ElementW() {}
+      ~ElementW();
       QString name() const;
       int type() const;
       int tick() const;
       Q_INVOKABLE QVariant get(const QString& s) const;
+      Element* element();
+      static ElementW* buildWrapper(ScoreElement* _e);
       };
 
 //---------------------------------------------------------
@@ -59,7 +62,7 @@ class ElementW : public QObject {
 //   @P staffIdx  int           current staff (track / 4)
 //   @P voice     int           current voice (track % 4)
 //   @P filter    enum          segment type filter
-//   @P element   Ms::ElementW*  current element at track, read only
+//   @P element   Ms::Element*  current element at track, read only
 //   @P segment   Ms::Segment*  current segment, read only
 //   @P measure   Ms::Measure*  current measure, read only
 //   @P tick      int           midi tick position, read only
@@ -74,7 +77,6 @@ class Cursor : public QObject {
       Q_PROPERTY(int staffIdx   READ staffIdx  WRITE setStaffIdx)
       Q_PROPERTY(int voice      READ voice     WRITE setVoice)
       Q_PROPERTY(int filter     READ filter    WRITE setFilter)
-
       Q_PROPERTY(int tick         READ tick)
       Q_PROPERTY(double time      READ time)
 
@@ -133,6 +135,7 @@ class Cursor : public QObject {
       Q_INVOKABLE bool next();
       Q_INVOKABLE bool nextMeasure();
       Q_INVOKABLE void add(Ms::Element*);
+      Q_INVOKABLE void add(Ms::ElementW*);
 
       Q_INVOKABLE void addNote(int pitch);
 

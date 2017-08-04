@@ -1115,6 +1115,13 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
       triggerLayout();
       setGenerated(false);
       return true;
+}
+
+void Element::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      ScoreElement::supportedProperties(dest, writeable);
+      dest << P_ID::TRACK << P_ID::GENERATED << P_ID::COLOR << P_ID::VISIBLE << P_ID::SELECTED << P_ID::USER_OFF << P_ID::PLACEMENT
+           << P_ID::AUTOPLACE << P_ID::Z <<P_ID::SYSTEM_FLAG;
       }
 
 //---------------------------------------------------------

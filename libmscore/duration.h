@@ -15,6 +15,7 @@
 
 #include "config.h"
 #include "element.h"
+#include "cursor.h"
 #include "durationtype.h"
 
 namespace Ms {
@@ -31,7 +32,23 @@ class Spanner;
 //   @P globalDuration Fraction  played duration
 //---------------------------------------------------------
 
+#ifdef SCRIPT_INTERFACE
+class DurationElementW : public ElementW {
+      Q_OBJECT
+      Q_PROPERTY(FractionWrapper* duration READ durationW WRITE setDurationW)
+      Q_PROPERTY(FractionWrapper* globalDuration READ globalDurW)
+   public:
+      DurationElementW() : ElementW() {}
+      DurationElementW(ScoreElement* _e) : ElementW(_e) {}
+      DurationElement* durationElement();
+      FractionWrapper* durationW();
+      void setDurationW(FractionWrapper* f);
+      FractionWrapper* globalDurW();
+      };
+#endif
+
 class DurationElement : public Element {
+      friend class DurationElementW;
       Fraction _duration;
       Tuplet* _tuplet;
 
@@ -69,6 +86,7 @@ class DurationElement : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       };
 
 

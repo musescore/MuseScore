@@ -17,6 +17,7 @@
 #include "sig.h"
 #include "mscore.h"
 #include "groups.h"
+#include "cursor.h"
 
 namespace Ms {
 
@@ -35,8 +36,25 @@ enum class TimeSigType : char {
 
 //---------------------------------------------------------------------------------------
 //   @@ TimeSig
-///    This class represents a time signature.
+//   This class represents a time signature.
+//   void setSig(int numerator, int denominator, int type) Type 0=NORMAL 1=FOUR_FOUR 2=ALLA_BREVE
+//
+//   @P *denominator         int           (read only)
+//   @P *denominatorStretch  int           (read only)
+//   @P *denominatorString   string        text of denominator
+//   @P *numerator           int           (read only)
+//   @P *numeratorStretch    int           (read only)
+//   @P *numeratorString     string        text of numerator
 //---------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+
+class TimeSigW : public ElementW {
+      Q_OBJECT
+   public:
+      TimeSigW() {};
+      TimeSigW(ScoreElement* _e) : ElementW() {e = _e;}
+      Q_INVOKABLE void setSig(int numerator, int denominator, int st=static_cast<int>(TimeSigType::NORMAL)); // Compatible with older versions
+      };
 
 class TimeSig : public Element {
       Q_GADGET

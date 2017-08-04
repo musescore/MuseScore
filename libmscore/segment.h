@@ -16,6 +16,7 @@
 #include "element.h"
 #include "shape.h"
 #include "mscore.h"
+#include "cursor.h"
 
 namespace Ms {
 
@@ -80,6 +81,13 @@ constexpr bool operator& (const SegmentType t1, const SegmentType t2) {
 //   @P segmentType     enum (Segment.All, .Ambitus, .BarLine, .Breath, .ChordRest, .Clef, .EndBarLine, .Invalid, .KeySig, .KeySigAnnounce, .StartRepeatBarLine, .TimeSig, .TimeSigAnnounce)
 //   @P tick            int               midi tick position (read only)
 //------------------------------------------------------------------------
+
+class SegmentW : public ElementW {
+public:
+      SegmentW() {};
+      SegmentW(ScoreElement* _e) : ElementW(_e) {}
+      Segment* segment();
+      };
 
 class Segment : public Element {
       Q_GADGET
@@ -214,6 +222,7 @@ class Segment : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable) override;
       virtual QVariant propertyDefault(P_ID) const;
 
       bool operator<(const Segment&) const;
