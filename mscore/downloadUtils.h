@@ -38,7 +38,7 @@ class DownloadUtils : public QObject
    public slots:
       void download();
       void downloadFinished(QNetworkReply* data);
-      void downloadProgress(qint64 recieved, qint64 total);
+      void downloadProgress(qint64 received, qint64 total);
       };
 }
 
