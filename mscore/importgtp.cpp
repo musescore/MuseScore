@@ -1528,7 +1528,7 @@ void GuitarPro1::readNote(int string, Note* note)
       if (noteBits & 0x1) {               // note != beat
             int a = readUChar();          // length
             int b = readUChar();          // t
-            qDebug("Time independend note len, len %d t %d", a, b);
+            qDebug("Time-independent note len, len %d t %d", a, b);
             }
       if (noteBits & 0x2) {               // note is dotted
             //readUChar();
