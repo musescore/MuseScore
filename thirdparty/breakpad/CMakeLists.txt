@@ -37,6 +37,7 @@ target_link_libraries(breakpad
     "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.14393.0/um/x86/wininet.lib"
     )
 
+
 set_target_properties ( breakpad
     PROPERTIES
         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-unknown-pragmas"
@@ -50,5 +51,12 @@ ADD_DEPENDENCIES(breakpad mops1)
 ADD_DEPENDENCIES(breakpad mops2)
 
 add_executable(crashReporter crashReporter.cpp)
+
+
+set_target_properties ( crashReporter
+    PROPERTIES
+        COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-unknown-pragmas"
+    )
+
 
 

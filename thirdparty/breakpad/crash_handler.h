@@ -21,11 +21,7 @@
 #define CRASH_HANDLER_H
 
 #pragma once
-#include <QtCore/QString>
 
-#include <QtCore/QDir>
-#include <QtCore/QProcess>
-#include <QtCore/QCoreApplication>
 #include <QMutex>
 
 #if defined(Q_OS_WIN32)
@@ -37,19 +33,15 @@
 //#include <unistd.h>
 #include <windows.h>
 
-
+using std::string;
 using std::wstring;
 using std::pair;
 
-
-
 namespace Breakpad {
 
-    int AnnotateCrashReport(const QString& aKey, const QString& aData);
+    int AnnotateCrashReport(string aKey, string aData);
     int PrintMyCrashReport();
     bool launcher(wstring program, wstring minidump_path);
-
-
 
     class CrashHandlerPrivate;
     class CrashHandler
@@ -57,12 +49,9 @@ namespace Breakpad {
     public:
 
         static CrashHandler* instance();
-
-        void Init(const QString&  reportPath);
+        void Init(wstring  reportPath);
         void setReportCrashesToSystem(bool report);
         bool writeMinidump();
-        bool launcher(wstring program, wstring minidump_path);
-
 
     private:
         CrashHandler();

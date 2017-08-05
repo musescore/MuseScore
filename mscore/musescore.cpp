@@ -6023,8 +6023,9 @@ int main(int argc, char* av[])
 
       //Initiate breakpad instance currently will produce the minidumps under the c:\Users\username directory
 #ifdef BREAKPAD
-      QDir().mkpath(dataPath+"/crash_reports");
-      Breakpad::CrashHandler::instance()->Init(dataPath+"/crash_reports");
+      QString breakpad_path = dataPath+"/crash_reports";
+      QDir().mkpath(breakpad_path);
+      Breakpad::CrashHandler::instance()->Init(breakpad_path.toStdWString());
       Breakpad::AnnotateCrashReport("semver",VERSION);
 #endif
 

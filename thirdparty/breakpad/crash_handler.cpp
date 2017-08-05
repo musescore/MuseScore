@@ -17,14 +17,9 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-
-
 #include "crash_handler.h"
 
-
-
 namespace Breakpad {
-
 
 
     /************************************************************************/
@@ -43,7 +38,7 @@ namespace Breakpad {
             delete pHandler;
         }
 
-        void InitCrashHandler(const QString& dumpPath);
+        void InitCrashHandler(wstring dumpPath);
 
         static google_breakpad::ExceptionHandler* pHandler;
 
@@ -54,25 +49,25 @@ namespace Breakpad {
     google_breakpad::ExceptionHandler* CrashHandlerPrivate::pHandler = NULL;
     bool CrashHandlerPrivate::bReportCrashesToSystem = false;
 
-    QHash<QString, QString> crashTable;
+    //QHash<QString, QString> crashTable;
+    std::map<string,string> crashTable;
     QMutex mymutex;
 
-    int AnnotateCrashReport(const QString& aKey, const QString& aData){
+    int AnnotateCrashReport(string aKey, string aData){
         mymutex.lock();
-        crashTable.insert(aKey,aData);
+        //crashTable.insert(aKey,aData);
+        crashTable[aKey] = aData;
         mymutex.unlock();
         return 0;
     }
 
     int PrintMyCrashReport(){
-        QHashIterator<QString, QString> i(crashTable);
-        while (i.hasNext()) {
-            i.next();
-            qDebug("%s : %s", qUtf8Printable(i.key()),qUtf8Printable(i.value()) );
+        for (std::map<string,string>::iterator it=crashTable.begin(); it!=crashTable.end(); ++it){
+            std::cout << it->first << " " << it->second << std::endl;
         }
+
         return 0;
     }
-
 
     /************************************************************************/
     /* DumpCallback                                                         */
@@ -113,14 +108,6 @@ namespace Breakpad {
         parameters.insert(pair<wstring, wstring>(L"version", L"0.1.0"));
         // parameters["uptime"] uptime_sec;
 
-        // Pass Crash table data to the parameters hash map
-        QHashIterator<QString, QString> i(crashTable);
-        while (i.hasNext()) {
-            i.next();
-            //qDebug("%s : %s", qUtf8Printable(i.key()),qUtf8Printable(i.value()) );
-            parameters.insert(pair<wstring, wstring>(i.key().toStdWString(),i.value().toStdWString()));
-        }
-
         //files["upload_file_minidump"] = minidump_path.toStdString();
         files.insert(pair<wstring, wstring>(L"upload_file_minidump", minidump_path));
 
@@ -160,14 +147,14 @@ namespace Breakpad {
         return CrashHandlerPrivate::bReportCrashesToSystem ? success : true;
     }
 
-    void CrashHandlerPrivate::InitCrashHandler(const QString& dumpPath)
+    void CrashHandlerPrivate::InitCrashHandler(wstring dumpPath)
     {
         if ( pHandler != NULL )
             return;
  #if defined(Q_OS_WIN32)
-        std::wstring pathAsStr = (const wchar_t*)dumpPath.utf16();
+        //std::wstring pathAsStr = string2wstring(dumpPath);
         pHandler = new google_breakpad::ExceptionHandler(
-            pathAsStr,
+            dumpPath,
             /*FilterCallback*/ 0,
             DumpCallback,
             /*context*/
@@ -216,7 +203,7 @@ namespace Breakpad {
         return res;
     }
 
-    void CrashHandler::Init( const QString& reportPath )
+    void CrashHandler::Init( wstring reportPath )
     {
         d->InitCrashHandler(reportPath);
 
