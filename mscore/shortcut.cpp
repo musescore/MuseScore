@@ -3914,7 +3914,7 @@ void Shortcut::read(XmlReader& e)
                   for (const Shortcut& sc : _sc) {
                         for (const QKeySequence s : sc._keys) {
                               if (s == seq)
-                                    qDebug("ambigous shortcut for action <%s>", _key.data());
+                                    qDebug("Ambiguous shortcut for action <%s>", _key.data());
                               }
                         }
 #endif
