@@ -574,7 +574,7 @@ void AlsaDriver::write(int n, float* l, float* r)
                         qDebug("AlsaDriver::write(): failed (%s)", snd_strerror(err));
                   }
             else {
-                  qDebug("AlsaDriver::write(): unsupported accesss type %d", _play_access);
+                  qDebug("AlsaDriver::write(): unsupported access type %d", _play_access);
                   return;
                   }
             }
