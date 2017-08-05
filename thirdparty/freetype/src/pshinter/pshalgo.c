@@ -779,7 +779,7 @@
            * It turns out though that minimizing the total number of lit
            * pixels is also important, so position C), with one edge
            * aligned with a pixel boundary is actually preferable
-           * to A).  There are also more possibile positions for C) than
+           * to A).  There are also more possible positions for C) than
            * for A) or B), so it involves less distortion of the overall
            * character shape.
            */

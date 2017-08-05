@@ -56,7 +56,7 @@ void ResourceManager::displayLanguages()
       QJsonParseError err;
       QJsonDocument result = QJsonDocument::fromJson(json, &err);
       if (err.error != QJsonParseError::NoError || !result.isObject()) {
-            qDebug("An error occured during parsing");
+            qDebug("An error occurred during parsing");
             return;
             }
       int rowCount = result.object().keys().size();
