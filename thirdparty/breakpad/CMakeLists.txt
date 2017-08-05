@@ -1,7 +1,3 @@
-#cmake_minimum_required(VERSION 2.8.12)
-
-#project(breakpad)
-
 include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 if (APPLE)
         file(GLOB_RECURSE INCS "*.h")
@@ -50,13 +46,15 @@ ADD_DEFINITIONS(-DUNICODE)
 ADD_DEPENDENCIES(breakpad mops1)
 ADD_DEPENDENCIES(breakpad mops2)
 
-add_executable(crashReporter crashReporter.cpp)
 
+add_executable(crashReporter crashReporter.cpp)
 
 set_target_properties ( crashReporter
     PROPERTIES
         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-unknown-pragmas"
     )
 
+xcode_pch(crashReporter all)
 
-
+ADD_DEPENDENCIES(crashReporter mops1)
+ADD_DEPENDENCIES(crashReporter mops2)

@@ -30,18 +30,21 @@
 #endif
 
 #include <iostream>
+#include <fstream>
 //#include <unistd.h>
 #include <windows.h>
 
 using std::string;
 using std::wstring;
 using std::pair;
+using std::endl;
 
 namespace Breakpad {
 
     int AnnotateCrashReport(string aKey, string aData);
     int PrintMyCrashReport();
     bool launcher(wstring program, wstring minidump_path);
+    void writeMyCrashReport(wstring mypath);
 
     class CrashHandlerPrivate;
     class CrashHandler

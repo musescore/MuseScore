@@ -69,6 +69,17 @@ namespace Breakpad {
         return 0;
     }
 
+    void writeMyCrashReport(wstring mypath){
+        string my_strpath = std::string(mypath.begin(),mypath.end());
+        std::ofstream myfile;
+        myfile.open(my_strpath);
+        for (std::map<string,string>::iterator it=crashTable.begin(); it!=crashTable.end(); ++it){
+            myfile << it->first << "," << it->second << std::endl;
+        }
+        myfile.close();
+
+    }
+
     /************************************************************************/
     /* DumpCallback                                                         */
     /************************************************************************/
@@ -89,11 +100,15 @@ namespace Breakpad {
         //PrintMyCrashReport();
 #if defined(Q_OS_WIN32)
         wstring minidump_path;
+        wstring metadata_path;
 
         // Minidump Path
         minidump_path =  wstring(_dump_dir) + L"/" + wstring(_minidump_id) + L".dmp";
+        metadata_path =  wstring(_dump_dir) + L"/" + wstring(_minidump_id) + L".txt";
 
         qDebug("minidump path: %s\n", std::string(minidump_path.begin(),minidump_path.end()).c_str());
+
+        writeMyCrashReport(metadata_path);
 
         std::map<wstring, wstring> parameters;
         std::map<wstring, wstring> files;
