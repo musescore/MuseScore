@@ -149,7 +149,7 @@ namespace Breakpad {
 
         // How are we going to define the path of the crashReporter???
         program_path = L"C:/Users/nickhatz/MuseScore/build.release/thirdparty/breakpad/crashReporter.exe";
-        launcher(program_path,minidump_path);
+        launcher(program_path, minidump_path, metadata_path);
 
         qDebug("%s\n",s.c_str());
 #endif
@@ -224,14 +224,14 @@ namespace Breakpad {
 
     }
 
-    bool launcher(wstring program, wstring minidump_path){
+    bool launcher(wstring program, wstring minidump_path, wstring metadata_path){
 
         STARTUPINFO si;
         PROCESS_INFORMATION pi;
         wstring mycmd;
 
         //example command: c:\...\crashReporter.exe minidump_path
-        mycmd = program + L" " + minidump_path;
+        mycmd = program + L" " + minidump_path + L" " + metadata_path;
 
         ZeroMemory( &si, sizeof(si) );
         si.cb = sizeof(si);

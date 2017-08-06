@@ -43,7 +43,7 @@ namespace Breakpad {
 
     int AnnotateCrashReport(string aKey, string aData);
     int PrintMyCrashReport();
-    bool launcher(wstring program, wstring minidump_path);
+    bool launcher(wstring program, wstring minidump_path, wstring metadata_path);
     void writeMyCrashReport(wstring mypath);
 
     class CrashHandlerPrivate;
