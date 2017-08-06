@@ -285,32 +285,18 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
 
 void BarLine::drawTips(QPainter* painter, bool reversed, qreal x) const
       {
-      SymId sym = SymId::noSym;
-      qreal y;
       if (reversed) {
-            if (isTop()) {
-                  sym = SymId::reversedBracketTop;
-                  x -= symWidth(sym);
-                  y  = y1;
-                  }
-            else if (isBottom()) {
-                  sym = SymId::reversedBracketBottom;
-                  x -= symWidth(sym);
-                  y = y2;
-                  }
+            if (isTop())
+                  drawSymbol(SymId::reversedBracketTop, painter, QPointF(x - symWidth(SymId::reversedBracketTop), y1));
+            if (isBottom())
+                  drawSymbol(SymId::reversedBracketBottom, painter, QPointF(x - symWidth(SymId::reversedBracketBottom), y2));
             }
       else {
-            if (isTop()) {
-                  sym = SymId::bracketTop;
-                  y = y1;
-                  }
-            if (isBottom()) {
-                  sym = SymId::bracketBottom;
-                  y = y2;
-                  }
+            if (isTop())
+                  drawSymbol(SymId::bracketTop, painter, QPointF(x, y1));
+            if (isBottom())
+                  drawSymbol(SymId::bracketBottom, painter, QPointF(x, y2));
             }
-      if (sym != SymId::noSym)
-            drawSymbol(sym, painter, QPointF(x, y));
       }
 
 //---------------------------------------------------------
@@ -319,18 +305,8 @@ void BarLine::drawTips(QPainter* painter, bool reversed, qreal x) const
 
 bool BarLine::isTop() const
       {
-      bool val = true;
-      for (int i = staffIdx() - 1; i >= 0; --i) {
-            BarLine* bl = toBarLine(segment()->element(i * VOICES));
-            if (!bl)
-                  return true;
-            Staff* staff = score()->staff(i);
-            if (!staff->invisible() && staff->part()->show())
-                  return !bl->spanStaff();
-            else if (!bl->spanStaff())
-                  return true;
-            }
-      return val;
+      int i = staffIdx();
+      return i == 0 || !toBarLine(segment()->element((i-1) * VOICES))->spanStaff();
       }
 
 //---------------------------------------------------------
@@ -410,7 +386,7 @@ void BarLine::draw(QPainter* painter) const
                   drawDots(painter, x);
 
                   if (score()->styleB(StyleIdx::repeatBarTips))
-                        drawTips(painter, false, -lw2 * .5);
+                        drawTips(painter, false, 0.0);
                   }
                   break;
 
@@ -431,7 +407,7 @@ void BarLine::draw(QPainter* painter) const
                   painter->drawLine(QLineF(x, y1, x, y2));
 
                   if (score()->styleB(StyleIdx::repeatBarTips))
-                        drawTips(painter, true, x);
+                        drawTips(painter, true, x + lw2 * .5);
                   }
                   break;
             }

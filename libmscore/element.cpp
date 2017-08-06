@@ -1109,6 +1109,7 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             default:
                   qFatal("unknown %s <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
+//                  qDebug("unknown %s <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
                   return false;
             }
       triggerLayout();
