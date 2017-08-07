@@ -591,9 +591,10 @@ void System::setInstrumentNames(bool longName)
                         //iname->setGenerated(true);
                         iname->setParent(this);
                         iname->setTrack(staffIdx * VOICES);
-                        iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
                         score()->addElement(iname);
                         }
+                  // set type inconditionally in case it changed
+                  iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
                   iname->setXmlText(sn.name());
                   iname->setLayoutPos(sn.pos());
                   ++idx;
