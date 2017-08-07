@@ -129,7 +129,7 @@ void TestAlbum::album_105716()
 //---------------------------------------------------------
 //   album_105621
 //    crash when removing second score from AlbumManager after previously joining the album.
-//    crash occured because TBox::clone() would not allocate memory for a new Text* object.
+//    crash occurred because TBox::clone() would not allocate memory for a new Text* object.
 //--------------------------------------------------------
 
 void TestAlbum::album_105621()
