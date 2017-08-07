@@ -69,6 +69,7 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
                            .arg("</a>"));
       QFont font = licenseHelp->font();
       font.setPointSize(8);
+      font.setItalic(true);
       licenseHelp->setFont(font);
 
       privateHelp->setText(tr("Respect the %1community guidelines%2. Only make your scores accessible to anyone with permission from the right holders.")
@@ -78,6 +79,7 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
 
       tagsHelp->setText(tr("Use a comma to separate the tags"));
       tagsHelp->setFont(font);
+
       uploadAudioHelp->setFont(font);
       QString urlHelp = QString("https://musescore.org/redirect/handbook?chapter=upload-score-audio&locale=%1&utm_source=desktop&utm_medium=save-online&utm_content=%2&utm_term=upload-score-audio&utm_campaign=MuseScore%3")
          .arg(mscore->getLocaleISOCode())
@@ -94,7 +96,7 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
 
 
       connect(buttonBox,   SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
-      chkSignoutOnExit->setVisible(false);
+      chkSignoutOnExit->setVisible(false);  // currently unused, so hide it
       _loginManager = loginManager;
       connect(_loginManager, SIGNAL(uploadSuccess(QString, QString, QString)), this, SLOT(uploadSuccess(QString, QString, QString)));
       connect(_loginManager, SIGNAL(uploadError(QString)), this, SLOT(uploadError(QString)));
@@ -212,12 +214,12 @@ void UploadScoreDialog::display()
             if (sl.length() > 0) {
                   QString nidString = sl.last();
                   bool ok;
-			int nid = nidString.toInt(&ok);
+                  int nid = nidString.toInt(&ok);
                   if (ok) {
-                         _nid = nid;
-                         _loginManager->getScore(nid);
-                         return;
-                         }
+                        _nid = nid;
+                        _loginManager->getScore(nid);
+                        return;
+                        }
                   }
             }
       showOrHideUploadAudio();
