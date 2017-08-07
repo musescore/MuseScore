@@ -1,5 +1,5 @@
 macro( precompiled_header includes header_name build_pch)
-    if( ${CMAKE_COMPILER_IS_GNUCXX})
+    if (NOT "${CMAKE_GENERATOR}" STREQUAL "Xcode")
         message(STATUS "Precompiled header generation")
         # Get the compiler flags for this build type
         string( TOUPPER "CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}" flags_for_build_name )
