@@ -1,4 +1,7 @@
 macro( precompiled_header includes header_name build_pch)
+    set (PCH_HEADER "${PROJECT_BINARY_DIR}/${header_name}.h")
+    set (PCH_INCLUDE "-include ${PCH_HEADER}")
+
     if( ${CMAKE_COMPILER_IS_GNUCXX})
         message(STATUS "Precompiled header generation")
         # Get the compiler flags for this build type
@@ -28,9 +31,6 @@ macro( precompiled_header includes header_name build_pch)
 
         # Prepare the compile flags var for passing to GCC
         separate_arguments( compile_flags )
-
-        set (PCH_HEADER "${PROJECT_BINARY_DIR}/${header_name}.h")
-        set (PCH_INCLUDE "-include ${PCH_HEADER}")
 
         if( ${build_pch} )
             set (PCH ${PROJECT_BINARY_DIR}/${header_name}.h.gch)
