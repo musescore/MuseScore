@@ -394,6 +394,7 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
       l3->addWidget(tempoGroup);
       l3->addStretch(100);
       setLayout(l3);
+      setFocusPolicy(Qt::StrongFocus);
       }
 
 //---------------------------------------------------------

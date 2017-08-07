@@ -91,6 +91,9 @@ class PaletteScrollArea : public QScrollArea {
 
       virtual void resizeEvent(QResizeEvent*);
 
+   protected:
+      virtual void keyPressEvent(QKeyEvent* event) override;
+
    public:
       PaletteScrollArea(Palette* w, QWidget* parent = 0);
       bool restrictHeight() const { return _restrictHeight; }
