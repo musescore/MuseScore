@@ -207,7 +207,9 @@ endif (MINGW OR APPLE)
 
 ##
 ##  look for Qt5
-##
+##  5.3 can be used, it should be compatible if you don't have access to 5.4.
+##  5.4 is used on windows and  mac. It's better to usdd it on other platforms
+##  if you can.
 SET(QT_MIN_VERSION    "5.3.0")
 
 SET(QT_USE_QTXML         TRUE)
