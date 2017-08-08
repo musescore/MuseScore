@@ -2334,20 +2334,20 @@ void Note::updateRelLine(int relLine, bool undoable)
       {
       if (!staff())
             return;
-      int idx       = staffIdx() + chord()->staffMove();
-      Staff* stf    = score()->staff(idx);
-      StaffType* st = stf->staffType(tick());
+      int idx      = staffIdx() + chord()->staffMove();
+      Staff* staff = score()->staff(idx);
+      StaffType* st = staff->staffType(tick());
 
       if (chord()->staffMove()) {
             // check that destination staff makes sense (might have been deleted)
             idx          += chord()->staffMove();
             int minStaff = part()->startTrack() / VOICES;
             int maxStaff = part()->endTrack() / VOICES;
-            if (idx < minStaff || idx >= maxStaff || st->group() != staff()->staffType(tick())->group())
+            if (idx < minStaff || idx >= maxStaff || st->group() != this->staff()->staffType(tick())->group())
                   chord()->undoChangeProperty(P_ID::STAFF_MOVE, 0);
             }
 
-      ClefType clef = stf->clef(chord()->tick());
+      ClefType clef = staff->clef(chord()->tick());
       int line      = relStep(relLine, clef);
 
       if (undoable && _line != INVALID_LINE)
