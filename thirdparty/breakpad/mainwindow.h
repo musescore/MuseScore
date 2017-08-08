@@ -10,16 +10,16 @@
 
 using namespace::std;
 
-void read_metadata(string mypath);
 wstring str2wstr(string mystr);
 string wstr2str(wstring mystr);
+pair<wstring,wstring> line2strings(string line);
+map <wstring,wstring> read_csv(string mypath);
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
