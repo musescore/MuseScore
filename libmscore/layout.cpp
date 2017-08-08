@@ -2373,7 +2373,13 @@ void Score::getNextMeasure(LayoutContext& lc)
                                                 else if (!note->fixed()) {
                                                       note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
                                                       // note->setHeadGroup(drumset->noteHead(pitch));
-                                                      note->setLine(drumset->line(pitch));
+                                                      int _line = drumset->line(pitch);
+                                                      note->setLine(_line);
+
+                                                      StaffType* st = staff->staffType(segment.tick());
+                                                      int off  = st->stepOffset();
+                                                      qreal ld = st->lineDistance().val();
+                                                      note->rypos()  = (_line + off * 2.0) * spatium() * .5 * ld;
                                                       continue;
                                                       }
                                                 }

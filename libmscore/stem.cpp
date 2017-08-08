@@ -138,8 +138,9 @@ void Stem::draw(QPainter* painter) const
       if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND)
             return;
 
-      Staff* st   = staff();
-      bool useTab = st && st->isTabStaff(chord()->tick());
+      Staff* st      = staff();
+      StaffType* stt = st ? st->staffType(chord()->tick()) : 0;
+      bool useTab    = stt && stt->isTabStaff();
 
       painter->setPen(QPen(curColor(), _lineWidth, Qt::SolidLine, Qt::RoundCap));
       painter->drawLine(line);
@@ -148,7 +149,6 @@ void Stem::draw(QPainter* painter) const
             return;
 
       // TODO: adjust bounding rectangle in layout() for dots and for slash
-      StaffType* stt = st->staffType(chord()->tick());
       qreal sp = spatium();
       bool _up = up();
 
