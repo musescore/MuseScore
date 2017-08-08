@@ -152,7 +152,7 @@ class Shortcut {
       Icons icon() const                       { return _icon;  }
       const QList<QKeySequence>& keys() const  { return _keys;  }
       QKeySequence::StandardKey standardKey() const { return _standardKey; }
-      void setStandardKey(QKeySequence::StandardKey k) {  _standardKey = k; }
+      void setStandardKey(QKeySequence::StandardKey k);
       void setKeys(const QList<QKeySequence>& ks);
 
       bool compareKeys(const Shortcut&) const;

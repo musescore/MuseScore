@@ -3644,6 +3644,17 @@ void Shortcut::setKeys(const QList<QKeySequence>& ks)
       }
 
 //---------------------------------------------------------
+//   setStandardKey
+//---------------------------------------------------------
+
+void Shortcut::setStandardKey(QKeySequence::StandardKey k)
+      {
+      _standardKey = k;
+      if (_action && k != QKeySequence::UnknownKey)
+            _action->setShortcuts(_standardKey);
+      }
+
+//---------------------------------------------------------
 //   descr
 //---------------------------------------------------------
 
@@ -3782,6 +3793,14 @@ QString Shortcut::keysToString() const
             if (i)
                   s += "; ";
             s += Shortcut::keySeqToString(_keys[i], QKeySequence::NativeText);
+            }
+      if (s.isEmpty() && _standardKey != QKeySequence::UnknownKey) {
+            QList<QKeySequence> keySeqList = QKeySequence::keyBindings(_standardKey);
+            for (int i = 0; i < keySeqList.size(); i++) {
+                  if (i)
+                        s += "; ";
+                  s += Shortcut::keySeqToString(keySeqList[i], QKeySequence::NativeText);
+                  }
             }
       return s;
       }
