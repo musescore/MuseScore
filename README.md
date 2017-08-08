@@ -80,8 +80,7 @@ Kept as an example of how to integrate with a complex synthesizer.
     Clone from [PortMidi](https://sourceforge.net/projects/portmedia/)
 
     * **thirdparty/beatroot**
-    It's a core part of BeatRoot Vamp Plugin by Simon Dixon and Chris Cannam,
-    used in MIDI import for beat detection. (https://code.soundsoftware.ac.uk/projects/beatroot-vamp/repository)
+    It's a core part of [BeatRoot Vamp Plugin](https://code.soundsoftware.ac.uk/projects/beatroot-vamp/repository) by Simon     Dixon and Chris Cannam, used in MIDI import for beat detection.
 
 
 ## Building
@@ -93,7 +92,7 @@ If using git to download repo of entire code history, type:
     git clone https://github.com/musescore/MuseScore.git
     cd MuseScore
 
-Else can just download the latest source release tarball from https://github.com/musescore/MuseScore/releases, and then from your download directory type:
+Else can just download the latest source release tarball from [github releases](https://github.com/musescore/MuseScore/releases), and then from your download directory type:
 
     tar xzf MuseScore-x.x.x.tar.gz
     cd MuseScore-x.x.x
@@ -125,4 +124,4 @@ To run the debug version, type:
     ./build.debug/mscore/mscore
 
 ### Testing
-See [mtest/README.md](/mtest/README.md) or https://musescore.org/en/developers-handbook/testing for instructions on how to run the test suite.
+See [mtest/README.md](/mtest/README.md) or [the developers handbook](https://musescore.org/en/developers-handbook/testing) for instructions on how to run the test suite.
