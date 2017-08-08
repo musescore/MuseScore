@@ -390,6 +390,7 @@ class StaffType {
       qreal   chordStemLength(const Chord*) const;
 
       bool isTabStaff() const  { return _group == StaffGroup::TAB; }
+      bool isDrumStaff() const { return _group == StaffGroup::PERCUSSION; }
       // static functions for font config files
       static QList<QString> fontNames(bool bDuration);
       static bool fontData(bool bDuration, int nIdx, QString *pFamily, QString *pDisplayName, qreal * pSize, qreal *pYOff);

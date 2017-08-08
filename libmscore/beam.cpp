@@ -1916,7 +1916,8 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
             qreal x2   = stemPos.x() - _pagePos.x();
             qreal y1   = (x2 - x1) * slope + py1 + _pagePos.y();
             qreal y2   = stemPos.y();
-            qreal fuzz = _spatium * .1;
+            // qreal fuzz = _spatium * .1;
+            qreal fuzz = _spatium * .4;   // something is wrong
 
             qreal by = y2 < y1 ? -1000000 : 1000000;
             for (const QLineF* l : beamSegments) {
@@ -1936,24 +1937,23 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   by = 0;
                   }
 
-            Stem* stem   = c->stem();
-
+            Stem* stem = c->stem();
             if (stem) {
                   qreal sw2  = stem->lineWidth() * .5;
                   if (c->up())
                         sw2 = -sw2;
                   stem->rxpos() = c->stemPosX() + sw2;
-                  stem->setLen(y2 - (by + _pagePos.y()));
+                  qreal l       = y2 - (by + _pagePos.y());
+                  stem->setLen(l);
 
+                  StemSlash* stemSlash = c->stemSlash();
+                  if (stemSlash)
+                        stemSlash->layout();
+                  Tremolo* tremolo = c->tremolo();
+                  if (tremolo)
+                        tremolo->layout();
                   c->segment()->createShape(c->vStaffIdx());      // recreate shape
                   }
-
-            StemSlash* stemSlash = c->stemSlash();
-            if (stemSlash)
-                  stemSlash->layout();
-            Tremolo* tremolo = c->tremolo();
-            if (tremolo)
-                  tremolo->layout();
             }
       }
 

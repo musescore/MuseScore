@@ -1019,6 +1019,19 @@ static void readText(XmlReader& e, Text* t, Element* be)
                   e.skipCurrentElement();
             else if (tag == "frame")
                   t->setHasFrame(e.readBool());
+            else if (tag == "halign") {
+                  Align align = Align(int(t->align()) & int(~(Align::HCENTER | Align::RIGHT)));
+                  const QString& val(e.readElementText());
+                  if (val == "center")
+                        align = align | Align::HCENTER;
+                  else if (val == "right")
+                        align = align | Align::RIGHT;
+                  else if (val == "left")
+                        ;
+                  else
+                        qDebug("readText: unknown alignment: <%s>", qPrintable(val));
+                  t->setAlign(align);
+                  }
             else if (!t->readProperties(e))
                   e.unknown();
             }
