@@ -2448,8 +2448,37 @@ void Beam::styleChanged()
 
 Shape Beam::shape() const
       {
+      qreal lw2 = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
+      const QLineF* bs = beamSegments.front();
+      double d  = (qAbs(bs->y2() - bs->y1())) / (bs->x2() - bs->x1());
+      if (beamSegments.size() > 1 && d > M_PI/6.0)
+            d = M_PI/6.0;
+      double ww      = lw2 / sin(M_PI_2 - atan(d));
+      qreal _spatium = spatium();
+
       Shape shape;
-      shape.add(bbox());
+      for (const QLineF* bs : beamSegments) {
+            qreal x = bs->x1();
+            qreal y = bs->y1();
+            qreal w = bs->x2() - x;
+            int n   = int(ceil(w / _spatium));
+            qreal s = (bs->y2() - y) / w;
+            w /= n;
+            for (int i = 1; i < n; ++i) {
+                  qreal xx = bs->x1() + i * w;
+                  qreal yy = bs->y1() + i * w * s;
+                  if (yy > y)
+                        shape.add(QRectF(x, y-ww, w, yy - y + ww*2));
+                  else
+                        shape.add(QRectF(x, yy-ww, w, y - yy + ww*2));
+                  x = xx;
+                  y = yy;
+                  }
+            if (y > bs->y2())
+                  shape.add(QRectF(x, bs->y2()-ww, w, y - bs->y2() + ww*2));
+            else
+                  shape.add(QRectF(x, y-ww, w, bs->y2() - y + ww*2));
+            }
       return shape;
       }
 
