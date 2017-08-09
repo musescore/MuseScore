@@ -398,26 +398,46 @@ void LoginManager::onGetMediaUrlRequestReady(QByteArray ba)
       QJsonObject response = jsonResponse.object();
       QJsonValue urlValue = response.value("url");
       if (urlValue.isString()) {
-            QString url = response.value("url").toString();
-            QString path = QDir::tempPath() + QString("/temp_%1.mp3").arg(qrand() % 100000);
+            _mediaUrl = response.value("url").toString();
+            QString mp3Path = QDir::tempPath() + QString("/temp_%1.mp3").arg(qrand() % 100000);
+            _mp3File = new QFile(mp3Path);
             Score* score = mscore->currentScore()->masterScore();
             int br = preferences.exportMp3BitRate;
             preferences.exportMp3BitRate = 128;
-            if (mscore->saveMp3(score, path)) { // no else, error handling is done in saveMp3
-                  QFile* mp3File = new QFile(path);
-                  if (mp3File->open(QIODevice::ReadOnly)) { // probably cancelled, no error handling
-                        QNetworkRequest request;
-                        request.setUrl(QUrl(url));
-                        _progressDialog->setLabelText(tr("Uploading..."));
-                        _progressDialog->setCancelButton(0);
-                        _progressDialog->show();
-                        QNetworkReply *reply = mscore->networkManager()->put(request, mp3File);
-                        connect(reply, SIGNAL(finished()), this, SLOT(mediaUploadFinished()));
-                        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(mediaUploadError(QNetworkReply::NetworkError)));
-                        connect(reply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(mediaUploadProgress(qint64, qint64)));
-                        }
+            if (mscore->saveMp3(score, mp3Path)) { // no else, error handling is done in saveMp3
+                  _uploadTryCount = 0;
+                  uploadMedia();
                   }
             preferences.exportMp3BitRate = br;
+            }
+      }
+
+//---------------------------------------------------------
+//   uploadMedia
+//---------------------------------------------------------
+
+void LoginManager::uploadMedia()
+      {
+      if (_mediaUrl.isEmpty()) {
+            _progressDialog->hide();
+            return;
+            }
+      if (!_mp3File->exists()) {
+            emit displaySuccess();
+            return;
+            }
+      if (_mp3File->open(QIODevice::ReadOnly)) { // probably cancelled, no error handling
+            QNetworkRequest request;
+            request.setUrl(QUrl(_mediaUrl));
+            _progressDialog->reset();
+            _progressDialog->setLabelText(tr("Uploading..."));
+            _progressDialog->setCancelButtonText(tr("Cancel"));
+            _progressDialog->show();
+            _uploadTryCount++;
+            QNetworkReply *reply = mscore->networkManager()->put(request, _mp3File);
+            connect(_progressDialog, SIGNAL(canceled()), reply, SLOT(abort()));
+            connect(reply, SIGNAL(finished()), this, SLOT(mediaUploadFinished()));
+            connect(reply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(mediaUploadProgress(qint64, qint64)));
             }
       }
 
@@ -429,23 +449,25 @@ void LoginManager::mediaUploadFinished()
       {
       QNetworkReply* reply = static_cast<QNetworkReply*>(QObject::sender());
       int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+      QNetworkReply::NetworkError e = reply->error();
       reply->deleteLater();
       _progressDialog->hide();
-      if (statusCode == 200)
+      if ((statusCode == 200 && reply->error() == QNetworkReply::NoError) || _progressDialog->wasCanceled()) {
+            _mp3File->remove();
+            delete _mp3File;
+            _mediaUrl = "";
             emit displaySuccess();
-      }
-
-//---------------------------------------------------------
-//   mediaDownloadError
-//---------------------------------------------------------
-
-void LoginManager::mediaUploadError(QNetworkReply::NetworkError e)
-      {
-      qDebug() << "error uploading media" << e;
-      QMessageBox::warning(0,
+            }
+      else if (e == QNetworkReply::RemoteHostClosedError && _uploadTryCount < MAX_UPLOAD_TRY_COUNT) {
+            uploadMedia();
+            }
+      else {
+            qDebug() << "error uploading media" << e;
+            QMessageBox::warning(0,
                      tr("Upload Error"),
                      tr("Sorry, MuseScore couldn't upload the audio file. Error %1").arg(e),
                      QString::null, QString::null);
+            }
       }
 
 //---------------------------------------------------------
@@ -454,9 +476,11 @@ void LoginManager::mediaUploadError(QNetworkReply::NetworkError e)
 
 void LoginManager::mediaUploadProgress(qint64 progress, qint64 total)
       {
-      _progressDialog->setMinimum(0);
-      _progressDialog->setMaximum(total);
-      _progressDialog->setValue(progress);
+      if (!_progressDialog->wasCanceled()) {
+            _progressDialog->setMinimum(0);
+            _progressDialog->setMaximum(total);
+            _progressDialog->setValue(progress);
+            }
       }
 
 //---------------------------------------------------------
