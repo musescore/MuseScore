@@ -25,6 +25,8 @@ class LoginManager : public QObject
       {
       Q_OBJECT
 
+      static const int MAX_UPLOAD_TRY_COUNT = 5;
+
       KQOAuthManager* _oauthManager;
       QString _consumerKey = 0;
       QString _consumerSecret = 0;
@@ -32,6 +34,10 @@ class LoginManager : public QObject
       QString _accessTokenSecret = 0;
       QString _userName = 0;
       int _uid = -1;
+
+      QString _mediaUrl;
+      QFile* _mp3File;
+      int _uploadTryCount = 0;
 
       QProgressDialog* _progressDialog;
 
@@ -56,8 +62,8 @@ class LoginManager : public QObject
       void onUploadRequestReady(QByteArray ba);
       void onGetMediaUrlRequestReady(QByteArray ba);
 
+      void uploadMedia();
       void mediaUploadFinished();
-      void mediaUploadError(QNetworkReply::NetworkError);
       void mediaUploadProgress(qint64, qint64);
 
       void onTryLoginSuccess();
