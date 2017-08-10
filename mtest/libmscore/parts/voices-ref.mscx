@@ -1535,7 +1535,7 @@
             <lid>99</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articAccentAbove</subtype>
+              <subtype>articAccentBelow</subtype>
               <lid>98</lid>
               </Articulation>
             <Note>
