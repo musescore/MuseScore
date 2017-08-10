@@ -202,6 +202,7 @@ void ShortcutCaptureDialog::clearClicked()
             nshrtLabel->setAccessibleName(tr("New shortcut"));
 
       nshrtLabel->setAccessibleName(tr("New shortcut"));
+      messageLabel->setText("");
       addButton->setEnabled(false);
       replaceButton->setEnabled(false);
       nshrtLabel->setText("");
