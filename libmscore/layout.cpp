@@ -1433,7 +1433,6 @@ static void checkDivider(bool left, System* s, qreal yOffset)
 static void layoutPage(Page* page, qreal restHeight)
       {
       Score* score  = page->score();
-      int gaps      = 0;
       int nsystems  = page->systems().size() - 1;
 
       QList<System*> sList;
@@ -1445,10 +1444,9 @@ static void layoutPage(Page* page, qreal restHeight)
             if (s1->vbox() || s2->vbox() || s1->hasFixedDownDistance())
                   continue;
             sList.push_back(s1);
-            ++gaps;
             }
 
-      if (!gaps || MScore::noVerticalStretch || score->layoutMode() == LayoutMode::SYSTEM) {
+      if (sList.empty() || MScore::noVerticalStretch || score->layoutMode() == LayoutMode::SYSTEM) {
             if (score->layoutMode() == LayoutMode::FLOAT) {
                   qreal y = restHeight * .5;
                   for (System* system : page->systems())
@@ -1473,7 +1471,7 @@ static void layoutPage(Page* page, qreal restHeight)
       std::sort(sList.begin(), sList.end(), [](System* a, System* b) { return a->distance() < b->distance(); });
 
       qreal dist = sList[0]->distance();
-      for (int i = 1; i < sList.size() && restHeight > 0.0; ++i) {
+      for (int i = 1; i < sList.size(); ++i) {
             qreal ndist = sList[i]->distance();
             qreal fill = ndist - dist;
             dist       = ndist;
@@ -1488,6 +1486,15 @@ static void layoutPage(Page* page, qreal restHeight)
                         s->setDistance(s->distance() + fill);
                         }
                   restHeight -= totalFill;
+                  if (restHeight <= 0)
+                        break;
+                  }
+            }
+      if (restHeight > 0.0) {
+            qreal fill = restHeight / sList.size();
+            for (int i = 0; i < sList.size(); ++i) {
+                  System* s = sList[i];
+                  s->setDistance(s->distance() + fill);
                   }
             }
 
