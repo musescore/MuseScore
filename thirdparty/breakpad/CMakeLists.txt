@@ -43,7 +43,7 @@ ADD_DEPENDENCIES(breakpad mops2)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 
-add_executable(crashReporter
+add_executable(musescore_crashreporter
     common/windows/http_upload.h
     common/windows/http_upload.cc
     crashReporter.cpp
@@ -52,17 +52,17 @@ add_executable(crashReporter
     mainwindow.ui
     )
 
-target_link_libraries(crashReporter
+target_link_libraries(musescore_crashreporter
     "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.14393.0/um/x86/wininet.lib"
     Qt5::Widgets
     )
 
-set_target_properties (crashReporter
+set_target_properties (musescore_crashreporter
     PROPERTIES
         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-unknown-pragmas"
     )
 
-xcode_pch(crashReporter all)
+xcode_pch(musescore_crashreporter all)
 
-ADD_DEPENDENCIES(crashReporter mops1)
-ADD_DEPENDENCIES(crashReporter mops2)
+ADD_DEPENDENCIES(musescore_crashreporter mops1)
+ADD_DEPENDENCIES(musescore_crashreporter mops2)

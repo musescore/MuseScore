@@ -112,7 +112,7 @@ namespace Breakpad {
         writeMyCrashReport(metadata_path);
 
         // How are we going to define the path of the crashReporter???
-        program_path = L"C:/Users/nickhatz/MuseScore/build.release/thirdparty/breakpad/crashReporter.exe";
+        program_path = L"C:/Users/nickhatz/MuseScore/build.release/thirdparty/breakpad/musescore_crashreporter.exe";
         launcher(program_path, minidump_path, metadata_path);
 
 #endif
@@ -216,9 +216,16 @@ namespace Breakpad {
                 &pi )           // Pointer to PROCESS_INFORMATION structure
             )
             {
-                printf( "CreateProcess failed (%d).\n", GetLastError() );
+                printf( "CreateProcess failed (%lu).\n", GetLastError() );
                 return true;
             }
+
+        // Wait until child process exits.
+        //WaitForSingleObject( pi.hProcess, INFINITE );
+
+        // Close process and thread handles.
+        CloseHandle( pi.hProcess );
+        CloseHandle( pi.hThread );
 
 
         Q_UNUSED(program);
