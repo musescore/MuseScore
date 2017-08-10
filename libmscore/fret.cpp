@@ -287,7 +287,7 @@ void FretDiagram::draw(QPainter* painter) const
             painter->drawLine(QLineF(0.0, y, x2, y));
             }
       QFont scaledFont(font);
-      scaledFont.setPixelSize(font.pixelSize() * _userMag);
+      scaledFont.setPixelSize(font.pixelSize() * _userMag * score()->styleD(StyleIdx::fretMag));
       painter->setFont(scaledFont);
       QFontMetricsF fm(scaledFont);
       qreal dotd = stringDist * .6;
@@ -327,7 +327,7 @@ void FretDiagram::draw(QPainter* painter) const
       if (_fretOffset > 0) {
             qreal fretNumMag = score()->styleD(StyleIdx::fretNumMag);
             QFont scaledFont(font);
-            scaledFont.setPixelSize(font.pixelSize() * fretNumMag * _userMag);
+            scaledFont.setPixelSize(font.pixelSize() * fretNumMag * _userMag * score()->styleD(StyleIdx::fretMag));
             painter->setFont(scaledFont);
             if (score()->styleI(StyleIdx::fretNumPos) == 0)
                   painter->drawText(QRectF(-stringDist *.4, .0, .0, fretDist),
