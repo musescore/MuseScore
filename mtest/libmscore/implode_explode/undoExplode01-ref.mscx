@@ -569,7 +569,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>articMarcatoAbove</subtype>
+            <subtype>articMarcatoBelow</subtype>
             </Articulation>
           <Note>
             <pitch>69</pitch>
@@ -715,7 +715,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>articMarcatoAbove</subtype>
+            <subtype>articMarcatoBelow</subtype>
             </Articulation>
           <Note>
             <pitch>65</pitch>

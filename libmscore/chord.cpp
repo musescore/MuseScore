@@ -799,8 +799,9 @@ void Chord::computeUp()
       {
       Q_ASSERT(!_notes.empty());
       StaffType* tab = staff() ? staff()->staffType(tick()) : 0;
+      bool tabStaff  = tab && tab->isTabStaff();
       // TAB STAVES
-      if (tab && tab->isTabStaff()) {
+      if (tabStaff) {
             // if no stems or stem beside staves
             if (tab->slashStyle() || !tab->stemThrough()) {
                   // if measure has voices, set stem direction according to voice
@@ -832,12 +833,11 @@ void Chord::computeUp()
             }
       else if (staffMove())
             _up = staffMove() > 0;
-      else if (measure()->hasVoices(staffIdx())) {
+      else if (measure()->hasVoices(staffIdx()))
             _up = !(track() % 2);
-            }
       else {
             int   dnMaxLine   = staff()->middleLine(tick());
-            int   ud          = (tab ? upString()*2 : upNote()->line() ) - dnMaxLine;
+            int   ud          = (tabStaff ? upString() * 2 : upNote()->line() ) - dnMaxLine;
             // standard case: if only 1 note or cross beaming
             if (_notes.size() == 1 || staffMove()) {
                   if (staffMove() > 0)
@@ -849,14 +849,14 @@ void Chord::computeUp()
                   }
             // if more than 1 note, compare extrema (topmost and bottommost notes)
             else {
-                  int dd = (tab ? downString()*2 : downNote()->line() ) - dnMaxLine;
+                  int dd = (tabStaff ? downString() * 2 : downNote()->line() ) - dnMaxLine;
                   // if extrema symmetrical, average directions of intermediate notes
                   if (-ud == dd) {
                         int up = 0;
                         int n = _notes.size();
                         for (int i = 0; i < n; ++i) {
                               const Note* n = _notes.at(i);
-                              int l = tab ? n->string()*2 : n->line();
+                              int l = tabStaff ? n->string() * 2 : n->line();
                               if (l <= dnMaxLine)
                                     --up;
                               else
