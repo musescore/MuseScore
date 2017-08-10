@@ -128,7 +128,7 @@
           <lid>9</lid>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>articAccentAbove</subtype>
+            <subtype>articAccentBelow</subtype>
             <lid>8</lid>
             </Articulation>
           <Note>
@@ -311,7 +311,7 @@
             <lid>9</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articAccentAbove</subtype>
+              <subtype>articAccentBelow</subtype>
               <lid>8</lid>
               </Articulation>
             <Note>
