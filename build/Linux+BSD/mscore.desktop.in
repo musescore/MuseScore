@@ -13,4 +13,6 @@ StartupNotify=true
 Terminal=false
 Type=Application
 Categories=Qt;Audio;Sequencer;Midi;AudioVideoEditing;Music;AudioVideo;
+Keywords=music;notation;composition;composing;arranging;making;sheet music;music notation software;lead sheet;leadsheet;score;full score;scorewriter;MIDI;musicxml;playback;instrument;
+Keywords[de]=Musik;Noten;Musiknoten;Komposition;Komponieren;Arrangieren;Notenblatt;Notenblätter;Notationsprogramm;Musiknotationsprogramm;Musiknotation;Tabulatur;MIDI;musicxml;Instrument;
 MimeType=application/x-musescore@MSCORE_INSTALL_SUFFIX@;application/x-musescore@MSCORE_INSTALL_SUFFIX@+xml;application/vnd.recordare.musicxml@MSCORE_INSTALL_SUFFIX@;application/vnd.recordare.musicxml@MSCORE_INSTALL_SUFFIX@+xml;
