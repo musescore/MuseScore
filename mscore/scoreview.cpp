@@ -1674,7 +1674,7 @@ void ScoreView::ticksTab(int ticks)
 
 void ScoreView::cmd(const QAction* a)
       {
-      const char* s = a ? a->data().toByteArray().data() : "";
+      const char* s = a ? a->data().toByteArray().constData() : "";
       cmd(s);
       }
 
