@@ -171,6 +171,7 @@ void ScoreView::resizeEvent(QResizeEvent* /*ev*/)
       {
       if (_magIdx != MagIdx::MAG_FREE)
             setMag(mscore->getMag(this));
+      emit sizeChanged();
       }
 
 //---------------------------------------------------------
