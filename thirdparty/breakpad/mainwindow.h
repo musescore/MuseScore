@@ -14,6 +14,7 @@ wstring str2wstr(string mystr);
 string wstr2str(wstring mystr);
 pair<wstring,wstring> line2strings(string line);
 map <wstring,wstring> read_csv(string mypath);
+void sendReport(QString user_txt);
 
 namespace Ui {
     class MainWindow;

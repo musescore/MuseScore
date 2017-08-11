@@ -65,22 +65,7 @@ map <wstring,wstring> read_csv(string mypath){
         return mymap;
 }
 
-
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
-    ui->setupUi(this);
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-
-
-void MainWindow::on_pushButton_clicked(){
-
+void sendReport(QString user_txt){
     QString minidump_path;
     QString metadata_path;
     map<wstring, wstring> parameters;
@@ -92,6 +77,7 @@ void MainWindow::on_pushButton_clicked(){
         metadata_path = QCoreApplication::arguments().at(2);
         cout << "Minidump path: " << minidump_path.toStdString() << endl;
         parameters = read_csv(metadata_path.toStdString());
+        parameters.insert(pair<wstring, wstring>(L"user_crash_input", user_txt.toStdWString()));
 
         wstring response;
         int mytimeout, my_error;
@@ -115,12 +101,43 @@ void MainWindow::on_pushButton_clicked(){
 
         cout << wstr2str(response) << endl;
 
-        QMessageBox::information(this,"Message","Report has send!!");
+        //QMessageBox::information(this,"Message","Report has send!!");
 
     }
 }
 
-void MainWindow::on_pushButton_2_clicked()
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
+    ui->setupUi(this);
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+
+void MainWindow::on_pushButton_clicked(){
+
+    if ( ui->checkBox->isChecked() ){
+        QString user_txt = ui->plainTextEdit->toPlainText();
+        sendReport(user_txt);
+    }
+
     close();
+
+}
+
+void MainWindow::on_pushButton_2_clicked(){
+
+    if ( ui->checkBox->isChecked() ){
+        QString user_txt = ui->plainTextEdit->toPlainText();
+        sendReport(user_txt);
+    }
+
+    // TODO: restart MuseScore
+
 }
