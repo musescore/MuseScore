@@ -1761,6 +1761,8 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       {
       cv = view;
       if (cv) {
+            if (timeline())
+                  timeline()->setScoreView(cv);
             if (cv->score() && (cs != cv->score())) {
                   // exit note entry mode
                   if (cv->noteEntryMode()) {
@@ -3278,8 +3280,25 @@ void MuseScore::changeState(ScoreState val)
       else {
             if (e->isText()) {
                   textTools()->updateTools(cv->getEditData());
-                  if (!(e->isFiguredBass() || e->isHarmony()))   // do not show text tools for f.b.
+                  if (!(e->isFiguredBass() || e->isHarmony())) {  // do not show text tools for f.b.
+                        if (timelineScrollArea() && timelineScrollArea()->isVisible()) {
+                              if (dockWidgetArea(timelineScrollArea()) != dockWidgetArea(textTools()) || timelineScrollArea()->isFloating()) {
+                                    QSizePolicy policy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+                                    textTools()->widget()->setSizePolicy(policy);
+                                    }
+                              else {
+                                    QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+                                    textTools()->widget()->setSizePolicy(policy);
+                                    }
+                              }
+                        else {
+                              QSizePolicy policy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+                              textTools()->widget()->setSizePolicy(policy);
+                              }
+                        if (timelineScrollArea())
+                              splitDockWidget(textTools(), timelineScrollArea(), Qt::Vertical);
                         textTools()->show();
+                        }
                   }
             if (_inspector)
                   _inspector->update(e->score());
@@ -5294,6 +5313,8 @@ void MuseScore::showDrumTools(const Drumset* drumset, Staff* staff)
                   _drumTools = new DrumTools(this);
                   addDockWidget(Qt::BottomDockWidgetArea, _drumTools);
                   }
+            if (timelineScrollArea())
+                  splitDockWidget(_drumTools, timelineScrollArea(), Qt::Vertical);
             _drumTools->setDrumset(cs, staff, drumset);
             _drumTools->show();
             }
