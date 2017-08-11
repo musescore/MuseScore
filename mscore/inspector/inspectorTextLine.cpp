@@ -24,9 +24,9 @@ namespace Ms {
 void populateHookType(QComboBox* b)
       {
       b->clear();
-      b->addItem(b->tr("None"), int(HookType::NONE));
-      b->addItem(b->tr("90°"), int(HookType::HOOK_90));
-      b->addItem(b->tr("45°"), int(HookType::HOOK_45));
+      b->addItem(b->QObject::tr("None"), int(HookType::NONE));
+      b->addItem(b->QObject::tr("90°"), int(HookType::HOOK_90));
+      b->addItem(b->QObject::tr("45°"), int(HookType::HOOK_45));
       }
 
 //---------------------------------------------------------
@@ -36,10 +36,10 @@ void populateHookType(QComboBox* b)
 void populateTextPlace(QComboBox* b)
       {
       b->clear();
-      b->addItem(b->tr("Auto"),  int(PlaceText::AUTO));
-      b->addItem(b->tr("Above"), int(PlaceText::ABOVE));
-      b->addItem(b->tr("Below"), int(PlaceText::BELOW));
-      b->addItem(b->tr("Left"),  int(PlaceText::LEFT));
+      b->addItem(b->QObject::tr("Auto"),  int(PlaceText::AUTO));
+      b->addItem(b->QObject::tr("Above"), int(PlaceText::ABOVE));
+      b->addItem(b->QObject::tr("Below"), int(PlaceText::BELOW));
+      b->addItem(b->QObject::tr("Left"),  int(PlaceText::LEFT));
       }
 
 //---------------------------------------------------------
