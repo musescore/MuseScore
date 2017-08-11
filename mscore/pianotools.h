@@ -76,6 +76,9 @@ class HPiano : public QGraphicsView {
       void releasePitch(int pitch);
       void updateAllKeys();
       virtual QSize sizeHint() const;
+
+   public slots:
+      void setMaximum(bool top_level);
       };
 
 //---------------------------------------------------------

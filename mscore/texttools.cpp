@@ -56,6 +56,7 @@ TextTools::TextTools(QWidget* parent)
       setObjectName("text-tools");
       setWindowTitle(tr("Text Tools"));
       setAllowedAreas(Qt::DockWidgetAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea));
+      setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
       text = nullptr;
       cursor = nullptr;
