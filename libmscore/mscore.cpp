@@ -424,7 +424,7 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<FileIO, 1>  ("FileIO",    3, 0, "FileIO");
             //-----------mscore bindings
             qmlRegisterUncreatableMetaObject(Ms::staticMetaObject, "MuseScore", 3, 0, "Ms", enumErr);
-//            qmlRegisterUncreatableType<Direction>("MuseScore", 3, 0, "Direction", tr(enumErr));
+//            qmlRegisterUncreatableType<Direction>("MuseScore", 3, 0, "Direction", QObject::tr(enumErr));
 
             qmlRegisterType<MScore>     ("MuseScore", 3, 0, "MScore");
             qmlRegisterType<MsScoreView>("MuseScore", 3, 0, "ScoreView");
@@ -464,7 +464,7 @@ QQmlEngine* MScore::qml()
 
 
             //classed enumerations
-            qmlRegisterUncreatableType<MSQE_StyledPropertyListIdx>("MuseScore", 1, 0, "StyledPropertyListIdx", tr("You can't create an enum"));
+            qmlRegisterUncreatableType<MSQE_StyledPropertyListIdx>("MuseScore", 1, 0, "StyledPropertyListIdx", QObject::tr("You can't create an enum"));
             qmlRegisterUncreatableType<MSQE_BarLineType>("MuseScore", 1, 0, "BarLineType", enumErr);
 
             //-----------virtual classes
