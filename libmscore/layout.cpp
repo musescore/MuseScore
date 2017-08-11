@@ -1470,6 +1470,8 @@ static void layoutPage(Page* page, qreal restHeight)
 
       std::sort(sList.begin(), sList.end(), [](System* a, System* b) { return a->distance() < b->distance(); });
 
+      qreal maxDist = score->styleP(StyleIdx::maxSystemDistance);
+
       qreal dist = sList[0]->distance();
       for (int i = 1; i < sList.size(); ++i) {
             qreal ndist = sList[i]->distance();
@@ -1483,7 +1485,10 @@ static void layoutPage(Page* page, qreal restHeight)
                         }
                   for (int k = 0; k < i; ++k) {
                         System* s = sList[k];
-                        s->setDistance(s->distance() + fill);
+                        qreal d = s->distance() + fill;
+                        if ((d - s->height()) > maxDist)
+                              d = qMax(maxDist + s->height(), s->distance());
+                        s->setDistance(d);
                         }
                   restHeight -= totalFill;
                   if (restHeight <= 0)
@@ -1494,7 +1499,10 @@ static void layoutPage(Page* page, qreal restHeight)
             qreal fill = restHeight / sList.size();
             for (int i = 0; i < sList.size(); ++i) {
                   System* s = sList[i];
-                  s->setDistance(s->distance() + fill);
+                  qreal d = s->distance() + fill;
+                  if ((d - s->height()) > maxDist)
+                        d = qMax(maxDist + s->height(), s->distance());
+                  s->setDistance(d);
                   }
             }
 

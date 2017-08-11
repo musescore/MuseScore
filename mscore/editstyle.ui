@@ -171,7 +171,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>28</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -636,6 +636,9 @@
              <property name="maximum">
               <double>1000.000000000000000</double>
              </property>
+             <property name="singleStep">
+              <double>0.500000000000000</double>
+             </property>
             </widget>
            </item>
            <item row="7" column="0" colspan="2">
@@ -686,6 +689,9 @@
              </property>
              <property name="maximum">
               <double>1000.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.500000000000000</double>
              </property>
             </widget>
            </item>
@@ -767,7 +773,7 @@
               <double>1000.000000000000000</double>
              </property>
              <property name="singleStep">
-              <double>0.100000000000000</double>
+              <double>0.500000000000000</double>
              </property>
             </widget>
            </item>
@@ -807,6 +813,9 @@
              <property name="maximum">
               <double>1000.000000000000000</double>
              </property>
+             <property name="singleStep">
+              <double>0.500000000000000</double>
+             </property>
             </widget>
            </item>
            <item row="4" column="0">
@@ -845,6 +854,9 @@
              <property name="minimum">
               <double>-100.000000000000000</double>
              </property>
+             <property name="singleStep">
+              <double>0.500000000000000</double>
+             </property>
             </widget>
            </item>
            <item row="4" column="4">
@@ -882,6 +894,9 @@
              </property>
              <property name="minimum">
               <double>-100.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.500000000000000</double>
              </property>
             </widget>
            </item>
@@ -939,10 +954,13 @@
               <number>1</number>
              </property>
              <property name="minimum">
-              <double>-1000.000000000000000</double>
+              <double>0.000000000000000</double>
              </property>
              <property name="maximum">
               <double>1000.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.500000000000000</double>
              </property>
             </widget>
            </item>
