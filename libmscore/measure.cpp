@@ -110,8 +110,8 @@ MStaff::MStaff(const MStaff& m)
       distanceDown = m.distanceDown;
       lines        = new StaffLines(*m.lines);
       hasVoices    = m.hasVoices;
-      _vspacerUp   = 0;
-      _vspacerDown = 0;
+      _vspacerUp   = m._vspacerUp ? new Spacer(*m._vspacerUp) : 0;
+      _vspacerDown = m._vspacerDown ? new Spacer(*m._vspacerDown) : 0;
       _visible     = m._visible;
       _slashStyle  = m._slashStyle;
       }
@@ -3959,7 +3959,8 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
       m->_repeatCount = _repeatCount;
       m->_repeatFlags = _repeatFlags;
 
-      foreach(MStaff* ms, staves)
+      m->staves.clear();
+      for (MStaff* ms : staves)
             m->staves.append(new MStaff(*ms));
 
       m->_no                    = _no;
