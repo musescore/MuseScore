@@ -52,6 +52,7 @@ namespace Breakpad {
     //QHash<QString, QString> crashTable;
     std::map<string,string> crashTable;
     QMutex mymutex;
+    wstring crash_reporter_path;
 
     int AnnotateCrashReport(string aKey, string aData){
         mymutex.lock();
@@ -78,6 +79,70 @@ namespace Breakpad {
         }
         myfile.close();
 
+    }
+
+    wstring str2wstr(string mystr){
+        wstring res(mystr.begin(), mystr.end());
+        return res;
+    }
+
+    string wstr2str(wstring mystr){
+        string res(mystr.begin(), mystr.end());
+        return res;
+    }
+
+    string get_musescore_path(){
+        wchar_t buffer[MAX_PATH];
+        GetModuleFileName(NULL, buffer, MAX_PATH) ;
+        string mscore_path = wstr2str(wstring(buffer));
+
+        int i;
+        int path_n;
+
+        for(i=mscore_path.size();i>=0;i--){
+            if( mscore_path[i] == '\\'){
+                path_n = i;
+                break;
+            }
+        }
+
+        string res;
+
+        for(i=0;i<path_n;i++){
+            res += mscore_path[i] ;
+        }
+
+        return res;
+    }
+
+    bool file_exists(string name) {
+        ifstream f(name.c_str());
+        return f.good();
+    }
+
+    string get_crash_reporter_path(){
+        string musescore_path = get_musescore_path();
+        string res = musescore_path+"\\musescore_crashreporter.exe";
+        string res_empty = "";
+        if ( file_exists(res)){
+            return res;
+        }
+        res = musescore_path + "\\..\\thirdparty\\breakpad\\musescore_crashreporter.exe";
+        if ( file_exists(res)){
+            return res;
+        }
+
+        return res_empty;
+
+    }
+
+    string replaceChar(string str, char ch1, char ch2) {
+        for (int i = 0; i < str.length(); ++i) {
+            if (str[i] == ch1)
+                str[i] = ch2;
+        }
+
+        return str;
     }
 
     /************************************************************************/
@@ -112,8 +177,9 @@ namespace Breakpad {
         writeMyCrashReport(metadata_path);
 
         // How are we going to define the path of the crashReporter???
-        program_path = L"C:/Users/nickhatz/MuseScore/build.release/thirdparty/breakpad/musescore_crashreporter.exe";
-        launcher(program_path, minidump_path, metadata_path);
+        //crash_reporter_path
+        //program_path = L"C:/Users/nickhatz/MuseScore/build.release/thirdparty/breakpad/musescore_crashreporter.exe";
+        launcher(crash_reporter_path, minidump_path, metadata_path);
 
 #endif
 
@@ -183,6 +249,8 @@ namespace Breakpad {
     void CrashHandler::Init( wstring reportPath )
     {
         d->InitCrashHandler(reportPath);
+        crash_reporter_path = str2wstr(replaceChar(get_crash_reporter_path(),'\\','/'));
+        qDebug("Crash Reporter Path: %s", crash_reporter_path.c_str());
 
     }
 

@@ -37,6 +37,7 @@ using std::string;
 using std::wstring;
 using std::pair;
 using std::endl;
+using std::ifstream;
 
 namespace Breakpad {
 
@@ -44,6 +45,11 @@ namespace Breakpad {
     int PrintMyCrashReport();
     bool launcher(wstring program, wstring minidump_path, wstring metadata_path);
     void writeMyCrashReport(wstring mypath);
+    wstring str2wstr(string mystr);
+    string wstr2str(wstring mystr);
+    string get_musescore_path();
+    bool file_exists(string name);
+    string get_crash_reporter_path();
 
     class CrashHandlerPrivate;
     class CrashHandler
