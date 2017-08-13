@@ -24,6 +24,7 @@
 #include "ui_palette.h"
 #include "ui_cellproperties.h"
 #include "libmscore/sym.h"
+#include "shortcut.h"
 
 namespace Ms {
 
@@ -39,10 +40,13 @@ class Palette;
 
 struct PaletteCell {
       ~PaletteCell();
-
+      PaletteCell(Palette* p);
       Element* element { 0 };
       QString name;           // used for tool tip
       QString tag;
+      Palette* parent;
+      Shortcut shortcut;
+      int id;
 
       bool drawStaff { false };
       double x       { 0.0   };

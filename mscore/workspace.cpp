@@ -206,8 +206,13 @@ void MuseScore::changeWorkspace(QAction* a)
 
 void MuseScore::changeWorkspace(Workspace* p)
       {
+      if (!p->loaded()) {
+            Workspace::currentWorkspace = p;
+            p->read();
+            return;
+            }
       Workspace::currentWorkspace->save();
-      p->read();
+      p->read1();
       Workspace::currentWorkspace = p;
       }
 
@@ -336,29 +341,16 @@ extern QString readRootFile(MQZipReader*, QList<QString>&);
 
 void Workspace::read()
       {
-      if (_path == "Advanced") {
-            mscore->setAdvancedPalette();
-            for (Palette* p : mscore->getPaletteBox()->palettes())
-                  p->setSystemPalette(true);
-            mscore->setNoteInputMenuEntries(MuseScore::advancedNoteInputMenuEntries());
-            mscore->populateNoteInputMenu();
-            return;
-            }
-      if (_path == "Basic") {
-            mscore->setBasicPalette();
-            for (Palette* p : mscore->getPaletteBox()->palettes())
-                  p->setSystemPalette(true);
-            mscore->setNoteInputMenuEntries(MuseScore::basicNoteInputMenuEntries());
-            mscore->populateNoteInputMenu();
-            return;
-            }
       if (_path.isEmpty() || !QFile(_path).exists()) {
             qDebug("cannot read workspace <%s>", qPrintable(_path));
             mscore->setAdvancedPalette();       // set default palette
             return;
             }
       QFileInfo fi(_path);
-      _readOnly = !fi.isWritable();
+      if (_path == "Basic" || _path == "Advanced")
+            _readOnly = true;
+      else
+            _readOnly = !fi.isWritable();
 
       MQZipReader f(_path);
       QList<QString> images;
@@ -387,6 +379,72 @@ void Workspace::read()
                         }
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   read1
+//---------------------------------------------------------
+
+void Workspace::read1()
+      {
+      if (_path == "Advanced") {
+            mscore->setAdvancedPalette();
+            for (Palette* p : mscore->getPaletteBox()->palettes())
+                  p->setSystemPalette(true);
+            mscore->setNoteInputMenuEntries(MuseScore::advancedNoteInputMenuEntries());
+            mscore->populateNoteInputMenu();
+            _loaded = true;
+            return;
+            }
+      if (_path == "Basic") {
+            mscore->setBasicPalette();
+            for (Palette* p : mscore->getPaletteBox()->palettes())
+                  p->setSystemPalette(true);
+            mscore->setNoteInputMenuEntries(MuseScore::basicNoteInputMenuEntries());
+            mscore->populateNoteInputMenu();
+            _loaded = true;
+            return;
+            }
+      if (_path.isEmpty() || !QFile(_path).exists()) {
+            qDebug("cannot read workspace <%s>", qPrintable(_path));
+            mscore->setAdvancedPalette();       // set default palette
+            return;
+            }
+      QFileInfo fi(_path);
+      if (_path == "Basic" || _path == "Advanced")
+            _readOnly = true;
+      else
+            _readOnly = !fi.isWritable();
+
+      MQZipReader f(_path);
+      QList<QString> images;
+      QString rootfile = readRootFile(&f, images);
+      //
+      // load images
+      //
+      for (const QString& s : images)
+            imageStore.add(s, f.fileData(s));
+
+      if (rootfile.isEmpty()) {
+            qDebug("can't find rootfile in: %s", qPrintable(_path));
+            return;
+            }
+
+      QByteArray ba = f.fileData(rootfile);
+      XmlReader e(ba);
+
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "Workspace")
+                              read(e);
+                        else
+                              e.unknown();
+                        }
+                  }
+            }
+      if (!_loaded)
+            _loaded = true;
       }
 
 void Workspace::read(XmlReader& e)
@@ -436,6 +494,8 @@ void Workspace::read(XmlReader& e)
             mscore->setNoteInputMenuEntries(mscore->allNoteInputMenuEntries());
             mscore->populateNoteInputMenu();
             }
+      if (!_loaded)
+            _loaded = true;
       }
 
 //---------------------------------------------------------
@@ -444,9 +504,35 @@ void Workspace::read(XmlReader& e)
 
 void Workspace::save()
       {
-      if (_readOnly)
-            return;
       PaletteBox* pb = mscore->getPaletteBox();
+      if (_path == "Basic" && pb) {
+            preferences.paletteCellListBasic.clear();
+            for (Palette* p : pb->palettes()) {
+                  for (PaletteCell* cell : p->getCells()) {
+                        PaletteCellDescription pd;
+                        pd.cell = cell;
+                        pd.description = cell->name;
+                        pd.shortcut = cell->shortcut;
+                        pd.shortcut.setDescr(cell->name);
+                        pd.shortcut.setState(STATE_NORMAL | STATE_NOTE_ENTRY);
+                        preferences.paletteCellListBasic.append(pd);
+                        }
+                  }
+            }
+      else if (_path == "Advanced" && pb) {
+            preferences.paletteCellListAdv.clear();
+            for (Palette* p : pb->palettes()) {
+                  for (PaletteCell* cell : p->getCells()) {
+                        PaletteCellDescription pd;
+                        pd.cell = cell;
+                        pd.description = cell->name;
+                        pd.shortcut = cell->shortcut;
+                        pd.shortcut.setDescr(cell->name);
+                        pd.shortcut.setState(STATE_NORMAL | STATE_NOTE_ENTRY);
+                        preferences.paletteCellListAdv.append(pd);
+                        }
+                  }
+            }
       if (pb)
             write();
       }

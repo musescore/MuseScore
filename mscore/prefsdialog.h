@@ -60,6 +60,7 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       void resetShortcutClicked();
       void saveShortcutListClicked();
       void loadShortcutListClicked();
+      void showPaletteShortcutManagerClicked();
       void clearShortcutClicked();
       void defineShortcutClicked();
       void portaudioApiActivated(int idx);

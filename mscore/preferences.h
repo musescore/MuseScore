@@ -31,10 +31,12 @@
  */
 
 #include "globals.h"
+#include "shortcut.h"
 
 namespace Ms {
 
 extern QString mscoreGlobalShare;
+class PaletteCell;
 
 enum class SessionStart : char {
       EMPTY, LAST, NEW, SCORE
@@ -192,6 +194,16 @@ class Preference {
       };
 
 //---------------------------------------------------------
+//   PaletteCellDescription
+//---------------------------------------------------------
+
+struct PaletteCellDescription {
+      QString description;
+      Shortcut shortcut;
+      PaletteCell* cell;
+      };
+
+//---------------------------------------------------------
 //   Preferences
 //---------------------------------------------------------
 
@@ -263,6 +275,11 @@ class Preferences {
       MidiRemote midiRemote(int recordId) const;
       void updateMidiRemote(int recordId, MidiRemoteType type, int data);
       void clearMidiRemote(int recordId);
+
+      // TODO: check how best to implement these with new preference model
+      QList<PaletteCellDescription> paletteCellList;
+      QList<PaletteCellDescription> paletteCellListBasic;
+      QList<PaletteCellDescription> paletteCellListAdv;
       };
 
 extern Preferences preferences;

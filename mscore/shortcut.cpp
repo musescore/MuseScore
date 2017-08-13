@@ -2786,6 +2786,26 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "palette-shortcut-manager",
+         QT_TRANSLATE_NOOP("action", "Palette Shortcut Manager..."),
+         QT_TRANSLATE_NOOP("action", "Palette Shortcut Manager"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "set-palette-shortcut",
+         QT_TRANSLATE_NOOP("action", "Set palette shortcut"),
+         QT_TRANSLATE_NOOP("action", "Set palette shortcut"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_FOTO,
          "inspector",
          QT_TRANSLATE_NOOP("action","Inspector"),

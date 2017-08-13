@@ -40,6 +40,7 @@ class Workspace : public QObject {
       QString _path;
       bool _dirty;
       bool _readOnly;
+      bool _loaded { false }; // true if the workspace has been loaded once
 
    public slots:
       void setDirty(bool val = true) { _dirty = val;    }
@@ -59,6 +60,7 @@ class Workspace : public QObject {
       void write();
       void read(XmlReader&);
       void read();
+      void read1();
       bool readOnly() const          { return _readOnly; }
       void setReadOnly(bool val)     { _readOnly = val;  }
 
@@ -68,6 +70,7 @@ class Workspace : public QObject {
       static Workspace* createNewWorkspace(const QString& name);
       static bool workspacesRead;
       static void writeBuiltinWorkspace();
+      bool loaded() { return _loaded; }
       };
 }
 #endif

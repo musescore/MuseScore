@@ -1549,6 +1549,13 @@ Palette* MuseScore::newFretboardDiagramPalette()
 
 void MuseScore::setAdvancedPalette()
       {
+      bool empty = true;
+      QList<Shortcut> shortcuts;  // stores advanced workspace shortcuts
+      if (!preferences.paletteCellListAdv.isEmpty())
+            empty = false;
+      for (PaletteCellDescription d : preferences.paletteCellListAdv) {
+            shortcuts.append(d.cell->shortcut);
+            }
       mscore->getPaletteBox();
       paletteBox->clear();
       paletteBox->addPalette(newClefsPalette(PaletteType::ADVANCED));
@@ -1576,6 +1583,31 @@ void MuseScore::setAdvancedPalette()
       paletteBox->addPalette(newBreaksPalette());
       paletteBox->addPalette(newFramePalette());
       paletteBox->addPalette(newBeamPalette(PaletteType::ADVANCED));
+      // set shortcuts in new palettes
+      QList<PaletteCell*> cells;
+      for (Palette* p : paletteBox->palettes()) {
+            for (PaletteCell* cell : p->getCells()) {
+                  cells.append(cell);
+                  }
+            }
+      preferences.paletteCellList.clear();
+      for (int i = 0; i < shortcuts.size(); i++) {
+            PaletteCell* cell = cells[i];
+            if (cell->name == "Show More") {
+                  continue;
+                  }
+            if (!empty)
+                  cell->shortcut = shortcuts[i];
+            int s = preferences.paletteCellList.size();
+            cell->id = s;
+            PaletteCellDescription pd;
+            pd.cell = cell;
+            pd.description = cell->name;
+            pd.shortcut = cell->shortcut;
+            pd.shortcut.setDescr(cell->name);
+            pd.shortcut.setState(STATE_NORMAL | STATE_NOTE_ENTRY);
+            preferences.paletteCellList.append(pd);
+            }
       }
 
 //---------------------------------------------------------
@@ -1584,7 +1616,13 @@ void MuseScore::setAdvancedPalette()
 
 void MuseScore::setBasicPalette()
       {
-      mscore->getPaletteBox();
+      bool empty = true;
+      QList<Shortcut> shortcuts;  // stores basic workspace shortcuts
+      if (!preferences.paletteCellListBasic.isEmpty())
+            empty = false;
+      for (PaletteCellDescription d : preferences.paletteCellListBasic) {
+            shortcuts.append(d.cell->shortcut);
+            }
       paletteBox->clear();
       paletteBox->addPalette(newClefsPalette(PaletteType::BASIC));
       paletteBox->addPalette(newKeySigPalette(PaletteType::BASIC));
@@ -1600,6 +1638,28 @@ void MuseScore::setBasicPalette()
       paletteBox->addPalette(newRepeatsPalette());
       paletteBox->addPalette(newBreaksPalette());
       paletteBox->addPalette(newBeamPalette(PaletteType::BASIC));
+      int i = 0;
+      preferences.paletteCellList.clear();
+      for (Palette* p : paletteBox->palettes()) {
+            for (PaletteCell* cell : p->getCells()) {
+                  if (cell->name == "Show More") {
+                        i++;
+                        continue;
+                        }
+                  if (!empty)
+                        cell->shortcut = shortcuts[i];
+                  int s = preferences.paletteCellList.size();
+                  cell->id = s;
+                  PaletteCellDescription pd;
+                  pd.cell = cell;
+                  pd.description = cell->name;
+                  pd.shortcut = cell->shortcut;
+                  pd.shortcut.setDescr(cell->name);
+                  pd.shortcut.setState(STATE_NORMAL | STATE_NOTE_ENTRY);
+                  preferences.paletteCellList.append(pd);
+                  i++;
+                  }
+            }
       }
 
 //---------------------------------------------------------
