@@ -689,6 +689,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(resetShortcut,  SIGNAL(clicked()), SLOT(resetShortcutClicked()));
       connect(saveShortcutList,  SIGNAL(clicked()), SLOT(saveShortcutListClicked()));
       connect(loadShortcutList,  SIGNAL(clicked()), SLOT(loadShortcutListClicked()));
+      connect(showPaletteShortcutManager,  SIGNAL(clicked()), SLOT(showPaletteShortcutManagerClicked()));
       connect(clearShortcut,  SIGNAL(clicked()), SLOT(clearShortcutClicked()));
       connect(defineShortcut, SIGNAL(clicked()), SLOT(defineShortcutClicked()));
       connect(resetToDefault, SIGNAL(clicked()), SLOT(resetAllValues()));
@@ -1160,6 +1161,11 @@ void PreferenceDialog::loadShortcutListClicked()
             prefs.myShortcutPath = loadFileName;
             Shortcut::loadFromNewFile(loadFileName);
             }
+      }
+
+void PreferenceDialog::showPaletteShortcutManagerClicked()
+      {
+      mscore->showPaletteShortcutManager();
       }
 
 //---------------------------------------------------------

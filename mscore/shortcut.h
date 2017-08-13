@@ -139,6 +139,7 @@ class Shortcut {
       QString descr() const;
       QString text() const;
       QString help() const;
+      void setDescr(QString s) { _descr = s.toUtf8(); }
       MsWidget assignedWidget() const { return _assignedWidget; }
       void clear();           //! remove shortcuts
       void reset();           //! reset to buildin

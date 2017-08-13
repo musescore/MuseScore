@@ -29,8 +29,8 @@ include_directories(
       )
 
 if (SCRIPT_INTERFACE)
-      set (SCRIPT_FILES mscorePlugins pluginCreator.cpp qmledit.cpp pluginManager.cpp)
-      set (SCRIPT_UI   pluginCreator.ui pluginManager.ui)
+      set (SCRIPT_FILES mscorePlugins pluginCreator.cpp qmledit.cpp pluginManager.cpp paletteShortcutManager.cpp)
+      set (SCRIPT_UI   pluginCreator.ui pluginManager.ui paletteShortcutManager.ui)
 endif (SCRIPT_INTERFACE)
 
 QT5_WRAP_UI (ui_headers

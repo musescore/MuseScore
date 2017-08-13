@@ -17,6 +17,7 @@
 #include "preferences.h"
 #include "libmscore/xml.h"
 #include "workspace.h"
+#include "shortcutcapturedialog.h"
 
 namespace Ms {
 
@@ -379,6 +380,7 @@ QList<Palette*> PaletteBox::palettes()const
 
 bool PaletteBox::read(XmlReader& e)
       {
+      preferences.paletteCellList.clear();
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Palette") {

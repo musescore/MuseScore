@@ -61,6 +61,7 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       void resetShortcutClicked();
       void saveShortcutListClicked();
       void loadShortcutListClicked();
+      void showPaletteShortcutManagerClicked();
       void clearShortcutClicked();
       void defineShortcutClicked();
       void portaudioApiActivated(int idx);
@@ -92,6 +93,7 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       PreferenceDialog(QWidget* parent);
       ~PreferenceDialog();
       void setPreferences(const Preferences& p);
+      Preferences getPreferences() { return prefs; }
       void updateRemote();
       };
 

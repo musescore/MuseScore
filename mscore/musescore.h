@@ -34,6 +34,10 @@
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
 #include "newwizard.h"
+#include "preferences.h"
+#include "paletteShortcutManager.h"
+#include "pluginManager.h"
+#include "pluginCreator.h"
 
 namespace Ms {
 
@@ -91,6 +95,7 @@ class Sym;
 class MasterPalette;
 class PluginCreator;
 class PluginManager;
+class PaletteShortcutManager;
 class MasterSynthesizer;
 class SynthesizerState;
 class Driver;
@@ -101,6 +106,7 @@ class HelpBrowser;
 class ToolbarEditor;
 
 struct PluginDescription;
+struct PaletteCellDescription;
 enum class SelState : char;
 enum class IconType : signed char;
 enum class MagIdx : char;
@@ -277,6 +283,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       MasterPalette* masterPalette         { 0 };
       PluginCreator* _pluginCreator        { 0 };
       PluginManager* pluginManager         { 0 };
+      PaletteShortcutManager* paletteShortcutManager { 0 };
       SelectionWindow* selectionWindow     { 0 };
 
       QMenu* menuFile;
@@ -334,6 +341,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       bool _midiinEnabled            { true };
       QList<QString> plugins;
+      QList<PaletteCell*> paletteShortcuts;
       ScriptEngine* se               { 0 };
       QString pluginPath;
 
@@ -342,7 +350,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       QTimer* autoSaveTimer;
       QList<QAction*> pluginActions;
+      QList<QAction*> paletteCellActions;
       QSignalMapper* pluginMapper        { 0 };
+      QSignalMapper* paletteShortcutMapper { 0 };
 
       PianorollEditor* pianorollEditor   { 0 };
       DrumrollEditor* drumrollEditor     { 0 };
@@ -518,6 +528,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void dirtyChanged(Score*);
       void setPos(int tick);
       void pluginTriggered(int);
+      void paletteShortcutTriggered(int);
       void handleMessage(const QString& message);
       void setCurrentScoreView(ScoreView*);
       void setCurrentScoreView(int);
@@ -565,6 +576,12 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updateDrumTools(const Drumset* ds);
       void showPluginCreator(QAction*);
       void showPluginManager();
+      void showPaletteShortcutManager();
+      PaletteShortcutManager* getPaletteShortcutManager();
+      bool paletteShortcutMapperNull() { return paletteShortcutMapper == 0; }
+      void clearPaletteShortcutMapper() { paletteShortcutMapper = 0; }
+      PreferenceDialog* getPreferenceDialog() { return preferenceDialog; }
+      void clearPaletteShortcuts() { paletteShortcuts.clear(); }
 
 //      void updateTabNames();
       QProgressBar* showProgressBar();
@@ -589,6 +606,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       virtual void setCurrentView(int tabIdx, int idx);
       void loadPlugins();
       void unloadPlugins();
+      void loadPaletteShortcuts();
 
       ScoreState state() const { return _sstate; }
       void changeState(ScoreState);
@@ -735,12 +753,17 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void registerPlugin(PluginDescription*);
       void unregisterPlugin(PluginDescription*);
 
+      void registerPaletteShortcut(PaletteCellDescription*);
+      void unregisterPaletteShortcut(PaletteCellDescription*);
+
       Q_INVOKABLE void showStartcenter(bool);
       void showPlayPanel(bool);
 
       QFileInfoList recentScores() const;
       void saveDialogState(const char* name, QFileDialog* d);
       void restoreDialogState(const char* name, QFileDialog* d);
+
+      QMenuBar* getMenuBar();
 
       QPixmap extractThumbnail(const QString& name);
 

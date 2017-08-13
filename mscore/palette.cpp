@@ -12,6 +12,7 @@
 //=============================================================================
 
 #include "palette.h"
+#include "palettebox.h"
 #include "musescore.h"
 #include "libmscore/element.h"
 #include "libmscore/style.h"
@@ -45,8 +46,17 @@
 #include "libmscore/slur.h"
 #include "paletteBoxButton.h"
 #include "palettebox.h"
+#include "workspace.h"
 
 namespace Ms {
+
+PaletteCell::PaletteCell(Palette* p)
+      {
+      parent = p;
+      shortcut.setDescr(name);
+      shortcut.setState(STATE_NORMAL | STATE_NOTE_ENTRY);
+      id = -1;
+      }
 
 PaletteCell::~PaletteCell()
       {
@@ -181,7 +191,7 @@ void Palette::setMoreElements(bool val)
       {
       _moreElements = val;
       if (val && (cells.isEmpty() || cells.back()->tag != "ShowMore")) {
-            PaletteCell* cell = new PaletteCell;
+            PaletteCell* cell = new PaletteCell(this);
             cell->name      = "Show More";
             cell->tag       = "ShowMore";
             cells.append(cell);
@@ -249,9 +259,16 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
       contextAction->setEnabled(!_readOnly);
       QAction* moreAction    = menu.addAction(tr("More Elements..."));
       moreAction->setEnabled(_moreElements);
+      QAction* setShortcutAction = menu.addAction(tr("Set Shortcut"));
+      QAction* clearShortcutAction = menu.addAction(tr("Clear Shortcut"));
 
       if (cellAt(i) && cellAt(i)->readOnly)
             clearAction->setEnabled(false);
+
+      if (cellAt(i) && cellAt(i)->name == "Show More") {
+            setShortcutAction->setEnabled(false);
+            clearShortcutAction->setEnabled(false);
+            }
 
       QAction* action = menu.exec(mapToGlobal(event->pos()));
 
@@ -269,6 +286,23 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
             PaletteCellProperties props(c);
             if (props.exec())
                   emit changed();
+            }
+      else if (action == setShortcutAction) {
+            PaletteCell* c = cellAt(i);
+            if (c == 0)
+                  return;
+            PaletteShortcutManager* p = mscore->getPaletteShortcutManager();
+            p->setShortcut(c);
+            emit changed();
+            }
+      else if (action == clearShortcutAction) {
+            PaletteCell* c = cellAt(i);
+            if (c == 0)
+                  return;
+            c->shortcut.clear();
+            PaletteShortcutManager* p = mscore->getPaletteShortcutManager();
+            p->clearShortcut(c);
+            emit changed();
             }
       else if (moreAction && (action == moreAction))
             emit displayMore(_name);
@@ -827,6 +861,7 @@ void Palette::leaveEvent(QEvent*)
 //---------------------------------------------------------
 //   nextPaletteElement
 //---------------------------------------------------------
+
 void Palette::nextPaletteElement()
       {
       PaletteBox* pb = mscore->getPaletteBox();
@@ -892,7 +927,7 @@ PaletteCell* Palette::append(Element* s, const QString& name, QString tag, qreal
             cells.append(0);
             return 0;
             }
-      PaletteCell* cell = new PaletteCell;
+      PaletteCell* cell = new PaletteCell(this);
       int idx;
       if (_moreElements) {
             cells.insert(cells.size() - 1, cell);
@@ -920,7 +955,7 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
             s->setReadPos(QPointF());
             }
 
-      PaletteCell* cell = new PaletteCell;
+      PaletteCell* cell = new PaletteCell(this);
       if (idx < cells.size()) {
             delete cells[idx];
             }
@@ -1240,6 +1275,8 @@ void Palette::write(XmlWriter& xml) const
             if (cells[i]->mag != 1.0)
                   xml.tag("mag", cells[i]->mag);
             cells[i]->element->write(xml);
+            // get shortcut for cell[i]
+            cells[i]->shortcut.write(xml);
             xml.etag();
             }
       xml.etag();
@@ -1465,7 +1502,7 @@ void Palette::read(XmlReader& e)
             else if (t == "drumPalette")      // obsolete
                   e.skipCurrentElement();
             else if (t == "Cell") {
-                  PaletteCell* cell = new PaletteCell;
+                  PaletteCell* cell = new PaletteCell(this);
                   cell->name = e.attribute("name");
                   bool add = true;
                   while (e.readNextStartElement()) {
@@ -1480,6 +1517,28 @@ void Palette::read(XmlReader& e)
                               cell->mag = e.readDouble();
                         else if (t == "tag")
                               cell->tag = e.readElementText();
+                        else if (t == "SC") {
+                              Shortcut s;
+                              s.read(e);
+                              s.action()->setShortcuts(s.keys());
+                              mscore->addAction(s.action());
+                              cell->shortcut = s;
+                              int i = preferences.paletteCellList.size();
+                              cell->id = i;
+                              PaletteCellDescription pd;
+                              pd.cell = cell;
+                              pd.description = cell->name;
+                              pd.shortcut = cell->shortcut;
+                              pd.shortcut.setDescr(cell->name);
+                              pd.shortcut.setState(STATE_NORMAL | STATE_NOTE_ENTRY);
+                              preferences.paletteCellList.append(pd);
+                              if (Workspace::currentWorkspace->path() == "Advanced")
+                                    preferences.paletteCellListAdv.append(pd);
+                              //else if (Workspace::currentWorkspace->path() == "Basic")
+                                //    preferences.paletteCellListAdv.append(pd);
+                              if (!cell->shortcut.keys().isEmpty())
+                                    mscore->registerPaletteShortcut(&pd);
+                              }
                         else {
                               cell->element = Element::name2Element(t, gscore);
                               if (cell->element == 0) {

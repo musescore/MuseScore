@@ -24,6 +24,7 @@
 #include "ui_palette.h"
 #include "ui_cellproperties.h"
 #include "libmscore/sym.h"
+#include "shortcut.h"
 
 namespace Ms {
 
@@ -39,10 +40,13 @@ class Palette;
 
 struct PaletteCell {
       ~PaletteCell();
-
+      PaletteCell(Palette* p);
       Element* element { 0 };
       QString name;           // used for tool tip
       QString tag;
+      Palette* parent;
+      Shortcut shortcut;
+      int id;
 
       bool drawStaff { false };
       double x       { 0.0   };
@@ -137,7 +141,6 @@ class Palette : public QWidget {
       virtual void leaveEvent(QEvent*) override;
       virtual bool event(QEvent*) override;
       virtual void resizeEvent(QResizeEvent*) override;
-      void applyPaletteElement(PaletteCell* cell);
 
       virtual void dragEnterEvent(QDragEnterEvent*) override;
       virtual void dragMoveEvent(QDragMoveEvent*) override;
@@ -218,6 +221,8 @@ class Palette : public QWidget {
       virtual int heightForWidth(int) const;
       virtual QSize sizeHint() const;
       int idx(const QPoint&) const;
+      QList<PaletteCell*> getCells() { return cells; }
+      void applyPaletteElement(PaletteCell* cell);
       };
 
 

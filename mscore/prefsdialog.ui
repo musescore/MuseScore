@@ -3991,6 +3991,19 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="showPaletteShortcutManager">
+           <property name="accessibleName">
+            <string>Displays the Palette Shortcut Manager</string>
+           </property>
+           <property name="accessibleDescription">
+            <string>Displays the Palette Shortcut Manager</string>
+           </property>
+           <property name="text">
+            <string>Palette Shortcut Manager</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="clearShortcut">
            <property name="accessibleName">
             <string>Clear</string>

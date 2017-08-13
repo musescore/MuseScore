@@ -22,7 +22,9 @@
 #include "shortcutcapturedialog.h"
 #include "musescore.h"
 #include "shortcut.h"
-
+#include "prefsdialog.h"
+#include "palette.h"
+#include "palettebox.h"
 namespace Ms {
 
 //---------------------------------------------------------
@@ -136,6 +138,25 @@ void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
       bool conflict = false;
       QString msgString;
 
+      QList<Shortcut*> menuShortcuts;
+      QList<QObject*> ol = mscore->getMenuBar()->children();
+      for (QObject* o : ol) {
+            QMenu* menu = qobject_cast<QMenu*>(o);
+            if (!menu)
+                  continue;
+            QString menuName = (menu->objectName());
+            if (menuName == "Format" || menuName == "Debug" || menuName == "")
+                  continue;
+
+            QString s = (menu->objectName()) + " Menu";
+            QString shortcut = Shortcut::getMenuShortcutString(menu);
+            QKeySequence k = Shortcut::keySeqFromString(shortcut, QKeySequence::PortableText); // check seq format
+            Shortcut* sh = new Shortcut(MsWidget::MAIN_WINDOW, -1, s.toUtf8());
+            sh->setDescr(s);
+            sh->addShortcut(k);
+            menuShortcuts.append(sh);
+            }
+
       for (Shortcut* ss : localShortcuts) {
             if (s == ss)
                   continue;
@@ -155,6 +176,77 @@ void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
             for (const QKeySequence& ks : ss->keys()) {
                   if (ks == key) {
                         msgString = tr("Shortcut conflicts with %1").arg(ss->descr());
+                        conflict = true;
+                        break;
+                        }
+                  }
+            if (conflict)
+                  break;
+            }
+
+      for (Shortcut* ss : menuShortcuts) {
+            if (s == ss)
+                  continue;
+            if (!(s->state() & ss->state()))    // no conflict if states do not overlap
+                  continue;
+
+            for (const QKeySequence& ks : ss->keys()) {
+                  if (ks == key) {
+                        msgString = tr("Shortcut conflicts with ") + ss->key();
+                        conflict = true;
+                        break;
+                        }
+                  }
+            if (conflict)
+                  break;
+            }
+
+      for (PaletteCellDescription d : preferences.paletteCellList) {
+            Shortcut* ss = &d.shortcut;
+            if (s == ss)
+                  continue;
+            if (!(s->state() & ss->state()))    // no conflict if states do not overlap
+                  continue;
+
+            for (const QKeySequence& ks : ss->keys()) {
+                  if (ks == key) {
+                        msgString = tr("Shortcut conflicts with ") + ss->descr();
+                        conflict = true;
+                        break;
+                        }
+                  }
+            if (conflict)
+                  break;
+            }
+
+      for (PaletteCellDescription d : preferences.paletteCellListBasic) {
+            Shortcut* ss = &d.shortcut;
+            if (s == ss)
+                  continue;
+            if (!(s->state() & ss->state()))    // no conflict if states do not overlap
+                  continue;
+
+            for (const QKeySequence& ks : ss->keys()) {
+                  if (ks == key) {
+                        msgString = tr("Shortcut conflicts with ") + ss->descr();
+                        conflict = true;
+                        break;
+                        }
+                  }
+            if (conflict)
+                  break;
+            }
+
+      for (PaletteCellDescription d : preferences.paletteCellListAdv) {
+            Shortcut* ss = &d.shortcut;
+            if (s == ss)
+                  continue;
+            if (!(s->state() & ss->state()))    // no conflict if states do not overlap
+                  continue;
+
+            for (const QKeySequence& ks : ss->keys()) {
+                  if (ks == key) {
+                        msgString = tr("Shortcut conflicts with ") + ss->descr();
                         conflict = true;
                         break;
                         }

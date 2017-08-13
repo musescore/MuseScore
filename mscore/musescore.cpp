@@ -36,7 +36,6 @@
 #include "mixer.h"
 #include "selectionwindow.h"
 #include "palette.h"
-#include "palettebox.h"
 #include "libmscore/part.h"
 #include "libmscore/drumset.h"
 #include "libmscore/instrtemplate.h"
@@ -4260,6 +4259,55 @@ void MuseScore::showPluginManager()
       }
 
 //---------------------------------------------------------
+//   showPaletteShortcutManager
+//---------------------------------------------------------
+
+void MuseScore::showPaletteShortcutManager()
+      {
+#ifdef SCRIPT_INTERFACE
+      if (!paletteShortcutManager)
+            paletteShortcutManager = new PaletteShortcutManager(0);
+      paletteShortcutManager->init();
+      paletteShortcutManager->show();
+#endif
+      }
+
+//---------------------------------------------------------
+//   getPaletteShortcutManager
+//---------------------------------------------------------
+
+PaletteShortcutManager* MuseScore::getPaletteShortcutManager()
+      {
+#ifdef SCRIPT_INTERFACE
+      if (!paletteShortcutManager)
+            paletteShortcutManager = new PaletteShortcutManager(0);
+      paletteShortcutManager->init1();
+      return paletteShortcutManager;
+#endif
+      }
+
+QMenuBar* MuseScore::getMenuBar()
+      {
+      return menuBar();
+      }
+
+//---------------------------------------------------------
+//   loadPaletteShortcuts
+//---------------------------------------------------------
+
+void MuseScore::loadPaletteShortcuts()
+      {
+      if (!paletteShortcutMapper) {
+            paletteShortcutMapper = new QSignalMapper(this);
+            connect(paletteShortcutMapper, SIGNAL(mapped(int)), SLOT(paletteShortcutTriggered(int)));
+            }
+      for (int i = 0; i < preferences.paletteCellList.size(); ++i) {
+            PaletteCellDescription* d = &preferences.paletteCellList[i];
+            registerPaletteShortcut(d);
+            }
+      }
+
+//---------------------------------------------------------
 //   showMediaDialog
 //---------------------------------------------------------
 
@@ -4962,6 +5010,21 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showPluginCreator(a);
       else if (cmd == "plugin-manager")
             showPluginManager();
+      else if (cmd == "palette-shortcut-manager")
+            showPaletteShortcutManager();
+      else if (cmd == "set-palette-shortcut") {
+            PaletteBox* pb = mscore->getPaletteBox();
+            for (Palette* p : pb->palettes()) {
+                  if (p->getCurrentIdx() != -1) {
+                        PaletteCell* c = p->getCells()[p->getCurrentIdx()];
+                        if (c == 0)
+                              return;
+                        PaletteShortcutManager* pm = getPaletteShortcutManager();
+                        pm->setShortcut(c);
+                        return;
+                        }
+                  }
+            }
       else if(cmd == "resource-manager"){
             ResourceManager r(0);
             r.exec();
@@ -5482,6 +5545,63 @@ SynthesizerState MuseScore::synthesizerState()
       {
       SynthesizerState state;
       return synti ? synti->state() : state;
+      }
+
+//---------------------------------------------------------
+//   registerPaletteShortcut
+//---------------------------------------------------------
+
+void MuseScore::registerPaletteShortcut(PaletteCellDescription* p)
+      {
+      bool alreadyPresent = false;
+      int paletteShortcutIdx = -1;
+
+      for (int i = 0; i < paletteShortcuts.size(); i++) {
+            if (paletteShortcuts[i]->id == p->cell->id) {
+                  paletteShortcutIdx = i;
+                  alreadyPresent = true;
+                  break;
+                  }
+            }
+      if (paletteShortcutIdx == -1) {
+            paletteShortcuts.append(p->cell);
+            paletteShortcutIdx = paletteShortcuts.size() - 1;
+            }
+      QAction* a = p->shortcut.action();
+      if (!alreadyPresent) {
+            paletteCellActions.append(a);
+            }
+      if (!paletteShortcutMapper) {
+            paletteShortcutMapper = new QSignalMapper(this);
+            connect(paletteShortcutMapper, SIGNAL(mapped(int)), SLOT(paletteShortcutTriggered(int)));
+            }
+      connect(a, SIGNAL(triggered()), paletteShortcutMapper, SLOT(map()));
+      paletteShortcutMapper->setMapping(a, paletteShortcutIdx);
+      }
+
+//---------------------------------------------------------
+//   unregisterPaletteShortcut
+//---------------------------------------------------------
+
+void MuseScore::unregisterPaletteShortcut(PaletteCellDescription* p)
+      {
+      paletteShortcuts.removeAll(p->cell);
+      QAction* a = p->shortcut.action();
+      paletteCellActions.removeAll(a);
+      disconnect(a, SIGNAL(triggered()), paletteShortcutMapper, SLOT(map()));
+      paletteShortcutMapper->removeMappings(a);
+      }
+
+//---------------------------------------------------------
+//   paletteShortcutTriggered
+//---------------------------------------------------------
+
+void MuseScore::paletteShortcutTriggered(int i)
+      {
+      PaletteCell* c = paletteShortcuts[i];
+      Palette* p = c->parent;
+      if (p)
+            p->applyPaletteElement(c);
       }
 
 //---------------------------------------------------------

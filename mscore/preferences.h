@@ -28,6 +28,7 @@
 namespace Ms {
 
 extern QString mscoreGlobalShare;
+class PaletteCell;
 
 enum class SessionStart : char {
       EMPTY, LAST, NEW, SCORE
@@ -77,6 +78,16 @@ struct PluginDescription {
       bool load;
       Shortcut shortcut;
       QString menuPath;
+      };
+
+//---------------------------------------------------------
+//   PaletteCellDescription
+//---------------------------------------------------------
+
+struct PaletteCellDescription {
+      QString description;
+      Shortcut shortcut;
+      PaletteCell* cell;
       };
 
 //---------------------------------------------------------
@@ -188,6 +199,9 @@ struct Preferences {
       bool dirty;
 
       QList<PluginDescription> pluginList;
+      QList<PaletteCellDescription> paletteCellList;
+      QList<PaletteCellDescription> paletteCellListBasic;
+      QList<PaletteCellDescription> paletteCellListAdv;
 
       bool readPluginList();
       void writePluginList();

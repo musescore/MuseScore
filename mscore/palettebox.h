@@ -15,12 +15,14 @@
 #define __PALETTE_BOX_H__
 
 #include "paletteBoxButton.h"
+#include "preferences.h"
 
 namespace Ms {
 
 class XmlWriter;
 class XmlReader;
 class Palette;
+class Shortcut;
 
 //---------------------------------------------------------
 //   PaletteBox
