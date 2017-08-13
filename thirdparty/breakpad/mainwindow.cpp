@@ -183,6 +183,9 @@ void MainWindow::sendReportQt(){
     #ifndef QT_NO_SSL
         connect(reply, SIGNAL(sslErrors(QList<QSslError>)), SLOT(sslErrors(QList<QSslError>)));
     #endif
+        QEventLoop loop;
+        connect(reply, SIGNAL(finished()),&loop, SLOT(quit()));
+        loop.exec();
     }
 
 }
