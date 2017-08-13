@@ -50,11 +50,14 @@ add_executable(musescore_crashreporter
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
+    HttpRequestWorker.h
+    HttpRequestWorker.cpp
     )
 
 target_link_libraries(musescore_crashreporter
     "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.14393.0/um/x86/wininet.lib"
     Qt5::Widgets
+    Qt5::Network
     )
 
 set_target_properties (musescore_crashreporter

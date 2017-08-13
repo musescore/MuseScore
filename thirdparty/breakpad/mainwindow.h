@@ -1,3 +1,22 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2017 Nikolaos Hatzopoulos (nickhatz@csu.fullerton.edu)
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//=============================================================================
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -7,6 +26,7 @@
 #include <QApplication>
 #include "common/windows/http_upload.h"
 #include <QMessageBox>
+#include "HttpRequestWorker.h"
 
 using namespace::std;
 
@@ -25,13 +45,13 @@ class MainWindow : public QMainWindow {
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    void sendReport2(QString user_txt);
     ~MainWindow();
 
 private slots:
     void on_pushButton_2_clicked();
-
-private slots:
     void on_pushButton_clicked();
+    void handle_result(HttpRequestWorker *worker);
 
 private:
     Ui::MainWindow *ui;

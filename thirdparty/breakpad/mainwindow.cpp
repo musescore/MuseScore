@@ -1,3 +1,22 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2017 Nikolaos Hatzopoulos (nickhatz@csu.fullerton.edu)
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//=============================================================================
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -106,6 +125,54 @@ void sendReport(QString user_txt){
     }
 }
 
+void MainWindow::handle_result(HttpRequestWorker *worker) {
+    QString msg;
+
+    if (worker->error_type == QNetworkReply::NoError) {
+        // communication was successful
+        msg = "Success - Response: " + worker->response;
+    }
+    else {
+        // an error occurred
+        msg = "Error: " + worker->error_str;
+    }
+
+    QMessageBox::information(this, "", msg);
+}
+
+
+void MainWindow::sendReport2(QString user_txt){
+    QString minidump_path;
+    QString metadata_path;
+    map<wstring, wstring> parameters;
+
+    if ( QCoreApplication::arguments().count() == 3 ){
+        //cout << argv[1] << endl;
+        minidump_path = QCoreApplication::arguments().at(1);
+        metadata_path = QCoreApplication::arguments().at(2);
+        cout << "Minidump path: " << minidump_path.toStdString() << endl;
+        parameters = read_csv(metadata_path.toStdString());
+        parameters.insert(pair<wstring, wstring>(L"user_crash_input", user_txt.toStdWString()));
+
+        QString url = "https://musescore.sp.backtrace.io:6098/post?format=minidump&token=00268871877ba102d69a23a8e713fff9700acf65999b1f043ec09c5c253b9c03";
+
+        HttpRequestInput input(url, "POST");
+
+        map<wstring, wstring>::iterator it;
+        for ( it = parameters.begin(); it != parameters.end(); it++ ){
+            input.add_var(wstr2str(it->first).c_str(),wstr2str(it->second).c_str());
+        }
+
+        input.add_file("upload_file_minidump",  minidump_path, NULL, "application/octet-stream");
+
+        HttpRequestWorker *worker = new HttpRequestWorker(this);
+        connect(worker, SIGNAL(on_execution_finished(HttpRequestWorker*)), this, SLOT(handle_result(HttpRequestWorker*)));
+        worker->execute(&input);
+
+
+    }
+}
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -125,6 +192,7 @@ void MainWindow::on_pushButton_clicked(){
     if ( ui->checkBox->isChecked() ){
         QString user_txt = ui->plainTextEdit->toPlainText();
         sendReport(user_txt);
+        //sendReport2(user_txt);
     }
 
     close();
@@ -136,6 +204,7 @@ void MainWindow::on_pushButton_2_clicked(){
     if ( ui->checkBox->isChecked() ){
         QString user_txt = ui->plainTextEdit->toPlainText();
         sendReport(user_txt);
+        //sendReport2(user_txt);
     }
 
     // TODO: restart MuseScore
