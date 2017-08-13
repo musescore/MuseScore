@@ -26,7 +26,11 @@
 #include <QApplication>
 #include "common/windows/http_upload.h"
 #include <QMessageBox>
-#include "HttpRequestWorker.h"
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QSslError>
+#include <QList>
 
 using namespace::std;
 
@@ -45,16 +49,19 @@ class MainWindow : public QMainWindow {
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    void sendReport2(QString user_txt);
     ~MainWindow();
 
 private slots:
     void on_pushButton_2_clicked();
     void on_pushButton_clicked();
-    void handle_result(HttpRequestWorker *worker);
+    void uploadFinished(QNetworkReply *reply);
+    void sslErrors(const QList<QSslError> &errors);
 
 private:
     Ui::MainWindow *ui;
+    void sendReportQt();
+    QNetworkAccessManager *m_manager;
+    QFile *m_file;
 };
 
 #endif // MAINWINDOW_H

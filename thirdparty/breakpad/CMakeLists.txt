@@ -50,8 +50,6 @@ add_executable(musescore_crashreporter
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
-    HttpRequestWorker.h
-    HttpRequestWorker.cpp
     )
 
 target_link_libraries(musescore_crashreporter

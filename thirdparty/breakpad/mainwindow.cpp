@@ -125,60 +125,14 @@ void sendReport(QString user_txt){
     }
 }
 
-void MainWindow::handle_result(HttpRequestWorker *worker) {
-    QString msg;
-
-    if (worker->error_type == QNetworkReply::NoError) {
-        // communication was successful
-        msg = "Success - Response: " + worker->response;
-    }
-    else {
-        // an error occurred
-        msg = "Error: " + worker->error_str;
-    }
-
-    QMessageBox::information(this, "", msg);
-}
-
-
-void MainWindow::sendReport2(QString user_txt){
-    QString minidump_path;
-    QString metadata_path;
-    map<wstring, wstring> parameters;
-
-    if ( QCoreApplication::arguments().count() == 3 ){
-        //cout << argv[1] << endl;
-        minidump_path = QCoreApplication::arguments().at(1);
-        metadata_path = QCoreApplication::arguments().at(2);
-        cout << "Minidump path: " << minidump_path.toStdString() << endl;
-        parameters = read_csv(metadata_path.toStdString());
-        parameters.insert(pair<wstring, wstring>(L"user_crash_input", user_txt.toStdWString()));
-
-        QString url = "https://musescore.sp.backtrace.io:6098/post?format=minidump&token=00268871877ba102d69a23a8e713fff9700acf65999b1f043ec09c5c253b9c03";
-
-        HttpRequestInput input(url, "POST");
-
-        map<wstring, wstring>::iterator it;
-        for ( it = parameters.begin(); it != parameters.end(); it++ ){
-            input.add_var(wstr2str(it->first).c_str(),wstr2str(it->second).c_str());
-        }
-
-        input.add_file("upload_file_minidump",  minidump_path, NULL, "application/octet-stream");
-
-        HttpRequestWorker *worker = new HttpRequestWorker(this);
-        connect(worker, SIGNAL(on_execution_finished(HttpRequestWorker*)), this, SLOT(handle_result(HttpRequestWorker*)));
-        worker->execute(&input);
-
-
-    }
-}
-
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    m_manager = new QNetworkAccessManager(this);
+    connect(m_manager, &QNetworkAccessManager::finished, this, &MainWindow::uploadFinished);
+
 }
 
 MainWindow::~MainWindow()
@@ -186,13 +140,61 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::sslErrors(const QList<QSslError> &sslErrors)
+{
+#ifndef QT_NO_SSL
+    foreach (const QSslError &error, sslErrors)
+        fprintf(stderr, "SSL error: %s\n", qPrintable(error.errorString()));
+#else
+    Q_UNUSED(sslErrors);
+#endif
+}
+
+void MainWindow::uploadFinished(QNetworkReply *reply)
+{
+    if (!reply->error())
+    {
+        m_file->close();
+        m_file->deleteLater();
+        reply->deleteLater();
+    }
+}
+
+void MainWindow::sendReportQt(){
+    QString minidump_path;
+    QString metadata_path;
+
+    if ( QCoreApplication::arguments().count() == 3 ){
+        //cout << argv[1] << endl;
+        minidump_path = QCoreApplication::arguments().at(1);
+        metadata_path = QCoreApplication::arguments().at(2);
+
+        //parameters = read_csv(metadata_path.toStdString());
+        //parameters.insert(pair<wstring, wstring>(L"user_crash_input", user_txt.toStdWString()));
+
+        QString url = "https://musescore.sp.backtrace.io:6098/post?format=minidump&token=00268871877ba102d69a23a8e713fff9700acf65999b1f043ec09c5c253b9c03";
+
+        m_file = new QFile(minidump_path);
+        m_file->open(QIODevice::ReadOnly);
+
+        QNetworkRequest request(url);
+        QNetworkReply *reply = m_manager->post(request,m_file);
+
+    #ifndef QT_NO_SSL
+        connect(reply, SIGNAL(sslErrors(QList<QSslError>)), SLOT(sslErrors(QList<QSslError>)));
+    #endif
+    }
+
+}
+
 
 void MainWindow::on_pushButton_clicked(){
 
     if ( ui->checkBox->isChecked() ){
         QString user_txt = ui->plainTextEdit->toPlainText();
-        sendReport(user_txt);
-        //sendReport2(user_txt);
+        //sendReport(user_txt);
+        sendReportQt();
+
     }
 
     close();
@@ -203,8 +205,9 @@ void MainWindow::on_pushButton_2_clicked(){
 
     if ( ui->checkBox->isChecked() ){
         QString user_txt = ui->plainTextEdit->toPlainText();
-        sendReport(user_txt);
-        //sendReport2(user_txt);
+        //sendReport(user_txt);
+        sendReportQt();
+
     }
 
     // TODO: restart MuseScore
