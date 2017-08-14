@@ -88,9 +88,8 @@ void InstrumentsDialog::on_saveButton_clicked()
             info.setFile(info.filePath() + ext);
       QFile f(info.filePath());
       if (!f.open(QIODevice::WriteOnly)) {
-            QString s = tr("Open Instruments File\n%1\nfailed: ")
-               + QString(strerror(errno));
-            QMessageBox::critical(mscore, tr("Open Instruments File"), s.arg(f.fileName()));
+            QString s = tr("Open Instruments File\n%1\nfailed: %2").arg(f.fileName(), strerror(errno));
+            QMessageBox::critical(mscore, tr("Open Instruments File"), s);
             return;
             }
 
@@ -105,7 +104,7 @@ void InstrumentsDialog::on_saveButton_clicked()
             }
       xml.etag();
       if (f.error() != QFile::NoError) {
-            QString s = tr("Write Instruments File failed: ") + f.errorString();
+            QString s = tr("Write Instruments File failed: %1").arg(f.errorString());
             QMessageBox::critical(this, tr("Write Instruments File"), s);
             }
       }
