@@ -199,7 +199,7 @@ void MediaDialog::addAudioPressed()
             }
       score->setTempomap(tmn);
       syncFile.close();
-      QMessageBox::information(0, "Done", "Done");
+      QMessageBox::information(0, tr("Done"), tr("Done"));
       }
 
 //---------------------------------------------------------
