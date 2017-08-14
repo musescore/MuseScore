@@ -2304,7 +2304,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             if (!MScore::noGui) {
                   QMessageBox::warning(0,
                      QWidget::tr("Import Guitar Pro"),
-                     QWidget::tr("Load failed: ") + gp->error(errNo),
+                     QWidget::tr("Load failed: %1").arg(gp->error(errNo)),
                      QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
                   }
             fp.close();

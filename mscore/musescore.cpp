@@ -4600,8 +4600,8 @@ void MuseScore::cmd(QAction* a)
       if (cs && (sc->state() & _sstate) == 0) {
             qDebug("invalid state %04x %04x", sc->state(), _sstate);
             QMessageBox::warning(0,
-               QWidget::tr("Invalid Command"),
-               QString("Command %1 not valid in current state").arg(cmdn));
+               tr("Invalid Command"),
+               tr("Command %1 not valid in current state").arg(cmdn));
             return;
             }
       if (cmdn == "palette-search") {
