@@ -61,6 +61,7 @@ private:
     Ui::MainWindow *ui;
     void sendReportQt();
     QNetworkAccessManager *m_manager;
+    QString http_attribute_encode(QString attribute_name, QString input);
     QFile *m_file;
 };
 

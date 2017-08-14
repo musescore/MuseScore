@@ -125,6 +125,54 @@ void sendReport(QString user_txt){
     }
 }
 
+QString MainWindow::http_attribute_encode(QString attribute_name, QString input) {
+    // result structure follows RFC 5987
+    bool need_utf_encoding = false;
+    QString result = "";
+    QByteArray input_c = input.toLocal8Bit();
+    char c;
+    for (int i = 0; i < input_c.length(); i++) {
+        c = input_c.at(i);
+        if (c == '\\' || c == '/' || c == '\0' || c < ' ' || c > '~') {
+            // ignore and request utf-8 version
+            need_utf_encoding = true;
+        }
+        else if (c == '"') {
+            result += "\\\"";
+        }
+        else {
+            result += c;
+        }
+    }
+
+    if (result.length() == 0) {
+        need_utf_encoding = true;
+    }
+
+    if (!need_utf_encoding) {
+        // return simple version
+        return QString("%1=\"%2\"").arg(attribute_name, result);
+    }
+
+    QString result_utf8 = "";
+    for (int i = 0; i < input_c.length(); i++) {
+        c = input_c.at(i);
+        if (
+                (c >= '0' && c <= '9')
+                || (c >= 'A' && c <= 'Z')
+                || (c >= 'a' && c <= 'z')
+                ) {
+            result_utf8 += c;
+        }
+        else {
+            result_utf8 += "%" + QString::number(static_cast<unsigned char>(input_c.at(i)), 16).toUpper();
+        }
+    }
+
+    // return enhanced version with UTF-8 support
+    return QString("%1=\"%2\"; %1*=utf-8''%3").arg(attribute_name, result, result_utf8);
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -169,16 +217,51 @@ void MainWindow::sendReportQt(){
         minidump_path = QCoreApplication::arguments().at(1);
         metadata_path = QCoreApplication::arguments().at(2);
 
+        qDebug() << "minidump file: " << minidump_path;
+
         //parameters = read_csv(metadata_path.toStdString());
         //parameters.insert(pair<wstring, wstring>(L"user_crash_input", user_txt.toStdWString()));
 
         QString url = "https://musescore.sp.backtrace.io:6098/post?format=minidump&token=00268871877ba102d69a23a8e713fff9700acf65999b1f043ec09c5c253b9c03";
 
+
+
+        /*bool first = true;
+        foreach (QString key, input->vars.keys()) {
+            if (!first) {
+                request_content.append("&");
+            }
+            first = false;
+
+            request_content.append(QUrl::toPercentEncoding(key));
+            request_content.append("=");
+            request_content.append(QUrl::toPercentEncoding(input->vars.value(key)));
+        }*/
+
+        QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+
+        QHttpPart textPart;
+        textPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"name\""));
+        textPart.setBody("toto");
+
         m_file = new QFile(minidump_path);
         m_file->open(QIODevice::ReadOnly);
 
+        QHttpPart filePart;
+        filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
+        filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"upload_file_minidump\"; filename=\""+minidump_path+"\""));
+
+        filePart.setBodyDevice(m_file);
+        m_file->setParent(multiPart); // we cannot delete the file now, so delete it with the multiPart
+
+        //multiPart->append(textPart);
+        multiPart->append(filePart);
+
         QNetworkRequest request(url);
-        QNetworkReply *reply = m_manager->post(request,m_file);
+        //request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+        //request.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data; boundary=" + boundary);
+
+        QNetworkReply *reply = m_manager->post(request,multiPart);
 
     #ifndef QT_NO_SSL
         connect(reply, SIGNAL(sslErrors(QList<QSslError>)), SLOT(sslErrors(QList<QSslError>)));
@@ -195,8 +278,8 @@ void MainWindow::on_pushButton_clicked(){
 
     if ( ui->checkBox->isChecked() ){
         QString user_txt = ui->plainTextEdit->toPlainText();
-        //sendReport(user_txt);
-        sendReportQt();
+        sendReport(user_txt);
+        //sendReportQt();
 
     }
 
@@ -208,8 +291,8 @@ void MainWindow::on_pushButton_2_clicked(){
 
     if ( ui->checkBox->isChecked() ){
         QString user_txt = ui->plainTextEdit->toPlainText();
-        //sendReport(user_txt);
-        sendReportQt();
+        sendReport(user_txt);
+        //sendReportQt();
 
     }
 
