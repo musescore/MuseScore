@@ -92,7 +92,7 @@ EditDrumset::EditDrumset(const Drumset* ds, QWidget* parent)
 
       updateList();
 
-      noteHead->addItem(tr("invalid"));
+      noteHead->addItem(QObject::tr("invalid"));
       for (auto g : noteHeadNames)
             noteHead->addItem(NoteHead::group2userName(g), int(g));
 
