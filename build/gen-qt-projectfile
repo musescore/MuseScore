@@ -22,5 +22,6 @@ for a in $uis; do
 uis=`find $1/share/instruments -name "*.h"`
 for a in $uis; do
       echo "    " $a \\;
+      done
 echo
 echo
