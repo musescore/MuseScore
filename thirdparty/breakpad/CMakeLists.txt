@@ -44,8 +44,6 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 
 add_executable(musescore_crashreporter
-    common/windows/http_upload.h
-    common/windows/http_upload.cc
     crashReporter.cpp
     mainwindow.cpp
     mainwindow.h
@@ -53,7 +51,6 @@ add_executable(musescore_crashreporter
     )
 
 target_link_libraries(musescore_crashreporter
-    "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.14393.0/um/x86/wininet.lib"
     Qt5::Widgets
     Qt5::Network
     )

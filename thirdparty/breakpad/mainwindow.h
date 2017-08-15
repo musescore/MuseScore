@@ -24,7 +24,6 @@
 #include <iostream>
 #include <fstream>
 #include <QApplication>
-#include "common/windows/http_upload.h"
 #include <QMessageBox>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -36,9 +35,8 @@ using namespace::std;
 
 wstring str2wstr(string mystr);
 string wstr2str(wstring mystr);
-pair<wstring,wstring> line2strings(string line);
-map <wstring,wstring> read_csv(string mypath);
-void sendReport(QString user_txt);
+pair<string,string> line2strings(string line);
+QMap <QString,QString> read_csv(QString mypath);
 
 namespace Ui {
     class MainWindow;
@@ -60,7 +58,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    void sendReportQt();
+    void sendReportQt(QString user_txt);
     QNetworkAccessManager *m_manager;
     QFile *m_file;
 };

@@ -30,48 +30,47 @@ string wstr2str(wstring mystr){
     return res;
 }
 
-pair<wstring,wstring> line2strings(string line){
-        string str1, str2;
-        string *mystr;
-        bool myflag;
-        int i;
+pair<string,string> line2strings(string line){
+    string str1, str2;
+    string *mystr;
+    bool myflag;
+    int i;
 
-        myflag = false;
-        str1.empty();
-        str2.empty();
+    myflag = false;
+    str1.empty();
+    str2.empty();
 
-        mystr = &str1;
+    mystr = &str1;
 
-        for (i = 0; i < line.size(); i++){
-                if ( line[i] == ',' && myflag == false){
-                        mystr = &str2;
-                        myflag = true;
-                }
-                else{
-                        if (line[i] != '\n'){
-                                *mystr += line[i];
-                        }
+    for (i = 0; i < line.size(); i++){
+            if ( line[i] == ',' && myflag == false){
+                    mystr = &str2;
+                    myflag = true;
+            }
+            else{
+                    if (line[i] != '\n'){
+                            *mystr += line[i];
+                    }
 
-                }
-        }
+            }
+    }
 
-        return pair<wstring,wstring>(str2wstr(str1),str2wstr(str2));
+    return pair<string,string>(str1,str2);
 
 }
 
-
-map <wstring,wstring> read_csv(string mypath){
+QMap <QString,QString> read_csv(QString mypath){
         string line;
-        pair<wstring,wstring> mykeyval;
-        ifstream myfile(mypath);
-        map <wstring,wstring> mymap;
+        pair<string,string> mykeyval;
+        ifstream myfile(mypath.toStdString());
+        QMap <QString,QString> mymap;
 
         if (myfile.is_open()){
                 while ( getline (myfile,line) ){
                         cout << line << '\n';
                         mykeyval = line2strings(line);
                         //cout << "str1: " << mykeyval.first << " str2: " << mykeyval.second << endl;
-                        mymap.insert(mykeyval);
+                        mymap.insert(mykeyval.first.c_str(),mykeyval.second.c_str());
 
                 }
                 myfile.close();
@@ -84,46 +83,6 @@ map <wstring,wstring> read_csv(string mypath){
         return mymap;
 }
 
-void sendReport(QString user_txt){
-    QString minidump_path;
-    QString metadata_path;
-    map<wstring, wstring> parameters;
-    map<wstring, wstring> files;
-
-    if ( QCoreApplication::arguments().count() == 3 ){
-        //cout << argv[1] << endl;
-        minidump_path = QCoreApplication::arguments().at(1);
-        metadata_path = QCoreApplication::arguments().at(2);
-        cout << "Minidump path: " << minidump_path.toStdString() << endl;
-        parameters = read_csv(metadata_path.toStdString());
-        parameters.insert(pair<wstring, wstring>(L"user_crash_input", user_txt.toStdWString()));
-
-        wstring response;
-        int mytimeout, my_error;
-
-        // Add any attributes to the parameters map.
-        // Attributes such as uname.sysname, uname.version, cpu.count are
-        // extracted from minidump files automatically.
-        //parameters.insert(pair<wstring, wstring>(L"product_name", L"foo"));
-        //parameters.insert(pair<wstring, wstring>(L"version", L"0.1.0"));
-        files.insert(pair<wstring, wstring>(L"upload_file_minidump", minidump_path.toStdWString()));
-
-        wstring url = L"https://musescore.sp.backtrace.io:6098/post?format=minidump&token=00268871877ba102d69a23a8e713fff9700acf65999b1f043ec09c5c253b9c03";
-
-        google_breakpad::HTTPUpload *test_upload;
-        test_upload->SendRequest(url,
-                                   parameters,
-                                   files,
-                                   &mytimeout,
-                                   &response,
-                                   &my_error);
-
-        cout << wstr2str(response) << endl;
-
-        //QMessageBox::information(this,"Message","Report has send!!");
-
-    }
-}
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -166,12 +125,12 @@ void MainWindow::onError(QNetworkReply::NetworkError err)
     qDebug() << err;
 }
 
-void MainWindow::sendReportQt(){
+void MainWindow::sendReportQt(QString user_txt){
     QString minidump_path;
     QString metadata_path;
 
     if ( QCoreApplication::arguments().count() == 3 ){
-        //cout << argv[1] << endl;
+
         minidump_path = QCoreApplication::arguments().at(1);
         metadata_path = QCoreApplication::arguments().at(2);
 
@@ -180,24 +139,7 @@ void MainWindow::sendReportQt(){
 
         qDebug() << "minidump file: " << minidump_path;
 
-        //parameters = read_csv(metadata_path.toStdString());
-        //parameters.insert(pair<wstring, wstring>(L"user_crash_input", user_txt.toStdWString()));
-
         QString url = "https://musescore.sp.backtrace.io:6098/post?format=minidump&token=00268871877ba102d69a23a8e713fff9700acf65999b1f043ec09c5c253b9c03";
-
-
-
-        /*bool first = true;
-        foreach (QString key, input->vars.keys()) {
-            if (!first) {
-                request_content.append("&");
-            }
-            first = false;
-
-            request_content.append(QUrl::toPercentEncoding(key));
-            request_content.append("=");
-            request_content.append(QUrl::toPercentEncoding(input->vars.value(key)));
-        }*/
 
         QString boundary = "--"
                     + QString::number(
@@ -207,19 +149,32 @@ void MainWindow::sendReportQt(){
         request.setHeader(QNetworkRequest::ContentTypeHeader,
                     "multipart/form-data; boundary=" + boundary);
 
-        //request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-
         QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
         multiPart->setBoundary(boundary.toUtf8());
 
-        //QHttpPart textPart;
-        //textPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"name\""));
-        //textPart.setBody("toto");
+        QMap <QString,QString> metadata;
+        metadata = read_csv(metadata_path);
 
-        //QHttpPart textTokenPart1;
-        //textTokenPart1.setHeader(QNetworkRequest::ContentDispositionHeader,
-        //                         QVariant("form-data; name=\"key\""));
-        //textTokenPart1.setBody(QByteArray(m_key.toAscii()));
+        QMap<QString, QString>::iterator it;
+        QHttpPart textToken;
+
+        // metadata input
+
+        for (it = metadata.begin(); it != metadata.end(); ++it) {
+            textToken.setHeader(QNetworkRequest::ContentDispositionHeader,
+                                     QVariant("form-data; name=\""+it.key()+"\""));
+            textToken.setBody(QByteArray(it.value().toUtf8()));
+            multiPart->append(textToken);
+        }
+
+        // user text input
+
+        textToken.setHeader(QNetworkRequest::ContentDispositionHeader,
+                                 QVariant("form-data; name=\"user_text_input\""));
+        textToken.setBody(QByteArray(user_txt.toUtf8()));
+        multiPart->append(textToken);
+
+        //FILE
 
         m_file = new QFile(minidump_path);
         m_file->open(QIODevice::ReadOnly);
@@ -231,7 +186,7 @@ void MainWindow::sendReportQt(){
         filePart.setBodyDevice(m_file);
         m_file->setParent(multiPart); // we cannot delete the file now, so delete it with the multiPart
 
-        //multiPart->append(textPart);
+
         multiPart->append(filePart);
 
         QNetworkReply *reply = m_manager->post(request,multiPart);
@@ -262,8 +217,7 @@ void MainWindow::on_pushButton_clicked(){
 
     if ( ui->checkBox->isChecked() ){
         QString user_txt = ui->plainTextEdit->toPlainText();
-        //sendReport(user_txt);
-        sendReportQt();
+        sendReportQt(user_txt);
 
     }
 
@@ -275,8 +229,7 @@ void MainWindow::on_pushButton_2_clicked(){
 
     if ( ui->checkBox->isChecked() ){
         QString user_txt = ui->plainTextEdit->toPlainText();
-        //sendReport(user_txt);
-        sendReportQt();
+        sendReportQt(user_txt);
 
     }
 
