@@ -63,7 +63,7 @@ Image::Image(const Image& img)
       if (imageType == ImageType::RASTER)
             rasterDoc = img.rasterDoc ? new QImage(*img.rasterDoc) : 0;
       else if (imageType == ImageType::SVG)
-            svgDoc = img.svgDoc ? new QSvgRenderer(img.svgDoc) : 0;
+            svgDoc = img.svgDoc ? new QSvgRenderer(_storeItem->buffer()) : 0;
       setZ(img.z());
       }
 
