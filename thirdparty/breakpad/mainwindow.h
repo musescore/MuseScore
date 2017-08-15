@@ -56,12 +56,12 @@ private slots:
     void on_pushButton_clicked();
     void uploadFinished(QNetworkReply *reply);
     void sslErrors(const QList<QSslError> &errors);
+    void onError(QNetworkReply::NetworkError err);
 
 private:
     Ui::MainWindow *ui;
     void sendReportQt();
     QNetworkAccessManager *m_manager;
-    QString http_attribute_encode(QString attribute_name, QString input);
     QFile *m_file;
 };
 
