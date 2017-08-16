@@ -211,7 +211,7 @@ static const PaperSize paperSizes114[] = {
       PaperSize(0,           MM(1),    MM(1))   // mark end of list
       };
 
-#if 0
+
 //---------------------------------------------------------
 //   getPaperSize
 //---------------------------------------------------------
@@ -225,7 +225,168 @@ static const PaperSize* getPaperSize114(const QString& name)
       qDebug("unknown paper size");
       return &paperSizes114[0];
       }
-#endif
+
+//---------------------------------------------------------
+//   convertFromHtml
+//---------------------------------------------------------
+
+QString convertFromHtml(Text* t, const QString& ss)
+      {
+      QTextDocument doc;
+      doc.setHtml(ss.trimmed());
+
+      QString s;
+      qreal size     = t->size();   // textStyle().size();
+      QString family = t->family(); // textStyle().family();
+
+      for (auto b = doc.firstBlock(); b.isValid() ; b = b.next()) {
+            if (!s.isEmpty())
+                  s += "\n";
+            for (auto it = b.begin(); !it.atEnd(); ++it) {
+                  QTextFragment f = it.fragment();
+                  if (f.isValid()) {
+                        QTextCharFormat tf = f.charFormat();
+                        QFont font = tf.font();
+                        qreal htmlSize = font.pointSizeF();
+                        // html font sizes may have spatium adjustments; need to undo this
+                        if (t->sizeIsSpatiumDependent())
+                              htmlSize *= SPATIUM20 / t->spatium();
+                        if (fabs(size - htmlSize) > 0.1) {
+                              size = htmlSize;
+                              s += QString("<font size=\"%1\"/>").arg(size);
+                              }
+                        if (family != font.family()) {
+                              family = font.family();
+                              s += QString("<font face=\"%1\"/>").arg(family);
+                              }
+                        if (font.bold())
+                              s += "<b>";
+                        if (font.italic())
+                              s += "<i>";
+                        if (font.underline())
+                              s += "<u>";
+                        s += f.text().toHtmlEscaped();
+                        if (font.underline())
+                              s += "</u>";
+                        if (font.italic())
+                              s += "</i>";
+                        if (font.bold())
+                              s += "</b>";
+                        }
+                  }
+            }
+
+      s.replace(QChar(0xe10e), QString("<sym>accidentalNatural</sym>"));  //natural
+      s.replace(QChar(0xe10c), QString("<sym>accidentalSharp</sym>"));    // sharp
+      s.replace(QChar(0xe10d), QString("<sym>accidentalFlat</sym>"));     // flat
+      s.replace(QChar(0xe104), QString("<sym>metNoteHalfUp</sym>")),      // note2_Sym
+      s.replace(QChar(0xe105), QString("<sym>metNoteQuarterUp</sym>"));   // note4_Sym
+      s.replace(QChar(0xe106), QString("<sym>metNote8thUp</sym>"));       // note8_Sym
+      s.replace(QChar(0xe107), QString("<sym>metNote16thUp</sym>"));      // note16_Sym
+      s.replace(QChar(0xe108), QString("<sym>metNote32ndUp</sym>"));      // note32_Sym
+      s.replace(QChar(0xe109), QString("<sym>metNote64thUp</sym>"));      // note64_Sym
+      s.replace(QChar(0xe10a), QString("<sym>metAugmentationDot</sym>")); // dot
+      s.replace(QChar(0xe10b), QString("<sym>metAugmentationDot</sym><sym>space</sym><sym>metAugmentationDot</sym>"));    // dotdot
+      s.replace(QChar(0xe167), QString("<sym>segno</sym>"));              // segno
+      s.replace(QChar(0xe168), QString("<sym>coda</sym>"));               // coda
+      s.replace(QChar(0xe169), QString("<sym>codaSquare</sym>"));         // varcoda
+      return s;
+      }
+
+
+//---------------------------------------------------------
+//   readTextProperties
+//---------------------------------------------------------
+
+static bool readTextProperties(XmlReader& e, Text* t, Element* be)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "style") {
+            int i = e.readInt();
+            SubStyle ss = SubStyle::DEFAULT;
+            switch (i) {
+                  case 2:  ss = SubStyle::TITLE;     break;
+                  case 3:  ss = SubStyle::SUBTITLE;  break;
+                  case 4:  ss = SubStyle::COMPOSER;  break;
+                  case 5:  ss = SubStyle::POET;      break;
+                  case 6:  ss = SubStyle::LYRIC1;    break;
+                  case 7:  ss = SubStyle::LYRIC2;    break;
+                  case 8:  ss = SubStyle::FINGERING; break;
+                  case 9:  ss = SubStyle::INSTRUMENT_LONG;    break;
+                  case 10: ss = SubStyle::INSTRUMENT_SHORT;   break;
+                  case 11: ss = SubStyle::INSTRUMENT_EXCERPT; break;
+
+                  case 12: ss = SubStyle::DYNAMICS;  break;
+                  case 13: ss = SubStyle::EXPRESSION;   break;
+                  case 14: ss = SubStyle::TEMPO;     break;
+                  case 15: ss = SubStyle::METRONOME; break;
+                  case 16: ss = SubStyle::FOOTER;    break;  // TextStyleType::COPYRIGHT
+                  case 17: ss = SubStyle::MEASURE_NUMBER; break;
+                  case 18: ss = SubStyle::FOOTER; break;    // TextStyleType::PAGE_NUMBER_ODD
+                  case 19: ss = SubStyle::FOOTER; break;    // TextStyleType::PAGE_NUMBER_EVEN
+                  case 20: ss = SubStyle::TRANSLATOR; break;
+                  case 21: ss = SubStyle::TUPLET;     break;
+
+                  case 22: ss = SubStyle::SYSTEM;         break;
+                  case 23: ss = SubStyle::STAFF;          break;
+                  case 24: ss = SubStyle::HARMONY;        break;
+                  case 25: ss = SubStyle::REHEARSAL_MARK; break;
+                  case 26: ss = SubStyle::REPEAT_LEFT;         break;
+//??                  case 27: ss = SubStyle::VOLTA;          break;
+                  case 28: ss = SubStyle::FRAME;          break;
+                  case 29: ss = SubStyle::TEXTLINE;       break;
+                  case 30: ss = SubStyle::GLISSANDO;      break;
+                  case 31: ss = SubStyle::STRING_NUMBER;  break;
+
+                  case 32: ss = SubStyle::OTTAVA;  break;
+//??                  case 33: ss = SubStyle::BENCH;   break;
+                  case 34: ss = SubStyle::HEADER;  break;
+                  case 35: ss = SubStyle::FOOTER;  break;
+                  case 0:
+                  default:
+                        qDebug("style %d invalid", i);
+                        ss = SubStyle::DEFAULT;
+                        break;
+                  }
+            be->initSubStyle(ss);
+            }
+      else if (tag == "subtype")
+            e.skipCurrentElement();
+      else if (tag == "html-data")
+            t->setXmlText(convertFromHtml(t, e.readXml()));
+      else if (tag == "foregroundColor")  // same as "color" ?
+            e.skipCurrentElement();
+      else if (tag == "frame")
+            t->setHasFrame(e.readBool());
+      else if (tag == "halign") {
+            Align align = Align(int(t->align()) & int(~(Align::HCENTER | Align::RIGHT)));
+            const QString& val(e.readElementText());
+            if (val == "center")
+                  align = align | Align::HCENTER;
+            else if (val == "right")
+                  align = align | Align::RIGHT;
+            else if (val == "left")
+                  ;
+            else
+                  qDebug("readText: unknown alignment: <%s>", qPrintable(val));
+            t->setAlign(align);
+            }
+      else if (!t->readProperties(e))
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   readText
+//---------------------------------------------------------
+
+static void readText(XmlReader& e, Text* t, Element* be)
+      {
+      while (e.readNextStartElement()) {
+            if (!readTextProperties(e, t, be))
+                  e.unknown();
+            }
+      }
 
 //---------------------------------------------------------
 //   readAccidental
@@ -809,6 +970,33 @@ static void readRest(Rest* rest, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   readTempoText
+//---------------------------------------------------------
+
+void readTempoText(TempoText* t, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "tempo")
+                  t->setTempo(e.readDouble());
+            else if (!readTextProperties(e, t, t))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   readStaffText
+//---------------------------------------------------------
+
+void readStaffText(StaffText* t, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            if (!readTextProperties(e, t, t))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
 //   readMeasure
 //---------------------------------------------------------
 
@@ -1211,9 +1399,9 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         cr->add(element);
                   }
             else if (tag == "Text") {
-                  Text* t = new StaffText(m->score());
+                  StaffText* t = new StaffText(m->score());
                   t->setTrack(e.track());
-                  t->read(e);
+                  readStaffText(t, e);
                   if (t->empty()) {
                         qDebug("reading empty text: deleted");
                         delete t;
@@ -1231,16 +1419,28 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(dyn);
                   }
+            else if (tag == "Tempo") {
+                  TempoText* t = new TempoText(m->score());
+                  t->setTrack(e.track());
+                  readTempoText(t, e);
+                  segment = m->getSegment(SegmentType::ChordRest, e.tick());
+                  segment->add(t);
+                  }
+            else if (tag == "StaffText") {
+                  StaffText* t = new StaffText(m->score());
+                  t->setTrack(e.track());
+                  readStaffText(t, e);
+                  segment = m->getSegment(SegmentType::ChordRest, e.tick());
+                  segment->add(t);
+                  }
             else if (tag == "Harmony"
                || tag == "FretDiagram"
                || tag == "TremoloBar"
                || tag == "Symbol"
-               || tag == "Tempo"
                || tag == "StaffText"
                || tag == "RehearsalMark"
                || tag == "InstrumentChange"
                || tag == "StaffState"
-               || tag == "FiguredBass"
                ) {
                   Element* el = Element::name2Element(tag, m->score());
                   // hack - needed because tick tags are unreliable in 1.3 scores
@@ -1347,8 +1547,20 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   beam->setParent(0);
                   e.addBeam(beam);
                   }
-            else if (tag == "Segment")
+            else if (tag == "Segment") {
                   segment->read(e);
+#if 0
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "off1") {
+                              qreal o = e.readDouble();
+                              qDebug("TODO: off1");
+                              }
+                        else
+                              e.unknown();
+                        }
+#endif
+                  }
             else if (tag == "MeasureNumber") {
                   Text* noText = new Text(SubStyle::MEASURE_NUMBER, m->score());
                   noText->read(e);
@@ -1394,6 +1606,22 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   }
             }
       e.checkTuplets();
+      }
+//---------------------------------------------------------
+//   readMeasureBase
+//---------------------------------------------------------
+
+static void readMeasureBase(MeasureBase* mb, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Text") {
+                  Text* t = new Text(mb->score());
+                  readText(e, t, t);
+                  }
+            else
+                  e.unknown();
+            }
       }
 
 //---------------------------------------------------------
@@ -1462,7 +1690,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                   }
             else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
                   MeasureBase* mb = static_cast<MeasureBase*>(Element::name2Element(tag, score));
-                  mb->read(e);
+                  readMeasureBase(mb, e);
                   mb->setTick(e.tick());
                   score->measures()->add(mb);
                   }
@@ -1660,7 +1888,7 @@ static void readPart(Part* part, XmlReader& e)
                   }
             else if (tag == "name") {
                   Text* t = new Text(_score);
-                  t->read(e);
+                  readText(e, t, t);
                   part->instrument()->setLongName(t->xmlText());
                   delete t;
                   }
@@ -1706,44 +1934,6 @@ static void readPart(Part* part, XmlReader& e)
       part->instrument()->setArticulation(articulations);
       }
 
-//---------------------------------------------------------
-//   convertOldTextStyleNames
-//---------------------------------------------------------
-
-#if 0
-static QString convertOldTextStyleNames(const QString& s)
-      {
-      QString rs(s);
-      // convert 1.2 text styles
-      if (s == "Chordname")
-            rs = "Chord Symbol";
-      else if (s == "Lyrics odd lines")
-            rs = "Lyrics Odd Lines";
-      else if (s == "Lyrics even lines")
-            rs = "Lyrics Even Lines";
-      else if (s == "InstrumentsLong")
-            rs = "Instrument Name (Long)";
-      else if (s == "InstrumentsShort")
-            rs = "Instrument Name (Short)";
-      else if (s == "InstrumentsExcerpt")
-            rs = "Instrument Name (Part)";
-      else if (s == "Poet")
-            rs = "Lyricist";
-      else if (s == "Technik")
-            rs = "Technique";
-      else if (s == "TextLine")
-            rs = "Text Line";
-      else if (s == "Tuplets")
-            rs = "Tuplet";
-      else if (s == "Dynamics2")
-            rs = "Dynamics";
-      else if (s == "Repeat Text")
-            rs = "Repeat Text Right";
-      return rs;
-      }
-#endif
-
-#if 0
 //---------------------------------------------------------
 //   readPageFormat
 //---------------------------------------------------------
@@ -1810,7 +2000,6 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
       qreal w2 = pf->size().width() - pf->evenLeftMargin() - _evenRightMargin;
       pf->setPrintableWidth(qMin(w1, w2));     // silently adjust right margins
       }
-#endif
 
 //---------------------------------------------------------
 //   readStyle
@@ -1953,6 +2142,7 @@ static void readStyle(MStyle* style, XmlReader& e)
 
 Score::FileError MasterScore::read114(XmlReader& e)
       {
+      qDebug("==");
 #if 0
       for (unsigned int i = 0; i < sizeof(style114)/sizeof(*style114); ++i)
             style().set(style114[i].idx, style114[i].val);
@@ -2067,14 +2257,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
 #endif
                   }
             else if (tag == "page-layout") {
-                  if (_layoutMode != LayoutMode::FLOAT && _layoutMode != LayoutMode::SYSTEM) {
-                        PageFormat pf;
-                        initPageFormat(&style(), &pf);
-                        pf.read(e);
-                        setPageFormat(&style(), pf);
-                        }
-                  else
-                        e.skipCurrentElement();
+                  PageFormat pf;
+                  readPageFormat(&pf, e);
                   }
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);
