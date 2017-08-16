@@ -5591,7 +5591,7 @@ SymId Sym::userName2id(const QString& s)
       {
       int idx = 0;
       for (const char* a : symUserNames) {
-            if (strcmp(a, qPrintable(s)) == 0)
+            if (a && strcmp(a, qPrintable(s)) == 0)
                   return SymId(idx);
             }
       return SymId::noSym;
