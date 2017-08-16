@@ -853,9 +853,10 @@ Note* searchTieNote114(Note* note)
 
       while ((seg = seg->next1(SegmentType::ChordRest))) {
             for (int track = strack; track < etrack; ++track) {
-                  Chord* c = toChord(seg->element(track));
-                  if (c == 0 || (!c->isChord()) || (c->track() != chord->track()))
+                  Element* e = seg->element(track);
+                  if (e == 0 || (!e->isChord()) || (e->track() != chord->track()))
                         continue;
+                  Chord* c = toChord(e);
                   int staffIdx = c->staffIdx() + c->staffMove();
                   if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?
                         continue;

@@ -1243,7 +1243,8 @@ SubStyle subStyleFromName(const QString& name)
             }
       if (name == "Technique")                  // compatibility
             return SubStyle::EXPRESSION;
-      qFatal("substyle <%s> not known", qPrintable(name));
+
+      qDebug("substyle <%s> not known", qPrintable(name));
       return SubStyle::DEFAULT;
       }
 
