@@ -20,7 +20,8 @@
 install(DIRECTORY ./
     DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
     FILES_MATCHING
-    REGEX ".*\\.qm")
+    REGEX ".*\\.qm"
+    REGEX "languages\\.xml")
 
 if (MINGW)
     install(DIRECTORY ${CROSSQT}/translations/
