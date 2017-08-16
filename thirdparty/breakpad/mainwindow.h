@@ -37,6 +37,9 @@ wstring str2wstr(string mystr);
 string wstr2str(wstring mystr);
 pair<string,string> line2strings(string line);
 QMap <QString,QString> read_csv(QString mypath);
+bool launcher(wstring program);
+QString get_crashreporter_path();
+QString get_musescore_path();
 
 namespace Ui {
     class MainWindow;

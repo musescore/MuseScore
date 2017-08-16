@@ -49,16 +49,18 @@ namespace Breakpad {
     google_breakpad::ExceptionHandler* CrashHandlerPrivate::pHandler = NULL;
     bool CrashHandlerPrivate::bReportCrashesToSystem = false;
 
-    //QHash<QString, QString> crashTable;
     std::map<string,string> crashTable;
-    QMutex mymutex;
+    HANDLE ghMutex;
     wstring crash_reporter_path;
 
     int AnnotateCrashReport(string aKey, string aData){
-        mymutex.lock();
+        ghMutex = CreateMutex(
+                NULL,              // default security attributes
+                FALSE,             // initially not owned
+                NULL);             // unnamed mutex
         //crashTable.insert(aKey,aData);
         crashTable[aKey] = aData;
-        mymutex.unlock();
+        CloseHandle(ghMutex);
         return 0;
     }
 

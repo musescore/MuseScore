@@ -20,6 +20,96 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+bool launcher(wstring program){
+
+    STARTUPINFO si;
+    PROCESS_INFORMATION pi;
+    wstring mycmd;
+
+    mycmd = program;
+
+    ZeroMemory( &si, sizeof(si) );
+    si.cb = sizeof(si);
+    ZeroMemory( &pi, sizeof(pi) );
+
+    //DWORD pid = GetCurrentProcessId();
+
+    // Open a Windows Process equivelant to fork() for Linux
+    if( !CreateProcess( NULL,   // No module name (use command line)
+            (WCHAR *)mycmd.c_str(),          // Command line
+            NULL,           // Process handle not inheritable
+            NULL,           // Thread handle not inheritable
+            FALSE,          // Set handle inheritance to FALSE
+            0,              // No creation flags
+            NULL,           // Use parent's environment block
+            NULL,           // Use parent's starting directory
+            &si,            // Pointer to STARTUPINFO structure
+            &pi )           // Pointer to PROCESS_INFORMATION structure
+        )
+        {
+            printf( "CreateProcess failed (%lu).\n", GetLastError() );
+            return true;
+        }
+
+    // Wait until child process exits.
+    //WaitForSingleObject( pi.hProcess, INFINITE );
+
+    // Close process and thread handles.
+
+    //exit(0);
+    //CloseHandle( pi.hProcess );
+    //CloseHandle( pi.hThread );
+
+
+    Q_UNUSED(program);
+    return false;
+
+}
+
+QString get_crashreporter_path(){
+    wchar_t buffer[MAX_PATH];
+    GetModuleFileName(NULL, buffer, MAX_PATH) ;
+    string mscore_path = wstr2str(wstring(buffer));
+
+    int i;
+    int path_n;
+
+    for(i=mscore_path.size();i>=0;i--){
+        if( mscore_path[i] == '\\'){
+            path_n = i;
+            break;
+        }
+    }
+
+    string res;
+
+    for(i=0;i<path_n;i++){
+        res += mscore_path[i] ;
+    }
+
+    return QString(res.c_str());
+}
+
+
+QString get_musescore_path(){
+    QString crashreporter_path = get_crashreporter_path();
+    QString res = crashreporter_path+"\\MuseScore.exe";
+    QString res_empty = "";
+    QFileInfo fileInfo(res);
+    if ( fileInfo.exists() && fileInfo.isFile()){
+        return res;
+    }
+
+    res = crashreporter_path + "\\..\\..\\mscore\\MuseScore.exe";
+    QFileInfo fileInfo2(res);
+    if ( fileInfo2.exists() && fileInfo2.isFile()){
+        return res;
+    }
+
+    return res_empty;
+
+}
+
 wstring str2wstr(string mystr){
     wstring res(mystr.begin(), mystr.end());
     return res;
@@ -221,7 +311,8 @@ void MainWindow::on_pushButton_clicked(){
 
     }
 
-    close();
+    //close();
+    QApplication::quit();
 
 }
 
@@ -233,6 +324,11 @@ void MainWindow::on_pushButton_2_clicked(){
 
     }
 
-    // TODO: restart MuseScore
+    QString mscore_path = get_musescore_path();
+    launcher(mscore_path.toStdWString());
+    //close();
+    QApplication::quit();
 
 }
+
+

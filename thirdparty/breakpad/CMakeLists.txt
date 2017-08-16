@@ -30,7 +30,7 @@ add_library (
 
 set_target_properties ( breakpad
     PROPERTIES
-        COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-unknown-pragmas"
+        COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Wno-invalid-pch -Wno-unknown-pragmas"
     )
 
 xcode_pch(breakpad all)
@@ -57,7 +57,7 @@ target_link_libraries(musescore_crashreporter
 
 set_target_properties (musescore_crashreporter
     PROPERTIES
-        COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-unknown-pragmas"
+        COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Wno-invalid-pch -Wno-unknown-pragmas"
     )
 
 xcode_pch(musescore_crashreporter all)

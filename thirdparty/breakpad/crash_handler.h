@@ -22,15 +22,12 @@
 
 #pragma once
 
-#include <QMutex>
-
 #if defined(Q_OS_WIN32)
 #include "client/windows/handler/exception_handler.h"
 #endif
 
 #include <iostream>
 #include <fstream>
-//#include <unistd.h>
 #include <windows.h>
 
 using std::string;
