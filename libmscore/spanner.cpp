@@ -715,7 +715,7 @@ Chord* Spanner::endChord()
 ChordRest* Spanner::startCR()
       {
       Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
-      if (!_startElement)
+      if (!_startElement || _startElement->score() != score())
             _startElement = score()->findCR(tick(), track());
       return static_cast<ChordRest*>(_startElement);
       }
@@ -727,7 +727,7 @@ ChordRest* Spanner::startCR()
 ChordRest* Spanner::endCR()
       {
       Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
-      if (!_endElement && type() == Element::Type::SLUR) {
+      if ((!_endElement || _endElement->score() != score())) {
             Segment* s = score()->tick2segmentMM(tick2(), false, Segment::Type::ChordRest);
             _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
             }
