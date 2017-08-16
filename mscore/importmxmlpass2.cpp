@@ -4531,8 +4531,15 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       while (_e.tokenType() == QXmlStreamReader::StartElement) {
 
             //qDebug("in second loop element '%s'", qPrintable(_e.name().toString()));
-            if (_e.name() == "lyric")
-                  lyric(numberedLyrics, defaultyLyrics, unNumberedLyrics, extendedLyrics);  // TODO: move track handling to addlyric
+            if (_e.name() == "lyric") {
+                  // lyrics on grace notes not (yet) supported by MuseScore
+                  if (!grace)
+                        lyric(numberedLyrics, defaultyLyrics, unNumberedLyrics, extendedLyrics);  // TODO: move track handling to addlyric
+                  else {
+                        logDebugInfo("ignoring lyrics on grace notes");
+                        skipLogCurrElem();
+                        }
+                  }
             else if (_e.name() == "notations")
                   notations(note, cr, noteStartTime.ticks(), tupletDesc, lastGraceAFter);
             else
