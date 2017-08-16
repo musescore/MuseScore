@@ -52,10 +52,13 @@ class Box : public MeasureBase {
       Box(Score*);
       virtual void draw(QPainter*) const override;
       virtual bool isEditable() const override { return true; }
+
       virtual void startEdit(EditData&) override;
       virtual bool edit(EditData&) override;
+      virtual void startEditDrag(EditData&) override;
       virtual void editDrag(EditData&) override;
       virtual void endEdit(EditData&) override;
+
       virtual void updateGrips(EditData&) const override;
       virtual void layout() override;
       virtual void write(XmlWriter&) const override;
