@@ -359,7 +359,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       ups(Grip::END).p   = p2;
       computeBezier();
 
-      if (autoplace() && system()) {
+      if (MScore::autoplaceSlurs && autoplace() && system()) {
             bool up = slur()->up();
             //
             // lookup segments for collision detection

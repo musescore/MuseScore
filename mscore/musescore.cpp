@@ -1254,6 +1254,10 @@ MuseScore::MuseScore()
       menuDebug->addAction(a);
       a = getAction("relayout");
       menuDebug->addAction(a);
+      a = getAction("autoplace-slurs");
+      a->setCheckable(true);
+      a->setChecked(MScore::autoplaceSlurs);
+      menuDebug->addAction(a);
 #endif
 
       //---------------------
@@ -5084,6 +5088,13 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             }
       else if (cmd == "show-corrupted-measures") {
             MScore::showCorruptedMeasures = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "autoplace-slurs") {
+            MScore::autoplaceSlurs = a->isChecked();
             if (cs) {
                   cs->setLayoutAll();
                   cs->update();
