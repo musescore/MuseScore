@@ -48,8 +48,6 @@ Kept as an example of how to integrate with a complex synthesizer.
 
 * **mscore** Main code for the MuseScore UI
 
-* **mstyle** Clone of KDE4 style Oxygen
-
 * **msynth** Abstract interface to Fluid + Aeolus
 
 * **mtest** Unit testing using QTest

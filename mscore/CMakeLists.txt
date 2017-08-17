@@ -352,7 +352,6 @@ add_executable ( ${ExecutableName}
 
 target_link_libraries(mscore
       awl
-      mstyle
       diff_match_patch
       bww
       rtf2html

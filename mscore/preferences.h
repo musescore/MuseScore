@@ -57,9 +57,7 @@ enum {
       };
 
 enum class MuseScoreStyleType : char {
-      DARK_OXYGEN = 0,
-      LIGHT_OXYGEN,
-      DARK_FUSION,
+      DARK_FUSION = 0,
       LIGHT_FUSION
       };
 
@@ -201,8 +199,7 @@ struct Preferences {
       QColor readColor(QString key, QColor def);
       void init();
       bool readDefaultStyle();
-      bool isThemeDark() { return globalStyle == MuseScoreStyleType::DARK_OXYGEN || globalStyle == MuseScoreStyleType::DARK_FUSION;}
-      bool isOxygen() { return globalStyle == MuseScoreStyleType::DARK_OXYGEN || globalStyle == MuseScoreStyleType::LIGHT_OXYGEN;}
+      bool isThemeDark() { return globalStyle == MuseScoreStyleType::DARK_FUSION;}
       };
 
 //---------------------------------------------------------

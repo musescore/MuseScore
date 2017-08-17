@@ -43,7 +43,6 @@
 #include "zerberus/zerberus.h"
 #include "fluid/fluid.h"
 #include "pathlistdialog.h"
-#include "mstyle/mconfig.h"
 #include "resourceManager.h"
 #include "synthesizer/msynthesizer.h"
 
@@ -322,11 +321,7 @@ void Preferences::write()
       s.setValue("useOsc", useOsc);
       s.setValue("oscPort", oscPort);
       QString styleName = "light_fusion";
-      if (globalStyle == MuseScoreStyleType::DARK_OXYGEN)
-            styleName = "dark";
-      else if (globalStyle == MuseScoreStyleType::LIGHT_OXYGEN)
-            styleName = "light";
-      else if (globalStyle == MuseScoreStyleType::DARK_FUSION)
+      if (globalStyle == MuseScoreStyleType::DARK_FUSION)
             styleName = "dark_fusion";
       s.setValue("style", styleName);
       s.setValue("animations", animations);
@@ -486,11 +481,7 @@ void Preferences::read()
       useOsc                 = s.value("useOsc", useOsc).toBool();
       oscPort                = s.value("oscPort", oscPort).toInt();
       QString sName          = s.value("style", "light_fusion").toString();
-      if (sName == "dark")
-            globalStyle  = MuseScoreStyleType::DARK_OXYGEN;
-      else if (sName == "light")
-            globalStyle  = MuseScoreStyleType::LIGHT_OXYGEN;
-      else if (sName == "dark_fusion")
+      if (sName == "dark_fusion")
             globalStyle  = MuseScoreStyleType::DARK_FUSION;
       else if (sName == "light_fusion")
             globalStyle  = MuseScoreStyleType::LIGHT_FUSION;
@@ -1583,9 +1574,6 @@ void PreferenceDialog::apply()
       prefs.oscPort = oscPort->value();
 
       prefs.globalStyle = MuseScoreStyleType(styleName->currentIndex());
-
-      prefs.animations = animations->isChecked();
-      MgStyleConfigData::animationsEnabled = prefs.animations;
 
       if (languageChanged) {
             setMscoreLocale(prefs.language);
