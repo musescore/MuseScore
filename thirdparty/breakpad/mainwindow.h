@@ -37,7 +37,6 @@ using namespace::std;
 
 wstring str2wstr(string mystr);
 string wstr2str(wstring mystr);
-pair<string,string> line2strings(string line);
 QMap <QString,QString> read_comma_seperated_metadata_txt_file(QString mypath);
 bool launcher(wstring program);
 QString get_musescore_path();

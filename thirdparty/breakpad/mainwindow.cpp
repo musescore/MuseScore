@@ -62,7 +62,6 @@ bool launcher(wstring program){
       //CloseHandle( pi.hProcess );
       //CloseHandle( pi.hThread );
 
-
       Q_UNUSED(program);
       return false;
 
@@ -103,32 +102,6 @@ string wstr2str(wstring mystr){
       return res;
 }
 
-pair<string,string> line2strings(string line){
-      string str1, str2;
-      string *mystr;
-      bool myflag;
-      int i;
-
-      myflag = false;
-      str1.empty();
-      str2.empty();
-
-      mystr = &str1;
-
-      for (i = 0; i < line.size(); i++){
-            if ( line[i] == ',' && myflag == false){
-                  mystr = &str2;
-                  myflag = true;
-            }
-            else{
-                  if (line[i] != '\n')
-                        *mystr += line[i];
-            }
-      }
-
-      return pair<string,string>(str1,str2);
-}
-
 // Read a comma seperated file with only two columns: key and parameter
 // We asuming the key will never being defined with comma
 // though if a parameter has a comma then the parameter will not come
@@ -136,29 +109,40 @@ pair<string,string> line2strings(string line){
 // key=>mykey parameter=>parameter1,test
 
 QMap <QString,QString> read_comma_seperated_metadata_txt_file(QString mypath){
-      string line;
-      pair<string,string> mykeyval;
-      ifstream myfile(mypath.toStdString());
       QMap <QString,QString> mymap;
+      QFile file(mypath);
+      QStringList fields;
+      QString line;
+      QString mypar;
+      int i;
 
-      if (myfile.is_open()){
-            while ( getline (myfile,line) ){
-                  //cout << line << '\n';
-                  mykeyval = line2strings(line);
-                  //cout << "str1: " << mykeyval.first << " str2: " << mykeyval.second << endl;
-                  mymap.insert(mykeyval.first.c_str(),mykeyval.second.c_str());
+      if(!file.open(QIODevice::ReadOnly)) {
+            QMessageBox::information(0, "error", file.errorString());
+      }
+
+      QTextStream in(&file);
+
+      while(!in.atEnd()) {
+            line = in.readLine();
+            fields = line.split(',');
+            if ( fields.count() == 2 ){
+                  mymap.insert(fields.at(0),fields.at(1));
 
             }
-            myfile.close();
+            if ( fields.count() > 2 ){
+                  mypar = "";
+                  for(i=1;i<fields.count()-1;i++){
+                        mypar += fields.at(i)+QString(",");
+                  }
+                  mypar += fields.at(fields.count()-1);
+                  mymap.insert(fields.at(0),mypar);
+            }
+      }
 
-      }
-      else {
-            cout << "Unable to open file";
-      }
+      file.close();
 
       return mymap;
 }
-
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
       ui->setupUi(this);
@@ -257,7 +241,6 @@ void MainWindow::sendReportQt(QString user_txt){
             filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
             filePart.setBodyDevice(m_file);
             m_file->setParent(multiPart); // we cannot delete the file now, so delete it with the multiPart
-
 
             multiPart->append(filePart);
 
