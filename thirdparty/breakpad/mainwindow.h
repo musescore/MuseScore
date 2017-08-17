@@ -31,39 +31,41 @@
 #include <QSslError>
 #include <QList>
 
+#define CRASH_SUBMIT_URL "https://musescore.sp.backtrace.io:6098/post?format=minidump&token=00268871877ba102d69a23a8e713fff9700acf65999b1f043ec09c5c253b9c03"
+
 using namespace::std;
 
 wstring str2wstr(string mystr);
 string wstr2str(wstring mystr);
 pair<string,string> line2strings(string line);
-QMap <QString,QString> read_csv(QString mypath);
+QMap <QString,QString> read_comma_seperated_metadata_txt_file(QString mypath);
 bool launcher(wstring program);
 QString get_crashreporter_path();
 QString get_musescore_path();
 
 namespace Ui {
-    class MainWindow;
+      class MainWindow;
 }
 
 class MainWindow : public QMainWindow {
-    Q_OBJECT
+      Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+      explicit MainWindow(QWidget *parent = 0);
+      ~MainWindow();
 
 private slots:
-    void on_pushButton_2_clicked();
-    void on_pushButton_clicked();
-    void uploadFinished(QNetworkReply *reply);
-    void sslErrors(const QList<QSslError> &errors);
-    void onError(QNetworkReply::NetworkError err);
+      void on_btnRestart_clicked();
+      void on_btnQuit_clicked();
+      void uploadFinished(QNetworkReply *reply);
+      void sslErrors(const QList<QSslError> &errors);
+      void onError(QNetworkReply::NetworkError err);
 
 private:
-    Ui::MainWindow *ui;
-    void sendReportQt(QString user_txt);
-    QNetworkAccessManager *m_manager;
-    QFile *m_file;
+      Ui::MainWindow *ui;
+      void sendReportQt(QString user_txt);
+      QNetworkAccessManager *m_manager;
+      QFile *m_file;
 };
 
 #endif // MAINWINDOW_H

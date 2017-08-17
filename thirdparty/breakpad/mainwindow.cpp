@@ -20,315 +20,316 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+// launcher(program) executes a file with filepath: program
+// this function is only valid under windows Operating System by sending the process to the background
+
 bool launcher(wstring program){
 
-    STARTUPINFO si;
-    PROCESS_INFORMATION pi;
-    wstring mycmd;
+      STARTUPINFO si;
+      PROCESS_INFORMATION pi;
+      wstring mycmd;
 
-    mycmd = program;
+      mycmd = program;
 
-    ZeroMemory( &si, sizeof(si) );
-    si.cb = sizeof(si);
-    ZeroMemory( &pi, sizeof(pi) );
+      ZeroMemory( &si, sizeof(si) );
+      si.cb = sizeof(si);
+      ZeroMemory( &pi, sizeof(pi) );
 
-    //DWORD pid = GetCurrentProcessId();
+      //DWORD pid = GetCurrentProcessId();
 
-    // Open a Windows Process equivelant to fork() for Linux
-    if( !CreateProcess( NULL,   // No module name (use command line)
-            (WCHAR *)mycmd.c_str(),          // Command line
-            NULL,           // Process handle not inheritable
-            NULL,           // Thread handle not inheritable
-            FALSE,          // Set handle inheritance to FALSE
-            0,              // No creation flags
-            NULL,           // Use parent's environment block
-            NULL,           // Use parent's starting directory
-            &si,            // Pointer to STARTUPINFO structure
-            &pi )           // Pointer to PROCESS_INFORMATION structure
-        )
-        {
+      // Open a Windows Process equivelant to fork() for Linux
+      if( !CreateProcess( NULL,   // No module name (use command line)
+                        (WCHAR *)mycmd.c_str(),          // Command line
+                        NULL,           // Process handle not inheritable
+                        NULL,           // Thread handle not inheritable
+                        FALSE,          // Set handle inheritance to FALSE
+                        0,              // No creation flags
+                        NULL,           // Use parent's environment block
+                        NULL,           // Use parent's starting directory
+                        &si,            // Pointer to STARTUPINFO structure
+                        &pi )           // Pointer to PROCESS_INFORMATION structure
+      ){
             printf( "CreateProcess failed (%lu).\n", GetLastError() );
             return true;
-        }
+      }
 
-    // Wait until child process exits.
-    //WaitForSingleObject( pi.hProcess, INFINITE );
+      // Wait until child process exits.
+      //WaitForSingleObject( pi.hProcess, INFINITE );
 
-    // Close process and thread handles.
+      // Close process and thread handles.
 
-    //exit(0);
-    //CloseHandle( pi.hProcess );
-    //CloseHandle( pi.hThread );
+      //exit(0);
+      //CloseHandle( pi.hProcess );
+      //CloseHandle( pi.hThread );
 
 
-    Q_UNUSED(program);
-    return false;
+      Q_UNUSED(program);
+      return false;
 
 }
 
 QString get_crashreporter_path(){
-    wchar_t buffer[MAX_PATH];
-    GetModuleFileName(NULL, buffer, MAX_PATH) ;
-    string mscore_path = wstr2str(wstring(buffer));
+      wchar_t buffer[MAX_PATH];
+      GetModuleFileName(NULL, buffer, MAX_PATH) ;
+      string mscore_path = wstr2str(wstring(buffer));
 
-    int i;
-    int path_n;
+      int i;
+      int path_n;
 
-    for(i=mscore_path.size();i>=0;i--){
-        if( mscore_path[i] == '\\'){
-            path_n = i;
-            break;
-        }
-    }
+      for(i=mscore_path.size();i>=0;i--){
+            if( mscore_path[i] == '\\'){
+                  path_n = i;
+                  break;
+            }
+      }
 
-    string res;
+      string res;
 
-    for(i=0;i<path_n;i++){
-        res += mscore_path[i] ;
-    }
+      for(i=0;i<path_n;i++)
+            res += mscore_path[i];
 
-    return QString(res.c_str());
+      return QString(res.c_str());
 }
 
+// get_musescore_path() finds the path of MuseScore.exe
+// MuseScore.exe can be found in the current directroy (for production)
+// or under the mscore folder (during development build)
 
 QString get_musescore_path(){
-    QString crashreporter_path = get_crashreporter_path();
-    QString res = crashreporter_path+"\\MuseScore.exe";
-    QString res_empty = "";
-    QFileInfo fileInfo(res);
-    if ( fileInfo.exists() && fileInfo.isFile()){
-        return res;
-    }
+      QString crashreporter_path = get_crashreporter_path();
+      QString res = crashreporter_path+"\\MuseScore.exe";
+      QString res_empty = "";
+      QFileInfo fileInfo(res);
+      if ( fileInfo.exists() && fileInfo.isFile())
+            return res;
 
-    res = crashreporter_path + "\\..\\..\\mscore\\MuseScore.exe";
-    QFileInfo fileInfo2(res);
-    if ( fileInfo2.exists() && fileInfo2.isFile()){
-        return res;
-    }
+      res = crashreporter_path + "\\..\\..\\mscore\\MuseScore.exe";
+      QFileInfo fileInfo2(res);
+      if ( fileInfo2.exists() && fileInfo2.isFile())
+            return res;
 
-    return res_empty;
-
+      return res_empty;
 }
+
+// convert a string to wstring
 
 wstring str2wstr(string mystr){
-    wstring res(mystr.begin(), mystr.end());
-    return res;
+      wstring res(mystr.begin(), mystr.end());
+      return res;
 }
 
+// convert a wstring to string
+
 string wstr2str(wstring mystr){
-    string res(mystr.begin(), mystr.end());
-    return res;
+      string res(mystr.begin(), mystr.end());
+      return res;
 }
 
 pair<string,string> line2strings(string line){
-    string str1, str2;
-    string *mystr;
-    bool myflag;
-    int i;
+      string str1, str2;
+      string *mystr;
+      bool myflag;
+      int i;
 
-    myflag = false;
-    str1.empty();
-    str2.empty();
+      myflag = false;
+      str1.empty();
+      str2.empty();
 
-    mystr = &str1;
+      mystr = &str1;
 
-    for (i = 0; i < line.size(); i++){
+      for (i = 0; i < line.size(); i++){
             if ( line[i] == ',' && myflag == false){
-                    mystr = &str2;
-                    myflag = true;
+                  mystr = &str2;
+                  myflag = true;
             }
             else{
-                    if (line[i] != '\n'){
-                            *mystr += line[i];
-                    }
+                  if (line[i] != '\n')
+                        *mystr += line[i];
+            }
+      }
+
+      return pair<string,string>(str1,str2);
+}
+
+// Read a comma seperated file with only two columns: key and parameter
+// We asuming the key will never being defined with comma
+// though if a parameter has a comma then the parameter will not come
+// in seperate parts example the line: mykey,parmetere1,test will then split as:
+// key=>mykey parameter=>parameter1,test
+
+QMap <QString,QString> read_comma_seperated_metadata_txt_file(QString mypath){
+      string line;
+      pair<string,string> mykeyval;
+      ifstream myfile(mypath.toStdString());
+      QMap <QString,QString> mymap;
+
+      if (myfile.is_open()){
+            while ( getline (myfile,line) ){
+                  //cout << line << '\n';
+                  mykeyval = line2strings(line);
+                  //cout << "str1: " << mykeyval.first << " str2: " << mykeyval.second << endl;
+                  mymap.insert(mykeyval.first.c_str(),mykeyval.second.c_str());
 
             }
-    }
+            myfile.close();
 
-    return pair<string,string>(str1,str2);
-
-}
-
-QMap <QString,QString> read_csv(QString mypath){
-        string line;
-        pair<string,string> mykeyval;
-        ifstream myfile(mypath.toStdString());
-        QMap <QString,QString> mymap;
-
-        if (myfile.is_open()){
-                while ( getline (myfile,line) ){
-                        cout << line << '\n';
-                        mykeyval = line2strings(line);
-                        //cout << "str1: " << mykeyval.first << " str2: " << mykeyval.second << endl;
-                        mymap.insert(mykeyval.first.c_str(),mykeyval.second.c_str());
-
-                }
-                myfile.close();
-
-        }
-        else{
+      }
+      else {
             cout << "Unable to open file";
-        }
+      }
 
-        return mymap;
+      return mymap;
 }
 
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
-    ui->setupUi(this);
-    m_manager = new QNetworkAccessManager(this);
-    connect(m_manager, &QNetworkAccessManager::finished, this, &MainWindow::uploadFinished);
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+      ui->setupUi(this);
+      m_manager = new QNetworkAccessManager(this);
+      connect(m_manager, &QNetworkAccessManager::finished, this, &MainWindow::uploadFinished);
 
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
+MainWindow::~MainWindow() {
+      delete ui;
 }
 
-void MainWindow::sslErrors(const QList<QSslError> &sslErrors)
-{
-#ifndef QT_NO_SSL
-    foreach (const QSslError &error, sslErrors)
-        fprintf(stderr, "SSL error: %s\n", qPrintable(error.errorString()));
-#else
-    Q_UNUSED(sslErrors);
-#endif
+void MainWindow::sslErrors(const QList<QSslError> &sslErrors) {
+      #ifndef QT_NO_SSL
+      foreach (const QSslError &error, sslErrors)
+            fprintf(stderr, "SSL error: %s\n", qPrintable(error.errorString()));
+      #else
+      Q_UNUSED(sslErrors);
+      #endif
 }
 
-void MainWindow::uploadFinished(QNetworkReply *reply)
-{
-    if (!reply->error())
-    {
-        m_file->close();
-        m_file->deleteLater();
-        reply->deleteLater();
-    }
+void MainWindow::uploadFinished(QNetworkReply *reply) {
+      if (!reply->error()){
+            m_file->close();
+            m_file->deleteLater();
+            reply->deleteLater();
+      }
 }
 
-void MainWindow::onError(QNetworkReply::NetworkError err)
-{
-    qDebug() << " SOME ERROR!";
-    qDebug() << err;
+void MainWindow::onError(QNetworkReply::NetworkError err) {
+      qDebug() << " SOME ERROR!";
+      qDebug() << err;
 }
 
 void MainWindow::sendReportQt(QString user_txt){
-    QString minidump_path;
-    QString metadata_path;
+      QString minidump_path;
+      QString metadata_path;
 
-    if ( QCoreApplication::arguments().count() == 3 ){
+      if ( QCoreApplication::arguments().count() == 3 ){
 
-        minidump_path = QCoreApplication::arguments().at(1);
-        metadata_path = QCoreApplication::arguments().at(2);
+            minidump_path = QCoreApplication::arguments().at(1);
+            metadata_path = QCoreApplication::arguments().at(2);
 
-        QStringList filePathList = minidump_path.split('/');
-        QString minidump_filename = filePathList.at(filePathList.count() - 1);
+            QStringList filePathList = minidump_path.split('/');
+            QString minidump_filename = filePathList.at(filePathList.count() - 1);
 
-        qDebug() << "minidump file: " << minidump_path;
+            qDebug() << "minidump file: " << minidump_path;
 
-        QString url = "https://musescore.sp.backtrace.io:6098/post?format=minidump&token=00268871877ba102d69a23a8e713fff9700acf65999b1f043ec09c5c253b9c03";
+            QString url = CRASH_SUBMIT_URL;
 
-        QString boundary = "--"
-                    + QString::number(
-                            qrand() * (90000000000) / (RAND_MAX + 1) + 10000000000, 16);
+            QString boundary = "--" + QString::number(
+                              qrand() * (90000000000) / (RAND_MAX + 1) + 10000000000, 16);
 
-        QNetworkRequest request(url);
-        request.setHeader(QNetworkRequest::ContentTypeHeader,
-                    "multipart/form-data; boundary=" + boundary);
+            QNetworkRequest request(url);
 
-        QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-        multiPart->setBoundary(boundary.toUtf8());
+            // According to RFC2046 section 5.1: http://www.ietf.org/rfc/rfc2046.txt
+            // We need to define our boundary stirng in the header request ( request.setHeader )
+            // and repeate the same boundary in between the multi parts ( multiPart->setBoundary )
 
-        QMap <QString,QString> metadata;
-        metadata = read_csv(metadata_path);
+            request.setHeader(QNetworkRequest::ContentTypeHeader,
+                              "multipart/form-data; boundary=" + boundary);
 
-        QMap<QString, QString>::iterator it;
-        QHttpPart textToken;
+            QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+            multiPart->setBoundary(boundary.toUtf8());
 
-        // metadata input
+            QMap <QString,QString> metadata;
+            metadata = read_comma_seperated_metadata_txt_file(metadata_path);
 
-        for (it = metadata.begin(); it != metadata.end(); ++it) {
+            QMap<QString, QString>::iterator it;
+            QHttpPart textToken;
+
+            // metadata input
+
+            for (it = metadata.begin(); it != metadata.end(); ++it) {
             textToken.setHeader(QNetworkRequest::ContentDispositionHeader,
-                                     QVariant("form-data; name=\""+it.key()+"\""));
+                                QVariant("form-data; name=\""+it.key()+"\""));
             textToken.setBody(QByteArray(it.value().toUtf8()));
             multiPart->append(textToken);
-        }
+            }
 
-        // user text input
+            // user text input
 
-        textToken.setHeader(QNetworkRequest::ContentDispositionHeader,
-                                 QVariant("form-data; name=\"user_text_input\""));
-        textToken.setBody(QByteArray(user_txt.toUtf8()));
-        multiPart->append(textToken);
+            textToken.setHeader(QNetworkRequest::ContentDispositionHeader,
+                                QVariant("form-data; name=\"user_text_input\""));
+            textToken.setBody(QByteArray(user_txt.toUtf8()));
+            multiPart->append(textToken);
 
-        //FILE
+            //FILE
 
-        m_file = new QFile(minidump_path);
-        m_file->open(QIODevice::ReadOnly);
+            m_file = new QFile(minidump_path);
+            m_file->open(QIODevice::ReadOnly);
 
-        QHttpPart filePart;
-        filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
-        QString contentDisposition = QString("form-data; name=\"upload_file_minidump\"; filename=\""+minidump_filename+"\"");
-        filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
-        filePart.setBodyDevice(m_file);
-        m_file->setParent(multiPart); // we cannot delete the file now, so delete it with the multiPart
-
-
-        multiPart->append(filePart);
-
-        QNetworkReply *reply = m_manager->post(request,multiPart);
-
-        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(onError(QNetworkReply::NetworkError)));
-        //connect(reply, SIGNAL(finished()),this, SLOT(uploadFinished()));
-
-    #ifndef QT_NO_SSL
-        connect(reply, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sslErrors(QList<QSslError>)));
-    #endif
-        QEventLoop loop;
-        connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-        loop.exec();
-
-        int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-
-        QNetworkReply::NetworkError e = reply->error();
-        qDebug() << "status code: " << statusCode;
-        qDebug() << "reply error: " << e;
-        qDebug() << "reply: " << reply->readAll();
-
-    }
-
-}
+            QHttpPart filePart;
+            filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
+            QString contentDisposition = QString("form-data; name=\"upload_file_minidump\"; filename=\""+minidump_filename+"\"");
+            filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
+            filePart.setBodyDevice(m_file);
+            m_file->setParent(multiPart); // we cannot delete the file now, so delete it with the multiPart
 
 
-void MainWindow::on_pushButton_clicked(){
+            multiPart->append(filePart);
 
-    if ( ui->checkBox->isChecked() ){
-        QString user_txt = ui->plainTextEdit->toPlainText();
-        sendReportQt(user_txt);
+            QNetworkReply *reply = m_manager->post(request,multiPart);
 
-    }
+            connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(onError(QNetworkReply::NetworkError)));
+            //connect(reply, SIGNAL(finished()),this, SLOT(uploadFinished()));
 
-    //close();
-    QApplication::quit();
+            #ifndef QT_NO_SSL
+            connect(reply, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sslErrors(QList<QSslError>)));
+            #endif
+            QEventLoop loop;
+            connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+            loop.exec();
 
-}
+            int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
-void MainWindow::on_pushButton_2_clicked(){
+            QNetworkReply::NetworkError e = reply->error();
+            qDebug() << "status code: " << statusCode;
+            qDebug() << "reply error: " << e;
+            qDebug() << "reply: " << reply->readAll();
 
-    if ( ui->checkBox->isChecked() ){
-        QString user_txt = ui->plainTextEdit->toPlainText();
-        sendReportQt(user_txt);
-
-    }
-
-    QString mscore_path = get_musescore_path();
-    launcher(mscore_path.toStdWString());
-    //close();
-    QApplication::quit();
+      }
 
 }
 
 
+void MainWindow::on_btnQuit_clicked(){
+
+      if ( ui->checkBox->isChecked() ){
+            QString user_txt = ui->plainTextEdit->toPlainText();
+            sendReportQt(user_txt);
+
+      }
+
+      //close();
+      QApplication::quit();
+
+}
+
+void MainWindow::on_btnRestart_clicked(){
+
+      if ( ui->checkBox->isChecked() ){
+            QString user_txt = ui->plainTextEdit->toPlainText();
+            sendReportQt(user_txt);
+      }
+
+      QString mscore_path = get_musescore_path();
+      launcher(mscore_path.toStdWString());
+      //close();
+      QApplication::quit();
+
+}
