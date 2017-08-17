@@ -11,12 +11,8 @@
         <file alias="fonts/fonts_tablature.xml">../fonts/fonts_tablature.xml</file>
         <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>
         <file alias="data/instruments.xml">../share/instruments/instruments.xml</file>
-        <file alias="themes/style_light_oxygen.css">../share/themes/style_light_oxygen.css</file>
-        <file alias="themes/style_dark_oxygen.css">../share/themes/style_dark_oxygen.css</file>
         <file alias="themes/style_light_fusion.css">../share/themes/style_light_fusion.css</file>
         <file alias="themes/style_dark_fusion.css">../share/themes/style_dark_fusion.css</file>
-        <file alias="themes/palette_light_oxygen.json">../share/themes/palette_light_oxygen.json</file>
-        <file alias="themes/palette_dark_oxygen.json">../share/themes/palette_dark_oxygen.json</file>
         <file alias="themes/palette_light_fusion.json">../share/themes/palette_light_fusion.json</file>
         <file alias="themes/palette_dark_fusion.json">../share/themes/palette_dark_fusion.json</file>
         <file>data/splash.png</file>
