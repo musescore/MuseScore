@@ -23,7 +23,8 @@
 // launcher(program) executes a file with filepath: program
 // this function is only valid under windows Operating System by sending the process to the background
 
-bool launcher(wstring program){
+bool launcher(wstring program)
+      {
 
       STARTUPINFO si;
       PROCESS_INFORMATION pi;
@@ -38,7 +39,7 @@ bool launcher(wstring program){
       //DWORD pid = GetCurrentProcessId();
 
       // Open a Windows Process equivelant to fork() for Linux
-      if( !CreateProcess( NULL,   // No module name (use command line)
+      if(!CreateProcess(NULL,   // No module name (use command line)
                         (WCHAR *)mycmd.c_str(),          // Command line
                         NULL,           // Process handle not inheritable
                         NULL,           // Thread handle not inheritable
@@ -48,7 +49,7 @@ bool launcher(wstring program){
                         NULL,           // Use parent's starting directory
                         &si,            // Pointer to STARTUPINFO structure
                         &pi )           // Pointer to PROCESS_INFORMATION structure
-      ){
+      ) {
             printf( "CreateProcess failed (%lu).\n", GetLastError() );
             return true;
       }
@@ -65,42 +66,44 @@ bool launcher(wstring program){
       Q_UNUSED(program);
       return false;
 
-}
+      }
 
 // get_musescore_path() finds the path of MuseScore.exe
 // MuseScore.exe can be found in the current directroy (for production)
 // or under the mscore folder (during development build)
 
-QString get_musescore_path(){
-
-      QString crashreporter_path = QCoreApplication::applicationDirPath().replace("/","\\");
+QString get_musescore_path()
+      {
+      QString crashreporter_path = QCoreApplication::applicationDirPath().replace("/", "\\");
       QString res = crashreporter_path+"\\MuseScore.exe";
       QString res_empty = "";
       QFileInfo fileInfo(res);
-      if ( fileInfo.exists() && fileInfo.isFile())
+      if (fileInfo.exists() && fileInfo.isFile())
             return res;
 
       res = crashreporter_path + "\\..\\..\\mscore\\MuseScore.exe";
       QFileInfo fileInfo2(res);
-      if ( fileInfo2.exists() && fileInfo2.isFile())
+      if (fileInfo2.exists() && fileInfo2.isFile())
             return res;
 
       return res_empty;
-}
+      }
 
 // convert a string to wstring
 
-wstring str2wstr(string mystr){
+wstring str2wstr(string mystr)
+      {
       wstring res(mystr.begin(), mystr.end());
       return res;
-}
+      }
 
-// convert a wstring to string
+// converts a wstring to string
 
-string wstr2str(wstring mystr){
+string wstr2str(wstring mystr)
+      {
       string res(mystr.begin(), mystr.end());
       return res;
-}
+      }
 
 // Read a comma seperated file with only two columns: key and parameter
 // We asuming the key will never being defined with comma
@@ -108,7 +111,8 @@ string wstr2str(wstring mystr){
 // in seperate parts example the line: mykey,parmetere1,test will then split as:
 // key=>mykey parameter=>parameter1,test
 
-QMap <QString,QString> read_comma_seperated_metadata_txt_file(QString mypath){
+QMap <QString,QString> read_comma_seperated_metadata_txt_file(QString mypath)
+      {
       QMap <QString,QString> mymap;
       QFile file(mypath);
       QStringList fields;
@@ -125,13 +129,11 @@ QMap <QString,QString> read_comma_seperated_metadata_txt_file(QString mypath){
       while(!in.atEnd()) {
             line = in.readLine();
             fields = line.split(',');
-            if ( fields.count() == 2 ){
+            if (fields.count()==2)
                   mymap.insert(fields.at(0),fields.at(1));
-
-            }
-            if ( fields.count() > 2 ){
+            if (fields.count()>2) {
                   mypar = "";
-                  for(i=1;i<fields.count()-1;i++){
+                  for(i=1; i<fields.count()-1; i++) {
                         mypar += fields.at(i)+QString(",");
                   }
                   mypar += fields.at(fields.count()-1);
@@ -140,54 +142,59 @@ QMap <QString,QString> read_comma_seperated_metadata_txt_file(QString mypath){
       }
 
       file.close();
-
       return mymap;
-}
+      }
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+      {
       ui->setupUi(this);
       m_manager = new QNetworkAccessManager(this);
       connect(m_manager, &QNetworkAccessManager::finished, this, &MainWindow::uploadFinished);
 
-}
+      }
 
-MainWindow::~MainWindow() {
+MainWindow::~MainWindow()
+      {
       delete ui;
-}
+      }
 
-void MainWindow::sslErrors(const QList<QSslError> &sslErrors) {
+void MainWindow::sslErrors(const QList<QSslError> &sslErrors)
+      {
       #ifndef QT_NO_SSL
       foreach (const QSslError &error, sslErrors)
             fprintf(stderr, "SSL error: %s\n", qPrintable(error.errorString()));
       #else
       Q_UNUSED(sslErrors);
       #endif
-}
+      }
 
-void MainWindow::uploadFinished(QNetworkReply *reply) {
-      if (!reply->error()){
+void MainWindow::uploadFinished(QNetworkReply *reply)
+      {
+      if (!reply->error()) {
             m_file->close();
             m_file->deleteLater();
             reply->deleteLater();
       }
-}
+      }
 
-void MainWindow::onError(QNetworkReply::NetworkError err) {
+void MainWindow::onError(QNetworkReply::NetworkError err)
+      {
       qDebug() << " SOME ERROR!";
       qDebug() << err;
-}
+      }
 
-void MainWindow::sendReportQt(QString user_txt){
+void MainWindow::sendReportQt(QString user_txt)
+      {
       QString minidump_path;
       QString metadata_path;
 
-      if ( QCoreApplication::arguments().count() == 3 ){
+      if (QCoreApplication::arguments().count()==3) {
 
             minidump_path = QCoreApplication::arguments().at(1);
             metadata_path = QCoreApplication::arguments().at(2);
 
             QStringList filePathList = minidump_path.split('/');
-            QString minidump_filename = filePathList.at(filePathList.count() - 1);
+            QString minidump_filename = filePathList.at(filePathList.count()-1);
 
             qDebug() << "minidump file: " << minidump_path;
 
@@ -217,10 +224,10 @@ void MainWindow::sendReportQt(QString user_txt){
             // metadata input
 
             for (it = metadata.begin(); it != metadata.end(); ++it) {
-            textToken.setHeader(QNetworkRequest::ContentDispositionHeader,
-                                QVariant("form-data; name=\""+it.key()+"\""));
-            textToken.setBody(QByteArray(it.value().toUtf8()));
-            multiPart->append(textToken);
+                  textToken.setHeader(QNetworkRequest::ContentDispositionHeader,
+                                      QVariant("form-data; name=\""+it.key()+"\""));
+                  textToken.setBody(QByteArray(it.value().toUtf8()));
+                  multiPart->append(textToken);
             }
 
             // user text input
@@ -265,12 +272,13 @@ void MainWindow::sendReportQt(QString user_txt){
 
       }
 
-}
+      }
 
 
-void MainWindow::on_btnQuit_clicked(){
+void MainWindow::on_btnQuit_clicked()
+      {
 
-      if ( ui->checkBox->isChecked() ){
+      if (ui->checkBox->isChecked()) {
             QString user_txt = ui->plainTextEdit->toPlainText();
             sendReportQt(user_txt);
 
@@ -279,11 +287,12 @@ void MainWindow::on_btnQuit_clicked(){
       //close();
       QApplication::quit();
 
-}
+      }
 
-void MainWindow::on_btnRestart_clicked(){
+void MainWindow::on_btnRestart_clicked()
+      {
 
-      if ( ui->checkBox->isChecked() ){
+      if (ui->checkBox->isChecked()) {
             QString user_txt = ui->plainTextEdit->toPlainText();
             sendReportQt(user_txt);
       }
@@ -293,4 +302,4 @@ void MainWindow::on_btnRestart_clicked(){
       //close();
       QApplication::quit();
 
-}
+      }

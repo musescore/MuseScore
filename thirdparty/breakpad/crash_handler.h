@@ -38,32 +38,31 @@ using std::ifstream;
 
 namespace Breakpad {
 
-    int AnnotateCrashReport(string aKey, string aData);
-    int PrintMyCrashReport();
-    bool launcher(wstring program, wstring minidump_path, wstring metadata_path);
-    void writeMyCrashReport(wstring mypath);
-    wstring str2wstr(string mystr);
-    string wstr2str(wstring mystr);
-    string get_musescore_path();
-    bool file_exists(string name);
-    string get_crash_reporter_path();
+      int AnnotateCrashReport(string aKey, string aData);
+      int PrintMyCrashReport();
+      bool launcher(wstring program, wstring minidump_path, wstring metadata_path);
+      void writeMyCrashReport(wstring mypath);
+      wstring str2wstr(string mystr);
+      string wstr2str(wstring mystr);
+      string get_musescore_path();
+      bool file_exists(string name);
+      string get_crash_reporter_path();
 
-    class CrashHandlerPrivate;
-    class CrashHandler
-    {
-    public:
+      class CrashHandlerPrivate;
+      class CrashHandler {
+      public:
+            static CrashHandler* instance();
+            void Init(wstring  reportPath);
+            void setReportCrashesToSystem(bool report);
+            bool writeMinidump();
 
-        static CrashHandler* instance();
-        void Init(wstring  reportPath);
-        void setReportCrashesToSystem(bool report);
-        bool writeMinidump();
+      private:
+            CrashHandler();
+            ~CrashHandler();
+            Q_DISABLE_COPY(CrashHandler);
+            CrashHandlerPrivate* d;
+      };
 
-    private:
-        CrashHandler();
-        ~CrashHandler();
-        Q_DISABLE_COPY(CrashHandler)
-        CrashHandlerPrivate* d;
-    };
 }
 
 #endif // CRASH_HANDLER_H
