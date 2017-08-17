@@ -68,35 +68,13 @@ bool launcher(wstring program){
 
 }
 
-QString get_crashreporter_path(){
-      wchar_t buffer[MAX_PATH];
-      GetModuleFileName(NULL, buffer, MAX_PATH) ;
-      string mscore_path = wstr2str(wstring(buffer));
-
-      int i;
-      int path_n;
-
-      for(i=mscore_path.size();i>=0;i--){
-            if( mscore_path[i] == '\\'){
-                  path_n = i;
-                  break;
-            }
-      }
-
-      string res;
-
-      for(i=0;i<path_n;i++)
-            res += mscore_path[i];
-
-      return QString(res.c_str());
-}
-
 // get_musescore_path() finds the path of MuseScore.exe
 // MuseScore.exe can be found in the current directroy (for production)
 // or under the mscore folder (during development build)
 
 QString get_musescore_path(){
-      QString crashreporter_path = get_crashreporter_path();
+
+      QString crashreporter_path = QCoreApplication::applicationDirPath().replace("/","\\");
       QString res = crashreporter_path+"\\MuseScore.exe";
       QString res_empty = "";
       QFileInfo fileInfo(res);
