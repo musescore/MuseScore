@@ -26,6 +26,7 @@
 #include "libmscore/undo.h"
 #include "libmscore/range.h"
 #include "musescore.h"
+#include "timeline.h"
 
 namespace Ms {
 
@@ -275,6 +276,7 @@ void MeasureProperties::apply()
             }
       score->select(m, SelectType::SINGLE, 0);
       score->update();
+      mscore->timeline()->updateGrid();
       }
 
 //---------------------------------------------------------
