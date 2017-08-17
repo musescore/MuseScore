@@ -48,6 +48,11 @@ namespace Breakpad {
       HANDLE ghMutex;
       wstring crash_reporter_path;
 
+      /************************************************************************/
+      /* AnnotateCrashReport :                                                */
+      /* Annotate a key and a parameter to the crash report                   */
+      /************************************************************************/
+
       int AnnotateCrashReport(string aKey, string aData)
             {
             ghMutex = CreateMutex(
@@ -60,6 +65,11 @@ namespace Breakpad {
             return 0;
             }
 
+      /************************************************************************/
+      /* PrintMyCrahsReport :                                                 */
+      /* Prints the Crash Report from the annotated keys and parameters       */
+      /************************************************************************/
+
       int PrintMyCrashReport()
             {
             for (std::map<string,string>::iterator it=crashTable.begin(); it!=crashTable.end(); ++it)
@@ -67,6 +77,11 @@ namespace Breakpad {
 
             return 0;
             }
+
+      /************************************************************************/
+      /* writeMyCrashReport :                                                 */
+      /* exports crash report to a text file with as: key,parameter           */
+      /************************************************************************/
 
       void writeMyCrashReport(wstring mypath)
             {
@@ -79,11 +94,19 @@ namespace Breakpad {
             myfile.close();
             }
 
+      /************************************************************************/
+      /* str2wstr : converts a string to wstring                              */
+      /************************************************************************/
+
       wstring str2wstr(string mystr)
             {
             wstring res(mystr.begin(), mystr.end());
             return res;
             }
+
+      /************************************************************************/
+      /* wstr2str : Converts a string to wstring                              */
+      /************************************************************************/
 
       string wstr2str(wstring mystr)
             {
@@ -91,17 +114,21 @@ namespace Breakpad {
             return res;
             }
 
+      /************************************************************************/
+      /* get_musescore_path : Locates the directory path of MuseScore.exe     */
+      /************************************************************************/
+
       string get_musescore_path()
             {
             wchar_t buffer[MAX_PATH];
-            GetModuleFileName(NULL, buffer, MAX_PATH) ;
+            GetModuleFileName(NULL, buffer, MAX_PATH);
             string mscore_path = wstr2str(wstring(buffer));
 
             int i;
             int path_n;
 
             for(i=mscore_path.size(); i>=0; i--) {
-                  if(mscore_path[i]=='\\'){
+                  if(mscore_path[i]=='\\') {
                         path_n = i;
                         break;
                   }
@@ -114,11 +141,20 @@ namespace Breakpad {
             return res;
             }
 
+      /************************************************************************/
+      /* file_exists : Returns True if a file exists                          */
+      /************************************************************************/
+
       bool file_exists(string name)
             {
             ifstream f(name.c_str());
             return f.good();
             }
+
+      /************************************************************************/
+      /* get_crash_reporter_path :                                            */
+      /* Locates the directory path of the musescore_crashreproter.exe        */
+      /************************************************************************/
 
       string get_crash_reporter_path()
             {
@@ -135,6 +171,12 @@ namespace Breakpad {
 
             }
 
+      /************************************************************************/
+      /* replaceChar :                                                        */
+      /* from an input string str replaces character ch1 with character ch2   */
+      /* and retrurn the result into a new string                             */
+      /************************************************************************/
+
       string replaceChar(string str, char ch1, char ch2)
             {
             for (int i=0; i<str.length(); ++i) {
@@ -146,8 +188,9 @@ namespace Breakpad {
             }
 
       /************************************************************************/
-      /* DumpCallback                                                         */
+      /* DumpCallback : This is the function that is called after a crash     */
       /************************************************************************/
+
 #if defined(Q_OS_WIN32)
       bool DumpCallback(const wchar_t* _dump_dir, const wchar_t* _minidump_id, void* context, EXCEPTION_POINTERS* exinfo, MDRawAssertionInfo* assertion, bool success)
 #endif
@@ -187,6 +230,10 @@ namespace Breakpad {
             return CrashHandlerPrivate::bReportCrashesToSystem ? success : true;
             }
 
+      /************************************************************************/
+      /* InitCrashHandler : Here we Initialize Breakpad ExceptionHandler      */
+      /************************************************************************/
+
       void CrashHandlerPrivate::InitCrashHandler(wstring dumpPath)
             {
             if (pHandler!=NULL)
@@ -208,6 +255,7 @@ namespace Breakpad {
       /************************************************************************/
       /* CrashHandler                                                         */
       /************************************************************************/
+
       CrashHandler* CrashHandler::instance()
             {
             static CrashHandler globalHandler;
@@ -242,12 +290,21 @@ namespace Breakpad {
             return res;
             }
 
+      /************************************************************************/
+      /* CrashHandler : Initialize Breakpad and Crashreproter                 */
+      /************************************************************************/
+
       void CrashHandler::Init(wstring reportPath)
             {
             d->InitCrashHandler(reportPath);
             crash_reporter_path = str2wstr(replaceChar(get_crash_reporter_path(), '\\', '/'));
             qDebug("Crash Reporter Path: %s", crash_reporter_path.c_str());
             }
+
+      /************************************************************************/
+      /* launcher : launches musescore_crashreporter.exe with arguments       */
+      /* the minidump location and the metadata txt file                      */
+      /************************************************************************/
 
       bool launcher(wstring program, wstring minidump_path, wstring metadata_path)
             {

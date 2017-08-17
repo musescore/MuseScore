@@ -20,8 +20,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-// launcher(program) executes a file with filepath: program
-// this function is only valid under windows Operating System by sending the process to the background
+//-----------------------------------------------------------------------------
+// launcher(program) : executes a file with filepath: program
+// this function is only valid under windows Operating System
+// when the executable is executed the process is send to the background
+//-----------------------------------------------------------------------------
 
 bool launcher(wstring program)
       {
@@ -68,9 +71,11 @@ bool launcher(wstring program)
 
       }
 
-// get_musescore_path() finds the path of MuseScore.exe
+//-----------------------------------------------------------------------------
+// get_musescore_path() : finds the path of MuseScore.exe
 // MuseScore.exe can be found in the current directroy (for production)
 // or under the mscore folder (during development build)
+//-----------------------------------------------------------------------------
 
 QString get_musescore_path()
       {
@@ -89,7 +94,9 @@ QString get_musescore_path()
       return res_empty;
       }
 
-// convert a string to wstring
+//-----------------------------------------------------------------------------
+// str2wstr : convert a string to wstring
+//-----------------------------------------------------------------------------
 
 wstring str2wstr(string mystr)
       {
@@ -97,7 +104,9 @@ wstring str2wstr(string mystr)
       return res;
       }
 
-// converts a wstring to string
+//-----------------------------------------------------------------------------
+// wstr2str : converts a wstring to string
+//-----------------------------------------------------------------------------
 
 string wstr2str(wstring mystr)
       {
@@ -105,11 +114,14 @@ string wstr2str(wstring mystr)
       return res;
       }
 
+//-----------------------------------------------------------------------------
+// read_comma_seperated_metadata_txt_file :
 // Read a comma seperated file with only two columns: key and parameter
 // We asuming the key will never being defined with comma
 // though if a parameter has a comma then the parameter will not come
 // in seperate parts example the line: mykey,parmetere1,test will then split as:
 // key=>mykey parameter=>parameter1,test
+//-----------------------------------------------------------------------------
 
 QMap <QString,QString> read_comma_seperated_metadata_txt_file(QString mypath)
       {
@@ -145,6 +157,10 @@ QMap <QString,QString> read_comma_seperated_metadata_txt_file(QString mypath)
       return mymap;
       }
 
+//-----------------------------------------------------------------------------
+// MainWindow Constructor
+//-----------------------------------------------------------------------------
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
       {
       ui->setupUi(this);
@@ -152,11 +168,18 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
       connect(m_manager, &QNetworkAccessManager::finished, this, &MainWindow::uploadFinished);
 
       }
+//-----------------------------------------------------------------------------
+// MainWindow Destructor
+//-----------------------------------------------------------------------------
 
 MainWindow::~MainWindow()
       {
       delete ui;
       }
+
+//-----------------------------------------------------------------------------
+// sslErrors : It reports Errors regarding SSL network transmitions
+//-----------------------------------------------------------------------------
 
 void MainWindow::sslErrors(const QList<QSslError> &sslErrors)
       {
@@ -168,6 +191,10 @@ void MainWindow::sslErrors(const QList<QSslError> &sslErrors)
       #endif
       }
 
+//-----------------------------------------------------------------------------
+// uploadFinished : Actions needed during an upload finished
+//-----------------------------------------------------------------------------
+
 void MainWindow::uploadFinished(QNetworkReply *reply)
       {
       if (!reply->error()) {
@@ -177,11 +204,19 @@ void MainWindow::uploadFinished(QNetworkReply *reply)
       }
       }
 
+//-----------------------------------------------------------------------------
+// onError : Error messages from netwokr respond
+//-----------------------------------------------------------------------------
+
 void MainWindow::onError(QNetworkReply::NetworkError err)
       {
       qDebug() << " SOME ERROR!";
       qDebug() << err;
       }
+
+//-----------------------------------------------------------------------------
+// sendRpoertQt : Uploads the minidump and metadata files to the crash server
+//-----------------------------------------------------------------------------
 
 void MainWindow::sendReportQt(QString user_txt)
       {
@@ -223,7 +258,7 @@ void MainWindow::sendReportQt(QString user_txt)
 
             // metadata input
 
-            for (it = metadata.begin(); it != metadata.end(); ++it) {
+            for (it=metadata.begin(); it!=metadata.end(); ++it) {
                   textToken.setHeader(QNetworkRequest::ContentDispositionHeader,
                                       QVariant("form-data; name=\""+it.key()+"\""));
                   textToken.setBody(QByteArray(it.value().toUtf8()));
@@ -274,6 +309,9 @@ void MainWindow::sendReportQt(QString user_txt)
 
       }
 
+//-----------------------------------------------------------------------------
+// on_btnQuit_clicked : Quit button functions
+//-----------------------------------------------------------------------------
 
 void MainWindow::on_btnQuit_clicked()
       {
@@ -288,6 +326,10 @@ void MainWindow::on_btnQuit_clicked()
       QApplication::quit();
 
       }
+
+//-----------------------------------------------------------------------------
+// on_btnRestart_clicked : Restart button functions
+//-----------------------------------------------------------------------------
 
 void MainWindow::on_btnRestart_clicked()
       {
