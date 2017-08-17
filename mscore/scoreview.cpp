@@ -3125,54 +3125,27 @@ void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2)
             startEditMode = true;      // start slur in edit mode if last chord is not given
             }
 
-      auto l1 = cr1->linkList();
-      auto l2 = cr2->linkList();    // QList<ScoreElement*> linkList() const;
-
-      SlurSegment* ss = 0;
-      Slur* slur      = 0;
-      Slur* lSlur     = 0;
       _score->startCmd();
-      for (ScoreElement* se1 : l1) {
-            ChordRest* _cr1 = toChordRest(se1);
-            ChordRest* _cr2 = 0;
-            // search corresponding _cr2 for _cr1
-            for (ScoreElement* se2 : l2) {
-                  ChordRest* cr = toChordRest(se2);
-                  if (_cr1->score() == cr->score() && _cr1->staffIdx() == cr->staffIdx()) {
-                        _cr2 = cr;
-                        break;
-                        }
-                  }
-            if (!_cr2)
-                  qFatal("link not found");
 
-            Slur* _slur = new Slur(_cr1->score());
-            if (lSlur)
-                  lSlur->linkTo(_slur);
-            else
-                  lSlur = _slur;
-            _slur->setTick(_cr1->tick());
-            _slur->setTick2(_cr2->tick());
-            _slur->setTrack(_cr1->track());
-            if (_cr2->staff()->part() == _cr1->staff()->part() && !_cr2->staff()->isLinked(_cr1->staff()))
-                  _slur->setTrack2(_cr2->track());
-            else
-                  _slur->setTrack2(_cr1->track());
-            _slur->setStartElement(_cr1);
-            _slur->setEndElement(_cr2);
+      Slur* slur = new Slur(cr1->score());
+      slur->setTick(cr1->tick());
+      slur->setTick2(cr2->tick());
+      slur->setTrack(cr1->track());
+      if (cr2->staff()->part() == cr1->staff()->part() && !cr2->staff()->isLinked(cr1->staff()))
+            slur->setTrack2(cr2->track());
+      else
+            slur->setTrack2(cr1->track());
+      slur->setStartElement(cr1);
+      slur->setEndElement(cr2);
 
-            _cr1->score()->undoAddElement(_slur);
-            SlurSegment* _ss = new SlurSegment(_cr1->score());
-            _ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-            if (_cr1 == _cr2)
-                  _ss->setSlurOffset(Grip::END, QPointF(3.0 * _cr1->score()->spatium(), 0.0));
-            _ss->setAutoplace(false);
-            _slur->add(_ss);
-            if (_cr1 == cr1) {
-                  ss = _ss;
-                  slur = _slur;
-                  }
-            }
+      cr1->score()->undoAddElement(slur);
+      SlurSegment* ss = new SlurSegment(cr1->score());
+      ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+      if (cr1 == cr2)
+            ss->setSlurOffset(Grip::END, QPointF(3.0 * cr1->score()->spatium(), 0.0));
+      ss->setAutoplace(false);
+      slur->add(ss);
+
       _score->endCmd();
 
       if (noteEntryMode()) {
