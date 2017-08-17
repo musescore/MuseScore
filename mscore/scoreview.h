@@ -287,6 +287,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void viewRectChanged();
       void scaleChanged(double);
       void offsetChanged(double, double);
+      void sizeChanged();
 
    public:
       ScoreView(QWidget* parent = 0);
