@@ -926,7 +926,7 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
             *p++ = val;
 
             val = *p;
-            rv = qMax(lv, qAbs(val));
+            rv = qMax(rv, qAbs(val));
             *p++ = val;
             }
       meterValue[0] = lv;
