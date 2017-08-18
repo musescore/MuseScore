@@ -35,7 +35,7 @@ environment:
   BINTRAY_API_KEY:
     secure: XFr4i9vkGli031KQGEVTuipPdAqMYpAyUWlVIrH7OhhicVIvA8x6EwiKGi+Zf22S
   DROPBOX_API_KEY:
-    secure: dKaddMdCSyKPQlKmsajtSQ6zdmzVe7NczsgPYeVYSBF4I7vJXAfLRaJNWepK+csbSvTsNf+dNCgo70/ZCT/xuXBPMR0gOZWrQ5xDqOQJLAQ=
+    secure: dKaddMdCSyKPQlKmsajtSRgJ9u663VFXBGvkuXQNl40XY0vePV5WqvgGNVC3+y4YA5TUWsepm9jFuq4Uz5gOWqDPchSlS30MiV+aq3agMxk=
 
 configuration: Release
 # scripts to run before build
@@ -73,7 +73,7 @@ after_build:
   - del MuseScore.pdb
   - del MuseScore.sym
   - cmd: 7z a C:\MuseScore\MuseScoreNightly-%MSversion%.7z C:\MuseScore\win32install
-  - cmd: curl -H "Authorization&#58; Bearer %DROPBOX_API_KEY%" https://api-content.dropbox.com/1/files_put/auto/ -T C:\MuseScore\MuseScoreNightly-%MSversion%.7z
+  - cmd: curl -H "Authorization&#58; Bearer "%DROPBOX_API_KEY% https://api-content.dropbox.com/1/files_put/auto/ -T C:\MuseScore\MuseScoreNightly-%MSversion%.7z
   - cmd: curl -T C:\MuseScore\MuseScoreNightly-%MSversion%.7z -ugsocnikos:%BINTRAY_API_KEY% https://api.bintray.com/content/musescoregsoc/myrepo/MuseScoreNightly/%MSversion%/MuseScoreNightly-%MSversion%.7z
   - cd C:\MuseScore
 artifacts:
