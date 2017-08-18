@@ -34,6 +34,8 @@ environment:
     secure: xFp6AKlTVT0xWaC57bONdw+96d1x+ZVKh8ytpLR+/FW5tACmC2qZDmPP1Pzglvu8TPoxrf0tiv7F1vp5/SRewFaTnj6hIvakziSAHmjWp2g=
   BINTRAY_API_KEY:
     secure: XFr4i9vkGli031KQGEVTuipPdAqMYpAyUWlVIrH7OhhicVIvA8x6EwiKGi+Zf22S
+  DROPBOX_API_KEY:
+    secure: dKaddMdCSyKPQlKmsajtSQ6zdmzVe7NczsgPYeVYSBF4I7vJXAfLRaJNWepK+csbSvTsNf+dNCgo70/ZCT/xuXBPMR0gOZWrQ5xDqOQJLAQ=
 
 configuration: Release
 # scripts to run before build
@@ -71,6 +73,7 @@ after_build:
   - del MuseScore.pdb
   - del MuseScore.sym
   - cmd: 7z a C:\MuseScore\MuseScoreNightly-%MSversion%.7z C:\MuseScore\win32install
+  - cmd: curl -X POST https://content.dropboxapi.com/2/files/upload --header "Authorization: Bearer %DROPBOX_API_KEY%" --header "Dropbox-API-Arg: {\"path\": \"/build/MuseScoreNightly-%MSversion%.7z\",\"mode\": \"add\",\"autorename\": true,\"mute\": false}" --header "Content-Type: application/octet-stream" --data-binary @MuseScoreNightly-%MSversion%.7z
   - cmd: curl -T C:\MuseScore\MuseScoreNightly-%MSversion%.7z -ugsocnikos:%BINTRAY_API_KEY% https://api.bintray.com/content/musescoregsoc/myrepo/MuseScoreNightly/%MSversion%/MuseScoreNightly-%MSversion%.7z
   - cd C:\MuseScore
 artifacts:
