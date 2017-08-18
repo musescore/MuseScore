@@ -1859,6 +1859,8 @@ void Score::cmdDeleteSelection()
                   Spanner* sp = i.value;
                   if (sp->isVolta())
                         continue;
+                  if (!selectionFilter().canSelectVoice(sp->track()))
+                        continue;
                   if (sp->track() >= track1 && sp->track() < track2) {
                         if (sp->tick() >= stick1 && sp->tick() < stick2
                             && sp->tick2() >= stick1 && sp->tick2() < stick2) {
