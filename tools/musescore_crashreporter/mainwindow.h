@@ -30,6 +30,7 @@
 #include <QNetworkReply>
 #include <QSslError>
 #include <QList>
+#include <QProcess>
 
 #define CRASH_SUBMIT_URL "https://musescore.sp.backtrace.io:6098/post?format=minidump&token=00268871877ba102d69a23a8e713fff9700acf65999b1f043ec09c5c253b9c03"
 

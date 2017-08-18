@@ -153,7 +153,7 @@ endif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 
 if (APPLE)
    set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++11 -fPIC -stdlib=libc++ -g -Wno-inconsistent-missing-override")
-   set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -fPIC -stdlib=libc++ -O2 -DNDEBUG -DQT_NO_DEBUG -Wno-inconsistent-missing-override")
+   set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -fPIC -stdlib=libc++ -O0 -DNDEBUG -DQT_NO_DEBUG -Wno-inconsistent-missing-override")
    # This is necessary for genManual to be executed during the build phase,
    # it needs to be able to get the Qt libs.
    SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
@@ -564,7 +564,7 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 subdirs(
       mscore awl bww2mxml share midi audiofile fluid libmscore synthesizer
       effects thirdparty/rtf2html thirdparty/diff thirdparty/beatroot
-      thirdparty/qzip thirdparty/kQOAuth tools/musescore_crashreporter
+      thirdparty/qzip thirdparty/kQOAuth
       )
 #      thirdparty/xmlstream
 
@@ -599,7 +599,7 @@ if (OMR)
 endif (OMR)
 
 if (BREAKPAD)
-    subdirs (thirdparty/breakpad)
+    subdirs (thirdparty/breakpad tools/musescore_crashreporter)
     include_directories(${PROJECT_SOURCE_DIR}/thirdparty/breakpad)
 endif (BREAKPAD)
 

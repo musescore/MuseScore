@@ -21,57 +21,6 @@
 #include "ui_mainwindow.h"
 
 //-----------------------------------------------------------------------------
-// launcher(program) : executes a file with filepath: program
-// this function is only valid under windows Operating System
-// when the executable is executed the process is send to the background
-//-----------------------------------------------------------------------------
-
-bool launcher(wstring program)
-      {
-
-      STARTUPINFO si;
-      PROCESS_INFORMATION pi;
-      wstring mycmd;
-
-      mycmd = program;
-
-      ZeroMemory( &si, sizeof(si) );
-      si.cb = sizeof(si);
-      ZeroMemory( &pi, sizeof(pi) );
-
-      //DWORD pid = GetCurrentProcessId();
-
-      // Open a Windows Process equivelant to fork() for Linux
-      if(!CreateProcess(NULL,   // No module name (use command line)
-                        (WCHAR *)mycmd.c_str(),          // Command line
-                        NULL,           // Process handle not inheritable
-                        NULL,           // Thread handle not inheritable
-                        FALSE,          // Set handle inheritance to FALSE
-                        0,              // No creation flags
-                        NULL,           // Use parent's environment block
-                        NULL,           // Use parent's starting directory
-                        &si,            // Pointer to STARTUPINFO structure
-                        &pi )           // Pointer to PROCESS_INFORMATION structure
-      ) {
-            printf( "CreateProcess failed (%lu).\n", GetLastError() );
-            return true;
-      }
-
-      // Wait until child process exits.
-      //WaitForSingleObject( pi.hProcess, INFINITE );
-
-      // Close process and thread handles.
-
-      //exit(0);
-      //CloseHandle( pi.hProcess );
-      //CloseHandle( pi.hThread );
-
-      Q_UNUSED(program);
-      return false;
-
-      }
-
-//-----------------------------------------------------------------------------
 // get_musescore_path() : finds the path of MuseScore.exe
 // MuseScore.exe can be found in the current directroy (for production)
 // or under the mscore folder (during development build)
@@ -79,39 +28,19 @@ bool launcher(wstring program)
 
 QString get_musescore_path()
       {
-      QString crashreporter_path = QCoreApplication::applicationDirPath().replace("/", "\\");
-      QString res = crashreporter_path+"\\MuseScore.exe";
+      QString crashreporter_path = QCoreApplication::applicationDirPath();
+      QString res = crashreporter_path+"/MuseScore.exe";
       QString res_empty = "";
       QFileInfo fileInfo(res);
       if (fileInfo.exists() && fileInfo.isFile())
             return res;
 
-      res = crashreporter_path + "\\..\\..\\mscore\\MuseScore.exe";
+      res = crashreporter_path + "/../../mscore/MuseScore.exe";
       QFileInfo fileInfo2(res);
       if (fileInfo2.exists() && fileInfo2.isFile())
             return res;
 
       return res_empty;
-      }
-
-//-----------------------------------------------------------------------------
-// str2wstr : convert a string to wstring
-//-----------------------------------------------------------------------------
-
-wstring str2wstr(string mystr)
-      {
-      wstring res(mystr.begin(), mystr.end());
-      return res;
-      }
-
-//-----------------------------------------------------------------------------
-// wstr2str : converts a wstring to string
-//-----------------------------------------------------------------------------
-
-string wstr2str(wstring mystr)
-      {
-      string res(mystr.begin(), mystr.end());
-      return res;
       }
 
 //-----------------------------------------------------------------------------
@@ -340,7 +269,12 @@ void MainWindow::on_btnRestart_clicked()
       }
 
       QString mscore_path = get_musescore_path();
-      launcher(mscore_path.toStdWString());
+
+      // Start a process that is not attached to the parent process
+      // otherwise the parent process kills the child
+      QProcess *process;
+      process->startDetached(mscore_path);
+
       //close();
       QApplication::quit();
 
