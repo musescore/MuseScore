@@ -163,7 +163,7 @@ namespace Breakpad {
             string res_empty = "";
             if (file_exists(res))
                   return res;
-            res = musescore_path + "\\..\\thirdparty\\breakpad\\musescore_crashreporter.exe";
+            res = musescore_path + "\\..\\tools\\musescore_crashreporter\\musescore_crashreporter.exe";
             if (file_exists(res))
                   return res;
 
@@ -179,7 +179,7 @@ namespace Breakpad {
 
       string replaceChar(string str, char ch1, char ch2)
             {
-            for (int i=0; i<str.length(); ++i) {
+            for (unsigned int i=0; i<str.length(); ++i) {
                   if (str[i]==ch1)
                         str[i] = ch2;
             }

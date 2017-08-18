@@ -310,7 +310,7 @@ void MainWindow::sendReportQt(QString user_txt)
       }
 
 //-----------------------------------------------------------------------------
-// on_btnQuit_clicked : Quit button functions
+// on_btnQuit_clicked : Quit button functionality
 //-----------------------------------------------------------------------------
 
 void MainWindow::on_btnQuit_clicked()
@@ -328,7 +328,7 @@ void MainWindow::on_btnQuit_clicked()
       }
 
 //-----------------------------------------------------------------------------
-// on_btnRestart_clicked : Restart button functions
+// on_btnRestart_clicked : Restart button functionality
 //-----------------------------------------------------------------------------
 
 void MainWindow::on_btnRestart_clicked()

@@ -564,7 +564,7 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 subdirs(
       mscore awl bww2mxml share midi audiofile fluid libmscore synthesizer
       effects thirdparty/rtf2html thirdparty/diff thirdparty/beatroot
-      thirdparty/qzip thirdparty/kQOAuth
+      thirdparty/qzip thirdparty/kQOAuth tools/musescore_crashreporter
       )
 #      thirdparty/xmlstream
 
