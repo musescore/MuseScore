@@ -1108,7 +1108,8 @@ void Score::undoAddElement(Element* element)
                         BarLine* bl = static_cast<BarLine*>(seg->element(ntrack));
                         na->setParent(bl);
                         }
-                  undo(new AddElement(na));
+                  if (na->parent())
+                        undo(new AddElement(na));
                   }
             else if (element->type() == Element::Type::CHORDLINE
                || element->type() == Element::Type::LYRICS) {
