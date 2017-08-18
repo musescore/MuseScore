@@ -502,6 +502,8 @@ void Selection::updateSelectedElements()
             // ignore spanners belonging to other tracks
             if (sp->track() < startTrack || sp->track() >= endTrack)
                   continue;
+            if (!canSelectVoice(sp->track()))
+                  continue;
             // ignore voltas
             if (sp->type() == Element::Type::VOLTA)
                   continue;
