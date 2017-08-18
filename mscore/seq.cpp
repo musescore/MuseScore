@@ -912,11 +912,11 @@ void Seq::process(unsigned n, float* buffer)
       for (unsigned i = 0; i < n; ++i) {
             qreal val = *p;
             lv = qMax(lv, qAbs(val));
-            *p++ = val;
+            p++;
 
             val = *p;
             rv = qMax(rv, qAbs(val));
-            *p++ = val;
+            p++;
             }
       meterValue[0] = lv;
       meterValue[1] = rv;
