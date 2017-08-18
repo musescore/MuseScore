@@ -915,7 +915,7 @@ void Seq::process(unsigned n, float* buffer)
             *p++ = val;
 
             val = *p;
-            rv = qMax(lv, qAbs(val));
+            rv = qMax(rv, qAbs(val));
             *p++ = val;
             }
       meterValue[0] = lv;
