@@ -923,11 +923,11 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
       for (unsigned i = 0; i < framesRemain; ++i) {
             qreal val = *p;
             lv = qMax(lv, qAbs(val));
-            *p++ = val;
+            p++;
 
             val = *p;
             rv = qMax(rv, qAbs(val));
-            *p++ = val;
+            p++;
             }
       meterValue[0] = lv;
       meterValue[1] = rv;
