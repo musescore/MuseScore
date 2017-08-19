@@ -524,6 +524,7 @@ if (MINGW)
 
     install(FILES
       ${CROSSQT}/plugins/platforms/qwindows.dll
+      ${CROSSQT}/plugins/platforms/qwindowsd.dll
       DESTINATION bin/platforms)
 
     install(FILES

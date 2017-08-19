@@ -18,14 +18,14 @@
 //=============================================================================
 
 #include <iostream>
-
 #include "mainwindow.h"
-#include <QApplication>
 
 main(int argc, char *argv[])
-      {
+      {      
 
       QApplication a(argc, argv);
+      QString sDir = QCoreApplication::applicationDirPath();
+      a.addLibraryPath(sDir+"/platform");
       MainWindow w;
       w.show();
 

@@ -31,3 +31,5 @@ ADD_DEFINITIONS(-DUNICODE)
 
 ADD_DEPENDENCIES(musescore_crashreporter mops1)
 ADD_DEPENDENCIES(musescore_crashreporter mops2)
+
+install (TARGETS musescore_crashreporter DESTINATION bin)
