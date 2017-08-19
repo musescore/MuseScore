@@ -73,7 +73,7 @@ after_build:
   - del MuseScore.pdb
   - del MuseScore.sym
   - cmd: 7z a C:\MuseScore\MuseScoreNightly-%MSversion%.7z C:\MuseScore\win32install
-  - cmd: curl -H "Authorization&#58; Bearer %DROPBOX_API_KEY%" https://api-content.dropbox.com/1/files_put/auto/ -T C:\MuseScore\MuseScoreNightly-%MSversion%.7z
+  - curl -H "Authorization: Bearer %DROPBOX_API_KEY%" https://api-content.dropbox.com/1/files_put/auto/ -T C:\MuseScore\MuseScoreNightly-%MSversion%.7z
   - cmd: curl -T C:\MuseScore\MuseScoreNightly-%MSversion%.7z -ugsocnikos:%BINTRAY_API_KEY% https://api.bintray.com/content/musescoregsoc/myrepo/MuseScoreNightly/%MSversion%/MuseScoreNightly-%MSversion%.7z
   - cd C:\MuseScore
 artifacts:
