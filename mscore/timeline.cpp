@@ -2620,7 +2620,7 @@ Staff* Timeline::numToStaff(int staff)
       if (!_score)
             return 0;
       QList<Staff*> staves = _score->staves();
-      if (staves.size() >= staff && staff >= 0)
+      if (staves.size() > staff && staff >= 0)
             return staves.at(staff);
       else
             return 0;
