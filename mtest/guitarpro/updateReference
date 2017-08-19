@@ -105,6 +105,10 @@ cp   $MSCORE/all-percussion.gp5.mscx all-percussion.gp5-ref.mscx
 cp   $MSCORE/fermata.gpx.mscx fermata.gpx-ref.mscx
 # cp   $MSCORE/directions.gpx.mscx directions.gpx-ref.mscx
 cp   $MSCORE/slur.gpx.mscx slur.gpx-ref.mscx
+cp   $MSCORE/slur_hammer_slur.gpx.mscx slur_hammer_slur.gpx-ref.mscx
+cp   $MSCORE/slur_over_3_measures.gpx.mscx  slur_over_3_measures.gpx-ref.mscx
+cp   $MSCORE/slur_slur_hammer.gpx.mscx  slur_slur_hammer.gpx-ref.mscx
+cp   $MSCORE/slur_voices.gpx.mscx slur_voices.gpx-ref.mscx
 cp   $MSCORE/vibrato.gpx.mscx vibrato.gpx-ref.mscx
 cp   $MSCORE/volume-swell.gpx.mscx volume-swell.gpx-ref.mscx
 # cp   $MSCORE/tremolo-bar.gpx.mscx tremolo-bar.gpx-ref.mscx

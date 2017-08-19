@@ -1107,8 +1107,8 @@ void GuitarPro::createSlur(bool hasSlur, int staffIdx, ChordRest* cr)
       if (hasSlur && (slurs[staffIdx] == 0)) {
             Slur* slur = new Slur(score);
             slur->setParent(0);
-            slur->setTrack(staffIdx * VOICES);
-            slur->setTrack2(staffIdx * VOICES);
+            slur->setTrack(cr->track());
+            slur->setTrack2(cr->track());
             slur->setTick(cr->tick());
             slur->setTick2(cr->tick());
             slurs[staffIdx] = slur;

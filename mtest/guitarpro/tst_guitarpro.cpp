@@ -129,6 +129,10 @@ private slots:
       void gpxFermata()      { gpReadTest("fermata", "gpx"); }
 //ws: no idea why this does not work      void gpxDirections()   { gpReadTest("directions", "gpx"); }
       void gpxSlur()         { gpReadTest("slur", "gpx"); }
+      void gpxSlurHS()       { gpReadTest("slur_hammer_slur", "gpx"); }
+      void gpxSlur3M()       { gpReadTest("slur_over_3_measures", "gpx"); }
+      void gpxSlurSH()       { gpReadTest("slur_slur_hammer", "gpx"); }
+      void gpxSlurV()        { gpReadTest("slur_voices", "gpx"); }
       void gpxVibrato()      { gpReadTest("vibrato", "gpx"); }
       void gpxVolumeSwell()  { gpReadTest("volume-swell", "gpx"); }
 //      void gpxTremoloBar()   { gpReadTest("tremolo-bar", "gpx"); }
