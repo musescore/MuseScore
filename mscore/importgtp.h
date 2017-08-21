@@ -351,6 +351,7 @@ class GuitarPro6 : public GuitarPro {
             QDomNode notes;
             QDomNode rhythms;
             };
+      Slur** legatos;
       // a mapping from identifiers to fret diagrams by tracks
       QMap<int, QMap<int, FretDiagram*>> fretDiagrams;
       QMap<int, QMap<int, QString>> chordnames;
