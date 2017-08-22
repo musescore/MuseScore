@@ -318,8 +318,10 @@ void Score::putNote(const Position& p, bool replace)
                   }
             case StaffGroup::TAB:
                   stringData = st->part()->instrument(s->tick())->stringData();
+                  _is.setDrumNote(-1);
                   break;
             case StaffGroup::STANDARD:
+                  _is.setDrumNote(-1);
                   break;
             }
 
