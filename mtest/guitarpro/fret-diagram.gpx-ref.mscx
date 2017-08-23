@@ -105,9 +105,9 @@
           <sigD>8</sigD>
           </TimeSig>
         <Tempo>
-          <tempo>2</tempo>
+          <tempo>1.68333</tempo>
           <lid>4</lid>
-          <text><sym>metNoteQuarterUp</sym> = 120</text>
+          <text><sym>metNoteQuarterUp</sym> = 101</text>
           </Tempo>
         <Rest>
           <lid>5</lid>
@@ -1046,9 +1046,9 @@
             <sigD>8</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>2</tempo>
+            <tempo>1.68333</tempo>
             <lid>4</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
+            <text><sym>metNoteQuarterUp</sym> = 101</text>
             </Tempo>
           <Rest>
             <lid>5</lid>

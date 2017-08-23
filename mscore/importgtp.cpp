@@ -95,6 +95,7 @@ GuitarPro::GuitarPro(Score* s, int v)
       version = v;
       _codec = QTextCodec::codecForName(preferences.importCharsetGP.toLatin1());
       voltaSequence = 1;
+      tempo = -1;
       }
 
 GuitarPro::~GuitarPro()

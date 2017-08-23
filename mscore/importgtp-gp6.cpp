@@ -106,8 +106,10 @@ const static std::map<QString, QString> instrumentMapping = {
             {"s-gtr7", "guitar-steel-treble-clef"},
             {"s-gtr8", "guitar-steel-treble-clef"},
             {"snt-lead-ss", "poly-synth"},
+            {"tmbrn",  "tambourine"}, // to be mapped
             {"tnr-s",  "voice"},
             {"snt-bass-ss", "metallic-synth"},
+            {"vbrslp", "vibraslap"}, // to be mapped
             {"vla", "viola"},
             {"vln", "violin"},
             {"xlphn", "xylophone"}
@@ -342,8 +344,13 @@ void GuitarPro6::readMasterTracks(QDomNode* masterTrack)
                   QDomNode currentAutomation = currentNode.firstChild();
                   while (!currentAutomation.isNull()) {
                         if (!currentAutomation.nodeName().compare("Automation")) {
-                              if (!currentAutomation.firstChild().nodeName().compare("Tempo"))
-                                    tempo = currentAutomation.lastChild().toElement().text().toInt();
+                              if (!currentAutomation.firstChild().toElement().text().compare("Tempo")) {
+                                    QString t = currentAutomation.lastChild().toElement().text();
+                                    QStringList sa = t.split(" ");
+                                    if (sa.length() >= 1) {
+                                          tempo = sa[0].toInt();
+                                          }
+                                    }
                               }
                         currentAutomation = currentAutomation.nextSibling();
                         }
@@ -1876,6 +1883,19 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                               measure->setRepeatEnd(true);
                         measure->setRepeatCount(count);
                         }
+                  else if (!masterBarElement.nodeName().compare("Section")) {
+                        QString letter = masterBarElement.firstChild().toElement().text();
+                        QString text = masterBarElement.lastChild().toElement().text();
+                        qDebug() << letter << text;
+                        Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
+                        bool rm = segment->findAnnotationOrElement(ElementType::REHEARSAL_MARK, 0, 1);
+                        if (!rm && (!letter.isEmpty() || !text.isEmpty())) {
+                              Text* s = new RehearsalMark(score);
+                              s->setPlainText(letter.isEmpty() ? text : letter);
+                              s->setTrack(0);
+                              segment->add(s);
+                              }
+                        }
                   else if (!masterBarElement.nodeName().compare("AlternateEndings")) {
                         QString endNumbers = masterBarElement.toElement().text();
                         Ms::Volta* volta = new Ms::Volta(score);
@@ -2023,7 +2043,8 @@ void GuitarPro6::readGpif(QByteArray* data)
                   }
             }
       // set the starting tempo of the score
-      setTempo(/*tempo*/120, score->firstMeasure());
+      if (tempo > 0)
+            setTempo(tempo, score->firstMeasure());
       }
 
 //---------------------------------------------------------
