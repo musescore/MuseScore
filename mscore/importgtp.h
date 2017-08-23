@@ -33,6 +33,7 @@
 #include "libmscore/keysig.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/ottava.h"
+#include "libmscore/pedal.h"
 #include "libmscore/drumset.h"
 
 namespace Ms {
@@ -192,6 +193,7 @@ class GuitarPro {
       int voltaSequence;
       QTextCodec* _codec;
       Slur** slurs;
+      Pedal** letRings;
 
       void skip(qint64 len);
       void read(void* p, qint64 len);
@@ -223,7 +225,7 @@ class GuitarPro {
       void createCrecDim(int staffIdx, int track, int tick, bool crec);
       Text* addTextToNote(QString, Align, Note*);
       void addPalmMute(Note* note);
-      void addLetRing(Note* note);
+      void addLetRing(Chord* chord, int staffIdx, bool hasLetRing);
       void addTap(Note* note);
       void addSlap(Note* note);
       void addPop(Note* note);

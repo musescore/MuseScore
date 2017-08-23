@@ -539,8 +539,11 @@ void GuitarPro5::read(QFile* fp)
       staves  = readInt();
 
       slurs = new Slur*[staves];
-      for (int i = 0; i < staves; ++i)
+      letRings = new Pedal*[staves];
+      for (int i = 0; i < staves; ++i) {
             slurs[i] = 0;
+            letRings[i] = 0;
+            }
 
       int tnumerator   = 4;
       int tdenominator = 4;
@@ -623,8 +626,9 @@ bool GuitarPro5::readNoteEffects(Note* note)
       if (modMask1 & EFFECT_HAMMER)
             slur = true;
       if (modMask1 & EFFECT_LET_RING)
-            addLetRing(note);
-
+            addLetRing(note->chord(), note->staffIdx(), true);
+      else
+            addLetRing(note->chord(), note->staffIdx(), false);
       if (modMask1 & EFFECT_GRACE) {
             int fret = readUChar();            // grace fret
             int dynamic = readUChar();            // grace dynamic

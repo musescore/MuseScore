@@ -263,7 +263,9 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             if (modMask1 & EFFECT_HAMMER)
                   slur = true;
             if (modMask1 & EFFECT_LET_RING)
-                  addLetRing(note);
+                  addLetRing(note->chord(), note->staffIdx(), true);
+            else
+                  addLetRing(note->chord(), note->staffIdx(), false);
             if (modMask1 & EFFECT_GRACE) {
                   int fret = readUChar();            // grace fret
                   int dynamic = readUChar();            // grace dynamic
@@ -663,8 +665,12 @@ void GuitarPro4::read(QFile* fp)
             }
 
       slurs = new Slur*[staves];
-      for (int i = 0; i < staves; ++i)
+      letRings = new Pedal*[staves];
+      for (int i = 0; i < staves; ++i) {
             slurs[i] = 0;
+            letRings[i] = 0;
+            }
+
       Measure* measure = score->firstMeasure();
       bool mixChange = false;
       for (int bar = 0; bar < measures; ++bar, measure = measure->nextMeasure()) {

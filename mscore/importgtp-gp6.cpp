@@ -498,6 +498,10 @@ void GuitarPro6::readTracks(QDomNode* track)
                                           Instrument* instr = part->instrument();
                                           instr->setStringData(*stringData);
                                     }
+                              else if (!propertyName.compare("CapoFret")) {
+                                    //QString fret = currentProperty.firstChild().toElement().text();
+                                    //qDebug() << fret;
+                                    }
                               else if (!propertyName.compare("DiagramCollection")) {
                                     QDomNode items = currentProperty.firstChild();
                                     QDomNode currentItem = items.firstChild();
@@ -1231,8 +1235,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       chord->add(a);
                                                       }
                                                 QDomNode letRingNode = currentNote.parentNode().firstChildElement("LetRing");
-                                                if (!letRingNode.isNull())
-                                                      addLetRing(note);
+                                                addLetRing(chord, staffIdx, !letRingNode.isNull());
                                                 QDomNode timerNode = currentNode.parentNode().firstChildElement("Timer");
                                                 if (!timerNode.isNull()) {
                                                       int time = timerNode.toElement().text().toInt();
@@ -1942,12 +1945,16 @@ void GuitarPro6::readGpif(QByteArray* data)
       // and legatos
       slurs = new Slur*[staves * VOICES];
       legatos = new Slur*[staves * VOICES];
+      letRings = new Pedal*[staves];
       ottava.assign(staves * VOICES, 0);
       ottavaFound.assign(staves * VOICES, 0);
       ottavaValue.assign(staves * VOICES, "");
       for (int i = 0; i < staves * VOICES; ++i) {
             slurs[i] = 0;
             legatos[i] = 0;
+            }
+      for (int i = 0; i < staves; ++i) {
+            letRings[i] = 0;
             }
 
       // MasterBars node
