@@ -18,6 +18,7 @@ matrix:
   include:
     # 1st parallel build job - debug build on Ubuntu
     - env: "JOB=Tests"
+      dist: precise
       addons:
         apt:
           sources:
