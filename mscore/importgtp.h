@@ -354,6 +354,7 @@ class GuitarPro6 : public GuitarPro {
             QDomNode rhythms;
             };
       Slur** legatos;
+      TextLine** barres;
       // a mapping from identifiers to fret diagrams by tracks
       QMap<int, QMap<int, FretDiagram*>> fretDiagrams;
       QMap<int, QMap<int, QString>> chordnames;
@@ -382,6 +383,8 @@ class GuitarPro6 : public GuitarPro {
       void makeTie(Note* note);
       int* previousDynamic;
       void addTremoloBar(Segment* segment, int track, int whammyOrigin, int whammyMiddle, int whammyEnd);
+      void addBarre(Chord* chord, int staffIdx, bool hasBarre, QString text = "");
+
 
    protected:
       void readNote(int string, Note* note);

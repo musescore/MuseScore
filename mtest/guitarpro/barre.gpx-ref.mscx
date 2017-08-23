@@ -138,51 +138,61 @@
           <lid>5</lid>
           <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
           </Tempo>
+        <TextLine id="2">
+          <endHook>1</endHook>
+          <endHookHeight>1</endHookHeight>
+          <lid>14</lid>
+          <lineWidth>0.15</lineWidth>
+          <lineStyle>2</lineStyle>
+          <beginText>
+            <text>1/2B  XV</text>
+            </beginText>
+          <continueText>
+            <text>1/2B  XV</text>
+            </continueText>
+          </TextLine>
         <Chord>
           <lid>6</lid>
           <durationType>quarter</durationType>
           <Note>
             <lid>7</lid>
-            <Text>
-              <lid>8</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
-              <text>1/2B XV</text>
-              </Text>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
             <string>2</string>
             </Note>
           </Chord>
+        <endSpanner id="2"/>
         <Chord>
-          <lid>9</lid>
+          <lid>8</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>10</lid>
+            <lid>9</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
             <string>2</string>
             </Note>
           </Chord>
+        <TextLine id="3">
+          <endHook>1</endHook>
+          <endHookHeight>1</endHookHeight>
+          <lid>15</lid>
+          <lineWidth>0.15</lineWidth>
+          <lineStyle>2</lineStyle>
+          <beginText>
+            <text>B  VIII</text>
+            </beginText>
+          <continueText>
+            <text>B  VIII</text>
+            </continueText>
+          </TextLine>
+        <endSpanner id="3"/>
         <Chord>
-          <lid>11</lid>
+          <lid>10</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>12</lid>
-            <Text>
-              <lid>13</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
-              <text>B VIII</text>
-              </Text>
+            <lid>11</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -190,7 +200,7 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>14</lid>
+          <lid>12</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
@@ -358,51 +368,61 @@
             <lid>5</lid>
             <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
             </Tempo>
+          <TextLine id="4">
+            <endHook>1</endHook>
+            <endHookHeight>1</endHookHeight>
+            <lid>14</lid>
+            <lineWidth>0.15</lineWidth>
+            <lineStyle>2</lineStyle>
+            <beginText>
+              <text>1/2B  XV</text>
+              </beginText>
+            <continueText>
+              <text>1/2B  XV</text>
+              </continueText>
+            </TextLine>
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>7</lid>
-              <Text>
-                <lid>8</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
-                <text>1/2B XV</text>
-                </Text>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <endSpanner id="4"/>
           <Chord>
-            <lid>9</lid>
+            <lid>8</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>10</lid>
+              <lid>9</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <TextLine id="5">
+            <endHook>1</endHook>
+            <endHookHeight>1</endHookHeight>
+            <lid>15</lid>
+            <lineWidth>0.15</lineWidth>
+            <lineStyle>2</lineStyle>
+            <beginText>
+              <text>B  VIII</text>
+              </beginText>
+            <continueText>
+              <text>B  VIII</text>
+              </continueText>
+            </TextLine>
+          <endSpanner id="5"/>
           <Chord>
-            <lid>11</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>12</lid>
-              <Text>
-                <lid>13</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
-                <text>B VIII</text>
-                </Text>
+              <lid>11</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -410,7 +430,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>14</lid>
+            <lid>12</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
@@ -425,51 +445,61 @@
             <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
+          <TextLine id="6">
+            <endHook>1</endHook>
+            <endHookHeight>1</endHookHeight>
+            <lid>14</lid>
+            <lineWidth>0.15</lineWidth>
+            <lineStyle>2</lineStyle>
+            <beginText>
+              <text>1/2B  XV</text>
+              </beginText>
+            <continueText>
+              <text>1/2B  XV</text>
+              </continueText>
+            </TextLine>
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>7</lid>
-              <Text>
-                <lid>8</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
-                <text>1/2B XV</text>
-                </Text>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <endSpanner id="6"/>
           <Chord>
-            <lid>9</lid>
+            <lid>8</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>10</lid>
+              <lid>9</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <TextLine id="7">
+            <endHook>1</endHook>
+            <endHookHeight>1</endHookHeight>
+            <lid>15</lid>
+            <lineWidth>0.15</lineWidth>
+            <lineStyle>2</lineStyle>
+            <beginText>
+              <text>B  VIII</text>
+              </beginText>
+            <continueText>
+              <text>B  VIII</text>
+              </continueText>
+            </TextLine>
+          <endSpanner id="7"/>
           <Chord>
-            <lid>11</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>12</lid>
-              <Text>
-                <lid>13</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
-                <text>B VIII</text>
-                </Text>
+              <lid>11</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -477,7 +507,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>14</lid>
+            <lid>12</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>

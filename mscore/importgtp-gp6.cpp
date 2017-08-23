@@ -1172,12 +1172,11 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
 
                                                       // if a barre fret has been specified
                                                       if (barreFret.compare("")) {
-                                                            TextStyle textStyle;
-                                                            textStyle.setAlign(AlignmentFlags::CENTER);
-                                                            if (halfBarre)
-                                                                  addTextToNote("1/2B " + barreFret, textStyle, note);
-                                                            else
-                                                                  addTextToNote("B " + barreFret, textStyle, note);
+                                                            QString barreText = QString("%1 %2").arg(halfBarre ? "1/2B " : "B ", barreFret);
+                                                            addBarre(chord, staffIdx, true, barreText);
+                                                            }
+                                                      else {
+                                                            addBarre(chord, staffIdx, false);
                                                             }
                                                       }
                                                 QDomNode dynamicsNode = currentNode.parentNode().firstChildElement("Dynamic");
@@ -1888,7 +1887,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         QString text = masterBarElement.lastChild().toElement().text();
                         qDebug() << letter << text;
                         Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
-                        bool rm = segment->findAnnotationOrElement(Element::Type::REHEARSAL_MARK, 0, 1);
+                        bool rm = segment->findAnnotation(Element::Type::REHEARSAL_MARK, 0, 1);
                         if (!rm && (!letter.isEmpty() || !text.isEmpty())) {
                               Text* s = new RehearsalMark(score);
                               s->setPlainText(letter.isEmpty() ? text : letter);
@@ -1966,6 +1965,7 @@ void GuitarPro6::readGpif(QByteArray* data)
       slurs = new Slur*[staves * VOICES];
       legatos = new Slur*[staves * VOICES];
       letRings = new Pedal*[staves];
+      barres = new TextLine*[staves];
       ottava.assign(staves * VOICES, 0);
       ottavaFound.assign(staves * VOICES, 0);
       ottavaValue.assign(staves * VOICES, "");
@@ -1975,6 +1975,7 @@ void GuitarPro6::readGpif(QByteArray* data)
             }
       for (int i = 0; i < staves; ++i) {
             letRings[i] = 0;
+            barres[i] = 0;
             }
 
       // MasterBars node
@@ -2078,6 +2079,43 @@ int GuitarPro6::readBeatEffects(int, Segment*)
       {
       qDebug("reading beat effects (.gpx)...\n");
       return 0;
+      }
+
+//---------------------------------------------------------
+//   addBarre
+//---------------------------------------------------------
+
+void GuitarPro6::addBarre(Chord* chord, int staffIdx, bool hasBarre, QString text)
+      {
+      if (hasBarre) {
+            TextLine* tl = barres[staffIdx];
+            if (tl && tl->beginText() == text) {
+                  // we already have pedal, let's expand it
+                  tl->setTick2(chord->tick() + chord->actualTicks());
+                  }
+            else {
+                  // we don't have pedal. Let's create one
+                  tl = new TextLine(score);
+                  tl->setParent(0);
+                  tl->setBeginText(text);
+                  tl->setContinueText(text);
+                  tl->setEndHook(true);
+                  tl->setTick(chord->tick());
+                  tl->setTrack(chord->track());
+                  tl->setTrack2(chord->track());
+                  tl->setLineStyle(Qt::DashLine);
+                  tl->setEndHookHeight(Spatium(1));
+                  tl->setYoff(-2.5);
+                  barres[staffIdx] = tl;
+                  score->addElement(tl);
+                  }
+            }
+      else {
+            // no more ring
+            TextLine* tl = barres[staffIdx];
+            if (tl)
+                  barres[staffIdx] = 0;
+            }
       }
 
 }

@@ -186,6 +186,7 @@ public:
       void clearAnnotations();
       void removeAnnotation(Element* e);
       bool findAnnotationOrElement(Element::Type type, int minTrack, int maxTrack);
+      bool findAnnotation(Element::Type type, int minTrack, int maxTrack);
 
       QQmlListProperty<Ms::Element> qmlAnnotations()  { return QmlListAccess<Ms::Element>(this, _annotations); }
 
