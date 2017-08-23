@@ -13,6 +13,7 @@
 #include "importgtp.h"
 #include "globals.h"
 #include "libmscore/score.h"
+#include "libmscore/elementlayout.h"
 #include "libmscore/measurebase.h"
 #include "libmscore/text.h"
 #include "libmscore/box.h"
@@ -326,10 +327,40 @@ void GuitarPro::addPalmMute(Note* note)
 //   addLetRing
 //---------------------------------------------------------
 
-void GuitarPro::addLetRing(Note* note)
+void GuitarPro::addLetRing(Chord* chord, int staffIdx, bool hasLetRing)
       {
-      Text* t = addTextToNote("let ring", Align::CENTER, note);
-      t->setItalic(true);
+      if (hasLetRing) {
+            Pedal* p = letRings[staffIdx];
+            if (p) {
+                  // we already have pedal, let's expand it
+                  Pedal* p = letRings[staffIdx];
+                  p->setTick2(chord->tick() + chord->actualTicks());
+                  }
+            else {
+                  // we don't have pedal. Let's create one
+                  Pedal* p = new Pedal(score);
+                  p->setParent(0);
+                  p->setBeginText("let ring");
+                  p->setContinueText("let ring");
+                  p->setEndHookType(HookType::HOOK_90);
+                  p->setTick(chord->tick());
+                  p->setTrack(chord->track());
+                  p->setTrack2(chord->track());
+                  p->setLineStyle(Qt::DashLine);
+                  p->setEndHookHeight(Spatium(1));
+                  p->setPlacement(Element::Placement::ABOVE);
+                  p->setProperty(P_ID::BEGIN_FONT_ITALIC, true);
+                  p->setProperty(P_ID::CONTINUE_FONT_ITALIC, true);
+                  letRings[staffIdx] = p;
+                  score->addElement(p);
+                  }
+            }
+      else {
+            // no more ring
+            Pedal* p = letRings[staffIdx];
+            if (p)
+                  letRings[staffIdx] = 0;
+            }
       }
 
 //---------------------------------------------------------
