@@ -200,6 +200,8 @@ class Segment : public Element {
       void clearAnnotations();
       void removeAnnotation(Element* e);
       bool findAnnotationOrElement(ElementType type, int minTrack, int maxTrack);
+      bool findAnnotation(ElementType type, int minTrack, int maxTrack);
+
 
       qreal dotPosX(int staffIdx) const          { return _dotPosX[staffIdx];  }
       void setDotPosX(int staffIdx, qreal val)   { _dotPosX[staffIdx] = val;   }

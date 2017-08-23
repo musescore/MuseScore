@@ -330,16 +330,15 @@ void GuitarPro::addPalmMute(Note* note)
 
 void GuitarPro::addLetRing(Chord* chord, int staffIdx, bool hasLetRing)
       {
+      Pedal* p = letRings[staffIdx];
       if (hasLetRing) {
-            Pedal* p = letRings[staffIdx];
             if (p) {
                   // we already have pedal, let's expand it
-                  Pedal* p = letRings[staffIdx];
                   p->setTick2(chord->tick() + chord->actualTicks());
                   }
             else {
                   // we don't have pedal. Let's create one
-                  Pedal* p = new Pedal(score);
+                  p = new Pedal(score);
                   p->setParent(0);
                   p->setBeginText("let ring");
                   p->setContinueText("let ring");
@@ -358,7 +357,6 @@ void GuitarPro::addLetRing(Chord* chord, int staffIdx, bool hasLetRing)
             }
       else {
             // no more ring
-            Pedal* p = letRings[staffIdx];
             if (p)
                   letRings[staffIdx] = 0;
             }
@@ -455,17 +453,21 @@ void GuitarPro::addDynamic(Note* note, int d)
             qDebug() << "addDynamics: No chord associated with this note";
             return;
             }
-      Dynamic* dyn = new Dynamic(score);
-      // guitar pro only allows their users to go from ppp to fff
-      QString map_dyn[] = {"f","ppp","pp","p","mp","mf","f","ff","fff"};
-      dyn->setDynamicType(map_dyn[d]);
-      dyn->setTrack(note->track());
+      Segment* s = nullptr;
       if (note->chord()->isGrace()) {
             Chord* parent = static_cast<Chord*>(note->chord()->parent());
-            parent->segment()->add(dyn);
+            s = parent->segment();
             }
       else
-            note->chord()->segment()->add(dyn);
+            s = note->chord()->segment();
+      if (!s->findAnnotation(ElementType::DYNAMIC, note->staffIdx() * VOICES, note->staffIdx() * VOICES + VOICES - 1)) {
+            Dynamic* dyn = new Dynamic(score);
+            // guitar pro only allows their users to go from ppp to fff
+            QString map_dyn[] = {"f","ppp","pp","p","mp","mf","f","ff","fff"};
+            dyn->setDynamicType(map_dyn[d]);
+            dyn->setTrack(note->track());
+            s->add(dyn);
+            }
       }
 
 void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
