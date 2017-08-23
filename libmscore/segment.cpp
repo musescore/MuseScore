@@ -939,6 +939,19 @@ bool Segment::findAnnotationOrElement(ElementType type, int minTrack, int maxTra
       }
 
 //---------------------------------------------------------
+//   findAnnotation
+///  return true if an annotation of type type
+//---------------------------------------------------------
+
+bool Segment::findAnnotation(ElementType type, int minTrack, int maxTrack)
+      {
+      for (const Element* e : _annotations)
+            if (e->type() == type && e->track() >= minTrack && e->track() <= maxTrack)
+                  return true;
+      return false;
+      }
+
+//---------------------------------------------------------
 //   removeAnnotation
 //---------------------------------------------------------
 

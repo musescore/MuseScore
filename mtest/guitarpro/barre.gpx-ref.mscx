@@ -113,16 +113,19 @@
           <lid>5</lid>
           <text><sym>metNoteQuarterUp</sym> = 120</text>
           </Tempo>
+        <TextLine id="2">
+          <endHookType>1</endHookType>
+          <endHookHeight>1</endHookHeight>
+          <beginText>1/2B  XV</beginText>
+          <continueText>1/2B  XV</continueText>
+          <lid>14</lid>
+          <lineStyle>2</lineStyle>
+          </TextLine>
         <Chord>
           <lid>6</lid>
           <durationType>quarter</durationType>
           <Note>
             <lid>7</lid>
-            <Text>
-              <lid>8</lid>
-              <align>center,center</align>
-              <text>1/2B XV</text>
-              </Text>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -130,26 +133,29 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>9</lid>
+          <lid>8</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>10</lid>
+            <lid>9</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
             <string>2</string>
             </Note>
           </Chord>
+        <TextLine id="3">
+          <endHookType>1</endHookType>
+          <endHookHeight>1</endHookHeight>
+          <beginText>B  VIII</beginText>
+          <continueText>B  VIII</continueText>
+          <lid>15</lid>
+          <lineStyle>2</lineStyle>
+          </TextLine>
         <Chord>
-          <lid>11</lid>
+          <lid>10</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>12</lid>
-            <Text>
-              <lid>13</lid>
-              <align>center,center</align>
-              <text>B VIII</text>
-              </Text>
+            <lid>11</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -157,7 +163,7 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>14</lid>
+          <lid>12</lid>
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
@@ -295,16 +301,19 @@
             <lid>5</lid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
+          <TextLine id="4">
+            <endHookType>1</endHookType>
+            <endHookHeight>1</endHookHeight>
+            <beginText>1/2B  XV</beginText>
+            <continueText>1/2B  XV</continueText>
+            <lid>14</lid>
+            <lineStyle>2</lineStyle>
+            </TextLine>
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>7</lid>
-              <Text>
-                <lid>8</lid>
-                <align>center,center</align>
-                <text>1/2B XV</text>
-                </Text>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -312,26 +321,29 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>9</lid>
+            <lid>8</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>10</lid>
+              <lid>9</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <TextLine id="5">
+            <endHookType>1</endHookType>
+            <endHookHeight>1</endHookHeight>
+            <beginText>B  VIII</beginText>
+            <continueText>B  VIII</continueText>
+            <lid>15</lid>
+            <lineStyle>2</lineStyle>
+            </TextLine>
           <Chord>
-            <lid>11</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>12</lid>
-              <Text>
-                <lid>13</lid>
-                <align>center,center</align>
-                <text>B VIII</text>
-                </Text>
+              <lid>11</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -339,7 +351,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>14</lid>
+            <lid>12</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
@@ -350,16 +362,19 @@
             <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
+          <TextLine id="6">
+            <endHookType>1</endHookType>
+            <endHookHeight>1</endHookHeight>
+            <beginText>1/2B  XV</beginText>
+            <continueText>1/2B  XV</continueText>
+            <lid>14</lid>
+            <lineStyle>2</lineStyle>
+            </TextLine>
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>7</lid>
-              <Text>
-                <lid>8</lid>
-                <align>center,center</align>
-                <text>1/2B XV</text>
-                </Text>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -367,26 +382,29 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>9</lid>
+            <lid>8</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>10</lid>
+              <lid>9</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <TextLine id="7">
+            <endHookType>1</endHookType>
+            <endHookHeight>1</endHookHeight>
+            <beginText>B  VIII</beginText>
+            <continueText>B  VIII</continueText>
+            <lid>15</lid>
+            <lineStyle>2</lineStyle>
+            </TextLine>
           <Chord>
-            <lid>11</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>12</lid>
-              <Text>
-                <lid>13</lid>
-                <align>center,center</align>
-                <text>B VIII</text>
-                </Text>
+              <lid>11</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -394,7 +412,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>14</lid>
+            <lid>12</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
