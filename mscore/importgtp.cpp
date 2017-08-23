@@ -329,13 +329,46 @@ void GuitarPro::addPalmMute(Note* note)
 //   addLetRing
 //---------------------------------------------------------
 
-void GuitarPro::addLetRing(Note* note)
+void GuitarPro::addLetRing(Chord* chord, int staffIdx, bool hasLetRing)
       {
-      QString letRing = "let ring";
-      TextStyle textStyle;
-      textStyle.setItalic(true);
-      textStyle.setAlign(AlignmentFlags::CENTER);
-      addTextToNote(letRing, textStyle, note);
+      if (hasLetRing) {
+            Pedal* p = letRings[staffIdx];
+            if (p) {
+                  // we already have pedal, let's expand it
+                  Pedal* p = letRings[staffIdx];
+                  p->setTick2(chord->tick() + chord->actualTicks());
+                  }
+            else {
+                  // we don't have pedal. Let's create one
+                  Pedal* p = new Pedal(score);
+                  p->setParent(0);
+                  p->setBeginText("let ring");
+                  p->setContinueText("let ring");
+                  p->setEndHook(true);
+                  p->setTick(chord->tick());
+                  p->setTrack(chord->track());
+                  p->setTrack2(chord->track());
+                  p->setLineStyle(Qt::DashLine);
+                  p->setEndHookHeight(Spatium(1));
+                  p->setYoff(-2.5);
+                  Align align = p->beginTextElement()->textStyle().align();
+                  align = (align & AlignmentFlags::HMASK) | AlignmentFlags::BASELINE;
+                  p->beginTextElement()->textStyle().setAlign(align);
+                  align = p->continueTextElement()->textStyle().align();
+                  align = (align & AlignmentFlags::HMASK) | AlignmentFlags::BASELINE;
+                  p->continueTextElement()->textStyle().setAlign(align);
+                  p->beginTextElement()->textStyle().setItalic(true);
+                  p->continueTextElement()->textStyle().setItalic(true);
+                  letRings[staffIdx] = p;
+                  score->addElement(p);
+                  }
+            }
+      else {
+            // no more ring
+            Pedal* p = letRings[staffIdx];
+            if (p)
+                  letRings[staffIdx] = 0;
+            }
       }
 
 //---------------------------------------------------------
