@@ -858,6 +858,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
 
                                                 QString harmonicText = "";
                                                 bool hasSlur = false;
+                                                bool hasPalmMute = false;
                                                 while (!currentProperty.isNull()) {
                                                       QString argument = currentProperty.attributes().namedItem("name").toAttr().value();
                                                       if (argument == "String")
@@ -896,7 +897,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             }
                                                       else if (argument == "PalmMuted") {
                                                             if (!currentProperty.firstChild().nodeName().compare("Enable"))
-                                                                  addPalmMute(note);
+                                                                  hasPalmMute = true;
                                                             }
                                                       else if (argument == "Tapped") {
                                                             if (!currentProperty.firstChild().nodeName().compare("Enable"))
@@ -966,7 +967,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             }
                                                       currentProperty = currentProperty.nextSibling();
                                                 }
-
+                                                addPalmMute(chord, staffIdx, hasPalmMute);
                                                 if (midi != "")
                                                       note->setPitch(midi.toInt());
                                                 else if (element != "")
@@ -1966,6 +1967,7 @@ void GuitarPro6::readGpif(QByteArray* data)
       legatos = new Slur*[staves * VOICES];
       letRings = new Pedal*[staves];
       barres = new TextLine*[staves];
+      palmMutes = new TextLine*[staves];
       ottava.assign(staves * VOICES, 0);
       ottavaFound.assign(staves * VOICES, 0);
       ottavaValue.assign(staves * VOICES, "");
@@ -1976,6 +1978,7 @@ void GuitarPro6::readGpif(QByteArray* data)
       for (int i = 0; i < staves; ++i) {
             letRings[i] = 0;
             barres[i] = 0;
+            palmMutes[i] = 0;
             }
 
       // MasterBars node
@@ -2090,11 +2093,11 @@ void GuitarPro6::addBarre(Chord* chord, int staffIdx, bool hasBarre, QString tex
       if (hasBarre) {
             TextLine* tl = barres[staffIdx];
             if (tl && tl->beginText() == text) {
-                  // we already have pedal, let's expand it
+                  // we already have barre, let's expand it
                   tl->setTick2(chord->tick() + chord->actualTicks());
                   }
             else {
-                  // we don't have pedal. Let's create one
+                  // we don't have barre. Let's create one
                   tl = new TextLine(score);
                   tl->setParent(0);
                   tl->setBeginText(text);
@@ -2111,7 +2114,7 @@ void GuitarPro6::addBarre(Chord* chord, int staffIdx, bool hasBarre, QString tex
                   }
             }
       else {
-            // no more ring
+            // no more barre
             TextLine* tl = barres[staffIdx];
             if (tl)
                   barres[staffIdx] = 0;

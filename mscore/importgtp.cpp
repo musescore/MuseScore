@@ -318,12 +318,36 @@ void GuitarPro::initGuitarProDrumset()
 //   addPalmMate
 //---------------------------------------------------------
 
-void GuitarPro::addPalmMute(Note* note)
+void GuitarPro::addPalmMute(Chord* chord, int staffIdx, bool hasPM)
       {
-      QString palmMute = "P.M.";
-      TextStyle textStyle;
-      textStyle.setAlign(AlignmentFlags::CENTER);
-      addTextToNote(palmMute, textStyle, note);
+      TextLine* tl = palmMutes[staffIdx];
+      if (hasPM) {
+            if (tl) {
+                  // we already have pm, let's expand it
+                  tl->setTick2(chord->tick() + chord->actualTicks());
+                  }
+            else {
+                  // we don't have pm. Let's create one
+                  tl = new TextLine(score);
+                  tl->setParent(0);
+                  tl->setBeginText("P.M.");
+                  tl->setContinueText("P.M.");
+                  tl->setEndHook(true);
+                  tl->setTick(chord->tick());
+                  tl->setTrack(chord->track());
+                  tl->setTrack2(chord->track());
+                  tl->setLineStyle(Qt::DashLine);
+                  tl->setEndHookHeight(Spatium(1));
+                  tl->setYoff(-2.5);
+                  palmMutes[staffIdx] = tl;
+                  score->addElement(tl);
+                  }
+            }
+      else {
+            // no more pm
+            if (tl)
+                  palmMutes[staffIdx] = 0;
+            }
       }
 
 //---------------------------------------------------------
