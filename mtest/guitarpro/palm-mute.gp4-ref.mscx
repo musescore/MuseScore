@@ -77,16 +77,19 @@
           <velocity>80</velocity>
           <lid>5</lid>
           </Dynamic>
+        <TextLine id="2">
+          <endHookType>1</endHookType>
+          <endHookHeight>1</endHookHeight>
+          <beginText>P.M.</beginText>
+          <continueText>P.M.</continueText>
+          <lid>15</lid>
+          <lineStyle>2</lineStyle>
+          </TextLine>
         <Chord>
           <lid>6</lid>
           <durationType>quarter</durationType>
           <Note>
             <lid>7</lid>
-            <Text>
-              <lid>8</lid>
-              <align>center,center</align>
-              <text>P.M.</text>
-              </Text>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -94,10 +97,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>9</lid>
+          <lid>8</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>10</lid>
+            <lid>9</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -105,10 +108,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>11</lid>
+          <lid>10</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>12</lid>
+            <lid>11</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>4</fret>
@@ -116,10 +119,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>13</lid>
+          <lid>12</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>14</lid>
+            <lid>13</lid>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <fret>7</fret>
@@ -225,16 +228,19 @@
             <velocity>80</velocity>
             <lid>5</lid>
             </Dynamic>
+          <TextLine id="3">
+            <endHookType>1</endHookType>
+            <endHookHeight>1</endHookHeight>
+            <beginText>P.M.</beginText>
+            <continueText>P.M.</continueText>
+            <lid>15</lid>
+            <lineStyle>2</lineStyle>
+            </TextLine>
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>7</lid>
-              <Text>
-                <lid>8</lid>
-                <align>center,center</align>
-                <text>P.M.</text>
-                </Text>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -242,10 +248,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>9</lid>
+            <lid>8</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>10</lid>
+              <lid>9</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -253,10 +259,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>11</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>12</lid>
+              <lid>11</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>4</fret>
@@ -264,10 +270,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>13</lid>
+            <lid>12</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>14</lid>
+              <lid>13</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>7</fret>
@@ -282,16 +288,19 @@
             <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
+          <TextLine id="4">
+            <endHookType>1</endHookType>
+            <endHookHeight>1</endHookHeight>
+            <beginText>P.M.</beginText>
+            <continueText>P.M.</continueText>
+            <lid>15</lid>
+            <lineStyle>2</lineStyle>
+            </TextLine>
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>7</lid>
-              <Text>
-                <lid>8</lid>
-                <align>center,center</align>
-                <text>P.M.</text>
-                </Text>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -299,10 +308,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>9</lid>
+            <lid>8</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>10</lid>
+              <lid>9</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -310,10 +319,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>11</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>12</lid>
+              <lid>11</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>4</fret>
@@ -321,10 +330,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>13</lid>
+            <lid>12</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>14</lid>
+              <lid>13</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>7</fret>
