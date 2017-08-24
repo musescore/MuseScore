@@ -540,9 +540,11 @@ void GuitarPro5::read(QFile* fp)
 
       slurs = new Slur*[staves];
       letRings = new Pedal*[staves];
+      palmMutes = new TextLine*[staves];
       for (int i = 0; i < staves; ++i) {
             slurs[i] = 0;
             letRings[i] = 0;
+            palmMutes[i] = 0;
             }
 
       int tnumerator   = 4;
@@ -720,7 +722,9 @@ bool GuitarPro5::readNoteEffects(Note* note)
             chord->add(a);
             }
       if (modMask2 & EFFECT_PALM_MUTE)
-            addPalmMute(note);
+            addPalmMute(note->chord(), note->staffIdx(), true);
+      else
+            addPalmMute(note->chord(), note->staffIdx(), false);
 
       if (modMask2 & EFFECT_TREMOLO) {    // tremolo picking length
             int tremoloDivision = readUChar();
