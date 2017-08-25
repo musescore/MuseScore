@@ -258,7 +258,7 @@ class GuitarPro {
 class GuitarPro1 : public GuitarPro {
 
    protected:
-      void readNote(int string, Note* note);
+      bool readNote(int string, Note* note);
       virtual int readBeatEffects(int track, Segment*);
 
    public:

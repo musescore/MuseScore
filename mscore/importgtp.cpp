@@ -1557,7 +1557,7 @@ void GuitarPro2::read(QFile* fp)
 //   readNote
 //---------------------------------------------------------
 
-void GuitarPro1::readNote(int string, Note* note)
+bool GuitarPro1::readNote(int string, Note* note)
       {
       uchar noteBits = readUChar();
 
@@ -1621,6 +1621,7 @@ void GuitarPro1::readNote(int string, Note* note)
             int b = readUChar();
             qDebug("Fingering=========%d %d", a, b);
             }
+      bool slur = false;
       if (noteBits & BEAT_EFFECTS) {
             uchar modMask1 = readUChar();
             uchar modMask2 = 0;
@@ -1705,8 +1706,8 @@ void GuitarPro1::readNote(int string, Note* note)
                          score->addElement(slur);
                          }
                   }
-            if (modMask1 & EFFECT_HAMMER) {         // hammer on / pull off
-                  }
+            if (modMask1 & EFFECT_HAMMER)  // hammer on / pull off
+                  slur = true;
             if (modMask1 & EFFECT_LET_RING) {         // let ring
                   }
             if (modMask1 & EFFECT_SLIDE_OLD)
@@ -1783,6 +1784,7 @@ void GuitarPro1::readNote(int string, Note* note)
                   segment = segment->prev1(Segment::Type::ChordRest);
                   }
             }
+      return slur;
       }
 
 //---------------------------------------------------------
@@ -2046,6 +2048,15 @@ void GuitarPro3::read(QFile* fp)
             ch->updateInitList();
             }
 
+      slurs = new Slur*[staves];
+      letRings = new Pedal*[staves];
+      palmMutes = new TextLine*[staves];
+      for (int i = 0; i < staves; ++i) {
+            slurs[i] = 0;
+            letRings[i] = 0;
+            palmMutes[i] = 0;
+            }
+
       previousTempo = tempo;
       Measure* measure = score->firstMeasure();
       bool mixChange = false;
@@ -2176,6 +2187,7 @@ void GuitarPro3::read(QFile* fp)
 
                         Staff* staff = cr->staff();
                         int numStrings = staff->part()->instrument()->stringData()->strings();
+                        bool hasSlur = false;
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
@@ -2189,7 +2201,7 @@ void GuitarPro3::read(QFile* fp)
                                           note->add(dot);
                                           }
                                     static_cast<Chord*>(cr)->add(note);
-                                    readNote(6-i, note);
+                                    hasSlur = readNote(6-i, note);
                                     note->setTpcFromPitch();
                                     }
                               }
@@ -2198,6 +2210,7 @@ void GuitarPro3::read(QFile* fp)
                               if (slide > 0)
                                     createSlide(slide, cr, staffIdx);
                               }
+                        createSlur(hasSlur, staffIdx, cr);
 
                         restsForEmptyBeats(segment, measure, cr, l, track, tick);
                         tick += cr->actualTicks();
