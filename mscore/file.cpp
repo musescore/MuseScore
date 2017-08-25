@@ -269,22 +269,22 @@ void MuseScore::loadFiles()
       {
       QStringList files = getOpenScoreNames(
 #ifdef OMR
-         tr("All Supported Files") + " (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;" +
+         tr("All Supported Files") + " (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu  *.sgu *.cap *.capx *.pdf *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx);;" +
 #else
-         tr("All Supported Files") + " (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;" +
+         tr("All Supported Files") + " (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx);;" +
 #endif
          tr("MuseScore Files") + " (*.mscz *.mscx);;" +
          tr("MusicXML Files") + " (*.xml *.mxl);;" +
          tr("MIDI Files") + " (*.mid *.midi *.kar);;" +
          tr("Muse Data Files") + " (*.md);;" +
          tr("Capella Files") + " (*.cap *.capx);;" +
-         tr("BB Files <experimental>") + " (*.mgu *.MGU *.sgu *.SGU);;" +
+         tr("BB Files <experimental>") + " (*.mgu *.sgu);;" +
 #ifdef OMR
          tr("PDF Files <experimental OMR>") + " (*.pdf);;" +
 #endif
          tr("Overture / Score Writer Files <experimental>") + " (*.ove *.scw);;" +
          tr("Bagpipe Music Writer Files <experimental>") + " (*.bww);;" +
-         tr("Guitar Pro") + " (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)",
+         tr("Guitar Pro") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx)",
          tr("Load Score")
          );
       for (const QString& s : files)
