@@ -44,8 +44,8 @@ void TestBiab::initTestCase()
 
 //---------------------------------------------------------
 //   biab_data
-//    every "xxx" test requires a *.SGU file and a *.mscx file:
-//          xxx.SGU      is the SGU file
+//    every "xxx" test requires a *.sgu file and a *.mscx file:
+//          xxx.sgu      is the SGU file
 //          xxx-ref.mscx is the corresponding (correct)
 //                       mscore 2.0 file
 //---------------------------------------------------------
@@ -54,7 +54,7 @@ void TestBiab::biab_data()
       {
       QTest::addColumn<QString>("file");
 
-      QTest::newRow("chords") <<  "chords";       // notes.SGU notes-ref.mscx
+      QTest::newRow("chords") <<  "chords";       // notes.sgu notes-ref.mscx
       }
 
 //---------------------------------------------------------
@@ -65,7 +65,7 @@ void TestBiab::biab()
       {
       QFETCH(QString, file);
 
-      QString readFile(DIR   + file + ".SGU");
+      QString readFile(DIR   + file + ".sgu");
       QString writeFile(file + "-test.mscx");
       QString reference(DIR  + file + "-ref.mscx");
 
