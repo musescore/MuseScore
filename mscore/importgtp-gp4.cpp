@@ -811,7 +811,6 @@ void GuitarPro4::read(QFile* fp)
                         Staff* staff = cr->staff();
                         int numStrings = staff->part()->instrument()->stringData()->strings();
                         bool hasSlur = false;
-
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
@@ -838,26 +837,8 @@ void GuitarPro4::read(QFile* fp)
                         if (slides[track] == -2) {
                               slide = 0;
                               slides[track] = -1;
-                        }
-                        if (hasSlur && (slurs[staffIdx] == 0)) {
-                              Slur* slur = new Slur(score);
-                              slur->setParent(0);
-                              slur->setTrack(track);
-                              slur->setTrack2(track);
-                              slur->setTick(cr->tick());
-                              slur->setTick2(cr->tick());
-                              slurs[staffIdx] = slur;
-                              score->addElement(slur);
                               }
-                        else if (slurs[staffIdx] && !hasSlur) {
-                              // TODO: check slur
-                              Slur* s = slurs[staffIdx];
-                              slurs[staffIdx] = 0;
-                              s->setTick2(cr->tick());
-                              s->setTrack2(cr->track());
-                              }
-                        else if (slurs[staffIdx] && hasSlur) {
-                              }
+                        createSlur(hasSlur, staffIdx, cr);
                         if (cr && (cr->type() == ElementType::CHORD) && slide > 0)
                               createSlide(convertGP4SlideNum(slide), cr, staffIdx);
                         restsForEmptyBeats(segment, measure, cr, l, track, tick);
