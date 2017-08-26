@@ -148,20 +148,15 @@
             <string>4</string>
             </Note>
           </Chord>
-        <Chord>
+        <StaffText>
           <lid>8</lid>
+          <text>Text</text>
+          </StaffText>
+        <Chord>
+          <lid>9</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>9</lid>
-            <Text>
-              <lid>10</lid>
-              <style></style>
-              <halign>center</halign>
-              <valign>center</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-2</yoffset>
-              <text>Text</text>
-              </Text>
+            <lid>10</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>5</fret>
@@ -365,20 +360,15 @@
               <string>4</string>
               </Note>
             </Chord>
-          <Chord>
+          <StaffText>
             <lid>8</lid>
+            <text>Text</text>
+            </StaffText>
+          <Chord>
+            <lid>9</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>9</lid>
-              <Text>
-                <lid>10</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
-                <text>Text</text>
-                </Text>
+              <lid>10</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -431,19 +421,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>8</lid>
+            <lid>9</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>9</lid>
-              <Text>
-                <lid>10</lid>
-                <style></style>
-                <halign>center</halign>
-                <valign>center</valign>
-                <xoffset>0</xoffset>
-                <yoffset>-2</yoffset>
-                <text>Text</text>
-                </Text>
+              <lid>10</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>

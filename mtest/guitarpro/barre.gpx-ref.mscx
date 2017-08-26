@@ -140,10 +140,9 @@
           </Tempo>
         <TextLine id="2">
           <endHook>1</endHook>
-          <endHookHeight>1</endHookHeight>
+          <endHookHeight>0.5</endHookHeight>
           <lid>14</lid>
           <lineWidth>0.15</lineWidth>
-          <lineStyle>2</lineStyle>
           <beginText>
             <text>1/2B  XV</text>
             </beginText>
@@ -176,10 +175,9 @@
           </Chord>
         <TextLine id="3">
           <endHook>1</endHook>
-          <endHookHeight>1</endHookHeight>
+          <endHookHeight>0.5</endHookHeight>
           <lid>15</lid>
           <lineWidth>0.15</lineWidth>
-          <lineStyle>2</lineStyle>
           <beginText>
             <text>B  VIII</text>
             </beginText>
@@ -370,10 +368,9 @@
             </Tempo>
           <TextLine id="4">
             <endHook>1</endHook>
-            <endHookHeight>1</endHookHeight>
+            <endHookHeight>0.5</endHookHeight>
             <lid>14</lid>
             <lineWidth>0.15</lineWidth>
-            <lineStyle>2</lineStyle>
             <beginText>
               <text>1/2B  XV</text>
               </beginText>
@@ -406,10 +403,9 @@
             </Chord>
           <TextLine id="5">
             <endHook>1</endHook>
-            <endHookHeight>1</endHookHeight>
+            <endHookHeight>0.5</endHookHeight>
             <lid>15</lid>
             <lineWidth>0.15</lineWidth>
-            <lineStyle>2</lineStyle>
             <beginText>
               <text>B  VIII</text>
               </beginText>
@@ -447,10 +443,9 @@
             </KeySig>
           <TextLine id="6">
             <endHook>1</endHook>
-            <endHookHeight>1</endHookHeight>
+            <endHookHeight>0.5</endHookHeight>
             <lid>14</lid>
             <lineWidth>0.15</lineWidth>
-            <lineStyle>2</lineStyle>
             <beginText>
               <text>1/2B  XV</text>
               </beginText>
@@ -483,10 +478,9 @@
             </Chord>
           <TextLine id="7">
             <endHook>1</endHook>
-            <endHookHeight>1</endHookHeight>
+            <endHookHeight>0.5</endHookHeight>
             <lid>15</lid>
             <lineWidth>0.15</lineWidth>
-            <lineStyle>2</lineStyle>
             <beginText>
               <text>B  VIII</text>
               </beginText>
