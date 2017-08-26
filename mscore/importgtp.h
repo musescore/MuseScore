@@ -359,7 +359,6 @@ class GuitarPro6 : public GuitarPro {
       // a mapping from identifiers to fret diagrams by tracks
       QMap<int, QMap<int, FretDiagram*>> fretDiagrams;
       QMap<int, QMap<int, QString>> chordnames;
-      void parseFile(char* filename, QByteArray* data);
       int readBit();
       QByteArray getBytes(QByteArray* buffer, int offset, int length);
       void readGPX(QByteArray* buffer);
@@ -376,6 +375,8 @@ class GuitarPro6 : public GuitarPro {
       int readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int startTick, int staffIdx, int voiceNum, Tuplet* tuplets[], int measureCounter);
       void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, int measureCounter);
       void readTracks(QDomNode* tracks);
+      void readTrackProperties(QDomNode* currentNode, Part* part, int trackCounter);
+
       void readMasterBars(GPPartInfo* partInfo);
       Fraction rhythmToDuration(QString value);
       Fraction fermataToFraction(int numerator, int denominator);
@@ -390,9 +391,11 @@ class GuitarPro6 : public GuitarPro {
    protected:
       void readNote(int string, Note* note);
       virtual int readBeatEffects(int track, Segment*);
+      void parseFile(const char* filename, QByteArray* data);
 
    public:
       GuitarPro6(Score* s) : GuitarPro(s, 6) {}
+      GuitarPro6(Score* s, int v) : GuitarPro(s, v) {}
       virtual void read(QFile*);
       };
 

@@ -123,16 +123,15 @@
             <string>4</string>
             </Note>
           </Chord>
-        <Chord>
+        <StaffText>
           <lid>8</lid>
+          <text>Text</text>
+          </StaffText>
+        <Chord>
+          <lid>9</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>9</lid>
-            <Text>
-              <lid>10</lid>
-              <align>center,center</align>
-              <text>Text</text>
-              </Text>
+            <lid>10</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>5</fret>
@@ -306,16 +305,15 @@
               <string>4</string>
               </Note>
             </Chord>
-          <Chord>
+          <StaffText>
             <lid>8</lid>
+            <text>Text</text>
+            </StaffText>
+          <Chord>
+            <lid>9</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>9</lid>
-              <Text>
-                <lid>10</lid>
-                <align>center,center</align>
-                <text>Text</text>
-                </Text>
+              <lid>10</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -364,15 +362,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>8</lid>
+            <lid>9</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>9</lid>
-              <Text>
-                <lid>10</lid>
-                <align>center,center</align>
-                <text>Text</text>
-                </Text>
+              <lid>10</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>

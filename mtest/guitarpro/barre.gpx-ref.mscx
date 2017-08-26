@@ -115,11 +115,10 @@
           </Tempo>
         <TextLine id="2">
           <endHookType>1</endHookType>
-          <endHookHeight>1</endHookHeight>
+          <endHookHeight>0.5</endHookHeight>
           <beginText>1/2B  XV</beginText>
           <continueText>1/2B  XV</continueText>
           <lid>14</lid>
-          <lineStyle>2</lineStyle>
           </TextLine>
         <Chord>
           <lid>6</lid>
@@ -145,11 +144,10 @@
           </Chord>
         <TextLine id="3">
           <endHookType>1</endHookType>
-          <endHookHeight>1</endHookHeight>
+          <endHookHeight>0.5</endHookHeight>
           <beginText>B  VIII</beginText>
           <continueText>B  VIII</continueText>
           <lid>15</lid>
-          <lineStyle>2</lineStyle>
           </TextLine>
         <Chord>
           <lid>10</lid>
@@ -303,11 +301,10 @@
             </Tempo>
           <TextLine id="4">
             <endHookType>1</endHookType>
-            <endHookHeight>1</endHookHeight>
+            <endHookHeight>0.5</endHookHeight>
             <beginText>1/2B  XV</beginText>
             <continueText>1/2B  XV</continueText>
             <lid>14</lid>
-            <lineStyle>2</lineStyle>
             </TextLine>
           <Chord>
             <lid>6</lid>
@@ -333,11 +330,10 @@
             </Chord>
           <TextLine id="5">
             <endHookType>1</endHookType>
-            <endHookHeight>1</endHookHeight>
+            <endHookHeight>0.5</endHookHeight>
             <beginText>B  VIII</beginText>
             <continueText>B  VIII</continueText>
             <lid>15</lid>
-            <lineStyle>2</lineStyle>
             </TextLine>
           <Chord>
             <lid>10</lid>
@@ -364,11 +360,10 @@
             </KeySig>
           <TextLine id="6">
             <endHookType>1</endHookType>
-            <endHookHeight>1</endHookHeight>
+            <endHookHeight>0.5</endHookHeight>
             <beginText>1/2B  XV</beginText>
             <continueText>1/2B  XV</continueText>
             <lid>14</lid>
-            <lineStyle>2</lineStyle>
             </TextLine>
           <Chord>
             <lid>6</lid>
@@ -394,11 +389,10 @@
             </Chord>
           <TextLine id="7">
             <endHookType>1</endHookType>
-            <endHookHeight>1</endHookHeight>
+            <endHookHeight>0.5</endHookHeight>
             <beginText>B  VIII</beginText>
             <continueText>B  VIII</continueText>
             <lid>15</lid>
-            <lineStyle>2</lineStyle>
             </TextLine>
           <Chord>
             <lid>10</lid>
