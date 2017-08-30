@@ -535,7 +535,7 @@ else (MINGW)
       ${ALSA_LIB}
       ${QT_LIBRARIES}
       z
-      dl
+      ${CMAKE_DL_LIBS}
       pthread
       )
 
@@ -584,7 +584,7 @@ else (MINGW)
    # 'gold' does not use indirect shared libraries for symbol resolution, Linux only
    if (NOT APPLE)
       if(USE_JACK)
-         target_link_libraries(mscore dl)
+         target_link_libraries(mscore ${CMAKE_DL_LIBS})
       endif(USE_JACK)
       target_link_libraries(mscore rt)
    endif (NOT APPLE)
