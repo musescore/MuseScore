@@ -370,6 +370,7 @@ void GuitarPro::addLetRing(Chord* chord, int staffIdx, bool hasLetRing)
                   p->setContinueText("let ring");
                   p->setEndHook(true);
                   p->setTick(chord->tick());
+                  p->setTick2(chord->tick() + chord->actualTicks());
                   p->setTrack(chord->track());
                   p->setTrack2(chord->track());
                   p->setLineStyle(Qt::DashLine);
@@ -1708,8 +1709,10 @@ bool GuitarPro1::readNote(int string, Note* note)
                   }
             if (modMask1 & EFFECT_HAMMER)  // hammer on / pull off
                   slur = true;
-            if (modMask1 & EFFECT_LET_RING) {         // let ring
-                  }
+            if (modMask1 & EFFECT_LET_RING)  // let ring
+                  addLetRing(note->chord(), note->staffIdx(), true);
+            else
+                  addLetRing(note->chord(), note->staffIdx(), false);
             if (modMask1 & EFFECT_SLIDE_OLD)
                   slides[note->chord()->track()] = SHIFT_SLIDE;
 
@@ -1727,6 +1730,9 @@ bool GuitarPro1::readNote(int string, Note* note)
                         readUChar();      // trill length
                         }
                   }
+            }
+      else {
+            addLetRing(note->chord(), note->staffIdx(), false);
             }
       if (fretNumber == -1) {
             qDebug("Note: no fret number, tie %d", tieNote);
@@ -2414,9 +2420,8 @@ Score::FileError importGTP(Score* score, const QString& name)
             s->setPlainText(gp->title);
             m->add(s);
             }
-      if (!gp->subtitle.isEmpty() && !gp->artist.isEmpty() && !gp->album.isEmpty()) {
+      if (!gp->subtitle.isEmpty() || !gp->artist.isEmpty() || !gp->album.isEmpty()) {
             Text* s = new Text(score);
-            // s->setSubtype(TEXT_SUBTITLE);
             s->setTextStyleType(TextStyleType::SUBTITLE);
             QString str;
             if (!gp->subtitle.isEmpty())
@@ -2436,7 +2441,6 @@ Score::FileError importGTP(Score* score, const QString& name)
             }
       if (!gp->composer.isEmpty()) {
             Text* s = new Text(score);
-            // s->setSubtype(TEXT_COMPOSER);
             s->setTextStyleType(TextStyleType::COMPOSER);
             s->setPlainText(gp->composer);
             m->add(s);
