@@ -61,6 +61,12 @@
           </Text>
         <Text>
           <lid>2</lid>
+          <style>Subtitle</style>
+          <text>Boria &amp; Freinds
+Puki Kuki</text>
+          </Text>
+        <Text>
+          <lid>3</lid>
           <style>Composer</style>
           <text>Boria</text>
           </Text>
@@ -69,23 +75,23 @@
         <Clef>
           <concertClefType>F8vb</concertClefType>
           <transposingClefType>F8vb</transposingClefType>
-          <lid>3</lid>
+          <lid>4</lid>
           </Clef>
         <TimeSig>
-          <lid>4</lid>
+          <lid>5</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           </TimeSig>
         <Dynamic>
           <subtype>f</subtype>
           <velocity>96</velocity>
-          <lid>5</lid>
+          <lid>6</lid>
           </Dynamic>
         <Chord>
-          <lid>6</lid>
+          <lid>7</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>7</lid>
+            <lid>8</lid>
             <Accidental>
               <subtype>accidentalSharp</subtype>
               </Accidental>
@@ -95,34 +101,34 @@
             <string>4</string>
             </Note>
           <Note>
-            <lid>8</lid>
+            <lid>9</lid>
             <pitch>26</pitch>
             <tpc>16</tpc>
             <fret>0</fret>
             <string>3</string>
-            </Note>
-          <Note>
-            <lid>9</lid>
-            <Accidental>
-              <subtype>accidentalFlat</subtype>
-              </Accidental>
-            <pitch>27</pitch>
-            <tpc>11</tpc>
-            <fret>0</fret>
-            <string>2</string>
             </Note>
           <Note>
             <lid>10</lid>
             <Accidental>
               <subtype>accidentalFlat</subtype>
               </Accidental>
-            <pitch>34</pitch>
-            <tpc>12</tpc>
+            <pitch>27</pitch>
+            <tpc>11</tpc>
             <fret>0</fret>
-            <string>1</string>
+            <string>2</string>
             </Note>
           <Note>
             <lid>11</lid>
+            <Accidental>
+              <subtype>accidentalFlat</subtype>
+              </Accidental>
+            <pitch>34</pitch>
+            <tpc>12</tpc>
+            <fret>0</fret>
+            <string>1</string>
+            </Note>
+          <Note>
+            <lid>12</lid>
             <pitch>127</pitch>
             <tpc>15</tpc>
             <fret>8</fret>
@@ -130,38 +136,38 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>12</lid>
+          <lid>13</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>13</lid>
+            <lid>14</lid>
             <pitch>8</pitch>
             <tpc>22</tpc>
             <fret>0</fret>
             <string>4</string>
-            </Note>
-          <Note>
-            <lid>14</lid>
-            <pitch>26</pitch>
-            <tpc>16</tpc>
-            <fret>0</fret>
-            <string>3</string>
             </Note>
           <Note>
             <lid>15</lid>
-            <pitch>27</pitch>
-            <tpc>11</tpc>
+            <pitch>26</pitch>
+            <tpc>16</tpc>
             <fret>0</fret>
-            <string>2</string>
+            <string>3</string>
             </Note>
           <Note>
             <lid>16</lid>
-            <pitch>34</pitch>
-            <tpc>12</tpc>
+            <pitch>27</pitch>
+            <tpc>11</tpc>
             <fret>0</fret>
-            <string>1</string>
+            <string>2</string>
             </Note>
           <Note>
             <lid>17</lid>
+            <pitch>34</pitch>
+            <tpc>12</tpc>
+            <fret>0</fret>
+            <string>1</string>
+            </Note>
+          <Note>
+            <lid>18</lid>
             <pitch>127</pitch>
             <tpc>15</tpc>
             <fret>8</fret>
@@ -169,38 +175,38 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>18</lid>
+          <lid>19</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>19</lid>
+            <lid>20</lid>
             <pitch>8</pitch>
             <tpc>22</tpc>
             <fret>0</fret>
             <string>4</string>
-            </Note>
-          <Note>
-            <lid>20</lid>
-            <pitch>26</pitch>
-            <tpc>16</tpc>
-            <fret>0</fret>
-            <string>3</string>
             </Note>
           <Note>
             <lid>21</lid>
+            <pitch>26</pitch>
+            <tpc>16</tpc>
+            <fret>0</fret>
+            <string>3</string>
+            </Note>
+          <Note>
+            <lid>22</lid>
             <pitch>27</pitch>
             <tpc>11</tpc>
             <fret>0</fret>
             <string>2</string>
             </Note>
           <Note>
-            <lid>22</lid>
+            <lid>23</lid>
             <pitch>34</pitch>
             <tpc>12</tpc>
             <fret>0</fret>
             <string>1</string>
             </Note>
           <Note>
-            <lid>23</lid>
+            <lid>24</lid>
             <pitch>127</pitch>
             <tpc>15</tpc>
             <fret>8</fret>
@@ -208,38 +214,38 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>24</lid>
+          <lid>25</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>25</lid>
+            <lid>26</lid>
             <pitch>8</pitch>
             <tpc>22</tpc>
             <fret>0</fret>
             <string>4</string>
             </Note>
           <Note>
-            <lid>26</lid>
+            <lid>27</lid>
             <pitch>26</pitch>
             <tpc>16</tpc>
             <fret>0</fret>
             <string>3</string>
             </Note>
           <Note>
-            <lid>27</lid>
+            <lid>28</lid>
             <pitch>27</pitch>
             <tpc>11</tpc>
             <fret>0</fret>
             <string>2</string>
             </Note>
           <Note>
-            <lid>28</lid>
+            <lid>29</lid>
             <pitch>34</pitch>
             <tpc>12</tpc>
             <fret>0</fret>
             <string>1</string>
             </Note>
           <Note>
-            <lid>29</lid>
+            <lid>30</lid>
             <pitch>127</pitch>
             <tpc>15</tpc>
             <fret>8</fret>
@@ -322,6 +328,12 @@
             </Text>
           <Text>
             <lid>2</lid>
+            <style>Subtitle</style>
+            <text>Boria &amp; Freinds
+Puki Kuki</text>
+            </Text>
+          <Text>
+            <lid>3</lid>
             <style>Composer</style>
             <text>Boria</text>
             </Text>
@@ -334,23 +346,23 @@
           <Clef>
             <concertClefType>F8vb</concertClefType>
             <transposingClefType>F8vb</transposingClefType>
-            <lid>3</lid>
+            <lid>4</lid>
             </Clef>
           <TimeSig>
-            <lid>4</lid>
+            <lid>5</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <lid>5</lid>
+            <lid>6</lid>
             </Dynamic>
           <Chord>
-            <lid>6</lid>
+            <lid>7</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>7</lid>
+              <lid>8</lid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -360,34 +372,34 @@
               <string>4</string>
               </Note>
             <Note>
-              <lid>8</lid>
+              <lid>9</lid>
               <pitch>26</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
               <string>3</string>
-              </Note>
-            <Note>
-              <lid>9</lid>
-              <Accidental>
-                <subtype>accidentalFlat</subtype>
-                </Accidental>
-              <pitch>27</pitch>
-              <tpc>11</tpc>
-              <fret>0</fret>
-              <string>2</string>
               </Note>
             <Note>
               <lid>10</lid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
                 </Accidental>
-              <pitch>34</pitch>
-              <tpc>12</tpc>
+              <pitch>27</pitch>
+              <tpc>11</tpc>
               <fret>0</fret>
-              <string>1</string>
+              <string>2</string>
               </Note>
             <Note>
               <lid>11</lid>
+              <Accidental>
+                <subtype>accidentalFlat</subtype>
+                </Accidental>
+              <pitch>34</pitch>
+              <tpc>12</tpc>
+              <fret>0</fret>
+              <string>1</string>
+              </Note>
+            <Note>
+              <lid>12</lid>
               <pitch>127</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
@@ -395,38 +407,38 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>12</lid>
+            <lid>13</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>13</lid>
+              <lid>14</lid>
               <pitch>8</pitch>
               <tpc>22</tpc>
               <fret>0</fret>
               <string>4</string>
-              </Note>
-            <Note>
-              <lid>14</lid>
-              <pitch>26</pitch>
-              <tpc>16</tpc>
-              <fret>0</fret>
-              <string>3</string>
               </Note>
             <Note>
               <lid>15</lid>
-              <pitch>27</pitch>
-              <tpc>11</tpc>
+              <pitch>26</pitch>
+              <tpc>16</tpc>
               <fret>0</fret>
-              <string>2</string>
+              <string>3</string>
               </Note>
             <Note>
               <lid>16</lid>
-              <pitch>34</pitch>
-              <tpc>12</tpc>
+              <pitch>27</pitch>
+              <tpc>11</tpc>
               <fret>0</fret>
-              <string>1</string>
+              <string>2</string>
               </Note>
             <Note>
               <lid>17</lid>
+              <pitch>34</pitch>
+              <tpc>12</tpc>
+              <fret>0</fret>
+              <string>1</string>
+              </Note>
+            <Note>
+              <lid>18</lid>
               <pitch>127</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
@@ -434,38 +446,38 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>18</lid>
+            <lid>19</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>19</lid>
+              <lid>20</lid>
               <pitch>8</pitch>
               <tpc>22</tpc>
               <fret>0</fret>
               <string>4</string>
-              </Note>
-            <Note>
-              <lid>20</lid>
-              <pitch>26</pitch>
-              <tpc>16</tpc>
-              <fret>0</fret>
-              <string>3</string>
               </Note>
             <Note>
               <lid>21</lid>
+              <pitch>26</pitch>
+              <tpc>16</tpc>
+              <fret>0</fret>
+              <string>3</string>
+              </Note>
+            <Note>
+              <lid>22</lid>
               <pitch>27</pitch>
               <tpc>11</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
-              <lid>22</lid>
+              <lid>23</lid>
               <pitch>34</pitch>
               <tpc>12</tpc>
               <fret>0</fret>
               <string>1</string>
               </Note>
             <Note>
-              <lid>23</lid>
+              <lid>24</lid>
               <pitch>127</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
@@ -473,38 +485,38 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>24</lid>
+            <lid>25</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>25</lid>
+              <lid>26</lid>
               <pitch>8</pitch>
               <tpc>22</tpc>
               <fret>0</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>26</lid>
+              <lid>27</lid>
               <pitch>26</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>27</lid>
+              <lid>28</lid>
               <pitch>27</pitch>
               <tpc>11</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
-              <lid>28</lid>
+              <lid>29</lid>
               <pitch>34</pitch>
               <tpc>12</tpc>
               <fret>0</fret>
               <string>1</string>
               </Note>
             <Note>
-              <lid>29</lid>
+              <lid>30</lid>
               <pitch>127</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
@@ -516,38 +528,38 @@
       <Staff id="2">
         <Measure number="1">
           <Chord>
-            <lid>6</lid>
+            <lid>7</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>7</lid>
+              <lid>8</lid>
               <pitch>8</pitch>
               <tpc>22</tpc>
               <fret>0</fret>
               <string>4</string>
-              </Note>
-            <Note>
-              <lid>8</lid>
-              <pitch>26</pitch>
-              <tpc>16</tpc>
-              <fret>0</fret>
-              <string>3</string>
               </Note>
             <Note>
               <lid>9</lid>
-              <pitch>27</pitch>
-              <tpc>11</tpc>
+              <pitch>26</pitch>
+              <tpc>16</tpc>
               <fret>0</fret>
-              <string>2</string>
+              <string>3</string>
               </Note>
             <Note>
               <lid>10</lid>
-              <pitch>34</pitch>
-              <tpc>12</tpc>
+              <pitch>27</pitch>
+              <tpc>11</tpc>
               <fret>0</fret>
-              <string>1</string>
+              <string>2</string>
               </Note>
             <Note>
               <lid>11</lid>
+              <pitch>34</pitch>
+              <tpc>12</tpc>
+              <fret>0</fret>
+              <string>1</string>
+              </Note>
+            <Note>
+              <lid>12</lid>
               <pitch>127</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
@@ -555,38 +567,38 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>12</lid>
+            <lid>13</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>13</lid>
+              <lid>14</lid>
               <pitch>8</pitch>
               <tpc>22</tpc>
               <fret>0</fret>
               <string>4</string>
-              </Note>
-            <Note>
-              <lid>14</lid>
-              <pitch>26</pitch>
-              <tpc>16</tpc>
-              <fret>0</fret>
-              <string>3</string>
               </Note>
             <Note>
               <lid>15</lid>
-              <pitch>27</pitch>
-              <tpc>11</tpc>
+              <pitch>26</pitch>
+              <tpc>16</tpc>
               <fret>0</fret>
-              <string>2</string>
+              <string>3</string>
               </Note>
             <Note>
               <lid>16</lid>
-              <pitch>34</pitch>
-              <tpc>12</tpc>
+              <pitch>27</pitch>
+              <tpc>11</tpc>
               <fret>0</fret>
-              <string>1</string>
+              <string>2</string>
               </Note>
             <Note>
               <lid>17</lid>
+              <pitch>34</pitch>
+              <tpc>12</tpc>
+              <fret>0</fret>
+              <string>1</string>
+              </Note>
+            <Note>
+              <lid>18</lid>
               <pitch>127</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
@@ -594,38 +606,38 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>18</lid>
+            <lid>19</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>19</lid>
+              <lid>20</lid>
               <pitch>8</pitch>
               <tpc>22</tpc>
               <fret>0</fret>
               <string>4</string>
-              </Note>
-            <Note>
-              <lid>20</lid>
-              <pitch>26</pitch>
-              <tpc>16</tpc>
-              <fret>0</fret>
-              <string>3</string>
               </Note>
             <Note>
               <lid>21</lid>
+              <pitch>26</pitch>
+              <tpc>16</tpc>
+              <fret>0</fret>
+              <string>3</string>
+              </Note>
+            <Note>
+              <lid>22</lid>
               <pitch>27</pitch>
               <tpc>11</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
-              <lid>22</lid>
+              <lid>23</lid>
               <pitch>34</pitch>
               <tpc>12</tpc>
               <fret>0</fret>
               <string>1</string>
               </Note>
             <Note>
-              <lid>23</lid>
+              <lid>24</lid>
               <pitch>127</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
@@ -633,38 +645,38 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>24</lid>
+            <lid>25</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>25</lid>
+              <lid>26</lid>
               <pitch>8</pitch>
               <tpc>22</tpc>
               <fret>0</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>26</lid>
+              <lid>27</lid>
               <pitch>26</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>27</lid>
+              <lid>28</lid>
               <pitch>27</pitch>
               <tpc>11</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
-              <lid>28</lid>
+              <lid>29</lid>
               <pitch>34</pitch>
               <tpc>12</tpc>
               <fret>0</fret>
               <string>1</string>
               </Note>
             <Note>
-              <lid>29</lid>
+              <lid>30</lid>
               <pitch>127</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
