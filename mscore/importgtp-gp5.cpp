@@ -901,6 +901,8 @@ bool GuitarPro5::readNote(int string, Note* note)
       bool slur = false;
       if (noteBits & NOTE_SLUR)
             slur = readNoteEffects(note);
+      else
+            addLetRing(note->chord(), note->staffIdx(), false);
 
       if (tieNote) {
             bool found = false;

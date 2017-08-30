@@ -62,6 +62,12 @@
           </Text>
         <Text>
           <lid>2</lid>
+          <style>Subtitle</style>
+          <text>Queen
+Innuendo</text>
+          </Text>
+        <Text>
+          <lid>3</lid>
           <style>Composer</style>
           <text>Queen</text>
           </Text>
@@ -70,17 +76,13 @@
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>3</lid>
+          <lid>4</lid>
           </Clef>
         <TimeSig>
-          <lid>4</lid>
+          <lid>5</lid>
           <sigN>12</sigN>
           <sigD>8</sigD>
           </TimeSig>
-        <Rest>
-          <lid>5</lid>
-          <durationType>eighth</durationType>
-          </Rest>
         <Rest>
           <lid>6</lid>
           <durationType>eighth</durationType>
@@ -95,30 +97,34 @@
           </Rest>
         <Rest>
           <lid>9</lid>
-          <durationType>quarter</durationType>
+          <durationType>eighth</durationType>
           </Rest>
         <Rest>
           <lid>10</lid>
           <durationType>quarter</durationType>
           </Rest>
+        <Rest>
+          <lid>11</lid>
+          <durationType>quarter</durationType>
+          </Rest>
         <Dynamic>
           <subtype>fff</subtype>
           <velocity>126</velocity>
-          <lid>11</lid>
+          <lid>12</lid>
           </Dynamic>
         <Chord>
-          <lid>12</lid>
+          <lid>13</lid>
           <dots>1</dots>
           <durationType>quarter</durationType>
           <Note>
-            <lid>13</lid>
+            <lid>14</lid>
             <pitch>74</pitch>
             <tpc>16</tpc>
             <fret>15</fret>
             <string>1</string>
             <Glissando id="2">
               <subtype>0</subtype>
-              <lid>17</lid>
+              <lid>18</lid>
               <diagonal>1</diagonal>
               <anchor>3</anchor>
               </Glissando>
@@ -127,13 +133,13 @@
         <Dynamic>
           <subtype>f</subtype>
           <velocity>96</velocity>
-          <lid>14</lid>
+          <lid>15</lid>
           </Dynamic>
         <Chord>
-          <lid>15</lid>
+          <lid>16</lid>
           <durationType>eighth</durationType>
           <Note>
-            <lid>16</lid>
+            <lid>17</lid>
             <Accidental>
               <subtype>accidentalSharp</subtype>
               </Accidental>
@@ -222,6 +228,12 @@
             </Text>
           <Text>
             <lid>2</lid>
+            <style>Subtitle</style>
+            <text>Queen
+Innuendo</text>
+            </Text>
+          <Text>
+            <lid>3</lid>
             <style>Composer</style>
             <text>Queen</text>
             </Text>
@@ -234,17 +246,13 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>3</lid>
+            <lid>4</lid>
             </Clef>
           <TimeSig>
-            <lid>4</lid>
+            <lid>5</lid>
             <sigN>12</sigN>
             <sigD>8</sigD>
             </TimeSig>
-          <Rest>
-            <lid>5</lid>
-            <durationType>eighth</durationType>
-            </Rest>
           <Rest>
             <lid>6</lid>
             <durationType>eighth</durationType>
@@ -259,30 +267,34 @@
             </Rest>
           <Rest>
             <lid>9</lid>
-            <durationType>quarter</durationType>
+            <durationType>eighth</durationType>
             </Rest>
           <Rest>
             <lid>10</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <Rest>
+            <lid>11</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Dynamic>
             <subtype>fff</subtype>
             <velocity>126</velocity>
-            <lid>11</lid>
+            <lid>12</lid>
             </Dynamic>
           <Chord>
-            <lid>12</lid>
+            <lid>13</lid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
-              <lid>13</lid>
+              <lid>14</lid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <fret>15</fret>
               <string>1</string>
               <Glissando id="3">
                 <subtype>0</subtype>
-                <lid>17</lid>
+                <lid>18</lid>
                 <diagonal>1</diagonal>
                 <anchor>3</anchor>
                 </Glissando>
@@ -291,13 +303,13 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <lid>14</lid>
+            <lid>15</lid>
             </Dynamic>
           <Chord>
-            <lid>15</lid>
+            <lid>16</lid>
             <durationType>eighth</durationType>
             <Note>
-              <lid>16</lid>
+              <lid>17</lid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -313,10 +325,6 @@
       <Staff id="2">
         <Measure number="1">
           <Rest>
-            <lid>5</lid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
             <lid>6</lid>
             <durationType>eighth</durationType>
             </Rest>
@@ -330,35 +338,39 @@
             </Rest>
           <Rest>
             <lid>9</lid>
-            <durationType>quarter</durationType>
+            <durationType>eighth</durationType>
             </Rest>
           <Rest>
             <lid>10</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <Rest>
+            <lid>11</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Chord>
-            <lid>12</lid>
+            <lid>13</lid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
-              <lid>13</lid>
+              <lid>14</lid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <fret>15</fret>
               <string>1</string>
               <Glissando id="4">
                 <subtype>0</subtype>
-                <lid>17</lid>
+                <lid>18</lid>
                 <diagonal>1</diagonal>
                 <anchor>3</anchor>
                 </Glissando>
               </Note>
             </Chord>
           <Chord>
-            <lid>15</lid>
+            <lid>16</lid>
             <durationType>eighth</durationType>
             <Note>
-              <lid>16</lid>
+              <lid>17</lid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>7</fret>
