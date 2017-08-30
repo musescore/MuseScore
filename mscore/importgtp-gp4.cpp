@@ -399,6 +399,9 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
 
                   }
             }
+      else {
+            addLetRing(note->chord(), note->staffIdx(), false);
+            }
       if (fretNumber == -1) {
             qDebug("Note: no fret number, tie %d", tieNote);
             }
