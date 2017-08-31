@@ -779,7 +779,7 @@ Element* ChordRest::drop(EditData& data)
                   nval.headGroup = note->headGroup();
                   nval.fret = note->fret();
                   nval.string = note->string();
-                  score()->setNoteRest(segment(), track(), nval, data.duration, Direction::AUTO);
+                  score()->setNoteRest(segment(), track(), nval, duration(), Direction::AUTO);
                   delete e;
                   }
                   break;
