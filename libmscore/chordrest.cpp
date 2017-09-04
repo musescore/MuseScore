@@ -775,10 +775,11 @@ Element* ChordRest::drop(EditData& data)
                   Note* note = static_cast<Note*>(e);
                   NoteVal nval;
                   nval.pitch = note->pitch();
+                  nval.tpc1 = note->tpc1();
                   nval.headGroup = note->headGroup();
                   nval.fret = note->fret();
                   nval.string = note->string();
-                  score()->setNoteRest(segment(), track(), nval, data.duration, Direction::AUTO);
+                  score()->setNoteRest(segment(), track(), nval, duration(), Direction::AUTO);
                   delete e;
                   }
                   break;
