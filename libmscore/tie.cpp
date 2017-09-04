@@ -478,8 +478,6 @@ void Tie::slurPos(SlurPos* sp)
       // so keep these in sync
 
       sp->p1    = sc->pos() + sc->segment()->pos() + sc->measure()->pos();
-      Chord* ec = endNote()->chord();
-      sp->p2    = ec->pos() + ec->segment()->pos() + ec->measure()->pos();
 
       //------p1
       if ((sc->notes().size() > 1) || (sc->stem() && (sc->up() == _up))) {
@@ -499,6 +497,8 @@ void Tie::slurPos(SlurPos* sp)
             sp->system2 = sp->system1;
             return;
             }
+      Chord* ec = endNote()->chord();
+      sp->p2    = ec->pos() + ec->segment()->pos() + ec->measure()->pos();
       sp->system2 = ec->measure()->system();
 
       hw = endNote()->tabHeadWidth(stt);
