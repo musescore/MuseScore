@@ -437,7 +437,7 @@ void PluginCreator::load()
 //---------------------------------------------------------
 
 void PluginCreator::doSavePlugin(bool saveas) 
-{
+      {
       if (saveas) {
             path = mscore->getPluginFilename(false);
             if (path.isEmpty())
@@ -449,7 +449,7 @@ void PluginCreator::doSavePlugin(bool saveas)
       if(fi.suffix() != "qml" ) {
             QMessageBox::critical(mscore, tr("Save Plugin"), tr("Cannot determine file type"));
             return;
-      }
+            }
 
       if (f.open(QIODevice::WriteOnly)) {
             f.write(textEdit->toPlainText().toUtf8());
@@ -464,17 +464,17 @@ void PluginCreator::doSavePlugin(bool saveas)
             // TODO
             }
       raise();
-}
+      }
 
 void PluginCreator::savePlugin()
-{
-  doSavePlugin(created);
-}
+      {
+      doSavePlugin(created);
+      }
 
 void PluginCreator::savePluginAs()
-{
-  doSavePlugin(true);
-}
+      {
+      doSavePlugin(true);
+      }
 
 //---------------------------------------------------------
 //   newPlugin

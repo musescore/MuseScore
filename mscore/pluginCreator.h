@@ -57,7 +57,8 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       void closePlugin();
       void showManual();
       void qmlWarnings(const QList<QQmlError>&);
-signals:
+
+  signals:
       void closed(bool);
 
    public:
