@@ -63,6 +63,7 @@ PluginCreator::PluginCreator(QWidget* parent)
 
       actionSave->setIcon(*icons[int(Icons::fileSave_ICON)]);
       actionSave->setShortcut(QKeySequence(QKeySequence::Save));
+      actionSaveAs->setIcon(*icons[int(Icons::fileSaveAs_ICON)]);
       fileTools->addAction(actionSave);
 
       actionQuit->setShortcut(QKeySequence(QKeySequence::Close));
@@ -99,6 +100,7 @@ PluginCreator::PluginCreator(QWidget* parent)
       connect(actionOpen, SIGNAL(triggered()),   SLOT(loadPlugin()));
       connect(actionReload, SIGNAL(triggered()), SLOT(load()));
       connect(actionSave, SIGNAL(triggered()),   SLOT(savePlugin()));
+      connect(actionSaveAs, SIGNAL(triggered()), SLOT(savePluginAs()));
       connect(actionNew,  SIGNAL(triggered()),   SLOT(newPlugin()));
       connect(actionQuit, SIGNAL(triggered()),   SLOT(close()));
       connect(actionManual, SIGNAL(triggered()), SLOT(showManual()));
@@ -136,6 +138,7 @@ void PluginCreator::setState(PCState newState)
                         case PCState::EMPTY:
                               setTitle("");
                               actionSave->setEnabled(false);
+                              actionSaveAs->setEnabled(false);
                               run->setEnabled(false);
                               stop->setEnabled(false);
                               textEdit->setEnabled(false);
@@ -152,6 +155,7 @@ void PluginCreator::setState(PCState newState)
                               break;
                         case PCState::CLEAN:
                               setTitle(path);
+                              actionSaveAs->setEnabled(true);
                               run->setEnabled(true);
                               textEdit->setEnabled(true);
                               break;
@@ -167,6 +171,7 @@ void PluginCreator::setState(PCState newState)
                               break;
                         case PCState::DIRTY:
                               actionSave->setEnabled(true);
+                              actionSaveAs->setEnabled(true);
                               break;
                         }
                   break;
@@ -176,6 +181,7 @@ void PluginCreator::setState(PCState newState)
                         case PCState::EMPTY:
                         case PCState::CLEAN:
                               actionSave->setEnabled(false);
+                              actionSave->setEnabled(true);
                         case PCState::DIRTY:
                               break;
                         }
@@ -430,19 +436,20 @@ void PluginCreator::load()
 //   savePlugin
 //---------------------------------------------------------
 
-void PluginCreator::savePlugin()
+void PluginCreator::doSavePlugin(bool saveas) 
       {
-      if (created) {
+      if (saveas) {
             path = mscore->getPluginFilename(false);
             if (path.isEmpty())
                   return;
             }
       QFile f(path);
       QFileInfo fi(f);
+      msg("Saving to:"+path+"\n");
       if(fi.suffix() != "qml" ) {
             QMessageBox::critical(mscore, tr("Save Plugin"), tr("Cannot determine file type"));
             return;
-      }
+            }
 
       if (f.open(QIODevice::WriteOnly)) {
             f.write(textEdit->toPlainText().toUtf8());
@@ -457,6 +464,16 @@ void PluginCreator::savePlugin()
             // TODO
             }
       raise();
+      }
+
+void PluginCreator::savePlugin()
+      {
+      doSavePlugin(created);
+      }
+
+void PluginCreator::savePluginAs()
+      {
+      doSavePlugin(true);
       }
 
 //---------------------------------------------------------
@@ -480,7 +497,7 @@ void PluginCreator::newPlugin()
       created = true;
       QString s(
          "import QtQuick 2.0\n"
-         "import MuseScore 1.0\n"
+         "import MuseScore 3.0\n"
          "\n"
          "MuseScore {\n"
          "      menuPath: \"Plugins.pluginName\"\n"
