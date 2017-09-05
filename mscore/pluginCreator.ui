@@ -94,6 +94,7 @@
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
     <addaction name="separator"/>
+    <addaction name="actionSaveAs"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -132,7 +133,10 @@
   </action>
   <action name="actionSave">
    <property name="text">
-    <string>Save As...</string>
+    <string>Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
@@ -176,6 +180,11 @@
    </property>
    <property name="toolTip">
     <string>Reload current plugin source</string>
+   </property>
+  </action>
+  <action name="actionSaveAs">
+   <property name="text">
+    <string>Save As...</string>
    </property>
   </action>
  </widget>
