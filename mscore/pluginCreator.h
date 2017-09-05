@@ -43,6 +43,7 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       void readSettings();
       void setTitle(const QString&);
       QString manualPath();
+      void doSavePlugin(bool saveas);
 
    private slots:
       void runClicked();
@@ -50,6 +51,7 @@ class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       void loadPlugin();
       void load();
       void savePlugin();
+      void savePluginAs();
       void newPlugin();
       void textChanged();
       void closePlugin();
