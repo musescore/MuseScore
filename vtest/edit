@@ -5,5 +5,6 @@
 #
 
 MSCORE=../build.debug/mscore/mscore
+echo $MSCORE $1.mscz
 $MSCORE $1.mscz
 
