@@ -36,10 +36,10 @@ extern int updateVersion();
 //   @@ MuseScore
 //   @P menuPath             QString           where the plugin is placed in menu
 //   @P filePath             QString           source file path, without the file name (read only)
-//   @P version              QString
-//   @P description          QString
-//   @P pluginType           QString
-//   @P dockArea             QString
+//   @P version              QString           version of this plugin
+//   @P description          QString           human readable description, displayed in Plugin Manager
+//   @P pluginType           QString           type may be dialog, dock, or not defined.
+//   @P dockArea             QString           where to dock on main screen. left,top,bottom, right(default)
 //   @P requiresScore        bool              whether the plugin requires an existing score to run
 //   @P division             int               number of MIDI ticks for 1/4 note (read only)
 //   @P mscoreVersion        int               complete version number of MuseScore in the form: MMmmuu (read only)

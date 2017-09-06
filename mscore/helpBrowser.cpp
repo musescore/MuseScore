@@ -152,7 +152,7 @@ HelpBrowser::HelpBrowser(QWidget* parent)
 
       view->document()->setDefaultStyleSheet(
             preferences.isThemeDark() ? cssDark : css);
-
+      view->setOpenExternalLinks(true);
       toolbar->setLayout(bl);
       }
 

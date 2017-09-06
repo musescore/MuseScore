@@ -292,6 +292,7 @@ static void qmlMsgHandler(QtMsgType type, const QMessageLogContext &, const QStr
 void PluginCreator::runClicked()
       {
       log->clear();
+      msg(tr("Running...\n"));
       QQmlEngine* qml = Ms::MScore::qml();
       connect(qml, SIGNAL(warnings(const QList<QQmlError>&)),
          SLOT(qmlWarnings(const QList<QQmlError>&)));
@@ -301,7 +302,7 @@ void PluginCreator::runClicked()
       component.setData(textEdit->toPlainText().toUtf8(), QUrl());
       QObject* obj = component.create();
       if (obj == 0) {
-            msg("creating component failed\n");
+            msg(tr("creating component failed\n"));
             foreach(QQmlError e, component.errors())
                   msg(QString("   line %1: %2\n").arg(e.line()).arg(e.description()));
             stop->setEnabled(false);
@@ -312,10 +313,15 @@ void PluginCreator::runClicked()
       run->setEnabled(false);
 
       item = qobject_cast<QmlPlugin*>(obj);
+      msg(tr("Plugin Details:\n"));
+      msg(tr("  Menupath: ") + item->menuPath() + "\n");
+      msg(tr("  Version: ") + item->version() + "\n");
+      msg(tr("  Description: ") + item->description() + "\n");
+      if (item->requiresScore()) msg(tr("  Requires Score\n"));
       if(MuseScoreCore::mscoreCore->currentScore() == nullptr && item->requiresScore() == true) {
             QMessageBox::information(0,
-                  QMessageBox::tr("MuseScore"),
-                  QMessageBox::tr("No score open.\n"
+                  tr("MuseScore"),
+                  tr("No score open.\n"
                   "This plugin requires an open score to run.\n"),
                   QMessageBox::Ok, QMessageBox::NoButton);
             delete obj;
@@ -352,7 +358,6 @@ void PluginCreator::runClicked()
                   dock->show();
                   }
             view->show();
-            view->raise();
             connect(view, SIGNAL(destroyed()), SLOT(closePlugin()));
             }
 
@@ -364,6 +369,16 @@ void PluginCreator::runClicked()
       if (mscore->currentScore() && item->pluginType() != "dock")
             mscore->currentScore()->endCmd();
       mscore->endCmd();
+      // Main window is on top at this point. Make sure correct view is on top.
+      if (item->pluginType() == "dock") {
+            raise(); // Screen needs to be on top to see docked panel.
+            }
+      else if (view) {
+            view->raise();
+            }
+      else {
+            raise(); // Console only, bring to top to see results.
+            }
       }
 
 //---------------------------------------------------------
@@ -379,6 +394,7 @@ void PluginCreator::closePlugin()
       if (dock)
             dock->close();
       qInstallMessageHandler(0);
+      raise();
       }
 
 //---------------------------------------------------------
@@ -445,7 +461,7 @@ void PluginCreator::doSavePlugin(bool saveas)
             }
       QFile f(path);
       QFileInfo fi(f);
-      msg("Saving to:"+path+"\n");
+      msg(tr("Saving to:") + path + "\n");
       if(fi.suffix() != "qml" ) {
             QMessageBox::critical(mscore, tr("Save Plugin"), tr("Cannot determine file type"));
             return;
@@ -501,6 +517,8 @@ void PluginCreator::newPlugin()
          "\n"
          "MuseScore {\n"
          "      menuPath: \"Plugins.pluginName\"\n"
+         "      description: \"Description goes here\"\n"
+         "      version: \"1.0\"\n"
          "      onRun: {\n"
          "            console.log(\"hello world\")\n"
          "            Qt.quit()\n"
