@@ -191,7 +191,7 @@ struct Preferences {
 
       bool readPluginList();
       void writePluginList();
-      void updatePluginList();
+      void updatePluginList(bool forceRefresh=false);
 
       Preferences();
       void write();

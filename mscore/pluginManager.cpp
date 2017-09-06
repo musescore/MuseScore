@@ -29,6 +29,7 @@ PluginManager::PluginManager(QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       connect(definePluginShortcut, SIGNAL(clicked()), SLOT(definePluginShortcutClicked()));
       connect(clearPluginShortcut, SIGNAL(clicked()), SLOT(clearPluginShortcutClicked()));
+      connect(reloadPlugins, SIGNAL(clicked()), SLOT(reloadPluginsClicked()));
       readSettings();
       }
 
@@ -48,15 +49,37 @@ void PluginManager::init()
       foreach(const Shortcut* s, Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       shortcutsChanged = false;
+      loadList(false);
+      connect(pluginList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
+      connect(pluginList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
+         SLOT(pluginListItemChanged(QListWidgetItem*, QListWidgetItem*)));
+      }
 
-      preferences.updatePluginList();
+//---------------------------------------------------------
+//   loadList - populate the listbox.
+//---------------------------------------------------------
+
+void PluginManager::loadList(bool forceRefresh)
+      {
+      QStringList saveLoaded; // If forcing a refresh, the load flags are lost. Keep a copy and reapply.
       int n = preferences.pluginList.size();
+      if (forceRefresh && n > 0) {
+            for (int i = 0; i < n; i++) {
+                  PluginDescription& d = preferences.pluginList[i];
+                  if (d.load) {
+                        saveLoaded.append(d.path);
+                        mscore->unregisterPlugin(&d);  // This will force the menu to rebuild.
+                        }
+                  }
+            }
+      preferences.updatePluginList(forceRefresh);
+      n = preferences.pluginList.size();
       pluginList->clear();
       for (int i = 0; i < n; ++i) {
             PluginDescription& d = preferences.pluginList[i];
             Shortcut* s = &d.shortcut;
             localShortcuts[s->key()] = new Shortcut(*s);
-
+            if (saveLoaded.contains(d.path)) d.load = true;
             QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).completeBaseName(),  pluginList);
             item->setFlags(item->flags() | Qt::ItemIsEnabled);
             item->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
@@ -67,9 +90,6 @@ void PluginManager::init()
             pluginList->setCurrentRow(0);
             pluginListItemChanged(pluginList->item(0), 0);
             }
-      connect(pluginList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
-      connect(pluginList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
-         SLOT(pluginListItemChanged(QListWidgetItem*, QListWidgetItem*)));
       }
 
 //---------------------------------------------------------
@@ -170,6 +190,19 @@ void PluginManager::definePluginShortcutClicked()
 
       pluginShortcut->setText(s->keysToString());
       prefs.dirty = true;
+      }
+
+//---------------------------------------------------------
+//   reloadPluginShortcutClicked
+//---------------------------------------------------------
+
+void PluginManager::reloadPluginsClicked()
+      {
+      loadList(true);
+      QMessageBox::information(0,
+            tr("MuseScore"),
+            tr("Plugins reloaded."),
+            QMessageBox::Ok, QMessageBox::NoButton);
       }
 
 //---------------------------------------------------------
