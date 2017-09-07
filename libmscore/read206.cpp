@@ -1045,7 +1045,8 @@ static bool readTextLineProperties(XmlReader& e, TextLineBase* tl)
 
       if (tag == "beginText") {
             Text* text = new Text(tl->score());
-            readText(e, text, tl);
+//            readText(e, text, tl);
+            readText(e, text, text);
             tl->setBeginText(text->xmlText());
             delete text;
             }

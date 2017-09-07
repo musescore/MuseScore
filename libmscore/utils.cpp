@@ -49,7 +49,7 @@ Measure* Score::tick2measure(int tick) const
       if (tick == -1)
             return lastMeasure();
 
-      Q_ASSERT(firstMeasure());
+//      Q_ASSERT(firstMeasure());
       Measure* lm = 0;
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             if (tick < m->tick())
