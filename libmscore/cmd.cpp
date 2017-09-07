@@ -253,6 +253,10 @@ void Score::update()
             }
       }
 
+//---------------------------------------------------------
+//   deletePostponed
+//---------------------------------------------------------
+
 void Score::deletePostponed()
       {
       for (ScoreElement* e : _updateState._deleteList) {
