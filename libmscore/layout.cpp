@@ -3456,8 +3456,7 @@ void LayoutContext::collectPage()
                   m->layout2();
                   }
             }
-//      printf("%p ====set rebuild\n", page);
-//      page->rebuildBspTree();
+      page->rebuildBspTree();
       }
 
 //---------------------------------------------------------
@@ -3467,9 +3466,6 @@ void LayoutContext::collectPage()
 
 void Score::doLayout()
       {
-//      qDeleteAll(_systems);
-//      _systems.clear();
-
       doLayoutRange(0, -1);
       }
 
@@ -3479,16 +3475,13 @@ void Score::doLayout()
 
 void Score::doLayoutRange(int stick, int etick)
       {
-      if (!firstMeasure())
-            return;
-
 qDebug("%p %d-%d %s systems %d", this, stick, etick, isMaster() ? "Master" : "Part", int(_systems.size()));
 
-      bool layoutAll = stick <= 0 && (etick < 0 || etick >= lastMeasure()->endTick());
+      bool layoutAll = stick <= 0 && (etick < 0 || etick >= last()->endTick());
       if (stick < 0)
             stick = 0;
       if (etick < 0)
-            etick = lastMeasure()->endTick();
+            etick = last()->endTick();
 
       LayoutContext lc;
       lc.endTick     = etick;
@@ -3639,7 +3632,6 @@ void LayoutContext::layout()
       {
       for (;;) {
             collectPage();
-            page->rebuildBspTree();
             System* s      = page->system(0);
             MeasureBase* m = s->measures().back();
             if (!curSystem || (rangeDone && m->tick() > endTick))
