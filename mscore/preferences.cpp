@@ -1943,13 +1943,18 @@ static void updatePluginList(QList<QString>& pluginPathList, const QString& plug
       }
 #endif
 
-void Preferences::updatePluginList()
+void Preferences::updatePluginList(bool forceRefresh)
       {
 #ifdef SCRIPT_INTERFACE
       QList<QString> pluginPathList;
       pluginPathList.append(dataPath + "/plugins");
       pluginPathList.append(mscoreGlobalShare + "plugins");
       pluginPathList.append(myPluginsPath);
+      if (forceRefresh) {
+            pluginList.clear();
+            QQmlEngine* engine=Ms::MScore::qml();
+            engine->clearComponentCache(); //TODO: Check this doesn't have unwanted side effects.
+            }
 
       foreach(QString pluginPath, pluginPathList) {
             Ms::updatePluginList(pluginPathList, pluginPath, pluginList);

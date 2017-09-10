@@ -152,6 +152,7 @@ HelpBrowser::HelpBrowser(QWidget* parent)
 
       view->document()->setDefaultStyleSheet(
             preferences.globalStyle == MuseScoreStyleType::DARK ? cssDark : css);
+      view->setOpenExternalLinks(true);
 
       toolbar->setLayout(bl);
       }
