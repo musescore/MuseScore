@@ -36,6 +36,7 @@ class QmlEdit : public QPlainTextEdit {
       void move(QTextCursor::MoveOperation);
       virtual void keyPressEvent(QKeyEvent*);
       void tab();
+      void autoIndent();
 
    private slots:
       void updateLineNumberAreaWidth(int);

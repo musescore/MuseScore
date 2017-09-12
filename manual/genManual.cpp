@@ -319,8 +319,15 @@ static void writeOutput()
       //
       QString out;
       addHeader(out);
-      out += "<h2>Score Elements</h2>\n"
-             "<ul>\n";
+      out += "<h2>Score Elements</h2>\n";
+      out += "<h3>Quick Guide</h3>\n";
+      out += "<p>Below are all the various classes you can use."
+             "<br>The main class is <a href='musescore.html'>MuseScore</a>."
+             "<br>Use 'New' to create a skeleton plugin."
+             "<br>Plugins are coded in <a href='http://doc.qt.io/qt-5/qmlapplications.html#what-is-qml'>QML</a>"
+             "</p>\n";
+
+      out += "<ul>\n";
       qSort(classes);
       foreach(const Class& s, classes) {
             out += QString("<li><a href=\"%1\">%2</a></li>\n")

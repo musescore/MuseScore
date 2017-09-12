@@ -641,7 +641,34 @@ void QmlEdit::keyPressEvent(QKeyEvent* event)
             event->accept();
             return;
             }
+      if (event->modifiers() != Qt::ControlModifier &&
+          (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)) {
+            autoIndent();
+            event->accept();
+            return;
+            }
       QPlainTextEdit::keyPressEvent(event);
+      }
+
+//---------------------------------------------------------
+//   autoindent - line new line up with start of previous.
+//---------------------------------------------------------
+void QmlEdit::autoIndent()
+      {
+      QTextCursor c = textCursor();
+      QTextBlock b = c.block();
+      QString line = "";
+      while (line.trimmed() == "" && b.isValid()) // Find last non-blank line to line up on.
+            {
+            line = b.text();
+            b = b.previous();
+            }
+      int indent=0;
+      c.insertText("\n");
+      while (line.at(indent) == ' ') {
+            indent += 1;
+            c.insertText(" ");
+            }
       }
 
 //---------------------------------------------------------
