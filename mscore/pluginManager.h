@@ -33,6 +33,7 @@ class PluginManager : public QDialog, public Ui::PluginManager {
       Preferences prefs;
 
       void readSettings();
+      void loadList(bool forceRefresh);
 
       virtual void closeEvent(QCloseEvent*);
       virtual void accept();
@@ -42,6 +43,7 @@ class PluginManager : public QDialog, public Ui::PluginManager {
       void clearPluginShortcutClicked();
       void pluginListItemChanged(QListWidgetItem*, QListWidgetItem*);
       void pluginLoadToggled(QListWidgetItem*);
+      void reloadPluginsClicked();
 
    signals:
       void closed(bool);
