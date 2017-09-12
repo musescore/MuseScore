@@ -44,6 +44,7 @@ matrix:
             - libegl1-mesa
             - ccache
             - libpulse-dev
+            - libgtk2.0-bin
       cache:
         directories:
           - $HOME/.ccache
