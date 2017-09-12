@@ -44,6 +44,8 @@ matrix:
             - ccache
             - libpulse-dev
             - libgtk2.0-bin
+            - libgstreamer0.10-0
+            - libgstreamer-plugins-base0.10-0
       cache:
         directories:
           - $HOME/.ccache
