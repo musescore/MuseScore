@@ -3475,8 +3475,14 @@ void Score::doLayout()
 
 void Score::doLayoutRange(int stick, int etick)
       {
+      if (!last()) {
+            qDeleteAll(_systems);
+            _systems.clear();
+            qDeleteAll(pages());
+            pages().clear();
+            return;
+            }
 qDebug("%p %d-%d %s systems %d", this, stick, etick, isMaster() ? "Master" : "Part", int(_systems.size()));
-
       bool layoutAll = stick <= 0 && (etick < 0 || etick >= last()->endTick());
       if (stick < 0)
             stick = 0;
