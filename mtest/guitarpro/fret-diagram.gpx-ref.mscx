@@ -33,7 +33,7 @@
         <shortName>Guit.</shortName>
         <trackName>Acoustic Guitar (Treble Clef)</trackName>
         <minPitchP>40</minPitchP>
-        <maxPitchP>83</maxPitchP>
+        <maxPitchP>84</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>83</maxPitchA>
         <transposeDiatonic>-7</transposeDiatonic>
@@ -970,7 +970,7 @@
           <shortName>Guit.</shortName>
           <trackName>Acoustic Guitar (Treble Clef)</trackName>
           <minPitchP>40</minPitchP>
-          <maxPitchP>83</maxPitchP>
+          <maxPitchP>84</maxPitchP>
           <minPitchA>40</minPitchA>
           <maxPitchA>83</maxPitchA>
           <transposeDiatonic>-7</transposeDiatonic>
