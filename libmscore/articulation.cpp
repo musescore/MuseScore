@@ -422,6 +422,15 @@ QPointF Articulation::canvasPos() const
       }
 
 //---------------------------------------------------------
+//   sym
+//---------------------------------------------------------
+
+SymId Articulation::sym() const
+      {
+      return _up ? articulationList[int(articulationType())].upSym : articulationList[int(articulationType())].downSym;
+      }
+
+//---------------------------------------------------------
 //   Symbol::draw
 //---------------------------------------------------------
 

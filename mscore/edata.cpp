@@ -30,13 +30,20 @@
 
 namespace Ms {
 
+//    TODO: spatium is not constant 20 but may depend on score
+
 //---------------------------------------------------------
 //   writeData
 //---------------------------------------------------------
 
+
 static void writeData(Xml& xml, qreal mag, const QString& name, const Element* e)
       {
-      xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(10).arg(name));
+      qreal scale = e->mag();
+      if (scale == 1.0)
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(20).arg(name));
+      else
+            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(20).arg(scale).arg(name));
       QRectF rr(e->pageBoundingRect());
       QRectF r(rr.x() * mag, rr.y() * mag, rr.width() * mag, rr.height() * mag);
       xml.putLevel();
@@ -52,11 +59,13 @@ static void writeData(Xml& xml, qreal mag, const QString& name, const Element* e
 //   writeSymbol
 //---------------------------------------------------------
 
-static void writeSymbol(Xml& xml, const QString& name, const Element* e, SymId sym, QPointF p)
+static void writeSymbol(Xml& xml, qreal mag, const QString& name, const Element* e, SymId sym, QPointF p)
       {
-      xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(10).arg(name));
+      xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(20).arg(name));
       QRectF bbox = e->score()->scoreFont()->bbox(sym, e->magS());
-      QRectF r    = bbox.translated(p);
+      QRectF rr   = bbox.translated(p);
+      QRectF r(rr.x() * mag, rr.y() * mag, rr.width() * mag, rr.height() * mag);
+
       xml.putLevel();
       xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
          .arg(r.x(),      0, 'f', 3)
@@ -87,7 +96,8 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
             if (e->type() == Element::Type::PAGE) {
                   xml.stag("Page");
                   QUrl url = QUrl::fromLocalFile(imageName);
-                  xml.tag("Image", url.toDisplayString());
+//                  xml.tag("Image", url.toDisplayString());
+                  xml.tag("Image", QString("file:%1").arg(imageName));  // no path
                   QRectF r(e->pageBoundingRect());
                   xml.tag("Size", QVariant(QSize(lrint(r.width() * mag), lrint(r.height() * mag))));
                   xml.etag();
@@ -95,6 +105,8 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                   }
             }
       for (const Element* e : pel) {
+            if (!e->visible())
+                  continue;
             switch (e->type()) {
                   case Element::Type::NOTEDOT:
                         writeData(xml, mag, "augmentationDot", e);
@@ -109,25 +121,9 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
 #endif
                   case Element::Type::ARTICULATION: {
                         const Articulation* a = static_cast<const Articulation*>(e);
-                        switch (a->articulationType()) {
-                              case ArticulationType::Staccato:
-                                    writeData(xml, mag, "articStaccatoAbove", a);
-                                    break;
-                              case ArticulationType::Tenuto:
-                                    writeData(xml, mag, "articTenutoAbove", a);
-                                    break;
-                              case ArticulationType::Marcato:
-                                    writeData(xml, mag, "articMarcatoAbove", a);
-                                    break;
-                              case ArticulationType::Staccatissimo:
-                                    writeData(xml, mag, "articStaccatissimoAbove", a);
-                                    break;
-                              case ArticulationType::Sforzatoaccent:
-                                    writeData(xml, mag, "articAccentAbove", a);
-                                    break;
-                              default:
-                                    break;
-                              }
+                        SymId symId = a->sym();
+                        QString symName = Sym::id2userName(symId);
+                        writeData(xml, mag, symName, a);
                         }
                         break;
                   case Element::Type::CLEF: {
@@ -175,7 +171,11 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                   case Element::Type::NOTE: {
                         const Note* n = static_cast<const Note*>(e);
                         const Chord* c = n->chord();
-                        bool small = c->isGrace() || c->small() || n->small();
+                        SymId symId = n->noteHead();
+                        QString symName = Sym::id2userName(symId);
+
+                        writeData(xml, mag, symName, n);
+#if 0
                         switch (n->chord()->durationType().headType()) {
                               case NoteHead::Type::HEAD_WHOLE:
                                     writeData(xml, mag, small ? "noteheadWholeSmall" : "noteheadWhole", n);
@@ -188,9 +188,11 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                                     break;
                               case NoteHead::Type::HEAD_BREVIS:
                                     writeData(xml, mag, small ? "noteheadDoubleWholeSmall" : "noteheadDoubleWhole", n);
+                                    break;
                               default:
                                     break;
                               }
+#endif
                         }
                         break;
 
@@ -236,7 +238,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                                           name = "unknonw";
                                           break;
                                     }
-                              writeSymbol(xml, name, k, ks.sym, p + ks.pos);
+                              writeSymbol(xml, mag, name, k, ks.sym, p + ks.pos);
                               }
 
 #if 0
@@ -305,52 +307,52 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                               case 0:
                                     break;
                               case -1:
-                                    writeData(xml, mag, "flag8thUp", h);
-                                    break;
-                              case -2:
-                                    writeData(xml, mag, "flag16thUp", h);
-                                    break;
-                              case -3:
-                                    writeData(xml, mag, "flag32ndUp", h);
-                                    break;
-                              case -4:
-                                    writeData(xml, mag, "flag64tjUp", h);
-                                    break;
-                              case -5:
-                                    writeData(xml, mag, "flag128thUp", h);
-                                    break;
-                              case -6:
-                                    writeData(xml, mag, "flag256thUp", h);
-                                    break;
-                              case -7:
-                                    writeData(xml, mag, "flag512thUp", h);
-                                    break;
-                              case -8:
-                                    writeData(xml, mag, "flag1024thUp", h);
-                                    break;
-                              case 1:
                                     writeData(xml, mag, "flag8thDown", h);
                                     break;
-                              case 2:
+                              case -2:
                                     writeData(xml, mag, "flag16thDown", h);
                                     break;
-                              case 3:
+                              case -3:
                                     writeData(xml, mag, "flag32ndDown", h);
                                     break;
-                              case 4:
-                                    writeData(xml, mag, "flag64thDown", h);
+                              case -4:
+                                    writeData(xml, mag, "flag64tjDown", h);
                                     break;
-                              case 5:
+                              case -5:
                                     writeData(xml, mag, "flag128thDown", h);
                                     break;
-                              case 6:
+                              case -6:
                                     writeData(xml, mag, "flag256thDown", h);
                                     break;
-                              case 7:
+                              case -7:
                                     writeData(xml, mag, "flag512thDown", h);
                                     break;
-                              case 8:
+                              case -8:
                                     writeData(xml, mag, "flag1024thDown", h);
+                                    break;
+                              case 1:
+                                    writeData(xml, mag, "flag8thUp", h);
+                                    break;
+                              case 2:
+                                    writeData(xml, mag, "flag16thUp", h);
+                                    break;
+                              case 3:
+                                    writeData(xml, mag, "flag32ndUp", h);
+                                    break;
+                              case 4:
+                                    writeData(xml, mag, "flag64thUp", h);
+                                    break;
+                              case 5:
+                                    writeData(xml, mag, "flag128thUp", h);
+                                    break;
+                              case 6:
+                                    writeData(xml, mag, "flag256thUp", h);
+                                    break;
+                              case 7:
+                                    writeData(xml, mag, "flag512thUp", h);
+                                    break;
+                              case 8:
+                                    writeData(xml, mag, "flag1024thUp", h);
                                     break;
                               }
                         }

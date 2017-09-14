@@ -2377,13 +2377,13 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
       int pages = pl.size();
 
       if (edata) {
-            convDpi     = DPI * 10.0 / score->spatium();          // spatium is allways 10 pixel in image output
+            convDpi     = DPI * 20.0 / score->spatium();          // spatium is allways 10 pixel in image output
             transparent = false;
 #if (QT_VERSION >= QT_VERSION_CHECK(5,5,0))
             format      = QImage::Format_Grayscale8;
-#endif
+#else
             format      = QImage::Format_ARGB32;
-
+#endif
             }
 
       int padding = QString("%1").arg(pages).size();

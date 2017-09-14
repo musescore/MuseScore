@@ -143,7 +143,7 @@ class Articulation : public Element {
 
       bool playArticulation() const { return _playArticulation;}
       void setPlayArticulation(bool val) { _playArticulation = val; }
-    
+
       QString channelName() const           { return _channelName; }
       void setChannelName(const QString& s) { _channelName = s;    }
 
@@ -156,6 +156,7 @@ class Articulation : public Element {
                                 _articulationType == ArticulationType::Verylongfermata; }
 
       QString accessibleInfo() override;
+      SymId sym() const;
       };
 
 }     // namespace Ms
