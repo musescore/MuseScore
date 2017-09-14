@@ -560,6 +560,7 @@ enum class StyleIdx {
       rehearsalMarkFontBold,
       rehearsalMarkFontItalic,
       rehearsalMarkFontUnderline,
+      rehearsalMarkAlign,
       rehearsalMarkFrame,
       rehearsalMarkFrameSquare,
       rehearsalMarkFrameCircle,
