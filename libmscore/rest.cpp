@@ -921,8 +921,19 @@ Shape Rest::shape() const
       Shape shape;
       if (!_gap) {
             shape.add(ChordRest::shape());
-            if (parent() && measure() && measure()->isMMRest())
-                  shape.add(QRectF(0.0, 0.0, score()->styleP(StyleIdx::minMMRestWidth), height()));
+            if (parent() && measure() && measure()->isMMRest()) {
+                  qreal _spatium = spatium();
+                  shape.add(QRectF(0.0, -_spatium, _mmWidth, 2.0 * _spatium));
+
+                  int n    = measure()->mmRestCount();
+                  std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
+                  qreal y  = -_spatium * 1.5 - staff()->height() *.5;
+                  qreal x = center(0.0, _mmWidth);
+                  QRectF r = symBbox(s);
+                  x -= r.width() * .5;
+                  r.translate(QPointF(x, y));
+                  shape.add(r);
+                  }
             else
                   shape.add(bbox());
             }
