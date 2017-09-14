@@ -5,7 +5,7 @@
 //  Note Names Plugin
 //
 //  Copyright (C) 2012 Werner Schweer
-//  Copyright (C) 2013 - 2016 Joachim Schmitz
+//  Copyright (C) 2013 - 2017 Joachim Schmitz
 //  Copyright (C) 2014 Jörn Eichler
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -131,7 +131,7 @@ MuseScore {
       } else {
          startStaff = cursor.staffIdx;
          cursor.rewind(2);
-         if (cursor.tick == 0) {
+         if (cursor.tick === 0) {
             // this happens when the selection includes
             // the last measure of the score.
             // rewind(2) goes behind the last segment (where
@@ -154,14 +154,14 @@ MuseScore {
                cursor.rewind(0); // beginning of score
 
             while (cursor.segment && (fullScore || cursor.tick < endTick)) {
-               if (cursor.element && cursor.element.type == Element.CHORD) {
+               if (cursor.element && cursor.element.type === Element.CHORD) {
                   var text = newElement(Element.STAFF_TEXT);
 
                   var graceChords = cursor.element.graceNotes;
                   for (var i = 0; i < graceChords.length; i++) {
                      // iterate through all grace chords
-                     var notes = graceChords[i].notes;
-                     nameChord(notes, text);
+                     var graceNotes = graceChords[i].notes;
+                     nameChord(graceNotes, text);
                      // there seems to be no way of knowing the exact horizontal pos.
                      // of a grace note, so we have to guess:
                      text.pos.x = -2.5 * (graceChords.length - i);
