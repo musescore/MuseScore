@@ -81,6 +81,7 @@
       <chordSymbolFontSize>15</chordSymbolFontSize>
       <rehearsalMarkFontFace>MuseJazz Text</rehearsalMarkFontFace>
       <rehearsalMarkFontBold>0</rehearsalMarkFontBold>
+      <rehearsalMarkAlign>right,baseline</rehearsalMarkAlign>
       <rehearsalMarkFramePadding>0.2</rehearsalMarkFramePadding>
       <repeatLeftFontFace>MuseJazz Text</repeatLeftFontFace>
       <repeatRightFontFace>MuseJazz Text</repeatRightFontFace>
