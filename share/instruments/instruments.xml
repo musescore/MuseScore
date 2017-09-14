@@ -8902,7 +8902,7 @@
                   <description>Acoustic Steel-strung Guitar</description>
                   <musicXMLid>pluck.guitar.acoustic</musicXMLid>
                   <StringData>
-                        <frets>19</frets>
+                        <frets>20</frets>
                         <string>40</string>
                         <string>45</string>
                         <string>50</string>
@@ -8913,7 +8913,7 @@
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-83</aPitchRange>
-                  <pPitchRange>40-83</pPitchRange>
+                  <pPitchRange>40-84</pPitchRange>
                   <Channel>
                         <program value="25"/>
                   </Channel>
@@ -8927,7 +8927,7 @@
                   <description>Acoustic Steel-strung Guitar (Treble Clef)</description>
                   <musicXMLid>pluck.guitar.acoustic</musicXMLid>
                   <StringData>
-                        <frets>19</frets>
+                        <frets>20</frets>
                         <string>52</string>
                         <string>57</string>
                         <string>62</string>
@@ -8939,7 +8939,7 @@
                   <concertClef>G8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-83</aPitchRange>
-                  <pPitchRange>40-83</pPitchRange>
+                  <pPitchRange>40-84</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
                   <Channel>
@@ -8992,7 +8992,7 @@
                   <description>12-string Guitar</description>
                   <musicXMLid>pluck.guitar</musicXMLid>
                   <StringData>
-                        <frets>19</frets>
+                        <frets>21</frets>
                         <string>40</string>
                         <string>45</string>
                         <string>50</string>
@@ -9003,7 +9003,7 @@
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-83</aPitchRange>
-                  <pPitchRange>40-83</pPitchRange>
+                  <pPitchRange>40-85</pPitchRange>
                   <Channel>
                         <program value="24"/>
                   </Channel>
@@ -9040,7 +9040,7 @@
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-86</aPitchRange>
-                  <pPitchRange>40-86</pPitchRange>
+                  <pPitchRange>40-88</pPitchRange>
                   <Channel>
                         <program value="27"/>
                   </Channel>
@@ -9065,7 +9065,7 @@
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-86</aPitchRange>
-                  <pPitchRange>40-86</pPitchRange>
+                  <pPitchRange>40-88</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
                   <Channel>
@@ -9685,7 +9685,7 @@
                   <concertClef>F8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-65</aPitchRange>
-                  <pPitchRange>28-65</pPitchRange>
+                  <pPitchRange>28-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
                   <Channel>
@@ -9758,7 +9758,7 @@
                   <concertClef>F8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-65</aPitchRange>
-                  <pPitchRange>28-65</pPitchRange>
+                  <pPitchRange>28-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
                   <Channel>
@@ -9798,7 +9798,7 @@
                   <concertClef>F8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-65</aPitchRange>
-                  <pPitchRange>28-65</pPitchRange>
+                  <pPitchRange>28-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
                   <Channel>
@@ -9828,7 +9828,7 @@
                   <concertClef>F8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>23-65</aPitchRange>
-                  <pPitchRange>23-65</pPitchRange>
+                  <pPitchRange>23-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
                   <Channel>
