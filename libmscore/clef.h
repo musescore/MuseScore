@@ -28,6 +28,7 @@ namespace Ms {
 class Xml;
 class MuseScoreView;
 class Segment;
+class Symbol;
 
 static const int NO_CLEF = -1000;
 
@@ -121,7 +122,7 @@ class Clef : public Element {
       Q_PROPERTY(bool showCourtesy READ showCourtesy WRITE undoSetShowCourtesy)
       Q_PROPERTY(bool small READ small)
 
-      QList<Element*> elements;
+      Symbol* symbol;
       bool _showCourtesy;
       bool _showPreviousClef;       // show clef type at position tick-1
                                     // used for first clef on staff immediatly followed
@@ -156,8 +157,9 @@ class Clef : public Element {
 
       virtual bool isEditable() const                    { return false; }
 
-      virtual void addElement(Element* e, qreal x, qreal y);
       virtual Space space() const      { return Space(0.0, bbox().x() * 2.0 + width()); }
+      SymId sym() const;
+      qreal symMag() const;
 
       bool small() const               { return _small; }
       void setSmall(bool val);

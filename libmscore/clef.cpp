@@ -78,7 +78,6 @@ ClefType ClefInfo::tag2type(const QString& s)
 Clef::Clef(Score* s)
   : Element(s)
       {
-//      setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
       setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
 
       _showCourtesy               = true;
@@ -88,6 +87,7 @@ Clef::Clef(Score* s)
       curClefType                 = ClefType::G;
       curLines                    = -1;
       curLineDist                 = 1.0;
+      symbol                      = 0;
       }
 
 Clef::Clef(const Clef& c)
@@ -105,7 +105,20 @@ Clef::Clef(const Clef& c)
 
 Clef::~Clef()
       {
-      qDeleteAll(elements);
+      delete symbol;
+      }
+
+//---------------------------------------------------------
+//   sym
+//---------------------------------------------------------
+
+SymId Clef::sym() const
+      {
+      return symbol ? symbol->sym() : SymId::noSym;
+      }
+qreal Clef::symMag() const
+      {
+      return symbol ? symbol->mag() : 1.0;
       }
 
 //---------------------------------------------------------
@@ -121,27 +134,13 @@ qreal Clef::mag() const
       }
 
 //---------------------------------------------------------
-//   add
-//---------------------------------------------------------
-
-void Clef::addElement(Element* e, qreal x, qreal y)
-      {
-      e->layout();
-      e->setPos(x, y);
-      e->setParent(this);
-      e->setSelected(selected());
-      elements.push_back(e);
-      }
-
-//---------------------------------------------------------
 //   setSelected
 //---------------------------------------------------------
 
 void Clef::setSelected(bool f)
       {
       Element::setSelected(f);
-      foreach(Element* e, elements)
-            e->setSelected(f);
+      symbol->setSelected(f);
       }
 
 //---------------------------------------------------------
@@ -200,8 +199,8 @@ void Clef::layout()
 
             // if clef not to show or not compatible with staff group
             if (bHide) {
-                  qDeleteAll(elements);         // set empty bbox and do nothing
-                  elements.clear();
+                  delete symbol;         // set empty bbox and do nothing
+                  symbol = 0;
                   setbbox(QRectF());
                   return;
                   }
@@ -230,10 +229,10 @@ void Clef::layout1()
       qreal _spatium = spatium();
       qreal yoff     = 0.0;
 
-      qDeleteAll(elements);
-      elements.clear();
+      delete symbol;
+      symbol = 0;
 
-      Symbol* symbol = new Symbol(score());
+      symbol = new Symbol(score());
 
       switch (curClefType) {
             case ClefType::G:                              // G clef on 2nd line
@@ -330,14 +329,11 @@ void Clef::layout1()
 
       symbol->setMag(smag);
       symbol->layout();
-      addElement(symbol, .0, yoff * _spatium);
-      setbbox(QRectF());
-      for (auto i = elements.begin(); i != elements.end(); ++i) {
-            Element* e = *i;
-            e->setColor(curColor());
-            addbbox(e->bbox().translated(e->pos()));
-            e->setSelected(selected());
-            }
+      symbol->setPos(.0, yoff * _spatium);
+      symbol->setParent(this);
+      symbol->setColor(curColor());
+      setbbox(symbol->bbox().translated(symbol->pos()));
+      symbol->setSelected(selected());
       }
 
 //---------------------------------------------------------
@@ -348,14 +344,11 @@ void Clef::draw(QPainter* painter) const
       {
       if (staff() && !staff()->staffType()->genClef())
             return;
-      QColor color(curColor());
-      foreach(Element* e, elements) {
-            e->setColor(color);           //??
-            QPointF pt(e->pos());
-            painter->translate(pt);
-            e->draw(painter);
-            painter->translate(-pt);
-            }
+      symbol->setColor(curColor());           //??
+      QPointF pt(symbol->pos());
+      painter->translate(pt);
+      symbol->draw(painter);
+      painter->translate(-pt);
       }
 
 //---------------------------------------------------------

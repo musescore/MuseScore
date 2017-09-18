@@ -25,6 +25,7 @@
 #include "libmscore/accidental.h"
 #include "libmscore/durationtype.h"
 #include "libmscore/sym.h"
+#include "libmscore/staff.h"
 
 //##  write out extended metadata about every painted symbol
 
@@ -36,16 +37,19 @@ namespace Ms {
 //   writeData
 //---------------------------------------------------------
 
-
-static void writeData(Xml& xml, qreal mag, const QString& name, const Element* e)
+static void writeData(Xml& xml, qreal spatium, qreal scale, const QString& name, const Element* e)
       {
-      qreal scale = e->mag();
+      qreal interline = 20.0;
+      if (e->staff()) {
+            interline *= (e->staff()->spatium() / e->score()->spatium());
+            scale     *= (e->score()->spatium() / e->staff()->spatium());
+            }
       if (scale == 1.0)
-            xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(20).arg(name));
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(name));
       else
-            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(20).arg(scale).arg(name));
+            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(name));
       QRectF rr(e->pageBoundingRect());
-      QRectF r(rr.x() * mag, rr.y() * mag, rr.width() * mag, rr.height() * mag);
+      QRectF r(rr.x() * spatium, rr.y() * spatium, rr.width() * spatium, rr.height() * spatium);
       xml.putLevel();
       xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
          .arg(r.x(),      0, 'f', 3)
@@ -80,7 +84,7 @@ static void writeSymbol(Xml& xml, qreal mag, const QString& name, const Element*
 //---------------------------------------------------------
 
 void MuseScore::writeEdata(const QString& edataName, const QString& imageName, Score* score,
-   qreal mag, const QList<const Element*>& pel)
+   qreal gmag, const QList<const Element*>& pel)
       {
       QFile f(edataName);
       if (!f.open(QIODevice::WriteOnly)) {
@@ -99,7 +103,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
 //                  xml.tag("Image", url.toDisplayString());
                   xml.tag("Image", QString("file:%1").arg(imageName));  // no path
                   QRectF r(e->pageBoundingRect());
-                  xml.tag("Size", QVariant(QSize(lrint(r.width() * mag), lrint(r.height() * mag))));
+                  xml.tag("Size", QVariant(QSize(lrint(r.width() * gmag), lrint(r.height() * gmag))));
                   xml.etag();
                   break;
                   }
@@ -107,92 +111,42 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
       for (const Element* e : pel) {
             if (!e->visible())
                   continue;
+            Staff* staff = e->staff();
+
+            qreal smag = staff ? score->spatium() / staff->spatium() : gmag;
+            qreal mag  = gmag * smag;
             switch (e->type()) {
                   case Element::Type::NOTEDOT:
-                        writeData(xml, mag, "augmentationDot", e);
+                        writeData(xml, mag, e->mag(), "augmentationDot", e);
                         break;
                   case Element::Type::STEM:
-                        writeData(xml, mag, "stem", e);
+                        writeData(xml, mag, e->mag() / smag, "stem", e);
                         break;
 #if 0
                   case Element::Type::HAIRPIN_SEGMENT:
-                        writeData(xml, mag, e->name(), e);
+                        writeData(xml, mag, e->mag(), e->name(), e);
                         break;
 #endif
                   case Element::Type::ARTICULATION: {
                         const Articulation* a = static_cast<const Articulation*>(e);
                         SymId symId = a->sym();
                         QString symName = Sym::id2userName(symId);
-                        writeData(xml, mag, symName, a);
+                        writeData(xml, mag, a->mag(), symName, a);
                         }
                         break;
                   case Element::Type::CLEF: {
                         const Clef* c = static_cast<const Clef*>(e);
-                        switch (c->clefType()) {
-                              case ClefType::G:
-                                    writeData(xml, mag, c->small() ? "gClefChange" : "gClef", c);
-                                    break;
-                              case ClefType::G3:
-                                    writeData(xml, mag, c->small() ? "gClef8vbChange" : "gClef8vb", c);
-                                    break;
-                              case ClefType::G1:
-                                    writeData(xml, mag, c->small() ? "gClef8vaChange" : "gClef8va", c);
-                                    break;
-                              case ClefType::G2:
-                                    writeData(xml, mag, c->small() ? "gClef15maChange" : "gClef15ma", c);
-                                    break;
-                              case ClefType::F:
-                                    writeData(xml, mag, c->small() ? "fClefChange" : "fClef", c);
-                                    break;
-                              case ClefType::F8:
-                                    writeData(xml, mag, c->small() ? "fClef8vbChange" : "fClef8vb", c);
-                                    break;
-                              case ClefType::F_8VA:
-                                    writeData(xml, mag, c->small() ? "fClef8vaChange" : "fClef8va", c);
-                                    break;
-                              case ClefType::F15:
-                                    writeData(xml, mag, c->small() ? "fClef15mbChange" : "fClef15mb", c);
-                                    break;
-                              case ClefType::F_15MA:
-                                    writeData(xml, mag, c->small() ? "fClef15maChange" : "fClef15ma", c);
-                                    break;
-                              case ClefType::C1:
-                              case ClefType::C2:
-                              case ClefType::C3:
-                              case ClefType::C4:
-                                    writeData(xml, mag, c->small() ? "cClefChange" : "cClef", c);
-                                    break;
-                              default:
-                                    break;
-                              }
+                        SymId symId = c->sym();
+                        QString symName = Sym::id2userName(symId);
+                        writeData(xml, mag, c->symMag(), symName, c);   // hack symMag
                         }
                         break;
 
                   case Element::Type::NOTE: {
                         const Note* n = static_cast<const Note*>(e);
-                        const Chord* c = n->chord();
                         SymId symId = n->noteHead();
                         QString symName = Sym::id2userName(symId);
-
-                        writeData(xml, mag, symName, n);
-#if 0
-                        switch (n->chord()->durationType().headType()) {
-                              case NoteHead::Type::HEAD_WHOLE:
-                                    writeData(xml, mag, small ? "noteheadWholeSmall" : "noteheadWhole", n);
-                                    break;
-                              case NoteHead::Type::HEAD_HALF:
-                                    writeData(xml, mag, small ? "noteheadHalfSmall" : "noteheadHalf", n);
-                                    break;
-                              case NoteHead::Type::HEAD_QUARTER:
-                                    writeData(xml, mag, small ? "noteheadBlackSmall" : "noteheadBlack", n);
-                                    break;
-                              case NoteHead::Type::HEAD_BREVIS:
-                                    writeData(xml, mag, small ? "noteheadDoubleWholeSmall" : "noteheadDoubleWhole", n);
-                                    break;
-                              default:
-                                    break;
-                              }
-#endif
+                        writeData(xml, mag, n->mag(), symName, n);
                         }
                         break;
 
@@ -200,19 +154,19 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                         const Accidental* a = static_cast<const Accidental*>(e);
                         switch (a->accidentalType()) {
                               case AccidentalType::SHARP:
-                                    writeData(xml, mag, "accidentalSharp", a);
+                                    writeData(xml, mag, a->mag(), "accidentalSharp", a);
                                     break;
                               case AccidentalType::FLAT:
-                                    writeData(xml, mag, "accidentalFlat", a);
+                                    writeData(xml, mag, a->mag(), "accidentalFlat", a);
                                     break;
                               case AccidentalType::SHARP2:
-                                    writeData(xml, mag, "accidentalDoubleSharp", a);
+                                    writeData(xml, mag, a->mag(), "accidentalDoubleSharp", a);
                                     break;
                               case AccidentalType::FLAT2:
-                                    writeData(xml, mag, "accidentalDoubleFlat", a);
+                                    writeData(xml, mag, a->mag(), "accidentalDoubleFlat", a);
                                     break;
                               case AccidentalType::NATURAL:
-                                    writeData(xml, mag, "accidentalNatural", a);
+                                    writeData(xml, mag, a->mag(), "accidentalNatural", a);
                                     break;
                               default:
                                     break;
@@ -240,52 +194,6 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                                     }
                               writeSymbol(xml, mag, name, k, ks.sym, p + ks.pos);
                               }
-
-#if 0
-                        switch (k->key()) {
-                              case Key::G_B:
-                                    writeData(xml, mag, "KeyFlat6", k);
-                                    break;
-                              case Key::D_B:
-                                    writeData(xml, mag, "KeyFlat5", k);
-                                    break;
-                              case Key::A_B:
-                                    writeData(xml, mag, "KeyFlat4", k);
-                                    break;
-                              case Key::E_B:
-                                    writeData(xml, mag, "KeyFlat3", k);
-                                    break;
-                              case Key::B_B:
-                                    writeData(xml, mag, "KeyFlat2", k);
-                                    break;
-                              case Key::F:
-                                    writeData(xml, mag, "KeyFlat1", k);
-                                    break;
-                              case Key::G:
-                                    writeData(xml, mag, "KeySharp1", k);
-                                    break;
-                              case Key::D:
-                                    writeData(xml, mag, "KeySharp2", k);
-                                    break;
-                              case Key::A:
-                                    writeData(xml, mag, "KeySharp3", k);
-                                    break;
-                              case Key::E:
-                                    writeData(xml, mag, "KeySharp4", k);
-                                    break;
-                              case Key::B:
-                                    writeData(xml, mag, "KeySharp5", k);
-                                    break;
-                              case Key::F_S:
-                                    writeData(xml, mag, "KeySharp6", k);
-                                    break;
-                              case Key::C_S:
-                                    writeData(xml, mag, "KeySharp7", k);
-                                    break;
-                              default:
-                                    break;
-                              }
-#endif
                         };
                         break;
 
@@ -296,9 +204,9 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                         if (c->isGrace()) {
                               if (h->hookType() == 1) {
                                     if (c->slash())
-                                          writeData(xml, mag, "Flag1UpSmallSlash", h);
+                                          writeData(xml, mag, c->mag(), "Flag1UpSmallSlash", h);
                                     else
-                                          writeData(xml, mag, "Flag1UpSmall", h);
+                                          writeData(xml, mag, c->mag(), "Flag1UpSmall", h);
                                     }
                               break;
                               }
@@ -307,52 +215,52 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                               case 0:
                                     break;
                               case -1:
-                                    writeData(xml, mag, "flag8thDown", h);
+                                    writeData(xml, mag, h->mag(), "flag8thDown", h);
                                     break;
                               case -2:
-                                    writeData(xml, mag, "flag16thDown", h);
+                                    writeData(xml, mag, h->mag(), "flag16thDown", h);
                                     break;
                               case -3:
-                                    writeData(xml, mag, "flag32ndDown", h);
+                                    writeData(xml, mag, h->mag(), "flag32ndDown", h);
                                     break;
                               case -4:
-                                    writeData(xml, mag, "flag64tjDown", h);
+                                    writeData(xml, mag, h->mag(), "flag64tjDown", h);
                                     break;
                               case -5:
-                                    writeData(xml, mag, "flag128thDown", h);
+                                    writeData(xml, mag, h->mag(), "flag128thDown", h);
                                     break;
                               case -6:
-                                    writeData(xml, mag, "flag256thDown", h);
+                                    writeData(xml, mag, h->mag(), "flag256thDown", h);
                                     break;
                               case -7:
-                                    writeData(xml, mag, "flag512thDown", h);
+                                    writeData(xml, mag, h->mag(), "flag512thDown", h);
                                     break;
                               case -8:
-                                    writeData(xml, mag, "flag1024thDown", h);
+                                    writeData(xml, mag, h->mag(), "flag1024thDown", h);
                                     break;
                               case 1:
-                                    writeData(xml, mag, "flag8thUp", h);
+                                    writeData(xml, mag, h->mag(), "flag8thUp", h);
                                     break;
                               case 2:
-                                    writeData(xml, mag, "flag16thUp", h);
+                                    writeData(xml, mag, h->mag(), "flag16thUp", h);
                                     break;
                               case 3:
-                                    writeData(xml, mag, "flag32ndUp", h);
+                                    writeData(xml, mag, h->mag(), "flag32ndUp", h);
                                     break;
                               case 4:
-                                    writeData(xml, mag, "flag64thUp", h);
+                                    writeData(xml, mag, h->mag(), "flag64thUp", h);
                                     break;
                               case 5:
-                                    writeData(xml, mag, "flag128thUp", h);
+                                    writeData(xml, mag, h->mag(), "flag128thUp", h);
                                     break;
                               case 6:
-                                    writeData(xml, mag, "flag256thUp", h);
+                                    writeData(xml, mag, h->mag(), "flag256thUp", h);
                                     break;
                               case 7:
-                                    writeData(xml, mag, "flag512thUp", h);
+                                    writeData(xml, mag, h->mag(), "flag512thUp", h);
                                     break;
                               case 8:
-                                    writeData(xml, mag, "flag1024thUp", h);
+                                    writeData(xml, mag, h->mag(), "flag1024thUp", h);
                                     break;
                               }
                         }
@@ -362,44 +270,44 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                         const Rest* r = static_cast<const Rest*>(e);
                         switch (r->durationType().type()) {
                               case TDuration::DurationType::V_1024TH:
-                                    writeData(xml, mag, "rest1024th", r);
+                                    writeData(xml, mag, r->mag(), "rest1024th", r);
                                     break;
                               case TDuration::DurationType::V_512TH:
-                                    writeData(xml, mag, "rest512th", r);
+                                    writeData(xml, mag, r->mag(), "rest512th", r);
                                     break;
                               case TDuration::DurationType::V_256TH:
-                                    writeData(xml, mag, "rest256th", r);
+                                    writeData(xml, mag, r->mag(), "rest256th", r);
                                     break;
                               case TDuration::DurationType::V_128TH:
-                                    writeData(xml, mag, "rest128th", r);
+                                    writeData(xml, mag, r->mag(), "rest128th", r);
                                     break;
                               case TDuration::DurationType::V_64TH:
-                                    writeData(xml, mag, "rest64th", r);
+                                    writeData(xml, mag, r->mag(), "rest64th", r);
                                     break;
                               case TDuration::DurationType::V_32ND:
-                                    writeData(xml, mag, "rest32nd", r);
+                                    writeData(xml, mag, r->mag(), "rest32nd", r);
                                     break;
                               case TDuration::DurationType::V_16TH:
-                                    writeData(xml, mag, "rest16th", r);
+                                    writeData(xml, mag, r->mag(), "rest16th", r);
                                     break;
                               case TDuration::DurationType::V_EIGHTH:
-                                    writeData(xml, mag, "rest8th", r);
+                                    writeData(xml, mag, r->mag(), "rest8th", r);
                                     break;
                               case TDuration::DurationType::V_QUARTER:
-                                    writeData(xml, mag, "restQuarter", r);
+                                    writeData(xml, mag, r->mag(), "restQuarter", r);
                                     break;
                               case TDuration::DurationType::V_HALF:
-                                    writeData(xml, mag, "restHalf", r);
+                                    writeData(xml, mag, r->mag(), "restHalf", r);
                                     break;
                               case TDuration::DurationType::V_WHOLE:
                               case TDuration::DurationType::V_MEASURE:
-                                    writeData(xml, mag, "restWhole", r);
+                                    writeData(xml, mag, r->mag(), "restWhole", r);
                                     break;
                               case TDuration::DurationType::V_BREVE:
-                                    writeData(xml, mag, "restDoubleWhole", r);
+                                    writeData(xml, mag, r->mag(), "restDoubleWhole", r);
                                     break;
                               case TDuration::DurationType::V_LONG:
-                                    writeData(xml, mag, "restLonga", r);
+                                    writeData(xml, mag, r->mag(), "restLonga", r);
                                     break;
                               default:
                                     break;
@@ -415,14 +323,14 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                         switch (t) {
                               case TimeSigType::NORMAL: {
                                     QString s = QString("timeSig%1over%2").arg(sig.numerator()).arg(sig.denominator());
-                                    writeData(xml, mag, s, ts);
+                                    writeData(xml, mag, ts->mag(), s, ts);
                                     }
                                     break;
                               case TimeSigType::FOUR_FOUR:
-                                    writeData(xml, mag, "timeSigCommon", ts);
+                                    writeData(xml, mag, ts->mag(), "timeSigCommon", ts);
                                     break;
                               case TimeSigType::ALLA_BREVE:
-                                    writeData(xml, mag, "timesigCut", ts);
+                                    writeData(xml, mag, ts->mag(), "timesigCut", ts);
                                     break;
                               }
                         }
@@ -433,27 +341,27 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                         switch (m->markerType()) {
                               case Marker::Type::SEGNO:
                               case Marker::Type::VARSEGNO:
-                                    writeData(xml, mag, "segno", m);
+                                    writeData(xml, mag, m->mag(), "segno", m);
                                     break;
 
                               case Marker::Type::VARCODA:
-                                    writeData(xml, mag, "codaSquare", m);
+                                    writeData(xml, mag, m->mag(), "codaSquare", m);
                                     break;
 
                               case Marker::Type::CODA:
-                                    writeData(xml, mag, "coda", m);
+                                    writeData(xml, mag, m->mag(), "coda", m);
                                     break;
 
                               case Marker::Type::FINE:
-                                    writeData(xml, mag, "fine", m);
+                                    writeData(xml, mag, m->mag(), "fine", m);
                                     break;
 
                               case Marker::Type::TOCODA:
-                                    writeData(xml, mag, "toCoda", m);
+                                    writeData(xml, mag, m->mag(), "toCoda", m);
                                     break;
 
                               case Marker::Type::CODETTA:
-                                    writeData(xml, mag, "unknown", m);
+                                    writeData(xml, mag, m->mag(), "unknown", m);
                                     break;
 
                               default:
@@ -467,91 +375,91 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                         const Dynamic* d = static_cast<const Dynamic*>(e);
                         switch (d->dynamicType()) {
                               case Dynamic::Type::PPPPPP:
-                                    writeData(xml, mag, "dynamicPPPPPP", d);
+                                    writeData(xml, mag, d->mag(), "dynamicPPPPPP", d);
                                     break;
                               case Dynamic::Type::PPPPP:
-                                    writeData(xml, mag, "dynamicPPPPP", d);
+                                    writeData(xml, mag, d->mag(), "dynamicPPPPP", d);
                                     break;
                               case Dynamic::Type::PPPP:
-                                    writeData(xml, mag, "dynamicPPPP", d);
+                                    writeData(xml, mag, d->mag(), "dynamicPPPP", d);
                                     break;
                               case Dynamic::Type::PPP:
-                                    writeData(xml, mag, "dynamicPPP", d);
+                                    writeData(xml, mag, d->mag(), "dynamicPPP", d);
                                     break;
                               case Dynamic::Type::PP:
-                                    writeData(xml, mag, "dynamicPP", d);
+                                    writeData(xml, mag, d->mag(), "dynamicPP", d);
                                     break;
                               case Dynamic::Type::P:
-                                    writeData(xml, mag, "dynamicPiano", d);
+                                    writeData(xml, mag, d->mag(), "dynamicPiano", d);
                                     break;
                               case Dynamic::Type::MP:
-                                    writeData(xml, mag, "dynamicMP", d);
+                                    writeData(xml, mag, d->mag(), "dynamicMP", d);
                                     break;
                               case Dynamic::Type::MF:
-                                    writeData(xml, mag, "dynamicMF", d);
+                                    writeData(xml, mag, d->mag(), "dynamicMF", d);
                                     break;
                               case Dynamic::Type::F:
-                                    writeData(xml, mag, "dynamicForte", d);
+                                    writeData(xml, mag, d->mag(), "dynamicForte", d);
                                     break;
                               case Dynamic::Type::FF:
-                                    writeData(xml, mag, "dynamicFF", d);
+                                    writeData(xml, mag, d->mag(), "dynamicFF", d);
                                     break;
                               case Dynamic::Type::FFF:
-                                    writeData(xml, mag, "dynamicFFF", d);
+                                    writeData(xml, mag, d->mag(), "dynamicFFF", d);
                                     break;
                               case Dynamic::Type::FFFF:
-                                    writeData(xml, mag, "dynamicFFFF", d);
+                                    writeData(xml, mag, d->mag(), "dynamicFFFF", d);
                                     break;
                               case Dynamic::Type::FFFFF:
-                                    writeData(xml, mag, "dynamicFFFF", d);
+                                    writeData(xml, mag, d->mag(), "dynamicFFFF", d);
                                     break;
                               case Dynamic::Type::FFFFFF:
-                                    writeData(xml, mag, "dynamicFFFFF", d);
+                                    writeData(xml, mag, d->mag(), "dynamicFFFFF", d);
                                     break;
                               case Dynamic::Type::FP:
-                                    writeData(xml, mag, "dynamicFortePiano", d);
+                                    writeData(xml, mag, d->mag(), "dynamicFortePiano", d);
                                     break;
                               case Dynamic::Type::SF:
-                                    writeData(xml, mag, "dynamicSforzando1", d);
+                                    writeData(xml, mag, d->mag(), "dynamicSforzando1", d);
                                     break;
                               case Dynamic::Type::SFZ:
-                                    writeData(xml, mag, "dynamicSforzato", d);
+                                    writeData(xml, mag, d->mag(), "dynamicSforzato", d);
                                     break;
                               case Dynamic::Type::SFF:
-                                    writeData(xml, mag, "unknown", d);
+                                    writeData(xml, mag, d->mag(), "unknown", d);
                                     break;
                               case Dynamic::Type::SFFZ:
-                                    writeData(xml, mag, "dynamicSforzatoFF", d);
+                                    writeData(xml, mag, d->mag(), "dynamicSforzatoFF", d);
                                     break;
                               case Dynamic::Type::SFP:
-                                    writeData(xml, mag, "dynamicSforzatoPiano", d);
+                                    writeData(xml, mag, d->mag(), "dynamicSforzatoPiano", d);
                                     break;
                               case Dynamic::Type::SFPP:
-                                    writeData(xml, mag, "dynamicSforzatoPianissimo", d);
+                                    writeData(xml, mag, d->mag(), "dynamicSforzatoPianissimo", d);
                                     break;
                               case Dynamic::Type::RFZ:
-                                    writeData(xml, mag, "dynamicRinforzando2", d);
+                                    writeData(xml, mag, d->mag(), "dynamicRinforzando2", d);
                                     break;
                               case Dynamic::Type::RF:
-                                    writeData(xml, mag, "unknown", d);
+                                    writeData(xml, mag, d->mag(), "unknown", d);
                                     break;
                               case Dynamic::Type::FZ:
-                                    writeData(xml, mag, "dynamicForzando", d);
+                                    writeData(xml, mag, d->mag(), "dynamicForzando", d);
                                     break;
                               case Dynamic::Type::M:
-                                    writeData(xml, mag, "unknown", d);
+                                    writeData(xml, mag, d->mag(), "unknown", d);
                                     break;
                               case Dynamic::Type::R:
-                                    writeData(xml, mag, "dynamicRinforzando", d);
+                                    writeData(xml, mag, d->mag(), "dynamicRinforzando", d);
                                     break;
                               case Dynamic::Type::S:
-                                    writeData(xml, mag, "dynamicSforzando", d);
+                                    writeData(xml, mag, d->mag(), "dynamicSforzando", d);
                                     break;
                               case Dynamic::Type::Z:
-                                    writeData(xml, mag, "dynamicZ", d);
+                                    writeData(xml, mag, d->mag(), "dynamicZ", d);
                                     break;
                               default:
-                                    writeData(xml, mag, "unknown", d);
+                                    writeData(xml, mag, d->mag(), "unknown", d);
                                     break;
                               }
                         }
