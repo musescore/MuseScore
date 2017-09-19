@@ -509,6 +509,7 @@ class Score : public QObject, ScoreElement {
       void cmdAddPitch(const EditData&, int note, bool addFlag, bool insert);
       void cmdAddFret(int fret);
       void cmdToggleVisible();
+      void layoutLyrics(System*);
 
    protected:
       int _fileDivision; ///< division of current loading *.msc file
