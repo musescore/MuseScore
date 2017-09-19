@@ -130,7 +130,7 @@ class Measure : public MeasureBase {
       void setCorrupted(int staffIdx, bool val);
       void setNoText(int staffIdx, Text*);
       Text* noText(int staffIdx) const;
-      Shape staffShape(int staffIdx) const;
+      const Shape& staffShape(int staffIdx) const;
       Shape& staffShape(int staffIdx);
       void createStaves(int);
 
