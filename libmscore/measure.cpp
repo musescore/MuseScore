@@ -294,7 +294,7 @@ void Measure::setCorrupted(int staffIdx, bool val)              { _mstaves[staff
 #endif
 void Measure::setNoText(int staffIdx, Text* t)                  { _mstaves[staffIdx]->setNoText(t); }
 Text* Measure::noText(int staffIdx) const                       { return _mstaves[staffIdx]->noText(); }
-Shape Measure::staffShape(int staffIdx) const                   { return _mstaves[staffIdx]->shape(); }
+const Shape& Measure::staffShape(int staffIdx) const            { return _mstaves[staffIdx]->shape(); }
 Shape& Measure::staffShape(int staffIdx)                        { return _mstaves[staffIdx]->shape(); }
 
 //---------------------------------------------------------

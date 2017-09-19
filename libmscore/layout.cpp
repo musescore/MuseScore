@@ -2605,13 +2605,15 @@ static qreal findLyricsMaxY(Segment& s, int staffIdx)
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeBelow()) {
                               l->rUserYoffset() = 0.0;
-                              sh.add(l->bbox().translated(l->pos()));
+                              // sh.add(l->bbox().translated(l->pos()));
+                              sh.add(l->bbox().translated(l->pos() + s.pos()));
                               }
                         }
                   qreal lyricsMinTopDistance = s.score()->styleP(StyleIdx::lyricsMinTopDistance);
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeBelow()) {
-                              qreal y = s.staffShape(staffIdx).minVerticalDistance(sh);
+                              // qreal y = s.staffShape(staffIdx).minVerticalDistance(sh);
+                              qreal y = s.measure()->staffShape(staffIdx).minVerticalDistance(sh);
                               if (y > -lyricsMinTopDistance)
                                     yMax = qMax(yMax, y + lyricsMinTopDistance);
                               }
@@ -2645,13 +2647,13 @@ static qreal findLyricsMinY(Segment& s, int staffIdx)
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeAbove()) {
                               l->rUserYoffset() = 0.0;
-                              sh.add(l->bbox().translated(l->pos()));
+                              sh.add(l->bbox().translated(l->pos() + s.pos()));
                               }
                         }
                   qreal lyricsMinTopDistance = s.score()->styleP(StyleIdx::lyricsMinTopDistance);
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeAbove()) {
-                              qreal y = sh.minVerticalDistance(s.staffShape(staffIdx));
+                              qreal y = sh.minVerticalDistance(s.measure()->staffShape(staffIdx));
                               if (y > -lyricsMinTopDistance)
                                     yMin = qMin(yMin, -y -lyricsMinTopDistance);
                               }
@@ -2748,6 +2750,64 @@ static void restoreBeams(Measure* m)
                               }
                         }
                   }
+            }
+      }
+
+//---------------------------------------------------------
+//   layoutLyrics
+//---------------------------------------------------------
+
+void Score::layoutLyrics(System* system)
+      {
+      //
+      //    vertical align lyrics
+      //
+
+      VerticalAlignRange ar = VerticalAlignRange(styleI(StyleIdx::autoplaceVerticalAlignRange));
+
+      switch (ar) {
+            case VerticalAlignRange::MEASURE:
+                  for (MeasureBase* mb : system->measures()) {
+                        if (!mb->isMeasure())
+                              continue;
+                        Measure* m = toMeasure(mb);
+                        for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
+                              qreal yMax = findLyricsMaxY(m, staffIdx);
+                              applyLyricsMax(m, staffIdx, yMax);
+                              }
+                        }
+                  break;
+            case VerticalAlignRange::SYSTEM:
+                  for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
+                        qreal yMax = 0.0;
+                        qreal yMin = 0.0;
+                        for (MeasureBase* mb : system->measures()) {
+                              if (!mb->isMeasure())
+                                    continue;
+                              yMax = qMax(yMax, findLyricsMaxY(toMeasure(mb), staffIdx));
+                              yMin = qMin(yMin, findLyricsMinY(toMeasure(mb), staffIdx));
+                              }
+                        for (MeasureBase* mb : system->measures()) {
+                              if (!mb->isMeasure())
+                                    continue;
+                              applyLyricsMax(toMeasure(mb), staffIdx, yMax);
+                              applyLyricsMin(toMeasure(mb), staffIdx, yMin);
+                              }
+                        }
+                  break;
+            case VerticalAlignRange::SEGMENT:
+                  for (MeasureBase* mb : system->measures()) {
+                        if (!mb->isMeasure())
+                              continue;
+                        Measure* m = toMeasure(mb);
+                        for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
+                              for (Segment& s : m->segments()) {
+                                    qreal yMax = findLyricsMaxY(s, staffIdx);
+                                    applyLyricsMax(s, staffIdx, yMax);
+                                    }
+                              }
+                        }
+                  break;
             }
       }
 
@@ -3105,56 +3165,6 @@ System* Score::collectSystem(LayoutContext& lc)
                         }
                   }
             }
-      //
-      //    vertical align lyrics
-      //
-
-      VerticalAlignRange ar = VerticalAlignRange(styleI(StyleIdx::autoplaceVerticalAlignRange));
-
-      switch (ar) {
-            case VerticalAlignRange::MEASURE:
-                  for (MeasureBase* mb : system->measures()) {
-                        if (!mb->isMeasure())
-                              continue;
-                        Measure* m = toMeasure(mb);
-                        for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
-                              qreal yMax = findLyricsMaxY(m, staffIdx);
-                              applyLyricsMax(m, staffIdx, yMax);
-                              }
-                        }
-                  break;
-            case VerticalAlignRange::SYSTEM:
-                  for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
-                        qreal yMax = 0.0;
-                        qreal yMin = 0.0;
-                        for (MeasureBase* mb : system->measures()) {
-                              if (!mb->isMeasure())
-                                    continue;
-                              yMax = qMax(yMax, findLyricsMaxY(toMeasure(mb), staffIdx));
-                              yMin = qMin(yMin, findLyricsMinY(toMeasure(mb), staffIdx));
-                              }
-                        for (MeasureBase* mb : system->measures()) {
-                              if (!mb->isMeasure())
-                                    continue;
-                              applyLyricsMax(toMeasure(mb), staffIdx, yMax);
-                              applyLyricsMin(toMeasure(mb), staffIdx, yMin);
-                              }
-                        }
-                  break;
-            case VerticalAlignRange::SEGMENT:
-                  for (MeasureBase* mb : system->measures()) {
-                        if (!mb->isMeasure())
-                              continue;
-                        Measure* m = toMeasure(mb);
-                        for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
-                              for (Segment& s : m->segments()) {
-                                    qreal yMax = findLyricsMaxY(s, staffIdx);
-                                    applyLyricsMax(s, staffIdx, yMax);
-                                    }
-                              }
-                        }
-                  break;
-            }
 
       //
       //    layout SpannerSegments for current system
@@ -3213,6 +3223,7 @@ System* Score::collectSystem(LayoutContext& lc)
                               }
                         }
                   }
+
             //
             // layout ottavas
             //
@@ -3273,6 +3284,8 @@ System* Score::collectSystem(LayoutContext& lc)
                         }
                   }
             }
+      layoutLyrics(system);
+
       system->layout2();   // compute staff distances
 
       Measure* lm  = system->lastMeasure();
