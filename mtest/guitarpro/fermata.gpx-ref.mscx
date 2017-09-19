@@ -33,7 +33,7 @@
         <shortName>El. Guit.</shortName>
         <trackName>Electric Guitar (Treble Clef)</trackName>
         <minPitchP>40</minPitchP>
-        <maxPitchP>86</maxPitchP>
+        <maxPitchP>88</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>86</maxPitchA>
         <transposeDiatonic>-7</transposeDiatonic>
@@ -308,7 +308,7 @@
           <shortName>El. Guit.</shortName>
           <trackName>Electric Guitar (Treble Clef)</trackName>
           <minPitchP>40</minPitchP>
-          <maxPitchP>86</maxPitchP>
+          <maxPitchP>88</maxPitchP>
           <minPitchA>40</minPitchA>
           <maxPitchA>86</maxPitchA>
           <transposeDiatonic>-7</transposeDiatonic>
