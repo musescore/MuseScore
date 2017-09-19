@@ -96,7 +96,6 @@ class Harmony : public Text {
       void render(const QString&, qreal&, qreal&);
       void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
       virtual void styleChanged() override     { render(); }
-//      virtual void setTextStyle(const TextStyle& st) override;
 
    public:
       Harmony(Score* = 0);
@@ -154,7 +153,7 @@ class Harmony : public Text {
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       QString harmonyName() const;
-      void render(const TextStyle* ts = 0);
+      void render();
 
       const ChordDescription* parseHarmony(const QString& s, int* root, int* base, bool syntaxOnly = false);
 
