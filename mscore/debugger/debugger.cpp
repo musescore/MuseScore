@@ -1391,21 +1391,20 @@ HarmonyView::HarmonyView()
 //   setElement
 //---------------------------------------------------------
 
-void HarmonyView::setElement(Element* /*e*/)
+void HarmonyView::setElement(Element* e)
       {
-#if 0
       Harmony* harmony = (Harmony*)e;
 
 //      tb.textStyle->clear();
 //      for (int i = 0; i < int(TextStyleType::TEXT_STYLES); ++i)
 //            tb.textStyle->addItem(e->score()->textStyle(TextStyleType(i)).name());
 
-      const TextStyle& ts = harmony->textStyle();
+//      const TextStyle& ts = harmony->textStyle();
       ShowElementBase::setElement(e);
       tb.text->setPlainText(harmony->xmlText());
-      tb.xoffset->setValue(ts.offset().x());
-      tb.yoffset->setValue(ts.offset().y());
-      tb.offsetType->setCurrentIndex(int(ts.offsetType()));
+//      tb.xoffset->setValue(ts.offset().x());
+//      tb.yoffset->setValue(ts.offset().y());
+//      tb.offsetType->setCurrentIndex(int(ts.offsetType()));
 //TODO      tb.textStyle->setCurrentIndex(ts.textStyleType());
       tb.layoutToParentWidth->setChecked(harmony->layoutToParentWidth());
 
@@ -1447,7 +1446,6 @@ void HarmonyView::setElement(Element* /*e*/)
             hb.degreeTab->setItem(i, 1, new QTableWidgetItem(QVariant(d.value()).toString()));
             hb.degreeTab->setItem(i, 2, new QTableWidgetItem(QVariant(d.alter()).toString()));
             }
-#endif
       }
 
 void HarmonyView::on_leftParen_clicked(bool checked)
@@ -1714,6 +1712,7 @@ QSize DoubleLabel::sizeHint() const
 ShowElementBase::ShowElementBase()
    : QWidget()
       {
+      el = 0;
       layout = new QVBoxLayout;
       setLayout(layout);
       layout->addStretch(2000);

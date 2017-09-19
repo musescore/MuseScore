@@ -767,18 +767,6 @@ void Harmony::endEdit(EditData& ed)
       score()->setLayoutAll();
       }
 
-#if 0
-//---------------------------------------------------------
-//   setTextStyle
-//---------------------------------------------------------
-
-void Harmony::setTextStyle(const TextStyle& st)
-      {
-      Text::setTextStyle(st);
-      render();
-      }
-#endif
-
 //---------------------------------------------------------
 //   setHarmony
 //---------------------------------------------------------
@@ -816,7 +804,6 @@ void Harmony::setHarmony(const QString& s)
 
 qreal Harmony::baseLine() const
       {
-//      return (editMode() || textList.empty()) ? Text::baseLine() : 0.0;
       return (textList.empty()) ? Text::baseLine() : 0.0;
       }
 
@@ -1008,7 +995,6 @@ const ChordDescription* Harmony::generateDescription()
 
 void Harmony::textChanged()
       {
-//      Text::createLayout();
       setHarmony(plainText());
       }
 
@@ -1026,10 +1012,9 @@ void Harmony::layout()
             }
 
       qreal yy = 0.0;
-      //qreal _spatium  = spatium();
 
-      if (parent()->type() == ElementType::SEGMENT) {
-            Segment* s = static_cast<Segment*>(parent());
+      if (parent()->isSegment()) {
+            Segment* s = toSegment(parent());
             // look for fret diagram
             bool fretsFound = false;
             for (Element* e : s->annotations()) {
@@ -1049,39 +1034,34 @@ void Harmony::layout()
             qDebug("Harmony %s with fret diagram as parent", qPrintable(_textName)); // not possible?
             yy = score()->styleP(StyleIdx::harmonyFretDist);
             }
-//TODO      yy += textStyle().offset(_spatium).y();
-#if 0
-      if (!editMode()) {
-            qreal hb = lineHeight() - Text::baseLine();
-            if (align() & Align::BOTTOM)
-                  yy -= hb;
-            else if (align() & Align::VCENTER) {
-                  yy -= hb;
-                  yy += (height() * .5);
-                  }
-            else if (align() & Align::BASELINE) {
-                  }
-            else { // Align::TOP
-                  yy -= hb;
-                  yy += height();
-                  }
+      yy += offset().y();           //      yy += offset(_spatium).y();
+
+      qreal hb = lineHeight() - Text::baseLine();
+      if (align() & Align::BOTTOM)
+            yy -= hb;
+      else if (align() & Align::VCENTER) {
+            yy -= hb;
+            yy += (height() * .5);
             }
-#endif
+      else if (align() & Align::BASELINE) {
+            }
+      else { // Align::TOP
+            yy -= hb;
+            yy += height();
+            }
 
       qreal xx = 0.0; // offset(_spatium).x();
-#if 0
-      if (!editMode()) {
-            qreal cw = symWidth(SymId::noteheadBlack);
-            if (align() & Align::RIGHT) {
-                  xx += cw;
-                  xx -= width();
-                  }
-            else if (align() & Align::HCENTER) {
-                  xx += (cw * .5);
-                  xx -= (width() * .5);
-                  }
+
+      qreal cw = symWidth(SymId::noteheadBlack);
+      if (align() & Align::RIGHT) {
+            xx += cw;
+            xx -= width();
             }
-#endif
+      else if (align() & Align::HCENTER) {
+            xx += (cw * .5);
+            xx -= (width() * .5);
+            }
+
       setPos(xx, yy);
 
       if (!readPos().isNull()) {
@@ -1107,7 +1087,6 @@ void Harmony::layout()
             layoutFrame();
             setbbox(saveBbox);
             }
-
       }
 
 //---------------------------------------------------------
@@ -1116,7 +1095,6 @@ void Harmony::layout()
 
 void Harmony::calculateBoundingRect()
       {
-//      if (editMode() || textList.empty()) {
       if (textList.empty()) {
             Text::layout1();
             setbboxtight(bbox());
@@ -1140,37 +1118,34 @@ void Harmony::calculateBoundingRect()
 void Harmony::draw(QPainter* painter) const
       {
       // painter->setPen(curColor());
-//      if (editMode() || textList.empty()) {
       if (textList.empty()) {
             Text::draw(painter);
             return;
             }
-#if 0 //TODO
-      if (textStyle().hasFrame()) {
-            if (textStyle().frameWidth().val() != 0.0) {
+      if (hasFrame()) {
+            if (frameWidth().val() != 0.0) {
                   QColor color = frameColor();
-                  QPen pen(color, textStyle().frameWidth().val() * spatium(), Qt::SolidLine,
+                  QPen pen(color, frameWidth().val() * spatium(), Qt::SolidLine,
                      Qt::SquareCap, Qt::MiterJoin);
                   painter->setPen(pen);
                   }
             else
                   painter->setPen(Qt::NoPen);
-            QColor bg(textStyle().backgroundColor());
+            QColor bg(bgColor());
             painter->setBrush(bg.alpha() ? QBrush(bg) : Qt::NoBrush);
-            if (textStyle().circle())
+            if (circle())
                   painter->drawArc(frame, 0, 5760);
             else {
-                  int r2 = textStyle().frameRound();
+                  int r2 = frameRound();
                   if (r2 > 99)
                         r2 = 99;
-                  painter->drawRoundedRect(frame, textStyle().frameRound(), r2);
+                  painter->drawRoundedRect(frame, frameRound(), r2);
                   }
             }
-#endif
       painter->setBrush(Qt::NoBrush);
       QColor color = textColor();
       painter->setPen(color);
-      foreach(const TextSegment* ts, textList) {
+      for (const TextSegment* ts : textList) {
             QFont f(ts->font);
             f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
             painter->setFont(f);
@@ -1263,11 +1238,11 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
       {
       ChordList* chordList = score()->style().chordList();
       QStack<QPointF> stack;
-      int fontIdx = 0;
+      int fontIdx    = 0;
       qreal _spatium = spatium();
-      qreal mag = _spatium / SPATIUM20;
+      qreal mag      = _spatium / SPATIUM20;
 
-      foreach(const RenderAction& a, renderList) {
+      for (const RenderAction& a : renderList) {
             if (a.type == RenderAction::RenderActionType::SET) {
                   TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
                   ChordSymbol cs = chordList->symbol(a.text);
@@ -1348,29 +1323,24 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
 //    construct Chord Symbol
 //---------------------------------------------------------
 
-void Harmony::render(const TextStyle* /*st*/)
+void Harmony::render()
       {
-#if 0 // TODO
       int capo = score()->styleI(StyleIdx::capoPosition);
 
-      if (st == 0)
-            st = &textStyle();
       ChordList* chordList = score()->style().chordList();
 
       fontList.clear();
-      foreach(ChordFont cf, chordList->fonts) {
-            if (cf.family.isEmpty() || cf.family == "default")
-                  fontList.append(st->font(spatium() * cf.mag));
-            else {
-                  QFont ff(st->font(spatium() * cf.mag));
+      for (const ChordFont& cf : chordList->fonts) {
+            QFont ff(font());
+            ff.setPointSizeF(ff.pointSizeF() * cf.mag);
+            if (!(cf.family.isEmpty() || cf.family == "default"))
                   ff.setFamily(cf.family);
-                  fontList.append(ff);
-                  }
+            fontList.append(ff);
             }
       if (fontList.empty())
-            fontList.append(st->font(spatium()));
+            fontList.append(font());
 
-      foreach(const TextSegment* s, textList)
+      for (const TextSegment* s : textList)
             delete s;
       textList.clear();
       qreal x = 0.0, y = 0.0;
@@ -1433,7 +1403,6 @@ void Harmony::render(const TextStyle* /*st*/)
 
       if (_rightParen)
             render(" )", x, y);
-#endif
       }
 
 //---------------------------------------------------------
