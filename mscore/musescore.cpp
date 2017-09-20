@@ -5787,6 +5787,8 @@ int main(int argc, char* av[])
 #endif
 
       QApplication::setDesktopSettingsAware(true);
+      QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+      QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
       qInstallMessageHandler(mscoreMessageHandler);
 #endif
@@ -6148,9 +6150,6 @@ int main(int argc, char* av[])
             css.replace("$voice3-bgcolor", MScore::selectColor[2].name(QColor::HexRgb));
             css.replace("$voice4-bgcolor", MScore::selectColor[3].name(QColor::HexRgb));
             qApp->setStyleSheet(css);
-
-            qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
-            qApp->setAttribute(Qt::AA_EnableHighDpiScaling);
             }
       else
             noSeq = true;
