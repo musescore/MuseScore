@@ -100,18 +100,18 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>B♭ Trumpet</trackName>
+      <trackName>B♭ Cornet</trackName>
       <Instrument>
-        <longName>B♭ Trumpet</longName>
-        <shortName>B♭ Tpt.</shortName>
-        <trackName>B♭ Trumpet</trackName>
+        <longName>B♭ Cornet</longName>
+        <shortName>B♭ Cnt.</shortName>
+        <trackName>B♭ Cornet</trackName>
         <minPitchP>52</minPitchP>
-        <maxPitchP>85</maxPitchP>
+        <maxPitchP>82</maxPitchP>
         <minPitchA>52</minPitchA>
-        <maxPitchA>80</maxPitchA>
+        <maxPitchA>79</maxPitchA>
         <transposeDiatonic>-1</transposeDiatonic>
         <transposeChromatic>-2</transposeChromatic>
-        <instrumentId>brass.trumpet.bflat</instrumentId>
+        <instrumentId>brass.cornet</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
