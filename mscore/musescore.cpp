@@ -6150,6 +6150,7 @@ int main(int argc, char* av[])
             qApp->setStyleSheet(css);
 
             qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
+            qApp->setAttribute(Qt::AA_EnableHighDpiScaling);
             }
       else
             noSeq = true;
