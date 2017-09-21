@@ -23,6 +23,13 @@
 
 namespace Ms {
 
+void TimeSigW::setSig(int numerator, int denominator, int st) {
+      if (e) {
+            static_cast<TimeSig *>(e)->setSig(Fraction(numerator,denominator),
+                                              static_cast<TimeSigType>(st));
+            }
+      }
+
 //---------------------------------------------------------
 //   TimeSig
 //    Constructs an invalid time signature element.
