@@ -4121,7 +4121,7 @@ void Score::changeVoice(int voice)
                               // create & add new note
                               Note* newNote = new Note(*note);
                               newNote->setSelected(false);
-                              newNote->Element::setParent(dstChord);
+                              newNote->setParent(dstChord);
                               undoAddElement(newNote);
                               el.append(newNote);
                               // add new chord if one was created

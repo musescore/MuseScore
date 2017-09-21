@@ -838,7 +838,7 @@ QVariant Segment::getProperty(P_ID propertyId) const
 
 void Segment::supportedProperties(QList<P_ID>& dest, bool writeable)
       {
-      Element::supportedProperties(dest,writeable);
+      Element::supportedProperties(dest, writeable);
       dest << P_ID::TICK << P_ID::LEADING_SPACE;
       }
 

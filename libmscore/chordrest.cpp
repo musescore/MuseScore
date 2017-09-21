@@ -1111,7 +1111,7 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
 
 void ChordRest::supportedProperties(QList<P_ID>& dest, bool writeable)
 {
-  DurationElement::supportedProperties(dest,writeable);
+  DurationElement::supportedProperties(dest, writeable);
   if (writeable) {
         dest << P_ID::SMALL << P_ID::BEAM_MODE << P_ID::STAFF_MOVE << P_ID::DURATION_TYPE << P_ID::VISIBLE;
         } else {

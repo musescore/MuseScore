@@ -424,8 +424,8 @@ class Note : public Element {
       Note* firstTiedNote() const;
       Note* lastTiedNote() const;
 
-      Chord* chord() const            { return (Chord*) Element::parent(); }
-      void setChord(Chord* a)         { Element::setParent((Element*)a);  }
+      Chord* chord() const            { return (Chord*)parent(); }
+      void setChord(Chord* a)         { setParent((Element*)a);  }
       virtual void draw(QPainter*) const override;
 
       virtual void read(XmlReader&) override;

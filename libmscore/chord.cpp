@@ -3410,8 +3410,8 @@ Chord* ChordW::chord()
 QQmlListProperty<ChordW> ChordW::qmlGraceNotes()
       {
       _gnotes.clear();
-      for (int i=0; i<chord()->_graceNotes.size(); i++) {
-            _gnotes << dynamic_cast<ChordW*>(ElementW::buildWrapper(chord()->_graceNotes[i]));
+      for (Chord* c : chord()->_graceNotes) {
+            _gnotes << dynamic_cast<ChordW*>(ElementW::buildWrapper(c));
             }
       return QmlListAccess<ChordW>(this, _gnotes);
       }
@@ -3419,7 +3419,7 @@ QQmlListProperty<ChordW> ChordW::qmlGraceNotes()
 QQmlListProperty<NoteW> ChordW::qmlNotes()
       {
       _notes.clear();
-      foreach(Note* n,chord()->notes()) {
+      for(Note* n : chord()->notes()) {
             _notes << dynamic_cast<NoteW*>(ElementW::buildWrapper(n));
             }
       return QmlListAccess<NoteW>(this, _notes);

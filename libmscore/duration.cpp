@@ -181,7 +181,7 @@ bool DurationElement::setProperty(P_ID propertyId, const QVariant& v)
 
 void DurationElement::supportedProperties(QList<P_ID>& dest, bool writeable)
       {
-      Element::supportedProperties(dest,writeable);
+      Element::supportedProperties(dest, writeable);
       dest << P_ID::DURATION;
       }
 

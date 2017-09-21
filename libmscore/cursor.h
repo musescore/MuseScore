@@ -59,7 +59,7 @@ class ElementW : public QObject {
       Q_INVOKABLE QVariant get(const QString& s) const;
       Q_INVOKABLE void set(const QString& s, const QVariant& value);
       Element* element();
-      static ElementW * buildWrapper(ScoreElement* _e);
+      static ElementW* buildWrapper(ScoreElement* _e);
       };
 
 //---------------------------------------------------------

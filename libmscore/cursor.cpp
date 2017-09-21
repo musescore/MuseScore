@@ -36,7 +36,7 @@ QVariantList ElementW::supportedProperties(bool writeable)
       QList<P_ID> dest;
       QVariantList names;
       if (e) {
-            e->supportedProperties(dest,writeable);
+            e->supportedProperties(dest, writeable);
             for(int i = 0; i<dest.size(); i++ ) {
                   names.append(propertyQmlName(dest[i])); //TODO: Check this doesn't cause a memory leak.
                   }

@@ -443,7 +443,7 @@ bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
 
 void Accidental::supportedProperties(QList<P_ID>& dest, bool writeable)
 {
-  Element::supportedProperties(dest,writeable);
+  Element::supportedProperties(dest, writeable);
   dest << P_ID::SMALL << P_ID::ACCIDENTAL_BRACKET << P_ID::ROLE;
 }
 

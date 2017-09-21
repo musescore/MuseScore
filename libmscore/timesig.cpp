@@ -25,7 +25,7 @@ namespace Ms {
 
 void TimeSigW::setSig(int numerator, int denominator, int st) {
       if (e) {
-            static_cast<TimeSig *>(e)->setSig(Fraction(numerator,denominator),
+            static_cast<TimeSig *>(e)->setSig(Fraction(numerator, denominator),
                                               static_cast<TimeSigType>(st));
             }
       }
@@ -466,7 +466,7 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
       }
 
 void TimeSig::supportedProperties(QList<P_ID>& dest, bool writeable) {
-      Element::supportedProperties(dest,writeable);
+      Element::supportedProperties(dest, writeable);
       dest << P_ID::SHOW_COURTESY << P_ID::NUMERATOR_STRING << P_ID::DENOMINATOR_STRING << P_ID::GROUPS
            << P_ID::TIMESIG << P_ID::TIMESIG_GLOBAL << P_ID::TIMESIG_STRETCH << P_ID::TIMESIG_TYPE << P_ID::SCALE;
       }
