@@ -71,7 +71,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::minSystemDistance,       "minSystemDistance",       Spatium(8.5)  },
       { StyleIdx::maxSystemDistance,       "maxSystemDistance",       Spatium(15.0) },
 
-      { StyleIdx::lyricsPlacement,         "lyricsPlacement",         int(Element::Placement::BELOW)  },
+      { StyleIdx::lyricsPlacement,         "lyricsPlacement",         int(Placement::BELOW)  },
       { StyleIdx::lyricsPosAbove,          "lyricsPosAbove",          Spatium(-2.0) },
       { StyleIdx::lyricsPosBelow,          "lyricsPosBelow",          Spatium(2.0) },
       { StyleIdx::lyricsMinTopDistance,    "lyricsMinTopDistance",    Spatium(1.0)  },
@@ -167,14 +167,14 @@ static const StyleType styleTypes[] {
       { StyleIdx::articulationMag,         "articulationMag",         QVariant(1.0) },
       { StyleIdx::lastSystemFillLimit,     "lastSystemFillLimit",     QVariant(0.3) },
 
-      { StyleIdx::hairpinPlacement,        "hairpinPlacement",        int(Element::Placement::BELOW)  },
+      { StyleIdx::hairpinPlacement,        "hairpinPlacement",        int(Placement::BELOW)  },
       { StyleIdx::hairpinPosAbove,         "hairpinPosAbove",         Spatium(-3.5) },
       { StyleIdx::hairpinPosBelow,         "hairpinPosBelow",         Spatium(3.5) },
       { StyleIdx::hairpinHeight,           "hairpinHeight",           Spatium(1.2) },
       { StyleIdx::hairpinContHeight,       "hairpinContHeight",       Spatium(0.5) },
       { StyleIdx::hairpinLineWidth,        "hairpinWidth",            Spatium(0.13) },
 
-      { StyleIdx::pedalPlacement,          "pedalPlacement",          int(Element::Placement::BELOW)  },
+      { StyleIdx::pedalPlacement,          "pedalPlacement",          int(Placement::BELOW)  },
       { StyleIdx::pedalPosAbove,           "pedalPosAbove",           Spatium(-4) },
       { StyleIdx::pedalPosBelow,           "pedalPosBelow",           Spatium(4) },
       { StyleIdx::pedalLineWidth,          "pedalLineWidth",          Spatium(.15) },
@@ -182,7 +182,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::pedalBeginTextOffset,    "pedalBeginTextOffset",    QPointF(0.0, 0.15) },
       { StyleIdx::pedalHookHeight,         "pedalHookHeight",         Spatium(-1.2) },
 
-      { StyleIdx::trillPlacement,          "trillPlacement",          int(Element::Placement::ABOVE)  },
+      { StyleIdx::trillPlacement,          "trillPlacement",          int(Placement::ABOVE)  },
       { StyleIdx::trillPosAbove,           "trillPosAbove",           Spatium(-1) },
       { StyleIdx::trillPosBelow,           "trillPosBelow",           Spatium(1) },
 
@@ -280,7 +280,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::voltaLineWidth,          "voltaLineWidth",          Spatium(.1) },
       { StyleIdx::voltaLineStyle,          "voltaLineStyle",          QVariant(int(Qt::SolidLine)) },
 
-      { StyleIdx::ottavaPlacement,         "ottavaPlacement",         int(Element::Placement::ABOVE)  },
+      { StyleIdx::ottavaPlacement,         "ottavaPlacement",         int(Placement::ABOVE)  },
       { StyleIdx::ottavaPosAbove,          "ottavaPosAbove",          Spatium(-3.0) },
       { StyleIdx::ottavaPosBelow,          "ottavaPosBelow",          Spatium(3.0) },
       { StyleIdx::ottavaHook,              "ottavaHook",              Spatium(1.9) },
@@ -321,14 +321,14 @@ static const StyleType styleTypes[] {
 
       { StyleIdx::autoplaceHairpinDynamicsDistance, "autoplaceHairpinDynamicsDistance", Spatium(0.5) },
 
-      { StyleIdx::dynamicsPlacement,       "dynamicsPlacement",       int(Element::Placement::BELOW)  },
+      { StyleIdx::dynamicsPlacement,       "dynamicsPlacement",       int(Placement::BELOW)  },
       { StyleIdx::dynamicsPosAbove,        "dynamicsPosAbove",        Spatium(-2.0) },
       { StyleIdx::dynamicsPosBelow,        "dynamicsPosBelow",        Spatium(1.0) },
 
       { StyleIdx::dynamicsMinDistance,         "dynamicsMinDistance",               Spatium(0.5) },
       { StyleIdx::autoplaceVerticalAlignRange, "autoplaceVerticalAlignRange",     int(VerticalAlignRange::SYSTEM) },
 
-      { StyleIdx::textLinePlacement,         "textLinePlacement",         int(Element::Placement::ABOVE)  },
+      { StyleIdx::textLinePlacement,         "textLinePlacement",         int(Placement::ABOVE)  },
       { StyleIdx::textLinePosAbove,          "textLinePosAbove",          Spatium(-3.5) },
       { StyleIdx::textLinePosBelow,          "textLinePosBelow",          Spatium(3.5) },
 
@@ -519,7 +519,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::tempoAlign,                    "tempoAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
       { StyleIdx::tempoOffset,                   "tempoOffset",                  QPointF(0.0, -4.0) },
       { StyleIdx::tempoSystemFlag,               "tempoSystemFlag",              true },
-      { StyleIdx::tempoPlacement,                "tempoPlacement",               int(Element::Placement::ABOVE)  },
+      { StyleIdx::tempoPlacement,                "tempoPlacement",               int(Placement::ABOVE)  },
       { StyleIdx::tempoPosAbove,                 "tempoPosAbove",                Spatium(-2.0) },
       { StyleIdx::tempoPosBelow,                 "tempoPosBelow",                Spatium(1.0)  },
       { StyleIdx::tempoMinDistance,              "tempoMinDistance",             Spatium(.5)  },
@@ -589,7 +589,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::rehearsalMarkFrameRound,       "rehearsalMarkFrameRound",      20 },
       { StyleIdx::rehearsalMarkFrameFgColor,     "rehearsalMarkFrameFgColor",    QColor(0, 0, 0, 255) },
       { StyleIdx::rehearsalMarkFrameBgColor,     "rehearsalMarkFrameBgColor",    QColor(255, 255, 255, 0) },
-      { StyleIdx::rehearsalMarkPlacement,        "rehearsalMarkPlacement",       int(Element::Placement::ABOVE) },
+      { StyleIdx::rehearsalMarkPlacement,        "rehearsalMarkPlacement",       int(Placement::ABOVE) },
       { StyleIdx::rehearsalMarkPosAbove,         "rehearsalMarkPosAbove",        Spatium(-2.0) },
       { StyleIdx::rehearsalMarkPosBelow,         "rehearsalMarkPosBelow",        Spatium(1.0) },
       { StyleIdx::rehearsalMarkMinDistance,      "rehearsalMarkMinDistance",     Spatium(0.5) },

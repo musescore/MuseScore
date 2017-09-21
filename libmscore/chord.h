@@ -19,6 +19,7 @@
 */
 
 #include <functional>
+#include <QQmlListProperty>
 #include "chordrest.h"
 
 namespace Ms {
@@ -34,6 +35,7 @@ class Chord;
 class StemSlash;
 class LedgerLine;
 class AccidentalState;
+class LyricsW;
 
 enum class TremoloChordType : char { TremoloSingle, TremoloFirstNote, TremoloSecondNote };
 enum class PlayEventType : char    {
@@ -44,7 +46,8 @@ enum class PlayEventType : char    {
       };
 
 //---------------------------------------------------------
-//   @@ Chord
+//   @@ ChordW
+//   @W Chord
 ///    Graphic representation of a chord.
 ///    Single notes are handled as degenerated chords.
 //
@@ -56,11 +59,35 @@ enum class PlayEventType : char    {
 //   @P stem        Stem            the stem of the chord if any (read only)
 //   @P stemSlash   StemSlash       the stem slash of the chord (acciaccatura) if any (read only)
 //   @P stemDirection Direction       the stem slash of the chord (acciaccatura) if any (read only)
+//   @S track,generated,color,visible,selected,user_off,placement,autoplace,z,system_flag,duration,small,beam_mode,staff_move,duration_type,no_stem,small,stem_direction
 //---------------------------------------------------------
 
-class Chord : public ChordRest {
-      Q_GADGET
+class ChordW : public ChordRestW {
+      Q_OBJECT
+      Q_PROPERTY(QQmlListProperty<Ms::ChordW> graceNotes READ qmlGraceNotes)
+      Q_PROPERTY(QQmlListProperty<Ms::NoteW>  notes      READ qmlNotes)
+      Q_PROPERTY(QQmlListProperty<Ms::LyricsW>lyrics     READ qmlLyrics)
+private:
+      QVector<ChordW*>  _gnotes;
+      QVector<NoteW*>   _notes;
+      QVector<LyricsW*> _lyrics;
+public:
+      ChordW() : ChordRestW() {}
+      ChordW(ScoreElement* _e) : ChordRestW(_e) {}
+      Chord* chord();
+      QQmlListProperty<ChordW>  qmlGraceNotes();
+      QQmlListProperty<NoteW>   qmlNotes();
+      QQmlListProperty<LyricsW> qmlLyrics();
+      //@ add an element to the Chord
+      Q_INVOKABLE virtual void add(Ms::ElementW* v);
+      //@ remove the element from the Chord
+      Q_INVOKABLE virtual void remove(Ms::ElementW* v);
+      };
+//@E
 
+class Chord : public ChordRest {
+      friend class ChordW;
+      Q_GADGET
       Q_PROPERTY(Ms::Beam* beam                         READ beam)
 //      Q_PROPERTY(QQmlListProperty<Ms::Chord> graceNotes READ qmlGraceNotes)
       Q_PROPERTY(Ms::Hook* hook                         READ hook)
@@ -208,6 +235,7 @@ class Chord : public ChordRest {
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID) const override;
 
       virtual void reset();

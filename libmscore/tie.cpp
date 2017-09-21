@@ -675,7 +675,7 @@ void Tie::layoutFor(System* system)
 
       fixupSegments(n);
       TieSegment* segment = segmentAt(0);
-      segment->setParent(system);
+      segment->setSystem(system); // Needed to populate System.spannerSegments
       segment->layoutSegment(sPos.p1, sPos.p2);
       segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
       }
@@ -692,7 +692,7 @@ void Tie::layoutBack(System* system)
 
       fixupSegments(2);
       TieSegment* segment = segmentAt(1);
-      segment->setParent(system);
+      segment->setSystem(system);
 
       qreal x;
       Segment* seg = endNote()->chord()->segment()->prev();

@@ -17,6 +17,7 @@
 
 #ifdef SCRIPT_INTERFACE
 #include "libmscore/mscore.h"
+#include "libmscore/cursor.h"
 
 namespace Ms {
 
@@ -68,7 +69,7 @@ class QmlPlugin : public QQuickItem {
       Q_PROPERTY(int mscoreUpdateVersion READ mscoreUpdateVersion)
       Q_PROPERTY(qreal mscoreDPI         READ mscoreDPI)
       Q_PROPERTY(Ms::Score* curScore     READ curScore)
-//TODO-ws      Q_PROPERTY(QQmlListProperty<Ms::Score> scores READ scores)
+      Q_PROPERTY(QQmlListProperty<Ms::Score> scores READ scores)
 
       MuseScoreCore* msc;
       QString _menuPath;
@@ -81,6 +82,7 @@ class QmlPlugin : public QQuickItem {
 
    protected:
       QString _filePath;            // the path of the source file, without file name
+      QVector<Score*> qmlScores;
    signals:
       void run();
 
@@ -116,7 +118,7 @@ class QmlPlugin : public QQuickItem {
       QQmlListProperty<Score> scores();
 
       Q_INVOKABLE Ms::Score* newScore(const QString& name, const QString& part, int measures);
-      Q_INVOKABLE Ms::Element* newElement(int);
+      Q_INVOKABLE Ms::ElementW* newElement(int);
       Q_INVOKABLE void cmd(const QString&);
       Q_INVOKABLE Ms::MsProcess* newQProcess();
       Q_INVOKABLE bool writeScore(Ms::Score*, const QString& name, const QString& ext);

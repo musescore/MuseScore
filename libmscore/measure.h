@@ -55,12 +55,41 @@ enum class MeasureNumberMode : char {
       };
 
 //---------------------------------------------------------
-//   @@ Measure
+//   @@ MeasureW
+//   @W Measure
 ///    one measure in a system
 //
-//   @P firstSegment    Segment       the first segment of the measure (read-only)
-//   @P lastSegment     Segment       the last segment of the measure (read-only)
+//   @P lineBreak       bool        true if a system break is positioned on this measure
+//   @P pageBreak       bool        true if a page break is positioned on this measure
+//   @S track,generated,color,visible,selected,user_off,placement,autoplace,z,system_flag,repeat_end,repeat_start,repeat_jump,timesig_nominal,timesig_actual,measure_number_mode,break_mmr,repeat_count,user_stretch,no_offset,irregular
 //---------------------------------------------------------
+
+class MeasureW : public ElementW {
+      Q_OBJECT
+      Q_PROPERTY(bool          pageBreak         READ pageBreak WRITE setPageBreak)
+      Q_PROPERTY(bool          lineBreak         READ lineBreak WRITE setLineBreak)
+   public:
+      MeasureW() {}
+      MeasureW(ScoreElement* _e) : ElementW(_e) {}
+      //@ the first segment of the measure
+      Q_INVOKABLE virtual Ms::ElementW* first();
+      //@ the last segment of the measure
+      Q_INVOKABLE virtual Ms::ElementW* last();
+      //@ the next Measure
+      Q_INVOKABLE virtual Ms::ElementW* nextMeasure();
+      //@ the next multi-measure rest Measure
+      Q_INVOKABLE virtual Ms::ElementW* nextMeasureMM();
+      //@  the previous Measure
+      Q_INVOKABLE virtual Ms::ElementW* prevMeasure();
+      //@ the previous multi-measure rest Measure
+      Q_INVOKABLE virtual Ms::ElementW* prevMeasureMM();
+      virtual bool pageBreak();
+      virtual void setPageBreak(bool v);
+      virtual bool lineBreak();
+      virtual void setLineBreak(bool v);
+      Measure* measure();
+      };
+//@E End of help annotation.
 
 class Measure : public MeasureBase {
       Q_GADGET
@@ -236,6 +265,7 @@ class Measure : public MeasureBase {
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID) const override;
 
       bool hasMMRest() const        { return _mmRest != 0; }

@@ -2575,6 +2575,7 @@ bool Text::validateText(QString& s)
 
 void Text::inputTransition(QInputMethodEvent* ie)
       {
+      Q_UNUSED(ie); // Remove annoying warning message.
 #if 0
       // remove preedit string
       int n = preEdit.size();
@@ -2779,6 +2780,15 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
       layoutInvalid = true;
       triggerLayout();
       return rv;
+      }
+
+void Text::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      Element::supportedProperties(dest,writeable);
+      dest << P_ID::FONT_FACE << P_ID::FONT_SIZE << P_ID::FONT_BOLD << P_ID::FONT_ITALIC << P_ID::FONT_UNDERLINE <<
+              P_ID::FRAME << P_ID::FRAME_SQUARE << P_ID::FRAME_CIRCLE << P_ID::FRAME_WIDTH << P_ID::FRAME_PADDING <<
+              P_ID::FRAME_ROUND << P_ID::FRAME_FG_COLOR << P_ID::FRAME_BG_COLOR << P_ID::FONT_SPATIUM_DEPENDENT <<
+              P_ID::ALIGN << P_ID::TEXT << P_ID::SUB_STYLE << P_ID::OFFSET << P_ID::OFFSET_TYPE;
       }
 
 //---------------------------------------------------------

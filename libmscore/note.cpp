@@ -2542,6 +2542,15 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
       return true;
       }
 
+void Note::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      Element::supportedProperties(dest, writeable);
+      dest << P_ID::PITCH << P_ID::TPC1 << P_ID::TPC2 << P_ID::SMALL << P_ID::MIRROR_HEAD << P_ID::DOT_POSITION << P_ID::HEAD_GROUP
+           << P_ID::VELO_OFFSET << P_ID::TUNING << P_ID::FRET << P_ID::STRING << P_ID::GHOST << P_ID::HEAD_TYPE << P_ID::VELO_TYPE
+           << P_ID::PLAY << P_ID::LINE << P_ID::FIXED << P_ID::FIXED_LINE;
+      if (writeable) dest << P_ID::VISIBLE;
+      }
+
 //---------------------------------------------------------
 //   undoSetFret
 //---------------------------------------------------------
@@ -2906,11 +2915,11 @@ Element* Note::nextElement()
                   }
             case ElementType::TIE_SEGMENT: {
                   if (!_spannerFor.empty()) {
-                      for (auto i : _spannerFor) {
-                            if (i->type() == ElementType::GLISSANDO)
-                                  return i->spannerSegments().front();
-                                  }
-                            }
+                        for (auto i : _spannerFor) {
+                              if (i->type() == ElementType::GLISSANDO)
+                                    return i->spannerSegments().front();
+                              }
+                        }
                   Chord* c = chord();
                   return c->nextElement();
                   }
@@ -3024,7 +3033,7 @@ Element* Note::lastElementBeforeSegment()
             return _tieFor->frontSegment();
             }
       else if (!_el.empty()) {
-              return _el.back();
+            return _el.back();
             }
       /*else if (_accidental) {
             return _accidental;
@@ -3141,7 +3150,7 @@ AccidentalType Note::accidentalType() const
 void Note::setAccidentalType(AccidentalType type)
       {
       if (score())
-      	score()->changeAccidental(this, type);
+            score()->changeAccidental(this, type);
       }
 
 //---------------------------------------------------------
@@ -3158,4 +3167,37 @@ Shape Note::shape() const
       return shape;
       }
 
+ElementW*NoteW::accidental()
+      {
+      return ElementW::buildWrapper(note()->accidental());
+      }
+
+Note* NoteW::note()
+      {
+      return dynamic_cast<Note*>(e);
+      }
+
+QQmlListProperty<ElementW> NoteW::qmlDots()
+      {
+      _dots.clear();
+      for(NoteDot* d : note()->_dots) {
+            _dots << ElementW::buildWrapper(d);
+            }
+      return QmlListAccess<ElementW>(this,_dots);
+      }
+
+QQmlListProperty<ElementW> NoteW::qmlElements()
+      {
+      _elements.clear();
+      for (Element* e : note()->_el) {
+            _elements << ElementW::buildWrapper(e);
+            }
+      return QmlListAccess<ElementW>(this,_elements);
+      }
+
+
+int NoteW::tpc()
+      {
+      return note()->tpc();
+      }
 }

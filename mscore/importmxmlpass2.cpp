@@ -83,7 +83,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 MusicXmlTupletDesc::MusicXmlTupletDesc()
-      : type(MxmlStartStop::NONE), placement(Element::Placement::BELOW),
+      : type(MxmlStartStop::NONE), placement(Placement::BELOW),
       bracket(Tuplet::BracketType::AUTO_BRACKET), shownumber(Tuplet::NumberType::SHOW_NUMBER)
       {
       // nothing
@@ -840,7 +840,7 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
             }
       else {
             el->setPlacement(placement == "above"
-                             ? Element::Placement::ABOVE : Element::Placement::BELOW);
+                             ? Placement::ABOVE : Placement::BELOW);
             }
 
       el->setTrack(track);
@@ -1376,7 +1376,7 @@ static void setSLinePlacement(SLine* sli, const QString placement)
             }
       else {
             sli->setPlacement(placement == "above"
-                              ? Element::Placement::ABOVE : Element::Placement::BELOW);
+                              ? Placement::ABOVE : Placement::BELOW);
             }
       }
 
@@ -2382,7 +2382,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                               _rehearsalText = "<b></b>" + _rehearsalText;  // explicitly turn bold off
                         t->setXmlText(_rehearsalText);
                         if (!_hasDefaultY)
-                              t->setPlacement(Element::Placement::ABOVE);  // crude way to force placement TODO improve ?
+                              t->setPlacement(Placement::ABOVE);  // crude way to force placement TODO improve ?
                         }
                   }
 

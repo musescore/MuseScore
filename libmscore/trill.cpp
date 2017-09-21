@@ -306,7 +306,7 @@ Trill::Trill(Score* s)
       _accidental = 0;
       _ornamentStyle    = MScore::OrnamentStyle::DEFAULT;
       setPlayArticulation(true);
-      setPlacement(Element::Placement::ABOVE);
+      setPlacement(Placement::ABOVE);
       }
 
 Trill::~Trill()
@@ -562,7 +562,7 @@ QVariant Trill::propertyDefault(P_ID propertyId) const
             case P_ID::PLAY:
                   return true;
             case P_ID::PLACEMENT:
-                  return int(Element::Placement::ABOVE);
+                  return int(Placement::ABOVE);
             default:
                   return SLine::propertyDefault(propertyId);
             }

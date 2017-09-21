@@ -51,7 +51,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { P_ID::PITCH,                   "pitch",                   true,  "pitch",                 P_TYPE::INT             },
 
       { P_ID::TPC1,                    "tpc1",                    true,  "tpc",                   P_TYPE::INT             },
-      { P_ID::TPC2,                    "tpc1",                    true,  "tpc2",                  P_TYPE::INT             },
+      { P_ID::TPC2,                    "tpc2",                    true,  "tpc2",                  P_TYPE::INT             },
       { P_ID::LINE,                    "line",                    false, "line",                  P_TYPE::INT             },
       { P_ID::FIXED,                   "fixed",                   false, "fixed",                 P_TYPE::BOOL            },
       { P_ID::FIXED_LINE,              "fixed_line",              false, "fixedLine",             P_TYPE::INT             },
@@ -446,9 +446,9 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case P_TYPE::PLACEMENT: {
                   QString value(e.readElementText());
                   if (value == "above")
-                        return QVariant(int(Element::Placement::ABOVE));
+                        return QVariant(int(Placement::ABOVE));
                   else if (value == "below")
-                        return QVariant(int(Element::Placement::BELOW));
+                        return QVariant(int(Placement::BELOW));
                   }
                   break;
             case P_TYPE::BARLINE_TYPE: {

@@ -42,9 +42,11 @@ struct Proc {
 
 struct Class {
       QString name;
+      QString originalName;
+      QString wrapper;
       QStringList description;
       QString parent;
-
+      QString properties; // List of supported properties, @S
       QList<Prop> props;
       QList<Proc> procs;
 
@@ -90,11 +92,15 @@ static void parseClass(const QString& name, const QString& in)
       {
       Class cl;
       cl.name = name;
-
+      cl.originalName = name;
+      cl.wrapper = "";
+      cl.properties = "";
       QStringList sl = in.split("\n");
       QStringList methodDescription;
 
       QRegExp re("@P ([^\\s]+)\\s+([^\\s]+)(.*)");
+      QRegExp rew("@W *(.*)"); // For wrappers.
+      QRegExp res("@S *(.*)"); // For supported properties
 
       // matches Q_INVOKABLE void mops(int a);   // comment
       QRegExp re1("Q_INVOKABLE +([^ ]+) +([^;]+); */*(.*)");
@@ -117,6 +123,12 @@ static void parseClass(const QString& name, const QString& in)
                   p.type        = re.cap(2);
                   p.description = re.cap(3);
                   cl.props.append(p);
+                  }
+            else if (rew.indexIn(s,0) != -1) { //@W
+                  cl.wrapper     = rew.cap(1).simplified(); // Note that this wraps another element.
+                  }
+            else if (res.indexIn(s,0) != -1) { //@S
+                  cl.properties  = res.cap(1).simplified(); // Comma separated list of supported properties.
                   }
             else if (re2.indexIn(s, 0) != -1) {
                   parseClassDescription = false;
@@ -145,11 +157,14 @@ static void parseClass(const QString& name, const QString& in)
                   methodDescription.clear();
                   cl.procs.append(p);
                   }
-            else if ((reD.indexIn(s, 0) != -1)) {
+            else if ((reD.indexIn(s, 0) != -1)) { //@ method descriptor.
                   if (parseClassDescription)
                         cl.description.append(reD.cap(1));
                   else
                         methodDescription.append(reD.cap(1));
+                  }
+            else if (s.startsWith(("//@E"))) { // Stop parsing.
+                  break;
                   }
             else if (s.startsWith("///")) {
                   QString ss = s.mid(3);
@@ -218,7 +233,13 @@ static void scanFile(const QString& in)
 
 static void writeOutput()
       {
-      foreach(const Class& cl, classes) {
+      for (Class& cl : classes) {
+            if (!cl.wrapper.isEmpty()) {
+                  printf("Name= [%s] Wrapper=[%s]\n",qPrintable(cl.name),qPrintable(cl.wrapper));
+                  cl.name = cl.wrapper.simplified(); // Use the name of the wrappered element if known.
+                  }
+            }
+      for(Class& cl : classes) {
             QString out;
             addHeader(out);
             out += QString("<h3>%1</h3>\n").arg(cl.name);
@@ -226,9 +247,9 @@ static void writeOutput()
             if (!cl.parent.isEmpty()) {
                   // show parent only if its part of the exported classes
                   foreach(const Class& lcl, classes) {
-                        if (lcl.name == cl.parent) {
-                              QString path = cl.parent.toLower();
-                              out += QString("<div class=\"class-inherit\">inherits <a href=\"%1.html\">%2</a></div>\n").arg(path).arg(cl.parent);
+                        if (lcl.originalName == cl.parent) {
+                              QString path = lcl.name.toLower();
+                              out += QString("<div class=\"class-inherit\">inherits <a href=\"%1.html\">%2</a></div>\n").arg(path).arg(lcl.name);
                               break;
                               }
                         }
@@ -301,6 +322,9 @@ static void writeOutput()
                         count++;
                         }
                   out += "</table></div>\n";
+                  }
+            if (!cl.properties.isEmpty()) {
+                  out += "\n<h4>Named properties (get/set)</h4>\n<i>"+cl.properties.replace(",",", ") +"</i>";
                   }
             addFooter(out);
 

@@ -1,8 +1,8 @@
-import QtQuick 2.0
-import MuseScore 1.0
+import QtQuick 2.8
+import MuseScore 3.0
 
 MuseScore {
-      version: "1.0"
+      version: "3.1"
       description: "Demo plugin to demonstrate the use of a ScoreView"
       menuPath: "Plugins.ScoreView"
       pluginType: "dialog"

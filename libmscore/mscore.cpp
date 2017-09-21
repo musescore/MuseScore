@@ -227,7 +227,7 @@ void MScore::init()
       qRegisterMetaType<Note::ValueType>   ("ValueType");
 
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
-      qRegisterMetaType<Element::Placement>("Placement");
+      qRegisterMetaType<Ms::Placement>("Placement");
       qRegisterMetaType<Spanner::Anchor>   ("Anchor");
       qRegisterMetaType<NoteHead::Group>   ("NoteHeadGroup");
       qRegisterMetaType<NoteHead::Type>("NoteHeadType");
@@ -434,26 +434,28 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<Cursor>     ("MuseScore", 3, 0, "Cursor");
             qmlRegisterType<ElementW>   ("MuseScore", 3, 0, "Element");
             qRegisterMetaType<ElementW*>("ElementWrapper*");
+            qmlRegisterType<TimeSigW>   ("MuseScore", 3, 0, "TimeSig");
+            qmlRegisterType<SegmentW>   ("MuseScore", 3, 0, "Segment");
+            qmlRegisterType<ChordW>     ("MuseScore", 3, 0, "Chord");
+            qRegisterMetaType<ChordW*>  ("ChordW*");
+            qmlRegisterType<NoteW>      ("MuseScore", 3, 0, "Note");
+            qRegisterMetaType<NoteW*>   ("NoteW*");
+            qmlRegisterType<LyricsW>    ("MuseScore", 3, 0, "Lyrics");
+            qmlRegisterType<TextW>      ("MuseScore", 3, 0, "MText");
+            qmlRegisterType<MeasureW>   ("MuseScore", 3, 0, "Measure");
 #if 0
-            qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
-            qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
-            qmlRegisterType<Note>       ("MuseScore", 1, 0, "Note");
             qmlRegisterType<NoteHead>   ("MuseScore", 1, 0, "NoteHead");
             qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
             qmlRegisterType<Rest>       ("MuseScore", 1, 0, "Rest");
-            qmlRegisterType<Measure>    ("MuseScore", 1, 0, "Measure");
             qmlRegisterType<StaffText>  ("MuseScore", 1, 0, "StaffText");
             qmlRegisterType<Part>       ("MuseScore", 1, 0, "Part");
             qmlRegisterType<Staff>      ("MuseScore", 1, 0, "Staff");
             qmlRegisterType<Harmony>    ("MuseScore", 1, 0, "Harmony");
-            qmlRegisterType<TimeSig>    ("MuseScore", 1, 0, "TimeSig");
             qmlRegisterType<KeySig>     ("MuseScore", 1, 0, "KeySig");
             qmlRegisterType<Slur>       ("MuseScore", 1, 0, "Slur");
             qmlRegisterType<Tie>        ("MuseScore", 1, 0, "Tie");
             qmlRegisterType<NoteDot>    ("MuseScore", 1, 0, "NoteDot");
             qmlRegisterType<FiguredBass>("MuseScore", 1, 0, "FiguredBass");
-            qmlRegisterType<Text>       ("MuseScore", 1, 0, "MText");
-            qmlRegisterType<Lyrics>     ("MuseScore", 1, 0, "Lyrics");
             qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
             qmlRegisterType<LayoutBreak>("MuseScore", 1, 0, "LayoutBreak");
             qmlRegisterType<Hook>       ("MuseScore", 1, 0, "Hook");

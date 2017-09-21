@@ -40,13 +40,35 @@ class Spanner;
 enum class SegmentType;
 
 //-------------------------------------------------------------------
-//   @@ ChordRest
+//   @@ ChordRestW
+//   @W ChordRest
 ///    Virtual base class. Chords and rests can be part of a beam
-//
 //   @P beamMode      enum (Beam.AUTO, .BEGIN, .MID, .END, .NONE, .BEGIN32, .BEGIN64, .INVALID)
 //   @P durationType  int
 //   @P small         bool           small chord/rest
+//   @S track,generated,color,visible,selected,user_off,placement,autoplace,z,system_flag,duration,small,beam_mode,staff_move,duration_type
 //-------------------------------------------------------------------
+class ChordRestW : public DurationElementW {
+      Q_OBJECT
+      Q_PROPERTY(QVariant       beamMode      READ beamMode           WRITE setBeamMode)
+      Q_PROPERTY(int            durationType  READ durationType       WRITE setDurationType)
+      Q_PROPERTY(bool           small         READ small              WRITE setSmall)
+
+   public:
+      ChordRestW() : DurationElementW() {}
+      ChordRestW(ScoreElement* _e) : DurationElementW(_e) {}
+      ChordRest* chordrest();
+
+   protected:
+      virtual bool small() {return get("small").toBool();}
+      virtual void setSmall(bool v) {set("small" , v);}
+      virtual int durationType() {return get("durationType").toInt();}
+      virtual void setDurationType(int v) {set("durationType" , v);}
+      virtual QVariant beamMode() {return get("beam_mode");}
+      virtual void setBeamMode(QVariant v) {set("beam_mode" , v);}
+      };
+
+//@E End of help
 
 class ChordRest : public DurationElement {
       Q_GADGET
@@ -170,6 +192,7 @@ class ChordRest : public DurationElement {
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID) const override;
       bool isGrace() const;
       bool isGraceBefore() const;

@@ -161,6 +161,7 @@ struct SymElement {
 //   @@ Accidental
 //   @P role        enum  (Accidental.AUTO, .USER) (read only)
 //   @P small       bool
+//   @S track,generated,color,visible,selected,user_off,placement,autoplace,z,system_flag,small,accidental_bracket,role
 //---------------------------------------------------------
 
 class Accidental : public Element {
@@ -212,6 +213,7 @@ class Accidental : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID propertyId) const override;
 
       static AccidentalVal subtype2value(AccidentalType);             // return effective pitch offset

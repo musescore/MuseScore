@@ -377,7 +377,7 @@ void GuitarPro::addLetRing(Chord* chord, int staffIdx, bool hasLetRing)
                   p->setTrack2(chord->track());
                   p->setLineStyle(Qt::DashLine);
                   p->setEndHookHeight(Spatium(1));
-                  p->setPlacement(Element::Placement::ABOVE);
+                  p->setPlacement(Placement::ABOVE);
                   p->setProperty(P_ID::BEGIN_FONT_ITALIC, true);
                   p->setProperty(P_ID::CONTINUE_FONT_ITALIC, true);
                   letRings[staffIdx] = p;

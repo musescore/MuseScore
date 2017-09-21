@@ -185,9 +185,29 @@ class TextBlock {
       };
 
 //---------------------------------------------------------
-//   Text
+// @@ TextW
+// @W Text
+/// Text based elements.
+//  @P text       QString     Text of this element.
+//  @S font_face,font_size,font_bold,font_italic,font_underline,frame,frame_square,frame_circle,frame_width,frame_padding,frame_round,frame_fg_color,frame_bg_color,font_spatium_dependent,align,text,sub_style,offset,offset_type
 //---------------------------------------------------------
 
+class TextW : public ElementW {
+      Q_OBJECT
+      Q_PROPERTY(QString text READ text WRITE setText)
+   protected:
+      virtual QString text() {return get("text").toString(); }
+      virtual void setText(QString v) {set("text",v);}
+   public:
+      TextW() {}
+      TextW(ScoreElement* _e) : ElementW(_e){}
+      };
+
+//@E End of Help Annotation
+
+//---------------------------------------------------------
+//   Text
+//---------------------------------------------------------
 class Text : public Element {
       Q_GADGET
 
@@ -345,6 +365,7 @@ class Text : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID id) const override;
       virtual void setPropertyFlags(P_ID, PropertyFlags) override;
       virtual PropertyFlags propertyFlags(P_ID) const override;

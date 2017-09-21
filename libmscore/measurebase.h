@@ -54,8 +54,10 @@ constexpr bool operator& (Repeat t1, Repeat t2) {
 //   @P nextMeasure     Measure     the next Measure (read-only)
 //   @P nextMeasureMM   Measure     the next multi-measure rest Measure (read-only)
 //   @P pageBreak       bool        true if a page break is positioned on this measure
+//   @P lineBreak       bool        true if a system break is positioned on this measure
 //   @P prevMeasure     Measure     the previous Measure (read-only)
 //   @P prevMeasureMM   Measure     the previous multi-measure rest Measure (read-only)
+//   @S track,generated,color,visible,selected,user_off,placement,autoplace,z,system_flag,repeat_end,repeat_start,repeat_jump
 //---------------------------------------------------------
 
 class MeasureBase : public Element {
@@ -64,9 +66,9 @@ class MeasureBase : public Element {
       Q_PROPERTY(bool         lineBreak         READ lineBreak   WRITE undoSetLineBreak)
       Q_PROPERTY(Ms::Measure* nextMeasure       READ nextMeasure)
       Q_PROPERTY(Ms::Measure* nextMeasureMM     READ nextMeasureMM)
-      Q_PROPERTY(bool         pageBreak         READ pageBreak   WRITE undoSetPageBreak)
       Q_PROPERTY(Ms::Measure* prevMeasure       READ prevMeasure)
       Q_PROPERTY(Ms::Measure* prevMeasureMM     READ prevMeasureMM)
+      Q_PROPERTY(bool         pageBreak         READ pageBreak   WRITE undoSetPageBreak)
 
       MeasureBase* _next    { 0 };
       MeasureBase* _prev    { 0 };
@@ -136,6 +138,7 @@ class MeasureBase : public Element {
 
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
+      void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID) const override;
 
       void clearElements();

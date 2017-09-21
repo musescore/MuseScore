@@ -22,12 +22,12 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-import QtQuick 2.0
-import MuseScore 1.0
+import QtQuick 2.8
+import MuseScore 3.0
 
 MuseScore {
       menuPath: "Plugins.run"
-      version:  "2.0"
+      version:  "3.0"
       description: "This demo plugin runs an external command. Probably this will only work on Linux."
       requiresScore: false
 

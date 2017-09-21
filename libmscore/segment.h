@@ -16,6 +16,8 @@
 #include "element.h"
 #include "shape.h"
 #include "mscore.h"
+#include "cursor.h"
+#include <QQmlListProperty>
 
 namespace Ms {
 
@@ -73,13 +75,34 @@ constexpr bool operator& (const SegmentType t1, const SegmentType t2) {
 //    BarLines and ChordRests.
 //
 //   @P annotations     array[Element]    the list of annotations (read only)
-//   @P next            Segment           the next segment in the whole score; null at last score segment (read-only)
-//   @P nextInMeasure   Segment           the next segment in measure; null at last measure segment (read-only)
-//   @P prev            Segment           the previous segment in the whole score; null at first score segment (read-only)
-//   @P prevInMeasure   Segment           the previous segment in measure; null at first measure segment (read-only)
 //   @P segmentType     enum (Segment.All, .Ambitus, .BarLine, .Breath, .ChordRest, .Clef, .EndBarLine, .Invalid, .KeySig, .KeySigAnnounce, .StartRepeatBarLine, .TimeSig, .TimeSigAnnounce)
-//   @P tick            int               midi tick position (read only)
+//   @S track,generated,color,visible,selected,user_off,placement,autoplace,z,system_flag,tick,leading_space
 //------------------------------------------------------------------------
+
+class SegmentW : public ElementW {
+      Q_OBJECT
+      Q_PROPERTY(int segmentType READ segmentType WRITE setSegmentType)
+      Q_PROPERTY(QQmlListProperty<Ms::ElementW> annotations READ qmlAnnotations)
+   protected:
+      QVector<ElementW*> _annotations;
+   public:
+      SegmentW() {};
+      SegmentW(ScoreElement* _e) : ElementW(_e) {}
+      Segment* segment();
+      //@ the next segment in the whole score; null at last score segment
+      Q_INVOKABLE virtual Ms::SegmentW* next();
+      //@ the previous segment in the whole score; null at first score segment
+      Q_INVOKABLE virtual Ms::SegmentW* prev();
+      //@ the next segment in measure; null at last measure segment
+      Q_INVOKABLE virtual Ms::SegmentW* nextInMeasure();
+      //@ the previous segment in measure; null at first measure segment
+      Q_INVOKABLE virtual Ms::SegmentW* prevInMeasure();
+      virtual int segmentType();
+      virtual void setSegmentType(int v);
+      Q_INVOKABLE Ms::ElementW* elementAt(int track);
+      virtual QQmlListProperty<Ms::ElementW> qmlAnnotations();
+
+      };
 
 class Segment : public Element {
       Q_GADGET
@@ -214,6 +237,7 @@ class Segment : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable) override;
       virtual QVariant propertyDefault(P_ID) const;
 
       bool operator<(const Segment&) const;

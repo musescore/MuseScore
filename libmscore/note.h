@@ -17,7 +17,8 @@
  \file
  Definition of classes Note and NoteHead.
 */
-
+#include <QObject>
+#include <QQmlListProperty>
 #include "element.h"
 #include "symbol.h"
 #include "noteevent.h"
@@ -25,6 +26,7 @@
 #include "shape.h"
 #include "tremolo.h"
 #include "key.h"
+#include "cursor.h"
 
 namespace Ms {
 
@@ -201,9 +203,31 @@ static const int INVALID_LINE = -10000;
 //   @P userMirror       enum (DirectionH.AUTO, DirectionH.LEFT, DirectionH.RIGHT)
 //   @P veloOffset       int
 //   @P veloType         enum (Note.OFFSET_VAL, Note.USER_VAL)
+//   @S track, generated, color, visible, selected, user_off, placement, autoplace, z, system_flag, pitch, tpc1, tpc2, small, mirror_head, dot_position, head_group, velo_offset, tuning, fret, string, ghost, head_type, velo_type, play, line, fixed, fixed_line
 //---------------------------------------------------------------------------------------
 
+class NoteW : public ElementW {
+      Q_OBJECT
+      Q_PROPERTY(QQmlListProperty<Ms::ElementW>  dots READ qmlDots)
+      Q_PROPERTY(Ms::ElementW*             accidental READ accidental)
+      Q_PROPERTY(int                       tpc        READ tpc)
+      Q_PROPERTY(QQmlListProperty<Ms::ElementW>  elements READ qmlElements)
+private:
+      QVector<ElementW*> _dots;
+      QVector<ElementW*> _elements;
+      ElementW* accidental();
+public:
+      NoteW() : ElementW() {}
+      NoteW(ScoreElement* _e) : ElementW(_e) {}
+      Note* note();
+      QQmlListProperty<ElementW> qmlDots();
+      QQmlListProperty<ElementW> qmlElements();
+      int tpc();
+      };
+//@E End of help notation
+
 class Note : public Element {
+      friend class NoteW;
       Q_GADGET
       Q_PROPERTY(Ms::Accidental*                accidental        READ accidental)
       Q_PROPERTY(int                            accidentalType    READ qmlAccidentalType  WRITE qmlSetAccidentalType)
@@ -494,6 +518,7 @@ class Note : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID) const override;
 
       bool mark() const               { return _mark;   }

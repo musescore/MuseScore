@@ -2847,6 +2847,13 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
       return true;
       }
 
+void Measure::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      MeasureBase::supportedProperties(dest,writeable);
+      dest << P_ID::TIMESIG_NOMINAL << P_ID::TIMESIG_ACTUAL << P_ID::MEASURE_NUMBER_MODE << P_ID::BREAK_MMR
+           << P_ID::REPEAT_COUNT << P_ID::USER_STRETCH << P_ID::NO_OFFSET << P_ID::IRREGULAR;
+      }
+
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
@@ -3911,6 +3918,61 @@ void Measure::computeMinWidth()
       bool isSystemHeader = s->header();
 
       computeMinWidth(s, x, isSystemHeader);
+      }
+
+ElementW* MeasureW::first()
+      {
+      return ElementW::buildWrapper(measure()->last());
+      }
+
+ElementW* MeasureW::last()
+      {
+      return ElementW::buildWrapper(measure()->last());
+      }
+
+ElementW* MeasureW::nextMeasure()
+      {
+      return ElementW::buildWrapper((measure()->nextMeasure()));
+      }
+
+ElementW* MeasureW::nextMeasureMM()
+      {
+      return ElementW::buildWrapper((measure()->nextMeasureMM()));
+      }
+
+ElementW* MeasureW::prevMeasure()
+      {
+      return ElementW::buildWrapper((measure()->prevMeasure()));
+      }
+
+ElementW* MeasureW::prevMeasureMM()
+      {
+      return ElementW::buildWrapper((measure()->prevMeasureMM()));
+      }
+
+bool MeasureW::pageBreak()
+      {
+      return measure()->pageBreak();
+      }
+
+void MeasureW::setPageBreak(bool v)
+      {
+      measure()->setPageBreak(v);
+      }
+
+bool MeasureW::lineBreak()
+      {
+      return measure()->lineBreak();
+      }
+
+void MeasureW::setLineBreak(bool v)
+      {
+      measure()->setLineBreak(v);
+      }
+
+Measure* MeasureW::measure()
+      {
+      return e ? dynamic_cast<Measure*>(e) : 0;
       }
 
 }

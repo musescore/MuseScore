@@ -1318,8 +1318,8 @@ void Score::cmdFlip()
                || e->isPedalSegment()
                || e->isTrillSegment()) {
                   // getProperty() delegates call from spannerSegment to Spanner:
-                  Element::Placement p = Element::Placement(e->getProperty(P_ID::PLACEMENT).toInt());
-                  p = (p == Element::Placement::ABOVE) ? Element::Placement::BELOW : Element::Placement::ABOVE;
+                  Placement p = Placement(e->getProperty(P_ID::PLACEMENT).toInt());
+                  p = (p == Placement::ABOVE) ? Placement::BELOW : Placement::ABOVE;
                   e->undoChangeProperty(P_ID::AUTOPLACE, true);
                   e->undoChangeProperty(P_ID::PLACEMENT, int(p));
                   }

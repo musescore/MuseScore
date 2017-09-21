@@ -26,6 +26,7 @@
 #include "spannermap.h"
 #include "layoutbreak.h"
 #include "property.h"
+#include "segment.h"
 
 namespace Ms {
 
@@ -41,6 +42,7 @@ class Clef;
 class Cursor;
 class Dynamic;
 class ElementList;
+class ElementW;
 class EventMap;
 class Excerpt;
 class FiguredBass;
@@ -66,6 +68,7 @@ class Rest;
 class Revisions;
 class ScoreFont;
 class Segment;
+class SegmentW;
 class Selection;
 class SigEvent;
 class Slur;
@@ -319,7 +322,6 @@ class Movements : public std::vector<MasterScore*> {
 //   @@ Score
 //   @P composer        string            composer of the score (read only)
 //   @P duration        int               duration of score in seconds (read only)
-//   @P excerpts        array[Excerpt]    the list of the excerpts (linked parts)
 //   @P firstMeasure    Measure           the first measure of the score (read only)
 //   @P firstMeasureMM  Measure           the first multi-measure rest measure of the score (read only)
 //   @P harmonyCount    int               number of harmony items (read only)
@@ -330,11 +332,12 @@ class Movements : public std::vector<MasterScore*> {
 //   @P lastMeasureMM   Measure           the last multi-measure rest measure of the score (read only)
 //   @P lastSegment     Segment           the last score segment (read-only)
 //   @P lyricCount      int               number of lyric items (read only)
-//   @P name            string            name of the score
 //   @P nmeasures       int               number of measures (read only)
 //   @P npages          int               number of pages (read only)
 //   @P nstaves         int               number of staves (read only)
 //   @P ntracks         int               number of tracks (staves * 4) (read only)
+//   @P title           string            title of the piece (read only)
+//   @P subtitle        string            subtitle of the piece (read only)
 // not to be documented?
 //   @P parts           array[Part]       the list of parts (read only)
 //
@@ -344,21 +347,25 @@ class Movements : public std::vector<MasterScore*> {
 class Score : public QObject, ScoreElement {
       Q_OBJECT
       Q_PROPERTY(int                            duration          READ duration)
-//      Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
-//      Q_PROPERTY(Ms::Measure*                   firstMeasure      READ firstMeasure)
-      Q_PROPERTY(Ms::Measure*                   firstMeasureMM    READ firstMeasureMM)
+      Q_PROPERTY(Ms::ElementW*                  firstMeasure      READ qmlFirstMeasure)
+      Q_PROPERTY(Ms::ElementW*                  firstMeasureMM    READ qmlFirstMeasureMM)
       Q_PROPERTY(int                            harmonyCount      READ harmonyCount)
       Q_PROPERTY(bool                           hasHarmonies      READ hasHarmonies)
       Q_PROPERTY(bool                           hasLyrics         READ hasLyrics)
       Q_PROPERTY(int                            keysig            READ keysig)
-      Q_PROPERTY(Ms::Measure*                   lastMeasure       READ lastMeasure)
-      Q_PROPERTY(Ms::Measure*                   lastMeasureMM     READ lastMeasureMM)
-      Q_PROPERTY(Ms::Segment*                   lastSegment       READ lastSegment)
+      Q_PROPERTY(Ms::ElementW*                  lastMeasure       READ qmlLastMeasure)
+      Q_PROPERTY(Ms::ElementW*                  lastMeasureMM     READ qmlLastMeasureMM)
+      Q_PROPERTY(Ms::SegmentW*                  lastSegment       READ qmlLastSegment)
       Q_PROPERTY(int                            lyricCount        READ lyricCount)
       Q_PROPERTY(int                            nmeasures         READ nmeasures)
       Q_PROPERTY(int                            npages            READ npages)
       Q_PROPERTY(int                            nstaves           READ nstaves)
       Q_PROPERTY(int                            ntracks           READ ntracks)
+      Q_PROPERTY(QString                        composer          READ composer)
+      Q_PROPERTY(QString                        title             READ title)
+      Q_PROPERTY(QString                        subtitle          READ subtitle)
+      Q_PROPERTY(QString                        poet              READ poet)
+
 //      Q_PROPERTY(QQmlListProperty<Ms::Part>     parts             READ qmlParts)
 
    public:
@@ -686,7 +693,7 @@ class Score : public QObject, ScoreElement {
       void regroupNotesAndRests(int startTick, int endTick, int track);
       void timeDelete(Measure*, Segment*, const Fraction&);
 
-      void startCmd();                          // start undoable command
+      Q_INVOKABLE void startCmd();                          // start undoable command
       void endCmd(bool rollback = false);       // end undoable command
       void update();
       void undoRedo(bool undo, EditData*);
@@ -931,10 +938,16 @@ class Score : public QObject, ScoreElement {
       MeasureBase* first() const;
       MeasureBase* firstMM() const;
       MeasureBase* last()  const;
-      Q_INVOKABLE Ms::Measure* firstMeasure() const;
+      Ms::Measure* firstMeasure() const;
       Ms::Measure* firstMeasureMM() const;
       Ms::Measure* lastMeasure() const;
       Ms::Measure* lastMeasureMM() const;
+      Ms::ElementW* qmlFirstMeasure();
+      Ms::ElementW* qmlFirstMeasureMM();
+      Ms::ElementW* qmlLastMeasure();
+      Ms::ElementW* qmlLastMeasureMM();
+      Ms::SegmentW* qmlLastSegment();
+
       MeasureBase* measure(int idx) const;
 
       int endTick() const;
@@ -942,6 +955,7 @@ class Score : public QObject, ScoreElement {
       Segment* firstSegment(SegmentType s) const;
       Segment* firstSegmentMM(SegmentType s) const;
       Segment* lastSegment() const;
+      ElementW* lastSegmentW() const;
 
       void connectTies(bool silent=false);
 
@@ -1055,6 +1069,11 @@ class Score : public QObject, ScoreElement {
       Q_INVOKABLE void addText(const QString&, const QString&);
       //@ creates and returns a cursor to be used to navigate the score
       Q_INVOKABLE Ms::Cursor* newCursor();
+
+      virtual QString composer();
+      virtual QString title();
+      virtual QString subtitle();
+      virtual QString poet();
 #endif
       const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }
       SpannerMap& spannerMap() { return _spanner; }
@@ -1134,7 +1153,6 @@ class Score : public QObject, ScoreElement {
       virtual inline QQueue<MidiInputEvent>* midiInputQueue();
       virtual inline std::list<MidiInputEvent>* activeMidiPitches();
 
-      virtual QString title() const;
 
       void cmdTimeDelete();
       void localTimeDelete();
@@ -1272,9 +1290,7 @@ class MasterScore : public Score {
       QFileInfo* fileInfo()               { return &info; }
       const QFileInfo* fileInfo() const   { return &info; }
       void setName(const QString&);
-
-      virtual QString title() const override;
-
+      virtual QString title() override;
       virtual int pageIdx(Page* page) const override     { return movements()->pageIdx(page); }
       virtual const QList<Page*>& pages() const override { return movements()->pages();       }
       virtual QList<Page*>& pages() override             { return movements()->pages();       }

@@ -3799,7 +3799,7 @@ void ScoreView::cmdAddText(TEXT type)
                   s = new StaffText(_score);
                   s->setTrack(cr->track());
                   s->initSubStyle(SubStyle::EXPRESSION);
-                  s->setPlacement(Element::Placement::BELOW);
+                  s->setPlacement(Placement::BELOW);
                   s->setParent(cr->segment());
                   }
                   break;

@@ -22,43 +22,11 @@
 #include "libmscore/system.h"
 #include "libmscore/segment.h"
 #include "libmscore/timesig.h"
+#include "libmscore/types.h"
 #include "cursor.h"
 
 namespace Ms {
 
-//---------------------------------------------------------
-//   ElementW
-//---------------------------------------------------------
-
-QString ElementW::name() const
-      {
-      return QString(e->name());
-      }
-
-int ElementW::type() const
-      {
-      return int(e->type());
-      }
-
-int ElementW::tick() const
-      {
-      return ((Element*)e)->tick();
-      }
-
-QVariant ElementW::get(const QString& s) const
-      {
-      QVariant val;
-      if (e) {
-            P_ID pid = propertyId(s);
-            val = e->getProperty(pid);
-            if (propertyType(pid) == P_TYPE::FRACTION) {
-                  Fraction f(val.value<Fraction>());
-                  FractionWrapper*  fw = new FractionWrapper(f);
-                  return QVariant::fromValue(fw);
-                  }
-            }
-      return val;
-      }
 
 //---------------------------------------------------------
 //   Cursor
@@ -163,6 +131,11 @@ bool Cursor::nextMeasure()
 //   add
 //---------------------------------------------------------
 
+void Cursor::add(ElementW* s)
+      {
+      add(s->element());
+      }
+
 void Cursor::add(Element* s)
       {
       if (!_segment)
@@ -252,7 +225,7 @@ qreal Cursor::tempo()
 
 ElementW* Cursor::segment() const
       {
-      return _segment ? new ElementW(_segment) : 0;
+      return ElementW::buildWrapper(_segment);
       }
 
 //---------------------------------------------------------
@@ -261,7 +234,7 @@ ElementW* Cursor::segment() const
 
 ElementW* Cursor::element() const
       {
-      return _segment && _segment->element(_track) ? new ElementW(_segment->element(_track)) : 0;
+      return _segment ? ElementW::buildWrapper(_segment->element(_track)) : 0;
       }
 
 //---------------------------------------------------------
@@ -270,7 +243,7 @@ ElementW* Cursor::element() const
 
 ElementW* Cursor::measure() const
       {
-      return _segment ? new ElementW(_segment->measure()) : 0;
+      return _segment ? ElementW::buildWrapper(_segment->measure()) : 0;
       }
 
 //---------------------------------------------------------

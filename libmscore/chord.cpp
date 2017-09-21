@@ -2634,6 +2634,12 @@ bool Chord::setProperty(P_ID propertyId, const QVariant& v)
       return true;
       }
 
+void Chord::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      ChordRest::supportedProperties(dest,writeable);
+      dest << P_ID::NO_STEM << P_ID::SMALL << P_ID::STEM_DIRECTION;
+      }
+
 //---------------------------------------------------------
 //   layoutArticulation
 //    called from ChordRest()->layoutArticulations()
@@ -3401,5 +3407,48 @@ Shape Chord::shape() const
       shape.add(ChordRest::shape());      // add articulation + lyrics
       return shape;
       }
+
+Chord* ChordW::chord()
+      {
+      return dynamic_cast<Chord*>(e);
+      }
+
+QQmlListProperty<ChordW> ChordW::qmlGraceNotes()
+      {
+      _gnotes.clear();
+      for (Chord* c : chord()->_graceNotes) {
+            _gnotes << dynamic_cast<ChordW*>(ElementW::buildWrapper(c));
+            }
+      return QmlListAccess<ChordW>(this, _gnotes);
+      }
+
+QQmlListProperty<NoteW> ChordW::qmlNotes()
+      {
+      _notes.clear();
+      for(Note* n : chord()->notes()) {
+            _notes << dynamic_cast<NoteW*>(ElementW::buildWrapper(n));
+            }
+      return QmlListAccess<NoteW>(this, _notes);
+      }
+
+QQmlListProperty<LyricsW> ChordW::qmlLyrics()
+      {
+      _lyrics.clear();
+      for (Lyrics* l : chord()->_lyrics) {
+            _lyrics << dynamic_cast<LyricsW*>(ElementW::buildWrapper(l));
+            }
+      return QmlListAccess<LyricsW>(this, _lyrics);
+      }
+
+void ChordW::add(ElementW* v)
+      {
+      chord()->add(v->element());
+      }
+
+void ChordW::remove(ElementW* v)
+      {
+      chord()->remove(v->element());
+      }
+
 }
 

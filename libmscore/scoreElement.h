@@ -14,6 +14,7 @@
 #define __SCORE_ELEMENT_H__
 
 #include "types.h"
+#include "cursor.h"
 
 namespace Ms {
 
@@ -113,6 +114,7 @@ class MeasureBase;
 class Page;
 class SystemText;
 class BracketItem;
+class ElementW;
 
 enum class P_ID : int;
 enum class PropertyFlags : char;
@@ -148,14 +150,16 @@ struct ElementName {
 //---------------------------------------------------------
 
 class ScoreElement {
+      friend class ElementW;
       Q_GADGET
       Score* _score;
 
    protected:
       LinkedElements* _links { 0 };
+      ElementW* elementWrapper = 0;
 
    public:
-      ScoreElement(Score* s) : _score(s)   {}
+      ScoreElement(Score* s) : _score(s)   {elementWrapper = 0;}
       ScoreElement(const ScoreElement& se);
       virtual ~ScoreElement();
 
@@ -176,6 +180,7 @@ class ScoreElement {
       virtual PropertyFlags propertyFlags(P_ID) const;
       virtual void setPropertyFlags(P_ID, PropertyFlags) {}
       virtual StyleIdx getPropertyStyle(P_ID) const;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false);
 
       void undoChangeProperty(P_ID id, const QVariant&, PropertyFlags ps);
       void undoChangeProperty(P_ID id, const QVariant&);

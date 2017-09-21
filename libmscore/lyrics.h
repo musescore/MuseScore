@@ -34,13 +34,34 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   @@ Lyrics
+//   @@ LyricsW
+//   @W Lyrics
+///   <br>named properties (get/set): <i>placement,syllabic,lyric_ticks,verse</i>
 //   @P syllabic  enum (Lyrics.SINGLE, Lyrics.BEGIN, Lyrics.END, Lyrics.MIDDLE)
+//   @P verse        int   Line no of lyric
+//   @S track,generated,color,visible,selected,user_off,placement,autoplace,z,system_flag,font_face,font_size,font_bold,font_italic,font_underline,has_frame,frame_square,frame_circle,frame_width,frame_padding,frame_round,frame_fg_color,frame_bg_color,font_spatium_dependent,align,text,sub_style,offset,offset_type,placement,syllabic,lyric_ticks,verse
 //---------------------------------------------------------
 
 class LyricsLine;
 
+class LyricsW : public TextW {
+      Q_OBJECT
+      Q_PROPERTY(QVariant     syllabic    READ syllabic     WRITE setSyllabic)
+      Q_PROPERTY(int          verse       READ verse        WRITE setVerse)
+  protected:
+      virtual QVariant syllabic() {return get("syllabic");}
+      virtual void setSyllabic(QVariant& v) {set("syllabic", v);}
+  public:
+      LyricsW() {}
+      LyricsW(ScoreElement* _e) : TextW(_e) {}
+      Lyrics* lyrics();
+      int verse() {return get("verse").toInt();}
+      void setVerse(int v) {set("verse",v);}
+      };
+//@E End of help anotation
+
 class Lyrics : public Text {
+      friend class LyricsW;
       Q_GADGET
 
    public:
@@ -131,6 +152,7 @@ class Lyrics : public Text {
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID id) const override;
       virtual PropertyFlags propertyFlags(P_ID) const override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;

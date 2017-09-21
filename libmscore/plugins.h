@@ -71,7 +71,7 @@ class FileIO : public QObject {
 //---------------------------------------------------------
 
 class MsProcess : public QProcess {
-      Q_GADGET
+      Q_OBJECT
 
    public:
       MsProcess(QObject* parent = 0) : QProcess(parent) {}
@@ -94,7 +94,7 @@ class MsProcess : public QProcess {
 //---------------------------------------------------------
 
 class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
-      Q_GADGET
+      Q_OBJECT
       Q_PROPERTY(QColor color READ color WRITE setColor)
       Q_PROPERTY(qreal  scale READ scale WRITE setScale)
 

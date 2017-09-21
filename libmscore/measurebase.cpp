@@ -360,6 +360,12 @@ bool MeasureBase::setProperty(P_ID id, const QVariant& value)
       return true;
       }
 
+void MeasureBase::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      Element::supportedProperties(dest,writeable);
+      dest << P_ID::REPEAT_END << P_ID::REPEAT_START << P_ID::REPEAT_JUMP;
+      }
+
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------

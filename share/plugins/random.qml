@@ -1,8 +1,8 @@
 import QtQuick 2.1
-import MuseScore 1.0
+import MuseScore 3.0
 
 MuseScore {
-      version:  "2.1"
+      version:  "3.0"
       description: "Create random score."
       menuPath: "Plugins.random"
       requiresScore: false
@@ -26,7 +26,7 @@ MuseScore {
             var key         = 3;
 
             var score = newScore("Random.mscz", "piano", measures);
-
+            console.log("Score="+score);
             score.addText("title", "==Random==");
             score.addText("subtitle", "subtitle");
 
@@ -35,7 +35,7 @@ MuseScore {
 
             cursor.rewind(0);
 
-            var ts = newElement(Element.TIMESIG);
+            var ts = newElement(Ms.TIMESIG);
             ts.setSig(numerator, denominator);
             cursor.add(ts);
 

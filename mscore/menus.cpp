@@ -1171,7 +1171,7 @@ Palette* MuseScore::newLinesPalette(PaletteType t)
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_8VB);
       ottava->setLen(w);
-      ottava->setPlacement(Element::Placement::BELOW);
+      ottava->setPlacement(Placement::BELOW);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8vb"));
 
       if (t != PaletteType::BASIC) {
@@ -1183,7 +1183,7 @@ Palette* MuseScore::newLinesPalette(PaletteType t)
             ottava = new Ottava(gscore);
             ottava->setOttavaType(OttavaType::OTTAVA_15MB);
             ottava->setLen(w);
-            ottava->setPlacement(Element::Placement::BELOW);
+            ottava->setPlacement(Placement::BELOW);
             sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15mb"));
 
             ottava = new Ottava(gscore);
@@ -1389,7 +1389,7 @@ Palette* MuseScore::newTextPalette()
 
       st = new StaffText(SubStyle::EXPRESSION, gscore);
       st->setXmlText(tr("Expression"));
-      st->setPlacement(Element::Placement::BELOW);
+      st->setPlacement(Placement::BELOW);
       sp->append(st, tr("Expression text"));
 
       InstrumentChange* is = new InstrumentChange(gscore);

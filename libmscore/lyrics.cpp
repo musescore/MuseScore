@@ -30,7 +30,7 @@ static const qreal TWICE = 2.0;
 //   searchNextLyrics
 //---------------------------------------------------------
 
-static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Element::Placement p)
+static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Placement p)
       {
       Lyrics* l = 0;
       while ((s = s->next1(SegmentType::ChordRest))) {
@@ -578,6 +578,12 @@ bool Lyrics::setProperty(P_ID propertyId, const QVariant& v)
       return true;
       }
 
+void Lyrics::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      Text::supportedProperties(dest,writeable);
+      dest << P_ID::PLACEMENT << P_ID::SYLLABIC << P_ID::LYRIC_TICKS << P_ID::VERSE;
+      }
+
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
@@ -1001,6 +1007,5 @@ void Lyrics::resetProperty(P_ID id)
                   return Text::resetProperty(id);
             }
       }
-
 }
 

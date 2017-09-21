@@ -39,6 +39,58 @@
 
 namespace Ms {
 
+Segment* SegmentW::segment()
+      {
+      return dynamic_cast<Segment*>(element());
+      }
+
+SegmentW* SegmentW::next()
+      {
+      return segment() ? dynamic_cast<SegmentW*>(ElementW::buildWrapper(segment()->next1())) : 0;
+      }
+
+SegmentW* SegmentW::prev()
+      {
+      return segment() ? dynamic_cast<SegmentW*>(ElementW::buildWrapper(segment()->prev1())) : 0;
+      }
+
+SegmentW* SegmentW::nextInMeasure()
+      {
+      return segment() ? dynamic_cast<SegmentW*>(ElementW::buildWrapper(segment()->next())) : 0;
+      }
+
+SegmentW* SegmentW::prevInMeasure()
+      {
+      return segment() ? dynamic_cast<SegmentW*>(ElementW::buildWrapper(segment()->prev())) : 0;
+      }
+
+int SegmentW::segmentType()
+      {
+      return segment() ? static_cast<int>(segment()->segmentType()) : 0;
+      }
+
+void SegmentW::setSegmentType(int v)
+      {
+      if (segment()) {
+            segment()->setSegmentType(static_cast<SegmentType>(v));
+            }
+      }
+
+ElementW* SegmentW::elementAt(int track)
+      {
+      return segment() ? ElementW::buildWrapper(segment()->elementAt(track)) : 0;
+      }
+
+QQmlListProperty<ElementW> SegmentW::qmlAnnotations()
+      {
+      _annotations.clear();
+      for (Element* e : segment()->annotations())
+            {
+            _annotations << ElementW::buildWrapper(e);
+            }
+      return QmlListAccess<ElementW>(this, _annotations);
+      }
+
 //---------------------------------------------------------
 //   subTypeName
 //---------------------------------------------------------
@@ -830,6 +882,12 @@ QVariant Segment::getProperty(P_ID propertyId) const
             default:
                   return Element::getProperty(propertyId);
             }
+      }
+
+void Segment::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      Element::supportedProperties(dest, writeable);
+      dest << P_ID::TICK << P_ID::LEADING_SPACE;
       }
 
 //---------------------------------------------------------

@@ -1585,6 +1585,31 @@ Measure* Score::lastMeasureMM() const
       return m;
       }
 
+ElementW*Score::qmlFirstMeasure()
+      {
+        return ElementW::buildWrapper(firstMeasure());
+      }
+
+ElementW*Score::qmlFirstMeasureMM()
+      {
+      return ElementW::buildWrapper(firstMeasureMM());
+      }
+
+ElementW*Score::qmlLastMeasure()
+      {
+      return ElementW::buildWrapper(lastMeasure());
+      }
+
+ElementW*Score::qmlLastMeasureMM()
+      {
+      return ElementW::buildWrapper(lastMeasureMM());
+      }
+
+SegmentW*Score::qmlLastSegment()
+      {
+      return dynamic_cast<SegmentW*>(ElementW::buildWrapper(lastSegment()));
+      }
+
 //---------------------------------------------------------
 //   endTick
 //---------------------------------------------------------
@@ -1637,6 +1662,12 @@ Segment* Score::lastSegment() const
       {
       Measure* m = lastMeasure();
       return m ? m->last() : 0;
+      }
+
+ElementW* Score::lastSegmentW() const
+      {
+      Segment* result = lastSegment();
+      return ElementW::buildWrapper(result);
       }
 
 //---------------------------------------------------------
@@ -2017,7 +2048,7 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
 
 void Score::splitStaff(int staffIdx, int splitPoint)
       {
-//      qDebug("split staff %d point %d", staffIdx, splitPoint);
+      //      qDebug("split staff %d point %d", staffIdx, splitPoint);
 
       //
       // create second staff
@@ -2413,7 +2444,7 @@ void Score::cmdRemoveStaff(int staffIdx)
                               }
                         }
                   else // linked staff in the same score
-                       sameScoreLinkedStaff = staff;
+                        sameScoreLinkedStaff = staff;
                   }
             if (sameScoreLinkedStaff)
                   s->score()->undo(new UnlinkStaff(sameScoreLinkedStaff, s)); // once should be enough
@@ -2566,27 +2597,27 @@ void Score::padToggle(Pad n)
                   break;
             case Pad::DOTDOT:
                   if ((_is.duration().dots() == 2)
-                     || (_is.duration() == TDuration::DurationType::V_512TH)
-                     || (_is.duration() == TDuration::DurationType::V_1024TH))
+                      || (_is.duration() == TDuration::DurationType::V_512TH)
+                      || (_is.duration() == TDuration::DurationType::V_1024TH))
                         _is.setDots(0);
                   else
                         _is.setDots(2);
                   break;
             case Pad::DOT3:
                   if ((_is.duration().dots() == 3)
-                     || (_is.duration() == TDuration::DurationType::V_256TH)
-                     || (_is.duration() == TDuration::DurationType::V_512TH)
-                     || (_is.duration() == TDuration::DurationType::V_1024TH))
+                      || (_is.duration() == TDuration::DurationType::V_256TH)
+                      || (_is.duration() == TDuration::DurationType::V_512TH)
+                      || (_is.duration() == TDuration::DurationType::V_1024TH))
                         _is.setDots(0);
                   else
                         _is.setDots(3);
                   break;
             case Pad::DOT4:
                   if ((_is.duration().dots() == 4)
-                     || (_is.duration() == TDuration::DurationType::V_128TH)
-                     || (_is.duration() == TDuration::DurationType::V_256TH)
-                     || (_is.duration() == TDuration::DurationType::V_512TH)
-                     || (_is.duration() == TDuration::DurationType::V_1024TH))
+                      || (_is.duration() == TDuration::DurationType::V_128TH)
+                      || (_is.duration() == TDuration::DurationType::V_256TH)
+                      || (_is.duration() == TDuration::DurationType::V_512TH)
+                      || (_is.duration() == TDuration::DurationType::V_1024TH))
                         _is.setDots(0);
                   else
                         _is.setDots(4);
@@ -2690,7 +2721,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
             }
       if (MScore::debugMode)
             qDebug("select element <%s> type %d(state %d) staff %d",
-               e ? e->name() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
+                   e ? e->name() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
 
       switch (type) {
             case SelectType::SINGLE:
@@ -2800,9 +2831,9 @@ void Score::selectRange(Element* e, int staffIdx)
             int etick = tick + m->ticks();
             activeTrack = staffIdx * VOICES;
             if (_selection.isNone()
-               || (_selection.isList() && !_selection.isSingle())) {
-                        if (_selection.isList())
-                              deselectAll();
+                || (_selection.isList() && !_selection.isSingle())) {
+                  if (_selection.isList())
+                        deselectAll();
                   _selection.setRange(m->tick2segment(tick),
                                       m == lastMeasure() ? 0 : m->last(),
                                       staffIdx,
@@ -2829,8 +2860,8 @@ void Score::selectRange(Element* e, int staffIdx)
                               startSegment = m->tick2segment(tick);
                               if (etick <= oetick)
                                     endSegment = cr->nextSegmentAfterCR(SegmentType::ChordRest
-                                                                                    | SegmentType::EndBarLine
-                                                                                    | SegmentType::Clef);
+                                                                        | SegmentType::EndBarLine
+                                                                        | SegmentType::Clef);
 
                               }
                         int staffStart = staffIdx;
@@ -2942,7 +2973,7 @@ void Score::collectMatch(void* data, Element* e)
             return;
 
       if ((p->staffStart != -1)
-         && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
+          && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
             return;
 
       if (p->voice != -1 && p->voice != e->voice())
@@ -2983,7 +3014,7 @@ void Score::collectNoteMatch(void* data, Element* e)
       if (p->duration.type() != TDuration::DurationType::V_INVALID && p->duration != n->chord()->actualDurationType())
             return;
       if ((p->staffStart != -1)
-         && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
+          && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
             return;
       if (p->voice != -1 && p->voice != e->voice())
             return;
@@ -3124,8 +3155,8 @@ void Score::lassoSelectEnd()
             }
       if (noteRestCount > 0) {
             endSegment = endCR->nextSegmentAfterCR(SegmentType::ChordRest
-               | SegmentType::EndBarLine
-               | SegmentType::Clef);
+                                                   | SegmentType::EndBarLine
+                                                   | SegmentType::Clef);
             _selection.setRange(startSegment, endSegment, startStaff, endStaff+1);
             if (!_selection.isRange())
                   _selection.setState(SelState::RANGE);
@@ -3146,7 +3177,7 @@ void Score::addLyrics(int tick, int staffIdx, const QString& txt)
       Segment* seg     = measure->findSegment(SegmentType::ChordRest, tick);
       if (seg == 0) {
             qDebug("no segment found for lyrics<%s> at tick %d",
-               qPrintable(txt), tick);
+                   qPrintable(txt), tick);
             return;
             }
 
@@ -3165,7 +3196,7 @@ void Score::addLyrics(int tick, int staffIdx, const QString& txt)
             }
       if (!lyricsAdded) {
             qDebug("no chord/rest for lyrics<%s> at tick %d, staff %d",
-               qPrintable(txt), tick, staffIdx);
+                   qPrintable(txt), tick, staffIdx);
             }
       }
 
@@ -3642,30 +3673,6 @@ void Score::setImportedFilePath(const QString& filePath)
       _importedFilePath = filePath;
       }
 
-#if 0
-//---------------------------------------------------------
-//   title
-//---------------------------------------------------------
-
-QString Score::title()
-      {
-      QString fn;
-      Text* t = getText(SubStyle::TITLE);
-      if (t)
-            fn = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
-
-      if (fn.isEmpty())
-            fn = metaTag("workTitle");
-
-      if (fn.isEmpty())
-            fn = masterScore()->fileInfo()->completeBaseName();
-
-      if (fn.isEmpty())
-            fn = "Untitled";
-
-      return fn.simplified();
-      }
-
 //---------------------------------------------------------
 //   subtitle
 //---------------------------------------------------------
@@ -3716,7 +3723,6 @@ QString Score::poet()
 
       return fn.simplified();
       }
-#endif
 
 //---------------------------------------------------------
 //   nmeasure
@@ -3829,7 +3835,7 @@ QString Score::extractLyrics()
                                     maxLyrics = cr->lyrics().size();
                               if (playCount >= int(cr->lyrics().size()))
                                     continue;
-                              Lyrics* l = cr->lyrics(playCount, Element::Placement::BELOW);  // TODO: ABOVE
+                              Lyrics* l = cr->lyrics(playCount, Placement::BELOW);  // TODO: ABOVE
                               if (!l)
                                     continue;
                               found = true;
@@ -3858,7 +3864,7 @@ QString Score::extractLyrics()
                                           maxLyrics = cr->lyrics().size();
                                     if (lyricsNumber >= cr->lyrics().size())
                                           continue;
-                                    Lyrics* l = cr->lyrics(lyricsNumber, Element::Placement::BELOW);  // TODO
+                                    Lyrics* l = cr->lyrics(lyricsNumber, Placement::BELOW);  // TODO
                                     if (!l)
                                           continue;
                                     found = true;
@@ -4244,7 +4250,7 @@ void Score::setStyle(const MStyle& s)
 //---------------------------------------------------------
 
 MasterScore::MasterScore()
-   : Score()
+      : Score()
       {
       _tempomap    = new TempoMap;
       _sigmap      = new TimeSigMap();
@@ -4276,7 +4282,7 @@ MasterScore::MasterScore()
       }
 
 MasterScore::MasterScore(const MStyle& s)
-   : MasterScore{}
+      : MasterScore{}
       {
       _movements = new Movements;
       _movements->push_back(this);
@@ -4353,12 +4359,12 @@ void MasterScore::setName(const QString& ss)
 //   title
 //---------------------------------------------------------
 
-QString MasterScore::title() const
+QString MasterScore::title()
       {
       return fileInfo()->completeBaseName();
       }
 
-QString Score::title() const
+QString Score::title()
       {
       return _excerpt->title();
       }
@@ -4432,7 +4438,7 @@ bool Score::isTopScore() const
 //---------------------------------------------------------
 
 Movements::Movements()
-   : std::vector<MasterScore*>()
+      : std::vector<MasterScore*>()
       {
       _undo = new UndoStack();
       }

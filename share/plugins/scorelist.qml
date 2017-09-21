@@ -1,17 +1,18 @@
 import QtQuick 2.0
-import MuseScore 1.0
+import MuseScore 3.0
 
 
 MuseScore {
     menuPath: "Plugins.scorelist"
-    version:  "2.0"
+    version:  "3.0"
     description: "This test plugin iterates through the score list."
     pluginType: "dialog"
+    requiresScore: false
 
     width:  150
     height: 75
     Component.onCompleted: {
-        console.log("hello scorelist");
+        console.log("scores.length="+scores.length);
         for (var i = 0; i < scores.length; i++) {
             console.log(scores[i].name);
             scoreList.text = scoreList.text + scores[i].name + '\n';

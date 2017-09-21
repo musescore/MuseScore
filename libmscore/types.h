@@ -137,6 +137,13 @@ enum class Direction {
 
 Q_ENUM_NS(Direction)
 
+enum class Placement : char {
+      ABOVE, BELOW
+      };
+
+Q_ENUM_NS(Placement)
+
+
 //hack: to force the build system to run moc on this file
 class Mops : public QObject {
       Q_GADGET

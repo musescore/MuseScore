@@ -1117,6 +1117,13 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
       return true;
       }
 
+void Element::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      ScoreElement::supportedProperties(dest, writeable);
+      dest << P_ID::TRACK << P_ID::GENERATED << P_ID::COLOR << P_ID::VISIBLE << P_ID::SELECTED << P_ID::USER_OFF << P_ID::PLACEMENT
+           << P_ID::AUTOPLACE << P_ID::Z <<P_ID::SYSTEM_FLAG;
+      }
+
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
@@ -1906,4 +1913,137 @@ void Element::endEdit(EditData&)
       {
       }
 
+//---------------------------------------------------------
+//   ElementW
+//---------------------------------------------------------
+
+QVariantList ElementW::supportedProperties(bool writeable)
+      {
+      QList<P_ID> dest;
+      QVariantList names;
+      if (e) {
+            e->supportedProperties(dest, writeable);
+            for(int i = 0; i < dest.size(); i++ ) {
+                  names.append(propertyQmlName(dest[i])); //TODO: Check this doesn't cause a memory leak.
+                  }
+            }
+      return names;
+      }
+
+ElementW::~ElementW()
+      {
+// QML engine apparently sometimes garbage collects objects. This should keep links sensible.
+      if (e) {
+            e->elementWrapper=0;
+            }
+      e = 0;
+      }
+
+QString ElementW::name() const
+      {
+      return QString(e->name());
+      }
+
+int ElementW::type() const
+      {
+      return int(e->type());
+      }
+
+int ElementW::tick() const
+      {
+      return ((Element*)e)->tick();
+      }
+
+QVariant ElementW::get(const QString& s) const
+      {
+      QVariant val;
+      if (e) {
+            P_ID pid = propertyId(s);
+            val = e->getProperty(pid);
+            if (propertyType(pid) == P_TYPE::FRACTION) {
+                  Fraction f(val.value<Fraction>());
+                  FractionWrapper*  fw = new FractionWrapper(f);
+                  return QVariant::fromValue(fw);
+                  }
+            }
+      return val;
+      }
+
+void ElementW::set(const QString& s, const QVariant& value)
+      {
+      if (e) {
+            P_ID pid =  propertyId(s);
+            e->setProperty(pid,value);
+            }
+      }
+
+Element* ElementW::element() {
+      if (!e) return 0;
+      return dynamic_cast<Element*>(e);
+      }
+
+QColor ElementW::color()
+      {
+      return element() ? element()->color() : QColor::fromRgb(0,0,0);
+      }
+
+void ElementW::setColor(const QColor& c)
+      {
+      if (element()) element()->undoSetColor(c);
+      }
+
+int ElementW::track()
+      {
+      return get("track").toInt();
+      }
+
+void ElementW::setTrack(int t)
+      {
+      set("track" , t);
+      }
+
+bool ElementW::selected()
+      {
+      return get("selected").toBool();
+      }
+
+void ElementW::setSelected(bool b)
+      {
+      set("selected" , b);
+      }
+
+QPointF ElementW::pos()
+      {
+      return element()->scriptPos();
+      }
+
+void ElementW::setPos(const QPointF& p)
+      {
+      element()->scriptSetPos(p);
+      }
+
+ElementW * ElementW::buildWrapper(ScoreElement* _e) // Create appropriate wrapper element.
+      {
+      ElementW* result;
+        if (_e == 0) return 0;
+        if (_e->elementWrapper)
+              return _e->elementWrapper;
+        switch(_e->type()) {
+              case ElementType::TIMESIG: result = new TimeSigW(_e); break;
+              case ElementType::SEGMENT: result = new SegmentW(_e); break;
+              case ElementType::CHORD:   result = new ChordW(_e); break;
+              case ElementType::NOTE:    result = new NoteW(_e); break;
+              case ElementType::LYRICS:  result = new LyricsW(_e); break;
+              case ElementType::MEASURE: result = new MeasureW(_e); break;
+              case ElementType::STAFF_TEXT:
+              case ElementType::TEXT:    result = new TextW(_e); break;
+              default:
+                    result = new ElementW(_e);
+              }
+        _e->elementWrapper = result; // This should keep memory leaks under control.
+        return result;
+      }
+
+
 }
+

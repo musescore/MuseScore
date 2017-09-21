@@ -17,6 +17,7 @@
 #include "sig.h"
 #include "mscore.h"
 #include "groups.h"
+#include "cursor.h"
 
 namespace Ms {
 
@@ -34,9 +35,28 @@ enum class TimeSigType : char {
       };
 
 //---------------------------------------------------------------------------------------
-//   @@ TimeSig
-///    This class represents a time signature.
+//   @@ TimeSigW
+//   @W TimeSig
+//   @S track,generated,color,visible,selected,user_off,placement,autoplace,z,system_flag,show_courtesy,numerator_string,denominator_string,groups,timesig,timesig_global,timesig_stretch,timesig_type,scale
+///   This class represents a time signature.
+//   void setSig(int numerator, int denominator, int type) Type 0=NORMAL 1=FOUR_FOUR 2=ALLA_BREVE
+//
+//   @P *denominator         int           (read only)
+//   @P *denominatorStretch  int           (read only)
+//   @P *denominatorString   string        text of denominator
+//   @P *numerator           int           (read only)
+//   @P *numeratorStretch    int           (read only)
+//   @P *numeratorString     string        text of numerator
 //---------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+
+class TimeSigW : public ElementW {
+      Q_OBJECT
+   public:
+      TimeSigW() {};
+      TimeSigW(ScoreElement* _e) : ElementW() {e = _e;}
+      Q_INVOKABLE void setSig(int numerator, int denominator, int st=static_cast<int>(TimeSigType::NORMAL)); // Compatible with older versions
+      };
 
 class TimeSig : public Element {
       Q_GADGET
@@ -116,6 +136,7 @@ class TimeSig : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID id) const override;
       virtual StyleIdx getPropertyStyle(P_ID id) const override;
       virtual void styleChanged() override;
