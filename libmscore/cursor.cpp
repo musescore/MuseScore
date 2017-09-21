@@ -22,6 +22,7 @@
 #include "libmscore/system.h"
 #include "libmscore/segment.h"
 #include "libmscore/timesig.h"
+#include "libmscore/types.h"
 #include "cursor.h"
 
 namespace Ms {
@@ -58,6 +59,21 @@ QVariant ElementW::get(const QString& s) const
                   }
             }
       return val;
+      }
+
+Element* ElementW::element() {
+      if (!e) return 0;
+      return dynamic_cast<Element*>(e);
+      }
+
+ElementW * ElementW::buildWrapper(ScoreElement* _e) // Create appropriate wrapper element.
+      {
+        if (_e == 0) return 0;
+        switch(_e->type()) {
+              case ElementType::TIMESIG: return new TimeSigW(_e);
+              default:
+                    return new ElementW(_e);
+              }
       }
 
 //---------------------------------------------------------
@@ -162,6 +178,10 @@ bool Cursor::nextMeasure()
 //---------------------------------------------------------
 //   add
 //---------------------------------------------------------
+
+void Cursor::add(ElementW* s) {
+      add(s->element());
+      }
 
 void Cursor::add(Element* s)
       {
