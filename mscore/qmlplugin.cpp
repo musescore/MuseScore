@@ -101,7 +101,7 @@ void QmlPlugin::closeScore(Ms::Score* score)
 //   newElement
 //---------------------------------------------------------
 
-Ms::Element* QmlPlugin::newElement(int t)
+Ms::ElementW* QmlPlugin::newElement(int t)
       {
       Score* score = curScore();
       if (score == 0)
@@ -109,16 +109,15 @@ Ms::Element* QmlPlugin::newElement(int t)
       Element* e = Element::create(ElementType(t), score);
       // tell QML not to garbage collect this score
 //TODO      Ms::MScore::qml()->setObjectOwnership(e, QQmlEngine::CppOwnership);
-      return e;
+      return ElementW::buildWrapper(e);
       }
 
 //---------------------------------------------------------
 //   newScore
 //---------------------------------------------------------
 
-Score* QmlPlugin::newScore(const QString& /*name*/, const QString& /*part*/, int /*measures*/)
+Score* QmlPlugin::newScore(const QString& name, const QString& part, int measures)
       {
-#if 0 // TODO
       if (msc->currentScore())
             msc->currentScore()->endCmd();
       MasterScore* score = new MasterScore(MScore::defaultStyle());
@@ -133,8 +132,6 @@ Score* QmlPlugin::newScore(const QString& /*name*/, const QString& /*part*/, int
       QQmlEngine::setObjectOwnership(score, QQmlEngine::CppOwnership);
       score->startCmd();
       return score;
-#endif
-      return 0;
       }
 
 //---------------------------------------------------------

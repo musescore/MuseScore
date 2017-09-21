@@ -212,6 +212,7 @@ class Accidental : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID propertyId) const override;
 
       static AccidentalVal subtype2value(AccidentalType);             // return effective pitch offset
