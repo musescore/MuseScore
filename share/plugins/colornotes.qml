@@ -3,7 +3,7 @@
 //  Music Composition & Notation
 //
 //  Copyright (C) 2012 Werner Schweer
-//  Copyright (C) 2013-2015 Nicolas Froment, Joachim Schmitz
+//  Copyright (C) 2013-2017 Nicolas Froment, Joachim Schmitz
 //  Copyright (C) 2014 Jörn Eichler
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -12,21 +12,29 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-import QtQuick 2.0
+import QtQuick 2.2
 import MuseScore 3.0
 
 MuseScore {
       version:  "1.0"
-      description: "This demo plugin colors notes in the selection depending on pitch"
+      description: qsTr("This plugin colors notes in the selection depending on their pitch as per the Boomwhackers convention")
       menuPath: "Plugins.Notes.Color Notes"
 
-      property variant colors : [
-               "#e21c48", "#f26622", "#f99d1c",
-               "#ffcc33", "#fff32b", "#bcd85f",
-               "#62bc47", "#009c95", "#0071bb",
-               "#5e50a1", "#8d5ba6", "#cf3e96"
+      property variant colors : [ // "#rrggbb" with rr, gg, and bb being the hex values for red, green, and blue, respectively
+               "#e21c48", // C
+               "#f26622", // C#/Db
+               "#f99d1c", // D
+               "#ffcc33", // D#/Eb
+               "#fff32b", // E
+               "#bcd85f", // F
+               "#62bc47", // F#/Gb
+               "#009c95", // G
+               "#0071bb", // G#/Ab
+               "#5e50a1", // A
+               "#8d5ba6", // A#/Bb
+               "#cf3e96"  // B
                ]
-      property variant black : "#000000"
+      property string black : "#000000"
 
       // Apply the given function to all notes in selection
       // or, if nothing is selected, in the entire score
@@ -45,7 +53,7 @@ MuseScore {
             } else {
                   startStaff = cursor.staffIdx;
                   cursor.rewind(2);
-                  if (cursor.tick == 0) {
+                  if (cursor.tick === 0) {
                         // this happens when the selection includes
                         // the last measure of the score.
                         // rewind(2) goes behind the last segment (where
@@ -67,17 +75,17 @@ MuseScore {
                               cursor.rewind(0) // if no selection, beginning of score
 
                         while (cursor.segment && (fullScore || cursor.tick < endTick)) {
-                              if (cursor.element && cursor.element.type == Element.CHORD) {
+                              if (cursor.element && cursor.element.type === Element.CHORD) {
                                     var graceChords = cursor.element.graceNotes;
                                     for (var i = 0; i < graceChords.length; i++) {
                                           // iterate through all grace chords
-                                          var notes = graceChords[i].notes;
-                                          for (var j = 0; j < notes.length; j++)
-                                                func(notes[j]);
+                                          var graceNotes = graceChords[i].notes;
+                                          for (var j = 0; j < graceNotes.length; j++)
+                                                func(graceNotes[j]);
                                     }
                                     var notes = cursor.element.notes;
-                                    for (var i = 0; i < notes.length; i++) {
-                                          var note = notes[i];
+                                    for (var k = 0; k < notes.length; k++) {
+                                          var note = notes[k];
                                           func(note);
                                     }
                               }
