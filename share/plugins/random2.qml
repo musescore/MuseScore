@@ -22,8 +22,7 @@ MuseScore {
 
             var idx    = Math.random() * 6;
             var octave = Math.floor(Math.random() * octaves.value);
-            var pitch  = cdur[Math.floor(idx)] + octave * 12 + 60;
-            var pitch  = pitch + keyo[key];
+            var pitch  = cdur[Math.floor(idx)] + octave * 12 + 60 + keyo[key];
             console.log("Add note pitch "+pitch);
             cursor.addNote(pitch);
             }
