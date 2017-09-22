@@ -36,8 +36,6 @@ enum class TimeSigType : char {
 
 //---------------------------------------------------------------------------------------
 //   @@ TimeSig
-//---------------------------------------------------------------------------------------
-//   @@ TimeSig
 //   This class represents a time signature.
 //   void setSig(int numerator, int denominator, int type) Type 0=NORMAL 1=FOUR_FOUR 2=ALLA_BREVE
 //
