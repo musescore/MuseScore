@@ -28,6 +28,7 @@ namespace Ms {
 class Synth;
 class Seq;
 class MidiDriver;
+class NPlayEvent;
 enum class Transport : char;
 
 //---------------------------------------------------------
@@ -56,6 +57,7 @@ class Portaudio : public Driver {
       virtual Transport getState() override;
       virtual int sampleRate() const { return _sampleRate; }
       virtual void midiRead();
+      virtual void putEvent(const NPlayEvent&, unsigned framePos);
 
       int framePos() const;
       float* getLBuffer(long n);
@@ -67,7 +69,7 @@ class Portaudio : public Driver {
       int deviceIndex(int apiIdx, int apiDevIdx);
       int currentApi() const;
       int currentDevice() const;
-      MidiDriver* mididriver() {return midiDriver;}
+      MidiDriver* mididriver() { return midiDriver; }
       };
 
 

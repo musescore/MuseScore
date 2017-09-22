@@ -90,7 +90,7 @@ endif (APPLE)
 # Disable components not supported on Linux/BSD
 if (NOT APPLE AND NOT MINGW)
       set(NIX_NOT_AVAIL "Not available on Linux/BSD")
-      option(BUILD_PORTMIDI "PortMidi disabled on Linux. (It uses ALSA but it's better to use ALSA directly)" OFF)
+      #option(BUILD_PORTMIDI "PortMidi disabled on Linux. (It uses ALSA but it's better to use ALSA directly)" OFF)
 endif (NOT APPLE AND NOT MINGW)
 
 option(AEOLUS        "enable pipe organ synthesizer"      OFF)

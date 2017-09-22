@@ -52,6 +52,7 @@ fetch-build-dependencies() {
     libsndfile1-dev:$ARCH \
     libasound2-dev:$ARCH \
     portaudio19-dev:$ARCH \
+    libportmidi-dev:$ARCH \
     zlib1g-dev:$ARCH \
     libfreetype6-dev:$ARCH \
     libmp3lame-dev:$ARCH \
