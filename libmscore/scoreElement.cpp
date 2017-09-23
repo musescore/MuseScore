@@ -237,6 +237,16 @@ void ScoreElement::writeProperty(XmlWriter& xml, P_ID id) const
             }
       else
             xml.tag(id, getProperty(id), propertyDefault(id));
+}
+
+//---------------------------------------------------------
+//  supportedProperties - get a list of supported properties.
+//---------------------------------------------------------
+
+void ScoreElement::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      Q_UNUSED(writeable); // If writeable=true, return only properties that are supported by setproperty, otherwise getproperty.
+      dest.clear();
       }
 
 //---------------------------------------------------------

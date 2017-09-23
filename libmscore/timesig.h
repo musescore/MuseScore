@@ -134,6 +134,7 @@ class TimeSig : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID id) const override;
       virtual StyleIdx getPropertyStyle(P_ID id) const override;
       virtual void styleChanged() override;

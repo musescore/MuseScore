@@ -412,6 +412,7 @@ class Element : public ScoreElement {
 
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID) const override;
       virtual void initSubStyle(SubStyle);
 

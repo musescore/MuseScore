@@ -31,6 +31,19 @@ namespace Ms {
 //   ElementW
 //---------------------------------------------------------
 
+QVariantList ElementW::supportedProperties(bool writeable)
+      {
+      QList<P_ID> dest;
+      QVariantList names;
+      if (e) {
+            e->supportedProperties(dest,writeable);
+            for(int i = 0; i<dest.size(); i++ ) {
+                  names.append(propertyQmlName(dest[i])); //TODO: Check this doesn't cause a memory leak.
+                  }
+            }
+      return names;
+      }
+
 QString ElementW::name() const
       {
       return QString(e->name());
@@ -59,6 +72,14 @@ QVariant ElementW::get(const QString& s) const
                   }
             }
       return val;
+      }
+
+void ElementW::set(const QString& s, const QVariant& value)
+      {
+      if (e) {
+            P_ID pid =  propertyId(s);
+            e->setProperty(pid,value);
+            }
       }
 
 Element* ElementW::element() {

@@ -465,6 +465,12 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
       return true;
       }
 
+void TimeSig::supportedProperties(QList<P_ID>& dest, bool writeable) {
+      Element::supportedProperties(dest,writeable);
+      dest << P_ID::SHOW_COURTESY << P_ID::NUMERATOR_STRING << P_ID::DENOMINATOR_STRING << P_ID::GROUPS
+           << P_ID::TIMESIG << P_ID::TIMESIG_GLOBAL << P_ID::TIMESIG_STRETCH << P_ID::TIMESIG_TYPE << P_ID::SCALE;
+      }
+
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------

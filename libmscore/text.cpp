@@ -2573,6 +2573,7 @@ bool Text::validateText(QString& s)
 
 void Text::inputTransition(QInputMethodEvent* ie)
       {
+      Q_UNUSED(ie); // Remove annoying warning message.
 #if 0
       // remove preedit string
       int n = preEdit.size();
