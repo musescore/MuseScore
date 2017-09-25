@@ -47,6 +47,14 @@ enum class SegmentType;
 //   @P durationType  int
 //   @P small         bool           small chord/rest
 //-------------------------------------------------------------------
+class ChordRestW : public DurationElementW {
+      Q_OBJECT
+
+   public:
+      ChordRestW() : DurationElementW() {}
+      ChordRestW(ScoreElement* _e) : DurationElementW(_e) {}
+      ChordRest* chordrest();
+      };
 
 class ChordRest : public DurationElement {
       Q_GADGET
@@ -170,6 +178,7 @@ class ChordRest : public DurationElement {
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID) const override;
       bool isGrace() const;
       bool isGraceBefore() const;

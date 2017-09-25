@@ -367,7 +367,7 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
 Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       {
       Note* note = new Note(this);
-      note->setParent(chord);
+      note->Element::setParent(chord);
       note->setTrack(chord->track());
       note->setNval(noteVal);
       undoAddElement(note);

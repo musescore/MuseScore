@@ -1637,6 +1637,12 @@ Segment* Score::lastSegment() const
       {
       Measure* m = lastMeasure();
       return m ? m->last() : 0;
+}
+
+ElementW* Score::lastSegmentW() const
+      {
+      Segment* result = lastSegment();
+      return ElementW::buildWrapper(result);
       }
 
 //---------------------------------------------------------
@@ -4115,7 +4121,7 @@ void Score::changeVoice(int voice)
                               // create & add new note
                               Note* newNote = new Note(*note);
                               newNote->setSelected(false);
-                              newNote->setParent(dstChord);
+                              newNote->Element::setParent(dstChord);
                               undoAddElement(newNote);
                               el.append(newNote);
                               // add new chord if one was created

@@ -17,7 +17,8 @@
  \file
  Definition of classes Note and NoteHead.
 */
-
+#include <QObject>
+#include <QQmlListProperty>
 #include "element.h"
 #include "symbol.h"
 #include "noteevent.h"
@@ -25,6 +26,7 @@
 #include "shape.h"
 #include "tremolo.h"
 #include "key.h"
+#include "cursor.h"
 
 namespace Ms {
 
@@ -203,7 +205,22 @@ static const int INVALID_LINE = -10000;
 //   @P veloType         enum (Note.OFFSET_VAL, Note.USER_VAL)
 //---------------------------------------------------------------------------------------
 
+class NoteW : public ElementW {
+      Q_OBJECT
+      Q_PROPERTY(QQmlListProperty<Ms::ElementW>  dots READ qmlDots)
+      Q_PROPERTY(Ms::ElementW*             accidental READ accidental)
+private:
+      QVector<ElementW*> _dots;
+      ElementW* accidental();
+public:
+      NoteW() : ElementW() {}
+      NoteW(ScoreElement* _e) : ElementW(_e) {}
+      Note* note();
+      QQmlListProperty<ElementW> qmlDots();
+      };
+
 class Note : public Element {
+      friend class NoteW;
       Q_GADGET
       Q_PROPERTY(Ms::Accidental*                accidental        READ accidental)
       Q_PROPERTY(int                            accidentalType    READ qmlAccidentalType  WRITE qmlSetAccidentalType)
@@ -407,8 +424,8 @@ class Note : public Element {
       Note* firstTiedNote() const;
       Note* lastTiedNote() const;
 
-      Chord* chord() const            { return (Chord*)parent(); }
-      void setChord(Chord* a)         { setParent((Element*)a);  }
+      Chord* chord() const            { return (Chord*) Element::parent(); }
+      void setChord(Chord* a)         { Element::setParent((Element*)a);  }
       virtual void draw(QPainter*) const override;
 
       virtual void read(XmlReader&) override;
@@ -494,6 +511,7 @@ class Note : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual void supportedProperties(QList<P_ID>& dest, bool writeable = false) override;
       virtual QVariant propertyDefault(P_ID) const override;
 
       bool mark() const               { return _mark;   }

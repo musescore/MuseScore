@@ -68,7 +68,7 @@ class ElementW : public QObject {
 //   @P staffIdx  int           current staff (track / 4)
 //   @P voice     int           current voice (track % 4)
 //   @P filter    enum          segment type filter
-//   @P element   Ms::ElementW*  current element at track, read only
+//   @P element   Ms::Element*  current element at track, read only
 //   @P segment   Ms::Segment*  current segment, read only
 //   @P measure   Ms::Measure*  current measure, read only
 //   @P tick      int           midi tick position, read only
@@ -83,7 +83,9 @@ class Cursor : public QObject {
       Q_PROPERTY(int staffIdx   READ staffIdx  WRITE setStaffIdx)
       Q_PROPERTY(int voice      READ voice     WRITE setVoice)
       Q_PROPERTY(int filter     READ filter    WRITE setFilter)
-
+      Q_PROPERTY(ElementW* segment READ segment)
+      Q_PROPERTY(ElementW* element READ element)
+      Q_PROPERTY(ElementW* measure READ measure)
       Q_PROPERTY(int tick         READ tick)
       Q_PROPERTY(double time      READ time)
 

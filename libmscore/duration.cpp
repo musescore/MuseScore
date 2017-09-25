@@ -177,6 +177,32 @@ bool DurationElement::setProperty(P_ID propertyId, const QVariant& v)
                   return Element::setProperty(propertyId, v);
             }
       return true;
+}
+
+void DurationElement::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      Element::supportedProperties(dest,writeable);
+      dest << P_ID::DURATION;
+      }
+
+DurationElement* DurationElementW::durationElement()
+      {
+      return dynamic_cast<DurationElement*>(e);
+      }
+
+FractionWrapper*DurationElementW::durationW()
+      {
+      return durationElement()->durationW();
+      }
+
+void DurationElementW::setDurationW(FractionWrapper* f)
+      {
+      durationElement()->setDurationW(f);
+      }
+
+FractionWrapper*DurationElementW::globalDurW()
+      {
+      return durationElement()->globalDurW();
       }
 
 }

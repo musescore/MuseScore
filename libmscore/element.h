@@ -137,6 +137,7 @@ class EditData {
 //-------------------------------------------------------------------
 
 class Element : public ScoreElement {
+      friend class ElementW;
       Q_GADGET
       Q_ENUMS(Placement)
 
@@ -165,7 +166,6 @@ class Element : public ScoreElement {
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
-
    public:
       Element(Score* s = 0);
       Element(const Element&);

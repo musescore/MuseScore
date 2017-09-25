@@ -131,6 +131,7 @@ ScoreElement::ScoreElement(const ScoreElement& se)
       {
       _score = se._score;
       _links = 0;
+      elementWrapper = 0;
       }
 
 //---------------------------------------------------------
@@ -145,6 +146,10 @@ ScoreElement::~ScoreElement()
                   delete _links;
                   _links = 0;
                   }
+            }
+      if (elementWrapper) {
+            delete elementWrapper;
+            elementWrapper = 0;
             }
       }
 

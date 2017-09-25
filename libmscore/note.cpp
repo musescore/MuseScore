@@ -1359,8 +1359,8 @@ bool Note::readProperties(XmlReader& e)
                   if (sp->isTie())
                         _tieBack = toTie(sp);
                   else {
-                        if (sp->isGlissando() && parent() && parent()->isChord())
-                              toChord(parent())->setEndsGlissando(true);
+                        if (sp->isGlissando() && Element::parent() && Element::parent()->isChord())
+                              toChord(Element::parent())->setEndsGlissando(true);
                         addSpannerBack(sp);
                         }
                   e.removeSpanner(sp);
@@ -1774,7 +1774,7 @@ Element* Note::drop(EditData& data)
                   v.flip();
                   n->setTpc2(Ms::transposeTpc(n->tpc1(), v, true));
                   // replace this note with new note
-                  n->setParent(ch);
+                  n->Element::setParent(ch);
                   score()->undoRemoveElement(this);
                   score()->undoAddElement(n);
                   }
@@ -2540,6 +2540,15 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
             }
       triggerLayout();
       return true;
+}
+
+void Note::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      Element::supportedProperties(dest,writeable);
+      dest << P_ID::PITCH << P_ID::TPC1 << P_ID::TPC2 << P_ID::SMALL << P_ID::MIRROR_HEAD << P_ID::DOT_POSITION << P_ID::HEAD_GROUP
+           << P_ID::VELO_OFFSET << P_ID::TUNING << P_ID::FRET << P_ID::STRING << P_ID::GHOST << P_ID::HEAD_TYPE << P_ID::VELO_TYPE
+           << P_ID::PLAY << P_ID::LINE << P_ID::FIXED << P_ID::FIXED_LINE;
+      if (writeable) dest << P_ID::VISIBLE;
       }
 
 //---------------------------------------------------------
@@ -3158,4 +3167,22 @@ Shape Note::shape() const
       return shape;
       }
 
+ElementW*NoteW::accidental()
+      {
+      return ElementW::buildWrapper(note()->accidental());
+      }
+
+Note* NoteW::note()
+      {
+      return dynamic_cast<Note*>(e);
+      }
+
+QQmlListProperty<ElementW> NoteW::qmlDots()
+      {
+      _dots.clear();
+      for(NoteDot* d : note()->_dots) {
+            _dots << ElementW::buildWrapper(d);
+            }
+      return QmlListAccess<ElementW>(this,_dots);
+      }
 }

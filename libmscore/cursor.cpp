@@ -89,12 +89,19 @@ Element* ElementW::element() {
 
 ElementW * ElementW::buildWrapper(ScoreElement* _e) // Create appropriate wrapper element.
       {
+      ElementW* result;
         if (_e == 0) return 0;
+        if (_e->elementWrapper) return _e->elementWrapper;
         switch(_e->type()) {
-              case ElementType::TIMESIG: return new TimeSigW(_e);
+              case ElementType::TIMESIG: result = new TimeSigW(_e); break;
+              case ElementType::SEGMENT: result = new SegmentW(_e); break;
+              case ElementType::CHORD:   result = new ChordW(_e); break;
+              case ElementType::NOTE:    result = new NoteW(_e); break;
               default:
-                    return new ElementW(_e);
+                    result = new ElementW(_e);
               }
+        _e->elementWrapper = result; // This should keep memory leaks under control.
+        return result;
       }
 
 //---------------------------------------------------------
@@ -293,7 +300,7 @@ qreal Cursor::tempo()
 
 ElementW* Cursor::segment() const
       {
-      return _segment ? new ElementW(_segment) : 0;
+      return ElementW::buildWrapper(_segment);
       }
 
 //---------------------------------------------------------
@@ -302,7 +309,7 @@ ElementW* Cursor::segment() const
 
 ElementW* Cursor::element() const
       {
-      return _segment && _segment->element(_track) ? new ElementW(_segment->element(_track)) : 0;
+      return _segment ? ElementW::buildWrapper(_segment->element(_track)) : 0;
       }
 
 //---------------------------------------------------------
@@ -311,7 +318,7 @@ ElementW* Cursor::element() const
 
 ElementW* Cursor::measure() const
       {
-      return _segment ? new ElementW(_segment->measure()) : 0;
+      return _segment ? ElementW::buildWrapper(_segment->measure()) : 0;
       }
 
 //---------------------------------------------------------

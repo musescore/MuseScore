@@ -14,6 +14,7 @@
 #define __SCORE_ELEMENT_H__
 
 #include "types.h"
+#include "cursor.h"
 
 namespace Ms {
 
@@ -148,11 +149,13 @@ struct ElementName {
 //---------------------------------------------------------
 
 class ScoreElement {
+      friend class ElementW;
       Q_GADGET
       Score* _score;
 
    protected:
       LinkedElements* _links { 0 };
+      ElementW* elementWrapper = 0;
 
    public:
       ScoreElement(Score* s) : _score(s)   {}

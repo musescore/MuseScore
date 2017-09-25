@@ -65,9 +65,10 @@ MuseScore {
 
                         if (fullScore)
                               cursor.rewind(0) // if no selection, beginning of score
-
+                        console.log("voice="+voice+" segment="+cursor.segment+" fullscore="+fullScore);
                         while (cursor.segment && (fullScore || cursor.tick < endTick)) {
-                              if (cursor.element && cursor.element.type == Element.CHORD) {
+                              console.log("Element="+cursor.element);
+                              if (cursor.element && cursor.element.type == Ms.CHORD) {
                                     var graceChords = cursor.element.graceNotes;
                                     for (var i = 0; i < graceChords.length; i++) {
                                           // iterate through all grace chords
@@ -88,24 +89,20 @@ MuseScore {
       }
 
       function colorNote(note) {
-            if (note.color == black)
-                  note.color = colors[note.pitch % 12];
+            var pitch = note.get("pitch");
+            var color = note.get("color");
+            var newcolor;
+            console.log("Pitch="+pitch+" color="+color);
+            if (color == black) 
+                  newcolor = colors[pitch % 12];
             else
-                  note.color = black;
+                  newcolor = black;
 
-            if (note.accidental) {
-                  if (note.accidental.color == black)
-                        note.accidental.color = colors[note.pitch % 12];
-                  else
-                        note.accidental.color = black;
-                  }
-
+            note.set("color", newcolor);
+            if (note.accidental) note.accidental.set("color",newcolor);
             for (var i = 0; i < note.dots.length; i++) {
                   if (note.dots[i]) {
-                        if (note.dots[i].color == black)
-                              note.dots[i].color = colors[note.pitch % 12];
-                        else
-                              note.dots[i].color = black;
+                        note.dots[i].set("color",newcolor);
                         }
                   }
          }

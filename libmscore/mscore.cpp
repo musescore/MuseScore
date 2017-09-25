@@ -435,10 +435,13 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<ElementW>   ("MuseScore", 3, 0, "Element");
             qRegisterMetaType<ElementW*>("ElementWrapper*");
             qmlRegisterType<TimeSigW>   ("MuseScore", 3, 0, "TimeSig");
+            qmlRegisterType<SegmentW>   ("MuseScore", 3, 0, "Segment");
+            qmlRegisterType<ChordW>     ("MuseScore", 3, 0, "Chord");
+            qRegisterMetaType<ChordW*>  ("ChordW*");
+            qmlRegisterType<NoteW>      ("MuseScore", 3, 0, "Note");
+            qRegisterMetaType<NoteW*>   ("NoteW*");
+
 #if 0
-            qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
-            qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
-            qmlRegisterType<Note>       ("MuseScore", 1, 0, "Note");
             qmlRegisterType<NoteHead>   ("MuseScore", 1, 0, "NoteHead");
             qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
             qmlRegisterType<Rest>       ("MuseScore", 1, 0, "Rest");

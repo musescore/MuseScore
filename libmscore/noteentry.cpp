@@ -168,7 +168,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
             // the code is similar enough that it could possibly be refactored
             Chord* chord = toChord(_is.cr());
             note = new Note(this);
-            note->setParent(chord);
+            note->Element::setParent(chord);
             note->setTrack(chord->track());
             note->setNval(nval);
             lastTiedNote = note;
@@ -439,7 +439,7 @@ void Score::repitchNote(const Position& p, bool replace)
             chord = toChord(cr);
             }
       Note* note = new Note(this);
-      note->setParent(chord);
+      note->Element::setParent(chord);
       note->setTrack(chord->track());
       note->setNval(nval);
 
