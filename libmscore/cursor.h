@@ -53,6 +53,7 @@ class ElementW : public QObject {
    public:
       ElementW(ScoreElement* _e) : QObject() { e = _e; }
       ElementW() {}
+      ~ElementW();
       QString name() const;
       int type() const;
       int tick() const;
@@ -83,9 +84,6 @@ class Cursor : public QObject {
       Q_PROPERTY(int staffIdx   READ staffIdx  WRITE setStaffIdx)
       Q_PROPERTY(int voice      READ voice     WRITE setVoice)
       Q_PROPERTY(int filter     READ filter    WRITE setFilter)
-      Q_PROPERTY(ElementW* segment READ segment)
-      Q_PROPERTY(ElementW* element READ element)
-      Q_PROPERTY(ElementW* measure READ measure)
       Q_PROPERTY(int tick         READ tick)
       Q_PROPERTY(double time      READ time)
 

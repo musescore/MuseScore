@@ -158,7 +158,7 @@ class ScoreElement {
       ElementW* elementWrapper = 0;
 
    public:
-      ScoreElement(Score* s) : _score(s)   {}
+      ScoreElement(Score* s) : _score(s)   {elementWrapper = 0;}
       ScoreElement(const ScoreElement& se);
       virtual ~ScoreElement();
 

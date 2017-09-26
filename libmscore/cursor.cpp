@@ -42,6 +42,15 @@ QVariantList ElementW::supportedProperties(bool writeable)
                   }
             }
       return names;
+}
+
+ElementW::~ElementW()
+      {
+// QML engine apparently sometimes garbage collects objects. This should keep links sensible.
+      if (e) {
+            e->elementWrapper=0;
+            }
+      e = 0;
       }
 
 QString ElementW::name() const
@@ -91,7 +100,8 @@ ElementW * ElementW::buildWrapper(ScoreElement* _e) // Create appropriate wrappe
       {
       ElementW* result;
         if (_e == 0) return 0;
-        if (_e->elementWrapper) return _e->elementWrapper;
+        if (_e->elementWrapper)
+              return _e->elementWrapper;
         switch(_e->type()) {
               case ElementType::TIMESIG: result = new TimeSigW(_e); break;
               case ElementType::SEGMENT: result = new SegmentW(_e); break;

@@ -6,7 +6,7 @@ MuseScore {
       description: "Demonstrates use of get, set, readProperties and writeProperties"
       version: "1.0"
       onRun: {
-            console.log("hello world")
+            console.log("Proplist Started")
             var score = curScore;
             var sig=newElement(Ms.TIMESIG);
             console.log("new sig = "+sig);
