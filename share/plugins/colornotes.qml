@@ -17,22 +17,14 @@ import MuseScore 3.0
 
 MuseScore {
       version:  "1.0"
-      description: qsTr("This plugin colors notes in the selection depending on their pitch as per the Boomwhackers convention")
+      description: "This demo plugin colors notes in the selection depending on pitch"
       menuPath: "Plugins.Notes.Color Notes"
 
-      property variant colors : [ // "#rrggbb" with rr, gg, and bb being the hex values for red, green, and blue, respectively
-               "#e21c48", // C
-               "#f26622", // C#/Db
-               "#f99d1c", // D
-               "#ffcc33", // D#/Eb
-               "#fff32b", // E
-               "#bcd85f", // F
-               "#62bc47", // F#/Gb
-               "#009c95", // G
-               "#0071bb", // G#/Ab
-               "#5e50a1", // A
-               "#8d5ba6", // A#/Bb
-               "#cf3e96"  // B
+      property variant colors : [
+               "#e21c48", "#f26622", "#f99d1c",
+               "#ffcc33", "#fff32b", "#bcd85f",
+               "#62bc47", "#009c95", "#0071bb",
+               "#5e50a1", "#8d5ba6", "#cf3e96"
                ]
       property variant black : "#000000"
 
