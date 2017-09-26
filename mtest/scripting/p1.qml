@@ -23,7 +23,7 @@ MuseScore {
                             log2("  small:",         e.get("small"));
                             log2("  stemDirection:", e.get("stem_direction"));
 
-                            log2("  duration:", e.duration);
+                            log2("  duration:", e.duration.numerator + "/" + e.duration.denominator);
 //                            log2("    numerator:",   e.duration.numerator);
 //                            log2("    denominator:", e.duration.denominator);
 //                            log2("    ticks:",       e.duration.ticks);

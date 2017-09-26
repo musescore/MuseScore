@@ -1107,6 +1107,26 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
             }
       triggerLayout();
       return true;
+}
+
+void ChordRest::supportedProperties(QList<P_ID>& dest, bool writeable)
+{
+  DurationElement::supportedProperties(dest, writeable);
+  if (writeable) {
+        dest << P_ID::SMALL << P_ID::BEAM_MODE << P_ID::STAFF_MOVE << P_ID::DURATION_TYPE << P_ID::VISIBLE;
+        } else {
+        dest << P_ID::SMALL << P_ID::BEAM_MODE << P_ID::STAFF_MOVE << P_ID::DURATION_TYPE;
+        }
+}
+
+void ChordRest::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      DurationElement::supportedProperties(dest, writeable);
+      if (writeable) {
+            dest << P_ID::SMALL << P_ID::BEAM_MODE << P_ID::STAFF_MOVE << P_ID::DURATION_TYPE << P_ID::VISIBLE;
+            } else {
+            dest << P_ID::SMALL << P_ID::BEAM_MODE << P_ID::STAFF_MOVE << P_ID::DURATION_TYPE;
+            }
       }
 
 //---------------------------------------------------------
@@ -1517,6 +1537,11 @@ void ChordRest::removeMarkings(bool /* keepTremolo */)
       qDeleteAll(el());
       qDeleteAll(articulations());
       qDeleteAll(lyrics());
+}
+
+ChordRest* ChordRestW::chordrest()
+      {
+      return dynamic_cast<ChordRest*>(e);
       }
 
 }

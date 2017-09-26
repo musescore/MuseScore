@@ -131,6 +131,7 @@ ScoreElement::ScoreElement(const ScoreElement& se)
       {
       _score = se._score;
       _links = 0;
+      elementWrapper = 0;
       }
 
 //---------------------------------------------------------
@@ -145,6 +146,10 @@ ScoreElement::~ScoreElement()
                   delete _links;
                   _links = 0;
                   }
+            }
+      if (elementWrapper) {
+            delete elementWrapper;
+            elementWrapper = 0;
             }
       }
 
@@ -237,6 +242,16 @@ void ScoreElement::writeProperty(XmlWriter& xml, P_ID id) const
             }
       else
             xml.tag(id, getProperty(id), propertyDefault(id));
+}
+
+//---------------------------------------------------------
+//  supportedProperties - get a list of supported properties.
+//---------------------------------------------------------
+
+void ScoreElement::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      Q_UNUSED(writeable); // If writeable=true, return only properties that are supported by setproperty, otherwise getproperty.
+      dest.clear();
       }
 
 //---------------------------------------------------------
