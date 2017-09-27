@@ -3247,10 +3247,14 @@ AboutMusicXMLBoxDialog::AboutMusicXMLBoxDialog()
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       label->setText(QString("<span style=\"font-size:10pt;\">%1<br/></span>")
                      .arg(tr(   "MusicXML is an open file format for exchanging digital sheet music,\n"
-                                "supported by many applications. MusicXML is copyright &copy; MakeMusic, Inc.\n"
-                                "All rights reserved. For more information, see: %1MusicXML.com%2.")
-                          .arg("<a href=\"http://www.musicxml.com\">")
-                          .arg("</a>")
+                                "supported by many applications.\n"
+                                "Copyright © 2004-2017 the Contributors to the MusicXML\n"
+                                "Specification, published by the W3C Music Notation Community\n"
+                                "Group under the W3C Community Contributor License Agreement\n"
+                                "(CLA):\n%1\n"
+                                "A human-readable summary is available:\n%2")
+                          .arg( "\n&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"https://www.w3.org/community/about/agreements/cla/\">https://www.w3.org/community/about/agreements/cla/</a>\n",
+                                "\n&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"https://www.w3.org/community/about/agreements/cla-deed/\">https://www.w3.org/community/about/agreements/cla-deed/</a>\n")
                           .replace("\n","<br/>")));
       }
 

@@ -4986,8 +4986,8 @@ void ExportMusicXml::write(QIODevice* dev)
       xml.setDevice(dev);
       xml.setCodec("UTF-8");
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-      xml << "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.0 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n";
-      xml.stag("score-partwise");
+      xml << "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n";
+      xml.stag("score-partwise version=\"3.1\"");
 
       const MeasureBase* measure = _score->measures()->first();
       work(measure);
