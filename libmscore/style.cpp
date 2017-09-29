@@ -1389,28 +1389,28 @@ void MStyle::set(const StyleIdx t, const QVariant& val)
 bool MStyle::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
-      QString val(e.readElementText());
+//      QString val(e.readElementText());
 
       for (const StyleType& t : styleTypes) {
             StyleIdx idx = t.styleIdx();
             if (t.name() == tag) {
                   const char* type = t.valueType();
                   if (!strcmp("Ms::Spatium", type))
-                        set(idx, Spatium(val.toDouble()));
+                        set(idx, Spatium(e.readElementText().toDouble()));
                   else if (!strcmp("double", type))
-                        set(idx, QVariant(val.toDouble()));
+                        set(idx, QVariant(e.readElementText().toDouble()));
                   else if (!strcmp("bool", type))
-                        set(idx, QVariant(bool(val.toInt())));
+                        set(idx, QVariant(bool(e.readElementText().toInt())));
                   else if (!strcmp("int", type))
-                        set(idx, QVariant(val.toInt()));
+                        set(idx, QVariant(e.readElementText().toInt()));
                   else if (!strcmp("Ms::Direction", type))
-                        set(idx, QVariant::fromValue(Direction(val.toInt())));
+                        set(idx, QVariant::fromValue(Direction(e.readElementText().toInt())));
                   else if (!strcmp("QString", type))
-                        set(idx, QVariant(val));
+                        set(idx, QVariant(e.readElementText()));
                   else if (!strcmp("Ms::Align", type)) {
-                        QStringList sl = val.split(',');
+                        QStringList sl = e.readElementText().split(',');
                         if (sl.size() != 2) {
-                              qDebug("bad align text <%s>", qPrintable(val));
+                              qDebug("bad align text <%s>", qPrintable(e.readElementText()));
                               return true;
                               }
                         Align align = Align::LEFT;
@@ -1442,11 +1442,13 @@ bool MStyle::readProperties(XmlReader& e)
                         qreal x = e.doubleAttribute("x", 0.0);
                         qreal y = e.doubleAttribute("y", 0.0);
                         set(idx, QPointF(x, y));
+                        e.readElementText();
                         }
                   else if (!strcmp("QSizeF", type)) {
-                        qreal x = e.doubleAttribute("w", 0.0);
+                        qreal x = e.intAttribute("w", 0);
                         qreal y = e.doubleAttribute("h", 0.0);
-                        set(idx, QPointF(x, y));
+                        set(idx, QSizeF(x, y));
+                        e.readElementText();
                         }
                   else if (!strcmp("QColor", type)) {
                         QColor c;
@@ -1455,6 +1457,7 @@ bool MStyle::readProperties(XmlReader& e)
                         c.setBlue(e.intAttribute("b"));
                         c.setAlpha(e.intAttribute("a", 255));
                         set(idx, c);
+                        e.readElementText();
                         }
                   else {
                         qFatal("unhandled type %s", type);
