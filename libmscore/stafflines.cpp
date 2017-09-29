@@ -111,6 +111,45 @@ void StaffLines::layout()
       }
 
 //---------------------------------------------------------
+//   layout for svg printing
+//---------------------------------------------------------
+
+void StaffLines::layoutWithoutMeasureWidth()
+    {
+        Staff* s = staff();
+        qreal _spatium = spatium();
+        qreal dist = _spatium;
+        setPos(QPointF(0.0, 0.0));
+        int _lines;
+        if (s) {
+            setMag(s->mag(measure()->tick()));
+            setColor(s->color());
+            StaffType* st = s->staffType(measure()->tick());
+            dist         *= st->lineDistance().val();
+            _lines        = st->lines();
+            rypos()       = st->yoffset().val() * _spatium;
+            if (_lines == 1)
+                rypos() = 2 * _spatium;
+        }
+        else {
+            _lines = 5;
+            setColor(MScore::defaultColor);
+        }
+        qreal w = bbox().width();
+        lw      = score()->styleS(StyleIdx::staffLineWidth).val() * _spatium;
+        qreal x1 = pos().x();
+        qreal x2 = x1 + w;
+        qreal y  = pos().y();
+        bbox().setRect(x1, -lw*.5 + y, w, (_lines-1) * _spatium + lw);
+
+        lines.clear();
+        for (int i = 0; i < _lines; ++i) {
+            lines.push_back(QLineF(x1, y, x2, y));
+            y += dist;
+        }
+    }
+
+//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
