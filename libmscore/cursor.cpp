@@ -22,6 +22,7 @@
 #include "libmscore/system.h"
 #include "libmscore/segment.h"
 #include "libmscore/timesig.h"
+#include "libmscore/types.h"
 #include "cursor.h"
 
 namespace Ms {
@@ -29,6 +30,28 @@ namespace Ms {
 //---------------------------------------------------------
 //   ElementW
 //---------------------------------------------------------
+
+QVariantList ElementW::supportedProperties(bool writeable)
+      {
+      QList<P_ID> dest;
+      QVariantList names;
+      if (e) {
+            e->supportedProperties(dest, writeable);
+            for(int i = 0; i<dest.size(); i++ ) {
+                  names.append(propertyQmlName(dest[i])); //TODO: Check this doesn't cause a memory leak.
+                  }
+            }
+      return names;
+      }
+
+ElementW::~ElementW()
+      {
+// QML engine apparently sometimes garbage collects objects. This should keep links sensible.
+      if (e) {
+            e->elementWrapper=0;
+            }
+      e = 0;
+      }
 
 QString ElementW::name() const
       {
@@ -58,6 +81,37 @@ QVariant ElementW::get(const QString& s) const
                   }
             }
       return val;
+      }
+
+void ElementW::set(const QString& s, const QVariant& value)
+      {
+      if (e) {
+            P_ID pid =  propertyId(s);
+            e->setProperty(pid,value);
+            }
+      }
+
+Element* ElementW::element() {
+      if (!e) return 0;
+      return dynamic_cast<Element*>(e);
+      }
+
+ElementW * ElementW::buildWrapper(ScoreElement* _e) // Create appropriate wrapper element.
+      {
+      ElementW* result;
+        if (_e == 0) return 0;
+        if (_e->elementWrapper)
+              return _e->elementWrapper;
+        switch(_e->type()) {
+              case ElementType::TIMESIG: result = new TimeSigW(_e); break;
+              case ElementType::SEGMENT: result = new SegmentW(_e); break;
+              case ElementType::CHORD:   result = new ChordW(_e); break;
+              case ElementType::NOTE:    result = new NoteW(_e); break;
+              default:
+                    result = new ElementW(_e);
+              }
+        _e->elementWrapper = result; // This should keep memory leaks under control.
+        return result;
       }
 
 //---------------------------------------------------------
@@ -163,6 +217,11 @@ bool Cursor::nextMeasure()
 //   add
 //---------------------------------------------------------
 
+void Cursor::add(ElementW* s)
+      {
+      add(s->element());
+      }
+
 void Cursor::add(Element* s)
       {
       if (!_segment)
@@ -252,7 +311,7 @@ qreal Cursor::tempo()
 
 ElementW* Cursor::segment() const
       {
-      return _segment ? new ElementW(_segment) : 0;
+      return ElementW::buildWrapper(_segment);
       }
 
 //---------------------------------------------------------
@@ -261,7 +320,7 @@ ElementW* Cursor::segment() const
 
 ElementW* Cursor::element() const
       {
-      return _segment && _segment->element(_track) ? new ElementW(_segment->element(_track)) : 0;
+      return _segment ? ElementW::buildWrapper(_segment->element(_track)) : 0;
       }
 
 //---------------------------------------------------------
@@ -270,7 +329,7 @@ ElementW* Cursor::element() const
 
 ElementW* Cursor::measure() const
       {
-      return _segment ? new ElementW(_segment->measure()) : 0;
+      return _segment ? ElementW::buildWrapper(_segment->measure()) : 0;
       }
 
 //---------------------------------------------------------

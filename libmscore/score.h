@@ -26,6 +26,7 @@
 #include "spannermap.h"
 #include "layoutbreak.h"
 #include "property.h"
+#include "segment.h"
 
 namespace Ms {
 
@@ -353,7 +354,7 @@ class Score : public QObject, ScoreElement {
       Q_PROPERTY(int                            keysig            READ keysig)
       Q_PROPERTY(Ms::Measure*                   lastMeasure       READ lastMeasure)
       Q_PROPERTY(Ms::Measure*                   lastMeasureMM     READ lastMeasureMM)
-      Q_PROPERTY(Ms::Segment*                   lastSegment       READ lastSegment)
+      Q_PROPERTY(Ms::ElementW*                  lastSegment       READ lastSegmentW)
       Q_PROPERTY(int                            lyricCount        READ lyricCount)
       Q_PROPERTY(int                            nmeasures         READ nmeasures)
       Q_PROPERTY(int                            npages            READ npages)
@@ -942,6 +943,7 @@ class Score : public QObject, ScoreElement {
       Segment* firstSegment(SegmentType s) const;
       Segment* firstSegmentMM(SegmentType s) const;
       Segment* lastSegment() const;
+      ElementW* lastSegmentW() const;
 
       void connectTies(bool silent=false);
 

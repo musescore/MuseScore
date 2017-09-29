@@ -7,12 +7,12 @@ found:Chord (85) at 0
   beamMode:0
   small:false
   stemDirection:AUTO
-  duration:
+  duration:1/4
 found:Rest (24) at 480
 found:Chord (85) at 960
   durationType:
   beamMode:0
   small:false
   stemDirection:AUTO
-  duration:
+  duration:1/2
 found:BarLine (11) at 1920

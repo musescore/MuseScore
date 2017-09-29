@@ -39,6 +39,11 @@
 
 namespace Ms {
 
+Segment* SegmentW::segment()
+      {
+      return dynamic_cast<Segment*>(element());
+      }
+
 //---------------------------------------------------------
 //   subTypeName
 //---------------------------------------------------------
@@ -830,6 +835,12 @@ QVariant Segment::getProperty(P_ID propertyId) const
             default:
                   return Element::getProperty(propertyId);
             }
+      }
+
+void Segment::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      Element::supportedProperties(dest, writeable);
+      dest << P_ID::TICK << P_ID::LEADING_SPACE;
       }
 
 //---------------------------------------------------------

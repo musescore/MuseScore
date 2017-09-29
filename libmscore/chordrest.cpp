@@ -1109,6 +1109,16 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
       return true;
       }
 
+void ChordRest::supportedProperties(QList<P_ID>& dest, bool writeable)
+      {
+      DurationElement::supportedProperties(dest, writeable);
+      if (writeable) {
+            dest << P_ID::SMALL << P_ID::BEAM_MODE << P_ID::STAFF_MOVE << P_ID::DURATION_TYPE << P_ID::VISIBLE;
+            } else {
+            dest << P_ID::SMALL << P_ID::BEAM_MODE << P_ID::STAFF_MOVE << P_ID::DURATION_TYPE;
+            }
+      }
+
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
@@ -1232,7 +1242,7 @@ void ChordRest::processSiblings(std::function<void(Element*)> func)
 //---------------------------------------------------------
 
 Element* ChordRest::nextArticulationOrLyric(Element* e)
-      {  
+      {
       auto i = std::find(_articulations.begin(), _articulations.end(), e);
       if (i != _articulations.end()) {
             if (i != _articulations.end()-1) {
@@ -1290,23 +1300,23 @@ Element* ChordRest::prevArticulationOrLyric(Element* e)
 Element* ChordRest::nextElement()
       {
       Element* e = score()->selection().element();
-            if (!e && !score()->selection().elements().isEmpty())
-                  e = score()->selection().elements().first();
+      if (!e && !score()->selection().elements().isEmpty())
+            e = score()->selection().elements().first();
       switch (e->type()) {
             case ElementType::ARTICULATION:
-            case ElementType::LYRICS: {                  
+            case ElementType::LYRICS: {
                   Element* next = nextArticulationOrLyric(e);
                   if (next)
                         return next;
                   else
                         break;
                   }
-            default: {                  
+            default: {
                   if (!_articulations.empty())
                         return _articulations[0];
                   else if (!_lyrics.empty())
-                        return _lyrics[0];                
-                  else 
+                        return _lyrics[0];
+                  else
                         break;
                   }
             }
@@ -1321,8 +1331,8 @@ Element* ChordRest::nextElement()
 Element* ChordRest::prevElement()
       {
       Element* e = score()->selection().element();
-            if (!e && !score()->selection().elements().isEmpty())
-                  e = score()->selection().elements().last();
+      if (!e && !score()->selection().elements().isEmpty())
+            e = score()->selection().elements().last();
       switch (e->type()) {
             case ElementType::ARTICULATION:
             case ElementType::LYRICS: {
@@ -1334,9 +1344,9 @@ Element* ChordRest::prevElement()
                               return static_cast<Chord*>(this)->lastElementBeforeSegment();
                         }
                   // fall through
-                  }           
+                  }
             default: {
-                  break;                 
+                  break;
                   }
             }
       int staffId = e->staffIdx();
@@ -1517,6 +1527,11 @@ void ChordRest::removeMarkings(bool /* keepTremolo */)
       qDeleteAll(el());
       qDeleteAll(articulations());
       qDeleteAll(lyrics());
+      }
+
+ChordRest* ChordRestW::chordrest()
+      {
+      return dynamic_cast<ChordRest*>(e);
       }
 
 }
