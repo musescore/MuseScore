@@ -535,6 +535,10 @@
     <seq>F10</seq>
     </SC>
   <SC>
+    <key>loop</key>
+    <seq>L</seq>
+    </SC>
+  <SC>
     <key>quit</key>
     <seq>Ctrl+Q</seq>
     </SC>
