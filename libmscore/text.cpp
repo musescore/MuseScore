@@ -198,8 +198,14 @@ bool TextFragment::operator ==(const TextFragment& f) const
 
 void TextFragment::draw(QPainter* p, const Text* t) const
       {
-      p->setFont(font(t));
-      p->drawText(pos, text);
+      p->save();
+      QFont font2 = font(t);
+      font2.setPixelSize(font2.pixelSize() * DPIFACTOR);
+      p->setFont(font2);
+      qreal dpiMag = 1 / DPIFACTOR;
+      p->scale(dpiMag,dpiMag);
+      p->drawText(pos * DPIFACTOR, text);
+      p->restore();
       }
 
 //---------------------------------------------------------
@@ -297,9 +303,11 @@ void TextBlock::layout(Text* t)
       else {
             for (TextFragment& f : _text) {
                   f.pos.setX(x);
-                  QFontMetricsF fm(f.font(t));
+                  QFont font2 = f.font(t);
+                  font2.setPixelSize(font2.pixelSize() * DPIFACTOR);
+                  QFontMetricsF fm(font2);
                   if (f.format.valign() != VerticalAlignment::AlignNormal) {
-                        qreal voffset = fm.xHeight() / subScriptSize;   // use original height
+                        qreal voffset = fm.xHeight() / subScriptSize / DPIFACTOR;   // use original height
                         if (f.format.valign() == VerticalAlignment::AlignSubScript)
                               voffset *= subScriptOffset;
                         else
@@ -308,13 +316,16 @@ void TextBlock::layout(Text* t)
                         }
                   else
                         f.pos.setY(0.0);
-                  qreal w = fm.width(f.text);
+                  qreal w = fm.width(f.text) / DPIFACTOR;
                   QRectF r;
                   if (f.format.type() == CharFormatType::SYMBOL)
                         r = fm.tightBoundingRect(f.text);
                   else
                         r = fm.boundingRect(f.text);
 
+                  QSizeF rectSize = r.size() / DPIFACTOR;
+                  r.setTopLeft((r.topLeft() / DPIFACTOR).toPoint());
+                  r.setSize(rectSize.toSize());
                   // for whatever reason the boundingRect() is different
                   // on second doLayout() (paint() ?)
                   r.setX(0);        //HACK
@@ -323,7 +334,7 @@ void TextBlock::layout(Text* t)
                   _bbox |= r.translated(f.pos);
                   x += w;
                   // _lineSpacing = (_lineSpacing == 0 || fm.lineSpacing() == 0) ? qMax(_lineSpacing, fm.lineSpacing()) : qMin(_lineSpacing, fm.lineSpacing());
-                  _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
+                  _lineSpacing = qMax(_lineSpacing, rint(fm.lineSpacing() / DPIFACTOR));
                   }
             }
       qreal rx;
@@ -349,7 +360,9 @@ qreal TextBlock::xpos(int column, const Text* t) const
       for (const TextFragment& f : _text) {
             if (column == col)
                   return f.pos.x();
-            QFontMetricsF fm(f.font(t));
+            QFont font2 = f.font(t);
+            font2.setPixelSize(font2.pixelSize() * DPIFACTOR);
+            QFontMetricsF fm(font2);
             int idx = 0;
             for (const QChar& c : f.text) {
                   ++idx;
@@ -357,7 +370,7 @@ qreal TextBlock::xpos(int column, const Text* t) const
                         continue;
                   ++col;
                   if (column == col)
-                        return f.pos.x() + fm.width(f.text.left(idx));
+                        return f.pos.x() + (fm.width(f.text.left(idx)) / DPIFACTOR);
                   }
             }
       return _bbox.x();
@@ -444,8 +457,10 @@ int TextBlock::column(qreal x, Text* t) const
                   ++idx;
                   if (c.isHighSurrogate())
                         continue;
-                  QFontMetricsF fm(f.font(t));
-                  qreal xo = fm.width(f.text.left(idx));
+                  QFont font2 = f.font(t);
+                  font2.setPixelSize(font2.pixelSize() * DPIFACTOR);
+                  QFontMetricsF fm(font2);
+                  qreal xo = fm.width(f.text.left(idx)) / DPIFACTOR;
                   if (x <= f.pos.x() + px + (xo-px)*.5)
                         return col;
                   ++col;
