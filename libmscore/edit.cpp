@@ -779,7 +779,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             //
             // rewrite all measures up to the next time signature
             //
-            if (fm == score->firstMeasure() && (fm->len() != fm->timesig())) {
+            if (fm == score->firstMeasure() && fm->nextMeasure() && (fm->len() != fm->timesig())) {
                   // handle upbeat
                   undoChangeProperty(fm, P_ID::TIMESIG_NOMINAL, QVariant::fromValue(ns));
                   Measure* m = fm->nextMeasure();
