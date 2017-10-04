@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise>
+  <work>
+    <work-number>MuseScore testfile</work-number>
+    <work-title>Lyrics 2</work-title>
+    </work>
+  <identification>
+    <creator type="composer">Leon Vinken</creator>
+    <encoding>
+      <software>MuseScore 0.7.0</software>
+      <encoding-date>2007-09-10</encoding-date>
+      <supports element="accidental" type="yes"/>
+      <supports element="beam" type="yes"/>
+      <supports element="print" attribute="new-page" type="no"/>
+      <supports element="print" attribute="new-system" type="no"/>
+      <supports element="stem" type="yes"/>
+      </encoding>
+    <miscellaneous>
+      <miscellaneous-field name="description">
+        Test lyrics sort order. MuseScore sorts lyrics on number first, if no number is present
+        it sorts on default-y. Lyric without or with invalid number are added in file order.
+        If a number contains a name instead, it will be replaced by a number.
+        </miscellaneous-field>
+      </miscellaneous>
+    </identification>
+  <part-list>
+    <score-part id="P1">
+      <part-name>Piano</part-name>
+      <part-abbreviation>Pno.</part-abbreviation>
+      <score-instrument id="P1-I1">
+        <instrument-name>Piano</instrument-name>
+        </score-instrument>
+      <midi-device id="P1-I1" port="1"></midi-device>
+      <midi-instrument id="P1-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      </score-part>
+    </part-list>
+  <part id="P1">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+          </key>
+        <time>
+          <beats>3</beats>
+          <beat-type>4</beat-type>
+          </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
+        </attributes>
+      <direction placement="above">
+        <direction-type>
+          <words>Number</words>
+          </direction-type>
+        </direction>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric number="1">
+          <syllabic>single</syllabic>
+          <text>Nr1</text>
+          </lyric>
+        <lyric number="2">
+          <syllabic>single</syllabic>
+          <text>Nr2</text>
+          </lyric>
+        <lyric number="3">
+          <syllabic>single</syllabic>
+          <text>Nr3</text>
+          </lyric>
+        </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric number="2">
+          <syllabic>single</syllabic>
+          <text>Nr2</text>
+          </lyric>
+        <lyric number="1">
+          <syllabic>single</syllabic>
+          <text>Nr1</text>
+          </lyric>
+        <lyric number="3">
+          <syllabic>single</syllabic>
+          <text>Nr3</text>
+          </lyric>
+        </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <lyric number="3">
+          <syllabic>single</syllabic>
+          <text>Nr3</text>
+          </lyric>
+        <lyric number="2">
+          <syllabic>single</syllabic>
+          <text>Nr2</text>
+          </lyric>
+        <lyric number="1">
+          <syllabic>single</syllabic>
+          <text>Nr1</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="2">
+      <direction placement="above">
+        <direction-type>
+          <words>Default Y</words>
+          </direction-type>
+        </direction>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric default-y="-80">
+          <syllabic>single</syllabic>
+          <text>DefY80</text>
+          </lyric>
+        <lyric default-y="-100">
+          <syllabic>single</syllabic>
+          <text>DefY100</text>
+          </lyric>
+        <lyric default-y="-120">
+          <syllabic>single</syllabic>
+          <text>DefY120</text>
+          </lyric>
+        </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric default-y="-80">
+          <syllabic>single</syllabic>
+          <text>DefY80</text>
+          </lyric>
+        <lyric default-y="-120">
+          <syllabic>single</syllabic>
+          <text>DefY120</text>
+          </lyric>
+        <lyric default-y="-100">
+          <syllabic>single</syllabic>
+          <text>DefY100</text>
+          </lyric>
+        </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <lyric default-y="-100">
+          <syllabic>single</syllabic>
+          <text>DefY100</text>
+          </lyric>
+        <lyric default-y="-80">
+          <syllabic>single</syllabic>
+          <text>DefY80</text>
+          </lyric>
+        <lyric default-y="-120">
+          <syllabic>single</syllabic>
+          <text>DefY120</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="3">
+      <direction placement="above">
+        <direction-type>
+          <words>Name</words>
+          </direction-type>
+        </direction>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric number="A">
+          <syllabic>single</syllabic>
+          <text>A</text>
+          </lyric>
+        <lyric number="B">
+          <syllabic>single</syllabic>
+          <text>B</text>
+          </lyric>
+        <lyric number="C">
+          <syllabic>single</syllabic>
+          <text>C</text>
+          </lyric>
+        </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric number="B">
+          <syllabic>single</syllabic>
+          <text>B</text>
+          </lyric>
+        <lyric number="A">
+          <syllabic>single</syllabic>
+          <text>A</text>
+          </lyric>
+        <lyric number="C">
+          <syllabic>single</syllabic>
+          <text>C</text>
+          </lyric>
+        </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <lyric number="A">
+          <syllabic>single</syllabic>
+          <text>A</text>
+          </lyric>
+        <lyric number="B">
+          <syllabic>single</syllabic>
+          <text>B</text>
+          </lyric>
+        <lyric number="C">
+          <syllabic>single</syllabic>
+          <text>C</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="4">
+      <direction placement="above">
+        <direction-type>
+          <words>None</words>
+          </direction-type>
+        </direction>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric>
+          <syllabic>single</syllabic>
+          <text>A</text>
+          </lyric>
+        <lyric>
+          <syllabic>single</syllabic>
+          <text>B</text>
+          </lyric>
+        <lyric>
+          <syllabic>single</syllabic>
+          <text>C</text>
+          </lyric>
+        </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric>
+          <syllabic>single</syllabic>
+          <text>B</text>
+          </lyric>
+        <lyric>
+          <syllabic>single</syllabic>
+          <text>A</text>
+          </lyric>
+        <lyric>
+          <syllabic>single</syllabic>
+          <text>C</text>
+          </lyric>
+        </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <lyric>
+          <syllabic>single</syllabic>
+          <text>A</text>
+          </lyric>
+        <lyric>
+          <syllabic>single</syllabic>
+          <text>B</text>
+          </lyric>
+        <lyric>
+          <syllabic>single</syllabic>
+          <text>C</text>
+          </lyric>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+    </part>
+  </score-partwise>

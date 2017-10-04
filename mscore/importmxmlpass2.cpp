@@ -779,29 +779,30 @@ static void addLyrics(ChordRest* cr,
                       QSet<Lyrics*>& extLyrics,
                       MusicXmlLyricsExtend& extendedLyrics)
       {
-      // first the lyrics with valid number
       int lyricNo = -1;
-      for (QMap<int, Lyrics*>::const_iterator i = numbrdLyrics.constBegin(); i != numbrdLyrics.constEnd(); ++i) {
-            lyricNo = i.key(); // use number obtained from MusicXML file
-            Lyrics* l = i.value();
+      // first the lyrics with valid number
+      auto lyricsNumbers = numbrdLyrics.keys();       // lyric numbers in ascending order
+      for (const auto number : lyricsNumbers) {
+            lyricNo++;       // use sequence number
+            auto l = numbrdLyrics.value(number);
             addLyric(cr, l, lyricNo, extendedLyrics);
             if (extLyrics.contains(l))
                   extendedLyrics.addLyric(l);
             }
 
       // then the lyrics without valid number but with valid default-y
-      for (QMap<int, Lyrics*>::const_iterator i = defyLyrics.constBegin(); i != defyLyrics.constEnd(); ++i) {
+      auto lyricsDefYs = defyLyrics.keys();       // lyric numbers in ascending order
+      for (const auto defy : lyricsDefYs) {
             lyricNo++; // use sequence number
-            Lyrics* l = i.value();
+            auto l = defyLyrics.value(defy);
             addLyric(cr, l, lyricNo, extendedLyrics);
             if (extLyrics.contains(l))
                   extendedLyrics.addLyric(l);
             }
 
       // finally the remaining lyrics, which are simply added in order they appear in the MusicXML file
-      for (QList<Lyrics*>::const_iterator i = unNumbrdLyrics.constBegin(); i != unNumbrdLyrics.constEnd(); ++i) {
-            lyricNo++; // use sequence number
-            Lyrics* l = *i;
+      for (const auto l : unNumbrdLyrics) {
+            lyricNo++;       // use sequence number
             addLyric(cr, l, lyricNo, extendedLyrics);
             if (extLyrics.contains(l))
                   extendedLyrics.addLyric(l);
