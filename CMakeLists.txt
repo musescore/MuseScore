@@ -28,24 +28,28 @@ if (CI)
     SET_PROPERTY(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
 endif (CI)
 
+# Libraries linked via full path no longer produce linker search paths.
 cmake_policy(SET CMP0003 NEW)
 
-if(POLICY CMP0053)
-      cmake_policy(SET CMP0053 OLD)
-endif(POLICY CMP0053)
+# Don't to link executables to qtmain.lib automatically when they link to the QtCore IMPORTED target
+#if(POLICY CMP0020)
+#      cmake_policy(SET CMP0020 OLD)
+#endif(POLICY CMP0020)
 
+# Issue no warning non-existent target argument to get_targer_property() and set the result variable to a -NOTFOUND value rather than issuing a FATAL_ERROR
 if(POLICY CMP0045)
       cmake_policy(SET CMP0045 OLD)
 endif(POLICY CMP0045)
-
-if(POLICY CMP0020)
-      cmake_policy(SET CMP0020 OLD)
-endif(POLICY CMP0020)
 
 # Silently ignore non-existent dependencies (mops1, mops2)
 if(POLICY CMP0046)
       cmake_policy(SET CMP0046 OLD)
 endif(POLICY CMP0046)
+
+# Honor the legacy behavior for variable references and escape sequences
+if(POLICY CMP0053)
+      cmake_policy(SET CMP0053 OLD)
+endif(POLICY CMP0053)
 
 #  Look for Qt5
 SET(QT_MIN_VERSION    "5.8.0")
