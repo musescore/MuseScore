@@ -74,10 +74,25 @@ add_library (
       bracketItem.cpp
       )
 
+##
+## Code coverage. Only affects DEBUG builds.
+##
+
+set(COVERAGE_OPTIONS "")
+if (NOT APPLE AND NOT MINGW)
+   if (ENABLE_COVERAGE)
+      set(COVERAGE_OPTIONS "-O0 --coverage")
+      set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
+      target_link_libraries(libmscore gcov)
+   endif (ENABLE_COVERAGE)
+endif (NOT APPLE AND NOT MINGW)
+
+
+
 set_target_properties (
       libmscore
       PROPERTIES
-         COMPILE_FLAGS "-g ${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch -Woverloaded-virtual"
+         COMPILE_FLAGS "-g ${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch -Woverloaded-virtual ${COVERAGE_OPTIONS}"
       )
 
 xcode_pch(libmscore all)
