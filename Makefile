@@ -57,10 +57,9 @@ release:
   	  -DBUILD_LAME="${BUILD_LAME}"             \
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}" \
   	  -DBUILD_JACK="${BUILD_JACK}"             \
-   	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"   \
-   	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}" \
-     -DCOVERAGE="${COVERAGE}"                 \
-  	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..; \
+     -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"   \
+     -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}" \
+     -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..; \
       make lrelease;                             \
       make -j ${CPUS};                           \
 
@@ -85,6 +84,7 @@ debug:
   	  -DBUILD_JACK="${BUILD_JACK}"                        \
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"              \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}"      \
+     -DCOVERAGE="${COVERAGE}"                 \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..;            \
       make lrelease;                                        \
       make -j ${CPUS};                                      \
