@@ -34,6 +34,7 @@ BUILD_PULSEAUDIO="ON" # Override with "OFF" to disable.
 BUILD_JACK="ON"       # Override with "OFF" to disable.
 BUILD_PORTAUDIO="ON"  # Override with "OFF" to disable.
 USE_SYSTEM_FREETYPE="OFF" # Override with "ON" to enable. Requires freetype >= 2.5.2.
+COVERAGE="OFF"        # Override with "ON" to enable.
 
 
 UPDATE_CACHE="TRUE"# Override if building a DEB or RPM, or when installing to a non-standard location.
@@ -58,6 +59,7 @@ release:
   	  -DBUILD_JACK="${BUILD_JACK}"             \
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"   \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}" \
+     -DCOVERAGE="${COVERAGE}"                 \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..; \
       make lrelease;                             \
       make -j ${CPUS};                           \
