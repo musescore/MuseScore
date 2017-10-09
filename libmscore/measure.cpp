@@ -3881,7 +3881,7 @@ void Measure::computeMinWidth()
       if (s->isChordRestType()) {
             x += score()->styleP(hasAccidental(s) ? StyleIdx::barAccidentalDistance : StyleIdx::barNoteDistance);
             }
-      else if (s->isClefType())
+      else if (s->isClefType() || s->isHeaderClefType())
             x += score()->styleP(StyleIdx::clefLeftMargin);
       else if (s->isKeySigType())
             x = qMax(x, score()->styleP(StyleIdx::keysigLeftMargin));
