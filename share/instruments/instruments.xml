@@ -1764,6 +1764,60 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
+            <Instrument id="bb-bass-clarinet-bass-clef">
+                  <longName>B♭ Bass Clarinet (Bass Clef)</longName>
+                  <shortName>B♭ B. Cl.</shortName>
+                  <description>Bass Clarinet (Bass Clef)</description>
+                  <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
+                  <transposingClef>F</transposingClef>
+                  <concertClef>F</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>37-75</aPitchRange>
+                  <pPitchRange>37-79</pPitchRange>
+                  <transposeDiatonic>-8</transposeDiatonic>
+                  <transposeChromatic>-2</transposeChromatic>
+                  <Channel>
+                        <program value="71"/>
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>orchestra</genre>
+            </Instrument>
+            <Instrument id="a-bass-clarinet">
+                  <longName>A Bass Clarinet</longName>
+                  <shortName>A B. Cl.</shortName>
+                  <description>Bass Clarinet</description>
+                  <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>36-74</aPitchRange>
+                  <pPitchRange>36-78</pPitchRange>
+                  <transposeDiatonic>-9</transposeDiatonic>
+                  <transposeChromatic>-15</transposeChromatic>
+                  <Channel>
+                        <program value="71"/>
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>orchestra</genre>
+            </Instrument>
+            <Instrument id="a-bass-clarinet-bass-clef)">
+                 <longName>A Bass Clarinet (Bass Clef)</longName>
+                 <shortName>A B. Cl.</shortName>
+                 <description>Bass Clarinet (Bass Clef)</description>
+                 <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
+                 <transposingClef>F</transposingClef>
+                 <concertClef>F</concertClef>
+                 <barlineSpan>1</barlineSpan>
+                 <aPitchRange>36-74</aPitchRange>
+                 <pPitchRange>36-78</pPitchRange>
+                 <transposeDiatonic>-9</transposeDiatonic>
+                 <transposeChromatic>-3</transposeChromatic>
+                 <Channel>
+                       <program value="71"/>
+                 </Channel>
+                 <genre>common</genre>
+                 <genre>orchestra</genre>
+           </Instrument>
             <Instrument id="contra-alto-clarinet">
                   <longName>Contra-alto Clarinet</longName>
                   <shortName>C-a. Cl.</shortName>
