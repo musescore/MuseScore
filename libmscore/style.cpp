@@ -1389,7 +1389,6 @@ void MStyle::set(const StyleIdx t, const QVariant& val)
 bool MStyle::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
-//      QString val(e.readElementText());
 
       for (const StyleType& t : styleTypes) {
             StyleIdx idx = t.styleIdx();
@@ -1521,8 +1520,8 @@ void MStyle::load(XmlReader& e)
                   _customChordList = true;
                   chordListTag = true;
                   }
-            else
-                  readProperties(e);
+            else if (!readProperties(e))
+                  e.unknown();
             }
 
       // if we just specified a new chord description file
