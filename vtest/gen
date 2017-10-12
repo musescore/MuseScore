@@ -83,7 +83,7 @@ for src in $SRC ; do
 #          echo "{ \"in\" : \"../$src.mscz\",         \"out\" : \"$src.png\" }," >> $JSON_FILE;
 #    else
           echo "{ \"in\" : \"../$src.mscx\",         \"out\" : \"$src.png\" }," >> $JSON_FILE;
-    fi
+#    fi
 done
 echo "{}]" >> $JSON_FILE
 
