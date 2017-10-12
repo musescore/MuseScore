@@ -79,9 +79,9 @@ JSON_FILE=vtestjob.json
 rm -f $JSON_FILE
 echo "[" >> $JSON_FILE
 for src in $SRC ; do
-    if test -f ../$src.mscz; then
-          echo "{ \"in\" : \"../$src.mscz\",         \"out\" : \"$src.png\" }," >> $JSON_FILE;
-    else
+#    if test -f ../$src.mscz; then
+#          echo "{ \"in\" : \"../$src.mscz\",         \"out\" : \"$src.png\" }," >> $JSON_FILE;
+#    else
           echo "{ \"in\" : \"../$src.mscx\",         \"out\" : \"$src.png\" }," >> $JSON_FILE;
     fi
 done
