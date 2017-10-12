@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="2.07">
+  <programVersion>2.1.0</programVersion>
+  <programRevision>3543170</programRevision>
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Synthesizer>
+      </Synthesizer>
+    <Division>480</Division>
+    <Style>
+      <showMeasureNumber>0</showMeasureNumber>
+      <showFooter>0</showFooter>
+      <page-layout>
+        <page-height>283.465</page-height>
+        <page-width>566.929</page-width>
+        <page-margins type="both">
+          <left-margin>11.3386</left-margin>
+          <right-margin>11.3386</right-margin>
+          <top-margin>0</top-margin>
+          <bottom-margin>0</bottom-margin>
+          </page-margins>
+        </page-layout>
+      <Spatium>1.764</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2014-10-03</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Linux</metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <PageList>
+      <Page>
+        <System>
+          </System>
+        </Page>
+      </PageList>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="-1" span="0"/>
+        </Staff>
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>70</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>40</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <TextLine id="2">
+          <endHook>1</endHook>
+          <lineWidth>0.15</lineWidth>
+          <beginText>
+            <text>VII</text>
+            </beginText>
+          </TextLine>
+        <Ottava id="3">
+          <subtype>8va</subtype>
+          </Ottava>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <endSpanner id="2"/>
+        <endSpanner id="3"/>
+        <TextLine id="4">
+          <endHook>1</endHook>
+          <lineWidth>0.15</lineWidth>
+          <beginText>
+            <text>VII</text>
+            </beginText>
+          </TextLine>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <endSpanner id="4"/>
+        <TextLine id="5">
+          <endHook>1</endHook>
+          <lineWidth>0.15</lineWidth>
+          <beginText>
+            <text>VII</text>
+            </beginText>
+          </TextLine>
+        <Beam id="1">
+          </Beam>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Beam>1</Beam>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <endSpanner id="5"/>
+        <TextLine id="6">
+          <endHook>1</endHook>
+          <lineWidth>0.15</lineWidth>
+          <beginText>
+            <text>VII</text>
+            </beginText>
+          </TextLine>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Beam>1</Beam>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          </BarLine>
+        <endSpanner id="6"/>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
+          </Clef>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <TextLine id="7">
+          <endHook>1</endHook>
+          <lineWidth>0.15</lineWidth>
+          <beginText>
+            <text>VII</text>
+            </beginText>
+          </TextLine>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Pedal id="8">
+          <beginHookHeight>-1.2</beginHookHeight>
+          <endHook>1</endHook>
+          <endHookHeight>-1.2</endHookHeight>
+          <beginText>
+            <style>Text Line</style>
+            <text><sym>keyboardPedalPed</sym></text>
+            </beginText>
+          </Pedal>
+        <Beam id="2">
+          </Beam>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Beam>2</Beam>
+          <Note>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <endSpanner id="8"/>
+        <Pedal id="9">
+          <beginHookHeight>-1.2</beginHookHeight>
+          <endHook>1</endHook>
+          <endHookHeight>-1.2</endHookHeight>
+          <beginText>
+            <style>Text Line</style>
+            <text><sym>keyboardPedalPed</sym></text>
+            </beginText>
+          </Pedal>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Beam>2</Beam>
+          <Note>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <endSpanner id="9"/>
+        <TextLine id="10">
+          <endHook>1</endHook>
+          <continueTextPlace>2</continueTextPlace>
+          <diagonal>1</diagonal>
+          <lineWidth>0.15</lineWidth>
+          <Segment>
+            <subtype>0</subtype>
+            <off2 x="-26.3983" y="6.4496"/>
+            <pos x="41.1601" y="-1.07508"/>
+            </Segment>
+          <beginText>
+            <text>Backwards</text>
+            </beginText>
+          </TextLine>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          </BarLine>
+        <endSpanner id="7"/>
+        <endSpanner id="10"/>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
