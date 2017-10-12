@@ -185,10 +185,13 @@ Fraction XmlReader::readFraction()
 void XmlReader::unknown()
       {
       if (QXmlStreamReader::error())
-            qDebug("StreamReaderError: %s", qPrintable(errorString()));
-      qDebug("tag in <%s> line %lld col %lld: %s",
-         qPrintable(docName), lineNumber(), columnNumber(),
-         name().toUtf8().data());
+            qDebug("%s ", qPrintable(errorString()));
+      if (!docName.isEmpty())
+            qDebug("tag in <%s> line %lld col %lld: %s",
+               qPrintable(docName), lineNumber(), columnNumber(), name().toUtf8().data());
+      else
+            qDebug("tag; line %lld col %lld: %s",
+               lineNumber(), columnNumber(), name().toUtf8().data());
       skipCurrentElement();
       }
 

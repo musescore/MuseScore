@@ -2014,9 +2014,6 @@ static void readStyle(MStyle* style, XmlReader& e)
       while (e.readNextStartElement()) {
             QString tag = e.name().toString();
 
-            if (tag == "lyricsDistance")        // was renamed
-                  tag = "lyricsPosBelow";
-
             if (tag == "TextStyle")
                   readTextStyle(style, e);
             else if (tag == "Spatium")
@@ -2025,6 +2022,14 @@ static void readStyle(MStyle* style, XmlReader& e)
                   readPageFormat(style, e);
             else if (tag == "displayInConcertPitch")
                   style->set(StyleIdx::concertPitch, QVariant(bool(e.readInt())));
+            else if (tag == "pedalY") {
+                  qreal y = e.readDouble();
+                  style->set(StyleIdx::pedalPosBelow, QVariant(Spatium(y)));
+                  }
+            else if (tag == "lyricsDistance") {
+                  qreal y = e.readDouble();
+                  style->set(StyleIdx::lyricsPosBelow, QVariant(Spatium(y)));
+                  }
             else if (tag == "ChordList") {
                   style->chordList()->clear();
                   style->chordList()->read(e);
