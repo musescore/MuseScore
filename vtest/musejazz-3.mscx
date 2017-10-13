@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.00">
   <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -30,9 +29,7 @@
       <beamDistance>0.33</beamDistance>
       <lastSystemFillLimit>0.25</lastSystemFillLimit>
       <hairpinWidth>0.2</hairpinWidth>
-      <pedalY>0</pedalY>
       <pedalLineWidth>0.2</pedalLineWidth>
-      <trillY>0</trillY>
       <showMeasureNumber>0</showMeasureNumber>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
@@ -477,12 +474,6 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <PageList>
-      <Page>
-        <System>
-          </System>
-        </Page>
-      </PageList>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
