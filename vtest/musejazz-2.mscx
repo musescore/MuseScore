@@ -17,7 +17,7 @@
       <barWidth>0.3</barWidth>
       <doubleBarWidth>0.3</doubleBarWidth>
       <endBarWidth>0.6</endBarWidth>
-      <endBarDistance>0.3</endBarDistance>
+      <endBarDistance>0.75</endBarDistance>
       <repeatBarlineDotSeparation>0.16</repeatBarlineDotSeparation>
       <repeatBarTips>1</repeatBarTips>
       <clefLeftMargin>0.64</clefLeftMargin>
