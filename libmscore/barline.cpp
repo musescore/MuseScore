@@ -361,11 +361,10 @@ void BarLine::draw(QPainter* painter) const
 
             case BarLineType::DOUBLE: {
                   qreal lw2 = score()->styleP(StyleIdx::doubleBarWidth)    * mag();
-                  qreal d   = score()->styleP(StyleIdx::doubleBarDistance) * mag();
                   painter->setPen(QPen(curColor(), lw2, Qt::SolidLine, Qt::FlatCap));
                   qreal x = lw2 * .5;
                   painter->drawLine(QLineF(x, y1, x, y2));
-                  x += d;
+                  x += score()->styleP(StyleIdx::doubleBarDistance) * mag();
                   painter->drawLine(QLineF(x, y1, x, y2));
                   }
                   break;
