@@ -48,6 +48,7 @@ SelectNoteDialog::SelectNoteDialog(const Note* _n, QWidget* parent)
       n = _n;
       notehead->setText(NoteHead::group2userName(n->headGroup()));
       pitch->setText(n->tpcUserName());
+      string->setText(QString::number(n->string()+1));
       type->setText(n->noteTypeUserName());
       duration->setText(n->chord()->durationUserName());
       name->setText(tpc2name(n->tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false));
@@ -65,6 +66,8 @@ void SelectNoteDialog::setPattern(NotePattern* p)
             p->notehead = n->headGroup();
       if (samePitch->isChecked())
             p->pitch = n->pitch();
+      if (sameString->isChecked())
+            p->string = n->string();
       if (sameName->isChecked())
             p->tpc = n->tpc();
       if (sameType->isChecked())
