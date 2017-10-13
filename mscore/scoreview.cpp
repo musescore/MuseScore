@@ -1738,10 +1738,14 @@ void ScoreView::cmd(const char* s)
             // ??
             }
       else if (cmd == "play") {
-            if (state == ViewState::NORMAL || state == ViewState::NOTE_ENTRY)
-                  changeState(ViewState::PLAY);
-            else if (state == ViewState::PLAY)
-                  changeState(ViewState::NORMAL);
+            if (seq && seq->canStart()) {
+                  if (state == ViewState::NORMAL || state == ViewState::NOTE_ENTRY)
+                        changeState(ViewState::PLAY);
+                  else if (state == ViewState::PLAY)
+                        changeState(ViewState::NORMAL);
+                  }
+            else
+                  getAction("play")->setChecked(false);
             }
       else if (cmd == "fotomode") {
             if (state == ViewState::NORMAL)
@@ -1807,12 +1811,6 @@ void ScoreView::cmd(const char* s)
                   Element* e = _score->selection().element();
                   mscore->selectElementDialog(e);
                   }
-            }
-      else if (cmd == "play") {
-            if (seq && seq->canStart())
-                  changeState(ViewState::PLAY);
-            else
-                  getAction("play")->setChecked(false);
             }
 //      else if (cmd == "find")
 //            ; // TODO:state         sm->postEvent(new CommandEvent(cmd));
