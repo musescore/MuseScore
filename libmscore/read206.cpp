@@ -307,7 +307,7 @@ void readPageFormat(MStyle* style, XmlReader& e)
 //   readTextStyle
 //---------------------------------------------------------
 
-static void readTextStyle(MStyle* style, XmlReader& e)
+void readTextStyle206(MStyle* style, XmlReader& e)
       {
       Spatium frameWidth(0.0);
       QString name = e.attribute("name");
@@ -2015,7 +2015,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             QString tag = e.name().toString();
 
             if (tag == "TextStyle")
-                  readTextStyle(style, e);
+                  readTextStyle206(style, e);
             else if (tag == "Spatium")
                   style->set(StyleIdx::spatium, e.readDouble() * DPMM);
             else if (tag == "page-layout")
@@ -2382,7 +2382,7 @@ void PageFormat::read(XmlReader& e)
 
 Score::FileError MasterScore::read206(XmlReader& e)
       {
-      qDebug("read206");
+//      qDebug("read206");
 
       for (unsigned int i = 0; i < sizeof(style206)/sizeof(*style206); ++i)
             style().set(style206[i].idx, style206[i].val);

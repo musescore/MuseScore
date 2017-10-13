@@ -68,6 +68,7 @@ class PageFormat {
 extern void readArticulation(Articulation*, XmlReader&);
 extern void setPageFormat(MStyle*, const PageFormat&);
 extern void initPageFormat(MStyle*, PageFormat*);
+extern void readTextStyle206(MStyle* style, XmlReader& e);
 }
 
 #endif

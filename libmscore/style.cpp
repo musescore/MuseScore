@@ -24,6 +24,7 @@
 #include "layout.h"
 #include "property.h"
 #include "elementlayout.h"
+#include "read206.h"
 
 namespace Ms {
 
@@ -1502,10 +1503,7 @@ void MStyle::load(XmlReader& e)
             const QStringRef& tag(e.name());
 
             if (tag == "TextStyle") {
-                  e.skipCurrentElement();
-                  // TextStyle s;
-                  //s.read(e);
-                  // setTextStyle(s);
+                  readTextStyle206(this, e);        // obsolete
                   }
             else if (tag == "Spatium")
                   set(StyleIdx::spatium, e.readDouble() * DPMM);
