@@ -98,7 +98,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::doubleBarWidth,          "doubleBarWidth",          Spatium(0.16) },
 
       { StyleIdx::endBarWidth,             "endBarWidth",             Spatium(0.5) },       // 0.5
-      { StyleIdx::doubleBarDistance,       "doubleBarDistance",       Spatium(0.30) },
+      { StyleIdx::doubleBarDistance,       "doubleBarDistance",       Spatium(0.46) },      // 0.3
       { StyleIdx::endBarDistance,          "endBarDistance",          Spatium(.40 + (.5) * .5) },     // 0.3
       { StyleIdx::repeatBarlineDotSeparation, "repeatBarlineDotSeparation", Spatium(.40 + .16 * .5) },
       { StyleIdx::repeatBarTips,           "repeatBarTips",           QVariant(false) },

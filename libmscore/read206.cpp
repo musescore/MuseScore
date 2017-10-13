@@ -86,7 +86,7 @@ struct StyleVal2 {
       { StyleIdx::barWidth,                    QVariant(0.16) },      // 0.1875
       { StyleIdx::doubleBarWidth,              QVariant(0.16) },
       { StyleIdx::endBarWidth,                 QVariant(0.5) },       // 0.5
-      { StyleIdx::doubleBarDistance,           QVariant(0.30) },
+      { StyleIdx::doubleBarDistance,           QVariant(0.46) },     // 0.3 + doubleBarWidth
       { StyleIdx::endBarDistance,              QVariant(0.65) },     // 0.3
       { StyleIdx::repeatBarTips,               QVariant(false) },
       { StyleIdx::startBarlineSingle,          QVariant(false) },
@@ -2029,6 +2029,12 @@ static void readStyle(MStyle* style, XmlReader& e)
             else if (tag == "lyricsDistance") {
                   qreal y = e.readDouble();
                   style->set(StyleIdx::lyricsPosBelow, QVariant(Spatium(y)));
+                  }
+            else if (tag == "endBarDistance") {
+                  double d = e.readDouble();
+                  d += style->value(StyleIdx::barWidth).toDouble();
+                  d += style->value(StyleIdx::endBarWidth).toDouble();
+                  style->set(StyleIdx::endBarDistance, QVariant(d));
                   }
             else if (tag == "ChordList") {
                   style->chordList()->clear();
