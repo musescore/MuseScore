@@ -204,7 +204,6 @@ bool Rest::acceptDrop(EditData& data) const
          || (type == ElementType::DYNAMIC)
          || (type == ElementType::HARMONY)
          || (type == ElementType::TEMPO_TEXT)
-         || (type == ElementType::STAFF_TEXT)
          || (type == ElementType::REHEARSAL_MARK)
          || (type == ElementType::FRET_DIAGRAM)
          || (type == ElementType::TREMOLOBAR)
