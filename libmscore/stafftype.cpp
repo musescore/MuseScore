@@ -768,7 +768,9 @@ void StaffType::drawInputStringMarks(QPainter *p, int string, int voice, QRectF 
             }
       // draw the text, if any
       if (!text.isEmpty()) {
-            p->setFont(fretFont());
+            QFont f = fretFont();
+            f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+            p->setFont(f);
             p->drawText(QPointF(rect.left(), rect.top() + lineDist), text);
             }
       }
