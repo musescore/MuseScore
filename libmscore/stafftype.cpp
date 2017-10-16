@@ -841,7 +841,7 @@ qreal StaffType::physStringToYOffset(int strg) const
       if (yOffset >= _lines) {                  // if physical string 'below' tab lines,
             yOffset = _lines;                   // reduce to first string 'below' tab body
             if (!_useNumbers)                   // with letters, add some space for the slashes ascender
-                  yOffset = _lines + STAFFTYPE_TAB_BASSSLASH_YOFFSET;
+                  yOffset = _onLines ? _lines : _lines + STAFFTYPE_TAB_BASSSLASH_YOFFSET;
             }
       // if TAB upside down, flip around top line
       yOffset = _upsideDown ? (qreal)(_lines - 1) - yOffset : yOffset;
