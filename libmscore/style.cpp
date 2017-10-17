@@ -142,19 +142,19 @@ static const StyleType styleTypes[] {
       { StyleIdx::minNoteDistance,         "minNoteDistance",         Spatium(0.25) },      // 0.4
       { StyleIdx::barNoteDistance,         "barNoteDistance",         Spatium(1.0) },     // was 1.2
 
-      { StyleIdx::barAccidentalDistance,   "barAccidentalDistance",   Spatium(.3) },
-      { StyleIdx::multiMeasureRestMargin,  "multiMeasureRestMargin",  Spatium(1.2) },
-      { StyleIdx::noteBarDistance,         "noteBarDistance",         Spatium(1.0) },
+      { StyleIdx::barAccidentalDistance,   "barAccidentalDistance",   Spatium(.3)   },
+      { StyleIdx::multiMeasureRestMargin,  "multiMeasureRestMargin",  Spatium(1.2)  },
+      { StyleIdx::noteBarDistance,         "noteBarDistance",         Spatium(1.0)  },
       { StyleIdx::measureSpacing,          "measureSpacing",          QVariant(1.2) },
-      { StyleIdx::staffLineWidth,          "staffLineWidth",          Spatium(0.08) },      // 0.09375
+      { StyleIdx::staffLineWidth,          "staffLineWidth",          Spatium(0.08) },     // 0.09375
       { StyleIdx::ledgerLineWidth,         "ledgerLineWidth",         Spatium(0.16) },     // 0.1875
-      { StyleIdx::ledgerLineLength,        "ledgerLineLength",        Spatium(.6) },     // notehead width + this value
+      { StyleIdx::ledgerLineLength,        "ledgerLineLength",        Spatium(.6)   },     // notehead width + this value
       { StyleIdx::accidentalDistance,      "accidentalDistance",      Spatium(0.22) },
       { StyleIdx::accidentalNoteDistance,  "accidentalNoteDistance",  Spatium(0.22) },
-      { StyleIdx::beamWidth,               "beamWidth",               Spatium(0.5) },           // was 0.48
+      { StyleIdx::beamWidth,               "beamWidth",               Spatium(0.5)  },     // was 0.48
 
-      { StyleIdx::beamDistance,            "beamDistance",            QVariant(0.5) },          // 0.25sp units
-      { StyleIdx::beamMinLen,              "beamMinLen",              Spatium(1.32) },      // 1.316178 exactly notehead widthen beams
+      { StyleIdx::beamDistance,            "beamDistance",            QVariant(0.5) },     // 0.25sp units
+      { StyleIdx::beamMinLen,              "beamMinLen",              Spatium(1.32) },     // 1.316178 exactly notehead widthen beams
       { StyleIdx::beamNoSlope,             "beamNoSlope",             QVariant(false) },
       { StyleIdx::dotMag,                  "dotMag",                  QVariant(1.0) },
       { StyleIdx::dotNoteDistance,         "dotNoteDistance",         Spatium(0.35) },

@@ -3111,13 +3111,11 @@ void Measure::stretchMeasure(qreal targetWidth)
                               //
                               // center multi measure rest
                               //
-                              qreal d  = point(score()->styleS(StyleIdx::multiMeasureRestMargin));
+                              qreal d = score()->styleP(StyleIdx::multiMeasureRestMargin);
                               qreal w = x2 - x1 - 2 * d;
 
-                              rest->setMMWidth(w);
-                              qreal x = x1 - s.x() + d;
-                              e->setPos(x, e->staff()->height() * .5);   // center vertically in measure
-                              rest->layout();
+                              rest->layoutMMRest(w);
+                              e->setPos(x1 - s.x() + d, e->staff()->height() * .5);   // center vertically in measure
                               s.createShape(staffIdx);
                               }
                         else { // if (rest->isFullMeasureRest()) {

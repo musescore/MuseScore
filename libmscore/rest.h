@@ -33,8 +33,8 @@ class Rest : public ChordRest {
       // values calculated by layout:
       SymId _sym;
       int dotline    { -1  };       // depends on rest symbol
-      qreal _mmWidth { 0.0 };       // width of multi measure rest
-      bool _gap;                    ///< invisible and not selectable for user
+      qreal _mmWidth;               // width of multi measure rest
+      bool _gap      { false };     // invisible and not selectable for user
 
       virtual QRectF drag(EditData&) override;
       virtual qreal upPos()   const override;
@@ -74,7 +74,7 @@ class Rest : public ChordRest {
       virtual void read(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
 
-      void setMMWidth(qreal val);
+      void layoutMMRest(qreal val);
       qreal mmWidth() const        { return _mmWidth; }
       SymId getSymbol(TDuration::DurationType type, int line, int lines,  int* yoffset);
 

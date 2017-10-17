@@ -1261,6 +1261,8 @@ void Text::createLayout()
                         token.clear();
                         }
                   else if (c == '\n') {
+                        if (rows() <= cursor.row())
+                              _layout.append(TextBlock());
                         _layout[cursor.row()].setEol(true);
                         cursor.setRow(cursor.row() + 1);
                         cursor.setColumn(0);

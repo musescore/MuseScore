@@ -41,7 +41,6 @@ Rest::Rest(Score* s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _beamMode  = Beam::Mode::NONE;
-      _gap       = false;
       _sym       = SymId::restQuarter;
       }
 
@@ -51,7 +50,6 @@ Rest::Rest(Score* s, const TDuration& d)
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _beamMode  = Beam::Mode::NONE;
       _sym       = SymId::restQuarter;
-      _gap       = false;
       setDurationType(d);
       if (d.fraction().isValid())
             setDuration(d.fraction());
@@ -98,22 +96,20 @@ void Rest::draw(QPainter* painter) const
             painter->setPen(pen);
 
             qreal w  = _mmWidth;
-            qreal y  = 0.0;
-            qreal x1 = 0.0;
             qreal x2 =  w;
             pw *= .5;
-            painter->drawLine(QLineF(x1 + pw, y, x2 - pw, y));
+            painter->drawLine(QLineF(pw, 0.0, _mmWidth - pw, 0.0));
 
             // draw vertical lines:
             pen.setWidthF(_spatium * .2);
             painter->setPen(pen);
-            painter->drawLine(QLineF(x1, y-_spatium, x1, y+_spatium));
-            painter->drawLine(QLineF(x2, y-_spatium, x2, y+_spatium));
+            painter->drawLine(QLineF(0.0, -_spatium, 0.0, _spatium));
+            painter->drawLine(QLineF(x2,  -_spatium, x2,  _spatium));
 
             std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
-            y  = -_spatium * 1.5 - staff()->height() *.5;
-            qreal x = center(x1, x2);
-            x -= symBbox(s).width() * .5;
+            qreal y = -_spatium * 1.5 - staff()->height() *.5;
+            qreal x = x2 * .5;
+            x      -= symBbox(s).width() * .5;
             drawSymbols(s, painter, QPointF(x, y));
             }
       else {
@@ -121,8 +117,8 @@ void Rest::draw(QPainter* painter) const
             int dots = durationType().dots();
             if (dots) {
                   qreal y = dotline * _spatium * .5;
-                  qreal dnd = point(score()->styleS(StyleIdx::dotNoteDistance)) * mag();
-                  qreal ddd = point(score()->styleS(StyleIdx::dotDotDistance)) * mag();
+                  qreal dnd = score()->styleP(StyleIdx::dotNoteDistance) * mag();
+                  qreal ddd = score()->styleP(StyleIdx::dotDotDistance) * mag();
                   for (int i = 1; i <= dots; ++i) {
                         qreal x = symWidth(_sym) + dnd + ddd * (i - 1);
                         drawSymbol(SymId::augmentationDot, painter, QPointF(x, y));
@@ -321,6 +317,26 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
       }
 
 //---------------------------------------------------------
+//   layoutMMRest
+//---------------------------------------------------------
+
+void Rest::layoutMMRest(qreal val)
+      {
+//      static const qreal verticalLineWidth = .2;
+
+      qreal _spatium = spatium();
+      _mmWidth       = val;
+//      qreal h        = _spatium * (2 + verticalLineWidth);
+//      qreal w        = _mmWidth + _spatium * verticalLineWidth * .5;
+//      bbox().setRect(-_spatium * verticalLineWidth * .5, -h * .5, w, h);
+      bbox().setRect(0.0, -_spatium, _mmWidth, _spatium * 2);
+
+      // text
+//      qreal y  = -_spatium * 2.5 - staff()->height() *.5;
+//      addbbox(QRectF(0, y, w, _spatium * 2));         // approximation
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
@@ -331,15 +347,7 @@ void Rest::layout()
       for (Element* e : el())
             e->layout();
       if (measure() && measure()->isMMRest()) {
-            static const qreal verticalLineWidth = .2;
-            qreal _spatium = spatium();
-            qreal h        = _spatium * (2 + verticalLineWidth);
-            qreal w        = _mmWidth + _spatium * verticalLineWidth*.5;
-            bbox().setRect(-_spatium * verticalLineWidth*.5, -h * .5, w, h);
-
-            // text
-            qreal y  = -_spatium * 2.5 - staff()->height() *.5;
-            addbbox(QRectF(0, y, w, _spatium * 2));         // approximation
+            _mmWidth = score()->styleP(StyleIdx::minMMRestWidth) * mag();
             return;
             }
 
@@ -616,16 +624,6 @@ void Rest::scanElements(void* data, void (*func)(void*, Element*), bool all)
             e->scanElements(data, func, all);
       if (!isGap())
             func(data, this);
-      }
-
-//---------------------------------------------------------
-//   setMMWidth
-//---------------------------------------------------------
-
-void Rest::setMMWidth(qreal val)
-      {
-      _mmWidth = val;
-      layout();
       }
 
 //---------------------------------------------------------
@@ -921,18 +919,20 @@ Shape Rest::shape() const
       Shape shape;
       if (!_gap) {
             shape.add(ChordRest::shape());
-            if (parent() && measure() && measure()->isMMRest()) {
+            if (measure() && measure()->isMMRest()) {
                   qreal _spatium = spatium();
                   shape.add(QRectF(0.0, -_spatium, _mmWidth, 2.0 * _spatium));
 
-                  int n    = measure()->mmRestCount();
-                  std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
-                  qreal y  = -_spatium * 1.5 - staff()->height() *.5;
-                  qreal x = center(0.0, _mmWidth);
-                  QRectF r = symBbox(s);
-                  x -= r.width() * .5;
-                  r.translate(QPointF(x, y));
-                  shape.add(r);
+                  if (_mmWidth > 0.1) {
+                        int n    = measure()->mmRestCount();
+                        std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
+                        qreal x  = _mmWidth * .5;
+                        qreal y  = -_spatium * 1.5 - staff()->height() *.5;
+                        QRectF r = symBbox(s);
+                        x       -= r.width() * .5;
+                        r.translate(QPointF(x, y));
+                        shape.add(r);
+                        }
                   }
             else
                   shape.add(bbox());

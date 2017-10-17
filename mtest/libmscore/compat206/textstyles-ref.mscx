@@ -30,7 +30,6 @@
       <measureNumberSystem>0</measureNumberSystem>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
-      <minMMRestWidth>0</minMMRestWidth>
       <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <musicalTextFont>MuseJazz Text</musicalTextFont>
       <footerOddEven>0</footerOddEven>

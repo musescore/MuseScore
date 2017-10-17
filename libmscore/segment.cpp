@@ -1895,8 +1895,9 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
       if (isChordRestType()) {
             if (nst == SegmentType::EndBarLine)
                   w += score()->styleP(StyleIdx::noteBarDistance);
-            else if (nst == SegmentType::Clef)
+            else if (nst == SegmentType::Clef) {
                   w = qMax(w, score()->styleP(StyleIdx::clefLeftMargin));
+                  }
             else {
                   bool isGap = false;
                   for (int i = 0; i < score()->nstaves() * VOICES; i++) {

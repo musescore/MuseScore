@@ -128,7 +128,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::concertPitch,            false, concertPitch,            0 },
       { StyleIdx::createMultiMeasureRests, false, multiMeasureRests,       0 },
       { StyleIdx::minEmptyMeasures,        false, minEmptyMeasures,        0 },
-      { StyleIdx::minMMRestWidth,          false, minMeasureWidth,         0 },
+      { StyleIdx::minMMRestWidth,          false, minMeasureWidth,         resetMinMMRestWidth },
       { StyleIdx::hideEmptyStaves,         false, hideEmptyStaves,         0 },
       { StyleIdx::dontHideStavesInFirstSystem, false, dontHideStavesInFirstSystem,             0 },
       { StyleIdx::hideInstrumentNameIfOneInstrument, false, hideInstrumentNameIfOneInstrument, 0 },
