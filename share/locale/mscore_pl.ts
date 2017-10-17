@@ -16135,7 +16135,7 @@ Chcesz go zastąpić?</translation>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="32"/>
         <source>By Key</source>
-        <translation>Przez klucz</translation>
+        <translation>Do tonacji</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="57"/>
