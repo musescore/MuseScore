@@ -171,7 +171,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -308,33 +308,7 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_5">
               <item>
-               <layout class="QFormLayout" name="formLayout_3">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_15">
-                  <property name="text">
-                   <string>Minimum number of empty measures:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>minEmptyMeasures</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QSpinBox" name="minEmptyMeasures">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="value">
-                   <number>2</number>
-                  </property>
-                 </widget>
-                </item>
+               <layout class="QGridLayout" name="gridLayout_30">
                 <item row="1" column="0">
                  <widget class="QLabel" name="label_16">
                   <property name="text">
@@ -361,6 +335,43 @@
                   </property>
                   <property name="value">
                    <double>4.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_15">
+                  <property name="text">
+                   <string>Minimum number of empty measures:</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>minEmptyMeasures</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QSpinBox" name="minEmptyMeasures">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
+                  <property name="value">
+                   <number>2</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QToolButton" name="resetMinMMRestWidth">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                   </property>
                  </widget>
                 </item>

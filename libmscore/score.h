@@ -379,7 +379,7 @@ class Score : public QObject, ScoreElement {
 
    private:
       int _linkId { 0 };
-      MasterScore* _masterScore;
+      MasterScore* _masterScore { 0 };
       QList<MuseScoreView*> viewer;
       Excerpt* _excerpt  { 0 };
 
