@@ -65,14 +65,15 @@ struct StyleVal2 {
             QVariant val;
             };
       static const StyleVal2 style206[] = {
-      { StyleIdx::staffUpperBorder,            7.0  },
-      { StyleIdx::staffLowerBorder,            7.0  },
-      { StyleIdx::staffDistance,               6.5  },
-      { StyleIdx::akkoladeDistance,            6.5  },
-      { StyleIdx::minSystemDistance,           8.5  },
-      { StyleIdx::maxSystemDistance,           15.0 },
+      { StyleIdx::staffUpperBorder,            Spatium(7.0)  },
+      { StyleIdx::staffLowerBorder,            Spatium(7.0)  },
+      { StyleIdx::staffDistance,               Spatium(6.5)  },
+      { StyleIdx::akkoladeDistance,            Spatium(6.5)  },
+      { StyleIdx::minSystemDistance,           Spatium(8.5)  },
+      { StyleIdx::maxSystemDistance,           Spatium(15.0) },
+
 //      { StyleIdx::lyricsDistance,              2.0  }, //renamed to lyricsPosBelow
-      { StyleIdx::lyricsMinBottomDistance,     4.0  },
+      { StyleIdx::lyricsMinBottomDistance,     Spatium(4.0)  },
       { StyleIdx::lyricsLineHeight,            QVariant(1.0) },
       { StyleIdx::figuredBassFontFamily,       QVariant(QString("MScoreBC")) },
       { StyleIdx::figuredBassFontSize,         QVariant(8.0) },
@@ -80,43 +81,43 @@ struct StyleVal2 {
       { StyleIdx::figuredBassLineHeight,       QVariant(1.0) },
       { StyleIdx::figuredBassAlignment,        QVariant(0) },
       { StyleIdx::figuredBassStyle,            QVariant(0) },
-      { StyleIdx::systemFrameDistance,         QVariant(7.0) },
-      { StyleIdx::frameSystemDistance,         QVariant(7.0) },
-      { StyleIdx::minMeasureWidth,             QVariant(5.0) },
-      { StyleIdx::barWidth,                    QVariant(0.16) },      // 0.1875
-      { StyleIdx::doubleBarWidth,              QVariant(0.16) },
-      { StyleIdx::endBarWidth,                 QVariant(0.5) },       // 0.5
-      { StyleIdx::doubleBarDistance,           QVariant(0.46) },     // 0.3 + doubleBarWidth
-      { StyleIdx::endBarDistance,              QVariant(0.65) },     // 0.3
+      { StyleIdx::systemFrameDistance,         Spatium(7.0) },
+      { StyleIdx::frameSystemDistance,         Spatium(7.0) },
+      { StyleIdx::minMeasureWidth,             Spatium(5.0) },
+      { StyleIdx::barWidth,                    Spatium(0.16) },      // 0.1875
+      { StyleIdx::doubleBarWidth,              Spatium(0.16) },
+      { StyleIdx::endBarWidth,                 Spatium(0.5) },       // 0.5
+      { StyleIdx::doubleBarDistance,           Spatium(0.46) },     // 0.3 + doubleBarWidth
+      { StyleIdx::endBarDistance,              Spatium(0.65) },     // 0.3
       { StyleIdx::repeatBarTips,               QVariant(false) },
       { StyleIdx::startBarlineSingle,          QVariant(false) },
       { StyleIdx::startBarlineMultiple,        QVariant(true) },
-      { StyleIdx::bracketWidth,                QVariant(0.45) },
-      { StyleIdx::bracketDistance,             QVariant(0.1) },
-      { StyleIdx::akkoladeWidth,               QVariant(1.6) },
-      { StyleIdx::akkoladeBarDistance,         QVariant(.4) },
-      { StyleIdx::clefLeftMargin,              QVariant(0.64) },
-      { StyleIdx::keysigLeftMargin,            QVariant(0.5) },
-      { StyleIdx::timesigLeftMargin,           QVariant(0.5) },
-      { StyleIdx::clefKeyRightMargin,          QVariant(1.75) },
-      { StyleIdx::clefBarlineDistance,         QVariant(0.18) },      // was 0.5
-      { StyleIdx::stemWidth,                   QVariant(0.13) },      // 0.09375
+      { StyleIdx::bracketWidth,                Spatium(0.45) },
+      { StyleIdx::bracketDistance,             Spatium(0.1) },
+      { StyleIdx::akkoladeWidth,               Spatium(1.6) },
+      { StyleIdx::akkoladeBarDistance,         Spatium(.4) },
+      { StyleIdx::clefLeftMargin,              Spatium(0.64) },
+      { StyleIdx::keysigLeftMargin,            Spatium(0.5) },
+      { StyleIdx::timesigLeftMargin,           Spatium(0.5) },
+      { StyleIdx::clefKeyRightMargin,          Spatium(1.75) },
+      { StyleIdx::clefBarlineDistance,         Spatium(0.18) },      // was 0.5
+      { StyleIdx::stemWidth,                   Spatium(0.13) },      // 0.09375
       { StyleIdx::shortenStem,                 QVariant(true) },
-      { StyleIdx::shortStemProgression,        QVariant(0.25) },
-      { StyleIdx::shortestStem,                QVariant(2.25) },
-      { StyleIdx::beginRepeatLeftMargin,       QVariant(1.0) },
-      { StyleIdx::minNoteDistance,             QVariant(0.25) },      // 0.4
-      { StyleIdx::barNoteDistance,             QVariant(1.2) },
-      { StyleIdx::barAccidentalDistance,       QVariant(.3) },
-      { StyleIdx::multiMeasureRestMargin,      QVariant(1.2) },
-      { StyleIdx::noteBarDistance,             QVariant(1.0) },
+      { StyleIdx::shortStemProgression,        Spatium(0.25) },
+      { StyleIdx::shortestStem,                Spatium(2.25) },
+      { StyleIdx::beginRepeatLeftMargin,       Spatium(1.0) },
+      { StyleIdx::minNoteDistance,             Spatium(0.25) },      // 0.4
+      { StyleIdx::barNoteDistance,             Spatium(1.2) },
+      { StyleIdx::barAccidentalDistance,       Spatium(.3) },
+      { StyleIdx::multiMeasureRestMargin,      Spatium(1.2) },
+      { StyleIdx::noteBarDistance,             Spatium(1.0) },
       { StyleIdx::measureSpacing,              QVariant(1.2) },
-      { StyleIdx::staffLineWidth,              QVariant(0.08) },      // 0.09375
-      { StyleIdx::ledgerLineWidth,             QVariant(0.16) },     // 0.1875
-      { StyleIdx::ledgerLineLength,            QVariant(.6) },     // notehead width + this value
-      { StyleIdx::accidentalDistance,          QVariant(0.22) },
-      { StyleIdx::accidentalNoteDistance,      QVariant(0.22) },
-      { StyleIdx::beamWidth,                   QVariant(0.5) },           // was 0.48
+      { StyleIdx::staffLineWidth,              Spatium(0.08) },      // 0.09375
+      { StyleIdx::ledgerLineWidth,             Spatium(0.16) },     // 0.1875
+      { StyleIdx::ledgerLineLength,            Spatium(.6) },     // notehead width + this value
+      { StyleIdx::accidentalDistance,          Spatium(0.22) },
+      { StyleIdx::accidentalNoteDistance,      Spatium(0.22) },
+      { StyleIdx::beamWidth,                   Spatium(0.5) },           // was 0.48
       { StyleIdx::beamDistance,                QVariant(0.5) },          // 0.25sp
       { StyleIdx::beamMinLen,                  QVariant(1.32) },      // 1.316178 exactly notehead width
       { StyleIdx::beamNoSlope,                 QVariant(false) },
@@ -180,7 +181,7 @@ struct StyleVal2 {
       { StyleIdx::concertPitch,                QVariant(false) },
       { StyleIdx::createMultiMeasureRests,     QVariant(false) },
       { StyleIdx::minEmptyMeasures,            QVariant(2) },
-      { StyleIdx::minMMRestWidth,              QVariant(4) },
+      { StyleIdx::minMMRestWidth,              Spatium(4) },
       { StyleIdx::hideEmptyStaves,             QVariant(false) },
       { StyleIdx::dontHideStavesInFirstSystem, QVariant(true) },
       { StyleIdx::hideInstrumentNameIfOneInstrument, QVariant(true) },
