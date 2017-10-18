@@ -346,8 +346,10 @@ void Rest::layout()
             return;
       for (Element* e : el())
             e->layout();
+      qreal _spatium = spatium();
       if (measure() && measure()->isMMRest()) {
             _mmWidth = score()->styleP(StyleIdx::minMMRestWidth) * mag();
+            // setbbox(QRectF(0.0, -_spatium, _mmWidth, 2.0 * _spatium));
             return;
             }
 
@@ -388,7 +390,6 @@ void Rest::layout()
 
       dotline = Rest::getDotline(durationType().type());
 
-      qreal _spatium = spatium();
       qreal yOff     = userOff().y();
       Staff* stf     = staff();
       StaffType*  st = stf->staffType(tick());
@@ -923,16 +924,14 @@ Shape Rest::shape() const
                   qreal _spatium = spatium();
                   shape.add(QRectF(0.0, -_spatium, _mmWidth, 2.0 * _spatium));
 
-                  if (_mmWidth > 0.1) {
-                        int n    = measure()->mmRestCount();
-                        std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
-                        qreal x  = _mmWidth * .5;
-                        qreal y  = -_spatium * 1.5 - staff()->height() *.5;
-                        QRectF r = symBbox(s);
-                        x       -= r.width() * .5;
-                        r.translate(QPointF(x, y));
-                        shape.add(r);
-                        }
+                  int n    = measure()->mmRestCount();
+                  std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(n));
+                  qreal x  = _mmWidth * .5;
+                  qreal y  = -_spatium * 1.5 - staff()->height() *.5;
+                  QRectF r = symBbox(s);
+                  x       -= r.width() * .5;
+                  r.translate(QPointF(x, y));
+                  shape.add(r);
                   }
             else
                   shape.add(bbox());
