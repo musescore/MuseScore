@@ -3745,13 +3745,54 @@ void Measure::setStretchedWidth(qreal w)
       qreal minWidth = score()->styleP(StyleIdx::minMeasureWidth);
       if (w < minWidth)
             w = minWidth;
-      qreal stretchableWidth = 0.0;
-      for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-            stretchableWidth += s->width();
+
+      // multi measure rests are not stretched depending on their
+      // tick length
+
+      if (!isMMRest()) {
+            qreal stretchableWidth = 0.0;
+            for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                  if (!s->enabled())
+                        continue;
+                  stretchableWidth += s->width();
+                  }
+            w += stretchableWidth * (basicStretch()-1.0) * ticks() / 1920.0;
             }
-      w += stretchableWidth * (basicStretch()-1.0) * ticks() / 1920.0;
       setWidth(w);
       }
+
+//---------------------------------------------------------
+//   hasAccidental
+//---------------------------------------------------------
+
+static bool hasAccidental(Segment* s)
+      {
+      for (int track = 0; track < s->score()->ntracks(); ++track) {
+            Element* e = s->element(track);
+            if (!e || !e->isChord())
+                  continue;
+            Chord* c = toChord(e);
+            for (Note* n : c->notes()) {
+                  if (n->accidental())
+                        return true;
+                  }
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   dumpMeasure
+//---------------------------------------------------------
+
+#ifndef NDEBUG
+static void dumpMeasure(Measure* m)
+      {
+      printf("Measure tick %d  width %f\n", m->tick(), m->width());
+      for (Segment* s = m->first(); s; s = s->next()) {
+            printf("    %04d %16s %f %f\n", s->rtick(), s->subTypeName(), s->x(), s->width());
+            }
+      }
+#endif
 
 //---------------------------------------------------------
 //   computeMinWidth
@@ -3831,25 +3872,6 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
             s = s->next();
             }
       setStretchedWidth(x);
-      }
-
-//---------------------------------------------------------
-//   hasAccidental
-//---------------------------------------------------------
-
-static bool hasAccidental(Segment* s)
-      {
-      for (int track = 0; track < s->score()->ntracks(); ++track) {
-            Element* e = s->element(track);
-            if (!e || !e->isChord())
-                  continue;
-            Chord* c = toChord(e);
-            for (Note* n : c->notes()) {
-                  if (n->accidental())
-                        return true;
-                  }
-            }
-      return false;
       }
 
 void Measure::computeMinWidth()

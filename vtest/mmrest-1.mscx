@@ -56,10 +56,6 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <shortName>
-<html><head><meta name="qrichtext" content="1"></meta><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body><p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Fl.</p></body></html></shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -97,10 +93,6 @@ p, li { white-space: pre-wrap; }
         </Staff>
       <trackName>Drumset</trackName>
       <Instrument>
-        <shortName>
-<html><head><meta name="qrichtext" content="1"></meta><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body><p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Drs.</p></body></html></shortName>
         <trackName>Drumset</trackName>
         <useDrumset>1</useDrumset>
         <Drum pitch="35">
