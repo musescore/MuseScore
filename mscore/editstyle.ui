@@ -8655,7 +8655,7 @@
              <item row="0" column="0">
               <widget class="QLabel" name="label_35">
                <property name="text">
-                <string>Note head distance:</string>
+                <string>Notehead distance:</string>
                </property>
                <property name="buddy">
                 <cstring>propertyDistanceHead</cstring>
@@ -8877,7 +8877,7 @@
               <item row="2" column="0">
                <widget class="QLabel" name="label_50">
                 <property name="text">
-                 <string>Vertical distance from note head:</string>
+                 <string>Vertical distance from notehead:</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -8950,7 +8950,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Vertical distance from note head' value</string>
+                 <string>Reset 'Vertical distance from notehead' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
