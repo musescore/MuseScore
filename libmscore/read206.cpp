@@ -1067,6 +1067,10 @@ static bool readTextLineProperties(XmlReader& e, TextLineBase* tl)
             tl->setBeginHookType(e.readBool() ? HookType::HOOK_90 : HookType::NONE);
       else if (tag == "endHook")
             tl->setEndHookType(e.readBool() ? HookType::HOOK_90 : HookType::NONE);
+      else if (tag == "beginHookType")
+            tl->setBeginHookType(e.readInt() == 0 ? HookType::HOOK_90 : HookType::HOOK_45);
+      else if (tag == "endHookType")
+            tl->setEndHookType(e.readInt() == 0 ? HookType::HOOK_90 : HookType::HOOK_45);
       else if (tl->readProperties(e))
             return true;
       return true;
