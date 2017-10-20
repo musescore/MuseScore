@@ -298,7 +298,7 @@
            <item>
             <widget class="QGroupBox" name="multiMeasureRests">
              <property name="title">
-              <string>Create multimeasure rests</string>
+              <string>Create multi-measure rests</string>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -2996,7 +2996,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'Multimeasure rest margin' value</string>
+                <string>Reset 'Multi-measure rest margin' value</string>
                </property>
                <property name="text">
                 <string notr="true"/>
@@ -3424,7 +3424,7 @@
              <item row="16" column="0">
               <widget class="QLabel" name="label_103">
                <property name="text">
-                <string>Multimeasure rest margin:</string>
+                <string>Multi-measure rest margin:</string>
                </property>
                <property name="buddy">
                 <cstring>multiMeasureRestMargin</cstring>
