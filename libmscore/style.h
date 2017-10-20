@@ -554,6 +554,7 @@ enum class StyleIdx {
       chordSymbolFontBold,
       chordSymbolFontItalic,
       chordSymbolFontUnderline,
+      chordSymbolAlign,
 
       rehearsalMarkFontFace,
       rehearsalMarkFontSize,

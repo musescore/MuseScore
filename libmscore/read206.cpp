@@ -100,7 +100,7 @@ struct StyleVal2 {
       { StyleIdx::keysigLeftMargin,            Spatium(0.5) },
       { StyleIdx::timesigLeftMargin,           Spatium(0.5) },
       { StyleIdx::clefKeyRightMargin,          Spatium(1.75) },
-      { StyleIdx::clefBarlineDistance,         Spatium(0.18) },      // was 0.5
+      { StyleIdx::clefBarlineDistance,         Spatium(0.5) },
       { StyleIdx::stemWidth,                   Spatium(0.13) },      // 0.09375
       { StyleIdx::shortenStem,                 QVariant(true) },
       { StyleIdx::shortStemProgression,        Spatium(0.25) },

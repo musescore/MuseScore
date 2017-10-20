@@ -574,6 +574,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::chordSymbolFontBold,           "chordSymbolFontBold",          false },
       { StyleIdx::chordSymbolFontItalic,         "chordSymbolFontItalic",        false },
       { StyleIdx::chordSymbolFontUnderline,      "chordSymbolFontUnderline",     false },
+      { StyleIdx::chordSymbolAlign,              "chordSymbolAlign",             QVariant::fromValue(Align::LEFT | Align::BASELINE) },
 
       { StyleIdx::rehearsalMarkFontFace,         "rehearsalMarkFontFace",        "FreeSerif" },
       { StyleIdx::rehearsalMarkFontSize,         "rehearsalMarkFontSize",        14.0 },
@@ -986,6 +987,7 @@ const std::vector<StyledProperty> chordSymbolStyle {
       { StyleIdx::chordSymbolFontBold,                P_ID::FONT_BOLD              },
       { StyleIdx::chordSymbolFontItalic,              P_ID::FONT_ITALIC            },
       { StyleIdx::chordSymbolFontUnderline,           P_ID::FONT_UNDERLINE         },
+      { StyleIdx::chordSymbolAlign,                   P_ID::ALIGN                  },
       };
 
 const std::vector<StyledProperty> rehearsalMarkStyle {

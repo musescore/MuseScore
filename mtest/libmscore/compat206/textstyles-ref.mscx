@@ -21,7 +21,6 @@
       <repeatBarTips>1</repeatBarTips>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
-      <clefBarlineDistance>0.18</clefBarlineDistance>
       <stemWidth>0.16</stemWidth>
       <barNoteDistance>1.2</barNoteDistance>
       <lastSystemFillLimit>0.25</lastSystemFillLimit>
