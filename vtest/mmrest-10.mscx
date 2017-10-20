@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.07">
-  <programVersion>2.1.0</programVersion>
+<museScore version="3.00">
+  <programVersion>3.0.0</programVersion>
   <programRevision>3543170</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
@@ -9,59 +9,36 @@
       </Synthesizer>
     <Division>480</Division>
     <Style>
+      <pageWidth>3.93701</pageWidth>
+      <pageHeight>1.96851</pageHeight>
+      <pagePrintableWidth>3.77953</pagePrintableWidth>
+      <pageEvenLeftMargin>0.0787403</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.0787403</pageOddLeftMargin>
+      <pageEvenTopMargin>0</pageEvenTopMargin>
+      <pageEvenBottomMargin>0</pageEvenBottomMargin>
+      <pageOddTopMargin>0</pageOddTopMargin>
+      <pageOddBottomMargin>0</pageOddBottomMargin>
+      <pageTwosided>0</pageTwosided>
       <staffUpperBorder>6</staffUpperBorder>
       <staffLowerBorder>6</staffLowerBorder>
       <minSystemDistance>6.5</minSystemDistance>
+      <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
       <showMeasureNumber>0</showMeasureNumber>
       <createMultiMeasureRests>1</createMultiMeasureRests>
       <showFooter>0</showFooter>
-      <evenFooterL>&lt;font size=&quot;13&quot;/&gt;&lt;font face=&quot;Sans&quot;/&gt;&amp;lt;font size=&amp;quot;13&amp;quot;/&amp;gt;&amp;lt;font face=&amp;quot;Sans&amp;quot;/&amp;gt;&amp;amp;lt;font size=&amp;amp;quot;13&amp;amp;quot;/&amp;amp;gt;&amp;amp;lt;font face=&amp;amp;quot;Sans&amp;amp;quot;/&amp;amp;gt;$p</evenFooterL>
-      <evenFooterC>&lt;font size=&quot;13&quot;/&gt;&lt;font face=&quot;Sans&quot;/&gt;&amp;lt;font size=&amp;quot;13&amp;quot;/&amp;gt;&amp;lt;font face=&amp;quot;Sans&amp;quot;/&amp;gt;&amp;amp;lt;font size=&amp;amp;quot;13&amp;amp;quot;/&amp;amp;gt;&amp;amp;lt;font face=&amp;amp;quot;Sans&amp;amp;quot;/&amp;amp;gt;$:copyright:</evenFooterC>
-      <oddFooterC>&lt;font size=&quot;13&quot;/&gt;&lt;font face=&quot;Sans&quot;/&gt;&amp;lt;font size=&amp;quot;13&amp;quot;/&amp;gt;&amp;lt;font face=&amp;quot;Sans&amp;quot;/&amp;gt;&amp;amp;lt;font size=&amp;amp;quot;13&amp;amp;quot;/&amp;amp;gt;&amp;amp;lt;font face=&amp;amp;quot;Sans&amp;amp;quot;/&amp;amp;gt;$:copyright:</oddFooterC>
-      <oddFooterR>&lt;font size=&quot;13&quot;/&gt;&lt;font face=&quot;Sans&quot;/&gt;&amp;lt;font size=&amp;quot;13&amp;quot;/&amp;gt;&amp;lt;font face=&amp;quot;Sans&amp;quot;/&amp;gt;&amp;amp;lt;font size=&amp;amp;quot;13&amp;amp;quot;/&amp;amp;gt;&amp;amp;lt;font face=&amp;amp;quot;Sans&amp;amp;quot;/&amp;amp;gt;$p</oddFooterR>
-      <page-layout>
-        <page-height>283.465</page-height>
-        <page-width>566.929</page-width>
-        <page-margins type="both">
-          <left-margin>11.3386</left-margin>
-          <right-margin>11.3386</right-margin>
-          <top-margin>0</top-margin>
-          <bottom-margin>0</bottom-margin>
-          </page-margins>
-        </page-layout>
       <Spatium>1.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
-    <metaTag name="arranger"></metaTag>
-    <metaTag name="composer"></metaTag>
-    <metaTag name="copyright"></metaTag>
     <metaTag name="creationDate">2013-09-17</metaTag>
-    <metaTag name="lyricist"></metaTag>
-    <metaTag name="movementNumber"></metaTag>
-    <metaTag name="movementTitle"></metaTag>
     <metaTag name="platform">X11</metaTag>
-    <metaTag name="poet"></metaTag>
-    <metaTag name="source"></metaTag>
-    <metaTag name="translator"></metaTag>
-    <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle"></metaTag>
-    <PageList>
-      <Page>
-        <System>
-          </System>
-        <System>
-          </System>
-        </Page>
-      </PageList>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
@@ -111,11 +88,10 @@
         <startRepeat/>
         <BarLine>
           <subtype>start-repeat</subtype>
-          <span>1</span>
           </BarLine>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="1" len="16/4">
@@ -124,73 +100,67 @@
         <endRepeat>2</endRepeat>
         <BarLine>
           <subtype>start-repeat</subtype>
-          <span>1</span>
           </BarLine>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>7680</tick>
+        <move>4/1</move>
         <BarLine>
           <subtype>end-repeat</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
-      <tick>1920</tick>
       <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="4">
         <endRepeat>2</endRepeat>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="5">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="5" len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>15360</tick>
+        <move>4/1</move>
         <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
-      <tick>9600</tick>
       <Measure number="6">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="7">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="8">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="9">
@@ -201,7 +171,7 @@
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="9" len="16/4">
@@ -213,31 +183,28 @@
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>23040</tick>
+        <move>4/1</move>
         <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
-      <tick>17280</tick>
       <Measure number="10">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="11">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="12">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="13">
@@ -247,7 +214,7 @@
           </StaffText>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="13" len="16/4">
@@ -261,25 +228,23 @@
           </StaffText>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>30720</tick>
+        <move>4/1</move>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
-      <tick>24960</tick>
       <Measure number="14">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="15">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="16">
@@ -288,48 +253,44 @@
           </LayoutBreak>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
           <subtype>double</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="17">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="17" len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>38400</tick>
+        <move>4/1</move>
         <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
-      <tick>32640</tick>
       <Measure number="18">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="19">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="20">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="21">
@@ -340,7 +301,7 @@
           </Marker>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="21" len="16/4">
@@ -359,25 +320,22 @@
           </Marker>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>46080</tick>
+        <move>4/1</move>
         <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
-      <tick>40320</tick>
       <Measure number="22">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="23">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="24">
@@ -390,48 +348,43 @@
           </Jump>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="25">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="25" len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
-        <tick>53760</tick>
+        <move>4/1</move>
         <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
-      <tick>48000</tick>
       <Measure number="26">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="27">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         </Measure>
       <Measure number="28">
         <Rest>
           <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
           </BarLine>
         </Measure>
       </Staff>
