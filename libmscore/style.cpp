@@ -558,7 +558,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::systemFontUnderline,           "systemFontUnderline",          false },
       { StyleIdx::systemOffset,                  "systemOffset",                 QPointF(0.0, -4.0) },
       { StyleIdx::systemOffsetType,              "defaultOffsetType",            int(OffsetType::SPATIUM)   },
-//      { StyleIdx::systemSystemFlag,              "systemSystemFlag",             true },
+      { StyleIdx::systemAlign,                   "systemAlign",                  QVariant::fromValue(Align::LEFT | Align::BASELINE) },
 
       { StyleIdx::staffFontFace,                 "staffFontFace",                "FreeSerif" },
       { StyleIdx::staffFontSize,                 "staffFontSize",                10.0 },
@@ -567,7 +567,6 @@ static const StyleType styleTypes[] {
       { StyleIdx::staffFontUnderline,            "staffFontUnderline",           false },
       { StyleIdx::staffOffset,                   "staffOffset",                  QPointF(0.0, -4.0) },
       { StyleIdx::staffOffsetType,               "defaultOffsetType",            int(OffsetType::SPATIUM)   },
-//      { StyleIdx::staffSystemFlag,               "staffSystemFlag",             false },
 
       { StyleIdx::chordSymbolFontFace,           "chordSymbolFontFace",          "FreeSerif" },
       { StyleIdx::chordSymbolFontSize,           "chordSymbolFontSize",          12.0 },
@@ -967,6 +966,7 @@ const std::vector<StyledProperty> systemStyle {
       { StyleIdx::systemFontUnderline,                P_ID::FONT_UNDERLINE         },
       { StyleIdx::systemOffset,                       P_ID::OFFSET                 },
       { StyleIdx::systemOffsetType,                   P_ID::OFFSET_TYPE            },
+      { StyleIdx::systemAlign,                        P_ID::ALIGN                  },
 //      { StyleIdx::systemSystemFlag,                   P_ID::SYSTEM_FLAG            },
       };
 
