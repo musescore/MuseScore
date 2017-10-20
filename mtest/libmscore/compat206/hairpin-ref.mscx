@@ -17,7 +17,6 @@
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
-      <clefBarlineDistance>0.18</clefBarlineDistance>
       <barNoteDistance>1.2</barNoteDistance>
       <pedalPosBelow>0</pedalPosBelow>
       <trillPosAbove>0</trillPosAbove>
