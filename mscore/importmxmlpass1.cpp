@@ -1769,7 +1769,7 @@ void MusicXMLParserPass1::scorePart()
                   skipLogCurrElem();
             }
 
-      fixupMidiProgram(_drumsets[id]);
+      //fixupMidiProgram(_drumsets[id]); TODO check if still required
 
       Q_ASSERT(_e.isEndElement() && _e.name() == "score-part");
       }
@@ -1956,6 +1956,13 @@ void MusicXMLParserPass1::part()
             _parts[id]._instrList.setInstrument(_firstInstrId, Fraction(0, 1));
 
       // debug: print results
+      /*
+      qDebug("instrument map:");
+      for (auto& instr: _parts[id]._instrList) {
+            qDebug("%s %s", qPrintable(instr.first.print()), qPrintable(instr.second));
+            }
+      */
+
       /*
       qDebug("voiceMapperStats: new staff");
       VoiceList& vl = _parts[id].voicelist;

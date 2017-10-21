@@ -33,6 +33,7 @@
 #include "libmscore/hairpin.h"
 #include "libmscore/harmony.h"
 #include "libmscore/instrchange.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/interval.h"
 #include "libmscore/jump.h"
 #include "libmscore/keysig.h"
@@ -411,11 +412,23 @@ static bool hasDrumset(const MusicXMLDrumset& mxmlDrumset)
       while (ii.hasNext()) {
             ii.next();
             // debug: dump the drumset
-            //qDebug("hasDrumset: instrument: %s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
+            qDebug("hasDrumset: instrument: %s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
             int pitch = ii.value().pitch;
             if (0 <= pitch && pitch <= 127) {
                   res = true;
                   }
+            }
+
+      for (const auto& instr : mxmlDrumset) {
+            // MusicXML elements instrument-name, midi-program, instrument-sound, virtual-library, virtual-name
+            // in a shell script use "mscore ... 2>&1 | grep GREP_ME | cut -d' ' -f3-" to extract
+            qDebug("GREP_ME '%s',%d,'%s','%s','%s'",
+                   qPrintable(instr.name),
+                   instr.midiProgram + 1,
+                   qPrintable(instr.sound),
+                   qPrintable(instr.virtLib),
+                   qPrintable(instr.virtName)
+                   );
             }
 
       return res;
@@ -452,6 +465,43 @@ static void initDrumset(Drumset* drumset, const MusicXMLDrumset& mxmlDrumset)
       }
 
 //---------------------------------------------------------
+//   createInstrument
+//---------------------------------------------------------
+
+/**
+ Create an Instrument based on the information in \a mxmlInstr.
+ */
+
+static Instrument createInstrument(const MusicXMLDrumInstrument& mxmlInstr)
+      {
+      Instrument instr;
+
+      InstrumentTemplate* it {};
+      if (!mxmlInstr.sound.isEmpty()) {
+            it = Ms::searchTemplateForMusicXmlId(mxmlInstr.sound);
+            }
+
+      qDebug("sound '%s' it %p program %d",
+             qPrintable(mxmlInstr.sound), it, mxmlInstr.midiProgram);
+
+      if (it) {
+            // initialize from template with matching MusicXmlId
+            instr = Instrument::fromTemplate(it);
+            }
+      else {
+            // set articulations to default (global articulations)
+            instr.setArticulation(articulation);
+            }
+
+      // add / overrule with values read from MusicXML
+      instr.channel(0)->pan = mxmlInstr.midiPan;
+      instr.channel(0)->volume = mxmlInstr.midiVolume;
+      instr.setTrackName(mxmlInstr.name);
+
+      return instr;
+      }
+
+//---------------------------------------------------------
 //   setFirstInstrument
 //---------------------------------------------------------
 
@@ -464,22 +514,22 @@ static void setFirstInstrument(MxmlLogger* logger, const QXmlStreamReader* const
                                const QString& instrId, const MusicXMLDrumset& mxmlDrumset)
       {
       if (mxmlDrumset.size() > 0) {
-            //qDebug("setFirstInstrument: initial instrument '%s'", qPrintable(instrId));
-            MusicXMLDrumInstrument instr;
+            qDebug("setFirstInstrument: initial instrument '%s'", qPrintable(instrId));
+            MusicXMLDrumInstrument mxmlInstr;
             if (instrId == "")
-                  instr = mxmlDrumset.first();
+                  mxmlInstr = mxmlDrumset.first();
             else if (mxmlDrumset.contains(instrId))
-                  instr = mxmlDrumset.value(instrId);
+                  mxmlInstr = mxmlDrumset.value(instrId);
             else {
                   logger->logError(QString("initial instrument '%1' not found in part '%2'")
                                    .arg(instrId).arg(partId), xmlreader);
-                  instr = mxmlDrumset.first();
+                  mxmlInstr = mxmlDrumset.first();
                   }
-            part->setMidiChannel(instr.midiChannel, instr.midiPort);
-            part->setMidiProgram(instr.midiProgram);
-            part->setPan(instr.midiPan);
-            part->setVolume(instr.midiVolume);
-            part->instrument()->setTrackName(instr.name);
+
+            Instrument instr = createInstrument(mxmlInstr);
+            part->setInstrument(instr);
+            part->setMidiChannel(mxmlInstr.midiChannel, mxmlInstr.midiPort);
+            part->setMidiProgram(mxmlInstr.midiProgram);
             }
       else
             logger->logError(QString("no instrument found for part '%1'")
@@ -569,7 +619,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
                                                .arg(instrId).arg(f.ticks()).arg(partId), xmlreader);
                         else {
                               MusicXMLDrumInstrument mxmlInstr = mxmlDrumset.value(instrId);
-                              Instrument instr;
+                              Instrument instr = createInstrument(mxmlInstr);
                               //qDebug("instr %p", &instr);
                               instr.channel(0)->program = mxmlInstr.midiProgram;
                               instr.channel(0)->pan = mxmlInstr.midiPan;
@@ -580,9 +630,10 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
                               // if there is already a staff text at this tick / track,
                               // delete it and use its text here instead of "Instrument"
                               QString text = findDeleteStaffText(segment, track);
-                              ic->setXmlText(text.isEmpty() ? "Instrument" : text);
+                              ic->setXmlText(text.isEmpty() ? "Instrument change" : text);
                               segment->add(ic);
 
+                              part->setInstrument(instr);
                               int key = part->instruments()->rbegin()->first;
                               part->setMidiChannel(mxmlInstr.midiChannel, mxmlInstr.midiPort, key);
                               }
