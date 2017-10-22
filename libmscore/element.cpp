@@ -304,10 +304,15 @@ QColor Element::curColor(const Element* proxy) const
             marked = note->mark();
             }
       if (proxy->selected() || marked ) {
+            QColor originalColor;
             if (track() == -1)
-                  return MScore::selectColor[0];
+                  originalColor = MScore::selectColor[0];
             else
-                  return MScore::selectColor[voice()];
+                  originalColor = MScore::selectColor[voice()];
+            if (proxy->visible())
+                  return originalColor;
+            else
+                  return originalColor.lighter(200);
             }
       if (!proxy->visible())
             return Qt::gray;
