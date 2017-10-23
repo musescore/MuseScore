@@ -315,7 +315,8 @@ QColor Element::curColor(const Element* proxy) const
                   int red = originalColor.red();
                   int green = originalColor.green();
                   int blue = originalColor.blue();
-                  return QColor(red + .75 * (255-red), green + .75 * (255-green), blue + .75 *(255-blue));
+                  float tint = .6;  // Between 0 and 1. Higher means lighter, lower means darker
+                  return QColor(red + tint * (255-red), green + tint * (255-green), blue + tint *(255-blue));
                   }
             }
       if (!proxy->visible())
