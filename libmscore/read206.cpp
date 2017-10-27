@@ -250,7 +250,7 @@ struct StyleVal2 {
       { StyleIdx::fretMag,                     QVariant(1.0) },
       { StyleIdx::scaleBarlines,               QVariant(true) },
       { StyleIdx::barGraceDistance,            QVariant(.6) },
-      { StyleIdx::rehearsalMarkFrameSquare,    QVariant(true)  },
+      { StyleIdx::rehearsalMarkFrameSquare,    QVariant(false)  },
       { StyleIdx::rehearsalMarkFrameRound,     QVariant(20)    },
       { StyleIdx::dynamicsFontItalic,          QVariant(false) },
       };
