@@ -288,7 +288,7 @@ QVariant TrillSegment::propertyDefault(P_ID id) const
 void TrillSegment::scanElements(void* data, void (*func)(void*, Element*), bool /*all*/)
       {
       func(data, this);
-      if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN) {
+      if (isSingleType() || isBeginType()) {
             Accidental* a = trill()->accidental();
             if (a)
                   func(data, a);
