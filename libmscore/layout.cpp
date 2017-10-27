@@ -60,6 +60,7 @@
 #include "stafflines.h"
 #include "articulation.h"
 #include "bracket.h"
+#include "spacer.h"
 
 namespace Ms {
 
@@ -3319,8 +3320,26 @@ void LayoutContext::collectPage()
                   distance = prevSystem->minDistance(curSystem);
             else {
                   // this is the first system on page
-                  VBox* vbox = curSystem->vbox();
-                  distance   = vbox ? 0.0 : score->styleP(StyleIdx::staffUpperBorder);
+                  if (curSystem->vbox())
+                        distance = 0.0;
+                  else {
+                        distance = score->styleP(StyleIdx::staffUpperBorder);
+                        for (MeasureBase* mb : curSystem->measures()) {
+                              if (mb->isMeasure()) {
+                                    Measure* m = toMeasure(mb);
+                                    Spacer* sp = m->vspacerUp(0);
+                                    if (sp) {
+                                          if (sp->spacerType() == SpacerType::FIXED) {
+                                                distance = sp->gap();
+                                                break;
+                                                }
+                                          else
+                                                distance = qMax(distance, sp->gap());
+                                          }
+                                    distance = qMax(distance, -m->staffShape(0).top());
+                                    }
+                              }
+                        }
                   }
             distance += score->staves().front()->userDist();
 
