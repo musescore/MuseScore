@@ -1021,7 +1021,6 @@ qreal System::minDistance(System* s2) const
       else if (!vbox() && s2->vbox())
             return qMax(s2->vbox()->topGap(), -minBottom());
       else if (vbox() && s2->vbox())
-//            return 0.0;
             return s2->vbox()->topGap() + vbox()->bottomGap();
 
       qreal minVerticalDistance = score()->styleP(StyleIdx::minVerticalDistance);
