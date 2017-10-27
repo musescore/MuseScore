@@ -250,6 +250,9 @@ struct StyleVal2 {
       { StyleIdx::fretMag,                     QVariant(1.0) },
       { StyleIdx::scaleBarlines,               QVariant(true) },
       { StyleIdx::barGraceDistance,            QVariant(.6) },
+      { StyleIdx::rehearsalMarkFrameSquare,    QVariant(true)  },
+      { StyleIdx::rehearsalMarkFrameRound,     QVariant(20)    },
+      { StyleIdx::dynamicsFontItalic,          QVariant(false) },
       };
 
 //---------------------------------------------------------
@@ -2398,10 +2401,6 @@ Score::FileError MasterScore::read206(XmlReader& e)
       for (unsigned int i = 0; i < sizeof(style206)/sizeof(*style206); ++i)
             style().set(style206[i].idx, style206[i].val);
 
-      // old text style default
-      style().set(StyleIdx::rehearsalMarkFrameSquare, false);
-      style().set(StyleIdx::rehearsalMarkFrameRound, 20);
-      style().set(StyleIdx::dynamicsFontItalic, false);
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());

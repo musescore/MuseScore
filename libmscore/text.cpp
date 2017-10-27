@@ -1503,14 +1503,15 @@ void Text::layoutFrame()
                   qreal w = frame.height() - frame.width();
                   frame.adjust(-w * .5, 0.0, w * .5, 0.0);
                   }
-#endif
+#else
             // make sure width >= height
             if (frame.height() > frame.width()) {
                   qreal w = frame.height() - frame.width();
                   frame.adjust(-w * .5, 0.0, w * .5, 0.0);
                   }
+#endif
             }
-      if (circle()) {
+      else if (circle()) {
             if (frame.width() > frame.height()) {
                   frame.setY(frame.y() + (frame.width() - frame.height()) * -.5);
                   frame.setHeight(frame.width());
