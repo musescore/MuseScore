@@ -1209,6 +1209,16 @@ static void readTrill(XmlReader& e, Trill* t)
             const QStringRef& tag(e.name());
             if (tag == "subtype")
                   t->setTrillType(e.readElementText());
+            else if (tag == "Accidental") {
+                  Accidental* _accidental = new Accidental(t->score());
+                  readAccidental(_accidental, e);
+                  _accidental->setParent(t);
+                  t->setAccidental(_accidental);
+                  }
+            else if ( tag == "ornamentStyle")
+                  t->setProperty(P_ID::ORNAMENT_STYLE, Ms::getProperty(P_ID::ORNAMENT_STYLE, e));
+            else if ( tag == "play")
+                  t->setPlayArticulation(e.readBool());
             else if (!t->SLine::readProperties(e))
                   e.unknown();
             }
