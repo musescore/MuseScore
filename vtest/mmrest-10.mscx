@@ -32,8 +32,19 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
     <metaTag name="creationDate">2013-09-17</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
     <metaTag name="platform">X11</metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
@@ -98,9 +109,6 @@
         <multiMeasureRest>4</multiMeasureRest>
         <startRepeat/>
         <endRepeat>2</endRepeat>
-        <BarLine>
-          <subtype>start-repeat</subtype>
-          </BarLine>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
@@ -141,9 +149,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <move>4/1</move>
-        <BarLine>
-          </BarLine>
         </Measure>
       <Measure number="6">
         <Rest>
@@ -185,9 +190,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <move>4/1</move>
-        <BarLine>
-          </BarLine>
         </Measure>
       <Measure number="10">
         <Rest>
@@ -271,9 +273,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <move>4/1</move>
-        <BarLine>
-          </BarLine>
         </Measure>
       <Measure number="18">
         <Rest>
@@ -322,9 +321,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <move>4/1</move>
-        <BarLine>
-          </BarLine>
         </Measure>
       <Measure number="22">
         <Rest>
@@ -363,9 +359,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <move>4/1</move>
-        <BarLine>
-          </BarLine>
         </Measure>
       <Measure number="26">
         <Rest>
@@ -384,8 +377,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <BarLine>
-          </BarLine>
         </Measure>
       </Staff>
     </Score>
