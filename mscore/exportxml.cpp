@@ -4732,7 +4732,7 @@ static void partList(XmlWriter& xml, Score* score, const QList<Part*>& il, MxmlI
             for (int i = 0; i < part->nstaves(); i++) {
                   Staff* st = part->staff(i);
                   if (st) {
-                        for (int j = 0; j < st->bracketLevels(); j++) {
+                        for (int j = 0; j < st->bracketLevels() + 1; j++) {
                               if (st->bracketType(j) != BracketType::NO_BRACKET) {
                                     bracketFound = true;
                                     if (i == 0) {
