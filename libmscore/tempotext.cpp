@@ -87,6 +87,51 @@ struct TempoPattern {
 // note: findTempoDuration requires the longer patterns to be before the shorter patterns in tp
 
 static const TempoPattern tp[] = {
+      TempoPattern("\uECA5\\s*\uECB7\\s*\uECB7", 1.75/60.0,  TDuration::DurationType::V_QUARTER, 2), // double dotted 1/4
+      TempoPattern("\uECA5\\s*\uECB7",           1.5/60.0,   TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
+      TempoPattern("\uECA5",                     1.0/60.0,   TDuration::DurationType::V_QUARTER),    // 1/4
+      TempoPattern("\uECA3\\s*\uECB7\\s*\uECB7", 1.75/30.0,  TDuration::DurationType::V_HALF, 2),    // double dotted 1/2
+      TempoPattern("\uECA3\\s*\uECB7",           1.5/30.0,   TDuration::DurationType::V_HALF, 1),    // dotted 1/2
+      TempoPattern("\uECA3",                     1.0/30.0,   TDuration::DurationType::V_HALF),       // 1/2
+      TempoPattern("\uECA7\\s*\uECB7\\s*\uECB7", 1.75/120.0, TDuration::DurationType::V_EIGHTH, 2),  // double dotted 1/8
+      TempoPattern("\uECA7\\s*\uECB7",           1.5/120.0,  TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
+      TempoPattern("\uECA7",                     1.0/120.0,  TDuration::DurationType::V_EIGHTH),     // 1/8
+      TempoPattern("\uECA2\\s*\uECB7",           1.5/15.0,   TDuration::DurationType::V_WHOLE, 1),   // dotted whole
+      TempoPattern("\uECA2",                     1.0/15.0,   TDuration::DurationType::V_WHOLE),      // whole
+      TempoPattern("\uECA9\\s*\uECB7",           1.5/240.0,  TDuration::DurationType::V_16TH, 1),    // dotted 1/16
+      TempoPattern("\uECA9",                     1.0/240.0,  TDuration::DurationType::V_16TH),       // 1/16
+      TempoPattern("\uECAB\\s*\uECB7",           1.5/480.0,  TDuration::DurationType::V_32ND, 1),    // dotted 1/32
+      TempoPattern("\uECAB",                     1.0/480.0,  TDuration::DurationType::V_32ND),       // 1/32
+      TempoPattern("\uECA1",                     1.0/7.5,    TDuration::DurationType::V_BREVE),      // longa
+      TempoPattern("\uECA0",                     1.0/7.5,    TDuration::DurationType::V_BREVE),      // double whole
+      TempoPattern("\uECAD",                     1.0/960.0,  TDuration::DurationType::V_64TH),       // 1/64
+      TempoPattern("\uECAF",                     1.0/1920.0, TDuration::DurationType::V_128TH),      // 1/128
+      };
+
+//---------------------------------------------------------
+//   findTempoDuration
+//    find the duration part (note + dot) of a tempo text in string s
+//    return the match position or -1 if not found
+//    set len to the match length and dur to the duration value
+//---------------------------------------------------------
+
+int TempoText::findTempoDuration(const QString& s, int& len, TDuration& dur)
+      {
+      len = 0;
+      dur = TDuration();
+      for (const auto& i : tp) {
+            QRegExp re(i.pattern);
+            int pos = re.indexIn(s);
+            if (pos != -1) {
+                  len = re.matchedLength();
+                  dur = i.d;
+                  return pos;
+                  }
+            }
+      return -1;
+      }
+
+static const TempoPattern tpSym[] = {
       TempoPattern("<sym>metNoteQuarterUp</sym>\\s*<sym>metAugmentationDot</sym>\\s*<sym>metAugmentationDot</sym>",                         1.75/60.0, TDuration::DurationType::V_QUARTER, 2), // double dotted 1/4
       TempoPattern("<sym>metNoteQuarterUp</sym>\\s*<sym>metAugmentationDot</sym>",          1.5/60.0,  TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
       TempoPattern("<sym>metNoteQuarterUp</sym>",                                           1.0/60.0,  TDuration::DurationType::V_QUARTER),  // 1/4
@@ -109,40 +154,16 @@ static const TempoPattern tp[] = {
       };
 
 //---------------------------------------------------------
-//   findTempoDuration
-//    find the duration part (note + dot) of a tempo text in string s
-//    return the match position or -1 if not found
-//    set len to the match length and dur to the duration value
-//---------------------------------------------------------
-
-int TempoText::findTempoDuration(const QString& s, int& len, TDuration& dur)
-      {
-      len = 0;
-      dur = TDuration();
-
-      for (const auto& i : tp) {
-            QRegExp re(i.pattern);
-            int pos = re.indexIn(s);
-            if (pos != -1) {
-                  len = re.matchedLength();
-                  dur = i.d;
-                  return pos;
-                  }
-            }
-      return -1;
-      }
-
-//---------------------------------------------------------
 //   duration2tempoTextString
 //    find the tempoText string representation for duration
 //---------------------------------------------------------
 
 QString TempoText::duration2tempoTextString(const TDuration dur)
       {
-      for (const TempoPattern& pa : tp) {
+      for (const TempoPattern& pa : tpSym) {
             if (pa.d == dur) {
                   QString res = pa.pattern;
-                  res.remove("\\s*");
+                  res.replace("\\s*", " ");
                   return res;
                   }
             }
