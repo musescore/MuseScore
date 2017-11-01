@@ -399,5 +399,11 @@ class GuitarPro6 : public GuitarPro {
       virtual void read(QFile*);
       };
 
+class GuitarPro7 : public GuitarPro6 {
+   public:
+      GuitarPro7(Score* s) : GuitarPro6(s, 7) {}
+      virtual void read(QFile*);
+      };
+
 } // namespace Ms
 #endif

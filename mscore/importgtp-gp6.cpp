@@ -13,6 +13,7 @@
 
 #include "importgtp.h"
 #include "globals.h"
+#include "thirdparty/qzip/qzipreader_p.h"
 #include "libmscore/score.h"
 #include "libmscore/measurebase.h"
 #include "libmscore/text.h"
@@ -490,7 +491,7 @@ void GuitarPro6::readTracks(QDomNode* track)
                   else if (nodeName == "Properties") {
                         readTrackProperties(&currentNode, part, trackCounter);
                         }
-                  else if (nodeName == "Staves") { // we consider only the first staff
+                  else if (nodeName == "Staves") { // GP7 only --  we consider only the first staff for now
                         QDomNode staff = currentNode.firstChild();
                         QDomNode properties = staff.firstChildElement("Properties");
                         readTrackProperties(&properties, part, trackCounter);
@@ -2114,6 +2115,20 @@ void GuitarPro6::read(QFile* fp)
       // decompress and read files contained within GPX file
       readGPX(this->buffer);
       delete this->buffer;
+      }
+
+//---------------------------------------------------------
+//   GuitarPro7::read
+//---------------------------------------------------------
+
+void GuitarPro7::read(QFile* fp)
+      {
+      f = fp;
+      // get score.gpif from zip
+      MQZipReader f(fp->fileName());
+      QByteArray data = f.fileData("Content/score.gpif");
+      // decompress and read files contained within GPX file
+      parseFile("score.gpif", &data);
       }
 
 //---------------------------------------------------------
