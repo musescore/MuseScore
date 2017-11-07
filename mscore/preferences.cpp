@@ -76,6 +76,7 @@ void Preferences::init()
       fgWallpaper        = (QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/paper5.png")).absoluteFilePath());
       fgColor.setNamedColor("#f9f9f9");
       pianoHlColor.setNamedColor("#1259d0");
+      cursorColor.setNamedColor("#1259d0");
       iconHeight         = 24;
       iconWidth          = 28;
 
@@ -235,6 +236,7 @@ void Preferences::write()
       s.setValue("dropColor",          MScore::dropColor.name(QColor::NameFormat::HexArgb));
       s.setValue("defaultColor",       MScore::defaultColor.name(QColor::NameFormat::HexArgb));
       s.setValue("pianoHlColor",       pianoHlColor.name(QColor::NameFormat::HexArgb));
+      s.setValue("cursorColor",        cursorColor.name(QColor::NameFormat::HexArgb));
       s.setValue("enableMidiInput",    enableMidiInput);
       s.setValue("realtimeDelay",      realtimeDelay);
       s.setValue("playNotes",          playNotes);
@@ -408,6 +410,7 @@ void Preferences::read()
       MScore::defaultColor    = readColor("defaultColor", MScore::defaultColor);
       MScore::dropColor       = readColor("dropColor",    MScore::dropColor);
       pianoHlColor            = readColor("pianoHlColor", pianoHlColor);
+      cursorColor             = readColor("cursorColor", cursorColor);
 
       enableMidiInput         = s.value("enableMidiInput", enableMidiInput).toBool();
       realtimeDelay           = s.value("realtimeDelay", realtimeDelay).toInt();
@@ -852,6 +855,7 @@ void PreferenceDialog::updateValues()
             fgColorLabel->setPixmap(new QPixmap(fgWallpaper->text()));
             }
 
+      cursorColorLabel->setColor(prefs.cursorColor);
       iconWidth->setValue(prefs.iconWidth);
       iconHeight->setValue(prefs.iconHeight);
 
@@ -1375,7 +1379,7 @@ void PreferenceDialog::apply()
 
       prefs.iconWidth      = iconWidth->value();
       prefs.iconHeight     = iconHeight->value();
-
+      prefs.cursorColor    = cursorColorLabel->color();
       prefs.bgUseColor     = bgColorButton->isChecked();
       prefs.fgUseColor     = fgColorButton->isChecked();
       prefs.enableMidiInput = enableMidiInput->isChecked();
