@@ -55,6 +55,7 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
                                           //             - single click action
       bool _boldTitle     { false };      // score title are displayed in bold
       bool _showCustomCategory  { false };// show a custom category for files
+      QLabel* _noMatchedScoresLabel;      // displayed when no scores are matching the search
 
       ScoreListWidget* createScoreList();
       ScoreItem* genScoreItem(const QFileInfo&, ScoreListWidget*);
@@ -76,6 +77,7 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
       void selectLast();
       void setBoldTitle(bool bold) { _boldTitle = bold; }
       void setShowCustomCategory(bool showCustomCategory) { _showCustomCategory = showCustomCategory; }
+      void filter(const QString&);
       };
 }
 
