@@ -24,7 +24,12 @@ namespace Ms {
 QSize ScoreListWidget::sizeHint() const
       {
       int cols = (width()-SPACE) / (CELLW + SPACE);
-      int n    = count();
+      int n = 0;
+      for (int i = 0; i < count(); ++i) {
+            if (!item(i)->isHidden())
+                  n++;
+            }
+
       int rows = 1;
       if (cols > 0)
             rows = (n+cols-1) / cols;
@@ -57,6 +62,9 @@ ScoreBrowser::ScoreBrowser(QWidget* parent)
       scoreList->setLayout(new QVBoxLayout);
       scoreList->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
       scoreList->layout()->setMargin(0);
+      _noMatchedScoresLabel = new QLabel(tr("There are no templates matching the current search."));
+      _noMatchedScoresLabel->setHidden(true);
+      scoreList->layout()->addWidget(_noMatchedScoresLabel);
       connect(preview, SIGNAL(doubleClicked(QString)), SIGNAL(scoreActivated(QString)));
       if (!_showPreview)
             preview->setVisible(false);
@@ -263,7 +271,44 @@ void ScoreBrowser::selectLast()
       ScoreItem* item = static_cast<ScoreItem*>(w->item(w->count()-1));
       w->setCurrentItem(item);
       preview->setScore(item->info());
-      }
+}
+
+//---------------------------------------------------------
+//   filter
+//      filter which scores are visible based on searchString
+//---------------------------------------------------------
+void ScoreBrowser::filter(const QString &searchString)
+{
+      int numCategoriesWithMathingScores = 0;
+
+      for (ScoreListWidget* list : scoreLists) {
+            int numMatchedScores = 0;
+
+            for (int i = 0; i < list->count(); ++i) {
+                  ScoreItem* score = static_cast<ScoreItem*>(list->item(i));
+                  QString title = score->text();
+                  bool isMatch = title.contains(searchString, Qt::CaseInsensitive);
+
+                  score->setHidden(!isMatch);
+
+                  if (isMatch)
+                        numMatchedScores++;
+                  }
+
+            int listindex = scoreList->layout()->indexOf(list);
+            QLayoutItem *label = scoreList->layout()->itemAt(listindex - 1);
+            if (label && label->widget()) {
+                  label->widget()->setHidden(numMatchedScores == 0);
+                  }
+
+            list->setHidden(numMatchedScores == 0);
+            if (numMatchedScores > 0) {
+                  numCategoriesWithMathingScores++;
+                  }
+            }
+
+      _noMatchedScoresLabel->setHidden(numCategoriesWithMathingScores > 0);
+}
 
 //---------------------------------------------------------
 //   scoreChanged
