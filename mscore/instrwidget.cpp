@@ -422,7 +422,6 @@ void InstrumentsWidget::buildTemplateList()
       {
       // clear search if instrument list is updated
       search->clear();
-      filterInstruments(instrumentList, search->text());
 
       populateInstrumentList(instrumentList);
       populateGenreCombo(instrumentGenreFilter);
@@ -875,25 +874,12 @@ void InstrumentsWidget::on_linkedButton_clicked()
 
 void InstrumentsWidget::on_search_textChanged(const QString &searchPhrase)
       {
-      if (searchPhrase.isEmpty())
-            return;
-
-      filterInstruments(instrumentList, searchPhrase);
       instrumentGenreFilter->blockSignals(true);
       instrumentGenreFilter->setCurrentIndex(0);
       instrumentGenreFilter->blockSignals(false);
+      filterInstruments(instrumentList, searchPhrase);
       }
 
-//---------------------------------------------------------
-//   on_clearSearch_clicked
-//---------------------------------------------------------
-
-void InstrumentsWidget::on_clearSearch_clicked()
-      {
-      search->clear();
-      QString genre = instrumentGenreFilter->currentData().toString();
-      filterInstrumentsByGenre(instrumentList, genre);
-      }
 
 //---------------------------------------------------------
 //   on_instrumentGenreFilter_currentTextChanged
