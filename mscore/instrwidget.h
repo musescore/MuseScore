@@ -132,7 +132,6 @@ class InstrumentsWidget : public QWidget, public Ui::InstrumentsWidget {
       void expandOrCollapse(const QModelIndex &);
 
       void on_search_textChanged(const QString &searchPhrase);
-      void on_clearSearch_clicked();
 
       void on_instrumentGenreFilter_currentIndexChanged(int);
       void filterInstrumentsByGenre(QTreeWidget *, QString);
