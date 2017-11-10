@@ -3199,12 +3199,20 @@ bool Text::edit(EditData& ed)
                         break;
 
                   case Qt::Key_Home:
-                        _cursor->movePosition(QTextCursor::Start, mm);
+                        if (ctrlPressed)
+                              _cursor->movePosition(QTextCursor::Start, mm);
+                        else
+                              _cursor->movePosition(QTextCursor::StartOfLine, mm);
+
                         s.clear();
                         break;
 
                   case Qt::Key_End:
-                        _cursor->movePosition(QTextCursor::End, mm);
+                        if (ctrlPressed)
+                              _cursor->movePosition(QTextCursor::End, mm);
+                        else
+                              _cursor->movePosition(QTextCursor::EndOfLine, mm);
+
                         s.clear();
                         break;
 
