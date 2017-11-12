@@ -97,10 +97,11 @@ class FiguredBassItem;
 class Glissando;
 class Pedal;
 class Trill;
+class MxmlLogger;
 
 class MusicXMLParserPass2 {
 public:
-      MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1);
+      MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MxmlLogger* logger);
       void initPartState(const QString& partId);
       Score::FileError parse(QIODevice* device);
       Score::FileError parse();
@@ -143,11 +144,6 @@ public:
       void fermata(ChordRest* cr);
       void tuplet(MusicXmlTupletDesc& tupletDesc);
       void doEnding(const QString& partId, Measure* measure, const QString& number, const QString& type, const QString& text);
-      QString getParseStatus() const { return _parseStatus; }
-      //QString getParseResult() const   { return parseResult; }
-      void logDebugTrace(const QString& info);
-      void logDebugInfo(const QString& info);
-      void logError(const QString& error);
       void skipLogCurrElem();
 
       // part specific data interface functions
@@ -164,9 +160,9 @@ private:
 
       QXmlStreamReader _e;
       int _divs;                          // the current divisions value
-      QString _parseStatus;               // the parse status (typicallay a short error message)
       Score* const _score;                // the score
-      MusicXMLParserPass1& _pass1;  // the pass1 results
+      MusicXMLParserPass1& _pass1;        // the pass1 results
+      MxmlLogger* _logger;                ///< Error logger
 
       // part specific data (TODO: move to part-specific class)
 
@@ -208,17 +204,15 @@ private:
 
 class MusicXMLParserDirection {
 public:
-      MusicXMLParserDirection(QXmlStreamReader& e, Score* score, const MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2);
+      MusicXMLParserDirection(QXmlStreamReader& e, Score* score, const MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2, MxmlLogger* logger);
       void direction(const QString& partId, Measure* measure, const int tick, MusicXmlSpannerMap& spanners);
-      void logError(const QString& error);
-      void logDebugInfo(const QString& info);
-      void skipLogCurrElem();
 
 private:
       QXmlStreamReader& _e;
       Score* const _score;                      // the score
       const MusicXMLParserPass1& _pass1;        // the pass1 results
       MusicXMLParserPass2& _pass2;              // the pass2 results
+      MxmlLogger* _logger;                      ///< Error logger
 
       QStringList _dynamicsList;
       QString _enclosure;
@@ -251,6 +245,7 @@ private:
       void sound();
       void dynamics();
       void handleRepeats(Measure* measure, const int track);
+      void skipLogCurrElem();
       };
 
 } // namespace Ms
