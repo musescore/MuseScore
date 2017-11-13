@@ -854,7 +854,7 @@ void renderArpeggio(Chord *chord, QList<NoteEventList> & ell)
       {
       int notes = chord->notes().size();
       int l = 64;
-      while (l * notes > chord->upNote()->playTicks())
+      while (l && (l * notes > chord->upNote()->playTicks()))
             l = 2*l / 3;
       int start, end, step;
       bool up = chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN && chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN_STRAIGHT;
