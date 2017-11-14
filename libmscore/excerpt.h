@@ -39,6 +39,7 @@ class Excerpt : public QObject {
 
    public:
       Excerpt(Score* s = 0)                { _oscore = s;       }
+      ~Excerpt();
 
       QList<Part*>& parts()                { return _parts;     }
       void setParts(const QList<Part*>& p) { _parts = p;        }
