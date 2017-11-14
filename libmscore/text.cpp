@@ -1774,12 +1774,18 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                         break;
 
                   case Qt::Key_Home:
-                        movePosition(QTextCursor::Start, mm);
+                        if (ctrlPressed)
+                              movePosition(QTextCursor::Start, mm);
+                        else
+                              movePosition(QTextCursor::StartOfLine, mm);
                         s.clear();
                         break;
 
                   case Qt::Key_End:
-                        movePosition(QTextCursor::End, mm);
+                        if (ctrlPressed)
+                              movePosition(QTextCursor::End, mm);
+                        else
+                              movePosition(QTextCursor::EndOfLine, mm);
                         s.clear();
                         break;
 
