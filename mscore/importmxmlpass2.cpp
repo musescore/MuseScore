@@ -459,7 +459,8 @@ static void initDrumset(Drumset* drumset, const MusicXMLDrumset& mxmlDrumset)
  Set first instrument for Part \a part
  */
 
-static void setFirstInstrument(Part* part, const QString& partId,
+static void setFirstInstrument(MxmlLogger* logger, const QXmlStreamReader* const xmlreader,
+                               Part* part, const QString& partId,
                                const QString& instrId, const MusicXMLDrumset& mxmlDrumset)
       {
       if (mxmlDrumset.size() > 0) {
@@ -470,7 +471,8 @@ static void setFirstInstrument(Part* part, const QString& partId,
             else if (mxmlDrumset.contains(instrId))
                   instr = mxmlDrumset.value(instrId);
             else {
-                  qDebug("setFirstInstrument: initial instrument '%s' not found in part '%s'", qPrintable(instrId), qPrintable(partId)); // TODO
+                  logger->logError(QString("initial instrument '%1' not found in part '%2'")
+                                   .arg(instrId).arg(partId), xmlreader);
                   instr = mxmlDrumset.first();
                   }
             part->setMidiChannel(instr.midiChannel, instr.midiPort);
@@ -480,8 +482,8 @@ static void setFirstInstrument(Part* part, const QString& partId,
             part->instrument()->setTrackName(instr.name);
             }
       else
-            qDebug("setFirstInstrument: no instrument found for part '%s'", qPrintable(partId));  // TODO
-
+            logger->logError(QString("no instrument found for part '%1'")
+                             .arg(partId), xmlreader);
       }
 
 //---------------------------------------------------------
@@ -534,7 +536,8 @@ static QString findDeleteStaffText(Segment* s, int track)
 //   setPartInstruments
 //---------------------------------------------------------
 
-static void setPartInstruments(Part* part, const QString& partId,
+static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const xmlreader,
+                               Part* part, const QString& partId,
                                Score* score, const MusicXmlInstrList& il, const MusicXMLDrumset& mxmlDrumset)
       {
       QString prevInstrId;
@@ -559,10 +562,11 @@ static void setPartInstruments(Part* part, const QString& partId,
                         //       qPrintable(f.print()), f.ticks(), track, qPrintable(instrId));
                         Segment* segment = score->tick2segment(f.ticks(), true, SegmentType::ChordRest, true);
                         if (!segment)
-                              qDebug("segment for instrument change at tick %d not found", f.ticks());  // TODO
+                              logger->logError(QString("segment for instrument change at tick %1 not found")
+                                               .arg(f.ticks()), xmlreader);
                         else if (!mxmlDrumset.contains(instrId))
-                              qDebug("changed instrument '%s' at tick %d not found in part '%s'",
-                                     qPrintable(instrId), f.ticks(), qPrintable(partId));  // TODO
+                              logger->logError(QString("changed instrument '%1' at tick %2 not found in part '%3'")
+                                               .arg(instrId).arg(f.ticks()).arg(partId), xmlreader);
                         else {
                               MusicXMLDrumInstrument mxmlInstr = mxmlDrumset.value(instrId);
                               Instrument instr;
@@ -752,10 +756,12 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
  Add a single lyric to the score or delete it (if number too high)
  */
 
-static void addLyric(ChordRest* cr, Lyrics* l, int lyricNo, MusicXmlLyricsExtend& extendedLyrics)
+static void addLyric(MxmlLogger* logger, const QXmlStreamReader* const xmlreader,
+                     ChordRest* cr, Lyrics* l, int lyricNo, MusicXmlLyricsExtend& extendedLyrics)
       {
       if (lyricNo > MAX_LYRICS) {
-            qDebug("too much lyrics (>%d)", MAX_LYRICS); // TODO
+            logger->logError(QString("too much lyrics (>%1)")
+                             .arg(MAX_LYRICS), xmlreader);
             delete l;
             }
       else {
@@ -773,7 +779,8 @@ static void addLyric(ChordRest* cr, Lyrics* l, int lyricNo, MusicXmlLyricsExtend
  Add a notes lyrics to the score
  */
 
-static void addLyrics(ChordRest* cr,
+static void addLyrics(MxmlLogger* logger, const QXmlStreamReader* const xmlreader,
+                      ChordRest* cr,
                       QMap<int, Lyrics*>& numbrdLyrics,
                       QMap<int, Lyrics*>& defyLyrics,
                       QList<Lyrics*>& unNumbrdLyrics,
@@ -785,7 +792,7 @@ static void addLyrics(ChordRest* cr,
       for (QMap<int, Lyrics*>::const_iterator i = numbrdLyrics.constBegin(); i != numbrdLyrics.constEnd(); ++i) {
             lyricNo = i.key(); // use number obtained from MusicXML file
             Lyrics* l = i.value();
-            addLyric(cr, l, lyricNo, extendedLyrics);
+            addLyric(logger, xmlreader, cr, l, lyricNo, extendedLyrics);
             if (extLyrics.contains(l))
                   extendedLyrics.addLyric(l);
             }
@@ -794,7 +801,7 @@ static void addLyrics(ChordRest* cr,
       for (QMap<int, Lyrics*>::const_iterator i = defyLyrics.constBegin(); i != defyLyrics.constEnd(); ++i) {
             lyricNo++; // use sequence number
             Lyrics* l = i.value();
-            addLyric(cr, l, lyricNo, extendedLyrics);
+            addLyric(logger, xmlreader, cr, l, lyricNo, extendedLyrics);
             if (extLyrics.contains(l))
                   extendedLyrics.addLyric(l);
             }
@@ -803,7 +810,7 @@ static void addLyrics(ChordRest* cr,
       for (QList<Lyrics*>::const_iterator i = unNumbrdLyrics.constBegin(); i != unNumbrdLyrics.constEnd(); ++i) {
             lyricNo++; // use sequence number
             Lyrics* l = *i;
-            addLyric(cr, l, lyricNo, extendedLyrics);
+            addLyric(logger, xmlreader, cr, l, lyricNo, extendedLyrics);
             if (extLyrics.contains(l))
                   extendedLyrics.addLyric(l);
             }
@@ -1754,7 +1761,7 @@ void MusicXMLParserPass2::part()
 
       // set the parts first instrument
       QString instrId = _pass1.getInstrList(id).instrument(Fraction(0, 1));
-      setFirstInstrument(_pass1.getPart(id), id, instrId, mxmlDrumset);
+      setFirstInstrument(_logger, &_e, _pass1.getPart(id), id, instrId, mxmlDrumset);
 
       if (_hasDrumset) {
             // set staff type to percussion if incorrectly imported as pitched staff
@@ -1766,7 +1773,7 @@ void MusicXMLParserPass2::part()
             // drumset is not needed
             delete drumset;
             // set the instruments for this part
-            setPartInstruments(_pass1.getPart(id), id, _score, _pass1.getInstrList(id), mxmlDrumset);
+            setPartInstruments(_logger, &_e, _pass1.getPart(id), id, _score, _pass1.getInstrList(id), mxmlDrumset);
             }
       }
 
@@ -4517,7 +4524,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       // add lyrics found by lyric
       if (cr) {
             // add lyrics and stop corresponding extends
-            addLyrics(cr, numberedLyrics, defaultyLyrics, unNumberedLyrics, extendedLyrics, _extendedLyrics);
+            addLyrics(_logger, &_e, cr, numberedLyrics, defaultyLyrics, unNumberedLyrics, extendedLyrics, _extendedLyrics);
             if (bRest) {
                   // stop all extends
                   _extendedLyrics.setExtend(-1, cr->track(), cr->tick());
