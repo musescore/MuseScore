@@ -54,7 +54,6 @@ void SelectInstrument::buildTemplateList()
       {
       // clear search if instrument list is updated
       search->clear();
-      filterInstruments(instrumentList, search->text());
 
       populateInstrumentList(instrumentList);
       populateGenreCombo(instrumentGenreFilter);
@@ -113,21 +112,13 @@ const InstrumentTemplate* SelectInstrument::instrTemplate() const
 
 void SelectInstrument::on_search_textChanged(const QString &searchPhrase)
       {
-      filterInstruments(instrumentList, searchPhrase);
       instrumentGenreFilter->blockSignals(true);
       instrumentGenreFilter->setCurrentIndex(0);
       instrumentGenreFilter->blockSignals(false);
+      filterInstruments(instrumentList, searchPhrase);
       }
 
-//---------------------------------------------------------
-//   on_clearSearch_clicked
-//---------------------------------------------------------
 
-void SelectInstrument::on_clearSearch_clicked()
-      {
-      search->clear();
-      filterInstruments (instrumentList);
-      }
 //---------------------------------------------------------
 //   on_instrumentGenreFilter_currentTextChanged
 //---------------------------------------------------------

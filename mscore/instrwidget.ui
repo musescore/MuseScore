@@ -101,18 +101,8 @@
            <property name="placeholderText">
             <string>Search</string>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="clearSearch">
-           <property name="accessibleName">
-            <string>Clear</string>
-           </property>
-           <property name="accessibleDescription">
-            <string>Clear Search box</string>
-           </property>
-           <property name="text">
-            <string>Clear</string>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -369,7 +359,6 @@
   <tabstop>instrumentGenreFilter</tabstop>
   <tabstop>instrumentList</tabstop>
   <tabstop>search</tabstop>
-  <tabstop>clearSearch</tabstop>
   <tabstop>addButton</tabstop>
   <tabstop>removeButton</tabstop>
   <tabstop>upButton</tabstop>
