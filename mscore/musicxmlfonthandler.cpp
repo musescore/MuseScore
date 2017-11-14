@@ -266,6 +266,8 @@ static QString attribute(bool needed, bool value, QString trueString, QString fa
 
 QString MScoreTextToMXML::updateFormat()
       {
+      if (newFormat.fontFamily() == "ScoreText")
+            newFormat.setFontFamily(musicalTextFont);
       QString res;
       res += attribute(newFormat.bold() != oldFormat.bold(), newFormat.bold(), "font-weight=\"bold\"", "font-weight=\"normal\"");
       res += attribute(newFormat.italic() != oldFormat.italic(), newFormat.italic(), "font-style=\"italic\"", "font-style=\"normal\"");
