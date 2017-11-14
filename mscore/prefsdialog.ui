@@ -2619,6 +2619,48 @@
          </property>
         </spacer>
        </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_14">
+         <property name="title">
+          <string>Playback</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Cursor color:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="Awl::ColorLabel" name="cursorColorLabel">
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
+              </property>
+              <property name="accessibleName">
+               <string>Select playback cursor color</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a dialog for selecting the playback cursor color</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Box</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabIO">

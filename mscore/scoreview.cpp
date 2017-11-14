@@ -557,7 +557,7 @@ void ScoreView::moveCursor(int tick)
       if (s == 0)
             return;
 
-      QColor c(MScore::selectColor[0]);
+      QColor c(preferences.cursorColor);
       c.setAlpha(50);
       _cursor->setColor(c);
       _cursor->setTick(tick);
