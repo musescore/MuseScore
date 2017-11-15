@@ -36,9 +36,9 @@ static void log(MxmlLogger::Level level, const QString& text, const QXmlStreamRe
       {
       QString str;
       switch (level) {
-            case MxmlLogger::Level::TRACE: str = "Trace"; break;
-            case MxmlLogger::Level::INFO: str = "Info"; break;
-            case MxmlLogger::Level::ERROR: str = "Error"; break;
+            case MxmlLogger::Level::MXML_TRACE: str = "Trace"; break;
+            case MxmlLogger::Level::MXML_INFO: str = "Info"; break;
+            case MxmlLogger::Level::MXML_ERROR: str = "Error"; break;
             default: str = "Unknown"; break;
             }
 
@@ -59,8 +59,8 @@ static void log(MxmlLogger::Level level, const QString& text, const QXmlStreamRe
 
 void MxmlLogger::logDebugTrace(const QString& trace, const QXmlStreamReader* const xmlreader)
       {
-      if (_level <= Level::TRACE) {
-            log(Level::TRACE, trace, xmlreader);
+      if (_level <= Level::MXML_TRACE) {
+            log(Level::MXML_TRACE, trace, xmlreader);
             }
       }
 
@@ -74,8 +74,8 @@ void MxmlLogger::logDebugTrace(const QString& trace, const QXmlStreamReader* con
 
 void MxmlLogger::logDebugInfo(const QString& info, const QXmlStreamReader* const xmlreader)
       {
-      if (_level <= Level::INFO) {
-            log(Level::INFO, info, xmlreader);
+      if (_level <= Level::MXML_INFO) {
+            log(Level::MXML_INFO, info, xmlreader);
             }
       }
 
@@ -89,8 +89,8 @@ void MxmlLogger::logDebugInfo(const QString& info, const QXmlStreamReader* const
 
 void MxmlLogger::logError(const QString& error, const QXmlStreamReader* const xmlreader)
       {
-      if (_level <= Level::ERROR) {
-            log(Level::ERROR, error, xmlreader);
+      if (_level <= Level::MXML_ERROR) {
+            log(Level::MXML_ERROR, error, xmlreader);
             }
       }
 
