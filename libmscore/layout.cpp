@@ -3422,7 +3422,7 @@ void LayoutContext::collectPage()
                         dist += vbox->bottomGap();
                   else if (!prevSystem->hasFixedDownDistance())
                         dist += qMax(curSystem->minBottom(), slb);
-                  breakPage  = (y + dist) >= ey;
+                  breakPage  = (y + dist) >= ey && breakPages;
                   }
             if (breakPage) {
                   VBox* vbox = prevSystem->vbox();
