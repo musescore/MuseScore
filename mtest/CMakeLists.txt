@@ -79,6 +79,7 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_chordname.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmxml.cpp               # Required by importxml.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmxmllogger.cpp         # Required by importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmxmlpass1.cpp          # Required by importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmxmlpass2.cpp          # Required by importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
