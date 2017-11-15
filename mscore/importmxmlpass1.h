@@ -60,9 +60,15 @@ struct MxmlOctaveShiftDesc {
       MxmlOctaveShiftDesc(Type _tp, short _size, Fraction _tm) : tp(_tp), size(_size), time(_tm), num(-1) {}
       };
 
+//---------------------------------------------------------
+//   MusicXMLParserPass1
+//---------------------------------------------------------
+
+class MxmlLogger;
+
 class MusicXMLParserPass1 {
 public:
-      MusicXMLParserPass1(Score* score);
+      MusicXMLParserPass1(Score* score, MxmlLogger* logger);
       void initPartState(const QString& partId);
       Score::FileError parse(QIODevice* device);
       Score::FileError parse();
@@ -96,10 +102,6 @@ public:
       void timeModification(Fraction& timeMod);
       void pitch(int& step, float& alter, int& oct);
       void rest();
-      QString getParseStatus() const { return _parseStatus; }
-      void logDebugTrace(const QString& info);
-      void logDebugInfo(const QString& info);
-      void logError(const QString& error);
       void skipLogCurrElem();
       bool determineMeasureLength(QVector<Fraction>& ml) const;
       VoiceList getVoiceList(const QString id) const;
@@ -126,8 +128,8 @@ private:
       QVector<Fraction> _measureStart;          ///< Start time of each measure
       PartMap _partMap;                         ///< TODO merge into MusicXmlPart ??
       QMap<QString, MusicXMLDrumset> _drumsets; ///< Drumset for each part, mapped on part id
-      QString _parseStatus;                     ///< Parse status (typicallay a short error message)
       Score* _score;                            ///< MuseScore score
+      MxmlLogger* _logger;                      ///< Error logger
 
       // part specific data (TODO: move to part-specific class)
       Fraction _timeSigDura;                    ///< Measure duration according to last timesig read
