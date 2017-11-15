@@ -26,6 +26,7 @@
 #include "libmscore/symbol.h"
 
 #include "importmxml.h"
+#include "importmxmllogger.h"
 #include "importmxmlpass1.h"
 #include "importmxmlpass2.h"
 #include "preferences.h"
@@ -37,16 +38,20 @@ Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/,
       //qDebug("importMusicXMLfromBuffer(score %p, name '%s', dev %p)",
       //       score, qPrintable(name), dev);
 
+      MxmlLogger logger;
+      logger.setLoggingLevel(MxmlLogger::Level::INFO);
+      //logger.setLoggingLevel(MxmlLogger::Level::TRACE); // also include tracing
+
       // pass 1
       dev->seek(0);
-      MusicXMLParserPass1 pass1(score);
+      MusicXMLParserPass1 pass1(score, &logger);
       Score::FileError res = pass1.parse(dev);
       if (res != Score::FileError::FILE_NO_ERROR)
             return res;
 
       // pass 2
       dev->seek(0);
-      MusicXMLParserPass2 pass2(score, pass1);
+      MusicXMLParserPass2 pass2(score, pass1, &logger);
       return pass2.parse(dev);
       }
 
