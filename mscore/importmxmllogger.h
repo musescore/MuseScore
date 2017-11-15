@@ -20,7 +20,7 @@ namespace Ms {
 class MxmlLogger {
 public:
       enum class Level : char {
-            TRACE, INFO, ERROR
+            MXML_TRACE, MXML_INFO, MXML_ERROR
             };
       MxmlLogger() {}
       void logDebugTrace(const QString& trace, const QXmlStreamReader* const xmlreader = 0);
@@ -28,7 +28,7 @@ public:
       void logError(const QString& error, const QXmlStreamReader* const xmlreader = 0);
       void setLoggingLevel(const Level level) { _level = level; }
 private:
-      Level _level = Level::INFO;
+      Level _level = Level::MXML_INFO;
       };
 
 } // namespace Ms
