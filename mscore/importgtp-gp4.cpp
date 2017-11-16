@@ -209,14 +209,13 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             int d = readChar();
             if (previousDynamic != d) {
                   previousDynamic = d;
-                  //addDynamic(note, d);
+                  // addDynamic(note, d);    // TODO-ws ??
                   }
             }
-	  else if (previousDynamic != 0)
-	  {
-		  previousDynamic = 0;
-		  //addDynamic(note, 0);
-	  }
+      else if (previousDynamic) {
+            previousDynamic = 0;
+		//addDynamic(note, 0);
+            }
 
       int fretNumber = -1;
       if (noteBits & NOTE_FRET)
@@ -773,8 +772,9 @@ bool GuitarPro4::read(QFile* fp)
       measures = readInt();
       staves   = readInt();
 
-	  curDynam.resize(staves * VOICES);
-	  for (auto& i : curDynam) i = -1;
+	curDynam.resize(staves * VOICES);
+	for (auto& i : curDynam)
+            i = -1;
 
       int tnumerator   = 4;
       int tdenominator = 4;
@@ -832,7 +832,7 @@ bool GuitarPro4::read(QFile* fp)
 
       createMeasures();
 
-	  setTempo(tempo, score->firstMeasure());
+      setTempo(tempo, score->firstMeasure());
 
       for (int i = 0; i < staves; ++i) {
             int tuning[GP_MAX_STRING_NUMBER];
@@ -890,7 +890,7 @@ bool GuitarPro4::read(QFile* fp)
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
             clef->setTrack(i * VOICES);
-            Segment* segment = measure->getSegment(SegmentType::Clef, 0);
+            Segment* segment = measure->getSegment(SegmentType::HeaderClef, 0);
             segment->add(clef);
 
             if (capo > 0) {
@@ -900,7 +900,7 @@ bool GuitarPro4::read(QFile* fp)
                   st->setParent(s);
                   st->setTrack(i * VOICES);
                   measure->add(st);
-            }
+                  }
 
             Channel* ch = instr->channel(0);
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
@@ -921,9 +921,9 @@ bool GuitarPro4::read(QFile* fp)
             }
 
       slurs = new Slur*[staves];
-	  tupleKind.resize(staves);
-	  for (auto& i : tupleKind)
-		  i = 0;
+	tupleKind.resize(staves);
+	for (auto& i : tupleKind)
+	      i = 0;
       for (int i = 0; i < staves; ++i)
             slurs[i] = 0;
 
@@ -1110,7 +1110,7 @@ bool GuitarPro4::read(QFile* fp)
 							if (dynam != curDynam[track])
 							{
 								curDynam[track] = dynam;
-//TODO-ws								addDynamic(dynamic_cast<Chord*>(cr)->notes().first(), dynam);
+								addDynamic(toChord(cr)->notes().front(), dynam);
 							}
 						}
 

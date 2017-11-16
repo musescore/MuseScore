@@ -565,7 +565,7 @@ bool GuitarPro5::readTracks()
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
             clef->setTrack(i * VOICES);
-            Segment* segment = measure->getSegment(SegmentType::Clef, 0);
+            Segment* segment = measure->getSegment(SegmentType::HeaderClef, 0);
             segment->add(clef);
 
             if (capo > 0) {
@@ -1070,7 +1070,8 @@ bool GuitarPro5::readNoteEffects(Note* note)
             gn->setFret(fret);
             gn->setString(note->string());*/
             int grace_pitch = note->staff()->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr, 0);
-            /*gn->setPitch(grace_pitch);
+#if 0
+            gn->setPitch(grace_pitch);
             gn->setTpcFromPitch();
 
             Chord* gc = new Chord(score);
@@ -1087,7 +1088,8 @@ bool GuitarPro5::readNoteEffects(Note* note)
             gc->setNoteType(note_type);
             gc->setMag(note->chord()->staff()->mag(0) * score->styleD(StyleIdx::graceNoteMag));
             note->chord()->add(gc);
-            addDynamic(gn, dynamic);*/
+            addDynamic(gn, dynamic);
+#endif
 		auto gnote = score->setGraceNote(note->chord(), grace_pitch, note_type, MScore::division / 2);
 		gnote->setString(note->string());
 		auto sd = note->part()->instrument()->stringData();
@@ -1381,9 +1383,9 @@ bool GuitarPro5::readNote(int string, Note* note)
             }
 
       int fretNumber = 0;
-	  if (noteBits & NOTE_FRET) {
-		  fretNumber = readChar();
-	  }
+      if (noteBits & NOTE_FRET) {
+	      fretNumber = readChar();
+            }
 
       if (noteBits & NOTE_FINGERING) {
             int leftFinger = readUChar();
