@@ -36,7 +36,8 @@ namespace Ms {
 const ClefInfo ClefInfo::clefTable[] = {
 // tag    xmlName    line oCh pOff|-lines for sharps---||---lines for flats--|  symbol                           | name                                   | valid in staff group
 { "G",    "G",         2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef,                    TR("Treble clef"),                       StaffGroup::STANDARD  },
-{ "G15mb","G",         2, -2, 59, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15mb,                TR("Treble clef 15mb"),                  StaffGroup::STANDARD  },
+// { "G15mb","G",         2, -2, 59, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15mb,                TR("Treble clef 15mb"),                  StaffGroup::STANDARD  },
+{ "G15mb","G",         2, -2, 31, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15mb,                TR("Treble clef 15mb"),                  StaffGroup::STANDARD  },
 { "G8vb", "G",         2, -1, 38, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vb,                 TR("Treble clef 8vb"),                   StaffGroup::STANDARD  },
 { "G8va", "G",         2,  1, 52, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8va,                 TR("Treble clef 8va"),                   StaffGroup::STANDARD  },
 { "G15ma","G",         2,  2, 59, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15ma,                TR("Treble clef 15ma"),                  StaffGroup::STANDARD  },

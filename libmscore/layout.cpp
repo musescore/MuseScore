@@ -3341,7 +3341,7 @@ void LayoutContext::collectPage()
                               }
                         }
                   }
-            distance += score->staves().front()->userDist();
+//TODO-ws ??            distance += score->staves().front()->userDist();
 
             y += distance;
             curSystem->setPos(page->lm(), y);

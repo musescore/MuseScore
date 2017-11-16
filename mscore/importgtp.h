@@ -21,20 +21,20 @@
 #ifndef __IMPORTGTP_H__
 #define __IMPORTGTP_H__
 
-#include "libmscore/mscore.h"
-#include "libmscore/fraction.h"
-#include "libmscore/fret.h"
-#include "libmscore/chordrest.h"
-#include "libmscore/slur.h"
-#include "libmscore/clef.h"
-#include "libmscore/keysig.h"
-#include "libmscore/chordrest.h"
-#include "libmscore/clef.h"
-#include "libmscore/keysig.h"
-#include "libmscore/hairpin.h"
-#include "libmscore/ottava.h"
-#include "libmscore/pedal.h"
-#include "libmscore/drumset.h"
+#include <libmscore/score.h>
+#include <libmscore/mscore.h>
+#include <libmscore/fraction.h>
+#include <libmscore/fret.h>
+#include <libmscore/chordrest.h>
+#include <libmscore/slur.h>
+#include <libmscore/clef.h>
+#include <libmscore/keysig.h>
+#include <libmscore/chordrest.h>
+#include <libmscore/clef.h>
+#include <libmscore/keysig.h>
+#include <libmscore/hairpin.h>
+#include <libmscore/ottava.h>
+#include <libmscore/drumset.h>
 
 namespace Ms {
 
@@ -44,6 +44,7 @@ class Note;
 class Segment;
 class Measure;
 class Tuplet;
+class Volta;
 
 static const int GP_MAX_LYRIC_LINES = 5;
 static const int GP_MAX_TRACK_NUMBER = 32;
@@ -52,6 +53,8 @@ static const int GP_DEFAULT_PERCUSSION_CHANNEL = 9;
 static const int GP_INVALID_KEYSIG = 127;
 static const int GP_VOLTA_BINARY = 1;
 static const int GP_VOLTA_FLAGS = 2;
+
+Score::FileError importGTP(Score* score, const QString& filename, const char* data, unsigned int data_len);
 
 enum class Repeat : char;
 
@@ -75,17 +78,20 @@ struct GPVolta {
  * occurring on the third beat of a measure in a 4/4 bar would be
  * represented as 2/1.
  */
+
 struct GPFermata {
       int index;
       int timeDivision;
-};
+	std::string type;
+      };
 
 struct GPLyrics {
       QStringList lyrics;
+      std::vector<Segment*> segments;
       int fromBeat;
       int beatCounter;
       int lyricTrack;
-};
+      };
 
 struct GpBar {
       Fraction timesig;
@@ -99,6 +105,10 @@ struct GpBar {
       QString direction;
       QString directionStyle;
 
+	QString section[2];
+
+	std::vector<QString> directions;
+
       GpBar();
       };
 
@@ -108,6 +118,7 @@ struct GpBar {
 
 class GuitarPro {
    protected:
+      std::list<Note*> slideList; //list of start slide notes
 
       // note effect bit masks
       static const uchar EFFECT_BEND = 0x1;
@@ -128,15 +139,15 @@ class GuitarPro {
       static const uchar ARPEGGIO_DOWN = 0x2;
 
       // note bit masks
-      static const uchar NOTE_GHOST = 0x04;
-      static const uchar NOTE_DEAD = 0x20;
-      static const uchar NOTE_DYNAMIC = 0x10;
-      static const uchar NOTE_FRET = 0x20;
-      static const uchar NOTE_FINGERING = 0x80;
-      static const uchar NOTE_MARCATO = 0x02;
-      static const uchar NOTE_SFORZATO = 0x40;
-      static const uchar NOTE_SLUR = 0x8;
-      static const uchar NOTE_APPOGIATURA = 0x02;
+      static const uchar NOTE_GHOST = 0x04; // 2
+      static const uchar NOTE_DEAD = 0x20; //5
+      static const uchar NOTE_DYNAMIC = 0x10; // 4
+      static const uchar NOTE_FRET = 0x20; //5
+      static const uchar NOTE_FINGERING = 0x80; //7
+      static const uchar NOTE_MARCATO = 0x02; //1
+      static const uchar NOTE_SFORZATO = 0x40; //6
+      static const uchar NOTE_SLUR = 0x8;//3
+      static const uchar NOTE_APPOGIATURA = 0x02;//1
 
       // beat bit masks
       static const uchar BEAT_FADE = 0x10;
@@ -171,30 +182,33 @@ class GuitarPro {
       static const int SLIDE_IN_BELOW = 32;
 
       static const int MAX_PITCH = 127;
-      static const char* errmsg[];
+      static const char* const errmsg[];
       int version;
       int key;
+
+	Segment* last_segment   { nullptr };
+	Measure* last_measure   { nullptr };
+	int last_tempo          { -1 };
 
       QMap<int, QList<GPFermata>*> fermatas;
       std::vector<Ottava*> ottava;
       Hairpin** hairpins;
-      Score* score;
+      MasterScore* score;
       QFile* f;
       int curPos;
       int previousTempo;
       int previousDynamic;
       std::vector<int> ottavaFound;
       std::vector<QString> ottavaValue;
+	std::map<int, std::pair<int, bool>> tempoMap;
       int tempo;
       QMap<int,int> slides;
 
       GPLyrics gpLyrics;
       int slide;
       int voltaSequence;
-      QTextCodec* _codec;
-      Slur** slurs;
-      Pedal** letRings;
-      TextLine** palmMutes;
+      QTextCodec* _codec { 0 };
+	Slur** slurs       { nullptr };
 
       void skip(qint64 len);
       void read(void* p, qint64 len);
@@ -214,7 +228,6 @@ class GuitarPro {
       void setTuplet(Tuplet* tuplet, int tuple);
       Fraction len2fraction(int len);
       void addDynamic(Note*, int d);
-      void setTempo(int n, Measure* measure);
       void createMeasures();
       void applyBeatEffects(Chord*, int beatEffects);
       void readTremoloBar(int track, Segment*);
@@ -222,16 +235,23 @@ class GuitarPro {
       void restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track, int tick);
       void createSlur(bool hasSlur, int staffIdx, ChordRest* cr);
       void createOttava(bool hasOttava, int track, ChordRest* cr, QString value);
-      void createSlide(int slide, ChordRest* cr, int staffIdx);
+      void createSlide(int slide, ChordRest* cr, int staffIdx, Note* note = nullptr);
       void createCrecDim(int staffIdx, int track, int tick, bool crec);
       Text* addTextToNote(QString, Align, Note*);
-      void addPalmMute(Chord* chord, int staffIdx, bool hasPM);
-      void addLetRing(Chord* chord, int staffIdx, bool hasLetRing);
+      void addPalmMute(Note* note);
+      void addLetRing(Note* note);
       void addTap(Note* note);
       void addSlap(Note* note);
       void addPop(Note* note);
+      void createTuningString(int strings, int tuning[]);
+
+	std::vector<TextLine*> _palmMutes;
+	std::vector<TextLine*> _letRings;
 
    public:
+	std::vector<std::string> tunings;
+
+	void setTempo(int n, Measure* measure);
       void initGuitarProDrumset();
       QString title, subtitle, artist, album, composer;
       QString transcriber, instructions;
@@ -245,9 +265,9 @@ class GuitarPro {
          GP_EOF, GP_BAD_NUMBER_OF_STRINGS
             };
 
-      GuitarPro(Score*, int v);
+      GuitarPro(MasterScore*, int v);
       virtual ~GuitarPro();
-      virtual void read(QFile*) = 0;
+      virtual bool read(QFile*) = 0;
       QString error(GuitarProError n) const { return QString(errmsg[int(n)]); }
       };
 
@@ -262,8 +282,8 @@ class GuitarPro1 : public GuitarPro {
       virtual int readBeatEffects(int track, Segment*);
 
    public:
-      GuitarPro1(Score* s, int v) : GuitarPro(s, v) {}
-      virtual void read(QFile*);
+      GuitarPro1(MasterScore* s, int v) : GuitarPro(s, v) {}
+      virtual bool read(QFile*);
       };
 
 //---------------------------------------------------------
@@ -273,8 +293,8 @@ class GuitarPro1 : public GuitarPro {
 class GuitarPro2 : public GuitarPro1 {
 
    public:
-      GuitarPro2(Score* s, int v) : GuitarPro1(s, v) {}
-      virtual void read(QFile*);
+      GuitarPro2(MasterScore* s, int v) : GuitarPro1(s, v) {}
+      virtual bool read(QFile*);
       };
 
 //---------------------------------------------------------
@@ -282,11 +302,11 @@ class GuitarPro2 : public GuitarPro1 {
 //---------------------------------------------------------
 
 class GuitarPro3 : public GuitarPro1 {
-
       virtual int readBeatEffects(int track, Segment* segment);
+
    public:
-      GuitarPro3(Score* s, int v) : GuitarPro1(s, v) {}
-      virtual void read(QFile*);
+      GuitarPro3(MasterScore* s, int v) : GuitarPro1(s, v) {}
+      virtual bool read(QFile*);
       };
 
 //---------------------------------------------------------
@@ -294,7 +314,10 @@ class GuitarPro3 : public GuitarPro1 {
 //---------------------------------------------------------
 
 class GuitarPro4 : public GuitarPro {
-
+	std::vector<int> curDynam;
+	//int curDynam{ -1 };
+	int curTuple{ 0 };
+	std::vector<int> tupleKind;
       void readInfo();
       bool readNote(int string, int staffIdx, Note* note);
       virtual int readBeatEffects(int track, Segment* segment);
@@ -302,8 +325,8 @@ class GuitarPro4 : public GuitarPro {
       int convertGP4SlideNum(int slide);
 
    public:
-      GuitarPro4(Score* s, int v) : GuitarPro(s, v) {}
-      virtual void read(QFile*);
+      GuitarPro4(MasterScore* s, int v) : GuitarPro(s, v) {}
+      virtual bool read(QFile*);
       };
 
 //---------------------------------------------------------
@@ -311,22 +334,23 @@ class GuitarPro4 : public GuitarPro {
 //---------------------------------------------------------
 
 class GuitarPro5 : public GuitarPro {
-
+	std::map<std::pair<int, int>, bool> dead_end;
+	  int _beat_counter{ 0 };
       void readInfo();
       void readPageSetup();
       virtual int readBeatEffects(int track, Segment* segment);
       bool readNote(int string, Note* note);
       virtual bool readMixChange(Measure* measure);
       void readMeasure(Measure* measure, int staffIdx, Tuplet*[], bool mixChange);
-      void readArtificialHarmonic();
-      void readTracks();
+      int readArtificialHarmonic();
+      bool readTracks();
       void readMeasures(int startingTempo);
       int readBeat(int tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets, bool mixChange);
       bool readNoteEffects(Note*);
 
    public:
-      GuitarPro5(Score* s, int v) : GuitarPro(s, v) {}
-      virtual void read(QFile*);
+      GuitarPro5(MasterScore* s, int v) : GuitarPro(s, v) {}
+      virtual bool read(QFile*);
       };
 
 //---------------------------------------------------------
@@ -335,7 +359,8 @@ class GuitarPro5 : public GuitarPro {
 
 class GuitarPro6 : public GuitarPro {
 
-   private:
+      int _lastTick;
+	Volta* _lastVolta{ nullptr };
       // an integer stored in the header indicating that the file is not compressed (BCFS).
       const int GPX_HEADER_UNCOMPRESSED = 1397113666;
       // an integer stored in the header indicating that the file is not compressed (BCFZ).
@@ -354,11 +379,9 @@ class GuitarPro6 : public GuitarPro {
             QDomNode notes;
             QDomNode rhythms;
             };
-      Slur** legatos;
-      TextLine** barres;
-      // a mapping from identifiers to fret diagrams by tracks
-      QMap<int, QMap<int, FretDiagram*>> fretDiagrams;
-      QMap<int, QMap<int, QString>> chordnames;
+      // a mapping from identifiers to fret diagrams
+      QMap<int, FretDiagram*> fretDiagrams;
+      void parseFile(char* filename, QByteArray* data);
       int readBit();
       QByteArray getBytes(QByteArray* buffer, int offset, int length);
       void readGPX(QByteArray* buffer);
@@ -368,35 +391,31 @@ class GuitarPro6 : public GuitarPro {
       int readBitsReversed(int bitsToRead);
       void readGpif(QByteArray* data);
       void readScore(QDomNode* metadata);
-      void readFretboardDiagram(QDomNode* diagram, int track);
+      void readChord(QDomNode* diagram, int track);
       int findNumMeasures(GPPartInfo* partInfo);
       void readMasterTracks(QDomNode* masterTrack);
       void readDrumNote(Note* note, int element, int variation);
       int readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int startTick, int staffIdx, int voiceNum, Tuplet* tuplets[], int measureCounter);
       void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, int measureCounter);
       void readTracks(QDomNode* tracks);
-      void readTrackProperties(QDomNode* currentNode, Part* part, int trackCounter);
-
       void readMasterBars(GPPartInfo* partInfo);
       Fraction rhythmToDuration(QString value);
       Fraction fermataToFraction(int numerator, int denominator);
-      QDomNode getNode(QString id, QDomNode nodes);
+      QDomNode getNode(const QString& id, const QDomNode& nodes);
       void unhandledNode(QString nodeName);
       void makeTie(Note* note);
       int* previousDynamic;
       void addTremoloBar(Segment* segment, int track, int whammyOrigin, int whammyMiddle, int whammyEnd);
-      void addBarre(Chord* chord, int staffIdx, bool hasBarre, QString text = "");
 
+      std::map<std::pair<int, int>, Note*> slideMap;
 
    protected:
       void readNote(int string, Note* note);
       virtual int readBeatEffects(int track, Segment*);
-      void parseFile(const char* filename, QByteArray* data);
 
    public:
-      GuitarPro6(Score* s) : GuitarPro(s, 6) {}
-      GuitarPro6(Score* s, int v) : GuitarPro(s, v) {}
-      virtual void read(QFile*);
+      GuitarPro6(MasterScore* s) : GuitarPro(s, 6) {}
+      virtual bool read(QFile*);
       };
 
 } // namespace Ms

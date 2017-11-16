@@ -2140,6 +2140,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
                   { "gp4",  &importGTP                },
                   { "gp5",  &importGTP                },
                   { "gpx",  &importGTP                },
+                  { "ptb",  &importGTP                },
                   };
 
             // import

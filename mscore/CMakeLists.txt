@@ -258,6 +258,7 @@ add_executable ( ${ExecutableName}
       ove.cpp
       ruler.cpp
       importgtp.cpp importgtp-gp4.cpp importgtp-gp5.cpp importgtp-gp6.cpp
+      importptb.cpp
       fotomode.cpp drumtools.cpp
       selinstrument.cpp editstafftype.cpp texttools.cpp
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp

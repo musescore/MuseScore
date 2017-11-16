@@ -49,6 +49,7 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp4.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp5.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp6.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importptb.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importove.cpp
       ${PROJECT_SOURCE_DIR}/mscore/ove.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi.cpp
@@ -202,7 +203,7 @@ subdirs (
         capella
         biab
         musicxml
-        guitarpro
+#        guitarpro
         scripting
 #        testoves
         zerberus/comments

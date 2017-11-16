@@ -3176,13 +3176,14 @@ Element* Chord::nextElement()
       Element* e = score()->selection().element();
       if (!e && !score()->selection().elements().isEmpty())
             e = score()->selection().elements().first();
+
       switch(e->type()) {
             case ElementType::SYMBOL:
             case ElementType::IMAGE:
             case ElementType::FINGERING:
             case ElementType::TEXT:
             case ElementType::BEND: {
-                  Note* n = static_cast<Note*>(e->parent());
+                  Note* n = toNote(e->parent());
                   if(n == _notes.front()) {
                         if (_arpeggio)
                               return _arpeggio;
@@ -3195,7 +3196,9 @@ Element* Chord::nextElement()
                               return *(&i-1);
                               }
                         }
+                  break;
                   }
+
             case ElementType::GLISSANDO_SEGMENT:
             case ElementType::TIE_SEGMENT: {
                   SpannerSegment* s = static_cast<SpannerSegment*>(e);
@@ -3216,15 +3219,17 @@ Element* Chord::nextElement()
                               return *(&i-1);
                               }
                         }
+                  break;
                   }
             case ElementType::ARPEGGIO:
                   if (_tremolo)
                         return _tremolo;
-                  else
-                        break;
+                  break;
+
             case ElementType::ACCIDENTAL:
                   e = e->parent();
                   // fall through
+
             case ElementType::NOTE: {
                   if (e == _notes.front()) {
                         if (_arpeggio)
@@ -3234,23 +3239,20 @@ Element* Chord::nextElement()
                         break;
                         }
                   for (auto &i : _notes) {
-                        if (i == e) {
+                        if (i == e)
                               return *(&i -1);
-                              }
                         }
                   }
-            case ElementType::CHORD: {
+                  break;
+
+            case ElementType::CHORD:
                   return _notes.back();
-                  }
+
             default:
                   break;
             }
 
-            Element* next = ChordRest::nextElement();
-            if (next)
-                  return next;
-            else
-                  return nullptr;
+      return ChordRest::nextElement();
       }
 
 //---------------------------------------------------------
@@ -3275,28 +3277,26 @@ Element* Chord::prevElement()
                   Element* next = prevNote->lastElementBeforeSegment();
                   return next;
                   }
-            case ElementType::CHORD: {
+
+            case ElementType::CHORD:
                   return _notes.front();
-                  }
-            case ElementType::TREMOLO: {
+
+            case ElementType::TREMOLO:
                   if (_arpeggio)
                         return _arpeggio;
                   // fall through
-                  }
+
             case ElementType::ARPEGGIO: {
                   Note* n = _notes.front();
                   Element* elN = n->lastElementBeforeSegment();
                   Q_ASSERT(elN != NULL);
                   return elN;
                   }
+
             default:
                   break;
             }
-            Element* prev = ChordRest::prevElement();
-            if (prev)
-                  return prev;
-            else
-                  return nullptr;
+      return ChordRest::prevElement();
       }
 
 //---------------------------------------------------------
