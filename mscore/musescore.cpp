@@ -3215,12 +3215,12 @@ void MuseScore::changeState(ScoreState val)
                         val = STATE_NOTE_ENTRY_METHOD_RHYTHM;
                         }
                   else if (getAction("note-input-realtime-auto")->isChecked()) {
-                        showModeText(tr("Realtime (automatic) note input mode"));
+                        showModeText(tr("Real-time (automatic) note input mode"));
                         cs->setNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO);
                         val = STATE_NOTE_ENTRY_METHOD_REALTIME_AUTO;
                         }
                   else if (getAction("note-input-realtime-manual")->isChecked()) {
-                        showModeText(tr("Realtime (manual) note input mode"));
+                        showModeText(tr("Real-time (manual) note input mode"));
                         cs->setNoteEntryMethod(NoteEntryMethod::REALTIME_MANUAL);
                         val = STATE_NOTE_ENTRY_METHOD_REALTIME_MANUAL;
                         }
