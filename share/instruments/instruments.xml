@@ -137,12 +137,13 @@
                   <shortName>Sc-a. Fl.</shortName>
                   <description>Subcontra-alto Flute</description>
                   <musicXMLid>wind.flutes.flute</musicXMLid>
-                  <clef>F</clef>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>31-60</aPitchRange>
                   <pPitchRange>31-64</pPitchRange>
-                  <transposeDiatonic>-3</transposeDiatonic>
-                  <transposeChromatic>-5</transposeChromatic>
+                  <transposeDiatonic>-17</transposeDiatonic>
+                  <transposeChromatic>-21</transposeChromatic>
                   <Channel>
                         <program value="73"/>
                   </Channel>
@@ -169,10 +170,13 @@
                   <shortName>B. Fl.</shortName>
                   <description>Bass Flute</description>
                   <musicXMLid>wind.flutes.flute.bass</musicXMLid>
-                  <clef>G8vb</clef>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-77</aPitchRange>
                   <pPitchRange>48-81</pPitchRange>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
                   <Channel>
                         <program value="73"/>
                   </Channel>
@@ -183,7 +187,8 @@
                   <shortName>C-a. Fl.</shortName>
                   <description>Contra-alto Flute</description>
                   <musicXMLid>wind.flutes.flute.contra-alto</musicXMLid>
-                  <clef>G</clef>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>43-76</aPitchRange>
                   <pPitchRange>43-79</pPitchRange>
@@ -198,10 +203,13 @@
                   <shortName>Cb. Fl.</shortName>
                   <description>Contrabass Flute</description>
                   <musicXMLid>wind.flutes.flute.contrabass</musicXMLid>
-                  <clef>F</clef>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-65</aPitchRange>
                   <pPitchRange>36-69</pPitchRange>
+                  <transposeDiatonic>-14</transposeDiatonic>
+                  <transposeChromatic>-24</transposeChromatic>
                   <Channel>
                         <program value="73"/>
                   </Channel>
@@ -211,10 +219,13 @@
                   <shortName>D. Cb. Fl.</shortName>
                   <description>Double Contrabass Flute</description>
                   <musicXMLid>wind.flutes.flute.double-contrabass</musicXMLid>
-                  <clef>F</clef>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>24-53</aPitchRange>
                   <pPitchRange>24-57</pPitchRange>
+                  <transposeDiatonic>-21</transposeDiatonic>
+                  <transposeChromatic>-36</transposeChromatic>
                   <Channel>
                         <program value="73"/>
                   </Channel>
@@ -224,10 +235,13 @@
                   <shortName>Hb. Fl.</shortName>
                   <description>Hyperbass Flute</description>
                   <musicXMLid>wind.flutes.flute.double-contrabass</musicXMLid>
-                  <clef>F15mb</clef>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F15mb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>12-42</aPitchRange>
                   <pPitchRange>12-45</pPitchRange>
+                  <transposeDiatonic>-28</transposeDiatonic>
+                  <transposeChromatic>-48</transposeChromatic>
                   <Channel>
                         <program value="73"/>
                   </Channel>
