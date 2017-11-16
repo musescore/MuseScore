@@ -631,7 +631,7 @@ class Score : public QObject, ScoreElement {
       void undoChangeBarLine(Measure*, BarLineType, SegmentType type);
       void undoChangeStyleVal(StyleIdx idx, const QVariant& v);
 
-      void setGraceNote(Chord*,  int pitch, NoteType type, int len);
+      Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
       Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, Direction stemDirection = Direction::AUTO);
       void changeCRlen(ChordRest* cr, const TDuration&);
