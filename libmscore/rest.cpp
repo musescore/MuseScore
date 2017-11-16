@@ -209,7 +209,6 @@ bool Rest::acceptDrop(const DropData& data) const
          || (type == Element::Type::DYNAMIC)
          || (type == Element::Type::HARMONY)
          || (type == Element::Type::TEMPO_TEXT)
-         || (type == Element::Type::STAFF_TEXT)
          || (type == Element::Type::REHEARSAL_MARK)
          || (type == Element::Type::FRET_DIAGRAM)
          || (type == Element::Type::TREMOLOBAR)
