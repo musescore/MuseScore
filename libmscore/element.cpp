@@ -311,8 +311,13 @@ QColor Element::curColor(const Element* proxy) const
                   originalColor = MScore::selectColor[voice()];
             if (proxy->visible())
                   return originalColor;
-            else
-                  return originalColor.lighter(200);
+            else {
+                  int red = originalColor.red();
+                  int green = originalColor.green();
+                  int blue = originalColor.blue();
+                  float tint = .6;  // Between 0 and 1. Higher means lighter, lower means darker
+                  return QColor(red + tint * (255 - red), green + tint * (255 - green), blue + tint * (255 - blue));
+                  }
             }
       if (!proxy->visible())
             return Qt::gray;
