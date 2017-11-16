@@ -117,6 +117,14 @@ qreal Clef::mag() const
       qreal mag = staff() ? staff()->mag(tick()) : 1.0;
       if (_small)
             mag *= score()->styleD(StyleIdx::smallClefMag);
+      if ((clefType() == ClefType::TAB || clefType() == ClefType::TAB_SERIF) && staff() && segment()) {
+            int tick = segment()->tick();
+            StaffType* staffType = staff()->staffType(tick);
+            int lines = staffType->lines();
+            qreal lineDist = staffType->lineDistance().val();
+            SymId symId = ClefInfo::symId(clefType());
+            mag = mag * ((lines - 1) * lineDist * spatium()) /  score()->scoreFont()->height(symId, 1);
+            }
       return mag;
       }
 
