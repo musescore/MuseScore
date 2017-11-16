@@ -119,7 +119,7 @@
       <item row="3" column="3">
        <widget class="QSpinBox" name="headGroup">
         <property name="toolTip">
-         <string notr="true">Note head group</string>
+         <string notr="true">Notehead group</string>
         </property>
         <property name="readOnly">
          <bool>true</bool>
