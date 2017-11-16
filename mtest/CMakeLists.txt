@@ -203,7 +203,7 @@ subdirs (
         capella
         biab
         musicxml
-#        guitarpro
+        guitarpro
         scripting
 #        testoves
         zerberus/comments
