@@ -23,7 +23,6 @@
 #include "config.h"
 #include "scoretab.h"
 #include "scoreview.h"
-#include "scoreview.h"
 #include "libmscore/score.h"
 #include "magbox.h"
 #ifdef OMR
