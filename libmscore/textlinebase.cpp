@@ -76,10 +76,8 @@ void TextLineBaseSegment::draw(QPainter* painter) const
 
       // color for line (text color comes from the text properties)
       QColor color;
-      if (selected() && !(score() && score()->printing()))
-            color = (track() > -1) ? MScore::selectColor[voice()] : MScore::selectColor[0];
-      else if (!tl->visible() || !tl->lineVisible())
-            color = Qt::gray;
+      if ((selected() && !(score() && score()->printing())) || !tl->visible() || !tl->lineVisible())
+            color = curColor();
       else
             color = tl->lineColor();
 

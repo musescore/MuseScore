@@ -1178,13 +1178,7 @@ void Text::drawSelection(QPainter* p, const QRectF& r) const
 
 QColor Text::textColor() const
       {
-      if (score() && !score()->printing()) {
-            if (selected())
-                  return (track() > -1) ? MScore::selectColor[voice()] : MScore::selectColor[0];
-            if (!visible())
-                  return Qt::gray;
-            }
-      return color();
+      return curColor();
       }
 
 //---------------------------------------------------------

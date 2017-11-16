@@ -304,10 +304,20 @@ QColor Element::curColor(const Element* proxy) const
             marked = note->mark();
             }
       if (proxy->selected() || marked ) {
+            QColor originalColor;
             if (track() == -1)
-                  return MScore::selectColor[0];
+                  originalColor = MScore::selectColor[0];
             else
-                  return MScore::selectColor[voice()];
+                  originalColor = MScore::selectColor[voice()];
+            if (proxy->visible())
+                  return originalColor;
+            else {
+                  int red = originalColor.red();
+                  int green = originalColor.green();
+                  int blue = originalColor.blue();
+                  float tint = .6;  // Between 0 and 1. Higher means lighter, lower means darker
+                  return QColor(red + tint * (255-red), green + tint * (255-green), blue + tint *(255-blue));
+                  }
             }
       if (!proxy->visible())
             return Qt::gray;
