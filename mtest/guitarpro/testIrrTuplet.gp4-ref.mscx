@@ -120,6 +120,13 @@
             <tpc>15</tpc>
             <fret>8</fret>
             <string>1</string>
+            <Glissando id="3">
+              <text>gliss.</text>
+              <subtype>0</subtype>
+              <lid>15</lid>
+              <diagonal>1</diagonal>
+              <anchor>3</anchor>
+              </Glissando>
             </Note>
           </Chord>
         <Chord>
@@ -134,15 +141,16 @@
             <tpc>15</tpc>
             <fret>8</fret>
             <string>1</string>
+            <endSpanner id="3"/>
             </Note>
           </Chord>
         <Chord>
-          <lid>15</lid>
+          <lid>16</lid>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>16</lid>
+            <lid>17</lid>
             <Accidental>
               <subtype>accidentalFlat</subtype>
               </Accidental>
@@ -159,7 +167,6 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -285,13 +292,20 @@
             <Beam>2</Beam>
             <Note>
               <lid>11</lid>
-              <Tie id="3">
+              <Tie id="4">
                 <lid>12</lid>
                 </Tie>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
               <string>1</string>
+              <Glissando id="5">
+                <text>gliss.</text>
+                <subtype>0</subtype>
+                <lid>15</lid>
+                <diagonal>1</diagonal>
+                <anchor>3</anchor>
+                </Glissando>
               </Note>
             </Chord>
           <Chord>
@@ -301,20 +315,21 @@
             <Beam>2</Beam>
             <Note>
               <lid>14</lid>
-              <endSpanner id="3"/>
+              <endSpanner id="4"/>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
               <string>1</string>
+              <endSpanner id="5"/>
               </Note>
             </Chord>
           <Chord>
-            <lid>15</lid>
+            <lid>16</lid>
             <Tuplet>2</Tuplet>
             <durationType>eighth</durationType>
             <Beam>2</Beam>
             <Note>
-              <lid>16</lid>
+              <lid>17</lid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
                 </Accidental>
@@ -366,13 +381,20 @@
             <Beam>3</Beam>
             <Note>
               <lid>11</lid>
-              <Tie id="4">
+              <Tie id="6">
                 <lid>12</lid>
                 </Tie>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
               <string>1</string>
+              <Glissando id="7">
+                <text>gliss.</text>
+                <subtype>0</subtype>
+                <lid>15</lid>
+                <diagonal>1</diagonal>
+                <anchor>3</anchor>
+                </Glissando>
               </Note>
             </Chord>
           <Chord>
@@ -382,20 +404,21 @@
             <Beam>3</Beam>
             <Note>
               <lid>14</lid>
-              <endSpanner id="4"/>
+              <endSpanner id="6"/>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
               <string>1</string>
+              <endSpanner id="7"/>
               </Note>
             </Chord>
           <Chord>
-            <lid>15</lid>
+            <lid>16</lid>
             <Tuplet>3</Tuplet>
             <durationType>eighth</durationType>
             <Beam>3</Beam>
             <Note>
-              <lid>16</lid>
+              <lid>17</lid>
               <pitch>75</pitch>
               <tpc>11</tpc>
               <fret>16</fret>

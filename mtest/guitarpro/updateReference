@@ -8,6 +8,11 @@ fi
 
 
 cp   $MSCORE/testIrrTuplet.gp4.mscx testIrrTuplet.gp4-ref.mscx
+
+exit
+
+
+
 cp   $MSCORE/slur.gp4.mscx slur.gp4-ref.mscx
 cp   $MSCORE/sforzato.gp4.mscx sforzato.gp4-ref.mscx
 cp   $MSCORE/heavy-accent.gp5.mscx heavy-accent.gp5-ref.mscx
