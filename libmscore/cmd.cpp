@@ -511,7 +511,7 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
 ///   \len is the visual duration of the grace note (1/16 or 1/32)
 //---------------------------------------------------------
 
-void Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
+Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
       {
       Note* note = new Note(this);
       Chord* chord = new Chord(this);
@@ -547,6 +547,7 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
 
       undoAddElement(chord);
       select(note, SelectType::SINGLE, 0);
+      return note;
       }
 
 //---------------------------------------------------------

@@ -39,6 +39,7 @@
 #include <math.h>
 #include <array>
 #include <functional>
+#include <memory>
 
 #include <QtGui>
 #include <QLoggingCategory>
