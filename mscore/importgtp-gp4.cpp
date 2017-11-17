@@ -85,10 +85,10 @@ bool GuitarPro4::readMixChange(Measure* measure)
       if (tremolo >= 0)
             readChar();
       if (tempo >= 0) {
-			  if (last_segment) {
-				  score->setTempo(last_segment->tick(), double(tempo) / 60.0f);
-				  last_segment = nullptr;
-			  }
+	      if (last_segment) {
+		      score->setTempo(last_segment->tick(), double(tempo) / 60.0f);
+			last_segment = nullptr;
+			}
             if (tempo != previousTempo) {
                   previousTempo = tempo;
                   setTempo(tempo, measure);
@@ -264,32 +264,27 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             f->reset();
             }
       bool slur = false;
-	  uchar modMask2{ 0 };
+	uchar modMask2{ 0 };
       if (noteBits & BEAT_EFFECTS) {
             uchar modMask1 = readUChar();
             modMask2 = readUChar();
-			if (modMask1 & EFFECT_BEND)
-			{
-				readBend(note);
+		if (modMask1 & EFFECT_BEND) {
+                  readBend(note);
 			}
-			if (modMask1 & EFFECT_HAMMER)
-			{
-				slur = true;
+            if (modMask1 & EFFECT_HAMMER) {
+                  slur = true;
 			}
-			if (modMask1 & EFFECT_LET_RING)
-			{
-
-				addLetRing(note);
-				//note->setLetRing(true);
+            if (modMask1 & EFFECT_LET_RING) {
+                  addLetRing(note);
+			//note->setLetRing(true);
 			}
-//TODO-ws			if (modMask2 & 0x40)
-//				note->vibrato = true;
+//TODO-ws	if (modMask2 & 0x40)
+//		      note->vibrato = true;
             if (modMask1 & EFFECT_GRACE) {
-                  int fret = readUChar();            // grace fret
-                  int dynamic = readUChar();            // grace dynamic
-                  int transition = readUChar();            // grace transition
-                  int duration = readUChar();            // grace duration
-
+                  int fret = readUChar();             // grace fret
+                  int dynamic = readUChar();          // grace dynamic
+                  int transition = readUChar();       // grace transition
+                  int duration = readUChar();         // grace duration
 
                   int grace_len = MScore::division/8;
                   if (duration == 1)
@@ -337,22 +332,24 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
 //TODO-ws				note->setSlideNote(gn);
                         }
                   else if (transition == 2 && fretNumber>=0 && fretNumber<=255 && fretNumber!=gn->fret()) {
-                        /*QList<PitchValue> points;
+#if 0
+                        QList<PitchValue> points;
                         points.append(PitchValue(0,0, false));
                         points.append(PitchValue(60,(fretNumber-gn->fret())*100, false));
 
                         Bend* b = new Bend(note->score());
                         b->setPoints(points);
                         b->setTrack(gn->track());
-                        gn->add(b);*/
+                        gn->add(b);
+#endif
                         }
                    else if (transition == 3) {
                          // TODO:
                          //     major: replace with a 'hammer-on' guitar effect when implemented
                          //     minor: make slurs for parts
 
-                         ChordRest* cr1 = static_cast<Chord*>(gc);
-                         ChordRest* cr2 = static_cast<Chord*>(note->chord());
+                         ChordRest* cr1 = toChord(gc);
+                         ChordRest* cr2 = toChord(note->chord());
 
                          Slur* slur = new Slur(score);
                          slur->setAnchor(Spanner::Anchor::CHORD);
@@ -372,10 +369,9 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                   a->setSymId(SymId::articStaccatoAbove);
                   chord->add(a);
                   }
-			if (modMask2 & EFFECT_PALM_MUTE)
-			{
-				//note->setPalmMute(true);
-				addPalmMute(note);
+            if (modMask2 & EFFECT_PALM_MUTE) {
+                  //note->setPalmMute(true);
+			addPalmMute(note);
 			}
 
             if (modMask2 & EFFECT_TREMOLO) {    // tremolo picking length
@@ -411,7 +407,8 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                   }
 
             if (modMask2 & EFFECT_TRILL) {
-//TODO-ws                  note->setTrillFret(readUChar());      // trill fret
+                  /* unsigned char a = */ readUChar();
+//TODO-ws                  note->setTrillFret(a);      // trill fret
                   /*int period =*/ readUChar();      // trill length
 
                   // add the trill articulation to the note
@@ -439,253 +436,121 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
       note->setString(string);
       note->setPitch(std::min(pitch, 127));
 
-#if 0  // TODO-ws
-	  if (modMask2 & 0x10) {
-		  TextStyle textStyle;
-		  textStyle.setAlign(Align::CENTER);
-		  int type = readUChar();      // harmonic kind
-		  if (type == 1) //Natural
-			  note->setHarmonic(false);
-		  else if (type == 3) // Tapped
-			  addTextToNote("T.H.", textStyle, note);
-		  else if (type == 4) //Pinch
-			  addTextToNote("P.H.", textStyle, note);
-		  else if (type == 5) //semi
-			  addTextToNote("S.H.", textStyle, note);
-		  else { //Artifical
-			  addTextToNote("A.H.", textStyle, note);
-			  int harmonicFret = note->fret();
-			  harmonicFret += type - 10;
-			  Note* harmonicNote = new Note(score);
-			  note->chord()->add(harmonicNote);
-			  harmonicNote->setFret(harmonicFret);
-			  int string = note->chord()->getEmptyString();
-			  harmonicNote->setString(note->string());//string);
-			  harmonicNote->setHarmonic(true);
-			  harmonicNote->setPitch(note->staff()->part()->instrument()->stringData()->getPitch(note->string(), harmonicFret, nullptr, 0));
-			  harmonicNote->setTpcFromPitch();
-		  }
-	  }
-#endif
-	  if (tieNote) {
+      if (modMask2 & 0x10) {
+	      int type = readUChar();      // harmonic kind
+		if (type == 1) //Natural
+		      ; // TODO-ws note->setHarmonic(false);
+		else if (type == 3) // Tapped
+			addTextToNote("T.H.", Align::CENTER, note);
+		else if (type == 4) //Pinch
+			addTextToNote("P.H.", Align::CENTER, note);
+		else if (type == 5) //semi
+			addTextToNote("S.H.", Align::CENTER, note);
+		else { //Artifical
+		      addTextToNote("A.H.", Align::CENTER, note);
+			int harmonicFret = note->fret();
+			harmonicFret += type - 10;
+			Note* harmonicNote = new Note(score);
+			note->chord()->add(harmonicNote);
+			harmonicNote->setFret(harmonicFret);
+			harmonicNote->setString(note->string());
+//TODO-ws			harmonicNote->setHarmonic(true);
+			harmonicNote->setPitch(note->staff()->part()->instrument()->stringData()->getPitch(note->string(), harmonicFret, nullptr, 0));
+			harmonicNote->setTpcFromPitch();
+                  }
+            }
 
-		  auto staffIdx = note->staffIdx();
-		  if (slurs[staffIdx])
-		  {
-			  score->removeSpanner(slurs[staffIdx]);
-			  delete slurs[staffIdx];
-			  slurs[staffIdx] = 0;
-		  }
-		  bool found = false;
-		  Chord* chord = note->chord();
-		  Segment* segment = chord->segment()->prev1(SegmentType::ChordRest);
-		  int track = note->track();
-		  std::vector<ChordRest*> chords;
-		  Note* true_note = nullptr;
-		  while (segment) {
-			  Element* e = segment->element(track);
-			  if (e) {
-				  if (e->type() == ElementType::CHORD) {
-					  Chord* chord2 = static_cast<Chord*>(e);
-					  foreach(Note* note2, chord2->notes()) {
-						  if (note2->string() == string) {
-							  if (chords.empty())
-							  {
-								  Tie* tie = new Tie(score);
-								  tie->setEndNote(note);
-								  note2->add(tie);
-							  }
-							  note->setFret(note2->fret());
-							  note->setPitch(note2->pitch());
-							  true_note = note2;
-							  found = true;
-							  break;
-						  }
-					  }
-				  }
-				  if (found)
-					  break;
-				  else {
-					  if (e) chords.push_back(static_cast<ChordRest*>(e));
-				  }
-			  }
-			  segment = segment->prev1(SegmentType::ChordRest);
-		  }
-		  if (true_note && chords.size())
-		  {
-			  Note* end_note = note;
-			  for (unsigned int i = 0; i < chords.size(); ++i)
-			  {
-				  Chord* chord = nullptr;
-				  auto cr = chords.at(i);
-				  if (cr->type() == ElementType::CHORD) chord = static_cast<Chord*>(cr);
-				  else {
-					  auto rest = static_cast<Rest*>(cr);
-					  auto dur = rest->duration();
-					  auto dut = rest->durationType();
-					  auto seg = rest->segment();
-					  seg->remove(rest);
-					  auto tuplet = rest->tuplet();
-					  if (tuplet) tuplet->remove(rest);
-					  delete rest;
-					  chord = new Chord(score);
-					  chord->setTrack(note->track());
-					  chord->setDuration(dur);
-					  chord->setDurationType(dut);
-					  seg->add(chord);
-					  if (tuplet) tuplet->add(chord);
-				  }
-
-				  Note* note2 = new Note(score);
-				  note2->setString(true_note->string());
-				  note2->setFret(true_note->fret());
-				  note2->setPitch(true_note->pitch());
-				  note2->setTpcFromPitch();
-				  chord->setNoteType(true_note->noteType());
-				  chord->add(note2);
-				  Tie* tie = new Tie(score);
-				  tie->setEndNote(end_note);
-//TODO-ws				  end_note->setHarmonic(true_note->harmonic());
-				  end_note = note2;
-				  note2->add(tie);
-			  }
-			  Tie* tie = new Tie(score);
-			  tie->setEndNote(end_note);
-//TODO-ws			  end_note->setHarmonic(true_note->harmonic());
-			  true_note->add(tie);
-		  }
-		  if (!found) {
-			  qDebug("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());
-			  return false;
-		  }
-	  }
-
-#if 0
       if (tieNote) {
-		  if (slurs[staffIdx])
-		  {
-			  score->removeSpanner(slurs[staffIdx]);
-			  delete slurs[staffIdx];
-			  slurs[staffIdx] = 0;
-		  }
+	      int staffIdx = note->staffIdx();
+		if (slurs[staffIdx]) {
+                  score->removeSpanner(slurs[staffIdx]);
+			delete slurs[staffIdx];
+			slurs[staffIdx] = 0;
+		      }
             bool found = false;
-            Chord* chord     = note->chord();
-            Segment* segment = chord->segment()->prev1(SegmentType::ChordRest);
-            int track        = note->track();
-			std::vector<Measure*> measures;
-			std::vector<Chord*> chords;
-			Note* true_note{ nullptr };
-			Measure* lastm = chord->segment()->measure();
-			int counter = 0;
-            while (segment) {
+		Chord* chord = note->chord();
+		Segment* segment = chord->segment()->prev1(SegmentType::ChordRest);
+		int track = note->track();
+		std::vector<ChordRest*> chords;
+		Note* true_note = 0;
+		while (segment) {
                   Element* e = segment->element(track);
-                  if (e) {
-                        if (e->type() == ElementType::CHORD) {
-                              Chord* chord2 = static_cast<Chord*>(e);
-                              foreach(Note* note2, chord2->notes()) {
-                                    if (note2->string() == string) {
-										if (measures.size())
-											while (note2->tieBack())
-												note2 = note2->tieBack()->startNote();
-										Note* first(nullptr), *second(nullptr);
-										for (unsigned int i = 0; i < measures.size(); ++i)
-										{
-											TDuration dur(TDuration::DurationType::V_WHOLE);
-											auto seg = measures[i]->segments()->first();
-											while (seg->segmentType() != SegmentType::ChordRest)
-												seg = seg->next();
-											score->inputState().setDuration(dur);
-											score->inputState().setString(string);
-											score->inputState().setSegment(seg);
-											Position pos{ seg, note->staffIdx(), note2->line(), note2->fret(), measures[i]->pos() };
-											Note* nt(nullptr);
-											score->putNote(pos, true, &nt);
-											assert(nt);
-											nt->setFret(note2->fret());
-											nt->setPitch(note2->pitch());
-											nt->setString(note2->string());
-											nt->setTpcFromPitch();
-											first = second;
-											second = nt;
-											Tie* tie = new Tie(score);
-											if (i > 0)
-											{
-												tie->setEndNote(first);
-												second->add(tie);
-											}
-											else if (i == 0)
-											{
-												tie->setEndNote(note);
-												second->add(tie);
-											}
-										}
-										Tie* tie = new Tie(score);
-										if (measures.size())
-										{
-											tie->setEndNote(second);
-											note2->add(tie);
-										}
-										else if (chords.empty())
-										{
-											tie->setEndNote(note);
-											note2->add(tie);
-										}
-										else
-											delete tie;
-										note->setFret(note2->fret());
-										note->setPitch(note2->pitch());
-										true_note = note2;
-										found = true;
-										break;
-                                          }
-                                    }
-							  if (!found)
-							  {
-								  chords.push_back(chord2);
-							  }
-							  else break;
-
-							}
-                        }
-				  if (counter > 0 && !e && lastm != segment->measure())
-				  {
-					  int _end = counter == 1 ? 2 : 1;
-					  for (int i = 0; i < _end; ++i)
-					  {
-						  if (counter == 1 && i == 0)
-								lastm = chord->segment()->prev1(SegmentType::ChordRest)->measure();
-						  else lastm = segment->measure();
-						  measures.push_back(lastm);
-					  }
-				  }
-				  if (e && e->type() == ElementType::REST) ++counter;
+			if (e) {
+			      if (e->isChord()) {
+				      Chord* chord2 = toChord(e);
+					foreach (Note* note2, chord2->notes()) {
+					      if (note2->string() == string) {
+						      if (chords.empty()) {
+                                                Tie* tie = new Tie(score);
+								tie->setEndNote(note);
+								note2->add(tie);
+							      }
+                                          note->setFret(note2->fret());
+							note->setPitch(note2->pitch());
+							true_note = note2;
+							found = true;
+                                          break;
+						      }
+					      }
+				      }
+                        if (found)
+				      break;
+                        else {
+				      if (e)
+                                    chords.push_back(toChordRest(e));
+                              }
+			      }
                   segment = segment->prev1(SegmentType::ChordRest);
                   }
+            if (true_note && chords.size()) {
+                  Note* end_note = note;
+			for (unsigned int i = 0; i < chords.size(); ++i) {
+                        Chord* chord = nullptr;
+				auto cr = chords.at(i);
+				if (cr->isChord())
+                              chord = toChord(cr);
+                        else {
+				      Rest* rest = toRest(cr);
+					auto dur = rest->duration();
+					auto dut = rest->durationType();
+					auto seg = rest->segment();
+					seg->remove(rest);
+					auto tuplet = rest->tuplet();
+					if (tuplet)
+                                    tuplet->remove(rest);
+                              delete rest;
+					chord = new Chord(score);
+					chord->setTrack(note->track());
+					chord->setDuration(dur);
+					chord->setDurationType(dut);
+					seg->add(chord);
+					if (tuplet)
+                                    tuplet->add(chord);
+                              }
 
-			if (true_note && chords.size() && measures.empty())
-			{
-				Note* end_note = note;
-				for (int i = 0; i < chords.size(); ++i)
-				{
-					Note* note2 = new Note(score);
-					note2->setString(true_note->string());
-					note2->setFret(true_note->fret());
-					note2->setPitch(true_note->pitch());
-					note2->setTpcFromPitch();
-					chords[i]->add(note2);
-					Tie* tie = new Tie(score);
-					tie->setEndNote(end_note);
-					end_note = note2;
-					note2->add(tie);
-				}
+                        Note* note2 = new Note(score);
+				note2->setString(true_note->string());
+				note2->setFret(true_note->fret());
+				note2->setPitch(true_note->pitch());
+				note2->setTpcFromPitch();
+				chord->setNoteType(true_note->noteType());
+				chord->add(note2);
 				Tie* tie = new Tie(score);
 				tie->setEndNote(end_note);
-				true_note->add(tie);
-			}
-            if (!found)
-                  qDebug("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());
+//TODO-ws			end_note->setHarmonic(true_note->harmonic());
+				end_note = note2;
+				note2->add(tie);
+                        }
+                  Tie* tie = new Tie(score);
+			tie->setEndNote(end_note);
+//TODO-ws		end_note->setHarmonic(true_note->harmonic());
+                  true_note->add(tie);
+                  }
+            if (!found) {
+		      qDebug("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());
+                  return false;
+                  }
             }
-#endif
       return slur;
       }
 
@@ -718,28 +583,18 @@ void GuitarPro4::readInfo()
 int GuitarPro4::convertGP4SlideNum(int slide)
       {
       switch (slide) {
-			case 1:
-				return SHIFT_SLIDE;
-				break;
-			case 2:
-				return LEGATO_SLIDE;
-				break;
-            // slide out downwards
-            case 3:
-				return SLIDE_OUT_DOWN;
-                  break;
-            // slide out upwards
-            case 4:
-				return SLIDE_OUT_UP;
-                  break;
-            // slide in from above
-            case 254:
-				return SLIDE_IN_ABOVE;
-                  break;
-            // slide in from below
-            case 255:
-				return SLIDE_IN_BELOW;
-                  break;
+            case 1:
+		      return SHIFT_SLIDE;
+		case 2:
+			return LEGATO_SLIDE;
+            case 3:     // slide out downwards
+                  return SLIDE_OUT_DOWN;
+            case 4:     // slide out upwards
+                  return SLIDE_OUT_UP;
+            case 254:   // slide in from above
+                  return SLIDE_IN_ABOVE;
+            case 255:   // slide in from below
+                  return SLIDE_IN_BELOW;
             }
       return slide;
       }
@@ -929,7 +784,7 @@ bool GuitarPro4::read(QFile* fp)
 
       Measure* measure = score->firstMeasure();
       bool mixChange = false;
-	  bool lastSlurAdd = false;
+	bool lastSlurAdd = false;
       for (int bar = 0; bar < measures; ++bar, measure = measure->nextMeasure()) {
 		  if (!f->isReadable())
 			  break;
@@ -965,20 +820,19 @@ bool GuitarPro4::read(QFile* fp)
                               pause = readUChar();
                         int len = readChar();
                         int tuple = 0;
-						if (beatBits & BEAT_TUPLET)
-						{
-							tuple = readInt();
-							if (tupleKind[staffIdx]) --tupleKind[staffIdx];
-							else {
-								tupleKind[staffIdx] = tuple - 1;
-								curTuple = tuple;
-							}
+				if (beatBits & BEAT_TUPLET) {
+                              tuple = readInt();
+					if (tupleKind[staffIdx])
+                                    --tupleKind[staffIdx];
+                              else {
+                                    tupleKind[staffIdx] = tuple - 1;
+						curTuple = tuple;
 						}
-						else if (tupleKind[staffIdx])
-						{
-							tuple = curTuple;
-							--tupleKind[staffIdx];
-						}
+				      }
+                        else if (tupleKind[staffIdx]) {
+                              tuple = curTuple;
+					--tupleKind[staffIdx];
+					}
                         Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
                         if (beatBits & BEAT_CHORD) {
                               int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
@@ -1020,12 +874,12 @@ bool GuitarPro4::read(QFile* fp)
                               readMixChange(measure);
                               mixChange = true;
                               }
-                        /*else  {
+#if 0
+                        else  {
                               if (bar == 0)
                                     setTempo(tempo, measure);
-                              }*/
-
-
+                              }
+#endif
                         int strings = readUChar();   // used strings mask
                         Fraction l  = len2fraction(len);
 
@@ -1073,7 +927,7 @@ bool GuitarPro4::read(QFile* fp)
 						else tuplets[staffIdx] = 0;
 
                         cr->setDuration(l);
-                        if (cr->type() == ElementType::REST && (pause == 0 || l >= measure->len())) {
+                        if (cr->isRest() && (pause == 0 || l >= measure->len())) {
                               cr->setDurationType(TDuration::DurationType::V_MEASURE);
                               cr->setDuration(measure->len());
                               }
@@ -1097,109 +951,102 @@ bool GuitarPro4::read(QFile* fp)
                                           dot->setVisible(true);
                                           note->add(dot);
                                           }
-                                    static_cast<Chord*>(cr)->add(note);
+                                    toChord(cr)->add(note);
 
                                     hasSlur = readNote(6-i, staffIdx, note);
-									dynam = std::max(dynam, previousDynamic);
+						dynam = std::max(dynam, previousDynamic);
                                     note->setTpcFromPitch();
                                     }
                               }
-						if (cr && (cr->type() == ElementType::CHORD))
-						{
-							applyBeatEffects(static_cast<Chord*>(cr), beatEffects);
-							if (dynam != curDynam[track])
-							{
-								curDynam[track] = dynam;
-								addDynamic(toChord(cr)->notes().front(), dynam);
-							}
+                        if (cr && cr->isChord()) {
+                              applyBeatEffects(toChord(cr), beatEffects);
+					if (dynam != curDynam[track]) {
+                                    curDynam[track] = dynam;
+						addDynamic(toChord(cr)->notes().front(), dynam);
 						}
+				      }
 
                         // if we see that a tied note has been constructed do not create the tie
                         if (slides[track] == -2) {
                               slide = 0;
                               slides[track] = -1;
-                        }
-						bool slurSwap = true;
-						if (slide != 2)
-						{
-							if (hasSlur && (slurs[staffIdx] == 0)) {
-								Slur* slur = new Slur(score);
-								slur->setParent(0);
-								slur->setTrack(track);
-								slur->setTrack2(track);
-								slur->setTick(cr->tick());
-								slur->setTick2(cr->tick());
-								slurs[staffIdx] = slur;
-								score->addElement(slur);
-							}
-							else if (slurs[staffIdx] && !hasSlur) {
-								// TODO: check slur
-								Slur* s = slurs[staffIdx];
-								slurs[staffIdx] = 0;
-								s->setTick2(cr->tick());
-								s->setTrack2(cr->track());
-								if (cr->type() == ElementType::CHORD)
-								{
-									lastSlurAdd = true;
-									slurSwap = false;
-								}
-//TODO-ws								cr->has_slur = true;
-							}
-							else if (slurs[staffIdx] && hasSlur) {
-							}
+                              }
+                        bool slurSwap = true;
+				if (slide != 2) {
+                              if (hasSlur && (slurs[staffIdx] == 0)) {
+					      Slur* slur = new Slur(score);
+						slur->setParent(0);
+						slur->setTrack(track);
+						slur->setTrack2(track);
+						slur->setTick(cr->tick());
+						slur->setTick2(cr->tick());
+						slurs[staffIdx] = slur;
+						score->addElement(slur);
 						}
-						if (cr && (cr->type() == ElementType::CHORD) && slide > 0)
-						{
-							auto chord = static_cast<Chord*>(cr);
-							auto effect = convertGP4SlideNum(slide);
-							if (slide > 2)
-								createSlide(convertGP4SlideNum(slide), cr, staffIdx);
-							if (slide < 3 || effect == SLIDE_OUT_UP)
-							{
-								Note* last = chord->upNote();
-								auto seg = chord->segment();
-								Measure* mes = seg->measure();
-								while ((seg = seg->prev()) || (mes = mes->prevMeasure()))
-								{
-									if (!seg) break;//seg = mes->last();
-									if (seg->segmentType() == SegmentType::ChordRest)
-									{
-										bool br = false;
-										auto cr = dynamic_cast<Chord*>(seg->cr(chord->track()));
-										if (cr)
-											for (auto n : cr->notes())
-												if (n->string() == last->string())
-												{
-													Glissando* s = new Glissando(score);
-													s->setAnchor(Spanner::Anchor::NOTE);
-													s->setStartElement(n);
-													s->setTick(seg->tick());
-													s->setTrack(chord->track());
-													s->setParent(n);
-													s->setGlissandoType(Glissando::Type::STRAIGHT);
-													s->setEndElement(last);
-													s->setTick2(chord->segment()->tick());
-													s->setTrack2(chord->track());
-													score->addElement(s);
-													if (slide == 2 || effect == SLIDE_OUT_UP) {
-														if (!lastSlurAdd)
-														{
-															createSlur(true, chord->staffIdx(), cr);
-															createSlur(false, chord->staffIdx(), chord);
-														}
-													}
-													br = true;
-													break;
-												}
-										if (br) break;
+					else if (slurs[staffIdx] && !hasSlur) {
+					      // TODO: check slur
+						Slur* s = slurs[staffIdx];
+						slurs[staffIdx] = 0;
+						s->setTick2(cr->tick());
+						s->setTrack2(cr->track());
+						if (cr->isChord()) {
+                                          lastSlurAdd = true;
+                                          slurSwap = false;
+                                          }
+//TODO-ws                           cr->has_slur = true;
+						}
+					else if (slurs[staffIdx] && hasSlur) {
+					      }
+                              }
+                        if (cr && (cr->isChord()) && slide > 0) {
+                              auto chord = toChord(cr);
+					auto effect = convertGP4SlideNum(slide);
+					if (slide > 2)
+					      createSlide(convertGP4SlideNum(slide), cr, staffIdx);
+                              if (slide < 3 || effect == SLIDE_OUT_UP) {
+                                    Note* last = chord->upNote();
+						auto seg = chord->segment();
+						Measure* mes = seg->measure();
+						while ((seg = seg->prev()) || (mes = mes->prevMeasure())) {
+                                          if (!seg)
+                                                break;//seg = mes->last();
+                                          if (seg->segmentType() == SegmentType::ChordRest) {
+                                                bool br = false;
+								Chord* cr = toChord(seg->cr(chord->track()));
+								if (cr)
+								      for (auto n : cr->notes()) {
+									      if (n->string() == last->string()) {
+                                                                  Glissando* s = new Glissando(score);
+											s->setAnchor(Spanner::Anchor::NOTE);
+											s->setStartElement(n);
+											s->setTick(seg->tick());
+											s->setTrack(chord->track());
+											s->setParent(n);
+											s->setGlissandoType(Glissando::Type::STRAIGHT);
+											s->setEndElement(last);
+											s->setTick2(chord->segment()->tick());
+											s->setTrack2(chord->track());
+											score->addElement(s);
+											if (slide == 2 || effect == SLIDE_OUT_UP) {
+										      	if (!lastSlurAdd) {
+											      	createSlur(true, chord->staffIdx(), cr);
+												      createSlur(false, chord->staffIdx(), chord);
+      											      }
+	      									      }
+                                                                  }
+                                                            br = true;
+										break;
+									      }
+									if (br)
+                                                            break;
 									}
 								}
 							}
-
 						}
-						if (slurSwap) lastSlurAdd = false;
+				if (slurSwap)
+                              lastSlurAdd = false;
                         restsForEmptyBeats(segment, measure, cr, l, track, tick);
-						createSlur(hasSlur, staffIdx, cr);
+				createSlur(hasSlur, staffIdx, cr);
                         tick += cr->actualTicks();
                         measureLen += cr->actualFraction();
                         }
@@ -1212,56 +1059,55 @@ bool GuitarPro4::read(QFile* fp)
                   setTempo(tempo, score->firstMeasure());
             }
 
-			for (auto n : slideList)
-			{
-//				Note* next = nullptr;
-				auto segment = n->chord()->segment();
-				auto measure = segment->measure();
-				int segment_counter{ 0 };
-				while ((segment = segment->next1(SegmentType::ChordRest)) || ((measure = measure->nextMeasure()) && (segment = measure->first())))
-				{
-					if (segment->segmentType() != SegmentType::ChordRest) continue;
-					bool br = false;
-					auto cr = dynamic_cast<Chord*>(segment->cr(n->track()));
-					if (cr)
-					{
-						++segment_counter;
-						if (segment_counter > 2)
-							break;
-						for (auto nt : cr->notes())
-							if (nt->string() == n->string())
-							{
-								for (auto e : nt->el())
-									if (e->type() == ElementType::CHORDLINE)
-									{
-										auto cl = dynamic_cast<ChordLine*>(e);
-										if (cl->chordLineType() == ChordLineType::PLOP || cl->chordLineType() == ChordLineType::SCOOP)
-										{
-											br = true;
-											break;
-										}
-									}
-								if (br) break;
-								Glissando* s = new Glissando(score);
-								s->setAnchor(Spanner::Anchor::NOTE);
-								s->setStartElement(n);
-								s->setTick(n->chord()->segment()->tick());
-								s->setTrack(n->track());
-								s->setParent(n);
-								s->setGlissandoType(Glissando::Type::STRAIGHT);
-								s->setEndElement(nt);
-								s->setTick2(nt->chord()->segment()->tick());
-								s->setTrack2(n->track());
-								score->addElement(s);
-								br = true;
-								break;
-							}
-						if (br) break;
-					}
-				}
-			}
+      for (auto n : slideList) {
+//          Note* next = nullptr;
+		auto segment = n->chord()->segment();
+		auto measure = segment->measure();
+		int segment_counter{ 0 };
+		while ((segment = segment->next1(SegmentType::ChordRest)) || ((measure = measure->nextMeasure()) && (segment = measure->first()))) {
+                  if (!segment->isChordRestType())
+                        continue;
+                  bool br = false;
+			Chord* cr = toChord(segment->cr(n->track()));
+                  if (cr) {
+                        ++segment_counter;
+				if (segment_counter > 2)
+				      break;
+                        for (auto nt : cr->notes()) {
+                              if (nt->string() == n->string()) {
+                                    for (auto e : nt->el()) {
+						      if (e->isChordLine()) {
+                                                auto cl = toChordLine(e);
+                                                if (cl->chordLineType() == ChordLineType::PLOP || cl->chordLineType() == ChordLineType::SCOOP) {
+								      br = true;
+							            break;
+      								}
+	      					      }
+		      				}
+                                    }
+			            if (br)
+                                    break;
+                              Glissando* s = new Glissando(score);
+		      		s->setAnchor(Spanner::Anchor::NOTE);
+			      	s->setStartElement(n);
+				      s->setTick(n->chord()->segment()->tick());
+      				s->setTrack(n->track());
+	      			s->setParent(n);
+		      		s->setGlissandoType(Glissando::Type::STRAIGHT);
+			      	s->setEndElement(nt);
+				      s->setTick2(nt->chord()->segment()->tick());
+      				s->setTrack2(n->track());
+	      			score->addElement(s);
+		      		br = true;
+			      	break;
+				      }
+      		      if (br)
+                              break;
+		            }
+		      }
+	      }
 
-            return true;
+      return true;
       }
 
 }
