@@ -67,16 +67,16 @@
           <sigN>4</sigN>
           <sigD>4</sigD>
           </TimeSig>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>4</lid>
-          <text><sym>metNoteQuarterUp</sym> = 120</text>
-          </Tempo>
         <Dynamic>
           <subtype>f</subtype>
           <velocity>96</velocity>
-          <lid>5</lid>
+          <lid>4</lid>
           </Dynamic>
+        <Tempo>
+          <tempo>2</tempo>
+          <lid>5</lid>
+          <text><sym>metNoteQuarterUp</sym> = 120</text>
+          </Tempo>
         <Slur id="2">
           <lid>13</lid>
           <track>0</track>
@@ -120,7 +120,6 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -202,16 +201,16 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>4</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <lid>5</lid>
+            <lid>4</lid>
             </Dynamic>
+          <Tempo>
+            <tempo>2</tempo>
+            <lid>5</lid>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
+            </Tempo>
           <Slur id="3">
             <lid>13</lid>
             <track>0</track>
