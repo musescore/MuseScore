@@ -1198,49 +1198,21 @@ void GuitarPro::setTempo(int tempo, Measure* measure)
 		std::swap(last_tempo, tempo);
 		std::swap(last_measure, measure);
 
+		Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
+		for (Element* e : segment->annotations()) {
+			if (e->isTempoText())
+				return;
+      		}
+
 		TempoText* tt = new TempoText(score);
 		tt->setTempo(double(tempo) / 60.0);
 		tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempo));
 		tt->setTrack(0);
-		Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-		bool foundTempo = false;
-		for (Element* e : segment->annotations()) {
-			if (e->type() == ElementType::TEMPO_TEXT) {
-				foundTempo = true;
-				//segment->remove(e);
-				//delete e;
-				delete tt;
-				break;
-			      }
-      		}
-		if (!foundTempo) {
-			segment->add(tt);
-			score->setTempo(measure->tick(), tt->tempo());
-			previousTempo = tempo;
-	      	}
+
+		segment->add(tt);
+		score->setTempo(measure->tick(), tt->tempo());
+		previousTempo = tempo;
       	}
-#if 0
-      TempoText* tt = new TempoText(score);
-      tt->setTempo(double(tempo)/60.0);
-      tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempo));
-      tt->setTrack(0);
-      Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-      bool foundTempo = false;
-      for (Element* e : segment->annotations()) {
-            if (e->type() == ElementType::TEMPO_TEXT) {
-                  foundTempo = true;
-				  //segment->remove(e);
-				  //delete e;
-                  delete tt;
-                  break;
-                  }
-            }
-      if (!foundTempo) {
-            segment->add(tt);
-            score->setTempo(measure->tick(), tt->tempo());
-            previousTempo = tempo;
-            }
-#endif
       }
 
 //---------------------------------------------------------

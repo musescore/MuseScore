@@ -99,7 +99,6 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>

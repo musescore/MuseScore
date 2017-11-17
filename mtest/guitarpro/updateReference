@@ -6,49 +6,48 @@ else
    MSCORE=../../build.debug/mtest/guitarpro
 fi
 
-
 cp   $MSCORE/testIrrTuplet.gp4.mscx testIrrTuplet.gp4-ref.mscx
-
-exit
-
-
-
 cp   $MSCORE/slur.gp4.mscx slur.gp4-ref.mscx
 cp   $MSCORE/sforzato.gp4.mscx sforzato.gp4-ref.mscx
 cp   $MSCORE/heavy-accent.gp5.mscx heavy-accent.gp5-ref.mscx
 cp   $MSCORE/tremolos.gp5.mscx tremolos.gp5-ref.mscx
-cp   $MSCORE/trill.gp4.mscx trill.gp4-ref.mscx
 cp   $MSCORE/dynamic.gp5.mscx dynamic.gp5-ref.mscx
-#cp   $MSCORE/arpeggio_up_down.gp4.mscx arpeggio_up_down.gp4-ref.mscx
-cp   $MSCORE/ghost_note.gp3.mscx ghost_note.gp3-ref.mscx
-#cp   $MSCORE/grace.gp5.mscx grace.gp5-ref.mscx
 cp   $MSCORE/volta.gp5.mscx volta.gp5-ref.mscx
-cp   $MSCORE/volta.gp4.mscx volta.gp4-ref.mscx
-cp   $MSCORE/volta.gp3.mscx volta.gp3-ref.mscx
-cp   $MSCORE/copyright.gpx.mscx copyright.gpx-ref.mscx
 cp   $MSCORE/copyright.gp5.mscx copyright.gp5-ref.mscx
-cp   $MSCORE/copyright.gp4.mscx copyright.gp4-ref.mscx
-cp   $MSCORE/copyright.gp3.mscx copyright.gp3-ref.mscx
 cp   $MSCORE/tempo.gp5.mscx tempo.gp5-ref.mscx
-cp   $MSCORE/tempo.gp4.mscx tempo.gp4-ref.mscx
-cp   $MSCORE/tempo.gp3.mscx tempo.gp3-ref.mscx
 cp   $MSCORE/basic-bend.gp5.mscx basic-bend.gp5-ref.mscx
-cp   $MSCORE/bend.gp5.mscx bend.gp5-ref.mscx
-cp   $MSCORE/bend.gp4.mscx bend.gp4-ref.mscx
-cp   $MSCORE/bend.gp3.mscx bend.gp3-ref.mscx
 cp   $MSCORE/keysig.gp5.mscx keysig.gp5-ref.mscx
-cp   $MSCORE/keysig.gp4.mscx keysig.gp4-ref.mscx
 cp   $MSCORE/dotted-tuplets.gp5.mscx dotted-tuplets.gp5-ref.mscx
-cp   $MSCORE/tuplet-with-slur.gp4.mscx tuplet-with-slur.gp4-ref.mscx
-cp   $MSCORE/beams-stems-ledger-lines.gp5.mscx beams-stems-ledger-lines.gp5-ref.mscx
-cp   $MSCORE/fret-diagram.gpx.mscx fret-diagram.gpx-ref.mscx
-cp   $MSCORE/fret-diagram.gp5.mscx fret-diagram.gp5-ref.mscx
-cp   $MSCORE/fret-diagram.gp4.mscx fret-diagram.gp4-ref.mscx
 cp   $MSCORE/fade-in.gp5.mscx fade-in.gp5-ref.mscx
 cp   $MSCORE/fade-in.gp4.mscx fade-in.gp4-ref.mscx
 cp   $MSCORE/slur-notes-effect-mask.gp5.mscx slur-notes-effect-mask.gp5-ref.mscx
 cp   $MSCORE/rest-centered.gpx.mscx rest-centered.gpx-ref.mscx
 cp   $MSCORE/rest-centered.gp5.mscx rest-centered.gp5-ref.mscx
+cp   $MSCORE/pick-up-down.gp5.mscx pick-up-down.gp5-ref.mscx
+cp   $MSCORE/fingering.gp5.mscx fingering.gp5-ref.mscx
+cp   $MSCORE/brush.gp5.mscx brush.gp5-ref.mscx
+cp   $MSCORE/tap-slap-pop.gp5.mscx tap-slap-pop.gp5-ref.mscx
+exit
+cp   $MSCORE/trill.gp4.mscx trill.gp4-ref.mscx
+#cp   $MSCORE/arpeggio_up_down.gp4.mscx arpeggio_up_down.gp4-ref.mscx
+cp   $MSCORE/ghost_note.gp3.mscx ghost_note.gp3-ref.mscx
+#cp   $MSCORE/grace.gp5.mscx grace.gp5-ref.mscx
+cp   $MSCORE/volta.gp4.mscx volta.gp4-ref.mscx
+cp   $MSCORE/volta.gp3.mscx volta.gp3-ref.mscx
+cp   $MSCORE/copyright.gpx.mscx copyright.gpx-ref.mscx
+cp   $MSCORE/copyright.gp4.mscx copyright.gp4-ref.mscx
+cp   $MSCORE/copyright.gp3.mscx copyright.gp3-ref.mscx
+cp   $MSCORE/tempo.gp4.mscx tempo.gp4-ref.mscx
+cp   $MSCORE/tempo.gp3.mscx tempo.gp3-ref.mscx
+cp   $MSCORE/bend.gp5.mscx bend.gp5-ref.mscx
+cp   $MSCORE/bend.gp4.mscx bend.gp4-ref.mscx
+cp   $MSCORE/bend.gp3.mscx bend.gp3-ref.mscx
+cp   $MSCORE/keysig.gp4.mscx keysig.gp4-ref.mscx
+cp   $MSCORE/tuplet-with-slur.gp4.mscx tuplet-with-slur.gp4-ref.mscx
+cp   $MSCORE/beams-stems-ledger-lines.gp5.mscx beams-stems-ledger-lines.gp5-ref.mscx
+cp   $MSCORE/fret-diagram.gpx.mscx fret-diagram.gpx-ref.mscx
+cp   $MSCORE/fret-diagram.gp5.mscx fret-diagram.gp5-ref.mscx
+cp   $MSCORE/fret-diagram.gp4.mscx fret-diagram.gp4-ref.mscx
 cp   $MSCORE/rest-centered.gp4.mscx rest-centered.gp4-ref.mscx
 cp   $MSCORE/slide-in-above.gp4.mscx slide-in-above.gp4-ref.mscx
 cp   $MSCORE/slide-in-above.gp5.mscx slide-in-above.gp5-ref.mscx
@@ -78,14 +77,11 @@ cp   $MSCORE/accent.gpx.mscx accent.gpx-ref.mscx
 cp   $MSCORE/turn.gpx.mscx turn.gpx-ref.mscx
 cp   $MSCORE/mordents.gpx.mscx mordents.gpx-ref.mscx
 cp   $MSCORE/pick-up-down.gpx.mscx pick-up-down.gpx-ref.mscx
-cp   $MSCORE/pick-up-down.gp5.mscx pick-up-down.gp5-ref.mscx
 cp   $MSCORE/pick-up-down.gp4.mscx pick-up-down.gp4-ref.mscx
 cp   $MSCORE/fingering.gpx.mscx fingering.gpx-ref.mscx
-cp   $MSCORE/fingering.gp5.mscx fingering.gp5-ref.mscx
 cp   $MSCORE/fingering.gp4.mscx fingering.gp4-ref.mscx
 cp   $MSCORE/arpeggio.gpx.mscx arpeggio.gpx-ref.mscx
 cp   $MSCORE/brush.gpx.mscx brush.gpx-ref.mscx
-cp   $MSCORE/brush.gp5.mscx brush.gp5-ref.mscx
 cp   $MSCORE/brush.gp4.mscx brush.gp4-ref.mscx
 #cp   $MSCORE/repeats.gp4.mscx repeats.gp4-ref.mscx
 cp   $MSCORE/repeats.gpx.mscx repeats.gpx-ref.mscx
@@ -99,7 +95,6 @@ cp   $MSCORE/let-ring.gpx.mscx let-ring.gpx-ref.mscx
 cp   $MSCORE/let-ring.gp5.mscx let-ring.gp5-ref.mscx
 cp   $MSCORE/let-ring.gp4.mscx let-ring.gp4-ref.mscx
 cp   $MSCORE/tap-slap-pop.gpx.mscx tap-slap-pop.gpx-ref.mscx
-cp   $MSCORE/tap-slap-pop.gp5.mscx tap-slap-pop.gp5-ref.mscx
 cp   $MSCORE/barre.gpx.mscx barre.gpx-ref.mscx
 cp   $MSCORE/timer.gpx.mscx timer.gpx-ref.mscx
 cp   $MSCORE/text.gpx.mscx text.gpx-ref.mscx
