@@ -143,7 +143,7 @@
                   <aPitchRange>31-60</aPitchRange>
                   <pPitchRange>31-64</pPitchRange>
                   <transposeDiatonic>-17</transposeDiatonic>
-                  <transposeChromatic>-21</transposeChromatic>
+                  <transposeChromatic>-29</transposeChromatic>
                   <Channel>
                         <program value="73"/>
                   </Channel>
