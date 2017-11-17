@@ -646,7 +646,6 @@ void PianorollEditor::updateAll()
 
 void PianorollEditor::playlistChanged()
       {
-      startTimer(0);    // delayed update
       }
 
 //---------------------------------------------------------
