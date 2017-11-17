@@ -2465,7 +2465,7 @@ static bool processNonGui(const QStringList& argv)
 //   Message handler
 //---------------------------------------------------------
 
-#if defined(QT_DEBUG) && defined(Q_OS_WIN)
+#if defined(QT_DEBUG)
 static void mscoreMessageHandler(QtMsgType type, const QMessageLogContext &context,const QString &msg)
      {
      QTextStream cerr(stderr);
@@ -5344,7 +5344,7 @@ using namespace Ms;
 int main(int argc, char* av[])
       {
       QApplication::setDesktopSettingsAware(true);
-#if defined(QT_DEBUG) && defined(Q_OS_WIN)
+#if defined(QT_DEBUG)
       qInstallMessageHandler(mscoreMessageHandler);
 #endif
 
