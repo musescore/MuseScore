@@ -2976,6 +2976,8 @@ void Score::collectNoteMatch(void* data, Element* e)
             return;
       if (p->pitch != -1 && p->pitch != n->pitch())
             return;
+      if (p->string != STRING_NONE && p->string != n->string())
+            return;
       if (p->tpc != Tpc::TPC_INVALID && p->tpc != n->tpc())
             return;
       if (p->notehead != NoteHead::Group::HEAD_INVALID && p->notehead != n->headGroup())
