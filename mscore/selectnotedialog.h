@@ -45,6 +45,7 @@ class SelectNoteDialog : public QDialog, Ui::SelectNoteDialog {
       bool doSubtract() const      { return subtract->isChecked();      }
       bool doFromSelection() const { return fromSelection->isChecked(); }
       bool isInSelection() const   { return inSelection->isChecked();   }
+      void setSameStringVisible(bool v) { sameString->setVisible(v); string->setVisible(v); }
       };
 
 } // namespace Ms
