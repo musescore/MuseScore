@@ -4429,7 +4429,11 @@ void MuseScore::selectElementDialog(Element* e)
       {
       Score* score = e->score();
       if (e->isNote()) {
-            SelectNoteDialog sd(toNote(e), 0);
+            Note* n = toNote(e);
+            SelectNoteDialog sd(n, 0);
+            // hide same string option if it doesn't make sense for the instrument
+            if (n->staff()->part()->instrument()->stringData()->strings() == 0)
+                  sd.setSameStringVisible(false);
             if (sd.exec()) {
                   NotePattern pattern;
                   sd.setPattern(&pattern);
