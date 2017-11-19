@@ -20,8 +20,11 @@
 
 install(FILES
       All_Dudes.mscz
+      Amazing_grace.mscz
       Reunion.mscz
       Triumph.mscz
+      adeste.mscx
+      goldberg.mscz
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}demos
       )
 
