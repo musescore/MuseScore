@@ -30,7 +30,12 @@ const TrillTableItem trillTable[] = {
       { Trill::Type::TRILL_LINE,      "trill",      QT_TRANSLATE_NOOP("trillType", "Trill line")          },
       { Trill::Type::UPPRALL_LINE,    "upprall",    QT_TRANSLATE_NOOP("trillType", "Upprall line")        },
       { Trill::Type::DOWNPRALL_LINE,  "downprall",  QT_TRANSLATE_NOOP("trillType", "Downprall line")      },
-      { Trill::Type::PRALLPRALL_LINE, "prallprall", QT_TRANSLATE_NOOP("trillType", "Prallprall line")     }
+      { Trill::Type::PRALLPRALL_LINE, "prallprall", QT_TRANSLATE_NOOP("trillType", "Prallprall line")     },
+      { Trill::Type::GUITAR_VIBRATO,         "guitarVibrato",         QT_TRANSLATE_NOOP("trillType", "Guitar vibrato")          },
+      { Trill::Type::GUITAR_VIBRATO_WIDE,    "guitarVibratoWide",     QT_TRANSLATE_NOOP("trillType", "Guitar vibrato wide")     },
+      { Trill::Type::VIBRATO_SAWTOOTH_NARROW,  "vibratoSawtoothNarrow", QT_TRANSLATE_NOOP("trillType", "Vibrato sawtooth narrow") },
+      { Trill::Type::VIBRATO_SAWTOOTH,         "vibratoSawtooth",       QT_TRANSLATE_NOOP("trillType", "Vibrato sawtooth")        },
+      { Trill::Type::VIBRATO_SAWTOOTH_WIDE,    "vibratoSawtoothWide",   QT_TRANSLATE_NOOP("trillType", "tremolo sawtooth wide")   }
       };
 
 int trillTableSize() {
@@ -145,22 +150,27 @@ void TrillSegment::layout()
                         symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
                         break;
                   case Trill::Type::UPPRALL_LINE:
-                        if (score()->scoreFont()->isValid(SymId::ornamentBottomLeftConcaveStroke))
                               symbolLine(SymId::ornamentBottomLeftConcaveStroke,
                                  SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
-                        else
-                              symbolLine(SymId::ornamentUpPrall,
-                                 // SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
-                                 SymId::ornamentZigZagLineNoRightEnd);
                         break;
                   case Trill::Type::DOWNPRALL_LINE:
-                        if (score()->scoreFont()->isValid(SymId::ornamentLeftVerticalStroke))
                               symbolLine(SymId::ornamentLeftVerticalStroke,
                                  SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
-                        else
-                              symbolLine(SymId::ornamentDownPrall,
-                                 // SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
-                                 SymId::ornamentZigZagLineNoRightEnd);
+                        break;
+                  case Trill::Type::GUITAR_VIBRATO:
+                        symbolLine(SymId::guitarVibratoStroke, SymId::guitarVibratoStroke);
+                        break;
+                  case Trill::Type::GUITAR_VIBRATO_WIDE:
+                        symbolLine(SymId::guitarWideVibratoStroke, SymId::guitarWideVibratoStroke);
+                        break;
+                  case Trill::Type::VIBRATO_SAWTOOTH_NARROW:
+                        symbolLine(SymId::wiggleSawtoothNarrow, SymId::wiggleSawtoothNarrow);
+                        break;
+                  case Trill::Type::VIBRATO_SAWTOOTH:
+                        symbolLine(SymId::wiggleSawtooth, SymId::wiggleSawtooth);
+                        break;
+                  case Trill::Type::VIBRATO_SAWTOOTH_WIDE:
+                        symbolLine(SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide);
                         break;
                   }
             }
@@ -447,18 +457,21 @@ void Trill::read(XmlReader& e)
 
 void Trill::setTrillType(const QString& s)
       {
-      if (s == "trill" || s == "0")
+      if (s == "0") {
             _trillType = Type::TRILL_LINE;
-      else if (s == "upprall")
-            _trillType = Type::UPPRALL_LINE;
-      else if (s == "downprall")
-            _trillType = Type::DOWNPRALL_LINE;
-      else if (s == "prallprall")
-            _trillType = Type::PRALLPRALL_LINE;
-      else if (s == "pure")
+            return;
+            }
+      if (s == "pure") {
             _trillType = Type::PRALLPRALL_LINE; // obsolete, compatibility only
-      else
-            qDebug("Trill::setSubtype: unknown <%s>", qPrintable(s));
+            return;
+            }
+      for (TrillTableItem i : trillTable) {
+            if (s.compare(i.name) == 0) {
+                  _trillType = i.type;
+                  return;
+                  }
+            }
+      qDebug("Trill::setSubtype: unknown <%s>", qPrintable(s));
       }
 
 //---------------------------------------------------------
@@ -467,19 +480,12 @@ void Trill::setTrillType(const QString& s)
 
 QString Trill::trillTypeName() const
       {
-      switch(trillType()) {
-            case Type::TRILL_LINE:
-                  return "trill";
-            case Type::UPPRALL_LINE:
-                  return "upprall";
-            case Type::DOWNPRALL_LINE:
-                  return "downprall";
-            case Type::PRALLPRALL_LINE:
-                  return "prallprall";
-            default:
-                  qDebug("unknown Trill subtype %d", int(trillType()));
-                  return "?";
+      for (TrillTableItem i : trillTable) {
+            if (i.type == trillType())
+                  return i.name;
             }
+      qDebug("unknown Trill subtype %d", int(trillType()));
+            return "?";
       }
 
 //---------------------------------------------------------
