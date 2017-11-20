@@ -109,7 +109,7 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
 
       virtual void dataChanged(const QRectF&)   { update(); }
       virtual void updateAll()                  { update(); }
-      virtual void adjustCanvasPosition(const Element*, bool,int) override {}
+      virtual void adjustCanvasPosition(const Element*, bool, int) override {}
       virtual void removeScore()                {}
       virtual void changeEditElement(Element*)  {}
       virtual int gripCount() const             { return 0; }

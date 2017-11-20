@@ -323,7 +323,7 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
             // be created
             if (!_drumset)
                   _drumset = new Drumset(*smDrumset);
-            if (!customDrumset) {
+            if (!(*customDrumset)) {
                   const_cast<Drumset*>(_drumset)->clear();
                   *customDrumset = true;
                   }
