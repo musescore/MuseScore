@@ -754,7 +754,7 @@ MuseScore::MuseScore()
                   fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(i)));
             }
       else {
-            for (auto i : { "file-new", "file-open", "file-save", "print", "redo", "undo"})
+            for (auto i : { "undo", "redo", "print", "file-save", "file-open", "file-new"})
                   fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(i)));
             }
 

@@ -83,8 +83,8 @@ PluginCreator::PluginCreator(QWidget* parent)
             editTools->addAction(actionRedo);
             }
       else {
-            editTools->addAction(actionUndo);
             editTools->addAction(actionRedo);
+            editTools->addAction(actionUndo);
             }
       actionUndo->setEnabled(false);
       actionRedo->setEnabled(false);
