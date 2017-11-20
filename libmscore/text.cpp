@@ -1,3 +1,4 @@
+
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
@@ -1914,7 +1915,6 @@ bool Text::readProperties(XmlReader& e)
                   }
             }
       if (tag == "text")
-            //_text = e.readXml();
             setXmlText(e.readXml());
       else if (!Element::readProperties(e))
             return false;

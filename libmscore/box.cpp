@@ -219,7 +219,6 @@ void Box::read(XmlReader& e)
       _bottomMargin    = 0.0;
       _boxHeight       = Spatium(0);     // override default set in constructor
       _boxWidth        = Spatium(0);
-      bool keepMargins = false;        // whether original margins have to be kept when reading old file
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -227,26 +226,14 @@ void Box::read(XmlReader& e)
                   HBox* hb = new HBox(score());
                   hb->read(e);
                   add(hb);
-                  keepMargins = true;     // in old file, box nesting used outer box margins
                   }
             else if (tag == "VBox") {
                   VBox* vb = new VBox(score());
                   vb->read(e);
                   add(vb);
-                  keepMargins = true;     // in old file, box nesting used outer box margins
                   }
             else if (!Box::readProperties(e))
                   e.unknown();
-            }
-
-      // with .msc versions prior to 1.17, box margins were only used when nesting another box inside this box:
-      // for backward compatibility set them to 0 in all other cases
-
-      if (score()->mscVersion() <= 114 && (isHBox() || isVBox()) && !keepMargins)  {
-            _leftMargin   = 0.0;
-            _rightMargin  = 0.0;
-            _topMargin    = 0.0;
-            _bottomMargin = 0.0;
             }
       }
 

@@ -47,6 +47,8 @@
 #include "ottava.h"
 #include "trill.h"
 #include "rehearsalmark.h"
+#include "box.h"
+#include "textframe.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -1022,7 +1024,7 @@ static void readText(XmlReader& e, Text* t, Element* be)
             else if (tag == "frame")
                   t->setHasFrame(e.readBool());
             else if (tag == "halign") {
-                  Align align = Align(int(t->align()) & int(~(Align::HCENTER | Align::RIGHT)));
+                  Align align = Align(int(t->align()) & int(~Align::HMASK));
                   const QString& val(e.readElementText());
                   if (val == "center")
                         align = align | Align::HCENTER;
@@ -1032,6 +1034,21 @@ static void readText(XmlReader& e, Text* t, Element* be)
                         ;
                   else
                         qDebug("readText: unknown alignment: <%s>", qPrintable(val));
+                  t->setAlign(align);
+                  }
+            else if (tag == "valign") {
+                  Align align = Align(int(t->align()) & int(~Align::VMASK));
+                  const QString& val(e.readElementText());
+                  if (val == "center")
+                        align = align | Align::VCENTER;
+                  else if (val == "bottom")
+                        align = align | Align::BOTTOM;
+                  else if (val == "baseline")
+                        align = align | Align::BASELINE;
+                  else if (val == "top")
+                        ;
+                  else
+                        qDebug("Text::readProperties: unknown alignment: <%s>", qPrintable(val));
                   t->setAlign(align);
                   }
             else if (!t->readProperties(e))
@@ -1933,6 +1950,66 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   readBox
+//---------------------------------------------------------
+
+static void readBox(Box* b, XmlReader& e)
+      {
+      b->setLeftMargin(0.0);
+      b->setRightMargin(0.0);
+      b->setTopMargin(0.0);
+      b->setBottomMargin(0.0);
+
+      b->setBoxHeight(Spatium(0));     // override default set in constructor
+      b->setBoxWidth(Spatium(0));
+      bool keepMargins = false;        // whether original margins have to be kept when reading old file
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "HBox") {
+                  HBox* hb = new HBox(b->score());
+                  hb->read(e);
+                  b->add(hb);
+                  keepMargins = true;     // in old file, box nesting used outer box margins
+                  }
+            else if (tag == "VBox") {
+                  VBox* vb = new VBox(b->score());
+                  vb->read(e);
+                  b->add(vb);
+                  keepMargins = true;     // in old file, box nesting used outer box margins
+                  }
+            else if (tag == "Text") {
+                  Text* t;
+                  if (b->isTBox()) {
+                        t = toTBox(b)->text();
+                        readText(e, t, t);
+                        }
+                  else {
+                        t = new Text(b->score());
+                        readText(e, t, t);
+                        if (t->empty()) {
+                              qDebug("read empty text");
+                              }
+                        else
+                              b->add(t);
+                        }
+                  }
+            else if (!b->readProperties(e))
+                  e.unknown();
+            }
+
+      // with .msc versions prior to 1.17, box margins were only used when nesting another box inside this box:
+      // for backward compatibility set them to 0 in all other cases
+
+      if (b->score()->mscVersion() <= 114 && (b->isHBox() || b->isVBox()) && !keepMargins)  {
+            b->setLeftMargin(0.0);
+            b->setRightMargin(0.0);
+            b->setTopMargin(0.0);
+            b->setBottomMargin(0.0);
+            }
+      }
+
+//---------------------------------------------------------
 //   readStaffContent
 //---------------------------------------------------------
 
@@ -1977,10 +2054,10 @@ static void readStaffContent(Score* score, XmlReader& e)
                               }
                         }
                   else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
-                        MeasureBase* mb = static_cast<MeasureBase*>(Element::name2Element(tag, score));
-                        mb->read(e);
-                        mb->setTick(e.tick());
-                        score->measures()->add(mb);
+                        Box* b = toBox(Element::name2Element(tag, score));
+                        readBox(b, e);
+                        b->setTick(e.tick());
+                        score->measures()->add(b);
                         }
                   else if (tag == "tick")
                         e.initTick(score->fileDivision(e.readInt()));
