@@ -65,7 +65,8 @@ class Trill : public SLine {
 
    public:
       enum class Type : char {
-            TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE
+            TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE,
+            GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH_NARROW, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE
             };
 
    private:
