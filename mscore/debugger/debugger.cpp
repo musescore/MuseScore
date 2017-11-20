@@ -1371,6 +1371,25 @@ void TextView::setElement(Element* e)
       tb.yoffset->setValue(te->offset().y());
       tb.offsetType->setCurrentIndex(int(te->offsetType()));
       tb.layoutToParentWidth->setChecked(te->layoutToParentWidth());
+      Align a = te->align();
+      const char* h;
+      if (a & Align::HCENTER)
+            h = "center";
+      else if (a & Align::RIGHT)
+            h = "right";
+      else
+            h = "left";
+      tb.halign->setText(h);
+      const char* v;
+      if (a & Align::BOTTOM)
+            v = "bottom";
+      else if (a & Align::VCENTER)
+            v = "center";
+      else if (a & Align::BASELINE)
+            v = "baseline";
+      else
+            v = "top";
+      tb.valign->setText(v);
       }
 
 //---------------------------------------------------------

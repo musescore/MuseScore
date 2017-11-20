@@ -62,7 +62,7 @@ include (GetCompilerVersion)
 include (CreatePrecompiledHeader)
 
 # For debugging the make system uncomment next line:
-#set(CMAKE_VERBOSE_MAKEFILE ON)
+# set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set(CMAKE_AUTOMOC     TRUE)
 set(MSCORE_UNSTABLE   TRUE)          # Mark as unstable
