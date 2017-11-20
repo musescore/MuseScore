@@ -318,7 +318,7 @@ void Tremolo::layout()
             qreal beamHalfLineWidth = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
             beamYOffset = beams * _chord1->beam()->beamDist() - beamHalfLineWidth;
             if (_chord1->up() != _chord2->up()) {  // cross-staff
-                  beamYOffset += beamYOffset + beamHalfLineWidth;
+                  beamYOffset = 2 * beamYOffset + beamHalfLineWidth;
                   }
             else if (!_chord1->up() && !_chord2->up()) {
                   beamYOffset = -beamYOffset;

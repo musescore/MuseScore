@@ -723,10 +723,6 @@ static void readNote(Note* note, XmlReader& e)
                         e.hasAccidental = true;   // we now have an accidental
                         }
                   }
-            else if (tag == "onTimeType")
-                  e.skipCurrentElement(); // _onTimeType = readValueType(e);
-            else if (tag == "offTimeType")
-                  e.skipCurrentElement(); // _offTimeType = readValueType(e);
             else if (tag == "offset")
                   e.skipCurrentElement(); // ignore manual layout in older scores
             else if (tag == "move")

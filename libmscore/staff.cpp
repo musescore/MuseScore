@@ -1022,7 +1022,7 @@ StaffType* Staff::setStaffType(int tick, const StaffType* nst)
 void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int cidx)
       {
       // set staff-type-independent parameters
-      if (cidx > MAX_STAVES) {
+      if (cidx >= MAX_STAVES) {
             setSmall(0, false);
             }
       else {
