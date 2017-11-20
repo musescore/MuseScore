@@ -1518,7 +1518,7 @@ bool GuitarPro2::read(QFile* fp)
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
             clef->setTrack(i * VOICES);
-            Segment* segment = measure->getSegment(SegmentType::Clef, 0);
+            Segment* segment = measure->getSegment(SegmentType::HeaderClef, 0);
             segment->add(clef);
 
             if (capo > 0) {
@@ -2217,7 +2217,7 @@ bool GuitarPro3::read(QFile* fp)
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
             clef->setTrack(i * VOICES);
-            Segment* segment = measure->getSegment(SegmentType::Clef, 0);
+            Segment* segment = measure->getSegment(SegmentType::HeaderClef, 0);
             segment->add(clef);
 
             if (capo > 0) {
@@ -2228,7 +2228,7 @@ bool GuitarPro3::read(QFile* fp)
                   st->setParent(s);
                   st->setTrack(i * VOICES);
                   measure->add(st);
-            }
+                  }
 
             Channel* ch = instr->channel(0);
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
@@ -2882,8 +2882,8 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
 		delete staff;
 		delete p;
 	      }
-      score->rebuildMidiMapping();
-      score->updateChannel();
+//      score->rebuildMidiMapping();
+//      score->updateChannel();
 //      album
 //      copyright
 
