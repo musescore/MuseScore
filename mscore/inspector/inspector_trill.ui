@@ -199,6 +199,31 @@
           <string>Prall Prall</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>Guitar vibrato</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Guitar vibrato wide</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Vibrato sawtooth narrow</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Vibrato sawtooth</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Vibrato sawtooth wide</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item row="1" column="1">
