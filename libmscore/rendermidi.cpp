@@ -662,34 +662,61 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
             std::map<int, std::vector<std::pair<int, bool>>> channelPedalEvents = std::map<int, std::vector<std::pair<int, bool>>>();
             for (const auto& sp : _spanner.map()) {
                   Spanner* s = sp.second;
-                  if (s->type() != ElementType::PEDAL || (staffIdx != -1 && s->staffIdx() != staffIdx))
+                  if (staffIdx != -1 && s->staffIdx() != staffIdx)
                         continue;
-
+                  
                   int idx = s->staff()->channel(s->tick(), 0);
                   int channel = s->part()->instrument(s->tick())->channel(idx)->channel;
-                  channelPedalEvents.insert({channel, std::vector<std::pair<int, bool>>()});
-                  std::vector<std::pair<int, bool>> pedalEventList = channelPedalEvents.at(channel);
-                  std::pair<int, bool> lastEvent;
+                  
+                  if (s->type() == ElementType::PEDAL) {
+                        channelPedalEvents.insert({channel, std::vector<std::pair<int, bool>>()});
+                        std::vector<std::pair<int, bool>> pedalEventList = channelPedalEvents.at(channel);
+                        std::pair<int, bool> lastEvent;
 
-                  if (!pedalEventList.empty())
-                        lastEvent = pedalEventList.back();
-                  else
-                        lastEvent = std::pair<int, bool>(0, true);
+                        if (!pedalEventList.empty())
+                              lastEvent = pedalEventList.back();
+                        else
+                              lastEvent = std::pair<int, bool>(0, true);
 
-                  if (s->tick() >= tick1 && s->tick() < tick2) {
-                        // Handle "overlapping" pedal segments (usual case for connected pedal line)
-                        if (lastEvent.second == false && lastEvent.first >= (s->tick() + tickOffset + 2)) {
-                              channelPedalEvents.at(channel).pop_back();
-                              channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick() + tickOffset + 1, false));
+                        if (s->tick() >= tick1 && s->tick() < tick2) {
+                              // Handle "overlapping" pedal segments (usual case for connected pedal line)
+                              if (lastEvent.second == false && lastEvent.first >= (s->tick() + tickOffset + 2)) {
+                                    channelPedalEvents.at(channel).pop_back();
+                                    channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick() + tickOffset + 1, false));
+                                    }
+                              channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick() + tickOffset + 2, true));
                               }
-                        channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick() + tickOffset + 2, true));
+                        if (s->tick2() >= tick1 && s->tick2() <= tick2) {
+                              int t = s->tick2() + tickOffset + 1;
+                              if (t > repeatList()->last()->utick + repeatList()->last()->len)
+                                    t = repeatList()->last()->utick + repeatList()->last()->len;
+                              channelPedalEvents.at(channel).push_back(std::pair<int, bool>(t, false));
+                              }
                         }
-                  if (s->tick2() >= tick1 && s->tick2() <= tick2) {
-                        int t = s->tick2() + tickOffset + 1;
-                        if (t > repeatList()->last()->utick + repeatList()->last()->len)
-                              t = repeatList()->last()->utick + repeatList()->last()->len;
-                        channelPedalEvents.at(channel).push_back(std::pair<int, bool>(t, false));
+                  else if (s->type() == ElementType::TRILL) {
+                        // from start to end of trill, send 0 and 100 bend at regular interval
+                        Trill* t = toTrill(s);
+                        if (t->isVibrato()) {
+                              int lastPointTick = s->tick();
+                              int pitch = -25; // 1/8 (100 is a semitone)
+                              if (t->trillType() == Trill::Type::GUITAR_VIBRATO_WIDE || t->trillType() == Trill::Type::VIBRATO_SAWTOOTH_WIDE)
+                                    pitch = -50; // 1/4
+                              int i = 0;
+                              while (lastPointTick < s->tick2()) {
+                                    int midiPitch = (pitch * 16384) / 1200 + 8192;
+                                    int msb = midiPitch / 128;
+                                    int lsb = midiPitch % 128;
+                                    NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
+                                    events->insert(std::pair<int, NPlayEvent>(lastPointTick, ev));
+                                    lastPointTick += MScore::division / 8; // 1/8 note
+                                    if (i%2 == 1) // 2 period down, 2 period up
+                                       pitch *= -1;
+                                    i++;
+                                    }
+                              }
                         }
+                  else
+                        continue;
                   }
 
             for (const auto& pedalEvents : channelPedalEvents) {
@@ -1284,7 +1311,7 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
            ,{Trill::Type::PRALLPRALL_LINE, SymId::ornamentTrill      }
             };
       auto it = articulationMap.find(trillType);
-      if (it == articulationMap.cend() )
+      if (it == articulationMap.cend())
             return false;
       else
             return renderNoteArticulation(events, note, chromatic, it->second, ornamentStyle);
