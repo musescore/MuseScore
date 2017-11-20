@@ -42,6 +42,11 @@ int trillTableSize() {
       return sizeof(trillTable)/sizeof(TrillTableItem);
       }
 
+bool Trill::isVibrato()
+      {
+      return _trillType >= Trill::Type::GUITAR_VIBRATO;
+      }
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------

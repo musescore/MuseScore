@@ -101,6 +101,7 @@ class Trill : public SLine {
       QString trillTypeUserName() const;
       Accidental* accidental() const      { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a; }
+      bool isVibrato();
 
       Segment* segment() const          { return (Segment*)parent(); }
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
