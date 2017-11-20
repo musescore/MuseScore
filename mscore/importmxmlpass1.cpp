@@ -888,8 +888,8 @@ void MusicXMLParserPass1::scorePartwise()
 
       MusicXmlPartGroupList partGroupList;
       CreditWordsList credits;
-      int pageWidth;                             ///< Page width read from defaults
-      int pageHeight;                            ///< Page height read from defaults
+      int pageWidth  = 0;                        ///< Page width read from defaults
+      int pageHeight = 0;                        ///< Page height read from defaults
 
       while (_e.readNextStartElement()) {
             if (_e.name() == "part")

@@ -48,8 +48,6 @@ Slider::Slider(Qt::Orientation orientation, QWidget* parent)
 
 void Slider::init()
       {
-      _dclickValue1 = 0.0;
-      _dclickValue2 = 0.0;
       if (orient == Qt::Vertical)
       	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
       else
