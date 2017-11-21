@@ -3860,6 +3860,8 @@ void Score::undoAddElement(Element* element)
             QList<int> tr;
             if (staff->score()->excerpt() && strack > -1)
                   tr = staff->score()->excerpt()->tracks().values(strack);
+            else if ((strack & ~3) != staffIdx) // linked staff ?
+                  tr.append(staffIdx * VOICES + (strack % VOICES));
             else
                   tr.append(strack);
 
