@@ -664,10 +664,10 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                   Spanner* s = sp.second;
                   if (staffIdx != -1 && s->staffIdx() != staffIdx)
                         continue;
-                  
+
                   int idx = s->staff()->channel(s->tick(), 0);
                   int channel = s->part()->instrument(s->tick())->channel(idx)->channel;
-                  
+
                   if (s->type() == ElementType::PEDAL) {
                         channelPedalEvents.insert({channel, std::vector<std::pair<int, bool>>()});
                         std::vector<std::pair<int, bool>> pedalEventList = channelPedalEvents.at(channel);
@@ -694,25 +694,47 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                               }
                         }
                   else if (s->type() == ElementType::TRILL) {
-                        // from start to end of trill, send 0 and 100 bend at regular interval
+                        // from start to end of trill, send bend events at regular interval
                         Trill* t = toTrill(s);
                         if (t->isVibrato()) {
-                              int lastPointTick = s->tick();
-                              int pitch = -25; // 1/8 (100 is a semitone)
-                              if (t->trillType() == Trill::Type::GUITAR_VIBRATO_WIDE || t->trillType() == Trill::Type::VIBRATO_SAWTOOTH_WIDE)
-                                    pitch = -50; // 1/4
-                              int i = 0;
-                              while (lastPointTick < s->tick2()) {
-                                    int midiPitch = (pitch * 16384) / 1200 + 8192;
-                                    int msb = midiPitch / 128;
-                                    int lsb = midiPitch % 128;
-                                    NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
-                                    events->insert(std::pair<int, NPlayEvent>(lastPointTick, ev));
-                                    lastPointTick += MScore::division / 8; // 1/8 note
-                                    if (i%2 == 1) // 2 period down, 2 period up
-                                       pitch *= -1;
-                                    i++;
+                              // guitar vibrato, up only
+                              int spitch = 0; // 1/8 (100 is a semitone)
+                              int epitch = 12;
+                              if (t->trillType() == Trill::Type::GUITAR_VIBRATO_WIDE) {
+                                    spitch = 0; // 1/4
+                                    epitch = 25;
                                     }
+                              // vibrato with whammy bar up and down
+                              else if (t->trillType() == Trill::Type::VIBRATO_SAWTOOTH_WIDE) {
+                                    spitch = 25; // 1/16
+                                    epitch = -25;
+                                    }
+                              else if (t->trillType() == Trill::Type::VIBRATO_SAWTOOTH) {
+                                    spitch = 12;
+                                    epitch = -12;
+                                    }
+
+                              int j = 0;
+                              int delta = MScore::division / 8; // 1/8 note
+                              int lastPointTick = s->tick();
+                              while (lastPointTick < s->tick2()) {
+                                    int pitch = (j % 4 < 2) ? spitch : epitch;
+                                    int nextPitch = ((j+1) % 4 < 2) ? spitch : epitch;
+                                    int nextPointTick = lastPointTick + delta;
+                                    for (int i = lastPointTick; i <= nextPointTick; i += 16) {
+                                          double dx = ((i - lastPointTick) * 60) / delta;
+                                          int p = pitch + dx * (nextPitch - pitch) / delta;
+                                          int midiPitch = (p * 16384) / 1200 + 8192;
+                                          int msb = midiPitch / 128;
+                                          int lsb = midiPitch % 128;
+                                          NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
+                                          events->insert(std::pair<int, NPlayEvent>(i, ev));
+                                          }
+                                    lastPointTick = nextPointTick;
+                                    j++;
+                                    }
+                              NPlayEvent ev(ME_PITCHBEND, channel, 0, 64); // no pitch bend
+                              events->insert(std::pair<int, NPlayEvent>(s->tick2(), ev));
                               }
                         }
                   else
