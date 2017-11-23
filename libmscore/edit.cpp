@@ -4183,10 +4183,13 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
 
       foreach (Staff* staff, ostaff->staffList()) {
             QList<int> tracks;
-            if (staff->score()->excerpt() && !staff->score()->excerpt()->tracks().isEmpty())
+            int staffIdx = staff->idx();
+            if ((strack & ~3) != staffIdx) // linked staff ?
+                  tracks.append(staffIdx * VOICES + (strack % VOICES));
+            else if (staff->score()->excerpt() && !staff->score()->excerpt()->tracks().isEmpty())
                   tracks = staff->score()->excerpt()->tracks().values(strack);
             else
-                  tracks.append(staff->idx() * VOICES + cr->voice());
+                  tracks.append(staffIdx * VOICES + cr->voice());
 
             for (int ntrack : tracks) {
                   if (ntrack < staff->part()->startTrack() || ntrack >= staff->part()->endTrack())
