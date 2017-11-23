@@ -198,10 +198,10 @@ void PowerTab::readChord(ptTrack& info)
       for (int i = 0; i < stringCount; ++i) {
             ch.frets.push_back(readUChar()); // fret
             }
-      if (info.diagramMap.find({ ch.key, ch.formula, ch.modification }) == info.diagramMap.end())
-            info.diagramMap[ { ch.key, ch.formula, ch.modification }] = ch;
+      if (info.diagramMap.find({ {ch.key, ch.formula, ch.modification} }) == info.diagramMap.end())
+            info.diagramMap[ { {ch.key, ch.formula, ch.modification} }] = ch;
       else {
-            auto a1 = info.diagramMap[ { ch.key, ch.formula, ch.modification }];
+            auto a1 = info.diagramMap[ { {ch.key, ch.formula, ch.modification} }];
             auto a2 = ch;
 
 //??            int k = 1;
@@ -698,9 +698,6 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                   tuple->add(cr);
                   tupleBeatCounter = 2;
                   }
-
-
-
             elist.pop_front();
             }
 
@@ -1256,6 +1253,17 @@ Score::FileError PowerTab::read()
             for (int i = staff->idx() * VOICES, j = 0; i < staff->idx() * VOICES + VOICES; i++, j++)
                   tracks.insert(i, j);
 
+            Excerpt* excerpt = new Excerpt(score);
+            excerpt->setTracks(tracks);
+            excerpt->setPartScore(pscore);
+            //title?
+            excerpt->setTitle(part->instrument()->longNames()[0].name());
+            pscore->setExcerpt(excerpt);
+            excerpt->parts().append(part);
+            score->excerpts().append(excerpt);
+
+            Excerpt::cloneStaves(score, pscore, stavesMap, tracks);
+
             if (staff->part()->instrument()->stringData()->strings() > 0 && part->staves()->front()->staffType(0)->group() == StaffGroup::STANDARD) {
                   p->setStaves(2);
                   Staff* s1 = p->staff(1);
@@ -1271,18 +1279,22 @@ Score::FileError PowerTab::read()
                   BracketItem* bi = new BracketItem(pscore, BracketType::NORMAL, 2);
                   p->staves()->front()->addBracket(bi);
                   }
-
-            Excerpt* excerpt = new Excerpt(score);
-            excerpt->setTracks(tracks);
-            excerpt->setPartScore(pscore);
-            //title?
-            excerpt->setTitle(part->instrument()->longNames()[0].name());
-            pscore->setExcerpt(excerpt);
-            excerpt->parts().append(part);
-            score->excerpts().append(excerpt);
-
-            Excerpt::cloneStaves(score, pscore, stavesMap, tracks);
             pscore->appendPart(p);
+
+            //
+            // create excerpt title
+            //
+            MeasureBase* measure = pscore->first();
+            if (!measure || (measure->type() != ElementType::VBOX)) {
+                  MeasureBase* mb = new VBox(pscore);
+                  mb->setTick(0);
+                  pscore->addMeasure(mb, measure);
+                  measure = mb;
+                  }
+            Text* txt = new Text(SubStyle::INSTRUMENT_EXCERPT, pscore);
+            txt->setPlainText(part->longName());
+            measure->add(txt);
+
             pscore->setPlaylistDirty();
             pscore->setLayoutAll();
             pscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
