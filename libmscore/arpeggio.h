@@ -38,6 +38,8 @@ class Arpeggio : public Element {
       std::vector<SymId> symbols;
       bool _playArpeggio;
 
+      bool _hidden = false; // set in layout, will skip draw if true
+
       void symbolLine(SymId start, SymId fill);
       void symbolLine2(SymId end, SymId fill);
 

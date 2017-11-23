@@ -174,6 +174,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::ArpeggioNoteDistance,    false, arpeggioNoteDistance,    0 },
       { StyleIdx::ArpeggioLineWidth,       false, arpeggioLineWidth,       0 },
       { StyleIdx::ArpeggioHookLen,         false, arpeggioHookLen,         0 },
+      { StyleIdx::ArpeggioHiddenInStdIfTab,false, arpeggioHiddenInStdIfTab,0 },
       { StyleIdx::SlurEndWidth,            false, slurEndLineWidth,        resetSlurEndLineWidth    },
       { StyleIdx::SlurMidWidth,            false, slurMidLineWidth,        resetSlurMidLineWidth    },
       { StyleIdx::SlurDottedWidth,         false, slurDottedLineWidth,     resetSlurDottedLineWidth },
