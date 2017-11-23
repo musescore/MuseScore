@@ -246,6 +246,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::ArpeggioNoteDistance,    "ArpeggioNoteDistance",    Spatium(.5) },
       { StyleIdx::ArpeggioLineWidth,       "ArpeggioLineWidth",       Spatium(.18) },
       { StyleIdx::ArpeggioHookLen,         "ArpeggioHookLen",         Spatium(.8) },
+      { StyleIdx::ArpeggioHiddenInStdIfTab,"ArpeggioHiddenInStdIfTab",QVariant(false)},
       { StyleIdx::SlurEndWidth,            "slurEndWidth",            Spatium(.07) },
       { StyleIdx::SlurMidWidth,            "slurMidWidth",            Spatium(.15) },
       { StyleIdx::SlurDottedWidth,         "slurDottedWidth",         Spatium(.10)  },
