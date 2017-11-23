@@ -31,11 +31,10 @@ const TrillTableItem trillTable[] = {
       { Trill::Type::UPPRALL_LINE,    "upprall",    QT_TRANSLATE_NOOP("trillType", "Upprall line")        },
       { Trill::Type::DOWNPRALL_LINE,  "downprall",  QT_TRANSLATE_NOOP("trillType", "Downprall line")      },
       { Trill::Type::PRALLPRALL_LINE, "prallprall", QT_TRANSLATE_NOOP("trillType", "Prallprall line")     },
-      { Trill::Type::GUITAR_VIBRATO,         "guitarVibrato",         QT_TRANSLATE_NOOP("trillType", "Guitar vibrato")          },
-      { Trill::Type::GUITAR_VIBRATO_WIDE,    "guitarVibratoWide",     QT_TRANSLATE_NOOP("trillType", "Guitar vibrato wide")     },
-      { Trill::Type::VIBRATO_SAWTOOTH_NARROW,  "vibratoSawtoothNarrow", QT_TRANSLATE_NOOP("trillType", "Vibrato sawtooth narrow") },
-      { Trill::Type::VIBRATO_SAWTOOTH,         "vibratoSawtooth",       QT_TRANSLATE_NOOP("trillType", "Vibrato sawtooth")        },
-      { Trill::Type::VIBRATO_SAWTOOTH_WIDE,    "vibratoSawtoothWide",   QT_TRANSLATE_NOOP("trillType", "tremolo sawtooth wide")   }
+      { Trill::Type::GUITAR_VIBRATO,         "guitarVibrato",         QT_TRANSLATE_NOOP("trillType", "Left hand vibrato (slight)") },
+      { Trill::Type::GUITAR_VIBRATO_WIDE,    "guitarVibratoWide",     QT_TRANSLATE_NOOP("trillType", "Left hand vibrator (wide)")  },
+      { Trill::Type::VIBRATO_SAWTOOTH,       "vibratoSawtooth",       QT_TRANSLATE_NOOP("trillType", "Vibrato with tremolo bar (slight)")  },
+      { Trill::Type::VIBRATO_SAWTOOTH_WIDE,  "vibratoSawtoothWide",   QT_TRANSLATE_NOOP("trillType", "Vibrato with tremolo bar (wide)")   }
       };
 
 int trillTableSize() {
@@ -167,9 +166,6 @@ void TrillSegment::layout()
                         break;
                   case Trill::Type::GUITAR_VIBRATO_WIDE:
                         symbolLine(SymId::guitarWideVibratoStroke, SymId::guitarWideVibratoStroke);
-                        break;
-                  case Trill::Type::VIBRATO_SAWTOOTH_NARROW:
-                        symbolLine(SymId::wiggleSawtoothNarrow, SymId::wiggleSawtoothNarrow);
                         break;
                   case Trill::Type::VIBRATO_SAWTOOTH:
                         symbolLine(SymId::wiggleSawtooth, SymId::wiggleSawtooth);
