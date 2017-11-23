@@ -295,6 +295,9 @@ class Note : public Element {
       SymId _cachedNoteheadSym; // use in draw to avoid recomputing at every update
       SymId _cachedSymNull; // additional symbol for some transparent notehead
 
+      QString _fretString;
+      bool _fretHidden = false;
+
       virtual void startDrag(EditData&) override;
       virtual QRectF drag(EditData&) override;
       virtual void endDrag(EditData&) override;

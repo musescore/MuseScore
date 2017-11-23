@@ -850,12 +850,7 @@ qreal Note::tabHeadWidth(StaffType* tab) const
             QFont f    = tab->fretFont();
             f.setPointSizeF(tab->fretFontSize());
             QFontMetricsF fm(f, MScore::paintDevice());
-            QString s;
-            if (fixed())
-                s = "/";
-            else
-                s = tab->fretString(_fret, _string, _ghost);
-            val  = fm.width(s) * magS();
+            val  = fm.width(_fretString) * magS();
             }
       else
             val = headWidth();
@@ -1057,7 +1052,7 @@ bool Note::isNoteName() const
 
 void Note::draw(QPainter* painter) const
       {
-      if (_hidden)
+      if (_hidden || _fretHidden)
             return;
 
       QColor c(curColor());
@@ -1065,21 +1060,12 @@ void Note::draw(QPainter* painter) const
       bool tablature = staff() && staff()->isTabStaff(chord()->tick());
 
       // tablature
-
       if (tablature) {
             StaffType* tab = staff()->staffType(tick());
-            if (tieBack() && !tab->showBackTied())    // skip back-tied notes if not shown
-                  return;
-            QString s;
-            if (fixed())
-                  s = "/";
-            else
-                  s = tab->fretString(_fret, _string, _ghost);
-
             // draw background, if required (to hide a segment of string line or to show a fretting conflict)
             if (!tab->linesThrough() || fretConflict()) {
                   qreal d  = spatium() * .1;
-                  QRectF bb = QRectF(bbox().x()-d, tab->fretMaskY()*magS(), bbox().width() + 2*d, tab->fretMaskH()*magS());
+                  QRectF bb = QRectF(bbox().x()-d, tab->fretMaskY() * magS(), bbox().width() + 2 * d, tab->fretMaskH()*magS());
                   // we do not know which viewer did this draw() call
                   // so update all:
                   if (!score()->getViewer().empty()) {
@@ -1101,7 +1087,7 @@ void Note::draw(QPainter* painter) const
             f.setPointSizeF(f.pointSizeF() * spatium() * MScore::pixelRatio / SPATIUM20);
             painter->setFont(f);
             painter->setPen(c);
-            painter->drawText(QPointF(bbox().x(), tab->fretFontYOffset()), s);
+            painter->drawText(QPointF(bbox().x(), tab->fretFontYOffset()), _fretString);
             }
 
       // NOT tablature
@@ -1938,7 +1924,22 @@ void Note::layout()
       if (useTablature) {
             StaffType* tab = staff()->staffType(tick());
             qreal mags = magS();
-            qreal w = tabHeadWidth(tab);
+            bool paren = false;
+            if (tieBack() && !tab->showBackTied()) {
+                  _fretHidden = false;
+                  if (el().size() > 0)
+                        paren = true;
+                  else
+                        _fretHidden = true;
+                  }
+            // not complete but we need systems to be layouted to add parenthesis
+            if (fixed())
+                  _fretString = "/";
+            else
+                  _fretString = tab->fretString(_fret, _string, _ghost);
+            if (paren)
+                  _fretString = QString("(%1)").arg(_fretString);
+            qreal w = tabHeadWidth(tab); // !! use _fretString
             bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
             }
       else {
@@ -1968,8 +1969,22 @@ void Note::layout2()
       // for standard staves this is done in Score::layoutChords3()
       // so that the results are available there
 
-      if (staff()->isTabStaff(chord()->tick()))
+      if (staff()->isTabStaff(chord()->tick())) {
             adjustReadPos();
+            StaffType* tab = staff()->staffType(tick());
+            qreal mags = magS();
+            bool paren = false;
+            if (tieBack() && !tab->showBackTied() && !_fretString.startsWith("(")) {   // skip back-tied notes if not shown but between () if on another system
+                  if (chord()->measure()->system() != tieBack()->startNote()->chord()->measure()->system())
+                        paren = true;
+                  else
+                        _fretHidden = true;
+                  }
+            if (paren)
+                  _fretString = QString("(%1)").arg(_fretString);
+            qreal w = tabHeadWidth(tab); // !! use _fretString
+            bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
+            }
 
       int dots = chord()->dots();
       if (dots) {
