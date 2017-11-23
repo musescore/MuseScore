@@ -3528,6 +3528,15 @@ void MuseScore::play(Element* e) const
                   seq->startNote(channel->channel, n->ppitch(), 80, n->tuning());
                   }
             seq->startNoteTimer(MScore::defaultPlayDuration);
+
+            PianoTools* piano = pianoTools();
+            if (piano && piano->isVisible()) {
+                // FIXME
+                QList<const Note*> notes;
+                for (Note *n : c->notes())
+                    notes.append(n);
+                piano->heartBeat(notes);
+                }
             }
       }
 
@@ -3543,6 +3552,13 @@ void MuseScore::play(Element* e, int pitch) const
             Instrument* instr = note->part()->instrument(tick);
             const Channel* channel = instr->channel(note->subchannel());
             seq->startNote(channel->channel, pitch, 80, MScore::defaultPlayDuration, note->tuning());
+
+            PianoTools* piano = pianoTools();
+            if (piano && piano->isVisible()) {
+                QList<const Note*> notes;
+                notes.append(note);
+                piano->heartBeat(notes);
+                }
             }
       }
 
@@ -4772,6 +4788,15 @@ void MuseScore::endCmd()
             }
       else {
             selectionChanged(SelState::NONE);
+            }
+      PianoTools *piano = pianoTools();
+
+      if (piano && piano->isVisible()) {
+                 // FIXME
+                 QList<const Note*> notes;
+                 for (Note *note: cs->selection().uniqueNotes())
+                     notes.append(note);
+                 piano->heartBeat(notes);
             }
       updateInspector();
       }
