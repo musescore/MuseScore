@@ -1925,6 +1925,7 @@ void Note::layout()
             StaffType* tab = staff()->staffType(tick());
             qreal mags = magS();
             bool paren = false;
+            _fretHidden = false;
             if (tieBack() && !tab->showBackTied()) {
                   _fretHidden = false;
                   if (el().size() > 0)
@@ -1974,8 +1975,9 @@ void Note::layout2()
             StaffType* tab = staff()->staffType(tick());
             qreal mags = magS();
             bool paren = false;
+            _fretHidden = false;
             if (tieBack() && !tab->showBackTied() && !_fretString.startsWith("(")) {   // skip back-tied notes if not shown but between () if on another system
-                  if (chord()->measure()->system() != tieBack()->startNote()->chord()->measure()->system())
+                  if (chord()->measure()->system() != tieBack()->startNote()->chord()->measure()->system() || el().size() > 0)
                         paren = true;
                   else
                         _fretHidden = true;
