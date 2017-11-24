@@ -1195,6 +1195,8 @@ Score::FileError PowerTab::read()
                   parts[i] = sec.beats[i];
             }
 
+      score->style().set(StyleIdx::ArpeggioHiddenInStdIfTab, true);
+
       MeasureBase* m;
       if (!score->measures()->first()) {
             m = new VBox(score);
@@ -1234,6 +1236,7 @@ Score::FileError PowerTab::read()
 
 //TODO-ws          pscore->showLyrics = score->showLyrics;
             pscore->style().set(StyleIdx::createMultiMeasureRests, false);
+            pscore->style().set(StyleIdx::ArpeggioHiddenInStdIfTab, true);
 
             QList<int> stavesMap;
             Part* p = new Part(pscore);
