@@ -2737,6 +2737,8 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             return Score::FileError::FILE_NO_ERROR;
             }
 
+      score->style().set(StyleIdx::ArpeggioHiddenInStdIfTab, true);
+
       MeasureBase* m;
       if (!score->measures()->first()) {
             m = new VBox(score);
@@ -2805,6 +2807,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
 	      Score* pscore = new Score(score);
 //TODO-ws		pscore->showLyrics = score->showLyrics;
             pscore->style().set(StyleIdx::createMultiMeasureRests, false);
+            pscore->style().set(StyleIdx::ArpeggioHiddenInStdIfTab, true);
 
             QList<int> stavesMap;
             Part*   p = new Part(pscore);
