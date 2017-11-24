@@ -222,6 +222,7 @@ enum class StyleIdx {
       ArpeggioNoteDistance,
       ArpeggioLineWidth,
       ArpeggioHookLen,
+      ArpeggioHiddenInStdIfTab,
 
       SlurEndWidth,
       SlurMidWidth,

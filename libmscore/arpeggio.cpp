@@ -122,7 +122,18 @@ void Arpeggio::layout()
       {
       qreal y1 = -_userLen1;
       qreal y2 = _height + _userLen2;
-
+      _hidden = false;
+      if (score()->styleB(StyleIdx::ArpeggioHiddenInStdIfTab)) {
+            if (staff() && staff()->isPitchedStaff(tick())) {
+                  for (Staff* s : staff()->staffList()) {
+                        if (s->score() == score()  && s->isTabStaff(tick())) {
+                              _hidden = true;
+                               setbbox(QRect());
+                               return;
+                               }
+                        }
+                  }
+            }
       if (staff())
             setMag(staff()->mag(tick()));
       switch (arpeggioType()) {
@@ -184,6 +195,8 @@ void Arpeggio::layout()
 
 void Arpeggio::draw(QPainter* p) const
       {
+      if (_hidden)
+            return;
       qreal _spatium = spatium();
 
       qreal y1 = -_userLen1;
