@@ -4908,6 +4908,13 @@
                </property>
               </widget>
              </item>
+             <item row="3" column="0" colspan="2">
+              <widget class="QCheckBox" name="arpeggioHiddenInStdIfTab">
+               <property name="text">
+                <string>Do not show arpeggio in standard notation when displayed in tablature</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
            <item>
