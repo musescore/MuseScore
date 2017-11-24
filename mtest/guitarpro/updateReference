@@ -28,10 +28,9 @@ cp   $MSCORE/fingering.gp5.mscx fingering.gp5-ref.mscx
 cp   $MSCORE/brush.gp5.mscx brush.gp5-ref.mscx
 cp   $MSCORE/tap-slap-pop.gp5.mscx tap-slap-pop.gp5-ref.mscx
 cp   $MSCORE/trill.gp4.mscx trill.gp4-ref.mscx
-exit
 #cp   $MSCORE/arpeggio_up_down.gp4.mscx arpeggio_up_down.gp4-ref.mscx
 cp   $MSCORE/ghost_note.gp3.mscx ghost_note.gp3-ref.mscx
-#cp   $MSCORE/grace.gp5.mscx grace.gp5-ref.mscx
+cp   $MSCORE/grace.gp5.mscx grace.gp5-ref.mscx
 cp   $MSCORE/volta.gp4.mscx volta.gp4-ref.mscx
 cp   $MSCORE/volta.gp3.mscx volta.gp3-ref.mscx
 cp   $MSCORE/copyright.gpx.mscx copyright.gpx-ref.mscx
