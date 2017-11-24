@@ -67,16 +67,16 @@
           <sigN>5</sigN>
           <sigD>4</sigD>
           </TimeSig>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>4</lid>
-          <text><sym>metNoteQuarterUp</sym> = 120</text>
-          </Tempo>
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
-          <lid>5</lid>
+          <lid>4</lid>
           </Dynamic>
+        <Tempo>
+          <tempo>2</tempo>
+          <lid>5</lid>
+          <text><sym>metNoteQuarterUp</sym> = 120</text>
+          </Tempo>
         <Chord>
           <lid>6</lid>
           <durationType>quarter</durationType>
@@ -258,7 +258,6 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -340,16 +339,16 @@
             <sigN>5</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>4</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <lid>5</lid>
+            <lid>4</lid>
             </Dynamic>
+          <Tempo>
+            <tempo>2</tempo>
+            <lid>5</lid>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
+            </Tempo>
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
