@@ -41,23 +41,23 @@ private slots:
 
       void gpTrill()         { gpReadTest("trill", "gp4"); }
       void gpDynamic()       { gpReadTest("dynamic", "gp5"); }
-//      void gpGhostNote()     { gpReadTest("ghost_note", "gp3"); }
-//      void gpGraceNote()     { /*gpReadTest("grace", "gp5");*/ } // doesn't work
+      void gpGhostNote()     { gpReadTest("ghost_note", "gp3"); }
+      void gpGraceNote()     { gpReadTest("grace", "gp5"); } // doesn't work
       void gp5Volta()        { gpReadTest("volta", "gp5"); }
-//      void gp4Volta()        { gpReadTest("volta", "gp4"); }
-//      void gp3Volta()        { gpReadTest("volta", "gp3"); }
+      void gp4Volta()        { gpReadTest("volta", "gp4"); }
+      void gp3Volta()        { gpReadTest("volta", "gp3"); }
       void gp5copyright()    { gpReadTest("copyright", "gp5"); }
-//      void gp4copyright()    { gpReadTest("copyright", "gp4"); }
-//      void gp3copyright()    { gpReadTest("copyright", "gp3"); }
+      void gp4copyright()    { gpReadTest("copyright", "gp4"); }
+      void gp3copyright()    { gpReadTest("copyright", "gp3"); }
       void gp5Tempo()        { gpReadTest("tempo", "gp5"); }
-//      void gp4Tempo()        { gpReadTest("tempo", "gp4"); }
-//      void gp3Tempo()        { gpReadTest("tempo", "gp3"); }
+      void gp4Tempo()        { gpReadTest("tempo", "gp4"); }
+      void gp3Tempo()        { gpReadTest("tempo", "gp3"); }
       void gp5BasicBend()    { gpReadTest("basic-bend", "gp5"); }
 //      void gp5Bend()         { gpReadTest("bend", "gp5"); }
 //      void gp4Bend()         { gpReadTest("bend", "gp4"); }
 //      void gp3Bend()         { gpReadTest("bend", "gp3"); }
       void gp5Keysig()       { gpReadTest("keysig", "gp5"); }
-//      void gp4Keysig()       { gpReadTest("keysig", "gp4"); }
+      void gp4Keysig()       { gpReadTest("keysig", "gp4"); }
       void gpDottedTuplets() { gpReadTest("dotted-tuplets", "gp5"); }
 //      void gpTupletSlur()    { gpReadTest("tuplet-with-slur", "gp4"); }
 //      void gpBeamsStemsLL()  { gpReadTest("beams-stems-ledger-lines", "gp5"); }
@@ -70,8 +70,8 @@ private slots:
       void gpSlurNoteMask()  { gpReadTest("slur-notes-effect-mask", "gp5"); }
       void gpxCentered()     { gpReadTest("rest-centered", "gpx"); }
       void gp5Centered()     { gpReadTest("rest-centered", "gp5"); }
-//      void gp4Centered()     { gpReadTest("rest-centered", "gp4"); }
-//      void gp4SlideInAbove() { gpReadTest("slide-in-above", "gp4"); }
+      void gp4Centered()     { gpReadTest("rest-centered", "gp4"); }
+      void gp4SlideInAbove() { gpReadTest("slide-in-above", "gp4"); }
 //      void gp5SlideInAbove() { gpReadTest("slide-in-above", "gp5"); }
 //      void gpxSlideInAbove() { gpReadTest("slide-in-above", "gpx"); }
 //      void gp4SlideInBelow() { gpReadTest("slide-in-below", "gp4"); }
@@ -86,7 +86,7 @@ private slots:
 //      void gp4LegatoSlide()  { gpReadTest("legato-slide", "gp4"); }
 //      void gp5LegatoSlide()  { gpReadTest("legato-slide", "gp5"); }
 //      void gpxLegatoSlide()  { gpReadTest("legato-slide", "gpx"); }
-//      void gp4ShiftSlide()   { gpReadTest("shift-slide", "gp4"); }
+      void gp4ShiftSlide()   { gpReadTest("shift-slide", "gp4"); }
 //      void gp5ShiftSlide()   { gpReadTest("shift-slide", "gp5"); }
 //      void gpxShiftSlide()   { gpReadTest("shift-slide", "gpx"); }
 //      void gpDoubleBar()     { gpReadTest("double-bar", "gpx"); }
@@ -100,14 +100,14 @@ private slots:
 //      void gpxMordents()     { gpReadTest("mordents", "gpx"); }
 //      void gpxPickUpDown()   { gpReadTest("pick-up-down", "gpx"); }
       void gp5PickUpDown()   { gpReadTest("pick-up-down", "gp5"); }
-//      void gp4PickUpDown()   { gpReadTest("pick-up-down", "gp4"); }
+      void gp4PickUpDown()   { gpReadTest("pick-up-down", "gp4"); }
 //      void gpxFingering()    { gpReadTest("fingering", "gpx"); }
       void gp5Fingering()    { gpReadTest("fingering", "gp5"); }
-//      void gp4Fingering()    { gpReadTest("fingering", "gp4"); }
+      void gp4Fingering()    { gpReadTest("fingering", "gp4"); }
 //      void gpxArpeggio()     { gpReadTest("arpeggio", "gpx"); }
 //      void gpxBrush()        { gpReadTest("brush", "gpx"); }
       void gp5Brush()        { gpReadTest("brush", "gp5"); }
-//      void gp4Brush()        { gpReadTest("brush", "gp4"); }
+      void gp4Brush()        { gpReadTest("brush", "gp4"); }
 //      void gpxRepeats()      { gpReadTest("repeats", "gpx"); }
 //      void gpxVolta()        { gpReadTest("volta", "gpx"); }
 //      //void gpxGraceBefore()  { gpReadTest("grace-before-beat", "gpx"); }

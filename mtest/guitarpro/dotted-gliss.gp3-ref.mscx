@@ -46,8 +46,6 @@
           <controller ctrl="10" value="63"/>
           <controller ctrl="93" value="255"/>
           <controller ctrl="91" value="255"/>
-          <midiPort>0</midiPort>
-          <midiChannel>3</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -62,12 +60,6 @@
           </Text>
         <Text>
           <lid>2</lid>
-          <style>Subtitle</style>
-          <text>Queen
-Innuendo</text>
-          </Text>
-        <Text>
-          <lid>3</lid>
           <style>Composer</style>
           <text>Queen</text>
           </Text>
@@ -76,13 +68,17 @@ Innuendo</text>
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>4</lid>
+          <lid>3</lid>
           </Clef>
         <TimeSig>
-          <lid>5</lid>
+          <lid>4</lid>
           <sigN>12</sigN>
           <sigD>8</sigD>
           </TimeSig>
+        <Rest>
+          <lid>5</lid>
+          <durationType>eighth</durationType>
+          </Rest>
         <Rest>
           <lid>6</lid>
           <durationType>eighth</durationType>
@@ -97,34 +93,31 @@ Innuendo</text>
           </Rest>
         <Rest>
           <lid>9</lid>
-          <durationType>eighth</durationType>
+          <durationType>quarter</durationType>
           </Rest>
         <Rest>
           <lid>10</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <Rest>
-          <lid>11</lid>
-          <durationType>quarter</durationType>
-          </Rest>
         <Dynamic>
           <subtype>fff</subtype>
           <velocity>126</velocity>
-          <lid>12</lid>
+          <lid>11</lid>
           </Dynamic>
         <Chord>
-          <lid>13</lid>
+          <lid>12</lid>
           <dots>1</dots>
           <durationType>quarter</durationType>
           <Note>
-            <lid>14</lid>
+            <lid>13</lid>
             <pitch>74</pitch>
             <tpc>16</tpc>
             <fret>15</fret>
             <string>1</string>
             <Glissando id="2">
+              <text>gliss.</text>
               <subtype>0</subtype>
-              <lid>18</lid>
+              <lid>17</lid>
               <diagonal>1</diagonal>
               <anchor>3</anchor>
               </Glissando>
@@ -133,13 +126,13 @@ Innuendo</text>
         <Dynamic>
           <subtype>f</subtype>
           <velocity>96</velocity>
-          <lid>15</lid>
+          <lid>14</lid>
           </Dynamic>
         <Chord>
-          <lid>16</lid>
+          <lid>15</lid>
           <durationType>eighth</durationType>
           <Note>
-            <lid>17</lid>
+            <lid>16</lid>
             <Accidental>
               <subtype>accidentalSharp</subtype>
               </Accidental>
@@ -157,7 +150,6 @@ Innuendo</text>
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -228,12 +220,6 @@ Innuendo</text>
             </Text>
           <Text>
             <lid>2</lid>
-            <style>Subtitle</style>
-            <text>Queen
-Innuendo</text>
-            </Text>
-          <Text>
-            <lid>3</lid>
             <style>Composer</style>
             <text>Queen</text>
             </Text>
@@ -246,13 +232,17 @@ Innuendo</text>
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>4</lid>
+            <lid>3</lid>
             </Clef>
           <TimeSig>
-            <lid>5</lid>
+            <lid>4</lid>
             <sigN>12</sigN>
             <sigD>8</sigD>
             </TimeSig>
+          <Rest>
+            <lid>5</lid>
+            <durationType>eighth</durationType>
+            </Rest>
           <Rest>
             <lid>6</lid>
             <durationType>eighth</durationType>
@@ -267,34 +257,31 @@ Innuendo</text>
             </Rest>
           <Rest>
             <lid>9</lid>
-            <durationType>eighth</durationType>
+            <durationType>quarter</durationType>
             </Rest>
           <Rest>
             <lid>10</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <lid>11</lid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Dynamic>
             <subtype>fff</subtype>
             <velocity>126</velocity>
-            <lid>12</lid>
+            <lid>11</lid>
             </Dynamic>
           <Chord>
-            <lid>13</lid>
+            <lid>12</lid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
-              <lid>14</lid>
+              <lid>13</lid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <fret>15</fret>
               <string>1</string>
               <Glissando id="3">
+                <text>gliss.</text>
                 <subtype>0</subtype>
-                <lid>18</lid>
+                <lid>17</lid>
                 <diagonal>1</diagonal>
                 <anchor>3</anchor>
                 </Glissando>
@@ -303,13 +290,13 @@ Innuendo</text>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <lid>15</lid>
+            <lid>14</lid>
             </Dynamic>
           <Chord>
-            <lid>16</lid>
+            <lid>15</lid>
             <durationType>eighth</durationType>
             <Note>
-              <lid>17</lid>
+              <lid>16</lid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
@@ -325,6 +312,10 @@ Innuendo</text>
       <Staff id="2">
         <Measure number="1">
           <Rest>
+            <lid>5</lid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
             <lid>6</lid>
             <durationType>eighth</durationType>
             </Rest>
@@ -338,39 +329,36 @@ Innuendo</text>
             </Rest>
           <Rest>
             <lid>9</lid>
-            <durationType>eighth</durationType>
+            <durationType>quarter</durationType>
             </Rest>
           <Rest>
             <lid>10</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <lid>11</lid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Chord>
-            <lid>13</lid>
+            <lid>12</lid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
-              <lid>14</lid>
+              <lid>13</lid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <fret>15</fret>
               <string>1</string>
               <Glissando id="4">
+                <text>gliss.</text>
                 <subtype>0</subtype>
-                <lid>18</lid>
+                <lid>17</lid>
                 <diagonal>1</diagonal>
                 <anchor>3</anchor>
                 </Glissando>
               </Note>
             </Chord>
           <Chord>
-            <lid>16</lid>
+            <lid>15</lid>
             <durationType>eighth</durationType>
             <Note>
-              <lid>17</lid>
+              <lid>16</lid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>7</fret>
