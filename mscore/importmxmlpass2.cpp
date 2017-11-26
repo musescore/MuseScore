@@ -1739,7 +1739,7 @@ void MusicXMLParserPass2::part()
 
       // set the parts first instrument
       QString instrId = _pass1.getInstrList(id).instrument(Fraction(0, 1));
-      // LVICHECK setFirstInstrument(_pass1.getPart(id), id, instrId, mxmlDrumset);
+      setFirstInstrument(_logger, &_e, _pass1.getPart(id), id, instrId, mxmlDrumset);
 
       // set the part name
       auto mxmlPart = _pass1.getMusicXmlPart(id);
