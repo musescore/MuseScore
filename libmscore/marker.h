@@ -25,12 +25,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Marker : public Text {
-      Q_GADGET
-
-      Q_PROPERTY(QString label               READ label      WRITE undoSetLabel)
-      Q_PROPERTY(Ms::Marker::Type markerType READ markerType WRITE undoSetMarkerType)
-      Q_ENUMS(Type)
-
    public:
       enum class Type : char {
             SEGNO,

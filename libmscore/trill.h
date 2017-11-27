@@ -25,8 +25,6 @@ class Accidental;
 //---------------------------------------------------------
 
 class TrillSegment : public LineSegment {
-      Q_GADGET
-
       std::vector<SymId> _symbols;
 
       void symbolLine(SymId start, SymId fill);
@@ -60,9 +58,6 @@ class TrillSegment : public LineSegment {
 //---------------------------------------------------------
 
 class Trill : public SLine {
-      Q_GADGET
-      Q_ENUMS(Type)
-
    public:
       enum class Type : char {
             TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE,

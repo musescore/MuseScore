@@ -164,8 +164,6 @@ struct SymElement {
 //---------------------------------------------------------
 
 class Accidental : public Element {
-      Q_GADGET
-
       QList<SymElement> el;
       AccidentalType _accidentalType { AccidentalType::NONE };
       bool _small                    { false                   };

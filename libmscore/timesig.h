@@ -39,8 +39,6 @@ enum class TimeSigType : char {
 //---------------------------------------------------------------------------------------
 
 class TimeSig : public Element {
-      Q_GADGET
-
       QString _numeratorString;     // calculated from actualSig() if !customText
       QString _denominatorString;
 

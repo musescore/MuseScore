@@ -32,8 +32,6 @@ class System;
 //---------------------------------------------------------
 
 class LineSegment : public SpannerSegment {
-      Q_GADGET
-
    protected:
       virtual void startEdit(EditData&) override;
       virtual void editDrag(EditData&) override;
@@ -66,8 +64,6 @@ class LineSegment : public SpannerSegment {
 //---------------------------------------------------------
 
 class SLine : public Spanner {
-      Q_GADGET
-
       Spatium _lineWidth      { 0.15 };
       QColor _lineColor       { MScore::defaultColor };
       Qt::PenStyle _lineStyle { Qt::SolidLine };

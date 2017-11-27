@@ -29,8 +29,6 @@ class Chord;
 //---------------------------------------------------------
 
 class LedgerLine : public Line {
-      Q_GADGET
-
       LedgerLine* _next;
 
    public:

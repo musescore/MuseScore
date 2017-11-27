@@ -30,8 +30,6 @@ class Text;
 //---------------------------------------------------------
 
 class TextLineBaseSegment : public LineSegment {
-      Q_GADGET
-
    protected:
       Text* _text;
       Text* _endText;
@@ -63,7 +61,7 @@ class TextLineBaseSegment : public LineSegment {
 //---------------------------------------------------------
 
 enum class HookType : char {
-      NONE, HOOK_90, HOOK_45
+      NONE, HOOK_90, HOOK_45, HOOK_90T
       };
 
 //---------------------------------------------------------
@@ -71,8 +69,6 @@ enum class HookType : char {
 //---------------------------------------------------------
 
 class TextLineBase : public SLine {
-      Q_GADGET
-
       enum class LineType : char { CRESCENDO, DECRESCENDO };
 
 #define PROP(a,b,c)                \

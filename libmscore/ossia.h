@@ -23,9 +23,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Ossia : public Element {
-      Q_GADGET
-
-
    public:
       Ossia(Score*);
       Ossia(const Ossia&);

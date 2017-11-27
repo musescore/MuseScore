@@ -616,8 +616,7 @@ Chord* Spanner::startChord()
       Q_ASSERT(_anchor == Anchor::CHORD);
       if (!_startElement)
             _startElement = score()->findCR(tick(), track());
-      Q_ASSERT(_startElement->type() == ElementType::CHORD);
-      return static_cast<Chord*>(_startElement);
+      return toChord(_startElement);
       }
 
 //---------------------------------------------------------
@@ -630,11 +629,11 @@ Chord* Spanner::endChord()
 
       if (!_endElement && type() == ElementType::SLUR) {
             Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
-            _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
-            if (_endElement->type() != ElementType::CHORD)
+            _endElement = s ? toChordRest(s->element(track2())) : nullptr;
+            if (!_endElement->isChord())
                   _endElement = nullptr;
             }
-      return static_cast<Chord*>(_endElement);
+      return toChord(_endElement);
       }
 
 //---------------------------------------------------------
@@ -646,7 +645,7 @@ ChordRest* Spanner::startCR()
       Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
       if (!_startElement || _startElement->score() != score())
             _startElement = score()->findCR(tick(), track());
-      return static_cast<ChordRest*>(_startElement);
+      return toChordRest(_startElement);
       }
 
 //---------------------------------------------------------
@@ -688,8 +687,7 @@ Segment* Spanner::endSegment() const
 
 Measure* Spanner::startMeasure() const
       {
-      Q_ASSERT(!_startElement || _startElement->type() == ElementType::MEASURE);
-      return static_cast<Measure*>(_startElement);
+      return toMeasure(_startElement);
       }
 
 //---------------------------------------------------------
@@ -698,8 +696,7 @@ Measure* Spanner::startMeasure() const
 
 Measure* Spanner::endMeasure() const
       {
-      Q_ASSERT(!_endElement || _endElement->type() == ElementType::MEASURE);
-      return static_cast<Measure*>(_endElement);
+      return toMeasure(_endElement);
       }
 
 //---------------------------------------------------------

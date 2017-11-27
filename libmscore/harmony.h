@@ -64,11 +64,6 @@ struct RenderAction;
 class HDegree;
 
 class Harmony : public Text {
-      Q_GADGET
-      Q_PROPERTY(int baseTpc  READ baseTpc  WRITE setBaseTpc)
-      Q_PROPERTY(int id  READ id  WRITE setId)
-      Q_PROPERTY(int rootTpc  READ rootTpc  WRITE setRootTpc)
-
       int _rootTpc;                       // root note for chord
       int _baseTpc;                       // bass note or chord base; used for "slash" chords
                                           // or notation of base note in chord

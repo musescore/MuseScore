@@ -55,8 +55,6 @@ struct BarLineTableItem {
 //---------------------------------------------------------
 
 class BarLine : public Element {
-      Q_GADGET
-
       int _spanStaff          { 0 };       // span barline to next staff if true, values > 1 are used for importing from 2.x
       char _spanFrom          { 0 };       // line number on start and end staves
       char _spanTo            { 0 };

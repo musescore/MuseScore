@@ -10,7 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "letring.h"
+#include "palmmute.h"
 #include "sym.h"
 #include "xml.h"
 #include "system.h"
@@ -25,18 +25,18 @@ namespace Ms {
 //   layout
 //---------------------------------------------------------
 
-void LetRingSegment::layout()
+void PalmMuteSegment::layout()
       {
       if (autoplace())
             setUserOff(QPointF());
       TextLineBaseSegment::layout();
       if (parent()) {     // for palette
-            rypos() += score()->styleP(letRing()->placeBelow() ? StyleIdx::pedalPosBelow : StyleIdx::pedalPosAbove);
+            rypos() += score()->styleP(palmMute()->placeBelow() ? StyleIdx::pedalPosBelow : StyleIdx::pedalPosAbove);
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
                   Shape s1 = shape().translated(pos());
 
-                  if (letRing()->placeBelow()) {
+                  if (palmMute()->placeBelow()) {
                         qreal d  = system()->bottomDistance(staffIdx(), s1);
                         if (d > -minDistance)
                               rUserYoffset() = d + minDistance;
@@ -52,11 +52,12 @@ void LetRingSegment::layout()
             }
       }
 
+
 //---------------------------------------------------------
-//   LetRing
+//   PalmMute
 //---------------------------------------------------------
 
-LetRing::LetRing(Score* s)
+PalmMute::PalmMute(Score* s)
    : TextLineBase(s)
       {
       setLineWidth(score()->styleS(StyleIdx::pedalLineWidth));
@@ -66,18 +67,13 @@ LetRing::LetRing(Score* s)
       resetProperty(P_ID::END_TEXT_ALIGN);
       resetProperty(P_ID::BEGIN_HOOK_HEIGHT);
       resetProperty(P_ID::END_HOOK_HEIGHT);
-      resetProperty(P_ID::END_HOOK_TYPE);
-      resetProperty(P_ID::BEGIN_TEXT);
-      resetProperty(P_ID::BEGIN_FONT_ITALIC);
-      resetProperty(P_ID::LINE_STYLE);
-      resetProperty(P_ID::BEGIN_TEXT_ALIGN);
       }
 
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
-void LetRing::read(XmlReader& e)
+void PalmMute::read(XmlReader& e)
       {
       int id = e.intAttribute("id", -1);
       e.addSpanner(id, this);
@@ -91,16 +87,16 @@ void LetRing::read(XmlReader& e)
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* LetRing::createLineSegment()
+LineSegment* PalmMute::createLineSegment()
       {
-      return new LetRingSegment(score());
+      return new PalmMuteSegment(score());
       }
 
 //---------------------------------------------------------
 //   setYoff
 //---------------------------------------------------------
 
-void LetRing::setYoff(qreal val)
+void PalmMute::setYoff(qreal val)
       {
       rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? StyleIdx::pedalPosAbove : StyleIdx::pedalPosBelow);
       }
@@ -109,38 +105,29 @@ void LetRing::setYoff(qreal val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant LetRing::propertyDefault(P_ID propertyId) const
+QVariant PalmMute::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::LINE_WIDTH:
-                  return score()->styleV(StyleIdx::letRingLineWidth);
+                  return score()->styleV(StyleIdx::pedalLineWidth);
 
             case P_ID::ALIGN:
                   return QVariant::fromValue(Align::LEFT | Align::BASELINE);
 
             case P_ID::LINE_STYLE:
-                  return score()->styleV(StyleIdx::letRingLineStyle);
+                  return score()->styleV(StyleIdx::pedalLineStyle);
 
             case P_ID::BEGIN_TEXT_OFFSET:
-                  return score()->styleV(StyleIdx::letRingBeginTextOffset).toPointF();
+                  return score()->styleV(StyleIdx::pedalBeginTextOffset).toPointF();
 
             case P_ID::BEGIN_TEXT_ALIGN:
             case P_ID::CONTINUE_TEXT_ALIGN:
             case P_ID::END_TEXT_ALIGN:
-                  return score()->styleV(StyleIdx::letRingTextAlign);
+                  return score()->styleV(StyleIdx::pedalTextAlign);
 
             case P_ID::BEGIN_HOOK_HEIGHT:
             case P_ID::END_HOOK_HEIGHT:
-                  return score()->styleV(StyleIdx::letRingHookHeight);
-
-            case P_ID::BEGIN_FONT_ITALIC:
-                  return score()->styleV(StyleIdx::letRingFontItalic);
-
-            case P_ID::BEGIN_TEXT:
-                  return score()->styleV(StyleIdx::letRingText);
-
-            case P_ID::END_HOOK_TYPE:
-                  return int(HookType::HOOK_90T);
+                  return score()->styleV(StyleIdx::pedalHookHeight);
 
             default:
                   return TextLineBase::propertyDefault(propertyId);
@@ -151,30 +138,28 @@ QVariant LetRing::propertyDefault(P_ID propertyId) const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-StyleIdx LetRing::getPropertyStyle(P_ID id) const
+StyleIdx PalmMute::getPropertyStyle(P_ID id) const
       {
       switch (id) {
             case P_ID::PLACEMENT:
-                  return StyleIdx::letRingPlacement;
+                  return StyleIdx::pedalPlacement;
             case P_ID::BEGIN_FONT_FACE:
-                  return StyleIdx::letRingFontFace;
+                  return StyleIdx::pedalFontFace;
             case P_ID::BEGIN_FONT_SIZE:
-                  return StyleIdx::letRingFontSize;
+                  return StyleIdx::pedalFontSize;
             case P_ID::BEGIN_FONT_BOLD:
-                  return StyleIdx::letRingFontBold;
+                  return StyleIdx::pedalFontBold;
             case P_ID::BEGIN_FONT_ITALIC:
-                  return StyleIdx::letRingFontItalic;
+                  return StyleIdx::pedalFontItalic;
             case P_ID::BEGIN_FONT_UNDERLINE:
-                  return StyleIdx::letRingFontUnderline;
+                  return StyleIdx::pedalFontUnderline;
             case P_ID::BEGIN_TEXT_ALIGN:
             case P_ID::CONTINUE_TEXT_ALIGN:
             case P_ID::END_TEXT_ALIGN:
-                  return StyleIdx::letRingTextAlign;
+                  return StyleIdx::pedalTextAlign;
             case P_ID::BEGIN_HOOK_HEIGHT:
             case P_ID::END_HOOK_HEIGHT:
-                  return StyleIdx::letRingHookHeight;
-            case P_ID::BEGIN_TEXT:
-                  return StyleIdx::letRingText;
+                  return StyleIdx::pedalHookHeight;
             default:
                   break;
             }
@@ -187,25 +172,25 @@ StyleIdx LetRing::getPropertyStyle(P_ID id) const
 //    return System() coordinates
 //---------------------------------------------------------
 
-QPointF LetRing::linePos(Grip grip, System** sys) const
+QPointF PalmMute::linePos(Grip grip, System** sys) const
       {
       qreal x;
       qreal nhw = score()->noteHeadWidth();
       System* s = nullptr;
       if (grip == Grip::START) {
-            ChordRest* c = static_cast<ChordRest*>(startElement());
+            ChordRest* c = toChordRest(startElement());
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-            if (c->type() == ElementType::REST && c->durationType() == TDuration::DurationType::V_MEASURE)
+            if (c->isRest() && c->durationType() == TDuration::DurationType::V_MEASURE)
                   x -= c->x();
             if (beginHookType() == HookType::HOOK_45)
                   x += nhw * .5;
             }
       else {
             Element* e = endElement();
-            ChordRest* c = static_cast<ChordRest*>(endElement());
+            ChordRest* c = toChordRest(endElement());
             if (!e || e == startElement() || (endHookType() == HookType::HOOK_90)) {
-                  // pedal marking on single note or ends with non-angled hook:
+                  // palmMute marking on single note or ends with non-angled hook:
                   // extend to next note or end of measure
                   Segment* seg = nullptr;
                   if (!e)
@@ -215,7 +200,7 @@ QPointF LetRing::linePos(Grip grip, System** sys) const
                   if (seg) {
                         seg = seg->next();
                         for ( ; seg; seg = seg->next()) {
-                              if (seg->segmentType() == SegmentType::ChordRest) {
+                              if (seg->isChordRestType()) {
                                     // look for a chord/rest in any voice on this staff
                                     bool crFound = false;
                                     int track = staffIdx() * VOICES;

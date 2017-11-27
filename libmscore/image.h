@@ -31,7 +31,6 @@ class Image : public BSymbol {
             QSvgRenderer* svgDoc;
             };
       ImageType imageType;
-      Q_GADGET
 
       QSizeF pixel2size(const QSizeF& s) const;
       QSizeF size2pixel(const QSizeF& s) const;

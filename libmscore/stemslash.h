@@ -24,8 +24,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 class StemSlash : public Element {
-      Q_GADGET
-
       QLineF line;
 
    public:

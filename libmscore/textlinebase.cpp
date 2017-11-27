@@ -302,6 +302,8 @@ void TextLineBaseSegment::layout()
                         qreal hh = tl->endHookHeight().val() * _spatium;
                         // painter->drawLine(QLineF(pp2.x(), pp2.y(), pp2.x() + endHookWidth, pp2.y() + hh));
                         points[npoints] = QPointF(pp2.x() + endHookWidth, pp2.y() + hh);
+                        if (tl->endHookType() == HookType::HOOK_90T)
+                              points[++npoints] = QPointF(pp2.x() + endHookWidth, pp2.y() - hh);
                         }
                   }
             }

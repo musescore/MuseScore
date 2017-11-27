@@ -30,16 +30,7 @@ enum class SubStyle;
 //   @P playUntil   string
 //---------------------------------------------------------
 
-
 class Jump : public Text {
-      Q_GADGET
-
-      Q_PROPERTY(QString continueAt  READ continueAt  WRITE undoSetContinueAt)
-      Q_PROPERTY(QString jumpTo      READ jumpTo      WRITE undoSetJumpTo)
-      Q_PROPERTY(QString playUntil   READ playUntil   WRITE undoSetPlayUntil)
-      //Q_Property(Ms::Jump::Type      READ jumpType)
-      //Q_ENUMS(Type)
-
       QString _jumpTo;
       QString _playUntil;
       QString _continueAt;

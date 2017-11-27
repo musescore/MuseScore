@@ -395,7 +395,7 @@ void GuitarPro::addPalmMute(Note* /*note*/)
 		pm->setLineType(TextLine::LineType::PALM_MUTE);
 		pm->setBeginText("P.M.");
 		pm->setTick(note->chord()->segment()->tick());
-		pm->setTick2(note->chord()->segment()->tick());
+		pm->setTick2(note->chord()->actualTicks());
 		pm->setTrack(track);
 		pm->setTrack2(track);
 		pm->setStartElement(note);
@@ -415,39 +415,35 @@ void GuitarPro::addLetRing(Note* note)
 	while (int(_letRings.size()) < track + 1)
 		_letRings.push_back(0);
 
+      Chord* chord = note->chord();
 	if (_letRings[track]) {
-#if 0
-		LetRing* lr = _letRings[track];
-		Note* lastNote = toNote(lr->endElement());
-		if (lastNote->chord() == note->chord())
+		LetRing* lr      = _letRings[track];
+		Chord* lastChord = toChord(lr->endCR());
+		if (lastChord == note->chord())
 			return;
-		ChordRest* next = lastNote->segment()->nextChordRest(lastNote()->chord()->track(), false);
-		if (next && next->isChord()) {
-			if (toChord(next) == note->chord()) {
-				lr->setTick2(note->chord()->segment()->tick());
-				lr->setEndElement(note);
-			      }
-			else {
-				_letRings[track] = 0;
-			      }
+            //
+            // extend the current "let ring" or start a new one
+            //
+            int tick = note->chord()->segment()->tick();
+		if (lr->tick2() < tick)
+                  _letRings[track] = 0;
+            else {
+                  lr->setTick2(chord->tick() + chord->actualTicks());
+			lr->setEndElement(chord);
 		      }
-#endif
-_letRings[track] = 0;
 	      }
 	if (!_letRings[track]) {
 		LetRing* lr = new LetRing(score);
 		_letRings[track] = lr;
-            Chord* chord = note->chord();
             Segment* segment = chord->segment();
             int tick = segment->tick();
-qDebug("====let ring track %d tick %d\n", track, tick);
- //     	lr->setLineType(TextLine::LineType::LET_RING);
+
 		lr->setTick(tick);
-		lr->setTick2(tick+480);
+		lr->setTick2(tick + chord->actualTicks());
 		lr->setTrack(track);
 		lr->setTrack2(track);
-		lr->setStartElement(note);
-		lr->setEndElement(note);
+		lr->setStartElement(chord);
+		lr->setEndElement(chord);
 		score->addElement(lr);
 	      }
       }
@@ -546,7 +542,7 @@ void GuitarPro::addDynamic(Note* note, int d)
 	if (d < 0)
             return;
       if (!note->chord()) {
-            qDebug() << "addDynamics: No chord associated with this note";
+            qDebug() << "No chord associated with this note";
             return;
             }
       Dynamic* dyn = new Dynamic(score);
@@ -1863,16 +1859,12 @@ bool GuitarPro1::readNote(int string, Note* note)
                          score->addElement(slur);
                          }
                   }
-            if (modMask1 & EFFECT_HAMMER) {         // hammer on / pull off
+            if (modMask1 & EFFECT_HAMMER)       // hammer on / pull off
                   slur = true;
-                  }
-            if (modMask1 & EFFECT_LET_RING) {         // let ring
-                  //note->setLetRing(true);
+            if (modMask1 & EFFECT_LET_RING)     // let ring
 			addLetRing(note);
-                  }
-            if (modMask1 & EFFECT_SLIDE_OLD) {
+            if (modMask1 & EFFECT_SLIDE_OLD)
                   slideList.push_back(note);
-			}
 
             if (version >= 400) {
                   if (modMask2 & EFFECT_STACATTO) {

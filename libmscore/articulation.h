@@ -55,8 +55,6 @@ constexpr bool operator& (ArticulationShowIn a1, ArticulationShowIn a2) {
 //---------------------------------------------------------
 
 class Articulation : public Element {
-      Q_GADGET
-
       SymId _symId;
       Direction _direction;
       QString _channelName;

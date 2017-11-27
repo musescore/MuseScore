@@ -24,7 +24,6 @@ class Note;
 //---------------------------------------------------------
 
 class NoteDot : public Element {
-      Q_GADGET
 
    public:
       NoteDot(Score* = 0);

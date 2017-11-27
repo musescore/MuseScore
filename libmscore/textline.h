@@ -24,10 +24,6 @@ class Note;
 //---------------------------------------------------------
 
 class TextLineSegment : public TextLineBaseSegment {
-      Q_GADGET
-
-   protected:
-
    public:
       TextLineSegment(Score* s);
       virtual ElementType type() const override     { return ElementType::TEXTLINE_SEGMENT; }
@@ -47,8 +43,6 @@ class TextLineSegment : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class TextLine : public TextLineBase {
-      Q_GADGET
-
    public:
       TextLine(Score* s);
       TextLine(const TextLine&);

@@ -29,9 +29,6 @@ class Segment;
 //-----------------------------------------------------------------------------
 
 class Dynamic : public Text {
-      Q_GADGET
-      Q_PROPERTY(Ms::Dynamic::Range range  READ dynRange  WRITE undoSetDynRange)
-
    public:
       enum class Type : char {
             OTHER,

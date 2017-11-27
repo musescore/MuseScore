@@ -24,8 +24,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Icon : public Element {
-      Q_GADGET
-
       IconType _iconType { IconType::NONE };
       QByteArray _action;
       QIcon _icon;

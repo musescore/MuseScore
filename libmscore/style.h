@@ -680,6 +680,29 @@ enum class StyleIdx {
       user2FontItalic,
       user2FontUnderline,
 
+      letRingFontFace,
+      letRingFontSize,
+      letRingFontBold,
+      letRingFontItalic,
+      letRingFontUnderline,
+      letRingTextAlign,
+      letRingHookHeight,
+      letRingPlacement,
+      letRingPosAbove,
+      letRingPosBelow,
+      letRingLineWidth,
+      letRingLineStyle,
+      letRingBeginTextOffset,
+      letRingText,
+
+      palmMuteFontFace,
+      palmMuteFontSize,
+      palmMuteFontBold,
+      palmMuteFontItalic,
+      palmMuteFontUnderline,
+      palmMuteTextAlign,
+      palmMuteHookHeight,
+
       STYLES
       };
 
@@ -734,6 +757,8 @@ enum class SubStyle {
       GLISSANDO,
       OTTAVA,
       PEDAL,
+      LET_RING,
+      PALM_MUTE,
       HAIRPIN,
       BEND,
       HEADER,

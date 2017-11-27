@@ -49,8 +49,6 @@ struct BEDrawingDataY;
 //---------------------------------------------------------
 
 class BagpipeEmbellishment : public Element {
-      Q_GADGET
-
       int _embelType;
       void drawGraceNote(QPainter*, const BEDrawingDataX&, const BEDrawingDataY&,
          SymId, const qreal x, const bool drawFlag) const;

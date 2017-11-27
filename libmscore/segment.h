@@ -82,8 +82,6 @@ constexpr bool operator& (const SegmentType t1, const SegmentType t2) {
 //------------------------------------------------------------------------
 
 class Segment : public Element {
-      Q_GADGET
-
       SegmentType _segmentType { SegmentType::Invalid };
       int _tick;                          // tick offset to measure
       int _ticks;
