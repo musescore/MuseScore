@@ -87,6 +87,8 @@
 #include "systemdivider.h"
 #include "stafftypechange.h"
 #include "stafflines.h"
+#include "letring.h"
+#include "vibrato.h"
 
 namespace Ms {
 
@@ -905,6 +907,8 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::NOTELINE:          return new NoteLine(score);
             case ElementType::LYRICSLINE:        return new LyricsLine(score);
             case ElementType::TRILL:             return new Trill(score);
+            case ElementType::LET_RING:          return new LetRing(score);
+            case ElementType::VIBRATO:           return new Vibrato(score);
             case ElementType::PEDAL:             return new Pedal(score);
             case ElementType::HAIRPIN:           return new Hairpin(score);
             case ElementType::CLEF:              return new Clef(score);
@@ -978,6 +982,8 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::HAIRPIN_SEGMENT:
             case ElementType::OTTAVA_SEGMENT:
             case ElementType::TRILL_SEGMENT:
+            case ElementType::LET_RING_SEGMENT:
+            case ElementType::VIBRATO_SEGMENT:
             case ElementType::VOLTA_SEGMENT:
             case ElementType::PEDAL_SEGMENT:
             case ElementType::LYRICSLINE_SEGMENT:

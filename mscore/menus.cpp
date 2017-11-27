@@ -80,6 +80,8 @@
 #include "libmscore/bagpembell.h"
 #include "libmscore/ambitus.h"
 #include "libmscore/stafftypechange.h"
+#include "libmscore/letring.h"
+#include "libmscore/vibrato.h"
 
 namespace Ms {
 
@@ -1260,6 +1262,14 @@ Palette* MuseScore::newLinesPalette(PaletteType t)
 
             Ambitus* a = new Ambitus(gscore);
             sp->append(a, QT_TRANSLATE_NOOP("Palette", "Ambitus"));
+
+            LetRing* letRing = new LetRing(gscore);
+            letRing->setLen(w);
+            sp->append(letRing, QT_TRANSLATE_NOOP("Palette", "Let Ring"));
+
+            Vibrato* vibrato = new Vibrato(gscore);
+            vibrato->setLen(w);
+            sp->append(vibrato, QT_TRANSLATE_NOOP("Palette", "Vibrato"));
             }
       else {
             sp->setMoreElements(true);

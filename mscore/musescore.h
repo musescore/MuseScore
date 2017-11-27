@@ -205,7 +205,7 @@ class MeasuresDialog : public QDialog, public Ui::MeasuresDialogBase {
 class MuseScoreApplication : public QtSingleApplication {
    public:
       QStringList paths;
-      MuseScoreApplication(const QString &id, int &argc, char **argv)
+      MuseScoreApplication(const QString& id, int &argc, char **argv)
          : QtSingleApplication(id, argc, argv) {
             };
       virtual bool event(QEvent *ev) override;
@@ -234,7 +234,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       static const std::list<const char*> _allPlaybackControlEntries;
       std::list<const char*> _playbackControlEntries { _allPlaybackControlEntries };
-      
+
       QVBoxLayout* layout;    // main window layout
       QSplitter* splitter;
       ScoreTab* tab1;

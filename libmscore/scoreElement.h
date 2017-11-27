@@ -114,6 +114,11 @@ class Page;
 class SystemText;
 class BracketItem;
 
+class LetRing;
+class LetRingSegment;
+class Vibrato;
+class VibratoSegment;
+
 enum class P_ID : int;
 enum class PropertyFlags : char;
 enum class StyleIdx : int;
@@ -269,6 +274,10 @@ class ScoreElement {
       CONVERT(NoteLine,      NOTELINE)
       CONVERT(Trill,         TRILL)
       CONVERT(TrillSegment,  TRILL_SEGMENT)
+      CONVERT(LetRing,       LET_RING)
+      CONVERT(LetRingSegment, LET_RING_SEGMENT)
+      CONVERT(Vibrato,       VIBRATO)
+      CONVERT(VibratoSegment,       VIBRATO_SEGMENT)
       CONVERT(Symbol,        SYMBOL)
       CONVERT(FSymbol,       FSYMBOL)
       CONVERT(Fingering,     FINGERING)
@@ -417,6 +426,10 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(NoteLine)
       CONVERT(Trill)
       CONVERT(TrillSegment)
+      CONVERT(LetRing)
+      CONVERT(LetRingSegment)
+      CONVERT(Vibrato)
+      CONVERT(VibratoSegment)
       CONVERT(Symbol)
       CONVERT(FSymbol)
       CONVERT(Fingering)
