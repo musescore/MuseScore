@@ -23,6 +23,7 @@ build.qt5
 mscore/revision.h
 .DS_Store
 CMakeLists.txt.user.*
+*.qmlc
 vtest/html
 thirdparty/mupdf-qt
 vtest/LOG
