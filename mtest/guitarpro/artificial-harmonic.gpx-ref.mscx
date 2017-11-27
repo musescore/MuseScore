@@ -5,6 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -41,7 +42,7 @@
         <instrumentId>pluck.guitar.electric</instrumentId>
         <clef>G8vb</clef>
         <StringData>
-          <frets>21</frets>
+          <frets>24</frets>
           <string>52</string>
           <string>57</string>
           <string>62</string>
@@ -281,7 +282,7 @@
             <pitch>86</pitch>
             <tpc>16</tpc>
             <head>diamond</head>
-            <fret>0</fret>
+            <fret>22</fret>
             <string>0</string>
             </Note>
           </Chord>
@@ -305,7 +306,7 @@
             <pitch>86</pitch>
             <tpc>16</tpc>
             <head>diamond</head>
-            <fret>0</fret>
+            <fret>22</fret>
             <string>0</string>
             </Note>
           </Chord>
@@ -316,7 +317,7 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -368,7 +369,7 @@
           <instrumentId>pluck.guitar.electric</instrumentId>
           <clef>G8vb</clef>
           <StringData>
-            <frets>21</frets>
+            <frets>24</frets>
             <string>52</string>
             <string>57</string>
             <string>62</string>
@@ -612,7 +613,7 @@
               <pitch>86</pitch>
               <tpc>16</tpc>
               <head>diamond</head>
-              <fret>0</fret>
+              <fret>22</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -636,7 +637,7 @@
               <pitch>86</pitch>
               <tpc>16</tpc>
               <head>diamond</head>
-              <fret>0</fret>
+              <fret>22</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -814,7 +815,7 @@
               <pitch>86</pitch>
               <tpc>16</tpc>
               <head>diamond</head>
-              <fret>0</fret>
+              <fret>22</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -838,7 +839,7 @@
               <pitch>86</pitch>
               <tpc>16</tpc>
               <head>diamond</head>
-              <fret>0</fret>
+              <fret>22</fret>
               <string>0</string>
               </Note>
             </Chord>

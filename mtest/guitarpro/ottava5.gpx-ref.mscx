@@ -5,6 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -42,7 +43,7 @@
         <concertClef>G8vb</concertClef>
         <transposingClef>G</transposingClef>
         <StringData>
-          <frets>21</frets>
+          <frets>24</frets>
           <string>52</string>
           <string>57</string>
           <string>62</string>
@@ -104,7 +105,7 @@
         <instrumentId>pluck.guitar.electric</instrumentId>
         <clef>G8vb</clef>
         <StringData>
-          <frets>21</frets>
+          <frets>24</frets>
           <string>52</string>
           <string>57</string>
           <string>62</string>
@@ -307,7 +308,7 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -360,7 +361,7 @@
           <concertClef>G8vb</concertClef>
           <transposingClef>G</transposingClef>
           <StringData>
-            <frets>21</frets>
+            <frets>24</frets>
             <string>52</string>
             <string>57</string>
             <string>62</string>
@@ -457,13 +458,6 @@
             <duration>4/4</duration>
             </Rest>
           </Measure>
-        <Measure number="2" len="12/4">
-          <multiMeasureRest>3</multiMeasureRest>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>12/4</duration>
-            </Rest>
-          </Measure>
         <Measure number="3">
           <Rest>
             <lid>11</lid>
@@ -504,13 +498,6 @@
             <duration>4/4</duration>
             </Rest>
           </Measure>
-        <Measure number="2" len="12/4">
-          <multiMeasureRest>3</multiMeasureRest>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>12/4</duration>
-            </Rest>
-          </Measure>
         <Measure number="3">
           <Rest>
             <lid>11</lid>
@@ -533,7 +520,7 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -585,7 +572,7 @@
           <instrumentId>pluck.guitar.electric</instrumentId>
           <clef>G8vb</clef>
           <StringData>
-            <frets>21</frets>
+            <frets>24</frets>
             <string>52</string>
             <string>57</string>
             <string>62</string>
@@ -705,13 +692,6 @@
             <duration>4/4</duration>
             </Rest>
           </Measure>
-        <Measure number="2" len="12/4">
-          <multiMeasureRest>3</multiMeasureRest>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>12/4</duration>
-            </Rest>
-          </Measure>
         <Measure number="3">
           <Rest>
             <lid>27</lid>
@@ -776,13 +756,6 @@
             <lid>26</lid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </Measure>
-        <Measure number="2" len="12/4">
-          <multiMeasureRest>3</multiMeasureRest>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>12/4</duration>
             </Rest>
           </Measure>
         <Measure number="3">
