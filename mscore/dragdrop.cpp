@@ -317,6 +317,8 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 
                   case ElementType::VOLTA:
                   case ElementType::PEDAL:
+                  case ElementType::LET_RING:
+                  case ElementType::VIBRATO:
                   case ElementType::DYNAMIC:
                   case ElementType::OTTAVA:
                   case ElementType::TRILL:
@@ -473,6 +475,8 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::OTTAVA:
                   case ElementType::TRILL:
                   case ElementType::PEDAL:
+                  case ElementType::LET_RING:
+                  case ElementType::VIBRATO:
                   case ElementType::HAIRPIN:
                   case ElementType::TEXTLINE:
                         {

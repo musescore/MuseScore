@@ -45,6 +45,7 @@ class Segment;
 class Measure;
 class Tuplet;
 class Volta;
+class LetRing;
 
 static const int GP_MAX_LYRIC_LINES = 5;
 static const int GP_MAX_TRACK_NUMBER = 32;
@@ -246,7 +247,7 @@ class GuitarPro {
       void createTuningString(int strings, int tuning[]);
 
 	std::vector<TextLine*> _palmMutes;
-	std::vector<TextLine*> _letRings;
+	std::vector<LetRing*> _letRings;
 
    public:
 	std::vector<std::string> tunings;
