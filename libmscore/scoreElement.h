@@ -118,6 +118,8 @@ class LetRing;
 class LetRingSegment;
 class Vibrato;
 class VibratoSegment;
+class PalmMute;
+class PalmMuteSegment;
 
 enum class P_ID : int;
 enum class PropertyFlags : char;
@@ -153,7 +155,6 @@ struct ElementName {
 //---------------------------------------------------------
 
 class ScoreElement {
-      Q_GADGET
       Score* _score;
 
    protected:
@@ -277,7 +278,9 @@ class ScoreElement {
       CONVERT(LetRing,       LET_RING)
       CONVERT(LetRingSegment, LET_RING_SEGMENT)
       CONVERT(Vibrato,       VIBRATO)
-      CONVERT(VibratoSegment,       VIBRATO_SEGMENT)
+      CONVERT(PalmMute,      PALM_MUTE)
+      CONVERT(PalmMuteSegment, PALM_MUTE_SEGMENT)
+      CONVERT(VibratoSegment,  VIBRATO_SEGMENT)
       CONVERT(Symbol,        SYMBOL)
       CONVERT(FSymbol,       FSYMBOL)
       CONVERT(Fingering,     FINGERING)
@@ -430,6 +433,8 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(LetRingSegment)
       CONVERT(Vibrato)
       CONVERT(VibratoSegment)
+      CONVERT(PalmMute)
+      CONVERT(PalmMuteSegment)
       CONVERT(Symbol)
       CONVERT(FSymbol)
       CONVERT(Fingering)

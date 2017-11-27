@@ -100,45 +100,6 @@ static const int  STRING_NONE             = -1;       // no ordinal for a physic
 static const int  FRET_NONE               = -1;       // no ordinal for a fret
 
 //---------------------------------------------------------
-//   Enumeration wrapper macro allowing exposure of
-//   enum class to QML without manual code reproduction
-//
-//   In addition to using this Macro, you need to do one/all of the following:
-//   - In mscore.cpp - QQmlEngine* MScore::qml()
-//       qmlRegisterUncreatableType<MSQE_name>("MuseScore", 1, 0, "name", tr("You can't create an enumeration"))
-//     Allows usage of name.VALUE from within a plugin as value
-//   - At the bottom of the file where you use this Macro
-//       Q_DECLARE_METATYPE(Ms::MSQE_name::E);
-//     Allows declaring Q_PROPERTY of the type Ms::MSQE_name::E
-//      Only useful if the next point is also done
-//   - In mscore.cpp - void MScore::init()
-//       qRegisterMetaType<MSQE_name::E>("name");
-//     Allows using Ms::MSQE_name::E as return type for the READ function
-//      and parameter type for the WRITE function on a Q_PROPERTY of that type
-//      on the condition that you also declare Q_ENUMS(Ms::MSQE_name::E)
-//      for that same Q_OBJECT
-//
-//   Q_INVOKABLES can't use the QML-wrapped enum type, nor the enum class type as
-//    parameters. Those should be from the correct storageType and static_casts should
-//    be applied when necessary.
-//---------------------------------------------------------
-
-#if 0
-#define MS_QML_ENUM(name, storageType, ...)\
-      enum class name : storageType {\
-            __VA_ARGS__\
-      };\
-      class MSQE_##name {\
-            Q_GADGET\
-            Q_ENUMS(E)\
-      public:\
-            enum class E : storageType {\
-                  __VA_ARGS__\
-            };\
-      };
-#endif
-
-//---------------------------------------------------------
 //   BracketType
 //    System Brackets
 //---------------------------------------------------------
@@ -343,8 +304,6 @@ class MPaintDevice : public QPaintDevice {
 //---------------------------------------------------------
 
 class MScore : public QObject {
-      Q_GADGET
-
       static MStyle _baseStyle;          // buildin initial style
       static MStyle _defaultStyle;       // buildin modified by preferences
       static MStyle* _defaultStyleForParts;

@@ -51,10 +51,6 @@ static const int MAX_DOTS = 4;
 //---------------------------------------------------------
 
 class NoteHead : public Symbol {
-      Q_GADGET
-
-      Q_ENUMS(Group)
-      Q_ENUMS(Type)
    public:
       enum class Group : signed char {
             HEAD_NORMAL = 0,
@@ -204,40 +200,6 @@ static const int INVALID_LINE = -10000;
 //---------------------------------------------------------------------------------------
 
 class Note : public Element {
-      Q_GADGET
-      Q_PROPERTY(Ms::Accidental*                accidental        READ accidental)
-      Q_PROPERTY(int                            accidentalType    READ qmlAccidentalType  WRITE qmlSetAccidentalType)
-//      Q_PROPERTY(QQmlListProperty<Ms::NoteDot>  dots              READ qmlDots)
-      Q_PROPERTY(int                            dotsCount         READ qmlDotsCount)
-//      Q_PROPERTY(QQmlListProperty<Ms::Element>  elements          READ qmlElements)
-      Q_PROPERTY(int                            fret              READ fret               WRITE undoSetFret)
-      Q_PROPERTY(bool                           ghost             READ ghost              WRITE undoSetGhost)
-      Q_PROPERTY(Ms::NoteHead::Group            headGroup         READ headGroup          WRITE undoSetHeadGroup)
-      Q_PROPERTY(Ms::NoteHead::Type             headType          READ headType           WRITE undoSetHeadType)
-      Q_PROPERTY(bool                           hidden            READ hidden)
-      Q_PROPERTY(int                            line              READ line)
-      Q_PROPERTY(bool                           mirror            READ mirror)
-      Q_PROPERTY(int                            pitch             READ pitch              WRITE undoSetPitch)
-      Q_PROPERTY(bool                           play              READ play               WRITE undoSetPlay)
-      Q_PROPERTY(int                            ppitch            READ ppitch)
-      Q_PROPERTY(bool                           small             READ small              WRITE undoSetSmall)
-      Q_PROPERTY(int                            string            READ string             WRITE undoSetString)
-      Q_PROPERTY(int                            subchannel        READ subchannel)
-      Q_PROPERTY(Ms::Tie*                       tieBack           READ tieBack)
-      Q_PROPERTY(Ms::Tie*                       tieFor            READ tieFor)
-      Q_PROPERTY(int                            tpc               READ tpc)
-//      Q_PROPERTY(int                            tpc1              READ tpc1               WRITE undoSetTpc1)
-//      Q_PROPERTY(int                            tpc2              READ tpc2               WRITE undoSetTpc2)
-      Q_PROPERTY(qreal                          tuning            READ tuning             WRITE undoSetTuning)
-//TODO-WS      Q_PROPERTY(Ms::MScore::Direction          userDotPosition   READ userDotPosition    WRITE undoSetUserDotPosition)
-      Q_PROPERTY(Ms::MScore::DirectionH         userMirror        READ userMirror         WRITE undoSetUserMirror)
-      Q_PROPERTY(int                            veloOffset        READ veloOffset         WRITE undoSetVeloOffset)
-      Q_PROPERTY(Ms::Note::ValueType            veloType          READ veloType           WRITE undoSetVeloType)
-
-      Q_ENUMS(ValueType)
-//TODO-WS      Q_ENUMS(Ms::MScore::Direction)
-      Q_ENUMS(Ms::MScore::DirectionH)
-
    public:
       enum class ValueType : char { OFFSET_VAL, USER_VAL };
       int qmlAccidentalType() const { return int(accidentalType()); }

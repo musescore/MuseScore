@@ -63,10 +63,6 @@ enum class MeasureNumberMode : char {
 //---------------------------------------------------------
 
 class Measure : public MeasureBase {
-      Q_GADGET
-      Q_PROPERTY(Ms::Segment* firstSegment READ first)
-      Q_PROPERTY(Ms::Segment* lastSegment  READ last)
-
       std::vector<MStaff*>  _mstaves;
       SegmentList _segments;
       Measure* _mmRest;       // multi measure rest which replaces a measure range

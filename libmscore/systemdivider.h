@@ -23,9 +23,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 class SystemDivider : public Symbol {
-      Q_GADGET
-      Q_ENUMS(Type)
-
    public:
       enum Type { LEFT, RIGHT };
 

@@ -31,8 +31,6 @@ struct BeamFragment;
 //---------------------------------------------------------
 
 class Beam : public Element {
-      Q_GADGET
-
       QVector<ChordRest*> _elements;        // must be sorted by tick
       QVector<QLineF*> beamSegments;
       Direction _direction;

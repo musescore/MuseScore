@@ -59,17 +59,6 @@ enum class PlayEventType : char    {
 //---------------------------------------------------------
 
 class Chord : public ChordRest {
-      Q_GADGET
-
-      Q_PROPERTY(Ms::Beam* beam                         READ beam)
-//      Q_PROPERTY(QQmlListProperty<Ms::Chord> graceNotes READ qmlGraceNotes)
-      Q_PROPERTY(Ms::Hook* hook                         READ hook)
-//      Q_PROPERTY(QQmlListProperty<Ms::Lyrics> lyrics    READ qmlLyrics)
-//      Q_PROPERTY(QQmlListProperty<Ms::Note> notes       READ qmlNotes)
-      Q_PROPERTY(Ms::Stem* stem                         READ stem)
-      Q_PROPERTY(Ms::StemSlash* stemSlash               READ stemSlash)
-//      Q_PROPERTY(int stemDirection                      READ stemDirection)
-
       std::vector<Note*>   _notes;       // sorted to decreasing line step
       LedgerLine*          _ledgerLines; // single linked list
 

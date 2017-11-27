@@ -32,9 +32,6 @@ class MeasureBase;
 //---------------------------------------------------------
 
 class Page : public Element {
-      Q_GADGET
-      Q_PROPERTY(int pagenumber READ no)
-
       QList<System*> _systems;
       int _no;                      // page number
 #ifdef USE_BSP

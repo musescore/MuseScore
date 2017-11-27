@@ -29,9 +29,6 @@ class Segment;
 //---------------------------------------------------------------------------------------
 
 class KeySig : public Element {
-      Q_GADGET
-      Q_PROPERTY(bool showCourtesy READ showCourtesy   WRITE undoSetShowCourtesy)
-
       bool _showCourtesy;
       bool _hideNaturals;     // used in layout to override score style (needed for the Continuous panel)
       KeySigEvent _sig;

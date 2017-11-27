@@ -33,8 +33,6 @@ struct ChannelActions {
 //---------------------------------------------------------
 
 class StaffText : public Text  {
-      Q_GADGET
-
       QString _channelNames[4];
       QList<ChannelActions> _channelActions;
       SwingParameters _swingParameters;

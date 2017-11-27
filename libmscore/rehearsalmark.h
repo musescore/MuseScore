@@ -22,8 +22,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 class RehearsalMark : public SystemText  {
-      Q_GADGET
-
    public:
       RehearsalMark(Score* score);
       virtual RehearsalMark* clone() const override { return new RehearsalMark(*this); }

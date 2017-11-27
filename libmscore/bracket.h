@@ -27,8 +27,6 @@ enum class BracketType : signed char;
 //---------------------------------------------------------
 
 class Bracket : public Element {
-      Q_GADGET
-
       BracketItem* _bi;
       qreal h2;
 

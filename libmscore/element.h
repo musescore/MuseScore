@@ -137,9 +137,6 @@ class EditData {
 //-------------------------------------------------------------------
 
 class Element : public ScoreElement {
-      Q_GADGET
-      Q_ENUMS(Placement)
-
       Element* _parent { 0 };
       mutable ElementFlags _flags  {
             ElementFlag::ENABLED | ElementFlag::EMPTY | ElementFlag::AUTOPLACE | ElementFlag::SELECTABLE
@@ -509,8 +506,6 @@ class ElementList : public std::vector<Element*> {
 //---------------------------------------------------------
 
 class Line : public Element {
-      Q_GADGET
-
       qreal _width;
       qreal _len;
 
@@ -543,8 +538,6 @@ public:
 //---------------------------------------------------------
 
 class Compound : public Element {
-      Q_GADGET
-
       QList<Element*> elements;
 
    protected:

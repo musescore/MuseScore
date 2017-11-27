@@ -31,8 +31,6 @@ class MuseScoreView;
 //---------------------------------------------------------
 
 class Box : public MeasureBase {
-      Q_GADGET
-
       Spatium _boxWidth             { Spatium(0) };  // only valid for HBox
       Spatium _boxHeight            { Spatium(0) };  // only valid for VBox
       qreal _topGap                 { 0.0   };       // distance from previous system (left border for hbox)
@@ -103,8 +101,6 @@ class Box : public MeasureBase {
 //---------------------------------------------------------
 
 class HBox : public Box {
-      Q_GADGET
-
       bool _createSystemHeader { true };
 
    public:
@@ -135,8 +131,6 @@ class HBox : public Box {
 //---------------------------------------------------------
 
 class VBox : public Box {
-      Q_GADGET
-
    public:
       VBox(Score* score);
       virtual ~VBox() {}
@@ -153,8 +147,6 @@ class VBox : public Box {
 //---------------------------------------------------------
 
 class FBox : public VBox {
-      Q_GADGET
-
    public:
       FBox(Score* score) : VBox(score) {}
       virtual ~FBox() {}

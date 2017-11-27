@@ -48,10 +48,6 @@ class Ottava;
 //---------------------------------------------------------
 
 class OttavaSegment : public TextLineBaseSegment {
-      Q_GADGET
-
-   protected:
-
    public:
       OttavaSegment(Score* s) : TextLineBaseSegment(s)  { }
       virtual ElementType type() const override   { return ElementType::OTTAVA_SEGMENT; }
@@ -73,8 +69,6 @@ class OttavaSegment : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class Ottava : public TextLineBase {
-      Q_GADGET
-
       OttavaType _ottavaType;
       bool _numbersOnly;
       PropertyFlags numbersOnlyStyle  { PropertyFlags::STYLED };

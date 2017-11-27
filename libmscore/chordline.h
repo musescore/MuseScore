@@ -32,8 +32,6 @@ enum class ChordLineType : char {
 //---------------------------------------------------------
 
 class ChordLine : public Element {
-      Q_GADGET
-
       ChordLineType _chordLineType;
       bool _straight;
       QPainterPath path;

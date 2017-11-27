@@ -25,8 +25,6 @@ class Note;
 //---------------------------------------------------------
 
 class Fingering : public Text {
-      Q_GADGET
-
    public:
       Fingering(Score* s);
       virtual Fingering* clone() const override   { return new Fingering(*this); }

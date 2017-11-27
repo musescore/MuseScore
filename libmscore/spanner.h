@@ -48,8 +48,6 @@ class SpannerEditData : public ElementEditData {
 //---------------------------------------------------------
 
 class SpannerSegment : public Element {
-      Q_GADGET
-
       Spanner* _spanner;
       SpannerSegmentType _spannerSegmentType;
 

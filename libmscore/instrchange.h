@@ -23,8 +23,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 class InstrumentChange : public Text  {
-      Q_GADGET
-
       Instrument* _instrument;  // Staff holds ownership if part of score
 
    public:

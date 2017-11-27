@@ -28,8 +28,6 @@ namespace Ms {
 */
 
 class ShadowNote : public Element {
-      Q_GADGET
-
       int _line;
       SymId _notehead;
       TDuration _duration;

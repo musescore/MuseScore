@@ -189,7 +189,6 @@ class TextBlock {
 //---------------------------------------------------------
 
 class Text : public Element {
-      Q_GADGET
 
 #define PROP(a,b,c)                                            \
       a _ ## b;                                                \

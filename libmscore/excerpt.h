@@ -32,10 +32,6 @@ class XmlReader;
 #include <QMultiMap>
 
 class Excerpt : public QObject {
-      Q_GADGET
-      Q_PROPERTY(Ms::Score*  partScore  READ partScore)
-      Q_PROPERTY(QString     title      READ title)
-
       MasterScore* _oscore;
 
       Score* _partScore           { 0 };

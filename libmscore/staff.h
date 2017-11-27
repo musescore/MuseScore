@@ -76,8 +76,6 @@ struct SwingParameters {
 //---------------------------------------------------------
 
 class Staff : public ScoreElement {
-      Q_GADGET
-
    public:
       enum class HideMode { AUTO, ALWAYS, NEVER, INSTRUMENT };
 

@@ -128,10 +128,6 @@ class ClefInfo {
 //---------------------------------------------------------
 
 class Clef : public Element {
-      Q_GADGET
-      Q_PROPERTY(bool showCourtesy READ showCourtesy WRITE undoSetShowCourtesy)
-      Q_PROPERTY(bool small READ small)
-
       SymId symId;
       bool _showCourtesy;
       bool _small;

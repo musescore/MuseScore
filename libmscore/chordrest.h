@@ -49,11 +49,6 @@ enum class SegmentType;
 //-------------------------------------------------------------------
 
 class ChordRest : public DurationElement {
-      Q_GADGET
-      Q_PROPERTY(Ms::Beam::Mode beamMode      READ beamMode           WRITE undoSetBeamMode)
-      Q_PROPERTY(int            durationType  READ durationTypeTicks  WRITE setDurationType)
-      Q_PROPERTY(bool           small         READ small              WRITE undoSetSmall)
-
       ElementList _el;
       TDuration _durationType;
       int _staffMove;         // -1, 0, +1, used for crossbeaming

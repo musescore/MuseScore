@@ -22,8 +22,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 class SystemText : public StaffText  {
-      Q_GADGET
-
    public:
       SystemText(Score* score);
       SystemText(SubStyle, Score* = 0);

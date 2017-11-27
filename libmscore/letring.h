@@ -24,10 +24,6 @@ class LetRing;
 //---------------------------------------------------------
 
 class LetRingSegment : public TextLineBaseSegment {
-      Q_GADGET
-
-   protected:
-
    public:
       LetRingSegment(Score* s) : TextLineBaseSegment(s) {}
       virtual ElementType type() const override       { return ElementType::LET_RING_SEGMENT; }
@@ -43,8 +39,6 @@ class LetRingSegment : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class LetRing : public TextLineBase {
-      Q_GADGET
-
    protected:
       QPointF linePos(Grip, System**) const override;
 
