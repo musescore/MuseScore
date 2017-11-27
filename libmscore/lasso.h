@@ -22,8 +22,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Lasso : public Element {
-      Q_GADGET
-
    public:
       Lasso(Score*);
       virtual Lasso* clone() const override        { return new Lasso(*this); }

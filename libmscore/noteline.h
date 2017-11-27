@@ -25,8 +25,6 @@ class Note;
 //---------------------------------------------------------
 
 class TextLineSegment : public TextLineBaseSegment {
-      Q_GADGET
-
    protected:
 
    public:
@@ -49,8 +47,6 @@ class TextLineSegment : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class NoteLine : public TextLineBase {
-      Q_GADGET
-
       Note* _startNote;
       Note* _endNote;
 

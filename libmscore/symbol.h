@@ -29,9 +29,6 @@ enum class SymId;
 //---------------------------------------------------------
 
 class Symbol : public BSymbol {
-      Q_GADGET
-      Q_PROPERTY(QString symbol        READ symName)
-
    protected:
       SymId _sym;
       const ScoreFont* _scoreFont = nullptr;
@@ -65,8 +62,6 @@ class Symbol : public BSymbol {
 //---------------------------------------------------------
 
 class FSymbol : public BSymbol {
-      Q_GADGET
-
       QFont _font;
       int _code;
 

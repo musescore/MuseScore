@@ -89,6 +89,7 @@
 #include "stafflines.h"
 #include "letring.h"
 #include "vibrato.h"
+#include "palmmute.h"
 
 namespace Ms {
 
@@ -909,6 +910,7 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::TRILL:             return new Trill(score);
             case ElementType::LET_RING:          return new LetRing(score);
             case ElementType::VIBRATO:           return new Vibrato(score);
+            case ElementType::PALM_MUTE:         return new PalmMute(score);
             case ElementType::PEDAL:             return new Pedal(score);
             case ElementType::HAIRPIN:           return new Hairpin(score);
             case ElementType::CLEF:              return new Clef(score);
@@ -984,6 +986,7 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::TRILL_SEGMENT:
             case ElementType::LET_RING_SEGMENT:
             case ElementType::VIBRATO_SEGMENT:
+            case ElementType::PALM_MUTE_SEGMENT:
             case ElementType::VOLTA_SEGMENT:
             case ElementType::PEDAL_SEGMENT:
             case ElementType::LYRICSLINE_SEGMENT:

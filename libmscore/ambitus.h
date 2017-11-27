@@ -24,8 +24,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Ambitus : public Element {
-      Q_GADGET
-
       NoteHead::Group     _noteHeadGroup;
       NoteHead::Type      _noteHeadType;
       MScore::DirectionH  _dir;
@@ -43,7 +41,6 @@ class Ambitus : public Element {
       void  normalize();
 
    public:
-
       Ambitus(Score* s);
       virtual Ambitus* clone() const override         { return new Ambitus(*this); }
 

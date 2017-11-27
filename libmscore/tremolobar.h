@@ -27,12 +27,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 class TremoloBar : public Element {
-      Q_GADGET
-
-      Q_PROPERTY(qreal   userMag   READ userMag    WRITE undoSetUserMag)
-      Q_PROPERTY(Spatium lineWidth READ lineWidth  WRITE undoSetLineWidth)
-      Q_PROPERTY(bool    play      READ play       WRITE undoSetPlay)
-
       Spatium _lw;
       PropertyFlags lineWidthStyle;
       qreal _userMag     { 1.0   };       // allowed 0.1 - 10.0

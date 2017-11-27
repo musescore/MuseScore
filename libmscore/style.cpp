@@ -700,6 +700,29 @@ static const StyleType styleTypes[] {
       { StyleIdx::user2FontItalic,               "user2FontItalic",              false },
       { StyleIdx::user2FontUnderline,            "user2FontUnderline",           false },
 
+      { StyleIdx::letRingFontFace,               "letRingFontFace",              "FreeSerif" },
+      { StyleIdx::letRingFontSize,               "letRingFontSize",              10.0 },
+      { StyleIdx::letRingFontBold,               "letRingFontBold",              false },
+      { StyleIdx::letRingFontItalic,             "letRingFontItalic",            true },
+      { StyleIdx::letRingFontUnderline,          "letRingFontUnderline",         false },
+      { StyleIdx::letRingTextAlign,              "letRingTextAlign",             QVariant::fromValue(Align::LEFT | Align::VCENTER) },
+      { StyleIdx::letRingHookHeight,             "letRingHookHeight",            Spatium(0.6) },
+      { StyleIdx::letRingPlacement,              "letRingPlacement",             int(Element::Placement::BELOW)  },
+      { StyleIdx::letRingPosAbove,               "letRingPosAbove",              Spatium(-4.0) },
+      { StyleIdx::letRingPosBelow,               "letRingPosBelow",              Spatium(4.0)  },
+      { StyleIdx::letRingLineWidth,              "letRingLineWidth",             Spatium(0.15) },
+      { StyleIdx::letRingLineStyle,              "letRingLineStyle",             QVariant(int(Qt::DashLine)) },
+      { StyleIdx::letRingBeginTextOffset,        "letRingBeginTextOffset",       QPointF(0.0, 0.15) },
+      { StyleIdx::letRingText,                   "letRingText",                  "let ring" },
+
+      { StyleIdx::palmMuteFontFace,              "palmMuteFontFace",              "FreeSerif" },
+      { StyleIdx::palmMuteFontSize,              "palmMuteFontSize",              10.0 },
+      { StyleIdx::palmMuteFontBold,              "palmMuteFontBold",              false },
+      { StyleIdx::palmMuteFontItalic,            "palmMuteFontItalic",            true },
+      { StyleIdx::palmMuteFontUnderline,         "palmMuteFontUnderline",         false },
+      { StyleIdx::palmMuteTextAlign,             "palmMuteTextAlign",             QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+      { StyleIdx::palmMuteHookHeight,            "palmMuteHookHeight",            Spatium(0.6) },
+
       };
 #undef MM
 
@@ -1082,6 +1105,50 @@ const std::vector<StyledProperty> pedalStyle {
       { StyleIdx::pedalHookHeight,                    P_ID::END_HOOK_HEIGHT        },
       };
 
+const std::vector<StyledProperty> letRingStyle {
+      { StyleIdx::letRingFontFace,                      P_ID::BEGIN_FONT_FACE        },
+      { StyleIdx::letRingFontFace,                      P_ID::CONTINUE_FONT_FACE     },
+      { StyleIdx::letRingFontFace,                      P_ID::END_FONT_FACE          },
+      { StyleIdx::letRingFontSize,                      P_ID::BEGIN_FONT_SIZE        },
+      { StyleIdx::letRingFontSize,                      P_ID::CONTINUE_FONT_SIZE     },
+      { StyleIdx::letRingFontSize,                      P_ID::END_FONT_SIZE          },
+      { StyleIdx::letRingFontBold,                      P_ID::BEGIN_FONT_BOLD        },
+      { StyleIdx::letRingFontBold,                      P_ID::CONTINUE_FONT_BOLD     },
+      { StyleIdx::letRingFontBold,                      P_ID::END_FONT_BOLD          },
+      { StyleIdx::letRingFontItalic,                    P_ID::BEGIN_FONT_ITALIC      },
+      { StyleIdx::letRingFontItalic,                    P_ID::CONTINUE_FONT_ITALIC   },
+      { StyleIdx::letRingFontItalic,                    P_ID::END_FONT_ITALIC        },
+      { StyleIdx::letRingFontUnderline,                 P_ID::BEGIN_FONT_UNDERLINE   },
+      { StyleIdx::letRingFontUnderline,                 P_ID::CONTINUE_FONT_UNDERLINE},
+      { StyleIdx::letRingFontUnderline,                 P_ID::END_FONT_UNDERLINE     },
+      { StyleIdx::letRingTextAlign,                     P_ID::BEGIN_TEXT_ALIGN       },
+      { StyleIdx::letRingTextAlign,                     P_ID::CONTINUE_TEXT_ALIGN    },
+      { StyleIdx::letRingHookHeight,                    P_ID::BEGIN_HOOK_HEIGHT      },
+      { StyleIdx::letRingHookHeight,                    P_ID::END_HOOK_HEIGHT        },
+      };
+
+const std::vector<StyledProperty> palmMuteStyle {
+      { StyleIdx::palmMuteFontFace,                      P_ID::BEGIN_FONT_FACE        },
+      { StyleIdx::palmMuteFontFace,                      P_ID::CONTINUE_FONT_FACE     },
+      { StyleIdx::palmMuteFontFace,                      P_ID::END_FONT_FACE          },
+      { StyleIdx::palmMuteFontSize,                      P_ID::BEGIN_FONT_SIZE        },
+      { StyleIdx::palmMuteFontSize,                      P_ID::CONTINUE_FONT_SIZE     },
+      { StyleIdx::palmMuteFontSize,                      P_ID::END_FONT_SIZE          },
+      { StyleIdx::palmMuteFontBold,                      P_ID::BEGIN_FONT_BOLD        },
+      { StyleIdx::palmMuteFontBold,                      P_ID::CONTINUE_FONT_BOLD     },
+      { StyleIdx::palmMuteFontBold,                      P_ID::END_FONT_BOLD          },
+      { StyleIdx::palmMuteFontItalic,                    P_ID::BEGIN_FONT_ITALIC      },
+      { StyleIdx::palmMuteFontItalic,                    P_ID::CONTINUE_FONT_ITALIC   },
+      { StyleIdx::palmMuteFontItalic,                    P_ID::END_FONT_ITALIC        },
+      { StyleIdx::palmMuteFontUnderline,                 P_ID::BEGIN_FONT_UNDERLINE   },
+      { StyleIdx::palmMuteFontUnderline,                 P_ID::CONTINUE_FONT_UNDERLINE},
+      { StyleIdx::palmMuteFontUnderline,                 P_ID::END_FONT_UNDERLINE     },
+      { StyleIdx::palmMuteTextAlign,                     P_ID::BEGIN_TEXT_ALIGN       },
+      { StyleIdx::palmMuteTextAlign,                     P_ID::CONTINUE_TEXT_ALIGN    },
+      { StyleIdx::palmMuteHookHeight,                    P_ID::BEGIN_HOOK_HEIGHT      },
+      { StyleIdx::palmMuteHookHeight,                    P_ID::END_HOOK_HEIGHT        },
+      };
+
 const std::vector<StyledProperty> hairpinStyle {
       { StyleIdx::hairpinFontFace,                    P_ID::BEGIN_FONT_FACE            },
       { StyleIdx::hairpinFontSize,                    P_ID::BEGIN_FONT_SIZE            },
@@ -1208,6 +1275,8 @@ static const std::array<StyledPropertyListName, int(SubStyle::SUBSTYLES)> namedS
       { QT_TRANSLATE_NOOP("TextStyle", "Glissando"),               &glissandoStyle,                 SubStyle::GLISSANDO },
       { QT_TRANSLATE_NOOP("TextStyle", "Ottava"),                  &ottavaStyle,                    SubStyle::OTTAVA },
       { QT_TRANSLATE_NOOP("TextStyle", "Pedal"),                   &pedalStyle,                     SubStyle::PEDAL },
+      { QT_TRANSLATE_NOOP("TextStyle", "LetRing"),                 &letRingStyle,                   SubStyle::LET_RING },
+      { QT_TRANSLATE_NOOP("TextStyle", "PalmMute"),                &palmMuteStyle,                  SubStyle::PALM_MUTE },
       { QT_TRANSLATE_NOOP("TextStyle", "Hairpin"),                 &hairpinStyle,                   SubStyle::HAIRPIN },
       { QT_TRANSLATE_NOOP("TextStyle", "Bend"),                    &bendStyle,                      SubStyle::BEND },
       { QT_TRANSLATE_NOOP("TextStyle", "Header"),                  &headerStyle,                    SubStyle::HEADER },

@@ -51,8 +51,6 @@ class SlurTie;
 //---------------------------------------------------------
 
 class SlurTieSegment : public SpannerSegment {
-      Q_GADGET
-
    protected:
       struct UP _ups[int(Grip::GRIPS)];
 

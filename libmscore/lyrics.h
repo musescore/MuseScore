@@ -41,8 +41,6 @@ namespace Ms {
 class LyricsLine;
 
 class Lyrics : public Text {
-      Q_GADGET
-
    public:
       enum class Syllabic : char { SINGLE, BEGIN, END, MIDDLE };
       // MELISMA FIRST UNDERSCORE:
@@ -144,8 +142,6 @@ class Lyrics : public Text {
 //---------------------------------------------------------
 
 class LyricsLine : public SLine {
-      Q_GADGET
-
    protected:
       Lyrics* _nextLyrics;
 
@@ -169,13 +165,11 @@ class LyricsLine : public SLine {
 //---------------------------------------------------------
 
 class LyricsLineSegment : public LineSegment {
-      Q_GADGET
-
    protected:
       int   _numOfDashes;
       qreal _dashLength;
 
-public:
+   public:
       LyricsLineSegment(Score* s);
 
       virtual LyricsLineSegment* clone() const override     { return new LyricsLineSegment(*this); }

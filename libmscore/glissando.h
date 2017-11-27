@@ -29,10 +29,6 @@ class Note;
 //---------------------------------------------------------
 
 class GlissandoSegment : public LineSegment {
-      Q_GADGET
-
-   protected:
-
    public:
       GlissandoSegment(Score* s) : LineSegment(s)           {}
       Glissando* glissando() const                          { return (Glissando*)spanner(); }
@@ -54,13 +50,6 @@ class GlissandoSegment : public LineSegment {
 //---------------------------------------------------------
 
 class Glissando : public SLine {
-      Q_GADGET
-
-      Q_PROPERTY(Ms::Glissando::Type glissandoType READ glissandoType  WRITE undoSetGlissandoType)
-      Q_PROPERTY(QString text                      READ text     WRITE undoSetText)
-      Q_PROPERTY(bool showText                     READ showText WRITE undoSetShowText)
-      Q_ENUMS(Type)
-
   public:
       enum class Type : char {
             STRAIGHT, WAVY

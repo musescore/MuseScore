@@ -79,22 +79,6 @@ and it is edited (via the normalized text); so it is derived from Text.
 class FiguredBass;
 
 class FiguredBassItem : public Element {
-      Q_GADGET
-      Q_ENUMS(Modifier)
-      Q_ENUMS(Parenthesis)
-      Q_ENUMS(ContLine)
-      Q_PROPERTY(Ms::FiguredBassItem::ContLine     continuationLine  READ contLine     WRITE undoSetContLine)
-      Q_PROPERTY(int                               digit             READ digit        WRITE undoSetDigit)
-      Q_PROPERTY(QString                           displayText       READ displayText)
-      Q_PROPERTY(QString                           normalizedText    READ normalizedText)
-      Q_PROPERTY(Ms::FiguredBassItem::Parenthesis  parenthesis1      READ parenth1     WRITE undoSetParenth1)
-      Q_PROPERTY(Ms::FiguredBassItem::Parenthesis  parenthesis2      READ parenth2     WRITE undoSetParenth2)
-      Q_PROPERTY(Ms::FiguredBassItem::Parenthesis  parenthesis3      READ parenth3     WRITE undoSetParenth3)
-      Q_PROPERTY(Ms::FiguredBassItem::Parenthesis  parenthesis4      READ parenth4     WRITE undoSetParenth4)
-      Q_PROPERTY(Ms::FiguredBassItem::Parenthesis  parenthesis5      READ parenth5     WRITE undoSetParenth5)
-      Q_PROPERTY(Ms::FiguredBassItem::Modifier     prefix            READ prefix       WRITE undoSetPrefix)
-      Q_PROPERTY(Ms::FiguredBassItem::Modifier     suffix            READ suffix       WRITE undoSetSuffix)
-
    public:
       enum class Modifier : char {
             NONE = 0,
@@ -246,12 +230,6 @@ struct FiguredBassFont {
 //---------------------------------------------------------
 
 class FiguredBass : public Text {
-      Q_GADGET
-
-//      Q_PROPERTY(QDeclarativeListProperty<FiguredBassItem> items READ qmlItems)
-      Q_PROPERTY(bool   onNote      READ onNote)
-      Q_PROPERTY(int    ticks       READ ticks  WRITE setTicks)
-
       std::vector<FiguredBassItem*> items;      // the individual lines of the F.B.
       QVector<qreal>    _lineLenghts;           // lengths of duration indicator lines (in raster units)
       bool              _onNote;                // true if this element is on a staff note | false if it is betweee notes

@@ -38,14 +38,6 @@ static const int DEFAULT_FRETS = 5;
 class FretDiagram : public Element {
 
 #ifdef SCRIPT_INTERFACE
-      Q_GADGET
-
-      Q_PROPERTY(qreal userMag  READ userMag    WRITE undoSetUserMag)
-      Q_PROPERTY(int strings    READ strings    WRITE undoSetStrings)
-      Q_PROPERTY(int frets      READ frets      WRITE undoSetFrets)
-      Q_PROPERTY(int barre      READ barre      WRITE undoSetBarre)
-      Q_PROPERTY(int fretOffset READ fretOffset WRITE undoSetFretOffset)
-
    public:
       void undoSetUserMag(qreal val);
       void undoSetStrings(int val);

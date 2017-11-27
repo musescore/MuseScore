@@ -37,8 +37,6 @@ enum class TremoloType : char {
 //---------------------------------------------------------
 
 class Tremolo : public Element {
-      Q_GADGET
-
       TremoloType _tremoloType;
       Chord* _chord1;
       Chord* _chord2;

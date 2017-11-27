@@ -30,8 +30,6 @@ extern LineSegment* voltaDebug;
 //---------------------------------------------------------
 
 class VoltaSegment : public TextLineBaseSegment {
-      Q_GADGET
-
    public:
       VoltaSegment(Score* s) : TextLineBaseSegment(s) {}
       virtual ElementType type() const override   { return ElementType::VOLTA_SEGMENT; }
@@ -54,8 +52,6 @@ class VoltaSegment : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class Volta : public TextLineBase {
-      Q_GADGET
-
       QList<int> _endings;
 
    public:

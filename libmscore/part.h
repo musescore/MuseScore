@@ -45,25 +45,6 @@ class InstrumentTemplate;
 //---------------------------------------------------------
 
 class Part : public ScoreElement {
-      Q_GADGET
-
-      Q_PROPERTY(int          endTrack          READ endTrack)
-      Q_PROPERTY(int          harmonyCount      READ harmonyCount)
-      Q_PROPERTY(bool         hasDrumStaff      READ hasDrumStaff)
-      Q_PROPERTY(bool         hasPitchedStaff   READ hasPitchedStaff)
-      Q_PROPERTY(bool         hasTabStaff       READ hasTabStaff)
-      Q_PROPERTY(QString      instrumentId      READ instrumentId)
-      Q_PROPERTY(QString      longName          READ longName     WRITE setLongName)
-      Q_PROPERTY(int          lyricCount        READ lyricCount)
-      Q_PROPERTY(int          midiChannel       READ midiChannel)
-      Q_PROPERTY(int          midiProgram       READ midiProgram)
-      Q_PROPERTY(bool         mute              READ mute         WRITE setMute)
-      Q_PROPERTY(QString      partName          READ partName     WRITE setPartName)
-      Q_PROPERTY(QString      shortName         READ shortName    WRITE setShortName)
-      Q_PROPERTY(bool         show              READ show         WRITE setShow)
-      Q_PROPERTY(int          startTrack        READ startTrack)
-      Q_PROPERTY(int          volume            READ volume       WRITE setVolume)
-
       QString _partName;            ///< used in tracklist (mixer)
       InstrumentList _instruments;
       QList<Staff*> _staves;
