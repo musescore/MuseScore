@@ -83,7 +83,7 @@ struct GPVolta {
 struct GPFermata {
       int index;
       int timeDivision;
-	std::string type;
+	QString type;
       };
 
 struct GPLyrics {
@@ -366,9 +366,8 @@ class GuitarPro6 : public GuitarPro {
       const int GPX_HEADER_UNCOMPRESSED = 1397113666;
       // an integer stored in the header indicating that the file is not compressed (BCFZ).
       const int GPX_HEADER_COMPRESSED = 1514554178;
-      int position=0;
+      int position = 0;
       QMap<int, int>* slides;
-      QByteArray* buffer;
       // a constant storing the amount of bits per byte
       const int BITS_IN_BYTE = 8;
       // contains all the information about notes that will go in the parts
@@ -383,13 +382,13 @@ class GuitarPro6 : public GuitarPro {
       // a mapping from identifiers to fret diagrams
       QMap<int, FretDiagram*> fretDiagrams;
       void parseFile(char* filename, QByteArray* data);
-      int readBit();
+      int readBit(QByteArray* buffer);
       QByteArray getBytes(QByteArray* buffer, int offset, int length);
       void readGPX(QByteArray* buffer);
       int readInteger(QByteArray* buffer, int offset);
       QByteArray readString(QByteArray* buffer, int offset, int length);
-      int readBits(int bitsToRead);
-      int readBitsReversed(int bitsToRead);
+      int readBits(QByteArray* buffer, int bitsToRead);
+      int readBitsReversed(QByteArray* buffer, int bitsToRead);
       void readGpif(QByteArray* data);
       void readScore(QDomNode* metadata);
       void readChord(QDomNode* diagram, int track);
@@ -402,7 +401,7 @@ class GuitarPro6 : public GuitarPro {
       void readMasterBars(GPPartInfo* partInfo);
       Fraction rhythmToDuration(QString value);
       Fraction fermataToFraction(int numerator, int denominator);
-      QDomNode getNode(const QString& id, const QDomNode& nodes);
+      QDomNode getNode(const QString& id, QDomNode currentDomNode);
       void unhandledNode(QString nodeName);
       void makeTie(Note* note);
       int* previousDynamic;

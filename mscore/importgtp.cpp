@@ -541,28 +541,24 @@ void GuitarPro::addDynamic(Note* note, int d)
       {
 	if (d < 0)
             return;
-      if (!note->chord()) {
-            qDebug() << "No chord associated with this note";
+      if (!note->chord()){
+            qDebug() << "addDynamics: No chord associated with this note";
             return;
             }
-      Dynamic* dyn = new Dynamic(score);
-
-      // guitar pro only allows their users to go from ppp to fff
-      QString map_dyn[] = {"f","ppp","pp","p","mp","mf","f","ff","fff"};
-      dyn->setDynamicType(map_dyn[std::min(d, 8)]);
-      dyn->setTrack(note->track());
+      Segment* s = nullptr;
       if (note->chord()->isGrace()) {
-		  if (note->chord()->parent()->type() == ElementType::SEGMENT) {
-		      note->chord()->parent()->add(dyn);
-		      }
-		  else {
-			Chord* parent = static_cast<Chord*>(note->chord()->parent());
-			parent->segment()->add(dyn);
-		      }
+            Chord* parent = static_cast<Chord*>(note->chord()->parent());
+            s = parent->segment();
             }
-      else {
-            if (note->chord()->segment())
-                  note->chord()->segment()->add(dyn);
+      else
+            s = note->chord()->segment();
+      if (!s->findAnnotation(ElementType::DYNAMIC, note->staffIdx() * VOICES, note->staffIdx() * VOICES + VOICES - 1)) {
+            Dynamic* dyn = new Dynamic(score);
+            // guitar pro only allows their users to go from ppp to fff
+            QString map_dyn[] = {"f","ppp","pp","p","mp","mf","f","ff","fff"};
+            dyn->setDynamicType(map_dyn[d]);
+            dyn->setTrack(note->track());
+            s->add(dyn);
             }
       }
 
@@ -2753,7 +2749,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             s->setPlainText(gp->title);
             m->add(s);
             }
-      if (!gp->subtitle.isEmpty() && !gp->artist.isEmpty() && !gp->album.isEmpty()) {
+      if (!gp->subtitle.isEmpty()|| !gp->artist.isEmpty() || !gp->album.isEmpty()) {
             Text* s = new Text(SubStyle::SUBTITLE, score);
             QString str;
             if (!gp->subtitle.isEmpty())

@@ -5,6 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -45,8 +46,6 @@
           <controller ctrl="10" value="63"/>
           <controller ctrl="93" value="255"/>
           <controller ctrl="91" value="255"/>
-          <midiPort>0</midiPort>
-          <midiChannel>4</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -259,7 +258,7 @@ Puki Kuki</text>
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
