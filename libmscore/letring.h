@@ -1,0 +1,64 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2017 Werner Schweer
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
+//=============================================================================
+
+#ifndef __LETRING_H__
+#define __LETRING_H__
+
+#include "textlinebase.h"
+
+namespace Ms {
+
+class LetRing;
+
+//---------------------------------------------------------
+//   @@ LetRingSegment
+//---------------------------------------------------------
+
+class LetRingSegment : public TextLineBaseSegment {
+      Q_GADGET
+
+   protected:
+
+   public:
+      LetRingSegment(Score* s) : TextLineBaseSegment(s) {}
+      virtual ElementType type() const override       { return ElementType::LET_RING_SEGMENT; }
+      virtual LetRingSegment* clone() const override  { return new LetRingSegment(*this);    }
+      LetRing* letRing() const                        { return (LetRing*)spanner();          }
+      virtual void layout() override;
+
+      friend class LetRing;
+      };
+
+//---------------------------------------------------------
+//   @@ LetRing
+//---------------------------------------------------------
+
+class LetRing : public TextLineBase {
+      Q_GADGET
+
+   protected:
+      QPointF linePos(Grip, System**) const override;
+
+   public:
+      LetRing(Score* s);
+      virtual LetRing* clone() const override   { return new LetRing(*this);   }
+      virtual ElementType type() const override { return ElementType::LET_RING; }
+      virtual void read(XmlReader&) override;
+      LineSegment* createLineSegment();
+      virtual void setYoff(qreal) override;
+      virtual QVariant propertyDefault(P_ID propertyId) const override;
+      virtual StyleIdx getPropertyStyle(P_ID) const override;
+      };
+
+}     // namespace Ms
+#endif
+

@@ -55,6 +55,8 @@
 #include <libmscore/notedot.h>
 #include <libmscore/stafftext.h>
 #include <libmscore/sym.h>
+#include <libmscore/textline.h>
+#include <libmscore/letring.h>
 
 namespace Ms {
 
@@ -407,47 +409,47 @@ void GuitarPro::addPalmMute(Note* /*note*/)
 //   addLetRing
 //---------------------------------------------------------
 
-void GuitarPro::addLetRing(Note* /*note*/)
+void GuitarPro::addLetRing(Note* note)
       {
-//TODO-ws	note->setLetRing(true);
-
-#if 0
-	auto track = note->track();
-	while (_letRings.size() < track + 1) {
-		_letRings.push_back(nullptr);
-	      }
+	int track = note->track();
+	while (int(_letRings.size()) < track + 1)
+		_letRings.push_back(0);
 
 	if (_letRings[track]) {
-		auto lr = _letRings[track];
-		auto lastNote = static_cast<Note*>(lr->endElement());
-		if (lastNote->chord() == note->chord()) {
+#if 0
+		LetRing* lr = _letRings[track];
+		Note* lastNote = toNote(lr->endElement());
+		if (lastNote->chord() == note->chord())
 			return;
-                  }
-		auto next = lastNote->parent()->nextElement();
-		if (next && next->type() == ElementType::NOTE) {
-			if (static_cast<Note*>(next)->chord() == note->chord()) {
+		ChordRest* next = lastNote->segment()->nextChordRest(lastNote()->chord()->track(), false);
+		if (next && next->isChord()) {
+			if (toChord(next) == note->chord()) {
 				lr->setTick2(note->chord()->segment()->tick());
 				lr->setEndElement(note);
 			      }
 			else {
-				_letRings[track] = nullptr;
+				_letRings[track] = 0;
 			      }
 		      }
+#endif
+_letRings[track] = 0;
 	      }
 	if (!_letRings[track]) {
-		auto lr = new TextLine(score);
+		LetRing* lr = new LetRing(score);
 		_letRings[track] = lr;
-		lr->setLineType(TextLine::LineType::LET_RING);
-		lr->setBeginText("let ring");
-		lr->setTick(note->chord()->segment()->tick());
-		lr->setTick2(note->chord()->segment()->tick());
+            Chord* chord = note->chord();
+            Segment* segment = chord->segment();
+            int tick = segment->tick();
+qDebug("====let ring track %d tick %d\n", track, tick);
+ //     	lr->setLineType(TextLine::LineType::LET_RING);
+		lr->setTick(tick);
+		lr->setTick2(tick+480);
 		lr->setTrack(track);
 		lr->setTrack2(track);
 		lr->setStartElement(note);
 		lr->setEndElement(note);
 		score->addElement(lr);
 	      }
-#endif
       }
 
 //---------------------------------------------------------

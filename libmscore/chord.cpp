@@ -2523,11 +2523,11 @@ Element* Chord::drop(EditData& data)
 
             case ElementType::TREMOLO:
                   {
-                  Tremolo* t = static_cast<Tremolo*>(e);
+                  Tremolo* t = toTremolo(e);
                   if (t->twoNotes()) {
                         Segment* s = segment()->next();
                         while (s) {
-                              if (s->element(track()) && s->element(track())->type() == ElementType::CHORD)
+                              if (s->element(track()) && s->element(track())->isChord())
                                     break;
                               s = s->next();
                               }
@@ -2536,7 +2536,7 @@ Element* Chord::drop(EditData& data)
                               delete e;
                               return 0;
                               }
-                        Chord* ch2 = static_cast<Chord*>(s->element(track()));
+                        Chord* ch2 = toChord(s->element(track()));
                         if (ch2->duration() != duration()) {
                               qDebug("no matching chord for second note of tremolo found");
                               delete e;

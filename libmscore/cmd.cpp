@@ -273,7 +273,7 @@ void Score::deletePostponed()
 //---------------------------------------------------------
 //   cmdAddSpanner
 //   drop VOLTA, OTTAVA, TRILL, PEDAL, DYNAMIC
-//        HAIRPIN, and TEXTLINE
+//        HAIRPIN, LET_RING, VIBRATO and TEXTLINE
 //---------------------------------------------------------
 
 void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)

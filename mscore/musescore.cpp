@@ -5812,6 +5812,7 @@ int main(int argc, char* av[])
             appName2 = "mscore3";
             appName  = "MuseScore3";
             }
+
       MuseScoreApplication* app = new MuseScoreApplication(appName2, argc, av);
       QCoreApplication::setApplicationName(appName);
 
@@ -6000,6 +6001,7 @@ int main(int argc, char* av[])
                               ok = false;
                               break;
                               }
+
                         }
                   if (ok)
                         return 0;
@@ -6008,6 +6010,7 @@ int main(int argc, char* av[])
                   if (app->sendMessage(QString("")))
                       return 0;
             }
+
       if (dataPath.isEmpty())
             dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 

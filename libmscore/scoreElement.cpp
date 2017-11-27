@@ -76,6 +76,8 @@ static const ElementName elementNames[] = {
       { ElementType::HAIRPIN_SEGMENT,      "HairpinSegment",       QT_TRANSLATE_NOOP("elementName", "Hairpin Segment") },
       { ElementType::OTTAVA_SEGMENT,       "OttavaSegment",        QT_TRANSLATE_NOOP("elementName", "Ottava Segment") },
       { ElementType::TRILL_SEGMENT,        "TrillSegment",         QT_TRANSLATE_NOOP("elementName", "Trill Segment") },
+      { ElementType::LET_RING_SEGMENT,     "LetRingSegment",       QT_TRANSLATE_NOOP("elementName", "Let Ring Segment") },
+      { ElementType::VIBRATO_SEGMENT,      "VibratoSegment",       QT_TRANSLATE_NOOP("elementName", "Vibrato Segment") },
       { ElementType::TEXTLINE_SEGMENT,     "TextLineSegment",      QT_TRANSLATE_NOOP("elementName", "Text Line Segment") },
       { ElementType::VOLTA_SEGMENT,        "VoltaSegment",         QT_TRANSLATE_NOOP("elementName", "Volta Segment") },
       { ElementType::PEDAL_SEGMENT,        "PedalSegment",         QT_TRANSLATE_NOOP("elementName", "Pedal Segment") },
@@ -99,6 +101,8 @@ static const ElementName elementNames[] = {
       { ElementType::OTTAVA,               "Ottava",               QT_TRANSLATE_NOOP("elementName", "Ottava") },
       { ElementType::PEDAL,                "Pedal",                QT_TRANSLATE_NOOP("elementName", "Pedal") },
       { ElementType::TRILL,                "Trill",                QT_TRANSLATE_NOOP("elementName", "Trill") },
+      { ElementType::LET_RING,             "LetRing",              QT_TRANSLATE_NOOP("elementName", "Let Ring") },
+      { ElementType::VIBRATO,              "Vibrato",              QT_TRANSLATE_NOOP("elementName", "Vibrato") },
       { ElementType::TEXTLINE,             "TextLine",             QT_TRANSLATE_NOOP("elementName", "Text Line") },
       { ElementType::TEXTLINE_BASE,        "TextLineBase",         QT_TRANSLATE_NOOP("elementName", "Text Line Base") },  // remove
       { ElementType::NOTELINE,             "NoteLine",             QT_TRANSLATE_NOOP("elementName", "Note Line") },
@@ -409,7 +413,7 @@ ElementType ScoreElement::name2type(const QStringRef& s)
 bool ScoreElement::isSLine() const
       {
       return isHairpin() || isOttava() || isPedal()
-         || isTrill() || isVolta() || isTextLine() || isNoteLine() || isGlissando();
+         || isTrill() || isVolta() || isTextLine() || isNoteLine() || isGlissando() || isLetRing() || isVibrato();
       }
 
 //---------------------------------------------------------
@@ -420,7 +424,7 @@ bool ScoreElement::isSLineSegment() const
       {
       return isHairpinSegment() || isOttavaSegment() || isPedalSegment()
          || isTrillSegment() || isVoltaSegment() || isTextLineSegment()
-         || isGlissandoSegment();
+         || isGlissandoSegment() || isLetRingSegment() || isVibratoSegment();
       }
 
 //---------------------------------------------------------
