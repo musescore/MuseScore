@@ -5,6 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -42,7 +43,7 @@
         <concertClef>G8vb</concertClef>
         <transposingClef>G</transposingClef>
         <StringData>
-          <frets>21</frets>
+          <frets>24</frets>
           <string>52</string>
           <string>57</string>
           <string>62</string>
@@ -176,7 +177,7 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -229,7 +230,7 @@
           <concertClef>G8vb</concertClef>
           <transposingClef>G</transposingClef>
           <StringData>
-            <frets>21</frets>
+            <frets>24</frets>
             <string>52</string>
             <string>57</string>
             <string>62</string>
