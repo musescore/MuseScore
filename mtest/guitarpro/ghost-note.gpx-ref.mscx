@@ -5,6 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -41,7 +42,7 @@
         <instrumentId>pluck.guitar.electric</instrumentId>
         <clef>G8vb</clef>
         <StringData>
-          <frets>21</frets>
+          <frets>24</frets>
           <string>52</string>
           <string>57</string>
           <string>62</string>
@@ -117,30 +118,23 @@
           <durationType>quarter</durationType>
           <Note>
             <lid>7</lid>
-            <Symbol>
-              <name>noteheadParenthesisLeft</name>
-              <lid>8</lid>
-              </Symbol>
-            <Symbol>
-              <name>noteheadParenthesisRight</name>
-              <lid>9</lid>
-              </Symbol>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <fret>12</fret>
             <string>3</string>
+            <ghost>1</ghost>
             </Note>
           </Chord>
         <Rest>
+          <lid>8</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>9</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
           <lid>10</lid>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>11</lid>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>12</lid>
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
@@ -150,7 +144,7 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -202,7 +196,7 @@
           <instrumentId>pluck.guitar.electric</instrumentId>
           <clef>G8vb</clef>
           <StringData>
-            <frets>21</frets>
+            <frets>24</frets>
             <string>52</string>
             <string>57</string>
             <string>62</string>
@@ -282,30 +276,23 @@
             <durationType>quarter</durationType>
             <Note>
               <lid>7</lid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
-                <lid>8</lid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
-                <lid>9</lid>
-                </Symbol>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>12</fret>
               <string>3</string>
+              <ghost>1</ghost>
               </Note>
             </Chord>
           <Rest>
+            <lid>8</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>9</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
             <lid>10</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>11</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>12</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
@@ -321,30 +308,23 @@
             <durationType>quarter</durationType>
             <Note>
               <lid>7</lid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
-                <lid>8</lid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
-                <lid>9</lid>
-                </Symbol>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>12</fret>
               <string>3</string>
+              <ghost>1</ghost>
               </Note>
             </Chord>
           <Rest>
+            <lid>8</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>9</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
             <lid>10</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>11</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>12</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
