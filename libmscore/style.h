@@ -702,6 +702,13 @@ enum class StyleIdx {
       palmMuteFontUnderline,
       palmMuteTextAlign,
       palmMuteHookHeight,
+      palmMutePlacement,
+      palmMutePosAbove,
+      palmMutePosBelow,
+      palmMuteLineWidth,
+      palmMuteLineStyle,
+      palmMuteBeginTextOffset,
+      palmMuteText,
 
       STYLES
       };

@@ -246,6 +246,8 @@ void Inspector::update(Score* s)
                               break;
                         case ElementType::TEXTLINE_SEGMENT:
                         case ElementType::PEDAL_SEGMENT:
+                        case ElementType::LET_RING_SEGMENT:
+                        case ElementType::PALM_MUTE_SEGMENT:
                               ie = new InspectorTextLine(this);
                               break;
                         case ElementType::SLUR_SEGMENT:
