@@ -13,6 +13,7 @@
 #include "importgtp.h"
 #include "importptb.h"
 #include "globals.h"
+#include "preferences.h"
 #include <libmscore/measurebase.h>
 #include <libmscore/text.h>
 #include <libmscore/box.h>
@@ -97,8 +98,9 @@ GuitarPro::GuitarPro(MasterScore* s, int v)
       {
       score   = s;
       version = v;
-      //_codec = QTextCodec::codecForName(preferences.importCharsetGP.toLatin1());
+      _codec = QTextCodec::codecForName(preferences.importCharsetGP.toLatin1());
       voltaSequence = 1;
+      tempo = -1;
       }
 
 GuitarPro::~GuitarPro()
@@ -1282,11 +1284,9 @@ void GuitarPro::createSlur(bool hasSlur, int staffIdx, ChordRest* cr)
       {
       if (hasSlur && (slurs[staffIdx] == 0)) {
             Slur* slur = new Slur(score);
-		slur->setAnchor(Spanner::Anchor::CHORD);
-		slur->setStartElement(cr);
             slur->setParent(0);
-            slur->setTrack(staffIdx * VOICES);
-            slur->setTrack2(staffIdx * VOICES);
+            slur->setTrack(cr->track());
+            slur->setTrack2(cr->track());
             slur->setTick(cr->tick());
             slur->setTick2(cr->tick());
             slurs[staffIdx] = slur;
@@ -1297,8 +1297,6 @@ void GuitarPro::createSlur(bool hasSlur, int staffIdx, ChordRest* cr)
             slurs[staffIdx] = 0;
             s->setTick2(cr->tick());
             s->setTrack2(cr->track());
-		s->setEndElement(cr);
-//TODO-ws		cr->has_slur = true;
             }
       }
 
@@ -2401,7 +2399,7 @@ bool GuitarPro3::read(QFile* fp)
 					segment->add(cr);
 					}
 				createSlur(hasSlur, staffIdx, cr);
-                        if (cr && (cr->type() == ElementType::CHORD)) {
+                        if (cr && (cr->isChord())) {
 				      if (beatEffects >= 200) {
                                     beatEffects -= 200;
 						Articulation* art = new Articulation(score);
