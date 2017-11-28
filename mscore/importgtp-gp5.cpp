@@ -1407,7 +1407,7 @@ bool GuitarPro5::readNote(int string, Note* note)
             f->reset();
             }
 
-      if (noteBits & 0x1)
+      if (noteBits & 0x1)     // Time independent duration
             skip(8);
 
       // check if a note is supposed to be accented, and give it the marcato type

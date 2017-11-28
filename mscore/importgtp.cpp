@@ -57,6 +57,7 @@
 #include <libmscore/sym.h>
 #include <libmscore/textline.h>
 #include <libmscore/letring.h>
+#include <libmscore/palmmute.h>
 
 namespace Ms {
 
@@ -362,47 +363,44 @@ void GuitarPro::initGuitarProDrumset()
 //   addPalmMate
 //---------------------------------------------------------
 
-void GuitarPro::addPalmMute(Note* /*note*/)
+void GuitarPro::addPalmMute(Note* note)
       {
-//TODO-ws	note->setPalmMute(true);
+      int track = note->track();
+	while (int(_palmMutes.size()) < track + 1)
+		_palmMutes.push_back(0);
 
-#if 0
-      auto track = note->track();
-	while (_palmMutes.size() < track + 1) {
-		_palmMutes.push_back(nullptr);
-	      }
-
+      Chord* chord = note->chord();
 	if (_palmMutes[track]) {
-		auto pm = _palmMutes[track];
-		auto lastNote = static_cast<Note*>(pm->endElement());
-		if (lastNote->chord() == note->chord()) {
+		PalmMute* pm = _palmMutes[track];
+		Chord* lastChord = toChord(pm->endCR());
+		if (lastChord == note->chord())
 			return;
+            //
+            // extend the current palm mute or start a new one
+            //
+            int tick = note->chord()->segment()->tick();
+		if (pm->tick2() < tick)
+                  _palmMutes[track] = 0;
+            else {
+                  pm->setTick2(chord->tick() + chord->actualTicks());
+			pm->setEndElement(chord);
 		      }
-		auto next = lastNote->parent()->nextElement();
-		if (next && next->type() == ElementType::NOTE) {
-			if (static_cast<Note*>(next)->chord() == note->chord()) {
-				pm->setTick2(note->chord()->segment()->tick());
-				pm->setEndElement(note);
-			      }
-			else {
-				_palmMutes[track] = nullptr;
-			      }
-		      }
+
 	      }
 	if (!_palmMutes[track]) {
-		auto pm = new TextLine(score);
+		PalmMute* pm = new PalmMute(score);
 		_palmMutes[track] = pm;
-		pm->setLineType(TextLine::LineType::PALM_MUTE);
-		pm->setBeginText("P.M.");
-		pm->setTick(note->chord()->segment()->tick());
-		pm->setTick2(note->chord()->actualTicks());
+            Segment* segment = chord->segment();
+            int tick = segment->tick();
+
+		pm->setTick(tick);
+		pm->setTick2(tick + chord->actualTicks());
 		pm->setTrack(track);
 		pm->setTrack2(track);
-		pm->setStartElement(note);
-		pm->setEndElement(note);
+		pm->setStartElement(chord);
+		pm->setEndElement(chord);
 		score->addElement(pm);
 	      }
-#endif
       }
 
 //---------------------------------------------------------
@@ -1674,7 +1672,7 @@ bool GuitarPro2::read(QFile* fp)
 
 bool GuitarPro1::readNote(int string, Note* note)
       {
-	  bool slur = false;
+      bool slur = false;
       uchar noteBits = readUChar();
       if (noteBits & NOTE_GHOST) {
 		if (version == 300)

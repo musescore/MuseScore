@@ -933,12 +933,13 @@ bool GuitarPro4::read(QFile* fp)
                               }
                         else
                               cr->setDurationType(d);
-                        if(!segment->cr(track))
+                        if (!segment->cr(track))
                               segment->add(cr);
-                        Staff* staff = cr->staff();
+                        Staff* staff   = cr->staff();
                         int numStrings = staff->part()->instrument()->stringData()->strings();
-                        bool hasSlur = false;
-						int dynam = -1;
+                        bool hasSlur   = false;
+				int dynam      = -1;
+if (cr && cr->isChord()) {    // ws
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
@@ -958,6 +959,7 @@ bool GuitarPro4::read(QFile* fp)
                                     note->setTpcFromPitch();
                                     }
                               }
+            }     // ws
                         if (cr && cr->isChord()) {
                               applyBeatEffects(toChord(cr), beatEffects);
 					if (dynam != curDynam[track]) {

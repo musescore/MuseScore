@@ -52,7 +52,6 @@ void PalmMuteSegment::layout()
             }
       }
 
-
 //---------------------------------------------------------
 //   PalmMute
 //---------------------------------------------------------
@@ -60,13 +59,17 @@ void PalmMuteSegment::layout()
 PalmMute::PalmMute(Score* s)
    : TextLineBase(s)
       {
-      setLineWidth(score()->styleS(StyleIdx::pedalLineWidth));
-      setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::pedalLineStyle)));
       resetProperty(P_ID::BEGIN_TEXT_ALIGN);
       resetProperty(P_ID::CONTINUE_TEXT_ALIGN);
       resetProperty(P_ID::END_TEXT_ALIGN);
       resetProperty(P_ID::BEGIN_HOOK_HEIGHT);
       resetProperty(P_ID::END_HOOK_HEIGHT);
+      resetProperty(P_ID::END_HOOK_TYPE);
+      resetProperty(P_ID::BEGIN_TEXT);
+      resetProperty(P_ID::BEGIN_FONT_ITALIC);
+      resetProperty(P_ID::LINE_STYLE);
+      resetProperty(P_ID::LINE_WIDTH);
+      resetProperty(P_ID::BEGIN_TEXT_ALIGN);
       }
 
 //---------------------------------------------------------
@@ -109,25 +112,34 @@ QVariant PalmMute::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::LINE_WIDTH:
-                  return score()->styleV(StyleIdx::pedalLineWidth);
+                  return score()->styleV(StyleIdx::palmMuteLineWidth);
 
             case P_ID::ALIGN:
                   return QVariant::fromValue(Align::LEFT | Align::BASELINE);
 
             case P_ID::LINE_STYLE:
-                  return score()->styleV(StyleIdx::pedalLineStyle);
+                  return score()->styleV(StyleIdx::palmMuteLineStyle);
 
             case P_ID::BEGIN_TEXT_OFFSET:
-                  return score()->styleV(StyleIdx::pedalBeginTextOffset).toPointF();
+                  return score()->styleV(StyleIdx::palmMuteBeginTextOffset).toPointF();
 
             case P_ID::BEGIN_TEXT_ALIGN:
             case P_ID::CONTINUE_TEXT_ALIGN:
             case P_ID::END_TEXT_ALIGN:
-                  return score()->styleV(StyleIdx::pedalTextAlign);
+                  return score()->styleV(StyleIdx::palmMuteTextAlign);
 
             case P_ID::BEGIN_HOOK_HEIGHT:
             case P_ID::END_HOOK_HEIGHT:
-                  return score()->styleV(StyleIdx::pedalHookHeight);
+                  return score()->styleV(StyleIdx::palmMuteHookHeight);
+
+            case P_ID::BEGIN_FONT_ITALIC:
+                  return score()->styleV(StyleIdx::palmMuteFontItalic);
+
+            case P_ID::BEGIN_TEXT:
+                  return score()->styleV(StyleIdx::palmMuteText);
+
+            case P_ID::END_HOOK_TYPE:
+                  return int(HookType::HOOK_90T);
 
             default:
                   return TextLineBase::propertyDefault(propertyId);
@@ -160,6 +172,8 @@ StyleIdx PalmMute::getPropertyStyle(P_ID id) const
             case P_ID::BEGIN_HOOK_HEIGHT:
             case P_ID::END_HOOK_HEIGHT:
                   return StyleIdx::pedalHookHeight;
+            case P_ID::BEGIN_TEXT:
+                  return StyleIdx::palmMuteText;
             default:
                   break;
             }
@@ -183,8 +197,6 @@ QPointF PalmMute::linePos(Grip grip, System** sys) const
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
             if (c->isRest() && c->durationType() == TDuration::DurationType::V_MEASURE)
                   x -= c->x();
-            if (beginHookType() == HookType::HOOK_45)
-                  x += nhw * .5;
             }
       else {
             Element* e = endElement();
