@@ -367,6 +367,7 @@ void GuitarPro::initGuitarProDrumset()
 
 void GuitarPro::addPalmMute(Note* note)
       {
+printf("addPalmMute===\n");
       int track = note->track();
 	while (int(_palmMutes.size()) < track + 1)
 		_palmMutes.push_back(0);
@@ -2861,7 +2862,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             pscore->setPlaylistDirty();
             pscore->setLayoutAll();
             pscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
-            pscore->doLayout();
+//            pscore->doLayout();
             }
 
       for (auto p : infoParts) {

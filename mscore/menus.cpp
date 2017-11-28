@@ -82,6 +82,7 @@
 #include "libmscore/stafftypechange.h"
 #include "libmscore/letring.h"
 #include "libmscore/vibrato.h"
+#include "libmscore/palmmute.h"
 
 namespace Ms {
 
@@ -1270,6 +1271,10 @@ Palette* MuseScore::newLinesPalette(PaletteType t)
             Vibrato* vibrato = new Vibrato(gscore);
             vibrato->setLen(w);
             sp->append(vibrato, QT_TRANSLATE_NOOP("Palette", "Vibrato"));
+
+            PalmMute* pm = new PalmMute(gscore);
+            pm->setLen(w);
+            sp->append(pm, QT_TRANSLATE_NOOP("Palette", "Palm Mute"));
             }
       else {
             sp->setMoreElements(true);

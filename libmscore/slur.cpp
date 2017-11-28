@@ -398,12 +398,12 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                         if (dist > 0.0) {
                               if (pt.x() - x1 < nearDistance) {
                                     // collision near beginning of slur
-                                    printf("collision near beginning of slur (up)\n");
+//                                    printf("collision near beginning of slur (up)\n");
                                     _ups[int(Grip::START)].off.ry() -= dist * .8;
                                     recomputeBezier = true;
                                     }
                               else if (x2  - pt.x() < nearDistance) {
-                                    printf("collision near end of slur (up)\n");
+//                                    printf("collision near end of slur (up)\n");
                                     _ups[int(Grip::END)].off.ry() -= dist * .8;
                                     recomputeBezier = true;
                                     }
@@ -416,12 +416,12 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                               if (pt.x() - x1 < nearDistance) {
                                     // collision near beginning of slur
 
-                                    printf("collision near beginning of slur (down)\n");
+//                                    printf("collision near beginning of slur (down)\n");
                                     _ups[int(Grip::START)].off.ry() += dist * .8;
                                     recomputeBezier = true;
                                     }
                               else if (x2  - pt.x() < nearDistance) {
-                                    printf("collision near end of slur (down)\n");
+//                                    printf("collision near end of slur (down)\n");
                                     _ups[int(Grip::END)].off.ry() += dist * .8;
                                     recomputeBezier = true;
                                     }
@@ -1150,7 +1150,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
 
 void Slur::layout()
       {
-      printf("Slur::layout %p\n", this);
+//      printf("Slur::layout %p\n", this);
 
       if (track2() == -1)
             setTrack2(track());
