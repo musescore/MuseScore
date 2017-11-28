@@ -1416,7 +1416,7 @@ bool GuitarPro5::readNote(int string, Note* note)
             art->setSymId(SymId::articMarcatoAbove);
             if (!note->score()->addArticulation(note, art))
                   delete art;
-      }
+            }
 
       // check if a note is supposed to be accented, and give it the sforzato type
       if (noteBits & NOTE_SFORZATO) {

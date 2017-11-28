@@ -1289,7 +1289,7 @@ bool Note::readProperties(XmlReader& e)
       else if (tag == "veloType")
             setProperty(P_ID::VELO_TYPE, Ms::getProperty(P_ID::VELO_TYPE, e));
       else if (tag == "line")
-            _line = e.readInt();
+            setLine(e.readInt());
       else if (tag == "Fingering") {
             Fingering* f = new Fingering(score());
             f->read(e);
@@ -2082,8 +2082,10 @@ void Note::updateAccidental(AccidentalState* as)
             AccidentalVal accVal = tpc2alter(tpc());
             bool error = false;
             AccidentalVal relLineAccVal = as->accidentalVal(relLine, error);
-            if (error)
+            if (error) {
+                  qDebug("error accidetalVal");
                   return;
+                  }
             if ((accVal != relLineAccVal) || hidden() || as->tieContext(relLine)) {
                   as->setAccidentalVal(relLine, accVal, _tieBack != 0);
                   acci = Accidental::value2subtype(accVal);

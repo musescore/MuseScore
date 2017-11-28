@@ -1280,6 +1280,7 @@ void Score::addElement(Element* element)
             case ElementType::HAIRPIN:
             case ElementType::LET_RING:
             case ElementType::VIBRATO:
+            case ElementType::PALM_MUTE:
                   {
                   Spanner* spanner = static_cast<Spanner*>(element);
                   if (et == ElementType::TEXTLINE && spanner->anchor() == Spanner::Anchor::NOTE)
@@ -1421,6 +1422,7 @@ void Score::removeElement(Element* element)
             case ElementType::PEDAL:
             case ElementType::LET_RING:
             case ElementType::VIBRATO:
+            case ElementType::PALM_MUTE:
             case ElementType::TEXTLINE:
             case ElementType::HAIRPIN:
                   {

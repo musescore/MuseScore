@@ -1973,6 +1973,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "TextLine"
                || tag == "LetRing"
                || tag == "Vibrato"
+               || tag == "PalmMute"
                || tag == "Volta") {
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
                   sp->setTrack(e.track());
