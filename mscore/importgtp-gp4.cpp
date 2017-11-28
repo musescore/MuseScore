@@ -161,14 +161,14 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
 
       //
       // noteBits:
-      //    7 - Right hand or left hand fingering;
-      //    6 - Accentuated note
-      //    5 - Note type (rest, empty note, normal note);
-      //    4 - note dynamic;
-      //    3 - Presence of effects linked to the note;
-      //    2 - Ghost note;
-      //    1 - Dotted note;  ?
-      //    0 - Time-independent duration
+      //   80 - Right hand or left hand fingering;
+      //   40 - Accentuated note
+      //   20 - Note type (rest, empty note, normal note);
+      //   10 - note dynamic;
+      //    8 - Presence of effects linked to the note;
+      //    4 - Ghost note;
+      //    2 - Dotted note;  ?
+      //    1 - Time-independent duration
 
       if (noteBits & BEAT_TREMOLO) {
             //note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
@@ -177,7 +177,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
 
       bool tieNote = false;
       uchar variant = 1;
-      if (noteBits & BEAT_EFFECT) {
+      if (noteBits & BEAT_EFFECT) {       // 0x20
             variant = readUChar();
             if (variant == 1) {     // normal note
                   }
@@ -205,11 +205,11 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             }
 
       // set dynamic information on note if different from previous note
-      if (noteBits & NOTE_DYNAMIC) {
+      if (noteBits & NOTE_DYNAMIC) {            // 0x10
             int d = readChar();
             if (previousDynamic != d) {
                   previousDynamic = d;
-                  // addDynamic(note, d);    // TODO-ws ??
+                  // addDynamic(note, d);    // velocity? TODO-ws ??
                   }
             }
       else if (previousDynamic) {
@@ -218,21 +218,23 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             }
 
       int fretNumber = -1;
-      if (noteBits & NOTE_FRET)
+      if (noteBits & NOTE_FRET) {                 // 0x20
+            // TODO: special case if note is tied
             fretNumber = readUChar();
+            }
 
       // check if a note is supposed to be accented, and give it the sforzato type
-      if (noteBits & NOTE_SFORZATO) {
+      if (noteBits & NOTE_SFORZATO) {           // 0x40
             Articulation* art = new Articulation(note->score());
             art->setSymId(SymId::articAccentAbove);
             if (!note->score()->addArticulation(note, art))
                   delete art;
             }
 
-      if (noteBits & NOTE_FINGERING) {
-            int leftFinger = readUChar();
+      if (noteBits & NOTE_FINGERING) {          // 0x80
+            int leftFinger  = readUChar();
             int rightFinger = readUChar();
-            Text* f = new Fingering(score);
+            Text* f         = new Fingering(score);
             QString finger;
             // if there is a valid left hand fingering
             if (leftFinger < 5) {

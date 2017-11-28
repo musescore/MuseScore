@@ -698,6 +698,7 @@ void System::add(Element* el)
             case ElementType::GLISSANDO_SEGMENT:
             case ElementType::LET_RING_SEGMENT:
             case ElementType::VIBRATO_SEGMENT:
+            case ElementType::PALM_MUTE_SEGMENT:
                   {
                   SpannerSegment* ss = static_cast<SpannerSegment*>(el);
 #ifndef NDEBUG

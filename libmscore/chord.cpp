@@ -1588,6 +1588,32 @@ void Chord::layout2()
       }
 
 //---------------------------------------------------------
+//   updatePercussionNotes
+//---------------------------------------------------------
+
+static void updatePercussionNotes(Chord* c, const Drumset* drumset)
+      {
+      for (Chord* ch : c->graceNotes())
+            updatePercussionNotes(ch, drumset);
+      std::vector<Note*> lnotes(c->notes());  // we need a copy!
+      for (Note* note : lnotes) {
+            if (!drumset)
+                  note->setLine(0);
+            else {
+                  int pitch = note->pitch();
+                  if (!drumset->isValid(pitch)) {
+                        note->setLine(0);
+                        qWarning("unmapped drum note %d", pitch);
+                        }
+                  else if (!note->fixed()) {
+                        note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
+                        note->setLine(drumset->line(pitch));
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   cmdUpdateNotes
 //---------------------------------------------------------
 
@@ -1607,17 +1633,13 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
 
       // PITCHED_ and PERCUSSION_STAFF can go note by note
 
-      for (Chord* ch : graceNotesBefore()) {
-            if (staffGroup != StaffGroup::PERCUSSION) {
+      if (staffGroup == StaffGroup::STANDARD) {
+            for (Chord* ch : graceNotesBefore()) {
                   std::vector<Note*> notes(ch->notes());  // we need a copy!
                   for (Note* note : notes)
                         note->updateAccidental(as);
+                  ch->sortNotes();
                   }
-            ch->sortNotes();
-            }
-
-
-      if (staffGroup == StaffGroup::STANDARD) {
             std::vector<Note*> lnotes(notes());  // we need a copy!
             for (Note* note : lnotes) {
                   if (note->tieBack() && note->tpc() == note->tieBack()->startNote()->tpc()) {
@@ -1631,39 +1653,21 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                         }
                   note->updateAccidental(as);
                   }
+            for (Chord* ch : graceNotesAfter()) {
+                  std::vector<Note*> notes(ch->notes());  // we need a copy!
+                  for (Note* note : notes)
+                        note->updateAccidental(as);
+                  ch->sortNotes();
+                  }
             }
       else if (staffGroup == StaffGroup::PERCUSSION) {
             const Instrument* instrument = part()->instrument();
             const Drumset* drumset = instrument->drumset();
             if (!drumset)
                   qWarning("no drumset");
-            std::vector<Note*> lnotes(notes());  // we need a copy!
-            for (Note* note : lnotes) {
-                  if (!drumset)
-                        note->setLine(0);
-                  else {
-                        int pitch = note->pitch();
-                        if (!drumset->isValid(pitch)) {
-                              note->setLine(0);
-                              qWarning("unmapped drum note %d", pitch);
-                              }
-                        else if (!note->fixed()) {
-                              note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
-                              // note->setHeadGroup(drumset->noteHead(pitch));
-                              note->setLine(drumset->line(pitch));
-                              }
-                        }
-                  }
+            updatePercussionNotes(this, drumset);
             }
 
-      for (Chord* ch : graceNotesAfter()) {
-            if (staffGroup != StaffGroup::PERCUSSION) {
-                  std::vector<Note*> notes(ch->notes());  // we need a copy!
-                  for (Note* note : notes)
-                        note->updateAccidental(as);
-                  }
-            ch->sortNotes();
-            }
       sortNotes();
       }
 
@@ -3067,13 +3071,16 @@ QVector<Chord*> Chord::graceNotesBefore() const
       {
       QVector<Chord*> cl;
       for (Chord* c : _graceNotes) {
-               if (c->noteType() & (NoteType::ACCIACCATURA
-                  | NoteType::APPOGGIATURA
-                  | NoteType::GRACE4
-                  | NoteType::GRACE16
-                  | NoteType::GRACE32))
+            Q_ASSERT(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
+            if (c->noteType() & (
+                 NoteType::ACCIACCATURA
+               | NoteType::APPOGGIATURA
+               | NoteType::GRACE4
+               | NoteType::GRACE16
+               | NoteType::GRACE32)) {
                   cl.push_back(c);
-              }
+                  }
+            }
       return cl;
       }
 
@@ -3086,6 +3093,7 @@ QVector<Chord*> Chord::graceNotesAfter() const
       QVector<Chord*> cl;
       for (int i = _graceNotes.size() - 1; i >= 0; i--) {
             Chord* c = _graceNotes[i];
+            Q_ASSERT(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
             if (c->noteType() & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER))
                   cl.push_back(c);
             }

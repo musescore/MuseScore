@@ -720,7 +720,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::palmMuteFontBold,              "palmMuteFontBold",              false },
       { StyleIdx::palmMuteFontItalic,            "palmMuteFontItalic",            true },
       { StyleIdx::palmMuteFontUnderline,         "palmMuteFontUnderline",         false },
-      { StyleIdx::palmMuteTextAlign,             "palmMuteTextAlign",             QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+      { StyleIdx::palmMuteTextAlign,             "palmMuteTextAlign",             QVariant::fromValue(Align::LEFT | Align::VCENTER) },
       { StyleIdx::palmMuteHookHeight,            "palmMuteHookHeight",            Spatium(0.6) },
       { StyleIdx::palmMutePlacement,             "palmMutePlacement",             int(Element::Placement::BELOW)  },
       { StyleIdx::palmMutePosAbove,              "palmMutePosAbove",              Spatium(-4.0) },
