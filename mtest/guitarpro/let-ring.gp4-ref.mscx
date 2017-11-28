@@ -5,6 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -67,28 +68,20 @@
           <sigN>4</sigN>
           <sigD>4</sigD>
           </TimeSig>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>4</lid>
-          <text><sym>metNoteQuarterUp</sym> = 120</text>
-          </Tempo>
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
-          <lid>5</lid>
+          <lid>4</lid>
           </Dynamic>
-        <Pedal id="2">
-          <endHookType>1</endHookType>
-          <endHookHeight>1</endHookHeight>
-          <beginText>let ring</beginText>
-          <beginFontItalic>1</beginFontItalic>
+        <Tempo>
+          <tempo>2</tempo>
+          <lid>5</lid>
+          <text><sym>metNoteQuarterUp</sym> = 120</text>
+          </Tempo>
+        <LetRing id="2">
           <beginTextOffset x="0" y="0"/>
-          <continueText>let ring</continueText>
-          <continueFontItalic>1</continueFontItalic>
           <lid>15</lid>
-          <placement>above</placement>
-          <lineStyle>2</lineStyle>
-          </Pedal>
+          </LetRing>
         <Chord>
           <lid>6</lid>
           <durationType>quarter</durationType>
@@ -141,7 +134,7 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -223,28 +216,20 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>4</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <lid>5</lid>
+            <lid>4</lid>
             </Dynamic>
-          <Pedal id="3">
-            <endHookType>1</endHookType>
-            <endHookHeight>1</endHookHeight>
-            <beginText>let ring</beginText>
-            <beginFontItalic>1</beginFontItalic>
+          <Tempo>
+            <tempo>2</tempo>
+            <lid>5</lid>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
+            </Tempo>
+          <LetRing id="3">
             <beginTextOffset x="0" y="0"/>
-            <continueText>let ring</continueText>
-            <continueFontItalic>1</continueFontItalic>
             <lid>15</lid>
-            <placement>above</placement>
-            <lineStyle>2</lineStyle>
-            </Pedal>
+            </LetRing>
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
@@ -298,18 +283,10 @@
             <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
-          <Pedal id="4">
-            <endHookType>1</endHookType>
-            <endHookHeight>1</endHookHeight>
-            <beginText>let ring</beginText>
-            <beginFontItalic>1</beginFontItalic>
+          <LetRing id="4">
             <beginTextOffset x="0" y="0"/>
-            <continueText>let ring</continueText>
-            <continueFontItalic>1</continueFontItalic>
             <lid>15</lid>
-            <placement>above</placement>
-            <lineStyle>2</lineStyle>
-            </Pedal>
+            </LetRing>
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
