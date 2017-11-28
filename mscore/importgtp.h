@@ -380,6 +380,7 @@ class GuitarPro6 : public GuitarPro {
             QDomNode notes;
             QDomNode rhythms;
             };
+      Slur** legatos;
       // a mapping from identifiers to fret diagrams
       QMap<int, FretDiagram*> fretDiagrams;
       void parseFile(char* filename, QByteArray* data);

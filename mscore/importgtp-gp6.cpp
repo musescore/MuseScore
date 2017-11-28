@@ -237,7 +237,7 @@ void GuitarPro6::readScore(QDomNode* scoreNode)
                   title = currentNode.toElement().text();
             if (!nodeName.compare("Copyright"))
                   score->setMetaTag("copyright", currentNode.toElement().text());
-            else if (!nodeName.compare("Subtitle"))
+            else if (!nodeName.compare("SubTitle"))
                   subtitle = currentNode.toElement().text();
             else if (!nodeName.compare("Artist"))
                   artist = currentNode.toElement().text();
@@ -731,6 +731,8 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
       Fraction fermataIndex(0,1);
       int track            = staffIdx * VOICES + voiceNum;
       auto currentBeatList = beats.split(" ");
+      bool startSlur = false;
+      bool endSlur = false;
       for (auto currentBeat = currentBeatList.begin(); currentBeat != currentBeatList.end(); currentBeat++) {
             int slide = -1;
             if (slides->contains(staffIdx * VOICES + voiceNum))
@@ -778,8 +780,29 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                         if (lyrchord && lyrchord->notes().size())
                               lyrNote = lyrchord->notes().front();
 
-                        if (!segment->cr(staffIdx * VOICES + voiceNum))
+                        if (!segment->cr(track))
                               segment->add(cr);
+
+                        if (startSlur) {
+                                    Slur* slur = new Slur(score);
+                                    slur->setParent(0);
+                                    slur->setTrack(track);
+                                    slur->setTrack2(track);
+                                    legatos[track] = slur;
+                                    slur->setTick(cr->tick());
+                                    slur->setTick2(cr->tick());
+                                    startSlur = false;
+                                    }
+                        if (endSlur) {
+                              Slur* slur = legatos[track];
+                              if (slur) {
+                                    slur->setTrack2(track);
+                                    slur->setTick2(cr->tick());
+                                    score->addElement(slur);
+                                    legatos[track] = 0;
+                                    }
+                              endSlur = false;
+                              }
 
                         Chord* lastChord { nullptr };
                         for (auto iter = notesList.begin(); iter != notesList.end(); ++iter) {
@@ -860,7 +883,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                                   score->addElement(s);
                                                                   slideMap.erase({ string, staffIdx });
                                                                   if (slurs[staffIdx])
-                                                                        createSlur(false, staffIdx, note->chord());
+                                                                        createSlur(false, track, note->chord());
                                                                   }
                                                             }
                                                       }
@@ -896,17 +919,11 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             }
                                                       }
                                                 else if (!argument.compare("HopoOrigin")) {
-                                                      //Symbol* s = new Symbol(score);
-                                                      //s->setSym(SymId::articLaissezVibrerBelow);
-                                                      //s->setParent(note);
-                                                      //note->add(s);
-                                                      //hasSlur = true;
-                                                      createSlur(true, staffIdx, cr);
-                                                      //note->setStemThrough(true);
+                                                      hasSlur = true;
+                                                      createSlur(true, track, cr);
                                                       }
                                                 else if (!argument.compare("HopoDestination") && !hasSlur) {
-                                                      createSlur(false, staffIdx, cr);
-                                                      //note->setStemThrough(true);
+                                                      createSlur(false, track, cr);
                                                       }
                                                 else if (argument == "Variation")
                                                       variation = currentProperty.firstChild().toElement().text();
@@ -1559,6 +1576,18 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               currentNode = currentNode.nextSibling();
                               }
                         fermataIndex += l;
+                        }
+                  else if (currentNode.nodeName() == "Legato") {
+                        QString origin = currentNode.attributes().namedItem("origin").toAttr().value();
+                        QString destination = currentNode.attributes().namedItem("destination").toAttr().value();
+                        if (!destination.compare("false") && !origin.compare("true")) {
+                              qDebug() << "origin";
+                              startSlur = true;
+                              }
+                        else if (!destination.compare("true") && !origin.compare("false")) {
+                              qDebug() << "destination";
+                              endSlur = true;
+                              }
                         }
                   else if (currentNode.nodeName() == "Hairpin") {
                         Segment* seg = segment->prev1(SegmentType::ChordRest);
@@ -2245,6 +2274,27 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                               }
                         else if (!masterBarElement.nodeName().compare("Bars") && stave == staves - 1) {
                               readBars(&masterBarElement, measure, &oldClefId[0], partInfo, measureCounter);
+                              for (int i = 0; i < staves * VOICES; ++i) {
+                                    Slur* slur = legatos[i];
+                                    if (slur) {
+                                          if (measure->prevMeasure() && !measure->hasVoice(i)) {
+                                                //find last chord in track
+                                                Chord* c = nullptr;
+                                                for (const Segment* seg = measure->prevMeasure()->last(); seg; seg = seg->prev1()) {
+                                                      Element* el = seg->element(i);
+                                                      if (el && el->isChord()) {
+                                                            c = static_cast<Chord*>(el);
+                                                            break;
+                                                            }
+                                                      }
+                                                if (c) {
+                                                      slur->setTick2(c->tick());
+                                                      score->addElement(slur);
+                                                      legatos[slur->track()] = 0;
+                                                      }
+                                                }
+                                          }
+                                    }
                               }
                         masterBarElement = masterBarElement.nextSibling();
                         }
@@ -2295,13 +2345,17 @@ void GuitarPro6::readGpif(QByteArray* data)
       QDomNode eachTrack = masterTrack.nextSibling();
       readTracks(&eachTrack);
 
-      // now we know how many staves there are from readTracks, we can initialise slurs
-      slurs = new Slur*[staves];
+      // now we know how many staves there are from readTracks, we can initialise slurs (for hammer/pulloff)
+       // and legatos
+      slurs = new Slur*[staves * VOICES];
+      legatos = new Slur*[staves * VOICES];
       ottava.assign(staves * VOICES, 0);
       ottavaFound.assign(staves * VOICES, 0);
       ottavaValue.assign(staves * VOICES, "");
-      for (int i = 0; i < staves; ++i)
+      for (int i = 0; i < staves * VOICES; ++i) {
             slurs[i] = 0;
+            legatos[i] = 0;
+            }
 
       // MasterBars node
       GPPartInfo partInfo;
@@ -2325,7 +2379,30 @@ void GuitarPro6::readGpif(QByteArray* data)
       createMeasures();
       fermatas.clear();
       readMasterBars(&partInfo);
-
+      // complete slurs (GP6 sometimes output destination=true even for last beat)
+      for (int i = 0; i < staves * VOICES; ++i) {
+            Slur* slur = legatos[i];
+            if (slur) {
+                  //find last chord in track
+                  Chord* c = nullptr;
+                  for (const Segment* seg = score->lastSegment(); seg; seg = seg->prev1()) {
+                        Element* el = seg->element(i);
+                        if (el && el->isChord()) {
+                              c = static_cast<Chord*>(el);
+                              break;
+                              }
+                        }
+                  if (c) {
+                        slur->setTick2(c->tick());
+                        score->addElement(slur);
+                        legatos[slur->track()] = 0;
+                        }
+                  else {
+                        delete slur;
+                        legatos[slur->track()] = 0;
+                        }
+                  }
+            }
       // change the tuning to deal with transposition
       // It's needed to create correct tabs
       for (Part * p : score->parts()) {
