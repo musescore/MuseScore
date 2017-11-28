@@ -722,6 +722,13 @@ static const StyleType styleTypes[] {
       { StyleIdx::palmMuteFontUnderline,         "palmMuteFontUnderline",         false },
       { StyleIdx::palmMuteTextAlign,             "palmMuteTextAlign",             QVariant::fromValue(Align::LEFT | Align::BASELINE) },
       { StyleIdx::palmMuteHookHeight,            "palmMuteHookHeight",            Spatium(0.6) },
+      { StyleIdx::palmMutePlacement,             "palmMutePlacement",             int(Element::Placement::BELOW)  },
+      { StyleIdx::palmMutePosAbove,              "palmMutePosAbove",              Spatium(-4.0) },
+      { StyleIdx::palmMutePosBelow,              "palmMutePosBelow",              Spatium(4.0)  },
+      { StyleIdx::palmMuteLineWidth,             "palmMuteLineWidth",             Spatium(0.15) },
+      { StyleIdx::palmMuteLineStyle,             "palmMuteLineStyle",             QVariant(int(Qt::DashLine)) },
+      { StyleIdx::palmMuteBeginTextOffset,       "palmMuteBeginTextOffset",       QPointF(0.0, 0.15) },
+      { StyleIdx::palmMuteText,                  "palmMuteText",                  "P.M." },
 
       };
 #undef MM

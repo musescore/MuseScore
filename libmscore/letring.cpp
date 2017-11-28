@@ -59,8 +59,6 @@ void LetRingSegment::layout()
 LetRing::LetRing(Score* s)
    : TextLineBase(s)
       {
-      setLineWidth(score()->styleS(StyleIdx::pedalLineWidth));
-      setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::pedalLineStyle)));
       resetProperty(P_ID::BEGIN_TEXT_ALIGN);
       resetProperty(P_ID::CONTINUE_TEXT_ALIGN);
       resetProperty(P_ID::END_TEXT_ALIGN);
@@ -70,6 +68,7 @@ LetRing::LetRing(Score* s)
       resetProperty(P_ID::BEGIN_TEXT);
       resetProperty(P_ID::BEGIN_FONT_ITALIC);
       resetProperty(P_ID::LINE_STYLE);
+      resetProperty(P_ID::LINE_WIDTH);
       resetProperty(P_ID::BEGIN_TEXT_ALIGN);
       }
 
@@ -193,17 +192,15 @@ QPointF LetRing::linePos(Grip grip, System** sys) const
       qreal nhw = score()->noteHeadWidth();
       System* s = nullptr;
       if (grip == Grip::START) {
-            ChordRest* c = static_cast<ChordRest*>(startElement());
+            ChordRest* c = toChordRest(startElement());
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-            if (c->type() == ElementType::REST && c->durationType() == TDuration::DurationType::V_MEASURE)
+            if (c->isRest() && c->durationType() == TDuration::DurationType::V_MEASURE)
                   x -= c->x();
-            if (beginHookType() == HookType::HOOK_45)
-                  x += nhw * .5;
             }
       else {
             Element* e = endElement();
-            ChordRest* c = static_cast<ChordRest*>(endElement());
+            ChordRest* c = toChordRest(endElement());
             if (!e || e == startElement() || (endHookType() == HookType::HOOK_90)) {
                   // pedal marking on single note or ends with non-angled hook:
                   // extend to next note or end of measure
@@ -241,7 +238,7 @@ QPointF LetRing::linePos(Grip grip, System** sys) const
             else if (c) {
                   s = c->segment()->system();
                   x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-                  if (c->type() == ElementType::REST && c->durationType() == TDuration::DurationType::V_MEASURE)
+                  if (c->isRest() && c->durationType() == TDuration::DurationType::V_MEASURE)
                         x -= c->x();
                   }
             if (!s) {
@@ -250,10 +247,7 @@ QPointF LetRing::linePos(Grip grip, System** sys) const
                   s = m->system();
                   x = m->tick2pos(t);
                   }
-            if (endHookType() == HookType::HOOK_45)
-                  x += nhw * .5;
-            else
-                  x += nhw;
+            x += nhw;
             }
 
       *sys = s;
