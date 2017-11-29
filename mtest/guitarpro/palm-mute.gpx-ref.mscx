@@ -5,6 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -41,7 +42,7 @@
         <instrumentId>pluck.guitar.electric</instrumentId>
         <clef>G8vb</clef>
         <StringData>
-          <frets>21</frets>
+          <frets>24</frets>
           <string>52</string>
           <string>57</string>
           <string>62</string>
@@ -112,14 +113,10 @@
           <lid>5</lid>
           <text><sym>metNoteQuarterUp</sym> = 120</text>
           </Tempo>
-        <TextLine id="2">
-          <endHookType>1</endHookType>
-          <endHookHeight>1</endHookHeight>
-          <beginText>P.M.</beginText>
-          <continueText>P.M.</continueText>
+        <PalmMute id="2">
+          <beginTextOffset x="0" y="0"/>
           <lid>15</lid>
-          <lineStyle>2</lineStyle>
-          </TextLine>
+          </PalmMute>
         <Chord>
           <lid>6</lid>
           <durationType>quarter</durationType>
@@ -131,6 +128,7 @@
             <string>2</string>
             </Note>
           </Chord>
+        <endSpanner id="2"/>
         <Chord>
           <lid>8</lid>
           <durationType>quarter</durationType>
@@ -171,7 +169,7 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -223,7 +221,7 @@
           <instrumentId>pluck.guitar.electric</instrumentId>
           <clef>G8vb</clef>
           <StringData>
-            <frets>21</frets>
+            <frets>24</frets>
             <string>52</string>
             <string>57</string>
             <string>62</string>
@@ -298,14 +296,10 @@
             <lid>5</lid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <TextLine id="3">
-            <endHookType>1</endHookType>
-            <endHookHeight>1</endHookHeight>
-            <beginText>P.M.</beginText>
-            <continueText>P.M.</continueText>
+          <PalmMute id="3">
+            <beginTextOffset x="0" y="0"/>
             <lid>15</lid>
-            <lineStyle>2</lineStyle>
-            </TextLine>
+            </PalmMute>
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
@@ -317,6 +311,7 @@
               <string>2</string>
               </Note>
             </Chord>
+          <endSpanner id="3"/>
           <Chord>
             <lid>8</lid>
             <durationType>quarter</durationType>
@@ -358,14 +353,10 @@
             <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
-          <TextLine id="4">
-            <endHookType>1</endHookType>
-            <endHookHeight>1</endHookHeight>
-            <beginText>P.M.</beginText>
-            <continueText>P.M.</continueText>
+          <PalmMute id="4">
+            <beginTextOffset x="0" y="0"/>
             <lid>15</lid>
-            <lineStyle>2</lineStyle>
-            </TextLine>
+            </PalmMute>
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
@@ -377,6 +368,7 @@
               <string>2</string>
               </Note>
             </Chord>
+          <endSpanner id="4"/>
           <Chord>
             <lid>8</lid>
             <durationType>quarter</durationType>
