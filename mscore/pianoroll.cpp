@@ -71,7 +71,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addSeparator();
       tb->addAction(getAction("repeat"));
       QAction* followAction = getAction("follow");
-      followAction->setChecked(preferences.followSong);
+      followAction->setChecked(preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG));
       tb->addAction(followAction);
       tb->addSeparator();
       tb->addAction(getAction("metronome"));
@@ -497,7 +497,7 @@ void PianorollEditor::heartBeat(Seq* seq)
             tick = score()->repeatList()->utick2tick(tick);
       if (locator[0].tick() != tick) {
             posChanged(POS::CURRENT, tick);
-            if (preferences.followSong)
+            if (preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG))
                   gv->ensureVisible(tick);
             }
       }

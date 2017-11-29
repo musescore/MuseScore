@@ -126,10 +126,10 @@ ScoreView::ScoreView(QWidget* parent)
 
       setContextMenuPolicy(Qt::DefaultContextMenu);
 
-      double mag  = preferences.mag * (mscore->physicalDotsPerInch() / DPI);
+      double mag  = preferences.getDouble(PREF_SCORE_MAGNIFICATION) * (mscore->physicalDotsPerInch() / DPI);
       _matrix     = QTransform(mag, 0.0, 0.0, mag, 0.0, 0.0);
       imatrix     = _matrix.inverted();
-      _magIdx     = preferences.mag == 1.0 ? MagIdx::MAG_100 : MagIdx::MAG_FREE;
+      _magIdx     = preferences.getDouble(PREF_SCORE_MAGNIFICATION) == 1.0 ? MagIdx::MAG_100 : MagIdx::MAG_FREE;
       focusFrame  = 0;
 //      dragElement = 0;
       _bgColor    = Qt::darkBlue;
@@ -166,18 +166,18 @@ ScoreView::ScoreView(QWidget* parent)
       if (MScore::debugMode)
             setMouseTracking(true);
 
-      if (preferences.bgUseColor)
+      if (preferences.getBool(PREF_UI_CANVAS_BG_USECOLOR))
             setBackground(MScore::bgColor);
       else {
-            QPixmap* pm = new QPixmap(preferences.bgWallpaper);
+            QPixmap* pm = new QPixmap(preferences.getString(PREF_UI_CANVAS_BG_WALLPAPER));
             setBackground(pm);
             }
-      if (preferences.fgUseColor)
-            setForeground(preferences.fgColor);
+      if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR))
+            setForeground(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
       else {
-            QPixmap* pm = new QPixmap(preferences.fgWallpaper);
+            QPixmap* pm = new QPixmap(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER));
             if (pm == 0 || pm->isNull())
-                  qDebug("no valid pixmap %s", qPrintable(preferences.fgWallpaper));
+                  qDebug("no valid pixmap %s", qPrintable(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER)));
             setForeground(pm);
             }
 
@@ -883,7 +883,7 @@ void ScoreView::paintEvent(QPaintEvent* ev)
       if (!_score)
             return;
       QPainter vp(this);
-      vp.setRenderHint(QPainter::Antialiasing, preferences.antialiasedDrawing);
+      vp.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
       vp.setRenderHint(QPainter::TextAntialiasing, true);
 
       paint(ev->rect(), vp);
@@ -3533,7 +3533,7 @@ void ScoreView::midiNoteReceived(int pitch, bool chord, int velocity)
 
       if (!chord && velocity && !realtimeTimer->isActive() && score()->usingNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO)) {
             // First note pressed in automatic real-time mode.
-            extendNoteTimer->start(preferences.realtimeDelay); // set timer to trigger repeatedly
+            extendNoteTimer->start(preferences.getInt(PREF_IO_MIDI_REALTIMEDELAY)); // set timer to trigger repeatedly
             triggerCmdRealtimeAdvance(); // also trigger once immediately
             }
 
@@ -3551,7 +3551,7 @@ void ScoreView::extendCurrentNote()
             return;
 
       allowRealtimeRests = false;
-      realtimeTimer->start(preferences.realtimeDelay); // set timer to trigger repeatedly
+      realtimeTimer->start(preferences.getInt(PREF_IO_MIDI_REALTIMEDELAY)); // set timer to trigger repeatedly
       triggerCmdRealtimeAdvance(); // also trigger once immediately
       }
 
@@ -3574,7 +3574,7 @@ void ScoreView::realtimeAdvance(bool allowRests)
                         realtimeTimer->stop();
                   else {
                         allowRealtimeRests = allowRests;
-                        realtimeTimer->start(preferences.realtimeDelay);
+                        realtimeTimer->start(preferences.getInt(PREF_IO_MIDI_REALTIMEDELAY));
                         }
                   break;
             default:
@@ -4152,7 +4152,7 @@ Element* ScoreView::elementNear(QPointF p)
             return 0;
 
       p       -= page->pos();
-      double w = (preferences.proximity * .5) / matrix().m11();
+      double w = (preferences.getInt(PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY) * .5) / matrix().m11();
       QRectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
       QList<Element*> el = page->items(r);

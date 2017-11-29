@@ -39,18 +39,17 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       QMap<QString, Shortcut*> localShortcuts;
       bool shortcutsChanged;
       QButtonGroup* recordButtons;
-      Preferences prefs;
 
       virtual void hideEvent(QHideEvent*);
       void apply();
       void updateSCListView();
       void setUseMidiOutput(bool);
-      void updateValues();
+      void updateValues(bool useDefaultValues = false);
 
    private slots:
       void buttonBoxClicked(QAbstractButton*);
-      void bgClicked(bool);
-      void fgClicked(bool);
+      void updateBgView(bool);
+      void updateFgView(bool);
       void selectFgWallpaper();
       void selectBgWallpaper();
       void selectDefaultStyle();
@@ -91,8 +90,20 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
    public:
       PreferenceDialog(QWidget* parent);
       ~PreferenceDialog();
-      void setPreferences(const Preferences& p);
+      void start();
       void updateRemote();
+      };
+
+//---------------------------------------------------------
+//   ShortcutItem
+//---------------------------------------------------------
+
+class ShortcutItem : public QTreeWidgetItem {
+
+      bool operator<(const QTreeWidgetItem&) const;
+
+   public:
+      ShortcutItem() : QTreeWidgetItem() {}
       };
 
 } // namespace Ms

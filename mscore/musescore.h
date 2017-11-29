@@ -583,6 +583,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PianorollEditor* getPianorollEditor() const { return pianorollEditor; }
       DrumrollEditor* getDrumrollEditor() const   { return drumrollEditor; }
       PianoTools* pianoTools() const              { return _pianoTools; }
+      PluginManager* getPluginManager() const     { return pluginManager; }
       void writeSessionFile(bool);
       bool restoreSession(bool);
       bool splitScreen() const { return _splitScreen; }

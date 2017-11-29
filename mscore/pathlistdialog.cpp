@@ -51,7 +51,7 @@ void PathListDialog::addClicked()
          this,
          tr("Choose a directory"),
          QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName()),
-         QFileDialog::ShowDirsOnly | (preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
+         QFileDialog::ShowDirsOnly | (preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS) ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
          );
       if (!newPath.isEmpty()) {
             newPath = QDir(newPath).absolutePath();

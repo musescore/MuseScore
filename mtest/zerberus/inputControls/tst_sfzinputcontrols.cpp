@@ -56,7 +56,7 @@ void TestSfzInputControls::initTestCase()
       {
       initMTest();
       synth = new Zerberus();
-      Ms::preferences.mySoundfontsPath += ";" + root;
+      preferences.setPreference(PREF_APP_PATHS_MYSOUNDFONTS, root);
       synth->init(44100.0f);
       synth->loadInstrument("inputControls.sfz");
       channel = synth->channel(0);

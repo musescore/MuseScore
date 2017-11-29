@@ -331,7 +331,7 @@ void collectChords(
       Q_ASSERT_X(areNotesLongEnough(chords),
                  "MChord::collectChords", "There are too short notes");
 
-      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const auto &opers = midiImportOperations.data()->trackOpers;
       const auto minAllowedDur = minAllowedDuration();
 
       const auto threshTime = (opers.isHumanPerformance.value())

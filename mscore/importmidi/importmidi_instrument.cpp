@@ -6,7 +6,7 @@
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 #include "libmscore/score.h"
-#include "mscore/preferences.h"
+#include "importmidi_operations.h"
 #include "midi/midiinstrument.h"
 
 #include <set>
@@ -14,7 +14,6 @@
 
 namespace Ms {
 
-extern Preferences preferences;
 extern QList<InstrumentGroup*> instrumentGroups;
 
 namespace MidiInstr {
@@ -353,7 +352,7 @@ std::vector<const InstrumentTemplate *> findSuitableInstruments(const MTrack &tr
 
 void findInstrumentsForAllTracks(const QList<MTrack> &tracks)
       {
-      auto& opers = preferences.midiImportOperations;
+      auto& opers = midiImportOperations;
       auto &instrListOption = opers.data()->trackOpers.msInstrList;
 
       if (opers.data()->processingsOfOpenedFile == 0) {
@@ -371,7 +370,7 @@ void findInstrumentsForAllTracks(const QList<MTrack> &tracks)
 
 void createInstruments(Score *score, QList<MTrack> &tracks)
       {
-      const auto& opers = preferences.midiImportOperations;
+      const auto& opers = midiImportOperations;
       const auto &instrListOption = opers.data()->trackOpers.msInstrList;
 
       const int ntracks = tracks.size();
@@ -448,7 +447,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
 
 QString msInstrName(int trackIndex)
       {
-      const auto& opers = preferences.midiImportOperations.data()->trackOpers;
+      const auto& opers = midiImportOperations.data()->trackOpers;
 
       const int instrIndex = opers.msInstrIndex.value(trackIndex);
       const auto &trackInstrList = opers.msInstrList.value(trackIndex);

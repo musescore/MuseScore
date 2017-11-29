@@ -82,7 +82,7 @@ MagBox::MagBox(QWidget* parent)
       addItem(QString("%1%").arg(freeMag * 100), int(MagIdx::MAG_FREE));
       setFocusPolicy(Qt::StrongFocus);
       setAccessibleName(tr("Zoom"));
-      setFixedHeight(preferences.iconHeight + 8);  // hack
+      setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
       connect(this, SIGNAL(currentIndexChanged(int)), SLOT(indexChanged(int)));
       connect(lineEdit(), SIGNAL(returnPressed()), SLOT(textChanged()));
       }

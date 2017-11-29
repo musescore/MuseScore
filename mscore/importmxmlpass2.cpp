@@ -2442,7 +2442,7 @@ void MusicXMLParserPass2::print(Measure* measure)
                   }
             }
       if (pm) {
-            if (preferences.musicxmlImportBreaks && (newSystem || newPage)) {
+            if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTBREAKS) && (newSystem || newPage)) {
                   if (!pm->lineBreak() && !pm->pageBreak()) {
                         LayoutBreak* lb = new LayoutBreak(_score);
                         lb->setLayoutBreakType(newSystem ? LayoutBreak::Type::LINE : LayoutBreak::Type::PAGE);
@@ -5735,7 +5735,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                   }
             else if (_e.name() == "dynamics") {
                   placement = _e.attributes().value("placement").toString();
-                  if (preferences.musicxmlImportLayout) {
+                  if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
                         // ry        = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
                         // rx        = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
                         // yoffset   = _e.attributes().value("default-y").toDouble(&hasYoffset) * -0.1;

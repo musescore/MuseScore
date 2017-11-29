@@ -125,7 +125,7 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
       font.setPixelSize(size);
 
       QPainter p(this);
-      p.setRenderHint(QPainter::Antialiasing, preferences.antialiasedDrawing);
+      p.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
       p.setRenderHint(QPainter::TextAntialiasing, true);
       p.translate(xo, yo);
 

@@ -1028,8 +1028,8 @@ void findTuplets(
       if (chords.empty() || startBarChordIt == endBarChordIt)
             return;
 
-      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
-      const int currentTrack = preferences.midiImportOperations.currentTrack();
+      const auto &opers = midiImportOperations.data()->trackOpers;
+      const int currentTrack = midiImportOperations.currentTrack();
       if (!opers.searchTuplets.value(currentTrack))
             return;
 

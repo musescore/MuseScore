@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include <map>
+#include <unordered_map>
 #include <set>
 #include <errno.h>
 #include <fcntl.h>

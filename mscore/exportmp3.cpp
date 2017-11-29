@@ -80,7 +80,7 @@ bool MP3Exporter::findLibrary()
            path,
            getLibraryTypeString(),
            0,
-           preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
+           preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS) ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
            );
 
       if (libPath.isEmpty())

@@ -70,7 +70,7 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
 #endif
       QAction* a = getAction("follow");
       a->setCheckable(true);
-      a->setChecked(preferences.followSong);
+      a->setChecked(preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG));
 
       tb->addAction(a);
 
@@ -391,7 +391,7 @@ void DrumrollEditor::heartBeat(Seq* seq)
             locator[0].setTick(t);
             gv->moveLocator(0);
             ruler->update();
-            if (preferences.followSong)
+            if (preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG))
                   gv->ensureVisible(t);
             }
       }

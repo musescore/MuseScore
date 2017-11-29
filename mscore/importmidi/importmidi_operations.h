@@ -278,6 +278,8 @@ class CurrentMidiFileSetter
       };
 
 } // namespace MidiOperations
+
+extern MidiOperations::Data midiImportOperations;
 } // namespace Ms
 
 

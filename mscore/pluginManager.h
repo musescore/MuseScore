@@ -15,11 +15,23 @@
 #define __PLUGIN_MANAGER_H__
 
 #include "ui_pluginManager.h"
-#include "preferences.h"
+#include "shortcut.h"
 
 namespace Ms {
 
-class Shortcut;
+
+//---------------------------------------------------------
+//   PluginDescription
+//---------------------------------------------------------
+
+struct PluginDescription {
+      QString path;
+      QString version;
+      QString description;
+      bool load;
+      Shortcut shortcut;
+      QString menuPath;
+      };
 
 //---------------------------------------------------------
 //   PluginManager
@@ -30,7 +42,7 @@ class PluginManager : public QDialog, public Ui::PluginManager {
 
       QMap<QString, Shortcut*> localShortcuts;
       bool shortcutsChanged;
-      Preferences prefs;
+      QList<PluginDescription> _pluginList;
 
       void readSettings();
       void loadList(bool forceRefresh);
@@ -41,7 +53,7 @@ class PluginManager : public QDialog, public Ui::PluginManager {
    private slots:
       void definePluginShortcutClicked();
       void clearPluginShortcutClicked();
-      void pluginListItemChanged(QListWidgetItem*, QListWidgetItem*);
+      void pluginListWidgetItemChanged(QListWidgetItem*, QListWidgetItem*);
       void pluginLoadToggled(QListWidgetItem*);
       void reloadPluginsClicked();
 
@@ -52,6 +64,13 @@ class PluginManager : public QDialog, public Ui::PluginManager {
       PluginManager(QWidget* parent = 0);
       void writeSettings();
       void init();
+
+      bool readPluginList();
+      void writePluginList();
+      void updatePluginList(bool forceRefresh=false);
+
+      int pluginCount() {return _pluginList.size();}
+      PluginDescription* getPluginDescription(int idx) {return &_pluginList[idx];}
       };
 
 

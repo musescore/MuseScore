@@ -18,6 +18,7 @@
 #include "libmscore/system.h"
 #include "libmscore/xml.h"
 #include "mscore/globals.h"
+#include "mscore/preferences.h"
 
 namespace Ms {
 
@@ -59,7 +60,7 @@ bool savePositions(Score* score, const QString& name, bool segments)
       xml.stag("elements");
       int id = 0;
 
-      qreal ndpi = ((qreal)converterDpi / DPI) * 12.0;
+      qreal ndpi = ((qreal) preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION) / DPI) * 12.0;
       if (segments) {
             for (Segment* s = score->firstMeasureMM()->first(SegmentType::ChordRest);
                s; s = s->next1MM(SegmentType::ChordRest)) {

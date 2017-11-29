@@ -161,7 +161,7 @@ int UpdateChecker::defaultPeriod()
 
 bool UpdateChecker::hasToCheck()
       {
-      if (!preferences.checkUpdateStartup)
+      if (!preferences.getBool(PREF_UI_APP_STARTUP_CHECKUPDATE))
             return false;
       QSettings s;
       s.beginGroup("Update");
@@ -169,7 +169,7 @@ bool UpdateChecker::hasToCheck()
       QDateTime lastUpdate = s.value("lastUpdateDate", now).value<QDateTime>();
 
       if (MScore::debugMode) {
-            qDebug("preferences.checkUpdateStartup: %d" , preferences.checkUpdateStartup);
+            qDebug("preferences.checkUpdateStartup: %d" , preferences.getBool(PREF_UI_APP_STARTUP_CHECKUPDATE));
             qDebug("lastupdate: %s", qPrintable(lastUpdate.toString("dd.MM.yyyy hh:mm:ss.zzz")));
             }
       s.endGroup();

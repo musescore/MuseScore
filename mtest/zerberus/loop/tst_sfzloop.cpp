@@ -50,7 +50,7 @@ void TestSfzLoop::initTestCase()
       initMTest();
       synth = new Zerberus();
       synth->init(samplerate);
-      Ms::preferences.mySoundfontsPath += ";" + root;
+      preferences.setPreference(PREF_APP_PATHS_MYSOUNDFONTS, root);
       synth->loadInstrument("loopTest.sfz");
       }
 

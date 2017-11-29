@@ -356,6 +356,25 @@ void MScore::init()
 #ifdef DEBUG_SHAPES
       testShapes();
 #endif
+}
+
+//---------------------------------------------------------
+//   readDefaultStyle
+//---------------------------------------------------------
+
+bool MScore::readDefaultStyle(QString file)
+      {
+      if (file.isEmpty())
+            return false;
+      MStyle style = defaultStyle();
+      QFile f(file);
+      if (!f.open(QIODevice::ReadOnly))
+            return false;
+      bool rv = style.load(&f);
+      if (rv)
+            setDefaultStyle(style);
+      f.close();
+      return rv;
       }
 
 //---------------------------------------------------------

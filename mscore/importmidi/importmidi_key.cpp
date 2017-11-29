@@ -8,7 +8,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/staff.h"
 #include "libmscore/score.h"
-#include "mscore/preferences.h"
+#include "importmidi_operations.h"
 
 
 // This simple key detection algorithm is from thesis
@@ -115,7 +115,7 @@ void recognizeMainKeySig(QList<MTrack> &tracks)
       {
       bool needToFindKey = false;
 
-      const auto &opers = preferences.midiImportOperations;
+      const auto &opers = midiImportOperations;
       const bool isHuman = opers.data()->trackOpers.isHumanPerformance.value();
       if (isHuman)
             needToFindKey = true;

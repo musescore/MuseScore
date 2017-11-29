@@ -56,6 +56,7 @@ class Driver {
       virtual void updateOutPortCount(int) {}
       };
 
+extern bool alsaIsUsed, jackIsUsed, portAudioIsUsed, pulseAudioIsUsed;
 
 } // namespace Ms
 #endif

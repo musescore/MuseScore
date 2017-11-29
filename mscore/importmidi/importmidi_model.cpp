@@ -110,7 +110,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   bool isEditable(int /*trackIndex*/) const override { return false; }
                   QVariant value(int trackIndex) const override
                         {
-                        MidiOperations::Data &opers = preferences.midiImportOperations;
+                        MidiOperations::Data &opers = midiImportOperations;
                         MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
 
                         return MidiCharset::convertToCharset(_opers.staffName.value(trackIndex));
@@ -214,7 +214,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         {
                         int index = _opers.lyricTrackIndex.value(trackIndex);
                         if (index >= 0) {
-                              MidiOperations::Data &opers = preferences.midiImportOperations;
+                              MidiOperations::Data &opers = midiImportOperations;
                               MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
 
                               return MidiCharset::convertToCharset(_lyricsList[index]);
@@ -228,7 +228,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         }
                   QStringList valueList(int /*trackIndex*/) const override
                         {
-                        MidiOperations::Data &opers = preferences.midiImportOperations;
+                        MidiOperations::Data &opers = midiImportOperations;
                         MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
 
                         auto list = QStringList("");
@@ -902,7 +902,7 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                         QVariant value = _columns[index.column()]->value(trackIndex);
                         if (value.type() == QVariant::String
                                     && _columns[index.column()]->valueList(trackIndex).empty()) {
-                              MidiOperations::Data &opers = preferences.midiImportOperations;
+                              MidiOperations::Data &opers = midiImportOperations;
                               MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
 
                               return MidiCharset::convertToCharset(value.toString().toStdString());

@@ -2,6 +2,9 @@
 
 
 namespace Ms {
+
+MidiOperations::Data midiImportOperations;
+
 namespace MidiOperations {
 
 static int readBoolFromXml(QXmlStreamReader &xml)

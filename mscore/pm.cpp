@@ -65,14 +65,14 @@ PortMidiDriver::~PortMidiDriver()
 
 bool PortMidiDriver::init()
       {
-      inputId = getDeviceIn(preferences.portMidiInput);
+      inputId = getDeviceIn(preferences.getString(PREF_IO_PORTMIDI_INPUTDEVICE));
       if (inputId == -1)
             inputId  = Pm_GetDefaultInputDeviceID();
 
       if (inputId == pmNoDevice)
             return false;
 
-      outputId = getDeviceOut(preferences.portMidiOutput); // Note: allow init even if outputId == pmNoDevice, since input is more important than output.
+      outputId = getDeviceOut(preferences.getString(PREF_IO_PORTMIDI_OUTPUTDEVICE)); // Note: allow init even if outputId == pmNoDevice, since input is more important than output.
 
       static const int DRIVER_INFO = 0;
       static const int TIME_INFO = 0;
@@ -82,7 +82,7 @@ bool PortMidiDriver::init()
       PmError error = Pm_OpenInput(&inputStream,
          inputId,
          (void*)DRIVER_INFO,
-         preferences.portMidiInputBufferCount,
+         preferences.getInt(PREF_IO_PORTMIDI_INPUTBUFFERCOUNT),
          ((PmTimeProcPtr) Pt_Time),
          (void*)TIME_INFO);
       if (error != pmNoError) {
@@ -102,10 +102,10 @@ bool PortMidiDriver::init()
             error = Pm_OpenOutput(&outputStream,
                outputId,
                (void*)DRIVER_INFO,
-               preferences.portMidiOutputBufferCount,
+               preferences.getInt(PREF_IO_PORTMIDI_OUTPUTBUFFERCOUNT),
                ((PmTimeProcPtr) Pt_Time),
                (void*)TIME_INFO,
-               preferences.portMidiOutputLatencyMilliseconds);
+               preferences.getInt(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS));
             if (error != pmNoError) {
                   const char* p = Pm_GetErrorText(error);
                   qDebug("PortMidi: open output (id=%d) failed: %s", int(outputId), p);

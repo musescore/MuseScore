@@ -235,7 +235,7 @@ namespace MidiCharset {
 QString convertToCharset(const std::string &text)
       {
                   // charset for the current MIDI file
-      QString charset = preferences.midiImportOperations.data()->charset;
+      QString charset = midiImportOperations.data()->charset;
       auto *codec = QTextCodec::codecForName(charset.toLatin1());
       if (codec)
             return codec->toUnicode(text.c_str());

@@ -171,6 +171,7 @@ void TestGuitarPro::initTestCase()
 
 void TestGuitarPro::gpReadTest(const char* file, const char* ext)
       {
+      preferences.setPreference(PREF_IMPORT_GUITARPRO_CHARSET, "");
       MasterScore* score = readScore(DIR + file + "." + ext);
       QVERIFY(score);
 

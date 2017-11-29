@@ -57,6 +57,7 @@
 #include "navigator.h"
 #include "timeline.h"
 #include "importmidi/importmidi_panel.h"
+#include "importmidi/importmidi_operations.h"
 #include "libmscore/chord.h"
 #include "libmscore/segment.h"
 #include "editraster.h"
@@ -144,7 +145,6 @@ bool processJob = false;
 bool externalIcons = false;
 bool pluginMode = false;
 static bool startWithNewScore = false;
-double converterDpi = 0;
 double guiScaling = 0.0;
 static double userDPI = 0.0;
 int trimMargin = -1;
@@ -422,10 +422,49 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       _loginManager->save();
 
       ev->accept();
-      if (preferences.dirty)
-            preferences.write();
+
+      if (Shortcut::dirty)
+            Shortcut::save();
+
       this->deleteLater();     //this is necessary on windows http://musescore.org/node/16713
       qApp->quit();
+      }
+
+void updateExternalValuesFromPreferences() {
+      // set values in libmscore
+      MScore::bgColor = preferences.getColor(PREF_UI_CANVAS_BG_COLOR);
+      MScore::dropColor = preferences.getColor(PREF_UI_SCORE_NOTE_DROPCOLOR);
+      MScore::defaultColor = preferences.getColor(PREF_UI_SCORE_DEFAULTCOLOR);
+      MScore::defaultPlayDuration = preferences.getInt(PREF_SCORE_NOTE_DEFAULTPLAYDURATION);
+      MScore::panPlayback = preferences.getBool(PREF_APP_PLAYBACK_PANPLAYBACK);
+      MScore::playRepeats = preferences.getBool(PREF_APP_PLAYBACK_PLAYREPEATS);
+      MScore::warnPitchRange = preferences.getBool(PREF_SCORE_NOTE_WARNPITCHRANGE);
+      MScore::layoutBreakColor = preferences.getColor(PREF_UI_SCORE_LAYOUTBREAKCOLOR);
+      MScore::frameMarginColor = preferences.getColor(PREF_UI_SCORE_FRAMEMARGINCOLOR);
+      MScore::setVerticalOrientation(preferences.getBool(PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION));
+
+      MScore::selectColor[0] = preferences.getColor(PREF_UI_SCORE_VOICE1_COLOR);
+      MScore::selectColor[1] = preferences.getColor(PREF_UI_SCORE_VOICE2_COLOR);
+      MScore::selectColor[2] = preferences.getColor(PREF_UI_SCORE_VOICE3_COLOR);
+      MScore::selectColor[3] = preferences.getColor(PREF_UI_SCORE_VOICE4_COLOR);
+
+      MScore::setHRaster(preferences.getInt(PREF_UI_APP_RASTER_HORIZONTAL));
+      MScore::setVRaster(preferences.getInt(PREF_UI_APP_RASTER_VERTICAL));
+
+      MScore::setNudgeStep(.1);         // cursor key (default 0.1)
+      MScore::setNudgeStep10(1.0);      // Ctrl + cursor key (default 1.0)
+      MScore::setNudgeStep50(0.01);     // Alt  + cursor key (default 0.01)
+
+      //Create directories if they are missing
+      QDir dir;
+      dir.mkpath(preferences.getString(PREF_APP_PATHS_MYSCORES));
+      dir.mkpath(preferences.getString(PREF_APP_PATHS_MYSTYLES));
+      dir.mkpath(preferences.getString(PREF_APP_PATHS_MYIMAGES));
+      dir.mkpath(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
+      dir.mkpath(preferences.getString(PREF_APP_PATHS_MYPLUGINS));
+      foreach (QString path, preferences.getString(PREF_APP_PATHS_MYSOUNDFONTS).split(";"))
+            dir.mkpath(path);
+
       }
 
 //---------------------------------------------------------
@@ -434,22 +473,25 @@ void MuseScore::closeEvent(QCloseEvent* ev)
 
 void MuseScore::preferencesChanged()
       {
+      updateExternalValuesFromPreferences();
+
+      QString fgWallpaper = preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER);
       for (int i = 0; i < tab1->count(); ++i) {
             ScoreView* canvas = tab1->view(i);
             if (canvas == 0)
                   continue;
-            if (preferences.bgUseColor)
-                  canvas->setBackground(MScore::bgColor);
+            if (preferences.getBool(PREF_UI_CANVAS_BG_USECOLOR))
+                  canvas->setBackground(preferences.getColor(PREF_UI_CANVAS_BG_COLOR));
             else {
-                  QPixmap* pm = new QPixmap(preferences.bgWallpaper);
+                  QPixmap* pm = new QPixmap(preferences.getString(PREF_UI_CANVAS_BG_WALLPAPER));
                   canvas->setBackground(pm);
                   }
-            if (preferences.fgUseColor)
-                  canvas->setForeground(preferences.fgColor);
+            if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR))
+                  canvas->setForeground(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
             else {
-                  QPixmap* pm = new QPixmap(preferences.fgWallpaper);
+                  QPixmap* pm = new QPixmap(fgWallpaper);
                   if (pm == 0 || pm->isNull())
-                        qDebug("no valid pixmap %s", preferences.fgWallpaper.toLatin1().data());
+                        qDebug("no valid pixmap %s", fgWallpaper.toLatin1().data());
                   canvas->setForeground(pm);
                   }
             }
@@ -458,18 +500,18 @@ void MuseScore::preferencesChanged()
                   ScoreView* canvas = tab2->view(i);
                   if (canvas == 0)
                         continue;
-                  if (preferences.bgUseColor)
-                        canvas->setBackground(MScore::bgColor);
+                  if (preferences.getBool(PREF_UI_CANVAS_BG_USECOLOR))
+                        canvas->setBackground(preferences.getColor(PREF_UI_CANVAS_BG_COLOR));
                   else {
-                        QPixmap* pm = new QPixmap(preferences.bgWallpaper);
+                        QPixmap* pm = new QPixmap(preferences.getString(PREF_UI_CANVAS_BG_WALLPAPER));
                         canvas->setBackground(pm);
                         }
-                  if (preferences.fgUseColor)
-                        canvas->setForeground(preferences.fgColor);
+                  if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR))
+                        canvas->setForeground(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
                   else {
-                        QPixmap* pm = new QPixmap(preferences.fgWallpaper);
+                        QPixmap* pm = new QPixmap(fgWallpaper);
                         if (pm == 0 || pm->isNull())
-                              qDebug("no valid pixmap %s", preferences.fgWallpaper.toLatin1().data());
+                              qDebug("no valid pixmap %s", fgWallpaper.toLatin1().data());
                         canvas->setForeground(pm);
                         }
                   }
@@ -478,8 +520,8 @@ void MuseScore::preferencesChanged()
       transportTools->setEnabled(!noSeq && seq && seq->isRunning());
       playId->setEnabled(!noSeq && seq && seq->isRunning());
 
-      getAction("midi-on")->setEnabled(preferences.enableMidiInput);
-      _statusBar->setVisible(preferences.showStatusBar);
+      getAction("midi-on")->setEnabled(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
+      _statusBar->setVisible(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
 
       delete newWizard;
       newWizard = 0;
@@ -576,12 +618,16 @@ MuseScore::MuseScore()
       setObjectName("MuseScore");
       _sstate = STATE_INIT;
       setWindowTitle(QString(MUSESCORE_NAME_VERSION));
-      setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
+      setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling, preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
 
       ucheck = new UpdateChecker();
 
       setAcceptDrops(true);
       setFocusPolicy(Qt::NoFocus);
+
+#ifdef SCRIPT_INTERFACE
+      pluginManager = new PluginManager(0);
+#endif
 
       if (!converterMode && !pluginMode) {
             _loginManager = new LoginManager(this);
@@ -664,7 +710,7 @@ MuseScore::MuseScore()
       _navigator->setFocusPolicy(Qt::NoFocus);
       mainWindow->addWidget(_navigator);
       scorePageLayoutChanged();
-      showNavigator(preferences.showNavigator);
+      showNavigator(preferences.getBool(PREF_UI_APP_STARTUP_SHOWNAVIGATOR));
 
       _timeline = new TDockWidget;
       _timeline->setFocusPolicy(Qt::NoFocus);
@@ -733,7 +779,7 @@ MuseScore::MuseScore()
       QAction* a;
 #ifdef HAS_MIDI
       a  = getAction("midi-on");
-      a->setEnabled(preferences.enableMidiInput);
+      a->setEnabled(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
       a->setChecked(_midiinEnabled);
 #endif
 
@@ -768,7 +814,7 @@ MuseScore::MuseScore()
 #else
       viewModeCombo->setFocusPolicy(Qt::TabFocus);
 #endif
-      viewModeCombo->setFixedHeight(preferences.iconHeight + 8);  // hack
+      viewModeCombo->setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
       viewModeCombo->addItem("",       int(LayoutMode::PAGE));
       viewModeCombo->addItem("", int(LayoutMode::LINE));
       viewModeCombo->addItem("", int(LayoutMode::SYSTEM));
@@ -791,7 +837,7 @@ MuseScore::MuseScore()
       transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("loop")));
       transportTools->addSeparator();
       QAction* repeatAction = getAction("repeat");
-      repeatAction->setChecked(MScore::playRepeats);
+      repeatAction->setChecked(preferences.getBool(PREF_APP_PLAYBACK_PLAYREPEATS));
       transportTools->addWidget(new AccessibleToolButton(transportTools, repeatAction));
       transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("pan")));
       transportTools->addWidget(new AccessibleToolButton(transportTools, metronomeAction));
@@ -949,7 +995,7 @@ MuseScore::MuseScore()
 
       a = getAction("toggle-navigator");
       a->setCheckable(true);
-      a->setChecked(preferences.showNavigator);
+      a->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWNAVIGATOR));
       menuView->addAction(a);
 
       a = getAction("toggle-timeline");
@@ -1021,7 +1067,7 @@ MuseScore::MuseScore()
 
       a = getAction("toggle-statusbar");
       a->setCheckable(true);
-      a->setChecked(true);
+      a->setChecked(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
       menuView->addAction(a);
 
       menuView->addSeparator();
@@ -1324,9 +1370,10 @@ MuseScore::MuseScore()
       setCentralWidget(envelope);
 
       // load cascading instrument templates
-      loadInstrumentTemplates(preferences.instrumentList1);
-      if (!preferences.instrumentList2.isEmpty())
-            loadInstrumentTemplates(preferences.instrumentList2);
+      loadInstrumentTemplates(preferences.getString(PREF_APP_PATHS_INSTRUMENTLIST1));
+      QString instrList2 = preferences.getString(PREF_APP_PATHS_INSTRUMENTLIST2);
+      if (!instrList2.isEmpty())
+            loadInstrumentTemplates(instrList2);
 
       preferencesChanged();
       if (seq) {
@@ -1450,8 +1497,8 @@ void MuseScore::resizeEvent(QResizeEvent*)
 
 void MuseScore::startAutoSave()
       {
-      if (preferences.autoSave) {
-            int t = preferences.autoSaveTime * 60 * 1000;
+      if (preferences.getBool(PREF_APP_AUTOSAVE_USEAUTOSAVE)) {
+            int t = preferences.getInt(PREF_APP_AUTOSAVE_AUTOSAVETIME) * 60 * 1000;
             autoSaveTimer->start(t);
             }
       else
@@ -2161,7 +2208,7 @@ void MuseScore::midiinToggled(bool val)
 
 bool MuseScore::midiinEnabled() const
       {
-      return preferences.enableMidiInput && _midiinEnabled;
+      return preferences.getBool(PREF_IO_MIDI_ENABLEINPUT) && _midiinEnabled;
       }
 
 //---------------------------------------------------------
@@ -2171,18 +2218,18 @@ bool MuseScore::midiinEnabled() const
 
 bool MuseScore::processMidiRemote(MidiRemoteType type, int data, int value)
       {
-      if (!preferences.useMidiRemote)
+      if (!preferences.getBool(PREF_IO_MIDI_USEREMOTECONTROL))
             return false;
       if (!value) {
             // This was a "NoteOff" or "CtrlOff" event. Most MidiRemote actions should only
             // be triggered by an "On" event, so we need to check if this is one of those.
-            if (!preferences.advanceOnRelease
-                    || type != preferences.midiRemote[RMIDI_REALTIME_ADVANCE].type
-                    || data != preferences.midiRemote[RMIDI_REALTIME_ADVANCE].data)
+            if (!preferences.getBool(PREF_IO_MIDI_ADVANCEONRELEASE)
+                    || type != preferences.midiRemote(RMIDI_REALTIME_ADVANCE).type
+                    || data != preferences.midiRemote(RMIDI_REALTIME_ADVANCE).data)
                   return false;
             }
       for (int i = 0; i < MIDI_REMOTES; ++i) {
-            if (preferences.midiRemote[i].type == type && preferences.midiRemote[i].data == data) {
+            if (preferences.midiRemote(i).type == type && preferences.midiRemote(i).data == data) {
                   if (cv == 0)
                         return false;
                   QAction* a = 0;
@@ -2240,8 +2287,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
 // qDebug("midiNoteReceived %d %d %d", channel, pitch, velo);
 
       if (_midiRecordId != -1) {
-            preferences.midiRemote[_midiRecordId].type = MIDI_REMOTE_TYPE_NOTEON;
-            preferences.midiRemote[_midiRecordId].data = pitch;
+            preferences.updateMidiRemote(_midiRecordId, MIDI_REMOTE_TYPE_NOTEON, pitch);
             _midiRecordId = -1;
             if (preferenceDialog)
                   preferenceDialog->updateRemote();
@@ -2310,8 +2356,7 @@ void MuseScore::midiCtrlReceived(int controller, int value)
       if (!midiinEnabled())
             return;
       if (_midiRecordId != -1) {
-            preferences.midiRemote[_midiRecordId].type = MIDI_REMOTE_TYPE_CTRL;
-            preferences.midiRemote[_midiRecordId].data = controller;
+            preferences.updateMidiRemote(_midiRecordId, MIDI_REMOTE_TYPE_CTRL, controller);
             _midiRecordId = -1;
             if (preferenceDialog)
                   preferenceDialog->updateRemote();
@@ -2500,7 +2545,7 @@ static void loadScores(const QStringList& argv)
             if (startWithNewScore)
                   mscore->newFile();
             else {
-                  switch (preferences.sessionStart) {
+                  switch (preferences.sessionStart()) {
                         case SessionStart::LAST:
                               {
                               QSettings settings;
@@ -2524,8 +2569,9 @@ static void loadScores(const QStringList& argv)
                               break;
                         case SessionStart::SCORE:
                               {
-                              MasterScore* score = mscore->readScore(preferences.startScore);
-                              if (preferences.startScore.startsWith(":/") && score) {
+                              QString startScore = preferences.getString(PREF_APP_STARTUP_STARTSCORE);
+                              MasterScore* score = mscore->readScore(startScore);
+                              if (startScore.startsWith(":/") && score) {
                                     score->setName(mscore->createDefaultName());
                                     // TODO score->setPageFormat(*MScore::defaultStyle().pageFormat());
                                     score->doLayout();
@@ -3509,7 +3555,7 @@ void MuseScore::readSettings()
 
 void MuseScore::play(Element* e) const
       {
-      if (noSeq || !(seq && seq->isRunning()) || !preferences.playNotes)
+      if (noSeq || !(seq && seq->isRunning()) || !preferences.getBool(PREF_SCORE_NOTE_PLAYONCLICK))
             return;
 
       if (e->isNote()) {
@@ -3535,7 +3581,7 @@ void MuseScore::play(Element* e, int pitch) const
       {
       if (noSeq || !(seq && seq->isRunning()))
             return;
-      if (preferences.playNotes && e->isNote()) {
+      if (preferences.getBool(PREF_SCORE_NOTE_PLAYONCLICK) && e->isNote()) {
             Note* note = static_cast<Note*>(e);
             int tick = note->chord()->tick();
             if (tick < 0)
@@ -3972,8 +4018,8 @@ void MuseScore::autoSaveTimerTimeout()
             }
       if (sessionChanged)
             writeSessionFile(false);
-      if (preferences.autoSave) {
-            int t = preferences.autoSaveTime * 60 * 1000;
+      if (preferences.getBool(PREF_APP_AUTOSAVE_USEAUTOSAVE)) {
+            int t = preferences.getInt(PREF_APP_AUTOSAVE_AUTOSAVETIME) * 60 * 1000;
             autoSaveTimer->start(t);
             }
       }
@@ -4256,8 +4302,6 @@ void MuseScore::showPluginCreator(QAction* a)
 void MuseScore::showPluginManager()
       {
 #ifdef SCRIPT_INTERFACE
-      if (!pluginManager)
-            pluginManager = new PluginManager(0);
       pluginManager->init();
       pluginManager->show();
 #endif
@@ -4729,7 +4773,7 @@ void MuseScore::endCmd()
             if (e && (cs->playNote() || cs->playChord())
                         && entryMethod != NoteEntryMethod::REALTIME_AUTO
                         && entryMethod != NoteEntryMethod::REALTIME_MANUAL) {
-                  if (cs->playChord() && preferences.playChordOnAddNote &&  e->type() == ElementType::NOTE)
+                  if (cs->playChord() && preferences.getBool(PREF_SCORE_CHORD_PLAYONADDNOTE) &&  e->type() == ElementType::NOTE)
                         play(static_cast<Note*>(e)->chord());
                   else
                         play(e);
@@ -4855,9 +4899,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "symbols")
             showMasterPalette(qApp->translate("MasterPalette", "Symbols"));
       else if (cmd == "toggle-statusbar") {
-            preferences.showStatusBar = a->isChecked();
-            _statusBar->setVisible(preferences.showStatusBar);
-            preferences.write();
+            preferences.setPreference(PREF_UI_APP_SHOWSTATUSBAR, a->isChecked());
+            _statusBar->setVisible(a->isChecked());
             }
       else if (cmd == "append-measures")
             cmdAppendMeasures();
@@ -4934,7 +4977,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "help")
             showContextHelp();
       else if (cmd == "follow")
-            preferences.followSong = a->isChecked();
+            preferences.setPreference(PREF_APP_PLAYBACK_FOLLOWSONG, a->isChecked());
       else if (cmd == "split-h")
             splitWindow(true);
       else if (cmd == "split-v")
@@ -5011,9 +5054,9 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "print")
             printFile();
       else if (cmd == "repeat") {
-            MScore::playRepeats = a->isChecked();
+            preferences.setPreference(PREF_APP_PLAYBACK_PLAYREPEATS, a->isChecked());
             if (cs) {
-                  cs->updateRepeatList(MScore::playRepeats);
+                  cs->updateRepeatList(preferences.getBool(PREF_APP_PLAYBACK_PLAYREPEATS));
                   emit cs->playlistChanged();
                   }
             }
@@ -5562,8 +5605,8 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       int channels = 2;
 
       int oldSampleRate = MScore::sampleRate;
-      int sampleRate = preferences.exportAudioSampleRate;
-      exporter.setBitrate(preferences.exportMp3BitRate);
+      int sampleRate = preferences.getInt(PREF_EXPORT_AUDIO_SAMPLERATE);
+      exporter.setBitrate(preferences.getInt(PREF_EXPORT_MP3_BITRATE));
 
       int inSamples = exporter.initializeStream(channels, sampleRate);
       if (inSamples < 0) {
@@ -5801,6 +5844,10 @@ int main(int argc, char* av[])
       qInstallMessageHandler(mscoreMessageHandler);
 #endif
 
+      qRegisterMetaTypeStreamOperators<SessionStart>("SessionStart");
+      qRegisterMetaTypeStreamOperators<MusicxmlExportBreaks>("MusicxmlExportBreaks");
+      qRegisterMetaTypeStreamOperators<MuseScoreStyleType>("MuseScoreStyleType");
+
       QFile f(":/revision.h");
       f.open(QIODevice::ReadOnly);
       revision = QString(f.readAll()).trimmed();
@@ -5921,7 +5968,7 @@ int main(int argc, char* av[])
             QString temp = parser.value("r");
             if (temp.isEmpty())
                    parser.showHelp(EXIT_FAILURE);
-            converterDpi = temp.toDouble();
+            preferences.setTemporaryPreference(PREF_EXPORT_PNG_RESOLUTION, temp.toDouble());
             }
       if (parser.isSet("T")) {
             QString temp = parser.value("T");
@@ -5974,7 +6021,7 @@ int main(int argc, char* av[])
             QString temp = parser.value("M");
             if (temp.isEmpty())
                   parser.showHelp(EXIT_FAILURE);
-            preferences.midiImportOperations.setOperationsFile(temp);
+            midiImportOperations.setOperationsFile(temp);
             }
       noWebView = parser.isSet("w");
       exportScoreParts = parser.isSet("export-score-parts");
@@ -5986,9 +6033,9 @@ int main(int argc, char* av[])
             if (temp.isEmpty())
                    parser.showHelp(EXIT_FAILURE);
             bool ok = false;
-            preferences.exportMp3BitRate = temp.toInt(&ok);
-            if (!ok)
-                  preferences.exportMp3BitRate = 128;
+            int rate = temp.toInt(&ok);
+            if (ok)
+                  preferences.setTemporaryPreference(PREF_EXPORT_MP3_BITRATE, rate);
            }
 
       QStringList argv = parser.positionalArguments();
@@ -6033,14 +6080,13 @@ int main(int argc, char* av[])
       if (MScore::debugMode)
             qDebug("global share: <%s>", qPrintable(mscoreGlobalShare));
 
-      // set translator before preferences are read to get
-      //    translations for all shortcuts
-      //
+      // set translator before Shortcut are initialized to get translations for all shortcuts
+      // can not use preferences to retrieve these values as it needs to be initialized after translator is set
       if (useFactorySettings)
             localeName = "system";
       else {
             QSettings s;
-            localeName = s.value("language", "system").toString();
+            localeName = s.value(PREF_UI_APP_LANGUAGE, "system").toString();
             }
 
       setMscoreLocale(localeName);
@@ -6051,6 +6097,7 @@ int main(int argc, char* av[])
       QNetworkProxyFactory::setUseSystemConfiguration(true);
 
       MScore::init();         // initialize libmscore
+      updateExternalValuesFromPreferences();
 
       // initialize current page size from default printer
 #ifndef QT_NO_PRINTER
@@ -6094,18 +6141,12 @@ int main(int argc, char* av[])
             qDebug() << "  Virtual size:" << screen->virtualSize().width() << "x" << screen->virtualSize().height();
             }
 
-      if (!(useFactorySettings || MScore::testMode))
-            preferences.read();
-
       if (!MScore::testMode)
-            preferences.readDefaultStyle();
-
-      if (converterDpi == 0)
-            converterDpi = preferences.pngResolution;
+            MScore::readDefaultStyle(preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE));
 
       QSplashScreen* sc = 0;
       QTimer* stimer = 0;
-      if (!MScore::noGui && preferences.showSplashScreen) {
+      if (!MScore::noGui && preferences.getBool(PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN)) {
             QPixmap pm(":/data/splash.png");
             sc = new QSplashScreen(pm);
             sc->setWindowTitle(QString("MuseScore Startup"));
@@ -6247,12 +6288,12 @@ int main(int argc, char* av[])
                   sw->exec();
                   s.setValue("firstStart", false);
                   s.setValue("keyboardLayout", sw->keyboardLayout());
-                  s.setValue("language", sw->language());
+                  preferences.setPreference(PREF_UI_APP_LANGUAGE, sw->language());
                   setMscoreLocale(sw->language());
                   for (auto ws : Workspace::workspaces()) {
                         if (ws->name().compare(sw->workspace()) == 0) {
                               mscore->changeWorkspace(ws);
-                              preferences.workspace = ws->name();
+                              preferences.setPreference(PREF_APP_WORKSPACE, ws->name());
                               mscore->getPaletteBox()->updateWorkspaces();
                               }
                         }
@@ -6299,12 +6340,13 @@ int main(int argc, char* av[])
             //
             // TODO: delete old session backups
             //
-            restoredSession = mscore->restoreSession((preferences.sessionStart == SessionStart::LAST && (files == 0)));
+            restoredSession = mscore->restoreSession((preferences.sessionStart() == SessionStart::LAST && (files == 0)));
             if (!restoredSession || files)
                   loadScores(argv);
             }
 
       errorMessage = new QErrorMessage(mscore);
+      mscore->getPluginManager()->readPluginList();
       mscore->loadPlugins();
       mscore->writeSessionFile(false);
 
@@ -6320,7 +6362,7 @@ int main(int argc, char* av[])
       if (mscore->hasToCheckForUpdate())
             mscore->checkForUpdate();
 
-      if (!scoresOnCommandline && preferences.showStartcenter && (!restoredSession || mscore->scores().size() == 0)) {
+      if (!scoresOnCommandline && preferences.getBool(PREF_UI_APP_STARTUP_SHOWSTARTCENTER) && (!restoredSession || mscore->scores().size() == 0)) {
 #ifdef Q_OS_MAC
 // ugly, but on mac we get an event when a file is open.
 // We can't get the event when the startcenter is shown.
@@ -6342,7 +6384,7 @@ int main(int argc, char* av[])
 #endif
             }
 
-      mscore->showPlayPanel(preferences.showPlayPanel);
+      mscore->showPlayPanel(preferences.getBool(PREF_UI_APP_STARTUP_SHOWPLAYPANEL));
       QSettings settings;
       if (settings.value("synthControlVisible", false).toBool())
             mscore->showSynthControl(true);

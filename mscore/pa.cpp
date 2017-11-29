@@ -96,7 +96,7 @@ bool Portaudio::init(bool)
       if (MScore::debugMode)
             qDebug("using PortAudio Version: %s", Pa_GetVersionText());
 
-      PaDeviceIndex idx = preferences.portaudioDevice;
+      PaDeviceIndex idx = preferences.getInt(PREF_IO_PORTAUDIO_DEVICE);
       if (idx < 0) {
             idx = Pa_GetDefaultOutputDevice();
             qDebug("No device selected.  PortAudio detected %d devices.  Will use the default device (index %d).", Pa_GetDeviceCount(), idx);
@@ -359,7 +359,7 @@ void Portaudio::putEvent(const NPlayEvent& e, unsigned framePos)
 
 int Portaudio::currentApi() const
       {
-      PaDeviceIndex idx = preferences.portaudioDevice;
+      PaDeviceIndex idx = preferences.getInt(PREF_IO_PORTAUDIO_DEVICE);
       if (idx < 0)
             idx = Pa_GetDefaultOutputDevice();
 
@@ -383,7 +383,7 @@ int Portaudio::currentApi() const
 
 int Portaudio::currentDevice() const
       {
-      PaDeviceIndex idx = preferences.portaudioDevice;
+      PaDeviceIndex idx = preferences.getInt(PREF_IO_PORTAUDIO_DEVICE);
       if (idx < 0)
             idx = Pa_GetDefaultOutputDevice();
 

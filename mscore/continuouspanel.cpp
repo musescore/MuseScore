@@ -272,13 +272,13 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       pen.setWidthF(0.0);
       pen.setStyle(Qt::NoPen);
       painter.setPen(pen);
-      painter.setBrush(preferences.fgColor);
+      painter.setBrush(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
       QRectF bg(_rect);
 
       bg.setWidth(_widthClef + _widthKeySig + _widthTimeSig + _leftMarginTotal + _panelRightPadding);
       QPixmap* fgPixmap = _sv->fgPixmap();
       if (fgPixmap == 0 || fgPixmap->isNull())
-            painter.fillRect(bg, preferences.fgColor);
+            painter.fillRect(bg, preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
       else {
             painter.setMatrixEnabled(false);
             painter.drawTiledPixmap(bg, *fgPixmap, bg.topLeft()

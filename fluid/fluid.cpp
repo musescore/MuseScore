@@ -891,7 +891,7 @@ QFileInfoList Fluid::sfFiles()
       {
       QFileInfoList l;
 
-      QStringList pl = preferences.mySoundfontsPath.split(";");
+      QStringList pl = preferences.getString(PREF_APP_PATHS_MYSOUNDFONTS).split(";");
       pl.prepend(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("sound")).absoluteFilePath());
 
       foreach (const QString& s, pl) {
