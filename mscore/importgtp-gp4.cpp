@@ -280,8 +280,8 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                   addLetRing(note);
 			//note->setLetRing(true);
 			}
-//TODO-ws	if (modMask2 & 0x40)
-//		      note->vibrato = true;
+            if (modMask2 & 0x40)
+                  addVibrato(note);
             if (modMask1 & EFFECT_GRACE) {
                   int fret = readUChar();             // grace fret
                   int dynamic = readUChar();          // grace dynamic

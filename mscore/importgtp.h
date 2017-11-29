@@ -47,6 +47,7 @@ class Tuplet;
 class Volta;
 class LetRing;
 class PalmMute;
+class Vibrato;
 
 static const int GP_MAX_LYRIC_LINES = 5;
 static const int GP_MAX_TRACK_NUMBER = 32;
@@ -240,15 +241,17 @@ class GuitarPro {
       void createSlide(int slide, ChordRest* cr, int staffIdx, Note* note = nullptr);
       void createCrecDim(int staffIdx, int track, int tick, bool crec);
       Text* addTextToNote(QString, Align, Note*);
-      void addPalmMute(Note* note);
-      void addLetRing(Note* note);
-      void addTap(Note* note);
-      void addSlap(Note* note);
-      void addPop(Note* note);
+      void addPalmMute(Note*);
+      void addLetRing(Note*);
+      void addVibrato(Note*);
+      void addTap(Note*);
+      void addSlap(Note*);
+      void addPop(Note*);
       void createTuningString(int strings, int tuning[]);
 
 	std::vector<PalmMute*> _palmMutes;
 	std::vector<LetRing*> _letRings;
+	std::vector<Vibrato*> _vibratos;
 
    public:
 	std::vector<std::string> tunings;

@@ -33,7 +33,7 @@ class VibratoSegment : public LineSegment {
    protected:
    public:
       VibratoSegment(Score* s) : LineSegment(s)      {}
-      Vibrato* vibrato() const                       { return (Vibrato*)spanner(); }
+      Vibrato* vibrato() const                       { return toVibrato(spanner()); }
       virtual ElementType type() const override      { return ElementType::VIBRATO_SEGMENT; }
       virtual VibratoSegment* clone() const override { return new VibratoSegment(*this); }
       virtual void draw(QPainter*) const override;

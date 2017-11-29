@@ -1290,8 +1290,8 @@ bool GuitarPro5::readNoteEffects(Note* note)
 		      }
 	      }
 
-//TODO-ws	  if (modMask2 & 0x40)
-//		      note->vibrato = true;
+            if (modMask2 & 0x40)
+                  addVibrato(note);
 
       if (modMask2 & EFFECT_TRILL) {
 //TODO-ws            note->setTrillFret(readUChar());      // trill fret
