@@ -269,7 +269,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
 
       // Bends
       for (Element* e : note->el()) {
-            if (e == 0 || e->type() != ElementType::BEND)
+            if (e == 0 || !e->isBend())
                   continue;
             Bend* bend = toBend(e);
             if (!bend->playBend())

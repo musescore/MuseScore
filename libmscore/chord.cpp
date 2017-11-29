@@ -1191,8 +1191,12 @@ void Chord::processSiblings(std::function<void(Element*)> func) const
 
       for (Articulation* a : _articulations)
             func(a);
-      for (Note* note : _notes)
+      for (Note* note : _notes) {
             func(note);
+            for (auto e : note->el())
+                  if (e->isBend())
+                        func(e);
+            }
 
       for (Element* e : el())
             func(e);
@@ -1710,7 +1714,7 @@ QPointF Chord::pagePos() const
                   return p;
             p.rx() = pageX();
 
-            const Chord* pc = static_cast<const Chord*>(parent());
+            const Chord* pc = toChord(parent());
             System* system = pc->segment()->system();
             if (!system)
                   return p;

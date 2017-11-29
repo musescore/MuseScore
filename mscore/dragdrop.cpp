@@ -224,7 +224,8 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
                         el->setHeight(_spatium * 5);
                   editData.element = el;
                   editData.element->setParent(0);
-                  editData.element->read(e);
+                  if (type != ElementType::BEND)
+                        editData.element->read(e);
                   editData.element->layout();
                   }
             return;

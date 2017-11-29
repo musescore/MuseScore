@@ -45,6 +45,7 @@ class BendProperties : public QDialog, public Ui::BendDialog {
    public:
       BendProperties(Bend*, QWidget* parent = 0);
       const QList<PitchValue>& points() const;
+      int tieSize() const;
       };
 
 
