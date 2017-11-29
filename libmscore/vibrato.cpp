@@ -312,7 +312,7 @@ void VibratoSegment::scanElements(void* data, void (*func)(void*, Element*), boo
 Vibrato::Vibrato(Score* s)
   : SLine(s)
       {
-      _vibratoType = Type::TRILL_LINE;
+      _vibratoType = Type::GUITAR_VIBRATO;
       _accidental = 0;
       _ornamentStyle    = MScore::OrnamentStyle::DEFAULT;
       setPlayArticulation(true);

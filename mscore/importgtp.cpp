@@ -59,6 +59,7 @@
 #include <libmscore/textline.h>
 #include <libmscore/letring.h>
 #include <libmscore/palmmute.h>
+#include <libmscore/vibrato.h>
 
 namespace Ms {
 
@@ -367,7 +368,6 @@ void GuitarPro::initGuitarProDrumset()
 
 void GuitarPro::addPalmMute(Note* note)
       {
-printf("addPalmMute===\n");
       int track = note->track();
 	while (int(_palmMutes.size()) < track + 1)
 		_palmMutes.push_back(0);
@@ -446,6 +446,49 @@ void GuitarPro::addLetRing(Note* note)
 		lr->setStartElement(chord);
 		lr->setEndElement(chord);
 		score->addElement(lr);
+	      }
+      }
+
+//---------------------------------------------------------
+//   addVibrato
+//---------------------------------------------------------
+
+void GuitarPro::addVibrato(Note* note)
+      {
+	int track = note->track();
+	while (int(_vibratos.size()) < track + 1)
+		_vibratos.push_back(0);
+
+      Chord* chord = note->chord();
+	if (_vibratos[track]) {
+		Vibrato* v      = _vibratos[track];
+		Chord* lastChord = toChord(v->endCR());
+		if (lastChord == note->chord())
+			return;
+            //
+            // extend the current "let ring" or start a new one
+            //
+            int tick = note->chord()->segment()->tick();
+		if (v->tick2() < tick)
+                  _vibratos[track] = 0;
+            else {
+                  v->setTick2(chord->tick() + chord->actualTicks());
+			v->setEndElement(chord);
+		      }
+	      }
+	if (!_vibratos[track]) {
+		Vibrato* v = new Vibrato(score);
+		_vibratos[track] = v;
+            Segment* segment = chord->segment();
+            int tick = segment->tick();
+
+		v->setTick(tick);
+		v->setTick2(tick + chord->actualTicks());
+		v->setTrack(track);
+		v->setTrack2(track);
+		v->setStartElement(chord);
+		v->setEndElement(chord);
+		score->addElement(v);
 	      }
       }
 
@@ -931,8 +974,8 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
 	if (beatEffect == 1) {
 		if (version > 300)
 			addTap(chord->upNote());
-//TODO-ws		else
-//			chord->upNote()->vibrato = true;
+            else
+                  addVibrato(chord->upNote());
 	      }
 	else if (beatEffect == 2)
 		addSlap(chord->upNote());
@@ -2303,7 +2346,7 @@ bool GuitarPro3::read(QFile* fp)
                         if (beatBits & BEAT_EFFECTS) {
 				      beatEffects = readBeatEffects(track, segment);
 					}
-//                        bool vibrato = beatEffects & 0x1 || beatEffects & 0x2;
+                        bool vibrato = beatEffects & 0x1 || beatEffects & 0x2;
 
                         if (beatBits & BEAT_MIX_CHANGE) {
                               readMixChange(measure);
@@ -2375,7 +2418,8 @@ bool GuitarPro3::read(QFile* fp)
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
-//TODO-ws						note->vibrato = vibrato;
+                                    if (vibrato)
+                                          addVibrato(note);
                                     if (dotted) {
                                           NoteDot* dot = new NoteDot(score);
                                           // there is at most one dotted note in this guitar pro version - set 0 index
@@ -2384,7 +2428,7 @@ bool GuitarPro3::read(QFile* fp)
                                           dot->setVisible(true);
                                           note->add(dot);
                                           }
-                                    static_cast<Chord*>(cr)->add(note);
+                                    toChord(cr)->add(note);
                                     hasSlur = (readNote(6-i, note) || hasSlur);
                                     note->setTpcFromPitch();
                                     }
@@ -2555,14 +2599,16 @@ int GuitarPro3::readBeatEffects(int track, Segment* segment)
       if (fxBits & BEAT_TREMOLO) {
             }
       if (fxBits & BEAT_FADE) {
-		  /*Articulation* art = new Articulation(score);
-		  // art->setArticulationType(ArticulationType::FadeOut);
+#if 0
+            Articulation* art = new Articulation(score);
+		// art->setArticulationType(ArticulationType::FadeOut);
             art->setSym(SymId::guitarFadeOut);
-		  art->setAnchor(ArticulationAnchor::TOP_STAFF);
-		  if (!score->addArticulation(segment->cr(track), art)) {
-			  delete art;
-		  }*/
-		  effects += 200;
+		art->setAnchor(ArticulationAnchor::TOP_STAFF);
+		if (!score->addArticulation(segment->cr(track), art)) {
+		      delete art;
+                  }
+#endif
+            effects += 200;
             }
       if (fxBits & BEAT_DOTTED) {
             }
@@ -2622,29 +2668,6 @@ void GuitarPro::createCrecDim(int staffIdx, int track, int tick, bool crec)
 //---------------------------------------------------------
 //   importGTP
 //---------------------------------------------------------
-
-#if 0
-Score::FileError importGTP(Score* score, const QString& name, QFile& fp);
-
-Score::FileError importGTP(Score* score, const QString& name)
-      {
-	QFile fp(name);
-	if (!fp.exists())
-		return Score::FileError::FILE_NOT_FOUND;
-	if (!fp.open(QIODevice::ReadOnly))
-		return Score::FileError::FILE_OPEN_ERROR;
-	return importGTP(score, name, fp);
-      }
-
-Score::FileError importGTP(Score* score, const QString& filename, const char* data, unsigned int data_len)
-      {
-	QFile fp(data, filename.c_str(), data_len);
-	auto err = importGTP(score, filename, fp);
-	if (fp.isError())
-            err = Score::FileError::FILE_CORRUPTED;
-	return err;
-      }
-#endif
 
 Score::FileError importGTP(MasterScore* score, const QString& name)
       {
