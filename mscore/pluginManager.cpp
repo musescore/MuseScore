@@ -14,6 +14,9 @@
 #include "pluginManager.h"
 #include "shortcutcapturedialog.h"
 #include "musescore.h"
+#include "libmscore/xml.h"
+#include "preferences.h"
+
 
 namespace Ms {
 
@@ -50,9 +53,158 @@ void PluginManager::init()
             localShortcuts[s->key()] = new Shortcut(*s);
       shortcutsChanged = false;
       loadList(false);
-      connect(pluginList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
-      connect(pluginList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
-         SLOT(pluginListItemChanged(QListWidgetItem*, QListWidgetItem*)));
+      connect(pluginListWidget, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
+      connect(pluginListWidget, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
+              SLOT(pluginListWidgetItemChanged(QListWidgetItem*, QListWidgetItem*)));
+}
+
+//---------------------------------------------------------
+//   readPluginList
+//---------------------------------------------------------
+
+bool PluginManager::readPluginList()
+      {
+      QFile f(dataPath + "/plugins.xml");
+      if (!f.exists())
+            return false;
+      if (!f.open(QIODevice::ReadOnly)) {
+            qDebug("Cannot open plugins file <%s>", qPrintable(f.fileName()));
+            return false;
+            }
+      XmlReader e(0, &f);
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "Plugin") {
+                              PluginDescription d;
+                              while (e.readNextStartElement()) {
+                                    const QStringRef& tag(e.name());
+                                    if (tag == "path")
+                                          d.path = e.readElementText();
+                                    else if (tag == "load")
+                                          d.load = e.readInt();
+                                    else if (tag == "SC")
+                                          d.shortcut.read(e);
+                                    else if (tag == "version")
+                                          d.version = e.readElementText();
+                                    else if (tag == "description")
+                                          d.description = e.readElementText();
+                                    else
+                                          e.unknown();
+                                    }
+                              d.shortcut.setState(STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT |
+                                          STATE_ALLTEXTUAL_EDIT | STATE_PLAY | STATE_FOTO | STATE_LOCK );
+                              if (d.path.endsWith(".qml"))
+                                    _pluginList.append(d);
+                              }
+                        else
+                              e.unknown();
+                        }
+                  }
+            else
+                  e.unknown();
+            }
+      return true;
+}
+
+//---------------------------------------------------------
+//   writePluginList
+//---------------------------------------------------------
+
+void PluginManager::writePluginList()
+      {
+      QDir dir;
+      dir.mkpath(dataPath);
+      QFile f(dataPath + "/plugins.xml");
+      if (!f.open(QIODevice::WriteOnly)) {
+            qDebug("cannot create plugin file <%s>", qPrintable(f.fileName()));
+            return;
+            }
+      XmlWriter xml(0, &f);
+      xml.header();
+      xml.stag("museScore version=\"" MSC_VERSION "\"");
+      foreach(const PluginDescription& d, _pluginList) {
+            xml.stag("Plugin");
+            xml.tag("path", d.path);
+            xml.tag("load", d.load);
+            xml.tag("version", d.version);
+            xml.tag("description", d.description);
+            if (!d.shortcut.keys().isEmpty())
+                  d.shortcut.write(xml);
+            xml.etag();
+            }
+      xml.etag();
+      f.close();
+}
+
+//---------------------------------------------------------
+//   updatePluginList
+//    scan plugin folders for new plugins and update
+//    pluginList
+//---------------------------------------------------------
+
+#ifdef SCRIPT_INTERFACE
+static void updatePluginList(QList<QString>& pluginPathList, const QString& pluginPath,
+   QList<PluginDescription>& pluginList)
+      {
+      QDirIterator it(pluginPath, QDir::NoDot|QDir::NoDotDot|QDir::Dirs|QDir::Files,
+         QDirIterator::Subdirectories);
+      while (it.hasNext()) {
+            it.next();
+            QFileInfo fi = it.fileInfo();
+            QString path(fi.absoluteFilePath());
+            if (fi.isFile()) {
+                  if (path.endsWith(".qml")) {
+                        bool alreadyInList = false;
+                        foreach (const PluginDescription& p, pluginList) {
+                              if (p.path == path) {
+                                    alreadyInList = true;
+                                    break;
+                                    }
+                              }
+                        if (!alreadyInList) {
+                              PluginDescription p;
+                              p.path = path;
+                              p.load = false;
+                              collectPluginMetaInformation(&p);
+                              pluginList.append(p);
+                              }
+                        }
+                  }
+            else
+                  updatePluginList(pluginPathList, path, pluginList);
+            }
+      }
+#endif
+
+void PluginManager::updatePluginList(bool forceRefresh)
+      {
+#ifdef SCRIPT_INTERFACE
+      QList<QString> pluginPathList;
+      pluginPathList.append(dataPath + "/plugins");
+      pluginPathList.append(mscoreGlobalShare + "plugins");
+      pluginPathList.append(preferences.getString(PREF_APP_PATHS_MYPLUGINS));
+      if (forceRefresh) {
+            _pluginList.clear();
+            QQmlEngine* engine=Ms::MScore::qml();
+            engine->clearComponentCache(); //TODO: Check this doesn't have unwanted side effects.
+            }
+
+      foreach(QString pluginPath, pluginPathList) {
+            Ms::updatePluginList(pluginPathList, pluginPath, _pluginList);
+            }
+      //remove non existing files
+      auto i = _pluginList.begin();
+      while (i != _pluginList.end()) {
+            PluginDescription d = *i;
+            QFileInfo fi(d.path);
+            if (!fi.exists())
+                  i = _pluginList.erase(i);
+            else
+                  ++i;
+            }
+#endif
       }
 
 //---------------------------------------------------------
@@ -62,33 +214,33 @@ void PluginManager::init()
 void PluginManager::loadList(bool forceRefresh)
       {
       QStringList saveLoaded; // If forcing a refresh, the load flags are lost. Keep a copy and reapply.
-      int n = preferences.pluginList.size();
+      int n = _pluginList.size();
       if (forceRefresh && n > 0) {
             for (int i = 0; i < n; i++) {
-                  PluginDescription& d = preferences.pluginList[i];
+                  PluginDescription& d = _pluginList[i];
                   if (d.load) {
                         saveLoaded.append(d.path);
                         mscore->unregisterPlugin(&d);  // This will force the menu to rebuild.
                         }
                   }
             }
-      preferences.updatePluginList(forceRefresh);
-      n = preferences.pluginList.size();
-      pluginList->clear();
+      updatePluginList(forceRefresh);
+      n = _pluginList.size();
+      pluginListWidget->clear();
       for (int i = 0; i < n; ++i) {
-            PluginDescription& d = preferences.pluginList[i];
+            PluginDescription& d = _pluginList[i];
             Shortcut* s = &d.shortcut;
             localShortcuts[s->key()] = new Shortcut(*s);
             if (saveLoaded.contains(d.path)) d.load = true;
-            QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).completeBaseName(),  pluginList);
+            QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).completeBaseName(),  pluginListWidget);
             item->setFlags(item->flags() | Qt::ItemIsEnabled);
             item->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
             item->setData(Qt::UserRole, i);
             }
-      prefs = preferences;
+
       if (n) {
-            pluginList->setCurrentRow(0);
-            pluginListItemChanged(pluginList->item(0), 0);
+            pluginListWidget->setCurrentRow(0);
+            pluginListWidgetItemChanged(pluginListWidget->item(0), 0);
             }
       }
 
@@ -109,18 +261,22 @@ void PluginManager::accept()
                   }
             Shortcut::dirty = true;
             }
-      int n = prefs.pluginList.size();
+      int n = _pluginList.size();
       for (int i = 0; i < n; ++i) {
-            PluginDescription& d = prefs.pluginList[i];
+            PluginDescription& d = _pluginList[i];
             if (d.load)
                   mscore->registerPlugin(&d);
             else
                   mscore->unregisterPlugin(&d);
             }
-      preferences = prefs;
-      preferences.write();
-      disconnect(pluginList, SIGNAL(itemChanged(QListWidgetItem*)));
-      disconnect(pluginList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)));
+
+      writePluginList();
+      if (Shortcut::dirty)
+            Shortcut::save();
+      Shortcut::dirty = false;
+
+      disconnect(pluginListWidget, SIGNAL(itemChanged(QListWidgetItem*)));
+      disconnect(pluginListWidget, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)));
       QDialog::accept();
       }
 
@@ -135,15 +291,15 @@ void PluginManager::closeEvent(QCloseEvent* ev)
       }
 
 //---------------------------------------------------------
-//   pluginListItemChanged
+//   pluginListWidgetItemChanged
 //---------------------------------------------------------
 
-void PluginManager::pluginListItemChanged(QListWidgetItem* item, QListWidgetItem*)
+void PluginManager::pluginListWidgetItemChanged(QListWidgetItem* item, QListWidgetItem*)
       {
       if (!item)
             return;
       int idx = item->data(Qt::UserRole).toInt();
-      const PluginDescription& d = prefs.pluginList[idx];
+      const PluginDescription& d = _pluginList[idx];
       QFileInfo fi(d.path);
       pluginName->setText(fi.completeBaseName());
       pluginPath->setText(fi.absolutePath());
@@ -159,9 +315,8 @@ void PluginManager::pluginListItemChanged(QListWidgetItem* item, QListWidgetItem
 void PluginManager::pluginLoadToggled(QListWidgetItem* item)
       {
       int idx = item->data(Qt::UserRole).toInt();
-      PluginDescription* d = &prefs.pluginList[idx];
+      PluginDescription* d = &_pluginList[idx];
       d->load = (item->checkState() == Qt::Checked);
-      prefs.dirty = true;
       }
 
 //---------------------------------------------------------
@@ -170,11 +325,11 @@ void PluginManager::pluginLoadToggled(QListWidgetItem* item)
 
 void PluginManager::definePluginShortcutClicked()
       {
-      QListWidgetItem* item = pluginList->currentItem();
+      QListWidgetItem* item = pluginListWidget->currentItem();
       if (!item)
             return;
       int idx = item->data(Qt::UserRole).toInt();
-      PluginDescription* pd = &prefs.pluginList[idx];
+      PluginDescription* pd = &_pluginList[idx];
       Shortcut* s = &pd->shortcut;
       ShortcutCaptureDialog sc(s, localShortcuts, this);
       int rv = sc.exec();
@@ -189,7 +344,6 @@ void PluginManager::definePluginShortcutClicked()
       mscore->addAction(action);
 
       pluginShortcut->setText(s->keysToString());
-      prefs.dirty = true;
       }
 
 //---------------------------------------------------------
@@ -211,11 +365,11 @@ void PluginManager::reloadPluginsClicked()
 
 void PluginManager::clearPluginShortcutClicked()
       {
-      QListWidgetItem* item = pluginList->currentItem();
+      QListWidgetItem* item = pluginListWidget->currentItem();
       if (!item)
             return;
       int idx = item->data(Qt::UserRole).toInt();
-      PluginDescription* pd = &prefs.pluginList[idx];
+      PluginDescription* pd = &_pluginList[idx];
       Shortcut* s = &pd->shortcut;
       s->clear();
 
@@ -224,7 +378,6 @@ void PluginManager::clearPluginShortcutClicked()
 //      mscore->addAction(action);
 
       pluginShortcut->setText(s->keysToString());
-      prefs.dirty = true;
       }
 
 //---------------------------------------------------------

@@ -49,6 +49,7 @@
 #include "libmscore/lyrics.h"
 #include "libmscore/layoutbreak.h"
 #include "qmlplugin.h"
+#include "pluginManager.h"
 
 namespace Ms {
 
@@ -341,8 +342,8 @@ void MuseScore::loadPlugins()
       {
       pluginMapper = new QSignalMapper(this);
       connect(pluginMapper, SIGNAL(mapped(int)), SLOT(pluginTriggered(int)));
-      for (int i = 0; i < preferences.pluginList.size(); ++i) {
-            PluginDescription* d = &preferences.pluginList[i];
+      for (int i = 0; i < pluginManager->pluginCount(); ++i) {
+            PluginDescription* d = pluginManager->getPluginDescription(i);
             if (d->load)
                   registerPlugin(d);
             }
@@ -379,7 +380,7 @@ bool MuseScore::loadPlugin(const QString& filename)
       if (filename.endsWith(".qml")){
             QFileInfo fi(pluginDir, filename);
             if (!fi.exists())
-                  fi = QFileInfo(preferences.myPluginsPath, filename);
+                  fi = QFileInfo(preferences.getString(PREF_APP_PATHS_MYPLUGINS), filename);
             if (fi.exists()) {
                   QString path(fi.filePath());
                   PluginDescription* p = new PluginDescription;

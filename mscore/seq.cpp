@@ -318,18 +318,18 @@ void Seq::start()
       if ((mscore->loop())) {
             if (cs->selection().isRange())
                   setLoopSelection();
-            if (!preferences.useJackTransport || (preferences.useJackTransport && state == Transport::STOP))
+            if (!preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) || (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && state == Transport::STOP))
                   seek(cs->repeatList()->tick2utick(cs->loopInTick()));
             }
       else {
-            if (!preferences.useJackTransport || (preferences.useJackTransport && state == Transport::STOP))
+            if (!preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) || (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && state == Transport::STOP))
                   seek(cs->repeatList()->tick2utick(cs->playPos()));
             }
-      if (preferences.useJackTransport && mscore->countIn() && state == Transport::STOP) {
+      if (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && mscore->countIn() && state == Transport::STOP) {
             // Ready to start playing count in, switching to fake transport
             // to prevent playing in other applications with our ticks simultaneously
             useJackTransportSavedFlag    = true;
-            preferences.useJackTransport = false;
+            preferences.setPreference(PREF_IO_JACK_USEJACKTRANSPORT, false);
             }
       _driver->startTransport();
       }
@@ -350,7 +350,7 @@ void Seq::stop()
             }
       if (!_driver)
             return;
-      if (!preferences.useJackTransport || (preferences.useJackTransport && _driver->getState() == Transport::PLAY))
+      if (!preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) || (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && _driver->getState() == Transport::PLAY))
             _driver->stopTransport();
       if (cv)
             cv->setCursorOn(false);
@@ -533,7 +533,7 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
 
 void Seq::recomputeMaxMidiOutPort()
       {
-      if (!(preferences.useJackMidi || preferences.useAlsaAudio))
+      if (!(preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO)))
             return;
       int max = 0;
       for (Score * s : MuseScoreCore::mscoreCore->scores()) {
@@ -563,7 +563,7 @@ void Seq::processMessages()
                               int utick = cs->utime2utick(qreal(playFrame) / qreal(MScore::sampleRate));
                               cs->tempomap()->setRelTempo(msg.realVal);
                               playFrame = cs->utick2utime(utick) * MScore::sampleRate;
-                              if (preferences.jackTimebaseMaster && preferences.useJackTransport)
+                              if (preferences.getBool(PREF_IO_JACK_TIMEBASEMASTER) && preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT))
                                     _driver->seekTransport(utick + 2 * cs->utime2utick(qreal((_driver->bufferSize()) + 1) / qreal(MScore::sampleRate)));
                               }
                         else
@@ -676,7 +676,7 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
       if (driverState != state) {
             // Got a message from JACK Transport panel: Play
             if (state == Transport::STOP && driverState == Transport::PLAY) {
-                  if ((preferences.useJackMidi || preferences.useJackAudio) && !getAction("play")->isChecked()) {
+                  if ((preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_JACK_USEJACKAUDIO)) && !getAction("play")->isChecked()) {
                         // Do not play while editing elements
                         if (mscore->state() != STATE_NORMAL || !isRunning() || !canStart())
                               return;
@@ -685,17 +685,17 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
 
                         // If we just launch MuseScore and press "Play" on JACK Transport with time 0:00
                         // MuseScore doesn't seek to 0 and guiPos is uninitialized, so let's make it manually
-                        if (preferences.useJackTransport && getCurTick() == 0)
+                        if (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && getCurTick() == 0)
                               seekRT(0);
 
                         // Switching to fake transport while playing count in
                         // to prevent playing in other applications with our ticks simultaneously
-                        if (preferences.useJackTransport && mscore->countIn()) {
+                        if (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && mscore->countIn()) {
                               // Stopping real JACK Transport
                               _driver->stopTransport();
                               // Starting fake transport
-                              useJackTransportSavedFlag = preferences.useJackTransport;
-                              preferences.useJackTransport = false;
+                              useJackTransportSavedFlag = preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT);
+                              preferences.setPreference(PREF_IO_JACK_USEJACKTRANSPORT, false);
                               _driver->startTransport();
                               }
                         }
@@ -797,7 +797,7 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                                     if (playPosUTick >= loopOutUTick || cs->repeatList()->utick2tick(playPosUTick) < cs->loopInTick()) {
                                           qDebug ("Process: playPosUTick = %d, cs->loopInTick() = %d, cs->loopOutTick() = %d, getCurTick() = %d, loopOutUTick = %d, playFrame = %d",
                                                             playPosUTick,      cs->loopInTick(),      cs->loopOutTick(),      getCurTick(),      loopOutUTick,    *pPlayFrame);
-                                          if (preferences.useJackTransport) {
+                                          if (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT)) {
                                                 int loopInUTick = cs->repeatList()->tick2utick(cs->loopInTick());
                                                 _driver->seekTransport(loopInUTick);
                                                 if (loopInUTick != 0) {
@@ -887,7 +887,7 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                         if (useJackTransportSavedFlag) {
                               // Stopping fake driver
                               _driver->stopTransport();
-                              preferences.useJackTransport = true;
+                              preferences.setPreference(PREF_IO_JACK_USEJACKTRANSPORT, true);
                               // Starting the real JACK Transport. All applications play in sync now
                               _driver->startTransport();
                               }
@@ -948,7 +948,7 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
 void Seq::initInstruments(bool realTime)
       {
       // Add midi out ports if necessary
-      if (cs && (preferences.useJackMidi || preferences.useAlsaAudio)) {
+      if (cs && (preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO))) {
             // Increase the maximum number of midi ports if user adds staves/instruments
             int scoreMaxMidiPort = cs->masterScore()->midiPortCount();
             if (maxMidiOutPort < scoreMaxMidiPort)
@@ -970,7 +970,7 @@ void Seq::initInstruments(bool realTime)
                         sendEvent(event);
                   }
             // Setting pitch bend sensitivity to 12 semitones for external synthesizers
-            if ((preferences.useJackMidi || preferences.useAlsaAudio) && mm.channel != 9) {
+            if ((preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO)) && mm.channel != 9) {
                   if (realTime) {
                         putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 0));
                         putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 0));
@@ -1093,7 +1093,7 @@ void Seq::seekCommon(int utick)
 
 void Seq::seek(int utick)
       {
-      if (preferences.useJackTransport) {
+      if (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT)) {
             if (utick > endUTick)
                   utick = 0;
             _driver->seekTransport(utick);
@@ -1118,7 +1118,7 @@ void Seq::seek(int utick)
 
 void Seq::seekRT(int utick)
       {
-      if (preferences.useJackTransport && utick > endUTick)
+      if (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && utick > endUTick)
                   utick = 0;
       seekCommon(utick);
       setPos(utick);
@@ -1207,7 +1207,7 @@ void Seq::stopNotes(int channel, bool realTime)
             if (cs->midiChannel(channel) != 9)
                   send(NPlayEvent(ME_PITCHBEND,  channel, 0, 64));
             }
-      if (preferences.useAlsaAudio || preferences.useJackAudio || preferences.usePulseAudio || preferences.usePortaudioAudio)
+      if (preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO) || preferences.getBool(PREF_IO_JACK_USEJACKAUDIO) || preferences.getBool(PREF_IO_PULSEAUDIO_USEPULSEAUDIO) || preferences.getBool(PREF_IO_PORTAUDIO_USEPORTAUDIO))
             _synti->allNotesOff(channel);
       }
 
@@ -1423,7 +1423,7 @@ void Seq::putEvent(const NPlayEvent& event, unsigned framePos)
       _synti->play(event, syntiIdx);
 
       // midi
-      if (_driver != 0 && (preferences.useJackMidi || preferences.useAlsaAudio || preferences.usePortaudioAudio))
+      if (_driver != 0 && (preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO) || preferences.getBool(PREF_IO_PORTAUDIO_USEPORTAUDIO)))
             _driver->putEvent(event, framePos);
       }
 
@@ -1631,8 +1631,8 @@ void Seq::handleTimeSigTempoChanged()
 void Seq::setInitialMillisecondTimestampWithLatency()
       {
      #ifdef USE_PORTMIDI
-           initialMillisecondTimestampWithLatency = Pt_Time() + preferences.portMidiOutputLatencyMilliseconds;
-           //qDebug("PortMidi initialMillisecondTimestampWithLatency: %d = %d + %d", initialMillisecondTimestampWithLatency, unsigned(Pt_Time()), preferences.portMidiOutputLatencyMilliseconds);
+           initialMillisecondTimestampWithLatency = Pt_Time() + preferences.getInt(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS);
+           //qDebug("PortMidi initialMillisecondTimestampWithLatency: %d = %d + %d", initialMillisecondTimestampWithLatency, unsigned(Pt_Time()), preferences.getInt(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS));
      #endif
      }
 

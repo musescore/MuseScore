@@ -50,7 +50,7 @@ void TestOpcodes::initTestCase()
 void TestOpcodes::testOpcodes()
       {
       Zerberus* synth = new Zerberus();
-      Ms::preferences.mySoundfontsPath += ";" + root;
+      preferences.setPreference(PREF_APP_PATHS_MYSOUNDFONTS, root);
       synth->loadInstrument("opcodeTest.sfz");
 
       std::list<Zone *>::iterator curZone = synth->instrument(0)->zones().begin();
