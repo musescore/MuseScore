@@ -45,6 +45,7 @@
 #include "libmscore/slur.h"
 #include "paletteBoxButton.h"
 #include "palettebox.h"
+#include "shortcut.h"
 
 namespace Ms {
 
@@ -974,8 +975,8 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
       p.setRenderHint(QPainter::Antialiasing, true);
 
       QColor bgColor(0xf6, 0xf0, 0xda);
-      if (preferences.fgUseColor)
-            bgColor = preferences.fgColor;
+      if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR))
+            bgColor = preferences.getColor(PREF_UI_CANVAS_FG_COLOR);
 #if 1
       p.setBrush(bgColor);
       p.drawRoundedRect(0, 0, width(), height(), 2, 2);

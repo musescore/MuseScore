@@ -43,7 +43,7 @@ PluginCreator::PluginCreator(QWidget* parent)
       helpBrowser = 0;
 
       setObjectName("PluginCreator");
-      setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
+      setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling, preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
 
       setupUi(this);
 

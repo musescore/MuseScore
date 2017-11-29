@@ -602,7 +602,7 @@ int AlsaAudio::sampleRate() const
       if (alsa)
             return alsa->sampleRate();
       else
-            return preferences.alsaSampleRate;
+            return preferences.getInt(PREF_IO_ALSA_SAMPLERATE);
       }
 
 //---------------------------------------------------------
@@ -623,10 +623,10 @@ AlsaAudio::~AlsaAudio()
 bool AlsaAudio::init(bool /*hot*/)
       {
       alsa = new AlsaDriver(
-         preferences.alsaDevice,
-         preferences.alsaSampleRate,
-         preferences.alsaPeriodSize,
-         preferences.alsaFragments);
+         preferences.getString(PREF_IO_ALSA_DEVICE),
+         preferences.getInt(PREF_IO_ALSA_SAMPLERATE),
+         preferences.getInt(PREF_IO_ALSA_PERIODSIZE),
+         preferences.getInt(PREF_IO_ALSA_FRAGMENTS));
       if (!alsa->init()) {
             delete alsa;
             alsa = 0;

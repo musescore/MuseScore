@@ -6,7 +6,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"
-#include "mscore/preferences.h"
+#include "importmidi_operations.h"
 
 
 namespace Ms {
@@ -49,7 +49,7 @@ void setTempoToScore(Score *score, int tick, double beatsPerSecond)
 
       score->setTempo(tick, beatsPerSecond);
 
-      auto *data = preferences.midiImportOperations.data();
+      auto *data = midiImportOperations.data();
       if (data->trackOpers.showTempoText.value()) {
             const int tempoInBpm = qRound(beatsPerSecond * 60.0);
 
@@ -105,7 +105,7 @@ void applyAllTempoEvents(const std::multimap<int, MTrack> &tracks, Score *score)
 void setTempo(const std::multimap<int, MTrack> &tracks, Score *score)
       {
       score->tempomap()->clear();
-      auto *midiData = preferences.midiImportOperations.data();
+      auto *midiData = midiImportOperations.data();
       std::set<ReducedFraction> beats = midiData->humanBeatData.beatSet;    // copy
 
       if (beats.empty()) {
