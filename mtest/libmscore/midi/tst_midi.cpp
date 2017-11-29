@@ -24,7 +24,6 @@
 #include "libmscore/note.h"
 #include "libmscore/keysig.h"
 #include "mscore/exportmidi.h"
-#include "mscore/preferences.h"
 #include <QIODevice>
 
 #include "libmscore/mcursor.h"
@@ -132,7 +131,7 @@ void TestMidi::events_data()
 bool saveMidi(Score* score, const QString& name)
       {
       ExportMidi em(score);
-      return em.write(name, true);
+      return em.write(name, true, true);
       }
 
 
@@ -406,7 +405,6 @@ void TestMidi::events()
 void TestMidi::midiExportTestRef(const QString& file)
       {
       MScore::debugMode = true;
-      preferences.midiExportRPNs = true;
       MasterScore* score = readScore(DIR + file + ".mscx");
       QVERIFY(score);
       score->doLayout();

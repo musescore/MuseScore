@@ -174,8 +174,8 @@ void genIcons()
             }
 
       static const char* vtext[VOICES] = { "1","2","3","4" };
-      int iw = preferences.iconHeight * 2 / 3; // 16;
-      int ih = preferences.iconHeight;   // 24;
+      int iw = preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * 2 / 3; // 16;
+      int ih = preferences.getInt(PREF_UI_THEME_ICONHEIGHT);   // 24;
       for (int i = 0; i < VOICES; ++i) {
             icons[int(Icons::voice1_ICON) + i] = new QIcon;
             QPixmap image(iw, ih);

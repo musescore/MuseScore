@@ -34,8 +34,6 @@
 
 namespace Ms {
 
-extern Preferences preferences;
-
 namespace MidiClef {
 
 
@@ -431,7 +429,7 @@ bool hasGFclefs(const InstrumentTemplate *templ)
 
 void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
       {
-      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const auto &opers = midiImportOperations.data()->trackOpers;
       const auto &trackInstrList = opers.msInstrList.value(indexOfOperation);
       const int msInstrIndex = opers.msInstrIndex.value(indexOfOperation);
       const bool hasInstrument = !trackInstrList.empty() && trackInstrList[msInstrIndex];

@@ -1345,7 +1345,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                               skipLogCurrElem();
                         }
                   double _spatium = DPMM * (millimeter * 10.0 / tenths);
-                  if (preferences.musicxmlImportLayout)
+                  if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT))
                         _score->setSpatium(_spatium);
                   }
             else if (_e.name() == "page-layout") {
@@ -1360,7 +1360,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                               skipLogCurrElem();
                         else if (_e.name() == "system-distance") {
                               Spatium val(_e.readElementText().toDouble() / 10.0);
-                              if (preferences.musicxmlImportLayout) {
+                              if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
                                     _score->style().set(StyleIdx::minSystemDistance, val);
                                     qDebug("system distance %f", val.val());
                                     }
@@ -1375,7 +1375,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                   while (_e.readNextStartElement()) {
                         if (_e.name() == "staff-distance") {
                               Spatium val(_e.readElementText().toDouble() / 10.0);
-                              if (preferences.musicxmlImportLayout)
+                              if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT))
                                     _score->style().set(StyleIdx::staffDistance, val);
                               }
                         else
