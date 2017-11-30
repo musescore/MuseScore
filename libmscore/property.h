@@ -128,6 +128,7 @@ enum class P_ID {
       OTTAVA_TYPE,
       NUMBERS_ONLY,
       TRILL_TYPE,
+      VIBRATO_TYPE,
       HAIRPIN_CIRCLEDTIP,
 
       HAIRPIN_TYPE,

@@ -25,6 +25,7 @@
 #include "part.h"
 #include "chord.h"
 #include "trill.h"
+#include "vibrato.h"
 #include "style.h"
 #include "slur.h"
 #include "tie.h"
@@ -668,7 +669,7 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                   int idx = s->staff()->channel(s->tick(), 0);
                   int channel = s->part()->instrument(s->tick())->channel(idx)->channel;
 
-                  if (s->type() == ElementType::PEDAL) {
+                  if (s->isPedal()) {
                         channelPedalEvents.insert({channel, std::vector<std::pair<int, bool>>()});
                         std::vector<std::pair<int, bool>> pedalEventList = channelPedalEvents.at(channel);
                         std::pair<int, bool> lastEvent;
@@ -693,49 +694,47 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                               channelPedalEvents.at(channel).push_back(std::pair<int, bool>(t, false));
                               }
                         }
-                  else if (s->type() == ElementType::TRILL) {
+                  else if (s->isVibrato()) {
                         // from start to end of trill, send bend events at regular interval
-                        Trill* t = toTrill(s);
-                        if (t->isVibrato()) {
-                              // guitar vibrato, up only
-                              int spitch = 0; // 1/8 (100 is a semitone)
-                              int epitch = 12;
-                              if (t->trillType() == Trill::Type::GUITAR_VIBRATO_WIDE) {
-                                    spitch = 0; // 1/4
-                                    epitch = 25;
-                                    }
-                              // vibrato with whammy bar up and down
-                              else if (t->trillType() == Trill::Type::VIBRATO_SAWTOOTH_WIDE) {
-                                    spitch = 25; // 1/16
-                                    epitch = -25;
-                                    }
-                              else if (t->trillType() == Trill::Type::VIBRATO_SAWTOOTH) {
-                                    spitch = 12;
-                                    epitch = -12;
-                                    }
-
-                              int j = 0;
-                              int delta = MScore::division / 8; // 1/8 note
-                              int lastPointTick = s->tick();
-                              while (lastPointTick < s->tick2()) {
-                                    int pitch = (j % 4 < 2) ? spitch : epitch;
-                                    int nextPitch = ((j+1) % 4 < 2) ? spitch : epitch;
-                                    int nextPointTick = lastPointTick + delta;
-                                    for (int i = lastPointTick; i <= nextPointTick; i += 16) {
-                                          double dx = ((i - lastPointTick) * 60) / delta;
-                                          int p = pitch + dx * (nextPitch - pitch) / delta;
-                                          int midiPitch = (p * 16384) / 1200 + 8192;
-                                          int msb = midiPitch / 128;
-                                          int lsb = midiPitch % 128;
-                                          NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
-                                          events->insert(std::pair<int, NPlayEvent>(i, ev));
-                                          }
-                                    lastPointTick = nextPointTick;
-                                    j++;
-                                    }
-                              NPlayEvent ev(ME_PITCHBEND, channel, 0, 64); // no pitch bend
-                              events->insert(std::pair<int, NPlayEvent>(s->tick2(), ev));
+                        Vibrato* t = toVibrato(s);
+                        // guitar vibrato, up only
+                        int spitch = 0; // 1/8 (100 is a semitone)
+                        int epitch = 12;
+                        if (t->vibratoType() == Vibrato::Type::GUITAR_VIBRATO_WIDE) {
+                              spitch = 0; // 1/4
+                              epitch = 25;
                               }
+                        // vibrato with whammy bar up and down
+                        else if (t->vibratoType() == Vibrato::Type::VIBRATO_SAWTOOTH_WIDE) {
+                              spitch = 25; // 1/16
+                              epitch = -25;
+                              }
+                        else if (t->vibratoType() == Vibrato::Type::VIBRATO_SAWTOOTH) {
+                              spitch = 12;
+                              epitch = -12;
+                              }
+
+                        int j = 0;
+                        int delta = MScore::division / 8; // 1/8 note
+                        int lastPointTick = s->tick();
+                        while (lastPointTick < s->tick2()) {
+                              int pitch = (j % 4 < 2) ? spitch : epitch;
+                              int nextPitch = ((j+1) % 4 < 2) ? spitch : epitch;
+                              int nextPointTick = lastPointTick + delta;
+                              for (int i = lastPointTick; i <= nextPointTick; i += 16) {
+                                    double dx = ((i - lastPointTick) * 60) / delta;
+                                    int p = pitch + dx * (nextPitch - pitch) / delta;
+                                    int midiPitch = (p * 16384) / 1200 + 8192;
+                                    int msb = midiPitch / 128;
+                                    int lsb = midiPitch % 128;
+                                    NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
+                                    events->insert(std::pair<int, NPlayEvent>(i, ev));
+                                    }
+                              lastPointTick = nextPointTick;
+                              j++;
+                              }
+                        NPlayEvent ev(ME_PITCHBEND, channel, 0, 64); // no pitch bend
+                        events->insert(std::pair<int, NPlayEvent>(s->tick2(), ev));
                         }
                   else
                         continue;

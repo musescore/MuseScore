@@ -5,6 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -41,7 +42,7 @@
         <instrumentId>pluck.guitar.electric</instrumentId>
         <clef>G8vb</clef>
         <StringData>
-          <frets>21</frets>
+          <frets>24</frets>
           <string>52</string>
           <string>57</string>
           <string>62</string>
@@ -112,22 +113,26 @@
           <lid>5</lid>
           <text><sym>metNoteQuarterUp</sym> = 120</text>
           </Tempo>
+        <Vibrato id="2">
+          <subtype>guitarVibrato</subtype>
+          <lid>30</lid>
+          </Vibrato>
         <Chord>
-          <lid>7</lid>
+          <lid>6</lid>
           <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>wiggleVibratoLargeFaster</subtype>
-            <lid>6</lid>
-            <anchor>0</anchor>
-            </Articulation>
           <Note>
-            <lid>8</lid>
+            <lid>7</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
             <string>2</string>
             </Note>
           </Chord>
+        <endSpanner id="2"/>
+        <Rest>
+          <lid>8</lid>
+          <durationType>quarter</durationType>
+          </Rest>
         <Rest>
           <lid>9</lid>
           <durationType>quarter</durationType>
@@ -136,98 +141,94 @@
           <lid>10</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <Rest>
-          <lid>11</lid>
-          <durationType>quarter</durationType>
-          </Rest>
         </Measure>
       <Measure number="2">
+        <Vibrato id="3">
+          <subtype>guitarVibratoWide</subtype>
+          <lid>31</lid>
+          </Vibrato>
         <Chord>
-          <lid>14</lid>
+          <lid>12</lid>
           <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>wiggleVibratoLargeSlowest</subtype>
-            <lid>13</lid>
-            <anchor>0</anchor>
-            </Articulation>
           <Note>
-            <lid>15</lid>
+            <lid>13</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
             <string>2</string>
             </Note>
           </Chord>
+        <endSpanner id="3"/>
+        <Rest>
+          <lid>14</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>15</lid>
+          <durationType>quarter</durationType>
+          </Rest>
         <Rest>
           <lid>16</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <Rest>
-          <lid>17</lid>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>18</lid>
-          <durationType>quarter</durationType>
-          </Rest>
         </Measure>
       <Measure number="3">
+        <Vibrato id="4">
+          <subtype>vibratoSawtooth</subtype>
+          <lid>32</lid>
+          </Vibrato>
         <Chord>
-          <lid>21</lid>
+          <lid>18</lid>
           <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>wiggleSawtooth</subtype>
-            <lid>20</lid>
-            <anchor>0</anchor>
-            </Articulation>
           <Note>
-            <lid>22</lid>
+            <lid>19</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
             <string>2</string>
             </Note>
           </Chord>
+        <endSpanner id="4"/>
         <Rest>
-          <lid>23</lid>
+          <lid>20</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>24</lid>
+          <lid>21</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>25</lid>
+          <lid>22</lid>
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
       <Measure number="4">
+        <Vibrato id="5">
+          <subtype>vibratoSawtoothWide</subtype>
+          <lid>33</lid>
+          </Vibrato>
         <Chord>
-          <lid>28</lid>
+          <lid>24</lid>
           <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>wiggleSawtoothWide</subtype>
-            <lid>27</lid>
-            <anchor>0</anchor>
-            </Articulation>
           <Note>
-            <lid>29</lid>
+            <lid>25</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
             <string>2</string>
             </Note>
           </Chord>
+        <endSpanner id="5"/>
         <Rest>
-          <lid>30</lid>
+          <lid>26</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>31</lid>
+          <lid>27</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>32</lid>
+          <lid>28</lid>
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
@@ -237,7 +238,7 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -289,7 +290,7 @@
           <instrumentId>pluck.guitar.electric</instrumentId>
           <clef>G8vb</clef>
           <StringData>
-            <frets>21</frets>
+            <frets>24</frets>
             <string>52</string>
             <string>57</string>
             <string>62</string>
@@ -364,22 +365,26 @@
             <lid>5</lid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
+          <Vibrato id="6">
+            <subtype>guitarVibrato</subtype>
+            <lid>30</lid>
+            </Vibrato>
           <Chord>
-            <lid>7</lid>
+            <lid>6</lid>
             <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>wiggleVibratoLargeFaster</subtype>
-              <lid>6</lid>
-              <anchor>0</anchor>
-              </Articulation>
             <Note>
-              <lid>8</lid>
+              <lid>7</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <endSpanner id="6"/>
+          <Rest>
+            <lid>8</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <lid>9</lid>
             <durationType>quarter</durationType>
@@ -388,98 +393,94 @@
             <lid>10</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <lid>11</lid>
-            <durationType>quarter</durationType>
-            </Rest>
           </Measure>
         <Measure number="2">
+          <Vibrato id="7">
+            <subtype>guitarVibratoWide</subtype>
+            <lid>31</lid>
+            </Vibrato>
           <Chord>
-            <lid>14</lid>
+            <lid>12</lid>
             <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>wiggleVibratoLargeSlowest</subtype>
-              <lid>13</lid>
-              <anchor>0</anchor>
-              </Articulation>
             <Note>
-              <lid>15</lid>
+              <lid>13</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <endSpanner id="7"/>
+          <Rest>
+            <lid>14</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>15</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <lid>16</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <lid>17</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>18</lid>
-            <durationType>quarter</durationType>
-            </Rest>
           </Measure>
         <Measure number="3">
+          <Vibrato id="8">
+            <subtype>vibratoSawtooth</subtype>
+            <lid>32</lid>
+            </Vibrato>
           <Chord>
-            <lid>21</lid>
+            <lid>18</lid>
             <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>wiggleSawtooth</subtype>
-              <lid>20</lid>
-              <anchor>0</anchor>
-              </Articulation>
             <Note>
-              <lid>22</lid>
+              <lid>19</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <endSpanner id="8"/>
           <Rest>
-            <lid>23</lid>
+            <lid>20</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>24</lid>
+            <lid>21</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>25</lid>
+            <lid>22</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="4">
+          <Vibrato id="9">
+            <subtype>vibratoSawtoothWide</subtype>
+            <lid>33</lid>
+            </Vibrato>
           <Chord>
-            <lid>28</lid>
+            <lid>24</lid>
             <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>wiggleSawtoothWide</subtype>
-              <lid>27</lid>
-              <anchor>0</anchor>
-              </Articulation>
             <Note>
-              <lid>29</lid>
+              <lid>25</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <endSpanner id="9"/>
           <Rest>
-            <lid>30</lid>
+            <lid>26</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>31</lid>
+            <lid>27</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>32</lid>
+            <lid>28</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
@@ -490,22 +491,26 @@
             <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
+          <Vibrato id="10">
+            <subtype>guitarVibrato</subtype>
+            <lid>30</lid>
+            </Vibrato>
           <Chord>
-            <lid>7</lid>
+            <lid>6</lid>
             <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>wiggleVibratoLargeFaster</subtype>
-              <lid>6</lid>
-              <anchor>0</anchor>
-              </Articulation>
             <Note>
-              <lid>8</lid>
+              <lid>7</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <endSpanner id="10"/>
+          <Rest>
+            <lid>8</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <lid>9</lid>
             <durationType>quarter</durationType>
@@ -514,98 +519,94 @@
             <lid>10</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <lid>11</lid>
-            <durationType>quarter</durationType>
-            </Rest>
           </Measure>
         <Measure number="2">
+          <Vibrato id="11">
+            <subtype>guitarVibratoWide</subtype>
+            <lid>31</lid>
+            </Vibrato>
           <Chord>
-            <lid>14</lid>
+            <lid>12</lid>
             <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>wiggleVibratoLargeSlowest</subtype>
-              <lid>13</lid>
-              <anchor>0</anchor>
-              </Articulation>
             <Note>
-              <lid>15</lid>
+              <lid>13</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <endSpanner id="11"/>
+          <Rest>
+            <lid>14</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>15</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <lid>16</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <lid>17</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>18</lid>
-            <durationType>quarter</durationType>
-            </Rest>
           </Measure>
         <Measure number="3">
+          <Vibrato id="12">
+            <subtype>vibratoSawtooth</subtype>
+            <lid>32</lid>
+            </Vibrato>
           <Chord>
-            <lid>21</lid>
+            <lid>18</lid>
             <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>wiggleSawtooth</subtype>
-              <lid>20</lid>
-              <anchor>0</anchor>
-              </Articulation>
             <Note>
-              <lid>22</lid>
+              <lid>19</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <endSpanner id="12"/>
           <Rest>
-            <lid>23</lid>
+            <lid>20</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>24</lid>
+            <lid>21</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>25</lid>
+            <lid>22</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="4">
+          <Vibrato id="13">
+            <subtype>vibratoSawtoothWide</subtype>
+            <lid>33</lid>
+            </Vibrato>
           <Chord>
-            <lid>28</lid>
+            <lid>24</lid>
             <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>wiggleSawtoothWide</subtype>
-              <lid>27</lid>
-              <anchor>0</anchor>
-              </Articulation>
             <Note>
-              <lid>29</lid>
+              <lid>25</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <endSpanner id="13"/>
           <Rest>
-            <lid>30</lid>
+            <lid>26</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>31</lid>
+            <lid>27</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>32</lid>
+            <lid>28</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
