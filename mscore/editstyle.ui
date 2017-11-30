@@ -115,6 +115,11 @@
       </item>
       <item>
        <property name="text">
+        <string>Vibrato</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Dynamics</string>
        </property>
       </item>
@@ -6741,7 +6746,7 @@
       <widget class="QWidget" name="PageTrill">
        <layout class="QVBoxLayout" name="verticalLayout_48">
         <item>
-         <widget class="QGroupBox" name="groupBox_22">
+         <widget class="QGroupBox" name="groupBox_36">
           <property name="title">
            <string>Trill Line</string>
           </property>
@@ -6884,6 +6889,172 @@
            </item>
            <item row="2" column="2">
             <widget class="QToolButton" name="resetTrillLinePosBelow">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Position below' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="PageVibrato">
+       <layout class="QVBoxLayout" name="verticalLayout_48">
+        <item>
+         <widget class="QGroupBox" name="groupBox_22">
+          <property name="title">
+           <string>Vibrato Line</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_14">
+           <item row="3" column="0">
+            <spacer name="verticalSpacer_18">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_97">
+             <property name="text">
+              <string>Position above:</string>
+             </property>
+             <property name="buddy">
+              <cstring>vibratoLinePosAbove</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="vibratoLinePosAbove">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
+             </property>
+             <property name="minimum">
+              <double>-1000.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>-5.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <spacer name="horizontalSpacer_10">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetVibratoLinePosAbove">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Position above' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="vibratoLinePlacement">
+             <item>
+              <property name="text">
+               <string notr="true">Above</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string notr="true">Below</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_125">
+             <property name="text">
+              <string>Placement:</string>
+             </property>
+             <property name="buddy">
+              <cstring>vibratoLinePlacement</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="resetVibratoLinePlacement">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Placement' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_140">
+             <property name="text">
+              <string>Position below:</string>
+             </property>
+             <property name="buddy">
+              <cstring>vibratoLinePosBelow</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="vibratoLinePosBelow">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
+             </property>
+             <property name="minimum">
+              <double>-1000.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>-5.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetVibratoLinePosBelow">
              <property name="toolTip">
               <string>Reset to default</string>
              </property>

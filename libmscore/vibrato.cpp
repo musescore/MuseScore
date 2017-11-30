@@ -122,7 +122,7 @@ void VibratoSegment::layout()
             symbolLine(SymId::wiggleVibrato, SymId::wiggleVibrato);
 
       if (parent()) {
-            qreal yo = score()->styleP(vibrato()->placeBelow() ? StyleIdx::trillPosBelow : StyleIdx::trillPosAbove);
+            qreal yo = score()->styleP(vibrato()->placeBelow() ? StyleIdx::vibratoPosBelow : StyleIdx::vibratoPosAbove);
             rypos() = yo;
             if (autoplace()) {
                   qreal minDistance = spatium();
@@ -393,7 +393,7 @@ void Vibrato::undoSetVibratoType(Type val)
 
 void Vibrato::setYoff(qreal val)
       {
-      rUserYoffset() += val * spatium() - score()->styleP(StyleIdx::trillPosAbove);
+      rUserYoffset() += val * spatium() - score()->styleP(StyleIdx::vibratoPosAbove);
       }
 
 //---------------------------------------------------------

@@ -31,7 +31,7 @@ void PalmMuteSegment::layout()
             setUserOff(QPointF());
       TextLineBaseSegment::layout();
       if (parent()) {     // for palette
-            rypos() += score()->styleP(palmMute()->placeBelow() ? StyleIdx::pedalPosBelow : StyleIdx::pedalPosAbove);
+            rypos() += score()->styleP(palmMute()->placeBelow() ? StyleIdx::palmMutePosBelow : StyleIdx::palmMutePosAbove);
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
                   Shape s1 = shape().translated(pos());
@@ -101,7 +101,7 @@ LineSegment* PalmMute::createLineSegment()
 
 void PalmMute::setYoff(qreal val)
       {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? StyleIdx::pedalPosAbove : StyleIdx::pedalPosBelow);
+      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? StyleIdx::palmMutePosAbove : StyleIdx::palmMutePosBelow);
       }
 
 //---------------------------------------------------------
