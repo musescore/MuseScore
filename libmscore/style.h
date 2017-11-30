@@ -164,6 +164,10 @@ enum class StyleIdx {
       trillPosAbove,
       trillPosBelow,
 
+      vibratoPlacement,
+      vibratoPosAbove,
+      vibratoPosBelow,
+
       harmonyY,
       harmonyFretDist,
       minHarmonyDistance,

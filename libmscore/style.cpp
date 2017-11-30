@@ -186,6 +186,10 @@ static const StyleType styleTypes[] {
       { StyleIdx::trillPosAbove,           "trillPosAbove",           Spatium(-1) },
       { StyleIdx::trillPosBelow,           "trillPosBelow",           Spatium(1) },
 
+      { StyleIdx::vibratoPlacement,        "vibratoPlacement",        int(Element::Placement::ABOVE)  },
+      { StyleIdx::vibratoPosAbove,         "vibratoPosAbove",         Spatium(-1) },
+      { StyleIdx::vibratoPosBelow,         "vibratoPosBelow",         Spatium(1) },
+
       { StyleIdx::harmonyY,                "harmonyY",                Spatium(2.5) },
       { StyleIdx::harmonyFretDist,         "harmonyFretDist",         Spatium(0.5) },
       { StyleIdx::minHarmonyDistance,      "minHarmonyDistance",      Spatium(0.5) },
