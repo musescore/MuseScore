@@ -155,8 +155,8 @@ class Segment : public Element {
       void setElement(int track, Element* el);
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
-      Measure* measure() const                   { return (Measure*)parent(); }
-      System* system() const                     { return (System*)parent()->parent(); }
+      Measure* measure() const                   { return toMeasure(parent()); }
+      System* system() const                     { return toSystem(parent()->parent()); }
       qreal x() const                            { return ipos().x();         }
       void setX(qreal v)                         { rxpos() = v;               }
 

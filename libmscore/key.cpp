@@ -40,17 +40,14 @@ KeySigEvent::KeySigEvent(const KeySigEvent& k)
 
 void KeySigEvent::enforceLimits()
       {
-      const char* msg = 0;
       if (_key < Key::MIN) {
             _key = Key::MIN;
-            msg = "key < -7";
+            qDebug("key < -7");
             }
       else if (_key > Key::MAX) {
             _key = Key::MAX;
-            msg = "key > 7";
+            qDebug("key > 7");
             }
-      if (msg)
-            qDebug("KeySigEvent: %s", msg);
       }
 
 //---------------------------------------------------------

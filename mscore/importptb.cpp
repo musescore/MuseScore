@@ -21,6 +21,7 @@
 #include <libmscore/rehearsalmark.h>
 #include <libmscore/bracketItem.h>
 #include <libmscore/box.h>
+#include <libmscore/palmmute.h>
 
 namespace Ms {
 
@@ -550,6 +551,48 @@ std::vector<int> PowerTab::getStaffMap(ptSection& sec)
       return result;
       }
 
+//---------------------------------------------------------
+//   addPalmMate
+//---------------------------------------------------------
+
+void PowerTab::addPalmMute(Chord* chord)
+      {
+      int track = chord->track();
+	while (int(_palmMutes.size()) < track + 1)
+		_palmMutes.push_back(0);
+
+	if (_palmMutes[track]) {
+		PalmMute* pm = _palmMutes[track];
+		Chord* lastChord = toChord(pm->endCR());
+		if (lastChord == chord)
+			return;
+            //
+            // extend the current palm mute or start a new one
+            //
+            int tick = chord->segment()->tick();
+		if (pm->tick2() < tick)
+                  _palmMutes[track] = 0;
+            else {
+                  pm->setTick2(chord->tick() + chord->actualTicks());
+			pm->setEndElement(chord);
+		      }
+
+	      }
+	if (!_palmMutes[track]) {
+		PalmMute* pm = new PalmMute(score);
+		_palmMutes[track] = pm;
+            Segment* segment = chord->segment();
+            int tick = segment->tick();
+
+		pm->setTick(tick);
+		pm->setTick2(tick + chord->actualTicks());
+		pm->setTrack(track);
+		pm->setTrack2(track);
+		pm->setStartElement(chord);
+		pm->setEndElement(chord);
+		score->addElement(pm);
+	      }
+      }
 
 void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::vector<Note*>& tiedNotes)
       {
@@ -594,11 +637,15 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
 
                   }
             else {
-                  auto chord = new Chord(score);
+                  Chord* chord = new Chord(score);
                   cr = chord;
-                  if (beat->palmMute) {
-//TODO-ws                        chord->setPalmMute(true);
-                        }
+                  chord->setTrack(staff * VOICES);
+                  chord->setDuration(l);
+                  chord->setDurationType(d);
+                  segment->add(chord);
+
+                  if (beat->palmMute)
+                        addPalmMute(chord);
                   if (beat->accent) {
                         auto accent = new Articulation(score);
                         accent->setSymId(SymId::articAccentAbove);
@@ -609,10 +656,6 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                         st->setSymId(SymId::articStaccatoAbove);
                         chord->add(st);
                         }
-                  chord->setTrack(staff * VOICES);
-                  chord->setDuration(l);
-                  chord->setDurationType(d);
-                  segment->add(chord);
                   bool has_hammer = false;
                   for (auto n : beat->notes) {
                         auto note = new Note(score);

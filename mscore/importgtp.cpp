@@ -901,6 +901,8 @@ void GuitarPro::createMeasures()
       {
       int tick = 0;
       Fraction ts;
+      qDebug("measures %d bars.size %d", measures, bars.size());
+
 //      for (int i = 0; i < measures; ++i) {
       for (int i = 0; i < bars.size(); ++i) {   // ?? (ws)
             Fraction nts = bars[i].timesig;
@@ -2418,6 +2420,7 @@ bool GuitarPro3::read(QFile* fp)
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
+                                    toChord(cr)->add(note);
                                     if (vibrato)
                                           addVibrato(note);
                                     if (dotted) {
@@ -2428,7 +2431,6 @@ bool GuitarPro3::read(QFile* fp)
                                           dot->setVisible(true);
                                           note->add(dot);
                                           }
-                                    toChord(cr)->add(note);
                                     hasSlur = (readNote(6-i, note) || hasSlur);
                                     note->setTpcFromPitch();
                                     }

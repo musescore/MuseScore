@@ -886,9 +886,10 @@ bool GuitarPro5::read(QFile* fp)
                   if (segment->segmentType() != SegmentType::ChordRest)
 			      continue;
                   bool br = false;
-			Chord* cr = toChord(segment->cr(n->track()));
-			if (cr) {
-			      for (auto nt : cr->notes()) {
+			ChordRest* cr = toChordRest(segment->cr(n->track()));
+			if (cr && cr->isChord()) {
+                        Chord* c = toChord(cr);
+			      for (auto nt : c->notes()) {
 				      if (nt->string() == n->string()) {
                                     for (auto e : nt->el())
 						      if (e->isChordLine()) {

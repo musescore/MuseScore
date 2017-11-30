@@ -17,6 +17,8 @@
 
 namespace Ms {
 
+class PalmMute;
+
 class PowerTab {
             QFile*                  _file;
             MasterScore*            score;
@@ -344,6 +346,10 @@ class PowerTab {
             char              lastPart{ 0 };
 
             ptSection*        cur_section;
+
+	      std::vector<PalmMute*> _palmMutes;
+            void addPalmMute(Chord*);
+
       public:
             PowerTab(QFile* f, MasterScore* s) : _file(f), score(s) {}
             Score::FileError read();

@@ -799,8 +799,7 @@ bool GuitarPro4::read(QFile* fp)
                   segment->add(s);
                   }
 
-			std::vector<Tuplet*> tuplets(staves);
-            //Tuplet* tuplets[staves];
+            std::vector<Tuplet*> tuplets(staves);
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx)
                   tuplets[staffIdx] = 0;
 
@@ -809,7 +808,9 @@ bool GuitarPro4::read(QFile* fp)
                   int tick  = measure->tick();
                   int beats = readInt();
                   int track = staffIdx * VOICES;
-				  if (!f->isReadable()) break;
+
+                  if (!f->isReadable())
+                        break;
                   for (int beat = 0; beat < beats; ++beat) {
                         slide = -1;
                         if (slides.contains(track))
@@ -824,16 +825,18 @@ bool GuitarPro4::read(QFile* fp)
                         int tuple = 0;
 				if (beatBits & BEAT_TUPLET) {
                               tuple = readInt();
+#if 0 // TODO: ws
 					if (tupleKind[staffIdx])
                                     --tupleKind[staffIdx];
                               else {
                                     tupleKind[staffIdx] = tuple - 1;
 						curTuple = tuple;
 						}
+#endif
 				      }
                         else if (tupleKind[staffIdx]) {
-                              tuple = curTuple;
-					--tupleKind[staffIdx];
+//TODO: ws                              tuple = curTuple;
+//					--tupleKind[staffIdx];
 					}
                         Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
                         if (beatBits & BEAT_CHORD) {
@@ -918,7 +921,6 @@ bool GuitarPro4::read(QFile* fp)
                                     tuplets[staffIdx] = tuplet;
                                     setTuplet(tuplet, tuple);
                                     tuplet->setParent(measure);
-
                                     }
                               tuplet->setTrack(track);
                               tuplet->setBaseLen(l);
@@ -926,7 +928,8 @@ bool GuitarPro4::read(QFile* fp)
                               cr->setTuplet(tuplet);
                               tuplet->add(cr);
                               }
-						else tuplets[staffIdx] = 0;
+                        else
+                              tuplets[staffIdx] = 0;  // needed?
 
                         cr->setDuration(l);
                         if (cr->isRest() && (pause == 0 || l >= measure->len())) {
@@ -1064,7 +1067,6 @@ if (cr && cr->isChord()) {    // ws
             }
 
       for (auto n : slideList) {
-//          Note* next = nullptr;
 		auto segment = n->chord()->segment();
 		auto measure = segment->measure();
 		int segment_counter{ 0 };
@@ -1072,12 +1074,13 @@ if (cr && cr->isChord()) {    // ws
                   if (!segment->isChordRestType())
                         continue;
                   bool br = false;
-			Chord* cr = toChord(segment->cr(n->track()));
-                  if (cr) {
+			ChordRest* cr = segment->cr(n->track());
+                  if (cr && cr->isChord()) {
+                        Chord* c = toChord(cr);
                         ++segment_counter;
 				if (segment_counter > 2)
 				      break;
-                        for (auto nt : cr->notes()) {
+                        for (auto nt : c->notes()) {
                               if (nt->string() == n->string()) {
                                     for (auto e : nt->el()) {
 						      if (e->isChordLine()) {
