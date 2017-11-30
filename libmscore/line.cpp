@@ -595,7 +595,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     x = maxRight; // cr->width()
                                     }
                              }
-                        else if (type() == ElementType::HAIRPIN || type() == ElementType::TRILL
+                        else if (type() == ElementType::HAIRPIN || type() == ElementType::TRILL || type() == ElementType::VIBRATO
                                     || type() == ElementType::TEXTLINE || type() == ElementType::LYRICSLINE) {
                               // (for LYRICSLINE, this is hyphen; melisma line is handled above)
                               // lay out to just before next chordrest on this staff, or barline

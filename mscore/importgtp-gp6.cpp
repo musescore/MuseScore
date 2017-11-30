@@ -1253,14 +1253,10 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                                   addPop(note);
                                                             }
                                                       else if (!argument.compare("VibratoWTremBar")) {
-                                                            Articulation* art = new Articulation(note->score());
                                                             if (!currentProperty.firstChild().toElement().text().compare("Slight"))
-                                                                  art->setSymId(SymId::wiggleSawtooth);
+                                                                  addVibrato(note, Vibrato::Type::VIBRATO_SAWTOOTH);
                                                             else
-                                                                  art->setSymId(SymId::wiggleSawtoothWide);
-                                                            art->setAnchor(ArticulationAnchor::TOP_STAFF);
-                                                            if (!note->score()->addArticulation(note, art))
-                                                                  delete art;
+                                                                  addVibrato(note, Vibrato::Type::VIBRATO_SAWTOOTH_WIDE);
                                                             }
                                                       else if (!argument.compare("BarreFret")) {
                                                             // target can be anywhere from 1 to 36
@@ -1433,17 +1429,10 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 }
                                           QDomNode noteVibrato = currentNote.parentNode().firstChildElement("Vibrato");
                                           if (!noteVibrato.isNull()) {
-                                                // note->vibrato = true; // TODO
-#if 0
-                                                Articulation* art = new Articulation(note->score());
                                                 if (!noteVibrato.toElement().text().compare("Slight"))
-                                                      art->setSymId(SymId::wiggleVibratoLargeFaster);
+                                                      addVibrato(note, Vibrato::Type::GUITAR_VIBRATO);
                                                 else
-                                                      art->setSymId(SymId::wiggleVibratoLargeSlowest);
-                                                art->setAnchor(ArticulationAnchor::TOP_STAFF);
-                                                if (!note->score()->addArticulation(note, art))
-                                                      delete art;
-#endif
+                                                      addVibrato(note, Vibrato::Type::GUITAR_VIBRATO_WIDE);
                                                 }
 
                                           if (cr && (cr->type() == ElementType::CHORD) && slide > 0)

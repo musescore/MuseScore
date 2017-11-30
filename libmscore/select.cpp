@@ -342,7 +342,7 @@ bool SelectionFilter::canSelect(const Element* e) const
       {
       if (e->isDynamic() || e->isHairpin())
           return isFiltered(SelectionFilterType::DYNAMIC);
-      if (e->isArticulation() || e->isTrill())
+      if (e->isArticulation() || e->isTrill() || e->isVibrato())
           return isFiltered(SelectionFilterType::ARTICULATION);
       if (e->type() == ElementType::LYRICS)
           return isFiltered(SelectionFilterType::LYRICS);
@@ -798,6 +798,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   case ElementType::HAIRPIN_SEGMENT:
                   case ElementType::OTTAVA_SEGMENT:
                   case ElementType::TRILL_SEGMENT:
+                  case ElementType::VIBRATO_SEGMENT:
                   case ElementType::TEXTLINE_SEGMENT:
                   case ElementType::VOLTA_SEGMENT:
                   case ElementType::PEDAL_SEGMENT:

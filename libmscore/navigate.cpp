@@ -570,6 +570,7 @@ Element* Score::nextElement()
                   case ElementType::HAIRPIN_SEGMENT:
                   case ElementType::OTTAVA_SEGMENT:
                   case ElementType::TRILL_SEGMENT:
+                  case ElementType::VIBRATO_SEGMENT:
                   case ElementType::VOLTA_SEGMENT:
                   case ElementType::PEDAL_SEGMENT: {
                         SpannerSegment* s = static_cast<SpannerSegment*>(e);
@@ -658,6 +659,7 @@ Element* Score::prevElement()
                   case ElementType::HAIRPIN_SEGMENT:
                   case ElementType::OTTAVA_SEGMENT:
                   case ElementType::TRILL_SEGMENT:
+                  case ElementType::VIBRATO_SEGMENT:
                   case ElementType::VOLTA_SEGMENT:
                   case ElementType::PEDAL_SEGMENT: {
                         SpannerSegment* s = static_cast<SpannerSegment*>(e);

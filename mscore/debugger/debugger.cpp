@@ -641,7 +641,6 @@ void Debugger::updateElement(Element* el)
                   case ElementType::TREMOLO:          ew = new TremoloView;         break;
                   case ElementType::OTTAVA:           ew = new OttavaView;          break;
                   case ElementType::LET_RING_SEGMENT:
-                  case ElementType::VIBRATO_SEGMENT:
                   case ElementType::OTTAVA_SEGMENT:   ew = new TextLineSegmentView; break;
                   case ElementType::SLUR_SEGMENT:     ew = new SlurSegmentView;     break;
                   case ElementType::TIE_SEGMENT:      ew = new TieSegmentView;     break;
@@ -667,6 +666,7 @@ void Debugger::updateElement(Element* el)
                         ew = new HarmonyView;
                         break;
                   case ElementType::TRILL_SEGMENT:
+                  case ElementType::VIBRATO_SEGMENT:
                   case ElementType::HAIRPIN_SEGMENT:
                         ew = new LineSegmentView; break;
                         break;

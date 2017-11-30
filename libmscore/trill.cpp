@@ -30,20 +30,11 @@ const TrillTableItem trillTable[] = {
       { Trill::Type::TRILL_LINE,      "trill",      QT_TRANSLATE_NOOP("trillType", "Trill line")          },
       { Trill::Type::UPPRALL_LINE,    "upprall",    QT_TRANSLATE_NOOP("trillType", "Upprall line")        },
       { Trill::Type::DOWNPRALL_LINE,  "downprall",  QT_TRANSLATE_NOOP("trillType", "Downprall line")      },
-      { Trill::Type::PRALLPRALL_LINE, "prallprall", QT_TRANSLATE_NOOP("trillType", "Prallprall line")     },
-      { Trill::Type::GUITAR_VIBRATO,         "guitarVibrato",         QT_TRANSLATE_NOOP("trillType", "Left hand vibrato (slight)") },
-      { Trill::Type::GUITAR_VIBRATO_WIDE,    "guitarVibratoWide",     QT_TRANSLATE_NOOP("trillType", "Left hand vibrator (wide)")  },
-      { Trill::Type::VIBRATO_SAWTOOTH,       "vibratoSawtooth",       QT_TRANSLATE_NOOP("trillType", "Vibrato with tremolo bar (slight)")  },
-      { Trill::Type::VIBRATO_SAWTOOTH_WIDE,  "vibratoSawtoothWide",   QT_TRANSLATE_NOOP("trillType", "Vibrato with tremolo bar (wide)")   }
+      { Trill::Type::PRALLPRALL_LINE, "prallprall", QT_TRANSLATE_NOOP("trillType", "Prallprall line")     }
       };
 
 int trillTableSize() {
       return sizeof(trillTable)/sizeof(TrillTableItem);
-      }
-
-bool Trill::isVibrato()
-      {
-      return _trillType >= Trill::Type::GUITAR_VIBRATO;
       }
 
 //---------------------------------------------------------
@@ -160,18 +151,6 @@ void TrillSegment::layout()
                   case Trill::Type::DOWNPRALL_LINE:
                               symbolLine(SymId::ornamentLeftVerticalStroke,
                                  SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
-                        break;
-                  case Trill::Type::GUITAR_VIBRATO:
-                        symbolLine(SymId::guitarVibratoStroke, SymId::guitarVibratoStroke);
-                        break;
-                  case Trill::Type::GUITAR_VIBRATO_WIDE:
-                        symbolLine(SymId::guitarWideVibratoStroke, SymId::guitarWideVibratoStroke);
-                        break;
-                  case Trill::Type::VIBRATO_SAWTOOTH:
-                        symbolLine(SymId::wiggleSawtooth, SymId::wiggleSawtooth);
-                        break;
-                  case Trill::Type::VIBRATO_SAWTOOTH_WIDE:
-                        symbolLine(SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide);
                         break;
                   }
             }

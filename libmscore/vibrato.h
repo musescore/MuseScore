@@ -37,15 +37,10 @@ class VibratoSegment : public LineSegment {
       virtual ElementType type() const override      { return ElementType::VIBRATO_SEGMENT; }
       virtual VibratoSegment* clone() const override { return new VibratoSegment(*this); }
       virtual void draw(QPainter*) const override;
-      virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&) override;
       virtual void layout() override;
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
-      virtual void add(Element*) override;
-      virtual void remove(Element*) override;
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all) override;
       Shape shape() const override;
 
       std::vector<SymId> symbols() const           { return _symbols; }
@@ -59,13 +54,10 @@ class VibratoSegment : public LineSegment {
 class Vibrato : public SLine {
    public:
       enum class Type : char {
-            TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE,
-            GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH_NARROW, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE
+            GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE
             };
    private:
       Type _vibratoType;
-      Accidental* _accidental;
-      MScore::OrnamentStyle _ornamentStyle; // for use in ornaments such as trill
       bool _playArticulation;
 
    public:
@@ -76,8 +68,6 @@ class Vibrato : public SLine {
 
       virtual void layout() override;
       virtual LineSegment* createLineSegment() override;
-      virtual void add(Element*) override;
-      virtual void remove(Element*) override;
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
 
@@ -85,17 +75,12 @@ class Vibrato : public SLine {
       void undoSetVibratoType(Type val);
       void setVibratoType(Type tt)        { _vibratoType = tt; }
       Type vibratoType() const              { return _vibratoType; }
-      void setOrnamentStyle(MScore::OrnamentStyle val) { _ornamentStyle = val;}
-      MScore::OrnamentStyle ornamentStyle() const { return _ornamentStyle;}
       void setPlayArticulation(bool val)  { _playArticulation = val;}
       bool playArticulation() const       { return _playArticulation; }
       QString vibratoTypeName() const;
       QString vibratoTypeUserName() const;
-      Accidental* accidental() const      { return _accidental; }
-      void setAccidental(Accidental* a)   { _accidental = a; }
 
       Segment* segment() const          { return (Segment*)parent(); }
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;

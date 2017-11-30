@@ -1655,6 +1655,7 @@ void Score::deleteItem(Element* el)
             case ElementType::OTTAVA_SEGMENT:
             case ElementType::HAIRPIN_SEGMENT:
             case ElementType::TRILL_SEGMENT:
+            case ElementType::VIBRATO_SEGMENT:
             case ElementType::TEXTLINE_SEGMENT:
             case ElementType::VOLTA_SEGMENT:
             case ElementType::SLUR_SEGMENT:
@@ -3836,6 +3837,7 @@ void Score::undoAddElement(Element* element)
          && et != ElementType::HAIRPIN
          && et != ElementType::OTTAVA
          && et != ElementType::TRILL
+         && et != ElementType::VIBRATO
          && et != ElementType::TEXTLINE
          && et != ElementType::PEDAL
          && et != ElementType::BREATH
@@ -3876,6 +3878,7 @@ void Score::undoAddElement(Element* element)
                 || element->isHairpin()
                 || element->isOttava()
                 || element->isTrill()
+                || element->isVibrato()
                 || element->isTextLine()
                 || element->isPedal())) {
                   tr.append(staffIdx * VOICES);
@@ -4009,6 +4012,7 @@ void Score::undoAddElement(Element* element)
                      || element->isHairpin()
                      || element->isOttava()
                      || element->isTrill()
+                     || element->isVibrato()
                      || element->isTextLine()
                      || element->isPedal()) {
                         Spanner* sp   = static_cast<Spanner*>(element);
