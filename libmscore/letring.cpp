@@ -31,7 +31,7 @@ void LetRingSegment::layout()
             setUserOff(QPointF());
       TextLineBaseSegment::layout();
       if (parent()) {     // for palette
-            rypos() += score()->styleP(letRing()->placeBelow() ? StyleIdx::pedalPosBelow : StyleIdx::pedalPosAbove);
+            rypos() += score()->styleP(letRing()->placeBelow() ? StyleIdx::letRingPosBelow : StyleIdx::letRingPosAbove);
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
                   Shape s1 = shape().translated(pos());
@@ -101,7 +101,7 @@ LineSegment* LetRing::createLineSegment()
 
 void LetRing::setYoff(qreal val)
       {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? StyleIdx::pedalPosAbove : StyleIdx::pedalPosBelow);
+      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? StyleIdx::letRingPosAbove : StyleIdx::letRingPosBelow);
       }
 
 //---------------------------------------------------------

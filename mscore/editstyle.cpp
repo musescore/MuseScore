@@ -211,6 +211,10 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::trillPosAbove,           false, trillLinePosAbove,       resetTrillLinePosAbove   },
       { StyleIdx::trillPosBelow,           false, trillLinePosBelow,       resetTrillLinePosBelow   },
 
+      { StyleIdx::vibratoPlacement,        false, vibratoLinePlacement,      resetVibratoLinePlacement  },
+      { StyleIdx::vibratoPosAbove,         false, vibratoLinePosAbove,       resetVibratoLinePosAbove   },
+      { StyleIdx::vibratoPosBelow,         false, vibratoLinePosBelow,       resetVibratoLinePosBelow   },
+
       { StyleIdx::harmonyY,                false, harmonyY,                0 },
       { StyleIdx::harmonyFretDist,         false, harmonyFretDist,         0 },
       { StyleIdx::minHarmonyDistance,      false, minHarmonyDistance,      0 },
@@ -344,7 +348,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       for (QComboBox* cb : std::vector<QComboBox*> {
             lyricsPlacement, textLinePlacement, hairpinPlacement, pedalLinePlacement,
-            trillLinePlacement, dynamicsPlacement, tempoTextPlacement, rehearsalMarkPlacement
+            trillLinePlacement, vibratoLinePlacement, dynamicsPlacement, tempoTextPlacement, rehearsalMarkPlacement
             }) {
             cb->clear();
             cb->addItem(tr("Above"), int(Element::Placement::ABOVE));
