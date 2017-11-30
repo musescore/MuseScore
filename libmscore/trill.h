@@ -61,7 +61,6 @@ class Trill : public SLine {
    public:
       enum class Type : char {
             TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE,
-            GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE
             };
 
    private:
@@ -96,7 +95,6 @@ class Trill : public SLine {
       QString trillTypeUserName() const;
       Accidental* accidental() const      { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a; }
-      bool isVibrato();
 
       Segment* segment() const          { return (Segment*)parent(); }
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;

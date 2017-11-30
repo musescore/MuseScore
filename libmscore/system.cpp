@@ -690,6 +690,7 @@ void System::add(Element* el)
             case ElementType::HAIRPIN_SEGMENT:
             case ElementType::OTTAVA_SEGMENT:
             case ElementType::TRILL_SEGMENT:
+            case ElementType::VIBRATO_SEGMENT:
             case ElementType::VOLTA_SEGMENT:
             case ElementType::SLUR_SEGMENT:
             case ElementType::TIE_SEGMENT:
@@ -697,7 +698,6 @@ void System::add(Element* el)
             case ElementType::LYRICSLINE_SEGMENT:
             case ElementType::GLISSANDO_SEGMENT:
             case ElementType::LET_RING_SEGMENT:
-            case ElementType::VIBRATO_SEGMENT:
             case ElementType::PALM_MUTE_SEGMENT:
                   {
                   SpannerSegment* ss = static_cast<SpannerSegment*>(el);
@@ -757,6 +757,7 @@ void System::remove(Element* el)
             case ElementType::HAIRPIN_SEGMENT:
             case ElementType::OTTAVA_SEGMENT:
             case ElementType::TRILL_SEGMENT:
+            case ElementType::VIBRATO_SEGMENT:
             case ElementType::VOLTA_SEGMENT:
             case ElementType::SLUR_SEGMENT:
             case ElementType::TIE_SEGMENT:

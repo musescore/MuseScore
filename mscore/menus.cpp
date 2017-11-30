@@ -1268,9 +1268,12 @@ Palette* MuseScore::newLinesPalette(PaletteType t)
             letRing->setLen(w);
             sp->append(letRing, QT_TRANSLATE_NOOP("Palette", "Let Ring"));
 
-            Vibrato* vibrato = new Vibrato(gscore);
-            vibrato->setLen(w);
-            sp->append(vibrato, QT_TRANSLATE_NOOP("Palette", "Vibrato"));
+            for (int i = 0; i < vibratoTableSize(); i++) {
+                  Vibrato* vibrato = new Vibrato(gscore);
+                  vibrato->setVibratoType(vibratoTable[i].type);
+                  vibrato->setLen(w);
+                  sp->append(vibrato, qApp->translate("vibratoType", vibratoTable[i].userName.toUtf8().constData()));
+                  }
 
             PalmMute* pm = new PalmMute(gscore);
             pm->setLen(w);

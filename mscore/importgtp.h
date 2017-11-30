@@ -34,6 +34,7 @@
 #include <libmscore/keysig.h>
 #include <libmscore/hairpin.h>
 #include <libmscore/ottava.h>
+#include <libmscore/vibrato.h>
 #include <libmscore/drumset.h>
 
 namespace Ms {
@@ -243,7 +244,7 @@ class GuitarPro {
       Text* addTextToNote(QString, Align, Note*);
       void addPalmMute(Note*);
       void addLetRing(Note*);
-      void addVibrato(Note*);
+      void addVibrato(Note*, Vibrato::Type type = Vibrato::Type::GUITAR_VIBRATO);
       void addTap(Note*);
       void addSlap(Note*);
       void addPop(Note*);

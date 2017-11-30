@@ -453,7 +453,7 @@ void GuitarPro::addLetRing(Note* note)
 //   addVibrato
 //---------------------------------------------------------
 
-void GuitarPro::addVibrato(Note* note)
+void GuitarPro::addVibrato(Note* note, Vibrato::Type type)
       {
 	int track = note->track();
 	while (int(_vibratos.size()) < track + 1)
@@ -466,7 +466,7 @@ void GuitarPro::addVibrato(Note* note)
 		if (lastChord == note->chord())
 			return;
             //
-            // extend the current "let ring" or start a new one
+            // extend the current "vibrato" or start a new one
             //
             int tick = note->chord()->segment()->tick();
 		if (v->tick2() < tick)
@@ -478,6 +478,7 @@ void GuitarPro::addVibrato(Note* note)
 	      }
 	if (!_vibratos[track]) {
 		Vibrato* v = new Vibrato(score);
+            v->setVibratoType(type);
 		_vibratos[track] = v;
             Segment* segment = chord->segment();
             int tick = segment->tick();

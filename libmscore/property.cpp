@@ -135,6 +135,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { P_ID::OTTAVA_TYPE,             "ottava_type",             false, "",                      P_TYPE::INT             },
       { P_ID::NUMBERS_ONLY,            "numbers_only",            false, "numbersOnly",           P_TYPE::BOOL            },
       { P_ID::TRILL_TYPE,              "trill_type",              false, "",                      P_TYPE::INT             },
+      { P_ID::VIBRATO_TYPE,            "vibrato_type",            false, "",                      P_TYPE::INT             },
       { P_ID::HAIRPIN_CIRCLEDTIP,      "hairpin_circledtip",      false, "hairpinCircledTip",     P_TYPE::BOOL            },
 
       { P_ID::HAIRPIN_TYPE,            "hairpin_type",            true,  "",                      P_TYPE::INT             },
