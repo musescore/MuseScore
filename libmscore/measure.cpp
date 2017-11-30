@@ -3372,8 +3372,10 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
 
       // fix segment layout
       Segment* s = seg->prevEnabled();
-      qreal x    = s->rxpos();
-      computeMinWidth(s, x, false);
+      if (s) {
+            qreal x    = s->rxpos();
+            computeMinWidth(s, x, false);
+            }
 
 #if 0
 #ifndef NDEBUG
