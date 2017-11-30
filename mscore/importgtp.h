@@ -187,7 +187,7 @@ class GuitarPro {
       static const int MAX_PITCH = 127;
       static const char* const errmsg[];
       int version;
-      int key;
+      int key { 0 };
 
 	Segment* last_segment   { nullptr };
 	Measure* last_measure   { nullptr };
