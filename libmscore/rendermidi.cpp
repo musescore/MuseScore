@@ -669,7 +669,7 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                   int idx = s->staff()->channel(s->tick(), 0);
                   int channel = s->part()->instrument(s->tick())->channel(idx)->channel;
 
-                  if (s->isPedal()) {
+                  if (s->isPedal() || s->isLetRing()) {
                         channelPedalEvents.insert({channel, std::vector<std::pair<int, bool>>()});
                         std::vector<std::pair<int, bool>> pedalEventList = channelPedalEvents.at(channel);
                         std::pair<int, bool> lastEvent;
