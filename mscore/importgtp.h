@@ -154,6 +154,7 @@ class GuitarPro {
       static const uchar NOTE_APPOGIATURA = 0x02;//1
 
       // beat bit masks
+      static const uchar BEAT_VIBRATO_TREMOLO = 0x02;
       static const uchar BEAT_FADE = 0x10;
       static const uchar BEAT_EFFECT = 0x20;
       static const uchar BEAT_TREMOLO = 0x04;
