@@ -462,19 +462,23 @@ void GuitarPro::addVibrato(Note* note, Vibrato::Type type)
       Chord* chord = note->chord();
 	if (_vibratos[track]) {
 		Vibrato* v      = _vibratos[track];
-		Chord* lastChord = toChord(v->endCR());
-		if (lastChord == note->chord())
-			return;
-            //
-            // extend the current "vibrato" or start a new one
-            //
-            int tick = note->chord()->segment()->tick();
-		if (v->tick2() < tick)
+            if (v->vibratoType() == type) {
+		      Chord* lastChord = toChord(v->endCR());
+                  if (lastChord == note->chord())
+			      return;
+                  //
+                  // extend the current "vibrato" or start a new one
+                  //
+                  int tick = note->chord()->segment()->tick();
+                  if (v->tick2() < tick)
+                        _vibratos[track] = 0;
+                  else {
+                        v->setTick2(chord->tick() + chord->actualTicks());
+                        v->setEndElement(chord);
+                        }
+                  }
+            else
                   _vibratos[track] = 0;
-            else {
-                  v->setTick2(chord->tick() + chord->actualTicks());
-			v->setEndElement(chord);
-		      }
 	      }
 	if (!_vibratos[track]) {
 		Vibrato* v = new Vibrato(score);
@@ -1004,6 +1008,9 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
             art->setSymId(SymId::stringsDownBow);
 		chord->add(art);
 	      }
+      else if (beatEffect == 7) {
+            addVibrato(chord->upNote(), Vibrato::Type::VIBRATO_SAWTOOTH);
+            }
       }
 
 #ifdef _MSC_VER

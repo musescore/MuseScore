@@ -95,6 +95,9 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
             int k = readUChar();
 		effects = k + effects * 100;// &effects;
 	      }
+      if (fxBits1 & BEAT_VIBRATO_TREMOLO) {
+            effects = 7 + effects * 100;
+            }
       if (fxBits2 & BEAT_TREMOLO)
             readTremoloBar(track, segment);       // readBend();
       if (fxBits2 & 0x01) { // Rasgueado effect
@@ -384,10 +387,9 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
       int rr = readChar();
       if (cr && cr->isChord()) {
             Chord* chord = toChord(cr);
-
-			do {
-				applyBeatEffects(chord, beatEffects % 100);
-			} while (beatEffects /= 100);
+            do {
+                  applyBeatEffects(chord, beatEffects % 100);
+            } while (beatEffects /= 100);
             if (rr == ARPEGGIO_DOWN)
                   chord->setStemDirection(Direction::DOWN);
             else if (rr == ARPEGGIO_UP)
