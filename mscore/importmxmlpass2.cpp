@@ -489,10 +489,14 @@ static Instrument createInstrument(const MusicXMLDrumInstrument& mxmlInstr)
       if (it) {
             // initialize from template with matching MusicXmlId
             instr = Instrument::fromTemplate(it);
+            // reset transpose, as it is determined later from MusicXML data
+            instr.setTranspose(Interval());
             }
       else {
             // set articulations to default (global articulations)
             instr.setArticulation(articulation);
+            // set default program
+            instr.channel(0)->program = mxmlInstr.midiProgram >= 0 ? mxmlInstr.midiProgram : 0;
             }
 
       // add / overrule with values read from MusicXML
@@ -531,6 +535,7 @@ static void setFirstInstrument(MxmlLogger* logger, const QXmlStreamReader* const
             Instrument instr = createInstrument(mxmlInstr);
             part->setInstrument(instr);
             if (mxmlInstr.midiChannel >= 0) part->setMidiChannel(mxmlInstr.midiChannel, mxmlInstr.midiPort);
+            // note: setMidiProgram() does more than simply setting the MIDI program
             if (mxmlInstr.midiProgram >= 0) part->setMidiProgram(mxmlInstr.midiProgram);
             }
       else
@@ -608,34 +613,34 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
                          mustInsert);
                    */
                   if (mustInsert) {
-                        int staff = score->staffIdx(part);
-                        int track = staff * VOICES;
+                        const int staff = score->staffIdx(part);
+                        const int track = staff * VOICES;
+                        const int tick = f.ticks();
                         //qDebug("instrument change: tick %s (%d) track %d instr '%s'",
-                        //       qPrintable(f.print()), f.ticks(), track, qPrintable(instrId));
-                        Segment* segment = score->tick2segment(f.ticks(), true, SegmentType::ChordRest, true);
+                        //       qPrintable(f.print()), tick, track, qPrintable(instrId));
+                        auto segment = score->tick2segment(tick, true, SegmentType::ChordRest, true);
                         if (!segment)
                               logger->logError(QString("segment for instrument change at tick %1 not found")
-                                               .arg(f.ticks()), xmlreader);
+                                               .arg(tick), xmlreader);
                         else if (!mxmlDrumset.contains(instrId))
                               logger->logError(QString("changed instrument '%1' at tick %2 not found in part '%3'")
-                                               .arg(instrId).arg(f.ticks()).arg(partId), xmlreader);
+                                               .arg(instrId).arg(tick).arg(partId), xmlreader);
                         else {
                               MusicXMLDrumInstrument mxmlInstr = mxmlDrumset.value(instrId);
                               Instrument instr = createInstrument(mxmlInstr);
                               //qDebug("instr %p", &instr);
-                              instr.channel(0)->program = mxmlInstr.midiProgram;
-                              instr.setTrackName(mxmlInstr.name);
+
                               InstrumentChange* ic = new InstrumentChange(instr, score);
                               ic->setTrack(track);
+
                               // if there is already a staff text at this tick / track,
-                              // delete it and use its text here instead of "Instrument"
+                              // delete it and use its text here instead of "Instrument change"
                               QString text = findDeleteStaffText(segment, track);
                               ic->setXmlText(text.isEmpty() ? "Instrument change" : text);
                               segment->add(ic); // note: includes part::setInstrument(instr);
 
-                              // TODO: check if required
-                              int key = part->instruments()->rbegin()->first;
-                              part->setMidiChannel(mxmlInstr.midiChannel, mxmlInstr.midiPort, key);
+                              // setMidiChannel() depends on setInstrument() already been done
+                              if (mxmlInstr.midiChannel >= 0) part->setMidiChannel(mxmlInstr.midiChannel, mxmlInstr.midiPort, tick);
                               }
                         }
                   prevInstrId = instrId;
