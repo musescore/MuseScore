@@ -49,6 +49,7 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase {
       TimeDialog(QWidget* parent = 0);
       bool dirty() const { return _dirty; }
       void save();
+      Palette* getPalette() { return sp; }
       };
 }
 

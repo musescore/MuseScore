@@ -47,6 +47,7 @@ Startcenter::Startcenter()
       setBackgroundRole(QPalette::Base);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setWindowModality(Qt::ApplicationModal);
+      this->setFocusPolicy(Qt::StrongFocus);
       connect(recentPage,  &ScoreBrowser::scoreActivated, this, &Startcenter::loadScore);
       connect(openScore, SIGNAL(clicked()), this, SLOT(openScoreClicked()));
       connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
@@ -148,6 +149,15 @@ void Startcenter::writeSettings()
 void Startcenter::readSettings()
       {
       MuseScore::restoreGeometry(this);
+      }
+
+//---------------------------------------------------------
+//   newScoreOnEnter
+//---------------------------------------------------------
+
+void Startcenter::newScoreOnEnter()
+      {
+      newScore();
       }
 
 #if 0

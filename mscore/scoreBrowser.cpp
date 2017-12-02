@@ -14,6 +14,7 @@
 #include "musescore.h"
 #include "icons.h"
 #include "libmscore/score.h"
+#include "startcenter.h"
 
 namespace Ms {
 
@@ -65,6 +66,7 @@ ScoreBrowser::ScoreBrowser(QWidget* parent)
       _noMatchedScoresLabel = new QLabel(tr("There are no templates matching the current search."));
       _noMatchedScoresLabel->setHidden(true);
       scoreList->layout()->addWidget(_noMatchedScoresLabel);
+      setFocusPolicy(Qt::StrongFocus);
       connect(preview, SIGNAL(doubleClicked(QString)), SIGNAL(scoreActivated(QString)));
       if (!_showPreview)
             preview->setVisible(false);
@@ -94,8 +96,9 @@ ScoreListWidget* ScoreBrowser::createScoreList()
       sl->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
       sl->setLayoutMode(QListView::SinglePass);
       sl->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+      sl->setAcceptDrops(true);
       if (!_showPreview)
-            sl->setSelectionMode(QAbstractItemView::NoSelection);
+            sl->setSelectionMode(QAbstractItemView::SingleSelection);
 
       connect(sl, SIGNAL(itemClicked(QListWidgetItem*)),   this, SLOT(scoreChanged(QListWidgetItem*)), Qt::QueuedConnection);
       connect(sl, SIGNAL(itemActivated(QListWidgetItem*)), SLOT(setScoreActivated(QListWidgetItem*)));
@@ -177,6 +180,7 @@ void ScoreBrowser::setScores(QFileInfoList& s)
       scoreLists.clear();
 
       QVBoxLayout* l = static_cast<QVBoxLayout*>(scoreList->layout());
+      scoreList->setAcceptDrops(true);
       while (l->count())
             l->removeItem(l->itemAt(0));
 
@@ -252,9 +256,13 @@ void ScoreBrowser::selectFirst()
       ScoreListWidget* w = scoreLists.front();
       if (w->count() == 0)
             return;
+      for (ScoreListWidget* s : scoreLists) {
+            s->setCurrentRow(-1);
+            }
       ScoreItem* item = static_cast<ScoreItem*>(w->item(0));
       w->setCurrentItem(item);
       preview->setScore(item->info());
+      emit scoreSelected(item->info().filePath());
       }
 
 //---------------------------------------------------------
@@ -341,6 +349,183 @@ void ScoreBrowser::setScoreActivated(QListWidgetItem* val)
       {
       ScoreItem* item = static_cast<ScoreItem*>(val);
       emit scoreActivated(item->info().filePath());
+      }
+
+//---------------------------------------------------------
+//   focusNextPrevChild
+//---------------------------------------------------------
+
+bool ScoreBrowser::focusNextPrevChild(bool next)
+      {
+      Q_UNUSED(next);
+      return false; // disable tab action during template navigation
+      }
+
+void ScoreListWidget::keyPressEvent(QKeyEvent* event)
+      {
+      QObject* parent = this->parent()->parent();
+      ScoreBrowser* sb = static_cast<ScoreBrowser*>(parent);
+      sb->keyPressEvent(event);
+      int idx = mscore->getNewWizard()->getTemplateFileBrowser()->getScoreLists().indexOf(this);
+      if (idx == 7)
+            setCurrentRow(-1);
+      mscore->getNewWizard()->getTemplateFileBrowser()->keyPressEvent(event);
+      }
+
+//---------------------------------------------------------
+//   keyPressEvent
+//---------------------------------------------------------
+
+void ScoreBrowser::keyPressEvent(QKeyEvent* event)
+      {
+      QWidget* wFocus = QApplication::focusWidget();
+      if (wFocus == 0)
+            return;
+      const char* classname = wFocus->metaObject()->className();
+      if (strcmp(classname, "Ms::ScoreBrowser") != 0) {
+            this->setFocus();
+            //return;
+            }
+      ScoreBrowser* sc = static_cast<ScoreBrowser*>(wFocus);
+      if (!sc)
+            return;
+      int s = this->scoreLists.size();
+      if (s == 1) { // if focus is on start center
+          if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+                Startcenter* sc = mscore->getStartCenter();
+                sc->newScoreOnEnter();
+                return;
+                }
+      }
+      ScoreListWidget* currentWidget = scoreLists.front();
+      int index = -1, idx = -1;
+      for (int i = 0; i < scoreLists.size(); i++) {
+            ScoreListWidget* w = scoreLists[i];
+            if (w->currentRow() != -1) {
+                  currentWidget = w;
+                  idx = i;
+                  index = w->currentRow();
+            }
+      }
+      ScoreItem* current = static_cast<ScoreItem*>(currentWidget->currentItem());
+      if (event->key() == Qt::Key_Right) {
+            ScoreItem* item;
+            if (index == -1) {
+                  item = static_cast<ScoreItem*>(currentWidget->item(0));
+                  currentWidget->setCurrentItem(item);
+                  currentWidget->setCurrentRow(0);
+                  }
+            else if (index < currentWidget->count() - 1){
+                  item = static_cast<ScoreItem*>(currentWidget->item(index + 1));
+                  currentWidget->setCurrentItem(item);
+                  currentWidget->setCurrentRow(index + 1);
+                  }
+            else {
+                  if (idx < scoreLists.size() - 1) {
+                        ScoreListWidget* next = scoreLists[idx + 1];
+                        item = static_cast<ScoreItem*>(next->item(0));
+                        currentWidget->setCurrentRow(-1);
+                        next->setCurrentItem(item);
+                        next->setCurrentRow(0);
+                        }
+                  else {
+                        item = static_cast<ScoreItem*>(scoreLists.front()->item(0));
+                        currentWidget->setCurrentRow(-1);
+                        scoreLists.front()->setCurrentItem(item);
+                        scoreLists.front()->setCurrentRow(0);
+                        }
+                  }
+
+
+            preview->setScore(item->info());
+            emit scoreSelected(item->info().filePath());
+            return;
+            }
+      else if (event->key() == Qt::Key_Left) {
+            ScoreItem* item;
+            if (index == -1) {
+                  item = static_cast<ScoreItem*>(currentWidget->item(0));
+                  currentWidget->setCurrentItem(item);
+                  currentWidget->setCurrentRow(0);
+                  }
+            else if (index > 0) {
+                  item = static_cast<ScoreItem*>(currentWidget->item(index - 1));
+                  currentWidget->setCurrentItem(item);
+                  currentWidget->setCurrentRow(index - 1);
+                  }
+            else {
+                  if (idx > 0) {
+                        ScoreListWidget* prev = scoreLists[idx - 1];
+                        item = static_cast<ScoreItem*>(prev->item(prev->count() - 1));
+                        currentWidget->setCurrentRow(-1);
+                        prev->setCurrentItem(item);
+                        prev->setCurrentRow(prev->count() - 1);
+                        currentWidget->update();
+                        prev->update();
+                        }
+                  else {
+                        item = static_cast<ScoreItem*>(scoreLists.back()->item(scoreLists.back()->count() - 1));
+                        currentWidget->setCurrentRow(-1);
+                        scoreLists.back()->setCurrentItem(item);
+                        scoreLists.back()->setCurrentRow(scoreLists.back()->count() - 1);
+                        }
+                  }
+            preview->setScore(item->info());
+            emit scoreSelected(item->info().filePath());
+            return;
+            }
+      else if (event->key() == Qt::Key_Tab) {
+            NewWizard* nw = mscore->getNewWizard();
+            if (nw->button(QWizard::CancelButton)->hasFocus()) {
+                  nw->button(QWizard::CancelButton)->clearFocus();
+                  nw->button(QWizard::BackButton)->setFocus();
+                  }
+            else if (nw->button(QWizard::BackButton)->hasFocus()) {
+                  nw->button(QWizard::BackButton)->clearFocus();
+                  nw->button(QWizard::NextButton)->setFocus();
+                  }
+            else if (nw->button(QWizard::NextButton)->hasFocus()) {
+                  nw->button(QWizard::NextButton)->clearFocus();
+                  nw->button(QWizard::FinishButton)->setFocus();
+                  }
+            else if (nw->button(QWizard::FinishButton)->hasFocus()) {
+                  nw->button(QWizard::FinishButton)->clearFocus();
+                  }
+            else {
+                  nw->button(QWizard::CancelButton)->setFocus();
+                  }
+            return;
+            }
+    else if (event->key() == Qt::Key_Backtab) {
+            NewWizard* nw = mscore->getNewWizard();
+            if (nw->button(QWizard::CancelButton)->hasFocus()) {
+                  nw->button(QWizard::CancelButton)->clearFocus();
+                  }
+            else if (nw->button(QWizard::BackButton)->hasFocus()) {
+                  nw->button(QWizard::BackButton)->clearFocus();
+                  nw->button(QWizard::CancelButton)->setFocus();
+                  }
+            else if (nw->button(QWizard::NextButton)->hasFocus()) {
+                  nw->button(QWizard::NextButton)->clearFocus();
+                  nw->button(QWizard::BackButton)->setFocus();
+                  }
+            else if (nw->button(QWizard::FinishButton)->hasFocus()) {
+                  nw->button(QWizard::FinishButton)->clearFocus();
+                  nw->button(QWizard::NextButton)->setFocus();
+                  }
+            else {
+                  nw->button(QWizard::FinishButton)->setFocus();
+                  }
+            return;
+            }
+      else if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+            if (!current)
+                  return;
+            scoreChanged(current);
+            setScoreActivated(current);
+            return;
+            }
+      QWidget::keyPressEvent(event);
       }
 
 }

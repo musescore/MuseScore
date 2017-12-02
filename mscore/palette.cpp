@@ -45,6 +45,7 @@
 #include "libmscore/slur.h"
 #include "paletteBoxButton.h"
 #include "palettebox.h"
+#include "masterpalette.h"
 
 namespace Ms {
 
@@ -687,6 +688,8 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
       {
       QWidget* w = this->widget();
       Palette* p = static_cast<Palette*>(w);
+      bool newScoreWizard = p->newScoreWizardFlag();
+
       if (event->key() == Qt::Key_Right) {
             int i = p->getSelectedIdx();
             if (i == -1)
@@ -710,6 +713,29 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
                   p->setSelected(p->size()-1);
 
             p->update();
+            }
+      else if ((event->key() == Qt::Key_Down || event->key() == Qt::Key_Up)
+               && !newScoreWizard) {
+            p->setCurrentIdx(-1);
+            if (p->name() == "Time Signatures")
+                  p->setSelected(2);
+            else
+                  p->setSelected(-1);
+            update();
+            MasterPalette* mp = mscore->getMasterPalette();
+            mp->setFocus();
+            mp->keyPressEvent(event);
+            }
+      else if ((event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+               && !newScoreWizard) {
+            Score* score = mscore->currentScore();
+            if (score == 0)
+                  return;
+            const Selection& sel = score->selection();
+            if (sel.isNone())
+                  return;
+            // apply currently selected palette symbol to selected score elements
+            p->applyPaletteElement(p->cellAt(p->getSelectedIdx()));
             }
       QScrollArea::keyPressEvent(event);
       }

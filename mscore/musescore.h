@@ -723,6 +723,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static Palette* newLinesPalette(PaletteType);
       static Palette* newFretboardDiagramPalette();
 
+      MasterPalette* getMasterPalette() {return masterPalette; }
       Inspector* inspector()           { return _inspector; }
       PluginCreator* pluginCreator()   { return _pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
@@ -731,6 +732,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showHelp(QString);
       void showContextHelp();
       void showHelp(const QUrl&);
+      Startcenter* getStartCenter() { return startcenter; }
+      NewWizard* getNewWizard() { return newWizard; }
 
       void registerPlugin(PluginDescription*);
       void unregisterPlugin(PluginDescription*);

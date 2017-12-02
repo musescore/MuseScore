@@ -36,7 +36,7 @@
 #include "libmscore/note.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/chordline.h"
-
+#include "palettebox.h"
 #include "timedialog.h"
 
 namespace Ms {
@@ -248,6 +248,8 @@ void MasterPalette::closeEvent(QCloseEvent* ev)
             timeDialog->save();
       if (keyEditor->dirty())
             keyEditor->save();
+      PaletteBox* pb = mscore->getPaletteBox();
+      pb->setKeyboardNavigation(false);
       emit closed(false);
       QWidget::closeEvent(ev);
       }
@@ -263,5 +265,114 @@ void MasterPalette::changeEvent(QEvent *event)
             retranslate();
       }
 
+//---------------------------------------------------------
+//   keyPressEvent
+//---------------------------------------------------------
+
+void MasterPalette::keyPressEvent(QKeyEvent *event)
+      {
+      QTreeWidgetItem* currentItem = treeWidget->currentItem();
+      int idx = treeWidget->indexOfTopLevelItem(currentItem);
+      if (event->key() == Qt::Key_Down) {
+            if (idx >= 0 && idx < treeWidget->topLevelItemCount() - 1) {
+                  selectItem(treeWidget->topLevelItem(idx+1)->text(0));
+                  }
+            else if (currentItem == symbolItem) {
+                  if (symbolItem->isExpanded())
+                        treeWidget->setCurrentItem(symbolItem->child(0));
+                  else
+                        selectItem(treeWidget->topLevelItem(0)->text(0));
+                  }
+            else if (symbolItem->indexOfChild(currentItem) != -1) {
+                  int i = symbolItem->indexOfChild(currentItem);
+                  if (i < symbolItem->childCount()-1) {
+                        treeWidget->setCurrentItem(symbolItem->child(i+1));
+                        }
+                  else {
+                        int symIdx = treeWidget->indexOfTopLevelItem(symbolItem);
+                        if (symIdx < treeWidget->topLevelItemCount() - 1)
+                              selectItem(treeWidget->topLevelItem(symIdx+1)->text(0));
+                        else
+                              selectItem(treeWidget->topLevelItem(0)->text(0));
+                        }
+                  }
+            else {
+                  selectItem(treeWidget->topLevelItem(0)->text(0));
+                  }
+            }
+      else if (event->key() == Qt::Key_Up) {
+            if (idx > 0) {
+                  selectItem(treeWidget->topLevelItem(idx-1)->text(0));
+                  }
+            else if (symbolItem->indexOfChild(currentItem) != -1) {
+                  int i = symbolItem->indexOfChild(currentItem);
+                  if (i > 0)
+                        treeWidget->setCurrentItem(symbolItem->child(i-1));
+                  else
+                      selectItem(symbolItem->text(0));
+                  }
+            else {
+                  selectItem(treeWidget->topLevelItem(treeWidget->topLevelItemCount() - 1)->text(0));
+                  }
+            }
+      else if (event->key() == Qt::Key_Right) {
+            QWidget* w = stack->currentWidget();
+            QWidget* ch = w->childAt(1, 1);
+            Palette* p = 0;
+            if (currentItem == keyItem) {
+                  KeyEditor* k = static_cast<KeyEditor*>(w);
+                  p = k->getPalette();
+                  }
+            else if (currentItem == timeItem) {
+                  TimeDialog* t = static_cast<TimeDialog*>(w);
+                  p = t->getPalette();
+                  }
+            else if (currentItem == symbolItem || symbolItem->indexOfChild(currentItem) != -1) {
+                  SymbolDialog* s = static_cast<SymbolDialog*>(w);
+                  p = s->getPalette();
+                  }
+            else {
+                  p = static_cast<Palette*>(ch);
+                  }
+            if (p) {
+                  p->setSelected(0);
+                  p->update();
+                  p->setFocus();
+                  }
+            return;
+            }
+      else if (event->key() == Qt::Key_Left) {
+            QWidget* w = stack->currentWidget();
+            QWidget* ch = w->childAt(1, 1);
+            Palette* p = 0;
+            if (currentItem == keyItem) {
+                  KeyEditor* k = static_cast<KeyEditor*>(w);
+                  p = k->getPalette();
+                  }
+            else if (currentItem == timeItem) {
+                  TimeDialog* t = static_cast<TimeDialog*>(w);
+                  p = t->getPalette();
+                  }
+            else if (currentItem == symbolItem || symbolItem->indexOfChild(currentItem) != -1) {
+                  SymbolDialog* s = static_cast<SymbolDialog*>(w);
+                  p = s->getPalette();
+                  }
+            else {
+                  p = static_cast<Palette*>(ch);
+                  }
+            if (p) {
+                  p->setSelected(p->size() - 1);
+                  p->update();
+                  p->setFocus();
+                  }
+            return;
+            }
+      else if (event->key() == Qt::Key_Enter ||
+               event->key() == Qt::Key_Return) {
+          if (currentItem == symbolItem)
+                clicked(treeWidget->topLevelItem(idx), 0);
+          }
+      QWidget::keyPressEvent(event);
+      }
 }
 
