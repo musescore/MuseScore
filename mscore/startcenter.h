@@ -107,6 +107,7 @@ class Startcenter : public AbstractDialog, public Ui::Startcenter
       void updateRecentScores();
       void writeSettings();
       void readSettings();
+      void newScoreOnEnter();
       };
 }
 #endif

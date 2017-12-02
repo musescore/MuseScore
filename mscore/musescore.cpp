@@ -37,6 +37,7 @@
 #include "selectionwindow.h"
 #include "palette.h"
 #include "palettebox.h"
+#include "masterpalette.h"
 #include "libmscore/part.h"
 #include "libmscore/drumset.h"
 #include "libmscore/instrtemplate.h"

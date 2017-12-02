@@ -49,6 +49,7 @@ class KeyEditor : public QWidget, Ui::KeyEdit {
       KeyEditor(QWidget* parent = 0);
       bool dirty() const { return _dirty; }
       void save();
+      Palette* getPalette() { return sp; }
       };
 
 

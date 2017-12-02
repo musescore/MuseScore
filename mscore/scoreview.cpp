@@ -1969,7 +1969,7 @@ void ScoreView::cmd(const char* s)
       else if (cmd == "prev-element") {
             Element* el = score()->selection().element();
             if (!el && !score()->selection().elements().isEmpty())
-                el = score()->selection().elements().last();
+                  el = score()->selection().elements().last();
 
             if (el)
                   cmdGotoElement(score()->prevElement());
