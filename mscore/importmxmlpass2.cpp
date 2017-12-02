@@ -412,13 +412,14 @@ static bool hasDrumset(const MusicXMLDrumset& mxmlDrumset)
       while (ii.hasNext()) {
             ii.next();
             // debug: dump the drumset
-            qDebug("hasDrumset: instrument: %s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
+            //qDebug("hasDrumset: instrument: %s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
             int pitch = ii.value().pitch;
             if (0 <= pitch && pitch <= 127) {
                   res = true;
                   }
             }
 
+      /*
       for (const auto& instr : mxmlDrumset) {
             // MusicXML elements instrument-name, midi-program, instrument-sound, virtual-library, virtual-name
             // in a shell script use "mscore ... 2>&1 | grep GREP_ME | cut -d' ' -f3-" to extract
@@ -430,6 +431,7 @@ static bool hasDrumset(const MusicXMLDrumset& mxmlDrumset)
                    qPrintable(instr.virtName)
                    );
             }
+       */
 
       return res;
       }
@@ -481,10 +483,12 @@ static Instrument createInstrument(const MusicXMLDrumInstrument& mxmlInstr)
             it = Ms::searchTemplateForMusicXmlId(mxmlInstr.sound);
             }
 
+      /*
       qDebug("sound '%s' it %p trackname '%s' program %d",
              qPrintable(mxmlInstr.sound), it,
              it ? qPrintable(it->trackName) : "",
              mxmlInstr.midiProgram);
+       */
 
       if (it) {
             // initialize from template with matching MusicXmlId
@@ -520,7 +524,7 @@ static void setFirstInstrument(MxmlLogger* logger, const QXmlStreamReader* const
                                const QString& instrId, const MusicXMLDrumset& mxmlDrumset)
       {
       if (mxmlDrumset.size() > 0) {
-            qDebug("setFirstInstrument: initial instrument '%s'", qPrintable(instrId));
+            //qDebug("setFirstInstrument: initial instrument '%s'", qPrintable(instrId));
             MusicXMLDrumInstrument mxmlInstr;
             if (instrId == "")
                   mxmlInstr = mxmlDrumset.first();

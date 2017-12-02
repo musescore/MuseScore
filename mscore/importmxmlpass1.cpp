@@ -1672,23 +1672,6 @@ static const InstrumentTemplate* findInstrument(const QString& instrSound)
       }
 
 //---------------------------------------------------------
-//   fixupMidiProgram
-//---------------------------------------------------------
-
-static void fixupMidiProgram(MusicXMLDrumset& drumset)
-      {
-      for (auto& instr : drumset) {
-            if (instr.midiProgram < 0 && instr.sound != "") {
-                  const InstrumentTemplate* templ = findInstrument(instr.sound);
-                  if (templ) {
-                        const int prog = templ->channel.at(0).program;
-                        instr.midiProgram = prog;
-                        }
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   scorePart
 //---------------------------------------------------------
 
@@ -1766,8 +1749,6 @@ void MusicXMLParserPass1::scorePart()
             else
                   skipLogCurrElem();
             }
-
-      //fixupMidiProgram(_drumsets[id]); TODO check if still required
 
       Q_ASSERT(_e.isEndElement() && _e.name() == "score-part");
       }
