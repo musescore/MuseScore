@@ -642,7 +642,7 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
 
 InstrumentTemplate* searchTemplate(const QString& name)
       {
-      foreach(InstrumentGroup* g, instrumentGroups) {
+      foreach (InstrumentGroup* g, instrumentGroups) {
             foreach(InstrumentTemplate* it, g->instrumentTemplates) {
                   if (it->id == name)
                         return it;
@@ -731,6 +731,30 @@ ClefTypeList InstrumentTemplate::clefType(int staffIdx) const
       if (staffIdx < staves)
             return clefTypes[staffIdx];
       return clefTypes[0];
+      }
+
+//---------------------------------------------------------
+//   defaultClef
+//    traverse the instrument list for first instrument
+//    with midi patch 'program'. Return the default clef
+//    for this instrument.
+//---------------------------------------------------------
+
+ClefType defaultClef(int program)
+      {
+      if (program >= 25 && program < 32)              // this are guitars
+            return ClefType::G8_VB;
+      else if (program >= 33 && program < 41)         // this is bass
+            return ClefType::F8_VB;
+
+      for (InstrumentGroup* g : instrumentGroups) {
+            for (InstrumentTemplate* it : g->instrumentTemplates) {
+                  if (it->channel[0].bank == 0 && it->channel[0].program == program){
+                        return (it->clefTypes[0]._concertClef);
+                        }
+                  }
+            }
+      return ClefType::G;
       }
 
 }
