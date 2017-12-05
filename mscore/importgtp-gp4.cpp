@@ -52,6 +52,7 @@
 #include <libmscore/notedot.h>
 #include <libmscore/stafftext.h>
 #include <libmscore/sym.h>
+#include <libmscore/instrtemplate.h>
 
 namespace Ms {
 
@@ -739,10 +740,8 @@ bool GuitarPro4::read(QFile* fp)
                   instr->setDrumset(gpDrumset);
                   staff->setStaffType(0, StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
-            else if (patch >= 24 && patch < 32)
-                  clefId = ClefType::G8_VB;
-            else if (patch >= 32 && patch < 40)
-                  clefId = ClefType::F8_VB;
+            else
+                  clefId = defaultClef(patch);
             Measure* measure = score->firstMeasure();
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
