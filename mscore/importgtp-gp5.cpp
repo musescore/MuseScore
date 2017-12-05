@@ -502,9 +502,9 @@ bool GuitarPro5::readTracks()
             Part* part = staff->part();
 
             uchar c = readUChar();   // simulations bitmask
-            if (c & 0x2) {                // 12 stringed guitar
+            if (c & 0x2) {           // 12 stringed guitar
                   }
-            if (c & 0x4) {                // banjo track
+            if (c & 0x4) {           // banjo track
                   }
             if (i == 0 || version == 500)
                   skip(1);
@@ -554,10 +554,8 @@ bool GuitarPro5::readTracks()
                   instr->setDrumset(gpDrumset);
                   staff->setStaffType(0, StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
-            else if (patch >= 24 && patch < 32)
-                  clefId = ClefType::G8_VB;
-            else if (patch >= 32 && patch < 40)
-                  clefId = ClefType::F8_VB;
+            else
+                  clefId = defaultClef(patch);
             Measure* measure = score->firstMeasure();
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
@@ -623,7 +621,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
                   tuplets[track] = 0;
 
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
-				_beat_counter = 0;
+                  _beat_counter = 0;
                   readMeasure(measure, staffIdx, &tuplets[0], mixChange);
                   if (!(((bar == (measures-1)) && (staffIdx == (staves-1))))) {
                         /*int a = */  readChar();
@@ -637,7 +635,6 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
       if (gpLyrics.segments.size()) {
             auto size = std::min(int(gpLyrics.segments.size()), int(gpLyrics.lyrics.size()));
 		for (int i = 0; i < size; ++i) {
-//			  std::string str = gpLyrics.lyrics[i];
                   std::string str = gpLyrics.lyrics[i].toStdString();
 			auto seg = gpLyrics.segments[i];
 			auto mes = seg->measure();
