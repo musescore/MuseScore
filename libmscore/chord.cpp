@@ -1417,18 +1417,20 @@ void Chord::layoutStem()
                               hookIdx = -hookIdx;
                         if (hookIdx && _hook) {
                               _hook->setHookType(hookIdx);
-                              qreal x = _stem->pos().x() + _stem->lineWidth() * .5;;
-                              qreal y = _stem->pos().y();
+#if 0
+                              _hook->layout();
+                              QPointF p(_stem->hookPos());
                               if (up()) {
-                                    y -= _stem->bbox().height();
-                                    x -= _stem->width();
+                                    p.ry() -= _hook->bbox().top();
+                                    p.rx() -= _stem->width();
                                     }
                               else {
-                                    y += _stem->bbox().height();
-                                    x -= _stem->width();
+                                    p.ry() -= _hook->bbox().bottom();
+                                    p.rx() -= _stem->width();
                                     }
-                              _hook->setPos(x, y);
+                              _hook->setPos(p);
                               _hook->adjustReadPos();
+#endif
                               }
                         }
                   return;
@@ -2068,9 +2070,9 @@ void Chord::layoutPitched()
 void Chord::layoutTablature()
       {
       qreal _spatium          = spatium();
-      qreal dotNoteDistance   = score()->styleS(StyleIdx::dotNoteDistance).val() * _spatium;
-      qreal minNoteDistance   = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium;
-      qreal minTieLength      = score()->styleS(StyleIdx::MinTieLength).val() * _spatium;
+      qreal dotNoteDistance   = score()->styleP(StyleIdx::dotNoteDistance);
+      qreal minNoteDistance   = score()->styleP(StyleIdx::minNoteDistance);
+      qreal minTieLength      = score()->styleP(StyleIdx::MinTieLength);
 
       for (Chord* c : _graceNotes)
             c->layoutTablature();
@@ -2216,6 +2218,17 @@ void Chord::layoutTablature()
                         _hook->layout();
                         if (rrr < stemX + _hook->width())
                               rrr = stemX + _hook->width();
+
+                        QPointF p(_stem->hookPos());
+                        if (up()) {
+                              p.ry() -= _hook->bbox().top();
+                              p.rx() -= _stem->width();
+                              }
+                        else {
+                              p.ry() -= _hook->bbox().bottom();
+                              p.rx() -= _stem->width();
+                              }
+                        _hook->setPos(p);
                         }
                   }
             }
