@@ -3089,6 +3089,7 @@ System* Score::collectSystem(LayoutContext& lc)
       //
       int stick = -1;
       int etick;
+      std::vector<Dynamic*> dynamics;
       for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure())
                   continue;
@@ -3155,9 +3156,7 @@ System* Score::collectSystem(LayoutContext& lc)
                                           }
                                     if (doAutoplace) {
                                           d->doAutoplace();
-                                          int si = d->staffIdx();
-                                          s->staffShape(si).add(d->shape().translated(d->pos()));
-                                          m->staffShape(si).add(d->shape().translated(s->pos() + d->pos()));
+                                          dynamics.push_back(d);
                                           }
                                     }
                               }
@@ -3165,6 +3164,15 @@ System* Score::collectSystem(LayoutContext& lc)
                               e->layout();
                         }
                   }
+            }
+
+      // add dynamics shape to staff shape
+      for (Dynamic* d : dynamics) {
+            int si = d->staffIdx();
+            Segment* s = d->segment();
+            s->staffShape(si).add(d->shape().translated(d->pos()));
+            Measure* m = s->measure();
+            m->staffShape(si).add(d->shape().translated(s->pos() + d->pos()));
             }
 
       //

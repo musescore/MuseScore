@@ -204,6 +204,12 @@ void Dynamic::doAutoplace()
       const Shape& s1   = s->measure()->staffShape(staffIdx());
       Shape s2          = shape().translated(s->pos() + pos());
 
+#if 0
+      bool val = s1.intersects(bbox().translated(s->pos() + pos()));
+      if (!val)
+            return;
+#endif
+
       if (placeAbove()) {
             qreal d = s2.minVerticalDistance(s1);
             if (d > -minDistance)
