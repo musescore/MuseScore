@@ -144,6 +144,8 @@ public:
       void fermata(ChordRest* cr);
       void tuplet(MusicXmlTupletDesc& tupletDesc);
       void doEnding(const QString& partId, Measure* measure, const QString& number, const QString& type, const QString& text);
+      void staffDetails(const QString& partId);
+      void staffTuning(StringData* t);
       void skipLogCurrElem();
 
       // part specific data interface functions
