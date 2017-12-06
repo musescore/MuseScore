@@ -667,6 +667,20 @@ InstrumentTemplate* searchTemplate(const QString& name)
       return 0;
       }
 
+//---------------------------------------------------------
+//   searchTemplateForMusicXMLid
+//---------------------------------------------------------
+
+InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId)
+      {
+      foreach(InstrumentGroup* g, instrumentGroups) {
+            foreach(InstrumentTemplate* it, g->instrumentTemplates) {
+                  if (it->musicXMLid == mxmlId)
+                        return it;
+                  }
+            }
+      return 0;
+      }
 
 //---------------------------------------------------------
 //   linkGenre

@@ -33,6 +33,7 @@
 #include "libmscore/hairpin.h"
 #include "libmscore/harmony.h"
 #include "libmscore/instrchange.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/interval.h"
 #include "libmscore/jump.h"
 #include "libmscore/keysig.h"
@@ -413,6 +414,20 @@ static bool hasDrumset(const MusicXMLDrumset& mxmlDrumset)
                   }
             }
 
+      /*
+      for (const auto& instr : mxmlDrumset) {
+            // MusicXML elements instrument-name, midi-program, instrument-sound, virtual-library, virtual-name
+            // in a shell script use "mscore ... 2>&1 | grep GREP_ME | cut -d' ' -f3-" to extract
+            qDebug("GREP_ME '%s',%d,'%s','%s','%s'",
+                   qPrintable(instr.name),
+                   instr.midiProgram + 1,
+                   qPrintable(instr.sound),
+                   qPrintable(instr.virtLib),
+                   qPrintable(instr.virtName)
+                   );
+            }
+       */
+
       return res;
       }
 
@@ -447,6 +462,51 @@ static void initDrumset(Drumset* drumset, const MusicXMLDrumset& mxmlDrumset)
       }
 
 //---------------------------------------------------------
+//   createInstrument
+//---------------------------------------------------------
+
+/**
+ Create an Instrument based on the information in \a mxmlInstr.
+ */
+
+static Instrument createInstrument(const MusicXMLDrumInstrument& mxmlInstr)
+      {
+      Instrument instr;
+
+      InstrumentTemplate* it {};
+      if (!mxmlInstr.sound.isEmpty()) {
+            it = Ms::searchTemplateForMusicXmlId(mxmlInstr.sound);
+            }
+
+      /*
+      qDebug("sound '%s' it %p trackname '%s' program %d",
+             qPrintable(mxmlInstr.sound), it,
+             it ? qPrintable(it->trackName) : "",
+             mxmlInstr.midiProgram);
+       */
+
+      if (it) {
+            // initialize from template with matching MusicXmlId
+            instr = Instrument::fromTemplate(it);
+            // reset transpose, as it is determined later from MusicXML data
+            instr.setTranspose(Interval());
+            }
+      else {
+            // set articulations to default (global articulations)
+            instr.setArticulation(articulation);
+            // set default program
+            instr.channel(0)->program = mxmlInstr.midiProgram >= 0 ? mxmlInstr.midiProgram : 0;
+            }
+
+      // add / overrule with values read from MusicXML
+      instr.channel(0)->pan = mxmlInstr.midiPan;
+      instr.channel(0)->volume = mxmlInstr.midiVolume;
+      instr.setTrackName(mxmlInstr.name);
+
+      return instr;
+      }
+
+//---------------------------------------------------------
 //   setFirstInstrument
 //---------------------------------------------------------
 
@@ -460,21 +520,22 @@ static void setFirstInstrument(MxmlLogger* logger, const QXmlStreamReader* const
       {
       if (mxmlDrumset.size() > 0) {
             //qDebug("setFirstInstrument: initial instrument '%s'", qPrintable(instrId));
-            MusicXMLDrumInstrument instr;
+            MusicXMLDrumInstrument mxmlInstr;
             if (instrId == "")
-                  instr = mxmlDrumset.first();
+                  mxmlInstr = mxmlDrumset.first();
             else if (mxmlDrumset.contains(instrId))
-                  instr = mxmlDrumset.value(instrId);
+                  mxmlInstr = mxmlDrumset.value(instrId);
             else {
                   logger->logError(QString("initial instrument '%1' not found in part '%2'")
                                    .arg(instrId).arg(partId), xmlreader);
-                  instr = mxmlDrumset.first();
+                  mxmlInstr = mxmlDrumset.first();
                   }
-            // part->setMidiChannel(instr.midiChannel); not required (is a NOP anyway)
-            part->setMidiProgram(instr.midiProgram);
-            part->setPan(instr.midiPan);
-            part->setVolume(instr.midiVolume);
-            part->instrument()->setTrackName(instr.name);
+
+            Instrument instr = createInstrument(mxmlInstr);
+            part->setInstrument(instr);
+            if (mxmlInstr.midiChannel >= 0) part->setMidiChannel(mxmlInstr.midiChannel);
+            // note: setMidiProgram() does more than simply setting the MIDI program
+            if (mxmlInstr.midiProgram >= 0) part->setMidiProgram(mxmlInstr.midiProgram);
             }
       else
             logger->logError(QString("no instrument found for part '%1'")
@@ -551,34 +612,34 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
                          mustInsert);
                    */
                   if (mustInsert) {
-                        int staff = score->staffIdx(part);
-                        int track = staff * VOICES;
+                        const int staff = score->staffIdx(part);
+                        const int track = staff * VOICES;
+                        const int tick = f.ticks();
                         //qDebug("instrument change: tick %s (%d) track %d instr '%s'",
                         //       qPrintable(f.print()), f.ticks(), track, qPrintable(instrId));
                         Segment* segment = score->tick2segment(f.ticks(), true, Segment::Type::ChordRest, true);
                         if (!segment)
                               logger->logError(QString("segment for instrument change at tick %1 not found")
-                                               .arg(f.ticks()), xmlreader);
+                                               .arg(tick), xmlreader);
                         else if (!mxmlDrumset.contains(instrId))
                               logger->logError(QString("changed instrument '%1' at tick %2 not found in part '%3'")
-                                               .arg(instrId).arg(f.ticks()).arg(partId), xmlreader);
+                                               .arg(instrId).arg(tick).arg(partId), xmlreader);
                         else {
                               MusicXMLDrumInstrument mxmlInstr = mxmlDrumset.value(instrId);
-                              Instrument instr;
+                              Instrument instr = createInstrument(mxmlInstr);
                               //qDebug("instr %p", &instr);
-                              instr.channel(0)->program = mxmlInstr.midiProgram;
-                              instr.channel(0)->pan = mxmlInstr.midiPan;
-                              instr.channel(0)->volume = mxmlInstr.midiVolume;
-                              instr.setTrackName(mxmlInstr.name);
+
                               InstrumentChange* ic = new InstrumentChange(instr, score);
                               ic->setTrack(track);
-                              // if there is already a staff text at this tick / track,
-                              // delete it and use its text here instead of "Instrument"
-                              QString text = findDeleteStaffText(segment, track);
-                              ic->setXmlText(text.isEmpty() ? "Instrument" : text);
-                              segment->add(ic);
 
-                              part->setMidiChannel(mxmlInstr.midiChannel);
+                              // if there is already a staff text at this tick / track,
+                              // delete it and use its text here instead of "Instrument change"
+                              QString text = findDeleteStaffText(segment, track);
+                              ic->setXmlText(text.isEmpty() ? "Instrument change" : text);
+                              segment->add(ic); // note: includes part::setInstrument(instr);
+
+                              // setMidiChannel() depends on setInstrument() already been done
+                              if (mxmlInstr.midiChannel >= 0) part->setMidiChannel(mxmlInstr.midiChannel);
                               }
                         }
                   prevInstrId = instrId;
@@ -1678,6 +1739,21 @@ void MusicXMLParserPass2::part()
       const MusicXMLDrumset& mxmlDrumset = _pass1.getDrumset(id);
       _hasDrumset = hasDrumset(mxmlDrumset);
 
+      // set the parts first instrument
+      QString instrId = _pass1.getInstrList(id).instrument(Fraction(0, 1));
+      setFirstInstrument(_logger, &_e, _pass1.getPart(id), id, instrId, mxmlDrumset);
+
+      // set the part name
+      auto mxmlPart = _pass1.getMusicXmlPart(id);
+      _pass1.getPart(id)->setPartName(mxmlPart.getName());
+      if (mxmlPart.getPrintName())
+            _pass1.getPart(id)->setLongName(mxmlPart.getName());
+      if (mxmlPart.getPrintAbbr())
+            _pass1.getPart(id)->setPlainShortName(mxmlPart.getAbbr());
+      // try to prevent an empty track name
+      if (_pass1.getPart(id)->partName() == "")
+            _pass1.getPart(id)->setPartName(mxmlDrumset[instrId].name);
+
 #ifdef DEBUG_VOICE_MAPPER
       VoiceList voicelist = _pass1.getVoiceList(id);
       // debug: print voice mapper contents
@@ -1750,10 +1826,6 @@ void MusicXMLParserPass2::part()
                   }
             }
       */
-
-      // set the parts first instrument
-      QString instrId = _pass1.getInstrList(id).instrument(Fraction(0, 1));
-      setFirstInstrument(_logger, &_e, _pass1.getPart(id), id, instrId, mxmlDrumset);
 
       if (_hasDrumset) {
             // set staff type to percussion if incorrectly imported as pitched staff
@@ -2153,12 +2225,144 @@ void MusicXMLParserPass2::attributes(const QString& partId, Measure* measure, co
                   key(partId, measure, tick);
             else if (_e.name() == "measure-style")
                   measureStyle(measure);
+            else if (_e.name() == "staff-details")
+                  staffDetails(partId);
             else if (_e.name() == "time")
                   time(partId, measure, tick);
             else if (_e.name() == "transpose")
                   transpose(partId);
             else
                   skipLogCurrElem();
+            }
+      }
+
+//---------------------------------------------------------
+//   setStaffLines
+//---------------------------------------------------------
+
+/**
+ Set stafflines and barline span for a single staff
+ */
+
+static void setStaffLines(Score* score, int staffIdx, int stafflines)
+      {
+      score->staff(staffIdx)->setLines(stafflines);
+      score->staff(staffIdx)->setBarLineTo(0);        // default
+      }
+
+//---------------------------------------------------------
+//   staffDetails
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/attributes/staff-details node.
+ */
+
+void MusicXMLParserPass2::staffDetails(const QString& partId)
+      {
+      Q_ASSERT(_e.isStartElement() && _e.name() == "staff-details");
+      //logDebugTrace("MusicXMLParserPass2::staffDetails");
+
+      Part* part = _pass1.getPart(partId);
+      Q_ASSERT(part);
+      int staves = part->nstaves();
+
+      QString number = _e.attributes().value("number").toString();
+      int n = 1;  // default
+      if (number != "") {
+            n = number.toInt();
+            if (n <= 0 || n > staves) {
+                  _logger->logError(QString("invalid staff-details number %1").arg(number), &_e);
+                  n = 1;
+                  }
+            }
+      n--;         // make zero-based
+
+      int staffIdx = _score->staffIdx(part) + n;
+
+      StringData* t = 0;
+      if (_score->staff(staffIdx)->isTabStaff()) {
+            t = new StringData;
+            t->setFrets(25);  // sensible default
+            }
+
+      int staffLines = 0;
+      while (_e.readNextStartElement()) {
+            if (_e.name() == "staff-lines") {
+                  // save staff lines for later
+                  staffLines = _e.readElementText().toInt();
+                  // for a TAB staff also resize the string table and init with zeroes
+                  if (t) {
+                        if (0 < staffLines)
+                              t->stringList() = QVector<instrString>(staffLines).toList();
+                        else
+                              _logger->logError(QString("illegal staff-lines %1").arg(staffLines), &_e);
+                        }
+                  }
+            else if (_e.name() == "staff-tuning")
+                  staffTuning(t);
+            else
+                  skipLogCurrElem();
+            }
+
+      if (staffLines > 0) {
+            setStaffLines(_score, staffIdx, staffLines);
+            }
+
+      if (t) {
+            Instrument* i = part->instrument();
+            i->setStringData(*t);
+            }
+      }
+//---------------------------------------------------------
+//   staffTuning
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/attributes/staff-details/staff-tuning node.
+ */
+
+void MusicXMLParserPass2::staffTuning(StringData* t)
+      {
+      Q_ASSERT(_e.isStartElement() && _e.name() == "staff-tuning");
+      //logDebugTrace("MusicXMLParserPass2::staffTuning");
+
+      // ignore <staff-tuning> if not a TAB staff
+      if (!t) {
+            _logger->logError("<staff-tuning> on non-TAB staff", &_e);
+            skipLogCurrElem();
+            return;
+            }
+
+      int line   = _e.attributes().value("line").toInt();
+      int step   = 0;
+      int alter  = 0;
+      int octave = 0;
+      while (_e.readNextStartElement()) {
+            if (_e.name() == "tuning-alter")
+                  alter = _e.readElementText().toInt();
+            else if (_e.name() == "tuning-octave")
+                  octave = _e.readElementText().toInt();
+            else if (_e.name() == "tuning-step") {
+                  QString strStep = _e.readElementText();
+                  int pos = QString("CDEFGAB").indexOf(strStep);
+                  if (strStep.size() == 1 && pos >=0 && pos < 7)
+                        step = pos;
+                  else
+                        _logger->logError(QString("invalid step '%1'").arg(strStep), &_e);
+                  }
+            else
+                  skipLogCurrElem();
+            }
+
+      if (0 < line && line <= t->stringList().size()) {
+            int pitch = MusicXMLStepAltOct2Pitch(step, alter, octave);
+            if (pitch >= 0)
+                  t->stringList()[line - 1].pitch = pitch;
+            else
+                  _logger->logError(QString("invalid string %1 tuning step/alter/oct %2/%3/%4")
+                                    .arg(line).arg(step).arg(alter).arg(octave),
+                                    &_e);
             }
       }
 

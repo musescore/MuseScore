@@ -48,9 +48,20 @@ public:
       int octaveShift(const int staff, const Fraction f) const;
       void addOctaveShift(const int staff, const int shift, const Fraction f);
       void calcOctaveShifts();
+      void setName(QString nm) { name = nm; }
+      QString getName() const { return name; }
+      void setPrintName(bool b) { printName = b; }
+      bool getPrintName() const { return printName; }
+      void setAbbr(QString ab) { abbr = ab; }
+      QString getAbbr() const { return abbr; }
+      void setPrintAbbr(bool b) { printAbbr = b; }
+      bool getPrintAbbr() const { return printAbbr; }
 private:
       QString id;
       QString name;
+      bool printName = true;
+      QString abbr;
+      bool printAbbr = true;
       QStringList measureNumbers;             // MusicXML measure number attribute
       QList<Fraction> measureDurations;       // duration in fraction for every measure
       QVector<MusicXmlOctaveShiftList> octaveShifts; // octave shift list for every staff

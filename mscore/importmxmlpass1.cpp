@@ -1632,46 +1632,6 @@ void MusicXMLParserPass1::partGroup(const int scoreParts,
       }
 
 //---------------------------------------------------------
-//   findInstrument
-//---------------------------------------------------------
-
-/**
- Find the first InstrumentTemplate with musicXMLid instrSound
- and a non-empty set of channels.
- */
-
-static const InstrumentTemplate* findInstrument(const QString& instrSound)
-      {
-      const InstrumentTemplate* instr = nullptr;
-
-      for (const InstrumentGroup* group : instrumentGroups) {
-            for (const InstrumentTemplate* templ : group->instrumentTemplates) {
-                  if (templ->musicXMLid == instrSound && !templ->channel.isEmpty()) {
-                        return templ;
-                        }
-                  }
-            }
-      return instr;
-      }
-
-//---------------------------------------------------------
-//   fixupMidiProgram
-//---------------------------------------------------------
-
-static void fixupMidiProgram(MusicXMLDrumset& drumset)
-      {
-      for (auto& instr : drumset) {
-            if (instr.midiProgram < 0 && instr.sound != "") {
-                  const InstrumentTemplate* templ = findInstrument(instr.sound);
-                  if (templ) {
-                        const int prog = templ->channel.at(0).program;
-                        instr.midiProgram = prog;
-                        }
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   scorePart
 //---------------------------------------------------------
 
@@ -1705,11 +1665,9 @@ void MusicXMLParserPass1::scorePart()
                   // It is displayed by default, but can be suppressed (print-object=”no”)
                   // As of MusicXML 3.0, formatting is deprecated, with part-name in plain text
                   // and the formatted version in the part-name-display element
-                  bool doLong = !(_e.attributes().value("print-object") == "no");
+                  _parts[id].setPrintName(!(_e.attributes().value("print-object") == "no"));
                   QString name = _e.readElementText();
-                  _partMap[id]->setPartName(name);
-                  if (doLong)
-                        _partMap[id]->setLongName(name);
+                  _parts[id].setName(name);
                   }
             else if (_e.name() == "part-name-display") {
                   // TODO
@@ -1720,9 +1678,9 @@ void MusicXMLParserPass1::scorePart()
                   // It is displayed by default, but can be suppressed (print-object=”no”)
                   // As of MusicXML 3.0, formatting is deprecated, with part-name in plain text
                   // and the formatted version in the part-abbreviation-display element
+                  _parts[id].setPrintAbbr(!(_e.attributes().value("print-object") == "no"));
                   QString name = _e.readElementText();
-                  if (!(_e.attributes().value("print-object") == "no"))
-                        _partMap[id]->setPlainShortName(name);
+                  _parts[id].setAbbr(name);
                   }
             else if (_e.name() == "part-abbreviation-display")
                   _e.skipCurrentElement();  // skip but don't log
@@ -1735,8 +1693,6 @@ void MusicXMLParserPass1::scorePart()
             else
                   skipLogCurrElem();
             }
-
-      fixupMidiProgram(_drumsets[id]);
 
       Q_ASSERT(_e.isEndElement() && _e.name() == "score-part");
       }
@@ -1772,9 +1728,6 @@ void MusicXMLParserPass1::scoreInstrument(const QString& partId)
                   // but used only internally
                   if (_drumsets[partId].contains(instrId))
                         _drumsets[partId][instrId].name = instrName;
-                  // try to prevent an empty track name
-                  if (_partMap[partId]->partName() == "")
-                        _partMap[partId]->setPartName(instrName);
                   }
             else if (_e.name() == "instrument-sound") {
                   QString instrSound = _e.readElementText();
@@ -1923,6 +1876,15 @@ void MusicXMLParserPass1::part()
             _parts[id]._instrList.setInstrument(_firstInstrId, Fraction(0, 1));
 
       // debug: print results
+      //qDebug("%s", qPrintable(_parts[id].toString()));
+
+      /*
+      qDebug("instrument map:");
+      for (auto& instr: _parts[id]._instrList) {
+            qDebug("%s %s", qPrintable(instr.first.print()), qPrintable(instr.second));
+            }
+      */
+
       /*
       qDebug("voiceMapperStats: new staff");
       VoiceList& vl = _parts[id].voicelist;
@@ -2089,7 +2051,7 @@ void MusicXMLParserPass1::attributes(const QString& partId)
             else if (_e.name() == "divisions")
                   divisions();
             else if (_e.name() == "staff-details")
-                  staffDetails(partId);
+                  _e.skipCurrentElement(); // skip but don't log
             else if (_e.name() == "staves")
                   staves(partId);
             else if (_e.name() == "time")
@@ -2258,165 +2220,6 @@ void MusicXMLParserPass1::divisions()
       _divs = _e.readElementText().toInt();
       if (!(_divs > 0))
             _logger->logError("illegal divisions", &_e);
-      }
-
-//---------------------------------------------------------
-//   setStaffLines
-//---------------------------------------------------------
-
-/**
- Set stafflines and barline span for a single staff
- */
-
-static void setStaffLines(Score* score, int staffIdx, int stafflines)
-      {
-      score->staff(staffIdx)->setLines(stafflines);
-      score->staff(staffIdx)->setBarLineTo((stafflines - 1) * 2);
-      }
-
-//---------------------------------------------------------
-//   staffDetails
-//---------------------------------------------------------
-
-/**
- Parse the /score-partwise/part/measure/attributes/staff-details node.
- */
-
-void MusicXMLParserPass1::staffDetails(const QString& partId)
-      {
-      Q_ASSERT(_e.isStartElement() && _e.name() == "staff-details");
-      _logger->logDebugTrace("MusicXMLParserPass1::staffDetails", &_e);
-
-      Part* part = getPart(partId);
-      Q_ASSERT(part);
-      int staves = part->nstaves();
-
-      QString number = _e.attributes().value("number").toString();
-      int n = 1; // default
-      if (number != "") {
-            n = number.toInt();
-            if (n <= 0 || n > staves) {
-                  _logger->logError(QString("invalid staff-details number %1").arg(number), &_e);
-                  n = 1;
-                  }
-            }
-      n--;        // make zero-based
-
-      int staffIdx = _score->staffIdx(part) + n;
-
-      StringData* t = 0;
-      if (_score->staff(staffIdx)->isTabStaff()) {
-            t = new StringData;
-            t->setFrets(25);       // sensible default
-            }
-
-      int staffLines = 0;
-      while (_e.readNextStartElement()) {
-            if (_e.name() == "staff-lines") {
-                  // save staff lines for later
-                  staffLines = _e.readElementText().toInt();
-                  // for a TAB staff also resize the string table and init with zeroes
-                  if (t) {
-                        if (0 < staffLines)
-                              t->stringList() = QVector<instrString>(staffLines).toList();
-                        else
-                              _logger->logError(QString("illegal staff-lines %1").arg(staffLines), &_e);
-                        }
-                  }
-            else if (_e.name() == "staff-tuning")
-                  staffTuning(t);
-            else
-                  skipLogCurrElem();
-            }
-
-      if (staffLines > 0) {
-            setStaffLines(_score, staffIdx, staffLines);
-            }
-
-      if (t) {
-            Instrument* i = part->instrument();
-            i->setStringData(*t);
-            }
-      }
-
-//---------------------------------------------------------
-//   MusicXMLStepAltOct2Pitch
-//---------------------------------------------------------
-
-/**
- Convert MusicXML \a step (0=C, 1=D, etc.) / \a alter / \a octave to midi pitch.
- Note: same code is in pass 1 and in pass 2.
- TODO: combine
- */
-
-static int MusicXMLStepAltOct2Pitch(int step, int alter, int octave)
-      {
-      //                       c  d  e  f  g  a   b
-      static int table[7]  = { 0, 2, 4, 5, 7, 9, 11 };
-      if (step < 0 || step > 6) {
-            qDebug("MusicXMLStepAltOct2Pitch: illegal step %d", step);
-            return -1;
-            }
-      int pitch = table[step] + alter + (octave+1) * 12;
-
-      if (pitch < 0)
-            pitch = -1;
-      if (pitch > 127)
-            pitch = -1;
-
-      return pitch;
-      }
-
-//---------------------------------------------------------
-//   staffTuning
-//---------------------------------------------------------
-
-/**
- Parse the /score-partwise/part/measure/attributes/staff-details/staff-tuning node.
- */
-
-void MusicXMLParserPass1::staffTuning(StringData* t)
-      {
-      Q_ASSERT(_e.isStartElement() && _e.name() == "staff-tuning");
-      _logger->logDebugTrace("MusicXMLParserPass1::staffTuning", &_e);
-
-      // ignore <staff-tuning> if not a TAB staff
-      if (!t) {
-            _logger->logError("<staff-tuning> on non-TAB staff", &_e);
-            skipLogCurrElem();
-            return;
-            }
-
-      int line   = _e.attributes().value("line").toInt();
-      int step   = 0;
-      int alter  = 0;
-      int octave = 0;
-      while (_e.readNextStartElement()) {
-            if (_e.name() == "tuning-alter")
-                  alter = _e.readElementText().toInt();
-            else if (_e.name() == "tuning-octave")
-                  octave = _e.readElementText().toInt();
-            else if (_e.name() == "tuning-step") {
-                  QString strStep = _e.readElementText();
-                  int pos = QString("CDEFGAB").indexOf(strStep);
-                  if (strStep.size() == 1 && pos >=0 && pos < 7)
-                        step = pos;
-                  else
-                        _logger->logError(QString("invalid step '%1'").arg(strStep), &_e);
-                  }
-            else
-                  skipLogCurrElem();
-            }
-
-      if (0 < line && line <= t->stringList().size()) {
-            int pitch = MusicXMLStepAltOct2Pitch(step, alter, octave);
-            if (pitch >= 0)
-                  t->stringList()[line - 1].pitch = pitch;
-            else
-                  _logger->logError(QString("invalid string %1 tuning step/alter/oct %2/%3/%4")
-                                    .arg(line).arg(step).arg(alter).arg(octave), &_e);
-            }
-
       }
 
 //---------------------------------------------------------

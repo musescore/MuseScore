@@ -72,8 +72,6 @@ public:
       void clef(const QString& partId);
       void time();
       void divisions();
-      void staffDetails(const QString& partId);
-      void staffTuning(StringData* t);
       void staves(const QString& partId);
       void direction(const QString& partId, const Fraction cTime);
       void directionType(const Fraction cTime, QList<MxmlOctaveShiftDesc>& starts, QList<MxmlOctaveShiftDesc>& stops);
@@ -94,6 +92,7 @@ public:
       int trackForPart(const QString& id) const;
       bool hasPart(const QString& id) const;
       Part* getPart(const QString& id) const { return _partMap.value(id); }
+      MusicXmlPart getMusicXmlPart(const QString& id) const { return _parts.value(id); }
       MusicXMLDrumset getDrumset(const QString& id) const { return _drumsets.value(id); }
       void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHead::Group hg, const int line, const MScore::Direction sd);
       MusicXmlInstrList getInstrList(const QString id) const;
