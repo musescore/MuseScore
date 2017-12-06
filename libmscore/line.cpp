@@ -724,6 +724,9 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                   if (!e)
                         return QPointF();
                   System* s = toNote(e)->chord()->segment()->system();
+                  if (s == 0) {
+                        qFatal("no system: %s  start %s chord parent %s\n", name(), e->name(), toNote(e)->chord()->parent()->name());
+                        }
                   *sys = s;
                   // return the position of the anchor note relative to the system
 //                  QPointF     elemPagePos = e->pagePos();                   // DEBUG
