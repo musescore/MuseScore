@@ -348,29 +348,34 @@ void FretDiagram::draw(QPainter* painter) const
 
 void FretDiagram::layout()
       {
-      qreal _spatium = spatium() * _userMag * score()->styleD(StyleIdx::fretMag);
+      if (autoplace())
+            setUserOff(QPointF());
+
+      qreal _spatium  = spatium() * _userMag * score()->styleD(StyleIdx::fretMag);
       lw1             = _spatium * 0.08;
       lw2             = _fretOffset ? lw1 : _spatium * 0.2;
       stringDist      = _spatium * .7;
       fretDist        = _spatium * .8;
 
-      qreal w = stringDist * (_strings - 1);
-      qreal h = _frets * fretDist + fretDist * .5;
-      qreal y = 0.0;
+      qreal w    = stringDist * (_strings - 1);
+      qreal h    = _frets * fretDist + fretDist * .5;
+      qreal y    = 0.0;
       qreal dotd = stringDist * .6;
-      qreal x = -((dotd+lw1) * .5);
-      w += dotd + lw1;
+      qreal x    = -((dotd+lw1) * .5);
+      w         += dotd + lw1;
       if (_marker) {
             QFont scaledFont(font);
             scaledFont.setPointSize(font.pointSize() * _userMag);
             QFontMetricsF fm(scaledFont, MScore::paintDevice());
-            y = -(fretDist * .1 + fm.height());
+            y  = -(fretDist * .1 + fm.height());
             h -= y;
             }
+
       bbox().setRect(x, y, w, h);
 
       setPos(-_spatium, -h - score()->styleP(StyleIdx::fretY) + _spatium );
-      adjustReadPos();
+      if (!autoplace())
+            adjustReadPos();
 
       if (_harmony)
             _harmony->layout();
@@ -379,11 +384,19 @@ void FretDiagram::layout()
             setPos(QPointF());
             return;
             }
-//      Measure* m     = toSegment(parent())->measure();
-//      int idx        = staffIdx();
-//      MStaff* mstaff = m->mstaff(idx);
-//      qreal dist = -(bbox().top());
-//      mstaff->distanceUp = qMax(mstaff->distanceUp, dist + _spatium * 2);
+      if (autoplace()) {
+            int staffIdx      = track() / VOICES;
+            qreal minDistance = score()->styleP(StyleIdx::fretMinDistance);
+            Segment* s        = segment();
+            Shape s1          = s->measure()->staffShape(staffIdx);
+            Shape s2          = shape().translated(s->pos() + pos());
+            qreal d           = s2.minVerticalDistance(s1);
+            if (d > -minDistance)
+                  rUserYoffset() = -d - minDistance;
+            }
+
+      if (_harmony)
+            _harmony->layout();
       }
 
 //---------------------------------------------------------

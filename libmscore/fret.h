@@ -75,6 +75,8 @@ class FretDiagram : public Element {
       virtual void draw(QPainter*) const override;
       virtual FretDiagram* clone() const override { return new FretDiagram(*this); }
 
+      Segment* segment() { return toSegment(parent()); }
+
       static FretDiagram* fromString(Score* score, const QString &s);
 
       virtual ElementType type() const override { return ElementType::FRET_DIAGRAM; }

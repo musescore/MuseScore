@@ -198,6 +198,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::fretNumMag,              "fretNumMag",              QVariant(2.0) },
       { StyleIdx::fretNumPos,              "fretNumPos",              QVariant(0) },
       { StyleIdx::fretY,                   "fretY",                   Spatium(2.0) },
+      { StyleIdx::fretMinDistance,         "fretMinDistance",         Spatium(0.5) },
       { StyleIdx::showPageNumber,          "showPageNumber",          QVariant(true) },
       { StyleIdx::showPageNumberOne,       "showPageNumberOne",       QVariant(false) },
 

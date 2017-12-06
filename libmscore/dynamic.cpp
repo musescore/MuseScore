@@ -198,6 +198,8 @@ void Dynamic::doAutoplace()
       if (!(s && autoplace()))
             return;
 
+      setUserOff(QPointF());
+
       qreal minDistance = score()->styleP(StyleIdx::dynamicsMinDistance);
       const Shape& s1   = s->measure()->staffShape(staffIdx());
       Shape s2          = shape().translated(s->pos() + pos());

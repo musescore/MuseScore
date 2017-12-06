@@ -347,6 +347,8 @@ QPointF Element::pagePos() const
                   measure = toMeasure(parent());
             else if (parent()->isSystem())
                   system = toSystem(parent());
+            else if (parent()->isFretDiagram())
+                  return p + parent()->pagePos();
             else
                   qFatal("this %s parent %s\n", name(), parent()->name());
             if (measure) {
@@ -384,7 +386,6 @@ QPointF Element::canvasPos() const
             Measure* measure = 0;
             if (parent()->isSegment())
                   measure = toSegment(parent())->measure();
-                  // system = toSegment(parent())->system();
             else if (parent()->isMeasure())     // used in measure number
                   measure = toMeasure(parent());
                   // system = toMeasure(parent())->system();
@@ -392,6 +393,8 @@ QPointF Element::canvasPos() const
                   system = toSystem(parent());
             else if (parent()->isChord())       // grace chord
                   measure = toSegment(parent()->parent())->measure();
+            else if (parent()->isFretDiagram())
+                  return p + parent()->canvasPos();
             else
                   qFatal("this %s parent %s\n", name(), parent()->name());
             if (measure) {
