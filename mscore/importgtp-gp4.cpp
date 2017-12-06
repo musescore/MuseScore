@@ -943,7 +943,7 @@ bool GuitarPro4::read(QFile* fp)
                         int numStrings = staff->part()->instrument()->stringData()->strings();
                         bool hasSlur   = false;
 				int dynam      = -1;
-if (cr && cr->isChord()) {    // ws
+if (cr && cr->isChord()) {    // TODO::ws  crashes without if
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
@@ -963,7 +963,7 @@ if (cr && cr->isChord()) {    // ws
                                     note->setTpcFromPitch();
                                     }
                               }
-            }     // ws
+} //ws
                         if (cr && cr->isChord()) {
                               applyBeatEffects(toChord(cr), beatEffects);
 					if (dynam != curDynam[track]) {
@@ -1066,9 +1066,9 @@ if (cr && cr->isChord()) {    // ws
             }
 
       for (auto n : slideList) {
-		auto segment = n->chord()->segment();
-		auto measure = segment->measure();
-		int segment_counter{ 0 };
+		Segment* segment = n->chord()->segment();
+		Measure* measure = segment->measure();
+		int segment_counter = 0;
 		while ((segment = segment->next1(SegmentType::ChordRest)) || ((measure = measure->nextMeasure()) && (segment = measure->first()))) {
                   if (!segment->isChordRestType())
                         continue;
@@ -1079,7 +1079,7 @@ if (cr && cr->isChord()) {    // ws
                         ++segment_counter;
 				if (segment_counter > 2)
 				      break;
-                        for (auto nt : c->notes()) {
+                        for (Note* nt : c->notes()) {
                               if (nt->string() == n->string()) {
                                     for (auto e : nt->el()) {
 						      if (e->isChordLine()) {
@@ -1093,6 +1093,7 @@ if (cr && cr->isChord()) {    // ws
                                     }
 			            if (br)
                                     break;
+#if 0  // TODO-ws: crash
                               Glissando* s = new Glissando(score);
 		      		s->setAnchor(Spanner::Anchor::NOTE);
 			      	s->setStartElement(n);
@@ -1104,6 +1105,7 @@ if (cr && cr->isChord()) {    // ws
 				      s->setTick2(nt->chord()->segment()->tick());
       				s->setTrack2(n->track());
 	      			score->addElement(s);
+#endif
 		      		br = true;
 			      	break;
 				      }
