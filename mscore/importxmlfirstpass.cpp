@@ -39,7 +39,8 @@ Fraction MusicXmlPart::measureDuration(int i) const
 QString MusicXmlPart::toString() const
       {
       QString res;
-      res = QString("part id '%1' name '%2'\n").arg(id).arg(name);
+      res = QString("part id '%1' name '%2' print %3 abbr '%4' print %5\n")
+            .arg(id).arg(name).arg(printName).arg(abbr).arg(printAbbr);
 
       for (VoiceList::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
             res += QString("voice %1 map staff data %2\n")
