@@ -42,7 +42,7 @@ private slots:
       void gpTrill()         { gpReadTest("trill", "gp4"); }
       void gpDynamic()       { gpReadTest("dynamic", "gp5"); }
       void gpGhostNote()     { gpReadTest("ghost_note", "gp3"); }
-      void gpGraceNote()     { gpReadTest("grace", "gp5"); } // doesn't work
+      void gpGraceNote()     { gpReadTest("grace", "gp5"); }
       void gp5Volta()        { gpReadTest("volta", "gp5"); }
       void gp4Volta()        { gpReadTest("volta", "gp4"); }
       void gp3Volta()        { gpReadTest("volta", "gp3"); }
@@ -151,7 +151,8 @@ private slots:
       void gpxOttava5()      { gpReadTest("ottava5", "gpx"); }
 //      void gpxChornamesKeyboard() { gpReadTest("chordnames_keyboard", "gpx"); }
       void gpxClefs() { gpReadTest("clefs", "gpx"); }
-
+      void gpxTuplets()  { gpReadTest("tuplets", "gpx"); }
+      void gpxTuplets2() { gpReadTest("tuplets2", "gpx"); }
       };
 
 //---------------------------------------------------------
