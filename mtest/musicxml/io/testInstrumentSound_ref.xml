@@ -129,6 +129,11 @@
           <sign>G</sign>
           <line>2</line>
           </clef>
+        <transpose>
+          <diatonic>0</diatonic>
+          <chromatic>0</chromatic>
+          <octave-change>-1</octave-change>
+          </transpose>
         </attributes>
       <note>
         <pitch>
