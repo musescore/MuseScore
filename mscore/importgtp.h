@@ -231,6 +231,7 @@ class GuitarPro {
       void readLyrics();
       void readChannels();
       void setTuplet(Tuplet* tuplet, int tuple);
+      void setupTupletStyle(Tuplet* tuplet);
       Fraction len2fraction(int len);
       void addDynamic(Note*, int d);
       void createMeasures();
@@ -254,7 +255,7 @@ class GuitarPro {
 	std::vector<PalmMute*> _palmMutes;
 	std::vector<LetRing*> _letRings;
 	std::vector<Vibrato*> _vibratos;
-
+ 
    public:
 	std::vector<std::string> tunings;
 

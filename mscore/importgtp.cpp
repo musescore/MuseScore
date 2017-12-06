@@ -543,6 +543,27 @@ Text* GuitarPro::addTextToNote(QString string, Align a, Note* note)
       return text;
       }
 
+void GuitarPro::setupTupletStyle(Tuplet* tuplet)
+      {
+      bool real;
+      switch (tuplet->ratio().numerator()) {
+            case 2: real = (tuplet->ratio().denominator() == 3); break;
+            case 3:
+            case 4: real = (tuplet->ratio().denominator() == 2); break;
+            case 5:
+            case 6:
+            case 7: real = (tuplet->ratio().denominator() == 4); break;
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13: real = (tuplet->ratio().denominator() == 8); break;
+            default: real = false;
+            }
+      if (!real)
+            tuplet->setNumberType(Tuplet::NumberType::SHOW_RELATION);
+      }
+
 //---------------------------------------------------------
 //   setTuplet
 //---------------------------------------------------------
@@ -2810,8 +2831,8 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             if (bar.barLine != BarLineType::NORMAL && bar.barLine != BarLineType::END_REPEAT && bar.barLine != BarLineType::START_REPEAT)
                   m->setEndBarLineType(bar.barLine, 0);
             }
-//      if (score->lastMeasure())
-//            score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
+      if (score->lastMeasure() && score->lastMeasure()->endBarLineType() != BarLineType::NORMAL)
+            score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
 
       //
       // create parts (excerpts)
