@@ -1032,7 +1032,7 @@ void Harmony::layout()
             }
       else if (parent()->isFretDiagram()) {
             qDebug("Harmony %s with fret diagram as parent", qPrintable(_textName)); // not possible?
-            yy = score()->styleP(StyleIdx::harmonyFretDist);
+            yy = -score()->styleP(StyleIdx::harmonyFretDist);
             }
       yy += offset().y();           //      yy += offset(_spatium).y();
 

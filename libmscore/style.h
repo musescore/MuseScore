@@ -176,6 +176,7 @@ enum class StyleIdx {
       fretNumMag,
       fretNumPos,
       fretY,
+      fretMinDistance,
 
       showPageNumber,
       showPageNumberOne,

@@ -1824,6 +1824,7 @@ void Segment::createShape(int staffIdx)
             // probably only allow for lyrics and chordnames
             if (e->staffIdx() == staffIdx
                && !e->isRehearsalMark()
+               && !e->isFretDiagram()
                && !e->isTempoText()
                && !e->isDynamic()
                && !e->isSymbol()

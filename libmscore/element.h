@@ -251,7 +251,11 @@ class Element : public ScoreElement {
       virtual void addbbox(const QRectF& r) const { _bbox |= r;          }
       bool contains(const QPointF& p) const;
       bool intersects(const QRectF& r) const;
+#ifndef NDEBUG
+      virtual Shape shape() const                 { return Shape(bbox(), name());   }
+#else
       virtual Shape shape() const                 { return Shape(bbox());   }
+#endif
       virtual qreal baseLine() const              { return -height();       }
 
       virtual int subtype() const                 { return -1; }  // for select gui
