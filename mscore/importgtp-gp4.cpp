@@ -1093,7 +1093,7 @@ if (cr && cr->isChord()) {    // TODO::ws  crashes without if
                                     }
 			            if (br)
                                     break;
-#if 0  // TODO-ws: crash
+#if 1  // TODO-ws: crash
                               Glissando* s = new Glissando(score);
 		      		s->setAnchor(Spanner::Anchor::NOTE);
 			      	s->setStartElement(n);
