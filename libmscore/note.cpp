@@ -3169,11 +3169,19 @@ void Note::setAccidentalType(AccidentalType type)
 
 Shape Note::shape() const
       {
+#ifndef NDEBUG
       Shape shape(bbox(), name());
       for (NoteDot* dot : _dots)
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot->name());
       if (_accidental)
             shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental->name());
+#else
+      Shape shape(bbox());
+      for (NoteDot* dot : _dots)
+            shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
+      if (_accidental)
+            shape.add(_accidental->bbox().translated(_accidental->pos()));
+#endif
       return shape;
       }
 
