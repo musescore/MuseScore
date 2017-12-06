@@ -1290,19 +1290,18 @@ void GuitarPro::setTempo(int tempo, Measure* measure)
 
 void GuitarPro::readChord(Segment* seg, int track, int numStrings, QString name, bool gpHeader)
       {
-      FretDiagram* fret = new FretDiagram(score);
-//TODO-ws	fret->setChordName(name);
-      fret->setTrack(track);
-      fret->setStrings(numStrings);
-
       int firstFret = readInt();
-      fret->setOffset(firstFret-1);
-      if (firstFret != 0 || gpHeader) {
+      if (firstFret || gpHeader) {
+            FretDiagram* fret = new FretDiagram(score);
+            fret->setTrack(track);
+            fret->setStrings(numStrings);
+            fret->setOffset(firstFret-1);
             for (int i = 0; i < (gpHeader ? 7 : 6); ++i) {
                   int currentFret =  readInt();
                   // read the frets and add them to the fretboard
                   // substract 1 extra from numStrings as we count from 0
-                  if (i > numStrings - 1) {}
+                  if (i > numStrings - 1) {
+                        }
                   else if (currentFret > 0) {
                         fret->setDot(numStrings - 1 - i, currentFret-firstFret+1);
                         }
@@ -1315,17 +1314,20 @@ void GuitarPro::readChord(Segment* seg, int track, int numStrings, QString name,
                         fret->setMarker(numStrings - 1 - i, 'X');
                         }
                   }
+            seg->add(fret);
+            if (!name.isEmpty()) {
+                  Harmony* harmony = new Harmony(seg->score());
+                  harmony->setHarmony(name);
+                  harmony->setTrack(track);
+                  fret->add(harmony);
+                  }
             }
-      seg->add(fret);
-      if (name.isEmpty())
-            return;
-#if 0
-      //TODO:
-      Harmony* harmony = new Harmony(seg->score());
-      harmony->setHarmony(name);
-      harmony->setTrack(track);
-      seg->add(harmony);
-#endif
+      else if (!name.isEmpty()) {
+            Harmony* harmony = new Harmony(seg->score());
+            harmony->setHarmony(name);
+            harmony->setTrack(track);
+            seg->add(harmony);
+            }
       }
 //---------------------------------------------------------
 //   restsForEmptyBeats

@@ -22,17 +22,39 @@ namespace Ms {
 class Segment;
 
 //---------------------------------------------------------
+//   ShapeElement
+//---------------------------------------------------------
+
+struct ShapeElement : public QRectF {
+#ifndef NDEBUG
+      const char* text;
+      void dump() const;
+      ShapeElement(const QRectF& f, const char* t = 0) : QRectF(f), text(t) {}
+#else
+      ShapeElement(const QRectF& f) : QRectF(f) {}
+#endif
+      };
+
+//---------------------------------------------------------
 //   Shape
 //---------------------------------------------------------
 
-class Shape : std::vector<QRectF> {
+class Shape : std::vector<ShapeElement> {
    public:
       Shape() {}
+#ifndef NDEBUG
+      Shape(const QRectF& r, const char* s = 0) { add(r, s); }
+#else
       Shape(const QRectF& r) { add(r); }
+#endif
       void draw(QPainter*) const;
 
       void add(const Shape& s)            { insert(end(), s.begin(), s.end()); }
+#ifndef NDEBUG
+      void add(const QRectF& r, const char* t = 0) { push_back(ShapeElement(r, t)); }
+#else
       void add(const QRectF& r)           { push_back(r); }
+#endif
       void remove(const QRectF&);
       void remove(const Shape&);
       void translate(const QPointF&);
@@ -46,9 +68,9 @@ class Shape : std::vector<QRectF> {
       qreal top() const;
       qreal bottom() const;
 
-      int size() const   { return std::vector<QRectF>::size(); }
-      bool empty() const { return std::vector<QRectF>::empty(); }
-      void clear()       { std::vector<QRectF>::clear();       }
+      int size() const   { return std::vector<ShapeElement>::size(); }
+      bool empty() const { return std::vector<ShapeElement>::empty(); }
+      void clear()       { std::vector<ShapeElement>::clear();       }
 
       bool contains(const QPointF&) const;
       bool intersects(const QRectF& rr) const;

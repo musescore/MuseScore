@@ -57,8 +57,8 @@
         </VBox>
       <Measure number="1">
         <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
+          <concertClefType>G8va</concertClefType>
+          <transposingClefType>G8va</transposingClefType>
           <lid>1</lid>
           </Clef>
         <KeySig>
@@ -84,8 +84,8 @@
           <lid>6</lid>
           </Dynamic>
         <Beam id="1">
-          <l1>20</l1>
-          <l2>16</l2>
+          <l1>8</l1>
+          <l2>5</l2>
           </Beam>
         <Tuplet id="1">
           <lid>9</lid>
@@ -231,8 +231,8 @@
           </VBox>
         <Measure number="1">
           <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
+            <concertClefType>G8va</concertClefType>
+            <transposingClefType>G8va</transposingClefType>
             <lid>1</lid>
             </Clef>
           <KeySig>
@@ -258,8 +258,8 @@
             <lid>6</lid>
             </Dynamic>
           <Beam id="2">
-            <l1>20</l1>
-            <l2>16</l2>
+            <l1>8</l1>
+            <l2>5</l2>
             </Beam>
           <Tuplet id="2">
             <lid>9</lid>
