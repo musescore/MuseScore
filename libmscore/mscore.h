@@ -71,6 +71,11 @@ static constexpr qreal INCH      = 25.4;
 static constexpr qreal PPI       = 72.0;           // printer points per inch
 static constexpr qreal SPATIUM20 = 5.0;
 static constexpr qreal DPI       = 72.0;
+#ifdef Q_OS_WIN
+static constexpr qreal DPIFACTOR = 100.0;       // scaling factor to adjust kerning under Windows, see 
+#else
+static constexpr qreal DPIFACTOR = 1.0;
+#endif
 static constexpr qreal DPMM      = DPI / INCH;
 
 static constexpr int MAX_STAVES  = 4;
