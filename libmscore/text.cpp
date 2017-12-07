@@ -198,6 +198,7 @@ bool TextFragment::operator ==(const TextFragment& f) const
 
 void TextFragment::draw(QPainter* p, const Text* t) const
       {
+#ifdef Q_OS_WIN // See PR #3298
       p->save();
       QFont font2 = font(t);
       font2.setPixelSize(font2.pixelSize() * DPIFACTOR);
@@ -206,6 +207,10 @@ void TextFragment::draw(QPainter* p, const Text* t) const
       p->scale(dpiMag,dpiMag);
       p->drawText(pos * DPIFACTOR, text);
       p->restore();
+#else
+      p->setFont(font(t));
+      p->drawText(pos, text);
+#endif
       }
 
 //---------------------------------------------------------
