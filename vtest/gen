@@ -82,8 +82,9 @@ for src in $SRC ; do
 #    if test -f ../$src.mscz; then
 #          echo "{ \"in\" : \"../$src.mscz\",         \"out\" : \"$src.png\" }," >> $JSON_FILE;
 #    else
+    if test -f ../$src.mscx; then
           echo "{ \"in\" : \"../$src.mscx\",         \"out\" : \"$src.png\" }," >> $JSON_FILE;
-#    fi
+    fi
 done
 echo "{}]" >> $JSON_FILE
 
@@ -92,8 +93,10 @@ $MSCORE -j $JSON_FILE -r $DPI >LOG 2<&1
 
 echo "Compare PNG files and references"
 for src in $SRC; do
-      cp ../$src-ref.png .
-      compare $src-1.png $src-ref.png $src-diff.png
+      if test -f $src-1.png; then
+            cp ../$src-ref.png .
+            compare $src-1.png $src-ref.png $src-diff.png
+            fi
       done
 
 echo "Generate report"

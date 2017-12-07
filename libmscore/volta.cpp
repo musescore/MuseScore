@@ -93,6 +93,7 @@ QVariant VoltaSegment::propertyDefault(P_ID id) const
             case P_ID::END_HOOK_HEIGHT:
             case P_ID::VOLTA_ENDING:
             case P_ID::BEGIN_TEXT_OFFSET:
+            case P_ID::BEGIN_FONT_BOLD:
                   return volta()->propertyDefault(id);
             default:
                   return TextLineBaseSegment::propertyDefault(id);
@@ -177,6 +178,8 @@ Volta::Volta(Score* s)
       setBeginHookType(HookType::HOOK_90);
       setAnchor(Anchor::MEASURE);
 
+      resetProperty(P_ID::BEGIN_FONT_SIZE);
+      resetProperty(P_ID::BEGIN_FONT_BOLD);
       resetProperty(P_ID::BEGIN_HOOK_HEIGHT);
       resetProperty(P_ID::END_HOOK_HEIGHT);
       resetProperty(P_ID::LINE_WIDTH);
@@ -314,7 +317,13 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
                   return score()->styleV(StyleIdx::voltaLineWidth);
 
             case P_ID::LINE_STYLE:
-                  return score()->styleI(StyleIdx::voltaLineStyle);
+                  return score()->styleV(StyleIdx::voltaLineStyle);
+
+            case P_ID::BEGIN_FONT_BOLD:
+                  return score()->styleV(StyleIdx::voltaFontBold);
+
+            case P_ID::BEGIN_FONT_SIZE:
+                  return score()->styleV(StyleIdx::voltaFontSize);
 
             case P_ID::VOLTA_ENDING:
                   return QVariant::fromValue(QList<int>());
