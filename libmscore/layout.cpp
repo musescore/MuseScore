@@ -2858,10 +2858,10 @@ System* Score::collectSystem(LayoutContext& lc)
                               m->removeSystemHeader();
                         }
 
+                  m->createEndBarLines(true);
                   Measure* nm = m->nextMeasure();
                   if (nm)
                         m->addSystemTrailer(nm);
-                  m->createEndBarLines(true);
                   m->computeMinWidth();
                   ww = m->width();
                   }
