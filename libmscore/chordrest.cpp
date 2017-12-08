@@ -1232,7 +1232,7 @@ void ChordRest::processSiblings(std::function<void(Element*)> func)
 //---------------------------------------------------------
 
 Element* ChordRest::nextArticulationOrLyric(Element* e)
-      {  
+      {
       auto i = std::find(_articulations.begin(), _articulations.end(), e);
       if (i != _articulations.end()) {
             if (i != _articulations.end()-1) {
@@ -1294,19 +1294,19 @@ Element* ChordRest::nextElement()
                   e = score()->selection().elements().first();
       switch (e->type()) {
             case ElementType::ARTICULATION:
-            case ElementType::LYRICS: {                  
+            case ElementType::LYRICS: {
                   Element* next = nextArticulationOrLyric(e);
                   if (next)
                         return next;
                   else
                         break;
                   }
-            default: {                  
+            default: {
                   if (!_articulations.empty())
                         return _articulations[0];
                   else if (!_lyrics.empty())
-                        return _lyrics[0];                
-                  else 
+                        return _lyrics[0];
+                  else
                         break;
                   }
             }
@@ -1334,9 +1334,9 @@ Element* ChordRest::prevElement()
                               return static_cast<Chord*>(this)->lastElementBeforeSegment();
                         }
                   // fall through
-                  }           
+                  }
             default: {
-                  break;                 
+                  break;
                   }
             }
       int staffId = e->staffIdx();

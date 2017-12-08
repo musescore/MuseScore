@@ -249,8 +249,13 @@ Styles & Properties
 ====================================================================
 
       * tablature not tested, has likely regressions
+
       * some scripting interface functions are commented out
-      * horizontal layout mode not working right
+
+      * horizontal layout mode is incomplete and does not work right
+
+      * only simple text editing will work, the current implementation is
+        incomplete
 
 
 
