@@ -57,7 +57,7 @@ Kept as an example of how to integrate with a complex synthesizer.
 
 * **omr** Optical music recognition
 
-* **share** Files moved to /usr/share/... on install
+* **share** Files moved to `/usr/share/`... on install
 
 * **test** Old tests. Should move to mtest
 
@@ -111,10 +111,10 @@ To start MuseScore, type:
 
     ./build.release/mscore/mscore
 
-The Start Center window will appear on every invocation, until you disable that setting via the "Preferences" dialog.
+The Start Center window will appear on every invocation, until you disable that setting via the `Preferences` dialog.
 
 ### Installing
-To install to default prefix using root user, type:
+To install to default prefix using `root` user, type:
 
     sudo make install
 
