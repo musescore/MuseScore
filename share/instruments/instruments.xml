@@ -10440,6 +10440,35 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <!-- Viola da Gamba (6 string) removed as a duplication -->
+            <Instrument id="baryton">
+                  <longName>Baryton</longName>
+                  <shortName>Bary.</shortName>
+                  <description>Baryton</description>
+                  <musicXMLid>strings.baryton</musicXMLid>
+                  <StringData>
+                        <frets>13</frets>
+                        <string>38</string>
+                        <string>43</string>
+                        <string>48</string>
+                        <string>52</string>
+                        <string>57</string>
+                        <string>62</string>
+                  </StringData>
+                  <clef>F</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>33-74</aPitchRange>
+                  <pPitchRange>33-79</pPitchRange>
+                  <Channel>
+                        <program value="42"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="15"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
+                  <genre>earlymusic</genre>
+            </Instrument>
             <Instrument id="violone">
                   <longName>Violone</longName>
                   <shortName>Vne.</shortName>
