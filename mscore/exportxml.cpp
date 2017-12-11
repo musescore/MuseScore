@@ -656,13 +656,13 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, XmlWriter& xml
 
 static void glissando(const Glissando* gli, int number, bool start, Notations& notations, XmlWriter& xml)
       {
-      Glissando::Type st = gli->glissandoType();
+      GlissandoType st = gli->glissandoType();
       QString tagName;
       switch (st) {
-            case Glissando::Type::STRAIGHT:
+            case GlissandoType::STRAIGHT:
                   tagName = "slide line-type=\"solid\"";
                   break;
-            case Glissando::Type::WAVY:
+            case GlissandoType::WAVY:
                   tagName = "glissando line-type=\"wavy\"";
                   break;
             default:
@@ -715,8 +715,8 @@ int GlissandoHandler::findNote(const Note* note, int type) const
 
 void GlissandoHandler::doGlissandoStart(Glissando* gliss, Notations& notations, XmlWriter& xml)
       {
-      Glissando::Type type = gliss->glissandoType();
-      if (type != Glissando::Type::STRAIGHT && type != Glissando::Type::WAVY) {
+      GlissandoType type = gliss->glissandoType();
+      if (type != GlissandoType::STRAIGHT && type != GlissandoType::WAVY) {
             qDebug("doGlissandoStart: unknown glissando subtype %d", int(type));
             return;
             }
@@ -726,14 +726,14 @@ void GlissandoHandler::doGlissandoStart(Glissando* gliss, Notations& notations, 
       if (i >= 0) {
             // print error and remove from list
             qDebug("doGlissandoStart: note for glissando/slide %p already on list", gliss);
-            if (type == Glissando::Type::STRAIGHT) slideNote[i] = 0;
-            if (type == Glissando::Type::WAVY) glissNote[i] = 0;
+            if (type == GlissandoType::STRAIGHT) slideNote[i] = 0;
+            if (type == GlissandoType::WAVY) glissNote[i] = 0;
             }
       // find free slot to store it
       i = findNote(0, int(type));
       if (i >= 0) {
-            if (type == Glissando::Type::STRAIGHT) slideNote[i] = note;
-            if (type == Glissando::Type::WAVY) glissNote[i] = note;
+            if (type == GlissandoType::STRAIGHT) slideNote[i] = note;
+            if (type == GlissandoType::WAVY) glissNote[i] = note;
             glissando(gliss, i + 1, true, notations, xml);
             }
       else
@@ -746,19 +746,19 @@ void GlissandoHandler::doGlissandoStart(Glissando* gliss, Notations& notations, 
 
 void GlissandoHandler::doGlissandoStop(Glissando* gliss, Notations& notations, XmlWriter& xml)
       {
-      Glissando::Type type = gliss->glissandoType();
-      if (type != Glissando::Type::STRAIGHT && type != Glissando::Type::WAVY) {
+      GlissandoType type = gliss->glissandoType();
+      if (type != GlissandoType::STRAIGHT && type != GlissandoType::WAVY) {
             qDebug("doGlissandoStart: unknown glissando subtype %d", int(type));
             return;
             }
       Note* note = static_cast<Note*>(gliss->startElement());
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-            if (type == Glissando::Type::STRAIGHT && slideNote[i] == note) {
+            if (type == GlissandoType::STRAIGHT && slideNote[i] == note) {
                   slideNote[i] = 0;
                   glissando(gliss, i + 1, false, notations, xml);
                   return;
                   }
-            if (type == Glissando::Type::WAVY && glissNote[i] == note) {
+            if (type == GlissandoType::WAVY && glissNote[i] == note) {
                   glissNote[i] = 0;
                   glissando(gliss, i + 1, false, notations, xml);
                   return;

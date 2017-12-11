@@ -1028,7 +1028,7 @@ if (cr && cr->isChord()) {    // TODO::ws  crashes without if
 											s->setTick(seg->tick());
 											s->setTrack(chord->track());
 											s->setParent(n);
-											s->setGlissandoType(Glissando::Type::STRAIGHT);
+											s->setGlissandoType(GlissandoType::STRAIGHT);
 											s->setEndElement(last);
 											s->setTick2(chord->segment()->tick());
 											s->setTrack2(chord->track());
@@ -1100,7 +1100,7 @@ if (cr && cr->isChord()) {    // TODO::ws  crashes without if
 				      s->setTick(n->chord()->segment()->tick());
       				s->setTrack(n->track());
 	      			s->setParent(n);
-		      		s->setGlissandoType(Glissando::Type::STRAIGHT);
+		      		s->setGlissandoType(GlissandoType::STRAIGHT);
 			      	s->setEndElement(nt);
 				      s->setTick2(nt->chord()->segment()->tick());
       				s->setTrack2(n->track());

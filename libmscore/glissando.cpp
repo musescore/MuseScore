@@ -65,7 +65,7 @@ void GlissandoSegment::layout()
 void GlissandoSegment::draw(QPainter* painter) const
       {
       painter->save();
-      //qreal _spatium = spatium();
+      qreal _spatium = spatium();
 
       QPen pen(glissando()->curColor());
       pen.setWidthF(glissando()->lineWidth().val() * spatium());
@@ -81,10 +81,10 @@ void GlissandoSegment::draw(QPainter* painter) const
       qreal scale = painter->worldTransform().m11();
       painter->rotate(-wi);
 
-      if (glissando()->glissandoType() == Glissando::Type::STRAIGHT) {
+      if (glissando()->glissandoType() == GlissandoType::STRAIGHT) {
             painter->drawLine(QLineF(0.0, 0.0, l, 0.0));
             }
-      else if (glissando()->glissandoType() == Glissando::Type::WAVY) {
+      else if (glissando()->glissandoType() == GlissandoType::WAVY) {
             QRectF b = symBbox(SymId::wiggleTrill);
             qreal w  = symAdvance(SymId::wiggleTrill);
             int n    = (int)(l / w);      // always round down (truncate) to avoid overlap
@@ -98,21 +98,26 @@ void GlissandoSegment::draw(QPainter* painter) const
             score()->scoreFont()->draw(ids, painter, magS(), QPointF(x, -(b.y() + b.height()*0.5) ), scale);
 //            MScore::pdfPrinting = tmp;
             }
-#if 0 // TODO
+
       if (glissando()->showText()) {
-            const TextStyle& st = score()->textStyle(StyledPropertyListIdx::GLISSANDO);
-            QRectF r = st.fontMetrics(_spatium).boundingRect(glissando()->text());
+            QFont f(score()->styleSt(StyleIdx::glissandoFontFace));
+            f.setPointSizeF(score()->styleD(StyleIdx::glissandoFontSize) * MScore::pixelRatio * _spatium / SPATIUM20);
+            f.setBold(score()->styleB(StyleIdx::glissandoFontBold));
+            f.setItalic(score()->styleB(StyleIdx::glissandoFontItalic));
+            f.setUnderline(score()->styleB(StyleIdx::glissandoFontUnderline));
+            QFontMetricsF fm(f);
+            QRectF r = fm.boundingRect(glissando()->text());
+
             // if text longer than available space, skip it
             if (r.width() < l) {
                   qreal yOffset = r.height() + r.y();       // find text descender height
                   // raise text slightly above line and slightly more with WAVY than with STRAIGHT
-                  yOffset += _spatium * (glissando()->glissandoType() == Glissando::Type::WAVY ? 0.4 : 0.1);
-                  painter->setFont(st.font(_spatium * MScore::pixelRatio));
+                  yOffset += _spatium * (glissando()->glissandoType() == GlissandoType::WAVY ? 0.4 : 0.1);
+                  painter->setFont(f);
                   qreal x = (l - r.width()) * 0.5;
                   painter->drawText(QPointF(x, -yOffset), glissando()->text());
                   }
             }
-#endif
       painter->restore();
       }
 
@@ -180,11 +185,11 @@ Glissando::Glissando(Score* s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
 
-      _glissandoType = Type::STRAIGHT;
+      _glissandoType = GlissandoType::STRAIGHT;
       _text          = "gliss.";
       _showText      = true;
       setDiagonal(true);
-      setGlissandoStyle(MScore::GlissandoStyle::CHROMATIC);
+      setGlissandoStyle(GlissandoStyle::CHROMATIC);
       setPlayGlissando(true);
       setLineWidth(Spatium(GLISS_DEFAULT_LINE_TICKNESS));
       setAnchor(Spanner::Anchor::NOTE);
@@ -409,7 +414,7 @@ void Glissando::read(XmlReader& e)
                   _text = e.readElementText();
                   }
             else if (tag == "subtype")
-                  _glissandoType = Type(e.readInt());
+                  _glissandoType = GlissandoType(e.readInt());
             else if (tag == "glissandoStyle") {
                 setProperty(P_ID::GLISSANDO_STYLE, Ms::getProperty(P_ID::GLISSANDO_STYLE, e));
             } else if ( tag == "play") {
@@ -466,32 +471,6 @@ void Glissando::computeStartElement()
       qDebug("no first note for glissando found");
       }
 */
-//---------------------------------------------------------
-//   undoSetGlissandoType
-//---------------------------------------------------------
-
-void Glissando::undoSetGlissandoType(Type t)
-      {
-      undoChangeProperty(P_ID::GLISS_TYPE, int(t));
-      }
-
-//---------------------------------------------------------
-//   undoSetText
-//---------------------------------------------------------
-
-void Glissando::undoSetText(const QString& s)
-      {
-      undoChangeProperty(P_ID::GLISS_TEXT, s);
-      }
-
-//---------------------------------------------------------
-//   undoSetShowText
-//---------------------------------------------------------
-
-void Glissando::undoSetShowText(bool f)
-      {
-      undoChangeProperty(P_ID::GLISS_SHOW_TEXT, f);
-      }
 
 //---------------------------------------------------------
 //   STATIC FUNCTIONS: guessInitialNote
@@ -708,7 +687,7 @@ bool Glissando::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
             case P_ID::GLISS_TYPE:
-                  setGlissandoType(Type(v.toInt()));
+                  setGlissandoType(GlissandoType(v.toInt()));
                   break;
             case P_ID::GLISS_TEXT:
                   setText(v.toString());
@@ -717,7 +696,7 @@ bool Glissando::setProperty(P_ID propertyId, const QVariant& v)
                   setShowText(v.toBool());
                   break;
             case P_ID::GLISSANDO_STYLE:
-                 setGlissandoStyle(MScore::GlissandoStyle(v.toInt()));
+                 setGlissandoStyle(GlissandoStyle(v.toInt()));
                  break;
             case P_ID::PLAY:
                  setPlayGlissando(v.toBool());
@@ -739,13 +718,13 @@ QVariant Glissando::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::GLISS_TYPE:
-                  return int(Type::STRAIGHT);
+                  return int(GlissandoType::STRAIGHT);
             case P_ID::GLISS_TEXT:
                   return "gliss.";
             case P_ID::GLISS_SHOW_TEXT:
                   return true;
             case P_ID::GLISSANDO_STYLE:
-                  return int(MScore::GlissandoStyle::CHROMATIC);
+                  return int(GlissandoStyle::CHROMATIC);
             case P_ID::PLAY:
                   return true;
             default:

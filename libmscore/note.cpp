@@ -1790,7 +1790,7 @@ Element* Note::drop(EditData& data)
                         gliss->setTrack2(finalNote->track());
                         // in TAB, use straight line with no text
                         if (staff()->isTabStaff(finalNote->chord()->tick())) {
-                              gliss->setGlissandoType(Glissando::Type::STRAIGHT);
+                              gliss->setGlissandoType(GlissandoType::STRAIGHT);
                               gliss->setShowText(false);
                               }
                         gliss->setParent(this);

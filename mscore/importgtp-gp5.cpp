@@ -906,7 +906,7 @@ bool GuitarPro5::read(QFile* fp)
 						s->setTick(n->chord()->segment()->tick());
 						s->setTrack(n->track());
 						s->setParent(n);
-						s->setGlissandoType(Glissando::Type::STRAIGHT);
+						s->setGlissandoType(GlissandoType::STRAIGHT);
 						s->setEndElement(nt);
 						s->setTick2(nt->chord()->segment()->tick());
 						s->setTrack2(n->track());
@@ -1225,7 +1225,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
 				s->setTick(start->chord()->segment()->tick());
 				s->setTrack(start->staffIdx());
 				s->setParent(start);
-				s->setGlissandoType(Glissando::Type::STRAIGHT);
+				s->setGlissandoType(GlissandoType::STRAIGHT);
 				s->setEndElement(note);
 				s->setTick2(note->chord()->segment()->tick());
 				s->setTrack2(note->staffIdx());

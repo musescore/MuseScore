@@ -321,12 +321,9 @@ class MScore : public QObject {
    public:
       enum class DirectionH : char { AUTO, LEFT, RIGHT };
       enum class OrnamentStyle : char { DEFAULT, BAROQUE};
-      enum class GlissandoStyle : char { CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC };
 
       static MsError _error;
       static std::vector<MScoreError> errorList;
-
-      Q_ENUMS(DirectionH OrnamentStyle GlissandoStyle)
 
       static void init();
 

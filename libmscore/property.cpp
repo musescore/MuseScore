@@ -393,13 +393,13 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case P_TYPE::GLISSANDO_STYLE: {
                   QString value(e.readElementText());
                   if ( value == "whitekeys")
-                        return QVariant(int(MScore::GlissandoStyle::WHITE_KEYS));
+                        return QVariant(int(GlissandoStyle::WHITE_KEYS));
                   else if ( value == "blackkeys")
-                        return QVariant(int(MScore::GlissandoStyle::BLACK_KEYS));
+                        return QVariant(int(GlissandoStyle::BLACK_KEYS));
                   else if ( value == "diatonic")
-                        return QVariant(int(MScore::GlissandoStyle::DIATONIC));
+                        return QVariant(int(GlissandoStyle::DIATONIC));
                   else // e.g., normally "Chromatic"
-                        return QVariant(int(MScore::GlissandoStyle::CHROMATIC));
+                        return QVariant(int(GlissandoStyle::CHROMATIC));
                   }
                   break;
             case P_TYPE::ORNAMENT_STYLE: {
