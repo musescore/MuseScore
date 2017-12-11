@@ -1371,7 +1371,7 @@ void renderGlissando(NoteEventList* events, Note *notestart)
       for (Spanner* spanner : notestart->spannerFor()) {
             if (spanner->type() == ElementType::GLISSANDO) {
                   Glissando *glissando = static_cast<Glissando *>(spanner);
-                  MScore::GlissandoStyle glissandoStyle = glissando->glissandoStyle();
+                  GlissandoStyle glissandoStyle = glissando->glissandoStyle();
                   Element* ee = spanner->endElement();
                   // only consider glissando connnected to NOTE.
                   if (glissando->playGlissando() && ElementType::NOTE == ee->type()) {
@@ -1381,7 +1381,7 @@ void renderGlissando(NoteEventList* events, Note *notestart)
                         bool direction= pitchend >  pitchstart;
                         if (pitchend == pitchstart)
                               continue; // next spanner
-                        if (glissandoStyle == MScore::GlissandoStyle::DIATONIC) { // scale obeying accidentals
+                        if (glissandoStyle == GlissandoStyle::DIATONIC) { // scale obeying accidentals
                               int line;
                               int p = pitchstart;
                               // iterate as long as we haven't past the pitchend.
@@ -1398,13 +1398,13 @@ void renderGlissando(NoteEventList* events, Note *notestart)
                                     bool choose = false;
                                     int mod = ((p - Cnote) + 1200) % 12;
                                     switch (glissandoStyle) {
-                                          case MScore::GlissandoStyle::CHROMATIC:
+                                          case GlissandoStyle::CHROMATIC:
                                                 choose = true;
                                                 break;
-                                          case MScore::GlissandoStyle::WHITE_KEYS: // white note
+                                          case GlissandoStyle::WHITE_KEYS: // white note
                                                 choose = (whitenotes.find(mod) != whitenotes.end());
                                                 break;
-                                          case MScore::GlissandoStyle::BLACK_KEYS: // black note
+                                          case GlissandoStyle::BLACK_KEYS: // black note
                                                 choose =  (blacknotes.find(mod) != blacknotes.end());
                                                 break;
                                           default:

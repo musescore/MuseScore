@@ -917,7 +917,7 @@ Palette* MuseScore::newArpeggioPalette()
             }
       for (int i = 0; i < 2; ++i) {
             Glissando* a = new Glissando(gscore);
-            a->setGlissandoType(Glissando::Type(i));
+            a->setGlissandoType(GlissandoType(i));
             sp->append(a, tr("Glissando"));
             }
 

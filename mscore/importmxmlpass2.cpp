@@ -5892,7 +5892,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                               if (color.isValid())
                                     gliss->setColor(color);
                               gliss->setText(glissText);
-                              gliss->setGlissandoType(tag == 0 ? Glissando::Type::STRAIGHT : Glissando::Type::WAVY);
+                              gliss->setGlissandoType(tag == 0 ? GlissandoType::STRAIGHT : GlissandoType::WAVY);
                               _spanners[gliss] = QPair<int, int>(tick, -1);
                               // qDebug("glissando/slide=%p inserted at first tick %d", gliss, tick);
                               }

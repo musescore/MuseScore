@@ -245,7 +245,6 @@ void MScore::init()
       qRegisterMetaType<HairpinType>("HairpinType");
       qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
       qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
-      qRegisterMetaType<Glissando::Type>("GlissandoType");
 
       //classed enumerations
 //      qRegisterMetaType<MSQE_StyledPropertyListIdx::E>("StyledPropertyListIdx");
@@ -421,14 +420,14 @@ QQmlEngine* MScore::qml()
             _qml->setImportPathList(importPaths);
 #endif
             const char* enumErr = "You can't create an enumeration";
-            qmlRegisterType<MsProcess>  ("MuseScore", 3, 0, "QProcess");
+//TODO-ws            qmlRegisterType<MsProcess>  ("MuseScore", 3, 0, "QProcess");
             qmlRegisterType<FileIO, 1>  ("FileIO",    3, 0, "FileIO");
             //-----------mscore bindings
             qmlRegisterUncreatableMetaObject(Ms::staticMetaObject, "MuseScore", 3, 0, "Ms", enumErr);
 //            qmlRegisterUncreatableType<Direction>("MuseScore", 3, 0, "Direction", QObject::tr(enumErr));
 
             qmlRegisterType<MScore>     ("MuseScore", 3, 0, "MScore");
-            qmlRegisterType<MsScoreView>("MuseScore", 3, 0, "ScoreView");
+//TODO-ws            qmlRegisterType<MsScoreView>("MuseScore", 3, 0, "ScoreView");
 
             qmlRegisterType<Score>      ("MuseScore", 3, 0, "Score");
             qmlRegisterType<Cursor>     ("MuseScore", 3, 0, "Cursor");

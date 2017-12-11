@@ -194,14 +194,14 @@ void XmlWriter::tag(P_ID id, QVariant data, QVariant defaultData)
                              }
                   break;
             case P_TYPE::GLISSANDO_STYLE:
-                  switch (MScore::GlissandoStyle(data.toInt())) {
-                        case MScore::GlissandoStyle::BLACK_KEYS:
+                  switch (GlissandoStyle(data.toInt())) {
+                        case GlissandoStyle::BLACK_KEYS:
                               tag(name, QVariant("blackkeys"));
                               break;
-                        case MScore::GlissandoStyle::WHITE_KEYS:
+                        case GlissandoStyle::WHITE_KEYS:
                               tag(name, QVariant("whitekeys"));
                               break;
-                        case MScore::GlissandoStyle::DIATONIC:
+                        case GlissandoStyle::DIATONIC:
                               tag(name, QVariant("diatonic"));
                               break;
                         default:
