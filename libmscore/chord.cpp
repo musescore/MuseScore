@@ -1058,7 +1058,7 @@ bool Chord::readProperties(XmlReader& e)
             gliss->setEndElement(nullptr);
             // in TAB, use straight line with no text
             if (score()->staff(e.track() >> 2)->isTabStaff(tick())) {
-                  gliss->setGlissandoType(Glissando::Type::STRAIGHT);
+                  gliss->setGlissandoType(GlissandoType::STRAIGHT);
                   gliss->setShowText(false);
                   }
             finalNote->addSpannerBack(gliss);

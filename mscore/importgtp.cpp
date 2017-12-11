@@ -762,7 +762,7 @@ void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx, Note* /*note
       if (slide == SHIFT_SLIDE || slide == LEGATO_SLIDE) {
             Glissando* s = new Glissando(score);
             //s->setXmlText("");
-            s->setGlissandoType(Glissando::Type::STRAIGHT);
+            s->setGlissandoType(GlissandoType::STRAIGHT);
             cr->add(s);
             s->setAnchor(Spanner::Anchor::NOTE);
             Segment* prevSeg = cr->segment()->prev1(SegmentType::ChordRest);
@@ -779,7 +779,7 @@ void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx, Note* /*note
                         s->setTrack(staffIdx);
                         s->setParent(prevChord->upNote());
                         s->setText("");
-                        s->setGlissandoType(Glissando::Type::STRAIGHT);
+                        s->setGlissandoType(GlissandoType::STRAIGHT);
                         if (slide == LEGATO_SLIDE)
                               createSlur(true, staffIdx, prevChord);
                         }
@@ -1874,7 +1874,7 @@ bool GuitarPro1::readNote(int string, Note* note)
                   else if(transition == 1){
 					  //note->setSlideNote(gn);
 					  Glissando* glis = new Glissando(score);
-					  glis->setGlissandoType(Glissando::Type::STRAIGHT);
+					  glis->setGlissandoType(GlissandoType::STRAIGHT);
 					  gn->chord()->add(glis);
 					  glis->setAnchor(Spanner::Anchor::NOTE);
 					  glis->setStartElement(gn);
@@ -2573,7 +2573,7 @@ bool GuitarPro3::read(QFile* fp)
 				            s->setTick(n->chord()->segment()->tick());
 				            s->setTrack(n->track());
 				            s->setParent(n);
-				            s->setGlissandoType(Glissando::Type::STRAIGHT);
+				            s->setGlissandoType(GlissandoType::STRAIGHT);
 				            s->setEndElement(nt);
 				            s->setTick2(cr->segment()->tick());
 				            s->setTrack2(n->track());

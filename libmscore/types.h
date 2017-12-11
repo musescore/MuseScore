@@ -131,7 +131,6 @@ enum class ElementType {
       MAXTYPE
       };
 
-Q_ENUM_NS(ElementType)
 
 //---------------------------------------------------------
 //   Direction
@@ -141,6 +140,23 @@ enum class Direction {
       AUTO, UP, DOWN
       };
 
+//---------------------------------------------------------
+//   GlissandoType
+//---------------------------------------------------------
+
+enum class GlissandoType {
+      STRAIGHT, WAVY
+      };
+
+//---------------------------------------------------------
+//   GlissandoStyle
+//---------------------------------------------------------
+
+enum class GlissandoStyle {
+      CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC
+      };
+
+Q_ENUM_NS(ElementType)
 Q_ENUM_NS(Direction)
 
 //hack: to force the build system to run moc on this file
@@ -155,8 +171,6 @@ extern void fillComboBoxDirection(QComboBox*);
 
 
 } // namespace Ms
-
-// Q_DECLARE_METATYPE(Ms::Direction);
 
 #endif
 
