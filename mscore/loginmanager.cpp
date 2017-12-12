@@ -429,6 +429,7 @@ void LoginManager::uploadMedia()
       if (_mp3File->open(QIODevice::ReadOnly)) { // probably cancelled, no error handling
             QNetworkRequest request;
             request.setUrl(QUrl(_mediaUrl));
+            request.setHeader(QNetworkRequest::KnownHeaders::ContentLengthHeader, _mp3File->size());
             _progressDialog->reset();
             _progressDialog->setLabelText(tr("Uploading..."));
             _progressDialog->setCancelButtonText(tr("Cancel"));
