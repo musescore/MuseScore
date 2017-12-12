@@ -3163,6 +3163,10 @@ QString MusicXMLParserDirection::metronome(double& r)
       TDuration dur2;
 
       while (_e.readNextStartElement()) {
+            if (_e.name() == "metronome-note" || _e.name() == "metronome-relation") {
+                  skipLogCurrElem();
+                  continue;
+                  }
             QString txt = _e.readElementText();
             if (_e.name() == "beat-unit") {
                   // set first dur that is still invalid
