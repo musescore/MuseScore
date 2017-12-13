@@ -261,6 +261,14 @@
     <seq>Ctrl+Alt+Shift+Left</seq>
     </SC>
   <SC>
+    <key>next-element</key>
+    <seq>Alt+Right</seq>
+    </SC>
+  <SC>
+    <key>prev-element</key>
+    <seq>Alt+Left</seq>
+    </SC>
+  <SC>
     <key>move-up</key>
     <seq>Ctrl+Shift+Up</seq>
     </SC>
