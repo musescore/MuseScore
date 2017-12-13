@@ -139,7 +139,7 @@ QVariant OttavaSegment::propertyDefault(P_ID id) const
 //   propertyStyle
 //---------------------------------------------------------
 
-PropertyFlags OttavaSegment::propertyFlags(P_ID id) const
+PropertyFlags& OttavaSegment::propertyFlags(P_ID id)
       {
       switch (id) {
             case P_ID::OTTAVA_TYPE:
@@ -165,10 +165,12 @@ void OttavaSegment::resetProperty(P_ID id)
             case P_ID::LINE_WIDTH:
             case P_ID::LINE_STYLE:
             case P_ID::NUMBERS_ONLY:
-                  return ottava()->resetProperty(id);
+                  ottava()->resetProperty(id);
+                  break;
 
             default:
-                  return TextLineBaseSegment::resetProperty(id);
+                  TextLineBaseSegment::resetProperty(id);
+                  break;
             }
       }
 
@@ -474,15 +476,15 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
       }
 
 //---------------------------------------------------------
-//   propertyStyle
+//   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags Ottava::propertyFlags(P_ID id) const
+PropertyFlags& Ottava::propertyFlags(P_ID id)
       {
       switch (id) {
             case P_ID::OTTAVA_TYPE:
             case P_ID::PLACEMENT:
-                  return PropertyFlags::NOSTYLE;
+                  return ScoreElement::propertyFlags(id);   // return PropertyFlags::NOSTYLE;
 
             case P_ID::NUMBERS_ONLY:
                   return numbersOnlyStyle;

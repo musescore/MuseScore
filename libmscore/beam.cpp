@@ -2403,7 +2403,7 @@ QVariant Beam::propertyDefault(P_ID id) const
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags Beam::propertyFlags(P_ID id) const
+PropertyFlags& Beam::propertyFlags(P_ID id)
       {
       switch (id) {
             case P_ID::BEAM_NO_SLOPE:

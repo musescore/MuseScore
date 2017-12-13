@@ -157,7 +157,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { P_ID::REPEAT_START,            "repeat_start",            true,  0,                       P_TYPE::BOOL            },
       { P_ID::REPEAT_JUMP,             "repeat_jump",             true,  0,                       P_TYPE::BOOL            },
       { P_ID::MEASURE_NUMBER_MODE,     "measure_number_mode",     false, "measureNumberMode",     P_TYPE::INT             },
-      { P_ID::GLISS_TYPE,              "gliss_type",              false, 0,                       P_TYPE::INT             },
+      { P_ID::GLISS_TYPE,              "gliss_type",              false, "subtype",               P_TYPE::INT             },
       { P_ID::GLISS_TEXT,              "gliss_text",              false, 0,                       P_TYPE::STRING          },
 
       { P_ID::GLISS_SHOW_TEXT,         "gliss_show_text",         false, 0,                       P_TYPE::BOOL            },

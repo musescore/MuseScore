@@ -445,7 +445,7 @@ QVariant HairpinSegment::propertyDefault(P_ID id) const
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags HairpinSegment::propertyFlags(P_ID id) const
+PropertyFlags& HairpinSegment::propertyFlags(P_ID id)
       {
       switch (id) {
             case P_ID::LINE_WIDTH:
@@ -775,7 +775,7 @@ QVariant Hairpin::propertyDefault(P_ID id) const
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags Hairpin::propertyFlags(P_ID id) const
+PropertyFlags& Hairpin::propertyFlags(P_ID id)
       {
       switch (id) {
             case P_ID::LINE_WIDTH:

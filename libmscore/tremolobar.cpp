@@ -210,7 +210,7 @@ bool TremoloBar::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyStyle
 //---------------------------------------------------------
 
-PropertyFlags TremoloBar::propertyFlags(P_ID id) const
+PropertyFlags& TremoloBar::propertyFlags(P_ID id)
       {
       switch (id) {
             case P_ID::LINE_WIDTH:

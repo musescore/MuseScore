@@ -503,7 +503,7 @@ StyleIdx TimeSig::getPropertyStyle(P_ID id) const
 //   propertyStyle
 //---------------------------------------------------------
 
-PropertyFlags TimeSig::propertyFlags(P_ID id) const
+PropertyFlags& TimeSig::propertyFlags(P_ID id)
       {
       switch (id) {
             case P_ID::SCALE:

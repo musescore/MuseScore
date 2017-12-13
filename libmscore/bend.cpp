@@ -441,7 +441,7 @@ void Bend::reset()
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags Bend::propertyFlags(P_ID id) const
+PropertyFlags& Bend::propertyFlags(P_ID id)
       {
       int i = 0;
       for (auto k : styledProperties) {

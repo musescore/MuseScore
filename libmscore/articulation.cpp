@@ -462,8 +462,9 @@ const char* Articulation::articulationName() const
 //   propertyStyle
 //---------------------------------------------------------
 
-PropertyFlags Articulation::propertyFlags(P_ID id) const
+PropertyFlags& Articulation::propertyFlags(P_ID id)
       {
+#if 0
       switch (id) {
             case P_ID::DIRECTION:
             case P_ID::TIME_STRETCH:
@@ -473,6 +474,7 @@ PropertyFlags Articulation::propertyFlags(P_ID id) const
             default:
                   break;
             }
+#endif
       return Element::propertyFlags(id);
       }
 
