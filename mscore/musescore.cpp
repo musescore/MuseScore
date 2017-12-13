@@ -4700,6 +4700,24 @@ void MuseScore::cmd(QAction* a)
                tr("Command %1 not valid in current state").arg(cmdn));
             return;
             }
+      if (cmdn == "toggle-palette") {
+            showPalette(a->isChecked());
+            PaletteBox* pb = mscore->getPaletteBox();
+            QLineEdit* sb = pb->searchBox();
+            if (a->isChecked()) {
+                  lastFocusWidget = QApplication::focusWidget();
+                  sb->setFocus();
+                  if (pb->noSelection())
+                        pb->setKeyboardNavigation(false);
+                  else
+                        pb->setKeyboardNavigation(true);
+                  }
+            else {
+                  if (lastFocusWidget)
+                        lastFocusWidget->setFocus();
+                  }
+            return;
+            }
       if (cmdn == "palette-search") {
             PaletteBox* pb = getPaletteBox();
             QLineEdit* sb = pb->searchBox();
@@ -4957,8 +4975,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             undoRedo(true);
       else if (cmd == "redo")
             undoRedo(false);
-      else if (cmd == "toggle-palette")
-            showPalette(a->isChecked());
       else if (cmd == "startcenter")
             showStartcenter(a->isChecked());
       else if (cmd == "inspector")
