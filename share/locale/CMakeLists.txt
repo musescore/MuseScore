@@ -1,8 +1,9 @@
 #=============================================================================
 #  Mscore
 #  Linux Music Score Editor
+#  $Id:$
 #
-#  Copyright (C) 2002-2017 by Werner Schweer and others
+#  Copyright (C) 2002-2008 by Werner Schweer and others
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2.
@@ -22,28 +23,4 @@ install(DIRECTORY ./
     FILES_MATCHING
     REGEX ".*\\.qm"
     REGEX "languages\\.xml")
-
-if (MINGW)
-    install(DIRECTORY ${CROSSQT}/translations/
-        DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
-        FILES_MATCHING
-        REGEX "qt_.*\\.qm"
-        REGEX "qt_help_.*\\.qm" EXCLUDE
-        REGEX "qtbase_.*\\.qm"
-        REGEX "qtmultimedia_.*\\.qm"
-        REGEX "qtquick1_.*\\.qm"
-        REGEX "qtscript_.*\\.qm"
-        REGEX "qtxmlpatterns_.*\\.qm")
-else (MINGW)
-    install(DIRECTORY ${QT_INSTALL_PREFIX}/translations/
-        DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
-        FILES_MATCHING
-        REGEX "qt_.*\\.qm"
-        REGEX "qt_help_.*\\.qm" EXCLUDE
-        REGEX "qtbase_.*\\.qm"
-        REGEX "qtmultimedia_.*\\.qm"
-        REGEX "qtquick1_.*\\.qm"
-        REGEX "qtscript_.*\\.qm"
-        REGEX "qtxmlpatterns_.*\\.qm")
-endif (MINGW)
 

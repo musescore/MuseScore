@@ -4,6 +4,7 @@ set OLD_DIR=%CD%
 
 echo TRANSLATIONS = \
 for /r %1/share/locale/ %%a in (mscore_*.ts) do echo     %%a \
+for /r %1/share/locale/ %%a in (qt_*.ts) do echo     %%a \
 echo.
 
 cd /d %1

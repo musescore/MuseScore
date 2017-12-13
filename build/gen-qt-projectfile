@@ -5,6 +5,11 @@ uis=`find $1/share/locale/ -name "mscore_*.ts"`
 for a in $uis; do
       echo "    " $a \\;
       done
+
+uis=`find $1/share/locale/ -name "qt_*.ts"`
+for a in $uis; do
+      echo "    " $a \\;
+      done
 echo
 
 echo "FORMS = \\"

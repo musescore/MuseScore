@@ -8,6 +8,7 @@ for a in $uis; do
 echo
 
 echo "HEADERS = \\"
+
 uis=`find $1 -name "*.h"`
 for a in $uis; do
       echo "    " $a \\;
