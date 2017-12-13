@@ -2808,6 +2808,7 @@ QVariant Text::propertyDefault(P_ID id) const
 //   resetProperty
 //---------------------------------------------------------
 
+#if 0
 void Text::resetProperty(P_ID id)
       {
       PropertyFlags* p = propertyFlagsP(id);
@@ -2818,6 +2819,7 @@ void Text::resetProperty(P_ID id)
       else
             Element::resetProperty(id);
       }
+#endif
 
 //---------------------------------------------------------
 //   reset
@@ -2856,18 +2858,7 @@ void Text::styleChanged()
       Element::styleChanged();
       }
 
-//---------------------------------------------------------
-//   propertyFlags
-//---------------------------------------------------------
-
-PropertyFlags Text::propertyFlags(P_ID id) const
-      {
-      const PropertyFlags* p = ((Text*)this)->propertyFlagsP(id); // ugh!
-      if (p)
-            return *p;
-      return Element::propertyFlags(id);
-      }
-
+#if 0
 //---------------------------------------------------------
 //   setPropertyFlags
 //---------------------------------------------------------
@@ -2880,49 +2871,50 @@ void Text::setPropertyFlags(P_ID id, PropertyFlags f)
       else
             Element::setPropertyFlags(id, f);
       }
+#endif
 
 //---------------------------------------------------------
-//   propertyFlagsP
+//   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags* Text::propertyFlagsP(P_ID id)
+PropertyFlags& Text::propertyFlags(P_ID id)
       {
       switch (id) {
             case P_ID::FONT_FACE:
-                  return &_familyStyle;
+                  return _familyStyle;
             case P_ID::FONT_SIZE:
-                  return &_sizeStyle;
+                  return _sizeStyle;
             case P_ID::FONT_BOLD:
-                  return &_boldStyle;
+                  return _boldStyle;
             case P_ID::FONT_ITALIC:
-                  return &_italicStyle;
+                  return _italicStyle;
             case P_ID::FONT_UNDERLINE:
-                  return &_underlineStyle;
+                  return _underlineStyle;
             case P_ID::FRAME:
-                  return &_hasFrameStyle;
+                  return _hasFrameStyle;
             case P_ID::FRAME_SQUARE:
-                  return &_squareStyle;
+                  return _squareStyle;
             case P_ID::FRAME_CIRCLE:
-                  return &_circleStyle;
+                  return _circleStyle;
             case P_ID::FRAME_WIDTH:
-                  return &_frameWidthStyle;
+                  return _frameWidthStyle;
             case P_ID::FRAME_PADDING:
-                  return &_paddingWidthStyle;
+                  return _paddingWidthStyle;
             case P_ID::FRAME_ROUND:
-                  return &_frameRoundStyle;
+                  return _frameRoundStyle;
             case P_ID::FRAME_FG_COLOR:
-                  return &_frameColorStyle;
+                  return _frameColorStyle;
             case P_ID::FRAME_BG_COLOR:
-                  return &_bgColorStyle;
+                  return _bgColorStyle;
             case P_ID::FONT_SPATIUM_DEPENDENT:
-                  return &_sizeIsSpatiumDependentStyle;
+                  return _sizeIsSpatiumDependentStyle;
             case P_ID::ALIGN:
-                  return &_alignStyle;
+                  return _alignStyle;
             default:
                   // qDebug("unknown id: %d %s", int(id), propertyName(id));
                   break;
             }
-      return 0;
+      return ScoreElement::propertyFlags(id);
       }
 
 //---------------------------------------------------------

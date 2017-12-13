@@ -117,7 +117,7 @@ class TimeSig : public Element {
       virtual QVariant propertyDefault(P_ID id) const override;
       virtual StyleIdx getPropertyStyle(P_ID id) const override;
       virtual void styleChanged() override;
-      virtual PropertyFlags propertyFlags(P_ID id) const override;
+      virtual PropertyFlags& propertyFlags(P_ID id) override;
 
       const Groups& groups() const    { return _groups; }
       void setGroups(const Groups& e) { _groups = e; }

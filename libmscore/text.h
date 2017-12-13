@@ -189,33 +189,23 @@ class TextBlock {
 //---------------------------------------------------------
 
 class Text : public Element {
-
-#define PROP(a,b,c)                                            \
-      a _ ## b;                                                \
-      PropertyFlags _ ## b ## Style { PropertyFlags::STYLED }; \
-   public:                                                     \
-      const a& b() const   { return _ ## b; }                  \
-      void c(const a& val) { _ ## b = val;  }                  \
-   private:
-
-      PROP(QString, family,                 setFamily)
-      PROP(qreal,   size,                   setSize)
-      PROP(bool,    bold,                   setBold)
-      PROP(bool,    italic,                 setItalic)
-      PROP(bool,    underline,              setUnderline)
-      PROP(QColor,  bgColor,                setBgColor)
-      PROP(QColor,  frameColor,             setFrameColor)
-      PROP(Align,   align,                  setAlign)
-      PROP(bool,    hasFrame,               setHasFrame)
-      PROP(bool,    circle,                 setCircle)
-      PROP(bool,    square,                 setSquare)
-      PROP(bool,    sizeIsSpatiumDependent, setSizeIsSpatiumDependent)
-      PROP(Spatium, frameWidth,             setFrameWidth)
-      PROP(Spatium, paddingWidth,           setPaddingWidth)
-      PROP(int,     frameRound,             setFrameRound)
-      PROP(QPointF, offset,                 setOffset)            // inch or spatium
-      PROP(OffsetType, offsetType,          setOffsetType)
-#undef PROP
+      M_PROPERTY(QString, family,                 setFamily)
+      M_PROPERTY(qreal,   size,                   setSize)
+      M_PROPERTY(bool,    bold,                   setBold)
+      M_PROPERTY(bool,    italic,                 setItalic)
+      M_PROPERTY(bool,    underline,              setUnderline)
+      M_PROPERTY(QColor,  bgColor,                setBgColor)
+      M_PROPERTY(QColor,  frameColor,             setFrameColor)
+      M_PROPERTY(Align,   align,                  setAlign)
+      M_PROPERTY(bool,    hasFrame,               setHasFrame)
+      M_PROPERTY(bool,    circle,                 setCircle)
+      M_PROPERTY(bool,    square,                 setSquare)
+      M_PROPERTY(bool,    sizeIsSpatiumDependent, setSizeIsSpatiumDependent)
+      M_PROPERTY(Spatium, frameWidth,             setFrameWidth)
+      M_PROPERTY(Spatium, paddingWidth,           setPaddingWidth)
+      M_PROPERTY(int,     frameRound,             setFrameRound)
+      M_PROPERTY(QPointF, offset,                 setOffset)            // inch or spatium
+      M_PROPERTY(OffsetType, offsetType,          setOffsetType)
 
       SubStyle _subStyle;
 
@@ -236,8 +226,6 @@ class Text : public Element {
 
       void insert(TextCursor*, uint code);
       void genText();
-
-      PropertyFlags* propertyFlagsP(P_ID id);
 
    protected:
       QColor textColor() const;
@@ -345,9 +333,9 @@ class Text : public Element {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(P_ID id) const override;
-      virtual void setPropertyFlags(P_ID, PropertyFlags) override;
-      virtual PropertyFlags propertyFlags(P_ID) const override;
-      virtual void resetProperty(P_ID id) override;
+//      virtual void setPropertyFlags(P_ID, PropertyFlags) override;
+      virtual PropertyFlags& propertyFlags(P_ID) override;
+//      virtual void resetProperty(P_ID id) override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;
       virtual void reset() override;
 

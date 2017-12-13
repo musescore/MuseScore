@@ -127,7 +127,7 @@ StyleIdx VoltaSegment::getPropertyStyle(P_ID id) const
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags VoltaSegment::propertyFlags(P_ID id) const
+PropertyFlags& VoltaSegment::propertyFlags(P_ID id)
       {
       switch (id) {
             case P_ID::LINE_WIDTH:

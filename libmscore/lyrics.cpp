@@ -925,11 +925,11 @@ void LyricsLineSegment::draw(QPainter* painter) const
 //   propertyStyle
 //---------------------------------------------------------
 
-PropertyFlags Lyrics::propertyFlags(P_ID id) const
+PropertyFlags& Lyrics::propertyFlags(P_ID id)
       {
       switch (id) {
             case P_ID::PLACEMENT:
-                  return PropertyFlags::NOSTYLE;
+                  return ScoreElement::propertyFlags(id);   // return PropertyFlags::NOSTYLE;
 
             default:
                   return Text::propertyFlags(id);

@@ -93,7 +93,6 @@
             <tpc>14</tpc>
             <Glissando id="2">
               <text>gliss.</text>
-              <subtype>0</subtype>
               <lid>6</lid>
               <diagonal>1</diagonal>
               <anchor>3</anchor>
@@ -134,7 +133,6 @@
             <tpc>14</tpc>
             <Glissando id="3">
               <text>gliss.</text>
-              <subtype>0</subtype>
               <lid>6</lid>
               <diagonal>1</diagonal>
               <anchor>3</anchor>

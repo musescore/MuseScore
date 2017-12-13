@@ -87,7 +87,6 @@
             <tpc>15</tpc>
             <Glissando id="2">
               <text>gliss.</text>
-              <subtype>0</subtype>
               <diagonal>1</diagonal>
               <anchor>3</anchor>
               </Glissando>
@@ -107,7 +106,6 @@
             <tpc>14</tpc>
             <Glissando id="4">
               <text>gliss.</text>
-              <subtype>0</subtype>
               <track>1</track>
               <diagonal>1</diagonal>
               <anchor>3</anchor>
@@ -123,7 +121,6 @@
             <tpc>18</tpc>
             <Glissando id="3">
               <text>gliss.</text>
-              <subtype>0</subtype>
               <track>1</track>
               <diagonal>1</diagonal>
               <anchor>3</anchor>
@@ -154,7 +151,6 @@
             <tpc>13</tpc>
             <Glissando id="5">
               <text>gliss.</text>
-              <subtype>0</subtype>
               <diagonal>1</diagonal>
               <anchor>3</anchor>
               </Glissando>

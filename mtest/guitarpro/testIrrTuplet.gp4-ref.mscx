@@ -123,7 +123,6 @@
             <string>1</string>
             <Glissando id="3">
               <text>gliss.</text>
-              <subtype>0</subtype>
               <lid>15</lid>
               <diagonal>1</diagonal>
               <anchor>3</anchor>
@@ -303,7 +302,6 @@
               <string>1</string>
               <Glissando id="5">
                 <text>gliss.</text>
-                <subtype>0</subtype>
                 <lid>15</lid>
                 <diagonal>1</diagonal>
                 <anchor>3</anchor>
@@ -392,7 +390,6 @@
               <string>1</string>
               <Glissando id="7">
                 <text>gliss.</text>
-                <subtype>0</subtype>
                 <lid>15</lid>
                 <diagonal>1</diagonal>
                 <anchor>3</anchor>

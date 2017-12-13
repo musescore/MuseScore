@@ -34,9 +34,7 @@ InspectorBase::InspectorBase(QWidget* parent)
    : QWidget(parent)
       {
       setAccessibleName(tr("Inspector"));
-      resetMapper  = new QSignalMapper(this);
       valueMapper  = new QSignalMapper(this);
-      styleMapper  = new QSignalMapper(this);
 
       inspector = static_cast<Inspector*>(parent);
       _layout    = new QVBoxLayout(this);
@@ -44,9 +42,7 @@ InspectorBase::InspectorBase(QWidget* parent)
       _layout->setContentsMargins(0, 10, 0, 0);
       _layout->addStretch(100);
 
-      connect(resetMapper, SIGNAL(mapped(int)), SLOT(resetClicked(int)));
       connect(valueMapper, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
-      connect(styleMapper, SIGNAL(mapped(int)), SLOT(setStyleClicked(int)));
       }
 
 //---------------------------------------------------------
@@ -391,9 +387,10 @@ void InspectorBase::resetClicked(int i)
       for (int i = 0; i < ii.parent; ++i)
             e = e->parent();
       QVariant def = e->propertyDefault(id);
-      if (!def.isValid())
+      if (!def.isValid()) {
+            qDebug("default value not valid");
             return;
-
+            }
       Score* s = e->score();
       s->startCmd();
       e->undoResetProperty(id);
@@ -470,25 +467,24 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
             QToolButton* resetButton = ii.r;
             if (resetButton) {
                   resetButton->setIcon(*icons[int(Icons::reset_ICON)]);
-                  connect(resetButton, SIGNAL(clicked()), resetMapper, SLOT(map()));
-
-                  resetMapper->setMapping(resetButton, i);
+                  connect(resetButton, &QToolButton::clicked, [=] { resetClicked(i); });
                   StyleIdx sidx = inspector->element()->getPropertyStyle(ii.t);
                   if (sidx != StyleIdx::NOSTYLE) {
                         QMenu* menu = new QMenu(this);
                         resetButton->setMenu(menu);
                         resetButton->setPopupMode(QToolButton::MenuButtonPopup);
                         QAction* a = menu->addAction(tr("Set as style"));
-                        styleMapper->setMapping(a, i);
-                        connect(a, SIGNAL(triggered()), styleMapper, SLOT(map()));
+                        connect(a, &QAction::triggered, [=] { setStyleClicked(i); });
                         }
                   }
             QWidget* w = ii.w;
             if (!w)
                   continue;
             valueMapper->setMapping(w, i);
-            if (qobject_cast<QDoubleSpinBox*>(w))
-                  connect(w, SIGNAL(valueChanged(double)), valueMapper, SLOT(map()));
+            if (qobject_cast<QDoubleSpinBox*>(w)) {
+                  // connect(w, SIGNAL(valueChanged(double)), valueMapper, SLOT(map()));
+                  connect(qobject_cast<QDoubleSpinBox*>(w), QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=] { valueChanged(i); });
+                  }
             else if (qobject_cast<QSpinBox*>(w))
                   connect(w, SIGNAL(valueChanged(int)), valueMapper, SLOT(map()));
             else if (qobject_cast<QFontComboBox*>(w))

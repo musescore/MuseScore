@@ -49,9 +49,7 @@ struct InspectorItem {
 class InspectorBase : public QWidget {
       Q_OBJECT
 
-      QSignalMapper* resetMapper;
       QSignalMapper* valueMapper;
-      QSignalMapper* styleMapper;
 
       bool dirty() const;
       void checkDifferentValues(const InspectorItem&);

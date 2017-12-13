@@ -12,7 +12,6 @@
         <tpc>14</tpc>
         <Glissando id="2">
           <text>gliss.</text>
-          <subtype>0</subtype>
           <track>0</track>
           <diagonal>1</diagonal>
           <anchor>3</anchor>

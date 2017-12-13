@@ -19,6 +19,25 @@ class XmlReader;
 enum class StyleIdx : int;
 
 //---------------------------------------------------------
+//    M_PROPERTY (type, getter_name, setter_name)
+//       helper macro to define a styled ScoreElement property
+//
+//    usage example:
+//    class Text : public Element {
+//          M_PROPERTY(bool, bold, setBold)
+//          ...
+//          };
+//---------------------------------------------------------
+
+#define M_PROPERTY(a,b,c)                                      \
+      a _ ## b;                                                \
+      PropertyFlags _ ## b ## Style { PropertyFlags::STYLED }; \
+   public:                                                     \
+      const a& b() const   { return _ ## b; }                  \
+      void c(const a& val) { _ ## b = val;  }                  \
+   private:
+
+//---------------------------------------------------------
 //   PropertyFlags
 //---------------------------------------------------------
 

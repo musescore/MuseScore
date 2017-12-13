@@ -106,10 +106,10 @@ QVariant TextLineSegment::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
-//   propertyStyle
+//   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags TextLineSegment::propertyFlags(P_ID id) const
+PropertyFlags& TextLineSegment::propertyFlags(P_ID id)
       {
       switch (id) {
             case P_ID::PLACEMENT:
