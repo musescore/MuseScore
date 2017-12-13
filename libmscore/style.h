@@ -620,6 +620,7 @@ enum class StyleIdx {
       glissandoFontBold,
       glissandoFontItalic,
       glissandoFontUnderline,
+      glissandoLineWidth,
 
       ottavaFontFace,
       ottavaFontSize,

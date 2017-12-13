@@ -432,7 +432,7 @@ QVariant Box::propertyDefault(P_ID id) const
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags Box::propertyFlags(P_ID id) const
+PropertyFlags& Box::propertyFlags(P_ID id)
       {
       switch (id) {
             case P_ID::TOP_GAP:

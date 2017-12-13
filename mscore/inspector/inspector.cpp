@@ -162,6 +162,7 @@ void Inspector::update(Score* s)
             return;
       _score = s;
       if (oe != element()) {
+            delete ie;
             ie  = 0;
             oe  = element();
             bool sameTypes = true;

@@ -96,7 +96,6 @@
             <tpc>14</tpc>
             <Glissando id="2">
               <text>gliss.</text>
-              <subtype>0</subtype>
               <diagonal>1</diagonal>
               <anchor>3</anchor>
               </Glissando>
@@ -122,7 +121,6 @@
             <tpc>14</tpc>
             <Glissando id="3">
               <text>gliss.</text>
-              <subtype>0</subtype>
               <diagonal>1</diagonal>
               <anchor>3</anchor>
               </Glissando>
@@ -160,7 +158,6 @@ in other voice</text>
             <tpc>14</tpc>
             <Glissando id="5">
               <text>gliss.</text>
-              <subtype>0</subtype>
               <diagonal>1</diagonal>
               <anchor>3</anchor>
               </Glissando>
@@ -225,7 +222,6 @@ in other staff</text>
             <tpc>14</tpc>
             <Glissando id="6">
               <text>gliss.</text>
-              <subtype>0</subtype>
               <diagonal>1</diagonal>
               <anchor>3</anchor>
               </Glissando>
@@ -284,7 +280,6 @@ in other staff</text>
             <tpc>14</tpc>
             <Glissando id="4">
               <text>gliss.</text>
-              <subtype>0</subtype>
               <diagonal>1</diagonal>
               <anchor>3</anchor>
               </Glissando>

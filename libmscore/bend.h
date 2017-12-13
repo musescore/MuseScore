@@ -66,7 +66,7 @@ class Bend : public Element {
       virtual QVariant propertyDefault(P_ID) const override;
 
       virtual void setPropertyFlags(P_ID, PropertyFlags) override;
-      virtual PropertyFlags propertyFlags(P_ID) const override;
+      virtual PropertyFlags& propertyFlags(P_ID) override;
       virtual void resetProperty(P_ID id) override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;
       virtual void reset() override;

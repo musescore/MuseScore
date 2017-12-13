@@ -1011,7 +1011,7 @@ QVariant Tuplet::propertyDefault(P_ID id) const
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags Tuplet::propertyFlags(P_ID id) const
+PropertyFlags& Tuplet::propertyFlags(P_ID id)
       {
       switch (id) {
             case P_ID::DIRECTION:
@@ -1020,18 +1020,18 @@ PropertyFlags Tuplet::propertyFlags(P_ID id) const
                   return numberStyle;
             case P_ID::BRACKET_TYPE:
                   return bracketStyle;
-            case P_ID::NORMAL_NOTES:
-            case P_ID::ACTUAL_NOTES:
-            case P_ID::P1:
-            case P_ID::P2:
-                  return PropertyFlags::NOSTYLE;
             case P_ID::FONT_FACE:
             case P_ID::FONT_SIZE:
             case P_ID::FONT_BOLD:
             case P_ID::FONT_ITALIC:
             case P_ID::FONT_UNDERLINE:
             case P_ID::ALIGN:
-                  return _number ? _number->propertyFlags(id) : PropertyFlags::NOSTYLE;
+                  return _number ? _number->propertyFlags(id) : ScoreElement::propertyFlags(id);
+            case P_ID::NORMAL_NOTES:
+            case P_ID::ACTUAL_NOTES:
+            case P_ID::P1:
+            case P_ID::P2:
+                  return ScoreElement::propertyFlags(id);   // return PropertyFlags::NOSTYLE;
             default:
                   return DurationElement::propertyFlags(id);
             }

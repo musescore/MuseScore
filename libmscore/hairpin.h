@@ -57,7 +57,7 @@ class HairpinSegment : public TextLineBaseSegment {
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
-      virtual PropertyFlags propertyFlags(P_ID) const override;
+      virtual PropertyFlags& propertyFlags(P_ID) override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
 
@@ -120,7 +120,7 @@ class Hairpin : public TextLineBase {
       virtual QVariant getProperty(P_ID id) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID id) const override;
-      virtual PropertyFlags propertyFlags(P_ID id) const override;
+      virtual PropertyFlags& propertyFlags(P_ID id) override;
       virtual void resetProperty(P_ID id) override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;
 

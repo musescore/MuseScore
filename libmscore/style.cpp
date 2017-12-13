@@ -636,10 +636,11 @@ static const StyleType styleTypes[] {
       { StyleIdx::textLineFontUnderline,         "textLineFontUnderline",        false },
 
       { StyleIdx::glissandoFontFace,             "glissandoFontFace",            "FreeSerif" },
-      { StyleIdx::glissandoFontSize,             "glissandoFontSize",            8.0 },
+      { StyleIdx::glissandoFontSize,             "glissandoFontSize",            QVariant(8.0) },
       { StyleIdx::glissandoFontBold,             "glissandoFontBold",            false },
       { StyleIdx::glissandoFontItalic,           "glissandoFontItalic",          true },
       { StyleIdx::glissandoFontUnderline,        "glissandoFontUnderline",       false },
+      { StyleIdx::glissandoLineWidth,            "glissandoLineWidth",           Spatium(0.15) },
 
       { StyleIdx::ottavaFontFace,                "ottavaFontFace",               "FreeSerif" },
       { StyleIdx::ottavaFontSize,                "ottavaFontSize",               12.0 },

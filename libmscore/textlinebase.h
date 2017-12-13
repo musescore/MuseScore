@@ -71,50 +71,41 @@ enum class HookType : char {
 class TextLineBase : public SLine {
       enum class LineType : char { CRESCENDO, DECRESCENDO };
 
-#define PROP(a,b,c)                \
-      a _ ## b;                           \
-      PropertyFlags _ ## b ## Style { PropertyFlags::STYLED }; \
-      public:                        \
-      const a& b() const   { return _ ## b;    } \
-      void c(const a& val) { _ ## b = val; }     \
-      private:
+      M_PROPERTY(bool,      lineVisible,           setLineVisible)
+      M_PROPERTY(HookType,  beginHookType,         setBeginHookType)
+      M_PROPERTY(HookType,  endHookType,           setEndHookType)
+      M_PROPERTY(Spatium,   beginHookHeight,       setBeginHookHeight)
+      M_PROPERTY(Spatium,   endHookHeight,         setEndHookHeight)
 
-      PROP(bool,      lineVisible,           setLineVisible)
-      PROP(HookType,  beginHookType,         setBeginHookType)
-      PROP(HookType,  endHookType,           setEndHookType)
-      PROP(Spatium,   beginHookHeight,       setBeginHookHeight)
-      PROP(Spatium,   endHookHeight,         setEndHookHeight)
+      M_PROPERTY(PlaceText, beginTextPlace,        setBeginTextPlace)
+      M_PROPERTY(QString,   beginText,             setBeginText)
+      M_PROPERTY(Align,     beginTextAlign,        setBeginTextAlign)
+      M_PROPERTY(QString,   beginFontFamily,       setBeginFontFamily)
+      M_PROPERTY(qreal,     beginFontSize,         setBeginFontSize)
+      M_PROPERTY(bool,      beginFontBold,         setBeginFontBold)
+      M_PROPERTY(bool,      beginFontItalic,       setBeginFontItalic)
+      M_PROPERTY(bool,      beginFontUnderline,    setBeginFontUnderline)
+      M_PROPERTY(QPointF,   beginTextOffset,       setBeginTextOffset)
 
-      PROP(PlaceText, beginTextPlace,        setBeginTextPlace)
-      PROP(QString,   beginText,             setBeginText)
-      PROP(Align,     beginTextAlign,        setBeginTextAlign)
-      PROP(QString,   beginFontFamily,       setBeginFontFamily)
-      PROP(qreal,     beginFontSize,         setBeginFontSize)
-      PROP(bool,      beginFontBold,         setBeginFontBold)
-      PROP(bool,      beginFontItalic,       setBeginFontItalic)
-      PROP(bool,      beginFontUnderline,    setBeginFontUnderline)
-      PROP(QPointF,   beginTextOffset,       setBeginTextOffset)
+      M_PROPERTY(PlaceText, continueTextPlace,     setContinueTextPlace)
+      M_PROPERTY(QString,   continueText,          setContinueText)
+      M_PROPERTY(Align,     continueTextAlign,     setContinueTextAlign)
+      M_PROPERTY(QString,   continueFontFamily,    setContinueFontFamily)
+      M_PROPERTY(qreal,     continueFontSize,      setContinueFontSize)
+      M_PROPERTY(bool,      continueFontBold,      setContinueFontBold)
+      M_PROPERTY(bool,      continueFontItalic,    setContinueFontItalic)
+      M_PROPERTY(bool,      continueFontUnderline, setContinueFontUnderline)
+      M_PROPERTY(QPointF,   continueTextOffset,    setContinueTextOffset)
 
-      PROP(PlaceText, continueTextPlace,     setContinueTextPlace)
-      PROP(QString,   continueText,          setContinueText)
-      PROP(Align,     continueTextAlign,     setContinueTextAlign)
-      PROP(QString,   continueFontFamily,    setContinueFontFamily)
-      PROP(qreal,     continueFontSize,      setContinueFontSize)
-      PROP(bool,      continueFontBold,      setContinueFontBold)
-      PROP(bool,      continueFontItalic,    setContinueFontItalic)
-      PROP(bool,      continueFontUnderline, setContinueFontUnderline)
-      PROP(QPointF,   continueTextOffset,    setContinueTextOffset)
-
-      PROP(PlaceText, endTextPlace,          setEndTextPlace)
-      PROP(QString,   endText,               setEndText)
-      PROP(Align,     endTextAlign,          setEndTextAlign)
-      PROP(QString,   endFontFamily,         setEndFontFamily)
-      PROP(qreal,     endFontSize,           setEndFontSize)
-      PROP(bool,      endFontBold,           setEndFontBold)
-      PROP(bool,      endFontItalic,         setEndFontItalic)
-      PROP(bool,      endFontUnderline,      setEndFontUnderline)
-      PROP(QPointF,   endTextOffset,         setEndTextOffset)
-#undef PROP
+      M_PROPERTY(PlaceText, endTextPlace,          setEndTextPlace)
+      M_PROPERTY(QString,   endText,               setEndText)
+      M_PROPERTY(Align,     endTextAlign,          setEndTextAlign)
+      M_PROPERTY(QString,   endFontFamily,         setEndFontFamily)
+      M_PROPERTY(qreal,     endFontSize,           setEndFontSize)
+      M_PROPERTY(bool,      endFontBold,           setEndFontBold)
+      M_PROPERTY(bool,      endFontItalic,         setEndFontItalic)
+      M_PROPERTY(bool,      endFontUnderline,      setEndFontUnderline)
+      M_PROPERTY(QPointF,   endTextOffset,         setEndTextOffset)
 
    protected:
       friend class TextLineBaseSegment;

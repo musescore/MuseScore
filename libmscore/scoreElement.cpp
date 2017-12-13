@@ -161,8 +161,12 @@ ScoreElement::~ScoreElement()
 void ScoreElement::resetProperty(P_ID id)
       {
       QVariant v = propertyDefault(id);
-      if (v.isValid())
+      if (v.isValid()) {
             setProperty(id, v);
+            PropertyFlags& p = propertyFlags(id);
+            if (p != PropertyFlags::NOSTYLE)
+                  p = PropertyFlags::STYLED;
+            }
       }
 
 //---------------------------------------------------------
@@ -241,8 +245,10 @@ void ScoreElement::writeProperty(XmlWriter& xml, P_ID id) const
             xml.tag(id, QVariant(getProperty(id).toReal()/_spatium),
                QVariant(propertyDefault(id).toReal()/_spatium));
             }
-      else
+      else {
+            Q_ASSERT(getProperty(id).isValid());
             xml.tag(id, getProperty(id), propertyDefault(id));
+            }
       }
 
 //---------------------------------------------------------
@@ -350,12 +356,24 @@ MasterScore* ScoreElement::masterScore() const
       }
 
 //---------------------------------------------------------
-//   propertyStyle
+//   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags ScoreElement::propertyFlags(P_ID) const
+PropertyFlags& ScoreElement::propertyFlags(P_ID)
       {
-      return PropertyFlags::NOSTYLE;
+      static PropertyFlags f = PropertyFlags::NOSTYLE;
+      return f;
+      }
+
+//---------------------------------------------------------
+//   setPropertyFlags
+//---------------------------------------------------------
+
+void ScoreElement::setPropertyFlags(P_ID id, PropertyFlags f)
+      {
+      PropertyFlags& p = propertyFlags(id);
+      if (p != PropertyFlags::NOSTYLE)
+            p = f;
       }
 
 //---------------------------------------------------------
