@@ -49,8 +49,6 @@ struct InspectorItem {
 class InspectorBase : public QWidget {
       Q_OBJECT
 
-      QSignalMapper* valueMapper;
-
       bool dirty() const;
       void checkDifferentValues(const InspectorItem&);
       bool compareValues(const InspectorItem& ii, QVariant a, QVariant b);
