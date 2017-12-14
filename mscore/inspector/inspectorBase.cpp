@@ -34,15 +34,11 @@ InspectorBase::InspectorBase(QWidget* parent)
    : QWidget(parent)
       {
       setAccessibleName(tr("Inspector"));
-      valueMapper  = new QSignalMapper(this);
-
       inspector = static_cast<Inspector*>(parent);
       _layout    = new QVBoxLayout(this);
       _layout->setSpacing(0);
       _layout->setContentsMargins(0, 10, 0, 0);
       _layout->addStretch(100);
-
-      connect(valueMapper, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
       }
 
 //---------------------------------------------------------
@@ -480,31 +476,32 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
             QWidget* w = ii.w;
             if (!w)
                   continue;
-            valueMapper->setMapping(w, i);
-            if (qobject_cast<QDoubleSpinBox*>(w)) {
-                  // connect(w, SIGNAL(valueChanged(double)), valueMapper, SLOT(map()));
+            if (qobject_cast<QDoubleSpinBox*>(w))
                   connect(qobject_cast<QDoubleSpinBox*>(w), QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=] { valueChanged(i); });
-                  }
             else if (qobject_cast<QSpinBox*>(w))
-                  connect(w, SIGNAL(valueChanged(int)), valueMapper, SLOT(map()));
+                  connect(qobject_cast<QSpinBox*>(w), QOverload<int>::of(&QSpinBox::valueChanged), [=] { valueChanged(i); });
             else if (qobject_cast<QFontComboBox*>(w))
-                  connect(w, SIGNAL(currentFontChanged(const QFont&)), valueMapper, SLOT(map()));
+                  connect(qobject_cast<QFontComboBox*>(w), QOverload<const QFont&>::of(&QFontComboBox::currentFontChanged), [=] { valueChanged(i); });
             else if (qobject_cast<QComboBox*>(w))
-                  connect(w, SIGNAL(currentIndexChanged(int)), valueMapper, SLOT(map()));
-            else if (qobject_cast<QCheckBox*>(w) || qobject_cast<QPushButton*>(w) || qobject_cast<QToolButton*>(w))
-                  connect(w, SIGNAL(toggled(bool)), valueMapper, SLOT(map()));
+                  connect(qobject_cast<QComboBox*>(w), QOverload<int>::of(&QComboBox::currentIndexChanged), [=] { valueChanged(i); });
+            else if (qobject_cast<QCheckBox*>(w))
+                  connect(qobject_cast<QCheckBox*>(w), QOverload<bool>::of(&QCheckBox::toggled), [=] { valueChanged(i); });
+            else if (qobject_cast<QPushButton*>(w))
+                  connect(qobject_cast<QPushButton*>(w), QOverload<bool>::of(&QPushButton::toggled), [=] { valueChanged(i); });
+            else if (qobject_cast<QToolButton*>(w))
+                  connect(qobject_cast<QToolButton*>(w), QOverload<bool>::of(&QToolButton::toggled), [=] { valueChanged(i); });
             else if (qobject_cast<QLineEdit*>(w))
-                  connect(w, SIGNAL(textChanged(const QString&)), valueMapper, SLOT(map()));
+                  connect(qobject_cast<QLineEdit*>(w), QOverload<const QString&>::of(&QLineEdit::textChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Awl::ColorLabel*>(w))
-                  connect(w, SIGNAL(colorChanged(QColor)), valueMapper, SLOT(map()));
+                  connect(qobject_cast<Awl::ColorLabel*>(w), QOverload<QColor>::of(&Awl::ColorLabel::colorChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Ms::AlignSelect*>(w))
-                  connect(w, SIGNAL(alignChanged(Align)), valueMapper, SLOT(map()));
+                  connect(qobject_cast<Ms::AlignSelect*>(w), QOverload<Align>::of(&Ms::AlignSelect::alignChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Ms::OffsetSelect*>(w))
-                  connect(w, SIGNAL(offsetChanged(const QPointF&)), valueMapper, SLOT(map()));
+                  connect(qobject_cast<Ms::OffsetSelect*>(w), QOverload<const QPointF&>::of(&Ms::OffsetSelect::offsetChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Ms::ScaleSelect*>(w))
-                  connect(w, SIGNAL(scaleChanged(const QSizeF&)), valueMapper, SLOT(map()));
+                  connect(qobject_cast<Ms::ScaleSelect*>(w), QOverload<const QSizeF&>::of(&Ms::ScaleSelect::scaleChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Ms::SizeSelect*>(w))
-                  connect(w, SIGNAL(valueChanged(const QVariant&)), valueMapper, SLOT(map()));
+                  connect(qobject_cast<Ms::SizeSelect*>(w), QOverload<const QVariant&>::of(&Ms::SizeSelect::valueChanged), [=] { valueChanged(i); });
             else
                   qFatal("not supported widget %s", w->metaObject()->className());
             ++i;
