@@ -36,6 +36,7 @@
 #include "libmscore/stafftype.h"
 #include "libmscore/timesig.h"
 #include "libmscore/sym.h"
+#include <QShortcut>
 
 namespace Ms {
 
@@ -452,6 +453,9 @@ NewWizard::NewWizard(QWidget* parent)
       setPage(Page::Template,    p4);
       setPage(Page::Keysig,      p5);
       setPage(Page::Timesig,     p3);
+
+      QShortcut *next_shortcut = new QShortcut(QKeySequence("Alt+N"), this);
+      QObject::connect(next_shortcut, SIGNAL(activated()),this->button(QWizard::NextButton), SLOT(click()));
 
       resize(QSize(840, 560)); //ensure default size if no geometry in settings
       MuseScore::restoreGeometry(this);
