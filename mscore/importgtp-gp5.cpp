@@ -1032,22 +1032,22 @@ bool GuitarPro5::readNoteEffects(Note* note)
             int fret = readUChar();            // grace fret
             /*int dynamic =*/ readUChar();            // grace dynamic
             int transition = readUChar();            // grace transition
-            int duration = readUChar();            // grace duration
+            /*int duration =*/ readUChar();            // grace duration
             int gflags = readUChar();
 
-            int grace_len = MScore::division/8;
 		NoteType note_type = NoteType::ACCIACCATURA;
 
             if (gflags & NOTE_APPOGIATURA) //on beat
                   note_type = NoteType::APPOGGIATURA;
 
+#if 0
+            int grace_len = MScore::division/8;
             if (duration == 1)
                   grace_len = MScore::division/8; //32th
             else if (duration == 2)
                   grace_len = MScore::division/6; //24th
             else if (duration == 3)
                   grace_len = MScore::division/4; //16th
-#if 0
             Note* gn = new Note(score);
 
             if (gflags & EFFECT_GHOST) {
@@ -1069,7 +1069,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
 
             TDuration d;
             d.setVal(grace_len);
-            if(grace_len == MScore::division/6)
+            if (grace_len == MScore::division/6)
                   d.setDots(1);
             gc->setDurationType(d);
             gc->setDuration(d.fraction());
@@ -1171,7 +1171,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             else
                   qDebug("Unknown tremolo value");
             }
-      bool skip = false;
+//      bool skip = false;
       if (modMask2 & EFFECT_SLIDE) {
             int slideKind = readUChar();
 		if (slideKind & SLIDE_OUT_DOWN) {
@@ -1180,7 +1180,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
 			cl->setChordLineType(ChordLineType::FALL);
 			cl->setStraight(true);
 			note->add(cl);
-			skip = true;
+//			skip = true;
 			}
 	      // slide out upwards (doit)
 		if (slideKind & SLIDE_OUT_UP) {
@@ -1189,7 +1189,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
 			cl->setChordLineType(ChordLineType::DOIT);
 			cl->setStraight(true);
 			note->add(cl);
-			skip = true;
+//			skip = true;
 			}
             // slide in from below (plop)
 		if (slideKind & SLIDE_IN_BELOW) {
@@ -1198,7 +1198,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
 			cl->setChordLineType(ChordLineType::PLOP);
 			cl->setStraight(true);
 			note->add(cl);
-			skip = true;
+//			skip = true;
 			}
 	      // slide in from above (scoop)
 		if (slideKind & SLIDE_IN_ABOVE) {
@@ -1207,7 +1207,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
 			cl->setChordLineType(ChordLineType::SCOOP);
 			cl->setStraight(true);
 			note->add(cl);
-			skip = true;
+//			skip = true;
 			}
 
 	      if (false && !slideList.empty() && slideList.back()->chord()->segment() != note->chord()->segment()) {

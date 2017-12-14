@@ -1657,6 +1657,7 @@ void MusicXMLParserPass1::partGroup(const int scoreParts,
  and a non-empty set of channels.
  */
 
+#if 0 // not used
 static const InstrumentTemplate* findInstrument(const QString& instrSound)
       {
       const InstrumentTemplate* instr = nullptr;
@@ -1670,6 +1671,7 @@ static const InstrumentTemplate* findInstrument(const QString& instrSound)
             }
       return instr;
       }
+#endif
 
 //---------------------------------------------------------
 //   scorePart
