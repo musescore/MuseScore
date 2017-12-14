@@ -1853,7 +1853,7 @@ TileSet* StyleHelper::dockFrame(const QColor& color, int w) {
       TileSet* tileSet = m_dockFrameCache.object(key);
       if (!tileSet) {
             // width should be odd
-            if (!w & 1)
+            if (!(w & 1))
                   --w;
 
             // fixed height
