@@ -2925,62 +2925,49 @@ Element* Note::nextElement()
                                     return i->spannerSegments().front();
                               }
                         }
-                  else
-                        return nullptr;
+                  return 0;
                   }
-            case ElementType::TIE_SEGMENT: {
+
+            case ElementType::TIE_SEGMENT:
                   if (!_spannerFor.empty()) {
                       for (auto i : _spannerFor) {
                             if (i->type() == ElementType::GLISSANDO)
                                   return i->spannerSegments().front();
                                   }
                             }
-                  Chord* c = chord();
-                  return c->nextElement();
-                  }
-            case ElementType::GLISSANDO_SEGMENT: {
-                  Chord* c = chord();
-                  return c->nextElement();
-                  }
-            case ElementType::ACCIDENTAL: {
-                  if (!_el.empty()) {
+                  return chord()->nextElement();
+
+            case ElementType::GLISSANDO_SEGMENT:
+                  return chord()->nextElement();
+
+            case ElementType::ACCIDENTAL:
+                  if (!_el.empty())
                         return _el[0];
-                        }
-                  else if (_tieFor) {
+                  if (_tieFor)
                         return _tieFor->frontSegment();
-                        }
-                  else if (!_spannerFor.empty()) {
+                  if (!_spannerFor.empty()) {
                         for (auto i : _spannerFor) {
-                              if (i->type() == ElementType::GLISSANDO)
+                              if (i->isGlissando())
                                     return i->spannerSegments().front();
                               }
                         }
-                  else {
-                        return nullptr;
-                        }
-                  }
-            case ElementType::NOTE: {
-                  /*if (_accidental) {
-                        return _accidental;
-                        }*/
-                  if (!_el.empty()) {
+                  return 0;
+
+            case ElementType::NOTE:
+                  if (!_el.empty())
                         return _el[0];
-                        }
-                  else if (_tieFor) {
+                  if (_tieFor)
                         return _tieFor->frontSegment();
-                        }
-                  else if (!_spannerFor.empty()) {
+                  if (!_spannerFor.empty()) {
                         for (auto i : _spannerFor) {
-                              if (i->type() == ElementType::GLISSANDO)
+                              if (i->isGlissando())
                                     return i->spannerSegments().front();
                               }
                         }
-                  else {
-                        return nullptr;
-                        }
-                  }
+                  return 0;
+
             default:
-                  return nullptr;
+                  return 0;
             }
       }
 
@@ -3002,33 +2989,22 @@ Element* Note::prevElement()
                   Element* prev = prevInEl(e); // return prev element in _el
                   if (prev)
                         return prev;
-                  /*else if (_accidental)
-                        return _accidental;*/
-                  else
-                        return this;
                   }
-            case ElementType::TIE_SEGMENT: {
+                  return this;
+            case ElementType::TIE_SEGMENT:
                   if (!_el.empty())
                         return _el.back();
-                  /*else if (_accidental)
-                        return _accidental;*/
-                  else
-                        return this;
-                  }
-            case ElementType::GLISSANDO_SEGMENT: {
+                  return this;
+            case ElementType::GLISSANDO_SEGMENT:
                   if (_tieFor)
                         return _tieFor->frontSegment();
                   else if (!_el.empty())
                         return _el.back();
-                  /*else if (_accidental)
-                        return _accidental;*/
-                  else
-                        return this;
-                  }
+                  return this;
             case ElementType::ACCIDENTAL:
                   return this;
             default:
-                  return nullptr;
+                  return 0;
             }
       }
 
@@ -3044,18 +3020,11 @@ Element* Note::lastElementBeforeSegment()
                         return i->spannerSegments().front();
                   }
             }
-      if (_tieFor) {
+      if (_tieFor)
             return _tieFor->frontSegment();
-            }
-      else if (!_el.empty()) {
-              return _el.back();
-            }
-      /*else if (_accidental) {
-            return _accidental;
-            }*/
-      else {
-            return this;
-            }
+      if (!_el.empty())
+            return _el.back();
+      return this;
       }
 
 //---------------------------------------------------------

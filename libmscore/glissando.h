@@ -33,7 +33,7 @@ enum class GlissandoType;
 class GlissandoSegment : public LineSegment {
    public:
       GlissandoSegment(Score* s) : LineSegment(s)           {}
-      Glissando* glissando() const                          { return (Glissando*)spanner(); }
+      Glissando* glissando() const                          { return toGlissando(spanner()); }
       virtual ElementType type() const override             { return ElementType::GLISSANDO_SEGMENT; }
       virtual GlissandoSegment* clone() const override      { return new GlissandoSegment(*this); }
       virtual void draw(QPainter*) const override;
