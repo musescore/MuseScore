@@ -157,8 +157,8 @@ class Timeline : public QGraphicsView {
       void setMetaData(QGraphicsItem* gi, int staff, ElementType et, Measure* m, bool full_measure, Element* e, QGraphicsItem* pair_item = nullptr, Segment* seg = nullptr);
       unsigned int getMetaRow(QString target_text);
 
-      int global_measure_number;
-      int global_z_value = 0;
+      int global_measure_number { 0 };
+      int global_z_value        { 0 };
 
       //True if meta value was last clicked
       bool meta_value = false;

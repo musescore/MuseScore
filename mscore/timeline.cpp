@@ -2501,7 +2501,7 @@ void Timeline::mouseOver(QPointF pos)
       {
       //Choose item with the largest original Z value...
       QList<QGraphicsItem*> graphics_list = scene()->items(pos);
-      QGraphicsItem* hovered_graphics_item;
+      QGraphicsItem* hovered_graphics_item = 0;
       int max_z_value = -1;
       for (QGraphicsItem* curr_graphics_item: graphics_list) {
             if (dynamic_cast<QGraphicsTextItem*>(curr_graphics_item))
