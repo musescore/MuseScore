@@ -1831,7 +1831,7 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
 
 void Score::cmdDeleteSelection()
       {
-      ChordRest* cr = nullptr;      // select something after deleting notes
+      ChordRest* cr = 0;            // select something after deleting notes
 
       if (selection().isRange()) {
             Segment* s1 = selection().startSegment();
@@ -1952,22 +1952,19 @@ void Score::cmdDeleteSelection()
                               }
                         }
                   if (f.isValid() && !f.isZero()) {
-
                         if (fullMeasure) {
                               // handle this as special case to be able to
                               // fix broken measures:
+                              Staff* staff = Score::staff(track / VOICES);
                               for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
-                                    Staff* staff = Score::staff(track / VOICES);
-                                    int tick = m->tick();
+                                    int tick    = m->tick();
                                     TimeSig* ts = staff->timeSig(tick);
-                                    if (ts) {
-                                          Fraction f = ts->sig();
-                                          Rest* r = setRest(tick, track, f, false, 0);
-                                          if (!cr)
-                                                cr = r;
-                                          if (s2 && (m == s2->measure()))
-                                                break;
-                                          }
+                                    Fraction f  = ts ? ts->sig() : Fraction(4, 4);
+                                    Rest* r     = setRest(tick, track, f, false, 0);
+                                    if (!cr)
+                                          cr = r;
+                                    if (s2 && (m == s2->measure()))
+                                          break;
                                     }
                               }
                         else {

@@ -203,7 +203,6 @@ void Segment::init()
       _shapes.assign(staves, Shape());
       _prev = 0;
       _next = 0;
-      _stretch = 0.0;    // debug
       }
 
 //---------------------------------------------------------
