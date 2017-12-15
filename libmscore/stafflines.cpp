@@ -77,9 +77,9 @@ QPointF StaffLines::canvasPos() const
 
 void StaffLines::layout()
       {
-      Staff* s = staff();
+      Staff* s       = staff();
       qreal _spatium = spatium();
-      qreal dist = _spatium;
+      qreal dist     = _spatium;
       setPos(QPointF(0.0, 0.0));
       int _lines;
       if (s) {
@@ -101,7 +101,7 @@ void StaffLines::layout()
       qreal x1 = pos().x();
       qreal x2 = x1 + w;
       qreal y  = pos().y();
-      bbox().setRect(x1, -lw*.5 + y, w, (_lines-1) * _spatium + lw);
+      bbox().setRect(x1, -lw * .5 + y, w, (_lines-1) * dist + lw);
 
       lines.clear();
       for (int i = 0; i < _lines; ++i) {
