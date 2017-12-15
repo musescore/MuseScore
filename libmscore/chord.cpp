@@ -1226,8 +1226,8 @@ qreal Chord::defaultStemLength()
             }
       else if (lineDistance != 1.0) {
             // convert to actual distance from top of staff in sp
-            ul *= lineDistance;
-            dl *= lineDistance;
+            // ul *= lineDistance;
+            // dl *= lineDistance;
             }
 
       if (tab && !tab->onLines()) {       // if TAB and frets above strings, move 1 position up
