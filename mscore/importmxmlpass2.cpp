@@ -4807,8 +4807,10 @@ void MusicXMLParserPass2::duration(Fraction& dura)
       dura.set(0, 0);        // invalid unless set correctly
       int intDura = _e.readElementText().toInt();
       if (intDura > 0) {
-            if (_divs > 0)
+            if (_divs > 0) {
                   dura.set(intDura, 4 * _divs);
+                  dura.reduce(); // prevent overflow in later Fraction operations
+                  }
             else
                   _logger->logError(QString("illegal or uninitialized divisions (%1)").arg(_divs), &_e);
             }
