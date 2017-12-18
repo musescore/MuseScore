@@ -150,6 +150,27 @@ TitleWizard::TitleWizard(QWidget* parent)
    : QWidget(parent)
       {
       setupUi(this);
+      connect(this->title, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(characterAfterCursor(int, int)));
+      connect(this->subtitle, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(characterAfterCursor(int, int)));
+      connect(this->composer, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(characterAfterCursor(int, int)));
+      connect(this->poet, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(characterAfterCursor(int, int)));
+      connect(this->copyright, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(characterAfterCursor(int, int)));
+      }
+
+void TitleWizard::characterAfterCursor(int old_pos, int new_pos)
+      {
+      QLineEdit* edit = static_cast<QLineEdit*>(QObject::sender());
+      if (edit) {
+            QChar c = edit->text().at(new_pos);
+            QString descr;
+            if (c == ' ')
+                  descr = "space";
+            else
+                  descr = QString(c);
+            edit->setAccessibleDescription(descr);
+            QAccessibleEvent event(edit, QAccessible::DescriptionChanged);
+            QAccessible::updateAccessibility(&event);
+            }
       }
 
 //---------------------------------------------------------

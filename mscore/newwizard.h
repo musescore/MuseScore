@@ -65,6 +65,9 @@ class TimesigWizard : public QWidget, private Ui::TimesigWizard {
 class TitleWizard : public QWidget, public Ui::NewWizard {
       Q_OBJECT
 
+   public slots:
+      void characterAfterCursor(int old_pos, int new_pos);
+
    public:
       TitleWizard(QWidget* parent = 0);
       };
