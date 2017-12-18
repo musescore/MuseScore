@@ -58,6 +58,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       _searchBox->installEventFilter(this);
       _searchBox->setClearButtonEnabled(true);
       _searchBox->setPlaceholderText(tr("Search"));
+      _searchBox->setAccessibleName(tr("Palette search box"));
       connect(_searchBox, SIGNAL(textChanged(const QString&)), this, SLOT(filterPalettes(const QString&)));
       QHBoxLayout* hlSearch = new QHBoxLayout;
       hlSearch->setContentsMargins(5,0,5,0);
@@ -367,8 +368,10 @@ void PaletteBox::write(XmlWriter& xml)
 QList<Palette*> PaletteBox::palettes()const
       {
       QList<Palette*> pl;
-      for (int i = 0; i < (vbox->count() - 1); i += 2)
-            pl.append(static_cast<Palette*>(vbox->itemAt(i+1)->widget()));
+      if (vbox) {
+            for (int i = 0; i < (vbox->count() - 1); i += 2)
+                  pl.append(static_cast<Palette*>(vbox->itemAt(i+1)->widget()));
+            }
       return pl;
       }
 
@@ -552,8 +555,34 @@ bool PaletteBox::eventFilter(QObject* obj, QEvent *event)
                   if (keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down ||
                           keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
                         navigation(keyEvent);
+                        for (Palette* p : palettes()) {
+                              if (p->getCurrentIdx() != -1) {
+                                    QString acc_descr = p->cellAt(p->getCurrentIdx())->name;
+                                    _searchBox->setAccessibleDescription(acc_descr);
+                                    break;
+                                    }
+                              }
+                        QAccessibleEvent event(_searchBox, QAccessible::DescriptionChanged);
+                        QAccessible::updateAccessibility(&event);
                         return true;
                         }
+                  }
+            else if (event->type() == QEvent::FocusOut || event->type() == QEvent::FocusIn) {
+                  bool no_selection = true;
+                  for (Palette* p : palettes()) {
+                        if (p->getCurrentIdx() != -1) {
+                              QString acc_descr = p->cellAt(p->getCurrentIdx())->name;
+                              _searchBox->setAccessibleDescription(acc_descr);
+                              no_selection = false;
+                              break;
+                              }
+                        }
+                  if (no_selection)
+                        _searchBox->setAccessibleDescription(tr("Palette search box"));
+
+                  QAccessibleEvent event(_searchBox, QAccessible::DescriptionChanged);
+                  QAccessible::updateAccessibility(&event);
+                  return true;
                   }
             return false;
             }
