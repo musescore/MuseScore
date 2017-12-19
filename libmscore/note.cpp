@@ -1236,6 +1236,7 @@ void Note::read(XmlReader& e)
 bool Note::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
+
       if (tag == "pitch")
             _pitch = e.readInt();
       else if (tag == "tpc") {

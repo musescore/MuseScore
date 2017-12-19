@@ -476,8 +476,10 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case P_TYPE::SYMID:
                   return QVariant::fromValue(Sym::name2id(e.readElementText()));
                   break;
-            case P_TYPE::HEAD_GROUP:
-                  return QVariant::fromValue(NoteHead::name2group(e.readElementText()));;
+            case P_TYPE::HEAD_GROUP: {
+                  QString s = e.readElementText();
+                  return QVariant::fromValue(NoteHead::name2group(s));
+                  }
             case P_TYPE::HEAD_TYPE:
                   return QVariant::fromValue(NoteHead::name2type(e.readElementText()));
             case P_TYPE::POINT_MM:              // not supported
