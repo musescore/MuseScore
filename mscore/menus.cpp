@@ -753,7 +753,7 @@ Palette* MuseScore::newOrnamentsPalette()
             SymId::ornamentTremblement,
             SymId::ornamentPrallMordent,
             SymId::ornamentUpPrall,
-            SymId::ornamentDownPrall,
+            SymId::ornamentPrecompMordentUpperPrefix,       // SymId::ornamentDownPrall,
             SymId::ornamentUpMordent,
             SymId::ornamentDownMordent,
             SymId::ornamentPrallDown,
