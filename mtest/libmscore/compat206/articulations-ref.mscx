@@ -1348,7 +1348,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>ornamentDownPrall</subtype>
+            <subtype>ornamentPrecompMordentUpperPrefix</subtype>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -1358,7 +1358,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>ornamentDownPrall</subtype>
+            <subtype>ornamentPrecompMordentUpperPrefix</subtype>
             </Articulation>
           <Note>
             <pitch>60</pitch>
@@ -1369,7 +1369,7 @@
           <durationType>quarter</durationType>
           <Articulation>
             <direction>up</direction>
-            <subtype>ornamentDownPrall</subtype>
+            <subtype>ornamentPrecompMordentUpperPrefix</subtype>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -1380,7 +1380,7 @@
           <durationType>quarter</durationType>
           <Articulation>
             <direction>down</direction>
-            <subtype>ornamentDownPrall</subtype>
+            <subtype>ornamentPrecompMordentUpperPrefix</subtype>
             </Articulation>
           <Note>
             <pitch>60</pitch>

@@ -1260,7 +1260,7 @@ static void addMordentToChord(ChordRest* cr, QString name, QString attrLong, QSt
             else if (attrLong == "yes" && attrAppr == "below" && attrDep == "")
                   articSym = SymId::ornamentUpPrall;
             else if (attrLong == "yes" && attrAppr == "above" && attrDep == "")
-                  articSym = SymId::ornamentDownPrall;
+                  articSym = SymId::ornamentPrecompMordentUpperPrefix;
             else if (attrLong == "yes" && attrAppr == "" && attrDep == "below")
                   articSym = SymId::ornamentPrallDown;
             else if (attrLong == "yes" && attrAppr == "" && attrDep == "above")

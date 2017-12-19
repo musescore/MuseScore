@@ -2518,6 +2518,7 @@ void ArticulationView::setElement(Element* e)
       articulation.up->setChecked(a->up());
       articulation.anchor->setCurrentIndex(int(a->anchor()));
       articulation.channelName->setText(a->channelName());
+      articulation.symName->setText(Sym::id2name(a->symId()));
       }
 
 //---------------------------------------------------------
