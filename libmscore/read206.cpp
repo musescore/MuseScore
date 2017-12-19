@@ -690,6 +690,7 @@ static NoteHead::Group convertHeadGroup(int i)
             case 13:
                   val = NoteHead::Group::HEAD_BREVIS_ALT;
                   break;
+            case 0:
             default:
                   val = NoteHead::Group::HEAD_NORMAL;
             }
