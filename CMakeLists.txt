@@ -110,6 +110,9 @@ option(BUILD_PORTAUDIO "Build with support for PortAudio audio backend." ON)
 option(BUILD_PORTMIDI "Build with support for PortAudio's MIDI features." ${BUILD_PORTAUDIO}) # PortAudio required
 option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
+option(COVERAGE "Build with instrumentation to record code coverage." OFF)
+
+set (ENABLE_COVERAGE (COVERAGE AND CMAKE_BUILD_TYPE MATCHES "DEBUG"))
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
