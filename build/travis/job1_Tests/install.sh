@@ -5,5 +5,5 @@ set -e # exit on error
 set -x # echo commands
 
 make revision
-make debug CPUS=2 PREFIX="$HOME/software"
+make debug CPUS=2 PREFIX="$HOME/software" COVERAGE=ON
 make installdebug CPUS=2 PREFIX="$HOME/software"
