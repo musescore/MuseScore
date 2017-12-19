@@ -3903,6 +3903,18 @@ void Measure::computeMinWidth()
       Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
 
       x = s->minLeft(ls);
+
+      if (s->isStartRepeatBarLineType()) {
+            System*  s = system();
+            MeasureBase* pmb = prev();
+            if (pmb->isMeasure() && pmb->system() == s && pmb->repeatEnd()) {
+                  Segment* s = toMeasure(pmb)->last();
+                  // overlap end repeat barline with start repeat barline
+                  if (s->isEndBarLineType())
+                        x -= score()->styleP(StyleIdx::endBarWidth) * mag();
+                  }
+            }
+
       if (s->isChordRestType()) {
             x += score()->styleP(hasAccidental(s) ? StyleIdx::barAccidentalDistance : StyleIdx::barNoteDistance);
             }
