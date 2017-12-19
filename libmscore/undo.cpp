@@ -96,8 +96,9 @@ void updateNoteLines(Segment* segment, int track)
             if (s->segmentType() != Segment::Type::ChordRest)
                   continue;
             for (int t = track; t < track + VOICES; ++t) {
-                  Chord* chord = static_cast<Chord*>(s->element(t));
-                  if (chord && chord->type() == Element::Type::CHORD) {
+                  Element* el = s->element(t);
+                  if (el && el->type() == Element::Type::CHORD) {
+                        Chord* chord = static_cast<Chord*>(el);
                         for (Note* n : chord->notes())
                               n->updateLine();
                         chord->sortNotes();
@@ -2958,9 +2959,10 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
             if (s->segmentType() != Segment::Type::ChordRest)
                   continue;
             for (int track = 0; track < ntracks(); ++track) {
-                  Chord* c = static_cast<Chord*>(s->element(track));
-                  if (c == 0 || c->type() != Element::Type::CHORD)
+                  Element* el = s->element(track);
+                  if (el == 0 || el->type() != Element::Type::CHORD)
                         continue;
+                  Chord* c = static_cast<Chord*>(el);
                   for (Note* n : c->notes()) {
                         Tie* t = n->tieBack();
                         if (t && (t->startNote()->chord()->tick() < m1->tick()))
@@ -3030,9 +3032,10 @@ void InsertRemoveMeasures::insertMeasures()
       Measure* m = fm->prevMeasure();
       for (Segment* seg = m->first(); seg; seg = seg->next()) {
             for (int track = 0; track < score->ntracks(); ++track) {
-                  Chord* chord = static_cast<Chord*>(seg->element(track));
-                  if (chord == 0 || chord->type() != Element::Type::CHORD)
+                  Element* el = seg->element(track);
+                  if (el == 0 || el->type() != Element::Type::CHORD)
                         continue;
+                  Chord* chord = static_cast<Chord*>(el);
                   foreach (Note* n, chord->notes()) {
                         Tie* tie = n->tieFor();
                         if (!tie)

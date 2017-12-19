@@ -1589,9 +1589,9 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   // set stem direction for every chord
                   //
                   for (ChordRest* cr : crl) {
-                        Chord* c = static_cast<Chord*>(cr);
-                        if (c->type() != Element::Type::CHORD)
+                        if (cr->type() != Element::Type::CHORD)
                               continue;
+                        Chord* c = static_cast<Chord*>(cr);
                         qreal y  = c->upNote()->pagePos().y();
                         bool nup = beamY < y;
                         if (c->up() != nup) {
@@ -1610,9 +1610,9 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   qreal yUpMin   = 300000;
 
                   for (ChordRest* cr : crl) {
-                        Chord* c = static_cast<Chord*>(cr);
-                        if (c->type() != Element::Type::CHORD)
+                        if (cr->type() != Element::Type::CHORD)
                               continue;
+                        Chord* c = static_cast<Chord*>(cr);
                         bool _up = c->up();
                         qreal y = (_up ? c->upNote() : c->downNote())->pagePos().y();
                         if (_up)
@@ -1893,9 +1893,9 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       //  calculate stem length
       //
       for (ChordRest* cr : crl) {
-            Chord* c = static_cast<Chord*>(cr);
-            if (c->type() != Element::Type::CHORD)
+            if (cr->type() != Element::Type::CHORD)
                   continue;
+            Chord* c = static_cast<Chord*>(cr);
             c->layoutStem1();
             Stem* stem = c->stem();
 #if 0
@@ -2250,17 +2250,18 @@ bool Beam::acceptDrop(const DropData& data) const
 
 Element* Beam::drop(const DropData& data)
       {
-      Icon* e = static_cast<Icon*>(data.element);
+      Element* e = data.element;
       if (e->type() != Element::Type::ICON)
             return 0;
+      Icon* icon = static_cast<Icon*>(e);
       qreal g1;
       qreal g2;
 
-      if (e->iconType() == IconType::FBEAM1) {
+      if (icon->iconType() == IconType::FBEAM1) {
             g1 = 1.0;
             g2 = 0.0;
             }
-      else if (e->iconType() == IconType::FBEAM2) {
+      else if (icon->iconType() == IconType::FBEAM2) {
             g1 = 0.0;
             g2 = 1.0;
             }

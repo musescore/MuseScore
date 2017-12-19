@@ -2241,12 +2241,12 @@ static Chord* nextChord(Chord* ch)
             // qDebug("no segment for second note of glissando found");
             return 0;
             }
-      Chord* c = static_cast<Chord*>(s->element(ch->track()));
-      if (c == 0 || c->type() != Element::Type::CHORD) {
+      Element* el = s->element(ch->track());
+      if (el == 0 || el->type() != Element::Type::CHORD) {
             // qDebug("no second note for glissando found, track %d", track());
             return 0;
             }
-      return c;
+      return static_cast<Chord*>(el);
       }
 */
 //---------------------------------------------------------

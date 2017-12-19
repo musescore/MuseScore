@@ -1110,12 +1110,12 @@ Note* Score::addMidiPitch(int pitch, bool addFlag)
 Note* Score::addPitch(NoteVal& nval, bool addFlag)
       {
       if (addFlag) {
-            Chord* c = static_cast<Chord*>(_is.lastSegment()->element(_is.track()));
-
-            if (c == 0 || c->type() != Element::Type::CHORD) {
-                  qDebug("Score::addPitch: cr %s", c ? c->name() : "zero");
+            Element* el = _is.lastSegment()->element(_is.track());
+            if (el == 0 || el->type() != Element::Type::CHORD) {
+                  qDebug("Score::addPitch: cr %s", el ? el->name() : "zero");
                   return 0;
                   }
+            Chord* c = static_cast<Chord*>(el);
             Note* note = addNote(c, nval);
             if (_is.lastSegment() == _is.segment()) {
                   NoteEntryMethod entryMethod = _is.noteEntryMethod();
@@ -1696,9 +1696,10 @@ void Score::cmdAddTie()
                   for (Segment* seg = chord->segment()->next1(Segment::Type::ChordRest); seg; seg = seg->next1(Segment::Type::ChordRest)) {
                         bool noteFound = false;
                         for (int track = strack; track < etrack; ++track) {
-                              ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
-                              if (cr == 0 || cr->type() != Element::Type::CHORD)
+                              Element* el = seg->element(track);
+                              if (el == 0 || el->type() != Element::Type::CHORD)
                                     continue;
+                              ChordRest* cr = static_cast<ChordRest*>(el);
                               int staffIdx = cr->staffIdx() + cr->staffMove();
                               if (staffIdx != chord->staffIdx() + chord->staffMove())
                                     continue;

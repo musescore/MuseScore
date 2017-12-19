@@ -1882,9 +1882,11 @@ void Score::createMMRests()
                   ++n;
                   len += nm->len();
                   lm = nm;
-                  nm = static_cast<Measure*>(mb);
-                  if (!nm || (nm->type() != Element::Type::MEASURE))
+                  if (!mb || (mb->type() != Element::Type::MEASURE)) {
+                        nm = nullptr;
                         break;
+                        }
+                  nm = static_cast<Measure*>(mb);
                   }
 
             if (n >= styleI(StyleIdx::minEmptyMeasures)) {
@@ -2421,9 +2423,10 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                                     Measure* m = static_cast<Measure*>(mb);
                                     for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
                                           for (int voice = 0; voice < VOICES; ++voice) {
-                                                ChordRest* cr = static_cast<ChordRest*>(s->element(st * VOICES + voice));
-                                                if (cr == 0 || cr->type() == Element::Type::REST)
+                                                Element* el = s->element(st * VOICES + voice);
+                                                if (el == 0 || el->type() == Element::Type::REST)
                                                       continue;
+                                                ChordRest* cr = static_cast<ChordRest*>(el);
                                                 int staffMove = cr->staffMove();
                                                 if (staffIdx == st + staffMove) {
                                                       hideStaff = false;
@@ -2655,9 +2658,10 @@ void Score::connectTies(bool silent)
       Segment::Type st = Segment::Type::ChordRest;
       for (Segment* s = m->first(st); s; s = s->next1(st)) {
             for (int i = 0; i < tracks; ++i) {
-                  Chord* c = static_cast<Chord*>(s->element(i));
-                  if (c == 0 || c->type() != Element::Type::CHORD)
+                  Element* el = s->element(i);
+                  if (el == 0 || el->type() != Element::Type::CHORD)
                         continue;
+                  Chord* c = static_cast<Chord*>(el);
                   // connect grace note tie to main note in 1.3 scores
                   if (_mscVersion <= 114) {
                         for (Chord* gc : c->graceNotes()) {
@@ -2727,12 +2731,13 @@ void Score::connectTies(bool silent)
                   Tremolo* tremolo = c->tremolo();
                   if (tremolo && tremolo->twoNotes() && !tremolo->chord2()) {
                         for (Segment* ls = s->next1(st); ls; ls = ls->next1(st)) {
-                              Chord* nc = static_cast<Chord*>(ls->element(i));
-                              if (nc == 0)
+                              Element* el = ls->element(i);
+                              if (el == 0)
                                     continue;
-                              if (nc->type() != Element::Type::CHORD)
+                              if (el->type() != Element::Type::CHORD)
                                     qDebug("cannot connect tremolo");
                               else {
+                                    Chord* nc = static_cast<Chord*>(el);
                                     nc->setTremolo(tremolo);
                                     tremolo->setChords(c, nc);
                                     // cross-measure tremolos are not supported
