@@ -1971,7 +1971,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                   case SymId::ornamentTremblement:
                   case SymId::ornamentPrallMordent:
                   case SymId::ornamentUpPrall:
-                  case SymId::ornamentDownPrall:
+                  case SymId::ornamentPrecompMordentUpperPrefix:
                   case SymId::ornamentUpMordent:
                   case SymId::ornamentDownMordent:
                   case SymId::ornamentPrallDown:
@@ -2107,7 +2107,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         ornaments.tag(xml);
                         xml.tagE("inverted-mordent long=\"yes\" approach=\"below\"");
                         break;
-                  case SymId::ornamentDownPrall:
+                  case SymId::ornamentPrecompMordentUpperPrefix:
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-mordent long=\"yes\" approach=\"above\"");

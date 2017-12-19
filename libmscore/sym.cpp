@@ -2661,14 +2661,14 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symNames = { {
 
 //    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
 
-      "ornamentPrallMordent",
-      "ornamentUpPrall",
-      "ornamentUpMordent",
-      "ornamentPrallDown",
-      "ornamentDownPrall",
-      "ornamentDownMordent",
-      "ornamentPrallUp",
-      "ornamentLinePrall",
+      "ornamentPrallMordent",       // ornamentPrecompTrillWithMordent ?
+      "ornamentUpPrall",            // ornamentPrecompSlideTrillDAnglebert ?
+      "ornamentUpMordent",          // ornamentPrecompSlideTrillBach ?
+      "ornamentPrallDown",          // ornamentPrecompTrillLowerSuffix ?
+//      "ornamentDownPrall",        // -> SymId::ornamentPrecompMordentUpperPrefix },
+      "ornamentDownMordent",        // ornamentPrecompTurnTrillBach ?
+      "ornamentPrallUp",            // ornamentPrecompTrillSuffixDandrieu ?
+      "ornamentLinePrall",          // ornamentPRecompAppoggTrill ?
 
 //    additional symbols
 
@@ -5329,6 +5329,7 @@ struct oldName {
 
 QHash<QString, SymId> Sym::lonhash;
 QVector<oldName> oldNames = {
+//      {"ornamentDownPrall",                     SymId::ornamentPrecompMordentUpperPrefix },
       {"clef eight",                            SymId::clef8},
       //{"clef one"                             SymId::},
       //{"clef five"                            SymId::},
@@ -5496,14 +5497,16 @@ QVector<oldName> oldNames = {
       {"prall",                                 SymId::ornamentMordent },           // scripts.prall
       {"mordent",                               SymId::ornamentMordentInverted },   // scripts.mordent
       {"prall prall",                           SymId::ornamentTremblement },       // scripts.prallprall
+
       {"prall mordent",                         SymId::ornamentPrallMordent },      // scripts.prallmordent
       {"up prall",                              SymId::ornamentUpPrall },           // scripts.upprall
       {"up mordent",                            SymId::ornamentUpMordent },         // scripts.upmordent
       {"prall down",                            SymId::ornamentPrallDown },         // scripts.pralldown
-      {"down prall",                            SymId::ornamentDownPrall },         // scripts.downprall
+//      {"down prall",                            SymId::ornamentDownPrall },         // scripts.downprall
       {"down mordent",                          SymId::ornamentDownMordent },       // scripts.downmordent
       {"prall up",                              SymId::ornamentPrallUp },           // scripts.prallup
       {"line prall",                            SymId::ornamentLinePrall },         // scripts.lineprall
+
       {"schleifer",                             SymId::ornamentPrecompSlide },      // scripts.schleifer
       {"caesura straight",                      SymId::caesura },                   // scripts.caesura.straight
       {"caesura curved",                        SymId::caesuraCurved },             // scripts.caesura.curved
@@ -5683,6 +5686,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, const QSizeF& mag, const QPoin
 
       GlyphKey gk(face, id, mag.width(), mag.height(), worldScale, color);
       GlyphPixmap* pm = cache->object(gk);
+
       if (!pm) {
             FT_Matrix matrix {
                   scale16X, 0,
@@ -6012,6 +6016,7 @@ void ScoreFont::load()
                   SymId::ornamentZigZagLineNoRightEnd,
                   SymId::ornamentBottomRightConcaveStroke,
                   }},
+#if 0
             { SymId::ornamentDownPrall,
                   {
                   SymId::ornamentTopLeftConvexStroke,
@@ -6019,6 +6024,7 @@ void ScoreFont::load()
                   SymId::ornamentZigZagLineNoRightEnd,
                   SymId::ornamentZigZagLineWithRightEnd
                   }},
+#endif
             { SymId::ornamentDownMordent,
                   {
                   SymId::ornamentLeftVerticalStroke,

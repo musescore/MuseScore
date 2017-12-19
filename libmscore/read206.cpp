@@ -1291,7 +1291,6 @@ static struct ArticulationNames {
       { SymId::ornamentTremblement,       "prallprall",                },
       { SymId::ornamentPrallMordent,      "prallmordent",              },
       { SymId::ornamentUpPrall,           "upprall",                   },
-      { SymId::ornamentDownPrall,         "downprall",                 },
       { SymId::ornamentUpMordent,         "upmordent",                 },
       { SymId::ornamentDownMordent,       "downmordent",               },
       { SymId::ornamentPrallDown,         "pralldown",                 },
@@ -1303,7 +1302,10 @@ static struct ArticulationNames {
       { SymId::luteFingeringRHThumb,      "lutefingeringthumb",        },
       { SymId::luteFingeringRHFirst,      "lutefingering1st",          },
       { SymId::luteFingeringRHSecond,     "lutefingering2nd",          },
-      { SymId::luteFingeringRHThird,      "lutefingering3rd",          }
+      { SymId::luteFingeringRHThird,      "lutefingering3rd",          },
+
+      { SymId::ornamentPrecompMordentUpperPrefix, "downprall"   },
+      { SymId::ornamentPrecompMordentUpperPrefix, "ornamentDownPrall"   },
       };
 
 //---------------------------------------------------------
