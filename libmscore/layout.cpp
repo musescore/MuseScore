@@ -2137,7 +2137,7 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
       if (showCourtesy && ns) {
             TimeSig* ts = static_cast<TimeSig*>(ns->element(0));
             if (ts && ts->showCourtesySig()) {
-                  qreal leftMargin  = point(styleS(StyleIdx::timesigLeftMargin));
+                  qreal leftMargin = point(styleS(StyleIdx::timesigLeftMargin));
                   Segment* s = m->findSegment(Segment::Type::TimeSigAnnounce, tick);
                   if (s && s->element(0)) {
                         w = static_cast<TimeSig*>(s->element(0))->width() + leftMargin;
@@ -2274,9 +2274,14 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                         firstMeasure = m;
                         addSystemHeader(m, isFirstSystem);
                         ww = m->minWidth2();
+                        if (MScore::debugMode)
+                              qDebug("measure %d: ww after minWidth2 = %f", m->no(), ww);
                         }
-                  else
+                  else {
                         ww = m->minWidth1();
+                        if (MScore::debugMode)
+                              qDebug("measure %d: ww after minWidth1 = %f", m->no(), ww);
+                        }
 
                   Segment* s = m->last();
                   if ((s->segmentType() == Segment::Type::EndBarLine) && s->element(0)) {
@@ -2297,10 +2302,14 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                                     - BarLine::layoutWidth(this, ot, mag);
                               }
                         }
+                  if (MScore::debugMode)
+                        qDebug("measure %d: ww after BarLine = %f", m->no(), ww);
                   qreal stretch = m->userStretch() * measureSpacing;
                   if (stretch < 1.0)
                         stretch = 1.0;
                   ww            *= stretch;
+                  if (MScore::debugMode)
+                        qDebug("measure %d: ww after stretch = %f", m->no(), ww);
                   cautionaryW   = cautionaryWidth(m, hasCourtesy) * stretch;
 
                   // if measure does not already have courtesy elements,
@@ -2308,17 +2317,21 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                   // (if measure *does* already have courtesy elements, these are included in width already)
                   if (!hasCourtesy)
                         ww += cautionaryW;
+                  if (MScore::debugMode)
+                        qDebug("measure %d: ww after cautionaryWidth = %f", m->no(), ww);
 
                   if (ww < minMeasureWidth)
                         ww = minMeasureWidth;
                   isFirstMeasure = false;
-                  //qDebug("measure %d: ww %f + minWidth %f = %f", m->no(), ww, minWidth, ww + minWidth);
+                  if (MScore::debugMode)
+                        qDebug("measure %d: ww %f + minWidth %f = %f", m->no(), ww, minWidth, ww + minWidth);
                   }
 
             // collect at least one measure
             bool empty = system->measures().isEmpty();
             if (!empty && (minWidth + ww > systemWidth)) {
-                  //qDebug("=== does not fit: systemWidth = %f", systemWidth);
+                  if (MScore::debugMode)
+                        qDebug("=== does not fit: systemWidth = %f", systemWidth);
                   curMeasure->setSystem(oldSystem);
                   continueFlag = false;
                   break;

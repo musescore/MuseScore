@@ -129,18 +129,26 @@ void KeySig::layout()
       // AND style says they are not off
       // OR key sig is CMaj/Amin (in which case they are always shown)
 
-      bool naturalsOn = false;
-      Measure* prevMeas = measure() ? measure()->prevMeasure() : nullptr;
+      Measure* m           = measure();
+      Measure* prevMeasure = m ? m->prevMeasure() : nullptr;
 
-      // If we're not force hiding naturals (Continuous panel), use score style settings
-      if (!_hideNaturals)
-          naturalsOn =
-            (prevMeas && prevMeas->sectionBreak() == nullptr
-            && (score()->styleI(StyleIdx::keySigNaturals) != int(KeySigNatural::NONE) || t1 == 0) );
-
-      // Don't repeat naturals if shown in courtesy
-      if (prevMeas && prevMeas->findSegment(Segment::Type::KeySigAnnounce, measure()->tick()) != 0
-          && segment()->segmentType() != Segment::Type::KeySigAnnounce )
+      // display of naturals defaults according to style
+      bool naturalsOn = score()->styleI(StyleIdx::keySigNaturals) != int(KeySigNatural::NONE) || t1 == 0;
+      // suppress if we are hiding all naturals
+      if (_hideNaturals)
+            naturalsOn = false;
+      // suppress after section break
+      else if (prevMeasure && prevMeasure->isFinalMeasureOfSection())
+            naturalsOn = false;
+      // suppress after courtesy keysig
+      // this may or may not have actually been generated yet,
+      // and even if it has been, it might be removed later,
+      // so instead of checking for existence of courtesy keysig,
+      // check instead for the conditions that would normally trigger it
+      else if (score()->styleB(StyleIdx::genCourtesyKeysig) && showCourtesy() && m && prevMeasure && m->system() != prevMeasure->system())
+            naturalsOn = false;
+      // suppress if no staff
+      else if (track() == -1)
             naturalsOn = false;
 
       int coffset = 0;
