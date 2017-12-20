@@ -580,24 +580,26 @@ void Ambitus::updateRange()
                   stop = meas->sectionBreak();
                   }
             // scan all relevant tracks of this segment for chords
-            for (trk=firstTrack; trk <= lastTrack; trk++)
-                  if ( (chord=static_cast<Chord*>(segm->element(trk))) != nullptr
-                              && chord->type() == ElementType::CHORD) {
-                        // update pitch range (with associated tpc's)
-                        foreach (Note* n, chord->notes()) {
-                              if (!n->play())         // skip notes which are not to be played
-                                    continue;
-                              int pitch = n->ppitch();
-                              if (pitch > pitchTop) {
-                                    pitchTop = pitch;
-                                    tpcTop   = n->tpc();
-                                    }
-                              if (pitch < pitchBottom) {
-                                    pitchBottom = pitch;
-                                    tpcBottom   = n->tpc();
-                                    }
+            for (trk = firstTrack; trk <= lastTrack; trk++) {
+                  Element* e = segm->element(trk);
+                  if (!e || !e->isChord())
+                        continue;
+                  chord = toChord(e);
+                  // update pitch range (with associated tpc's)
+                  for (Note* n : chord->notes()) {
+                        if (!n->play())         // skip notes which are not to be played
+                              continue;
+                        int pitch = n->ppitch();
+                        if (pitch > pitchTop) {
+                              pitchTop = pitch;
+                              tpcTop   = n->tpc();
+                              }
+                        if (pitch < pitchBottom) {
+                              pitchBottom = pitch;
+                              tpcBottom   = n->tpc();
                               }
                         }
+                  }
             segm = segm->nextCR();
             }
 

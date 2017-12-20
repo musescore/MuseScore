@@ -94,7 +94,7 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace)
             ChordRest* e = toChordRest(seg->element(track));
             if (e) {
                   if (e->isChord() && !skipGrace) {
-                        Chord* c = static_cast<Chord*>(e);
+                        Chord* c = toChord(e);
                         if (!c->graceNotes().empty()) {
                               QVector<Chord*> cl = c->graceNotesBefore();
                               if (!cl.empty())
@@ -536,7 +536,7 @@ Element* Score::nextElement()
                               break;
                        }
                   case ElementType::SEGMENT: {
-                        Segment* s = static_cast<Segment*>(e);
+                        Segment* s = toSegment(e);
                         Element* next = s->nextElement(staffId);
                         if (next)
                               return next;
@@ -544,21 +544,21 @@ Element* Score::nextElement()
                               break;
                         }
                   case ElementType::MEASURE: {
-                        Measure* m = static_cast<Measure*>(e);                 
+                        Measure* m = toMeasure(e);
                         Element* next = m->nextElementStaff(staffId);
                         if (next)
                               return next;
                         else
                               break;
                         }
-                  case ElementType::CLEF:              
-                  case ElementType::KEYSIG:            
-                  case ElementType::TIMESIG:           
-                  case ElementType::BAR_LINE: {                                          
+                  case ElementType::CLEF:
+                  case ElementType::KEYSIG:
+                  case ElementType::TIMESIG:
+                  case ElementType::BAR_LINE: {
                        for (; e && e->type() != ElementType::SEGMENT; e = e->parent()) {
                              ;
                              }
-                       Segment* s = static_cast<Segment*>(e);
+                       Segment* s = toSegment(e);
                        Element* next = s->nextElement(staffId);
                        if (next)
                              return next;
@@ -573,7 +573,7 @@ Element* Score::nextElement()
                   case ElementType::VIBRATO_SEGMENT:
                   case ElementType::VOLTA_SEGMENT:
                   case ElementType::PEDAL_SEGMENT: {
-                        SpannerSegment* s = static_cast<SpannerSegment*>(e);
+                        SpannerSegment* s = toSpannerSegment(e);
                         Spanner* sp = s->spanner();
                         Spanner* nextSp = sp->nextSpanner(sp, staffId);
                         if (nextSp)
@@ -590,13 +590,13 @@ Element* Score::nextElement()
                                     }
                               }
                         break;
-                        }                  
+                        }
                   case ElementType::GLISSANDO_SEGMENT:
                   case ElementType::TIE_SEGMENT: {
-                        SpannerSegment* s = static_cast<SpannerSegment*>(e);
-                        Spanner* sp = s->spanner();                   
-                        Element* elSt = sp->startElement();              
-                        Note* n = static_cast<Note*>(elSt);
+                        SpannerSegment* s = toSpannerSegment(e);
+                        Spanner* sp = s->spanner();
+                        Element* elSt = sp->startElement();
+                        Note* n = toNote(elSt);
                         Element* next =  n->nextElement();
                         if (next)
                               return next;
@@ -633,7 +633,7 @@ Element* Score::prevElement()
                               break;
                         }
                   case ElementType::SEGMENT: {
-                        Segment* s = static_cast<Segment*>(e);
+                        Segment* s = toSegment(e);
                         Element* prev = s->prevElement(staffId);
                         if (prev)
                               return prev;
@@ -641,17 +641,17 @@ Element* Score::prevElement()
                               break;
                         }
                   case ElementType::MEASURE: {
-                        Measure* m = static_cast<Measure*>(e);                       
+                        Measure* m = toMeasure(e);
                         return m->prevElementStaff(staffId);
                         }
                   case ElementType::CLEF:
                   case ElementType::KEYSIG:
                   case ElementType::TIMESIG:
-                  case ElementType::BAR_LINE: {                    
+                  case ElementType::BAR_LINE: {
                         for (; e && e->type() != ElementType::SEGMENT; e = e->parent()) {
                               ;
                               }
-                        Segment* s = static_cast<Segment*>(e);
+                        Segment* s = toSegment(e);
                         return s->prevElement(staffId);
                         }
                   case ElementType::SLUR_SEGMENT:
@@ -662,7 +662,7 @@ Element* Score::prevElement()
                   case ElementType::VIBRATO_SEGMENT:
                   case ElementType::VOLTA_SEGMENT:
                   case ElementType::PEDAL_SEGMENT: {
-                        SpannerSegment* s = static_cast<SpannerSegment*>(e);
+                        SpannerSegment* s = toSpannerSegment(e);
                         Spanner* sp = s->spanner();
                         Element* stEl = sp->startElement();
                         Spanner* prevSp = sp->prevSpanner(sp, staffId);
@@ -686,25 +686,24 @@ Element* Score::prevElement()
                                                 }
                                           }
                                     }
-                              if (el->type() == ElementType::CHORD) {
-                                    return static_cast<Chord*>(el)->lastElementBeforeSegment();
-                                    }
-                              else if (el->type() == ElementType::NOTE) {
-                                    Chord* c = static_cast<Note*>(el)->chord();
+                              if (el->isChord())
+                                    return toChord(el)->lastElementBeforeSegment();
+                              else if (el->isNote()) {
+                                    Chord* c = toNote(el)->chord();
                                     return c->lastElementBeforeSegment();
                                     }
                               else {
                                     return el;
                                     }
-                             }             
+                             }
                         }
                   case ElementType::GLISSANDO_SEGMENT:
                   case ElementType::TIE_SEGMENT: {
-                        SpannerSegment* s = static_cast<SpannerSegment*>(e);
+                        SpannerSegment* s = toSpannerSegment(e);
                         Spanner* sp = s->spanner();
                         Element* elSt = sp->startElement();
                         Q_ASSERT(elSt->type() == ElementType::NOTE);
-                        Note* n = static_cast<Note*>(elSt);
+                        Note* n = toNote(elSt);
                         Element* prev =  n->prevElement();
                         if(prev)
                               return prev;

@@ -56,7 +56,7 @@ void TrillSegment::add(Element* e)
       e->setParent(this);
       if (e->type() == ElementType::ACCIDENTAL) {
             // accidental is part of trill
-            trill()->setAccidental(static_cast<Accidental*>(e));
+            trill()->setAccidental(toAccidental(e));
             }
       }
 
@@ -312,7 +312,7 @@ void Trill::add(Element* e)
       {
       if (e->type() == ElementType::ACCIDENTAL) {
             e->setParent(this);
-            _accidental = static_cast<Accidental*>(e);
+            _accidental = toAccidental(e);
             }
       else
             SLine::add(e);
@@ -339,7 +339,7 @@ void Trill::layout()
             return;
       if (spannerSegments().empty())
             return;
-      TrillSegment* ls = static_cast<TrillSegment*>(frontSegment());
+      TrillSegment* ls = toTrillSegment(frontSegment());
 #if 0
 // this is now handled differently, in SLine::linePos
       //

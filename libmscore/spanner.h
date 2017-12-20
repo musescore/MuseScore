@@ -99,7 +99,7 @@ class SpannerSegment : public Element {
 
       virtual Element* nextSegmentElement() override;
       virtual Element* prevSegmentElement() override;
-      virtual bool isSpannerSegment() const override { return true; }
+//      virtual bool isSpannerSegment() const override { return true; }
       virtual QString accessibleInfo() const override;
       virtual void styleChanged() override;
       virtual void triggerLayout() const override;
@@ -211,7 +211,7 @@ class Spanner : public Element {
       virtual Element* nextSegmentElement() override;
       virtual Element* prevSegmentElement() override;
 
-      virtual bool isSpanner() const override { return true; }
+//      virtual bool isSpanner() const override { return true; }
 
       friend class SpannerSegment;
       };

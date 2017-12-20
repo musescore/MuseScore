@@ -32,7 +32,7 @@ Volta* Score::searchVolta(int tick) const
             Spanner* s = p.second;
             if (s->type() != ElementType::VOLTA)
                   continue;
-            Volta* volta = static_cast<Volta*>(s);
+            Volta* volta = toVolta(s);
             if (tick >= volta->tick() && tick < volta->tick2())
                   return volta;
             }

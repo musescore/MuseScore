@@ -367,8 +367,8 @@ class Element : public ScoreElement {
       qreal magS() const;
 
       bool isPrintable() const;
-      virtual bool isSpanner() const           { return false; }
-      virtual bool isSpannerSegment() const    { return false; }
+//      virtual bool isSpanner() const           { return false; }
+//      virtual bool isSpannerSegment() const    { return false; }
 
       qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
@@ -480,17 +480,6 @@ class ElementEditData {
 
       void pushProperty(P_ID pid) { propertyData.push_back(PropertyData({pid, e->getProperty(pid) })); }
       };
-
-//---------------------------------------------------------
-//   toSpanner
-//---------------------------------------------------------
-
-class Spanner;
-
-static inline Spanner* toSpanner(Element* e) {
-      Q_ASSERT(e == 0 || e->isSpanner());
-      return (Spanner*)e;
-      }
 
 //---------------------------------------------------------
 //   ElementList

@@ -179,13 +179,13 @@ bool Rest::acceptDrop(EditData& data) const
       Element* e = data.element;
       ElementType type = e->type();
       if (
-            (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::NBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM64)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
-         || (type == ElementType::ARTICULATION && static_cast<Articulation*>(e)->isFermata())
+            (type == ElementType::ICON && toIcon(e)->iconType() == IconType::SBEAM)
+         || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::MBEAM)
+         || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::NBEAM)
+         || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::BEAM32)
+         || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::BEAM64)
+         || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::AUTOBEAM)
+         || (type == ElementType::ARTICULATION && toArticulation(e)->isFermata())
          || (type == ElementType::CLEF)
          || (type == ElementType::KEYSIG)
          || (type == ElementType::TIMESIG)
@@ -230,10 +230,9 @@ Element* Rest::drop(EditData& data)
                   }
                   return e;
 
-            case ElementType::CHORD:
-                  {
-                  Chord* c              = static_cast<Chord*>(e);
-                  Note* n               = c->upNote();
+            case ElementType::CHORD: {
+                  Chord* c = toChord(e);
+                  Note* n  = c->upNote();
                   Direction dir = c->stemDirection();
                   // score()->select(0, SelectType::SINGLE, 0);
                   NoteVal nval;
@@ -243,7 +242,7 @@ Element* Rest::drop(EditData& data)
                   if (!d.isZero()) {
                         Segment* seg = score()->setNoteRest(segment(), track(), nval, d, dir);
                         if (seg) {
-                              ChordRest* cr = static_cast<ChordRest*>(seg->element(track()));
+                              ChordRest* cr = toChordRest(seg->element(track()));
                               if (cr)
                                     score()->nextInputPos(cr, true);
                               }
@@ -441,7 +440,7 @@ int Rest::computeLineOffset(int lines)
             // do not offset voice 1 rest if there exists a matching invisible rest in voice 2;
             Element* e = s->element(track() + 1);
             if (e && e->isRest() && (!e->visible() || toRest(e)->isGap())) {
-                  Rest* r = static_cast<Rest*>(e);
+                  Rest* r = toRest(e);
                   if (r->globalDuration() == globalDuration()) {
                         offsetVoices = false;
                         }
@@ -463,7 +462,7 @@ int Rest::computeLineOffset(int lines)
                   if (v <= 1) {
                         // try to find match in other voice (1 or 2)
                         if (e && e->type() == ElementType::REST) {
-                              Rest* r = static_cast<Rest*>(e);
+                              Rest* r = toRest(e);
                               if (r->globalDuration() == globalDuration()) {
                                     matchFound = true;
                                     continue;

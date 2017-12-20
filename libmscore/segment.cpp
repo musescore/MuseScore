@@ -1204,7 +1204,7 @@ Element* Segment::firstElementOfSegment(Segment* s, int activeStaff)
       for (auto i: s->elist()) {
             if (i && i->staffIdx() == activeStaff) {
                   if (i->type() == ElementType::CHORD)
-                        return static_cast<Chord*>(i)->notes().back();
+                        return toChord(i)->notes().back();
                   else
                         return i;
                   }
@@ -1231,13 +1231,13 @@ Element* Segment::nextElementOfSegment(Segment* s, Element* e, int activeStaff)
                        }
                  if (!next)
                        return nullptr;
-                 if (next->type() == ElementType::CHORD)
-                       return static_cast<Chord*>(next)->notes().back();
+                 if (next->isChord())
+                       return toChord(next)->notes().back();
                  else
                        return next;
              }
              if (el->type() == ElementType::CHORD) {
-                   std::vector<Note*> notes = static_cast<Chord*>(el)->notes();
+                   std::vector<Note*> notes = toChord(el)->notes();
                    auto i = std::find(notes.begin(), notes.end(), e);
                    if (i == notes.end())
                          continue;
@@ -1252,8 +1252,8 @@ Element* Segment::nextElementOfSegment(Segment* s, Element* e, int activeStaff)
                                }
                          if (!nextEl)
                                return nullptr;
-                         if (nextEl->type() == ElementType::CHORD)
-                               return static_cast<Chord*>(nextEl)->notes().back();
+                         if (nextEl->isChord())
+                               return toChord(nextEl)->notes().back();
                          return nextEl;
                          }
                    }
@@ -1281,15 +1281,15 @@ Element* Segment::prevElementOfSegment(Segment* s, Element* e, int activeStaff)
                  if (!prev)
                        return nullptr;
                  if (prev->staffIdx() == e->staffIdx()) {
-                 if (prev->type() == ElementType::CHORD)
-                       return static_cast<Chord*>(prev)->notes().front();
+                 if (prev->isChord())
+                       return toChord(prev)->notes().front();
                  else
                        return prev;
                        }
                  return nullptr;
              }
-             if (el->type() == ElementType::CHORD) {
-                   std::vector<Note*> notes = static_cast<Chord*>(el)->notes();
+             if (el->isChord()) {
+                   std::vector<Note*> notes = toChord(el)->notes();
                    auto i = std::find(notes.begin(), notes.end(), e);
                    if (i == notes.end())
                          continue;
@@ -1305,8 +1305,8 @@ Element* Segment::prevElementOfSegment(Segment* s, Element* e, int activeStaff)
                          if (!prevEl)
                                return nullptr;
                          if (prevEl->staffIdx() == e->staffIdx()) {
-                         if (prevEl->type() == ElementType::CHORD)
-                               return static_cast<Chord*>(prevEl)->notes().front();
+                         if (prevEl->isChord())
+                               return toChord(prevEl)->notes().front();
                          return prevEl;
                                }
                          return nullptr;
@@ -1326,8 +1326,8 @@ Element* Segment::lastElementOfSegment(Segment* s, int activeStaff)
       std::vector<Element*> elements = s->elist();
       for (auto i = --elements.end(); i != elements.begin(); --i) {
             if (*i && (*i)->staffIdx() == activeStaff) {
-                  if ((*i)->type() == ElementType::CHORD)
-                      return static_cast<Chord*>(*i)->notes().front();
+                  if ((*i)->isChord())
+                      return toChord(*i)->notes().front();
                   else
                         return *i;
                   }
@@ -1335,7 +1335,7 @@ Element* Segment::lastElementOfSegment(Segment* s, int activeStaff)
       auto i = elements.begin();
       if (*i && (*i)->staffIdx() == activeStaff) {
             if ((*i)->type() == ElementType::CHORD)
-                  return static_cast<Chord*>(*i)->notes().front();
+                  return toChord(*i)->notes().front();
             else
                   return *i;
             }
@@ -1476,7 +1476,7 @@ Element* Segment::nextElement(int activeStaff)
             default: {
                   Element* p;
                   if (e->isTieSegment() || e->isGlissandoSegment()) {
-                        SpannerSegment* s = static_cast<SpannerSegment*>(e);
+                        SpannerSegment* s = toSpannerSegment(e);
                         Spanner* sp = s->spanner();
                         p = sp->startElement();
                         }
@@ -1491,7 +1491,7 @@ Element* Segment::nextElement(int activeStaff)
                   for (; p && p->type() != ElementType::SEGMENT; p = p->parent()) {
                         ;
                        }
-                  Segment* seg = static_cast<Segment*>(p);
+                  Segment* seg = toSegment(p);
                   // next in _elist
                   Element* nextEl = nextElementOfSegment(seg, el, activeStaff);
                   if (nextEl)
@@ -1574,10 +1574,10 @@ Element* Segment::prevElement(int activeStaff)
                                }
                           }
                    if (el->type() == ElementType::CHORD) {
-                         return static_cast<Chord*>(el)->lastElementBeforeSegment();
+                         return toChord(el)->lastElementBeforeSegment();
                          }
                    else if (el->type() == ElementType::NOTE) {
-                         Chord* c = static_cast<Note*>(el)->chord();
+                         Chord* c = toNote(el)->chord();
                          return c->lastElementBeforeSegment();
                          }
                    else {
@@ -1588,14 +1588,14 @@ Element* Segment::prevElement(int activeStaff)
             case ElementType::TREMOLO: {
                   Element* el = this->element(e->track());
                   Q_ASSERT(el->type() == ElementType::CHORD);
-                  return static_cast<Chord*>(el)->prevElement();
+                  return toChord(el)->prevElement();
                   }
             default: {
                   Element* el = e;
                   Segment* seg = this;
                   if (e->type() == ElementType::TIE_SEGMENT ||
                       e->type() == ElementType::GLISSANDO_SEGMENT) {
-                        SpannerSegment* s = static_cast<SpannerSegment*>(e);
+                        SpannerSegment* s = toSpannerSegment(e);
                         Spanner* sp = s->spanner();
                         el = sp->startElement();
                         seg = sp->startSegment();
@@ -1618,10 +1618,10 @@ Element* Segment::prevElement(int activeStaff)
                                     }
                               }
                         if (prev->type() == ElementType::CHORD) {
-                              return static_cast<Chord*>(prev)->lastElementBeforeSegment();
+                              return toChord(prev)->lastElementBeforeSegment();
                               }
                         else if (prev->type() == ElementType::NOTE) {
-                              Chord* c = static_cast<Note*>(prev)->chord();
+                              Chord* c = toNote(prev)->chord();
                               return c->lastElementBeforeSegment();
                               }
                         else {
@@ -1665,10 +1665,10 @@ Element* Segment::prevElement(int activeStaff)
                                }
                          }
                    if (prev->type() == ElementType::CHORD) {
-                         return static_cast<Chord*>(prev)->lastElementBeforeSegment();
+                         return toChord(prev)->lastElementBeforeSegment();
                          }
                    else if (prev->type() == ElementType::NOTE) {
-                         Chord* c = static_cast<Note*>(prev)->chord();
+                         Chord* c = toNote(prev)->chord();
                          return c->lastElementBeforeSegment();
                          }
                    else {

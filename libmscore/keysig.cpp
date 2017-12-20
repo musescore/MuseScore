@@ -290,7 +290,7 @@ bool KeySig::acceptDrop(EditData& data) const
 
 Element* KeySig::drop(EditData& data)
       {
-      KeySig* ks = static_cast<KeySig*>(data.element);
+      KeySig* ks = toKeySig(data.element);
       if (ks->type() != ElementType::KEYSIG) {
             delete ks;
             return 0;

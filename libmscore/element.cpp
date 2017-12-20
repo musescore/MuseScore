@@ -1455,11 +1455,11 @@ Element* Element::nextElement()
       if (e) {
             switch (e->type()) {
                   case ElementType::SEGMENT: {
-                        Segment* s = static_cast<Segment*>(e);
+                        Segment* s = toSegment(e);
                         return s->nextElement(staffIdx());
                         }
                   case ElementType::MEASURE: {
-                        Measure* m = static_cast<Measure*>(e);
+                        Measure* m = toMeasure(e);
                         return m->nextElementStaff(staffIdx());
                         }
                   case ElementType::CLEF:
@@ -1489,11 +1489,11 @@ Element* Element::prevElement()
       if (e) {
             switch(e->type()) {
                   case ElementType::SEGMENT: {
-                        Segment* s = static_cast<Segment*>(e);
+                        Segment* s = toSegment(e);
                         return s->prevElement(staffIdx());
                         }
                   case ElementType::MEASURE: {
-                        Measure* m = static_cast<Measure*>(e);
+                        Measure* m = toMeasure(e);
                         return m->prevElementStaff(staffIdx());
                         }
                   case ElementType::CLEF:
@@ -1524,27 +1524,27 @@ Element* Element::nextSegmentElement()
       while (p) {
             switch (p->type()) {
                   case ElementType::NOTE:
-                        if(static_cast<Note*>(p)->chord()->isGrace())
+                        if (toNote(p)->chord()->isGrace())
                               break;
                         return p;
                   case ElementType::REST:
                         return p;
                   case ElementType::CHORD: {
-                        Chord* c = static_cast<Chord*>(p);
+                        Chord* c = toChord(p);
                         if (!c->isGrace())
                               return c->notes().back();
                         }
                         break;
                   case ElementType::SEGMENT: {
-                        Segment* s = static_cast<Segment*>(p);
+                        Segment* s = toSegment(p);
                         return s->firstElement(staffIdx());
                         }
                   case ElementType::MEASURE: {
-                        Measure* m = static_cast<Measure*>(p);
+                        Measure* m = toMeasure(p);
                         return m->nextElementStaff(staffIdx());
                         }
                   case ElementType::SYSTEM: {
-                        System* sys = static_cast<System*>(p);
+                        System* sys = toSystem(p);
                         return sys->nextSegmentElement();
                         }
                   default:
@@ -1569,27 +1569,27 @@ Element* Element::prevSegmentElement()
       while (p) {
             switch (p->type()) {
                   case ElementType::NOTE:
-                        if(static_cast<Note*>(p)->chord()->isGrace())
+                        if (toNote(p)->chord()->isGrace())
                               break;
                         return p;
                   case ElementType::REST:
                         return p;
                   case ElementType::CHORD: {
-                        Chord* c = static_cast<Chord*>(p);
+                        Chord* c = toChord(p);
                         if (!c->isGrace())
                               return c->notes().front();
                         }
                         break;
                   case ElementType::SEGMENT: {
-                        Segment* s = static_cast<Segment*>(p);
+                        Segment* s = toSegment(p);
                         return s->lastElement(staffIdx());
                         }
                   case ElementType::MEASURE: {
-                        Measure* m = static_cast<Measure*>(p);
+                        Measure* m = toMeasure(p);
                         return m->prevElementStaff(staffIdx());
                         }
                   case ElementType::SYSTEM: {
-                        System* sys = static_cast<System*>(p);
+                        System* sys = toSystem(p);
                         return sys->prevSegmentElement();
                         }
                   default:
@@ -1814,8 +1814,8 @@ QRectF Element::drag(EditData& ed)
             Page* p = 0;
             Element* e = this;
             while (e) {
-                  if (e->type() == ElementType::PAGE) {
-                        p = static_cast<Page*>(e);
+                  if (e->isPage()) {
+                        p = toPage(e);
                         break;
                         }
                   e = e->parent();

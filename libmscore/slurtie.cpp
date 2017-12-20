@@ -151,7 +151,7 @@ void SlurTieSegment::editDrag(EditData& ed)
                   if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
                         Spanner* spanner = slurTie();
                         Qt::KeyboardModifiers km = qApp->keyboardModifiers();
-                        Note* note = static_cast<Note*>(ed.view->elementNear(ed.pos));
+                        Note* note = toNote(ed.view->elementNear(ed.pos));
                         if (note && note->isNote()
                            && ((g == Grip::END && note->tick() > slurTie()->tick()) || (g == Grip::START && note->tick() < slurTie()->tick2()))
                            ) {

@@ -60,7 +60,7 @@ int InputState::tick() const
 
 ChordRest* InputState::cr() const
       {
-      return _segment ? static_cast<ChordRest*>(_segment->element(_track)) : 0;
+      return _segment ? toChordRest(_segment->element(_track)) : 0;
       }
 
 //---------------------------------------------------------
@@ -71,12 +71,12 @@ void InputState::update(Element* e)
       {
       if (e == 0)
             return;
-      if (e && e->type() == ElementType::CHORD)
-            e = static_cast<Chord*>(e)->upNote();
+      if (e && e->isChord())
+            e = toChord(e)->upNote();
 
       setDrumNote(-1);
-      if (e->type() == ElementType::NOTE) {
-            Note* note    = static_cast<Note*>(e);
+      if (e->isNote()) {
+            Note* note    = toNote(e);
             Chord* chord  = note->chord();
             setDuration(chord->durationType());
             setRest(false);
@@ -84,8 +84,8 @@ void InputState::update(Element* e)
             setNoteType(note->noteType());
             setBeamMode(chord->beamMode());
             }
-      else if (e->type() == ElementType::REST) {
-            Rest* rest   = static_cast<Rest*>(e);
+      else if (e->isRest()) {
+            Rest* rest = toRest(e);
             if (rest->durationType().type() == TDuration::DurationType::V_MEASURE)
                   setDuration(TDuration::DurationType::V_QUARTER);
             else
@@ -95,11 +95,11 @@ void InputState::update(Element* e)
             setBeamMode(rest->beamMode());
             setNoteType(NoteType::NORMAL);
             }
-      if (e->type() == ElementType::NOTE || e->type() == ElementType::REST) {
+      if (e->isNote() || e->isRest()) {
             const Instrument* instr = e->part()->instrument();
             if (instr->useDrumset()) {
-                  if (e->type() == ElementType::NOTE)
-                        setDrumNote(static_cast<Note*>(e)->pitch());
+                  if (e->isNote())
+                        setDrumNote(toNote(e)->pitch());
                   else
                         setDrumNote(-1);
                   }

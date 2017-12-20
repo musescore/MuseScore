@@ -932,7 +932,7 @@ void Note::addSpanner(Spanner* l)
 
 void Note::removeSpanner(Spanner* l)
       {
-      Note* e = static_cast<Note*>(l->endElement());
+      Note* e = toNote(l->endElement());
       if (e && e->isNote()) {
             if (!e->removeSpannerBack(l)) {
                   qDebug("Note::removeSpanner(%p): cannot remove spannerBack %s %p", this, l->name(), l);
@@ -981,7 +981,7 @@ void Note::add(Element* e)
                   break;
             case ElementType::TEXTLINE:
             case ElementType::GLISSANDO:
-                  addSpanner(static_cast<Spanner*>(e));
+                  addSpanner(toSpanner(e));
                   break;
             default:
                   qDebug("Note::add() not impl. %s", e->name());
@@ -1023,7 +1023,7 @@ void Note::remove(Element* e)
 
             case ElementType::TEXTLINE:
             case ElementType::GLISSANDO:
-                  removeSpanner(static_cast<Spanner*>(e));
+                  removeSpanner(toSpanner(e));
                   break;
 
             default:
@@ -1377,7 +1377,7 @@ bool Note::readProperties(XmlReader& e)
             }
       else if (tag == "TextLine"
             || tag == "Glissando") {
-            Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
+            Spanner* sp = toSpanner(Element::name2Element(tag, score()));
             // check this is not a lower-to-higher cross-staff spanner we already got
             int id = e.intAttribute("id");
             Spanner* placeholder = e.findSpanner(id);
@@ -1388,7 +1388,7 @@ bool Note::readProperties(XmlReader& e)
                   sp->setTrack2(placeholder->track2());
                   sp->setTick(e.tick());                          // make sure tick2 will be correct
                   sp->setTick2(placeholder->tick2());
-                  static_cast<Note*>(placeholder->endElement())->addSpannerBack(sp);
+                  toNote(placeholder->endElement())->addSpannerBack(sp);
                   // remove no longer needed place-holder before reading the new spanner,
                   // as reading it also adds it to XML reader list of spanners,
                   // which would overwrite the place-holder
@@ -1654,7 +1654,7 @@ Element* Note::drop(EditData& data)
                   return e;
 
             case ElementType::ACCIDENTAL:
-                  score()->changeAccidental(this, static_cast<Accidental*>(e)->accidentalType());
+                  score()->changeAccidental(this, toAccidental(e)->accidentalType());
                   break;
 
             case ElementType::BEND:
@@ -1677,7 +1677,7 @@ Element* Note::drop(EditData& data)
                         if (links()) {
                               for (ScoreElement* e : *links()) {
                                     e->undoChangeProperty(P_ID::HEAD_GROUP, int(group));
-                                    Note* note = static_cast<Note*>(e);
+                                    Note* note = toNote(e);
                                     if (note->staff() && note->staff()->isTabStaff(ch->tick()) && group == NoteHead::Group::HEAD_CROSS)
                                           e->undoChangeProperty(P_ID::GHOST, true);
                                     }
@@ -1736,7 +1736,7 @@ Element* Note::drop(EditData& data)
 
             case ElementType::BAGPIPE_EMBELLISHMENT:
                   {
-                  BagpipeEmbellishment* b = static_cast<BagpipeEmbellishment*>(e);
+                  BagpipeEmbellishment* b = toBagpipeEmbellishment(e);
                   noteList nl = b->getNoteList();
                   // add grace notes in reverse order, as setGraceNote adds a grace note
                   // before the current note

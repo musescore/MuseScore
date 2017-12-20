@@ -131,7 +131,7 @@ void Tremolo::layout()
       // if ((parent() == 0) && !twoNotes())
       //       rect.setHeight(rect.height() + _spatium);
 
-      _chord1 = static_cast<Chord*>(parent());
+      _chord1 = toChord(parent());
       if (_chord1 == 0) {
             // just for the palette
             QTransform shearTransform;
@@ -249,7 +249,7 @@ void Tremolo::layout()
             return;
             }
 
-      _chord2 = static_cast<Chord*>(s->element(track()));
+      _chord2 = toChord(s->element(track()));
       _chord2->setTremolo(this);
 
       Stem* stem1 = _chord1->stem();

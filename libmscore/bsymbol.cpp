@@ -89,10 +89,10 @@ bool BSymbol::readProperties(XmlReader& e)
 
 void BSymbol::add(Element* e)
       {
-      if (e->type() == ElementType::SYMBOL || e->type() == ElementType::IMAGE) {
+      if (e->isSymbol() || e->isImage()) {
             e->setParent(this);
             _leafs.append(e);
-            static_cast<BSymbol*>(e)->setZ(z() - 1);    // draw on top of parent
+            toBSymbol(e)->setZ(z() - 1);    // draw on top of parent
             }
       else
             qDebug("BSymbol::add: unsupported type %s", e->name());
@@ -104,7 +104,7 @@ void BSymbol::add(Element* e)
 
 void BSymbol::remove(Element* e)
       {
-      if (e->type() == ElementType::SYMBOL || e->type() == ElementType::IMAGE) {
+      if (e->isSymbol() || e->isImage()) {
             if (!_leafs.removeOne(e))
                   qDebug("BSymbol::remove: element <%s> not found", e->name());
             }
@@ -129,8 +129,7 @@ void BSymbol::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 bool BSymbol::acceptDrop(EditData& data) const
       {
-      ElementType type = data.element->type();
-      return type == ElementType::SYMBOL || type == ElementType::IMAGE;
+      return data.element->isSymbol() || data.element->isImage();
       }
 
 //---------------------------------------------------------

@@ -457,7 +457,7 @@ void Glissando::layout()
       segm2->setPos2(segm2->ipos2() + offs2);
 
       for (SpannerSegment* segm : spannerSegments())
-            static_cast<GlissandoSegment*>(segm)->layout();
+            segm->layout();
 
       // compute glissando bbox as the bbox of the last segment, relative to the end anchor note
       QPointF anchor2PagePos = anchor2->pagePos();

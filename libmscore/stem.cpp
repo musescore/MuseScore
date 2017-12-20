@@ -275,7 +275,7 @@ void Stem::reset()
 bool Stem::acceptDrop(EditData& data) const
       {
       Element* e = data.element;
-      if ((e->type() == ElementType::TREMOLO) && (static_cast<Tremolo*>(e)->tremoloType() <= TremoloType::R64)) {
+      if ((e->type() == ElementType::TREMOLO) && (toTremolo(e)->tremoloType() <= TremoloType::R64)) {
             return true;
             }
       return false;
