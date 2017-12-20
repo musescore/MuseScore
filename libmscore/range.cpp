@@ -640,7 +640,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
             for (auto i : first->score()->spanner()) {
                   Spanner* s = i.second;
                   if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
-                        Spanner* ns = static_cast<Spanner*>(s->clone());
+                        Spanner* ns = toSpanner(s->clone());
                         ns->setParent(0);
                         ns->setStartElement(0);
                         ns->setEndElement(0);

@@ -213,7 +213,7 @@ void LayoutBreak::spatiumChanged(qreal, qreal)
 bool LayoutBreak::acceptDrop(EditData& data) const
       {
       return data.element->type() == ElementType::LAYOUT_BREAK
-         && static_cast<LayoutBreak*>(data.element)->layoutBreakType() != layoutBreakType();
+         && toLayoutBreak(data.element)->layoutBreakType() != layoutBreakType();
       }
 
 //---------------------------------------------------------

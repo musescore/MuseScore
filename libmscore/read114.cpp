@@ -1166,9 +1166,9 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                                           }
                                     Chord* pch = 0;       // previous chord
                                     if (ss) {
-                                          ChordRest* cr = static_cast<ChordRest*>(ss->element(track));
+                                          ChordRest* cr = toChordRest(ss->element(track));
                                           if (cr && cr->type() == ElementType::CHORD)
-                                                pch = static_cast<Chord*>(cr);
+                                                pch = toChord(cr);
                                           }
                                     if (pch) {
                                           tremolo->setParent(pch);
@@ -1226,7 +1226,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   Segment* prev = m->findSegment(SegmentType::ChordRest, prevTick);
                   if (prev) {
                         // find chordrest
-                        ChordRest* lastCR = static_cast<ChordRest*>(prev->element(e.track()));
+                        ChordRest* lastCR = toChordRest(prev->element(e.track()));
                         if (lastCR)
                               tick = prevTick + lastCR->actualTicks();
                         }
@@ -1275,7 +1275,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                || tag == "Trill"
                || tag == "TextLine"
                || tag == "Volta") {
-                  Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, m->score()));
+                  Spanner* sp = toSpanner(Element::name2Element(tag, m->score()));
                   sp->setTrack(e.track());
                   sp->setTick(e.tick());
                   // ?? sp->setAnchor(Spanner::Anchor::SEGMENT);
@@ -1390,9 +1390,9 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   element->setTrack(e.track());
                   element->read(e);
                   segment       = m->getSegment(SegmentType::ChordRest, e.tick());
-                  ChordRest* cr = static_cast<ChordRest*>(segment->element(element->track()));
+                  ChordRest* cr = toChordRest(segment->element(element->track()));
                   if (!cr)
-                        cr = static_cast<ChordRest*>(segment->element(e.track())); // in case lyric itself has bad track info
+                        cr = toChordRest(segment->element(e.track())); // in case lyric itself has bad track info
                   if (!cr)
                         qDebug("Internal error: no chord/rest for lyrics");
                   else
@@ -1689,7 +1689,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                         }
                   }
             else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
-                  MeasureBase* mb = static_cast<MeasureBase*>(Element::name2Element(tag, score));
+                  MeasureBase* mb = toMeasureBase(Element::name2Element(tag, score));
                   readMeasureBase(mb, e);
                   mb->setTick(e.tick());
                   score->measures()->add(mb);
@@ -2297,7 +2297,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                 || (tag == "Volta")
                 || (tag == "Trill")
                 || (tag == "Pedal")) {
-                  Spanner* s = static_cast<Spanner*>(Element::name2Element(tag, this));
+                  Spanner* s = toSpanner(Element::name2Element(tag, this));
                   s->read(e);
                   if (s->track() == -1)
                         s->setTrack(e.track());
@@ -2494,8 +2494,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   }
             }
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
-            if (mb->type() == ElementType::VBOX) {
-                  Box* b  = static_cast<Box*>(mb);
+            if (mb->isVBox()) {
+                  VBox* b  = toVBox(mb);
                   qreal y = styleP(StyleIdx::staffUpperBorder);
                   b->setBottomGap(y);
                   }

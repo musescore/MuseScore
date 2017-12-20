@@ -112,7 +112,8 @@ VBox* System::vbox() const
       {
       if (!ml.empty()) {
             if (ml[0]->isVBox() || ml[0]->isTBox())
-                  return static_cast<VBox*>(ml[0]);
+                  // return toVBox(ml[0]);
+                  return static_cast<VBox*>(ml[0]);   // TODO
             }
       return 0;
       }
@@ -651,7 +652,7 @@ void System::add(Element* el)
       switch(el->type()) {
             case ElementType::INSTRUMENT_NAME:
 // qDebug("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
-                  _staves[el->staffIdx()]->instrumentNames.append(static_cast<InstrumentName*>(el));
+                  _staves[el->staffIdx()]->instrumentNames.append(toInstrumentName(el));
                   break;
 
             case ElementType::BEAM:
@@ -700,7 +701,7 @@ void System::add(Element* el)
             case ElementType::LET_RING_SEGMENT:
             case ElementType::PALM_MUTE_SEGMENT:
                   {
-                  SpannerSegment* ss = static_cast<SpannerSegment*>(el);
+                  SpannerSegment* ss = toSpannerSegment(el);
 #ifndef NDEBUG
                   if (_spannerSegments.contains(ss))
                         qDebug("System::add() %s %p already there", ss->name(), ss);
@@ -734,14 +735,14 @@ void System::remove(Element* el)
       {
       switch (el->type()) {
             case ElementType::INSTRUMENT_NAME:
-                  _staves[el->staffIdx()]->instrumentNames.removeOne(static_cast<InstrumentName*>(el));
+                  _staves[el->staffIdx()]->instrumentNames.removeOne(toInstrumentName(el));
                   break;
             case ElementType::BEAM:
                   score()->removeElement(el);
                   break;
             case ElementType::BRACKET:
                   {
-                  Bracket* b = static_cast<Bracket*>(el);
+                  Bracket* b = toBracket(el);
                   if (!_brackets.removeOne(b))
                         qDebug("System::remove: bracket not found");
                   }
@@ -764,7 +765,7 @@ void System::remove(Element* el)
             case ElementType::PEDAL_SEGMENT:
             case ElementType::LYRICSLINE_SEGMENT:
             case ElementType::GLISSANDO_SEGMENT:
-                  if (!_spannerSegments.removeOne(static_cast<SpannerSegment*>(el))) {
+                  if (!_spannerSegments.removeOne(toSpannerSegment(el))) {
                         qDebug("System::remove: %p(%s) not found, score %p", el, el->name(), score());
                         Q_ASSERT(score() == el->score());
                         }
@@ -1129,7 +1130,7 @@ qreal System::minTop() const
       for (MeasureBase* mb : ml) {
             if (mb->type() != ElementType::MEASURE)
                   continue;
-            for (Segment* s = static_cast<Measure*>(mb)->first(); s; s = s->next())
+            for (Segment* s = toMeasure(mb)->first(); s; s = s->next())
                   dist = qMin(dist, s->staffShape(0).top());
             }
       return dist;
@@ -1147,7 +1148,7 @@ qreal System::minBottom() const
       for (MeasureBase* mb : ml) {
             if (mb->type() != ElementType::MEASURE)
                   continue;
-            for (Segment* s = static_cast<Measure*>(mb)->first(); s; s = s->next())
+            for (Segment* s = toMeasure(mb)->first(); s; s = s->next())
                   dist = qMax(dist, s->staffShape(staffIdx).bottom());
             }
       return dist - spatium() * 4;

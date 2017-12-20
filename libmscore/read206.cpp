@@ -1564,7 +1564,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   Segment* prev = m->findSegment(SegmentType::ChordRest, prevTick);
                   if (prev) {
                         // find chordrest
-                        ChordRest* lastCR = static_cast<ChordRest*>(prev->element(e.track()));
+                        ChordRest* lastCR = toChordRest(prev->element(e.track()));
                         if (lastCR)
                               tick = prevTick + lastCR->actualTicks();
                         }
@@ -1613,7 +1613,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                || tag == "Trill"
                || tag == "TextLine"
                || tag == "Volta") {
-                  Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score));
+                  Spanner* sp = toSpanner(Element::name2Element(tag, score));
                   sp->setTrack(e.track());
                   sp->setTick(e.tick());
                   qDeleteAll(sp->spannerSegments());
@@ -1631,7 +1631,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   else if (tag == "Trill")
                         readTrill(e, toTrill(sp));
                   else
-                        readTextLine(e, static_cast<TextLineBase*>(sp));
+                        readTextLine(e, toTextLineBase(sp));
                   score->addSpanner(sp);
                   //
                   // check if we already saw "endSpanner"
@@ -2281,7 +2281,7 @@ static bool readScore(Score* score, XmlReader& e)
                 || (tag == "Trill")
                 || (tag == "Slur")
                 || (tag == "Pedal")) {
-                  Spanner* s = static_cast<Spanner*>(Element::name2Element(tag, score));
+                  Spanner* s = toSpanner(Element::name2Element(tag, score));
                   s->read(e);
                   score->addSpanner(s);
                   }

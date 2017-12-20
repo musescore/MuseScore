@@ -519,7 +519,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                   {
                   ChordRest* cr;
                   if (grip == Grip::START) {
-                        cr = static_cast<ChordRest*>(startElement());
+                        cr = toChordRest(startElement());
                         if (cr && type() == ElementType::OTTAVA) {
                               // some sources say to center the text over the notehead
                               // others say to start the text just to left of notehead
@@ -532,7 +532,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                               }
                         }
                   else {
-                        cr = static_cast<ChordRest*>(endElement());
+                        cr = toChordRest(endElement());
                         if (type() == ElementType::OTTAVA) {
                               if (cr && cr->durationType() == TDuration::DurationType::V_MEASURE) {
                                     x = cr->x() + cr->width() + sp;
@@ -568,7 +568,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                           }
                                     }
                               }
-                        else if (type() == ElementType::LYRICSLINE && static_cast<Lyrics*>(parent())->ticks() > 0) {
+                        else if (isLyricsLine() && toLyrics(parent())->ticks() > 0) {
                               // melisma line
                               // it is possible CR won't be in correct track
                               // prefer element in current track if available
@@ -577,7 +577,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                               else if (cr->track() != track()) {
                                     Element* e = cr->segment()->element(track());
                                     if (e)
-                                          cr = static_cast<ChordRest*>(e);
+                                          cr = toChordRest(e);
                                     }
                               // layout to right edge of CR
                               if (cr) {
@@ -585,7 +585,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     if (cr->type() == ElementType::CHORD) {
                                           // chord bbox() is unreliable, look at notes
                                           // this also allows us to more easily ignore ledger lines
-                                          for (Note* n : static_cast<Chord*>(cr)->notes())
+                                          for (Note* n : toChord(cr)->notes())
                                                 maxRight = qMax(maxRight, cr->x() + n->x() + n->headWidth());
                                           }
                                     else {
@@ -602,7 +602,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                               // tick2 actually tells us the right chordrest to look for
                               if (cr && endElement()->parent() && endElement()->parent()->type() == ElementType::SEGMENT) {
                                     qreal x2 = cr->x() /* TODO + cr->space().rw() */;
-                                    Segment* currentSeg = static_cast<Segment*>(endElement()->parent());
+                                    Segment* currentSeg = toSegment(endElement()->parent());
                                     Segment* seg = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
                                     if (!seg) {
                                           // no end segment found, use measure width
@@ -688,7 +688,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                         if (seg && seg->segmentType() == SegmentType::EndBarLine) {
                               Element* e = seg->element(0);
                               if (e && e->type() == ElementType::BAR_LINE) {
-                                    BarLineType blt = static_cast<BarLine*>(e)->barLineType();
+                                    BarLineType blt = toBarLine(e)->barLineType();
                                     switch (blt) {
                                           case BarLineType::END_REPEAT:
                                                 // skip dots
@@ -755,7 +755,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
       LineSegment* lineSegm = 0;
       for (SpannerSegment* ss : segments) {
             if (!ss->system()) {
-                  lineSegm = static_cast<LineSegment*>(ss);
+                  lineSegm = toLineSegment(ss);
                   break;
                   }
             }

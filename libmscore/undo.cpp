@@ -552,7 +552,7 @@ const char* AddElement::name() const
       static char buffer[64];
       if (element->isText())
             snprintf(buffer, 64, "Add:    %s <%s> %p", element->name(),
-               qPrintable(static_cast<Text*>(element)->plainText()), element);
+               qPrintable(toText(element)->plainText()), element);
       else if (element->isSegment())
             snprintf(buffer, 64, "Add:    <%s-%s> %p", element->name(), toSegment(element)->subTypeName(), element);
       else
@@ -669,7 +669,7 @@ const char* RemoveElement::name() const
       static char buffer[64];
       if (element->isText())
             snprintf(buffer, 64, "Remove: %s <%s> %p", element->name(),
-               qPrintable(static_cast<Text*>(element)->plainText()), element);
+               qPrintable(toText(element)->plainText()), element);
       else if (element->isSegment())
             snprintf(buffer, 64, "Remove: <%s-%s> %p", element->name(), toSegment(element)->subTypeName(), element);
       else
@@ -937,8 +937,8 @@ void ChangeElement::flip(EditData*)
             score->setTempo(t->segment(), t->tempo());
             }
       if (newElement->isSegmentFlag()) {
-            SpannerSegment* os = static_cast<SpannerSegment*>(oldElement);
-            SpannerSegment* ns = static_cast<SpannerSegment*>(newElement);
+            SpannerSegment* os = toSpannerSegment(oldElement);
+            SpannerSegment* ns = toSpannerSegment(newElement);
             if (os->system())
                   os->system()->remove(os);
             if (ns->system())
@@ -1384,7 +1384,7 @@ void ChangeChordStaffMove::flip(EditData*)
       {
       int v = chordRest->staffMove();
       for (ScoreElement* e : chordRest->linkList()) {
-            ChordRest* cr = static_cast<ChordRest*>(e);
+            ChordRest* cr = toChordRest(e);
             cr->setStaffMove(staffMove);
             cr->triggerLayout();
             }
@@ -1493,9 +1493,10 @@ void InsertRemoveMeasures::insertMeasures()
       Measure* m = fm->prevMeasure();
       for (Segment* seg = m->first(); seg; seg = seg->next()) {
             for (int track = 0; track < score->ntracks(); ++track) {
-                  Chord* chord = static_cast<Chord*>(seg->element(track));
-                  if (chord == 0 || !chord->isChord())
+                  Element* e = seg->element(track);
+                  if (e == 0 || !e->isChord())
                         continue;
+                  Chord* chord = toChord(e);
                   foreach (Note* n, chord->notes()) {
                         Tie* tie = n->tieFor();
                         if (!tie)
@@ -1934,8 +1935,8 @@ void ChangeSpannerElements::flip(EditData*)
             for (ScoreElement* el : spanner->linkList()) {
                   Spanner*    sp    = static_cast<Spanner*>(el);
                   newStartNote      = newEndNote = nullptr;
-                  oldStartNote      = static_cast<Note*>(sp->startElement());
-                  oldEndNote        = static_cast<Note*>(sp->endElement());
+                  oldStartNote      = toNote(sp->startElement());
+                  oldEndNote        = toNote(sp->endElement());
                   // if not the current spanner, but one linked to it, determine its new start and end notes
                   // as modifications 'parallel' to the modifications of the current spanner's start and end notes
                   if (sp != spanner) {
@@ -1960,8 +1961,8 @@ void ChangeSpannerElements::flip(EditData*)
                         }
                   // if current spanner, just use stored start and end elements
                   else {
-                        newStartNote = static_cast<Note*>(startElement);
-                        newEndNote   = static_cast<Note*>(endElement);
+                        newStartNote = toNote(startElement);
+                        newEndNote   = toNote(endElement);
                         }
                   // update spanner's start and end notes
                   if (newStartNote && newEndNote) {

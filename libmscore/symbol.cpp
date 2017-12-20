@@ -197,7 +197,7 @@ QPointF BSymbol::canvasPos() const
       {
       if (parent() && (parent()->type() == ElementType::SEGMENT)) {
             QPointF p(pos());
-            Segment* s = static_cast<Segment*>(parent());
+            Segment* s = toSegment(parent());
 
             System* system = s->measure()->system();
             if (system) {

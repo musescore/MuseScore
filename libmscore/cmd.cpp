@@ -706,7 +706,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   Chord* chord = toNote(nr)->chord();
                   _is.slur()->undoChangeProperty(P_ID::SPANNER_TICKS, chord->tick() - _is.slur()->tick());
                   for (ScoreElement* e : _is.slur()->linkList()) {
-                        Slur* slur = static_cast<Slur*>(e);
+                        Slur* slur = toSlur(e);
                         for (ScoreElement* ee : chord->linkList()) {
                               Element* e = static_cast<Element*>(ee);
                               if (e->score() == slur->score() && e->track() == slur->track2()) {
@@ -1447,7 +1447,7 @@ void Score::upDown(bool up, UpDownMode mode)
                   // user added accidentals are removed here.
                   auto l = oNote->linkList();
                   for (ScoreElement* e : l) {
-                        Note* ln = static_cast<Note*>(e);
+                        Note* ln = toNote(e);
                         if (ln->accidental())
                               undo(new RemoveElement(ln->accidental()));
                         }
@@ -1629,7 +1629,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
             forceAdd = true;
 
       for (ScoreElement* se : note->linkList()) {
-            Note* ln = static_cast<Note*>(se);
+            Note* ln = toNote(se);
             if (ln->concertPitch() != note->concertPitch())
                   continue;
             Score* lns    = ln->score();
@@ -1896,11 +1896,11 @@ bool Score::processMidiInput()
             if (noteEntryMode()) {
                   if (ev.velocity == 0) {
                         // delete note in realtime mode
-                        //Chord* chord = static_cast<Chord*>(_is.cr());
+                        //Chord* chord = toChord(_is.cr());
                         //std::vector<Note*> notes = chord->notes();
                         if (entryMethod == NoteEntryMethod::REALTIME_AUTO || entryMethod == NoteEntryMethod::REALTIME_MANUAL) {
                               if (_is.cr()->isChord()) {
-                                    Note* n = static_cast<Chord*>(_is.cr())->findNote(ev.pitch);
+                                    Note* n = toChord(_is.cr())->findNote(ev.pitch);
                                     if (n) {
                                           qDebug("Pitches match! Note %i, Pitch %i", n->pitch(), ev.pitch);
                                           if (!cmdActive) {
@@ -2753,7 +2753,7 @@ void Score::cmdSlashFill()
                   Chord* c = toChord(s->element(track + voice));
                   if (c->links()) {
                         for (ScoreElement* e : *c->links()) {
-                              Chord* lc = static_cast<Chord*>(e);
+                              Chord* lc = toChord(e);
                               lc->setSlash(true, true);
                               }
                         }
@@ -2787,7 +2787,7 @@ void Score::cmdSlashRhythm()
                   Rest* r = toRest(e);
                   if (r->links()) {
                         for (ScoreElement* e : *r->links()) {
-                              Rest* lr = static_cast<Rest*>(e);
+                              Rest* lr = toRest(e);
                               lr->setAccent(!lr->accent());
                               }
                         }
@@ -2807,7 +2807,7 @@ void Score::cmdSlashRhythm()
                   // toggle slash setting
                   if (c->links()) {
                         for (ScoreElement* e : *c->links()) {
-                              Chord* lc = static_cast<Chord*>(e);
+                              Chord* lc = toChord(e);
                               lc->setSlash(!lc->slash(), false);
                               }
                         }
@@ -3394,10 +3394,10 @@ void Score::cmdToggleVisible()
             if (e->isBracket())     // ignore
                   continue;
             bool spannerSegment = e->isSpannerSegment();
-            if (!spannerSegment || !spanners.contains(static_cast<SpannerSegment*>(e)->spanner()))
+            if (!spannerSegment || !spanners.contains(toSpannerSegment(e)->spanner()))
                   e->undoChangeProperty(P_ID::VISIBLE, !e->getProperty(P_ID::VISIBLE).toBool());
             if (spannerSegment)
-                  spanners.insert(static_cast<SpannerSegment*>(e)->spanner());
+                  spanners.insert(toSpannerSegment(e)->spanner());
             }
       }
 

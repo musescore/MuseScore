@@ -364,7 +364,7 @@ bool ChordRest::readProperties(XmlReader& e)
                                     Spanner* ls = static_cast<Spanner*>(e);
                                     ls->setTick(spanner->tick());
                                     for (ScoreElement* ee : linkList()) {
-                                          ChordRest* cr = static_cast<ChordRest*>(ee);
+                                          ChordRest* cr = toChordRest(ee);
                                           if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack(cr->track());
                                                 if (ls->type() == ElementType::SLUR)
@@ -380,7 +380,7 @@ bool ChordRest::readProperties(XmlReader& e)
                         spanner->setTrack2(track());
                         if (spanner->type() == ElementType::SLUR)
                               spanner->setEndElement(this);
-                        Chord* start = static_cast<Chord*>(spanner->startElement());
+                        Chord* start = toChord(spanner->startElement());
                         if (start)
                               spanner->setTrack(start->track());
                         if (e.pasteMode()) {
@@ -390,7 +390,7 @@ bool ChordRest::readProperties(XmlReader& e)
                                     Spanner* ls = static_cast<Spanner*>(e);
                                     ls->setTick2(spanner->tick2());
                                     for (ScoreElement* ee : linkList()) {
-                                          ChordRest* cr = static_cast<ChordRest*>(ee);
+                                          ChordRest* cr = toChordRest(ee);
                                           if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack2(cr->track());
                                                 if (ls->type() == ElementType::SLUR)
@@ -770,9 +770,8 @@ Element* ChordRest::drop(EditData& data)
                   score()->undoAddElement(e);
                   return e;
 
-            case ElementType::NOTE:
-                  {
-                  Note* note = static_cast<Note*>(e);
+            case ElementType::NOTE: {
+                  Note* note = toNote(e);
                   NoteVal nval;
                   nval.pitch = note->pitch();
                   nval.tpc1 = note->tpc1();
@@ -787,7 +786,7 @@ Element* ChordRest::drop(EditData& data)
             case ElementType::HARMONY:
                   {
                   // transpose
-                  Harmony* harmony = static_cast<Harmony*>(e);
+                  Harmony* harmony = toHarmony(e);
                   Interval interval = staff()->part()->instrument(tick())->transpose();
                   if (!score()->styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                         interval.flip();
@@ -819,7 +818,7 @@ Element* ChordRest::drop(EditData& data)
             case ElementType::FIGURED_BASS:
                   {
                   bool bNew;
-                  FiguredBass * fb = static_cast<FiguredBass *>(e);
+                  FiguredBass * fb = toFiguredBass(e);
                   fb->setParent( segment() );
                   fb->setTrack( (track() / VOICES) * VOICES );
                   fb->setTicks( duration().ticks() );
@@ -838,7 +837,7 @@ Element* ChordRest::drop(EditData& data)
 
             case ElementType::ICON:
                   {
-                  switch(static_cast<Icon*>(e)->iconType()) {
+                  switch (toIcon(e)->iconType()) {
                         case IconType::SBEAM:
                               undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::BEGIN));
                               break;
@@ -866,7 +865,7 @@ Element* ChordRest::drop(EditData& data)
 
             case ElementType::KEYSIG:
                   {
-                  KeySig* ks    = static_cast<KeySig*>(e);
+                  KeySig* ks    = toKeySig(e);
                   KeySigEvent k = ks->keySigEvent();
                   delete ks;
 
@@ -1330,8 +1329,8 @@ Element* ChordRest::prevElement()
                   if (prev)
                         return prev;
                   else {
-                        if (type() == ElementType::CHORD)
-                              return static_cast<Chord*>(this)->lastElementBeforeSegment();
+                        if (isChord())
+                              return toChord(this)->lastElementBeforeSegment();
                         }
                   // fall through
                   }

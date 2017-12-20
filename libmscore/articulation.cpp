@@ -191,7 +191,7 @@ void Articulation::draw(QPainter* painter) const
 ChordRest* Articulation::chordRest() const
       {
       if (parent() && parent()->isChordRest())
-            return static_cast<ChordRest*>(parent());
+            return toChordRest(parent());
       return 0;
       }
 
@@ -227,7 +227,7 @@ System* Articulation::system() const
 Page* Articulation::page() const
       {
       System* s = system();
-      return static_cast<Page*>(s ? s->parent() : 0);
+      return toPage(s ? s->parent() : 0);
       }
 
 //---------------------------------------------------------

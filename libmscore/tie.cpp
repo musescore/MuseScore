@@ -153,7 +153,7 @@ void TieSegment::editDrag(EditData& ed)
             //
             if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
                   Spanner* spanner = tie();
-                  Note* note = static_cast<Note*>(ed.view->elementNear(ed.pos));
+                  Note* note = toNote(ed.view->elementNear(ed.pos));
                   if (note && note->isNote()
                      && ((g == Grip::END && note->tick() > tie()->tick()) || (g == Grip::START && note->tick() < tie()->tick2()))
                      ) {
@@ -760,7 +760,7 @@ void Tie::setStartNote(Note* note)
 Note* Tie::startNote() const
       {
       Q_ASSERT(!startElement() || startElement()->type() == ElementType::NOTE);
-      return static_cast<Note*>(startElement());
+      return toNote(startElement());
       }
 
 //---------------------------------------------------------
@@ -769,8 +769,7 @@ Note* Tie::startNote() const
 
 Note* Tie::endNote() const
       {
-      Q_ASSERT(!endElement() || endElement()->type() == ElementType::NOTE);
-      return static_cast<Note*>(endElement());
+      return toNote(endElement());
       }
 
 //---------------------------------------------------------

@@ -155,7 +155,7 @@ void MasterScore::updateChannel()
                         Element* e = s->element(track);
                         if (e->type() != ElementType::CHORD)
                               continue;
-                        Chord* c = static_cast<Chord*>(e);
+                        Chord* c = toChord(e);
                         int channel = st->channel(c->tick(), c->voice());
                         Instrument* instr = c->part()->instrument(c->tick());
                         if (channel >= instr->channel().size()) {
@@ -207,7 +207,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
       int tieLen = 0;
       if (chord->isGrace()) {
             Q_ASSERT( !graceNotesMerged(chord)); // this function should not be called on a grace note if grace notes are merged
-            chord = static_cast<Chord*>(chord->parent());
+            chord = toChord(chord->parent());
             ticks = chord->actualTicks(); // ticks of the parent note
             tieLen = 0;
             }
@@ -271,7 +271,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
       for (Element* e : note->el()) {
             if (e == 0 || e->type() != ElementType::BEND)
                   continue;
-            Bend* bend = static_cast<Bend*>(e);
+            Bend* bend = toBend(e);
             if (!bend->playBend())
                   break;
             const QList<PitchValue>& points = bend->points();
@@ -374,7 +374,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   if (cr == 0 || cr->type() != ElementType::CHORD)
                         continue;
 
-                  Chord* chord = static_cast<Chord*>(cr);
+                  Chord* chord = toChord(cr);
                   Staff* staff = chord->staff();
                   int velocity = staff->velocities().velo(seg->tick());
                   Instrument* instr = chord->part()->instrument(tick);
@@ -617,7 +617,7 @@ void Score::updateVelo()
                   Spanner* s = sp.second;
                   if (s->type() != ElementType::HAIRPIN || sp.second->staffIdx() != staffIdx)
                         continue;
-                  Hairpin* h = static_cast<Hairpin*>(s);
+                  Hairpin* h = toHairpin(s);
                   updateHairpin(h);
                   }
             }
@@ -825,7 +825,7 @@ void renderTremolo(Chord *chord, QList<NoteEventList> & ell)
             int track = chord->track();
             while (seg2 && !seg2->element(track))
                   seg2 = seg2->next(st);
-            Chord* c2 = seg2 ? static_cast<Chord*>(seg2->element(track)) : 0;
+            Chord* c2 = seg2 ? toChord(seg2->element(track)) : 0;
             if (c2 && c2->type() == ElementType::CHORD) {
                   int notes2 = c2->notes().size();
                   int tnotes = qMax(notes, notes2);
@@ -1013,7 +1013,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
             Element *e = segment->element(track);
             if (!e || e->type() != ElementType::CHORD)
                   continue;
-            Chord* chord = static_cast<Chord*>(e);
+            Chord* chord = toChord(e);
             for (Note* note : chord->notes()) {
                   if (note->tieBack())
                         continue;
@@ -1371,15 +1371,15 @@ void renderGlissando(NoteEventList* events, Note *notestart)
 
       for (Spanner* spanner : notestart->spannerFor()) {
             if (spanner->type() == ElementType::GLISSANDO) {
-                  Glissando *glissando = static_cast<Glissando *>(spanner);
+                  Glissando *glissando = toGlissando(spanner);
                   GlissandoStyle glissandoStyle = glissando->glissandoStyle();
                   Element* ee = spanner->endElement();
                   // only consider glissando connnected to NOTE.
                   if (glissando->playGlissando() && ElementType::NOTE == ee->type()) {
                         vector<int> body;
-                        Note *noteend = static_cast<Note *>(ee);
+                        Note *noteend  = toNote(ee);
                         int pitchend   = noteend->ppitch();
-                        bool direction= pitchend >  pitchstart;
+                        bool direction = pitchend >  pitchstart;
                         if (pitchend == pitchstart)
                               continue; // next spanner
                         if (glissandoStyle == GlissandoStyle::DIATONIC) { // scale obeying accidentals
@@ -1436,7 +1436,7 @@ Trill* findFirstTrill(Chord *chord) {
                   continue;
             if (i.value->track() != chord->track())
                   continue;
-            Trill *trill = static_cast<Trill *>(i.value);
+            Trill *trill = toTrill (i.value);
             if (trill->playArticulation() == false)
                   continue;
             return trill;
@@ -1657,7 +1657,7 @@ void Score::createPlayEvents(Chord* chord)
       for (auto sp : _spanner.map()) {
             if (sp.second->type() != ElementType::SLUR || sp.second->staffIdx() != chord->staffIdx())
                   continue;
-            Slur* s = static_cast<Slur*>(sp.second);
+            Slur* s = toSlur(sp.second);
             if (tick >= s->tick() && tick < s->tick2()) {
                   slur = s;
                   break;
@@ -1705,10 +1705,10 @@ void Score::createPlayEvents()
                         continue;
                   const SegmentType st = SegmentType::ChordRest;
                   for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-                        Chord* chord = static_cast<Chord*>(seg->element(track));
-                        if (chord == 0 || chord->type() != ElementType::CHORD)
+                        Element* e = seg->element(track);
+                        if (e == 0 || !e->isChord())
                               continue;
-                        createPlayEvents(chord);
+                        createPlayEvents(toChord(e));
                         }
                   }
             }

@@ -387,7 +387,7 @@ void Staff::removeClef(Clef* clef)
                && s->element(clef->track())
                && !s->element(clef->track())->generated()) {
                   // a previous clef at the same tick position gets valid
-                  clefs.setClef(tick, static_cast<Clef*>(s->element(clef->track()))->clefTypeList());
+                  clefs.setClef(tick, toClef(s->element(clef->track()))->clefTypeList());
                   break;
                   }
             }
@@ -1179,7 +1179,7 @@ void Staff::insertTime(int tick, int len)
             Segment* s = m->findSegment(SegmentType::Clef, tick);
             if (s) {
                   int track = idx() * VOICES;
-                  clef = static_cast<Clef*>(s->element(track));
+                  clef = toClef(s->element(track));
                   }
             }
 

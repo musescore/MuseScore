@@ -312,9 +312,9 @@ QPointF Arpeggio::gripAnchor(Grip n) const
       else if (n == Grip::END) {
             Note* dnote = c->downNote();
             int btrack  = track() + (_span - 1) * VOICES;
-            ChordRest* bchord = static_cast<ChordRest*>(c->segment()->element(btrack));
-            if (bchord && bchord->type() == ElementType::CHORD)
-                  dnote = static_cast<Chord*>(bchord)->downNote();
+            Element* e = c->segment()->element(btrack);
+            if (e && e->isChord())
+                  dnote = toChord(e)->downNote();
             return dnote->pagePos();
             }
       return QPointF();
@@ -393,7 +393,7 @@ Element* Arpeggio::drop(EditData& data)
       switch(e->type()) {
             case ElementType::ARPEGGIO:
                   {
-                  Arpeggio* a = static_cast<Arpeggio*>(e);
+                  Arpeggio* a = toArpeggio(e);
                   if (parent())
                         score()->undoRemoveElement(this);
                   a->setTrack(track());

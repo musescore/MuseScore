@@ -328,8 +328,8 @@ bool Box::readProperties(XmlReader& e)
 
 void Box::add(Element* e)
       {
-      if (e->type() == ElementType::TEXT)
-            static_cast<Text*>(e)->setLayoutToParentWidth(true);
+      if (e->isText())
+            toText(e)->setLayoutToParentWidth(true);
       MeasureBase::add(e);
       }
 
@@ -530,8 +530,8 @@ HBox::HBox(Score* score)
 
 void HBox::layout()
       {
-      if (parent() && parent()->type() == ElementType::VBOX) {
-            VBox* vb = static_cast<VBox*>(parent());
+      if (parent() && parent()->isVBox()) {
+            VBox* vb = toVBox(parent());
             qreal x = vb->leftMargin() * DPMM;
             qreal y = vb->topMargin() * DPMM;
             qreal w = point(boxWidth());
@@ -603,7 +603,7 @@ Element* Box::drop(EditData& data)
       switch (e->type()) {
             case ElementType::LAYOUT_BREAK:
                   {
-                  LayoutBreak* lb = static_cast<LayoutBreak*>(e);
+                  LayoutBreak* lb = toLayoutBreak(e);
                   if (pageBreak() || lineBreak()) {
                         if (
                            (lb->isPageBreak() && pageBreak())
@@ -634,7 +634,7 @@ Element* Box::drop(EditData& data)
                   {
                   Text* text = new Text(SubStyle::FRAME, score());
                   text->setParent(this);
-                  text->setXmlText(static_cast<StaffText*>(e)->xmlText());
+                  text->setXmlText(toStaffText(e)->xmlText());
                   score()->undoAddElement(text);
                   delete e;
                   return text;
@@ -692,7 +692,7 @@ QRectF HBox::drag(EditData& data)
       qreal diff = data.delta.x();
       qreal x1   = userOff().x() + diff;
       if (parent()->type() == ElementType::VBOX) {
-            VBox* vb = static_cast<VBox*>(parent());
+            VBox* vb = toVBox(parent());
             qreal x2 = parent()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
             if (x1 < 0.0)
                   x1 = 0.0;
@@ -814,8 +814,8 @@ void FBox::layout()
 void FBox::add(Element* e)
       {
       e->setParent(this);
-      if (e->type() == ElementType::FRET_DIAGRAM) {
-//            FretDiagram* fd = static_cast<FretDiagram*>(e);
+      if (e->isFretDiagram()) {
+//            FretDiagram* fd = toFretDiagram(e);
 //            fd->setFlag(ElementFlag::MOVABLE, false);
             }
       else {

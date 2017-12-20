@@ -128,8 +128,8 @@ QPointF FretDiagram::pagePos() const
       {
       if (parent() == 0)
             return pos();
-      if (parent()->type() == ElementType::SEGMENT) {
-            Measure* m = static_cast<Segment*>(parent())->measure();
+      if (parent()->isSegment()) {
+            Measure* m = toSegment(parent())->measure();
             System* system = m->system();
             qreal yp = y();
             if (system)
@@ -150,8 +150,8 @@ QLineF FretDiagram::dragAnchor() const
       for (Element* e = parent(); e; e = e->parent())
             xp += e->x();
       qreal yp;
-      if (parent()->type() == ElementType::SEGMENT) {
-            System* system = static_cast<Segment*>(parent())->measure()->system();
+      if (parent()->isSegment()) {
+            System* system = toSegment(parent())->measure()->system();
             yp = system->staffCanvasYpage(staffIdx());
             }
       else
@@ -160,7 +160,7 @@ QLineF FretDiagram::dragAnchor() const
       return QLineF(p1, canvasPos());
 #if 0 // TODOxx
       if (parent()->type() == ElementType::SEGMENT) {
-            Segment* s     = static_cast<Segment*>(parent());
+            Segment* s     = toSegment(parent());
             Measure* m     = s->measure();
             System* system = m->system();
             qreal yp      = system->staff(staffIdx())->y() + system->y();
@@ -524,8 +524,8 @@ void FretDiagram::setFingering(int string, int finger)
 void FretDiagram::add(Element* e)
       {
       e->setParent(this);
-      if (e->type() == ElementType::HARMONY) {
-            _harmony = static_cast<Harmony*>(e);
+      if (e->isHarmony()) {
+            _harmony = toHarmony(e);
             _harmony->setTrack(track());
             }
       else
@@ -560,8 +560,8 @@ bool FretDiagram::acceptDrop(EditData& data) const
 Element* FretDiagram::drop(EditData& data)
       {
       Element* e = data.element;
-      if (e->type() == ElementType::HARMONY) {
-            Harmony* h = static_cast<Harmony*>(e);
+      if (e->isHarmony()) {
+            Harmony* h = toHarmony(e);
             h->setParent(parent());
             h->setTrack(track());
             score()->undoAddElement(h);

@@ -444,7 +444,7 @@ void Beam::layoutGraceNotes()
       setMag(graceMag);
 
       for (ChordRest* cr : _elements) {
-            c2 = static_cast<Chord*>(cr);
+            c2 = toChord(cr);
             if (c1 == 0)
                   c1 = c2;
             int i = c2->staffMove();
@@ -1583,7 +1583,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   qreal y1   = -200000;
                   qreal y2   = 200000;
                   for (int i = 0; i < n; ++i) {
-                        Chord* c = static_cast<Chord*>(crl.at(i));
+                        Chord* c = toChord(crl.at(i));
                         qreal y;
                         if (c->isRest())
                               continue;   //y = c->pagePos().y();
@@ -1602,9 +1602,9 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   // set stem direction for every chord
                   //
                   for (ChordRest* cr : crl) {
-                        Chord* c = static_cast<Chord*>(cr);
-                        if (c->type() != ElementType::CHORD)
+                        if (!cr->isChord())
                               continue;
+                        Chord* c = toChord(cr);
                         qreal y  = c->upNote()->pagePos().y();
                         bool nup = beamY < y;
                         if (c->up() != nup) {
@@ -1623,9 +1623,9 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   qreal yUpMin   = 300000;
 
                   for (ChordRest* cr : crl) {
-                        Chord* c = static_cast<Chord*>(cr);
-                        if (c->type() != ElementType::CHORD)
+                        if (!cr->isChord())
                               continue;
+                        Chord* c = toChord(cr);
                         bool _up = c->up();
                         qreal y = (_up ? c->upNote() : c->downNote())->pagePos().y();
                         if (_up)
@@ -2128,13 +2128,13 @@ void Beam::updateGrips(EditData& ed) const
       int n = _elements.size();
       for (int i = 0; i < n; ++i) {
             if (_elements[i]->isChordRest()) {
-                  c1 = static_cast<ChordRest*>(_elements[i]);
+                  c1 = toChordRest(_elements[i]);
                   break;
                   }
             }
       for (int i = n-1; i >= 0; --i) {
             if (_elements[i]->isChordRest()) {
-                  c2 = static_cast<ChordRest*>(_elements[i]);
+                  c2 = toChordRest(_elements[i]);
                   break;
                   }
             }
@@ -2234,8 +2234,8 @@ void Beam::triggerLayout() const
 bool Beam::acceptDrop(EditData& data) const
       {
       return (data.element->type() == ElementType::ICON)
-         && ((static_cast<Icon*>(data.element)->iconType() == IconType::FBEAM1)
-         || (static_cast<Icon*>(data.element)->iconType() == IconType::FBEAM2));
+         && ((toIcon(data.element)->iconType() == IconType::FBEAM1)
+         || (toIcon(data.element)->iconType() == IconType::FBEAM2));
       }
 
 //---------------------------------------------------------
@@ -2244,9 +2244,9 @@ bool Beam::acceptDrop(EditData& data) const
 
 Element* Beam::drop(EditData& data)
       {
-      Icon* e = static_cast<Icon*>(data.element);
-      if (e->type() != ElementType::ICON)
+      if (!data.element->isIcon())
             return 0;
+      Icon* e = toIcon(data.element);
       qreal g1;
       qreal g2;
 

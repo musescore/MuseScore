@@ -1219,7 +1219,7 @@ Measure* Score::getCreateMeasure(int tick)
                   m->setTick(lastTick);
                   m->setTimesig(ts);
                   m->setLen(ts);
-                  measures()->add(static_cast<MeasureBase*>(m));
+                  measures()->add(toMeasureBase(m));
                   lastTick += ts.ticks();
                   }
             }
@@ -1252,7 +1252,7 @@ void Score::addElement(Element* element)
          || et == ElementType::TBOX
          || et == ElementType::FBOX
          ) {
-            measures()->add(static_cast<MeasureBase*>(element));
+            measures()->add(toMeasureBase(element));
             return;
             }
 
@@ -1282,7 +1282,7 @@ void Score::addElement(Element* element)
             case ElementType::LET_RING:
             case ElementType::PALM_MUTE:
                   {
-                  Spanner* spanner = static_cast<Spanner*>(element);
+                  Spanner* spanner = toSpanner(element);
                   if (et == ElementType::TEXTLINE && spanner->anchor() == Spanner::Anchor::NOTE)
                         break;
                   addSpanner(spanner);
@@ -1426,7 +1426,7 @@ void Score::removeElement(Element* element)
             case ElementType::TEXTLINE:
             case ElementType::HAIRPIN:
                   {
-                  Spanner* spanner = static_cast<Spanner*>(element);
+                  Spanner* spanner = toSpanner(element);
                   if (et == ElementType::TEXTLINE && spanner->anchor() == Spanner::Anchor::NOTE)
                         break;
                   removeSpanner(spanner);
@@ -1713,7 +1713,7 @@ void Score::scanElementsInRange(void* data, void (*func)(void*, Element*), bool 
             }
       for (Element* e : _selection.elements()) {
             if (e->isSpanner()) {
-                  Spanner* spanner = static_cast<Spanner*>(e);
+                  Spanner* spanner = toSpanner(e);
                   for (SpannerSegment* ss : spanner->spannerSegments()) {
                         ss->scanElements(data, func, all);
                         }
@@ -1991,7 +1991,7 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
       // clone the spanners
       for (auto sp : score->spanner()) {
             Spanner* spanner = sp.second;
-            Spanner* ns = static_cast<Spanner*>(spanner->clone());
+            Spanner* ns = toSpanner(spanner->clone());
             ns->setScore(this);
             ns->setParent(0);
             ns->setTick(spanner->tick() + tickOfAppend);
@@ -2088,20 +2088,20 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         Chord* chord = note->chord();
                         if (chord->notes().empty()) {
                               for (auto sp : spanner()) {
-                                    Slur* slur = static_cast<Slur*>(sp.second);
+                                    Slur* slur = toSlur(sp.second);
                                     if (slur->type() != ElementType::SLUR)
                                           continue;
                                     if (slur->startCR() == chord) {
                                           slur->undoChangeProperty(P_ID::TRACK, slur->track()+VOICES);
                                           for (ScoreElement* ee : slur->linkList()) {
-                                                Slur* lslur = static_cast<Slur*>(ee);
+                                                Slur* lslur = toSlur(ee);
                                                 lslur->setStartElement(0);
                                                 }
                                           }
                                     if (slur->endCR() == chord) {
                                           slur->undoChangeProperty(P_ID::SPANNER_TRACK2, slur->track2()+VOICES);
                                           for (ScoreElement* ee : slur->linkList()) {
-                                                Slur* lslur = static_cast<Slur*>(ee);
+                                                Slur* lslur = toSlur(ee);
                                                 lslur->setEndElement(0);
                                                 }
                                           }
@@ -2505,7 +2505,7 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                         for (ScoreElement* e : h->linkList()) {
                               // don't transpose all links
                               // just ones resulting from mmrests
-                              Harmony* he = static_cast<Harmony*>(e);    // toHarmony() does not work as e is an ScoreElement
+                              Harmony* he = toHarmony(e);    // toHarmony() does not work as e is an ScoreElement
                               if (he->staff() == h->staff())
                                     undoTransposeHarmony(he, rootTpc, baseTpc);
                               }

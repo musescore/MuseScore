@@ -248,7 +248,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                         for (auto e : segment->annotations()) {
                               if ((e->type() != ElementType::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
                                     continue;
-                              Harmony* h  = static_cast<Harmony*>(e);
+                              Harmony* h  = toHarmony(e);
                               int rootTpc = Ms::transposeTpc(h->rootTpc(), interval, true);
                               int baseTpc = Ms::transposeTpc(h->baseTpc(), interval, true);
                               score->undoTransposeHarmony(h, rootTpc, baseTpc);
@@ -330,7 +330,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
       // dont clone voltas for track != 0
       if (s->type() == ElementType::VOLTA && s->track() != 0)
             return;
-      Spanner* ns = static_cast<Spanner*>(s->linkedClone());
+      Spanner* ns = toSpanner(s->linkedClone());
       ns->setScore(score);
       ns->setParent(0);
       ns->setTrack(dstTrack);
@@ -346,7 +346,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
             ns->setEndElement(0);
             if (cr1 && cr1->links()) {
                   for (ScoreElement* e : *cr1->links()) {
-                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        ChordRest* cr = toChordRest(e);
                         if (cr == cr1)
                               continue;
                         if ((cr->score() == score) && (cr->tick() == ns->tick()) && cr->track() == dstTrack) {
@@ -357,7 +357,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
                   }
             if (cr2 && cr2->links()) {
                   for (ScoreElement* e : *cr2->links()) {
-                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        ChordRest* cr = toChordRest(e);
                         if (cr == cr2)
                               continue;
                         if ((cr->score() == score) && (cr->tick() == ns->tick2()) && cr->track() == dstTrack2) {
@@ -383,7 +383,7 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
       ot->setTrack(ocr->track());
       Tuplet* nt = tupletMap.findNew(ot);
       if (nt == 0) {
-            nt = static_cast<Tuplet*>(ot->linkedClone());
+            nt = toTuplet(ot->linkedClone());
             nt->setTrack(track);
             nt->setParent(m);
             tupletMap.add(ot, nt);
@@ -392,7 +392,7 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
             while (ot->tuplet()) {
                   Tuplet* nt = tupletMap.findNew(ot->tuplet());
                   if (nt == 0) {
-                        nt = static_cast<Tuplet*>(ot->tuplet()->linkedClone());
+                        nt = toTuplet(ot->tuplet()->linkedClone());
                         nt->setTrack(track);
                         nt->setParent(m);
                         tupletMap.add(ot->tuplet(), nt);
@@ -424,13 +424,13 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                   nmb = new VBox(score);
             else if (mb->type() == ElementType::TBOX) {
                   nmb = new TBox(score);
-                  Text* text = static_cast<TBox*>(mb)->text();
+                  Text* text = toTBox(mb)->text();
                   Element* ne = text->linkedClone();
                   ne->setScore(score);
                   nmb->add(ne);
                   }
             else if (mb->type() == ElementType::MEASURE) {
-                  Measure* m  = static_cast<Measure*>(mb);
+                  Measure* m  = toMeasure(mb);
                   Measure* nm = new Measure(score);
                   nmb = nm;
                   nm->setTick(m->tick());
@@ -479,8 +479,8 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                           ns->add(ne);
                                           // for chord symbols,
                                           // re-render with new style settings
-                                          if (ne->type() == ElementType::HARMONY) {
-                                                Harmony* h = static_cast<Harmony*>(ne);
+                                          if (ne->isHarmony()) {
+                                                Harmony* h = toHarmony(ne);
                                                 h->render();
                                                 }
                                           }
@@ -523,7 +523,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                                 }
                                           if (oe) {
                                                 // barline found, now check span
-                                                BarLine* bl = static_cast<BarLine*>(oe);
+                                                BarLine* bl = toBarLine(oe);
                                                 int oSpan1 = bl->staff()->idx();
                                                 int oSpan2 = oSpan1 + bl->spanStaff();
                                                 if (oSpan1 <= oIdx && oIdx < oSpan2) {
@@ -550,12 +550,12 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                           ne->scanElements(score, localSetScore);   //necessary?
                                           ne->setScore(score);
                                           if (oe->type() == ElementType::BAR_LINE && adjustedBarlineSpan) {
-                                                BarLine* nbl = static_cast<BarLine*>(ne);
+                                                BarLine* nbl = toBarLine(ne);
                                                 nbl->setSpanStaff(adjustedBarlineSpan);
                                                 }
                                           else if (oe->isChordRest()) {
-                                                ChordRest* ocr = static_cast<ChordRest*>(oe);
-                                                ChordRest* ncr = static_cast<ChordRest*>(ne);
+                                                ChordRest* ocr = toChordRest(oe);
+                                                ChordRest* ncr = toChordRest(ne);
 
                                                 if (ocr->beam() && !ocr->beam()->empty() && ocr->beam()->elements().front() == ocr) {
                                                       Beam* nb = ocr->beam()->clone();
@@ -571,16 +571,16 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                                 if (ot)
                                                       cloneTuplets(ocr, ncr, ot, tupletMap, m, track);
 
-                                                if (oe->type() == ElementType::CHORD) {
-                                                      Chord* och = static_cast<Chord*>(ocr);
-                                                      Chord* nch = static_cast<Chord*>(ncr);
+                                                if (oe->isChord()) {
+                                                      Chord* och = toChord(ocr);
+                                                      Chord* nch = toChord(ncr);
 
                                                       int n = och->notes().size();
                                                       for (int i = 0; i < n; ++i) {
                                                             Note* on = och->notes().at(i);
                                                             Note* nn = nch->notes().at(i);
                                                             if (on->tieFor()) {
-                                                                  Tie* tie = static_cast<Tie*>(on->tieFor()->linkedClone());
+                                                                  Tie* tie = toTie(on->tieFor()->linkedClone());
                                                                   tie->setScore(score);
                                                                   nn->setTieFor(tie);
                                                                   tie->setStartNote(nn);
@@ -605,7 +605,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                                                         continue;
                                                                   Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
                                                                   if (newStart != nullptr) {
-                                                                        Spanner* newSp = static_cast<Spanner*>(oldSp->linkedClone());
+                                                                        Spanner* newSp = toSpanner(oldSp->linkedClone());
                                                                         newSp->setNoteSpan(newStart, nn);
                                                                         score->addElement(newSp);
                                                                         }
@@ -618,7 +618,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                                                         continue;
                                                                   Note* newEnd = Spanner::endElementFromSpanner(oldSp, nn);
                                                                   if (newEnd != nullptr) {
-                                                                        Spanner* newSp = static_cast<Spanner*>(oldSp->linkedClone());
+                                                                        Spanner* newSp = toSpanner(oldSp->linkedClone());
                                                                         newSp->setNoteSpan(nn, newEnd);
                                                                         score->addElement(newSp);
                                                                         }
@@ -632,7 +632,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                                            if (och == och->tremolo()->chord1()) {
                                                                   if (tremolo)
                                                                         qDebug("unconnected two note tremolo");
-                                                                  tremolo = static_cast<Tremolo*>(och->tremolo()->linkedClone());
+                                                                  tremolo = toTremolo(och->tremolo()->linkedClone());
                                                                   tremolo->setScore(nch->score());
                                                                   tremolo->setParent(nch);
                                                                   tremolo->setTrack(nch->track());
@@ -675,7 +675,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
             nmb->linkTo(mb);
             foreach (Element* e, mb->el()) {
                   if (e->type() == ElementType::LAYOUT_BREAK) {
-                        LayoutBreak::Type st = static_cast<LayoutBreak*>(e)->layoutBreakType();
+                        LayoutBreak::Type st = toLayoutBreak(e)->layoutBreakType();
                         if (st == LayoutBreak::Type::PAGE || st == LayoutBreak::Type::LINE)
                               continue;
                         }
@@ -820,7 +820,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                         Element* ne = 0;
                         if (oe->isClef()) {
                               // only clone clef if it matches staff group and does not exists yet
-                              Clef* clef = static_cast<Clef*>(oe);
+                              Clef* clef = toClef(oe);
                               int   tick = seg->tick();
                               if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->staffType(0)->group()
                                           && dstStaff->clefType(tick) != clef->clefTypeList()) {
@@ -889,7 +889,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           Note* on = och->notes().at(i);
                                           Note* nn = nch->notes().at(i);
                                           if (on->tieFor()) {
-                                                Tie* tie = static_cast<Tie*>(on->tieFor()->linkedClone());
+                                                Tie* tie = toTie(on->tieFor()->linkedClone());
                                                 tie->setScore(score);
                                                 nn->setTieFor(tie);
                                                 tie->setStartNote(nn);
@@ -912,7 +912,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           for (Spanner* oldSp : on->spannerBack()) {
                                                 Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
                                                 if (newStart != nullptr) {
-                                                      Spanner* newSp = static_cast<Spanner*>(oldSp->linkedClone());
+                                                      Spanner* newSp = toSpanner(oldSp->linkedClone());
                                                       newSp->setNoteSpan(newStart, nn);
                                                       score->addElement(newSp);
                                                       }
@@ -926,7 +926,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           if (och == och->tremolo()->chord1()) {
                                                 if (tremolo)
                                                       qDebug("unconnected two note tremolo");
-                                                tremolo = static_cast<Tremolo*>(och->tremolo()->linkedClone());
+                                                tremolo = toTremolo(och->tremolo()->linkedClone());
                                                 tremolo->setScore(nch->score());
                                                 tremolo->setParent(nch);
                                                 tremolo->setTrack(nch->track());
@@ -1047,14 +1047,14 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick
                         ne->setScore(score);
                         score->undoAddElement(ne);
                         if (oe->isChordRest()) {
-                              ChordRest* ocr = static_cast<ChordRest*>(oe);
-                              ChordRest* ncr = static_cast<ChordRest*>(ne);
+                              ChordRest* ocr = toChordRest(oe);
+                              ChordRest* ncr = toChordRest(ne);
                               Tuplet* ot     = ocr->tuplet();
                               if (ot) {
                                     Tuplet* nt = tupletMap.findNew(ot);
                                     if (nt == 0) {
                                           // nt = new Tuplet(*ot);
-                                          nt = static_cast<Tuplet*>(ot->linkedClone());
+                                          nt = toTuplet(ot->linkedClone());
                                           nt->clear();
                                           nt->setTrack(dstTrack);
                                           nt->setParent(m);
@@ -1089,14 +1089,14 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick
                                           }
                                     }
                               if (oe->type() == ElementType::CHORD) {
-                                    Chord* och = static_cast<Chord*>(ocr);
-                                    Chord* nch = static_cast<Chord*>(ncr);
+                                    Chord* och = toChord(ocr);
+                                    Chord* nch = toChord(ncr);
                                     int n = och->notes().size();
                                     for (int i = 0; i < n; ++i) {
                                           Note* on = och->notes().at(i);
                                           Note* nn = nch->notes().at(i);
                                           if (on->tieFor()) {
-                                                Tie* tie = static_cast<Tie*>(on->tieFor()->linkedClone());
+                                                Tie* tie = toTie(on->tieFor()->linkedClone());
                                                 tie->setScore(score);
                                                 nn->setTieFor(tie);
                                                 tie->setStartNote(nn);

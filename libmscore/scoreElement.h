@@ -113,6 +113,12 @@ class MeasureBase;
 class Page;
 class SystemText;
 class BracketItem;
+class Spanner;
+class SpannerSegment;
+class BagpipeEmbellishment;
+class LineSegment;
+class BSymbol;
+class TextLineBase;
 
 class LetRing;
 class LetRingSegment;
@@ -300,17 +306,61 @@ class ScoreElement {
       CONVERT(SystemText,    SYSTEM_TEXT)
       CONVERT(BracketItem,   BRACKET_ITEM)
       CONVERT(Staff,         STAFF)
+      CONVERT(BagpipeEmbellishment, BAGPIPE_EMBELLISHMENT)
 #undef CONVERT
 
       bool isChordRest() const       { return isRest() || isChord() || isRepeatMeasure(); }
       bool isDurationElement() const { return isChordRest() || isTuplet(); }
       bool isSlurTieSegment() const  { return isSlurSegment() || isTieSegment(); }
       bool isStaffText() const       { return type() == ElementType::STAFF_TEXT || type() == ElementType::SYSTEM_TEXT; }
-      bool isSLine() const;
       bool isSLineSegment() const;
       bool isBox() const { return isVBox() || isHBox() || isTBox() || isFBox(); }
       bool isMeasureBase() const { return isMeasure() || isBox(); }
       bool isText() const;
+      bool isTextLineBaseSegment() const {
+         return isHairpinSegment()
+         || isLetRingSegment()
+         || isTextLineSegment()
+         || isOttavaSegment()
+         || isPalmMuteSegment()
+         || isPedalSegment()
+         || isVoltaSegment()
+         ;
+         }
+      bool isLineSegment() const {
+         return isGlissandoSegment()
+         || isLyricsLineSegment()
+         || isTextLineBaseSegment()
+         || isTrillSegment()
+         || isVibratoSegment()
+         ;
+         }
+      bool isSpannerSegment() const { return isLineSegment() || isTextLineBaseSegment() || isSlurSegment() || isTieSegment(); }
+      bool isBSymbol() const { return isImage() || isSymbol(); }
+      bool isTextLineBase() const {
+            return isHairpin()
+            || isLetRing()
+            || isNoteLine()
+            || isOttava()
+            || isPalmMute()
+            || isPedal()
+            || isTextLine()
+            || isVolta()
+            ;
+            }
+      bool isSLine() const {
+            return isTextLineBase() || isTrill() || isGlissando() || isVibrato();
+            }
+
+      bool isSpanner() const {
+         return isSlur()
+         || isTie()
+         || isGlissando()
+         || isLyricsLine()
+         || isTextLineBase()
+         || isSLine()
+         ;
+         }
       };
 
 //---------------------------------------------------
@@ -360,6 +410,26 @@ static inline MeasureBase* toMeasureBase(ScoreElement* e) {
 static inline Box* toBox(ScoreElement* e) {
      Q_ASSERT(e == 0 || e->isBox());
       return (Box*)e;
+      }
+static inline Spanner* toSpanner(ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isSpanner());
+      return (Spanner*)e;
+      }
+static inline SpannerSegment* toSpannerSegment(ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isSpannerSegment());
+      return (SpannerSegment*)e;
+      }
+static inline LineSegment* toLineSegment(ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isLineSegment());
+      return (LineSegment*)e;
+      }
+static inline BSymbol* toBSymbol(ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isBSymbol());
+      return (BSymbol*)e;
+      }
+static inline TextLineBase* toTextLineBase(ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isTextLineBase());
+      return (TextLineBase*)e;
       }
 
 #define CONVERT(a)  \
@@ -454,6 +524,7 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(SystemText)
       CONVERT(BracketItem)
       CONVERT(Staff)
+      CONVERT(BagpipeEmbellishment)
 #undef CONVERT
 
 }

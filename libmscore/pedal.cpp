@@ -178,7 +178,7 @@ QPointF Pedal::linePos(Grip grip, System** sys) const
       qreal nhw = score()->noteHeadWidth();
       System* s = nullptr;
       if (grip == Grip::START) {
-            ChordRest* c = static_cast<ChordRest*>(startElement());
+            ChordRest* c = toChordRest(startElement());
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
             if (c->type() == ElementType::REST && c->durationType() == TDuration::DurationType::V_MEASURE)
@@ -188,7 +188,7 @@ QPointF Pedal::linePos(Grip grip, System** sys) const
             }
       else {
             Element* e = endElement();
-            ChordRest* c = static_cast<ChordRest*>(endElement());
+            ChordRest* c = toChordRest(endElement());
             if (!e || e == startElement() || (endHookType() == HookType::HOOK_90)) {
                   // pedal marking on single note or ends with non-angled hook:
                   // extend to next note or end of measure

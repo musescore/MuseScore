@@ -591,19 +591,19 @@ void TextBlock::layout(Text* t)
                   case ElementType::HBOX:
                   case ElementType::VBOX:
                   case ElementType::TBOX: {
-                        Box* b = static_cast<Box*>(e);
+                        Box* b = toBox(e);
                         layoutWidth -= ((b->leftMargin() + b->rightMargin()) * DPMM);
                         lm = b->leftMargin() * DPMM;
                         }
                         break;
                   case ElementType::PAGE: {
-                        Page* p = static_cast<Page*>(e);
+                        Page* p = toPage(e);
                         layoutWidth -= (p->lm() + p->rm());
                         lm = p->lm();
                         }
                         break;
                   case ElementType::MEASURE: {
-                        Measure* m = static_cast<Measure*>(e);
+                        Measure* m = toMeasure(e);
                         layoutWidth = m->bbox().width();
                         }
                         break;
@@ -1952,8 +1952,8 @@ void Text::insertSym(EditData& ed, SymId id)
 
 QRectF Text::pageRectangle() const
       {
-      if (parent() && (parent()->type() == ElementType::HBOX || parent()->type() == ElementType::VBOX || parent()->type() == ElementType::TBOX)) {
-            Box* box = static_cast<Box*>(parent());
+      if (parent() && (parent()->isHBox() || parent()->isVBox() || parent()->isTBox())) {
+            Box* box = toBox(parent());
             QRectF r = box->abbox();
             qreal x = r.x() + box->leftMargin() * DPMM;
             qreal y = r.y() + box->topMargin() * DPMM;
@@ -1965,8 +1965,8 @@ QRectF Text::pageRectangle() const
 
             return QRectF(x, y, w, h);
             }
-      if (parent() && parent()->type() == ElementType::PAGE) {
-            Page* box  = static_cast<Page*>(parent());
+      if (parent() && parent()->isPage()) {
+            Page* box  = toPage(parent());
             QRectF r = box->abbox();
             qreal x = r.x() + box->lm();
             qreal y = r.y() + box->tm();
@@ -2000,8 +2000,8 @@ QLineF Text::dragAnchor() const
       for (Element* e = parent(); e; e = e->parent())
             xp += e->x();
       qreal yp;
-      if (parent()->type() == ElementType::SEGMENT) {
-            System* system = static_cast<Segment*>(parent())->measure()->system();
+      if (parent()->isSegment()) {
+            System* system = toSegment(parent())->measure()->system();
             yp = system->staffCanvasYpage(staffIdx());
             }
       else
@@ -2135,7 +2135,7 @@ void Text::layoutEdit()
       {
       layout();
       if (parent() && parent()->type() == ElementType::TBOX) {
-            TBox* tbox = static_cast<TBox*>(parent());
+            TBox* tbox = toTBox(parent());
             tbox->layout();
             System* system = tbox->system();
             system->setHeight(tbox->height());
