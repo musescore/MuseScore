@@ -7849,7 +7849,7 @@ void OveOrganizer::organizeWedge(Wedge* wedge, int part, int track, Measure* mea
                               wedge->start()->getOffset(), wedge->stop()->getOffset(),
                               middleMeasure, middleUnit);
 
-            if( middleMeasure != 0 ) {
+            if( middleUnit != 0 ) {
                   WedgeEndPoint* midStopPoint = new WedgeEndPoint();
                   measureData->addMusicData(midStopPoint);
 

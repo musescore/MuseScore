@@ -1221,7 +1221,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
       for (int j = 0; j < s; j++)
             ontime = makeEvent(suffix[j], ontime, tieForward(j,suffix));
       // render graceNotesAfter
-      ontime = graceExtend(note->pitch(), note->chord()->graceNotesAfter(), ontime);
+      graceExtend(note->pitch(), note->chord()->graceNotesAfter(), ontime);
       return true;
       }
 
