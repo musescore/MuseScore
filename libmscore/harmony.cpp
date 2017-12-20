@@ -199,7 +199,7 @@ void Harmony::write(XmlWriter& xml) const
             int rRootTpc = _rootTpc;
             int rBaseTpc = _baseTpc;
             if (staff()) {
-                  Segment* segment = static_cast<Segment*>(parent());
+                  Segment* segment = toSegment(parent());
                   int tick = segment ? segment->tick() : -1;
                   const Interval& interval = part()->instrument(tick)->transpose();
                   if (xml.clipboardmode() && !score()->styleB(StyleIdx::concertPitch) && interval.chromatic) {
@@ -740,14 +740,14 @@ void Harmony::endEdit(EditData& ed)
             foreach(ScoreElement* e, *links()) {
                   if (e == this)
                         continue;
-                  Harmony* h = static_cast<Harmony*>(e);
+                  Harmony* h = toHarmony(e);
                   // transpose if necessary
                   // at this point chord will already have been rendered in same key as original
                   // (as a result of Text::endEdit() calling setText() for linked elements)
                   // we may now need to change the TPC's and the text, and re-render
                   if (score()->styleB(StyleIdx::concertPitch) != h->score()->styleB(StyleIdx::concertPitch)) {
                         Part* partDest = h->part();
-                        Segment* segment = static_cast<Segment*>(parent());
+                        Segment* segment = toSegment(parent());
                         int tick = segment ? segment->tick() : -1;
                         Interval interval = partDest->instrument(tick)->transpose();
                         if (!interval.isZero()) {
@@ -1076,7 +1076,7 @@ void Harmony::layout()
 
       if (parent()->isFretDiagram() && parent()->parent()->isSegment()) {
             qDebug("Harmony %s with fret diagram as parent and segment as grandparent", qPrintable(_textName));
-//            MStaff* mstaff = static_cast<Segment*>(parent()->parent())->measure()->mstaff(staffIdx());
+//            MStaff* mstaff = toSegment(parent()->parent())->measure()->mstaff(staffIdx());
 //WS            qreal dist = -(bbox().top());
 //            mstaff->distanceUp = qMax(mstaff->distanceUp, dist + _spatium);
             }

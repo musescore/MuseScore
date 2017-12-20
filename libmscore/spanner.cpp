@@ -248,7 +248,7 @@ Spanner::~Spanner()
 
 void Spanner::add(Element* e)
       {
-      SpannerSegment* ls = static_cast<SpannerSegment*>(e);
+      SpannerSegment* ls = toSpannerSegment(e);
       ls->setSpanner(this);
       ls->setSelected(selected());
       ls->setTrack(track());
@@ -261,7 +261,7 @@ void Spanner::add(Element* e)
 
 void Spanner::remove(Element* e)
       {
-      SpannerSegment* ss = static_cast<SpannerSegment*>(e);
+      SpannerSegment* ss = toSpannerSegment(e);
       if (ss->system())
             ss->system()->remove(ss);
       segments.removeOne(ss);
@@ -533,8 +533,8 @@ Note* Spanner::startElementFromSpanner(Spanner* sp, Element* newEnd)
       if (sp->anchor() != Anchor::NOTE)
             return nullptr;
 
-      Note*  oldStart   = static_cast<Note*>(sp->startElement());
-      Note*  oldEnd     = static_cast<Note*>(sp->endElement());
+      Note*  oldStart   = toNote(sp->startElement());
+      Note*  oldEnd     = toNote(sp->endElement());
       if (oldStart == nullptr || oldEnd == nullptr)
             return nullptr;
       Note*  newStart   = nullptr;
@@ -544,9 +544,8 @@ Note* Spanner::startElementFromSpanner(Spanner* sp, Element* newEnd)
       // look in notes linked to oldStart for a note with the
       // same score as new score and appropriate track
       for (ScoreElement* newEl : oldStart->linkList())
-            if (static_cast<Note*>(newEl)->score() == score
-                        && static_cast<Note*>(newEl)->track() == newTrack) {
-                  newStart = static_cast<Note*>(newEl);
+            if (toNote(newEl)->score() == score && toNote(newEl)->track() == newTrack) {
+                  newStart = toNote(newEl);
                   break;
             }
       return newStart;
@@ -567,8 +566,8 @@ Note* Spanner::endElementFromSpanner(Spanner* sp, Element* newStart)
       if (sp->anchor() != Anchor::NOTE)
             return nullptr;
 
-      Note*  oldStart   = static_cast<Note*>(sp->startElement());
-      Note*  oldEnd     = static_cast<Note*>(sp->endElement());
+      Note*  oldStart   = toNote(sp->startElement());
+      Note*  oldEnd     = toNote(sp->endElement());
       if (oldStart == nullptr || oldEnd == nullptr)
             return nullptr;
       Note*  newEnd     = nullptr;
@@ -578,9 +577,8 @@ Note* Spanner::endElementFromSpanner(Spanner* sp, Element* newStart)
       // look in notes linked to oldEnd for a note with the
       // same score as new score and appropriate track
       for (ScoreElement* newEl : oldEnd->linkList())
-            if (static_cast<Note*>(newEl)->score() == score
-                        && static_cast<Note*>(newEl)->track() == newTrack) {
-                  newEnd = static_cast<Note*>(newEl);
+            if (toNote(newEl)->score() == score && toNote(newEl)->track() == newTrack) {
+                  newEnd = toNote(newEl);
                   break;
             }
       return newEnd;
@@ -777,7 +775,7 @@ Spanner* Spanner::nextSpanner(Element* e, int activeStaff)
                                   Element* st = s->startElement();
                                   if (!st)
                                         continue;
-                                  if (s->startSegment() == static_cast<Spanner*>(e)->startSegment() &&
+                                  if (s->startSegment() == toSpanner(e)->startSegment() &&
                                       st->staffIdx() == activeStaff)
                                         return s;
                                   //else
@@ -809,7 +807,7 @@ Spanner* Spanner::prevSpanner(Element* e, int activeStaff)
                         while (i != range.first) {
                               --i;
                               Spanner* s =  i->second;
-                              if (s->startSegment() == static_cast<Spanner*>(e)->startSegment() &&
+                              if (s->startSegment() == toSpanner(e)->startSegment() &&
                                   s->startElement()->staffIdx() == activeStaff)
                                     return s;
                               }

@@ -427,16 +427,6 @@ ElementType ScoreElement::name2type(const QStringRef& s)
       }
 
 //---------------------------------------------------------
-//   isSLine
-//---------------------------------------------------------
-
-bool ScoreElement::isSLine() const
-      {
-      return isHairpin() || isOttava() || isPedal()
-         || isTrill() || isVolta() || isTextLine() || isNoteLine() || isGlissando() || isLetRing() || isVibrato() || isPalmMute();
-      }
-
-//---------------------------------------------------------
 //   isSLineSegment
 //---------------------------------------------------------
 

@@ -1321,7 +1321,7 @@ FiguredBass* FiguredBass::nextFiguredBass() const
       // scan segment annotations for an existing FB element in the this' staff
       for (Element* e : nextSegm->annotations())
             if (e->type() == ElementType::FIGURED_BASS && e->track() == track())
-                  return static_cast<FiguredBass*>(e);
+                  return toFiguredBass(e);
 
       return 0;
       }
@@ -1424,7 +1424,7 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
       for (Element* e : seg->annotations()) {
             if (e->type() == ElementType::FIGURED_BASS && (e->track() / VOICES) == staff) {
                   // an FB already exists in segment: re-use it
-                  fb = static_cast<FiguredBass*>(e);
+                  fb = toFiguredBass(e);
                   *pNew = false;
                   endTick = seg->tick() + fb->ticks();
                   break;
@@ -1467,7 +1467,7 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
             for(prevSegm = seg->prev1(SegmentType::ChordRest); prevSegm; prevSegm = prevSegm->prev1(SegmentType::ChordRest)) {
                   for (Element* e : prevSegm->annotations()) {
                         if (e->type() == ElementType::FIGURED_BASS && (e->track() ) == track) {
-                              prevFB = static_cast<FiguredBass*>(e);   // previous FB found
+                              prevFB = toFiguredBass(e);   // previous FB found
                               break;
                               }
                         }
@@ -1769,13 +1769,12 @@ FiguredBass* Score::addFiguredBass()
 
       FiguredBass * fb;
       bool bNew;
-      if (el->type() == ElementType::NOTE) {
-            ChordRest * cr = static_cast<Note*>(el)->chord();
-            fb = FiguredBass::addFiguredBassToSegment(cr->segment(),
-                        (cr->track() / VOICES) * VOICES, 0, &bNew);
+      if (el->isNote()) {
+            ChordRest * cr = toNote(el)->chord();
+            fb = FiguredBass::addFiguredBassToSegment(cr->segment(), cr->staffIdx() * VOICES, 0, &bNew);
             }
-      else if (el->type() == ElementType::FIGURED_BASS) {
-            fb = static_cast<FiguredBass*>(el);
+      else if (el->isFiguredBass()) {
+            fb = toFiguredBass(el);
             bNew = false;
             }
       else

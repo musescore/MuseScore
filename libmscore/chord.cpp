@@ -453,7 +453,7 @@ void Chord::add(Element* e)
                   break;
             case ElementType::TREMOLO:
                   {
-                  Tremolo* tr = static_cast<Tremolo*>(e);
+                  Tremolo* tr = toTremolo(e);
                   if (tr->twoNotes()) {
                         if (!(_tremolo && _tremolo->twoNotes())) {
                               TDuration d = durationType();
@@ -490,7 +490,7 @@ void Chord::add(Element* e)
                   break;
             case ElementType::CHORD:
                   {
-                  Chord* gc = static_cast<Chord*>(e);
+                  Chord* gc = toChord(e);
                   Q_ASSERT(gc->noteType() != NoteType::NORMAL);
                   int idx = gc->graceIndex();
                   gc->setFlags(ElementFlag::MOVABLE);
@@ -544,7 +544,7 @@ void Chord::remove(Element* e)
                   break;
             case ElementType::TREMOLO:
                   {
-                  Tremolo* tremolo = static_cast<Tremolo*>(e);
+                  Tremolo* tremolo = toTremolo(e);
                   if (tremolo->twoNotes()) {
                         TDuration d = durationType();
                         int dots = d.dots();
@@ -583,7 +583,7 @@ void Chord::remove(Element* e)
                   break;
             case ElementType::CHORD:
                   {
-                  auto i = std::find(_graceNotes.begin(), _graceNotes.end(), static_cast<Chord*>(e));
+                  auto i = std::find(_graceNotes.begin(), _graceNotes.end(), toChord(e));
                   Chord* grace = *i;
                   grace->setGraceIndex(i - _graceNotes.begin());
                   _graceNotes.erase(i);
@@ -1526,9 +1526,10 @@ void Chord::layout2()
                   qreal cx  = h->measureXPos();
 
                   for (int track = strack; track < etrack; ++track) {
-                        Chord* e = static_cast<Chord*>(s->element(track));
-                        if (!e || e->type() != ElementType::CHORD)
+                        Element* el = s->element(track);
+                        if (!el || !el->isChord())
                               continue;
+                        Chord* e = toChord(el);
                         for (LedgerLine* ll = e->ledgerLines(); ll; ll = ll->next()) {
                               if (ll->y() != y)
                                     continue;
@@ -1918,7 +1919,7 @@ void Chord::layoutPitched()
                               // that this voice does not have conflict but another voice does
                               Element* e = s->element(track());
                               if (e && e->type() == ElementType::CHORD)
-                                    pc = static_cast<Chord*>(e);
+                                    pc = toChord(e);
                               else {
                                     int startTrack = staffIdx() * VOICES;
                                     int endTrack = startTrack + VOICES;
@@ -1927,7 +1928,7 @@ void Chord::layoutPitched()
                                                 continue;
                                           e = s->element(t);
                                           if (e && e->type() == ElementType::CHORD) {
-                                                pc = static_cast<Chord*>(e);
+                                                pc = toChord(e);
                                                 // prefer chord with ledger lines
                                                 if (pc->ledgerLines())
                                                       break;
@@ -2457,8 +2458,8 @@ void Chord::layoutArpeggio2()
       qreal y           = upNote()->pagePos().y() - upNote()->headHeight() * .5;
       int span          = _arpeggio->span();
       int btrack        = track() + (span - 1) * VOICES;
-      ChordRest* bchord = static_cast<ChordRest*>(segment()->element(btrack));
-      Note* dnote       = (bchord && bchord->type() == ElementType::CHORD) ? static_cast<Chord*>(bchord)->downNote() : downNote();
+      ChordRest* bchord = toChordRest(segment()->element(btrack));
+      Note* dnote       = (bchord && bchord->type() == ElementType::CHORD) ? toChord(bchord)->downNote() : downNote();
 
       qreal h = dnote->pagePos().y() + dnote->headHeight() * .5 - y;
       _arpeggio->setHeight(h);
@@ -2475,9 +2476,9 @@ void Chord::layoutArpeggio2()
             }
 
       for (int i = 1; i < span; ++i) {
-            ChordRest* c = static_cast<ChordRest*>(segment()->element(track() + i * VOICES));
+            ChordRest* c = toChordRest(segment()->element(track() + i * VOICES));
             if (c && c->type() == CHORD) {
-                  QList<Note*> nl = static_cast<Chord*>(c)->notes();
+                  QList<Note*> nl = toChord(c)->notes();
                   int n = nl.size();
                   for (int j = n - 1; j >= 0; --j) {
                         Note* note = nl[j];
@@ -2515,7 +2516,7 @@ Element* Chord::drop(EditData& data)
       switch (e->type()) {
             case ElementType::ARTICULATION:
                   {
-                  Articulation* atr = static_cast<Articulation*>(e);
+                  Articulation* atr = toArticulation(e);
                   Articulation* oa = hasArticulation(atr);
                   if (oa) {
                         delete atr;
@@ -2571,7 +2572,7 @@ Element* Chord::drop(EditData& data)
 
             case ElementType::ARPEGGIO:
                   {
-                  Arpeggio* a = static_cast<Arpeggio*>(e);
+                  Arpeggio* a = toArpeggio(e);
                   if (arpeggio())
                         score()->undoRemoveElement(arpeggio());
                   a->setTrack(track());
@@ -2805,7 +2806,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                   continue;
             if ( sp->tick2() == tick() && sp->track2() != track())
                   continue;
-            Slur* s = static_cast<Slur*>(sp);
+            Slur* s = toSlur(sp);
             if (s->up())
                   topGap = true;
             else
@@ -3061,7 +3062,7 @@ Segment* Chord::segment() const
       Element* e = parent();
       for (; e && e->type() != ElementType::SEGMENT; e = e->parent())
             ;
-      return static_cast<Segment*>(e);
+      return toSegment(e);
       }
 
 //---------------------------------------------------------
@@ -3073,7 +3074,7 @@ Measure* Chord::measure() const
       Element* e = parent();
       for (; e && e->type() != ElementType::MEASURE; e = e->parent())
             ;
-      return static_cast<Measure*>(e);
+      return toMeasure(e);
       }
 
 //---------------------------------------------------------
@@ -3222,11 +3223,11 @@ Element* Chord::nextElement()
 
             case ElementType::GLISSANDO_SEGMENT:
             case ElementType::TIE_SEGMENT: {
-                  SpannerSegment* s = static_cast<SpannerSegment*>(e);
+                  SpannerSegment* s = toSpannerSegment(e);
                   Spanner* sp = s->spanner();
                   Element* elSt = sp->startElement();
                   Q_ASSERT(elSt->type() == ElementType::NOTE);
-                  Note* n = static_cast<Note*>(elSt);
+                  Note* n = toNote(elSt);
                   Q_ASSERT(n != NULL);
                   if (n == _notes.front()) {
                         if (_arpeggio)
@@ -3350,7 +3351,7 @@ Element* Chord::nextSegmentElement()
             Element* e = segment()->element(v);
             if (e) {
                   if (e->type() == ElementType::CHORD)
-                        return static_cast<Chord*>(e)->notes().back();
+                        return toChord(e)->notes().back();
 
                   return e;
                   }
@@ -3370,8 +3371,8 @@ Element* Chord::prevSegmentElement()
             el = score()->selection().elements().first();
       Element* e = segment()->lastInPrevSegments(el->staffIdx());
       if (e) {
-            if (e->type() == ElementType::CHORD)
-                  return static_cast<Chord*>(e)->notes().front();
+            if (e->isChord())
+                  return toChord(e)->notes().front();
             return e;
             }
 

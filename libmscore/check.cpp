@@ -97,7 +97,7 @@ qDebug("checkScore: remove empty ChordRest segment");
             int tick  = 0;
             Staff* st = staff(staffIdx);
             for (Segment* s = firstMeasure()->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-                  ChordRest* cr = static_cast<ChordRest*>(s->element(track));
+                  ChordRest* cr = toChordRest(s->element(track));
                   if (!cr)
                         continue;
                   if (s->tick() != tick) {
@@ -265,7 +265,7 @@ bool Score::checkKeys()
                   if (s) {
                         Element* element = s->element(i * VOICES);
                         if (element)
-                              k = static_cast<KeySig*>(element)->key();
+                              k = toKeySig(element)->key();
                         }
                   if (staff(i)->key(m->tick()) != k) {
                         qDebug("measure %d (tick %d) : key %d, map %d", m->no(), m->tick(), int(k),

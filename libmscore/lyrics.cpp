@@ -746,8 +746,8 @@ bool LyricsLine::setProperty(P_ID propertyId, const QVariant& v)
                   {
                   // if parent lyrics has a melisma, change its length too
                   if (parent() && parent()->type() == ElementType::LYRICS
-                              && static_cast<Lyrics*>(parent())->ticks() > 0) {
-                        int newTicks   = static_cast<Lyrics*>(parent())->ticks() + v.toInt() - ticks();
+                              && toLyrics(parent())->ticks() > 0) {
+                        int newTicks   = toLyrics(parent())->ticks() + v.toInt() - ticks();
                         parent()->undoChangeProperty(P_ID::LYRIC_TICKS, newTicks);
                         }
                   setTicks(v.toInt());

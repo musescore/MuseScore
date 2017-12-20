@@ -898,7 +898,7 @@ void TabDurationSymbol::layout()
       qreal xpos, ypos;             // position coords
 
       _beamGrid = TabBeamGrid::NONE;
-      Chord* chord = static_cast<Chord*>(parent());
+      Chord* chord = toChord(parent());
       // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
       if (!chord || !chord->isChord() ||
             (chord->beamMode() != Beam::Mode::BEGIN && chord->beamMode() != Beam::Mode::MID &&
@@ -959,7 +959,7 @@ void TabDurationSymbol::layout2()
             return;
 
       // get 'grid' beam length from page positions of this' chord and previous chord
-      Chord*      chord       = static_cast<Chord*>(parent());
+      Chord*      chord       = toChord(parent());
       ChordRest*  prevChord   = prevChordRest(chord, true);
       if (chord == nullptr || prevChord == nullptr)
             return;

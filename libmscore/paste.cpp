@@ -266,7 +266,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                            || tag == "Trill"
                            || tag == "TextLine"
                            || tag == "Volta") {
-                              Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, this));
+                              Spanner* sp = toSpanner(Element::name2Element(tag, this));
                               sp->setAnchor(Spanner::Anchor::SEGMENT);
                               sp->read(e);
                               sp->setTrack(e.track());

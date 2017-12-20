@@ -1316,7 +1316,7 @@ Element* Measure::drop(EditData& data)
                   e->setTrack(0);
                   {
                   // code borrowed from ChordRest::drop()
-//                  Text* t = static_cast<Text*>(e);
+//                  Text* t = toText(e);
 //                  StyledPropertyListIdx st = t->textStyleType();
                   // for palette items, we want to use current score text style settings
                   // except where the source element had explicitly overridden these via text properties
@@ -1975,7 +1975,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "Vibrato"
                || tag == "PalmMute"
                || tag == "Volta") {
-                  Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
+                  Spanner* sp = toSpanner(Element::name2Element(tag, score()));
                   sp->setTrack(e.track());
                   sp->setTick(e.tick());
                   // ?? sp->setAnchor(Spanner::Anchor::SEGMENT);
@@ -2948,7 +2948,7 @@ Element* Measure::nextElementStaff(int staff)
       for (; e && e->type() != ElementType::SEGMENT; e = e->parent()) {
             ;
       }
-      Segment* seg = static_cast<Segment*>(e);
+      Segment* seg = toSegment(e);
       Segment* nextSegment = seg->next();
       Element* next = seg->firstElementOfSegment(nextSegment, staff);
       if (next)

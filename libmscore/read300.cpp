@@ -132,7 +132,7 @@ bool Score::read(XmlReader& e)
                 || (tag == "Trill")
                 || (tag == "Slur")
                 || (tag == "Pedal")) {
-                  Spanner* s = static_cast<Spanner*>(Element::name2Element(tag, this));
+                  Spanner* s = toSpanner(Element::name2Element(tag, this));
                   s->read(e);
                   addSpanner(s);
                   }
