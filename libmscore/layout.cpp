@@ -2255,6 +2255,29 @@ void Score::createBeams(Measure* measure)
       }
 
 //---------------------------------------------------------
+//   layoutDrumsetChord
+//---------------------------------------------------------
+
+static void layoutDrumsetChord(Chord* c, const Drumset* drumset, StaffType* st, qreal spatium)
+      {
+      for (Note* note : c->notes()) {
+            int pitch = note->pitch();
+            if (!drumset->isValid(pitch)) {
+                  // qDebug("unmapped drum note %d", pitch);
+                  }
+            else if (!note->fixed()) {
+                  note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
+                  int line = drumset->line(pitch);
+                  note->setLine(line);
+
+                  int off  = st->stepOffset();
+                  qreal ld = st->lineDistance().val();
+                  note->rypos()  = (line + off * 2.0) * spatium * .5 * ld;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   getNextMeasure
 //---------------------------------------------------------
 
@@ -2357,8 +2380,9 @@ void Score::getNextMeasure(LayoutContext& lc)
                         ks->layout();
                         }
                   else if (segment.isChordRestType()) {
-                        int track    = staffIdx * VOICES;
-                        int endTrack = track + VOICES;
+                        StaffType* st = staff->staffType(segment.tick());
+                        int track     = staffIdx * VOICES;
+                        int endTrack  = track + VOICES;
 
                         for (int t = track; t < endTrack; ++t) {
                               ChordRest* cr = segment.cr(t);
@@ -2378,28 +2402,12 @@ void Score::getNextMeasure(LayoutContext& lc)
                                                 c->setUp(c->stemDirection() == Direction::UP);
                                           else
                                                 c->setUp(!(t % 2));
+                                          if (drumset)
+                                                layoutDrumsetChord(c, drumset, st, spatium());
                                           c->layoutStem1();
                                           }
-                                    if (drumset) {
-                                          for (Note* note : chord->notes()) {
-                                                int pitch = note->pitch();
-                                                if (!drumset->isValid(pitch)) {
-                                                      // qDebug("unmapped drum note %d", pitch);
-                                                      }
-                                                else if (!note->fixed()) {
-                                                      note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
-                                                      // note->setHeadGroup(drumset->noteHead(pitch));
-                                                      int _line = drumset->line(pitch);
-                                                      note->setLine(_line);
-
-                                                      StaffType* st = staff->staffType(segment.tick());
-                                                      int off  = st->stepOffset();
-                                                      qreal ld = st->lineDistance().val();
-                                                      note->rypos()  = (_line + off * 2.0) * spatium() * .5 * ld;
-                                                      continue;
-                                                      }
-                                                }
-                                          }
+                                    if (drumset)
+                                          layoutDrumsetChord(chord, drumset, st, spatium());
                                     chord->computeUp();
                                     chord->layoutStem1();   // create stems needed to calculate spacing
                                                             // stem direction can change later during beam processing
