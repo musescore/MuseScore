@@ -5404,7 +5404,7 @@ void MusicXMLParserPass2::pitch(int& step, int& alter, int& oct, AccidentalType&
                   QString strAlter = _e.readElementText();
                   bool ok;
                   alter = MxmlSupport::stringToInt(strAlter, &ok); // fractions not supported by mscore
-                  if (!ok || alter < -2.5 || alter > 2.5) {
+                  if (!ok || alter < -2 || alter > 2) {
                         _logger->logError(QString("invalid alter '%1'").arg(strAlter), &_e);
                         bool ok2;
                         double altervalue = strAlter.toDouble(&ok2);
