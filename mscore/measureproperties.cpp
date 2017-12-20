@@ -268,7 +268,7 @@ void MeasureProperties::apply()
             else if (!MScore::noGui) {
                   QMessageBox::warning(0,
                      QT_TRANSLATE_NOOP("MeasureProperties", "MuseScore"),
-                     QT_TRANSLATE_NOOP("MeasureProperties", "cannot change measure length:\n"
+                     QT_TRANSLATE_NOOP("MeasureProperties", "Cannot change measure length:\n"
                      "tuplet would cross measure")
                      );
                   }

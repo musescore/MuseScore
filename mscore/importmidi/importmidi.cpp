@@ -1198,7 +1198,7 @@ Score::FileError importMidi(MasterScore *score, const QString &name)
                   if (!MScore::noGui) {
                         QMessageBox::warning(0,
                            QWidget::tr("Load MIDI"),
-                           QWidget::tr("Load failed: ") + errorText,
+                           QWidget::tr("Load failed: %1").arg(errorText),
                            QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
                         }
                   fp.close();
