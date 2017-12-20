@@ -919,15 +919,17 @@ void Voice::update_param(int _gen)
                    * which offsets the original rate.  This means that the fine tuning is
                    * inverted with respect to the root note (so subtract it, not add).
                    */
-                  if (gen[GEN_OVERRIDEROOTKEY].val > -1) {   //FIXME: use flag instead of -1
-                        root_pitch = gen[GEN_OVERRIDEROOTKEY].val * 100.0f - sample->pitchadj;
+                  if (sample != 0) {
+                        if (gen[GEN_OVERRIDEROOTKEY].val > -1) {   //FIXME: use flag instead of -1
+                              root_pitch = gen[GEN_OVERRIDEROOTKEY].val * 100.0f - sample->pitchadj;
+                              }
+                        else {
+                              root_pitch = sample->origpitch * 100.0f - sample->pitchadj;
                         }
-                  else {
-                        root_pitch = sample->origpitch * 100.0f - sample->pitchadj;
+                        root_pitch = _fluid->ct2hz(root_pitch);
+                        if (sample->samplerate != 0)
+                              root_pitch *= (float) _fluid->sample_rate / sample->samplerate;
                         }
-                  root_pitch = _fluid->ct2hz(root_pitch);
-                  if (sample != 0)
-                        root_pitch *= (float) _fluid->sample_rate / sample->samplerate;
                   break;
 
             case GEN_FILTERFC:
