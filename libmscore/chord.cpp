@@ -1582,9 +1582,10 @@ void Chord::layout2()
                   qreal cx  = h->measureXPos();
 
                   for (int track = strack; track < etrack; ++track) {
-                        Chord* e = static_cast<Chord*>(s->element(track));
-                        if (!e || e->type() != Element::Type::CHORD)
+                        Element* el = s->element(track);
+                        if (!el || el->type() != Element::Type::CHORD)
                               continue;
+                        Chord* e = static_cast<Chord*>(el);
                         for (LedgerLine* ll = e->ledgerLines(); ll; ll = ll->next()) {
                               if (ll->y() != y)
                                     continue;

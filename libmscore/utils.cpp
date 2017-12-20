@@ -834,9 +834,10 @@ Note* searchTieNote(Note* note)
             if (seg->tick() < endTick  && !seg->element(chord->track()))
                   continue;
             for (int track = strack; track < etrack; ++track) {
-                  Chord* c = static_cast<Chord*>(seg->element(track));
-                  if (c == 0 || c->type() != Element::Type::CHORD)
+                  Element* el = seg->element(track);
+                  if (el == 0 || el->type() != Element::Type::CHORD)
                         continue;
+                  Chord* c = static_cast<Chord*>(el);
                   // if there are grace notes before, try to tie to first one
                   QList<Chord*> gnb = c->graceNotesBefore();
                   if (!gnb.isEmpty()) {
@@ -878,9 +879,10 @@ Note* searchTieNote114(Note* note)
 
       while ((seg = seg->next1(Segment::Type::ChordRest))) {
             for (int track = strack; track < etrack; ++track) {
-                  Chord* c = static_cast<Chord*>(seg->element(track));
-                  if (c == 0 || (c->type() != Element::Type::CHORD) || (c->track() != chord->track()))
+                  Element* el = seg->element(track);
+                  if (el == 0 || (el->type() != Element::Type::CHORD) || (el->track() != chord->track()))
                         continue;
+                  Chord* c = static_cast<Chord*>(el);
                   int staffIdx = c->staffIdx() + c->staffMove();
                   if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?
                         continue;

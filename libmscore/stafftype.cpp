@@ -895,9 +895,10 @@ void TabDurationSymbol::layout()
       qreal xpos, ypos;             // position coords
 
       _beamGrid = TabBeamGrid::NONE;
-      Chord* chord = static_cast<Chord*>(parent());
+      Element* el = parent();
+      Chord* chord = static_cast<Chord*>(el);
       // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
-      if (!chord || chord->type() != Element::Type::CHORD ||
+      if (!el || el->type() != Element::Type::CHORD ||
             (chord->beamMode() != Beam::Mode::BEGIN && chord->beamMode() != Beam::Mode::MID &&
                   chord->beamMode() != Beam::Mode::END) ) {
             QFontMetricsF fm(_tab->durationFont());

@@ -58,8 +58,8 @@ void TieStateMachine::addSeg(const Segment *seg, int strack)
       {
       bool isChord = false;
       for (int voice = 0; voice < VOICES; ++voice) {
-            ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
-            if (!cr || cr->type() != Element::Type::CHORD)
+            Element* el = seg->element(strack + voice);
+            if (!el || el->type() != Element::Type::CHORD)
                   continue;
             if (!isChord)
                   isChord = true;

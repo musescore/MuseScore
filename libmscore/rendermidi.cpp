@@ -933,7 +933,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
       int endTrack   = startTrack + VOICES;
       bool done = false;
       for (int track = startTrack; track < endTrack; ++track) {
-            Element *e = segment->element(track);
+            Element* e = segment->element(track);
             if (!e || e->type() != Element::Type::CHORD)
                   continue;
             Chord* chord = static_cast<Chord*>(e);
@@ -1514,9 +1514,10 @@ void Score::createPlayEvents()
                         continue;
                   const Segment::Type st = Segment::Type::ChordRest;
                   for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-                        Chord* chord = static_cast<Chord*>(seg->element(track));
-                        if (chord == 0 || chord->type() != Element::Type::CHORD)
+                        Element* el = seg->element(track);
+                        if (el == 0 || el->type() != Element::Type::CHORD)
                               continue;
+                        Chord* chord = static_cast<Chord*>(el);
                         createPlayEvents(chord);
                         }
                   }

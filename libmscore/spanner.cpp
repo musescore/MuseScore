@@ -702,9 +702,9 @@ Chord* Spanner::endChord()
       if (!_endElement && type() == Element::Type::SLUR) {
             Segment* s = score()->tick2segmentMM(tick2(), false, Segment::Type::ChordRest);
             _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
-            if (_endElement->type() != Element::Type::CHORD)
-                  _endElement = nullptr;
             }
+      if (_endElement && _endElement->type() != Element::Type::CHORD)
+                  _endElement = nullptr;
       return static_cast<Chord*>(_endElement);
       }
 
