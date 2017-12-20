@@ -8,6 +8,6 @@
 #MSCORE=mscore2
 DPI=130
 
-$MSCORE $1.mscz -r $DPI -o $1.png
+$MSCORE $1.mscx -r $DPI -o $1.png
 mv $1-1.png $1-ref.png
 
