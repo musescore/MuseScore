@@ -34,14 +34,14 @@ struct BreathType {
 //!    breathType() is index in symList
 //---------------------------------------------------------
 
-class Breath : public Element {
+class Breath final : public Element {
       qreal _pause;
       SymId _symId;
 
    public:
       Breath(Score* s);
       virtual ElementType type() const override { return ElementType::BREATH; }
-      virtual Breath* clone() const override      { return new Breath(*this); }
+      virtual Breath* clone() const override    { return new Breath(*this); }
 
       void setSymId(SymId id)          { _symId = id; }
       SymId symId() const              { return _symId; }

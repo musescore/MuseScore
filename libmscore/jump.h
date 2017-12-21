@@ -30,7 +30,7 @@ enum class SubStyle;
 //   @P playUntil   string
 //---------------------------------------------------------
 
-class Jump : public Text {
+class Jump final : public Text {
       QString _jumpTo;
       QString _playUntil;
       QString _continueAt;

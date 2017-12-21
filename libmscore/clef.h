@@ -127,7 +127,7 @@ class ClefInfo {
 //   @P small         bool    small, mid-staff clef (read only, set by layout)
 //---------------------------------------------------------
 
-class Clef : public Element {
+class Clef final : public Element {
       SymId symId;
       bool _showCourtesy;
       bool _small;

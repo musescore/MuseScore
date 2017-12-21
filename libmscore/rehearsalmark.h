@@ -21,7 +21,7 @@ namespace Ms {
 //   @@ RehearsalMark
 //---------------------------------------------------------
 
-class RehearsalMark : public SystemText  {
+class RehearsalMark final : public SystemText  {
    public:
       RehearsalMark(Score* score);
       virtual RehearsalMark* clone() const override { return new RehearsalMark(*this); }

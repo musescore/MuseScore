@@ -71,7 +71,7 @@ class SysStaff {
 ///    a complete piece of the timeline.
 //---------------------------------------------------------
 
-class System : public Element {
+class System final : public Element {
       SystemDivider* _systemDividerLeft    { 0 };     // to the next system
       SystemDivider* _systemDividerRight   { 0 };
 

@@ -26,7 +26,7 @@ namespace Ms {
 //   @P layoutBreakType  enum (LayoutBreak.PAGE, LayoutBreak.LINE, LayoutBreak.SECTION)
 //---------------------------------------------------------
 
-class LayoutBreak : public Element {
+class LayoutBreak final : public Element {
    public:
       enum Type {
             PAGE, LINE, SECTION, NOBREAK
@@ -52,7 +52,7 @@ class LayoutBreak : public Element {
       LayoutBreak(const LayoutBreak&);
       virtual LayoutBreak* clone() const override { return new LayoutBreak(*this); }
 
-      virtual ElementType type() const override { return ElementType::LAYOUT_BREAK; }
+      virtual ElementType type() const override   { return ElementType::LAYOUT_BREAK; }
       virtual bool systemFlag() const override    { return true;  }
 
       void setLayoutBreakType(Type);

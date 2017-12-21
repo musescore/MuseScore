@@ -26,7 +26,7 @@ namespace Ms {
 //   @P play       bool         play tremolo bar
 //---------------------------------------------------------
 
-class TremoloBar : public Element {
+class TremoloBar final : public Element {
       Spatium _lw;
       PropertyFlags lineWidthStyle;
       qreal _userMag     { 1.0   };       // allowed 0.1 - 10.0
@@ -39,7 +39,7 @@ class TremoloBar : public Element {
    public:
       TremoloBar(Score* s);
       virtual TremoloBar* clone() const override  { return new TremoloBar(*this); }
-      virtual ElementType type() const override { return ElementType::TREMOLOBAR; }
+      virtual ElementType type() const override   { return ElementType::TREMOLOBAR; }
       virtual void layout() override;
       virtual void draw(QPainter*) const override;
       virtual void write(XmlWriter&) const override;

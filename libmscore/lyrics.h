@@ -40,7 +40,7 @@ namespace Ms {
 
 class LyricsLine;
 
-class Lyrics : public Text {
+class Lyrics final : public Text {
    public:
       enum class Syllabic : char { SINGLE, BEGIN, END, MIDDLE };
       // MELISMA FIRST UNDERSCORE:
@@ -85,7 +85,7 @@ class Lyrics : public Text {
       Lyrics(const Lyrics&);
       ~Lyrics();
       virtual Lyrics* clone() const override          { return new Lyrics(*this); }
-      virtual ElementType type() const override     { return ElementType::LYRICS; }
+      virtual ElementType type() const override       { return ElementType::LYRICS; }
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
@@ -141,7 +141,7 @@ class Lyrics : public Text {
 //   LyricsLine
 //---------------------------------------------------------
 
-class LyricsLine : public SLine {
+class LyricsLine final : public SLine {
    protected:
       Lyrics* _nextLyrics;
 
@@ -164,7 +164,7 @@ class LyricsLine : public SLine {
 //   LyricsLineSegment
 //---------------------------------------------------------
 
-class LyricsLineSegment : public LineSegment {
+class LyricsLineSegment final : public LineSegment {
    protected:
       int   _numOfDashes;
       qreal _dashLength;
@@ -173,7 +173,7 @@ class LyricsLineSegment : public LineSegment {
       LyricsLineSegment(Score* s);
 
       virtual LyricsLineSegment* clone() const override     { return new LyricsLineSegment(*this); }
-      virtual ElementType type() const override           { return ElementType::LYRICSLINE_SEGMENT; }
+      virtual ElementType type() const override             { return ElementType::LYRICSLINE_SEGMENT; }
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
       LyricsLine* lyricsLine() const                        { return (LyricsLine*)spanner(); }

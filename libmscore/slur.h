@@ -22,7 +22,7 @@ namespace Ms {
 ///    a single segment of slur; also used for Tie
 //---------------------------------------------------------
 
-class SlurSegment : public SlurTieSegment {
+class SlurSegment final : public SlurTieSegment {
 
    protected:
       virtual void changeAnchor(EditData&, Element*);
@@ -52,7 +52,7 @@ class SlurSegment : public SlurTieSegment {
 //   @@ Slur
 //---------------------------------------------------------
 
-class Slur : public SlurTie {
+class Slur final : public SlurTie {
 
       void slurPosChord(SlurPos*);
 

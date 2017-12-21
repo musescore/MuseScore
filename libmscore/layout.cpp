@@ -1193,8 +1193,10 @@ void Score::layoutSpanner()
                         c->layoutStem();
                         for (Note* n : c->notes()) {
                               Tie* tie = n->tieFor();
-                              if (tie)
+                              if (tie) {
+printf("tie layout ??\n");
                                     tie->layout();
+                                    }
                               for (Spanner* sp : n->spannerFor())
                                     sp->layout();
                               }
@@ -2819,6 +2821,22 @@ void Score::layoutLyrics(System* system)
                   break;
             }
       }
+//---------------------------------------------------------
+//   layoutTies
+//---------------------------------------------------------
+
+static void layoutTies(Chord* ch, System* system, int stick)
+      {
+      for (Note* note : ch->notes()) {
+            if (note->tieFor())
+                  note->tieFor()->layoutFor(system);
+            if (note->tieBack()) {
+                  Tie* tie = note->tieBack();
+                  if (tie->startNote()->tick() < stick)
+                        tie->layoutBack(system);
+                  }
+            }
+      }
 
 //---------------------------------------------------------
 //   collectSystem
@@ -3119,17 +3137,10 @@ System* Score::collectSystem(LayoutContext& lc)
                                     m->staffShape(cr->staffIdx()).add(shape.translated(s->pos()));
                                     }
                               if (e->isChord()) {
-                                    for (Note* note : toChord(e)->notes()) {
-                                          if (note->tieFor()) {
-                                                Tie* tie = toTie(note->tieFor());
-                                                tie->layoutFor(system);
-                                                }
-                                          if (note->tieBack()) {
-                                                Tie* tie = toTie(note->tieBack());
-                                                if (tie->startNote()->tick() < stick)
-                                                      tie->layoutBack(system);
-                                                }
-                                          }
+                                    Chord* c = toChord(e);
+                                    for (Chord* ch : c->graceNotes())
+                                          layoutTies(ch, system, stick);
+                                    layoutTies(c, system, stick);
                                     }
                               }
                         }

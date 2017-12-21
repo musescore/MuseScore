@@ -22,7 +22,7 @@ namespace Ms {
 //   BracketItem
 //---------------------------------------------------------
 
-class BracketItem : public ScoreElement {
+class BracketItem final : public ScoreElement {
       BracketType _bracketType { BracketType::NO_BRACKET };
       int _column              { 0     };
       int  _bracketSpan        { 0     };

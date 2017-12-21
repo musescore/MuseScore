@@ -28,7 +28,7 @@ class Segment;
 //   @P showCourtesy  bool  show courtesy key signature for this sig if appropriate
 //---------------------------------------------------------------------------------------
 
-class KeySig : public Element {
+class KeySig final : public Element {
       bool _showCourtesy;
       bool _hideNaturals;     // used in layout to override score style (needed for the Continuous panel)
       KeySigEvent _sig;
@@ -39,7 +39,7 @@ class KeySig : public Element {
       KeySig(const KeySig&);
       virtual KeySig* clone() const override       { return new KeySig(*this); }
       virtual void draw(QPainter*) const override;
-      virtual ElementType type() const override { return ElementType::KEYSIG; }
+      virtual ElementType type() const override    { return ElementType::KEYSIG; }
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
       virtual void layout() override;

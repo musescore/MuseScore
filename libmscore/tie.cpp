@@ -635,7 +635,7 @@ void Tie::layoutFor(System* system)
       //
       if (startNote() == 0 || endNote() == 0) {
             if (startNote() == 0) {
-                  qDebug("Tie::layout(): no start note");
+                  qDebug("no start note");
                   return;
                   }
             Chord* c1 = startNote()->chord();

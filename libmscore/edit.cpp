@@ -1052,7 +1052,7 @@ void Score::cmdAddTie()
             }
 
       startCmd();
-      Chord* lastAddedChord = nullptr;
+      Chord* lastAddedChord = 0;
       for (Note* note : noteList) {
             if (note->tieFor()) {
                   qDebug("cmdAddTie: note %p has already tie? noteFor: %p", note, note->tieFor());
@@ -1120,37 +1120,6 @@ void Score::cmdAddTie()
                   }
             else {
                   Note* note2 = searchTieNote(note);
-#if 0
-                  // this code appears to mostly duplicate searchTieNote()
-                  // not clear if it served any additional purpose
-                  // it might have before we supported extended ties?
-                  Part* part = chord->part();
-                  int strack = part->staves()->front()->idx() * VOICES;
-                  int etrack = strack + part->staves()->size() * VOICES;
-
-                  for (Segment* seg = chord->segment()->next1(SegmentType::ChordRest); seg; seg = seg->next1(SegmentType::ChordRest)) {
-                        bool noteFound = false;
-                        for (int track = strack; track < etrack; ++track) {
-                              ChordRest* cr = toChordRest(seg->element(track));
-                              if (cr == 0 || !cr->isChord())
-                                    continue;
-                              int staffIdx = cr->staffIdx() + cr->staffMove();
-                              if (staffIdx != chord->staffIdx() + chord->staffMove())
-                                    continue;
-                              foreach(Note* n, toChord(cr)->notes()) {
-                                    if (n->pitch() == note->pitch()) {
-                                          if (note2 == 0 || note->chord()->track() == chord->track())
-                                                note2 = n;
-                                          }
-                                    // this may belong to *previous* if?
-                                    else if (cr->track() == chord->track())
-                                          noteFound = true;
-                                    }
-                              }
-                        if (noteFound || note2)
-                              break;
-                        }
-#endif
                   if (note2) {
                         Tie* tie = new Tie(this);
                         tie->setStartNote(note);

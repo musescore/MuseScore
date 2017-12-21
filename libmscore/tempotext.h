@@ -26,7 +26,7 @@ namespace Ms {
 //   @P followText  bool      determine tempo from text
 //-------------------------------------------------------------------
 
-class TempoText : public Text  {
+class TempoText final : public Text  {
       qreal _tempo;           // beats per second
       bool _followText;       // parse text to determine tempo
       qreal _relative;
@@ -36,7 +36,7 @@ class TempoText : public Text  {
    public:
       TempoText(Score*);
       virtual TempoText* clone() const override   { return new TempoText(*this); }
-      virtual ElementType type() const override { return ElementType::TEMPO_TEXT; }
+      virtual ElementType type() const override   { return ElementType::TEMPO_TEXT; }
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       Segment* segment() const   { return (Segment*)parent(); }

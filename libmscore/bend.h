@@ -23,7 +23,7 @@ namespace Ms {
 //   @@ Bend
 //---------------------------------------------------------
 
-class Bend : public Element {
+class Bend final : public Element {
       QString fontFace   { "FreeSerif" };
       qreal fontSize     { 8.0         };
       bool fontBold      { false       };

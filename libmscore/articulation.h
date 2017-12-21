@@ -54,7 +54,7 @@ constexpr bool operator& (ArticulationShowIn a1, ArticulationShowIn a2) {
 ///    articulation marks
 //---------------------------------------------------------
 
-class Articulation : public Element {
+class Articulation final : public Element {
       SymId _symId;
       Direction _direction;
       QString _channelName;

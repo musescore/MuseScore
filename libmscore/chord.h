@@ -58,7 +58,7 @@ enum class PlayEventType : char    {
 //   @P stemDirection Direction       the stem slash of the chord (acciaccatura) if any (read only)
 //---------------------------------------------------------
 
-class Chord : public ChordRest {
+class Chord final : public ChordRest {
       std::vector<Note*>   _notes;       // sorted to decreasing line step
       LedgerLine*          _ledgerLines; // single linked list
 

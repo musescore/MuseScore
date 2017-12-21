@@ -78,7 +78,7 @@ and it is edited (via the normalized text); so it is derived from Text.
 
 class FiguredBass;
 
-class FiguredBassItem : public Element {
+class FiguredBassItem final : public Element {
    public:
       enum class Modifier : char {
             NONE = 0,
@@ -229,7 +229,7 @@ struct FiguredBassFont {
 //   @P ticks   int   duration in ticks
 //---------------------------------------------------------
 
-class FiguredBass : public Text {
+class FiguredBass final : public Text {
       std::vector<FiguredBassItem*> items;      // the individual lines of the F.B.
       QVector<qreal>    _lineLenghts;           // lengths of duration indicator lines (in raster units)
       bool              _onNote;                // true if this element is on a staff note | false if it is betweee notes
@@ -254,7 +254,7 @@ class FiguredBass : public Text {
                               qreal * pSize, qreal * pLineHeight);
 
       // standard re-implemented virtual functions
-      virtual FiguredBass*    clone() const override     { return new FiguredBass(*this); }
+      virtual FiguredBass*    clone() const override   { return new FiguredBass(*this); }
       virtual ElementType   type() const override      { return ElementType::FIGURED_BASS; }
       virtual void      draw(QPainter* painter) const override;
       virtual void      endEdit(EditData&) override;

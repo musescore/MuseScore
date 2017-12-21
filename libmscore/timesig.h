@@ -38,7 +38,7 @@ enum class TimeSigType : char {
 ///    This class represents a time signature.
 //---------------------------------------------------------------------------------------
 
-class TimeSig : public Element {
+class TimeSig final : public Element {
       QString _numeratorString;     // calculated from actualSig() if !customText
       QString _denominatorString;
 

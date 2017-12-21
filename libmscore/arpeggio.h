@@ -27,7 +27,7 @@ enum class ArpeggioType : char {
 //   @@ Arpeggio
 //---------------------------------------------------------
 
-class Arpeggio : public Element {
+class Arpeggio final : public Element {
       ArpeggioType _arpeggioType;
       qreal _userLen1;
       qreal _userLen2;
@@ -48,7 +48,7 @@ class Arpeggio : public Element {
 
    public:
       Arpeggio(Score* s);
-      virtual Arpeggio* clone() const override      { return new Arpeggio(*this); }
+      virtual Arpeggio* clone() const override    { return new Arpeggio(*this); }
       virtual ElementType type() const override   { return ElementType::ARPEGGIO; }
 
       ArpeggioType arpeggioType() const    { return _arpeggioType; }

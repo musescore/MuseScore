@@ -23,7 +23,7 @@ class Pedal;
 //   @@ PedalSegment
 //---------------------------------------------------------
 
-class PedalSegment : public TextLineBaseSegment {
+class PedalSegment final : public TextLineBaseSegment {
    public:
       PedalSegment(Score* s) : TextLineBaseSegment(s) {}
       virtual ElementType type() const override       { return ElementType::PEDAL_SEGMENT; }
@@ -38,7 +38,7 @@ class PedalSegment : public TextLineBaseSegment {
 //   @@ Pedal
 //---------------------------------------------------------
 
-class Pedal : public TextLineBase {
+class Pedal final : public TextLineBase {
    protected:
       QPointF linePos(Grip, System**) const override;
 

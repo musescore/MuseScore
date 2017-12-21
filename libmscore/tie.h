@@ -22,7 +22,7 @@ namespace Ms {
 ///    a single segment of slur; also used for Tie
 //---------------------------------------------------------
 
-class TieSegment : public SlurTieSegment {
+class TieSegment final : public SlurTieSegment {
       QPointF autoAdjustOffset;
 
       void setAutoAdjust(const QPointF& offset);
@@ -58,7 +58,7 @@ class TieSegment : public SlurTieSegment {
 //!    a Tie has a Note as startElement/endElement
 //---------------------------------------------------------
 
-class Tie : public SlurTie {
+class Tie final : public SlurTie {
       static Note* editStartNote;
       static Note* editEndNote;
 

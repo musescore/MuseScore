@@ -20,14 +20,14 @@ namespace Ms {
 ///    it draws the horizontal staff lines.
 //-------------------------------------------------------------------
 
-class StaffLines : public Element {
+class StaffLines final : public Element {
       qreal lw;
       QVector<QLineF> lines;
 
    public:
       StaffLines(Score*);
       virtual StaffLines* clone() const override    { return new StaffLines(*this); }
-      virtual ElementType type() const override   { return ElementType::STAFF_LINES; }
+      virtual ElementType type() const override     { return ElementType::STAFF_LINES; }
       virtual void layout() override;
       virtual void draw(QPainter*) const override;
       virtual QPointF pagePos() const override;    ///< position in page coordinates

@@ -50,7 +50,7 @@ static const int MAX_DOTS = 4;
 //   @@ NoteHead
 //---------------------------------------------------------
 
-class NoteHead : public Symbol {
+class NoteHead final : public Symbol {
    public:
       enum class Group : signed char {
             HEAD_NORMAL = 0,
@@ -199,11 +199,9 @@ static const int INVALID_LINE = -10000;
 //   @P veloType         enum (Note.OFFSET_VAL, Note.USER_VAL)
 //---------------------------------------------------------------------------------------
 
-class Note : public Element {
+class Note final : public Element {
    public:
       enum class ValueType : char { OFFSET_VAL, USER_VAL };
-      int qmlAccidentalType() const { return int(accidentalType()); }
-      void qmlSetAccidentalType(int t) { setAccidentalType(static_cast<AccidentalType>(t)); }
 
    private:
       bool _ghost         { false };      ///< ghost note (guitar: death note)
@@ -330,8 +328,6 @@ class Note : public Element {
       void setTpcFromPitch();
       int tpc1default(int pitch) const;
       int tpc2default(int pitch) const;
-//      void undoSetTpc1(int tpc)      { undoChangeProperty(P_ID::TPC1, tpc); }
-//      void undoSetTpc2(int tpc)      { undoChangeProperty(P_ID::TPC2, tpc); }
       int transposeTpc(int tpc);
 
       Accidental* accidental() const      { return _accidental; }
@@ -370,7 +366,7 @@ class Note : public Element {
       void setTieFor(Tie* t)          { _tieFor = t;     }
       void setTieBack(Tie* t)         { _tieBack = t;    }
       Note* firstTiedNote() const;
-      Note* lastTiedNote() const;
+      const Note* lastTiedNote() const;
 
       Chord* chord() const            { return (Chord*)parent(); }
       void setChord(Chord* a)         { setParent((Element*)a);  }
@@ -393,7 +389,6 @@ class Note : public Element {
 
       ElementList& el()                           { return _el; }
       const ElementList& el() const               { return _el; }
-//      QQmlListProperty<Ms::Element> qmlElements() { return QmlListAccess<Ms::Element>(this, _el); }
 
       int subchannel() const                    { return _subchannel; }
       void setSubchannel(int val)               { _subchannel = val;  }
@@ -419,8 +414,6 @@ class Note : public Element {
       NoteDot* dot(int n)                         { return _dots[n];          }
       const QVector<NoteDot*>& dots() const       { return _dots;             }
       QVector<NoteDot*>& dots()                   { return _dots;             }
-
-//      QQmlListProperty<Ms::NoteDot> qmlDots() { return QmlListAccess<Ms::NoteDot>(this, _dots);  }
 
       int qmlDotsCount();
       void updateAccidental(AccidentalState*);

@@ -62,7 +62,7 @@ enum class MeasureNumberMode : char {
 //   @P lastSegment     Segment       the last segment of the measure (read-only)
 //---------------------------------------------------------
 
-class Measure : public MeasureBase {
+class Measure final : public MeasureBase {
       std::vector<MStaff*>  _mstaves;
       SegmentList _segments;
       Measure* _mmRest;       // multi measure rest which replaces a measure range

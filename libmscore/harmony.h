@@ -63,7 +63,7 @@ struct TextSegment {
 struct RenderAction;
 class HDegree;
 
-class Harmony : public Text {
+class Harmony final : public Text {
       int _rootTpc;                       // root note for chord
       int _baseTpc;                       // bass note or chord base; used for "slash" chords
                                           // or notation of base note in chord
@@ -97,7 +97,7 @@ class Harmony : public Text {
       Harmony(const Harmony&);
       ~Harmony();
       virtual Harmony* clone() const override     { return new Harmony(*this); }
-      virtual ElementType type() const override { return ElementType::HARMONY; }
+      virtual ElementType type() const override   { return ElementType::HARMONY; }
       virtual bool systemFlag() const override    { return false;  }
 
       void setId(int d)                        { _id = d; }

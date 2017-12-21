@@ -44,7 +44,7 @@ class InstrumentTemplate;
 //   @P volume          int
 //---------------------------------------------------------
 
-class Part : public ScoreElement {
+class Part final : public ScoreElement {
       QString _partName;            ///< used in tracklist (mixer)
       InstrumentList _instruments;
       QList<Staff*> _staves;
