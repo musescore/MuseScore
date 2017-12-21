@@ -112,8 +112,6 @@ option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
 
-set (ENABLE_COVERAGE (COVERAGE AND CMAKE_BUILD_TYPE MATCHES "DEBUG") CACHE BOOL "Enable code coverage")
-
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
       set (CMAKE_CXX_COMPILER_ID "Clang")
