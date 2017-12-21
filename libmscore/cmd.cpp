@@ -336,11 +336,7 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
             tick2 = endSegment->tick();
       spanner->setTick2(tick2);
 #if 0 // TODO
-<<<<<<< HEAD
-      TextLine* tl = static_cast<TextLine*>(spanner);
-=======
       TextLine* tl = toTextLine(spanner);
->>>>>>> fix ties from/to grace notes; add 'final' to classes were appropriate
       if (tl) {
             StyledPropertyListIdx st;
             Text* t;
