@@ -507,9 +507,10 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             QPdfWriter pdfWriter(fn);
             pdfWriter.setResolution(preferences.exportPdfDpi);
             mag = pdfWriter.logicalDpiX() / DPI;
-            QSize size(lrint(r.width() * mag), lrint(r.height() * mag));
-            QPageSize ps(size, "", QPageSize::SizeMatchPolicy::ExactMatch);
+            QSizeF size(r.width() / DPI, r.height() / DPI);
+            QPageSize ps(size, QPageSize::Inch, "", QPageSize::ExactMatch);
             pdfWriter.setPageSize(ps);
+            pdfWriter.setPageMargins(QMarginsF(0.0, 0.0, 0.0, 0.0));
             pdfWriter.setCreator("MuseScore Version: " VERSION);
             pdfWriter.setTitle(fn);
             MScore::pixelRatio = DPI / pdfWriter.logicalDpiX();
