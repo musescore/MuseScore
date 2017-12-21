@@ -791,7 +791,9 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             printer.setDocName(fn);
             printer.setOutputFileName(fn);
             QPainter p(&printer);
+            MScore::pdfPrinting = true;
             paintRect(printMode, p, r, mag);
+            MScore::pdfPrinting = false;
             }
       else if (ext == "svg") {
             // note that clipping is not implemented
