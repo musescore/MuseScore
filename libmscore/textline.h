@@ -23,10 +23,10 @@ class Note;
 //   @@ TextLineSegment
 //---------------------------------------------------------
 
-class TextLineSegment : public TextLineBaseSegment {
+class TextLineSegment final : public TextLineBaseSegment {
    public:
       TextLineSegment(Score* s);
-      virtual ElementType type() const override     { return ElementType::TEXTLINE_SEGMENT; }
+      virtual ElementType type() const override       { return ElementType::TEXTLINE_SEGMENT; }
       virtual TextLineSegment* clone() const override { return new TextLineSegment(*this); }
       TextLine* textLine() const                      { return (TextLine*)spanner(); }
       virtual void layout() override;
@@ -42,14 +42,14 @@ class TextLineSegment : public TextLineBaseSegment {
 //   @@ TextLine
 //---------------------------------------------------------
 
-class TextLine : public TextLineBase {
+class TextLine final : public TextLineBase {
    public:
       TextLine(Score* s);
       TextLine(const TextLine&);
       ~TextLine() {}
 
       virtual TextLine* clone() const           { return new TextLine(*this); }
-      virtual ElementType type() const        { return ElementType::TEXTLINE; }
+      virtual ElementType type() const          { return ElementType::TEXTLINE; }
       virtual void styleChanged() override;
       virtual void reset() override;
       virtual LineSegment* createLineSegment() override;

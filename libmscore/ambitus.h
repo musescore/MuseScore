@@ -23,7 +23,7 @@ namespace Ms {
 //   @@ Ambitus
 //---------------------------------------------------------
 
-class Ambitus : public Element {
+class Ambitus final : public Element {
       NoteHead::Group     _noteHeadGroup;
       NoteHead::Type      _noteHeadType;
       MScore::DirectionH  _dir;

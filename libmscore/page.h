@@ -31,7 +31,7 @@ class MeasureBase;
 //   @P pagenumber int (read only)
 //---------------------------------------------------------
 
-class Page : public Element {
+class Page final : public Element {
       QList<System*> _systems;
       int _no;                      // page number
 #ifdef USE_BSP

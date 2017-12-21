@@ -23,7 +23,7 @@ namespace Ms {
 //    dummy element, used for drag&drop
 //---------------------------------------------------------
 
-class Icon : public Element {
+class Icon final : public Element {
       IconType _iconType { IconType::NONE };
       QByteArray _action;
       QIcon _icon;

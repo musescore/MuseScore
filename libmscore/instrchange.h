@@ -22,7 +22,7 @@ namespace Ms {
 //   @@ InstrumentChange
 //---------------------------------------------------------
 
-class InstrumentChange : public Text  {
+class InstrumentChange final : public Text  {
       Instrument* _instrument;  // Staff holds ownership if part of score
 
    public:
@@ -32,7 +32,7 @@ class InstrumentChange : public Text  {
       ~InstrumentChange();
 
       virtual InstrumentChange* clone() const override { return new InstrumentChange(*this); }
-      virtual ElementType type() const override      { return ElementType::INSTRUMENT_CHANGE; }
+      virtual ElementType type() const override        { return ElementType::INSTRUMENT_CHANGE; }
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
 

@@ -683,55 +683,6 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
       xml.etag();
       }
 
-#ifdef SCRIPT_INTERFACE
-
-//---------------------------------------------------------
-//   undoSetUserMag
-//---------------------------------------------------------
-
-void FretDiagram::undoSetUserMag(qreal val)
-      {
-      undoChangeProperty(P_ID::MAG, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetStrings
-//---------------------------------------------------------
-
-void FretDiagram::undoSetStrings(int val)
-      {
-      undoChangeProperty(P_ID::FRET_STRINGS, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetFrets
-//---------------------------------------------------------
-
-void FretDiagram::undoSetFrets(int val)
-      {
-      undoChangeProperty(P_ID::FRET_FRETS, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetBarre
-//---------------------------------------------------------
-
-void FretDiagram::undoSetBarre(int val)
-      {
-      undoChangeProperty(P_ID::FRET_BARRE, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetFretOffset
-//---------------------------------------------------------
-
-void FretDiagram::undoSetFretOffset(int val)
-      {
-      undoChangeProperty(P_ID::FRET_OFFSET, val);
-      }
-
-#endif // SCRIPT_INTERFACE
-
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------

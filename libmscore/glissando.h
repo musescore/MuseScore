@@ -30,7 +30,7 @@ enum class GlissandoType;
 //   @@ GlissandoSegment
 //---------------------------------------------------------
 
-class GlissandoSegment : public LineSegment {
+class GlissandoSegment final : public LineSegment {
    public:
       GlissandoSegment(Score* s) : LineSegment(s)           {}
       Glissando* glissando() const                          { return toGlissando(spanner()); }
@@ -51,7 +51,7 @@ class GlissandoSegment : public LineSegment {
 //   Glissando
 //---------------------------------------------------------
 
-class Glissando : public SLine {
+class Glissando final : public SLine {
       QString _text;
       GlissandoType _glissandoType;
       GlissandoStyle _glissandoStyle;

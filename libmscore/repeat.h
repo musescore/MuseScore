@@ -25,7 +25,7 @@ class Segment;
 //   @@ RepeatMeasure
 //---------------------------------------------------------
 
-class RepeatMeasure : public Rest {
+class RepeatMeasure final : public Rest {
       QPainterPath path;
 
    public:
@@ -33,7 +33,7 @@ class RepeatMeasure : public Rest {
       RepeatMeasure &operator=(const RepeatMeasure&) = delete;
       virtual RepeatMeasure* clone() const override   { return new RepeatMeasure(*this); }
       virtual Element* linkedClone() override         { return Element::linkedClone(); }
-      virtual ElementType type() const override     { return ElementType::REPEAT_MEASURE; }
+      virtual ElementType type() const override       { return ElementType::REPEAT_MEASURE; }
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
       virtual Fraction duration() const override;

@@ -771,9 +771,22 @@ Note* searchTieNote(Note* note)
       int etrack   = strack + part->staves()->size() * VOICES;
 
       if (chord->isGraceBefore()) {
-            // grace before
-            // try to tie to note in parent chord
             chord = toChord(chord->parent());
+
+            // try to tie to next grace note
+
+            int index = chord->graceIndex();
+            for (Chord* c : chord->graceNotes()) {
+                  if (c->graceIndex() == index + 1) {
+                        note2 = c->findNote(note->pitch());
+                        if (note2) {
+                              printf("found grace-grace tie\n");
+                              return note2;
+                              }
+                        }
+                  }
+
+            // try to tie to note in parent chord
             note2 = chord->findNote(note->pitch());
             if (note2)
                   return note2;

@@ -36,7 +36,7 @@ enum class TremoloType : char {
 //   @@ Tremolo
 //---------------------------------------------------------
 
-class Tremolo : public Element {
+class Tremolo final : public Element {
       TremoloType _tremoloType;
       Chord* _chord1;
       Chord* _chord2;
@@ -49,8 +49,8 @@ class Tremolo : public Element {
       Tremolo(const Tremolo&);
       Tremolo &operator=(const Tremolo&) = delete;
       virtual Tremolo* clone() const     { return new Tremolo(*this); }
-      virtual ElementType type() const { return ElementType::TREMOLO; }
-      virtual int subtype() const         { return (int) _tremoloType; }
+      virtual ElementType type() const   { return ElementType::TREMOLO; }
+      virtual int subtype() const        { return (int) _tremoloType; }
       virtual QString subtypeName() const;
 
       QString tremoloTypeName() const;

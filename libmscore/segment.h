@@ -81,7 +81,7 @@ constexpr bool operator& (const SegmentType t1, const SegmentType t2) {
 //   @P tick            int               midi tick position (read only)
 //------------------------------------------------------------------------
 
-class Segment : public Element {
+class Segment final : public Element {
       SegmentType _segmentType { SegmentType::Invalid };
       int _tick;                          // tick offset to measure
       int _ticks;

@@ -75,7 +75,7 @@ struct SwingParameters {
 ///    Global staff data not directly related to drawing.
 //---------------------------------------------------------
 
-class Staff : public ScoreElement {
+class Staff final : public ScoreElement {
    public:
       enum class HideMode { AUTO, ALWAYS, NEVER, INSTRUMENT };
 

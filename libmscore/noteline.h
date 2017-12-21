@@ -46,7 +46,7 @@ class TextLineSegment : public TextLineBaseSegment {
 //   @@ NoteLine
 //---------------------------------------------------------
 
-class NoteLine : public TextLineBase {
+class NoteLine final : public TextLineBase {
       Note* _startNote;
       Note* _endNote;
 
@@ -55,7 +55,7 @@ class NoteLine : public TextLineBase {
       NoteLine(const NoteLine&);
       ~NoteLine() {}
 
-      virtual NoteLine* clone() const           { return new NoteLine(*this); }
+      virtual NoteLine* clone() const         { return new NoteLine(*this); }
       virtual ElementType type() const        { return ElementType::NOTELINE; }
 
       void setStartNote(Note* n)  { _startNote = n; }

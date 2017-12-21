@@ -25,7 +25,7 @@ enum class ImageType : char { NONE, RASTER, SVG };
 //   @@ Image
 //---------------------------------------------------------
 
-class Image : public BSymbol {
+class Image final : public BSymbol {
       union {
             QImage*       rasterDoc;
             QSvgRenderer* svgDoc;
@@ -59,7 +59,7 @@ class Image : public BSymbol {
       Image(Score* = 0);
       Image(const Image&);
       ~Image();
-      virtual Image* clone() const override       { return new Image(*this); }
+      virtual Image* clone() const override     { return new Image(*this); }
       virtual ElementType type() const override { return ElementType::IMAGE; }
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;

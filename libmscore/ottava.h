@@ -47,10 +47,10 @@ class Ottava;
 //   @@ OttavaSegment
 //---------------------------------------------------------
 
-class OttavaSegment : public TextLineBaseSegment {
+class OttavaSegment final : public TextLineBaseSegment {
    public:
       OttavaSegment(Score* s) : TextLineBaseSegment(s)  { }
-      virtual ElementType type() const override   { return ElementType::OTTAVA_SEGMENT; }
+      virtual ElementType type() const override     { return ElementType::OTTAVA_SEGMENT; }
       virtual OttavaSegment* clone() const override { return new OttavaSegment(*this); }
       Ottava* ottava() const                        { return (Ottava*)spanner(); }
       virtual void layout() override;
@@ -68,7 +68,7 @@ class OttavaSegment : public TextLineBaseSegment {
 //   @P ottavaType  enum (Ottava.OTTAVA_8VA, .OTTAVA_8VB, .OTTAVA_15MA, .OTTAVA_15MB, .OTTAVA_22MA, .OTTAVA_22MB)
 //---------------------------------------------------------
 
-class Ottava : public TextLineBase {
+class Ottava final : public TextLineBase {
       OttavaType _ottavaType;
       bool _numbersOnly;
       PropertyFlags numbersOnlyStyle  { PropertyFlags::STYLED };

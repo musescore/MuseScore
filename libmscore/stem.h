@@ -24,7 +24,7 @@ class Chord;
 ///    Graphic representation of a note stem.
 //---------------------------------------------------------
 
-class Stem : public Element {
+class Stem final : public Element {
       QLineF line;                  // p1 is attached to notehead
       qreal _userLen   { 0.0 };
       qreal _len       { 0.0 };     // allways positive
@@ -35,7 +35,7 @@ class Stem : public Element {
       Stem &operator=(const Stem&) = delete;
 
       virtual Stem* clone() const        { return new Stem(*this); }
-      virtual ElementType type() const { return ElementType::STEM; }
+      virtual ElementType type() const   { return ElementType::STEM; }
       virtual void draw(QPainter*) const;
       virtual bool isEditable() const    { return true; }
       virtual void layout();

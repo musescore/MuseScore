@@ -22,11 +22,11 @@ namespace Ms {
 ///    not implemented yet
 //---------------------------------------------------------
 
-class Ossia : public Element {
+class Ossia final : public Element {
    public:
       Ossia(Score*);
       Ossia(const Ossia&);
-      virtual Ossia* clone() const override       { return new Ossia(*this); }
+      virtual Ossia* clone() const override     { return new Ossia(*this); }
       virtual ElementType type() const override { return ElementType::OSSIA; }
       };
 

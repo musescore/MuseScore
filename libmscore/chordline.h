@@ -31,7 +31,7 @@ enum class ChordLineType : char {
 ///    implements fall, doit, plop, bend
 //---------------------------------------------------------
 
-class ChordLine : public Element {
+class ChordLine final : public Element {
       ChordLineType _chordLineType;
       bool _straight;
       QPainterPath path;

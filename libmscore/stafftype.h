@@ -414,7 +414,7 @@ enum class TabBeamGrid : char {
       NUM_OF
       };
 
-class TabDurationSymbol : public Element {
+class TabDurationSymbol final : public Element {
       qreal       _beamLength;      // if _grid==MEDIALFINAL, length of the beam toward previous grid element
       int         _beamLevel;       // if _grid==MEDIALFINAL, the number of beams
       TabBeamGrid _beamGrid;        // value for special 'English' grid display

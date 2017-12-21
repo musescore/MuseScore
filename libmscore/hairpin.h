@@ -35,7 +35,7 @@ enum class HairpinType : char {
 //   @@ HairpinSegment
 //---------------------------------------------------------
 
-class HairpinSegment : public TextLineBaseSegment {
+class HairpinSegment final : public TextLineBaseSegment {
       bool    drawCircledTip;
       QPointF circledTip;
       qreal   circledTipRadius;
@@ -72,7 +72,7 @@ class HairpinSegment : public TextLineBaseSegment {
 //   @P veloChange   int
 //---------------------------------------------------------
 
-class Hairpin : public TextLineBase {
+class Hairpin final : public TextLineBase {
       HairpinType _hairpinType;
       int _veloChange;
       bool  _hairpinCircledTip;
