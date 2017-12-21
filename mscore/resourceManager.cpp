@@ -145,7 +145,7 @@ bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
 
 void ResourceManager::download()
       {
-      QPushButton *button = dynamic_cast<QPushButton*>( sender() );
+      QPushButton *button = qobject_cast<QPushButton*>( sender() );
       QString data = buttonMap[button];
       QString hash = buttonHashMap[button];
       button->setText(tr("Updating"));

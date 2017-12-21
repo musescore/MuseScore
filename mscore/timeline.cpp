@@ -317,9 +317,9 @@ void TRowLabels::restrict_scroll(int value)
 
             QGraphicsItem* graphics_item = pair_graphic_int.first;
 
-            QGraphicsRectItem* graphics_rect_item = dynamic_cast<QGraphicsRectItem*>(graphics_item);
-            QGraphicsLineItem* graphics_line_item = dynamic_cast<QGraphicsLineItem*>(graphics_item);
-            QGraphicsPixmapItem* graphics_pixmap_item = dynamic_cast<QGraphicsPixmapItem*>(graphics_item);
+            QGraphicsRectItem* graphics_rect_item = qgraphicsitem_cast<QGraphicsRectItem*>(graphics_item);
+            QGraphicsLineItem* graphics_line_item = qgraphicsitem_cast<QGraphicsLineItem*>(graphics_item);
+            QGraphicsPixmapItem* graphics_pixmap_item = qgraphicsitem_cast<QGraphicsPixmapItem*>(graphics_item);
             int y = pair_graphic_int.second * 20;
             int scrollbar_value = verticalScrollBar()->value();
 
@@ -490,7 +490,7 @@ void TRowLabels::mousePressEvent(QMouseEvent* event)
       else {
             //Check if pixmap was selected
             if (QGraphicsItem* graphics_item = scene()->itemAt(scene_pt, transform())) {
-                  QGraphicsPixmapItem* graphics_pixmap_item = dynamic_cast<QGraphicsPixmapItem*>(graphics_item);
+                  QGraphicsPixmapItem* graphics_pixmap_item = qgraphicsitem_cast<QGraphicsPixmapItem*>(graphics_item);
                   if (graphics_pixmap_item) {
                         unsigned int row = graphics_pixmap_item->data(2).value<unsigned int>();
                         if (row == num_metas - 1)
@@ -545,7 +545,7 @@ void TRowLabels::mouseMoveEvent(QMouseEvent* event)
 void TRowLabels::mouseReleaseEvent(QMouseEvent* event)
       {
       if (QGraphicsItem* graphics_item = scene()->itemAt(mapToScene(event->pos()), transform())) {
-                  QGraphicsPixmapItem* graphics_pixmap_item = dynamic_cast<QGraphicsPixmapItem*>(graphics_item);
+                  QGraphicsPixmapItem* graphics_pixmap_item = qgraphicsitem_cast<QGraphicsPixmapItem*>(graphics_item);
                   if (graphics_pixmap_item)
                         this->setCursor(Qt::PointingHandCursor);
                   else
@@ -582,7 +582,7 @@ void TRowLabels::mouseOver(QPointF scene_pt)
       {
       //Handle drawing of arrows
       if (QGraphicsItem* graphics_item = scene()->itemAt(scene_pt, transform())) {
-            QGraphicsPixmapItem* graphics_pixmap_item = dynamic_cast<QGraphicsPixmapItem*>(graphics_item);
+            QGraphicsPixmapItem* graphics_pixmap_item = qgraphicsitem_cast<QGraphicsPixmapItem*>(graphics_item);
             if (graphics_pixmap_item) {
                   this->setCursor(Qt::PointingHandCursor);
                   return;
@@ -681,7 +681,7 @@ void TRowLabels::mouseOver(QPointF scene_pt)
             old_item_info = tmp;
             }
       if (QGraphicsItem* graphics_item = scene()->itemAt(scene_pt, transform())) {
-            QGraphicsPixmapItem* graphics_pixmap_item = dynamic_cast<QGraphicsPixmapItem*>(graphics_item);
+            QGraphicsPixmapItem* graphics_pixmap_item = qgraphicsitem_cast<QGraphicsPixmapItem*>(graphics_item);
             if (graphics_pixmap_item)
                   this->setCursor(Qt::PointingHandCursor);
             else
@@ -1787,7 +1787,7 @@ void Timeline::drawSelection()
                   if (target_element) {
                         for (Element* element : element_list) {
                               if (element == target_element) {
-                                    QGraphicsRectItem* graphics_rect_item = dynamic_cast<QGraphicsRectItem*>(graphics_item);
+                                    QGraphicsRectItem* graphics_rect_item = qgraphicsitem_cast<QGraphicsRectItem*>(graphics_item);
                                     if (graphics_rect_item)
                                           graphics_rect_item->setBrush(QBrush(QColor(173,216,230)));
                                     }
@@ -1795,7 +1795,7 @@ void Timeline::drawSelection()
                         }
                   else if (seg) {
                         for (Element* element : element_list) {
-                              QGraphicsRectItem* graphics_rect_item = dynamic_cast<QGraphicsRectItem*>(graphics_item);
+                              QGraphicsRectItem* graphics_rect_item = qgraphicsitem_cast<QGraphicsRectItem*>(graphics_item);
                               if (graphics_rect_item) {
                                     for (int track = 0; track < _score->nstaves() * VOICES; track++) {
                                           if (element == seg->element(track))
@@ -1805,14 +1805,14 @@ void Timeline::drawSelection()
                               }
                         }
                   else {
-                        QGraphicsRectItem* graphics_rect_item = dynamic_cast<QGraphicsRectItem*>(graphics_item);
+                        QGraphicsRectItem* graphics_rect_item = qgraphicsitem_cast<QGraphicsRectItem*>(graphics_item);
                         if (graphics_rect_item)
                               graphics_rect_item->setBrush(QBrush(QColor(173,216,230)));
                         }
                   }
             //Change color from gray to only blue
             else if (it != meta_labels_set.end()) {
-                  QGraphicsRectItem* graphics_rect_item = dynamic_cast<QGraphicsRectItem*>(graphics_item);
+                  QGraphicsRectItem* graphics_rect_item = qgraphicsitem_cast<QGraphicsRectItem*>(graphics_item);
                   graphics_rect_item->setBrush(QBrush(QColor(graphics_rect_item->brush().color().red(),
                                                              graphics_rect_item->brush().color().green(),
                                                              255)));
@@ -1860,7 +1860,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
       int max_z_value = -4;
       QGraphicsItem* curr_graphics_item = nullptr;
       for (QGraphicsItem* graphics_item: graphics_item_list) {
-            QGraphicsRectItem* graphics_rect_item = dynamic_cast<QGraphicsRectItem*>(graphics_item);
+            QGraphicsRectItem* graphics_rect_item = qgraphicsitem_cast<QGraphicsRectItem*>(graphics_item);
             if (graphics_rect_item && graphics_item->zValue() > max_z_value) {
                   curr_graphics_item = graphics_item;
                   max_z_value = graphics_item->zValue();
@@ -2467,9 +2467,9 @@ void Timeline::handle_scroll(int value)
             std::pair<QGraphicsItem*, int> pair_graphics_int = *it;
 
             QGraphicsItem* graphics_item = pair_graphics_int.first;
-            QGraphicsRectItem* graphics_rect_item = dynamic_cast<QGraphicsRectItem*>(graphics_item);
-            QGraphicsLineItem* graphics_line_item = dynamic_cast<QGraphicsLineItem*>(graphics_item);
-            QGraphicsPixmapItem* graphics_pixmap_item = dynamic_cast<QGraphicsPixmapItem*>(graphics_item);
+            QGraphicsRectItem* graphics_rect_item = qgraphicsitem_cast<QGraphicsRectItem*>(graphics_item);
+            QGraphicsLineItem* graphics_line_item = qgraphicsitem_cast<QGraphicsLineItem*>(graphics_item);
+            QGraphicsPixmapItem* graphics_pixmap_item = qgraphicsitem_cast<QGraphicsPixmapItem*>(graphics_item);
 
             int row_y = pair_graphics_int.second * grid_height;
             int scrollbar_value = value;
@@ -2504,7 +2504,7 @@ void Timeline::mouseOver(QPointF pos)
       QGraphicsItem* hovered_graphics_item = 0;
       int max_z_value = -1;
       for (QGraphicsItem* curr_graphics_item: graphics_list) {
-            if (dynamic_cast<QGraphicsTextItem*>(curr_graphics_item))
+            if (qgraphicsitem_cast<QGraphicsTextItem*>(curr_graphics_item))
                   continue;
             if (curr_graphics_item->zValue() >= max_z_value && curr_graphics_item->zValue() < global_z_value) {
                   hovered_graphics_item = curr_graphics_item;
@@ -2520,8 +2520,8 @@ void Timeline::mouseOver(QPointF pos)
             if (std::get<0>(old_hover_info)) {
                   std::get<0>(old_hover_info)->setZValue(std::get<1>(old_hover_info));
                   static_cast<QGraphicsItem*>(std::get<0>(old_hover_info)->data(5).value<void*>())->setZValue(std::get<1>(old_hover_info));
-                  QGraphicsRectItem* graphics_rect_item1 = dynamic_cast<QGraphicsRectItem*>(std::get<0>(old_hover_info));
-                  QGraphicsRectItem* graphics_rect_item2 = dynamic_cast<QGraphicsRectItem*>(static_cast<QGraphicsItem*>(std::get<0>(old_hover_info)->data(5).value<void*>()));
+                  QGraphicsRectItem* graphics_rect_item1 = qgraphicsitem_cast<QGraphicsRectItem*>(std::get<0>(old_hover_info));
+                  QGraphicsRectItem* graphics_rect_item2 = qgraphicsitem_cast<QGraphicsRectItem*>(static_cast<QGraphicsItem*>(std::get<0>(old_hover_info)->data(5).value<void*>()));
                   if (graphics_rect_item1)
                         graphics_rect_item1->setBrush(QBrush(std::get<2>(old_hover_info)));
                   if (graphics_rect_item2)
@@ -2536,8 +2536,8 @@ void Timeline::mouseOver(QPointF pos)
             if (std::get<0>(old_hover_info)) {
                   std::get<0>(old_hover_info)->setZValue(std::get<1>(old_hover_info));
                   static_cast<QGraphicsItem*>(std::get<0>(old_hover_info)->data(5).value<void*>())->setZValue(std::get<1>(old_hover_info));
-                  QGraphicsRectItem* graphics_rect_item1 = dynamic_cast<QGraphicsRectItem*>(std::get<0>(old_hover_info));
-                  QGraphicsRectItem* graphics_rect_item2 = dynamic_cast<QGraphicsRectItem*>(static_cast<QGraphicsItem*>(std::get<0>(old_hover_info)->data(5).value<void*>()));
+                  QGraphicsRectItem* graphics_rect_item1 = qgraphicsitem_cast<QGraphicsRectItem*>(std::get<0>(old_hover_info));
+                  QGraphicsRectItem* graphics_rect_item2 = qgraphicsitem_cast<QGraphicsRectItem*>(static_cast<QGraphicsItem*>(std::get<0>(old_hover_info)->data(5).value<void*>()));
                   if (graphics_rect_item1)
                         graphics_rect_item1->setBrush(QBrush(std::get<2>(old_hover_info)));
                   if (graphics_rect_item2)
@@ -2554,8 +2554,8 @@ void Timeline::mouseOver(QPointF pos)
       if (std::get<0>(old_hover_info)) {
             std::get<0>(old_hover_info)->setZValue(std::get<1>(old_hover_info));
             static_cast<QGraphicsItem*>(std::get<0>(old_hover_info)->data(5).value<void*>())->setZValue(std::get<1>(old_hover_info));
-            QGraphicsRectItem* graphics_rect_item1 = dynamic_cast<QGraphicsRectItem*>(std::get<0>(old_hover_info));
-            QGraphicsRectItem* graphics_rect_item2 = dynamic_cast<QGraphicsRectItem*>(static_cast<QGraphicsItem*>(std::get<0>(old_hover_info)->data(5).value<void*>()));
+            QGraphicsRectItem* graphics_rect_item1 = qgraphicsitem_cast<QGraphicsRectItem*>(std::get<0>(old_hover_info));
+            QGraphicsRectItem* graphics_rect_item2 = qgraphicsitem_cast<QGraphicsRectItem*>(static_cast<QGraphicsItem*>(std::get<0>(old_hover_info)->data(5).value<void*>()));
             if (graphics_rect_item1)
                   graphics_rect_item1->setBrush(QBrush(std::get<2>(old_hover_info)));
             if (graphics_rect_item2)
@@ -2572,8 +2572,8 @@ void Timeline::mouseOver(QPointF pos)
       hovered_graphics_item->setZValue(global_z_value + 1);
       pair_item->setZValue(global_z_value + 1);
 
-      QGraphicsRectItem* graphics_rect_item1 = dynamic_cast<QGraphicsRectItem*>(hovered_graphics_item);
-      QGraphicsRectItem* graphics_rect_item2 = dynamic_cast<QGraphicsRectItem*>(pair_item);
+      QGraphicsRectItem* graphics_rect_item1 = qgraphicsitem_cast<QGraphicsRectItem*>(hovered_graphics_item);
+      QGraphicsRectItem* graphics_rect_item2 = qgraphicsitem_cast<QGraphicsRectItem*>(pair_item);
       if (graphics_rect_item1) {
             std::get<2>(old_hover_info) = graphics_rect_item1->brush().color();
             if (std::get<2>(old_hover_info) != QColor(173,216,230))
@@ -2686,7 +2686,7 @@ void Timeline::contextMenuEvent(QContextMenuEvent*)
 
 void Timeline::toggleMetaRow()
       {
-      QAction* action = dynamic_cast<QAction*>(QObject::sender());
+      QAction* action = qobject_cast<QAction*>(QObject::sender());
       if (action) {
             QString target_text = action->text();
 

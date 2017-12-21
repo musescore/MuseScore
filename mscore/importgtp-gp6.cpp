@@ -776,9 +776,11 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
 
                         cr->setDurationType(d);
 
-                        auto lyrchord = dynamic_cast<Chord*>(cr);
-                        if (lyrchord && lyrchord->notes().size())
-                              lyrNote = lyrchord->notes().front();
+                        if (cr->isChord()) {
+                              auto lyrchord = toChord(cr);
+                              if (lyrchord && lyrchord->notes().size())
+                                    lyrNote = lyrchord->notes().front();
+                              }
 
                         if (!segment->cr(track))
                               segment->add(cr);
@@ -1699,7 +1701,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                         art->setUp(true);
                         art->setAnchor(ArticulationAnchor::TOP_STAFF);
                         auto seg = cr->segment()->prev1(SegmentType::ChordRest);
-                        if (seg && dynamic_cast<Chord*>(seg->cr(track))) {
+                        if (seg && seg->cr(track)->isChord()) {
                               seg->cr(track)->add(art);
                               }
                         else
