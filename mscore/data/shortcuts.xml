@@ -225,6 +225,26 @@
     <seq>X</seq>
     </SC>
   <SC>
+    <key>sharp</key>
+    <seq>#</seq>
+    </SC>
+  <SC>
+    <key>nat</key>
+    <seq>=</seq>
+    </SC>
+  <SC>
+    <key>flat</key>
+    <seq>-</seq>
+    </SC>
+  <SC>
+    <key>add-brackets</key>
+    <seq>(</seq>
+    </SC>
+  <SC>
+    <key>no-beam</key>
+    <seq>)</seq>
+    </SC>
+  <SC>
     <key>pitch-up</key>
     <seq>Up</seq>
     </SC>
@@ -604,7 +624,7 @@
     </SC>
    <SC>
     <key>system-break</key>
-   <seq>Return</seq>
+    <seq>Return</seq>
     </SC>
   <SC>
     <key>page-break</key>
