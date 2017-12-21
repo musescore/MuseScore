@@ -505,16 +505,18 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
       double pr = MScore::pixelRatio;
       if (ext == "pdf") {
             QPdfWriter pdfWriter(fn);
-            mag = pdfWriter.logicalDpiX() / DPI;
             pdfWriter.setResolution(preferences.exportPdfDpi);
-            QSizeF size(r.width() * mag, r.height() * mag);
-            QPageSize ps(QPageSize::id(size, QPageSize::Inch));
+            mag = pdfWriter.logicalDpiX() / DPI;
+            QSize size(lrint(r.width() * mag), lrint(r.height() * mag));
+            QPageSize ps(size, "", QPageSize::SizeMatchPolicy::ExactMatch);
             pdfWriter.setPageSize(ps);
             pdfWriter.setCreator("MuseScore Version: " VERSION);
             pdfWriter.setTitle(fn);
             MScore::pixelRatio = DPI / pdfWriter.logicalDpiX();
             QPainter p(&pdfWriter);
+            MScore::pdfPrinting = true;
             paintRect(printMode, p, r, mag);
+            MScore::pdfPrinting = false;
             }
       else if (ext == "svg") {
             // note that clipping is not implemented
