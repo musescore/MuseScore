@@ -35,19 +35,7 @@ static const int DEFAULT_FRETS = 5;
 //   @P fretOffset int
 //---------------------------------------------------------
 
-class FretDiagram : public Element {
-
-#ifdef SCRIPT_INTERFACE
-   public:
-      void undoSetUserMag(qreal val);
-      void undoSetStrings(int val);
-      void undoSetFrets(int val);
-      void undoSetBarre(int val);
-      void undoSetFretOffset(int val);
-
-   private:
-#endif
-
+class FretDiagram final : public Element {
       int _strings       { DEFAULT_STRINGS };
       int maxStrings     { 0 };
       int _frets         { DEFAULT_FRETS };

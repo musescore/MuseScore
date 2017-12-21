@@ -30,7 +30,7 @@ enum class SpacerType : char {
 ///    Vertical spacer element to adjust the distance of staves.
 //-------------------------------------------------------------------
 
-class Spacer : public Element {
+class Spacer final : public Element {
       SpacerType _spacerType;
       qreal _gap;
 

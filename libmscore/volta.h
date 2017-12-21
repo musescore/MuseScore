@@ -29,10 +29,10 @@ extern LineSegment* voltaDebug;
 //   @@ VoltaSegment
 //---------------------------------------------------------
 
-class VoltaSegment : public TextLineBaseSegment {
+class VoltaSegment final : public TextLineBaseSegment {
    public:
       VoltaSegment(Score* s) : TextLineBaseSegment(s) {}
-      virtual ElementType type() const override   { return ElementType::VOLTA_SEGMENT; }
+      virtual ElementType type() const override     { return ElementType::VOLTA_SEGMENT; }
       virtual VoltaSegment* clone() const override  { return new VoltaSegment(*this); }
       Volta* volta() const                          { return (Volta*)spanner(); }
       virtual void layout() override;
@@ -51,7 +51,7 @@ class VoltaSegment : public TextLineBaseSegment {
 //   @P voltaType  enum (Volta.CLOSE, Volta.OPEN)
 //---------------------------------------------------------
 
-class Volta : public TextLineBase {
+class Volta final : public TextLineBase {
       QList<int> _endings;
 
    public:
@@ -61,7 +61,7 @@ class Volta : public TextLineBase {
 
       Volta(Score* s);
       virtual Volta* clone()       const override { return new Volta(*this); }
-      virtual ElementType type() const override { return ElementType::VOLTA; }
+      virtual ElementType type() const override   { return ElementType::VOLTA; }
       virtual LineSegment* createLineSegment() override;
 
       virtual void write(XmlWriter&) const override;

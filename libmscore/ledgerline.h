@@ -28,14 +28,14 @@ class Chord;
 //!    y-origin:   SStaff
 //---------------------------------------------------------
 
-class LedgerLine : public Line {
+class LedgerLine final : public Line {
       LedgerLine* _next;
 
    public:
       LedgerLine(Score*);
       LedgerLine &operator=(const LedgerLine&) = delete;
       virtual LedgerLine* clone() const override { return new LedgerLine(*this); }
-      virtual ElementType type() const override { return ElementType::LEDGER_LINE; }
+      virtual ElementType type() const override  { return ElementType::LEDGER_LINE; }
       virtual QPointF pagePos() const override;      ///< position in page coordinates
       Chord* chord() const { return (Chord*)parent(); }
       virtual void layout() override;

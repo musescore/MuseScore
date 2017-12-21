@@ -30,7 +30,7 @@ struct BeamFragment;
 //   @@ Beam
 //---------------------------------------------------------
 
-class Beam : public Element {
+class Beam final : public Element {
       QVector<ChordRest*> _elements;        // must be sorted by tick
       QVector<QLineF*> beamSegments;
       Direction _direction;
@@ -76,7 +76,7 @@ class Beam : public Element {
       Beam(const Beam&);
       ~Beam();
       virtual Beam* clone() const override         { return new Beam(*this); }
-      virtual ElementType type() const override  { return ElementType::BEAM; }
+      virtual ElementType type() const override    { return ElementType::BEAM; }
       virtual QPointF pagePos() const override;    ///< position in page coordinates
       virtual QPointF canvasPos() const override;  ///< position in page coordinates
 

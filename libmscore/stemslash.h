@@ -23,7 +23,7 @@ namespace Ms {
 ///    used for grace notes of type acciaccatura
 //---------------------------------------------------------
 
-class StemSlash : public Element {
+class StemSlash final : public Element {
       QLineF line;
 
    public:
@@ -33,7 +33,7 @@ class StemSlash : public Element {
       void setLine(const QLineF& l);
 
       virtual StemSlash* clone() const   { return new StemSlash(*this); }
-      virtual ElementType type() const { return ElementType::STEM_SLASH; }
+      virtual ElementType type() const   { return ElementType::STEM_SLASH; }
       virtual void draw(QPainter*) const;
       virtual void layout();
       Chord* chord() const               { return (Chord*)parent(); }

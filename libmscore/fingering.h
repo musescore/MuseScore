@@ -24,10 +24,10 @@ class Note;
 //   @@ Fingering
 //---------------------------------------------------------
 
-class Fingering : public Text {
+class Fingering final : public Text {
    public:
       Fingering(Score* s);
-      virtual Fingering* clone() const override   { return new Fingering(*this); }
+      virtual Fingering* clone() const override { return new Fingering(*this); }
       virtual ElementType type() const override { return ElementType::FINGERING; }
 
       Note* note() const { return toNote(parent()); }

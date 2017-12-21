@@ -23,7 +23,7 @@ class PalmMute;
 //   @@ PalmMuteSegment
 //---------------------------------------------------------
 
-class PalmMuteSegment : public TextLineBaseSegment {
+class PalmMuteSegment final : public TextLineBaseSegment {
 
    public:
       PalmMuteSegment(Score* s) : TextLineBaseSegment(s) {}
@@ -39,7 +39,7 @@ class PalmMuteSegment : public TextLineBaseSegment {
 //   @@ PalmMute
 //---------------------------------------------------------
 
-class PalmMute : public TextLineBase {
+class PalmMute final : public TextLineBase {
 
    protected:
       QPointF linePos(Grip, System**) const override;

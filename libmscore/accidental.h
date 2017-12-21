@@ -163,7 +163,7 @@ struct SymElement {
 //   @P small       bool
 //---------------------------------------------------------
 
-class Accidental : public Element {
+class Accidental final : public Element {
       QList<SymElement> el;
       AccidentalType _accidentalType { AccidentalType::NONE };
       bool _small                    { false                   };

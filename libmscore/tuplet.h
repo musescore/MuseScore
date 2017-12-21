@@ -32,7 +32,7 @@ class Spanner;
 //!    A tuplet note has len of _baseLen * _normalNotes / _actualNotes.
 //------------------------------------------------------------------------
 
-class Tuplet : public DurationElement {
+class Tuplet final : public DurationElement {
       // the tick position of a tuplet is the tick position of its
       // first element:
       int _tick;

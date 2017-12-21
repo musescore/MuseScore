@@ -24,7 +24,7 @@ class Accidental;
 //   @@ VibratoSegment
 //---------------------------------------------------------
 
-class VibratoSegment : public LineSegment {
+class VibratoSegment final : public LineSegment {
       std::vector<SymId> _symbols;
 
       void symbolLine(SymId start, SymId fill);
@@ -51,7 +51,7 @@ class VibratoSegment : public LineSegment {
 //   Vibrato
 //---------------------------------------------------------
 
-class Vibrato : public SLine {
+class Vibrato final : public SLine {
    public:
       enum class Type : char {
             GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE

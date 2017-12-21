@@ -2190,8 +2190,10 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
             if (score()->tagIsValid(e->tag()))
                   e->scanElements(data, func, all);
             }
-      for (Spanner* sp : _spannerFor)
+      for (Spanner* sp : _spannerFor) {
+            printf("Note scan %d %s\n", tick(), sp->name());
             sp->scanElements(data, func, all);
+            }
 
       if (!dragMode && _accidental)
             func(data, _accidental);
@@ -3064,10 +3066,10 @@ Element* Note::prevSegmentElement()
 //   lastTiedNote
 //---------------------------------------------------------
 
-Note* Note::lastTiedNote() const
+const Note* Note::lastTiedNote() const
       {
-      std::vector<Note*> notes;
-      Note* note = const_cast<Note*>(this);
+      std::vector<const Note*> notes;
+      const Note* note = this;
       notes.push_back(note);
       while (note->tieFor()) {
             if (std::find(notes.begin(), notes.end(), note->tieFor()->endNote()) != notes.end())

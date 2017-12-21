@@ -24,7 +24,7 @@ class Accidental;
 //   @@ TrillSegment
 //---------------------------------------------------------
 
-class TrillSegment : public LineSegment {
+class TrillSegment final : public LineSegment {
       std::vector<SymId> _symbols;
 
       void symbolLine(SymId start, SymId fill);
@@ -57,7 +57,7 @@ class TrillSegment : public LineSegment {
 //   @P trillType  enum (Trill.DOWNPRALL_LINE, .PRALLPRALL_LINE, .PURE_LINE, .TRILL_LINE, .UPPRALL_LINE)
 //---------------------------------------------------------
 
-class Trill : public SLine {
+class Trill final : public SLine {
    public:
       enum class Type : char {
             TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE,

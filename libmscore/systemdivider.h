@@ -22,7 +22,7 @@ namespace Ms {
 //   SystemDivider
 //---------------------------------------------------------
 
-class SystemDivider : public Symbol {
+class SystemDivider final : public Symbol {
    public:
       enum Type { LEFT, RIGHT };
 
@@ -34,7 +34,7 @@ class SystemDivider : public Symbol {
       SystemDivider(const SystemDivider&);
 
       virtual SystemDivider* clone() const override   { return new SystemDivider(*this); }
-      virtual ElementType type() const override     { return ElementType::SYSTEM_DIVIDER; }
+      virtual ElementType type() const override       { return ElementType::SYSTEM_DIVIDER; }
 
       Type dividerType() const                        { return _dividerType; }
       void setDividerType(Type v);

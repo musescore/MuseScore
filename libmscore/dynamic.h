@@ -28,7 +28,7 @@ class Segment;
 //   @P range  enum (Dynamic.STAFF, .PART, .SYSTEM)
 //-----------------------------------------------------------------------------
 
-class Dynamic : public Text {
+class Dynamic final : public Text {
    public:
       enum class Type : char {
             OTHER,
@@ -79,7 +79,7 @@ class Dynamic : public Text {
       Dynamic(Score*);
       Dynamic(const Dynamic&);
       virtual Dynamic* clone() const override     { return new Dynamic(*this); }
-      virtual ElementType type() const override { return ElementType::DYNAMIC; }
+      virtual ElementType type() const override   { return ElementType::DYNAMIC; }
       Segment* segment() const                    { return (Segment*)parent(); }
       Measure* measure() const                    { return (Measure*)parent()->parent(); }
 
