@@ -79,13 +79,13 @@ add_library (
 ##
 
 set(COVERAGE_OPTIONS "")
-if (NOT APPLE AND NOT MINGW)
-   if (ENABLE_COVERAGE)
+if (NOT APPLE AND NOT MINGW AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
+   if (COVERAGE)
       set(COVERAGE_OPTIONS "-O0 --coverage")
       set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
       target_link_libraries(libmscore gcov)
-   endif (ENABLE_COVERAGE)
-endif (NOT APPLE AND NOT MINGW)
+   endif (COVERAGE)
+endif (NOT APPLE AND NOT MINGW AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
 
 
