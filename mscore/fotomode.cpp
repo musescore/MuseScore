@@ -782,6 +782,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
 
       if (ext == "pdf") {
             QPrinter printer(QPrinter::HighResolution);
+            printer.setOutputFormat(QPrinter::PdfFormat);
             mag = printer.logicalDpiX() / DPI;
             printer.setPaperSize(QSizeF(r.width() * mag, r.height() * mag) , QPrinter::DevicePixel);
             printer.setCreator("MuseScore Version: " VERSION);
@@ -789,8 +790,6 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             printer.setColorMode(QPrinter::Color);
             printer.setDocName(fn);
             printer.setOutputFileName(fn);
-            if (ext == "pdf")
-                  printer.setOutputFormat(QPrinter::PdfFormat);
             QPainter p(&printer);
             paintRect(printMode, p, r, mag);
             }
