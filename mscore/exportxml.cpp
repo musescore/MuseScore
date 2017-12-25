@@ -4439,12 +4439,17 @@ void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
 
       if (!previousMeasure)
             currentSystem = TopSystem;
-      else if (m->parent() && previousMeasure->parent()) {
-            if (m->parent()->parent() != previousMeasure->parent()->parent())
-                  currentSystem = NewPage;
-            else if (m->parent() != previousMeasure->parent())
-                  currentSystem = NewSystem;
+      else {
+            const auto mSystem = m->mmRest1()->system();
+            const auto previousMeasureSystem = previousMeasure->mmRest1()->system();
+
+            if (mSystem && previousMeasureSystem) {
+                  if (mSystem->page() != previousMeasureSystem->page())
+                        currentSystem = NewPage;
+                  else if (mSystem != previousMeasureSystem)
+                        currentSystem = NewSystem;
             }
+      }
 
       bool prevMeasLineBreak = false;
       bool prevMeasPageBreak = false;
