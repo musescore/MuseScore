@@ -1333,16 +1333,27 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                               }
                         }
                   if (empty) {
-                        Segment* s = m->getSegment(SegmentType::ChordRest, m->tick());
-                        Rest* rest = new Rest(score);
-                        TDuration d(m->len());
-                        if ((m->len() == m->timesig()) || !d.isValid())
+
+                        if ((m->len() == m->timesig())) {
+                              Segment* s = m->getSegment(SegmentType::ChordRest, m->tick());
+                              Rest* rest = new Rest(score);
                               rest->setDurationType(TDuration::DurationType::V_MEASURE);
-                        else
-                              rest->setDurationType(d.type());
-                        rest->setDuration(m->len());
-                        rest->setTrack(staffIdx * VOICES);
-                        s->add(rest);
+                              rest->setDuration(m->len());
+                              rest->setTrack(staffIdx * VOICES);
+                              s->add(rest);
+                              }
+                        else {
+                              auto durList = toDurationList(m->len(), true);
+                              int tickOffset = 0;
+                              for (auto d : durList) {
+                                    Segment* s = m->getSegment(SegmentType::ChordRest, m->tick() + tickOffset);
+                                    Rest* rest = new Rest(score);
+                                    rest->setDurationType(d);
+                                    rest->setTrack(staffIdx * VOICES);
+                                    s->add(rest);
+                                    tickOffset += d.ticks();
+                                    }
+                              }
                         }
                   }
             }
