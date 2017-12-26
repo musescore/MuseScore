@@ -4447,6 +4447,25 @@ static void initReverseInstrMap(MxmlReverseInstrumentMap& rim, const MxmlInstrum
       }
 
 //---------------------------------------------------------
+//  findSystem - find the system for a measure
+//---------------------------------------------------------
+
+/*
+ For measures in a multi-measure rest, parent() contains a nullptr;
+ Use mmRest1(), which either returns the measure itself (regular measure)
+ or the enclosing multi-measure rest.
+ */
+
+static System* findSystem(const Measure* const m)
+{
+      auto sys = m->mmRest1()->parent();
+      Q_ASSERT(sys && sys->type() == ElementType::SYSTEM);
+      //qDebug("findSystem(m %p type %hhd '%s')", m, m->type(), m->name());
+      //qDebug("findSystem(sys %p type %hhd '%s')", sys, sys->type(), sys->name());
+      return dynamic_cast<System*>(sys);
+}
+
+//---------------------------------------------------------
 //  print
 //---------------------------------------------------------
 
@@ -4474,12 +4493,17 @@ void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
 
       if (!previousMeasure)
             currentSystem = TopSystem;
-      else if (m->parent() && previousMeasure->parent()) {
-            if (m->parent()->parent() != previousMeasure->parent()->parent())
-                  currentSystem = NewPage;
-            else if (m->parent() != previousMeasure->parent())
-                  currentSystem = NewSystem;
+      else {
+            const auto mSystem = findSystem(m);
+            const auto previousMeasureSystem = findSystem(previousMeasure);
+
+            if (mSystem && previousMeasureSystem) {
+                  if (mSystem->page() != previousMeasureSystem->page())
+                        currentSystem = NewPage;
+                  else if (mSystem != previousMeasureSystem)
+                        currentSystem = NewSystem;
             }
+      }
 
       bool prevMeasLineBreak = false;
       bool prevMeasPageBreak = false;
