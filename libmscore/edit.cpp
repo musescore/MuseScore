@@ -1060,14 +1060,23 @@ void Score::cmdAddTie()
                   }
 
             if (noteEntryMode()) {
-                  // set cursor at position after note
-                  _is.setSegment(note->chord()->segment());
-                  _is.moveToNextInputPos();
-                  _is.setLastSegment(_is.segment());
+                  ChordRest* cr = nullptr;
+                  Chord* c = note->chord();
 
-                  if (_is.cr() == 0)
-                        expandVoice();
-                  ChordRest* cr = _is.cr();
+                  // set cursor at position after note
+                  if (c->isGraceBefore()) {
+                        // tie grace note before to main note
+                        cr = toChord(c->parent());
+                        }
+                  else {
+                        _is.setSegment(note->chord()->segment());
+                        _is.moveToNextInputPos();
+                        _is.setLastSegment(_is.segment());
+
+                        if (_is.cr() == 0)
+                              expandVoice();
+                        cr = _is.cr();
+                        }
                   if (cr == 0)
                         break;
 
@@ -1107,7 +1116,7 @@ void Score::cmdAddTie()
                               tie->setEndNote(nnote);
                               tie->setTrack(note->track());
                               undoAddElement(tie);
-                              if (!addFlag || nnote->chord() == lastAddedChord) {
+                              if (!addFlag || nnote->chord()->tick() >= lastAddedChord->tick() || nnote->chord()->isGrace()) {
                                     break;
                                     }
                               else {
