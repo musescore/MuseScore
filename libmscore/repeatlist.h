@@ -44,8 +44,9 @@ class RepeatList: public QList<RepeatSegment*>
 
       RepeatSegment* rs;            // tmp value during unwind()
 
-      Measure* jumpToStartRepeat(Measure*);
       void unwindSection(Measure* fm, Measure* em);
+      Measure* findStartRepeat(Measure*);
+      int findStartFromRepeatCount(Measure * const startFrom, Measure * const sectionEndMeasure);
 
    public:
       RepeatList(Score* s);
