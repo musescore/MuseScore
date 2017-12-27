@@ -129,8 +129,8 @@ p, li { white-space: pre-wrap; }
           </Text>
         <Text>
           <style>Subtitle</style>
-          <text>Playback 123-24-256
-(Repeat No of 2. Volta set to 1)</text>
+          <text>Playback 123-256
+(Repeat No of 2. Volta set to 1, so it will be skipped)</text>
           </Text>
         </VBox>
       <Measure number="1">

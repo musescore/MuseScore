@@ -28,7 +28,6 @@
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
@@ -55,12 +54,11 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
           <pos x="-1.65" y="8.89999"/>
           <text>Playback should be 1234 356 23567
-A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
+</text>
           </StaffText>
         <Chord>
           <durationType>quarter</durationType>
@@ -166,7 +164,6 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
         <endRepeat>2</endRepeat>
         <Volta id="2">
           <endHookType>1</endHookType>
-          <lineWidth>0.1</lineWidth>
           <beginText>1.</beginText>
           <endings>1</endings>
           </Volta>
@@ -202,7 +199,6 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
       <Measure number="5">
         <endSpanner id="2"/>
         <Volta id="3">
-          <lineWidth>0.1</lineWidth>
           <beginText>2.</beginText>
           <endings>2</endings>
           </Volta>
@@ -287,7 +283,6 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
             </Note>
           </Chord>
         <BarLine>
-          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>

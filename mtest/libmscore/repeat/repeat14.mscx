@@ -1649,7 +1649,7 @@
             <offset x="0.832017" y="-2.6585"/>
             </Segment>
           <beginText>2.</beginText>
-          <endings>1</endings>
+          <endings>2</endings>
           </Volta>
         <Chord>
           <durationType>whole</durationType>
@@ -1700,7 +1700,7 @@
             <offset x="0.113878" y="-2.65662"/>
             </Segment>
           <beginText>3.</beginText>
-          <endings>1</endings>
+          <endings>3</endings>
           </Volta>
         <Chord>
           <durationType>whole</durationType>

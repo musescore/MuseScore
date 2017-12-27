@@ -56,7 +56,7 @@
           <pos x="-3.61536" y="1.48464"/>
           <style></style>
           <text>Volta test 1
-playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</text>
+playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2, end</text>
           </Text>
         </VBox>
       <Measure number="1">
@@ -214,7 +214,7 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
             <off2 x="0" y="0"/>
             </Segment>
           <beginText>2.</beginText>
-          <endings>1</endings>
+          <endings>2</endings>
           </Volta>
         <Chord>
           <durationType>quarter</durationType>
