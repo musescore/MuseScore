@@ -195,6 +195,7 @@
             <string>4</string>
             </Note>
           </Chord>
+        <endSpanner id="2"/>
         </Measure>
       </Staff>
     <Staff id="2">

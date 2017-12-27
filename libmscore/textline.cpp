@@ -151,6 +151,7 @@ void TextLineSegment::styleChanged()
 TextLine::TextLine(Score* s)
    : TextLineBase(s)
       {
+      init();
       setPlacement(Placement::ABOVE);
       }
 

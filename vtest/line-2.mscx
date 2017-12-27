@@ -14,7 +14,6 @@
       <minSystemDistance>5.5</minSystemDistance>
       <maxSystemDistance>7.5</maxSystemDistance>
       <lastSystemFillLimit>0.03</lastSystemFillLimit>
-      <pedalY>7</pedalY>
       <showMeasureNumber>0</showMeasureNumber>
       <showFooter>0</showFooter>
       <page-layout>

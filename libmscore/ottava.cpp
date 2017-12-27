@@ -184,6 +184,24 @@ StyleIdx OttavaSegment::getPropertyStyle(P_ID id) const
             case P_ID::LINE_WIDTH:
             case P_ID::LINE_STYLE:
             case P_ID::NUMBERS_ONLY:
+            case P_ID::BEGIN_FONT_FACE:
+            case P_ID::CONTINUE_FONT_FACE:
+            case P_ID::END_FONT_FACE:
+            case P_ID::BEGIN_FONT_SIZE:
+            case P_ID::CONTINUE_FONT_SIZE:
+            case P_ID::END_FONT_SIZE:
+            case P_ID::BEGIN_FONT_BOLD:
+            case P_ID::CONTINUE_FONT_BOLD:
+            case P_ID::END_FONT_BOLD:
+            case P_ID::BEGIN_FONT_ITALIC:
+            case P_ID::CONTINUE_FONT_ITALIC:
+            case P_ID::END_FONT_ITALIC:
+            case P_ID::BEGIN_FONT_UNDERLINE:
+            case P_ID::CONTINUE_FONT_UNDERLINE:
+            case P_ID::END_FONT_UNDERLINE:
+            case P_ID::BEGIN_TEXT_ALIGN:
+            case P_ID::CONTINUE_TEXT_ALIGN:
+            case P_ID::END_TEXT_ALIGN:
                   return ottava()->getPropertyStyle(id);
 
             default:
@@ -207,13 +225,14 @@ void OttavaSegment::styleChanged()
 Ottava::Ottava(Score* s)
    : TextLineBase(s)
       {
-      setFlag(ElementFlag::ON_STAFF, true);
-
       _numbersOnly = score()->styleB(StyleIdx::ottavaNumbersOnly);
+      setFlag(ElementFlag::ON_STAFF, true);
       setOttavaType(OttavaType::OTTAVA_8VA);
+      init();
 
       resetProperty(P_ID::LINE_WIDTH);
       resetProperty(P_ID::LINE_STYLE);
+#if 0
       resetProperty(P_ID::PLACEMENT);
       resetProperty(P_ID::END_HOOK_TYPE);
       resetProperty(P_ID::END_HOOK_HEIGHT);
@@ -224,14 +243,15 @@ Ottava::Ottava(Score* s)
       resetProperty(P_ID::BEGIN_FONT_UNDERLINE);
       resetProperty(P_ID::BEGIN_TEXT_ALIGN);
       resetProperty(P_ID::CONTINUE_TEXT_ALIGN);
+#endif
       }
 
 Ottava::Ottava(const Ottava& o)
    : TextLineBase(o)
       {
+      setOttavaType(o._ottavaType);
       _numbersOnly = o._numbersOnly;
       _pitchShift  = o._pitchShift;
-      setOttavaType(o._ottavaType);
       }
 
 //---------------------------------------------------------
@@ -535,17 +555,28 @@ StyleIdx Ottava::getPropertyStyle(P_ID id) const
             case P_ID::PLACEMENT:
                   return StyleIdx::ottavaPlacement;
             case P_ID::BEGIN_FONT_FACE:
+            case P_ID::CONTINUE_FONT_FACE:
+            case P_ID::END_FONT_FACE:
                   return StyleIdx::ottavaFontFace;
             case P_ID::BEGIN_FONT_SIZE:
+            case P_ID::CONTINUE_FONT_SIZE:
+            case P_ID::END_FONT_SIZE:
                   return StyleIdx::ottavaFontSize;
             case P_ID::BEGIN_FONT_BOLD:
+            case P_ID::CONTINUE_FONT_BOLD:
+            case P_ID::END_FONT_BOLD:
                   return StyleIdx::ottavaFontBold;
             case P_ID::BEGIN_FONT_ITALIC:
+            case P_ID::CONTINUE_FONT_ITALIC:
+            case P_ID::END_FONT_ITALIC:
                   return StyleIdx::ottavaFontItalic;
             case P_ID::BEGIN_FONT_UNDERLINE:
+            case P_ID::CONTINUE_FONT_UNDERLINE:
+            case P_ID::END_FONT_UNDERLINE:
                   return StyleIdx::ottavaFontUnderline;
             case P_ID::BEGIN_TEXT_ALIGN:
             case P_ID::CONTINUE_TEXT_ALIGN:
+            case P_ID::END_TEXT_ALIGN:
                   return StyleIdx::ottavaTextAlign;
             default:
                   break;

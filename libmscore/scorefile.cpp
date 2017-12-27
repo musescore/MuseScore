@@ -1225,7 +1225,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
             if (clip || ls == 0) {
                   for (Spanner* s : spanners) {
                         if ((s->tick2() == endTick)
-                          && s->isSlur()
+                          && !s->isSlur()
                           && (s->track2() == track || (s->track2() == -1 && s->track() == track))
                           && (!clip || s->tick() >= fs->tick())
                           ) {

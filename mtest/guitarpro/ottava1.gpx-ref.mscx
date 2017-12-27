@@ -232,6 +232,7 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
+        <endSpanner id="6"/>
         </Measure>
       </Staff>
     <Score>

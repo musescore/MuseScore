@@ -74,7 +74,6 @@
           <lid>4</lid>
           </Dynamic>
         <PalmMute id="2">
-          <beginTextOffset x="0" y="0"/>
           <lid>14</lid>
           </PalmMute>
         <Chord>
@@ -217,7 +216,6 @@
             <lid>4</lid>
             </Dynamic>
           <PalmMute id="3">
-            <beginTextOffset x="0" y="0"/>
             <lid>14</lid>
             </PalmMute>
           <Chord>
@@ -274,7 +272,6 @@
             <accidental>0</accidental>
             </KeySig>
           <PalmMute id="4">
-            <beginTextOffset x="0" y="0"/>
             <lid>14</lid>
             </PalmMute>
           <Chord>
