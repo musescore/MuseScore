@@ -1679,7 +1679,7 @@
           <beginText>
             <text>2.</text>
             </beginText>
-          <endings>1</endings>
+          <endings>2</endings>
           </Volta>
         <Chord>
           <durationType>whole</durationType>
@@ -1732,7 +1732,7 @@
           <beginText>
             <text>3.</text>
             </beginText>
-          <endings>1</endings>
+          <endings>3</endings>
           </Volta>
         <Chord>
           <durationType>whole</durationType>

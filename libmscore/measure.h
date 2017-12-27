@@ -282,6 +282,9 @@ class Measure : public MeasureBase {
       void setRepeatFlags(Repeat val)              { _repeatFlags = val;  }
       void setRepeatFlag(Repeat val)               { _repeatFlags = _repeatFlags | val; }
       void resetRepeatFlag(Repeat val)             { _repeatFlags = Repeat(int(_repeatFlags) & ~int(val)); }
+      bool repeatEnd()                             { return _repeatFlags & Repeat::END; }
+      bool repeatStart()                           { return _repeatFlags & Repeat::START; }
+      bool repeatJump()                            { return _repeatFlags & Repeat::JUMP; }
 
       AccidentalVal findAccidental(Note*) const;
       AccidentalVal findAccidental(Segment* s, int staffIdx, int line, bool &error) const;

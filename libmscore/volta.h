@@ -86,6 +86,7 @@ class Volta : public TextLine {
 
       bool hasEnding(int repeat) const;
 
+      int lastEnding() const;
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
