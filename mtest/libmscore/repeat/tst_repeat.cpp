@@ -41,8 +41,8 @@ class TestRepeat : public QObject, public MTest
       void repeat07() { repeat("repeat07.mscx", "1;2;3;4;5;6;1;2;3"); }         // DC al fine
       void repeat08() { repeat("repeat08.mscx", "1;2;3;4;5;6;2;3;4;7;8;9;10;11"); } // DS al coda
 
-      void repeat09() { repeat("repeat09.mscx", "1;2;3;2;4;2;5;6"); }                        // 3 voltas
-      //void repeat10() { repeat("repeat10.mscx", "1;2;3;4;1;2;5;6;7;8;1;2;9;10;1;2;11;12"); } // 3 voltas
+      void repeat09() { repeat("repeat09.mscx", "1;2;3;2;5;6"); }                        // 3 voltas, but twice a volta1
+      void repeat10() { repeat("repeat10.mscx", "1;2;3;4; 1;2;5;6;7;8; 1;2;9;10; 1;2;11;12"); } // 3 voltas
       void repeat11() { repeat("repeat11.mscx", "1;2;3;4;2;3;5;6;7;8;2;9;10"); }  // volta after to coda
       void repeat12() { repeat("repeat12.mscx", "1;2;3;4;3;5;6;2;3;5;6;7"); }     // volta between segno & DS
       void repeat13() { repeat("repeat13.mscx", "1;2;3;4;5"); }                   // no repeat
@@ -62,8 +62,8 @@ class TestRepeat : public QObject, public MTest
       // complex roadmap
       void repeat23() { repeat("repeat23.mscx", "1;2;1;2;3;2;3;4;5;6;7;6;7;8;9;10;11;9;10;12;12;13;14;13;14;15;16;13;14"); }
 
-      void repeat24() { repeat("repeat24.mscx", "1;2;3;4;2;3;4;5;3;4;5;6"); } // imbricated DS and ||: :||
-      void repeat25() { repeat("repeat25.mscx", "1;2;1;2;3;4;2;3;4;5;4;5"); } // imbricated DS and ||: :||
+      void repeat24() { repeat("repeat24.mscx", "1;2;3;4;5;3;4;2;3;4;5;6"); } // imbricated DS and ||: :||
+      void repeat25() { repeat("repeat25.mscx", "1;2;1;2;3;4;5;4;2;3;4;5"); } // imbricated DS and ||: :||
 
       void repeat26() { repeat("repeat26.mscx", "1;1;2;2;3"); } // empty and garbage jump
 
@@ -83,6 +83,17 @@ class TestRepeat : public QObject, public MTest
 
       void repeat37() { repeat("repeat37.mscx", "1;2;1; 1;2;1; 1;2;1; 1;2;1; 1;2;1"); } // #65161, with section breaks occuring on non-meausure frames
       void repeat38() { repeat("repeat38.mscx", "1;2;2;3;4;2;2;3;5"); }
+
+      void repeat39() { repeat("repeat39.mscx", "1;2;3; 2;4;5; 2;3; 2;4;5; 2;6"); } // volta 1.3.,2.4.
+
+      void repeat40() { repeat("repeat40.mscx", "1;2;1;3;4;1;5"); } // #148276 Open volta lines must extend over entire ending: next endRepeat
+      void repeat41() { repeat("repeat41.mscx", "1;2;1;3;1;4;5"); } // #148276 Open volta lines must extend over entire ending: next endRepeat at volta (SLine) end
+      void repeat42() { repeat("repeat42.mscx", "1;2;1;3;5;1;4;5"); } // #148276 Open volta lines must extend over entire ending: next volta
+      void repeat43() { repeat("repeat43.mscx", "1;2;1;2;1;3;1;2;1;4;1;5"); } // #8604 Complex alternate endings 1.2.4. / 3./ 5.
+      void repeat44() { repeat("repeat44.mscx", "1;2;3;4;5;3;6;3;4;1;7"); } // Jump from within a volta
+      
+      void repeat45() { repeat("repeat45.mscx", "1;2;3;4;3;5;6;2;3;4;3;5;6;7"); } // repeat12 but with 'play repeats' enabled
+	  void repeat46() { repeat("repeat46.mscx", "1;2;3;4;5;3;4;2;3;4;5;3;4;5;6"); } // repeat24 but with 'play repeats' enabled
       };
 
 //---------------------------------------------------------
