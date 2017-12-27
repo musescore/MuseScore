@@ -74,6 +74,7 @@ class Volta final : public TextLineBase {
       QString text() const;
 
       bool hasEnding(int repeat) const;
+      int lastEnding() const;
       void setVoltaType(Volta::Type);     // deprecated
       Type voltaType() const;             // deprecated
 

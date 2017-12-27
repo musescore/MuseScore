@@ -112,6 +112,13 @@
           </BarLine>
         </Measure>
       <Measure number="5">
+        <Jump>
+          <style>Repeat Text Right</style>
+          <text>D.C. al Coda</text>
+          <jumpTo>start</jumpTo>
+          <playUntil>coda</playUntil>
+          <continueAt>codab</continueAt>
+          </Jump>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
