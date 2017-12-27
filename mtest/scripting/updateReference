@@ -1,6 +1,12 @@
 #!/bin/bash
 
-cp ../../build.debug/mtest/scripting/p1.log  p1.log.ref
-cp ../../build.debug/mtest/scripting/p2.log  p2.log.ref
+if [ "`uname`" = 'Darwin' ]; then
+   MSCORE=../../build.xcode/mtest/scripting/Debug
+else
+   MSCORE=../../build.debug/mtest/scripting
+fi
+
+cp $MSCORE/p1.log  p1.log.ref
+cp $MSCORE/p2.log  p2.log.ref
 
 
