@@ -91,9 +91,9 @@ class TestRepeat : public QObject, public MTest
       void repeat42() { repeat("repeat42.mscx", "1;2;1;3;5;1;4;5"); } // #148276 Open volta lines must extend over entire ending: next volta
       void repeat43() { repeat("repeat43.mscx", "1;2;1;2;1;3;1;2;1;4;1;5"); } // #8604 Complex alternate endings 1.2.4. / 3./ 5.
       void repeat44() { repeat("repeat44.mscx", "1;2;3;4;5;3;6;3;4;1;7"); } // Jump from within a volta
-      
+
       void repeat45() { repeat("repeat45.mscx", "1;2;3;4;3;5;6;2;3;4;3;5;6;7"); } // repeat12 but with 'play repeats' enabled
-	  void repeat46() { repeat("repeat46.mscx", "1;2;3;4;5;3;4;2;3;4;5;3;4;5;6"); } // repeat24 but with 'play repeats' enabled
+      void repeat46() { repeat("repeat46.mscx", "1;2;3;4;5;3;4;2;3;4;5;3;4;5;6"); } // repeat24 but with 'play repeats' enabled
       };
 
 //---------------------------------------------------------

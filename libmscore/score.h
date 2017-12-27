@@ -904,7 +904,7 @@ class Score : public QObject, ScoreElement {
       void adjustBracketsIns(int sidx, int eidx);
       void adjustKeySigs(int sidx, int eidx, KeyList km);
 
-      Measure* searchLabel(const QString& s);
+      Measure* searchLabel(const QString& s, Measure* startMeasure = nullptr, Measure* endMeasure = nullptr);
       Measure* searchLabelWithinSectionFirst(const QString& s, Measure* sectionStartMeasure, Measure* sectionEndMeasure);
       virtual inline RepeatList* repeatList() const;
       qreal utick2utime(int tick) const;
