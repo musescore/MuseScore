@@ -40,8 +40,9 @@ int markerTypeTableSize()
 //---------------------------------------------------------
 
 Marker::Marker(Score* s)
-   : Text(SubStyle::REPEAT_LEFT, s)
+   : TextBase(s)
       {
+      init(SubStyle::REPEAT_LEFT);
       _markerType = Type::FINE;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setLayoutToParentWidth(true);
@@ -175,7 +176,7 @@ Marker::Type Marker::markerType(const QString& s) const
 void Marker::layout()
       {
       setPos(QPointF(0.0, score()->styleP(StyleIdx::markerPosAbove)));
-      Text::layout1();
+      TextBase::layout1();
       // although normally laid out to parent (measure) width,
       // force to center over barline if left-aligned
       if (layoutToParentWidth() && !(align() & (Align::RIGHT | Align::HCENTER)))
@@ -198,7 +199,7 @@ void Marker::read(XmlReader& e)
                   setLabel(s);
                   mt = markerType(s);
                   }
-            else if (!Text::readProperties(e))
+            else if (!TextBase::readProperties(e))
                   e.unknown();
             }
       setMarkerType(mt);
@@ -211,7 +212,7 @@ void Marker::read(XmlReader& e)
 void Marker::write(XmlWriter& xml) const
       {
       xml.stag(name());
-      Text::writeProperties(xml);
+      TextBase::writeProperties(xml);
       xml.tag("label", _label);
       xml.etag();
       }
@@ -248,7 +249,7 @@ QVariant Marker::getProperty(P_ID propertyId) const
             default:
                   break;
             }
-      return Text::getProperty(propertyId);
+      return TextBase::getProperty(propertyId);
       }
 
 //---------------------------------------------------------
@@ -265,7 +266,7 @@ bool Marker::setProperty(P_ID propertyId, const QVariant& v)
                   setMarkerType(Type(v.toInt()));
                   break;
             default:
-                  if (!Text::setProperty(propertyId, v))
+                  if (!TextBase::setProperty(propertyId, v))
                         return false;
                   break;
             }
@@ -289,7 +290,7 @@ QVariant Marker::propertyDefault(P_ID propertyId) const
             default:
                   break;
             }
-      return Text::propertyDefault(propertyId);
+      return TextBase::propertyDefault(propertyId);
       }
 
 

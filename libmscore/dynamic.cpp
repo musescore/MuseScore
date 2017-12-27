@@ -80,8 +80,9 @@ static Dyn dynList[] = {
 //---------------------------------------------------------
 
 Dynamic::Dynamic(Score* s)
-   : Text(SubStyle::DYNAMICS, s)
+   : TextBase(s)
       {
+      init(SubStyle::DYNAMICS);
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _velocity = -1;
       _dynRange = Range::PART;
@@ -89,7 +90,7 @@ Dynamic::Dynamic(Score* s)
       }
 
 Dynamic::Dynamic(const Dynamic& d)
-   : Text(d)
+   : TextBase(d)
       {
       _dynamicType = d._dynamicType;
       _velocity    = d._velocity;
@@ -117,7 +118,7 @@ void Dynamic::write(XmlWriter& xml) const
       xml.tag("subtype", dynamicTypeName());
       writeProperty(xml, P_ID::VELOCITY);
       writeProperty(xml, P_ID::DYNAMIC_RANGE);
-      Text::writeProperties(xml, dynamicType() == Type::OTHER);
+      TextBase::writeProperties(xml, dynamicType() == Type::OTHER);
       xml.etag();
       }
 
@@ -135,7 +136,7 @@ void Dynamic::read(XmlReader& e)
                   _velocity = e.readInt();
             else if (tag == "dynType")
                   _dynRange = Range(e.readInt());
-            else if (!Text::readProperties(e))
+            else if (!TextBase::readProperties(e))
                   e.unknown();
             }
       if (subStyle() == SubStyle::DEFAULT)
@@ -159,7 +160,7 @@ void Dynamic::layout()
             y = score()->styleP(StyleIdx::dynamicsPosBelow) + sh + lineSpacing();
             }
       setPos(QPointF(0.0, y));
-      Text::layout1();
+      TextBase::layout1();
 
       Segment* s = segment();
       if (s) {
@@ -256,7 +257,7 @@ QString Dynamic::dynamicTypeName() const
 
 void Dynamic::startEdit(EditData& ed)
       {
-      Text::startEdit(ed);
+      TextBase::startEdit(ed);
       }
 
 //---------------------------------------------------------
@@ -265,7 +266,7 @@ void Dynamic::startEdit(EditData& ed)
 
 void Dynamic::endEdit(EditData& ed)
       {
-      Text::endEdit(ed);
+      TextBase::endEdit(ed);
       if (xmlText() != QString::fromUtf8(dynList[int(_dynamicType)].text))
             _dynamicType = Type::OTHER;
       }
@@ -276,7 +277,7 @@ void Dynamic::endEdit(EditData& ed)
 
 void Dynamic::reset()
       {
-      Text::reset();
+      TextBase::reset();
       }
 
 //---------------------------------------------------------
@@ -328,7 +329,7 @@ QVariant Dynamic::getProperty(P_ID propertyId) const
             case P_ID::VELOCITY:          return velocity();
             case P_ID::SUBTYPE:           return int(_dynamicType);
             default:
-                  return Text::getProperty(propertyId);
+                  return TextBase::getProperty(propertyId);
             }
       }
 
@@ -349,7 +350,7 @@ bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
                   _dynamicType = Type(v.toInt());
                   break;
             default:
-                  if (!Text::setProperty(propertyId, v))
+                  if (!TextBase::setProperty(propertyId, v))
                         return false;
                   break;
             }
@@ -371,7 +372,7 @@ QVariant Dynamic::propertyDefault(P_ID id) const
             case P_ID::VELOCITY:
                   return -1;
             default:
-                  return Text::propertyDefault(id);
+                  return TextBase::propertyDefault(id);
             }
       }
 

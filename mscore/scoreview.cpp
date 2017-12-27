@@ -3728,7 +3728,7 @@ void ScoreView::cmdAddText(TEXT type)
       if (noteEntryMode())          // force out of entry mode
             changeState(ViewState::NORMAL);
 
-      Text* s = 0;
+      TextBase* s = 0;
       _score->startCmd();
       switch(type) {
             case TEXT::TITLE:

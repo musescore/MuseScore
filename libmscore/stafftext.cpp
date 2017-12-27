@@ -24,16 +24,18 @@ namespace Ms {
 //---------------------------------------------------------
 
 StaffText::StaffText(Score* s)
-   : Text(SubStyle::STAFF, s)
+   : TextBase(s)
       {
+      init(SubStyle::STAFF);
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setPlacement(Placement::ABOVE);     // default
       setSwingParameters(MScore::division / 2, 60);
       }
 
 StaffText::StaffText(SubStyle ss, Score* s)
-   : Text(ss, s)
+   : TextBase(s)
       {
+      init(ss);
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setPlacement(Placement::ABOVE);     // default
       setSwingParameters(MScore::division / 2, 60);
@@ -69,7 +71,7 @@ void StaffText::writeProperties(XmlWriter& xml) const
             int swingRatio = swingParameters()->swingRatio;
             xml.tagE(QString("swing unit=\"%1\" ratio= \"%2\"").arg(swingUnit).arg(swingRatio));
             }
-      Text::writeProperties(xml);
+      TextBase::writeProperties(xml);
       }
 
 //---------------------------------------------------------
@@ -163,7 +165,7 @@ bool StaffText::readProperties(XmlReader& e)
             setSwingParameters(unit, ratio);
             e.readNext();
             }
-      else if (!Text::readProperties(e))
+      else if (!TextBase::readProperties(e))
             return false;
       return true;
       }
@@ -213,7 +215,7 @@ void StaffText::layout()
       if (placement() == Element::Placement::BELOW)
             p.ry() =  - p.ry() + lineHeight();
       setPos(p);
-      Text::layout1();
+      TextBase::layout1();
       if (!parent()) // palette & clone trick
           return;
 
@@ -262,7 +264,7 @@ QVariant StaffText::propertyDefault(P_ID id) const
             case P_ID::PLACEMENT:
                   return int(Placement::ABOVE);
             default:
-                  return Text::propertyDefault(id);
+                  return TextBase::propertyDefault(id);
             }
       }
 

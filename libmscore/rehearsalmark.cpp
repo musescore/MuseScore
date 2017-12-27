@@ -22,8 +22,10 @@ namespace Ms {
 //---------------------------------------------------------
 
 RehearsalMark::RehearsalMark(Score* s)
-   : SystemText(SubStyle::REHEARSAL_MARK, s)
+   : TextBase(s)
       {
+      init(SubStyle::REHEARSAL_MARK);
+      setSystemFlag(true);
       }
 
 //---------------------------------------------------------
@@ -42,7 +44,7 @@ void RehearsalMark::layout()
             y = score()->styleP(StyleIdx::rehearsalMarkPosBelow) + sh + lineSpacing();
             }
       setPos(QPointF(0.0, y));
-      Text::layout1();
+      TextBase::layout1();
 
       Segment* s = segment();
       if (s) {
@@ -91,7 +93,7 @@ QVariant RehearsalMark::propertyDefault(P_ID id) const
             case P_ID::PLACEMENT:
                   return score()->styleV(StyleIdx::rehearsalMarkPlacement);
             default:
-                  return Text::propertyDefault(id);
+                  return TextBase::propertyDefault(id);
             }
       }
 

@@ -63,7 +63,7 @@ struct TextSegment {
 struct RenderAction;
 class HDegree;
 
-class Harmony final : public Text {
+class Harmony final : public TextBase {
       int _rootTpc;                       // root note for chord
       int _baseTpc;                       // bass note or chord base; used for "slash" chords
                                           // or notation of base note in chord

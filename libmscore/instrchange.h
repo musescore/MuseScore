@@ -22,7 +22,7 @@ namespace Ms {
 //   @@ InstrumentChange
 //---------------------------------------------------------
 
-class InstrumentChange final : public Text  {
+class InstrumentChange final : public TextBase  {
       Instrument* _instrument;  // Staff holds ownership if part of score
 
    public:

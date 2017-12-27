@@ -1426,9 +1426,9 @@ Palette* MuseScore::newTextPalette()
       st->setSwing(true);
       sp->append(st, tr("Swing"));
 
-      st = new SystemText(gscore);
-      st->setXmlText(tr("System Text"));
-      sp->append(st, tr("System text"));
+      SystemText* stxt = new SystemText(gscore);
+      stxt->setXmlText(tr("System Text"));
+      sp->append(stxt, tr("System text"));
 
       return sp;
       }

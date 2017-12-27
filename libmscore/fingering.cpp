@@ -27,8 +27,9 @@ namespace Ms {
 //---------------------------------------------------------
 
 Fingering::Fingering(Score* s)
-  : Text(SubStyle::FINGERING, s)
+  : TextBase(s)
       {
+      init(SubStyle::FINGERING);
       setFlag(ElementFlag::HAS_TAG, true);      // this is a layered element
       }
 
@@ -41,7 +42,7 @@ void Fingering::write(XmlWriter& xml) const
       if (!xml.canWrite(this))
             return;
       xml.stag(name());
-      Text::writeProperties(xml);
+      TextBase::writeProperties(xml);
       xml.etag();
       }
 
@@ -52,7 +53,7 @@ void Fingering::write(XmlWriter& xml) const
 void Fingering::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            if (!Text::readProperties(e))
+            if (!TextBase::readProperties(e))
                   e.unknown();
             }
       }
@@ -63,7 +64,7 @@ void Fingering::read(XmlReader& e)
 
 void Fingering::layout()
       {
-      Text::layout();
+      TextBase::layout();
 
       if (autoplace() && note()) {
             Chord* chord = note()->chord();
@@ -124,7 +125,7 @@ void Fingering::layout()
 
 void Fingering::draw(QPainter* painter) const
       {
-      Text::draw(painter);
+      TextBase::draw(painter);
       }
 
 //---------------------------------------------------------
@@ -148,7 +149,7 @@ QVariant Fingering::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
             default:
-                  return Text::getProperty(propertyId);
+                  return TextBase::getProperty(propertyId);
             }
       }
 
@@ -160,7 +161,7 @@ bool Fingering::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
             default:
-                  return Text::setProperty(propertyId, v);
+                  return TextBase::setProperty(propertyId, v);
             }
       triggerLayout();
       return true;
@@ -176,7 +177,7 @@ QVariant Fingering::propertyDefault(P_ID id) const
             case P_ID::SUB_STYLE:
                   return int(SubStyle::FINGERING);
             default:
-                  return Text::propertyDefault(id);
+                  return TextBase::propertyDefault(id);
             }
       }
 
@@ -188,7 +189,7 @@ PropertyFlags& Fingering::propertyFlags(P_ID id)
       {
       switch (id) {
             default:
-                  return Text::propertyFlags(id);
+                  return TextBase::propertyFlags(id);
             }
       }
 
@@ -200,7 +201,7 @@ void Fingering::resetProperty(P_ID id)
       {
       switch (id) {
             default:
-                  return Text::resetProperty(id);
+                  return TextBase::resetProperty(id);
             }
       }
 
@@ -212,7 +213,7 @@ StyleIdx Fingering::getPropertyStyle(P_ID id) const
       {
       switch (id) {
             default:
-                  return Text::getPropertyStyle(id);
+                  return TextBase::getPropertyStyle(id);
             }
       return StyleIdx::NOSTYLE;
       }
@@ -224,7 +225,7 @@ StyleIdx Fingering::getPropertyStyle(P_ID id) const
 
 void Fingering::styleChanged()
       {
-      Text::styleChanged();
+      TextBase::styleChanged();
       }
 
 //---------------------------------------------------------
@@ -233,7 +234,7 @@ void Fingering::styleChanged()
 
 void Fingering::reset()
       {
-      Text::reset();
+      TextBase::reset();
       }
 
 //---------------------------------------------------------

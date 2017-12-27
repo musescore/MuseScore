@@ -326,7 +326,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                     break;
                                     }
                               }
-                        Text* text = new StaffText(score);
+                        TextBase* text = new StaffText(score);
                         QFont f(st->font());
                         text->setFamily(f.family());
                         text->setItalic(f.italic());

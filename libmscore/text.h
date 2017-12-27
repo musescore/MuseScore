@@ -16,12 +16,13 @@
 #include "element.h"
 #include "elementlayout.h"
 #include "property.h"
+#include "style.h"
 
 namespace Ms {
 
 class MuseScoreView;
 struct SymCode;
-class Text;
+class TextBase;
 class TextBlock;
 class ChangeText;
 
@@ -70,7 +71,7 @@ class CharFormat {
 //---------------------------------------------------------
 
 class TextCursor {
-      Text*      _text;
+      TextBase*      _text;
       CharFormat _format;
       int _row           { 0 };
       int _column        { 0 };
@@ -78,9 +79,9 @@ class TextCursor {
       int _selectColumn  { 0 };
 
    public:
-      TextCursor(Text* t) : _text(t) {}
+      TextCursor(TextBase* t) : _text(t) {}
 
-      Text* text() const        { return _text; }
+      TextBase* text() const    { return _text; }
       bool hasSelection() const { return (_selectLine != _row) || (_selectColumn != _column); }
       void clearSelection();
 
@@ -96,7 +97,7 @@ class TextCursor {
       void setColumn(int val)       { _column = val; }
       void setSelectLine(int val)   { _selectLine = val; }
       void setSelectColumn(int val) { _selectColumn = val; }
-      void setText(Text* t)         { _text = t; }
+      void setText(TextBase* t)     { _text = t; }
       int columns() const;
       void init();
 
@@ -113,8 +114,6 @@ class TextCursor {
       void changeSelectionFormat(FormatId id, QVariant val);
       bool deleteChar() const;
       };
-
-class Text;
 
 //---------------------------------------------------------
 //   TextFragment
@@ -135,8 +134,8 @@ class TextFragment {
       TextFragment(const QString& s);
       TextFragment(TextCursor*, const QString&);
       TextFragment split(int column);
-      void draw(QPainter*, const Text*) const;
-      QFont font(const Text*) const;
+      void draw(QPainter*, const TextBase*) const;
+      QFont font(const TextBase*) const;
       int columns() const;
       void changeFormat(FormatId id, QVariant data);
       };
@@ -159,19 +158,19 @@ class TextBlock {
       TextBlock() {}
       bool operator ==(const TextBlock& x)         { return _fragments == x._fragments; }
       bool operator !=(const TextBlock& x)         { return _fragments != x._fragments; }
-      void draw(QPainter*, const Text*) const;
-      void layout(Text*);
+      void draw(QPainter*, const TextBase*) const;
+      void layout(TextBase*);
       const QList<TextFragment>& fragments() const { return _fragments; }
       QList<TextFragment>& fragments()             { return _fragments; }
       const QRectF& boundingRect() const           { return _bbox; }
-      QRectF boundingRect(int col1, int col2, const Text*) const;
+      QRectF boundingRect(int col1, int col2, const TextBase*) const;
       int columns() const;
       void insert(TextCursor*, const QString&);
       QString remove(int column);
       QString remove(int start, int n);
-      int column(qreal x, Text*) const;
+      int column(qreal x, TextBase*) const;
       TextBlock split(int column);
-      qreal xpos(int col, const Text*) const;
+      qreal xpos(int col, const TextBase*) const;
       const CharFormat* formatAt(int) const;
       const TextFragment* fragment(int col) const;
       QList<TextFragment>::iterator fragment(int column, int* rcol, int* ridx);
@@ -185,10 +184,10 @@ class TextBlock {
       };
 
 //---------------------------------------------------------
-//   Text
+//   TextBase
 //---------------------------------------------------------
 
-class Text : public Element {
+class TextBase : public Element {
       M_PROPERTY(QString, family,                 setFamily)
       M_PROPERTY(qreal,   size,                   setSize)
       M_PROPERTY(bool,    bold,                   setBold)
@@ -236,17 +235,14 @@ class Text : public Element {
       void insertSym(EditData& ed, SymId id);
 
    public:
-      Text(Score* = 0);
-      Text(SubStyle, Score* = 0);
-      Text(const Text&);
-      ~Text();
+      TextBase(Score* = 0);
+      TextBase(const TextBase&);
+      void init(SubStyle st = SubStyle::DEFAULT);
 
       SubStyle subStyle() const                    { return _subStyle; }
       void setSubStyle(SubStyle ss)                { _subStyle = ss;   }
       virtual void initSubStyle(SubStyle) override;
 
-      virtual Text* clone() const override         { return new Text(*this); }
-      virtual ElementType type() const override    { return ElementType::TEXT; }
       virtual bool mousePress(EditData&) override;
 
       Text &operator=(const Text&) = delete;
@@ -333,9 +329,7 @@ class Text : public Element {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(P_ID id) const override;
-//      virtual void setPropertyFlags(P_ID, PropertyFlags) override;
       virtual PropertyFlags& propertyFlags(P_ID) override;
-//      virtual void resetProperty(P_ID id) override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;
       virtual void reset() override;
 
@@ -352,7 +346,21 @@ class Text : public Element {
       friend class TextCursor;
       };
 
+//---------------------------------------------------------
+//   Text
+//---------------------------------------------------------
+
+class Text final : public TextBase {
+
+   public:
+      Text(Score* s = 0);
+      Text(SubStyle ss, Score* s = 0);
+
+      virtual ElementType type() const override    { return ElementType::TEXT; }
+      virtual Text* clone() const override         { return new Text(*this); }
+      };
 
 }     // namespace Ms
 
 #endif
+

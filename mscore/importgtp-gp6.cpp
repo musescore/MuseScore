@@ -1997,7 +1997,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
             const GpBar& gpbar = bars[bar];
 
             if (!gpbar.marker.isEmpty()) {
-                  Text* s = new RehearsalMark(score);
+                  RehearsalMark* s = new RehearsalMark(score);
                   s->setPlainText(gpbar.marker.trimmed());
                   s->setTrack(0);
                   Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
@@ -2299,14 +2299,14 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
             if (bars[measureCounter].section[0].length() || bars[measureCounter].section[1].length()) {
                   Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
                   if (bars[measureCounter].section[0].length()) {
-                        Text* t = new RehearsalMark(score);
+                        RehearsalMark* t = new RehearsalMark(score);
                         t->setHasFrame(true);
                         t->setPlainText(bars[measureCounter].section[0]);
                         t->setTrack(0);
                         s->add(t);
                         }
                   if (bars[measureCounter].section[1].length()) {
-                        Text* t = new RehearsalMark(score);
+                        RehearsalMark* t = new RehearsalMark(score);
                         t->setHasFrame(false);
                         t->setPlainText(bars[measureCounter].section[1]);
                         t->setTrack(0);

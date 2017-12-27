@@ -24,7 +24,7 @@ class Note;
 //   @@ Fingering
 //---------------------------------------------------------
 
-class Fingering final : public Text {
+class Fingering final : public TextBase {
    public:
       Fingering(Score* s);
       virtual Fingering* clone() const override { return new Fingering(*this); }

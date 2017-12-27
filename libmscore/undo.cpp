@@ -2191,7 +2191,7 @@ void SplitText::undo(EditData* ed)
 void SplitText::redo(EditData* ed)
       {
       TextCursor tc = c;
-      Text* t       = tc.text();
+      TextBase* t   = tc.text();
       int line      = tc.row();
 
       CharFormat* charFmt = tc.format();         // take current format
@@ -2216,7 +2216,7 @@ void SplitText::redo(EditData* ed)
 
 void JoinText::redo(EditData* ed)
       {
-      Text* t       = c.text();
+      TextBase* t   = c.text();
       int line      = c.row();
       t->setTextInvalid();
       t->triggerLayout();
@@ -2239,7 +2239,7 @@ void JoinText::redo(EditData* ed)
 
 void JoinText::undo(EditData* ed)
       {
-      Text* t       = c.text();
+      TextBase* t   = c.text();
       int line      = c.row();
       t->setTextInvalid();
       t->triggerLayout();

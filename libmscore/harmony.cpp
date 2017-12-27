@@ -138,8 +138,9 @@ qDebug("ResolveDegreeList: not found in table");
 //---------------------------------------------------------
 
 Harmony::Harmony(Score* s)
-   : Text(SubStyle::HARMONY, s)
+   : TextBase(s)
       {
+      init(SubStyle::HARMONY);
       _rootTpc    = Tpc::TPC_INVALID;
       _baseTpc    = Tpc::TPC_INVALID;
       _rootCase   = NoteCaseType::CAPITAL;
@@ -152,7 +153,7 @@ Harmony::Harmony(Score* s)
       }
 
 Harmony::Harmony(const Harmony& h)
-   : Text(h)
+   : TextBase(h)
       {
       _rootTpc    = h._rootTpc;
       _baseTpc    = h._baseTpc;
@@ -252,7 +253,7 @@ void Harmony::write(XmlWriter& xml) const
             }
       else
             xml.tag("name", _textName);
-      Text::writeProperties(xml, false, true);
+      TextBase::writeProperties(xml, false, true);
       if (_rightParen)
             xml.tagE("rightParen");
       xml.etag();
@@ -329,7 +330,7 @@ void Harmony::read(XmlReader& e)
                   _rightParen = true;
                   e.readNext();
                   }
-            else if (!Text::readProperties(e))
+            else if (!TextBase::readProperties(e))
                   e.unknown();
             }
 
@@ -708,7 +709,7 @@ void Harmony::startEdit(EditData& ed)
       {
       if (!textList.empty())
             setXmlText(harmonyName());
-      Text::startEdit(ed);
+      TextBase::startEdit(ed);
       layout();
       }
 
@@ -720,7 +721,7 @@ bool Harmony::edit(EditData& ed)
       {
       if (ed.key == Qt::Key_Return)
             return true; // Harmony only single line
-      bool rv = Text::edit(ed);
+      bool rv = TextBase::edit(ed);
       QString str = xmlText();
       int root, base;
       bool badSpell = !str.isEmpty() && !parseHarmony(str, &root, &base, true);
@@ -734,7 +735,7 @@ bool Harmony::edit(EditData& ed)
 
 void Harmony::endEdit(EditData& ed)
       {
-      Text::endEdit(ed);
+      TextBase::endEdit(ed);
       layout();
       if (links()) {
             foreach(ScoreElement* e, *links()) {
@@ -743,7 +744,7 @@ void Harmony::endEdit(EditData& ed)
                   Harmony* h = toHarmony(e);
                   // transpose if necessary
                   // at this point chord will already have been rendered in same key as original
-                  // (as a result of Text::endEdit() calling setText() for linked elements)
+                  // (as a result of TextBase::endEdit() calling setText() for linked elements)
                   // we may now need to change the TPC's and the text, and re-render
                   if (score()->styleB(StyleIdx::concertPitch) != h->score()->styleB(StyleIdx::concertPitch)) {
                         Part* partDest = h->part();
@@ -804,7 +805,7 @@ void Harmony::setHarmony(const QString& s)
 
 qreal Harmony::baseLine() const
       {
-      return (textList.empty()) ? Text::baseLine() : 0.0;
+      return (textList.empty()) ? TextBase::baseLine() : 0.0;
       }
 
 //---------------------------------------------------------
@@ -1036,7 +1037,7 @@ void Harmony::layout()
             }
       yy += offset().y();           //      yy += offset(_spatium).y();
 
-      qreal hb = lineHeight() - Text::baseLine();
+      qreal hb = lineHeight() - TextBase::baseLine();
       if (align() & Align::BOTTOM)
             yy -= hb;
       else if (align() & Align::VCENTER) {
@@ -1096,7 +1097,7 @@ void Harmony::layout()
 void Harmony::calculateBoundingRect()
       {
       if (textList.empty()) {
-            Text::layout1();
+            TextBase::layout1();
             setbboxtight(bbox());
             }
       else {
@@ -1119,7 +1120,7 @@ void Harmony::draw(QPainter* painter) const
       {
       // painter->setPen(curColor());
       if (textList.empty()) {
-            Text::draw(painter);
+            TextBase::draw(painter);
             return;
             }
       if (hasFrame()) {
@@ -1411,7 +1412,7 @@ void Harmony::render()
 
 void Harmony::spatiumChanged(qreal oldValue, qreal newValue)
       {
-      Text::spatiumChanged(oldValue, newValue);
+      TextBase::spatiumChanged(oldValue, newValue);
       render();
       }
 
@@ -1421,7 +1422,7 @@ void Harmony::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Harmony::localSpatiumChanged(qreal oldValue, qreal newValue)
       {
-      Text::localSpatiumChanged(oldValue, newValue);
+      TextBase::localSpatiumChanged(oldValue, newValue);
       render();
       }
 
@@ -1624,7 +1625,7 @@ QVariant Harmony::propertyDefault(P_ID id) const
             case P_ID::SUB_STYLE:
                   return int(SubStyle::HARMONY);
             default:
-                  return Text::propertyDefault(id);
+                  return TextBase::propertyDefault(id);
             }
       }
 
