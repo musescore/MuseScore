@@ -1229,6 +1229,7 @@
           <durationType>measure</durationType>
           <duration>3/4</duration>
           </Rest>
+        <endSpanner id="3"/>
         <move>0/1</move>
         <Chord>
           <lid>162</lid>
@@ -2518,6 +2519,7 @@
             <durationType>measure</durationType>
             <duration>3/4</duration>
             </Rest>
+          <endSpanner id="5"/>
           <move>0/1</move>
           <Chord>
             <lid>162</lid>

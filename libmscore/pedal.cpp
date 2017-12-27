@@ -16,6 +16,7 @@
 #include "system.h"
 #include "measure.h"
 #include "chordrest.h"
+#include "staff.h"
 
 #include "score.h"
 
@@ -31,7 +32,10 @@ void PedalSegment::layout()
             setUserOff(QPointF());
       TextLineBaseSegment::layout();
       if (parent()) {     // for palette
-            rypos() += score()->styleP(pedal()->placeBelow() ? StyleIdx::pedalPosBelow : StyleIdx::pedalPosAbove);
+            if (pedal()->placeBelow())
+                  rypos() += score()->styleP(StyleIdx::pedalPosBelow) + (staff() ? staff()->height() : 0.0);
+            else
+                  rypos() += score()->styleP(StyleIdx::pedalPosAbove);
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
                   Shape s1 = shape().translated(pos());
@@ -60,13 +64,7 @@ void PedalSegment::layout()
 Pedal::Pedal(Score* s)
    : TextLineBase(s)
       {
-      setLineWidth(score()->styleS(StyleIdx::pedalLineWidth));
-      setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::pedalLineStyle)));
-      resetProperty(P_ID::BEGIN_TEXT_ALIGN);
-      resetProperty(P_ID::CONTINUE_TEXT_ALIGN);
-      resetProperty(P_ID::END_TEXT_ALIGN);
-      resetProperty(P_ID::BEGIN_HOOK_HEIGHT);
-      resetProperty(P_ID::END_HOOK_HEIGHT);
+      init();
       }
 
 //---------------------------------------------------------

@@ -18,6 +18,7 @@ namespace Ms {
 NoteLine::NoteLine(Score* s)
    : TextLineBase(s)
       {
+      init();
       }
 
 NoteLine::NoteLine(const NoteLine& nl)

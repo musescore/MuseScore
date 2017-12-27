@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.00">
+  <programVersion>3.0.0</programVersion>
+  <programRevision>3543170</programRevision>
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Synthesizer>
+      </Synthesizer>
+    <Division>480</Division>
+    <Style>
+      <pageWidth>3.93701</pageWidth>
+      <pageHeight>1.96851</pageHeight>
+      <pagePrintableWidth>3.77953</pagePrintableWidth>
+      <pageEvenLeftMargin>0.0787403</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.0787403</pageOddLeftMargin>
+      <pageEvenTopMargin>0</pageEvenTopMargin>
+      <pageEvenBottomMargin>0</pageEvenBottomMargin>
+      <pageOddTopMargin>0</pageOddTopMargin>
+      <pageOddBottomMargin>0</pageOddBottomMargin>
+      <pageTwosided>0</pageTwosided>
+      <showMeasureNumber>0</showMeasureNumber>
+      <showFooter>0</showFooter>
+      <Spatium>1.764</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2017-12-27</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Linux</metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>70</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>40</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure number="1">
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          </TimeSig>
+        <Pedal id="2">
+          <endHookType>1</endHookType>
+          <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+          </Pedal>
+        <Chord>
+          <durationType>half</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <endSpanner id="2"/>
+        <Pedal id="3">
+          <endHookType>1</endHookType>
+          <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+          </Pedal>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <BarLine>
+          </BarLine>
+        </Measure>
+      <Measure number="2">
+        <endSpanner id="3"/>
+        <Pedal id="4">
+          <endHookType>1</endHookType>
+          <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+          </Pedal>
+        <Chord>
+          <durationType>whole</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <BarLine>
+          </BarLine>
+        <endSpanner id="4"/>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure number="1">
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          </TimeSig>
+        <Pedal id="5">
+          <endHookType>1</endHookType>
+          <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+          </Pedal>
+        <Chord>
+          <durationType>whole</durationType>
+          <Note>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <BarLine>
+          </BarLine>
+        </Measure>
+      <Measure number="2">
+        <endSpanner id="5"/>
+        <Pedal id="6">
+          <endHookType>1</endHookType>
+          <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+          </Pedal>
+        <Chord>
+          <durationType>half</durationType>
+          <Note>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <endSpanner id="6"/>
+        <Pedal id="7">
+          <endHookType>1</endHookType>
+          <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+          </Pedal>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <BarLine>
+          </BarLine>
+        <endSpanner id="7"/>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
