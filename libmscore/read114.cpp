@@ -230,7 +230,7 @@ static const PaperSize* getPaperSize114(const QString& name)
 //   convertFromHtml
 //---------------------------------------------------------
 
-QString convertFromHtml(Text* t, const QString& ss)
+QString convertFromHtml(TextBase* t, const QString& ss)
       {
       QTextDocument doc;
       doc.setHtml(ss.trimmed());
@@ -298,7 +298,7 @@ QString convertFromHtml(Text* t, const QString& ss)
 //   readTextProperties
 //---------------------------------------------------------
 
-static bool readTextProperties(XmlReader& e, Text* t, Element* be)
+static bool readTextProperties(XmlReader& e, TextBase* t, Element* be)
       {
       const QStringRef& tag(e.name());
       if (tag == "style") {

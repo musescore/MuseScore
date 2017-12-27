@@ -28,8 +28,9 @@ namespace Ms {
 //---------------------------------------------------------
 
 TempoText::TempoText(Score* s)
-   : Text(SubStyle::TEMPO, s)
+   : TextBase(s)
       {
+      init(SubStyle::TEMPO);
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
       _relative   = 1.0;
@@ -47,7 +48,7 @@ void TempoText::write(XmlWriter& xml) const
       xml.tag("tempo", _tempo);
       if (_followText)
             xml.tag("followText", _followText);
-      Text::writeProperties(xml);
+      TextBase::writeProperties(xml);
       xml.etag();
       }
 
@@ -63,7 +64,7 @@ void TempoText::read(XmlReader& e)
                   setTempo(e.readDouble());
             else if (tag == "followText")
                   _followText = e.readInt();
-            else if (!Text::readProperties(e))
+            else if (!TextBase::readProperties(e))
                   e.unknown();
             }
       // check sanity
@@ -291,7 +292,7 @@ QVariant TempoText::getProperty(P_ID propertyId) const
             case P_ID::TEMPO_FOLLOW_TEXT:
                   return _followText;
             default:
-                  return Text::getProperty(propertyId);
+                  return TextBase::getProperty(propertyId);
             }
       }
 
@@ -311,7 +312,7 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
                   _followText = v.toBool();
                   break;
             default:
-                  if (!Text::setProperty(propertyId, v))
+                  if (!TextBase::setProperty(propertyId, v))
                         return false;
                   break;
             }
@@ -335,7 +336,7 @@ QVariant TempoText::propertyDefault(P_ID id) const
             case P_ID::PLACEMENT:
                   return int(Element::Placement::ABOVE);
             default:
-                  return Text::propertyDefault(id);
+                  return TextBase::propertyDefault(id);
             }
       }
 
@@ -357,7 +358,7 @@ void TempoText::layout()
             y = score()->styleP(StyleIdx::tempoPosBelow) + sh + lineSpacing();
             }
       setPos(QPointF(0.0, y));
-      Text::layout1();
+      TextBase::layout1();
 
       // tempo text on first chordrest of measure should align over time sig if present
       //
@@ -445,7 +446,7 @@ QString TempoText::accessibleInfo() const
                   return QString("%1: %2 %3 = %4").arg(Element::accessibleInfo()).arg(dots1).arg(QObject::tr("note")).arg(secondPart);
             }
       else
-            return Text::accessibleInfo();
+            return TextBase::accessibleInfo();
       }
 
 }

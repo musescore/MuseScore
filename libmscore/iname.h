@@ -25,7 +25,7 @@ enum class InstrumentNameType : char {
 //   InstrumentName
 //---------------------------------------------------------
 
-class InstrumentName final : public Text  {
+class InstrumentName final : public TextBase  {
       InstrumentNameType _instrumentNameType;
       int _layoutPos { 0 };
 

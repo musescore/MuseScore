@@ -608,7 +608,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
             const GpBar& gpbar = bars[bar];
 
             if (!gpbar.marker.isEmpty()) {
-                  Text* s = new RehearsalMark(score);
+                  RehearsalMark* s = new RehearsalMark(score);
                   s->setPlainText(gpbar.marker.trimmed());
                   s->setTrack(0);
                   Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());

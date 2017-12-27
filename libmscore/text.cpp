@@ -492,7 +492,7 @@ bool TextFragment::operator ==(const TextFragment& f) const
 //   draw
 //---------------------------------------------------------
 
-void TextFragment::draw(QPainter* p, const Text* t) const
+void TextFragment::draw(QPainter* p, const TextBase* t) const
       {
       QFont f(font(t));
       f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
@@ -504,7 +504,7 @@ void TextFragment::draw(QPainter* p, const Text* t) const
 //   font
 //---------------------------------------------------------
 
-QFont TextFragment::font(const Text* t) const
+QFont TextFragment::font(const TextBase* t) const
       {
       QFont font;
 
@@ -564,7 +564,7 @@ QFont TextFragment::font(const Text* t) const
 //   draw
 //---------------------------------------------------------
 
-void TextBlock::draw(QPainter* p, const Text* t) const
+void TextBlock::draw(QPainter* p, const TextBase* t) const
       {
       p->translate(0.0, _y);
       for (const TextFragment& f : _fragments)
@@ -576,7 +576,7 @@ void TextBlock::draw(QPainter* p, const Text* t) const
 //   layout
 //---------------------------------------------------------
 
-void TextBlock::layout(Text* t)
+void TextBlock::layout(TextBase* t)
       {
       _bbox        = QRectF();
       qreal x      = 0.0;
@@ -654,7 +654,7 @@ void TextBlock::layout(Text* t)
 //   xpos
 //---------------------------------------------------------
 
-qreal TextBlock::xpos(int column, const Text* t) const
+qreal TextBlock::xpos(int column, const TextBase* t) const
       {
       int col = 0;
       for (const TextFragment& f : _fragments) {
@@ -714,7 +714,7 @@ const CharFormat* TextBlock::formatAt(int column) const
 //   boundingRect
 //---------------------------------------------------------
 
-QRectF TextBlock::boundingRect(int col1, int col2, const Text* t) const
+QRectF TextBlock::boundingRect(int col1, int col2, const TextBase* t) const
       {
       qreal x1 = xpos(col1, t);
       qreal x2 = xpos(col2, t);
@@ -743,7 +743,7 @@ int TextBlock::columns() const
 //    Text coordinate system
 //---------------------------------------------------------
 
-int TextBlock::column(qreal x, Text* t) const
+int TextBlock::column(qreal x, TextBase* t) const
       {
       int col = 0;
       for (const TextFragment& f : _fragments) {
@@ -1074,15 +1074,7 @@ QString TextBlock::text(int col1, int len) const
 //   Text
 //---------------------------------------------------------
 
-Text::Text(Score* s)
-   : Element(s)
-      {
-      _size = 10.0;
-      initSubStyle(SubStyle::DEFAULT);          // we assume all properties are set
-      setFlag(ElementFlag::MOVABLE, true);
-      }
-
-Text::Text(SubStyle st, Score* s)
+TextBase::TextBase(Score* s)
    : Element(s)
       {
       _family                 = "FreeSerif";
@@ -1102,18 +1094,16 @@ Text::Text(SubStyle st, Score* s)
       _frameRound             = 0;
       _offset                 = QPointF();
       _offsetType             = OffsetType::SPATIUM;
-      initSubStyle(st);
       setFlag(ElementFlag::MOVABLE, true);
       }
 
-Text::Text(const Text& st)
+TextBase::TextBase(const TextBase& st)
    : Element(st)
       {
       _text                        = st._text;
       _layout                      = st._layout;
       textInvalid                  = st.textInvalid;
       layoutInvalid                = st.layoutInvalid;
-
       frame                        = st.frame;
       _subStyle                    = st._subStyle;
       _layoutToParentWidth         = st._layoutToParentWidth;
@@ -1154,15 +1144,20 @@ Text::Text(const Text& st)
       _offsetTypeStyle             = st._offsetTypeStyle;
       }
 
-Text::~Text()
+//---------------------------------------------------------
+//   init
+//---------------------------------------------------------
+
+void TextBase::init(SubStyle st)
       {
+      initSubStyle(st);
       }
 
 //---------------------------------------------------------
 //   drawSelection
 //---------------------------------------------------------
 
-void Text::drawSelection(QPainter* p, const QRectF& r) const
+void TextBase::drawSelection(QPainter* p, const QRectF& r) const
       {
       QBrush bg(QColor("steelblue"));
       p->setCompositionMode(QPainter::CompositionMode_HardLight);
@@ -1177,7 +1172,7 @@ void Text::drawSelection(QPainter* p, const QRectF& r) const
 //   textColor
 //---------------------------------------------------------
 
-QColor Text::textColor() const
+QColor TextBase::textColor() const
       {
       return curColor();
       }
@@ -1187,7 +1182,7 @@ QColor Text::textColor() const
 //    insert character
 //---------------------------------------------------------
 
-void Text::insert(TextCursor* cursor, uint code)
+void TextBase::insert(TextCursor* cursor, uint code)
       {
       if (cursor->row() >= rows())
             _layout.append(TextBlock());
@@ -1234,7 +1229,7 @@ static qreal parseNumProperty(const QString& s)
 //    create layout from text
 //---------------------------------------------------------
 
-void Text::createLayout()
+void TextBase::createLayout()
       {
       _layout.clear();
       TextCursor cursor((Text*)this);
@@ -1394,7 +1389,7 @@ void Text::createLayout()
 //   layout
 //---------------------------------------------------------
 
-void Text::layout()
+void TextBase::layout()
       {
       QPointF o(_offset * (_offsetType == OffsetType::SPATIUM ? spatium() : DPI));
 
@@ -1407,7 +1402,7 @@ void Text::layout()
 //   layout1
 //---------------------------------------------------------
 
-void Text::layout1()
+void TextBase::layout1()
       {
       if (layoutInvalid)
             createLayout();
@@ -1484,7 +1479,7 @@ void Text::layout1()
 //   layoutFrame
 //---------------------------------------------------------
 
-void Text::layoutFrame()
+void TextBase::layoutFrame()
       {
       frame = bbox();
       if (square()) {
@@ -1527,7 +1522,7 @@ void Text::layoutFrame()
 //   lineSpacing
 //---------------------------------------------------------
 
-qreal Text::lineSpacing() const
+qreal TextBase::lineSpacing() const
       {
       return fontMetrics().lineSpacing() * MScore::pixelRatio;
       }
@@ -1536,7 +1531,7 @@ qreal Text::lineSpacing() const
 //   lineHeight
 //---------------------------------------------------------
 
-qreal Text::lineHeight() const
+qreal TextBase::lineHeight() const
       {
       return fontMetrics().height();
       }
@@ -1545,7 +1540,7 @@ qreal Text::lineHeight() const
 //   baseLine
 //---------------------------------------------------------
 
-qreal Text::baseLine() const
+qreal TextBase::baseLine() const
       {
       return fontMetrics().ascent();
       }
@@ -1596,7 +1591,7 @@ class XmlNesting : public QStack<QString> {
 //   genText
 //---------------------------------------------------------
 
-void Text::genText()
+void TextBase::genText()
       {
       _text.clear();
       bool _bold      = false;
@@ -1657,7 +1652,7 @@ void Text::genText()
                   if (format.fontSize() != fmt.fontSize())
                         _text += QString("<font size=\"%1\"/>").arg(format.fontSize());
                   if (format.fontFamily() != fmt.fontFamily())
-                        _text += QString("<font face=\"%1\"/>").arg(Text::escape(format.fontFamily()));
+                        _text += QString("<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
 
                   VerticalAlignment va = format.valign();
                   VerticalAlignment cva = fmt.valign();
@@ -1689,7 +1684,7 @@ void Text::genText()
 //   startEdit
 //---------------------------------------------------------
 
-void Text::startEdit(EditData& ed)
+void TextBase::startEdit(EditData& ed)
       {
       ed.grips = 0;
       TextEditData* ted = new TextEditData();
@@ -1712,7 +1707,7 @@ void Text::startEdit(EditData& ed)
 //   endEdit
 //---------------------------------------------------------
 
-void Text::endEdit(EditData&)
+void TextBase::endEdit(EditData&)
       {
       static const qreal w = 2.0;
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
@@ -1722,7 +1717,7 @@ void Text::endEdit(EditData&)
 //   editInsertText
 //---------------------------------------------------------
 
-void Text::editInsertText(TextCursor* cursor, const QString& s)
+void TextBase::editInsertText(TextCursor* cursor, const QString& s)
       {
       textInvalid = true;
 
@@ -1747,7 +1742,7 @@ void Text::editInsertText(TextCursor* cursor, const QString& s)
 //   endHexState
 //---------------------------------------------------------
 
-void Text::endHexState()
+void TextBase::endHexState()
       {
 #if 0
       if (hexState >= 0) {
@@ -1776,7 +1771,7 @@ void Text::endHexState()
 //   selectAll
 //---------------------------------------------------------
 
-void Text::selectAll(TextCursor* _cursor)
+void TextBase::selectAll(TextCursor* _cursor)
       {
       _cursor->setSelectLine(0);
       _cursor->setSelectColumn(0);
@@ -1788,7 +1783,7 @@ void Text::selectAll(TextCursor* _cursor)
 //   deleteSelectedText
 //---------------------------------------------------------
 
-bool Text::deleteSelectedText(EditData& ed)
+bool TextBase::deleteSelectedText(EditData& ed)
       {
       TextCursor* _cursor = cursor(ed);
       if (!_cursor->hasSelection())
@@ -1808,7 +1803,7 @@ bool Text::deleteSelectedText(EditData& ed)
             if (c1 > c2)
                   qSwap(c1, c2);
             }
-      int rows = Text::rows();
+      int rows = TextBase::rows();
 
       for (int row = 0; row < rows; ++row) {
             TextBlock& t = _layout[row];
@@ -1841,7 +1836,7 @@ bool Text::deleteSelectedText(EditData& ed)
 //   write
 //---------------------------------------------------------
 
-void Text::write(XmlWriter& xml) const
+void TextBase::write(XmlWriter& xml) const
       {
       xml.stag(name());
       writeProperties(xml, true, true);
@@ -1852,7 +1847,7 @@ void Text::write(XmlWriter& xml) const
 //   read
 //---------------------------------------------------------
 
-void Text::read(XmlReader& e)
+void TextBase::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             if (!readProperties(e))
@@ -1885,7 +1880,7 @@ static const std::array<P_ID, 18> pids { {
 //   writeProperties
 //---------------------------------------------------------
 
-void Text::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
+void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
       {
       Element::writeProperties(xml);
       for (P_ID i :pids)
@@ -1898,7 +1893,7 @@ void Text::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle*/) 
 //   readProperties
 //---------------------------------------------------------
 
-bool Text::readProperties(XmlReader& e)
+bool TextBase::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
@@ -1926,7 +1921,7 @@ bool Text::readProperties(XmlReader& e)
 //    insert text at cursor position and move cursor
 //---------------------------------------------------------
 
-void Text::insertText(EditData& ed, const QString& s)
+void TextBase::insertText(EditData& ed, const QString& s)
       {
       TextCursor* _cursor = cursor(ed);
       deleteSelectedText(ed);
@@ -1939,7 +1934,7 @@ void Text::insertText(EditData& ed, const QString& s)
 //   insertSym
 //---------------------------------------------------------
 
-void Text::insertSym(EditData& ed, SymId id)
+void TextBase::insertSym(EditData& ed, SymId id)
       {
       deleteSelectedText(ed);
       QString s = score()->scoreFont()->toString(id);
@@ -1950,7 +1945,7 @@ void Text::insertSym(EditData& ed, SymId id)
 //   pageRectangle
 //---------------------------------------------------------
 
-QRectF Text::pageRectangle() const
+QRectF TextBase::pageRectangle() const
       {
       if (parent() && (parent()->isHBox() || parent()->isVBox() || parent()->isTBox())) {
             Box* box = toBox(parent());
@@ -1981,7 +1976,7 @@ QRectF Text::pageRectangle() const
 //   dragTo
 //---------------------------------------------------------
 
-void Text::dragTo(EditData& ed)
+void TextBase::dragTo(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
       TextCursor* _cursor = ted->cursor;
@@ -1994,7 +1989,7 @@ void Text::dragTo(EditData& ed)
 //   dragAnchor
 //---------------------------------------------------------
 
-QLineF Text::dragAnchor() const
+QLineF TextBase::dragAnchor() const
       {
       qreal xp = 0.0;
       for (Element* e = parent(); e; e = e->parent())
@@ -2017,14 +2012,14 @@ QLineF Text::dragAnchor() const
 //   paste
 //---------------------------------------------------------
 
-void Text::paste(EditData& ed)
+void TextBase::paste(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
       TextCursor* _cursor = ted->cursor;
 
       QString txt = QApplication::clipboard()->text(QClipboard::Clipboard);
       if (MScore::debugMode)
-            qDebug("Text::paste() <%s>", qPrintable(txt));
+            qDebug("<%s>", qPrintable(txt));
 
       int state = 0;
       QString token;
@@ -2115,7 +2110,7 @@ void Text::paste(EditData& ed)
 //    set text cursor
 //---------------------------------------------------------
 
-bool Text::mousePress(EditData& ed)
+bool TextBase::mousePress(EditData& ed)
       {
       bool shift = ed.modifiers & Qt::ShiftModifier;
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
@@ -2131,7 +2126,7 @@ bool Text::mousePress(EditData& ed)
 //   layoutEdit
 //---------------------------------------------------------
 
-void Text::layoutEdit()
+void TextBase::layoutEdit()
       {
       layout();
       if (parent() && parent()->type() == ElementType::TBOX) {
@@ -2151,7 +2146,7 @@ void Text::layoutEdit()
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Text::acceptDrop(EditData& data) const
+bool TextBase::acceptDrop(EditData& data) const
       {
       ElementType type = data.element->type();
       return type == ElementType::SYMBOL || type == ElementType::FSYMBOL;
@@ -2161,7 +2156,7 @@ bool Text::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Text::drop(EditData& ed)
+Element* TextBase::drop(EditData& ed)
       {
       TextCursor* _cursor = cursor(ed);
 
@@ -2197,7 +2192,7 @@ Element* Text::drop(EditData& ed)
 //   setPlainText
 //---------------------------------------------------------
 
-void Text::setPlainText(const QString& s)
+void TextBase::setPlainText(const QString& s)
       {
       setXmlText(s.toHtmlEscaped());
       }
@@ -2206,7 +2201,7 @@ void Text::setPlainText(const QString& s)
 //   setXmlText
 //---------------------------------------------------------
 
-void Text::setXmlText(const QString& s)
+void TextBase::setXmlText(const QString& s)
       {
       _text = s;
       layoutInvalid = true;
@@ -2219,7 +2214,7 @@ void Text::setXmlText(const QString& s)
 //    return plain text with symbols
 //---------------------------------------------------------
 
-QString Text::plainText() const
+QString TextBase::plainText() const
       {
       QString s;
 
@@ -2239,7 +2234,7 @@ QString Text::plainText() const
 //   xmlText
 //---------------------------------------------------------
 
-QString Text::xmlText() const
+QString TextBase::xmlText() const
       {
       if (textInvalid)
             ((Text*)(this))->genText();    // ugh!
@@ -2250,7 +2245,7 @@ QString Text::xmlText() const
 //   convertFromHtml
 //---------------------------------------------------------
 
-QString Text::convertFromHtml(const QString& ss) const
+QString TextBase::convertFromHtml(const QString& ss) const
       {
       QTextDocument doc;
       doc.setHtml(ss);
@@ -2319,7 +2314,7 @@ QString Text::convertFromHtml(const QString& ss) const
 //    convert from internal html format to Qt
 //---------------------------------------------------------
 
-QString Text::convertToHtml(const QString& s, const TextStyle& /*st*/)
+QString TextBase::convertToHtml(const QString& s, const TextStyle& /*st*/)
       {
 //TODO      qreal size     = st.size();
 //      QString family = st.family();
@@ -2332,7 +2327,7 @@ QString Text::convertToHtml(const QString& s, const TextStyle& /*st*/)
 //   tagEscape
 //---------------------------------------------------------
 
-QString Text::tagEscape(QString s)
+QString TextBase::tagEscape(QString s)
       {
       QStringList tags = { "sym", "b", "i", "u", "sub", "sup" };
       for (QString tag : tags) {
@@ -2359,7 +2354,7 @@ QString Text::tagEscape(QString s)
 //   unEscape
 //---------------------------------------------------------
 
-QString Text::unEscape(QString s)
+QString TextBase::unEscape(QString s)
       {
       s.replace("&lt;", "<");
       s.replace("&gt;", ">");
@@ -2372,7 +2367,7 @@ QString Text::unEscape(QString s)
 //   escape
 //---------------------------------------------------------
 
-QString Text::escape(QString s)
+QString TextBase::escape(QString s)
       {
       s.replace("<", "&lt;");
       s.replace(">", "&gt;");
@@ -2385,7 +2380,7 @@ QString Text::escape(QString s)
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Text::accessibleInfo() const
+QString TextBase::accessibleInfo() const
       {
       QString rez;
       switch (subStyle()) {
@@ -2413,7 +2408,7 @@ QString Text::accessibleInfo() const
 //   screenReaderInfo
 //---------------------------------------------------------
 
-QString Text::screenReaderInfo() const
+QString TextBase::screenReaderInfo() const
       {
       QString rez;
       switch (subStyle()) {
@@ -2437,7 +2432,7 @@ QString Text::screenReaderInfo() const
 //   subtype
 //---------------------------------------------------------
 
-int Text::subtype() const
+int TextBase::subtype() const
       {
       switch (subStyle()) {
             case SubStyle::TITLE:
@@ -2455,7 +2450,7 @@ int Text::subtype() const
 //   subtypeName
 //---------------------------------------------------------
 
-QString Text::subtypeName() const
+QString TextBase::subtypeName() const
       {
       QString rez;
       switch (subStyle()) {
@@ -2481,7 +2476,7 @@ QString Text::subtypeName() const
  Used by the MusicXML formatted export to avoid parsing the xml text format
  */
 
-QList<TextFragment> Text::fragmentList() const
+QList<TextFragment> TextBase::fragmentList() const
       {
       QList<TextFragment> res;
       for (const TextBlock& block : _layout) {
@@ -2508,7 +2503,7 @@ QList<TextFragment> Text::fragmentList() const
 //  (this is incomplete/experimental)
 //---------------------------------------------------------
 
-bool Text::validateText(QString& s)
+bool TextBase::validateText(QString& s)
       {
       QString d;
       for (int i = 0; i < s.size(); ++i) {
@@ -2568,7 +2563,7 @@ bool Text::validateText(QString& s)
 //   inputTransition
 //---------------------------------------------------------
 
-void Text::inputTransition(QInputMethodEvent* ie)
+void TextBase::inputTransition(QInputMethodEvent* ie)
       {
 #if 0
       // remove preedit string
@@ -2578,7 +2573,7 @@ void Text::inputTransition(QInputMethodEvent* ie)
                   _cursor->deleteChar();
             }
 
-      qDebug("Text::inputTransition <%s><%s> len %d start %d, preEdit size %d",
+      qDebug("TextBase::inputTransition <%s><%s> len %d start %d, preEdit size %d",
          qPrintable(ie->commitString()),
          qPrintable(ie->preeditString()),
          ie->replacementLength(), ie->replacementStart(), preEdit.size());
@@ -2621,7 +2616,7 @@ void Text::inputTransition(QInputMethodEvent* ie)
 //   font
 //---------------------------------------------------------
 
-QFont Text::font() const
+QFont TextBase::font() const
       {
       qreal m = _size;
       if (_sizeIsSpatiumDependent)
@@ -2636,7 +2631,7 @@ QFont Text::font() const
 //   fontMetrics
 //---------------------------------------------------------
 
-QFontMetricsF Text::fontMetrics() const
+QFontMetricsF TextBase::fontMetrics() const
       {
       return QFontMetricsF(font());
       }
@@ -2645,7 +2640,7 @@ QFontMetricsF Text::fontMetrics() const
 //   initSubStyle
 //---------------------------------------------------------
 
-void Text::initSubStyle(SubStyle s)
+void TextBase::initSubStyle(SubStyle s)
       {
       _subStyle = s;
       Element::initSubStyle(s);
@@ -2655,7 +2650,7 @@ void Text::initSubStyle(SubStyle s)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Text::getProperty(P_ID propertyId) const
+QVariant TextBase::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::FONT_FACE:
@@ -2705,7 +2700,7 @@ QVariant Text::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Text::setProperty(P_ID propertyId, const QVariant& v)
+bool TextBase::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
       bool rv = true;
@@ -2780,7 +2775,7 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Text::propertyDefault(P_ID id) const
+QVariant TextBase::propertyDefault(P_ID id) const
       {
       for (const StyledProperty& p : Ms::subStyle(_subStyle)) {
             if (p.propertyIdx == id)
@@ -2809,7 +2804,7 @@ QVariant Text::propertyDefault(P_ID id) const
 //---------------------------------------------------------
 
 #if 0
-void Text::resetProperty(P_ID id)
+void TextBase::resetProperty(P_ID id)
       {
       PropertyFlags* p = propertyFlagsP(id);
       if (p) {
@@ -2825,7 +2820,7 @@ void Text::resetProperty(P_ID id)
 //   reset
 //---------------------------------------------------------
 
-void Text::reset()
+void TextBase::reset()
       {
       for (const StyledProperty& p : Ms::subStyle(_subStyle))
             undoResetProperty(p.propertyIdx);
@@ -2836,7 +2831,7 @@ void Text::reset()
 //   getPropertyStyle
 //---------------------------------------------------------
 
-StyleIdx Text::getPropertyStyle(P_ID id) const
+StyleIdx TextBase::getPropertyStyle(P_ID id) const
       {
       for (auto sp : Ms::subStyle(_subStyle)) {
             if (sp.propertyIdx == id)
@@ -2849,7 +2844,7 @@ StyleIdx Text::getPropertyStyle(P_ID id) const
 //   styleChanged
 //---------------------------------------------------------
 
-void Text::styleChanged()
+void TextBase::styleChanged()
       {
       for (const StyledProperty& p : Ms::subStyle(_subStyle)) {
             if (propertyFlags(p.propertyIdx) == PropertyFlags::STYLED)
@@ -2863,7 +2858,7 @@ void Text::styleChanged()
 //   setPropertyFlags
 //---------------------------------------------------------
 
-void Text::setPropertyFlags(P_ID id, PropertyFlags f)
+void TextBase::setPropertyFlags(P_ID id, PropertyFlags f)
       {
       PropertyFlags* p = propertyFlagsP(id);
       if (p)
@@ -2877,7 +2872,7 @@ void Text::setPropertyFlags(P_ID id, PropertyFlags f)
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags& Text::propertyFlags(P_ID id)
+PropertyFlags& TextBase::propertyFlags(P_ID id)
       {
       switch (id) {
             case P_ID::FONT_FACE:
@@ -2921,7 +2916,7 @@ PropertyFlags& Text::propertyFlags(P_ID id)
 //   editCut
 //---------------------------------------------------------
 
-void Text::editCut(EditData& ed)
+void TextBase::editCut(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
       TextCursor* _cursor = ted->cursor;
@@ -2940,7 +2935,7 @@ void Text::editCut(EditData& ed)
 //   editCopy
 //---------------------------------------------------------
 
-void Text::editCopy(EditData& ed)
+void TextBase::editCopy(EditData& ed)
       {
       //
       // store selection as plain text
@@ -2956,7 +2951,7 @@ void Text::editCopy(EditData& ed)
 //   cursor
 //---------------------------------------------------------
 
-TextCursor* Text::cursor(EditData& ed)
+TextCursor* TextBase::cursor(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
       return ted->cursor;
@@ -2966,7 +2961,7 @@ TextCursor* Text::cursor(EditData& ed)
 //   draw
 //---------------------------------------------------------
 
-void Text::draw(QPainter* p) const
+void TextBase::draw(QPainter* p) const
       {
       if (hasFrame()) {
             if (frameWidth().val() != 0.0) {
@@ -2999,7 +2994,7 @@ void Text::draw(QPainter* p) const
 //    draw edit mode decorations
 //---------------------------------------------------------
 
-void Text::drawEditMode(QPainter* p, EditData& ed)
+void TextBase::drawEditMode(QPainter* p, EditData& ed)
       {
       QPointF pos(canvasPos());
       p->translate(pos);
@@ -3095,7 +3090,7 @@ bool TextCursor::deleteChar() const
 //   edit
 //---------------------------------------------------------
 
-bool Text::edit(EditData& ed)
+bool TextBase::edit(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
       TextCursor* _cursor = ted->cursor;
@@ -3281,5 +3276,18 @@ bool Text::edit(EditData& ed)
       return true;
       }
 
+//---------------------------------------------------------
+//   Text
+//---------------------------------------------------------
+
+Text::Text(Score* s) : TextBase(s)
+      {
+      init(SubStyle::DEFAULT);
+      }
+
+Text::Text(SubStyle ss, Score* s) : TextBase(s)
+      {
+      init(ss);
+      }
 }
 

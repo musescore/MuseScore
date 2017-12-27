@@ -40,7 +40,7 @@ namespace Ms {
 
 class LyricsLine;
 
-class Lyrics final : public Text {
+class Lyrics final : public TextBase {
    public:
       enum class Syllabic : char { SINGLE, BEGIN, END, MIDDLE };
       // MELISMA FIRST UNDERSCORE:
@@ -124,7 +124,7 @@ class Lyrics final : public Text {
    #endif
 #endif
 
-      using Text::paste;
+      using TextBase::paste;
       virtual void paste(EditData&) override;
 
       virtual QVariant getProperty(P_ID propertyId) const override;

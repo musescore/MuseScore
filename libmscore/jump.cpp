@@ -40,8 +40,9 @@ int jumpTypeTableSize()
 //---------------------------------------------------------
 
 Jump::Jump(Score* s)
-   : Text(SubStyle::REPEAT_RIGHT, s)
+   : TextBase(s)
       {
+      init(SubStyle::REPEAT_RIGHT);
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       setLayoutToParentWidth(true);
       _playRepeats = false;
@@ -93,7 +94,7 @@ QString Jump::jumpTypeUserName() const
 void Jump::layout()
       {
       setPos(QPointF(0.0, score()->styleP(StyleIdx::jumpPosAbove)));
-      Text::layout1();
+      TextBase::layout1();
       adjustReadPos();
       }
 
@@ -113,7 +114,7 @@ void Jump::read(XmlReader& e)
                   _continueAt = e.readElementText();
             else if (tag == "playRepeats")
                   _playRepeats = e.readBool();
-            else if (!Text::readProperties(e))
+            else if (!TextBase::readProperties(e))
                   e.unknown();
             }
       }
@@ -125,7 +126,7 @@ void Jump::read(XmlReader& e)
 void Jump::write(XmlWriter& xml) const
       {
       xml.stag(name());
-      Text::writeProperties(xml);
+      TextBase::writeProperties(xml);
       xml.tag("jumpTo", _jumpTo);
       xml.tag("playUntil", _playUntil);
       xml.tag("continueAt", _continueAt);
@@ -178,7 +179,7 @@ QVariant Jump::getProperty(P_ID propertyId) const
             default:
                   break;
             }
-      return Text::getProperty(propertyId);
+      return TextBase::getProperty(propertyId);
       }
 
 //---------------------------------------------------------
@@ -201,7 +202,7 @@ bool Jump::setProperty(P_ID propertyId, const QVariant& v)
                   setPlayRepeats(v.toInt());
                   break;
             default:
-                  if (!Text::setProperty(propertyId, v))
+                  if (!TextBase::setProperty(propertyId, v))
                         return false;
                   break;
             }
@@ -228,7 +229,7 @@ QVariant Jump::propertyDefault(P_ID propertyId) const
             default:
                   break;
             }
-      return Text::propertyDefault(propertyId);
+      return TextBase::propertyDefault(propertyId);
       }
 
 //---------------------------------------------------------

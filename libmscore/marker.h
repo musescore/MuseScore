@@ -24,7 +24,7 @@ namespace Ms {
 //   @P markerType  enum (Marker.CODA, .CODETTA, .FINE, .SEGNO, .TOCODA, .USER, .VARCODA, .VARSEGNO)
 //---------------------------------------------------------
 
-class Marker final : public Text {
+class Marker final : public TextBase {
    public:
       enum class Type : char {
             SEGNO,

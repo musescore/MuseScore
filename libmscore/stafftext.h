@@ -32,7 +32,7 @@ struct ChannelActions {
 //   @@ StaffText
 //---------------------------------------------------------
 
-class StaffText : public Text  {
+class StaffText : public TextBase  {
       QString _channelNames[4];
       QList<ChannelActions> _channelActions;
       SwingParameters _swingParameters;

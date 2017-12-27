@@ -3162,7 +3162,7 @@ static void beatUnit(XmlWriter& xml, const TDuration dur)
             }
       }
 
-static void wordsMetrome(XmlWriter& xml, Score* s, Text const* const text)
+static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text)
       {
       //qDebug("wordsMetrome('%s')", qPrintable(text->xmlText()));
       const QList<TextFragment> list = text->fragmentList();

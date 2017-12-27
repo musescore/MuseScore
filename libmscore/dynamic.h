@@ -28,7 +28,7 @@ class Segment;
 //   @P range  enum (Dynamic.STAFF, .PART, .SYSTEM)
 //-----------------------------------------------------------------------------
 
-class Dynamic final : public Text {
+class Dynamic final : public TextBase {
    public:
       enum class Type : char {
             OTHER,

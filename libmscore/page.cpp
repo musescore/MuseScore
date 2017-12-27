@@ -156,7 +156,8 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       if (area < 3) {
             text = score()->headerText();
             if (!text) {
-                  text = new Text(SubStyle::HEADER, score());
+                  text = new Text(score());
+                  text->init(SubStyle::HEADER);
                   text->setLayoutToParentWidth(true);
                   score()->setHeaderText(text);
                   }
@@ -164,7 +165,8 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       else {
             text = score()->footerText();
             if (!text) {
-                  text = new Text(SubStyle::FOOTER, score());
+                  text = new Text(score());
+                  text->init(SubStyle::FOOTER);
                   text->setLayoutToParentWidth(true);
                   score()->setFooterText(text);
                   }
