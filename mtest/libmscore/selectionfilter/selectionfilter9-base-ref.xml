@@ -5,7 +5,6 @@
     <move>0/1</move>
     <Pedal id="2">
       <beginText>&lt;sym&gt;keyboardPedalPed&lt;sym&gt;</beginText>
-      <beginTextOffset x="0" y="0"/>
       <track>0</track>
       </Pedal>
     <Chord>

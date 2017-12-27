@@ -114,7 +114,6 @@
           <text><sym>metNoteQuarterUp</sym> = 120</text>
           </Tempo>
         <PalmMute id="2">
-          <beginTextOffset x="0" y="0"/>
           <lid>15</lid>
           </PalmMute>
         <Chord>
@@ -297,7 +296,6 @@
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <PalmMute id="3">
-            <beginTextOffset x="0" y="0"/>
             <lid>15</lid>
             </PalmMute>
           <Chord>
@@ -354,7 +352,6 @@
             <accidental>0</accidental>
             </KeySig>
           <PalmMute id="4">
-            <beginTextOffset x="0" y="0"/>
             <lid>15</lid>
             </PalmMute>
           <Chord>

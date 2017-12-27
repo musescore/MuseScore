@@ -79,7 +79,6 @@
           <text><sym>metNoteQuarterUp</sym> = 120</text>
           </Tempo>
         <LetRing id="2">
-          <beginTextOffset x="0" y="0"/>
           <lid>15</lid>
           </LetRing>
         <Chord>
@@ -227,7 +226,6 @@
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <LetRing id="3">
-            <beginTextOffset x="0" y="0"/>
             <lid>15</lid>
             </LetRing>
           <Chord>
@@ -284,7 +282,6 @@
             <accidental>0</accidental>
             </KeySig>
           <LetRing id="4">
-            <beginTextOffset x="0" y="0"/>
             <lid>15</lid>
             </LetRing>
           <Chord>

@@ -405,8 +405,6 @@ QVariant TextLineBaseSegment::propertyDefault(P_ID id) const
 TextLineBase::TextLineBase(Score* s)
    : SLine(s)
       {
-      for (P_ID pid : pids)
-            setProperty(pid, propertyDefault(pid));
       }
 
 TextLineBase::TextLineBase(const TextLineBase& e)
@@ -414,6 +412,16 @@ TextLineBase::TextLineBase(const TextLineBase& e)
       {
       for (P_ID pid : pids)
             setProperty(pid, e.getProperty(pid));
+      }
+
+//---------------------------------------------------------
+//   init
+//---------------------------------------------------------
+
+void TextLineBase::init()
+      {
+      for (P_ID pid : pids)
+            setProperty(pid, propertyDefault(pid));
       }
 
 //---------------------------------------------------------

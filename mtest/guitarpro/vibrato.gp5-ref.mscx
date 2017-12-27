@@ -137,6 +137,7 @@
             <string>2</string>
             </Note>
           </Chord>
+        <endSpanner id="3"/>
         </Measure>
       </Staff>
     <Score>
@@ -295,6 +296,7 @@
               <string>2</string>
               </Note>
             </Chord>
+          <endSpanner id="5"/>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -362,6 +364,7 @@
               <string>2</string>
               </Note>
             </Chord>
+          <endSpanner id="7"/>
           </Measure>
         </Staff>
       <name>Steel Guitar</name>

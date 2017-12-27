@@ -113,6 +113,7 @@ class TextLineBase : public SLine {
    public:
       TextLineBase(Score* s);
       TextLineBase(const TextLineBase&);
+      void init();
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
