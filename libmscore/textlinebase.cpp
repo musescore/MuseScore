@@ -698,7 +698,7 @@ QVariant TextLineBase::propertyDefault(P_ID id) const
             case P_ID::BEGIN_FONT_SIZE:
             case P_ID::CONTINUE_FONT_SIZE:
             case P_ID::END_FONT_SIZE:
-                  return 10.0;
+                  return 12.0;
             case P_ID::BEGIN_FONT_BOLD:
             case P_ID::BEGIN_FONT_ITALIC:
             case P_ID::BEGIN_FONT_UNDERLINE:
@@ -716,7 +716,7 @@ QVariant TextLineBase::propertyDefault(P_ID id) const
             case P_ID::BEGIN_TEXT_ALIGN:
             case P_ID::CONTINUE_TEXT_ALIGN:
             case P_ID::END_TEXT_ALIGN:
-                  return QVariant::fromValue(Align::LEFT);
+                  return QVariant::fromValue(Align::VCENTER);
             case P_ID::LINE_VISIBLE:
                   return true;
             default:

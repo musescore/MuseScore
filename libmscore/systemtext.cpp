@@ -19,14 +19,16 @@ namespace Ms {
 //---------------------------------------------------------
 
 SystemText::SystemText(Score* s)
-   : StaffText(SubStyle::SYSTEM, s)
+   : TextBase(s)
       {
+      init(SubStyle::SYSTEM);
       setSystemFlag(true);
       }
 
 SystemText::SystemText(SubStyle ss, Score* s)
-   : StaffText(ss, s)
+   : TextBase(s)
       {
+      init(ss);
       setSystemFlag(true);
       }
 
@@ -40,7 +42,7 @@ QVariant SystemText::propertyDefault(P_ID id) const
             case P_ID::SUB_STYLE:
                   return int(SubStyle::SYSTEM);
             default:
-                  return StaffText::propertyDefault(id);
+                  return TextBase::propertyDefault(id);
             }
       }
 
@@ -53,7 +55,7 @@ void SystemText::write(XmlWriter& xml) const
       if (!xml.canWrite(this))
             return;
       xml.stag(name());
-      StaffText::writeProperties(xml);
+      TextBase::writeProperties(xml);
       xml.etag();
       }
 

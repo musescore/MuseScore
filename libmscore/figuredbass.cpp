@@ -956,8 +956,9 @@ bool FiguredBassItem::startsWithParenthesis() const
 //---------------------------------------------------------
 
 FiguredBass::FiguredBass(Score* s)
-   : Text(SubStyle::FIGURED_BASS, s)
+   : TextBase(s)
       {
+      init(SubStyle::FIGURED_BASS);
       setFlag(ElementFlag::ON_STAFF, true);
       setOnNote(true);
 #if 0  // TODO
@@ -978,7 +979,7 @@ FiguredBass::FiguredBass(Score* s)
       }
 
 FiguredBass::FiguredBass(const FiguredBass& fb)
-   : Text(fb)
+   : TextBase(fb)
       {
       setOnNote(fb.onNote());
       setTicks(fb.ticks());
@@ -1011,7 +1012,7 @@ void FiguredBass::write(XmlWriter& xml) const
             xml.tag("ticks", ticks());
       // if unparseable items, write full text data
       if (items.size() < 1)
-            Text::writeProperties(xml, true);
+            TextBase::writeProperties(xml, true);
       else {
 //            if (textStyleType() != StyledPropertyListIdx::FIGURED_BASS)
 //                  // if all items parsed and not unstiled, we simply have a special style: write it
@@ -1050,7 +1051,7 @@ void FiguredBass::read(XmlReader& e)
                   }
 //            else if (tag == "style")
 //                  setStyledPropertyListIdx(e.readElementText());
-            else if (!Text::readProperties(e))
+            else if (!TextBase::readProperties(e))
                   e.unknown();
             }
       // if items could be parsed set normalized text
@@ -1080,7 +1081,7 @@ void FiguredBass::layout()
       // do nothing else, keeping default laying out and formatting
 //      if (editMode() || items.size() < 1 || subStyle() != SubStyle::FIGURED_BASS) {
       if (items.size() < 1 || subStyle() != SubStyle::FIGURED_BASS) {
-            Text::layout();
+            TextBase::layout();
             return;
             }
 
@@ -1207,10 +1208,10 @@ void FiguredBass::draw(QPainter* painter) const
       // if in edit mode or with custom style, use standard text drawing
 //      if (editMode() || subStyle() != SubStyle::FIGURED_BASS)
       if (subStyle() != SubStyle::FIGURED_BASS)
-            Text::draw(painter);
+            TextBase::draw(painter);
       else {                                                // not edit mode:
             if (items.size() < 1)                           // if not parseable into f.b. items
-                  Text::draw(painter);                      // draw as standard text
+                  TextBase::draw(painter);                      // draw as standard text
             else
                   for (FiguredBassItem* item : items) {     // if parseable into f.b. items
                         painter->translate(item->pos());    // draw each item in its proper position
@@ -1231,15 +1232,15 @@ void FiguredBass::draw(QPainter* painter) const
 
 void FiguredBass::startEdit(EditData& ed)
       {
-      Text::layout();               // convert layout to standard Text conventions
-      Text::startEdit(ed);
+      TextBase::layout();               // convert layout to standard Text conventions
+      TextBase::startEdit(ed);
       }
 
 void FiguredBass::endEdit(EditData& ed)
       {
       int idx;
 
-      Text::endEdit(ed);
+      TextBase::endEdit(ed);
       // as the standard text editor keeps inserting spurious HTML formatting and styles
       // retrieve and work only on the plain text
       QString txt = plainText();
@@ -1257,7 +1258,7 @@ void FiguredBass::endEdit(EditData& ed)
             FiguredBassItem* pItem = new FiguredBassItem(score(), idx++);
             if(!pItem->parse(str)) {            // if any item fails parsing
                   items.clear();                // clear item list
-                  Text::layout();               // keeping text as entered by user
+                  TextBase::layout();               // keeping text as entered by user
                   return;
                   }
             pItem->setTrack(track());
@@ -1363,7 +1364,7 @@ QVariant FiguredBass::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             default:
-                  return Text::getProperty(propertyId);
+                  return TextBase::getProperty(propertyId);
             }
       }
 
@@ -1372,7 +1373,7 @@ bool FiguredBass::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
             default:
-                  return Text::setProperty(propertyId, v);
+                  return TextBase::setProperty(propertyId, v);
             }
       score()->setLayoutAll();
       return true;
@@ -1382,7 +1383,7 @@ QVariant FiguredBass::propertyDefault(P_ID id) const
       {
       switch(id) {
             default:
-                  return Text::propertyDefault(id);
+                  return TextBase::propertyDefault(id);
             }
       }
 

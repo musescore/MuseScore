@@ -37,7 +37,6 @@ enum class ElementType {
       BAR_LINE,
       SYSTEM_DIVIDER,
       STEM_SLASH,
-      LINE,
       ARPEGGIO,
       ACCIDENTAL,
       LEDGER_LINE,

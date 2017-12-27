@@ -640,84 +640,6 @@ void ElementList::write(XmlWriter& xml) const
       }
 
 //---------------------------------------------------------
-//   Line
-//---------------------------------------------------------
-
-Line::Line(Score* s, bool v)
-   : Element(s)
-      {
-      vertical = v;
-      }
-
-//---------------------------------------------------------
-//   spatiumChanged
-//---------------------------------------------------------
-
-void Line::spatiumChanged(qreal oldValue, qreal newValue)
-      {
-      _width = (_width / oldValue) * newValue;
-      _len   = (_len / oldValue) * newValue;
-      layout();
-      }
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Line::layout()
-      {
-      qreal w2 = _width * .5;
-      if (vertical)
-            bbox().setRect(-w2, -w2, _width, _len + _width);
-      else
-            bbox().setRect(-w2, -w2, _len + _width, _width);
-      }
-
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void Line::draw(QPainter* painter) const
-      {
-      painter->setPen(QPen(curColor(), _width));
-      if (vertical)
-            painter->drawLine(QLineF(0.0, 0.0, 0.0, _len));
-      else
-            painter->drawLine(QLineF(0.0, 0.0, _len, 0.0));
-      }
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void Line::writeProperties(XmlWriter& xml) const
-      {
-      xml.tag("lineWidth", _width / spatium());
-      xml.tag("lineLen", _len / spatium());
-      if (!vertical)
-            xml.tag("vertical", vertical);
-      }
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Line::readProperties(XmlReader& e)
-      {
-      const QStringRef& tag(e.name());
-
-      if (tag == "lineWidth")
-            _width = e.readDouble() * spatium();
-      else if (tag == "lineLen")
-            _len = e.readDouble() * spatium();
-      else if (tag == "vertical")
-            vertical = e.readInt();
-      else
-            return false;
-      return true;
-      }
-
-//---------------------------------------------------------
 //   Compound
 //---------------------------------------------------------
 
@@ -978,7 +900,6 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::SLUR_SEGMENT:
             case ElementType::TIE_SEGMENT:
             case ElementType::STEM_SLASH:
-            case ElementType::LINE:
             case ElementType::TIE:
             case ElementType::PAGE:
             case ElementType::BEAM:

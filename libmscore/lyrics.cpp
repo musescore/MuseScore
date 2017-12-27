@@ -57,8 +57,9 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Element::Pl
 //---------------------------------------------------------
 
 Lyrics::Lyrics(Score* s)
-   : Text(SubStyle::LYRIC1, s)
+   : TextBase(s)
       {
+      init(SubStyle::LYRIC1);
       _no         = 0;
       _ticks      = 0;
       _syllabic   = Syllabic::SINGLE;
@@ -68,7 +69,7 @@ Lyrics::Lyrics(Score* s)
       }
 
 Lyrics::Lyrics(const Lyrics& l)
-   : Text(l)
+   : TextBase(l)
       {
       _no        = l._no;
       _ticks     = l._ticks;
@@ -113,7 +114,7 @@ void Lyrics::write(XmlWriter& xml) const
             }
       writeProperty(xml, P_ID::LYRIC_TICKS);
 
-      Text::writeProperties(xml);
+      TextBase::writeProperties(xml);
       xml.etag();
       }
 
@@ -157,9 +158,9 @@ void Lyrics::read(XmlReader& e)
                   }
             else if (tag == "placement") {
                   placementStyle = PropertyFlags::UNSTYLED;
-                  Text::readProperties(e);
+                  TextBase::readProperties(e);
                   }
-            else if (!Text::readProperties(e))
+            else if (!TextBase::readProperties(e))
                   e.unknown();
             }
       // if any endTick, make it relative to current tick
@@ -180,11 +181,11 @@ void Lyrics::read(XmlReader& e)
 
 void Lyrics::add(Element* el)
       {
-      el->setParent(this);
-      if (el->type() == ElementType::LINE)
+//      el->setParent(this);
+//      if (el->type() == ElementType::LINE)
 //            _separator.append((Line*)el);           // ignore! Internally managed
-            ;
-      else
+//            ;
+//      else
             qDebug("Lyrics::add: unknown element %s", el->name());
       }
 
@@ -262,7 +263,7 @@ void Lyrics::layout()
 void Lyrics::layout1()
       {
       setPos(QPointF());
-      Text::layout1();
+      TextBase::layout1();
       if (!parent()) // palette & clone trick
           return;
 
@@ -297,6 +298,7 @@ void Lyrics::layout1()
             QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)", QRegularExpression::UseUnicodePropertiesOption);
             QRegularExpressionMatch punctuationMatch = punctuationPattern.match(s);
             if (punctuationMatch.hasMatch()) {
+#if 0 // TODO::ws
                   // leading and trailing punctuation
                   QString lp = punctuationMatch.captured(1);
                   QString tp = punctuationMatch.captured(3);
@@ -312,6 +314,7 @@ void Lyrics::layout1()
                   centerAdjust = leading.width() - trailing.width();
                   if (!lp.isEmpty() && lp[0].isDigit())
                         hasNumber = true;
+#endif
                   }
             }
 
@@ -467,7 +470,7 @@ int Lyrics::endTick() const
 
 bool Lyrics::acceptDrop(EditData& data) const
       {
-      return data.element->isText() || Text::acceptDrop(data);
+      return data.element->isText() || TextBase::acceptDrop(data);
       }
 
 //---------------------------------------------------------
@@ -478,7 +481,7 @@ Element* Lyrics::drop(EditData& data)
       {
       ElementType type = data.element->type();
       if (type == ElementType::SYMBOL || type == ElementType::FSYMBOL) {
-            Text::drop(data);
+            TextBase::drop(data);
             return 0;
             }
       if (!data.element->isText()) {
@@ -514,7 +517,7 @@ void Lyrics::setNo(int n)
 
 void Lyrics::endEdit(EditData& ed)
       {
-      Text::endEdit(ed);
+      TextBase::endEdit(ed);
       score()->setLayoutAll();
       }
 
@@ -545,7 +548,7 @@ QVariant Lyrics::getProperty(P_ID propertyId) const
             case P_ID::VERSE:
                   return _no;
             default:
-                  return Text::getProperty(propertyId);
+                  return TextBase::getProperty(propertyId);
             }
       }
 
@@ -570,7 +573,7 @@ bool Lyrics::setProperty(P_ID propertyId, const QVariant& v)
                   _no = v.toInt();
                   break;
             default:
-                  if (!Text::setProperty(propertyId, v))
+                  if (!TextBase::setProperty(propertyId, v))
                         return false;
                   break;
             }
@@ -594,7 +597,7 @@ QVariant Lyrics::propertyDefault(P_ID id) const
             case P_ID::LYRIC_TICKS:
             case P_ID::VERSE:
                   return 0;
-            default: return Text::propertyDefault(id);
+            default: return TextBase::propertyDefault(id);
             }
       }
 
@@ -932,7 +935,7 @@ PropertyFlags& Lyrics::propertyFlags(P_ID id)
                   return ScoreElement::propertyFlags(id);   // return PropertyFlags::NOSTYLE;
 
             default:
-                  return Text::propertyFlags(id);
+                  return TextBase::propertyFlags(id);
             }
       }
 
@@ -972,7 +975,7 @@ void Lyrics::styleChanged()
       {
       if (placementStyle == PropertyFlags::STYLED)
             setPlacement(Placement(score()->styleI(StyleIdx::lyricsPlacement)));
-      Text::styleChanged();
+      TextBase::styleChanged();
       }
 
 //---------------------------------------------------------
@@ -982,7 +985,7 @@ void Lyrics::styleChanged()
 void Lyrics::reset()
       {
       undoResetProperty(P_ID::PLACEMENT);
-      Text::reset();
+      TextBase::reset();
       }
 
 //---------------------------------------------------------
@@ -998,7 +1001,7 @@ void Lyrics::resetProperty(P_ID id)
                   break;
 
             default:
-                  return Text::resetProperty(id);
+                  return TextBase::resetProperty(id);
             }
       }
 

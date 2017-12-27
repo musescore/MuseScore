@@ -23,7 +23,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 InstrumentName::InstrumentName(Score* s)
-   : Text(s)
+   : TextBase(s)
       {
       setInstrumentNameType(InstrumentNameType::SHORT);
       setSelectable(false);
@@ -72,7 +72,7 @@ QVariant InstrumentName::getProperty(P_ID id) const
             case P_ID::INAME_LAYOUT_POSITION:
                   return _layoutPos;
             default:
-                  return Text::getProperty(id);
+                  return TextBase::getProperty(id);
             }
       }
 
@@ -88,7 +88,7 @@ bool InstrumentName::setProperty(P_ID id, const QVariant& v)
                   _layoutPos = v.toInt();
                   break;
             default:
-                  rv = Text::setProperty(id, v);
+                  rv = TextBase::setProperty(id, v);
                   break;
             }
       StyleIdx sidx = getPropertyStyle(id);
@@ -109,7 +109,7 @@ QVariant InstrumentName::propertyDefault(P_ID id) const
             case P_ID::INAME_LAYOUT_POSITION:
                   return 0;
             default:
-                  return Text::propertyDefault(id);
+                  return TextBase::propertyDefault(id);
             }
       }
 

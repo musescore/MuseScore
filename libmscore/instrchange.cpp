@@ -28,21 +28,23 @@ namespace Ms {
 //---------------------------------------------------------
 
 InstrumentChange::InstrumentChange(Score* s)
-   : Text(SubStyle::INSTRUMENT_CHANGE, s)
+   : TextBase(s)
       {
+      init(SubStyle::INSTRUMENT_CHANGE);
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _instrument = new Instrument();
       }
 
 InstrumentChange::InstrumentChange(const Instrument& i, Score* s)
-   : Text(SubStyle::INSTRUMENT_CHANGE, s)
+   : TextBase(s)
       {
+      init(SubStyle::INSTRUMENT_CHANGE);
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _instrument = new Instrument(i);
       }
 
 InstrumentChange::InstrumentChange(const InstrumentChange& is)
-   : Text(is)
+   : TextBase(is)
       {
       _instrument = new Instrument(*is._instrument);
       }
@@ -66,7 +68,7 @@ void InstrumentChange::write(XmlWriter& xml) const
       {
       xml.stag(name());
       _instrument->write(xml, part());
-      Text::writeProperties(xml);
+      TextBase::writeProperties(xml);
       xml.etag();
       }
 
@@ -80,7 +82,7 @@ void InstrumentChange::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "Instrument")
                   _instrument->read(e, part());
-            else if (!Text::readProperties(e))
+            else if (!TextBase::readProperties(e))
                   e.unknown();
             }
       if (score()->mscVersion() <= 206) {
@@ -105,7 +107,7 @@ QVariant InstrumentChange::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
             default:
-                  return Text::getProperty(propertyId);
+                  return TextBase::getProperty(propertyId);
             }
       }
 
@@ -119,7 +121,7 @@ QVariant InstrumentChange::propertyDefault(P_ID propertyId) const
             case P_ID::SUB_STYLE:
                   return int(SubStyle::INSTRUMENT_CHANGE);
             default:
-                  return Text::propertyDefault(propertyId);
+                  return TextBase::propertyDefault(propertyId);
             }
       }
 
@@ -131,7 +133,7 @@ bool InstrumentChange::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
             default:
-                  return Text::setProperty(propertyId, v);
+                  return TextBase::setProperty(propertyId, v);
             }
       return true;
       }

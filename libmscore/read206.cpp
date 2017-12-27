@@ -1011,7 +1011,7 @@ static void readChord(Chord* chord, XmlReader& e)
 //   read
 //---------------------------------------------------------
 
-static void readText(XmlReader& e, Text* t, Element* be)
+static void readText(XmlReader& e, TextBase* t, Element* be)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -1034,7 +1034,7 @@ static void readText(XmlReader& e, Text* t, Element* be)
                   else if (val == "left")
                         ;
                   else
-                        qDebug("readText: unknown alignment: <%s>", qPrintable(val));
+                        qDebug("unknown alignment: <%s>", qPrintable(val));
                   t->setAlign(align);
                   }
             else if (tag == "valign") {
@@ -1049,7 +1049,7 @@ static void readText(XmlReader& e, Text* t, Element* be)
                   else if (val == "top")
                         ;
                   else
-                        qDebug("Text::readProperties: unknown alignment: <%s>", qPrintable(val));
+                        qDebug("unknown alignment: <%s>", qPrintable(val));
                   t->setAlign(align);
                   }
             else if (!t->readProperties(e))
@@ -1766,7 +1766,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         }
                   }
             else if (tag == "Text") {
-                  Text* t = new StaffText(score);
+                  StaffText* t = new StaffText(score);
                   t->setTrack(e.track());
                   readText(e, t, t);
                   if (t->empty()) {

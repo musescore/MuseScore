@@ -824,7 +824,7 @@ void PowerTab::addToScore(ptSection& sec)
             }
       if (!sec.partName.empty() && lastPart != sec.partMarker) {
             lastPart = sec.partMarker;
-            Text* t = new RehearsalMark(score);
+            RehearsalMark* t = new RehearsalMark(score);
             t->setHasFrame(true);
             t->setPlainText(QString(sec.partMarker));
             t->setTrack(0);

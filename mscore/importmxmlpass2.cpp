@@ -1379,7 +1379,7 @@ static void addTextToNote(int l, int c, QString txt, SubStyle style, Score* scor
       {
       if (note) {
             if (!txt.isEmpty()) {
-                  Text* t = new Fingering(score);
+                  TextBase* t = new Fingering(score);
                   t->initSubStyle(style);
                   t->setPlainText(txt);
                   note->add(t);
@@ -2511,7 +2511,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
       // create text if any text was found
 
       if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
-            Text* t = 0;
+            TextBase* t = 0;
             if (_tpoSound > 0.1) {
                   _tpoSound /= 60;
                   t = new TempoText(_score);

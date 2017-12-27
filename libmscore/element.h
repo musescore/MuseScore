@@ -495,38 +495,6 @@ class ElementList : public std::vector<Element*> {
       };
 
 //---------------------------------------------------------
-//   @@ Line
-//---------------------------------------------------------
-
-class Line : public Element {
-      qreal _width;
-      qreal _len;
-
-   protected:
-      bool vertical;
-
-public:
-      Line(Score*);
-      Line(Score*, bool vertical);
-      Line &operator=(const Line&);
-
-      virtual Line* clone() const override        { return new Line(*this); }
-      virtual ElementType type() const override { return ElementType::LINE; }
-      virtual void layout() override;
-
-      virtual void draw(QPainter*) const override;
-      void writeProperties(XmlWriter& xml) const;
-      bool readProperties(XmlReader&);
-
-      qreal len() const          { return _len;   }
-      qreal lineWidth() const    { return _width; }
-      void setLen(qreal v)       { _len = v;      }
-      void setLineWidth(qreal v) { _width = v;    }
-
-      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
-      };
-
-//---------------------------------------------------------
 //   @@ Compound
 //---------------------------------------------------------
 

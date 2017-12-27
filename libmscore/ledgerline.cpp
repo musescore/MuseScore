@@ -16,6 +16,7 @@
 #include "staff.h"
 #include "system.h"
 #include "score.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -24,7 +25,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 LedgerLine::LedgerLine(Score* s)
-   : Line(s, false)
+   : Element(s)
       {
       setSelectable(false);
       _next = 0;
@@ -62,7 +63,11 @@ void LedgerLine::layout()
       setLineWidth(score()->styleP(StyleIdx::ledgerLineWidth) * chord()->mag());
       if (staff())
             setColor(staff()->color());
-      Line::layout();
+      qreal w2 = _width * .5;
+      if (vertical)
+            bbox().setRect(-w2, -w2, _width, _len + _width);
+      else
+            bbox().setRect(-w2, -w2, _len + _width, _width);
       }
 
 //---------------------------------------------------------
@@ -73,7 +78,53 @@ void LedgerLine::draw(QPainter* painter) const
       {
       if (chord()->crossMeasure() == CrossMeasure::SECOND)
             return;
-      Line::draw(painter);
+      painter->setPen(QPen(curColor(), _width));
+      if (vertical)
+            painter->drawLine(QLineF(0.0, 0.0, 0.0, _len));
+      else
+            painter->drawLine(QLineF(0.0, 0.0, _len, 0.0));
+      }
+
+//---------------------------------------------------------
+//   spatiumChanged
+//---------------------------------------------------------
+
+void LedgerLine::spatiumChanged(qreal oldValue, qreal newValue)
+      {
+      _width = (_width / oldValue) * newValue;
+      _len   = (_len / oldValue) * newValue;
+      layout();
+      }
+
+//---------------------------------------------------------
+//   writeProperties
+//---------------------------------------------------------
+
+void LedgerLine::writeProperties(XmlWriter& xml) const
+      {
+      xml.tag("lineWidth", _width / spatium());
+      xml.tag("lineLen", _len / spatium());
+      if (!vertical)
+            xml.tag("vertical", vertical);
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool LedgerLine::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "lineWidth")
+            _width = e.readDouble() * spatium();
+      else if (tag == "lineLen")
+            _len = e.readDouble() * spatium();
+      else if (tag == "vertical")
+            vertical = e.readInt();
+      else
+            return false;
+      return true;
       }
 
 }

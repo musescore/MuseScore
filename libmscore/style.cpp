@@ -1042,6 +1042,7 @@ const std::vector<StyledProperty> rehearsalMarkStyle {
       { StyleIdx::rehearsalMarkFrameRound,            P_ID::FRAME_ROUND            },
       { StyleIdx::rehearsalMarkFrameFgColor,          P_ID::FRAME_FG_COLOR         },
       { StyleIdx::rehearsalMarkFrameBgColor,          P_ID::FRAME_BG_COLOR         },
+      { StyleIdx::rehearsalMarkPlacement,             P_ID::PLACEMENT              },
       };
 
 const std::vector<StyledProperty> repeatLeftStyle {

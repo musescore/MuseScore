@@ -26,7 +26,7 @@ namespace Ms {
 //   @P followText  bool      determine tempo from text
 //-------------------------------------------------------------------
 
-class TempoText final : public Text  {
+class TempoText final : public TextBase  {
       qreal _tempo;           // beats per second
       bool _followText;       // parse text to determine tempo
       qreal _relative;
