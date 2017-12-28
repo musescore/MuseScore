@@ -56,7 +56,7 @@ def main():
         c = client.server().connect(server, port, nickname)
     except irc.client.ServerConnectionError:
         print(sys.exc_info()[1])
-        raise SystemExit(1)
+        raise SystemExit(0)
 
     c.add_global_handler("welcome", on_connect)
     c.add_global_handler("join", on_join)
