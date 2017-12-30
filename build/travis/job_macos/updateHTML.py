@@ -3,19 +3,43 @@ import sys
 import os
 from datetime import datetime
 import time
+from collections import OrderedDict
 from subprocess import check_output
+
+osName = 'macosx'
 
 
 def getFileList(sshKey):
-    a = ["ssh", "-i", sshKey, "musescore-nightlies@ftp-osl.osuosl.org", "ls ftp/macosx/"]
+    a = ["ssh", "-oStrictHostKeyChecking=no", "-i", sshKey, "musescore-nightlies@ftp-osl.osuosl.org", "ls ftp/" + osName + "/"]
     return check_output(a)
 
 
 def generateHTML(pathname, lines):
     li = ""
+    branches = dict()
     for l in lines:
         if l and l.startswith("MuseScore"):
-            li += '<li><a href="http://ftp.osuosl.org/pub/musescore-nightlies/macosx/' + l + '">' + l + "</a></li>"
+            sA = l.split("-")
+            if len(sA) > 5:
+                branch = sA[5]
+                branches.setdefault(branch, [])
+                branches[branch].append(l)
+    baseUrl = 'https://ftp.osuosl.org/pub/musescore-nightlies/' + osName + '/'
+    if "master" in branches:
+        li += '<h4>master</h4>'
+        li += '<ul>'
+        for f in branches["master"]:
+            li += '<li><a href="' + baseUrl + f + '">' + f + '</a></li>'
+        li += '</ul>'
+
+    odict = OrderedDict(sorted(branches.items(), key=lambda t: t[0]))
+    for b in odict:
+        if b != "master":
+            li += '<h4>' + b + '</h4>'
+            li += '<ul>'
+            for f in odict[b]:
+                li += '<li><a href="' + baseUrl + f + '">' + f + '</a></li>'
+            li += '</ul>'
 
     htmlTplPath = pathname + "/web/index.html.tpl"
     htmlPath = pathname + "/web/index.html"
@@ -31,6 +55,7 @@ def generateHTML(pathname, lines):
 
 def generateRSS(pathname, lines):
     li = ""
+    baseUrl = 'https://ftp.osuosl.org/pub/musescore-nightlies/' + osName + '/'
     for l in lines:
         if l and l.startswith("MuseScore"):
             info = l.split("-")
@@ -53,7 +78,7 @@ def generateRSS(pathname, lines):
             li += '''
 <item>
 <title>''' + l + '''</title>
-<link>http://ftp.osuosl.org/pub/musescore-nightlies/macosx/''' + l + '''</link>
+<link>''' + baseUrl + l + '''</link>
 <pubDate>'''+formatdate(time.mktime(d.timetuple()), usegmt=True)+'''</pubDate>
 <description>Nightly Build of MuseScore, Branch: ''' + branch + ''', Revision: '''+commit + '''</description>
 </item>'''

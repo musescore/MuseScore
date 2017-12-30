@@ -25,9 +25,9 @@
 </ol>
 
 <h3 id="download">Download</h3>
-<ul id="nightly-list">
+<div id="nightly-list">
 ##PLACEHOLDER##
-</ul>
+</div>
 
 
 <p>* <strong>If you experience a crash on startup</strong>, revert to factory settings by running MuseScore with the -F flag (nightly.exe -F) or via the batch file <code>special/revertToFactorySettings.bat</code>.</p>
