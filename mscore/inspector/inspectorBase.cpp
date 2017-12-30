@@ -344,7 +344,13 @@ void InspectorBase::valueChanged(int idx, bool reset)
 
       Score* score  = inspector->element()->score();
 
-      score->startCmd();
+      bool alreadyActive = false;
+      if (!score->undoStack()->active()) {
+            score->startCmd();
+      } else {
+            alreadyActive = true;
+      }
+
       for (Element* e : *inspector->el()) {
             for (int i = 0; i < ii.parent; ++i)
                   e = e->parent();
@@ -362,7 +368,8 @@ void InspectorBase::valueChanged(int idx, bool reset)
             }
       inspector->setInspectorEdit(true);
       checkDifferentValues(ii);
-      score->endCmd();
+      if (!alreadyActive)
+            score->endCmd();
       inspector->setInspectorEdit(false);
       postInit();
 
