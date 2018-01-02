@@ -68,6 +68,7 @@ MagBox::MagBox(QWidget* parent)
       setToolTip(tr("Zoom"));
       setWhatsThis(tr("Zoom"));
       setValidator(new MagValidator(this));
+      setAutoCompletion(false);
 
       int i = 0;
       for (const MagEntry& e : magTable) {
