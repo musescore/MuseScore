@@ -23,7 +23,7 @@ platform:
 configuration: Release
 
 install:
-  - IF NOT DEFINED APPVEYOR_PULL_REQUEST_NUMBER (
+  - IF DEFINED ENCRYPT_SECRET_SSH (
     nuget install secure-file -ExcludeVersion &&
     secure-file\tools\secure-file -decrypt C:\MuseScore\build\appveyor\resources\osuosl_nighlies_rsa_nopp.enc -secret %ENCRYPT_SECRET_SSH%
     )
@@ -31,14 +31,14 @@ install:
 # scripts to run before build
 before_build:
   - IF NOT EXIST dependencies.7z (
-    START " " /wait "C:\MinGW\msys\1.0\bin\wget" --no-check-certificate "http://utils.musescore.org.s3.amazonaws.com/musescore_dependencies_win32.7z" -O dependencies.7z &&
-    START " " /wait "7z" x -y dependencies.7z > nul &&
+    START " " /wait "C:\MinGW\msys\1.0\bin\wget" --no-check-certificate "http://utils.musescore.org.s3.amazonaws.com/musescore_dependencies_win32.7z" -O dependencies.7z
+    )
+  - START " " /wait "7z" x -y dependencies.7z > nul &&
     CD dependencies &&
     XCOPY i686-w64-mingw32 "C:\Qt\Tools\mingw491_32\i686-w64-mingw32" /E /Y &&
     XCOPY lib "C:\Qt\Tools\mingw491_32\lib" /E /Y &&
     XCOPY Jack "C:\Program Files (x86)\Jack" /E /I /Y &&
     XCOPY ccache "C:\ccache" /E /I /Y
-    )
   - SET OLD_PATH=%PATH%
   - SET PATH=C:\Qt\5.4\mingw491_32\bin;C:\Qt\Tools\mingw491_32\bin;%PATH%
   - CD C:\MuseScore
@@ -69,17 +69,17 @@ after_build:
 
   - SET SSH_IDENTITY=C:\MuseScore\build\appveyor\resources\osuosl_nighlies_rsa_nopp
   - SET PATH=%OLD_PATH%
-  - IF NOT DEFINED APPVEYOR_PULL_REQUEST_NUMBER scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% %ARTIFACT_NAME% musescore-nightlies@ftp-osl.osuosl.org:~/ftp/windows/
-  - IF NOT DEFINED APPVEYOR_PULL_REQUEST_NUMBER ssh -oStrictHostKeyChecking=no -i %SSH_IDENTITY% musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/windows; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
+  - IF DEFINED ENCRYPT_SECRET_SSH scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% %ARTIFACT_NAME% musescore-nightlies@ftp-osl.osuosl.org:~/ftp/windows/
+  - IF DEFINED ENCRYPT_SECRET_SSH ssh -oStrictHostKeyChecking=no -i %SSH_IDENTITY% musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/windows; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
 # create and upload index.html and RSS
-  - IF NOT DEFINED APPVEYOR_PULL_REQUEST_NUMBER python build/appveyor/updateHTML.py %SSH_IDENTITY%
-  - IF NOT DEFINED APPVEYOR_PULL_REQUEST_NUMBER scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% build/appveyor/web/index.html musescore-nightlies@ftp-osl.osuosl.org:ftp/windows
-  - IF NOT DEFINED APPVEYOR_PULL_REQUEST_NUMBER scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% build/appveyor/web/nightly.xml musescore-nightlies@ftp-osl.osuosl.org:ftp/windows
+  - IF DEFINED ENCRYPT_SECRET_SSH python build/appveyor/updateHTML.py %SSH_IDENTITY%
+  - IF DEFINED ENCRYPT_SECRET_SSH scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% build/appveyor/web/index.html musescore-nightlies@ftp-osl.osuosl.org:ftp/windows
+  - IF DEFINED ENCRYPT_SECRET_SSH scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% build/appveyor/web/nightly.xml musescore-nightlies@ftp-osl.osuosl.org:ftp/windows
 # trigger distribution
-  - IF NOT DEFINED APPVEYOR_PULL_REQUEST_NUMBER ssh -oStrictHostKeyChecking=no -i %SSH_IDENTITY% musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
+  - IF DEFINED ENCRYPT_SECRET_SSH ssh -oStrictHostKeyChecking=no -i %SSH_IDENTITY% musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
 # notify IRC channel
-  - IF NOT DEFINED APPVEYOR_PULL_REQUEST_NUMBER pip install irc
-  - IF NOT DEFINED APPVEYOR_PULL_REQUEST_NUMBER python build/appveyor/irccat.py "%APPVEYOR_REPO_BRANCH%-%MSversion% (Win) compiled successfully https://ftp.osuosl.org/pub/musescore/nightlies/windows/%ARTIFACT_NAME%"
+  - IF DEFINED ENCRYPT_SECRET_SSH pip install irc
+  - IF DEFINED ENCRYPT_SECRET_SSH python build/appveyor/irccat.py "%APPVEYOR_REPO_BRANCH%-%MSversion% (Win) compiled successfully https://ftp.osuosl.org/pub/musescore/nightlies/windows/%ARTIFACT_NAME%"
 
   - CD C:\MuseScore
 artifacts:
