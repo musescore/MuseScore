@@ -51,6 +51,16 @@ if(POLICY CMP0053)
       cmake_policy(SET CMP0053 OLD)
 endif(POLICY CMP0053)
 
+# RPATH settings on macOS do not affect install_name
+if(POLICY CMP0068)
+      cmake_policy(SET CMP0068 NEW)
+endif(POLICY CMP0068)
+
+# Don't process generated source files with AUTOMOC
+if(POLICY CMP0071)
+      cmake_policy(SET CMP0071 OLD)
+endif(POLICY CMP0071)
+
 #  Look for Qt5
 SET(QT_MIN_VERSION    "5.8.0")
 # Include modules
