@@ -178,16 +178,6 @@ Volta::Volta(Score* s)
 
       setBeginHookType(HookType::HOOK_90);
       setAnchor(Anchor::MEASURE);
-      resetProperty(P_ID::LINE_WIDTH);
-      resetProperty(P_ID::LINE_STYLE);
-#if 0
-      resetProperty(P_ID::BEGIN_FONT_SIZE);
-      resetProperty(P_ID::BEGIN_FONT_BOLD);
-      resetProperty(P_ID::BEGIN_HOOK_HEIGHT);
-      resetProperty(P_ID::END_HOOK_HEIGHT);
-      resetProperty(P_ID::BEGIN_TEXT_OFFSET);
-      resetProperty(P_ID::BEGIN_TEXT_ALIGN);
-#endif
       }
 
 //---------------------------------------------------------

@@ -389,6 +389,8 @@ QVariant HairpinSegment::getProperty(P_ID id) const
             case P_ID::VELO_CHANGE:
             case P_ID::DYNAMIC_RANGE:
             case P_ID::DIAGONAL:
+            case P_ID::LINE_STYLE:
+            case P_ID::LINE_WIDTH:
             case P_ID::HAIRPIN_HEIGHT:
             case P_ID::HAIRPIN_CONT_HEIGHT:
             case P_ID::PLACEMENT:
@@ -410,6 +412,7 @@ bool HairpinSegment::setProperty(P_ID id, const QVariant& v)
             case P_ID::VELO_CHANGE:
             case P_ID::DYNAMIC_RANGE:
             case P_ID::DIAGONAL:
+            case P_ID::LINE_STYLE:
             case P_ID::LINE_WIDTH:
             case P_ID::HAIRPIN_HEIGHT:
             case P_ID::HAIRPIN_CONT_HEIGHT:
@@ -432,6 +435,8 @@ QVariant HairpinSegment::propertyDefault(P_ID id) const
             case P_ID::VELO_CHANGE:
             case P_ID::DYNAMIC_RANGE:
             case P_ID::DIAGONAL:
+            case P_ID::LINE_STYLE:
+            case P_ID::LINE_WIDTH:
             case P_ID::HAIRPIN_HEIGHT:
             case P_ID::HAIRPIN_CONT_HEIGHT:
             case P_ID::PLACEMENT:
@@ -448,6 +453,7 @@ QVariant HairpinSegment::propertyDefault(P_ID id) const
 PropertyFlags& HairpinSegment::propertyFlags(P_ID id)
       {
       switch (id) {
+            case P_ID::LINE_STYLE:
             case P_ID::LINE_WIDTH:
             case P_ID::HAIRPIN_HEIGHT:
             case P_ID::HAIRPIN_CONT_HEIGHT:
@@ -466,6 +472,7 @@ PropertyFlags& HairpinSegment::propertyFlags(P_ID id)
 StyleIdx HairpinSegment::getPropertyStyle(P_ID id) const
       {
       switch (id) {
+            case P_ID::LINE_STYLE:
             case P_ID::LINE_WIDTH:
             case P_ID::HAIRPIN_HEIGHT:
             case P_ID::HAIRPIN_CONT_HEIGHT:
@@ -501,6 +508,7 @@ StyleIdx HairpinSegment::getPropertyStyle(P_ID id) const
 void HairpinSegment::resetProperty(P_ID id)
       {
       switch (id) {
+            case P_ID::LINE_STYLE:
             case P_ID::LINE_WIDTH:
             case P_ID::HAIRPIN_HEIGHT:
             case P_ID::HAIRPIN_CONT_HEIGHT:
@@ -518,10 +526,10 @@ void HairpinSegment::resetProperty(P_ID id)
 Hairpin::Hairpin(Score* s)
    : TextLineBase(s)
       {
+      _hairpinType           = HairpinType::CRESC_HAIRPIN;
       init();
 
       setLineWidth(score()->styleS(StyleIdx::hairpinLineWidth));
-      _hairpinType           = HairpinType::CRESC_HAIRPIN;
       _hairpinCircledTip     = false;
       _veloChange            = 0;
       _dynRange              = Dynamic::Range::PART;
