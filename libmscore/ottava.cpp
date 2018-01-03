@@ -229,21 +229,6 @@ Ottava::Ottava(Score* s)
       setFlag(ElementFlag::ON_STAFF, true);
       setOttavaType(OttavaType::OTTAVA_8VA);
       init();
-
-      resetProperty(P_ID::LINE_WIDTH);
-      resetProperty(P_ID::LINE_STYLE);
-#if 0
-      resetProperty(P_ID::PLACEMENT);
-      resetProperty(P_ID::END_HOOK_TYPE);
-      resetProperty(P_ID::END_HOOK_HEIGHT);
-      resetProperty(P_ID::BEGIN_FONT_FACE);
-      resetProperty(P_ID::BEGIN_FONT_SIZE);
-      resetProperty(P_ID::BEGIN_FONT_BOLD);
-      resetProperty(P_ID::BEGIN_FONT_ITALIC);
-      resetProperty(P_ID::BEGIN_FONT_UNDERLINE);
-      resetProperty(P_ID::BEGIN_TEXT_ALIGN);
-      resetProperty(P_ID::CONTINUE_TEXT_ALIGN);
-#endif
       }
 
 Ottava::Ottava(const Ottava& o)

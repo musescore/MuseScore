@@ -60,19 +60,6 @@ PalmMute::PalmMute(Score* s)
    : TextLineBase(s)
       {
       init();
-      resetProperty(P_ID::LINE_STYLE);
-      resetProperty(P_ID::LINE_WIDTH);
-#if 0
-      resetProperty(P_ID::BEGIN_TEXT_ALIGN);
-      resetProperty(P_ID::CONTINUE_TEXT_ALIGN);
-      resetProperty(P_ID::END_TEXT_ALIGN);
-      resetProperty(P_ID::BEGIN_HOOK_HEIGHT);
-      resetProperty(P_ID::END_HOOK_HEIGHT);
-      resetProperty(P_ID::END_HOOK_TYPE);
-      resetProperty(P_ID::BEGIN_TEXT);
-      resetProperty(P_ID::BEGIN_FONT_ITALIC);
-      resetProperty(P_ID::BEGIN_TEXT_ALIGN);
-#endif
       }
 
 //---------------------------------------------------------
