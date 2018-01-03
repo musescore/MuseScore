@@ -303,6 +303,7 @@ class ScoreElement {
       CONVERT(ChordLine,     CHORDLINE)
       CONVERT(FretDiagram,   FRET_DIAGRAM)
       CONVERT(Page,          PAGE)
+      CONVERT(StaffText,     STAFF_TEXT)
       CONVERT(SystemText,    SYSTEM_TEXT)
       CONVERT(BracketItem,   BRACKET_ITEM)
       CONVERT(Staff,         STAFF)
@@ -312,7 +313,6 @@ class ScoreElement {
       bool isChordRest() const       { return isRest() || isChord() || isRepeatMeasure(); }
       bool isDurationElement() const { return isChordRest() || isTuplet(); }
       bool isSlurTieSegment() const  { return isSlurSegment() || isTieSegment(); }
-      bool isStaffText() const       { return type() == ElementType::STAFF_TEXT || type() == ElementType::SYSTEM_TEXT; }
       bool isSLineSegment() const;
       bool isBox() const { return isVBox() || isHBox() || isTBox() || isFBox(); }
       bool isMeasureBase() const { return isMeasure() || isBox(); }
