@@ -104,22 +104,25 @@ rvm get head
 #  echo "Qt ${QT_LONG_VERSION} already installed"
 #fi
 
-wget -nv http://utils.musescore.org.s3.amazonaws.com/qt590_mac.zip
+wget -nv http://utils.musescore.org.s3.amazonaws.com/qt5100_mac.zip
 mkdir -p $QT_MACOS
-unzip -qq qt590_mac.zip -d $QT_MACOS
-rm qt590_mac.zip
+unzip -qq qt5100_mac.zip -d $QT_MACOS
+rm qt5100_mac.zip
 
 #install signing certificate
-export CERTIFICATE_P12=Certificate.p12
-echo $CERTIFICATE_OSX_P12 | base64 - -D -o $CERTIFICATE_P12
-export KEYCHAIN=build.keychain
-security create-keychain -p travis $KEYCHAIN
-security default-keychain -s $KEYCHAIN
-security unlock-keychain -p travis $KEYCHAIN
-# Set keychain timeout to 1 hour for long builds
-# see http://www.egeek.me/2013/02/23/jenkins-and-xcode-user-interaction-is-not-allowed/
-security set-keychain-settings -t 3600 -l $KEYCHAIN
-security import $CERTIFICATE_P12 -k $KEYCHAIN -P "$CERTIFICATE_OSX_PASSWORD" -T /usr/bin/codesign
+if [ -n "$CERTIFICATE_OSX_PASSWORD" ]
+then
+    export CERTIFICATE_P12=Certificate.p12
+    echo $CERTIFICATE_OSX_P12 | base64 - -D -o $CERTIFICATE_P12
+    export KEYCHAIN=build.keychain
+    security create-keychain -p travis $KEYCHAIN
+    security default-keychain -s $KEYCHAIN
+    security unlock-keychain -p travis $KEYCHAIN
+    # Set keychain timeout to 1 hour for long builds
+    # see http://www.egeek.me/2013/02/23/jenkins-and-xcode-user-interaction-is-not-allowed/
+    security set-keychain-settings -t 3600 -l $KEYCHAIN
+    security import $CERTIFICATE_P12 -k $KEYCHAIN -P "$CERTIFICATE_OSX_PASSWORD" -T /usr/bin/codesign
+fi
 
 
 
