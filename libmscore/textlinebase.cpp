@@ -126,16 +126,17 @@ Shape TextLineBaseSegment::shape() const
             shape.add(_text->bbox().translated(_text->pos()));
       if (!_endText->empty())
             shape.add(_endText->bbox().translated(_endText->pos()));
-      qreal lw = textLineBase()->lineWidth().val() * spatium();
+      qreal lw  = textLineBase()->lineWidth().val() * spatium();
+      qreal lw2 = lw * .5;
       if (twoLines) {   // hairpins
-            shape.add(QRectF(points[0].x(), points[0].y() - lw * .5,
+            shape.add(QRectF(points[0].x(), points[0].y() - lw2,
                points[1].x() - points[0].x(), points[1].y() - points[0].y() + lw));
-            shape.add(QRectF(points[2].x(), points[2].y() - lw * .5,
+            shape.add(QRectF(points[2].x(), points[2].y() - lw2,
                points[3].x() - points[2].x(), points[3].y() - points[2].y() + lw));
             }
       else {
             for (int i = 0; i < npoints; ++i) {
-                  shape.add(QRectF(points[i].x() - lw * .5, points[i].y() - lw * .5,
+                  shape.add(QRectF(points[i].x() - lw2, points[i].y() - lw2,
                      points[i+1].x() - points[i].x() + lw, points[i+1].y() - points[i].y() + lw));
                   }
             }
@@ -324,7 +325,10 @@ void TextLineBaseSegment::spatiumChanged(qreal ov, qreal nv)
 //   pids
 //---------------------------------------------------------
 
-static constexpr std::array<P_ID, 32> pids = { {
+static constexpr std::array<P_ID, 34> pids = { {
+      P_ID::LINE_WIDTH,
+      P_ID::LINE_STYLE,
+
       P_ID::LINE_VISIBLE,
       P_ID::BEGIN_HOOK_TYPE,
       P_ID::BEGIN_HOOK_HEIGHT,

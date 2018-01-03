@@ -2839,6 +2839,36 @@ static void layoutTies(Chord* ch, System* system, int stick)
       }
 
 //---------------------------------------------------------
+//   processLines
+//---------------------------------------------------------
+
+static void processLines(System* system, std::vector<Spanner*> lines)
+      {
+      std::vector<SpannerSegment*> segments;
+      for (Spanner* sp : lines) {
+            SpannerSegment* ss = sp->layoutSystem(system);     // create/layout spanner segment for this system
+            if (ss->autoplace())
+                  segments.push_back(ss);
+            }
+
+      //
+      // add shapes to staff shapes
+      //
+
+      for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure())
+                  continue;
+            Measure* m = toMeasure(mb);
+            for (SpannerSegment* ss : segments) {
+                  // spanner shape must be translated from system coordinate space
+                  // to measure coordinate space
+                  Shape* shape = &m->staffShape(ss->staffIdx());
+                  shape->add(ss->shape().translated(ss->pos() - m->pos()));
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   collectSystem
 //---------------------------------------------------------
 
@@ -3201,20 +3231,30 @@ System* Score::collectSystem(LayoutContext& lc)
       if (etick > stick) {    // ignore vbox
             auto spanners = score()->spannerMap().findOverlapping(stick, etick);
 
-            std::vector<SpannerSegment*> voltaSegments;
+            std::vector<Spanner*> ottavas;
+            std::vector<Spanner*> spanner;
+
             for (auto interval : spanners) {
                   Spanner* sp = interval.value;
-                  if (sp->isOttava())
-                        continue;
                   if (sp->tick() < etick && sp->tick2() > stick) {
-                        SpannerSegment* ss = sp->layoutSystem(system);     // create/layout spanner segment for this system
-                        if (ss->isVoltaSegment() && ss->autoplace())
-                              voltaSegments.push_back(ss);
+                        if (sp->isOttava())
+                              ottavas.push_back(sp);
+                        else
+                              spanner.push_back(sp);
                         }
                   }
+
+            processLines(system, ottavas);
+            processLines(system, spanner);
+
             //
             // vertical align volta segments
             //
+            std::vector<SpannerSegment*> voltaSegments;
+            for (SpannerSegment* ss : system->spannerSegments()) {
+                  if (ss->isVoltaSegment())
+                       voltaSegments.push_back(ss);
+                 }
             if (voltaSegments.size() > 1) {
                   qreal y = 0;
                   for (SpannerSegment* ss : voltaSegments)
@@ -3238,8 +3278,6 @@ System* Score::collectSystem(LayoutContext& lc)
                   Measure* m = toMeasure(mb);
                   for (SpannerSegment* ss : system->spannerSegments()) {
                         Spanner* sp = ss->spanner();
-                        if (sp->isOttava())
-                              continue;
                         if (sp->tick() < m->endTick() && sp->tick2() > m->tick()) {
                               // spanner shape must be translated from system coordinate space
                               // to measure coordinate space
@@ -3248,43 +3286,6 @@ System* Score::collectSystem(LayoutContext& lc)
                                     shape->add(ss->shape().translated(-m->pos()));
                               else
                                     shape->add(ss->shape().translated(ss->pos() - m->pos()));
-                              }
-                        }
-                  }
-
-            //
-            // layout ottavas
-            //
-            for (auto interval : spanners) {
-                  Spanner* sp = interval.value;
-                  if (!sp->isOttava())
-                        continue;
-                  if (sp->tick() < etick && sp->tick2() > stick) {
-                        if (sp->isOttava() && sp->ticks() == 0) {       // sanity check?
-                              sp->setTick2(lastMeasure()->endTick());
-                              sp->staff()->updateOttava();
-                              }
-                        sp->layoutSystem(system);     // create/layout spanner segment for this system
-                        }
-                  }
-
-            //
-            // add ottava shapes to staff shapes
-            //
-
-            for (MeasureBase* mb : system->measures()) {
-                  if (!mb->isMeasure())
-                        continue;
-                  Measure* m = toMeasure(mb);
-                  for (SpannerSegment* ss : system->spannerSegments()) {
-                        Spanner* sp = ss->spanner();
-                        if (!sp->isOttava())
-                              continue;
-                        if (sp->tick() < m->endTick() && sp->tick2() > m->tick()) {
-                              // spanner shape must be translated from system coordinate space
-                              // to measure coordinate space
-                              Shape* shape = &m->staffShape(sp->staffIdx());
-                              shape->add(ss->shape().translated(ss->pos() - m->pos()));
                               }
                         }
                   }

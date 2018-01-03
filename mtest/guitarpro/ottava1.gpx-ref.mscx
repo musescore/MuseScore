@@ -201,6 +201,7 @@
         <Ottava id="6">
           <subtype>8va</subtype>
           </Ottava>
+        <endSpanner id="6"/>
         <Chord>
           <lid>21</lid>
           <durationType>whole</durationType>
@@ -232,7 +233,6 @@
           <durationType>measure</durationType>
           <duration>4/4</duration>
           </Rest>
-        <endSpanner id="6"/>
         </Measure>
       </Staff>
     <Score>
