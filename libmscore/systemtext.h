@@ -21,7 +21,7 @@ namespace Ms {
 //   SystemText
 //---------------------------------------------------------
 
-class SystemText : public TextBase  {
+class SystemText final : public TextBase  {
    public:
       SystemText(Score* score);
       SystemText(SubStyle, Score* = 0);
