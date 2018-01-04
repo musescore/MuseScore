@@ -3283,8 +3283,8 @@ void ScoreView::cmdChangeEnharmonic(bool both)
                   int string = n->line() + (both ? 1 : -1);
                   int fret   = staff->part()->instrument()->stringData()->fret(n->pitch(), string, staff, n->chord()->tick());
                   if (fret != -1) {
-                        score()->undoChangeProperty(n, P_ID::FRET, fret);
-                        score()->undoChangeProperty(n, P_ID::STRING, string);
+                        n->undoChangeProperty(P_ID::FRET, fret);
+                        n->undoChangeProperty(P_ID::STRING, string);
                         }
                   }
             else {

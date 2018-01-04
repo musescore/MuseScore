@@ -367,9 +367,6 @@ class Element : public ScoreElement {
       qreal magS() const;
 
       bool isPrintable() const;
-//      virtual bool isSpanner() const           { return false; }
-//      virtual bool isSpannerSegment() const    { return false; }
-
       qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
       virtual int tick() const;       // utility, searches for segment / segment parent

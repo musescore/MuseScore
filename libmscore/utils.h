@@ -39,6 +39,7 @@ class System;
 class Element;
 class Note;
 class Tuplet;
+class BarLine;
 
 enum class ClefType : signed char;
 
@@ -84,6 +85,8 @@ extern int step2pitch(int step);
 
 extern Segment* skipTuplet(Tuplet* tuplet);
 extern std::vector<SymId> toTimeSigString(const QString&);
+
+extern void undoChangeBarLineType(BarLine* bl, BarLineType barType);
 
 
 }     // namespace Ms

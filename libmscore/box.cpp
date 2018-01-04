@@ -666,17 +666,6 @@ Element* Box::drop(EditData& data)
                   e->setParent(this);
                   score()->undoAddElement(e);
                   return e;
-#if 0
-            case ElementType::BAR_LINE: {
-                  MeasureBase* mb = next();
-                  if (!mb || !mb->isMeasure()) {
-                        delete e;
-                        return 0;
-                        }
-                  score()->undoChangeBarLine(toMeasure(mb), toBarLine(e)->barLineType(), true);
-                  }
-                  return 0;
-#endif
             default:
                   return 0;
             }

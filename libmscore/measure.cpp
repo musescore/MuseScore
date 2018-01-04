@@ -1484,15 +1484,24 @@ Element* Measure::drop(EditData& data)
                   // or if Ctrl key used
                   if ((bl->spanFrom() && bl->spanTo()) || data.control()) {
                         // get existing bar line for this staff, and drop the change to it
-                        Segment* seg = undoGetSegment(SegmentType::EndBarLine, tick() + ticks());
+                        Segment* seg = undoGetSegmentR(SegmentType::EndBarLine, ticks());
                         BarLine* cbl = toBarLine(seg->element(staffIdx * VOICES));
                         if (cbl)
                               cbl->drop(data);
                         }
                   else {
-                        // if dropped bar line refers to line subtype
-                        score()->undoChangeBarLine(this, bl->barLineType(), SegmentType::EndBarLine);
-                        delete e;
+                        // drop to first end barline
+                        Segment* seg = findSegmentR(SegmentType::EndBarLine, ticks());
+                        if (seg) {
+                              for (Element* ee : seg->elist()) {
+                                    if (ee) {
+                                          ee->drop(data);
+                                          break;
+                                          }
+                                    }
+                              }
+                        else
+                              delete e;
                         }
                   break;
                   }

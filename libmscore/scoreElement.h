@@ -192,7 +192,7 @@ class ScoreElement {
 
       virtual StyleIdx getPropertyStyle(P_ID) const;
 
-      void undoChangeProperty(P_ID id, const QVariant&, PropertyFlags ps);
+      virtual void undoChangeProperty(P_ID id, const QVariant&, PropertyFlags ps);
       void undoChangeProperty(P_ID id, const QVariant&);
       void undoResetProperty(P_ID id);
 
