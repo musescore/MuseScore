@@ -28,8 +28,6 @@
 #include "sig.h"
 #include "tuplet.h"
 #include "sym.h"
-#include "barline.h"
-#include "undo.h"
 
 namespace Ms {
 
@@ -1026,61 +1024,5 @@ std::vector<SymId> toTimeSigString(const QString& s)
       return d;
       }
 
-//---------------------------------------------------------
-//   undoChangeBarLineType
-//---------------------------------------------------------
-
-void undoChangeBarLineType(BarLine* bl, BarLineType barType)
-      {
-      Measure* m = bl->measure();
-
-      switch (barType) {
-            case BarLineType::END:
-            case BarLineType::NORMAL:
-            case BarLineType::DOUBLE:
-            case BarLineType::BROKEN:
-            case BarLineType::DOTTED: {
-                  SegmentType segmentType = bl->segment()->segmentType();
-                  if (segmentType == SegmentType::EndBarLine) {
-                        m->undoChangeProperty(P_ID::REPEAT_END, false);
-                        Segment* segment = m->findSegmentR(SegmentType::EndBarLine, m->ticks());
-                        if (segment) {
-                              for (Element* e : segment->elist()) {
-                                    if (e) {
-                                          e->score()->undo(new ChangeProperty(e, P_ID::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
-                                          e->score()->undo(new ChangeProperty(e, P_ID::GENERATED, false, PropertyFlags::NOSTYLE));
-                                          }
-                                    }
-                              }
-                        }
-                  else if (segmentType == SegmentType::BeginBarLine) {
-                        Segment* segment = m->undoGetSegmentR(SegmentType::BeginBarLine, 0);
-                        for (Element* e : segment->elist()) {
-                              if (e) {
-                                    e->score()->undo(new ChangeProperty(e, P_ID::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
-                                    e->score()->undo(new ChangeProperty(e, P_ID::GENERATED, false, PropertyFlags::NOSTYLE));
-                                    }
-                              else {
-                                    BarLine* bl = new BarLine(bl->score());
-                                    bl->setBarLineType(barType);
-                                    bl->setParent(segment);
-                                    bl->setTrack(0);
-                                    bl->setSpanStaff(bl->score()->nstaves());
-                                    bl->score()->undo(new AddElement(bl));
-                                    }
-                              }
-                        }
-                  else if (segmentType == SegmentType::StartRepeatBarLine)
-                        m->undoChangeProperty(P_ID::REPEAT_START, false);
-                  }
-                  break;
-            case BarLineType::START_REPEAT:
-                  m->undoChangeProperty(P_ID::REPEAT_START, true);
-                  break;
-            case BarLineType::END_REPEAT:
-                  m->undoChangeProperty(P_ID::REPEAT_END, true);
-                  break;
-            }
-      }
 }
 
