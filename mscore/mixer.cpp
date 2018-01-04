@@ -164,16 +164,16 @@ void PartEdit::playbackVoiceChanged()
                         switch (voice) {
                               case 0:
                               printf("undo\n");
-                                    score->undoChangeProperty(staff, P_ID::PLAYBACK_VOICE1, val);
+                                    staff->undoChangeProperty(P_ID::PLAYBACK_VOICE1, val);
                                     break;
                               case 1:
-                                    score->undoChangeProperty(staff, P_ID::PLAYBACK_VOICE2, val);
+                                    staff->undoChangeProperty(P_ID::PLAYBACK_VOICE2, val);
                                     break;
                               case 2:
-                                    score->undoChangeProperty(staff, P_ID::PLAYBACK_VOICE3, val);
+                                    staff->undoChangeProperty(P_ID::PLAYBACK_VOICE3, val);
                                     break;
                               case 3:
-                                    score->undoChangeProperty(staff, P_ID::PLAYBACK_VOICE4, val);
+                                    staff->undoChangeProperty(P_ID::PLAYBACK_VOICE4, val);
                                     break;
                               }
                         }

@@ -1380,8 +1380,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                     }
                                     // store the fretting change before undoChangePitch() chooses
                                     // a fretting of its own liking!
-                                    undoChangeProperty(oNote, P_ID::FRET, fret);
-//                                    undoChangeProperty(oNote, P_ID::STRING, string);
+                                    oNote->undoChangeProperty(P_ID::FRET, fret);
                                     }
                                     break;
                               }
@@ -1459,11 +1458,11 @@ void Score::upDown(bool up, UpDownMode mode)
             else if (staff->staffType(tick)->group() == StaffGroup::TAB) {
                   bool refret = false;
                   if (oNote->string() != string) {
-                        undoChangeProperty(oNote, P_ID::STRING, string);
+                        oNote->undoChangeProperty(P_ID::STRING, string);
                         refret = true;
                         }
                   if (oNote->fret() != fret) {
-                        undoChangeProperty(oNote, P_ID::FRET, fret);
+                        oNote->undoChangeProperty(P_ID::FRET, fret);
                         refret = true;
                         }
                   if (refret) {
@@ -1808,11 +1807,11 @@ void Score::cmdResetBeamMode()
                         continue;
                   if (cr->type() == ElementType::CHORD) {
                         if (cr->beamMode() != Beam::Mode::AUTO)
-                              undoChangeProperty(cr, P_ID::BEAM_MODE, int(Beam::Mode::AUTO));
+                              cr->undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::AUTO));
                         }
                   else if (cr->type() == ElementType::REST) {
                         if (cr->beamMode() != Beam::Mode::NONE)
-                              undoChangeProperty(cr, P_ID::BEAM_MODE, int(Beam::Mode::NONE));
+                              cr->undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::NONE));
                         }
                   }
             }
@@ -2225,7 +2224,7 @@ void Score::cmdMirrorNoteHead()
             if (e->type() == ElementType::NOTE) {
                   Note* note = toNote(e);
                   if (note->staff() && note->staff()->isTabStaff(note->chord()->tick()))
-                        note->score()->undoChangeProperty(e, P_ID::GHOST, !note->ghost());
+                        e->undoChangeProperty(P_ID::GHOST, !note->ghost());
                   else {
                         MScore::DirectionH d = note->userMirror();
                         if (d == MScore::DirectionH::AUTO)
@@ -2310,7 +2309,7 @@ void Score::cmdMoveRest(Rest* rest, Direction dir)
             pos.ry() -= spatium();
       else if (dir == Direction::DOWN)
             pos.ry() += spatium();
-      undoChangeProperty(rest, P_ID::USER_OFF, pos);
+      rest->undoChangeProperty(P_ID::USER_OFF, pos);
       }
 
 //---------------------------------------------------------

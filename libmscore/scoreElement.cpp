@@ -33,8 +33,8 @@ static const ElementName elementNames[] = {
       { ElementType::INSTRUMENT_NAME,      "InstrumentName",       QT_TRANSLATE_NOOP("elementName", "Instrument Name") },
       { ElementType::SLUR_SEGMENT,         "SlurSegment",          QT_TRANSLATE_NOOP("elementName", "Slur Segment") },
       { ElementType::TIE_SEGMENT,          "TieSegment",           QT_TRANSLATE_NOOP("elementName", "Tie Segment") },
-      { ElementType::STAFF_LINES,          "StaffLines",           QT_TRANSLATE_NOOP("elementName", "Staff Lines") },
       { ElementType::BAR_LINE,             "BarLine",              QT_TRANSLATE_NOOP("elementName", "Barline") },
+      { ElementType::STAFF_LINES,          "StaffLines",           QT_TRANSLATE_NOOP("elementName", "Staff Lines") },
       { ElementType::SYSTEM_DIVIDER,       "SystemDivider",        QT_TRANSLATE_NOOP("elementName", "System Divider") },
       { ElementType::STEM_SLASH,           "StemSlash",            QT_TRANSLATE_NOOP("elementName", "Stem Slash") },
       { ElementType::ARPEGGIO,             "Arpeggio",             QT_TRANSLATE_NOOP("elementName", "Arpeggio") },
@@ -182,6 +182,24 @@ void ScoreElement::undoResetProperty(P_ID id)
       }
 
 //---------------------------------------------------------
+//   changeProperties
+//---------------------------------------------------------
+
+static void changeProperties(ScoreElement* e, P_ID t, const QVariant& st, PropertyFlags ps)
+      {
+      if (propertyLink(t)) {
+            for (ScoreElement* ee : e->linkList()) {
+                  if (ee->getProperty(t) != st || ee->propertyFlags(t) != ps)
+                        ee->score()->undo(new ChangeProperty(ee, t, st, ps));
+                  }
+            }
+      else {
+            if (e->getProperty(t) != st || e->propertyFlags(t) != ps)
+                  e->score()->undo(new ChangeProperty(e, t, st, ps));
+            }
+      }
+
+//---------------------------------------------------------
 //   undoChangeProperty
 //---------------------------------------------------------
 
@@ -218,9 +236,9 @@ void ScoreElement::undoChangeProperty(P_ID id, const QVariant& v, PropertyFlags 
             auto l = subStyle(SubStyle(v.toInt()));
             // Change to SubStyle defaults
             for (const StyledProperty& p : l)
-                  score()->undoChangeProperty(this, p.propertyIdx, score()->styleV(p.styleIdx), PropertyFlags::STYLED);
+                  changeProperties(this, p.propertyIdx, score()->styleV(p.styleIdx), PropertyFlags::STYLED);
             }
-      score()->undoChangeProperty(this, id, v, ps);
+      changeProperties(this, id, v, ps);
       }
 
 //---------------------------------------------------------
@@ -313,10 +331,10 @@ void ScoreElement::undoUnlink()
 QList<ScoreElement*> ScoreElement::linkList() const
       {
       QList<ScoreElement*> el;
-      if (links())
-            el.append(*links());
+      if (_links)
+            el.append(*_links);
       else
-            el.append((Element*)this);
+            el.append(const_cast<ScoreElement*>(this));
       return el;
       }
 

@@ -399,10 +399,10 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             delete r;
             }
       else if (cmd == "smallNote")
-            score()->undoChangeProperty(e, P_ID::SMALL, !static_cast<Note*>(e)->small());
+            e->undoChangeProperty(P_ID::SMALL, !static_cast<Note*>(e)->small());
       else if (cmd == "clef-courtesy") {
             bool show = !static_cast<Clef*>(e)->showCourtesy();
-            score()->undoChangeProperty(e, P_ID::SHOW_COURTESY, show);
+            e->undoChangeProperty(P_ID::SHOW_COURTESY, show);
             }
       else if (cmd == "st-props") {
             StaffTextProperties rp(static_cast<StaffText*>(e));
@@ -486,7 +486,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         nlb->setStartWithLongNames(sbp.startWithLongNames());
                         nlb->setStartWithMeasureOne(sbp.startWithMeasureOne());
                         // propagate in parts
-                        score()->undoChangeProperty(lb, P_ID::PAUSE, sbp.pause());
+                        lb->undoChangeProperty(P_ID::PAUSE, sbp.pause());
                         score()->undoChangeElement(lb, nlb);
                         }
                   }
