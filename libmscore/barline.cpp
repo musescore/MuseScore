@@ -24,6 +24,7 @@
 #include "marker.h"
 #include "stafflines.h"
 #include "spanner.h"
+#include "utils.h"
 
 namespace Ms {
 
@@ -499,8 +500,10 @@ void BarLine::read(XmlReader& e)
 bool BarLine::acceptDrop(EditData& data) const
       {
       ElementType type = data.element->type();
-      if (type == ElementType::BAR_LINE)
+      if (type == ElementType::BAR_LINE) {
+printf("may drop\n");
             return true;
+            }
       else {
             return (type == ElementType::ARTICULATION
                && segment()
@@ -518,6 +521,7 @@ Element* BarLine::drop(EditData& data)
       Element* e = data.element;
 
       if (e->isBarLine()) {
+printf("drop\n");
             BarLine* bl    = toBarLine(e);
             BarLineType st = bl->barLineType();
 
@@ -559,8 +563,7 @@ Element* BarLine::drop(EditData& data)
             //    Update repeat flags
             //---------------------------------------------
 
-            Measure* m  = segment()->measure();
-            score()->undoChangeBarLine(m, st, segment()->segmentType());
+            undoChangeBarLineType(this, st);
             delete e;
             return 0;
             }
@@ -1095,6 +1098,18 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
       setGenerated(false);
       triggerLayout();
       return true;
+      }
+
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void BarLine::undoChangeProperty(P_ID id, const QVariant& v, PropertyFlags ps)
+      {
+      if (id == P_ID::BARLINE_TYPE && segment())
+            undoChangeBarLineType(this, v.value<BarLineType>());
+      else
+            ScoreElement::undoChangeProperty(id, v, ps);
       }
 
 //---------------------------------------------------------

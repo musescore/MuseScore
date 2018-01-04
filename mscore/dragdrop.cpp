@@ -41,24 +41,20 @@ void ScoreView::setDropTarget(const Element* el)
       if (dropTarget != el) {
             if (dropTarget) {
                   dropTarget->setDropTarget(false);
-//                  _score->addRefresh(dropTarget->canvasBoundingRect());
                   dropTarget = 0;
                   }
             dropTarget = el;
             if (dropTarget) {
                   dropTarget->setDropTarget(true);
-//                  _score->addRefresh(dropTarget->canvasBoundingRect());
                   }
             }
       if (!dropAnchor.isNull()) {
             QRectF r;
             r.setTopLeft(dropAnchor.p1());
             r.setBottomRight(dropAnchor.p2());
-//            _score->addRefresh(r.normalized());
             dropAnchor = QLineF();
             }
       if (dropRectangle.isValid()) {
-//            _score->addRefresh(dropRectangle);
             dropRectangle = QRectF();
             }
       update();
@@ -369,6 +365,10 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case ElementType::FRET_DIAGRAM:
                   case ElementType::STAFFTYPE_CHANGE: {
                         QList<Element*> el = elementsAt(pos);
+printf("elements at\n");
+                        for (Element* e : el)
+                              printf("     %s\n", e->name());
+
                         bool found = false;
                         setDropTarget(0);
                         for (const Element* e : el) {

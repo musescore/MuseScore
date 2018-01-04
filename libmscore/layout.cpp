@@ -1735,8 +1735,8 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                               BarLine* bd = toBarLine(ds->element(staffIdx * VOICES));
                               BarLine* bs = toBarLine(e);
                               if (bd->barLineType() != bs->barLineType()) {
-                                    undoChangeProperty(bd, P_ID::BARLINE_TYPE, QVariant::fromValue(bs->barLineType()));
-                                    undoChangeProperty(bd, P_ID::GENERATED, true);
+                                    bd->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(bs->barLineType()));
+                                    bd->undoChangeProperty(P_ID::GENERATED, true);
                                     }
                               }
                         }
