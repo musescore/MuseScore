@@ -24,9 +24,66 @@
 #include "marker.h"
 #include "stafflines.h"
 #include "spanner.h"
-#include "utils.h"
+#include "undo.h"
 
 namespace Ms {
+
+//---------------------------------------------------------
+//   undoChangeBarLineType
+//---------------------------------------------------------
+
+static void undoChangeBarLineType(BarLine* bl, BarLineType barType)
+      {
+      Measure* m = bl->measure();
+
+      switch (barType) {
+            case BarLineType::END:
+            case BarLineType::NORMAL:
+            case BarLineType::DOUBLE:
+            case BarLineType::BROKEN:
+            case BarLineType::DOTTED: {
+                  SegmentType segmentType = bl->segment()->segmentType();
+                  if (segmentType == SegmentType::EndBarLine) {
+                        m->undoChangeProperty(P_ID::REPEAT_END, false);
+                        Segment* segment = m->findSegmentR(SegmentType::EndBarLine, m->ticks());
+                        if (segment) {
+                              for (Element* e : segment->elist()) {
+                                    if (e) {
+                                          e->score()->undo(new ChangeProperty(e, P_ID::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
+                                          e->score()->undo(new ChangeProperty(e, P_ID::GENERATED, false, PropertyFlags::NOSTYLE));
+                                          }
+                                    }
+                              }
+                        }
+                  else if (segmentType == SegmentType::BeginBarLine) {
+                        Segment* segment = m->undoGetSegmentR(SegmentType::BeginBarLine, 0);
+                        for (Element* e : segment->elist()) {
+                              if (e) {
+                                    e->score()->undo(new ChangeProperty(e, P_ID::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
+                                    e->score()->undo(new ChangeProperty(e, P_ID::GENERATED, false, PropertyFlags::NOSTYLE));
+                                    }
+                              else {
+                                    BarLine* bl = new BarLine(bl->score());
+                                    bl->setBarLineType(barType);
+                                    bl->setParent(segment);
+                                    bl->setTrack(0);
+                                    bl->setSpanStaff(bl->score()->nstaves());
+                                    bl->score()->undo(new AddElement(bl));
+                                    }
+                              }
+                        }
+                  else if (segmentType == SegmentType::StartRepeatBarLine)
+                        m->undoChangeProperty(P_ID::REPEAT_START, false);
+                  }
+                  break;
+            case BarLineType::START_REPEAT:
+                  m->undoChangeProperty(P_ID::REPEAT_START, true);
+                  break;
+            case BarLineType::END_REPEAT:
+                  m->undoChangeProperty(P_ID::REPEAT_END, true);
+                  break;
+            }
+      }
 
 //---------------------------------------------------------
 //   BarLineEditData
@@ -521,7 +578,6 @@ Element* BarLine::drop(EditData& data)
       Element* e = data.element;
 
       if (e->isBarLine()) {
-printf("drop\n");
             BarLine* bl    = toBarLine(e);
             BarLineType st = bl->barLineType();
 
@@ -554,20 +610,12 @@ printf("drop\n");
                         }
                   // if drop refers to subtype, update this bar line subtype
                   else
-                        undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(bl->barLineType()));
-                  delete e;
-                  return 0;
+                        undoChangeBarLineType(this, st);
                   }
-
-            //---------------------------------------------
-            //    Update repeat flags
-            //---------------------------------------------
-
-            undoChangeBarLineType(this, st);
+            else
+                  undoChangeBarLineType(this, st);
             delete e;
-            return 0;
             }
-
       else if (e->isArticulation()) {
             Articulation* atr = toArticulation(e);
             atr->setParent(this);
