@@ -86,8 +86,6 @@ extern int step2pitch(int step);
 extern Segment* skipTuplet(Tuplet* tuplet);
 extern std::vector<SymId> toTimeSigString(const QString&);
 
-extern void undoChangeBarLineType(BarLine* bl, BarLineType barType);
-
 
 }     // namespace Ms
 #endif
