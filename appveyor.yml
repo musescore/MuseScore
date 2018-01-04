@@ -1,0 +1,109 @@
+# clone directory
+clone_folder: C:\MuseScore
+# fetch repository as zip archive
+# shallow_clone: true                 # default is "false"
+# set clone depth
+clone_depth: 3                      # clone entire repository history if not defined
+# environment variables
+# this is how to allow failing jobs in the matrix
+#matrix:
+#  fast_finish: true
+#  allow_failures:
+#    - platform: x86
+#      configuration: Release
+# build cache to preserve files/folders between builds
+cache:
+  - dependencies.7z
+  - C:\Qt\Tools\mingw530_32\lib
+  - C:\Qt\Tools\mingw530_32\i686-w64-mingw32
+  - C:\Program Files (x86)\Jack
+  - C:\MuseScore\build.release\thirdparty
+  - C:\ccache
+#cache:
+#  - packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
+#  - projectA\libs
+#  - node_modules                    # local npm modules
+#  - %APPDATA%\npm-cache             # npm cache
+# build platform, i.e. x86, x64, Any CPU. This setting is optional.
+platform:
+  - x86
+# build Configuration, i.e. Debug, Release, etc.
+
+environment:
+  SYM_TOKEN:
+    secure: xFp6AKlTVT0xWaC57bONdw+96d1x+ZVKh8ytpLR+/FW5tACmC2qZDmPP1Pzglvu8TPoxrf0tiv7F1vp5/SRewFaTnj6hIvakziSAHmjWp2g=
+  BINTRAY_API_KEY:
+    secure: XFr4i9vkGli031KQGEVTuipPdAqMYpAyUWlVIrH7OhhicVIvA8x6EwiKGi+Zf22S
+  DROPBOX_API_KEY:
+    secure: dKaddMdCSyKPQlKmsajtSTEplncR6Mn+yCdUZnIWFyWlCjzKaUdned1/tfi/VAB8oGLoNQ5JQPMA9CCk5ds1TTFH0xu3A3H+Z+YYeJIfLfE=
+
+configuration: Release
+# scripts to run before build
+before_build:
+  - IF NOT EXIST dependencies.7z (
+    start " " /wait "C:\MinGW\msys\1.0\bin\wget" --no-check-certificate "http://utils.musescore.org.s3.amazonaws.com/musescore_dependencies_win32.7z" -O dependencies.7z &&
+    start " " /wait "7z" x -y dependencies.7z > nul &&
+    cd dependencies &&
+    xcopy i686-w64-mingw32 "C:\Qt\Tools\mingw530_32\i686-w64-mingw32" /E &&
+    xcopy lib "C:\Qt\Tools\mingw530_32\lib" /E &&
+    xcopy Jack "C:\Program Files (x86)\Jack" /E /I &&
+    xcopy ccache "C:\ccache" /E /I
+    )
+  # copy /y cc1plus.exe "C:\Qt\Tools\mingw530_32\libexec\gcc\i686-w64-mingw32\5.3.0\cc1plus.exe"
+  
+  - cd C:\MuseScore
+  - set PATH=C:\Qt\5.8\mingw53_32\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%
+  - mingw32-make -f Makefile.mingw revision
+  # CMake refuses to generate MinGW Makefiles if sh.exe is in the Path
+  - set PATH=C:\Qt\5.8\mingw53_32\bin;C:\Qt\Tools\mingw530_32\bin;C:\Program Files (x86)\CMake\bin;C:\Program Files\7-Zip;C:\ccache\bin;C:\Tools\curl\bin
+  - set CCACHE_DIR=C:\ccache\cache
+  - set /p MSversion=<mscore\revision.h
+# scripts to run *after* solution is built and *before* automatic packaging occurs (web apps, NuGet packages, Azure Cloud Services)
+#before_package:
+# scripts to run after build
+after_build:
+  - ccache.exe -s
+  - cd c:\MuseScore
+  - start " " /wait C:\MinGW\msys\1.0\bin\wget --no-check-certificate "http://utils.musescore.org.s3.amazonaws.com/musescore_tools_win32.zip"
+  - cmd: 7z x -y musescore_tools_win32.zip
+  - cd C:\MuseScore\win32install\bin
+  - C:\MuseScore\cv2pdb.exe MuseScore.exe
+  - C:\MuseScore\dump_syms.exe MuseScore.pdb > MuseScore.sym
+  - cmd: curl  --data-binary @MuseScore.sym "https://musescore.sp.backtrace.io:6098/post?format=symbols&token="%SYM_TOKEN%
+  - del MuseScore.pdb
+  - del MuseScore.sym
+  - cmd: 7z a C:\MuseScore\MuseScoreNightly-%MSversion%.7z C:\MuseScore\win32install
+  - cmd: curl -H "Authorization:Bearer RQr4dbCGfzAAAAAAAAAAPUIFzHGz-esZC0tjEY7Ief_9rrLXGIIf8NGrDXT8nwYX" https://api-content.dropbox.com/1/files_put/auto/ -T C:\MuseScore\MuseScoreNightly-%MSversion%.7z
+  - cmd: curl -T C:\MuseScore\MuseScoreNightly-%MSversion%.7z -ugsocnikos:%BINTRAY_API_KEY% https://api.bintray.com/content/musescoregsoc/myrepo/MuseScoreNightly/%MSversion%/MuseScoreNightly-%MSversion%.7z
+  - cd C:\MuseScore
+artifacts:
+  - path: MuseScoreNightly-$(MSversion).7z
+#deploy:
+#- provider: BinTray
+#  username: antoniobl
+#  api_key:
+#    secure: 2hZMhDAPtVbeoNZHA0GSzenAHtU+g4SzW4KwJp1h9/r7uWr2j9kMYo93iOGlEvtp
+#  subject: antoniobl
+#  repo: archive
+#  package: musescoretest
+#  version: $(MSversion)
+#  publish: true
+#  override: true
+# to run your custom scripts instead of automatic MSBuild
+#deploy:
+#- provider: BinTray
+#  username: gsocnikos
+#  api_key:
+#    # api key from https://bintray.com/profile/edit
+#    # encrypted in https://ci.appveyor.com/tools/encrypt
+#    secure: XFr4i9vkGli031KQGEVTuipPdAqMYpAyUWlVIrH7OhhicVIvA8x6EwiKGi+Zf22S
+#  subject: gsocnikos
+#  repo: myrepo
+#  package: musescoretest
+#  version: $(MSversion)
+#  publish: true
+#  override: true
+#  explode: true
+
+build_script:
+  - mingw32-make -f Makefile.mingw RelWithDebInfo && mingw32-make -f Makefile.mingw install

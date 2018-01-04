@@ -437,13 +437,23 @@ if (MINGW)
            COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
            LINK_FLAGS "-mwindows -mconsole -L ${CROSSQT}/lib"
         )
-   else(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+   endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+   
+   if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
      set_target_properties( mscore
           PROPERTIES
              COMPILE_FLAGS "${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
              LINK_FLAGS "-Wl,-S -mwindows -L ${CROSSQT}/lib"
           )
-   endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+   endif(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+   
+   if(CMAKE_BUILD_TYPE MATCHES "RELWITHDEBINFO")
+     set_target_properties( mscore
+          PROPERTIES
+             COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+			 LINK_FLAGS " -mwindows -L ${CROSSQT}/lib"
+          )
+   endif(CMAKE_BUILD_TYPE MATCHES "RELWITHDEBINFO")
 
    target_link_libraries(mscore
       portaudio
@@ -459,6 +469,10 @@ if (MINGW)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)
    endif (OMR)
+
+   if (BREAKPAD)
+       target_link_libraries(mscore breakpad)
+   endif (BREAKPAD)
 
    target_link_libraries(mscore ${QT_mingw_LIBRARIES})
 
@@ -511,6 +525,7 @@ if (MINGW)
 
     install(FILES
       ${CROSSQT}/plugins/platforms/qwindows.dll
+      ${CROSSQT}/plugins/platforms/qwindowsd.dll
       DESTINATION bin/platforms)
 
     install(FILES

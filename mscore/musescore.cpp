@@ -122,6 +122,10 @@ extern Ms::Synthesizer* createAeolus();
 extern Ms::Synthesizer* createZerberus();
 #endif
 
+#ifdef BREAKPAD
+#include "breakpad/crash_handler.h"
+#endif
+
 #ifdef QT_NO_DEBUG
       Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
 #else
@@ -6029,6 +6033,14 @@ int main(int argc, char* av[])
       // create local plugin directory
       // if not already there:
       QDir().mkpath(dataPath + "/plugins");
+
+      //Initiate breakpad instance currently will produce the minidumps under the c:\Users\username directory
+#ifdef BREAKPAD
+      QString breakpad_path = dataPath+"/crash_reports";
+      QDir().mkpath(breakpad_path);
+      Breakpad::CrashHandler::instance()->Init(breakpad_path.toStdWString());
+      Breakpad::AnnotateCrashReport("semver",VERSION);
+#endif
 
       if (MScore::debugMode)
             qDebug("global share: <%s>", qPrintable(mscoreGlobalShare));
