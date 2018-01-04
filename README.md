@@ -3,6 +3,7 @@
 
 [![Travis CI](https://secure.travis-ci.org/musescore/MuseScore.svg)](https://travis-ci.org/musescore/MuseScore)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
+[![Help Contribute to Open Source](https://www.codetriage.com/musescore/musescore/badges/users.svg)](https://www.codetriage.com/musescore/musescore)
 
 MuseScore is an open source and free music notation software.
 For support, contribution, bug reports, visit [MuseScore.org](https://musescore.org). Fork and make pull requests!
