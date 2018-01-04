@@ -462,21 +462,25 @@ if (MINGW)
       endif (OCR)
    endif (OMR)
 
-   target_link_libraries(mscore ${QT_LIBRARIES})
-
-   install( TARGETS mscore RUNTIME DESTINATION bin )
-
    # Keep dependencies in alphabetical order. Changes made to this list
    # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
    get_filename_component(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
    get_filename_component (MINGW_ROOT ${COMPILER_DIR} DIRECTORY)
    foreach (QtLibrary ${QT_LIBRARIES})
-      get_target_property(QtSharedLibrary ${QtLibrary} LOCATION_${CMAKE_BUILD_TYPE})
+      message("Library ${QtLibrary}")
+      # always use release libs
+      set_target_properties(${QtLibrary} PROPERTIES MAP_IMPORTED_CONFIG_DEBUG "RELEASE")
+      get_target_property(QtSharedLibrary ${QtLibrary} LOCATION_RELEASE)
       if (EXISTS ${QtSharedLibrary})
           list (APPEND QtInstallLibraries ${QtSharedLibrary})
       endif (EXISTS ${QtSharedLibrary})
    endforeach (QtLibrary ${QT_LIBRARIES})
    list(REMOVE_DUPLICATES QtInstallLibraries)
+
+   target_link_libraries(mscore ${QT_LIBRARIES})
+
+   install( TARGETS mscore RUNTIME DESTINATION bin )
+
    install( FILES
       ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
       ${MINGW_ROOT}/bin/libstdc++-6.dll
