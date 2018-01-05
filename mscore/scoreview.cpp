@@ -4475,23 +4475,68 @@ void ScoreView::cmdAddSlur()
             }
       else {
             QList<Note*> nl = _score->selection().noteList();
-            Note* firstNote = 0;
-            Note* lastNote  = 0;
-            for (Note* n : nl) {
-                  if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick() || (lastNote && n->chord()->parent() == lastNote->chord()))
-                        firstNote = n;
-                  if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick() || (firstNote && firstNote->chord()->parent() == n->chord()))
-                        lastNote = n;
-                  }
-            if (!firstNote)
+
+            if (nl.isEmpty())
                   return;
+
+            Note* firstNote = nl.takeFirst();
+            Note* lastNote  = firstNote;
+
+            for (Note* n : nl) {
+                  if(!n->chord()->isGrace()) {
+                        // case 1) n is NO GRACENOTE:
+                        // n is the new firstNote if a) its tick is smaller than firstNote's tick
+                        //                        or b) firstNote is a graceAfter that has n as its parent
+                        if ((n->chord()->tick() < firstNote->chord()->tick())
+                           || (firstNote->chord()->isGraceAfter() && (firstNote->chord()->parent() == n->chord()))) {
+                              firstNote = n;
+                              continue;
+                        }
+                        // n is the new lastNote if a) its tick is bigger than lastNote's tick
+                        //                       or b) lastNote is a graceBefore that has n as its parent
+                        if ((n->chord()->tick() > lastNote->chord()->tick())
+                           || (lastNote->chord()->isGraceBefore() && (lastNote->chord()->parent() == n->chord()))) {
+                              lastNote = n;
+                              continue;
+                              }
+                        }
+                  else {
+                        // case 2) n IS A GRACENOTE:
+                        // n is the new firstNote if a) its tick is smaller than firstNote's tick or
+                        //                           b) n is a graceBefore and has firstNote as its parent or
+                        //                           c) firstNote is a gracenote with the same parent and
+                        //                              c1) firstNote and n are graceBefore, but n has a smaller graceIndex or
+                        //                              c2) firstNote and n are graceAfter, but n has a bigger graceIndex or
+                        //                              c3) firstNote is graceAfter and n is graceBefore
+                        if ((n->chord()->tick() < firstNote->chord()->tick())
+                           || (n->chord()->isGraceBefore() && (n->chord()->parent() == firstNote->chord()))
+                           || ((firstNote->chord()->isGrace() && (firstNote->chord()->parent() == n->chord()->parent()))
+                           && ((firstNote->chord()->isGraceBefore() && n->chord()->isGraceBefore() && (n->chord()->graceIndex() < firstNote->chord()->graceIndex()))
+                           || (firstNote->chord()->isGraceAfter() && n->chord()->isGraceAfter() && (n->chord()->graceIndex() > firstNote->chord()->graceIndex()))
+                           || (firstNote->chord()->isGraceAfter() && n->chord()->isGraceBefore())))) {
+                              firstNote = n;
+                              continue;
+                              }
+                        // n is the new lastNote if a) its tick is bigger than lastNote's tick
+                        //                       or b) n is a graceAfter and has lastNote as its parent
+                        //                       or c) lastNote is a gracenote with the same parent and
+                        //                              c1) lastNote and n are graceBefore, but n has a bigger graceIndex or
+                        //                              c2) lastNote and n are graceAfter, but n has a smaller graceIndex
+                        //                              c3) lastNote is graceBefore and n is graceAfter
+                        if ((n->chord()->tick() > lastNote->chord()->tick())
+                           || (n->chord()->isGraceAfter() && (n->chord()->parent() == lastNote->chord()))
+                           || ((lastNote->chord()->isGrace() && (lastNote->chord()->parent() == n->chord()->parent()))
+                           && ((lastNote->chord()->isGraceBefore() && n->chord()->isGraceBefore() && (n->chord()->graceIndex() > lastNote->chord()->graceIndex()))
+                           || (lastNote->chord()->isGraceAfter() && n->chord()->isGraceAfter() && (n->chord()->graceIndex() < lastNote->chord()->graceIndex()))
+                           || (lastNote->chord()->isGraceBefore() && n->chord()->isGraceAfter())))) {
+                              lastNote = n;
+                              continue;
+                              }
+                        }
+                  }
+
             if (firstNote == lastNote)
                   lastNote = 0;
-            else if (firstNote->chord()->isGraceAfter()) {
-                  Note* tmp = firstNote;
-                  firstNote = lastNote;
-                  lastNote = tmp;
-                  }
             cmdAddSlur(firstNote, lastNote);
             }
       }
