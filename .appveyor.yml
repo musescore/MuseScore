@@ -22,6 +22,9 @@ platform:
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Release
 
+# Stop Appveyor from "Discovering Tests"
+test: off
+
 install:
   - IF DEFINED ENCRYPT_SECRET_SSH (
     nuget install secure-file -ExcludeVersion &&
@@ -84,6 +87,7 @@ after_build:
   - CD C:\MuseScore
 artifacts:
   - path: $(ARTIFACT_NAME)
+
 
 
 build_script:
