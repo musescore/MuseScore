@@ -4487,6 +4487,11 @@ void ScoreView::cmdAddSlur()
                   return;
             if (firstNote == lastNote)
                   lastNote = 0;
+            else if (firstNote->chord()->isGraceAfter()) {
+                  Note* tmp = firstNote;
+                  firstNote = lastNote;
+                  lastNote = tmp;
+                  }
             cmdAddSlur(firstNote, lastNote);
             }
       }
