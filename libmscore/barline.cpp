@@ -42,16 +42,14 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType)
             case BarLineType::DOUBLE:
             case BarLineType::BROKEN:
             case BarLineType::DOTTED: {
-                  SegmentType segmentType = bl->segment()->segmentType();
+                  Segment* segment        = bl->segment();
+                  SegmentType segmentType = segment->segmentType();
                   if (segmentType == SegmentType::EndBarLine) {
                         m->undoChangeProperty(P_ID::REPEAT_END, false);
-                        Segment* segment = m->findSegmentR(SegmentType::EndBarLine, m->ticks());
-                        if (segment) {
-                              for (Element* e : segment->elist()) {
-                                    if (e) {
-                                          e->score()->undo(new ChangeProperty(e, P_ID::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
-                                          e->score()->undo(new ChangeProperty(e, P_ID::GENERATED, false, PropertyFlags::NOSTYLE));
-                                          }
+                        for (Element* e : segment->elist()) {
+                              if (e) {
+                                    e->score()->undo(new ChangeProperty(e, P_ID::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
+                                    e->score()->undo(new ChangeProperty(e, P_ID::GENERATED, false, PropertyFlags::NOSTYLE));
                                     }
                               }
                         }
