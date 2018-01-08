@@ -3339,7 +3339,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                   }
             else if (isLastMeasureInSystem && nextMeasure() && nextMeasure()->repeatStart()) {
                   t = BarLineType::NORMAL;
-                  force = true;
+//                  force = true;
                   }
 
             for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
