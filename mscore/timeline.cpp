@@ -897,7 +897,7 @@ void Timeline::drawGrid(int global_rows, int global_cols)
                         part_name = part_list.at(row)->instrumentName();
 
                   graphics_rect_item->setToolTip(initial_letter + QString(" ") + QString::number(curr_measure->no() + 1) + QString(", ") + part_name);
-                  graphics_rect_item->setPen(QPen(QColor(204, 204, 204)));
+                  graphics_rect_item->setPen(QPen(QColor(Qt::lightGray)));
                   graphics_rect_item->setBrush(QBrush(colorBox(graphics_rect_item)));
                   graphics_rect_item->setZValue(-3);
                   scene()->addItem(graphics_rect_item);
@@ -2353,8 +2353,8 @@ void Timeline::updateView()
 
             QGraphicsPathItem* non_visible_path_item = new QGraphicsPathItem(non_visible_painter_path.simplified());
 
-            QPen non_visible_pen = QPen(Qt::NoPen);
-            QBrush non_visible_brush = QBrush(QColor(0, 150, 150, 50));
+            QPen non_visible_pen = QPen(QColor(100, 150, 250));
+            QBrush non_visible_brush = QBrush(QColor(192, 192, 192, 180));
             non_visible_path_item->setPen(QPen(non_visible_brush.color()));
             non_visible_path_item->setBrush(non_visible_brush);
             non_visible_path_item->setZValue(-3);
@@ -2408,7 +2408,7 @@ QColor Timeline::colorBox(QGraphicsRectItem* item)
                         }
                   }
             }
-      return QColor(211,211,211);
+      return QColor(224,224,224);
       }
 
 //---------------------------------------------------------
