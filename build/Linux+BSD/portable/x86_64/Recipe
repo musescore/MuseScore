@@ -25,7 +25,7 @@ apt-get -y install \
   libgl1-mesa-dev \
   libopenal1 \
   gstreamer0.10-plugins-base \
-  python-software-properties # installs `add-apt-repository`
+  software-properties-common # installs `add-apt-repository`
 
 # get newer compiler
 if [ ! -f /etc/apt/sources.list.d/ubuntu-toolchain-r-test-precise.list ]; then
