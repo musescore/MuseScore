@@ -3111,8 +3111,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   mb->setPos(pos);
             pos.rx() += ww;
             }
-//      if (lineMode())
-            system->setWidth(pos.x());
+      system->setWidth(pos.x());
 
       //
       // compute measure shape
@@ -3143,17 +3142,32 @@ System* Score::collectSystem(LayoutContext& lc)
       //    - update the segment shape + measure shape
       //
       //
-      int stick = -1;
-      int etick;
+      int stick = system->measures().front()->tick();
+      int etick = system->measures().back()->endTick();
+
+      //
+      // layout slurs
+      //
+      if (etick > stick) {    // ignore vbox
+            auto spanners = score()->spannerMap().findOverlapping(stick, etick);
+
+            std::vector<Spanner*> spanner;
+            for (auto interval : spanners) {
+                  Spanner* sp = interval.value;
+                  if (sp->tick() < etick && sp->tick2() > stick) {
+                        if (sp->isSlur())
+                              spanner.push_back(sp);
+                        }
+                  }
+            processLines(system, spanner);
+            }
+
       std::vector<Dynamic*> dynamics;
       for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure())
                   continue;
             SegmentType st = SegmentType::ChordRest;
             Measure* m = toMeasure(mb);
-            if (stick == -1)
-                  stick = m->tick();
-            etick = m->endTick();
             for (Segment* s = m->first(st); s; s = s->next(st)) {
                   for (Element* e : s->elist()) {
                         if (!e)
@@ -3239,7 +3253,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   if (sp->tick() < etick && sp->tick2() > stick) {
                         if (sp->isOttava())
                               ottavas.push_back(sp);
-                        else
+                        else if (!sp->isSlur())             // slurs are already handled
                               spanner.push_back(sp);
                         }
                   }
