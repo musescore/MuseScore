@@ -1016,8 +1016,11 @@ void SLine::layout()
 
 void SLine::writeProperties(XmlWriter& xml) const
       {
-      if (!endElement())
-            xml.tag("ticks", ticks());
+      if (!endElement()) {
+            ((Spanner*)this)->computeEndElement();                // HACK
+            if (!endElement())
+                  xml.tag("ticks", ticks());
+            }
       Spanner::writeProperties(xml);
       if (_diagonal)
             xml.tag("diagonal", _diagonal);
