@@ -82,7 +82,7 @@ after_build:
   - IF DEFINED ENCRYPT_SECRET_SSH ssh -oStrictHostKeyChecking=no -i %SSH_IDENTITY% musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
 # notify IRC channel
   - IF DEFINED ENCRYPT_SECRET_SSH pip install irc
-  - IF DEFINED ENCRYPT_SECRET_SSH python build/appveyor/irccat.py "%APPVEYOR_REPO_BRANCH%-%MSversion% (Win) compiled successfully https://ftp.osuosl.org/pub/musescore/nightlies/windows/%ARTIFACT_NAME%"
+  - IF DEFINED ENCRYPT_SECRET_SSH python build/appveyor/irccat.py "%APPVEYOR_REPO_BRANCH%-%MSversion% (Win) compiled successfully https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%"
 
   - CD C:\MuseScore
 artifacts:
