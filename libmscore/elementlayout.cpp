@@ -234,10 +234,14 @@ bool ElementLayout::readProperties(XmlReader& e)
 
 void ElementLayout::restyle(const ElementLayout& ol, const ElementLayout& nl)
       {
-      if ((ol._align & Align::HMASK) == (_align & Align::HMASK))
+      if ((ol._align & Align::HMASK) == (_align & Align::HMASK)) {
+            _align = Align(_align & Align::VMASK); // unset all HMASK-flags before setting new flags
             _align = Align(_align | Align(int(nl._align) & int(Align::HMASK)));
-      if ((ol._align & Align::VMASK) == (_align & Align::VMASK))
+            }
+      if ((ol._align & Align::VMASK) == (_align & Align::VMASK)) {
+            _align = Align(_align & Align::HMASK); // unset all VMASK-flags before setting new flags
             _align = _align | Align((int(nl._align) & int(Align::VMASK)));
+            }
       if (ol._offset == _offset)
             _offset = nl._offset;
       if (_offsetType == ol._offsetType)
