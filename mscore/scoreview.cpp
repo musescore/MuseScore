@@ -4478,9 +4478,9 @@ void ScoreView::cmdAddSlur()
             Note* firstNote = 0;
             Note* lastNote  = 0;
             for (Note* n : nl) {
-                  if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick() || (lastNote && n->chord()->parent() == lastNote->chord()))
+                  if (!firstNote || n->isBefore(firstNote))
                         firstNote = n;
-                  if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick() || (firstNote && firstNote->chord()->parent() == n->chord()))
+                  if (!lastNote || lastNote->isBefore(n))
                         lastNote = n;
                   }
             if (!firstNote)
