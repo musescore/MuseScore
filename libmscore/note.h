@@ -441,6 +441,7 @@ class Note : public Element {
       void setDotY(MScore::Direction);
 
       void addBracket();
+      bool isBefore(Note*);
 
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);
       NoteVal noteVal() const;

@@ -1614,6 +1614,38 @@ Element* Note::drop(const DropData& data)
       }
 
 //---------------------------------------------------------
+//   isBefore
+//---------------------------------------------------------
+
+bool Note::isBefore(Note* o)
+      {
+      if (!o)
+            return true;
+      Chord* oChord = o->chord();
+      Chord* c = chord();
+      if (oChord == c)
+            return _line < o->line();
+      int otick = oChord->tick();
+      int tick = c->tick();
+      if (tick == otick) { // At least one of the note is a grace note, order the grace notes
+            bool oGraceAfter = oChord->isGraceAfter();
+            bool graceAfter = c->isGraceAfter();
+            bool oGrace = oChord->isGrace();
+            bool grace = c->isGrace();
+            // normal note are initialized at graceIndex 0 and graceIndex is 0 based
+            int oGraceIndex = oChord->graceIndex() + (oGrace ? 1 : 0);
+            int graceIndex = c->graceIndex() + (grace ? 1 : 0);
+            if (oGrace)
+                  oGraceIndex = static_cast<Chord*>(oChord->parent())->graceNotes().size() - oGraceIndex;
+            if (grace)
+                  graceIndex = static_cast<Chord*>(c->parent())->graceNotes().size() - graceIndex;
+            otick = otick + (oGraceAfter ? 1 : -1) *  oGraceIndex;
+            tick = tick + (graceAfter ? 1 : -1) *  graceIndex;
+            }
+      return tick < otick;
+      }
+
+//---------------------------------------------------------
 //   addBracket
 //---------------------------------------------------------
 
