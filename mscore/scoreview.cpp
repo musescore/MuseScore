@@ -3097,9 +3097,9 @@ void ScoreView::addSlur()
                   if (!e->isChordRest())
                         continue;
                   ChordRest* cr = toChordRest(e);
-                  if (!cr1 || cr1->tick() > cr->tick())
+                  if (!cr1 || cr->isBefore(cr1))
                         cr1 = cr;
-                  if (!cr2 || cr2->tick() < cr->tick() || (cr1 && cr1->parent() == cr))
+                  if (!cr2 || cr2->isBefore(cr))
                         cr2 = cr;
                   }
             if (cr1 == cr2)

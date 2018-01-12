@@ -1518,5 +1518,35 @@ void ChordRest::removeMarkings(bool /* keepTremolo */)
       qDeleteAll(lyrics());
       }
 
+//---------------------------------------------------------
+//   isBefore
+//---------------------------------------------------------
+
+bool ChordRest::isBefore(ChordRest* o)
+      {
+      if (!o)
+            return true;
+      if (this == o)
+            return true;
+      int otick = o->tick();
+      int t = tick();
+      if (t == otick) { // At least one of the chord is a grace, order the grace notes
+            bool oGraceAfter = o->isGraceAfter();
+            bool graceAfter = isGraceAfter();
+            bool oGrace = o->isGrace();
+            bool grace = isGrace();
+            // normal note are initialized at graceIndex 0 and graceIndex is 0 based
+            int oGraceIndex = oGrace ? toChord(o)->graceIndex() +  1 : 0;
+            int graceIndex = grace ? toChord(this)->graceIndex() + 1 : 0;
+            if (oGrace)
+                  oGraceIndex = toChord(o->parent())->graceNotes().size() - oGraceIndex;
+            if (grace)
+                  graceIndex = toChord(parent())->graceNotes().size() - graceIndex;
+            otick = otick + (oGraceAfter ? 1 : -1) *  oGraceIndex;
+            t = t + (graceAfter ? 1 : -1) *  graceIndex;
+            }
+      return t < otick;
+      }
+
 }
 
